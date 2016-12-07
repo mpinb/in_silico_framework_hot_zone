@@ -10,7 +10,8 @@ local.properties
 .loadpath
 .recommenders
 test/data/
-
+trash_it_now/
+*.pyc
 
 # Eclipse Core
 .project
