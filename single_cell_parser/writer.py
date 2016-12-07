@@ -667,16 +667,38 @@ def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoin
                     for sec in cell.tree:
                         if sec.label in axonLabels:
                             continue
-                        for vec in sec.recordVars[var]:
-                            line = '%.6f\n' % vec[i]
+                        
+                        #Roberts original code only covered the case, that the mechanisms exist in 
+                        #every section:
+                        #for vec in sec.recordVars[var]:
+                        #    line = '%.6f\n' % vec[i]
+                        #    outFile.write(line) 
+                        #END OF FUNCTION
+                        #
+                        #The following code extends this by first checking, if the segment contains the 
+                        #mechanism. If not, a zero-vector is used
+                        #
+                        #todo: allow other values than zero
+                        
+                        #convert neuron section to convenient python list
+                        segment_list = [seg for seg in sec] 
+                        #this is a seperated count variable for segments, that actually contain the mechanism
+                        lv_for_record_vars = 0 
+                        #whereas lv reflects the number of segments, that have been processed
+                        for lv, seg in enumerate(segment_list):
+                            ## check if mechanism is in section
+                            try:
+                                href = eval('seg.' + var)
+                                dummy_vec=sec.recordVars[var][lv_for_record_vars]
+                                lv_for_record_vars = lv_for_record_vars + 1
+                                line = '%.6f\n' % dummy_vec[i]
+                            ##if not: use standard value
+                            except NameError:
+                                line = '%.6f\n' % 0
+
                             outFile.write(line)
-            
-#            outFile.write('\n@7 # Vm at Point\n')
-#            for sec in cell.tree:
-#                for vec in sec.recVList:
-#                    line = '%.6f\n' % vec[i]
-#                    outFile.write(line)
-            
+                            
+                        assert(lv_for_record_vars == len(sec.recordVars[var]))        
     
     
     
