@@ -4,21 +4,16 @@ Created on Aug 15, 2016
 @author: arco
 '''
 
-import unittest
-from mock import patch, MagicMock
 import os
+import tempfile
 import cloudpickle as pickle
-import IO, analyze
-import pandas as pd
-import dask.dataframe
+import IO, IO.LoaderDumper.to_pickle, analyze
 import dask.diagnostics
-#from model_data_base.Plot
-import shutil
 import settings
 from tuplecloudsqlitedict import SqliteDict
-import path
 from copy import deepcopy
 import warnings
+
 # #monkey patch pandas to provide parallel computing methods
 # def apply_parallel(self, *args, **kwargs):
 #     '''Takes a pandas dataframe, converts it to a dask dataframe, applies the given method in parallel,
@@ -29,6 +24,9 @@ import warnings
 #     return dask.dataframe.from_pandas(self, npartitions = 80).apply(*args, **kwargs).compute(get = dask.multiprocessing.get)
 # pd.DataFrame.apply_parallel = apply_parallel
 
+class LoaderWrapper:
+    def __init__(self, relpath):
+        self.relpath = relpath
 
 class ModelDataBase(object):
     def __init__(self, path, tempdir, forceload = False, readonly = False):
@@ -53,16 +51,18 @@ class ModelDataBase(object):
         It is possible to use tuples oif strings as keys.
         To read out all existing keys, use the keys()-function.
         
-        After an update of the underlying libraries, it might be,
+        After an update of the underlying libraries (e.g. dask), it might be,
         that the standard data ('voltage_traces', 'synapse_activation' and so on) 
         can not be unpickled any more. In this case, you can rebuild these
-        Dataframes by calling the _regenerate_data() method.
-        
-        If it is possible to access e.g. mdb['voltage_traces'], you should
+        Dataframes by calling the _regenerate_data() method. If you regain
+        access to the underlying data e.g. mdb['voltage_traces'], you should
         consider to save the updated database with the save_db() method.     
         '''
-        self.analyze = analyze      
         
+        #todo: rename tempdir to basedir
+        
+        self.analyze = analyze      
+        self._registeredDumpers = [IO.LoaderDumper.to_pickle, 'self']
         self.path = path
         self.tempdir = tempdir
         self.settings = settings #settings is imported above
@@ -83,7 +83,10 @@ class ModelDataBase(object):
         #self.old = old.old(self)
         
         
-        
+    def registerDumper(self, dumperModule):
+        '''caveat: make sure to procide the MODULE, not the class'''
+        self._registeredDumpers.append(dumperModule)
+            
     def add_directory(self, path,tempdir):
         #todo: this should to be put in the Converrter class
         #currently, path and tempdir do not have any impact, because
@@ -244,11 +247,21 @@ class ModelDataBase(object):
         else:
             try:
                 sqllitedict = SqliteDict(os.path.join(self.tempdir, 'sqlitedict.db'), autocommit=True)
-                return sqllitedict[arg]
+                dummy = sqllitedict[arg]
+                if isinstance(dummy, LoaderWrapper):
+                    return IO.LoaderDumper.load(os.path.join(self.tempdir, dummy.relpath)) 
+                else:
+                    return dummy
             finally:
                 sqllitedict.close()
+                
+    def get_mkdtemp(self, suffix = ''):
+        absolute_path = tempfile.mkdtemp(suffix = suffix, dir = self.tempdir) 
+        relative_path = os.path.relpath(absolute_path, self.tempdir)
+        return absolute_path, relative_path
         
-    def __setitem__(self, key, item):
+    def setitem(self, key, item, dumper = None):
+        #check if we have writing privilege
         if self.readonly is True:
             raise RuntimeError("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         elif self.readonly is 'warning':
@@ -258,20 +271,45 @@ class ModelDataBase(object):
         else:
             raise RuntimeError("Readonly attribute is in unknown state. Should be True, False or 'warning, but is: %s" % self.readonly)
         
-        try:
-            sqllitedict = SqliteDict(os.path.join(self.tempdir, 'sqlitedict.db'), autocommit=True)
-            sqllitedict[key] = item
-        except:
-            raise
-        finally: 
-            sqllitedict.close() 
+        #find dumper
+        if dumper is None:
+            for d in self._registeredDumpers:
+                if d.check(item):
+                    dumper = d
+                    break
+    
+        assert(dumper is not None)
                 
-    def maybe_calculate(self, key, fun):
+        #if dumper is 'self': store in this DB
+        if dumper == 'self':
+            try:
+                sqllitedict = SqliteDict(os.path.join(self.tempdir, 'sqlitedict.db'), autocommit=True)
+                sqllitedict[key] = item
+            except:
+                raise
+            finally: 
+                sqllitedict.close() 
+                
+        #if dumper is something else: 
+        #generate temp directory, save the object in that directory using dump()
+        #wrap the relative path to an LoaderWrapper object and save it to the 
+        #internal database
+        else:
+            tempdir_absolute, tempdir_relative = self.get_mkdtemp()
+            dumper.dump(item, tempdir_absolute)
+            self.setitem(key, LoaderWrapper(tempdir_relative), dumper = 'self')
+        
+            
+    def __setitem__(self, key, item):
+        self.setitem(key, item, dumper = None)
+                
+    def maybe_calculate(self, key, fun, dumper = None):
         try:
             return self[key]
         except:
             with dask.diagnostics.ProgressBar():
-                self[key] = ret = fun()
+                ret = fun()
+                self.setitem(key, ret, dumper)
             return ret    
         
     def keys(self):
