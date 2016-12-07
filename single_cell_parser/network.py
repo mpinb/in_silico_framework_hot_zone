@@ -163,7 +163,7 @@ class NetworkMapper:
                     for recepStr in synParameters.receptors.keys():
                         receptor = synParameters.receptors[recepStr]
                         self._assign_synapse_weights(receptor, recepStr, newSyn)
-                activate_functional_synapse(newSyn, self.postCell, newCell, synParameters)
+                activate_functional_synapse(newSyn, self.postCell, newCell, synParameters, forceSynapseActivation = True)
         print '***************************'
         print 'network complete!'
         print '***************************'
@@ -298,7 +298,7 @@ class NetworkMapper:
         Should be done after creating presynaptic cells.
         TODO: PointCells are only useable with one spike currently.
         '''
-        for synType in self.nwParam.keys():
+        for synType in self.nwParam.keys(): ## contains list of celltypes in network: ['L45Peak_D1', 'L45Peak_D2', 'L5tt_B3', 'L45Peak_Delta', 'L2_C1', 'L6ct_E3' ...]
             if self.nwParam[synType].celltype == 'pointcell':
                 self._create_pointcell_activities(synType, self.nwParam[synType])
 #                nrOfCells = self.nwParam[synType].cellNr
@@ -370,7 +370,7 @@ class NetworkMapper:
 ##                    cell.play()
 ##                    cell.playing = True
             else:
-                try:
+                try: ##seems to be build for the case, that self.nwParam[synType].celltype contains the actual celltypes instead of beeing one
                     cellTypes = self.nwParam[synType].celltype.keys()
                     for cellType in cellTypes:
                         if cellType == "spiketrain":
@@ -467,7 +467,7 @@ class NetworkMapper:
                 errstr = 'Time bins and probabilities of PSTH for cell type %s have unequal length! ' % preCellType
                 errstr += 'len(bins) = %d - len(probabilities) = %d' % (len(bins), len(probabilities))
                 raise RuntimeError(errstr)
-            for i in range(len(bins)):
+            for i in range(len(bins)): ##fill all cells bin after bin
                 tBegin, tEnd = bins[i]
                 spikeProb = probabilities[i]
                 active, = np.where(np.random.uniform(size=nrOfCells) < spikeProb)
@@ -783,7 +783,7 @@ class NetworkMapper:
                 syn.weight[recepStr].append(receptor.weight)
         
 
-def activate_functional_synapse(syn, cell, preSynCell, synParameters, tChange=None, synParametersChange=None):
+def activate_functional_synapse(syn, cell, preSynCell, synParameters, tChange=None, synParametersChange=None, forceSynapseActivation = False):
     '''Default method to activate single synapse.
     Currently, this implementation expects all presynaptic spike
     times to be pre-computed; can thus not be used in recurrent
@@ -799,7 +799,7 @@ def activate_functional_synapse(syn, cell, preSynCell, synParameters, tChange=No
                     if np.random.rand() < prelChange:
                         releaseTimes.append(t)
                     continue
-            if np.random.rand() < prel:
+            if np.random.rand() < prel or forceSynapseActivation:
                 releaseTimes.append(t)
     else:
         releaseTimes = preSynCell.spikeTimes[:]
@@ -830,6 +830,55 @@ def activate_functional_synapse(syn, cell, preSynCell, synParameters, tChange=No
         if synParameters.has_key('releaseProb') and synParameters.releaseProb == 'dynamic':
             paramStr = 'syn.receptors[\'' + recepStr + '\'].setRNG(syn.hocRNG)'
             exec(paramStr)
+
+# backup by arco
+# def activate_functional_synapse(syn, cell, preSynCell, synParameters, tChange=None, synParametersChange=None):
+#     '''Default method to activate single synapse.
+#     Currently, this implementation expects all presynaptic spike
+#     times to be pre-computed; can thus not be used in recurrent
+#     network models at this point.'''
+#     releaseTimes = []
+#     if synParameters.has_key('releaseProb') and synParameters.releaseProb != 'dynamic':
+#         prel = synParameters.releaseProb
+#         if tChange is not None:
+#             prelChange = synParametersChange.releaseProb
+#         for t in preSynCell.spikeTimes:
+#             if tChange is not None:
+#                 if t >= tChange:
+#                     if np.random.rand() < prelChange:
+#                         releaseTimes.append(t)
+#                     continue
+#             if np.random.rand() < prel:
+#                 releaseTimes.append(t)
+#     else:
+#         releaseTimes = preSynCell.spikeTimes[:]
+#     if not len(releaseTimes):
+#         return
+#     releaseTimes.sort()
+#     releaseSite = PointCell(releaseTimes)
+#     releaseSite.play()
+#     receptors = synParameters.receptors
+#     syn.activate_hoc_syn(releaseSite, preSynCell, cell, receptors)
+#     if synParameters.has_key('releaseProb') and synParameters.releaseProb == 'dynamic':
+#         syn.hocRNG = h.Random(int(1000000*np.random.rand()))
+#         syn.hocRNG.negexp(1)
+# #    set properties for all receptors here
+#     for recepStr in receptors.keys():
+#         recep = receptors[recepStr]
+#         for param in recep.parameter.keys():
+# #            try treating parameters as hoc range variables,
+# #            then as hoc global variables
+#             try:
+#                 paramStr = 'syn.receptors[\'' + recepStr + '\'].'
+#                 paramStr += param + '=' + str(recep.parameter[param])
+#                 exec(paramStr)
+#             except LookupError:
+#                 paramStr = param + '_' + recepStr + '='
+#                 paramStr += str(recep.parameter[param])
+#                 h(paramStr)
+#         if synParameters.has_key('releaseProb') and synParameters.releaseProb == 'dynamic':
+#             paramStr = 'syn.receptors[\'' + recepStr + '\'].setRNG(syn.hocRNG)'
+#             exec(paramStr)
 
 def functional_connectivity_visualization(functionalMap, cell):
     nrL4ssCells = 3168
