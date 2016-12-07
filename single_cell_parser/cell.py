@@ -79,7 +79,14 @@ class Cell(object):
     
     def record_range_var(self, var, mech=None):
         for sec in self.sections:
-            sec._init_range_var_recording(var, mech)
+            try:
+                sec._init_range_var_recording(var, mech)
+            except NameError:    
+                ## if mechanism not in segment: continue
+                ## this leaves the duty to take care of missing range vars to 
+                ## all further functions relying on that values. I.e. they should
+                ## check, if the range var is existent in the respective segment or not                       
+                pass
     
     def distance_between_pts(self, sec1, x1, sec2, x2):
         '''computes path length between to points given by
@@ -526,6 +533,7 @@ class PySection(nrn.Section):
                 for seg in self:
                     vec = h.Vector()
                     hRef = eval('seg._ref_'+var)
+                    print ('seg._ref_'+var)
                     vec.record(hRef, sec=self)
                     self.recordVars[var].append(vec)
         else:
@@ -535,6 +543,7 @@ class PySection(nrn.Section):
                 for seg in self:
                     vec = h.Vector()
                     hRef = eval('seg.'+mech+'._ref_'+var)
+                    print ('seg.'+mech+'._ref_'+var)
                     vec.record(hRef, sec=self)
                     self.recordVars[key].append(vec)
 
