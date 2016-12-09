@@ -65,12 +65,12 @@ class ConverterFabric:
     def get_pathgenerator(self):
         if self.filetype == 'cells':
             def pathgenerator(x):
-                path = os.path.join(self.mdb.path, x.path, x.cell_file_name)
+                path = os.path.join(self.mdb['simresult_path'], x.path, x.cell_file_name)
                 return path
             return pathgenerator
         if self.filetype == 'synapses':
             def pathgenerator(x):
-                path = os.path.join(self.mdb.path, x.path, x.synapses_file_name)
+                path = os.path.join(self.mdb['simresult_path'], x.path, x.synapses_file_name)
                 return path
             return pathgenerator            
     
@@ -83,7 +83,7 @@ class ConverterFabric:
                 path = x.path
                 fname = x.cell_file_name
                 sim_trail = x.sim_trail_index
-                _convert_files_csv(self.mdb.path, self.mdb.tempdir, path, sim_trail, 'sim_trail_index,presynaptic_cell_type,cell_ID,', fname, max_commas)
+                _convert_files_csv(self.mdb['simresult_path'], self.mdb.tempdir, path, sim_trail, 'sim_trail_index,presynaptic_cell_type,cell_ID,', fname, max_commas)
                 return 1 #return something, so dask will not complain
             
             return convert_fun
@@ -92,13 +92,13 @@ class ConverterFabric:
                 path = x.path
                 fname = x.synapses_file_name
                 sim_trail = x.sim_trail_index
-                _convert_files_csv(self.mdb.path, self.mdb.tempdir, path, sim_trail, 'sim_trail_index,synapse_type,synapse_ID,soma_distance,section_ID,section_pt_ID,dendrite_label,', fname, max_commas)
+                _convert_files_csv(self.mdb['simresult_path'], self.mdb.tempdir, path, sim_trail, 'sim_trail_index,synapse_type,synapse_ID,soma_distance,section_ID,section_pt_ID,dendrite_label,', fname, max_commas)
                 return 1 #return something, so dask will not complain
             return convert_fun
 
 def rewrite_data_in_fast_format(mdb):
     scheduler = settings.multiprocessing_scheduler
-    metadata_dd = dd.from_pandas(mdb.metadata, npartitions = settings.npartitions)
+    metadata_dd = dd.from_pandas(mdb['metadata'], npartitions = settings.npartitions)
     myConvFab = ConverterFabric(mdb)
     
     myConvFab.set_filetype('cells')
