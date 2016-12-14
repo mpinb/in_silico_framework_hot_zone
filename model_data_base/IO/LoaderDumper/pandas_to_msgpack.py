@@ -9,12 +9,12 @@ def check(obj):
 
 class Loader(parent_classes.Loader):
     def get(self, savedir):
-        return pd.read_msgpack(savedir)
+        return pd.read_msgpack(os.path.join(savedir, 'pandas_to_msgpack.pickle'))
     
-def dump(obj, path):
-    obj.to_msgpack(path)
-        
-    with open(os.path.join(path, 'Loader.pickle'), 'w') as file_:
+def dump(obj, savedir):
+    obj.to_msgpack(os.path.join(savedir, 'pandas_to_msgpack.pickle'))
+
+    with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
         cloudpickle.dump(Loader(), file_)
     
 

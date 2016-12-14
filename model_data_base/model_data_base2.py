@@ -5,26 +5,37 @@ Created on Aug 15, 2016
 '''
 
 import os
+import shutil
 import tempfile
 import cloudpickle as pickle
-import IO, IO.LoaderDumper.to_pickle, analyze
+import IO, IO.LoaderDumper.to_pickle
+import IO.LoaderDumper.pandas_to_msgpack
+import analyze
 import dask.diagnostics
 import settings
 from tuplecloudsqlitedict import SqliteDict
 from copy import deepcopy
 import warnings
+import re
 
-# #monkey patch pandas to provide parallel computing methods
-# def apply_parallel(self, *args, **kwargs):
-#     '''Takes a pandas dataframe, converts it to a dask dataframe, applies the given method in parallel,
-#     and converts the result back to a pandas dataframe. Introduces a lot of overhead but is convenient.
-#     '''
-#     #Note: npartitions = 80 seems to be a good choice if one of the compute servers with 40 cores is used.
-#     #Otherwise, it might be necessary to change that value
-#     return dask.dataframe.from_pandas(self, npartitions = 80).apply(*args, **kwargs).compute(get = dask.multiprocessing.get)
-# pd.DataFrame.apply_parallel = apply_parallel
 
+def slugify(value):
+    """
+    Normalizes string, converts to lowercase, removes non-alpha characters,
+    and converts spaces to hyphens.
+    
+    http://stackoverflow.com/questions/295135/turn-a-string-into-a-valid-filename
+    a bit modified
+    """
+    import unicodedata
+    value = unicode(value, errors = 'ignore')
+    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
+    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
+    value = unicode(re.sub('[-\s]+', '-', value))
+    return str(value)
+    
 class LoaderWrapper:
+    '''wrapper class pointing to loader, which can be saved in the internal SQL database'''
     def __init__(self, relpath):
         self.relpath = relpath
         
@@ -84,7 +95,8 @@ class ModelDataBase(object):
         
         #todo: rename basedir to basedir
         
-        self.basedir = basedir
+        self.basedir = os.path.abspath(basedir)
+        #self.basedir = basedir
         self.settings = settings #settings is imported above
         self.forceload = forceload
         self.readonly = readonly #possible values: False, True, 'warning'
@@ -126,20 +138,40 @@ class ModelDataBase(object):
             return True
         except:
             return False
-            
-    def __getitem__(self, arg):
+    
+    def __direct_dbget(self, arg):
         try:
             sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
             dummy = sqllitedict[arg]
-            if isinstance(dummy, LoaderWrapper):
-                return IO.LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
-            else:
-                return dummy
         finally:
-            sqllitedict.close()
+            sqllitedict.close() 
+        return dummy
+    
+    def __direct_dbset(self, key, item):
+        try:
+            sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
+            sqllitedict[key] = item
+        except:
+            raise
+        finally: 
+            sqllitedict.close()  
+
+    def __direct_dbdel(self, arg):
+        try:
+            sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
+            del sqllitedict[arg]
+        finally:
+            sqllitedict.close() 
+                           
+    def __getitem__(self, arg):
+        dummy = self.__direct_dbget(arg)
+        if isinstance(dummy, LoaderWrapper):
+            return IO.LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
+        else:
+            return dummy
                 
-    def get_mkdtemp(self, suffix = ''):
-        absolute_path = tempfile.mkdtemp(suffix = suffix, dir = self.basedir) 
+    def get_mkdtemp(self, prefix = '', suffix = ''):
+        absolute_path = tempfile.mkdtemp(prefix = prefix + '_', suffix = '_' + suffix, dir = self.basedir) 
         relative_path = os.path.relpath(absolute_path, self.basedir)
         return absolute_path, relative_path
         
@@ -155,6 +187,10 @@ class ModelDataBase(object):
         else:
             raise RuntimeError("Readonly attribute is in unknown state. Should be True, False or 'warning, but is: %s" % self.readonly)
         
+        #check if there is already a subdirectory assigned to this key. If so: delete subdirectory.
+        if key in self.keys():
+            self.__delitem__(key)
+                
         #find dumper
         if dumper is None:
             for d in self._registeredDumpers:
@@ -166,31 +202,38 @@ class ModelDataBase(object):
                 
         #if dumper is 'self': store in this DB
         if dumper == 'self':
-            try:
-                sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
-                sqllitedict[key] = item
-            except:
-                raise
-            finally: 
-                sqllitedict.close() 
+            self.__direct_dbset(key, item)
                 
         #if dumper is something else: 
         #generate temp directory, save the object in that directory using dump()
         #wrap the relative path to an LoaderWrapper object and save it to the 
         #internal database
         else:
-            basedir_absolute, basedir_relative = self.get_mkdtemp()
-            dumper.dump(item, basedir_absolute)
-            self.setitem(key, LoaderWrapper(basedir_relative), dumper = 'self')
-            
-            
-        '''
-        how can i make the dumper thingy more 
-        '''
-        
-            
+            basedir_absolute, basedir_relative = self.get_mkdtemp(prefix = slugify(key))
+            try:
+                dumper.dump(item, basedir_absolute)
+                self.__direct_dbset(key, LoaderWrapper(basedir_relative))
+            except:
+                shutil.rmtree(basedir_absolute)
+                if key in self.keys():
+                    del self[key]
+                raise
+               
     def __setitem__(self, key, item):
         self.setitem(key, item, dumper = None)
+
+    def __delitem__(self, key):
+        dummy = self.__direct_dbget(key)
+        if isinstance(dummy, LoaderWrapper):
+            try:
+                shutil.rmtree(os.path.join(self.basedir,dummy.relpath))
+            except OSError:
+                print('The folder ' + os.path.join(self.basedir,dummy.relpath) + ' was registered as belonging to ' + \
+                      str(key) + '. I tried to delete this folder, because the corresponding key was overwritten. ' + \
+                      'Could not delete anything, because folder did not exist in the first place. I just carry on ...')
+        
+        self.__direct_dbdel(key)
+                       
                 
     def maybe_calculate(self, key, fun, dumper = None):
         try:

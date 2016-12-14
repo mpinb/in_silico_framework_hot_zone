@@ -1,0 +1,36 @@
+import dask.dataframe
+import pandas as pd
+import os
+
+
+def concat_path_elements_to_filelist(*args):
+    '''e.g. 
+    args = ['str', [1,2,3], pd.Series([1,2,3])]
+    > [['str', 'str', 'str'], [1, 2, 3], [1, 2, 3]]
+    '''
+    args = [[arg] if isinstance(arg, str) else list(arg) for arg in args]
+    max_len = max([len(x) for x in args])
+    args = [x*max_len if len(x)==1 else x for x in args]
+    min_len = min([len(x) for x in args])
+    assert(min_len == max_len)
+    ret = [os.path.join(*x) for x in zip(*args)]
+    return ret
+    
+#todo test:
+#['str', [1,2,3], pd.Series([1,2,3])] --> [('str', 1, 1), ('str', 2, 2), ('str', 3, 3)]
+#'0' --> ['0']
+        
+    
+def read_csvs(*args):
+    '''the dask read_csv function only supports 
+    globstrings. this is intended to use, if you want to provide
+    a explicit filelist instead'''
+    filelist = concat_path_elements_to_filelist(*args) ## 3hr of debugging: *args, not args
+    out = []
+    for fname in filelist:
+        absolute_path_to_file = os.path.join(fname)
+        out.append(dask.delayed(pd.read_csv)(absolute_path_to_file))
+    
+    return dask.dataframe.from_delayed(out)
+
+

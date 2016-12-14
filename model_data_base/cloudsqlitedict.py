@@ -163,7 +163,7 @@ class SqliteDict(DictClass):
         self.autocommit = autocommit
         self.journal_mode = journal_mode
 
-        logger.info("opening Sqlite table %r in %s" % (tablename, filename))
+        ##logger.info("opening Sqlite table %r in %s" % (tablename, filename))
         MAKE_TABLE = 'CREATE TABLE IF NOT EXISTS "%s" (key TEXT PRIMARY KEY, value BLOB)' % self.tablename
         self.conn = self._new_conn()
         self.conn.execute(MAKE_TABLE)

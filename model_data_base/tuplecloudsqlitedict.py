@@ -39,3 +39,4 @@ class SqliteDict:
 
     def close(self):
         self.sqlitedict.close()
+    

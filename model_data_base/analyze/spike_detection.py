@@ -1,6 +1,7 @@
 import pandas as pd
 import dask
 import numpy as np
+from ..settings import multiprocessing_scheduler
 
 def simple_spike_detection(t, v, tBegin=None, tEnd=None, threshold=0.0, mode='regular'):
     '''
@@ -44,6 +45,26 @@ def simple_spike_detection(t, v, tBegin=None, tEnd=None, threshold=0.0, mode='re
     return tSpike
 
 
+# deprecated: this only works, if dask accepts concatenating dataframes with variable length of
+# columns. this does not seem to be the case for dask > 0.12
+#
+# def _helper(x):
+#     '''reads out a voltage trace, so it can be fed into simple_spike_detection()
+#     and converts the result back to pd.Series, so the result can be concatenated 
+#     to a dask dataframe'''
+#     t = x.index.values
+#     values = x.values
+#     spikes = simple_spike_detection(t, values, mode = 'regular', threshold = 0)
+#     #print(len(spikes))
+#     return pd.Series({lv: x for lv, x in enumerate(spikes)})
+# 
+# def spike_detection(ddf):
+#     #print(type(mdb['voltage_traces']))
+# #     return mdb['voltage_traces'].apply(_helper, axis = 1)
+#     return ddf.apply(_helper, axis = 1)
+
+
+
 def _helper(x):
     '''reads out a voltage trace, so it can be fed into simple_spike_detection()
     and converts the result back to pd.Series, so the result can be concatenated 
@@ -55,7 +76,6 @@ def _helper(x):
     return pd.Series({lv: x for lv, x in enumerate(spikes)})
 
 def spike_detection(ddf):
-    #print(type(mdb['voltage_traces']))
-#     return mdb['voltage_traces'].apply(_helper, axis = 1)
-    return ddf.apply(_helper, axis = 1)
-
+    '''this method expects a dask dataframe and returns a pandas dataframe containing the spikes'''
+    dummy = dask.compute(*map(dask.delayed(lambda x: x.apply(_helper, axis = 1)), ddf.to_delayed()), get = multiprocessing_scheduler)
+    return pd.concat(dummy)

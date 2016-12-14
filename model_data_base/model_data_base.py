@@ -156,7 +156,7 @@ class ModelDataBase(object):
         self.file_list = IO.make_file_list(self.path, 'vm_all_traces.csv')
         print('done with filelist ...')        
         #read all soma voltage traces in dask dataframe
-        self.voltage_traces = IO.read_voltage_traces(self.path, self.file_list)
+        self.voltage_traces = IO.read_voltage_traces_by_filenames(self.path, self.file_list)
         print('done with voltage_traces ...')        
         #the indexes of this dataframe are stored for further use to identify the 
         #simulation trail
@@ -179,7 +179,7 @@ class ModelDataBase(object):
         self.cell_activation = IO.read_cell_activation_times(self)
         
     def _regenerate_data(self):
-        self.voltage_traces = IO.read_voltage_traces(self.path, self.file_list)
+        self.voltage_traces = IO.read_voltage_traces_by_filenames(self.path, self.file_list)
         self._build_db_part2()
     
     def read_db(self, selfcheck = True):
