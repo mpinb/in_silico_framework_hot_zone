@@ -54,8 +54,8 @@ def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
             return pd.Series({'A': fig2np(fig)})
         
         #print df.npartitions
-        figures_list = df.map_partitions(fun2, meta = {'A': 'object'})
-        figures_list = figures_list.compute(get = multiprocessing_scheduler)
+        figures_list = df.map_partitions(fun2, meta = ('A', 'object'))
+        figures_list = figures_list.compute(get = dask.async.get_sync)#multiprocessing_scheduler)
         #print figures_list
         #if fig is None: fig = plt.figure(figsize = figsize)
         #plt.axis('off')

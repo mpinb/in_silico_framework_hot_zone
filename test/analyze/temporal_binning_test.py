@@ -31,7 +31,7 @@ class Tests(unittest.TestCase):
     
     @decorators.testlevel(1)    
     def test_binning_real_data(self):
-        mdb = model_data_base.ModelDataBase('test/data/test_data', 'test/data/test_temp')            
+        mdb = model_data_base.ModelDataBase('test/data/test_temp')            
             
         pdf = mdb['spike_times']
         #if dask: convert to pandas

@@ -4,7 +4,7 @@ import unittest
 import dask.dataframe as dd
 import pandas as pd
 from .. import decorators
-from model_data_base import ModelDataBase 
+from model_data_base.model_data_base import ModelDataBase 
 
 class Tests(unittest.TestCase):
     def setUp(self):
@@ -22,13 +22,13 @@ class Tests(unittest.TestCase):
         ddf = dd.from_pandas(self.df, npartitions = 2)
         fig = rasterplot(self.df, tlim = (0,350))
 
-    @decorators.testlevel(1)        
-    def test_real_data(self):
-        mdb = ModelDataBase(os.path.join(parent, 'test/data/test_data'), os.path.join(parent, 'trash_it_now'))
-        x = mdb['spike_times']
-        if not isinstance(x, dd.DataFrame):
-            raise ValueError("This test requires mdb['spike_times'] to be an instance of dask.dataframe.Dataframe")
-        fig = rasterplot(mdb['spike_times'], tlim = (0,350))
+#     @decorators.testlevel(1)        
+#     def test_real_data(self):
+#         mdb = ModelDataBase(os.path.join(parent, 'trash_it_now'))
+#         x = mdb['spike_times']
+#         if not isinstance(x, dd.DataFrame):
+#             raise ValueError("This test requires mdb['spike_times'] to be an instance of dask.dataframe.Dataframe")
+#         fig = rasterplot(mdb['spike_times'], tlim = (0,350))
     
     def test_can_be_called_with_figures_and_axes(self):
         from  matplotlib.figure import Figure

@@ -25,23 +25,23 @@ class Loader(parent_classes.Loader):
         elif self.index_name and self.divisions:
             print('loaded dask dataframe with index and known divisions')
             ddf = [dask.delayed(pd.read_csv)(fname, index_col = self.index_name) \
-                   for fname in glob.glob(os.path.join(savedir, fileglob))]
+                   for fname in sorted(glob.glob(os.path.join(savedir, fileglob)))]
             ddf = dd.from_delayed(ddf, divisions = self.divisions, meta = self.meta)
         elif self.index_name and not self.divisions:
             print('loaded dask dataframe with index but without known divisions')            
             ddf = [dask.delayed(pd.read_csv)(fname, index_col = self.index_name) \
-                   for fname in glob.glob(os.path.join(savedir, fileglob))]
+                   for fname in sorted(glob.glob(os.path.join(savedir, fileglob)))]
             ddf = dd.from_delayed(ddf, meta = self.meta)   
         return ddf
         
 def dump(obj, savedir):
-    if obj.npartitions < 100:
-        try:
-            obj = obj.repartition(npartitions = 100)
-        except ValueError:
-            pass # can only repartition to fewer partitions ... will hopefully change in the future
-    elif obj.npartitions >= 2000:
-        obj = obj.repartition(npartitions = 2000)
+#     if obj.npartitions < 100:
+#         try:
+#             obj = obj.repartition(npartitions = 100)
+#         except ValueError:
+#             pass # can only repartition to fewer partitions ... will hopefully change in the future
+#     elif obj.npartitions >= 2000:
+#         obj = obj.repartition(npartitions = 2000)
     index_flag = obj.index.name is not None
     obj.to_csv(os.path.join(savedir, fileglob), get = settings.multiprocessing_scheduler, index = index_flag)
     meta = obj._meta
@@ -50,7 +50,10 @@ def dump(obj, savedir):
         divisions = obj.divisions
     else:
         divisions = None
+        #experimental: calculate divisions, if they are not known and index is set
+        if obj.index.name is not None:
+            obj=obj.reset_index().set_index(index_name, sorted = True)
+            divisions = obj.divisions
         
     with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
         cloudpickle.dump(Loader(meta, index_name, divisions), file_)
-

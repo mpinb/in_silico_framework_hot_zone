@@ -5,36 +5,71 @@ Created on Aug 15, 2016
 '''
 
 import os
+import shutil
 import tempfile
 import cloudpickle as pickle
-import IO, IO.LoaderDumper.to_pickle, analyze
+import IO, IO.LoaderDumper.to_pickle
+import IO.LoaderDumper.pandas_to_msgpack
+import analyze
 import dask.diagnostics
 import settings
 from tuplecloudsqlitedict import SqliteDict
 from copy import deepcopy
 import warnings
+import re
 
-# #monkey patch pandas to provide parallel computing methods
-# def apply_parallel(self, *args, **kwargs):
-#     '''Takes a pandas dataframe, converts it to a dask dataframe, applies the given method in parallel,
-#     and converts the result back to a pandas dataframe. Introduces a lot of overhead but is convenient.
-#     '''
-#     #Note: npartitions = 80 seems to be a good choice if one of the compute servers with 40 cores is used.
-#     #Otherwise, it might be necessary to change that value
-#     return dask.dataframe.from_pandas(self, npartitions = 80).apply(*args, **kwargs).compute(get = dask.multiprocessing.get)
-# pd.DataFrame.apply_parallel = apply_parallel
 
+def slugify(value):
+    """
+    Normalizes string, converts to lowercase, removes non-alpha characters,
+    and converts spaces to hyphens.
+    
+    http://stackoverflow.com/questions/295135/turn-a-string-into-a-valid-filename
+    a bit modified
+    """
+    import unicodedata
+    value = str(value)
+    value = unicode(value, errors = 'ignore')
+    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
+    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
+    value = unicode(re.sub('[-\s]+', '-', value))
+    return str(value)
+    
 class LoaderWrapper:
+    '''wrapper class pointing to loader, which can be saved in the internal SQL database'''
     def __init__(self, relpath):
         self.relpath = relpath
+        
+class MdbException(Exception):
+    pass        
+
+def _check_working_dir_clean_for_build(working_dir):
+    #todo: try to make dirs
+    if os.path.exists(working_dir):
+        try:
+            os.rmdir(working_dir) #only works, if dir was empty --- but is it save?
+            os.mkdir(working_dir)
+            return
+        except OSError:
+            raise MdbException("Can't build database: " \
+                               + "The specified working_dir is either not empty " \
+                               + "or write permission is missing. The specified path is %s" % working_dir)
+    else:
+        try: 
+            os.makedirs(working_dir) #todo: should ideally be mkdirs
+            return
+        except OSError:
+            raise MdbException("Can't build database: " \
+                               + "Cannot create the directories specified in %s" % working_dir)
 
 class ModelDataBase(object):
-    def __init__(self, path, tempdir, forceload = False, readonly = False):
+    def __init__(self, basedir, forceload = False, readonly = False):
         '''
-        This is an interface to simulation results. The simulation results located in
-        path are converted to an optimized format located in tempdir.
+        Class responsible for storing information, meant to be used as an interface to simulation 
+        results. 
         
-        After the initialization, the data can be accessed in the following way:
+        E.g. this class can be initialized in a way that after the initialization, 
+        the data can be accessed in the following way:
         mdb['voltage_traces']
         mdb['synapse_activation']
         mdb['spike_times']
@@ -43,12 +78,12 @@ class ModelDataBase(object):
         
         Further more, it is possible to assign new elements to the database
         mdb['my_new_element'] = my_new_element
-        These elements are stored together with the other data in the tempdir.
+        These elements are stored together with the other data in the basedir.
         
         They can be re ad out of the database in the following way:
         my_reloaded_element = mdb['my_new_element']
         
-        It is possible to use tuples oif strings as keys.
+        It is possible to use tuples of strings as keys to reflect an arbitrary hierarchy.
         To read out all existing keys, use the keys()-function.
         
         After an update of the underlying libraries (e.g. dask), it might be,
@@ -59,222 +94,108 @@ class ModelDataBase(object):
         consider to save the updated database with the save_db() method.     
         '''
         
-        #todo: rename tempdir to basedir
+        #todo: rename basedir to basedir
         
-        self.analyze = analyze      
-        self._registeredDumpers = [IO.LoaderDumper.to_pickle, 'self']
-        self.path = path
-        self.tempdir = tempdir
+        self.basedir = os.path.abspath(basedir)
+        #self.basedir = basedir
         self.settings = settings #settings is imported above
         self.forceload = forceload
         self.readonly = readonly #possible values: False, True, 'warning'
-
-        if not forceload:       
-            self.add_directory(path, tempdir)
-        else:
-            print('Data integrity check omitted. Data is simply loaded.')
-            if not os.path.exists(tempdir): 
-                raise RuntimeError("""tempdir %s does not exist. Please specify the path to your simulation results""" % path)
-            self.read_db()
-            #those information was overwritten by read_db()
-            self.path = path
-            self.tempdir = tempdir
-
-        #self.old = old.old(self)
         
+        try:
+            self.read_db()
+        except:
+            _check_working_dir_clean_for_build(basedir)
+            self.first_init()
+            self.save_db()
+            
+    def first_init(self):
+        '''function to initialize this db with default values, if it has never been
+        initialized before'''
+        self._registeredDumpers = ['self'] #self: stores the data in the underlying database
         
     def registerDumper(self, dumperModule):
-        '''caveat: make sure to procide the MODULE, not the class'''
+        '''caveat: make sure to provide the MODULE, not the class ### does it really matter?'''
         self._registeredDumpers.append(dumperModule)
-            
-    def add_directory(self, path,tempdir):
-        #todo: this should to be put in the Converrter class
-        #currently, path and tempdir do not have any impact, because
-        #because the called functions only look on self.path and self.tempdir
-        
-        #what should this function implement based on its name?
-        #it should provide an interface, to add arbitrary simulation
-        #folders to the mdb.
-        
-        #how could this be done better
-        #the model_data_base class only implements the set_item method
-        #this method can than be called by a Converter object or function,
-        #which either sets the data directly, or sets an respective Loader instance.
-        #For each such object, the Converter object is pickled in the metadata,
-        #so in case of corrupted data, the data necessary for the Loader can be regenerated.
-        
-        #this implies, that the set_item method allways sets a dictionary, containing
-        #two fields: data (for the actual object to be stored) and metadata
-        
-        #on initialization of the model_data_base, an optional selfcheck can be made
-        #in which the .check() method on every loader object is called.
-        if not os.path.exists(path): 
-            raise RuntimeError("""path %s does not exist. Please specify the path to your simulation results""" % path)
-        if self.check_already_build():
-            self.read_db()
-        else:
-            self.build_db() #create them
-            self.save_db()
     
-    def check_already_build(self):
-        '''checks if SOME build is in the folder'''
-        #no folder, no files --> suitable for rebuild
-        if not os.path.exists(self.tempdir): return False
-        #folder exists --> not suitable for rebuild
-        else:
-            db_main_file = os.path.join(self.tempdir, 'dbcore.pickle')
-            #folder exists, but not the necessary file
-            if not os.path.exists(db_main_file): 
-                print(db_main_file)
-                raise RuntimeError("The specified tempdir exists, but it does not contain"
-                                   + " the necessary dbcore.pickle. If you want to rebuild the database,"
-                                   + " please provide a directory, that currently does not exist." 
-                                   + " The directory will be created and the database will be" 
-                                   + " rebuild in this folder.")
-            #file exists
-            else:
-                try:
-                    with open(db_main_file, 'r') as f:
-                        pickle.load(f)
-                    #file exists and can be read
-                    return True
-                except:
-                    raise RuntimeError("The speicied tempdir exists. It contains the necessary dbcore.pickle"
-                                    + "However, this file can not be unpickled. You might consider rebuilding"
-                                    + "the database by providing a tempdir, that currently does not exist." 
-                                    + " The directory will be created and the database will be" 
-                                    + " rebuild in this folder.")           
-    def build_db(self):    
-        self._build_db_part1()
-        self._build_db_part2()
-        
-    def _build_db_part1(self):
-        '''builds the metadata object and rewrites files for fast access.
-        Only needs to be called once to put the necessary files in the tempdir'''
-        print('building database ...')
-        #make filelist of all soma-voltagetraces-files
-        self.file_list = IO.make_file_list(self.path, 'vm_all_traces.csv')
-        print('done with filelist ...')        
-        #read all soma voltage traces in dask dataframe
-        self.voltage_traces = IO.read_voltage_traces_by_filenames(self.path, self.file_list)
-        print('done with voltage_traces ...')        
-        #the indexes of this dataframe are stored for further use to identify the 
-        #simulation trail
-        self.sim_trails = self.voltage_traces.index.compute()
-        print('unambiguous sim_trail_indices generated ...')        
-        #builds the metadata object, which connects the sim_trail indexes with the 
-        #associated files
-        self.metadata = IO.create_metadata(self.sim_trails)
-        print('finished generating metadata ...')        
-        #rewrites the synapse and cell files in a way they can be acessed fast
-        print('start rewriting synapse and cell activation data in optimized format')                
-        IO.rewrite_data_in_fast_format(self)    
-        print('data is written. The above steps will not be necessary again if the' \
-              + 'ModelDataBase object is instantiated in the same way.')                
-        
-    
-    def _build_db_part2(self):
-        self.spike_times = analyze.spike_detection(self.voltage_traces)
-        self.synapse_activation = IO.read_synapse_activation_times(self)
-        self.cell_activation = IO.read_cell_activation_times(self)
-        
-    def _regenerate_data(self):
-        self.voltage_traces = IO.read_voltage_traces_by_filenames(self.path, self.file_list)
-        self._build_db_part2()
-    
-    def read_db(self, selfcheck = True):
-            ###path is already checked
-#         if not os.path.exists(self.path): 
-#             raise RuntimeError("There is something wrong with the tempdir %s." +
-#                                "The folder exists, but the file dbcore.pickle could\n" + 
-#                                "not be found. Plese delete the folder manually \n" +
-#                                "(so it can be rebuild) or use another tempdir.")
-        
-        with open(os.path.join(self.tempdir, 'dbcore.pickle'), 'r') as f:
+    def read_db(self):    
+        with open(os.path.join(self.basedir, 'dbcore.pickle'), 'r') as f:
             out = pickle.load(f)
-        
-        #check accordance of saved and provided data location
-        if not self.forceload:
-            if not os.path.abspath(self.tempdir) == os.path.abspath(out['tempdir']):
-                raise RuntimeError("Cave: the tempdir specified in the saved data \n" + 
-                                     "differs from the real location.\n"+
-                                     "given location:%s \n" % self.tempdir+
-                                     "location stored in file:%s \n" % out['tempdir'])
-            if not os.path.abspath(self.path) == os.path.abspath(out['path']):
-                raise RuntimeError("Cave: the path specified in the saved data " + 
-                                     "differs from the real location \n" + 
-                                    "given location:%s \n" % self.path +
-                                     "location stored in file:%s \n" % out['path'])
             
         for name in out:
             setattr(self, name, out[name])            
-        
-        if selfcheck:
-            pass
-        
-        #self._build_db_part2()
-    
+            
     def save_db(self):
         '''saves the core data to dbcore.pickle'''
-        out = {'metadata': self.metadata, 'path': self.path, 
-               'tempdir': self.tempdir, 'file_list': self.file_list,
-               'sim_trails': self.sim_trails, 'voltage_traces': self.voltage_traces,
-               'spike_times': self.spike_times,
-               'synapse_activation': self.synapse_activation,
-               'cell_activation': self.cell_activation}
-        with open(os.path.join(self.tempdir, 'dbcore.pickle'), 'w') as f:
+        out = {'_registeredDumpers': self._registeredDumpers} ## things that define the state of this mdb and should be saved
+        with open(os.path.join(self.basedir, 'dbcore.pickle'), 'w') as f:
             pickle.dump(out, f)
         
     def itemexists(self, item):
+        #todo: this is inefficient, since it has to load all the data
+        #just to see if there is a key
         try:
             self.__getitem__(item)
             return True
         except:
             return False
-            
+    
+    def __direct_dbget(self, arg):
+        try:
+            sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
+            dummy = sqllitedict[arg]
+        finally:
+            sqllitedict.close() 
+        return dummy
+    
+    def __direct_dbset(self, key, item):
+        try:
+            sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
+            sqllitedict[key] = item
+        except:
+            raise
+        finally: 
+            sqllitedict.close()  
+
+    def __direct_dbdel(self, arg):
+        try:
+            sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
+            del sqllitedict[arg]
+        finally:
+            sqllitedict.close() 
+                           
     def __getitem__(self, arg):
-        #everything should go in self.sqllitedict
-        if arg == 'spike_times':
-            return deepcopy(self.spike_times)
-        elif arg == 'voltage_traces':
-            return deepcopy(self.voltage_traces)
-        elif arg == 'synapse_activation':
-            return deepcopy(self.synapse_activation)
-        elif arg == 'cell_activation':
-            return deepcopy(self.cell_activation)
-        elif arg == 'metadata':
-            return deepcopy(self.metadata)
+        dummy = self.__direct_dbget(arg)
+        if isinstance(dummy, LoaderWrapper):
+            return IO.LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
         else:
-            try:
-                sqllitedict = SqliteDict(os.path.join(self.tempdir, 'sqlitedict.db'), autocommit=True)
-                dummy = sqllitedict[arg]
-                if isinstance(dummy, LoaderWrapper):
-                    return IO.LoaderDumper.load(os.path.join(self.tempdir, dummy.relpath)) 
-                else:
-                    return dummy
-            finally:
-                sqllitedict.close()
+            return dummy
                 
-    def get_mkdtemp(self, suffix = ''):
-        absolute_path = tempfile.mkdtemp(suffix = suffix, dir = self.tempdir) 
-        relative_path = os.path.relpath(absolute_path, self.tempdir)
+    def get_mkdtemp(self, prefix = '', suffix = ''):
+        absolute_path = tempfile.mkdtemp(prefix = prefix + '_', suffix = '_' + suffix, dir = self.basedir) 
+        relative_path = os.path.relpath(absolute_path, self.basedir)
         return absolute_path, relative_path
         
     def setitem(self, key, item, dumper = None):
         #check if we have writing privilege
         if self.readonly is True:
             raise RuntimeError("DB is in readonly mode. Blocked writing attempt to key %s" % key)
-        elif self.readonly is 'warning':
+        #this exists, so jupyter notebooks will not crash when they try to write something
+        elif self.readonly is 'warning': 
             warnings.warn("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         elif self.readonly is False:
             pass
         else:
             raise RuntimeError("Readonly attribute is in unknown state. Should be True, False or 'warning, but is: %s" % self.readonly)
         
+        #check if there is already a subdirectory assigned to this key. If so: delete subdirectory.
+        if key in self.keys():
+            self.__delitem__(key)
+                
         #find dumper
         if dumper is None:
             for d in self._registeredDumpers:
-                if d.check(item):
+                if d == 'self' or d.check(item):
                     dumper = d
                     break
     
@@ -282,26 +203,38 @@ class ModelDataBase(object):
                 
         #if dumper is 'self': store in this DB
         if dumper == 'self':
-            try:
-                sqllitedict = SqliteDict(os.path.join(self.tempdir, 'sqlitedict.db'), autocommit=True)
-                sqllitedict[key] = item
-            except:
-                raise
-            finally: 
-                sqllitedict.close() 
+            self.__direct_dbset(key, item)
                 
         #if dumper is something else: 
         #generate temp directory, save the object in that directory using dump()
         #wrap the relative path to an LoaderWrapper object and save it to the 
         #internal database
         else:
-            tempdir_absolute, tempdir_relative = self.get_mkdtemp()
-            dumper.dump(item, tempdir_absolute)
-            self.setitem(key, LoaderWrapper(tempdir_relative), dumper = 'self')
-        
-            
+            basedir_absolute, basedir_relative = self.get_mkdtemp(prefix = slugify(key))
+            try:
+                dumper.dump(item, basedir_absolute)
+                self.__direct_dbset(key, LoaderWrapper(basedir_relative))
+            except:
+                shutil.rmtree(basedir_absolute)
+                if key in self.keys():
+                    del self[key]
+                raise
+               
     def __setitem__(self, key, item):
         self.setitem(key, item, dumper = None)
+
+    def __delitem__(self, key):
+        dummy = self.__direct_dbget(key)
+        if isinstance(dummy, LoaderWrapper):
+            try:
+                shutil.rmtree(os.path.join(self.basedir,dummy.relpath))
+            except OSError:
+                print('The folder ' + os.path.join(self.basedir,dummy.relpath) + ' was registered as belonging to ' + \
+                      str(key) + '. I tried to delete this folder, because the corresponding key was overwritten. ' + \
+                      'Could not delete anything, because folder did not exist in the first place. I just carry on ...')
+        
+        self.__direct_dbdel(key)
+                       
                 
     def maybe_calculate(self, key, fun, dumper = None):
         try:
@@ -314,10 +247,13 @@ class ModelDataBase(object):
         
     def keys(self):
         try:
-            sqllitedict = SqliteDict(os.path.join(self.tempdir, 'sqlitedict.db'), autocommit=True)
-            keys = sqllitedict.keys() + ['spike_times', 'voltage_traces', 'synapse_activation', 'cell_activation', 'metadata']
+            sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
+            keys = sqllitedict.keys()
             return sorted(keys)
         finally:
-            sqllitedict.close()                       
+            sqllitedict.close()             
+            
+
+                      
         
     

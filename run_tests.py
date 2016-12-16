@@ -8,6 +8,7 @@ import matplotlib
 #matplotlib.use('agg')
 import matplotlib.pyplot as plt
 #print(matplotlib.get_backend())
+from model_data_base import ModelDataBase
 plt.switch_backend('agg')  
 if __name__ == "__main__":
 #     import shutil
@@ -23,7 +24,7 @@ if __name__ == "__main__":
     #unittest.monkypatches.run_if_testlevel(level) are only run
     #if testlevel >= level.
     #if testlevel is set to 'all', all tests will run.
-    test.decorators.current_testlevel = 100#'all'#0#'all'#'0
+    test.decorators.current_testlevel = 1#'all'#0#'all'#'0
 #     unittest.monkypatches.testlevel = 'all'
     
     #if run is set to a string resembling the path of a module
@@ -32,6 +33,7 @@ if __name__ == "__main__":
     #if run is set to 'all', all tests in the test module will run.
 #     run = 'test.tuplecloudsqlitedict_test'
     run = 'all'
+    #run = 'test.plotfunctions.manylines_test'
     
     #verbosity of testrunner
     verbosity = 5

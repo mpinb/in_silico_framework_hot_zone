@@ -3,6 +3,7 @@ from .. import decorators
 from model_data_base.analyze.spaciotemporal_binning import *
 import unittest
 import dask
+from  model_data_base.model_data_base import ModelDataBase
 
 
 class Tests(unittest.TestCase):
@@ -13,6 +14,11 @@ class Tests(unittest.TestCase):
                  '3': [np.NaN, np.NaN, 11.5, 30, np.NaN, np.NaN, np.NaN]}
         
         self.test_dataframe = pd.DataFrame(self.test_dataframe)
+        
+        mdb = ModelDataBase('test/data/test_temp') 
+        if not 'synapse_activation' in mdb.keys():
+            import model_data_base.mdb_initializers.load_roberts_simulationdata
+            model_data_base.mdb_initializers.load_roberts_simulationdata.init(mdb, 'test/data/test_data')
     
     def test_binning_small_pandas_df(self):
         '''binning a smale pandas.DataFrame'''
@@ -42,7 +48,7 @@ class Tests(unittest.TestCase):
     def test_binning_real_data(self):
         '''binning dask dataframes has to deliver the same
         results as binning pandas dataframes'''
-        mdb = model_data_base.ModelDataBase('test/data/test_data', 'test/data/test_temp')            
+        mdb = model_data_base.ModelDataBase('test/data/test_temp')            
             
         x = universal(mdb['synapse_activation'].compute(get=dask.multiprocessing.get), 'soma_distance')
         y = universal(mdb['synapse_activation'], 'soma_distance')
