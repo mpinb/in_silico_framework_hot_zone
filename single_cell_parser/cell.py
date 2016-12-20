@@ -78,6 +78,10 @@ class Cell(object):
                 self.synapses[synType] = []
     
     def record_range_var(self, var, mech=None):
+        #allow specifying mech and var in var. this is closer to the neuron syntax
+        if '.' in var:
+            mech, var = var.split('.')
+            
         for sec in self.sections:
             try:
                 sec._init_range_var_recording(var, mech)
