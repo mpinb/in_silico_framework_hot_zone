@@ -24,15 +24,19 @@ class Loader(parent_classes.Loader):
             ddf = dd.read_csv(os.path.join(savedir, fileglob))        
         elif self.index_name and self.divisions:
             print('loaded dask dataframe with index and known divisions')
-            ddf = [dask.delayed(pd.read_csv)(fname, index_col = self.index_name) \
+            ddf = [dask.delayed(pd.read_csv)(fname, index_col = self.index_name, skiprows = 1, \
+                                             names = [self.index_name] + list(self.meta.columns)) \
                    for fname in sorted(glob.glob(os.path.join(savedir, fileglob)))]
             ddf = dd.from_delayed(ddf, divisions = self.divisions, meta = self.meta)
         elif self.index_name and not self.divisions:
             print('loaded dask dataframe with index but without known divisions')            
-            ddf = [dask.delayed(pd.read_csv)(fname, index_col = self.index_name) \
+            ddf = [dask.delayed(pd.read_csv)(fname, index_col = self.index_name, skiprows = 1, \
+                                             names = [self.index_name] + list(self.meta.columns)) \
                    for fname in sorted(glob.glob(os.path.join(savedir, fileglob)))]
             ddf = dd.from_delayed(ddf, meta = self.meta)   
         return ddf
+    
+        
         
 def dump(obj, savedir):
 #     if obj.npartitions < 100:

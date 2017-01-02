@@ -96,6 +96,10 @@ class Tests(unittest.TestCase):
         self.assertEqual(0, len(cell_activation[cell_activation.isnan == True]))
         self.assertEqual(0, len(voltage_traces[voltage_traces.isnan == True]))
  
+    def test_voltage_traces_have_float_indices(self):
+        e = ModelDataBase(self.test_temp)
+        self.assertIsInstance(e['voltage_traces'].columns[0], float)
+        
     def test_sqlitedict(self):
         e = ModelDataBase(self.test_temp)
         x = np.random.rand(10)
