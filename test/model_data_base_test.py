@@ -99,6 +99,7 @@ class Tests(unittest.TestCase):
     def test_voltage_traces_have_float_indices(self):
         e = ModelDataBase(self.test_temp)
         self.assertIsInstance(e['voltage_traces'].columns[0], float)
+        self.assertIsInstance(e['voltage_traces'].head().columns[0], float)
         
     def test_sqlitedict(self):
         e = ModelDataBase(self.test_temp)
