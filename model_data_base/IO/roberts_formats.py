@@ -97,7 +97,7 @@ def read_pandas_synapse_activation_from_roberts_format(path, sim_trail_index = '
     '''reads synapse activation file from simulation and converts it to pandas table'''
     
     if max_commas is None:
-        max_commas = _max_commas(path, lambda x: x)
+        max_commas = _max_commas(path)#, lambda x: x)
     else:
         pass
     header = 'sim_trail_index,synapse_type,synapse_ID,soma_distance,section_ID,section_pt_ID,dendrite_label,'    
