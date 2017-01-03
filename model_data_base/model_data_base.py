@@ -236,8 +236,10 @@ class ModelDataBase(object):
         self.__direct_dbdel(key)
                        
                 
-    def maybe_calculate(self, key, fun, dumper = None):
+    def maybe_calculate(self, key, fun, dumper = None, force_calculation = False):
         try:
+            if force_calculation:
+                raise ValueError
             return self[key]
         except:
             with dask.diagnostics.ProgressBar():
