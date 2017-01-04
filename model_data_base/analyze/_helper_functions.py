@@ -25,7 +25,7 @@ def time_list_from_pd(syn):
     out = []
     for col in relevant_columns:
         dummy = syn[col]
-        dummy = dummy[np.logical_not(np.isnan(dummy))]
+        dummy = dummy.dropna()
         out.append(dummy)
     return pd.concat(out).values
 
