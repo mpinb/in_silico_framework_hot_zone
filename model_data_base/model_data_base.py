@@ -36,14 +36,39 @@ def slugify(value):
     return str(value)
     
 class LoaderWrapper:
-    '''wrapper class pointing to loader, which can be saved in the internal SQL database'''
+    '''This is a pointer to data, which is stored elsewhere.
+    
+    It is used by ModelDataBase, if data is stored in a subfolder of the 
+    model_data_base.basedir folder. It is not used, if the data is stored directly
+    in the sqlite database.
+    
+    The process of storing data in a subfolder is as follows:
+    1. The subfolder is generated using the mkdtemp method
+    2. the respective dumper puts its data there
+    3. the dumper also saves a Loader.pickle file there.
+    4. A LoaderWrapper object pointing to the datafolder with a relative
+        path (to allow moving of the database) is saved under the respective key
+        in the model_data_base
+        
+    The process of loading in the data is as follows:
+    1. the user request it: mdb['somekey']
+    2. the result is a LoaderWrapper object
+    3. the Loader.pickle file in the respective folder is loaded
+    4. the get-methdo of the unpickled object is called with the
+        absolute path to the folder.
+    5. the returned object is returned to the user
+    
+    '''
     def __init__(self, relpath):
         self.relpath = relpath
         
 class MdbException(Exception):
+    '''Typical mdb errors'''
     pass        
 
 def _check_working_dir_clean_for_build(working_dir):
+    '''Backend method that checks, wether working_dir is suitable
+    to build a new database there'''
     #todo: try to make dirs
     if os.path.exists(working_dir):
         try:
@@ -118,7 +143,8 @@ class ModelDataBase(object):
         '''caveat: make sure to provide the MODULE, not the class ### does it really matter?'''
         self._registeredDumpers.append(dumperModule)
     
-    def read_db(self):    
+    def read_db(self):
+        '''sets the state of the database according to dbcore.pickle''' 
         with open(os.path.join(self.basedir, 'dbcore.pickle'), 'r') as f:
             out = pickle.load(f)
             
@@ -126,21 +152,23 @@ class ModelDataBase(object):
             setattr(self, name, out[name])            
             
     def save_db(self):
-        '''saves the core data to dbcore.pickle'''
+        '''saves the data which defines the state of this database to dbcore.pickle'''
         out = {'_registeredDumpers': self._registeredDumpers} ## things that define the state of this mdb and should be saved
         with open(os.path.join(self.basedir, 'dbcore.pickle'), 'w') as f:
             pickle.dump(out, f)
         
-    def itemexists(self, item):
+    def itemexists(self, key):
+        '''Checks, if item is already in the database'''
         #todo: this is inefficient, since it has to load all the data
         #just to see if there is a key
         try:
-            self.__getitem__(item)
+            self.__getitem__(key)
             return True
         except:
             return False
     
     def __direct_dbget(self, arg):
+        '''Backend method to retrive item from the database'''
         try:
             sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
             dummy = sqllitedict[arg]
@@ -149,6 +177,7 @@ class ModelDataBase(object):
         return dummy
     
     def __direct_dbset(self, key, item):
+        '''Backend method to add a key-value pair to the sqlite database'''
         try:
             sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
             sqllitedict[key] = item
@@ -158,6 +187,7 @@ class ModelDataBase(object):
             sqllitedict.close()  
 
     def __direct_dbdel(self, arg):
+        '''Backend method to delete item from the sqlite database.'''
         try:
             sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
             del sqllitedict[arg]
@@ -165,6 +195,8 @@ class ModelDataBase(object):
             sqllitedict.close() 
                            
     def __getitem__(self, arg):
+        '''items can be retrieved from the ModelDataBase using this syntax:
+        item = my_model_data_base[key]'''
         dummy = self.__direct_dbget(arg)
         if isinstance(dummy, LoaderWrapper):
             return IO.LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
@@ -172,11 +204,31 @@ class ModelDataBase(object):
             return dummy
                 
     def get_mkdtemp(self, prefix = '', suffix = ''):
+        '''creates a directory in the model_data_base directory and 
+        returns the path'''
         absolute_path = tempfile.mkdtemp(prefix = prefix + '_', suffix = '_' + suffix, dir = self.basedir) 
         relative_path = os.path.relpath(absolute_path, self.basedir)
         return absolute_path, relative_path
         
-    def setitem(self, key, item, dumper = None):
+    def setitem(self, key, item, **kwargs):
+        '''Allows to set items with a maximum amount of control.
+        
+        key: key
+        item: item that should be saved
+        dumper= dumper module to use, e.g. model_data_base.IO.LoaderDumper.numpy_to_npy
+            If dumper is not set, the default dumper is used
+        **kwargs: other keyword arguments that should be passed to the dumper
+        '''
+        
+        
+        #extract dumper from kwargs
+        if not 'dumper' in kwargs:
+            dumper = None
+        else:
+            dumper = kwargs['dumper']
+            del kwargs['dumper']
+            
+            
         #check if we have writing privilege
         if self.readonly is True:
             raise RuntimeError("DB is in readonly mode. Blocked writing attempt to key %s" % key)
@@ -212,7 +264,7 @@ class ModelDataBase(object):
         else:
             basedir_absolute, basedir_relative = self.get_mkdtemp(prefix = slugify(key))
             try:
-                dumper.dump(item, basedir_absolute)
+                dumper.dump(item, basedir_absolute, **kwargs)
                 self.__direct_dbset(key, LoaderWrapper(basedir_relative))
             except:
                 shutil.rmtree(basedir_absolute)
@@ -221,9 +273,17 @@ class ModelDataBase(object):
                 raise
                
     def __setitem__(self, key, item):
+        '''items can be set using my_model_data_base[key] = item
+        This saves the data with the default dumper.
+        
+        A more elaborate version of this function, which allows more 
+        control on how the data is stored in the database is 
+        ModelDataBase.setitem.'''
+                
         self.setitem(key, item, dumper = None)
 
     def __delitem__(self, key):
+        '''items can be deleted using del my_model_data_base[key]'''
         dummy = self.__direct_dbget(key)
         if isinstance(dummy, LoaderWrapper):
             try:
@@ -236,7 +296,33 @@ class ModelDataBase(object):
         self.__direct_dbdel(key)
                        
                 
-    def maybe_calculate(self, key, fun, dumper = None, force_calculation = False):
+    def maybe_calculate(self, key, fun, **kwargs):
+        '''This function returns the corresponding value of key,
+        if it is already in the database. If it is not in the database,
+        it calculates the value by calling fun, adds this value to the
+        database and returns the value.
+        
+        key: key on which the item can be accessed / should be accessible in the database
+        fun: function expects no parameters (e.g. lambda: 'hello world') 
+        force_calculation =: if set to True, the value will allways be recalculated
+            If there is already an entry in the database with the same key, it will
+            be overwritten
+        **kwargs: attributes, that get passed to ModelDataBase.setitem
+        
+        Example:
+        #value is calculated, since it is the first call and not in the database
+        mdb.maybe_calculate('knok_knok', lambda: 'whos there?', dumper = 'self')
+        > 'whos there?'
+        
+        #value is taken from the database, since it is already stored
+        mdb.maybe_calculate('knok_knok', lambda: 'whos there?', dumper = 'self')
+        > 'whos there?'        
+        '''
+        if 'force_calculation' in kwargs:
+            force_calculation = kwargs['force_calculation']
+            del kwargs['force_calculation']
+        else:
+            force_calculation = False
         try:
             if force_calculation:
                 raise ValueError
@@ -244,10 +330,11 @@ class ModelDataBase(object):
         except:
             with dask.diagnostics.ProgressBar():
                 ret = fun()
-                self.setitem(key, ret, dumper)
+                self.setitem(key, ret, **kwargs)
             return ret    
         
     def keys(self):
+        '''returns the keys of the database'''
         try:
             sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
             keys = sqllitedict.keys()
