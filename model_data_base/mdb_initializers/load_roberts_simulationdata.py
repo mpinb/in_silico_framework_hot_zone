@@ -238,8 +238,8 @@ def rewrite_data_in_fast_format(mdb):
 
 
 
-def _build_db_part1(mdb):
-    '''builds the metadata object and rewrites files for fast access.
+def _build_db_part1(mdb, repartition = False, force_calculate = False):
+    '''builds the metadata object and garants acces to the soma voltage traces.
     Only needs to be called once to put the necessary files in the tempdir'''
        
     print('building database ...')
@@ -247,37 +247,52 @@ def _build_db_part1(mdb):
     #mdb['file_list'] = IO.make_file_list(mdb['simresult_path'], 'vm_all_traces.csv')
     print('generate filelist ...')
     file_list = mdb.maybe_calculate('file_list', lambda: IO.make_file_list(mdb['simresult_path'], 'vm_all_traces.csv'))
-    mdb['file_list'] = sorted(file_list, key = lambda x: os.path.dirname(x))
+    mdb.maybe_calculate('file_list', \
+                        lambda: sorted(file_list, key = lambda x: os.path.dirname(x)), \
+                        dumper = 'self', \
+                        force_calculate = force_calculate)
     #read all soma voltage traces in dask dataframe
-    #mdb['voltage_traces'] = read_voltage_traces_by_filenames(mdb['simresult_path'], mdb['file_list'])
     print('generate voltage traces dataframe...')            
-    mdb['voltage_traces'] = read_voltage_traces_by_filenames(mdb['simresult_path'], mdb['file_list'])
+    mdb.maybe_calculate('voltage_traces_raw', \
+                        lambda: read_voltage_traces_by_filenames(mdb['simresult_path'], mdb['file_list']), \
+                        dumper = 'self',
+                        force_calculate = force_calculate)
     #the indexes of this dataframe are stored for further use to identify the 
     #simulation trail
-    #mdb['sim_trails'] = mdb['voltage_traces'].index.compute(get = settings.multiprocessing_scheduler)
     print('Move voltage_traces locally')
-    mdb.setitem(item = mdb['voltage_traces'], key = 'voltage_traces', dumper = dask_to_csv)    
+    mdb.maybe_calculate('voltage_traces', \
+                        lambda: mdb['voltage_traces'], \
+                        dumper = dask_to_csv, 
+                        force_calculate = force_calculate)
+    del mdb['voltage_traces_raw']
+    
     print('generate unambigous indices ...')            
-    mdb['sim_trail_index'] = mdb['voltage_traces'].index.compute(get = settings.multiprocessing_scheduler)
+    mdb.maybe_calculate('sim_trail_index',
+                        lambda: mdb['voltage_traces'].index.compute(get = settings.multiprocessing_scheduler), 
+                        dumper = 'self', \
+                        force_calculate = force_calculate)
     #builds the metadata object, which connects the sim_trail indexes with the 
     #associated files
-    ##todo: maybe the following is initializer specific and should be put in here 
-    ##rather than in the general Model Data Base IO?
-    #mdb['metadata'] = create_metadata(mdb['sim_trails']) 
     print('generate metadata ...')        
-    mdb.maybe_calculate('metadata', lambda: create_metadata(mdb['sim_trail_index']) )
-    #rewrites the synapse and cell files in a way they can be acessed fast
-    print('start rewriting synapse and cell activation data in optimized format')                
-    rewrite_data_in_fast_format(mdb)                  
+    mdb.maybe_calculate('metadata', \
+                        lambda: create_metadata(mdb['sim_trail_index']),\
+                        dumper = 'self',\
+                        force_calculate = force_calculate)                 
 
 
 def _build_db_part2(mdb):
+    '''Rewrites synapse activation files for fast access and sets up access to them'''
+
+    #rewrites the synapse and cell files in a way they can be acessed fast
+    print('start rewriting synapse and cell activation data in optimized format')                
+    rewrite_data_in_fast_format(mdb)     
     m = mdb['metadata']
     print('generate cell and synapse activation dataframes')
     mdb['synapse_activation'] = dask_wrappers.read_csvs(mdb['synapses_cache_folder'], m.path, m.synapses_file_name).set_index('sim_trail_index', sorted = True)
     mdb['cell_activation'] = dask_wrappers.read_csvs(mdb['cells_cache_folder'], m.path, m.cells_file_name).set_index('sim_trail_index', sorted = True)
     
-def _build_db_part3(mdb):    
+def _build_db_part3(mdb):  
+    '''rewrites synapse activation fiels again, this time with known divisions'''  
     print('Move synapse_activation to local database')    
     mdb.setitem(item = mdb['synapse_activation'], key = 'synapse_activation', dumper = dask_to_csv)
     print('Move cell_activation to local database')    
@@ -318,16 +333,16 @@ def load_dendritic_voltage_traces_helper(mdb, suffix):
     ddf = read_voltage_traces_by_filenames(mdb['simresult_path'], fnames)
     return ddf
 
-def load_dendritic_voltage_traces(mdb):
+def load_dendritic_voltage_traces(mdb, repartition = False):
     
     suffix = '_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv'
     ddf_distal = load_dendritic_voltage_traces_helper(mdb, suffix)      
     suffix = '_apical_proximal_distal_rec_sites_ID_001_sec_025_seg_001_x_0.500_somaDist_198.1_vm_dend_traces.csv'
     ddf_proximal = load_dendritic_voltage_traces_helper(mdb, suffix)
     print('Move distal voltage traces to local database')
-    mdb.setitem(item = ddf_distal, key = 'Vm_distal', dumper = dask_to_csv)  
+    mdb.setitem(item = ddf_distal, key = 'Vm_distal', dumper = dask_to_csv, repartition = repartition)  
     print('Move proximal voltage traces to local database')
-    mdb.setitem(item = ddf_proximal, key = 'Vm_proximal', dumper = dask_to_csv)        
+    mdb.setitem(item = ddf_proximal, key = 'Vm_proximal', dumper = dask_to_csv, repartition = repartition)        
 
 def pipeline(mdb):
     with ProgressBar(): 
