@@ -78,3 +78,5 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
         return dict(score_all = score_all, score_0 = score_0, score_1 = score_1, classifier_ = classifier_)
     elif return_ == 'score':
         return(score)
+    
+lda_prediction_rates = prediction_rates
