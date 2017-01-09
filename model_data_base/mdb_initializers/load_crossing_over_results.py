@@ -1,14 +1,16 @@
 from dask.diagnostics import ProgressBar
 import  load_roberts_simulationdata
 
-def pipeline(mdb):
+def pipeline(mdb, spikes = True, bursts = False):
     '''access to spike times and bursts'''
     with ProgressBar(): 
-        load_roberts_simulationdata.load_dendritic_voltage_traces(mdb)    
-        from ..analyze.spike_detection import spike_detection
-        mdb['spike_times'] = spike_detection(mdb['voltage_traces'])
-        from ..analyze.burst_detection import burst_detection
-        burst_detection(mdb['Vm_proximal'], mdb['spike_times'], burst_cutoff = -55)
+        if spikes:
+            from ..analyze.spike_detection import spike_detection
+            mdb['spike_times'] = spike_detection(mdb['voltage_traces'])
+        if bursts: 
+            load_roberts_simulationdata.load_dendritic_voltage_traces(mdb, dumper = 'self')    
+            from ..analyze.burst_detection import burst_detection
+            burst_detection(mdb['Vm_proximal'], mdb['spike_times'], burst_cutoff = -55)
         
 def init_minimal(mdb, simresult_path):
     '''only access to voltage traces and spikes. Automatically
