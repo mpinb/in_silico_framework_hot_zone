@@ -105,6 +105,6 @@ def read_pandas_synapse_activation_from_roberts_format(path, sim_trail_index = '
     prefix2 = tempfile.mkdtemp()
     fname = os.path.basename(path)
     _convert_files_csv(prefix1, prefix2, '', sim_trail_index, header, fname, max_commas)
-    df = pd.read_csv(os.path.join(prefix2, fname))
+    df = pd.read_csv(os.path.join(prefix2, fname), index_col = 'sim_trail_index')
     shutil.rmtree(prefix2)
     return df
