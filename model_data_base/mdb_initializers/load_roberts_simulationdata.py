@@ -46,7 +46,7 @@ def read_voltage_traces_by_filenames(prefix, fnames):
     '''takes list of filenames pointing to voltage trace files
     returned by roberts simulator, returns dask dataframe'''
     out = []
-    for fname in fnames:
+    for fname in sorted(fnames):
         out.append(dask.delayed(read_voltage_traces_from_file)(prefix, fname))
     out = dd.from_delayed(out, meta=out[0].compute())   
     #out = out.set_index('sim_trail_index') 
@@ -238,7 +238,7 @@ def rewrite_data_in_fast_format(mdb):
 
 
 
-def _build_db_part1(mdb, repartition = False, force_calculate = False):
+def _build_db_part1(mdb, repartition = False, force_calculation = False):
     '''builds the metadata object and garants acces to the soma voltage traces.
     Only needs to be called once to put the necessary files in the tempdir'''
        
@@ -250,34 +250,34 @@ def _build_db_part1(mdb, repartition = False, force_calculate = False):
     mdb.maybe_calculate('file_list', \
                         lambda: sorted(file_list, key = lambda x: os.path.dirname(x)), \
                         dumper = 'self', \
-                        force_calculate = force_calculate)
+                        force_calculation = force_calculation)
     #read all soma voltage traces in dask dataframe
     print('generate voltage traces dataframe...')            
     mdb.maybe_calculate('voltage_traces_raw', \
                         lambda: read_voltage_traces_by_filenames(mdb['simresult_path'], mdb['file_list']), \
                         dumper = 'self',
-                        force_calculate = force_calculate)
+                        force_calculation = force_calculation)
     #the indexes of this dataframe are stored for further use to identify the 
     #simulation trail
     print('Move voltage_traces locally')
     mdb.maybe_calculate('voltage_traces', \
-                        lambda: mdb['voltage_traces'], \
+                        lambda: mdb['voltage_traces_raw'], \
                         dumper = dask_to_csv, 
-                        force_calculate = force_calculate)
+                        force_calculation = force_calculation)
     del mdb['voltage_traces_raw']
     
     print('generate unambigous indices ...')            
     mdb.maybe_calculate('sim_trail_index',
                         lambda: mdb['voltage_traces'].index.compute(get = settings.multiprocessing_scheduler), 
                         dumper = 'self', \
-                        force_calculate = force_calculate)
+                        force_calculation = force_calculation)
     #builds the metadata object, which connects the sim_trail indexes with the 
     #associated files
     print('generate metadata ...')        
     mdb.maybe_calculate('metadata', \
                         lambda: create_metadata(mdb['sim_trail_index']),\
                         dumper = 'self',\
-                        force_calculate = force_calculate)                 
+                        force_calculation = force_calculation)                 
 
 
 def _build_db_part2(mdb):
@@ -333,7 +333,7 @@ def load_dendritic_voltage_traces_helper(mdb, suffix):
     ddf = read_voltage_traces_by_filenames(mdb['simresult_path'], fnames)
     return ddf
 
-def load_dendritic_voltage_traces(mdb, repartition = False):
+def load_dendritic_voltage_traces(mdb, repartition = False, dumper = dask_to_csv):
     
     suffix = '_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv'
     ddf_distal = load_dendritic_voltage_traces_helper(mdb, suffix)      
