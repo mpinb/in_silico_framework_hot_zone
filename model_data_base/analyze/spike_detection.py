@@ -75,7 +75,9 @@ def _helper(x):
     #print(len(spikes))
     return pd.Series({lv: x for lv, x in enumerate(spikes)})
 
-def spike_detection(ddf):
+def spike_detection(ddf, get = None):
     '''this method expects a dask dataframe and returns a pandas dataframe containing the spikes'''
-    dummy = dask.compute(*map(dask.delayed(lambda x: x.apply(_helper, axis = 1)), ddf.to_delayed()), get = multiprocessing_scheduler)
+    if get is None:
+        get = multiprocessing_scheduler
+    dummy = dask.compute(*map(dask.delayed(lambda x: x.apply(_helper, axis = 1)), ddf.to_delayed()), get = get)
     return pd.concat(dummy)
