@@ -327,22 +327,38 @@ def sim_trial_index_generator(fname, len_data):
 #sim_trial_index_generator(fname, 10)
 
 def load_dendritic_voltage_traces_helper(mdb, suffix):
-    m = mdb['metadata']   
-    fnames = [os.path.join(x.path, x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
+    m = mdb['metadata'] 
+    if os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, m.iloc[0].path.split('_')[-1] + suffix)):
+        fnames = [os.path.join(x.path, x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
+    elif os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, 'seed_' + m.iloc[0].path.split('_')[-1] + suffix)):
+        fnames = [os.path.join(x.path, 'seed_' + x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
     fnames = unique(fnames)
     ddf = read_voltage_traces_by_filenames(mdb['simresult_path'], fnames)
     return ddf
 
-def load_dendritic_voltage_traces(mdb, repartition = False, dumper = dask_to_csv):
+def load_dendritic_voltage_traces(mdb, repartition = False, dumper = dask_to_csv, force_calculation = False):
     
     suffix = '_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv'
-    ddf_distal = load_dendritic_voltage_traces_helper(mdb, suffix)      
+    mdb.maybe_calculate('Vm_distal', \
+                        lambda: load_dendritic_voltage_traces_helper(mdb, suffix), \
+                        dumper = dask_to_csv, \
+                        force_calculation = force_calculation)
     suffix = '_apical_proximal_distal_rec_sites_ID_001_sec_025_seg_001_x_0.500_somaDist_198.1_vm_dend_traces.csv'
-    ddf_proximal = load_dendritic_voltage_traces_helper(mdb, suffix)
-    print('Move distal voltage traces to local database')
-    mdb.setitem(item = ddf_distal, key = 'Vm_distal', dumper = dask_to_csv, repartition = repartition)  
-    print('Move proximal voltage traces to local database')
-    mdb.setitem(item = ddf_proximal, key = 'Vm_proximal', dumper = dask_to_csv, repartition = repartition)        
+    mdb.maybe_calculate('Vm_proximal', \
+                        lambda: load_dendritic_voltage_traces_helper(mdb, suffix), \
+                        dumper = dask_to_csv, \
+                        force_calculation = force_calculation)    
+
+#     suffix = '_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv'    
+#     ddf_distal = load_dendritic_voltage_traces_helper(mdb, suffix)      
+#     suffix = '_apical_proximal_distal_rec_sites_ID_001_sec_025_seg_001_x_0.500_somaDist_198.1_vm_dend_traces.csv'
+#     ddf_proximal = load_dendritic_voltage_traces_helper(mdb, suffix)
+#     print('Move distal voltage traces to local database')
+#     mdb.setitem(item = ddf_distal, key = 'Vm_distal', dumper = dask_to_csv, repartition = repartition)  
+#     print('Move proximal voltage traces to local database')
+#     mdb.setitem(item = ddf_proximal, key = 'Vm_proximal', dumper = dask_to_csv, repartition = repartition) 
+    
+        
 
 def pipeline(mdb):
     with ProgressBar(): 
@@ -350,7 +366,7 @@ def pipeline(mdb):
         from ..analyze.spike_detection import spike_detection
         mdb['spike_times'] = spike_detection(mdb['voltage_traces'])
         from ..analyze.burst_detection import burst_detection
-        burst_detection(mdb['Vm_proximal'], mdb['spike_times'], burst_cutoff = -55)
+        mdb['burst_times'] = burst_detection(mdb['Vm_proximal'], mdb['spike_times'], burst_cutoff = -55)
         
 def init(mdb, simresult_path):
     with ProgressBar():
