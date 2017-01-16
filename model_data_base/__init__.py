@@ -1,3 +1,5 @@
+import tables #so florida servers have no problem with neuron
+
 from model_data_base import ModelDataBase
 
 import dask
