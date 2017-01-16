@@ -22,7 +22,7 @@ def make_groups_equal_size(X,y):
 assert(len(make_groups_equal_size(np.array([[1,2,3],[2,3,4],[3,4,5], [4,5,6]]), np.array([0,0,1,1]))[0]) == 4)
 assert(len(make_groups_equal_size(np.array([[1,2,3],[2,3,4],[3,4,5], [4,5,6]]), np.array([0,0,0,1]))[0]) == 2)
 
-def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', normalize_group_size = True, verbosity = 0):
+def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', normalize_group_size = True, verbosity = 0, test_size = 0.4, solver = 'eigen'):
     '''
     X: training data
     y: target values
@@ -47,14 +47,14 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
                     X, y = make_groups_equal_size(X_in,y_in)  
                 else:
                     X, y = X_in, y_in                            
-                X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.4, random_state=x)
+                X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=test_size, random_state=x)
                 #classifier = LDA(n_components=2, shrinkage = 'auto', solver = 'eigen', )
-                classifier = LDA(n_components=2, shrinkage = None, solver = 'svd', )
+                classifier = LDA(n_components=2, shrinkage = None, solver = solver)
                 
                 classifier.fit(X_train, y_train)
                 break
             except ValueError:
-                if lv >= 10:
+                if lv >= 100:
                     raise RuntimeError("Can't select data, that is accepted by estimator!")
                 lv = lv + 1
                 continue
@@ -75,7 +75,7 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
         print ''
     
     if return_ == 'all': 
-        return dict(score_all = score_all, score_0 = score_0, score_1 = score_1, classifier_ = classifier_)
+        return dict(score_all = score_all, score_0 = score_0, score_1 = score_1, score = score, classifier_ = classifier_)
     elif return_ == 'score':
         return(score)
     
