@@ -4,6 +4,7 @@ for single cell simulations
 with NeuroNet subcellular synapse distributions
 '''
 
+import tables #so florida servers have no problem with neuron
 from writer import write_cell_simulation
 from writer import write_landmark_file
 from writer import write_cell_synapse_locations
