@@ -4,6 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from  matplotlib.figure import Figure
 from matplotlib.axes import Axes
+from ..utils import skit
+from functools import wraps
 
 class ForceReturnException(Exception):
     def __init__(self, return_value):
@@ -28,6 +30,7 @@ def dask_to_pandas(fun):
             if isinstance(kwargs[name], dask_instances):
                 kwargs[name] = kwargs[name].compute()
         return fun(*args, **kwargs)
+    retfun.__doc__ = fun.__doc__    
     return retfun
 
 @dask_to_pandas
@@ -61,7 +64,8 @@ def subsequent_calls_per_line(plotfun):
                 break          
             
         if max_lv == -1:
-            return plotfun(*args, **kwargs)
+            plotfun_kwargs = skit(plotfun, **kwargs)[0]
+            return plotfun(*args, **plotfun_kwargs)
         
         newargs = list(args)
         if isinstance(x, pd.DataFrame):
@@ -73,8 +77,10 @@ def subsequent_calls_per_line(plotfun):
             kwargs['label'] = index            
             for lv in range(max_lv+1):
                 newargs[lv] = args[lv].loc[index]
-            fig = plotfun(*newargs, **kwargs)
+            plotfun_kwargs = skit(plotfun, **kwargs)[0]             
+            fig = plotfun(*newargs, **plotfun_kwargs)
         return fig
+    retfun.__doc__ = plotfun.__doc__    
     return retfun
 
 def return_figure_or_axis(plotfun):
@@ -110,27 +116,5 @@ def return_figure_or_axis(plotfun):
                 return fig
         except ForceReturnException as e:
             return e.return_value
+    retfun.__doc__ = plotfun.__doc__    
     return retfun
-
-#     def retfun(*args, **kwargs):
-#         try:
-#             if 'fig' in kwargs and kwargs['fig'] is not None:
-#                 fig = kwargs['fig']
-#                 if isinstance(fig, Figure):
-#                     kwargs['fig'] = fig.add_subplot(1,1,1)
-#                     plotfun(*args, **kwargs)
-#                     plt.close(fig)
-#                     return fig
-#                 if isinstance(fig, Axes):
-#                     return plotfun(*args, **kwargs)
-#             else:
-#                 fig = plt.figure()
-#                 kwargs['fig'] = fig.add_subplot(1,1,1)
-#                 ret = plotfun(*args, **kwargs)
-#                 plt.close(fig)
-#                 return ret
-#         except ForceReturnException as e:
-#             return e.return_value
-#     return retfun
-
-        
