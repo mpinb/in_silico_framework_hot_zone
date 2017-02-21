@@ -8,12 +8,15 @@ def concat_path_elements_to_filelist(*args):
     args = ['str', [1,2,3], pd.Series([1,2,3])]
     > [['str', 'str', 'str'], [1, 2, 3], [1, 2, 3]]
     '''
-    args = [[arg] if isinstance(arg, str) else list(arg) for arg in args]
+    if not args:
+        return []
+    
+    args = [[arg] if isinstance(arg, (str, int, float)) else list(arg) for arg in args]
     max_len = max([len(x) for x in args])
     args = [x*max_len if len(x)==1 else x for x in args]
     min_len = min([len(x) for x in args])
     assert(min_len == max_len)
-    ret = [os.path.join(*x) for x in zip(*args)]
+    ret = [os.path.join(*[str(x) for x in x]) for x in zip(*args)]
     return ret
     
 #todo test:
