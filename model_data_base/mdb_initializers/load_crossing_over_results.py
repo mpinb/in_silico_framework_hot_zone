@@ -1,9 +1,12 @@
 from dask.diagnostics import ProgressBar
 import  load_roberts_simulationdata
+import model_data_base
+from model_data_base.model_data_base import get_progress_bar_function
+
 
 def pipeline(mdb, spikes = True, bursts = False):
     '''access to spike times and bursts'''
-    with ProgressBar(): 
+    with get_progress_bar_function()(): 
         if spikes:
             from ..analyze.spike_detection import spike_detection
             mdb['spike_times'] = spike_detection(mdb['voltage_traces'])
@@ -15,7 +18,7 @@ def pipeline(mdb, spikes = True, bursts = False):
 def init_minimal(mdb, simresult_path):
     '''only access to voltage traces and spikes. Automatically
     repartitions the voltagetraces'''
-    with ProgressBar():
+    with get_progress_bar_function()(): 
         mdb['simresult_path'] = simresult_path  
         load_roberts_simulationdata._build_db_part1(mdb, repartition = True)
         from ..analyze.spike_detection import spike_detection
@@ -24,7 +27,7 @@ def init_minimal(mdb, simresult_path):
         
 def init_complete(mdb, simresult_path):
     '''access to voltage traces'''
-    with ProgressBar():
+    with get_progress_bar_function()(): 
         mdb['simresult_path'] = simresult_path  
         load_roberts_simulationdata._build_db_part1(mdb, repartition = False)
         load_roberts_simulationdata._build_db_part2(mdb)

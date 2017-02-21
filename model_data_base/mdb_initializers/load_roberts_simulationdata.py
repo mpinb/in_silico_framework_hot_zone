@@ -15,8 +15,10 @@ import shutil
 import tempfile
 from .. import settings
 from dask.diagnostics import ProgressBar
-from ..IO.LoaderDumper import dask_to_csv
+from ..IO.LoaderDumper import dask_to_csv, dask_to_msgpack
 from ..IO import dask_wrappers
+import model_data_base
+from model_data_base.model_data_base import get_progress_bar_function
 
 
 ############################################
@@ -238,7 +240,7 @@ def rewrite_data_in_fast_format(mdb):
 
 
 
-def _build_db_part1(mdb, repartition = False, force_calculation = False):
+def _build_db_part1(mdb, repartition = False, force_calculation = False, dask_dumper = dask_to_csv):
     '''builds the metadata object and garants acces to the soma voltage traces.
     Only needs to be called once to put the necessary files in the tempdir'''
        
@@ -247,6 +249,8 @@ def _build_db_part1(mdb, repartition = False, force_calculation = False):
     #mdb['file_list'] = IO.make_file_list(mdb['simresult_path'], 'vm_all_traces.csv')
     print('generate filelist ...')
     file_list = mdb.maybe_calculate('file_list', lambda: IO.make_file_list(mdb['simresult_path'], 'vm_all_traces.csv'))
+    if len(file_list) == 0:
+        raise ValueError("Did not find any '*vm_all_traces.csv'-files. Filelist empty. Abort initialization.")
     mdb.maybe_calculate('file_list', \
                         lambda: sorted(file_list, key = lambda x: os.path.dirname(x)), \
                         dumper = 'self', \
@@ -262,7 +266,7 @@ def _build_db_part1(mdb, repartition = False, force_calculation = False):
     print('Move voltage_traces locally')
     mdb.maybe_calculate('voltage_traces', \
                         lambda: mdb['voltage_traces_raw'], \
-                        dumper = dask_to_csv, 
+                        dumper = dask_dumper, 
                         force_calculation = force_calculation)
     del mdb['voltage_traces_raw']
     
@@ -280,7 +284,7 @@ def _build_db_part1(mdb, repartition = False, force_calculation = False):
                         force_calculation = force_calculation)                 
 
 
-def _build_db_part2(mdb):
+def _build_db_part2(mdb, dask_dumper = dask_to_csv):
     '''Rewrites synapse activation files for fast access and sets up access to them'''
 
     #rewrites the synapse and cell files in a way they can be acessed fast
@@ -291,12 +295,12 @@ def _build_db_part2(mdb):
     mdb['synapse_activation'] = dask_wrappers.read_csvs(mdb['synapses_cache_folder'], m.path, m.synapses_file_name).set_index('sim_trail_index', sorted = True)
     mdb['cell_activation'] = dask_wrappers.read_csvs(mdb['cells_cache_folder'], m.path, m.cells_file_name).set_index('sim_trail_index', sorted = True)
     
-def _build_db_part3(mdb):  
+def _build_db_part3(mdb, dask_dumper = dask_to_csv):  
     '''rewrites synapse activation fiels again, this time with known divisions'''  
     print('Move synapse_activation to local database')    
-    mdb.setitem(item = mdb['synapse_activation'], key = 'synapse_activation', dumper = dask_to_csv)
+    mdb.setitem(item = mdb['synapse_activation'], key = 'synapse_activation', dumper = dask_dumper)
     print('Move cell_activation to local database')    
-    mdb.setitem(item = mdb['cell_activation'], key = 'cell_activation', dumper = dask_to_csv)
+    mdb.setitem(item = mdb['cell_activation'], key = 'cell_activation', dumper = dask_dumper)
 
 def _tidy_up(mdb):
     print('Tidy up ...')
@@ -326,6 +330,7 @@ def sim_trial_index_generator(fname, len_data):
 #fname = '20160629-2316_16848/16848_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv'
 #sim_trial_index_generator(fname, 10)
 
+
 def load_dendritic_voltage_traces_helper(mdb, suffix):
     m = mdb['metadata'] 
     if os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, m.iloc[0].path.split('_')[-1] + suffix)):
@@ -336,17 +341,17 @@ def load_dendritic_voltage_traces_helper(mdb, suffix):
     ddf = read_voltage_traces_by_filenames(mdb['simresult_path'], fnames)
     return ddf
 
-def load_dendritic_voltage_traces(mdb, repartition = False, dumper = dask_to_csv, force_calculation = False):
+def load_dendritic_voltage_traces(mdb, repartition = False, dask_dumper = dask_to_csv, force_calculation = False):
     
     suffix = '_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv'
     mdb.maybe_calculate('Vm_distal', \
                         lambda: load_dendritic_voltage_traces_helper(mdb, suffix), \
-                        dumper = dask_to_csv, \
+                        dumper = dask_dumper, \
                         force_calculation = force_calculation)
     suffix = '_apical_proximal_distal_rec_sites_ID_001_sec_025_seg_001_x_0.500_somaDist_198.1_vm_dend_traces.csv'
     mdb.maybe_calculate('Vm_proximal', \
                         lambda: load_dendritic_voltage_traces_helper(mdb, suffix), \
-                        dumper = dask_to_csv, \
+                        dumper = dask_dumper, \
                         force_calculation = force_calculation)    
 
 #     suffix = '_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv'    
@@ -359,22 +364,37 @@ def load_dendritic_voltage_traces(mdb, repartition = False, dumper = dask_to_csv
 #     mdb.setitem(item = ddf_proximal, key = 'Vm_proximal', dumper = dask_to_csv, repartition = repartition) 
     
         
+from ..analyze.spike_detection import spike_detection
+from ..analyze.burst_detection import burst_detection
+
 
 def pipeline(mdb):
-    with ProgressBar(): 
-        load_dendritic_voltage_traces(mdb)    
-        from ..analyze.spike_detection import spike_detection
-        mdb['spike_times'] = spike_detection(mdb['voltage_traces'])
-        from ..analyze.burst_detection import burst_detection
-        mdb['burst_times'] = burst_detection(mdb['Vm_proximal'], mdb['spike_times'], burst_cutoff = -55)
+    #model_data_base.get_progress_bar_function()(): 
+    #   like dask.diagnostics.ProgressBar, if model_data_base.settings.show_computation_progress,
+    #   else empty context manager. This allows to hide the ProgressBar
+    with dask.set_options(get = settings.multiprocessing_scheduler):
+        with get_progress_bar_function()(): 
+            load_dendritic_voltage_traces(mdb)    
+            mdb['spike_times'] = spike_detection(mdb['voltage_traces'])
+            mdb['burst_times'] = burst_detection(mdb['Vm_proximal'], mdb['spike_times'], burst_cutoff = -55)
         
-def init(mdb, simresult_path):
-    with ProgressBar():
-        mdb['simresult_path'] = simresult_path  
-        _build_db_part1(mdb)
-        _build_db_part2(mdb)
-        _build_db_part3(mdb)
-        _tidy_up(mdb)
+def init(mdb, simresult_path, dask_dumper = dask_to_csv, voltage_traces = True, synapse_activation = True, synapse_activation_known_divisions = True, dendritic_voltage_traces = False, spike_times = False,  burst_times = False):
+    with dask.set_options(get = settings.multiprocessing_scheduler):
+        with get_progress_bar_function()(): 
+            mdb['simresult_path'] = simresult_path  
+            if voltage_traces:
+                _build_db_part1(mdb, dask_dumper = dask_dumper)
+                if synapse_activation:
+                    _build_db_part2(mdb, dask_dumper = dask_dumper)
+                    if synapse_activation_known_divisions:
+                        _build_db_part3(mdb, dask_dumper = dask_dumper)
+                        _tidy_up(mdb)
+            if dendritic_voltage_traces:
+                load_dendritic_voltage_traces(mdb, dask_dumper = dask_dumper)
+            if spike_times:
+                mdb['spike_times'] = spike_detection(mdb['voltage_traces'])
+            if burst_times:
+                mdb['burst_times'] = burst_detection(mdb['Vm_proximal'], mdb['spike_times'], burst_cutoff = -55)
         print('Initialization succesful.') 
     
     
