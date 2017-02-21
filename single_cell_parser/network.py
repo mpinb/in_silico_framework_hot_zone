@@ -789,20 +789,27 @@ def activate_functional_synapse(syn, cell, preSynCell, synParameters, tChange=No
     times to be pre-computed; can thus not be used in recurrent
     network models at this point.'''
     releaseTimes = []
+#     try:
+#         conductance_delay = synParameters.delay
+#     except KeyError:
+#         conductance_delay = 0.0    
+    conductance_delay = 0.0
+        
+        
     if synParameters.has_key('releaseProb') and synParameters.releaseProb != 'dynamic':
         prel = synParameters.releaseProb
         if tChange is not None:
             prelChange = synParametersChange.releaseProb
         for t in preSynCell.spikeTimes:
             if tChange is not None:
-                if t >= tChange:
-                    if np.random.rand() < prelChange:
-                        releaseTimes.append(t)
+                if t >= tChange: 
+                    if np.random.rand() < prelChange: ##change parameters within simulation time
+                        releaseTimes.append(t + conductance_delay)
                     continue
             if np.random.rand() < prel or forceSynapseActivation:
-                releaseTimes.append(t)
+                releaseTimes.append(t + conductance_delay)
     else:
-        releaseTimes = preSynCell.spikeTimes[:]
+        releaseTimes = [t + conductance_delay for t in preSynCell.spikeTimes]
     if not len(releaseTimes):
         return
     releaseTimes.sort()
