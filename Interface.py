@@ -1,3 +1,18 @@
+'''
+This has the only purpose to make the simrun2 and the model_data_base package
+more convenient.
+
+It therefore imports all the "important" functions from those modules,
+so that they are directly available. It also contains some small 
+functions, that combine two functions, that are frequently used together,
+e.g. instead of displaying a PSTH, you can simply use the PSTH function
+which combines binning and displaying in one function.
+
+A recommendet use is to import it in a jupyter notebook in the following manner:
+    import Interface as I
+    
+'''
+
 import os
 import sys
 import tempfile
@@ -13,16 +28,46 @@ from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_r
 from model_data_base.analyze.temporal_binning import universal as temporal_binning
 from model_data_base.analyze.spike_detection import spike_detection 
 from model_data_base.analyze.spaciotemporal_binning import universal as spaciotemporal_binning
+from model_data_base.analyze import split_synapse_activation
+from model_data_base.analyze.analyze_input_mapper_result import compare_to_neuronet
 
 from model_data_base.IO.LoaderDumper import dask_to_csv as dumper_dask_to_csv
 from model_data_base.IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
 from model_data_base.IO.LoaderDumper import pandas_to_pickle as dumper_pandas_to_pickle
+from model_data_base.IO.LoaderDumper import dask_to_msgpack as dumper_dask_to_msgpack
+
 
 from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
+from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
+from model_data_base.IO.roberts_formats import read_InputMapper_summary
 
 from model_data_base.mdb_initializers import load_crossing_over_results as mdb_init_crossing_over
 from model_data_base.mdb_initializers import load_roberts_simulationdata as mdb_init_roberts_simulations
+
+from model_data_base.analyze import split_synapse_activation, color_cellTypeColorMap, excitatory, inhibitory
+from model_data_base.utils import silence_stdout
+from model_data_base.utils import select, pandas_to_array, pooled_std
+from model_data_base.utils import skit
+
+from model_data_base.settings import path_synapses_avg_total, get_synapses_avg_total
+
+def split_synapse_activation(sa, selfcheck = True, excitatory = excitatory, inhibiotry = inhibitory):
+    '''Splits synapse activation in EXC and INH component.
+    
+    Assumes, that if the cell type mentioned in the column synapse_type is
+    in the list Interface.excitatory, that the synapse is excitatory, else inhibitory.
+    
+    selfcheck: Default: True. If True, it is checked that every celltype is either
+    asigned excitatory or inhibitory
+    '''
+    if selfcheck:
+        celltypes = sa.apply(lambda x: x.synapse_type.split('_')[0], axis = 1).drop_duplicates()
+        for celltype in celltypes:
+            assert(celltype in excitatory + inhibitory)
+            
+    sa['EI'] = sa.apply(lambda x: 'EXC' if x.synapse_type.split('_')[0] in excitatory else 'INH', axis = 1)
+    return sa[sa.EI == 'EXC'], sa[sa.EI == 'INH']
 
 try: ##to avoid import errors in distributed system because of missing matplotlib backend
     from model_data_base.plotfunctions.average_std import average_std as average_std
@@ -31,20 +76,35 @@ try: ##to avoid import errors in distributed system because of missing matplotli
     from model_data_base.plotfunctions.rasterplot import rasterplot
     from model_data_base.plotfunctions.cell_to_ipython_animation import cell_to_ipython_animation, display_animation
     from model_data_base.plotfunctions._figure_array_converter import show_pixel_object, PixelObject
-    #PSTH = lambda x, **kwargs: histogram(temporal_binning(x), **kwargs)
-    def PSTH(x, **kwargs):
-        if 'groupby_attribute' in kwargs:
-            assert('min_time' in kwargs)
-            assert('max_time' in kwargs)        
-            groupby_attribute = kwargs['groupby_attribute']
-            del kwargs['groupby_attribute']
-            colormap = kwargs['colormap']
-            del kwargs['colormap']
-            PSTH = x.groupby(groupby_attribute).apply(lambda x: temporal_binning(x, **kwargs))
-            return histogram(PSTH, colormap = colormap, groupby_attribute = groupby_attribute)
-        else:
-            return histogram(temporal_binning(x), **kwargs)
 
+    def PSTH(x, **kwargs):
+        '''Combines the temporal_binning function with the histogram function.'''
+        kwargs_temporal_binning, kwargs_histogram = skit(temporal_binning, histogram, **kwargs)
+        print kwargs
+        bins = temporal_binning(x, **kwargs_temporal_binning)
+        return histogram(bins, **kwargs_histogram)
+    PSTH.__doc__ = PSTH.__doc__ + \
+                '\n\nDocs temporal_binning:' + str(temporal_binning.__doc__) + \
+                '\n\nDocs histogram: ' + str(histogram.__doc__)
+
+    def PSTH_spaciotemporal(df, distance_column = 'soma_distance', **kwargs):
+        '''Combines the spaciotemporal_binning function with the histogram function.
+        
+        kwargs: colormap and groupby_attribute will be forwarded to histogram.
+        All other kwargs are forwarded to temporal binning.
+        
+        kwargs: 
+        spacial_distance_bins = 50, 
+        min_time = 0, \
+        max_time = 300, time_distance_bins = 1
+        '''
+        
+        if 'distance_column' in kwargs:
+            distance_column = kwargs['distance_column']
+        else: 
+            kwargs['distance_column'] = 'soma_distance'
+        
+        bins = spaciotemporal_binning(df, **kwargs)
     
 except ImportError:
     pass
@@ -59,15 +119,10 @@ from simrun2.sim_trail_to_cell_object import simtrail_to_cell_object \
     as simrun_simtrail_to_cell_object
 from simrun2.sim_trail_to_cell_object import trail_to_cell_object \
     as simrun_trail_to_cell_object
-
     
-color_cellTypeColorMap = {'L1': 'cyan', 'L2': 'dodgerblue', 'L34': 'blue', 'L4py': 'palegreen',\
-                    'L4sp': 'green', 'L4ss': 'lime', 'L5st': 'yellow', 'L5tt': 'orange',\
-                    'L6cc': 'indigo', 'L6ccinv': 'violet', 'L6ct': 'magenta', 'VPM': 'black',\
-                    'INH': 'grey', 'EXC': 'red', 'all': 'black', 'PSTH': 'blue'}
+from simrun2 import crossing_over as simrun_crossing_over_module
+from simrun2.crossing_over.crossing_over_simple_interface import crossing_over as simrun_crossing_over_simple_interface
 
-excitatory = ['L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34', 'L6ccinv', 'L5tt']
-inhibitory = ['SymLocal1', 'SymLocal2', 'SymLocal3', 'SymLocal4', 'SymLocal5', 'SymLocal6', 'L45Sym', 'L1', 'L45Peak', 'L56Trans', 'L23Trans']
 
 try:
     import single_cell_analyzer as sca
