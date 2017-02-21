@@ -3,13 +3,8 @@ import tempfile
 import shutil
 import numpy as np
 import pandas as pd
+from ..utils import convertible_to_int
 
-def convertible_to_int(x):
-        try:
-            int(x)
-            return True
-        except:
-            return False
         
 def _max_commas(path):
     '''for optimal performance, every single file should contain the same
@@ -108,3 +103,23 @@ def read_pandas_synapse_activation_from_roberts_format(path, sim_trail_index = '
     df = pd.read_csv(os.path.join(prefix2, fname), index_col = 'sim_trail_index')
     shutil.rmtree(prefix2)
     return df
+
+from ..utils import split_file_to_buffers, first_line_to_key
+def read_InputMapper_summary(pathOrBuffer, sep = '\t'):
+    '''Expects the path to a summary csv file of the Single Cell Mapper,
+    returns the tables as pandas tables'''
+    def fun(f):
+        '''helper function, contains the main functionality, but only accepts Buffer'''
+        tables = split_file_to_buffers(f)
+        tables = first_line_to_key(tables)
+        for name in tables:
+            tables[name] = pd.read_csv(tables[name], sep = sep)
+        return tables
+    
+    try: #assume it is path
+        with open(pathOrBuffer) as f:
+            return fun(f)
+    except TypeError: #if it was buffer instead
+        return fun(pathOrBuffer)
+
+
