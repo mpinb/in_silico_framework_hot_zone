@@ -87,11 +87,26 @@ def _check_working_dir_clean_for_build(working_dir):
             raise MdbException("Can't build database: " \
                                + "Cannot create the directories specified in %s" % working_dir)
 
+###methods to hide dask progress bar based on settings:
+import contextlib
+@contextlib.contextmanager
+def empty_context_manager(*args, **kwargs):
+    '''does nothing. is meant to replace ProgressBar, if no output is needed'''
+    yield
+
+def get_progress_bar_function():
+    if settings.show_computation_progress:
+        PB = dask.diagnostics.ProgressBar
+    else:
+        PB = empty_context_manager
+    return PB
+    
 class ModelDataBase(object):
     def __init__(self, basedir, forceload = False, readonly = False):
         '''
         Class responsible for storing information, meant to be used as an interface to simulation 
-        results. 
+        results. If the dask backends are used to save the data, it will be out of memory,
+        allowing larger than memory calculations.
         
         E.g. this class can be initialized in a way that after the initialization, 
         the data can be accessed in the following way:
@@ -105,24 +120,24 @@ class ModelDataBase(object):
         mdb['my_new_element'] = my_new_element
         These elements are stored together with the other data in the basedir.
         
-        They can be re ad out of the database in the following way:
+        They can be read out of the database in the following way:
         my_reloaded_element = mdb['my_new_element']
         
         It is possible to use tuples of strings as keys to reflect an arbitrary hierarchy.
+        Valid keys are tuples of str or str. "@" ist not allowed.
+        
         To read out all existing keys, use the keys()-function.
         
+        The following is deprecated:
         After an update of the underlying libraries (e.g. dask), it might be,
         that the standard data ('voltage_traces', 'synapse_activation' and so on) 
         can not be unpickled any more. In this case, you can rebuild these
         Dataframes by calling the _regenerate_data() method. If you regain
         access to the underlying data e.g. mdb['voltage_traces'], you should
-        consider to save the updated database with the save_db() method.     
+        consider to save the updated database with the save_db() method.  
         '''
-        
-        #todo: rename basedir to basedir
-        
+                
         self.basedir = os.path.abspath(basedir)
-        #self.basedir = basedir
         self.settings = settings #settings is imported above
         self.forceload = forceload
         self.readonly = readonly #possible values: False, True, 'warning'
@@ -140,7 +155,7 @@ class ModelDataBase(object):
         self._registeredDumpers = ['self'] #self: stores the data in the underlying database
         
     def registerDumper(self, dumperModule):
-        '''caveat: make sure to provide the MODULE, not the class ### does it really matter?'''
+        '''caveat: make sure to provide the MODULE, not the class'''
         self._registeredDumpers.append(dumperModule)
     
     def read_db(self):
@@ -211,7 +226,8 @@ class ModelDataBase(object):
         return absolute_path, relative_path
         
     def setitem(self, key, item, **kwargs):
-        '''Allows to set items with a maximum amount of control.
+        '''Allows to set items. Compared to the mdb['some_keys'] = my_item syntax,
+        this method allows more control over how the item is stored in the database.
         
         key: key
         item: item that should be saved
@@ -318,6 +334,7 @@ class ModelDataBase(object):
         mdb.maybe_calculate('knok_knok', lambda: 'whos there?', dumper = 'self')
         > 'whos there?'        
         '''
+        
         if 'force_calculation' in kwargs:
             force_calculation = kwargs['force_calculation']
             del kwargs['force_calculation']
@@ -328,7 +345,7 @@ class ModelDataBase(object):
                 raise ValueError
             return self[key]
         except:
-            with dask.diagnostics.ProgressBar():
+            with get_progress_bar_function()():
                 ret = fun()
                 self.setitem(key, ret, **kwargs)
             return ret    
