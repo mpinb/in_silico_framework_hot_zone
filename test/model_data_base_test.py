@@ -15,7 +15,8 @@ class Tests(unittest.TestCase):
         self.test_data = os.path.join(self.prefix, 'data/test_data')      
         self.nonexistent = os.path.join(self.prefix, 'data/nonexistent') 
 
-        mdb = ModelDataBase('test/data/test_temp') 
+        mdb = ModelDataBase('test/data/test_temp')
+        mdb.settings.show_computation_progress = False
         if not 'synapse_activation' in mdb.keys():
             import model_data_base.mdb_initializers.load_roberts_simulationdata
             model_data_base.mdb_initializers.load_roberts_simulationdata.init(mdb, 'test/data/test_data')     
@@ -29,51 +30,14 @@ class Tests(unittest.TestCase):
             shutil.rmtree(self.nonexistent)
         except(OSError):
             pass
-         
-#     def test_already_build(self):
-#         '''check the already build function'''
-#         e = ModelDataBase.__new__(ModelDataBase, '', '')
-#          
-#         #empty folder causes error        
-#         e.tempdir = self.empty_folder
-#         self.assertRaises(RuntimeError, lambda: ModelDataBase.check_already_build(e))   
-#          
-#         #tempdir contains full data and can therefore be read
-#         e.tempdir = self.test_temp
-#         self.assertTrue(ModelDataBase.check_already_build(e)) 
- 
-#     def test_read_db_already_build(self, *args):
-#         '''if db is already build, it should be read and not build again'''
-#         e = ModelDataBase.__new__(ModelDataBase, self.test_data, self.test_temp)
-#         e.read_db = MagicMock()
-#         e.build_db = MagicMock()
-#         e.save_db = MagicMock()
-#         e.__init__(self.test_data, self.test_temp)
-#         e.read_db.assert_called_once_with()
-#         e.build_db.assert_not_called()
-          
-#     def test_read_db_non_existent_tempdir(self, *args):
-#         '''if tempdir is not existent, database should be build'''        
-#         e = ModelDataBase.__new__(ModelDataBase, self.test_temp, self.nonexistent)
-#         e.read_db = MagicMock()
-#         e.build_db = MagicMock()
-#         e.save_db = MagicMock()
-#         e.__init__(self.test_temp, self.nonexistent)        
-#         e.read_db.assert_not_called()
-#         e.build_db.assert_called_once_with()
-
-# obsolete, since the initializers are not called from the __init__ function of ModelDataBase anymore      
-#     def test_non_existent_path(self):
-#         '''if path to simulation data is not valid, an exeption is raised'''
-#         self.assertRaises(RuntimeError, lambda: ModelDataBase(self.nonexistent, self.test_temp))
     
     @decorators.testlevel(1)    
     def test_canbeinstanciated(self):
         mdbtest = ModelDataBase(os.path.join(parent, 'test/data/test_temp'))
 
-    @decorators.testlevel(3)    
+    @decorators.testlevel(0)    
     def test_no_empy_rows(self):
-        e = ModelDataBase(os.path.join(parent, 'test/data', 'trash_it_now'))
+        e = ModelDataBase(os.path.join(parent, 'test/data/test_temp'))
         synapse_activation = e['synapse_activation']
         synapse_activation['isnan'] = synapse_activation.soma_distance.apply(lambda x: np.isnan(x))
         nr_nan_rows_synapse_activation = len(synapse_activation[synapse_activation.isnan == True])
@@ -107,5 +71,11 @@ class Tests(unittest.TestCase):
         e['sqltest']=x
         y = e['sqltest']
         np.testing.assert_array_equal(x, y, "there was an error reading from the sqlitedict")
+        
+    def test_maybe_calculate(self):
+        #allways calls function, if force_calculate == True
+        #calls function only if unknown, if force_calculate = False
+        #passes arguments to dumper
+        pass
          
          
