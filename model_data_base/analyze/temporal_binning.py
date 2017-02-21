@@ -46,6 +46,16 @@ def temporal_binning_dask(ddf, bin_size = 1, min_time = None, max_time = None, n
     return t_bins, out
 
 def universal(*args, **kwargs):
+    '''
+    Binning of a pandas Dataframe, that contains timevalues in columns,
+    whose name can be converted to int, like the usual spike_times dataframe.
+    
+    Parameters:
+        bin_size
+        min_time
+        max_time
+        normalize
+    '''
     if isinstance(args[0], pd.DataFrame):
         return temporal_binning_pd(*args, **kwargs)
     elif isinstance(args[0], dd.DataFrame):

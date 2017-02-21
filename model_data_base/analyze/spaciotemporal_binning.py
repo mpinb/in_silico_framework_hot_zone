@@ -24,7 +24,12 @@ def universal_pd(df, distance_column, spacial_distance_bins = 50, min_time = 0, 
 
 def universal(df, distance_column, spacial_distance_bins = 50, min_time = 0, \
               max_time = 300, time_distance_bins = 1):
-    
+    '''
+    kwargs: 
+    spacial_distance_bins = 50, 
+    min_time = 0, \
+    max_time = 300, time_distance_bins = 1
+    '''
     
     fun = lambda x: universal_pd(x, distance_column, spacial_distance_bins =  \
                                  spacial_distance_bins, min_time = min_time, \
