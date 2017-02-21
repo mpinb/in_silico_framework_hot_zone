@@ -13,11 +13,13 @@ from ... import settings
 # this method has to the aim to be as simple as possible
 #####################################################
 def get_to_csv_function(index = None):
+    '''returns function, that stores pandas dataframe'''
     def ddf_save_chunks(pdf, path, number, digits):
         pdf.to_csv(path.replace('*', str(number).zfill(digits)), index = index)
     return ddf_save_chunks
     
 def chunkIt(seq, num):
+    '''makes approx. equal size chunks out of seq'''
     avg = len(seq) / float(num)
     out = []
     last = 0.0
@@ -29,6 +31,10 @@ def chunkIt(seq, num):
 
 @dask.delayed
 def bundle_delayeds(*args):
+    '''bundeling delayeds provided a huge speedup.
+    this issue was adressed here:
+    https://github.com/dask/dask/issues/1884
+    '''
     pass
 
 def my_to_csv(ddf, path, optimize_graph = False, index = None, get = settings.multiprocessing_scheduler):
@@ -36,6 +42,9 @@ def my_to_csv(ddf, path, optimize_graph = False, index = None, get = settings.mu
     The reason for it's creation is a lot of frustration with the respective 
     dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
     takes all the ram (512GB!) or takes a very long time to "optimize" / merge the graph.
+    
+    Update: this issue was addressed here:
+    https://github.com/dask/dask/issues/1888
     '''
     
     ddf_save_chunks = get_to_csv_function(index = index)
@@ -55,37 +64,45 @@ def my_to_csv(ddf, path, optimize_graph = False, index = None, get = settings.mu
 fileglob = 'dask_to_csv.*.csv'
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''
-    return isinstance(obj, dd.DataFrame) #basically everything can be saved with pickle
+    return isinstance(obj, dd.DataFrame)
 
 class Loader(parent_classes.Loader):
-    def __init__(self, meta, index_name = None, divisions = None):
+    def __init__(self, meta, index_name = None, divisions = None):        
         self.index_name = index_name
         self.meta = meta
-
         self.divisions = divisions
-    def get(self, savedir):  
+    def get(self, savedir, verbose = True):  
+        #if dtypes is not defined (old mdb_versions) set it to None
+        try:
+            self.dtypes
+        except AttributeError:
+            self.dtypes = None
+            
+            
         my_read_csv = lambda x: pd.read_csv(x, index_col = self.index_name, skiprows = 1, \
-                                                names = [self.index_name] + list(self.meta.columns))    
-        if not self.index_name:
-            print('loaded dask dataframe without index')
-            ddf = dd.read_csv(os.path.join(savedir, fileglob))        
-        elif self.index_name and self.divisions:
-            print('loaded dask dataframe with index and known divisions')
+                                                names = [self.index_name] + list(self.meta.columns), \
+                                                dtype = self.meta.dtypes.append(pd.Series({self.meta.index.name: self.meta.index.dtype})).to_dict())    
+        if self.index_name is None:
+            if verbose: print('loaded dask dataframe without index')
+            ddf = dd.read_csv(os.path.join(savedir, fileglob), dtype = self.meta.dtypes.to_dict(), names = list(self.meta.columns), skiprows = 1)        
+        elif self.index_name is not None and self.divisions:
+            if verbose: print('loaded dask dataframe with index and known divisions')
             #it does not seem to be a good idea to pass the long index list through the delayed interface
             #therefore the list is contained in this function enclosure
             ddf = [dask.delayed(my_read_csv)(fname) \
                    for fname in sorted(glob.glob(os.path.join(savedir, fileglob)))]
             ddf = dd.from_delayed(ddf, divisions = self.divisions, meta = self.meta)
-        elif self.index_name and not self.divisions:
-            print('loaded dask dataframe with index but without known divisions')            
+        elif self.index_name is not None and not self.divisions:
+            if verbose: print('loaded dask dataframe with index but without known divisions')            
             ddf = [dask.delayed(my_read_csv)(fname) \
                    for fname in sorted(glob.glob(os.path.join(savedir, fileglob)))]
             ddf = dd.from_delayed(ddf, meta = self.meta)   
+        ddf.index.name = self.index_name
         return ddf
     
         
         
-def dump(obj, savedir, repartition = False):
+def dump(obj, savedir, repartition = False, calculate_divisions = True):
     if repartition:
         if obj.npartitions < 100:
             try:
@@ -100,14 +117,19 @@ def dump(obj, savedir, repartition = False):
     #obj.to_csv(os.path.join(savedir, fileglob), get = settings.multiprocessing_scheduler, index = index_flag)
     meta = obj._meta
     index_name = obj.index.name
+    dtypes = obj.dtypes
     if obj.known_divisions:
         divisions = obj.divisions
     else:
         divisions = None
         #experimental: calculate divisions, if they are not known and index is set
-        if obj.index.name is not None:
-            obj=obj.reset_index().set_index(index_name, sorted = True)
+        if obj.index.name is not None and calculate_divisions is True:
+            with dask.set_options(get = settings.multiprocessing_scheduler):
+                obj=obj.reset_index().set_index(index_name, sorted = True)
             divisions = obj.divisions
         
     with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
-        cloudpickle.dump(Loader(meta, index_name, divisions), file_)
+        cloudpickle.dump(Loader(meta, index_name = index_name, divisions = divisions), file_)
+        
+        
+        
