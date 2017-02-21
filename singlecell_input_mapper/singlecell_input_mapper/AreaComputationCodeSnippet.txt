@@ -1,0 +1,91 @@
+namespace {
+    double getTruncatedConeArea(const double height,
+                                const double radius1,
+                                const double radius2)
+    {
+        const double radiusDiff = radius2 - radius1;
+        const double slantedHeight = sqrt(height*height + radiusDiff*radiusDiff);
+        const double area = M_PI * (radius1 + radius2) * slantedHeight;
+        return area;
+    }
+
+    float interpolateRadius(const McVec3f& p0,
+                            const float r0,
+                            const McVec3f& p1,
+                            const float r1,
+                            const McVec3f& targetPos)
+    {
+        const float totalLen = (p1-p0).length();
+        if (fabs(totalLen) < 1.e-4) {
+            return 0.5f * (r0+r1);
+        }
+        const float p0targetLen = (targetPos-p0).length();
+        const float alpha = p0targetLen/totalLen;
+        return alpha*r1 + (1.0f-alpha)*r0;
+    }
+}
+
+void NeuralNetworkFunctions::addEdgeAreaPerGridCell(const HxSpatialGraphInterface* graphInterface,
+                                                    const int edgeNum,
+                                                    Grid& grid,
+                                                    const float weight)
+{
+    // Transformation from registered position to position after up-scaling
+    const McDArray<McVec3f> transformedPoints =
+        SpatialGraphFunctions::getTransformedEdgePoints(graphInterface, edgeNum);
+
+    const PointAttribute* radiusAtt = graphInterface->findEdgePointAttribute("Radius");
+    if (!radiusAtt) {
+        mcthrowcompat(QString("Error in addEdgeAreaPerGridCell: no \"Radius\" attribute found."));
+    }
+
+    const McVec3i INVALID_CELL(-1, -1, -1);
+
+    for (int p=0; p<graphInterface->getNumEdgePoints(edgeNum)-1; ++p) {
+        const float radius0 = radiusAtt->getFloatDataAtPoint(edgeNum, p);
+        const float radius1 = radiusAtt->getFloatDataAtPoint(edgeNum, p+1);
+
+        McVec3f u0 = transformedPoints[p];
+        McVec3f u1 = transformedPoints[p+1];
+
+        McVec3i c0 = grid.getCellContainingPoint(u0);
+        McVec3i c1 = grid.getCellContainingPoint(u1);
+
+        if (c0 == INVALID_CELL) {
+            mcthrowcompat(QString("Error in addEdgeAreaPerGridCell: point (%1, %2, %3) outside grid.")
+                              .arg(u0.x).arg(u0.y).arg(u0.z));
+        }
+        if (c1 == INVALID_CELL) {
+            mcthrowcompat(QString("Error in addEdgeAreaPerGridCell: point (%1, %2, %3) outside grid.")
+                              .arg(u1.x).arg(u1.y).arg(u1.z));
+        }
+
+        if (c0 == c1) {
+            const float length = (u0-u1).length();
+            const double area = getTruncatedConeArea(length, radius0, radius1);
+            // weight is the PST density for this edge (depending on label)
+            grid.setValue(c0, grid.getValue(c0) + weight*area);
+        }
+        else {
+            McVec3f q0, q1;
+            // clip line segment against each grid cell
+            for (int z=MC_MIN2(c0[2], c1[2]); z<=MC_MAX2(c0[2], c1[2]); ++z) {
+                for (int y=MC_MIN2(c0[1], c1[1]); y<=MC_MAX2(c0[1], c1[1]); ++y) {
+                    for (int x=MC_MIN2(c0[0], c1[0]); x<=MC_MAX2(c0[0], c1[0]); ++x) {
+                        McBox3f box = grid.getGridCellBox(McVec3i(x, y, z));
+                        // clipline = Liang-Barsky clipping function
+                        if (box.clipLine(u0, u1, q0, q1)) {
+                            const float length = (q0-q1).length();
+                            const float r0 = interpolateRadius(u0, radius0, u1, radius1, q0);
+                            const float r1 = interpolateRadius(u0, radius0, u1, radius1, q1);
+                            const float area = getTruncatedConeArea(length, r0, r1);
+                            McVec3i cellIndex(x, y, z);
+                            grid.setValue(cellIndex, grid.getValue(cellIndex) + weight*area);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
