@@ -20,7 +20,7 @@ class Tests(unittest.TestCase):
             import model_data_base.mdb_initializers.load_roberts_simulationdata            
             model_data_base.mdb_initializers.load_roberts_simulationdata.pipeline(mdb)    
     
-    @decorators.testlevel(1)    
+    @decorators.testlevel(2)    
     def test_saved_and_reloded_synapse_file_is_identical(self):
         mdb = model_data_base.ModelDataBase(os.path.join('/nas1/Data_arco/project_src/model_data_base/', 'test/data/test_temp'))
         synapse_pdf = mdb['synapse_activation'].loc[mdb['sim_trail_index'][0]].compute(get=dask.threaded.get)
