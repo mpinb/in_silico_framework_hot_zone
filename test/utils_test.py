@@ -4,7 +4,6 @@ from . import decorators
 import unittest
 import numpy as np
 from pandas.util.testing import assert_frame_equal
-assert_frame_equal(pdf, pdf2)
 
 class Test(unittest.TestCase):
     def test_pandas_to_array(self):
