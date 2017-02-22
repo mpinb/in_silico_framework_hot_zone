@@ -65,7 +65,13 @@ def read_voltage_traces_by_filenames(prefix, fnames):
 ############################################
 def create_metadata(sim_trail_index):
     '''Generates metadata out of a pd.Series containing the sim_trail_indices'''
-    
+    def determine_zfill_used_in_simulation(x):
+        path = x.sim_trail_index
+        path, trailnr = os.path.split(path)
+        glob.glob(os.path.join())
+        
+        
+        
     def voltage_trace_file_list(x):
         '''returns part of the metadata dataframe.'''
         path = x.sim_trail_index
@@ -292,8 +298,9 @@ def _build_db_part2(mdb, dask_dumper = dask_to_csv):
     rewrite_data_in_fast_format(mdb)     
     m = mdb['metadata']
     print('generate cell and synapse activation dataframes')
-    mdb['synapse_activation'] = dask_wrappers.read_csvs(mdb['synapses_cache_folder'], m.path, m.synapses_file_name).set_index('sim_trail_index', sorted = True)
-    mdb['cell_activation'] = dask_wrappers.read_csvs(mdb['cells_cache_folder'], m.path, m.cells_file_name).set_index('sim_trail_index', sorted = True)
+    index = list(mdb['sim_trail_index'])
+    mdb['synapse_activation'] = dask_wrappers.read_csvs(mdb['synapses_cache_folder'], m.path, m.synapses_file_name).set_index('sim_trail_index', sorted = True, divisions = index)
+    mdb['cell_activation'] = dask_wrappers.read_csvs(mdb['cells_cache_folder'], m.path, m.cells_file_name).set_index('sim_trail_index', sorted = True, divisions = index)
     
 def _build_db_part3(mdb, dask_dumper = dask_to_csv):  
     '''rewrites synapse activation fiels again, this time with known divisions'''  
