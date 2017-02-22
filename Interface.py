@@ -50,8 +50,6 @@ from model_data_base.utils import silence_stdout
 from model_data_base.utils import select, pandas_to_array, pooled_std
 from model_data_base.utils import skit
 
-from model_data_base.settings import path_synapses_avg_total, get_synapses_avg_total
-
 def split_synapse_activation(sa, selfcheck = True, excitatory = excitatory, inhibiotry = inhibitory):
     '''Splits synapse activation in EXC and INH component.
     
