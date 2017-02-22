@@ -58,8 +58,8 @@ def my_dask_writer(ddf, path, optimize_graph = False, index = None, get = settin
     save_delayeds = zip(ddf, [path]*l, list(range(l)), [digits]*l) #put all data together
     save_delayeds = map(dask.delayed(lambda x: ddf_save_chunks(*x)), save_delayeds) #call save function with it
     save_delayeds = bundle_delayeds(*save_delayeds) #bundle everything, so dask does not merge the graphs, which takes ages
-    dask.compute(save_delayeds, optimize_graph = optimize_graph, get = get)
-    
+    #dask.compute(save_delayeds, optimize_graph = optimize_graph, get = get)
+    save_delayeds.compute(optimize_graph = True, get = get)
     
 
 ########################################################
