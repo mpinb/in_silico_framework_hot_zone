@@ -22,18 +22,22 @@ def concat_path_elements_to_filelist(*args):
 #todo test:
 #['str', [1,2,3], pd.Series([1,2,3])] --> [('str', 1, 1), ('str', 2, 2), ('str', 3, 3)]
 #'0' --> ['0']
-        
-    
-def read_csvs(*args):
+
+def my_reader(fname, fun):
+    df = pd.read_csv(fname)
+    if fun is not None:
+        df = fun(df)
+    return df
+
+def read_csvs(*args, **kwargs):
     '''the dask read_csv function only supports 
     globstrings. this is intended to use, if you want to provide
     a explicit filelist instead'''
     filelist = concat_path_elements_to_filelist(*args) ## 3hr of debugging: *args, not args
     out = []
+    fun = kwargs['fun'] if 'fun' in kwargs else None
     for fname in filelist:
         absolute_path_to_file = os.path.join(fname)
-        out.append(dask.delayed(pd.read_csv)(absolute_path_to_file))
+        out.append(dask.delayed(my_reader)(absolute_path_to_file, fun))
     
     return dask.dataframe.from_delayed(out)
-
-
