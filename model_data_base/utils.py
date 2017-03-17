@@ -1,4 +1,21 @@
 import sys, os
+from six import StringIO
+
+
+def chunkIt(seq, num):
+    '''splits seq in num lists, which have approximately equal size.
+    https://stackoverflow.com/questions/2130016/splitting-a-list-of-arbitrary-size-into-only-roughly-n-equal-parts
+    '''
+    avg = len(seq) / float(num)
+    out = []
+    last = 0.0
+    
+    while last < len(seq):
+        out.append(seq[int(last):int(last + avg)])
+        last += avg
+    
+    return [o for o in out if o] #filter out empty lists
+
 
 def silence_stdout(fun, outfilename = None):
     '''robustly silences a function and restores stdout afterwars
@@ -28,7 +45,6 @@ def convertible_to_int(x):
         except:
             return False
         
-from six import StringIO
 def split_file_to_buffers(f, split_str = '#'):
     '''reads a file f and splits it, whenever "split_str" is found.
     Returns a list of StringIO Buffers.
@@ -144,3 +160,6 @@ def skit(*funcs, **kwargs):
             out[-1].update(kwargs)
         
     return tuple(out)
+
+def unique(list_):
+    return list(pd.Series(list_).drop_duplicates())
