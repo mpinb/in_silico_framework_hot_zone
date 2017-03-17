@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 import dask
 import dask.dataframe as dd
-from ..misc.add_nparray_aligned import add_aligned
-from _helper_functions import time_list_from_pd, pd_to_array, map_return_to_series
+from model_data_base.misc.add_nparray_aligned import add_aligned
+from model_data_base.analyze._helper_functions import time_list_from_pd, pd_to_array, map_return_to_series
 
 
 def universal_pd(df, distance_column, spacial_distance_bins = 50, min_time = 0, \
