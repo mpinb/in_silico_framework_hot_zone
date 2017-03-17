@@ -2,23 +2,20 @@
 the initialize function in this module is meant to be used to load in simulation results,
 that are in the same format as roberts L6 simulations'''
 
-from .. import IO
+from model_data_base.IO import make_file_list
 from .. import analyze
 
-import os
+import os, glob
 import pandas as pd
 import dask
 import dask.dataframe as dd
-import dask.bag as db
 import numpy as np
 import shutil
-import tempfile
 from .. import settings
-from dask.diagnostics import ProgressBar
 from ..IO.LoaderDumper import dask_to_csv, dask_to_msgpack
 from ..IO import dask_wrappers
-import model_data_base
 from model_data_base.model_data_base import get_progress_bar_function
+import hashlib
 
 
 ############################################
@@ -63,14 +60,19 @@ def read_voltage_traces_by_filenames(prefix, fnames):
 ############################################
 #Step four: generate metadata dataframe out of sim_trail_indices
 ############################################
-def create_metadata(sim_trail_index):
+def create_metadata(mdb):
     '''Generates metadata out of a pd.Series containing the sim_trail_indices'''
-    def determine_zfill_used_in_simulation(x):
-        path = x.sim_trail_index
-        path, trailnr = os.path.split(path)
-        glob.glob(os.path.join())
-        
-        
+    sim_trail_index = mdb['sim_trail_index']
+    simresult_path = mdb['simresult_path']
+    
+    def determine_zfill_used_in_simulation(globstring):
+        ret = len(os.path.basename(glob.glob(globstring)[0]).split('_')[1].lstrip('run'))
+        return ret
+    
+    testpath = os.path.join(simresult_path, os.path.dirname(list(sim_trail_index)[0]), \
+                            '*%s*.csv')
+    zfill_synapses = determine_zfill_used_in_simulation(testpath % 'synapses')    
+    zfill_cells = determine_zfill_used_in_simulation(testpath % 'cells')    
         
     def voltage_trace_file_list(x):
         '''returns part of the metadata dataframe.'''
@@ -79,14 +81,18 @@ def create_metadata(sim_trail_index):
         path, trailnr = os.path.split(path)
         #path, voltage_traces_file_name = os.path.split(path)
         voltage_traces_file_name = os.path.basename(path)
-        voltage_traces_file_name = voltage_traces_file_name.split('_')[-1] + '_vm_all_traces.csv'
-        return pd.Series({'path': path, 'trailnr': trailnr, 'voltage_traces_file_name': voltage_traces_file_name})
+        voltage_traces_file_name = voltage_traces_file_name.split('_')[-1] \
+                                        + '_vm_all_traces.csv'
+                                        
+        return pd.Series({'path': path, \
+                          'trailnr': trailnr, \
+                          'voltage_traces_file_name': voltage_traces_file_name})
     
     
     def synaptic_file_list(x):
         '''returns part of the metadata dataframe.'''
-        synapses_file_name = "simulation_run%04d_synapses.csv" % int(x.trailnr)
-        cells_file_name = "simulation_run%04d_presynaptic_cells.csv" % int(x.trailnr)
+        synapses_file_name = "simulation_run%s_synapses.csv" % str(int(x.trailnr)).zfill(zfill_synapses)
+        cells_file_name = "simulation_run%s_presynaptic_cells.csv" % str(int(x.trailnr)).zfill(zfill_cells)
         return pd.Series({'synapses_file_name': synapses_file_name, 'cells_file_name': cells_file_name}) 
     
     sim_trail_index = pd.DataFrame(dict(sim_trail_index = list(sim_trail_index)))
@@ -216,7 +222,7 @@ def rewrite_data_in_fast_format(mdb):
                                              meta = int).compute(get = scheduler)#, meta = pd.Series({'max_commas': 'int64'}))
     max_commas = max(list(max_commas))
     print('Rewriting cell csv files to cache folder')    
-    mdb['cells_cache_folder'] = cells_cache_folder = mdb.get_mkdtemp(suffix = 'cells_cache_folder')[0]
+    cells_cache_folder = mdb.get_managed_folder('cells_cache_folder')
     metadata_dd.apply(myConvFab.get_convert_fun(max_commas, cells_cache_folder), 
                       axis = 1, meta = 1).compute(get = scheduler)
     
@@ -227,7 +233,7 @@ def rewrite_data_in_fast_format(mdb):
                                    meta = 1).compute(get = scheduler)
     max_commas = max(list(max_commas))
     print('Rewriting synapse csv files to cache folder')  
-    mdb['synapses_cache_folder'] = synapses_cache_folder = mdb.get_mkdtemp(suffix = 'synapses_cache_folder')[0]          
+    synapses_cache_folder = mdb.get_managed_folder('synapses_cache_folder')          
     metadata_dd.apply(myConvFab.get_convert_fun(max_commas, synapses_cache_folder), 
                       axis = 1, meta = 1).compute(get = scheduler)    
 
@@ -240,6 +246,82 @@ def rewrite_data_in_fast_format(mdb):
 ###########################################
 #this is covered in _build_db_part3
 
+###########################################
+#Step seven: load dendritic voltage traces
+###########################################
+
+def load_dendritic_voltage_traces_helper(mdb, suffix):
+    m = mdb['metadata'] 
+    if os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, m.iloc[0].path.split('_')[-1] + suffix)):
+        fnames = [os.path.join(x.path, x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
+    elif os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, 'seed_' + m.iloc[0].path.split('_')[-1] + suffix)):
+        fnames = [os.path.join(x.path, 'seed_' + x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
+    fnames = unique(fnames)
+    ddf = read_voltage_traces_by_filenames(mdb['simresult_path'], fnames)
+    return ddf
+
+def load_dendritic_voltage_traces(mdb, repartition = False, dask_dumper = dask_to_csv, force_calculation = False):
+    
+    suffix = '_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv'
+    mdb.maybe_calculate('Vm_distal', \
+                        lambda: load_dendritic_voltage_traces_helper(mdb, suffix), \
+                        dumper = dask_dumper, \
+                        force_calculation = force_calculation)
+    suffix = '_apical_proximal_distal_rec_sites_ID_001_sec_025_seg_001_x_0.500_somaDist_198.1_vm_dend_traces.csv'
+    mdb.maybe_calculate('Vm_proximal', \
+                        lambda: load_dendritic_voltage_traces_helper(mdb, suffix), \
+                        dumper = dask_dumper, \
+                        force_calculation = force_calculation)
+    
+###########################################
+#Step eight: load parameterfiles
+###########################################    
+      
+def generate_param_file_hashes(simresult_path, sim_trail_index, get = dask.multiprocessing.get):
+    print "find unique parameterfiles"
+    def fun(x):
+        sim_trail_folder = os.path.dirname(x.sim_trail_index)
+        identifier = os.path.basename(sim_trail_folder).split('_')[-1]
+        return sim_trail_folder, identifier
+
+    def fun_network(x):
+        sim_trail_folder, identifier = fun(x)
+        return os.path.join(simresult_path, sim_trail_folder, identifier + '_network_model.param')
+
+    def fun_neuron(x):
+        sim_trail_folder, identifier = fun(x)
+        return os.path.join(simresult_path, sim_trail_folder, identifier + '_neuron_model.param')
+    
+    @dask.delayed
+    def _helper(df):
+        df['path_neuron'] = df.apply(lambda x: fun_neuron(x), axis = 1)
+        df['path_network'] = df.apply(lambda x: fun_network(x), axis = 1)
+        df['hash_neuron'] = df['path_neuron'].map(lambda x: hashlib.md5(open(x, 'rb').read()).hexdigest())
+        df['hash_network'] = df['path_network'].map(lambda x: hashlib.md5(open(x, 'rb').read()).hexdigest())
+        return df
+        
+    df = pd.DataFrame(dict(sim_trail_index = list(sim_trail_index)))
+    ddf = dd.from_pandas(df, npartitions = 200).to_delayed()
+    delayeds = [_helper(df) for df in ddf]
+    return dask.delayed(delayeds)
+
+@dask.delayed
+def parallel_copy_helper(df):
+    for name, value in df.iterrows():
+        shutil.copy(value.from_, value.to_)
+
+def write_param_files_to_folder(df, folder, path_column, hash_column):
+    print "move parameterfiles"
+    df = df.drop_duplicates(subset = hash_column)
+    df2 = pd.DataFrame()
+    df2['from_'] = df[path_column]
+    df2['to_'] = df.apply(lambda x: os.path.join(folder, x[hash_column]), axis = 1)
+    ddf = dd.from_pandas(df2, npartitions = 200).to_delayed()
+    return dask.delayed([parallel_copy_helper(d) for d in ddf])
+    
+#df = pd.concat(generate_param_file_hashes(simresult_path, sim_trail_index).compute(get = dask.multiprocessing.get))    
+    
+    
 ###########################################
 #Step seven: tidy up
 ##########################################
@@ -254,7 +336,7 @@ def _build_db_part1(mdb, repartition = False, force_calculation = False, dask_du
     #make filelist of all soma-voltagetraces-files
     #mdb['file_list'] = IO.make_file_list(mdb['simresult_path'], 'vm_all_traces.csv')
     print('generate filelist ...')
-    file_list = mdb.maybe_calculate('file_list', lambda: IO.make_file_list(mdb['simresult_path'], 'vm_all_traces.csv'))
+    file_list = mdb.maybe_calculate('file_list', lambda: make_file_list(mdb['simresult_path'], 'vm_all_traces.csv'))
     if len(file_list) == 0:
         raise ValueError("Did not find any '*vm_all_traces.csv'-files. Filelist empty. Abort initialization.")
     mdb.maybe_calculate('file_list', \
@@ -285,24 +367,77 @@ def _build_db_part1(mdb, repartition = False, force_calculation = False, dask_du
     #associated files
     print('generate metadata ...')        
     mdb.maybe_calculate('metadata', \
-                        lambda: create_metadata(mdb['sim_trail_index']),\
+                        lambda: create_metadata(mdb),\
                         dumper = 'self',\
                         force_calculation = force_calculation)                 
 
 
+# def _build_db_part2(mdb, dask_dumper = dask_to_csv):
+#     '''Rewrites synapse activation files for fast access and sets up access to them'''
+# 
+#     #rewrites the synapse and cell files in a way they can be acessed fast
+#     print('start rewriting synapse and cell activation data in optimized format')                
+#     rewrite_data_in_fast_format(mdb)     
+#     m = mdb['metadata']
+#     print('generate cell and synapse activation dataframes')
+#     index = list(mdb['sim_trail_index'])
+#     
+#     
+#     def categorize(df, name):
+#         '''in the future, this function can be used to categorize data before it is saved.
+#         Currently this does not work, because dataframes that are saved using to_msgpack 
+#         that contain categorials cannot be read again'''
+#         if isinstance(name, str): name = [name]
+#         for name in name:
+#             df[name] = df[name].astype('category')
+#         return df
+#             
+#     categorize_synapse_activation = lambda df: categorize(df, ['sim_trail_index', 'synapse_type', 'dendrite_label'])
+#     categorize_cell_activation = lambda df: categorize(df, ['sim_trail_index', 'presynaptic_cell_type'])
+#     synapse_activation = dask_wrappers.read_csvs(mdb['synapses_cache_folder'], m.path, m.synapses_file_name, \
+#                                                         fun = categorize_synapse_activation).set_index('sim_trail_index', \
+#                                                                                                        sorted = True, \
+#                                                                                                        divisions = index)
+#     cell_activation = dask_wrappers.read_csvs(mdb['cells_cache_folder'], m.path, m.cells_file_name,\
+#                                                      fun = categorize_cell_activation).set_index('sim_trail_index', \
+#                                                                                                  sorted = True, divisions = index)
+# 
+#     print('Move synapse_activation to local database')    
+#     mdb.setitem(item = synapse_activation, key = 'synapse_activation', dumper = dask_dumper)
+#     print('Move cell_activation to local database')    
+#     mdb.setitem(item = cell_activation, key = 'cell_activation', dumper = dask_dumper)    
+#  
+#  
+
 def _build_db_part2(mdb, dask_dumper = dask_to_csv):
     '''Rewrites synapse activation files for fast access and sets up access to them'''
-
+ 
     #rewrites the synapse and cell files in a way they can be acessed fast
     print('start rewriting synapse and cell activation data in optimized format')                
     rewrite_data_in_fast_format(mdb)     
     m = mdb['metadata']
     print('generate cell and synapse activation dataframes')
     index = list(mdb['sim_trail_index'])
-    mdb['synapse_activation'] = dask_wrappers.read_csvs(mdb['synapses_cache_folder'], m.path, m.synapses_file_name).set_index('sim_trail_index', sorted = True, divisions = index)
-    mdb['cell_activation'] = dask_wrappers.read_csvs(mdb['cells_cache_folder'], m.path, m.cells_file_name).set_index('sim_trail_index', sorted = True, divisions = index)
-    
+ 
+             
+    synapse_activation = dask_wrappers.read_csvs(mdb['synapses_cache_folder'], m.path, m.synapses_file_name)
+    cell_activation = dask_wrappers.read_csvs(mdb['cells_cache_folder'], m.path, m.cells_file_name)
+     
+    #if dask_dumper is not dask_to_csv:
+    #    print('categorize cell and synapse dataframe')
+    #    synapse_activation = synapse_activation.categorize(index = True, split_every = 256)
+    #    cell_activation = cell_activation.categorize(index = True, split_every = 256)
+     
+    synapse_activation = synapse_activation.set_index('sim_trail_index', sorted = True, divisions = index)
+    cell_activation = cell_activation.set_index('sim_trail_index', sorted = True, divisions = index)
+     
+    print('Move synapse_activation to local database')    
+    mdb.setitem(item = synapse_activation, key = 'synapse_activation', dumper = dask_dumper)
+    print('Move cell_activation to local database')    
+    mdb.setitem(item = cell_activation, key = 'cell_activation', dumper = dask_dumper)
+#     
 def _build_db_part3(mdb, dask_dumper = dask_to_csv):  
+    return
     '''rewrites synapse activation fiels again, this time with known divisions'''  
     print('Move synapse_activation to local database')    
     mdb.setitem(item = mdb['synapse_activation'], key = 'synapse_activation', dumper = dask_dumper)
@@ -311,9 +446,6 @@ def _build_db_part3(mdb, dask_dumper = dask_to_csv):
 
 def _tidy_up(mdb):
     print('Tidy up ...')
-    basedir = mdb.basedir
-    shutil.rmtree(os.path.join(basedir, mdb['synapses_cache_folder']))
-    shutil.rmtree(os.path.join(basedir, mdb['cells_cache_folder']))
     del mdb['synapses_cache_folder']
     del mdb['cells_cache_folder']
 
@@ -334,58 +466,18 @@ def sim_trial_index_generator(fname, len_data):
     index = [str(os.path.join(dirname, pid + '_vm_all_traces.csv', str(index))) for index in range(len_data)]
     return index
 
-#fname = '20160629-2316_16848/16848_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv'
-#sim_trial_index_generator(fname, 10)
-
-
-def load_dendritic_voltage_traces_helper(mdb, suffix):
-    m = mdb['metadata'] 
-    if os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, m.iloc[0].path.split('_')[-1] + suffix)):
-        fnames = [os.path.join(x.path, x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
-    elif os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, 'seed_' + m.iloc[0].path.split('_')[-1] + suffix)):
-        fnames = [os.path.join(x.path, 'seed_' + x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
-    fnames = unique(fnames)
-    ddf = read_voltage_traces_by_filenames(mdb['simresult_path'], fnames)
-    return ddf
-
-def load_dendritic_voltage_traces(mdb, repartition = False, dask_dumper = dask_to_csv, force_calculation = False):
-    
-    suffix = '_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv'
-    mdb.maybe_calculate('Vm_distal', \
-                        lambda: load_dendritic_voltage_traces_helper(mdb, suffix), \
-                        dumper = dask_dumper, \
-                        force_calculation = force_calculation)
-    suffix = '_apical_proximal_distal_rec_sites_ID_001_sec_025_seg_001_x_0.500_somaDist_198.1_vm_dend_traces.csv'
-    mdb.maybe_calculate('Vm_proximal', \
-                        lambda: load_dendritic_voltage_traces_helper(mdb, suffix), \
-                        dumper = dask_dumper, \
-                        force_calculation = force_calculation)    
-
-#     suffix = '_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv'    
-#     ddf_distal = load_dendritic_voltage_traces_helper(mdb, suffix)      
-#     suffix = '_apical_proximal_distal_rec_sites_ID_001_sec_025_seg_001_x_0.500_somaDist_198.1_vm_dend_traces.csv'
-#     ddf_proximal = load_dendritic_voltage_traces_helper(mdb, suffix)
-#     print('Move distal voltage traces to local database')
-#     mdb.setitem(item = ddf_distal, key = 'Vm_distal', dumper = dask_to_csv, repartition = repartition)  
-#     print('Move proximal voltage traces to local database')
-#     mdb.setitem(item = ddf_proximal, key = 'Vm_proximal', dumper = dask_to_csv, repartition = repartition) 
-    
-        
 from ..analyze.spike_detection import spike_detection
 from ..analyze.burst_detection import burst_detection
 
 
 def pipeline(mdb):
-    #model_data_base.get_progress_bar_function()(): 
-    #   like dask.diagnostics.ProgressBar, if model_data_base.settings.show_computation_progress,
-    #   else empty context manager. This allows to hide the ProgressBar
     with dask.set_options(get = settings.multiprocessing_scheduler):
         with get_progress_bar_function()(): 
             load_dendritic_voltage_traces(mdb)    
             mdb['spike_times'] = spike_detection(mdb['voltage_traces'])
             mdb['burst_times'] = burst_detection(mdb['Vm_proximal'], mdb['spike_times'], burst_cutoff = -55)
         
-def init(mdb, simresult_path, dask_dumper = dask_to_csv, voltage_traces = True, synapse_activation = True, synapse_activation_known_divisions = True, dendritic_voltage_traces = False, spike_times = False,  burst_times = False):
+def init(mdb, simresult_path, dask_dumper = dask_to_msgpack, voltage_traces = True, synapse_activation = True, dendritic_voltage_traces = False, spike_times = False,  burst_times = False, parameterfiles = True):
     with dask.set_options(get = settings.multiprocessing_scheduler):
         with get_progress_bar_function()(): 
             mdb['simresult_path'] = simresult_path  
@@ -393,9 +485,14 @@ def init(mdb, simresult_path, dask_dumper = dask_to_csv, voltage_traces = True, 
                 _build_db_part1(mdb, dask_dumper = dask_dumper)
                 if synapse_activation:
                     _build_db_part2(mdb, dask_dumper = dask_dumper)
-                    if synapse_activation_known_divisions:
-                        _build_db_part3(mdb, dask_dumper = dask_dumper)
-                        _tidy_up(mdb)
+                    #_build_db_part3(mdb, dask_dumper = dask_dumper)
+                    _tidy_up(mdb)
+                if parameterfiles:                    
+                    df = pd.concat(generate_param_file_hashes(simresult_path, mdb['sim_trail_index']).compute())
+                    df.set_index('sim_trail_index', inplace = True)
+                    write_param_files_to_folder(df, mdb.get_managed_folder('parameterfiles_cell_folder'), 'path_neuron', 'hash_neuron').compute()
+                    write_param_files_to_folder(df, mdb.get_managed_folder('parameterfiles_network_folder'), 'path_network', 'hash_network').compute()
+                    mdb['parameterfiles'] = df
             if dendritic_voltage_traces:
                 load_dendritic_voltage_traces(mdb, dask_dumper = dask_dumper)
             if spike_times:
