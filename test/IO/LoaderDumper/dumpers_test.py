@@ -9,8 +9,10 @@ from pandas.util.testing import assert_frame_equal
 import dask.dataframe as dd
 import pandas as pd
 import dask
-from  model_data_base.IO.LoaderDumper import dask_to_csv, numpy_to_npy, pandas_to_msgpack, to_pickle, pandas_to_pickle, dask_to_msgpack
+from  model_data_base.IO.LoaderDumper import dask_to_csv, numpy_to_npy, pandas_to_msgpack, \
+                                to_pickle, pandas_to_pickle, dask_to_msgpack
 from numpy.testing import assert_array_equal
+from IO.LoaderDumper import dask_to_categorized_msgpack, to_cloudpickle
 
 
 def robust_del_fun(mdb, key):
@@ -63,6 +65,12 @@ class Tests(unittest.TestCase):
     def test_dask_to_csv_small(self):
         self.data_frame_generic_small(self.pdf2, self.ddf2, dask_to_csv)
         
+    def test_dask_to_msgpack_small(self):
+        self.data_frame_generic_small(self.pdf2, self.ddf2, dask_to_msgpack)     
+        
+    def test_dask_to_categorized_msgpack_small(self):
+        self.data_frame_generic_small(self.pdf2, self.ddf2, dask_to_categorized_msgpack)
+        
     def test_pandas_to_msgpack_small(self):
         self.data_frame_generic_small(self.pdf, self.pdf, pandas_to_msgpack)
     
@@ -71,6 +79,9 @@ class Tests(unittest.TestCase):
         
     def test_to_pickle_small(self):
         self.data_frame_generic_small(self.pdf, self.pdf, to_pickle) 
+        
+    def test_to_cloudpickle_small(self):
+        self.data_frame_generic_small(self.pdf, self.pdf, to_cloudpickle)         
                
     def test_self_small(self):
         self.data_frame_generic_small(self.pdf, self.pdf, 'self')         
@@ -86,20 +97,28 @@ class Tests(unittest.TestCase):
         fun(np.array([]))
         
         
-    
-    @decorators.testlevel(2)
-    def test_dask_to_csv_real_data(self):
-        self.mdb.setitem('voltage_traces2', self.mdb['voltage_traces'], dumper = dask_to_csv)
+    def real_data_generic(self, dumper):
+        self.mdb.setitem('voltage_traces2', self.mdb['voltage_traces'], dumper = dumper)
         dummy = self.mdb['voltage_traces2']
         b = self.mdb['voltage_traces'].compute(get = dask.multiprocessing.get)
         a = dummy.compute(get = dask.multiprocessing.get)
         assert_frame_equal(a, b)   
            
-        self.mdb.setitem('synapse_activation2', self.mdb['synapse_activation'], dumper = dask_to_csv)
+        self.mdb.setitem('synapse_activation2', self.mdb['synapse_activation'], dumper = dumper)
         dummy = self.mdb['synapse_activation2']
         b = self.mdb['synapse_activation'].compute(get = dask.multiprocessing.get)
         a = dummy.compute(get = dask.multiprocessing.get)
-        assert_frame_equal(a, b)
+        assert_frame_equal(a, b)        
+
+    @decorators.testlevel(2)
+    def test_dask_to_csv_real_data(self):
+        real_data_generic(dask_to_csv)
+        
+    def test_dask_to_csv_real_data(self):
+        real_data_generic(dask_to_categorized_msgpack)        
+
+    def test_dask_to_csv_real_data(self):
+        real_data_generic(dask_to_msgpack)          
         
     @decorators.testlevel(2)
     def test_dask_to_msgpack_real_data(self):
