@@ -8,8 +8,12 @@ import os
 import shutil
 import tempfile
 import cloudpickle as pickle
-import IO, IO.LoaderDumper.to_pickle
+import IO
+import IO.LoaderDumper.to_cloudpickle
 import IO.LoaderDumper.pandas_to_msgpack
+import IO.LoaderDumper.just_create_folder
+import IO.LoaderDumper.just_create_mdb
+
 import analyze
 import dask.diagnostics
 import settings
@@ -62,6 +66,18 @@ class LoaderWrapper:
     def __init__(self, relpath):
         self.relpath = relpath
         
+class FunctionWrapper:
+    '''This class wraps arouand an object that cannot be saved directly (e.g. 
+    using pickle) but needs an initialization function instead.
+    
+    To use it, 
+    1. create a function, that does not expect any argument returns the object
+        you want to save    
+    2. create an instance of this class and pass your function
+    3. save it in the database with wathever dumper you want'''
+    def __init__(self, fun):
+        self.fun = fun
+                
 class MdbException(Exception):
     '''Typical mdb errors'''
     pass        
@@ -127,14 +143,6 @@ class ModelDataBase(object):
         Valid keys are tuples of str or str. "@" ist not allowed.
         
         To read out all existing keys, use the keys()-function.
-        
-        The following is deprecated:
-        After an update of the underlying libraries (e.g. dask), it might be,
-        that the standard data ('voltage_traces', 'synapse_activation' and so on) 
-        can not be unpickled any more. In this case, you can rebuild these
-        Dataframes by calling the _regenerate_data() method. If you regain
-        access to the underlying data e.g. mdb['voltage_traces'], you should
-        consider to save the updated database with the save_db() method.  
         '''
                 
         self.basedir = os.path.abspath(basedir)
@@ -182,10 +190,13 @@ class ModelDataBase(object):
         except:
             return False
     
+    def __get_sql(self):
+        return SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
+    
     def __direct_dbget(self, arg):
         '''Backend method to retrive item from the database'''
         try:
-            sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
+            sqllitedict = self.__get_sql()
             dummy = sqllitedict[arg]
         finally:
             sqllitedict.close() 
@@ -194,7 +205,7 @@ class ModelDataBase(object):
     def __direct_dbset(self, key, item):
         '''Backend method to add a key-value pair to the sqlite database'''
         try:
-            sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
+            sqllitedict = self.__get_sql()
             sqllitedict[key] = item
         except:
             raise
@@ -204,7 +215,7 @@ class ModelDataBase(object):
     def __direct_dbdel(self, arg):
         '''Backend method to delete item from the sqlite database.'''
         try:
-            sqllitedict = SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
+            sqllitedict = self.__get_sql()
             del sqllitedict[arg]
         finally:
             sqllitedict.close() 
@@ -214,9 +225,10 @@ class ModelDataBase(object):
         item = my_model_data_base[key]'''
         dummy = self.__direct_dbget(arg)
         if isinstance(dummy, LoaderWrapper):
-            return IO.LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
-        else:
-            return dummy
+            dummy = IO.LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
+        if isinstance(dummy, FunctionWrapper):
+            dummy = dummy.fun()
+        return dummy
                 
     def get_mkdtemp(self, prefix = '', suffix = ''):
         '''creates a directory in the model_data_base directory and 
@@ -224,7 +236,21 @@ class ModelDataBase(object):
         absolute_path = tempfile.mkdtemp(prefix = prefix + '_', suffix = '_' + suffix, dir = self.basedir) 
         relative_path = os.path.relpath(absolute_path, self.basedir)
         return absolute_path, relative_path
-        
+    
+    def get_managed_folder(self, key):
+        #todo: make sure that existing key will not be overwritten
+        self.setitem(key, None, dumper = IO.LoaderDumper.just_create_folder)
+        return self[key]
+    
+    def get_sub_mdb(self, key):
+        if key in self.keys():
+            item = self[key]
+            if not isinstance(item, ModelDataBase):
+                raise ValueError("Key %s is already set. Please use del mdb[%s] first" % (key, key))
+        else:
+            self.setitem(key, None, dumper = IO.LoaderDumper.just_create_mdb)
+        return self[key]
+    
     def setitem(self, key, item, **kwargs):
         '''Allows to set items. Compared to the mdb['some_keys'] = my_item syntax,
         this method allows more control over how the item is stored in the database.
@@ -256,9 +282,14 @@ class ModelDataBase(object):
         else:
             raise RuntimeError("Readonly attribute is in unknown state. Should be True, False or 'warning, but is: %s" % self.readonly)
         
-        #check if there is already a subdirectory assigned to this key. If so: delete subdirectory.
+        #check if there is already a subdirectory assigned to this key. If so: store folder to delete it after new item is set.
+        old_folder = None
         if key in self.keys():
-            self.__delitem__(key)
+            dummy = self.__direct_dbget(key)
+            if isinstance(dummy, LoaderWrapper):
+                old_folder = dummy.relpath
+                
+            #self.__delitem__(key)
                 
         #find dumper
         if dumper is None:
@@ -282,11 +313,17 @@ class ModelDataBase(object):
             try:
                 dumper.dump(item, basedir_absolute, **kwargs)
                 self.__direct_dbset(key, LoaderWrapper(basedir_relative))
-            except:
-                shutil.rmtree(basedir_absolute)
-                if key in self.keys():
-                    del self[key]
-                raise
+            except Exception as e:
+                print("An error occured. Tidy up. Please do not interrupt.")
+                try:
+                    shutil.rmtree(basedir_absolute)
+                except:
+                    print 'could not delete folder %s' % basedir_absolute
+                raise e
+                
+        
+        if old_folder is not None:
+            self.__robust_rmtree(key, os.path.join(self.basedir, old_folder))
                
     def __setitem__(self, key, item):
         '''items can be set using my_model_data_base[key] = item
@@ -298,17 +335,19 @@ class ModelDataBase(object):
                 
         self.setitem(key, item, dumper = None)
 
+    def __robust_rmtree(self, key, path):
+        try:
+            shutil.rmtree(path)
+        except OSError:
+            print('The folder ' + path + ' was registered as belonging to ' + \
+                  str(key) + '. I tried to delete this folder, because the corresponding key was overwritten. ' + \
+                  'Could not delete anything, because folder did not exist in the first place. I just carry on ...')
+            
     def __delitem__(self, key):
         '''items can be deleted using del my_model_data_base[key]'''
         dummy = self.__direct_dbget(key)
         if isinstance(dummy, LoaderWrapper):
-            try:
-                shutil.rmtree(os.path.join(self.basedir,dummy.relpath))
-            except OSError:
-                print('The folder ' + os.path.join(self.basedir,dummy.relpath) + ' was registered as belonging to ' + \
-                      str(key) + '. I tried to delete this folder, because the corresponding key was overwritten. ' + \
-                      'Could not delete anything, because folder did not exist in the first place. I just carry on ...')
-        
+            self.__robust_rmtree(key, os.path.join(self.basedir,dummy.relpath))
         self.__direct_dbdel(key)
                        
                 
