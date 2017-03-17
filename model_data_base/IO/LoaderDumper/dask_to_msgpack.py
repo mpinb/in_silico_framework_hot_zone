@@ -89,12 +89,12 @@ class Loader(parent_classes.Loader):
             if verbose: print('loaded dask dataframe with known divisions')
             #it does not seem to be a good idea to pass the long index list through the delayed interface
             #therefore the list is contained in this function enclosure
-            ddf = [dask.delayed(my_reader)(fname) \
+            ddf = [dask.delayed(my_reader, traverse = False)(fname) \
                    for fname in sorted(glob.glob(os.path.join(savedir, fileglob)))]
             ddf = dd.from_delayed(ddf, divisions = self.divisions, meta = self.meta)
         else:
             if verbose: print('loaded dask dataframe without known divisions')            
-            ddf = [dask.delayed(my_reader)(fname) \
+            ddf = [dask.delayed(my_reader, tracerse = False)(fname) \
                    for fname in sorted(glob.glob(os.path.join(savedir, fileglob)))]
             ddf = dd.from_delayed(ddf, meta = self.meta)   
         ddf.index.name = self.index_name
@@ -102,14 +102,9 @@ class Loader(parent_classes.Loader):
     
         
         
-def dump(obj, savedir, repartition = False, calculate_divisions = True):
+def dump(obj, savedir, repartition = False):
     if repartition:
-        if obj.npartitions < 100:
-            try:
-                obj = obj.repartition(npartitions = 100)
-            except ValueError:
-                pass # can only repartition to fewer partitions ... will hopefully change in the future
-        elif obj.npartitions >= 5000:
+        if obj.npartitions > 10000:
             obj = obj.repartition(npartitions = 5000)
             
     index_flag = obj.index.name is not None
@@ -121,11 +116,6 @@ def dump(obj, savedir, repartition = False, calculate_divisions = True):
         divisions = obj.divisions
     else:
         divisions = None
-        #experimental: calculate divisions, if they are not known and index is set
-        if obj.index.name is not None and calculate_divisions is True:
-            with dask.set_options(get = settings.multiprocessing_scheduler):
-                obj=obj.reset_index().set_index(index_name, sorted = True)
-            divisions = obj.divisions
         
     with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
         cloudpickle.dump(Loader(meta, index_name = index_name, divisions = divisions), file_)

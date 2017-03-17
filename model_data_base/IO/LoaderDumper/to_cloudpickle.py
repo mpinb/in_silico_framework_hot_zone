@@ -1,5 +1,5 @@
 import os
-import cPickle
+import cloudpickle
 import parent_classes
 
 def check(obj):
@@ -9,11 +9,11 @@ def check(obj):
 class Loader(parent_classes.Loader):
     def get(self, savedir):
         with open(os.path.join(savedir, 'to_pickle_dump'), 'r') as file_:
-            return cPickle.load(file_)
+            return cloudpickle.load(file_)
     
 def dump(obj, path):
     with open(os.path.join(path, 'to_pickle_dump'), 'w') as file_:
-        cPickle.dump(obj, file_)
+        cloudpickle.dump(obj, file_)
         
     with open(os.path.join(path, 'Loader.pickle'), 'w') as file_:
-        cPickle.dump(Loader(), file_)
+        cloudpickle.dump(Loader(), file_)
