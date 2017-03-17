@@ -1,56 +1,91 @@
 import os
-import tempfile
-import shutil
+#from six import BytesIO
+from StringIO import StringIO as BytesIO
 import numpy as np
 import pandas as pd
-from ..utils import convertible_to_int
+from model_data_base.utils import convertible_to_int, split_file_to_buffers, first_line_to_key
 
-        
+
+
+#################################################################
+# read synapse and cell activation file
+#################################################################
+def _process_line_fun(line, n_commas):
+    line = line.strip()
+    line = line.replace('\t', ',')
+    real_n_commas = line.count(',')
+    return line + ',' * (n_commas-real_n_commas)+'\n'
+
+def _replace_commas(f, n_commas, header, skiprows = 1):
+    f2 = BytesIO()
+    f.seek(0)
+    header = header + ','.join([str(x) for x in range(n_commas-header.count(','))])+'\n'
+    f2.write(header)
+    for line in f.read().split('\n')[skiprows:]:
+        line = _process_line_fun(line, n_commas)
+        f2.write(line)
+    f2.seek(0)
+    return f2
+
+def read_csv_uneven_length(path, n_commas, header = None, skiprows = 0):
+    with open(path) as f:
+        bla = _replace_commas(f, n_commas, header, skiprows)
+    return pd.read_csv(bla, index_col = False)
+
 def _max_commas(path):
-    '''for optimal performance, every single file should contain the same
-    numer of columns. Therefore, before the data can be rewritten in
-    an optimized form as csv, the maximum number of rows in all simulation
-    trails in the project has to be determined.'''
     with open(path, 'r') as f:
         text = f.read()
         text = text.replace('\t',',') #only , should be used
         commas_linewise = []
         for l in text.split('\n'):
-            commas_linewise.append(l.count(','))
+            if not l:
+                continue
+            comma_at_end = l[-1] == ',' # allways assume that line ends with comma
+            commas_linewise.append(l.count(',') + int(not comma_at_end))
         max_commas = max(commas_linewise)
     return max_commas
 
-def _convert_files_csv(prefix, prefix2, path, sim_trail, header, fname, max_commas):
-    #make directories
-    if not os.path.exists(os.path.join(prefix2, path)):
-        os.makedirs(os.path.join(prefix2, path))
-    #read file in and convert it
-    with open(os.path.join(prefix, path, fname), 'r') as synFile:
-        text = synFile.read()
-    #remove leading or trailing whitespace
-    text = text.strip()
-    #only use , as seperator
-    text = text.replace('\t',',') #only , should be used
+def _read_roberts_csv_uneven_length_helper(path, header, sim_trail_index = 'no_sim_trail_assigned', \
+                                           max_commas = None, set_index = True):
+    '''general function for reading roberts csv files that have a variable amount of delimiters. 
+    Also supports vectorized arguments for path and sim_trail_index.
+    '''
+    if isinstance(path, (list, tuple)): 
+        #checks for the vectorized case
+        assert(isinstance(sim_trail_index, (list, tuple)))
+        assert(max_commas is not None)
+    else:
+        path = [path]
+        sim_trail_index = [sim_trail_index]
 
-    max_commas = max_commas + 1 #+1 because of one additional field (sim_trail)
-    #every line needs to have the same number of fields
-    text_with_commas = []
-    for lv, l in enumerate(text.split('\n')):
-        if lv == 0: #header
-            if not header[-1] == ',': header = header + ','                
-            for x in range(max_commas - header.count(',') + 1):
-                header = header + str(x) + ','
-            text_with_commas.append(header[:-1]) #remove last comma
-        else: #data
-            text_with_commas.append(sim_trail + ',' + l) 
-    text = '\n'.join(text_with_commas)
-    #write new file
-    with open(os.path.join(prefix2, path, fname), 'w+') as synFile:
-        synFile.write(text)
-        #print os.path.join(prefix2, path, fname)
-    #print(os.path.join(prefix2, path, fname))
-    return 1  
-        
+    if max_commas is None: max_commas = _max_commas(path)
+    def fun(path, sim_trail_index):
+        '''read single file'''        
+        df = read_csv_uneven_length(path, max_commas, header = header, skiprows = 1)
+        df['sim_trail_index'] = sim_trail_index
+        return df
+     
+    p_sti_tuples = zip(path, sim_trail_index)
+
+    df = pd.concat([fun(p, sti) for p, sti in p_sti_tuples])
+    if set_index: df.set_index('sim_trail_index', inplace = True)
+    return df
+
+def read_pandas_synapse_activation_from_roberts_format(path, sim_trail_index = 'no_sim_trail_assigned', 
+                                                       max_commas = None, set_index = True):
+    '''reads synapse activation file from simulation and converts it to pandas table'''
+    header = 'synapse_type,synapse_ID,soma_distance,section_ID,section_pt_ID,dendrite_label,'
+    return _read_roberts_csv_uneven_length_helper(path, header, sim_trail_index, max_commas, set_index)
+
+def read_pandas_cell_activation_from_roberts_format(path, sim_trail_index = 'no_sim_trail_assigned', \
+                                                    max_commas = None, set_index = True):
+    '''reads cell activation file from simulation and converts it to pandas table'''
+    header = 'sim_trail_index,presynaptic_cell_type,cell_ID'
+    return _read_roberts_csv_uneven_length_helper(path, header, sim_trail_index, max_commas, set_index)
+
+############################################################
+# write synapse activation file
+############################################################
 def write_pandas_synapse_activation_to_roberts_format(path, syn_activation):
     '''save pandas df in a format, which can be understood by the simulator'''
     with open(path, 'w') as outputFile:
@@ -88,23 +123,10 @@ def write_pandas_synapse_activation_to_roberts_format(path, syn_activation):
             line += '\n'
             outputFile.write(line)            
 
-def read_pandas_synapse_activation_from_roberts_format(path, sim_trail_index = 'no_sim_trail_assigned', max_commas = None):
-    '''reads synapse activation file from simulation and converts it to pandas table'''
-    
-    if max_commas is None:
-        max_commas = _max_commas(path)#, lambda x: x)
-    else:
-        pass
-    header = 'sim_trail_index,synapse_type,synapse_ID,soma_distance,section_ID,section_pt_ID,dendrite_label,'    
-    prefix1 = os.path.dirname(path)
-    prefix2 = tempfile.mkdtemp()
-    fname = os.path.basename(path)
-    _convert_files_csv(prefix1, prefix2, '', sim_trail_index, header, fname, max_commas)
-    df = pd.read_csv(os.path.join(prefix2, fname), index_col = 'sim_trail_index')
-    shutil.rmtree(prefix2)
-    return df
 
-from ..utils import split_file_to_buffers, first_line_to_key
+############################################################
+# read input mapper summary
+############################################################
 def read_InputMapper_summary(pathOrBuffer, sep = '\t'):
     '''Expects the path to a summary csv file of the Single Cell Mapper,
     returns the tables as pandas tables'''
