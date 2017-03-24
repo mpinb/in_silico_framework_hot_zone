@@ -9,7 +9,7 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-test/data/
+test_model_data_base/data/
 trash_it_now/
 *.pyc
 

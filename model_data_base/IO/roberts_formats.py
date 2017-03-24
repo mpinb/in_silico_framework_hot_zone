@@ -58,7 +58,7 @@ def _read_roberts_csv_uneven_length_helper(path, header, sim_trail_index = 'no_s
         path = [path]
         sim_trail_index = [sim_trail_index]
 
-    if max_commas is None: max_commas = _max_commas(path)
+    if max_commas is None: max_commas = max([_max_commas(p) for p in path])
     def fun(path, sim_trail_index):
         '''read single file'''        
         df = read_csv_uneven_length(path, max_commas, header = header, skiprows = 1)

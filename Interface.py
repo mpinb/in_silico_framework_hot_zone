@@ -22,7 +22,7 @@ import dask
 import dask.dataframe as dd
 
 
-from model_data_base import ModelDataBase
+from model_data_base.model_data_base import ModelDataBase
 from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
 from model_data_base.analyze.temporal_binning import universal as temporal_binning

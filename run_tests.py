@@ -1,21 +1,19 @@
 import unittest
-import test
+import test_model_data_base, test_model_data_base.decorators
+import test_simrun2, test_simrun2.decorators
 import model_data_base
-import test.decorators
+import simrun2
+#import test.decorators
 
 #matplotlib issues: matplotlib.use doesn't set the backend
 import matplotlib
 #matplotlib.use('agg')
 import matplotlib.pyplot as plt
 #print(matplotlib.get_backend())
-from model_data_base import ModelDataBase
+#from model_data_base import ModelDataBase
 plt.switch_backend('agg')  
 if __name__ == "__main__":
-#     import shutil
-#     try:
-#         shutil.rmtree('/nas1/Data_arco/model_data_base/test/data/test_temp')
-#     except:
-#         pass
+
     ##################################################
     # configure here
     ##################################################
@@ -24,14 +22,17 @@ if __name__ == "__main__":
     #unittest.monkypatches.run_if_testlevel(level) are only run
     #if testlevel >= level.
     #if testlevel is set to 'all', all tests will run.
-    test.decorators.current_testlevel = 1#'all'#0#'all'#'0
+    test_model_data_base.decorators.current_testlevel = 1#'all'#0#'all'#'0
+    test_simrun2.decorators.current_testlevel = 1#'all'#0#'all'#'0
+    
+    
 #     unittest.monkypatches.testlevel = 'all'
     
     #if run is set to a string resembling the path of a module
     #containing unittest.TestCase object, only the tests in the
     #speified module will run.
     #if run is set to 'all', all tests in the test module will run.
-#     run = 'test.tuplecloudsqlitedict_test'
+#    run = 'test_model_data_base.model_data_base_test'
     run = 'all'
     #run = 'test.plotfunctions.manylines_test'
     
