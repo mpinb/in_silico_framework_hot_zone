@@ -44,13 +44,12 @@ from model_data_base.IO.LoaderDumper import cell as dumper_cell
 
 from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
-from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
+from model_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format
 from model_data_base.IO.roberts_formats import read_InputMapper_summary
 
 from model_data_base.mdb_initializers import load_crossing_over_results as mdb_init_crossing_over
 from model_data_base.mdb_initializers import load_roberts_simulationdata as mdb_init_roberts_simulations
-from model_data_base.mdb_initializers import load_roberts_simulationdata2 as mdb_init_simrun_general
-
+from model_data_base.mdb_initializers import load_simrun_general as mdb_init_simrun_general
 
 from model_data_base.analyze import split_synapse_activation, color_cellTypeColorMap, excitatory, inhibitory
 from model_data_base.utils import silence_stdout

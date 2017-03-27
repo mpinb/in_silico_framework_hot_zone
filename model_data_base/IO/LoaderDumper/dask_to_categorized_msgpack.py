@@ -24,14 +24,12 @@ import dask.delayed
 import pandas as pd
 import parent_classes
 import glob
-from ... import settings
+from model_data_base import settings
 
 ####
 # if you want to use this as template to implement another dask dumper: 
 # lines that most likely need to be changed are marked with ###
 ####
-import dask.dataframe
-import path
 ############################
 # custom methods to categorize and entcategorize a dataframe:
 ############################

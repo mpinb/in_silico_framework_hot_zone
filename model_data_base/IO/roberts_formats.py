@@ -17,22 +17,36 @@ def _process_line_fun(line, n_commas):
     return line + ',' * (n_commas-real_n_commas)+'\n'
 
 def _replace_commas(f, n_commas, header, skiprows = 1):
+    '''robert was using mixed delimiters. this normalizes a file.'''
     f2 = BytesIO()
     f.seek(0)
     header = header + ','.join([str(x) for x in range(n_commas-header.count(','))])+'\n'
     f2.write(header)
     for line in f.read().split('\n')[skiprows:]:
+        if not line.strip():
+            continue
         line = _process_line_fun(line, n_commas)
         f2.write(line)
     f2.seek(0)
     return f2
 
 def read_csv_uneven_length(path, n_commas, header = None, skiprows = 0):
+    '''general function to read in a csv file with varying length data.
+    
+    args:
+        path: path to file
+        n_commas: maximum length of fields
+    kwargs:
+        header: you can provide an alternative header
+        skiprows: skip rows at the beginning of the file (e.g. one to skip the 
+                    header if you specified one manually)
+    '''
     with open(path) as f:
         bla = _replace_commas(f, n_commas, header, skiprows)
     return pd.read_csv(bla, index_col = False)
 
 def _max_commas(path):
+    '''calculates the maximum number of delimiters (',' and '\t' in file.'''
     with open(path, 'r') as f:
         text = f.read()
         text = text.replace('\t',',') #only , should be used
@@ -47,8 +61,11 @@ def _max_commas(path):
 
 def _read_roberts_csv_uneven_length_helper(path, header, sim_trail_index = 'no_sim_trail_assigned', \
                                            max_commas = None, set_index = True):
-    '''general function for reading roberts csv files that have a variable amount of delimiters. 
-    Also supports vectorized arguments for path and sim_trail_index.
+    '''general function for reading roberts csv files. 
+    Supports vectorized arguments for path and sim_trail_index. If you provide a list for
+    sim_trail_index and path, the result will be one big dataframe containing the data
+    of all paths specified, normalized with respect to the overall maximum number of 
+    delimiters.
     '''
     if isinstance(path, (list, tuple)): 
         #checks for the vectorized case
@@ -80,7 +97,7 @@ def read_pandas_synapse_activation_from_roberts_format(path, sim_trail_index = '
 def read_pandas_cell_activation_from_roberts_format(path, sim_trail_index = 'no_sim_trail_assigned', \
                                                     max_commas = None, set_index = True):
     '''reads cell activation file from simulation and converts it to pandas table'''
-    header = 'sim_trail_index,presynaptic_cell_type,cell_ID'
+    header = 'presynaptic_cell_type,cell_ID,'
     return _read_roberts_csv_uneven_length_helper(path, header, sim_trail_index, max_commas, set_index)
 
 ############################################################

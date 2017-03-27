@@ -30,9 +30,8 @@ def my_reader(fname, fun):
     return df
 
 def read_csvs(*args, **kwargs):
-    '''the dask read_csv function only supports 
-    globstrings. this is intended to use, if you want to provide
-    a explicit filelist instead'''
+    '''The native dask read_csv function only supports globstrings. 
+    Use this function instead, if you want to provide a explicit filelist.'''
     filelist = concat_path_elements_to_filelist(*args) ## 3hr of debugging: *args, not args
     out = []
     fun = kwargs['fun'] if 'fun' in kwargs else None

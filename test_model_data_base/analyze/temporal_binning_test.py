@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import dask.dataframe as dd
 from model_data_base.settings import npartitions
+from model_data_base.model_data_base import ModelDataBase
 
 class Tests(unittest.TestCase):
     def setUp(self):
@@ -31,7 +32,7 @@ class Tests(unittest.TestCase):
     
     @decorators.testlevel(1)    
     def test_binning_real_data(self):
-        mdb = model_data_base.ModelDataBase('test/data/test_temp')            
+        mdb = ModelDataBase(test_mdb_folder)            
             
         pdf = mdb['spike_times']
         #if dask: convert to pandas

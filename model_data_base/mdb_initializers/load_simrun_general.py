@@ -192,6 +192,8 @@ def generate_param_file_hashes(simresult_path, sim_trail_index, get = dask.multi
     
     @dask.delayed
     def _helper(df):
+        ## todo: crashes if specified folder directly contains the param files
+        ## and not a subfolder containing the param files
         df['path_neuron'] = df.apply(lambda x: fun_neuron(x), axis = 1)
         df['path_network'] = df.apply(lambda x: fun_network(x), axis = 1)
         df['hash_neuron'] = df['path_neuron'].map(lambda x: hashlib.md5(open(x, 'rb').read()).hexdigest())

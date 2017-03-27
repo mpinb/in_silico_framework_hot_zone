@@ -336,6 +336,7 @@ def _build_db_part1(mdb, repartition = False, force_calculation = False, dask_du
     #make filelist of all soma-voltagetraces-files
     #mdb['file_list'] = IO.make_file_list(mdb['simresult_path'], 'vm_all_traces.csv')
     print('generate filelist ...')
+    print mdb['simresult_path']
     file_list = mdb.maybe_calculate('file_list', lambda: make_file_list(mdb['simresult_path'], 'vm_all_traces.csv'))
     if len(file_list) == 0:
         raise ValueError("Did not find any '*vm_all_traces.csv'-files. Filelist empty. Abort initialization.")

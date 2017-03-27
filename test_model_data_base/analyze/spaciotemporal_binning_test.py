@@ -16,11 +16,9 @@ class Tests(unittest.TestCase):
         
         self.test_dataframe = pd.DataFrame(self.test_dataframe)
         
-        mdb = ModelDataBase('test_model_data_base/data/test_temp') 
-        if not 'synapse_activation' in mdb.keys():
-            import model_data_base.mdb_initializers.load_roberts_simulationdata
-            model_data_base.mdb_initializers.load_roberts_simulationdata.init(mdb, 'test/data/test_data')
-    
+        mdb = ModelDataBase(test_mdb_folder) 
+        assert('synapse_activation' in mdb.keys())
+        
     def test_binning_small_pandas_df(self):
         '''binning a smale pandas.DataFrame'''
         a = universal(self.test_dataframe, 'distance', 5, 0, 30, 5)

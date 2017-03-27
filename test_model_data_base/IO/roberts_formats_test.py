@@ -1,7 +1,7 @@
 from ..context import *
 from .. import decorators
 from model_data_base.IO.roberts_formats import *
-from model_data_base import ModelDataBase
+import model_data_base
 import unittest
 import dask
 import tempfile
@@ -10,20 +10,17 @@ import pandas
 from pandas.util.testing import assert_frame_equal
 import os
 
+
+
 class Tests(unittest.TestCase):       
     def setUp(self):
-        mdb = ModelDataBase('test/data/test_temp') 
-        if not 'synapse_activation' in mdb.keys():
-            import model_data_base.mdb_initializers.load_roberts_simulationdata
-            model_data_base.mdb_initializers.load_roberts_simulationdata.init(mdb, 'test/data/test_data')     
-        if not 'spike_times' in mdb.keys():
-            import model_data_base.mdb_initializers.load_roberts_simulationdata            
-            model_data_base.mdb_initializers.load_roberts_simulationdata.pipeline(mdb)    
+        self.mdb = ModelDataBase(test_mdb_folder) 
+        assert('synapse_activation' in self.mdb.keys())
+        assert('spike_times' in self.mdb.keys())
     
     @decorators.testlevel(2)    
     def test_saved_and_reloded_synapse_file_is_identical(self):
-        mdb = model_data_base.ModelDataBase(os.path.join('/nas1/Data_arco/project_src/model_data_base/', 'test/data/test_temp'))
-        synapse_pdf = mdb['synapse_activation'].loc[mdb['sim_trail_index'][0]].compute(get=dask.threaded.get)
+        synapse_pdf = self.mdb['synapse_activation'].loc[self.mdb['sim_trail_index'][0]].compute(get=dask.threaded.get)
         try:
             path = tempfile.mkdtemp()
             path_file = os.path.join(path, 'test.csv')

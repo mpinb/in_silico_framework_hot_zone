@@ -1,29 +1,27 @@
 from context import *
+
+import os, sys, glob, shutil, tempfile
+import numpy as np
+from numpy.testing import assert_almost_equal
+import pandas as pd
+from pandas.util.testing import assert_frame_equal
+import dask
+import dask.dataframe as dd
+import neuron
+import Interface as I
+
 import decorators
 import unittest
-import os, shutil
-from mock import MagicMock
 import numpy as np
-#for x in sys.modules: print x
 
 import simrun2.generate_synapse_activations
 import simrun2.run_new_simulations
 import simrun2.run_existing_synapse_activations
 import simrun2.sim_trail_to_cell_object
 import simrun2.crossing_over.crossing_over_simple_interface
-import tempfile
-import shutil
-import dask
-import pandas as pd
-import glob
-from pandas.util.testing import assert_frame_equal
-from numpy.testing import assert_almost_equal
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
-import Interface as I
-import neuron
 #neuron.load_mechanisms('/nas1/Data_arco/project_src/mechanisms/netcon')
 #neuron.load_mechanisms('/nas1/Data_arco/project_src/mechanisms/channels')  
-
 
 name = 'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center'
 cellParamName = '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/network_embedding/postsynaptic_location/3x3_C2_sampling/C2center/86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param'

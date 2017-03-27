@@ -1,9 +1,6 @@
 '''
-Created on Jan 28, 2013
-
-ongoing activity L2 neuron model
-
-@author: robert
+Created 2017
+@author: arco
 '''
 import time
 import numpy as np
@@ -15,6 +12,8 @@ import single_cell_analyzer as sca
 from seed_manager import get_seed
 from silence_stdout import silence_stdout
 import os
+
+
 
 def _evoked_activity(cellParamName, evokedUpParamName, simName = '', dirPrefix = '', seed = None, nSweeps = 1000, tStop = 345):
     '''

@@ -22,13 +22,8 @@ def robust_del_fun(mdb, key):
          pass
             
 class Tests(unittest.TestCase):       
-    def setUp(self):
-        self.prefix = os.path.dirname(os.path.abspath(__file__))     
-        self.test_data = os.path.join(self.prefix, 'data/test_data')      
-        #this is requested to be an intact database!
-        #if there is an issue, delete the folder test/data/test_temp and run model_data_base_test.
-        #This will rebuild the database        
-        mdb = ModelDataBase('test/data/test_temp') 
+    def setUp(self): 
+        mdb = ModelDataBase(test_mdb_folder) 
         self.mdb = mdb 
         
         self.pdf = pd.DataFrame({0: [1,2,3,4,5,6], 1: ['1', '2', '3', '1', '2', '3'], '2': [1, '2', 3, 1, '2', 3], \
@@ -110,29 +105,17 @@ class Tests(unittest.TestCase):
         a = dummy.compute(get = dask.multiprocessing.get)
         assert_frame_equal(a, b)        
 
-    @decorators.testlevel(2)
+    @decorators.testlevel(1)
     def test_dask_to_csv_real_data(self):
-        real_data_generic(dask_to_csv)
-        
-    def test_dask_to_csv_real_data(self):
-        real_data_generic(dask_to_categorized_msgpack)        
+        self.real_data_generic(dask_to_csv)
 
-    def test_dask_to_csv_real_data(self):
-        real_data_generic(dask_to_msgpack)          
-        
-    @decorators.testlevel(2)
+    @decorators.testlevel(1)
+    def test_dask_to_categorized_msgpack_real_data(self):
+        self.real_data_generic(dask_to_categorized_msgpack)        
+
+    @decorators.testlevel(1)
     def test_dask_to_msgpack_real_data(self):
-        self.mdb.setitem('voltage_traces2', self.mdb['voltage_traces'], dumper = dask_to_msgpack)
-        dummy = self.mdb['voltage_traces2']
-        b = self.mdb['voltage_traces'].compute(get = dask.multiprocessing.get)
-        a = dummy.compute(get = dask.multiprocessing.get)
-        assert_frame_equal(a, b)   
-           
-        self.mdb.setitem('synapse_activation2', self.mdb['synapse_activation'], dumper = dask_to_msgpack)
-        dummy = self.mdb['synapse_activation2']
-        b = self.mdb['synapse_activation'].compute(get = dask.multiprocessing.get)
-        a = dummy.compute(get = dask.multiprocessing.get)
-        assert_frame_equal(a, b)
+        self.real_data_generic(dask_to_msgpack)          
          
 
         
