@@ -10,6 +10,7 @@ local.properties
 .loadpath
 .recommenders
 test_model_data_base/data/
+!test_model_data_base/data/test_data
 trash_it_now/
 *.pyc
 
