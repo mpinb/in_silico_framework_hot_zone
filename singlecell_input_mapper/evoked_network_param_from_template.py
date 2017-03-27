@@ -4,7 +4,7 @@ import sys
 import single_cell_parser as scp
 
 #evokedPrefix = '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/evoked_activity/'
-evokedPrefix = '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/evoked_activity/functional_constraints/PW_SuW_RF_CDK/'
+evokedPrefix = '/home/abast/test/neurosim_getting_started/getting_started_files/functional_constraints/evoked_activity/PW_SuW_RF_CDK/'
 #L2EvokedName = evokedPrefix + 'L2_3x3_PSTH_template_0-50_10ms.param'
 #L34EvokedName = evokedPrefix + 'L34_3x3_PSTH_template_0-20_1ms_20-50_10ms.param'
 #L4pyEvokedName = evokedPrefix + 'L4py_3x3_PSTH_template_0-50_10ms.param'
@@ -352,7 +352,7 @@ deflectionOffset = 245.0 #ms; to allow same analysis as CDK JPhys 2007
 #deflectionOffset = 345.0 #ms; model2 needs more time to get to steady state
 
 # write cluster parameter file yes/no
-clusterParameters = True
+clusterParameters = False
 
 def create_network_parameter(templateParamName, cellNumberFileName, synFileName, conFileName, whisker, outFileName):
     print '*************'

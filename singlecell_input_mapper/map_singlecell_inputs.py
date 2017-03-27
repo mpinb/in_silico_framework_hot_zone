@@ -51,7 +51,7 @@ import singlecell_input_mapper as sim
 # located on your system (assuming you just unpack the data and do not change
 # the directory structure)
 #===============================================================================
-prefix = '/nas1/Data_arco/project_src/SingleCellInputMapper/barrel_cortex'
+prefix = '/home/abast/test/SingleCellInputMapper/barrel_cortex'
 
 #===============================================================================
 # If you change the directory structure of the anatomical input data,
