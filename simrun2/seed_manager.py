@@ -7,7 +7,7 @@ def get_seed(recursion_depth = 0):
 
     used_seeds = []
     try:
-        used_seeds = np.fromfile('/nas1/Data_arco/used_seeds', dtype = 'int')
+        used_seeds = np.fromfile('/home/abast/used_seeds', dtype = 'int')
         used_seeds = used_seeds.tolist()
     except IOError:
         pass
