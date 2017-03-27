@@ -24,14 +24,14 @@ def average_std(mean, std,
     ax = fig#.add_subplot(1,1,1) ###taken care by decorator return_figure_or_axis
     if colormap: 
         color =  colormap[label]
-        plot = ax.plot(t, mean, zorder = 3, label = label, color = color)       
     else:
-        plot = ax.plot(t, mean, zorder = 3, label = label)
+        color = 'b'
         
+    plot = ax.plot(t, mean, zorder = 3, label = label, color = color)               
     if 's' in mode:
         ax.plot(t, mean+std, zorder = 3, color = plot[0].get_color(), linewidth = 0.3, alpha = 0.3)
         ax.plot(t, mean-std, zorder = 3, color = plot[0].get_color(), linewidth = 0.3, alpha = 0.3)
-        ax.fill_between(t, mean+std, mean-std, zorder=2, alpha = '0.1', linewidth=0.0, color = plot[0].get_color())
+        ax.fill_between(t, mean+std, mean-std, zorder=2, alpha = 0.1, linewidth=0.0, color = color)
 
     #if axis: ax.axis(axis)
     

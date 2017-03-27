@@ -58,7 +58,7 @@ def subsequent_calls_per_line(plotfun):
         max_lv = -1
         #count number of consecutive args of type pd.DataFrame
         for lv, x in enumerate(args):
-            if isinstance(x, (pd.DataFrame, pd.Series)):
+            if isinstance(x, (pd.DataFrame)):
                 max_lv = lv
             else:
                 break          
