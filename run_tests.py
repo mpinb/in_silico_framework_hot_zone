@@ -1,7 +1,7 @@
 import os, shutil
 import unittest
 import test_model_data_base, test_model_data_base.decorators, test_model_data_base.context
-import test_simrun2, test_simrun2.decorators
+#import test_simrun2, test_simrun2.decorators
 import model_data_base
 import simrun2
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     #if testlevel >= level.
     #if testlevel is set to 'all', all tests will run.
     test_model_data_base.decorators.current_testlevel = 1#'all'#0#'all'#'0
-    test_simrun2.decorators.current_testlevel = 1#'all'#0#'all'#'0
+#    test_simrun2.decorators.current_testlevel = 1#'all'#0#'all'#'0
     
     
 #     unittest.monkypatches.testlevel = 'all'

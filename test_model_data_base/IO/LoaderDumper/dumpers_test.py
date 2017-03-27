@@ -105,15 +105,15 @@ class Tests(unittest.TestCase):
         a = dummy.compute(get = dask.multiprocessing.get)
         assert_frame_equal(a, b)        
 
-    @decorators.testlevel(1)
+    @decorators.testlevel(2)
     def test_dask_to_csv_real_data(self):
         self.real_data_generic(dask_to_csv)
 
-    @decorators.testlevel(1)
+    @decorators.testlevel(2)
     def test_dask_to_categorized_msgpack_real_data(self):
         self.real_data_generic(dask_to_categorized_msgpack)        
 
-    @decorators.testlevel(1)
+    @decorators.testlevel(2)
     def test_dask_to_msgpack_real_data(self):
         self.real_data_generic(dask_to_msgpack)          
          
