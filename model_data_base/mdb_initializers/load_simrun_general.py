@@ -310,12 +310,16 @@ def init(mdb, simresult_path, rewrite_optimized = False, \
                 mdb.setitem('spike_times', spike_detection(vt), dumper = pandas_to_pickle)                                        
             if burst_times: 
                 print "---burst times---"
-                burst_times = burst_detection(mdb['Vm_proximal'], mdb['spike_times'], burst_cutoff = -55)
-                mdb.setitem('burst_times', burst_times, dumper = pandas_to_pickle)
+                if 'Vm_proximal' in mdb.keys(): 
+                    burst_times = burst_detection(mdb['Vm_proximal'], mdb['spike_times'], burst_cutoff = -55)
+                    mdb.setitem('burst_times', burst_times, dumper = pandas_to_pickle)
+                else:
+                    print "Could not load dendritic voltage_trace Vm_proximal. Skip computing burst times ..."
             if rewrite_optimized: optimize(mdb, dumper)
         print('Initialization succesful.') 
         
 def _get_dumper(value):
+    '''tries to automativcally infer the best dumper for each table'''
     if isinstance(value, pd.DataFrame):
         return pandas_to_pickle
     elif isinstance(value, dd.DataFrame):
@@ -337,13 +341,14 @@ def optimize(mdb, dumper = None, select = None):
         select = keys_for_rewrite
         
     with dask.set_options(get = mdb.settings.multiprocessing_scheduler):
-        for key in mdb.keys():
-            if not(key in keys_for_rewrite and key in select):
-                continue
-            else:
-                print 'optimizing %s' % key
-                value = mdb[key]
-                dumper = _get_dumper(value)
-                mdb.setitem(key, value, dumper = dumper)
-    
+        with get_progress_bar_function()(): 
+            for key in mdb.keys():
+                if not(key in keys_for_rewrite and key in select):
+                    continue
+                else:
+                    print 'optimizing %s' % key
+                    value = mdb[key]
+                    dumper = _get_dumper(value)
+                    mdb.setitem(key, value, dumper = dumper)
+        
     
