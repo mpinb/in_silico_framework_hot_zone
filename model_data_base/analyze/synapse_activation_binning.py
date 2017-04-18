@@ -40,6 +40,7 @@ def synapse_activation_postprocess_pandas(pdf, groupby = '', \
                                           prefun = prefun, 
                                           applyfun = applyfun, 
                                           postfun = postfun):
+    '''see docstring of synapse_activation_postprocess_dask'''
 
     if not isinstance(groupby, list): groupby = [groupby]
     pdf = prefun(pdf)
@@ -67,15 +68,67 @@ def merge_results_together(dicts):
     return out
     
 def synapse_activation_postprocess_dask(ddf, **kwargs):
+    '''
+    Calculates bins of synapse activation dask dataframe per trail.
+    #Todo: make this method out of core
+    
+    args:
+        ddf: synapse activation dask dataframe
+    kwargs:
+        groupby: (default: ''): species for which subgroups the bins should be 
+            calculated. Available values include: 
+                'celltype', 
+                'presynaptic_column', 
+                'proximal', (soma distance < 500 ym)
+                'EI' (Lumping the EXC / INH celltypes together)
+            It can also be any column in the specified dataframe.
+            Can be a list, if "sub-subgroups" should be calculated.
+        mdb: if specified, the result will be computed immediately and 
+                saved in the database immediately.
+        get: only has an effect if 'mdb' kwarg is provided. In this case,
+                it allows to specify a dask scheduler for the computation
+        (prefun: function to apply on each partition before binning)
+        (applyfun: actual binning function)
+        (postfun: function to merge results together for one partition)
+        
+    
+    returns: 
+        dask.delayed object. If computed, this will return a dictionary 
+        containing numpy arrays. rows: sim trails, columns: bins
+    '''
     fun = dask.delayed(synapse_activation_postprocess_pandas)
     ds = ddf.to_delayed()
+    
+    #special case: if mdb is defined: isolate that keyword 
+    #for later use
+    if 'mdb' in kwargs:
+        mdb = kwargs['mdb']
+        del kwargs['mdb']
+    else:
+        mdb = None
+    if 'get' in kwargs:
+        get = kwargs['get']
+        del kwargs['get']
+    else:
+        get = None        
+         
     ds = [fun(d, **kwargs) for d in ds]
-    return dask.delayed(merge_results_together(ds))
+    ret = dask.delayed(merge_results_together(ds))
+    
+    if mdb is not None:
+        assert('groupby' in kwargs)
+        data = ret.compute(get = get)
+        save_groupby(mdb, data, kwargs['groupby'])
+    else:
+        return ret
 
 
 
 
 def save_groupby(mdb, result, groupby):
+    '''saves the result of synapse_activation_postprocess_dask to a model data base.
+    
+    A new model data base within mdb is created and the numpy arrays are stored there.'''
     identifier = tuple(['synapse_activation', 'binned_t1'] + groupby)
     try:
         del mdb[identifier]

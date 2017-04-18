@@ -21,11 +21,12 @@ import numpy as np
 import dask
 import dask.dataframe as dd
 
-
 from model_data_base.model_data_base import ModelDataBase
 from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
 from model_data_base.analyze.temporal_binning import universal as temporal_binning
+from model_data_base.analyze.synapse_activation_binning import synapse_activation_postprocess_dask as synapse_activation_binning_dask
+
 from model_data_base.analyze.spike_detection import spike_detection 
 from model_data_base.analyze.spaciotemporal_binning import universal as spaciotemporal_binning
 from model_data_base.analyze import split_synapse_activation
@@ -36,11 +37,7 @@ from model_data_base.IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
 from model_data_base.IO.LoaderDumper import pandas_to_pickle as dumper_pandas_to_pickle
 from model_data_base.IO.LoaderDumper import dask_to_msgpack as dumper_dask_to_msgpack
 from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack as dumper_dask_to_categorized_msgpack
-
-#from model_data_base.IO.LoaderDumper import just_create_folder as dumper_just_create_folder
 from model_data_base.IO.LoaderDumper import cell as dumper_cell
-
-
 
 from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
