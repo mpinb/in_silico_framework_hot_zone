@@ -170,9 +170,12 @@ def my_dask_writer(ddf, path, optimize_graph = False, get = settings.multiproces
     @dask.delayed()
     def save_chunk(ddf, numbers):    
         ddf = cloudpickle.loads(ddf)      
+        dask_options = dask.context._globals
+        dask.set_options(callbacks=set()) #disable progress bars etc. 
         for number in numbers:
             pdf = ddf.get_partition(number).compute(get = dask.async.get_sync)
             fun(pdf, path, number, ndigits)
+        dask.context._globals = dask_options
     
     x = cloudpickle.dumps(ddf)
     delayeds = [save_chunk(x, chunk) for chunk in chunkIt(range(ddf.npartitions), 300)] #max 100 tasks writing at the same time
