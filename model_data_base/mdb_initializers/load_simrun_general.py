@@ -293,10 +293,23 @@ def _build_param_files(mdb):
     write_param_files_to_folder(df, mdb.get_managed_folder('parameterfiles_network_folder'), 'path_network', 'hash_network').compute()
     mdb['parameterfiles'] = df    
 
-def init(mdb, simresult_path, rewrite_optimized = False, \
+def init(mdb, simresult_path,  \
          core = True, voltage_traces = True, synapse_activation = True, dendritic_voltage_traces = True, \
-         parameterfiles = True, spike_times = True,  burst_times = True, repartition = True, dumper = dask_to_categorized_msgpack):
+         parameterfiles = True, spike_times = True,  burst_times = True, repartition = True):
     
+    '''This initializes a ModelDataBase object by loading simulation results in it.
+    You can specify which data should be included.
+    
+    The result will be a database, in which you can access e.g. the synapse activation table
+    using
+    mdb['synapse_activation'].
+    
+    You can have a look on what is stored in the database by calling mdb.keys().
+    
+    At this point, the database refers to external data, i.e. it is not self containing.
+    To move all data in the database folder using a speed optimized format, call the optimize
+    function.
+    '''
     with dask.set_options(get = mdb.settings.multiprocessing_scheduler):
         with get_progress_bar_function()(): 
             mdb['simresult_path'] = simresult_path  
@@ -315,7 +328,6 @@ def init(mdb, simresult_path, rewrite_optimized = False, \
                     mdb.setitem('burst_times', burst_times, dumper = pandas_to_pickle)
                 else:
                     print "Could not load dendritic voltage_trace Vm_proximal. Skip computing burst times ..."
-            if rewrite_optimized: optimize(mdb, dumper)
         print('Initialization succesful.') 
         
 def _get_dumper(value):
@@ -331,8 +343,28 @@ def _get_dumper(value):
         raise NotImplementedError()
     
 def optimize(mdb, dumper = None, select = None):
+    '''
+    This function speeds up the access to simulation data and makes the database
+    self-containing and more robust. It can only be used after initializing the database (do so 
+    by using the init method in this module).
+    
+    After calling init, the database contains references to the external 
+    folder in which the simulation results are stored. The references 
+    point to csv files, which is a slow format. The reference itself is stored
+    using pickle in this database. If you update an underlying library (dask, pandas, numpy),
+    it is not assured that you can stil unpickle the data.
+    
+    This function deals with these drawbacks. It will save the data in subfolders of the 
+    specified model_data_base dircetory using an optimized format, which is much faster than csv
+    (it categorizes the data and saves each partition using the pandas msgpack extension). 
+    It also repartitions dataframes such that they contain 5000 partitions at maximum.
+    The references to the data is then saved using pickle, but in a way that we only depend
+    on the public api of third party libraries but not their internal structure.
+
+    select: If None, all data will be converted. You can specify a list of items that
+    should be optimized, if only a subset should be optimized.
+    '''
     print '--- save data in optimized format to database ---'
-    print 'dumper: %s' % str(dumper)
     keys = mdb.keys()
     keys_for_rewrite = ['synapse_activation', 'cell_activation', 'voltage_traces'] 
     if 'dendritic_voltage_traces_keys' in keys:
@@ -349,6 +381,7 @@ def optimize(mdb, dumper = None, select = None):
                     print 'optimizing %s' % key
                     value = mdb[key]
                     dumper = _get_dumper(value)
+                    print 'dumper: %s' % str(dumper)
                     mdb.setitem(key, value, dumper = dumper)
         
     
