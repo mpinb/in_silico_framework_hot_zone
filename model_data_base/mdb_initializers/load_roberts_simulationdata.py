@@ -1,4 +1,8 @@
 '''
+deprecated!!!
+Use load_simrun_general instead
+
+
 the initialize function in this module is meant to be used to load in simulation results,
 that are in the same format as roberts L6 simulations'''
 
@@ -472,6 +476,11 @@ from ..analyze.burst_detection import burst_detection
 
 
 def pipeline(mdb):
+    '''
+    deprecated!!!
+    Use load_simrun_general instead
+
+    '''    
     with dask.set_options(get = settings.multiprocessing_scheduler):
         with get_progress_bar_function()(): 
             load_dendritic_voltage_traces(mdb)    
@@ -479,6 +488,11 @@ def pipeline(mdb):
             mdb['burst_times'] = burst_detection(mdb['Vm_proximal'], mdb['spike_times'], burst_cutoff = -55)
         
 def init(mdb, simresult_path, dask_dumper = dask_to_msgpack, voltage_traces = True, synapse_activation = True, dendritic_voltage_traces = False, spike_times = False,  burst_times = False, parameterfiles = True):
+    '''
+    deprecated!!!
+    Use load_simrun_general instead
+
+    '''
     with dask.set_options(get = settings.multiprocessing_scheduler):
         with get_progress_bar_function()(): 
             mdb['simresult_path'] = simresult_path  

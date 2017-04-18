@@ -1,3 +1,8 @@
+'''
+deprecated!!!
+Use load_simrun_general instead
+'''
+
 from dask.diagnostics import ProgressBar
 import  load_roberts_simulationdata
 import model_data_base
@@ -5,7 +10,11 @@ from model_data_base.model_data_base import get_progress_bar_function
 
 
 def pipeline(mdb, spikes = True, bursts = False):
-    '''access to spike times and bursts'''
+    '''access to spike times and bursts
+    
+    deprecated!!!
+    Use load_simrun_general instead
+    '''
     with get_progress_bar_function()(): 
         if spikes:
             from ..analyze.spike_detection import spike_detection
@@ -17,7 +26,11 @@ def pipeline(mdb, spikes = True, bursts = False):
         
 def init_minimal(mdb, simresult_path):
     '''only access to voltage traces and spikes. Automatically
-    repartitions the voltagetraces'''
+    repartitions the voltagetraces
+    
+    deprecated!!!
+    Use load_simrun_general instead
+    '''
     with get_progress_bar_function()(): 
         mdb['simresult_path'] = simresult_path  
         load_roberts_simulationdata._build_db_part1(mdb, repartition = True)
@@ -26,7 +39,11 @@ def init_minimal(mdb, simresult_path):
         print('Initialization succesful.') 
         
 def init_complete(mdb, simresult_path):
-    '''access to voltage traces'''
+    '''access to voltage traces
+    
+    deprecated!!!
+    Use load_simrun_general instead
+    '''
     with get_progress_bar_function()(): 
         mdb['simresult_path'] = simresult_path  
         load_roberts_simulationdata._build_db_part1(mdb, repartition = False)
