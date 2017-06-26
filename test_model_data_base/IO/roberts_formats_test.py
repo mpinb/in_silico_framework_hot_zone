@@ -25,7 +25,7 @@ class Tests(unittest.TestCase):
             path = tempfile.mkdtemp()
             path_file = os.path.join(path, 'test.csv')
             write_pandas_synapse_activation_to_roberts_format(path_file, synapse_pdf)
-            synapse_pdf_reloaded = read_pandas_synapse_activation_from_roberts_format(path_file, sim_trail_index = mdb['sim_trail_index'][0]) 
+            synapse_pdf_reloaded = read_pandas_synapse_activation_from_roberts_format(path_file, sim_trail_index = self.mdb['sim_trail_index'][0]) 
         except:
             raise
         finally:

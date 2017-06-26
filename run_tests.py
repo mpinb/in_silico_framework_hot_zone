@@ -50,7 +50,7 @@ if __name__ == "__main__":
     #unittest.monkypatches.run_if_testlevel(level) are only run
     #if testlevel >= level.
     #if testlevel is set to 'all', all tests will run.
-    test_model_data_base.decorators.current_testlevel = 1#'all'#0#'all'#'0
+    test_model_data_base.decorators.current_testlevel = 100#'all'#0#'all'#'0
 #    test_simrun2.decorators.current_testlevel = 1#'all'#0#'all'#'0
     
     
@@ -60,8 +60,9 @@ if __name__ == "__main__":
     #containing unittest.TestCase object, only the tests in the
     #speified module will run.
     #if run is set to 'all', all tests in the test module will run.
-#    run = 'test_model_data_base.model_data_base_test'
-    run = 'all'
+    run = 'test_model_data_base.mdb_initializers.load_crossing_over_results_test'
+
+ #   run = 'all'
     #run = 'test.plotfunctions.manylines_test'
     
     #verbosity of testrunner
