@@ -32,7 +32,7 @@ def make_filelist(directory, suffix = 'vm_all_traces.csv'):
             matches.append(os.path.relpath(dummy, directory))
             
     if len(matches) == 0:
-        raise ValueError("Did not find any '*vm_all_traces.csv'-files. Filelist empty. Abort initialization.")
+        raise ValueError("Did not find any '*{suffix}'-files. Filelist empty. Abort initialization.".format(suffix = suffix))
     return matches
 
 

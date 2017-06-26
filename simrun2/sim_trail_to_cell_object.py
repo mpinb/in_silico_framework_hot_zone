@@ -17,7 +17,7 @@ h = neuron.h
 #neuron.load_mechanisms('/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/first_testing/mechanisms')
 neuron.load_mechanisms('/nas1/Data_arco/L5tt_blubb/mechanisms/')
 neuron.load_mechanisms('/nas1/Data_arco/project_src/simrun/simrun/mechanisms/netcon')
-#neuron.load_mechanisms('/home/regger/bin/nrn-7.2/share/examples/nrniv/netcon')
+#neuron.load_mechanisms('/home/rcegger/bin/nrn-7.2/share/examples/nrniv/netcon')
 
 
 def scale_apical(cell):
@@ -75,9 +75,12 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
         metadata = metadata[metadata.sim_trail_index == sim_trail_index]
         assert(len(metadata) == 1)
         m = metadata.iloc[0]
+        parameter_table = mdb['parameterfiles']
+        cellName = parameter_table.loc[sim_trail_index].hash_neuron
+        networkName = parameter_table.loc[sim_trail_index].hash_network
         synapse_activation_file = os.path.join(mdb['simresult_path'], m['path'], m['synapses_file_name'])
-        dummy =  trail_to_cell_object(cellName = mdb[('parameterfiles', 'cellName')], \
-                                    networkName = mdb[('parameterfiles', 'networkName')], \
+        dummy =  trail_to_cell_object(cellName = os.path.join(mdb['parameterfiles_cell_folder'], cellName), \
+                                    networkName = os.path.join(mdb['parameterfiles_network_folder'], networkName), \
                                     synapse_activation_file = synapse_activation_file, \
                                     range_vars = range_vars, 
                                     scale_apical = scale_apical, 
