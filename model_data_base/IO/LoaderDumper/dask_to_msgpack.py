@@ -94,7 +94,7 @@ class Loader(parent_classes.Loader):
             ddf = dd.from_delayed(ddf, divisions = self.divisions, meta = self.meta)
         else:
             if verbose: print('loaded dask dataframe without known divisions')            
-            ddf = [dask.delayed(my_reader, tracerse = False)(fname) \
+            ddf = [dask.delayed(my_reader, traverse = False)(fname) \
                    for fname in sorted(glob.glob(os.path.join(savedir, fileglob)))]
             ddf = dd.from_delayed(ddf, meta = self.meta)   
         ddf.index.name = self.index_name

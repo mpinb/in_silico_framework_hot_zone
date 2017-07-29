@@ -177,7 +177,7 @@ def my_dask_writer(ddf, path, optimize_graph = False, get = settings.multiproces
             fun(pdf, path, number, ndigits)
         dask.context._globals = dask_options
     
-    x = cloudpickle.dumps(ddf)
+    x = cloudpickle.dumps(ddf) #manual serialization since dask.multiprocessing is slow here
     delayeds = [save_chunk(x, chunk) for chunk in chunkIt(range(ddf.npartitions), 300)] #max 100 tasks writing at the same time
     dask.delayed(delayeds).compute(get=get)
         
@@ -213,7 +213,7 @@ class Loader(parent_classes.Loader):
             ddf = dd.from_delayed(ddf, divisions = self.divisions, meta = self.meta)
         else:
             if verbose: print('loaded dask dataframe without known divisions')            
-            ddf = [dask.delayed(my_reader, tracerse = False)(fname) \
+            ddf = [dask.delayed(my_reader, traverse = False)(fname) \
                    for fname in sorted(glob.glob(os.path.join(savedir, fileglob)))]
             ddf = dd.from_delayed(ddf, meta = self.meta)   
         ddf.index.name = self.index_name
