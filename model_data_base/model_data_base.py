@@ -71,7 +71,7 @@ class FunctionWrapper:
     using pickle) but needs an initialization function instead.
     
     To use it, 
-    1. create a function, that does not expect any argument returns the object
+    1. create a function, that does not expect any argument and returns the object
         you want to save    
     2. create an instance of this class and pass your function
     3. save it in the database with wathever dumper you want'''
@@ -88,16 +88,17 @@ def _check_working_dir_clean_for_build(working_dir):
     #todo: try to make dirs
     if os.path.exists(working_dir):
         try:
-            os.rmdir(working_dir) #only works, if dir was empty --- but is it save?
-            os.mkdir(working_dir)
-            return
+            if not os.listdir(working_dir):
+                return
+            else:
+                raise OSError()
         except OSError:
             raise MdbException("Can't build database: " \
                                + "The specified working_dir is either not empty " \
                                + "or write permission is missing. The specified path is %s" % working_dir)
     else:
         try: 
-            os.makedirs(working_dir) #todo: should ideally be mkdirs
+            os.makedirs(working_dir)
             return
         except OSError:
             raise MdbException("Can't build database: " \
@@ -118,7 +119,7 @@ def get_progress_bar_function():
     return PB
     
 class ModelDataBase(object):
-    def __init__(self, basedir, forceload = False, readonly = False):
+    def __init__(self, basedir, forceload = False, readonly = False, nocreate = False):
         '''
         Class responsible for storing information, meant to be used as an interface to simulation 
         results. If the dask backends are used to save the data, it will be out of memory,
@@ -152,7 +153,9 @@ class ModelDataBase(object):
         
         try:
             self.read_db()
-        except:
+        except IOError:
+            if nocreate:
+                raise MdbException("Did not find a database in {path}. A new empty database will not be created since nocreate is set to True.")
             _check_working_dir_clean_for_build(basedir)
             self.first_init()
             self.save_db()
@@ -182,13 +185,15 @@ class ModelDataBase(object):
         
     def itemexists(self, key):
         '''Checks, if item is already in the database'''
+        return key in self.keys()
+    
         #todo: this is inefficient, since it has to load all the data
-        #just to see if there is a key
-        try:
-            self.__getitem__(key)
-            return True
-        except:
-            return False
+        #just to see if there is a key    
+        #try:
+        #    self.__getitem__(key)
+        #    return True
+        #except:
+        #    return False
     
     def __get_sql(self):
         return SqliteDict(os.path.join(self.basedir, 'sqlitedict.db'), autocommit=True)
@@ -236,20 +241,39 @@ class ModelDataBase(object):
         absolute_path = tempfile.mkdtemp(prefix = prefix + '_', suffix = '_' + suffix, dir = self.basedir) 
         relative_path = os.path.relpath(absolute_path, self.basedir)
         return absolute_path, relative_path
-    
-    def get_managed_folder(self, key):
+
+    def create_managed_folder(self, key):
+        '''creates a folder in the mdb directory and saves the path in 'key'.
+        You can delete the folder using del mdb[key]'''
         #todo: make sure that existing key will not be overwritten
-        self.setitem(key, None, dumper = IO.LoaderDumper.just_create_folder)
-        return self[key]
-    
-    def get_sub_mdb(self, key):
         if key in self.keys():
-            item = self[key]
-            if not isinstance(item, ModelDataBase):
-                raise ValueError("Key %s is already set. Please use del mdb[%s] first" % (key, key))
+                raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
+        else:           
+            self.setitem(key, None, dumper = IO.LoaderDumper.just_create_folder)
+        return self[key]
+        
+    def get_managed_folder(self, key):
+        '''deprecated!
+        
+        Use create_managed_folder instead'''    
+        return self.create_managed_folder(self, key)
+    
+    def create_sub_mdb(self, key):
+        '''creates a ModelDataBase within a ModelDataBase. Example:
+        mdb.create_sub_mdb('my_sub_database')
+        mdb['my_sub_database']['sme_key'] = ['some_value']
+        '''
+        if key in self.keys():
+            raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         else:
             self.setitem(key, None, dumper = IO.LoaderDumper.just_create_mdb)
         return self[key]
+    
+    def get_sub_mdb(self,key):
+        '''deprecated!
+        
+        Use create_sub_mdb instead'''
+        return self.create_sub_mdb(self, key)
     
     def setitem(self, key, item, **kwargs):
         '''Allows to set items. Compared to the mdb['some_keys'] = my_item syntax,
@@ -273,14 +297,14 @@ class ModelDataBase(object):
             
         #check if we have writing privilege
         if self.readonly is True:
-            raise RuntimeError("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+            raise MdbException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         #this exists, so jupyter notebooks will not crash when they try to write something
         elif self.readonly is 'warning': 
             warnings.warn("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         elif self.readonly is False:
             pass
         else:
-            raise RuntimeError("Readonly attribute is in unknown state. Should be True, False or 'warning, but is: %s" % self.readonly)
+            raise MdbException("Readonly attribute is in unknown state. Should be True, False or 'warning, but is: %s" % self.readonly)
         
         #check if there is already a subdirectory assigned to this key. If so: store folder to delete it after new item is set.
         old_folder = None
