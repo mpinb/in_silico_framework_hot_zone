@@ -14,7 +14,7 @@ Exemplary use:
 import numpy as np
 import dask
 import Interface as I
-
+from model_data_base.analyze import excitatory, inhibitory
 #general function
 from collections import defaultdict
 
@@ -23,7 +23,7 @@ def prefun(df):
     df['celltype'] = dummy.str[0]
     df['presynaptic_column'] = dummy.str[1]
     df['proximal'] = (df.soma_distance < 500).replace(True, 'prox').replace(False, 'dist')
-    df['EI'] = df['celltype'].isin(I.excitatory).replace(True, 'EXC').replace(False, 'INH')
+    df['EI'] = df['celltype'].isin(excitatory).replace(True, 'EXC').replace(False, 'INH')
     return df
 
 def postfun(s):
