@@ -1,14 +1,17 @@
 '''
-This has the only purpose to make the simrun2 and the model_data_base package
-more convenient.
+The purpose of this module is to glue together all libraries necessary for single cell simulations
+of cells in barrel cortex. This includes:
 
-It therefore imports all the "important" functions from those modules,
-so that they are directly available. It also contains some small 
-functions, that combine two functions, that are frequently used together,
-e.g. instead of displaying a PSTH, you can simply use the PSTH function
-which combines binning and displaying in one function.
+ - Moving around hoc-morphologies
+ - Compute anatomical realization of presynaptic cells and synapses
+ - Activation of synapses based on experimental data
+ - determining apropriate biophysical parameters
+ - setting up a cluster
+ - use that cluster to optimize / find suitable parameters
+ - use that cluster to compute single cell responses to synaptic input
+ - efficiently store the simulation results and provide an easy interface to query data
 
-A recommendet use is to import it in a jupyter notebook in the following manner:
+The recommendet use is to import it in a jupyter notebook in the following manner:
     import Interface as I
     
 '''
@@ -16,6 +19,7 @@ A recommendet use is to import it in a jupyter notebook in the following manner:
 import os
 import sys
 import tempfile
+import glob
 import pandas as pd
 import numpy as np
 import dask
@@ -53,6 +57,21 @@ from model_data_base.utils import silence_stdout
 from model_data_base.utils import select, pandas_to_array, pooled_std
 from model_data_base.utils import skit, chunkIt
 
+def cache(function):
+    import cPickle, hashlib
+    memo = {}
+    def get_key(*args, **kwargs):
+        return hashlib.md5(cPickle.dumps([args, kwargs])).hexdigest()
+    def wrapper(*args, **kwargs):
+        key = get_key(*args, **kwargs)
+        if key in memo:
+            return memo[key]
+        else:
+            rv = function(*args, **kwargs)
+            memo[key] = rv
+            return rv
+    return wrapper
+
 def split_synapse_activation(sa, selfcheck = True, excitatory = excitatory, inhibiotry = inhibitory):
     '''Splits synapse activation in EXC and INH component.
     
@@ -71,6 +90,8 @@ def split_synapse_activation(sa, selfcheck = True, excitatory = excitatory, inhi
     return sa[sa.EI == 'EXC'], sa[sa.EI == 'INH']
 
 try: ##to avoid import errors in distributed system because of missing matplotlib backend
+    import matplotlib
+	import matplotlib.pyplot as plt
     from model_data_base.plotfunctions.average_std import average_std as average_std
     from model_data_base.plotfunctions.histogram import histogram as histogram
     from model_data_base.plotfunctions.manylines import manylines
@@ -120,6 +141,13 @@ from simrun2.sim_trail_to_cell_object import simtrail_to_cell_object \
     as simrun_simtrail_to_cell_object
 from simrun2.sim_trail_to_cell_object import trail_to_cell_object \
     as simrun_trail_to_cell_object
+
+from simrun2.reduced_model import synapse_activations \
+    as simrun_reduced_model_synapse_activations
+from simrun2.reduced_model import spiking_output \
+    as simrun_reduced_model_spiking_output
+from simrun2.reduced_model import get_kernel \
+    as simrun_reduced_model_get_kernel
     
 from simrun2 import crossing_over as simrun_crossing_over_module
 from simrun2.crossing_over.crossing_over_simple_interface import crossing_over as simrun_crossing_over_simple_interface
