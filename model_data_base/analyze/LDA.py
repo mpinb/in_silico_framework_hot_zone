@@ -2,7 +2,9 @@
 import numpy as np
 
 from sklearn.model_selection import train_test_split
-from sklearn.lda import LDA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+from sklearn.metrics import roc_curve, roc_auc_score
+
 
 def make_groups_equal_size(X,y):
     X_true = X[y == 1]
@@ -35,6 +37,7 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
     score_all = []
     score_0 = []
     score_1 = []
+    score_rocauc = []
     classifier_ = []
     lv = 0
     
@@ -62,6 +65,7 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
         score_all.append(classifier.score(X_test,y_test))
         score_1.append(classifier.score(X_test[y_test == 1, :],y_test[y_test==1]))
         score_0.append(classifier.score(X_test[y_test == 0, :],y_test[y_test==0]))
+        score_rocauc.append(roc_auc_score(y_test, np.dot(X_test, classifier.coef_.squeeze())))
         classifier_.append(classifier)
 
     score = (np.median(score_1) + np.median(score_0))
@@ -70,6 +74,8 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
         print('score all: max %f min %f mean %f' % (max(score_all), min(score_all), np.mean(score_all)))
         print('score 1:   max %f min %f mean %f' % (max(score_1), min(score_1), np.mean(score_1)))
         print('score 0:   max %f min %f mean %f' % (max(score_0), min(score_0), np.mean(score_0)))
+        print('score ROC-AUC:   max %f min %f mean %f' % (max(score_rocauc), min(score_rocauc), np.mean(score_rocauc)))
+		
     if verbosity > 0:    
         print('score: %f' % score)
         print ''
