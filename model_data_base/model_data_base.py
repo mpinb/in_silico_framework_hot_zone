@@ -256,7 +256,7 @@ class ModelDataBase(object):
         '''deprecated!
         
         Use create_managed_folder instead'''    
-        return self.create_managed_folder(self, key)
+        return self.create_managed_folder(key)
     
     def create_sub_mdb(self, key):
         '''creates a ModelDataBase within a ModelDataBase. Example:
@@ -273,7 +273,7 @@ class ModelDataBase(object):
         '''deprecated!
         
         Use create_sub_mdb instead'''
-        return self.create_sub_mdb(self, key)
+        return self.create_sub_mdb(key)
     
     def setitem(self, key, item, **kwargs):
         '''Allows to set items. Compared to the mdb['some_keys'] = my_item syntax,
@@ -420,8 +420,10 @@ class ModelDataBase(object):
             keys = sqllitedict.keys()
             return sorted(keys)
         finally:
-            sqllitedict.close()             
-            
+            sqllitedict.close()  
+
+    def __reduce__(self):
+        return (self.__class__, (self.basedir, self.forceload, self.readonly, True))
 
                       
         
