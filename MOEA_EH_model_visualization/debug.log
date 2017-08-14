@@ -1,0 +1,6109 @@
+loading membrane mechanisms from /nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/Hay_models/MOEA_EH_model_visualization/x86_64/.libs/libnrnmech.so
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	0 
+	0 
+/*---------------------------------------------------------------------------*/
+/* Special case 86_L5_CDK20041214:                                           */
+/* Scale diameter of apical dendrites 0-32 by 2.5 (RE)                       */
+/* Otherwise, apical trunk is too thin (<2mu) to allow coupling between      */
+/* somatic Na+ and apical Ca2+ spiking zones                                 */
+/*---------------------------------------------------------------------------*/
+soma area = 916.45771 
+apical area = 27211.754 
+dend area = 11408.327 
+axonal area = 188.49556 
+total area = 39725.034 
+full list is of length 2 
+	0 
+	0 
+full list is of length 2 
+	0 
+	0 
+	0 
+	0 
+record path is ga_result_86_CDK20041214_BAC_run3_seed_4223
+population file is random
+called load population
+ga_result_86_CDK20041214_BAC_run3_seed_4223/clean_population_file.txt
+breed matrix rows 1000 
+breed matrix columns 22 
+population loaded from file
+called load error
+error matrix loaded from file
+take_vec is 
+0	0	
+stim num is2 
+4  files loaded successfuly
+oc>ran equal sort
+expected genome was
+2.71	0.00478	0.081	0.0383	0.0377	
+0.605	2.49e-05	0	0.00484	539	
+2.58e-05	4.43e-05	7.97e-05	8.22e-05	0.000381	
+0.0213	0.00881	0.00451	0.106	0.00284	
+0.000523	135	
+GAcell_v2[0].soma { nseg=1  L=22.1619  Ra=100
+	/*location 0 attached to cell 0*/
+	/* First segment only */
+	insert morphology { diam=12.01}
+	insert capacitance { cm=1}
+	insert IClamp { del=0 dur=0 amp=0}
+	insert IClamp { del=0 dur=0 amp=0}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=2.71}
+	insert Nap_Et2 { gNap_Et2bar_Nap_Et2=0.00478}
+	insert na_ion { ena=50}
+	insert K_Pst { gK_Pstbar_K_Pst=0.081}
+	insert K_Tst { gK_Tstbar_K_Tst=0.0383}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.0377}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.605}
+	insert k_ion { ek=-85}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=2.49e-05}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0}
+	insert IClamp { del=0 dur=0 amp=0}
+	insert IClamp { del=0 dur=0 amp=0}
+	insert pas { g_pas=2.58e-05 e_pas=-90}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.00484 decay_CaDynamics_E2=539 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+	insert Ih { gIhbar_Ih=0.0002}
+	insert IClamp { del=1295 dur=5 amp=0}
+	insert APCount { n=3 thresh=-30 time=1319.46}
+}
+distance 0.0 = 11.080941 
+distance 0.5 = 32.238393 
+distance 1.0 = 53.395846 
+GAcell_v2[0].apic[0] { nseg=3  L=42.3149  Ra=100
+	GAcell_v2[0].soma connect GAcell_v2[0].apic[0] (0), 0.313299
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=4.8}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000250287}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 11.080941 
+Ih gbar = 0.0002502868 
+should be = 0.00025422464 
+x = 0.16666667 
+distance(x) = 18.133425 
+Ih gbar = 0.0002502868 
+should be = 0.00026120667 
+x = 0.5 
+distance(x) = 32.238393 
+Ih gbar = 0.0002642353 
+should be = 0.00027551417 
+x = 0.83333333 
+distance(x) = 46.343362 
+Ih gbar = 0.0002860226 
+should be = 0.00029029212 
+x = 1 
+distance(x) = 53.395846 
+Ih gbar = 0.0002860226 
+should be = 0.00029786233 
+distance 0.0 = 53.395846 
+distance 0.5 = 64.621889 
+distance 1.0 = 75.847932 
+GAcell_v2[0].apic[1] { nseg=1  L=22.4521  Ra=100
+	GAcell_v2[0].apic[0] connect GAcell_v2[0].apic[1] (0), 1
+	/* First segment only */
+	insert morphology { diam=2.60934}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000310329}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 53.395846 
+Ih gbar = 0.0003103291 
+should be = 0.00029786233 
+x = 0.5 
+distance(x) = 64.621889 
+Ih gbar = 0.0003103291 
+should be = 0.00031016795 
+x = 1 
+distance(x) = 75.847932 
+Ih gbar = 0.0003103291 
+should be = 0.00032279454 
+distance 0.0 = 75.847932 
+distance 0.5 = 78.171399 
+distance 1.0 = 80.494865 
+GAcell_v2[0].apic[2] { nseg=1  L=4.64693  Ra=100
+	GAcell_v2[0].apic[1] connect GAcell_v2[0].apic[2] (0), 1
+	/* First segment only */
+	insert morphology { diam=1.975}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000315518}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 75.847932 
+Ih gbar = 0.0003155181 
+should be = 0.00032279454 
+x = 0.5 
+distance(x) = 78.171399 
+Ih gbar = 0.0003155181 
+should be = 0.00032544874 
+x = 1 
+distance(x) = 80.494865 
+Ih gbar = 0.0003155181 
+should be = 0.00032811712 
+distance 0.0 = 80.494865 
+distance 0.5 = 199.23417 
+distance 1.0 = 317.97347 
+GAcell_v2[0].apic[3] { nseg=11  L=237.479  Ra=100
+	GAcell_v2[0].apic[2] connect GAcell_v2[0].apic[3] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.43656}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000327787}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 80.494865 
+Ih gbar = 0.0003277874 
+should be = 0.00032811712 
+x = 0.045454545 
+distance(x) = 91.289347 
+Ih gbar = 0.0003277874 
+should be = 0.00034070223 
+x = 0.13636364 
+distance(x) = 112.87831 
+Ih gbar = 0.0003532563 
+should be = 0.00036682681 
+x = 0.22727273 
+distance(x) = 134.46727 
+Ih gbar = 0.0003800182 
+should be = 0.00039427759 
+x = 0.31818182 
+distance(x) = 156.05624 
+Ih gbar = 0.0004081387 
+should be = 0.0004231219 
+x = 0.40909091 
+distance(x) = 177.6452 
+Ih gbar = 0.0004376866 
+should be = 0.00045343048 
+x = 0.5 
+distance(x) = 199.23417 
+Ih gbar = 0.0004687346 
+should be = 0.00048527766 
+x = 0.59090909 
+distance(x) = 220.82313 
+Ih gbar = 0.0005013587 
+should be = 0.00051874155 
+x = 0.68181818 
+distance(x) = 242.41209 
+Ih gbar = 0.0005356389 
+should be = 0.00055390422 
+x = 0.77272727 
+distance(x) = 264.00106 
+Ih gbar = 0.0005716593 
+should be = 0.0005908519 
+x = 0.86363636 
+distance(x) = 285.59002 
+Ih gbar = 0.0006095084 
+should be = 0.00062967522 
+x = 0.95454545 
+distance(x) = 307.17898 
+Ih gbar = 0.0006699148 
+should be = 0.00067046939 
+x = 1 
+distance(x) = 317.97347 
+Ih gbar = 0.0006699148 
+should be = 0.00069163662 
+distance 0.0 = 80.494865 
+distance 0.5 = 203.59998 
+distance 1.0 = 326.7051 
+GAcell_v2[0].apic[4] { nseg=13  L=246.21  Ra=100
+	GAcell_v2[0].apic[2] connect GAcell_v2[0].apic[4] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.15609}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000326265}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 80.494865 
+Ih gbar = 0.0003262651 
+should be = 0.00032811712 
+x = 0.038461538 
+distance(x) = 89.96449 
+Ih gbar = 0.0003262651 
+should be = 0.00033914077 
+x = 0.11538462 
+distance(x) = 108.90374 
+Ih gbar = 0.0003484722 
+should be = 0.00036191956 
+x = 0.19230769 
+distance(x) = 127.84299 
+Ih gbar = 0.0003716653 
+should be = 0.00038570967 
+x = 0.26923077 
+distance(x) = 146.78224 
+Ih gbar = 0.0003958881 
+should be = 0.00041055601 
+x = 0.34615385 
+distance(x) = 165.72148 
+Ih gbar = 0.0004211864 
+should be = 0.00043650548 
+x = 0.42307692 
+distance(x) = 184.66073 
+Ih gbar = 0.0004476078 
+should be = 0.00046360705 
+x = 0.5 
+distance(x) = 203.59998 
+Ih gbar = 0.0004752023 
+should be = 0.00049191187 
+x = 0.57692308 
+distance(x) = 222.53923 
+Ih gbar = 0.0005040219 
+should be = 0.00052147336 
+x = 0.65384615 
+distance(x) = 241.47848 
+Ih gbar = 0.0005341211 
+should be = 0.00055234731 
+x = 0.73076923 
+distance(x) = 260.41773 
+Ih gbar = 0.0005655565 
+should be = 0.00058459201 
+x = 0.80769231 
+distance(x) = 279.35698 
+Ih gbar = 0.0005983877 
+should be = 0.0006182683 
+x = 0.88461538 
+distance(x) = 298.29622 
+Ih gbar = 0.0006326765 
+should be = 0.00065343974 
+x = 0.96153846 
+distance(x) = 317.23547 
+Ih gbar = 0.0006869851 
+should be = 0.00069017272 
+x = 1 
+distance(x) = 326.7051 
+Ih gbar = 0.0006869851 
+should be = 0.00070914633 
+distance 0.0 = 75.847932 
+distance 0.5 = 148.82953 
+distance 1.0 = 221.81114 
+GAcell_v2[0].apic[5] { nseg=7  L=145.963  Ra=100
+	GAcell_v2[0].apic[1] connect GAcell_v2[0].apic[5] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.44732}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000322049}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 75.847932 
+Ih gbar = 0.0003220489 
+should be = 0.00032279454 
+x = 0.071428571 
+distance(x) = 86.273875 
+Ih gbar = 0.0003220489 
+should be = 0.000334816 
+x = 0.21428571 
+distance(x) = 107.12576 
+Ih gbar = 0.0003463462 
+should be = 0.0003597388 
+x = 0.35714286 
+distance(x) = 127.97765 
+Ih gbar = 0.0003718339 
+should be = 0.00038588255 
+x = 0.5 
+distance(x) = 148.82953 
+Ih gbar = 0.0003985701 
+should be = 0.00041330707 
+x = 0.64285714 
+distance(x) = 169.68142 
+Ih gbar = 0.0004266162 
+should be = 0.00044207511 
+x = 0.78571429 
+distance(x) = 190.53331 
+Ih gbar = 0.0004560363 
+should be = 0.00047225249 
+x = 0.92857143 
+distance(x) = 211.38519 
+Ih gbar = 0.0005028907 
+should be = 0.00050390825 
+x = 1 
+distance(x) = 221.81114 
+Ih gbar = 0.0005028907 
+should be = 0.00052031301 
+distance 0.0 = 53.395846 
+distance 0.5 = 56.522162 
+distance 1.0 = 59.648479 
+GAcell_v2[0].apic[6] { nseg=1  L=6.25263  Ra=100
+	GAcell_v2[0].apic[0] connect GAcell_v2[0].apic[6] (0), 1
+	/* First segment only */
+	insert morphology { diam=3.20348}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000292666}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 53.395846 
+Ih gbar = 0.0002926664 
+should be = 0.00029786233 
+x = 0.5 
+distance(x) = 56.522162 
+Ih gbar = 0.0002926664 
+should be = 0.00030125752 
+x = 1 
+distance(x) = 59.648479 
+Ih gbar = 0.0002926664 
+should be = 0.00030467715 
+distance 0.0 = 59.648479 
+distance 0.5 = 77.518784 
+distance 1.0 = 95.389089 
+GAcell_v2[0].apic[7] { nseg=1  L=35.7406  Ra=100
+	GAcell_v2[0].apic[6] connect GAcell_v2[0].apic[7] (0), 1
+	/* First segment only */
+	insert morphology { diam=3.1}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000332527}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 59.648479 
+Ih gbar = 0.0003325274 
+should be = 0.00030467715 
+x = 0.5 
+distance(x) = 77.518784 
+Ih gbar = 0.0003325274 
+should be = 0.0003247018 
+x = 1 
+distance(x) = 95.389089 
+Ih gbar = 0.0003325274 
+should be = 0.00034556429 
+distance 0.0 = 95.389089 
+distance 0.5 = 134.5705 
+distance 1.0 = 173.75191 
+GAcell_v2[0].apic[8] { nseg=3  L=78.3628  Ra=100
+	GAcell_v2[0].apic[7] connect GAcell_v2[0].apic[8] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=2.05124}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000347928}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 95.389089 
+Ih gbar = 0.0003479283 
+should be = 0.00034556429 
+x = 0.16666667 
+distance(x) = 108.44956 
+Ih gbar = 0.0003479283 
+should be = 0.00036136164 
+x = 0.5 
+distance(x) = 134.5705 
+Ih gbar = 0.0003801494 
+should be = 0.00039441213 
+x = 0.83333333 
+distance(x) = 160.69144 
+Ih gbar = 0.0004322493 
+should be = 0.0004295033 
+x = 1 
+distance(x) = 173.75191 
+Ih gbar = 0.0004322493 
+should be = 0.00044785321 
+distance 0.0 = 95.389089 
+distance 0.5 = 114.39727 
+distance 1.0 = 133.40546 
+GAcell_v2[0].apic[9] { nseg=1  L=38.0164  Ra=100
+	GAcell_v2[0].apic[7] connect GAcell_v2[0].apic[9] (0), 1
+	/* First segment only */
+	insert morphology { diam=3.36976}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000378671}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 95.389089 
+Ih gbar = 0.0003786708 
+should be = 0.00034556429 
+x = 0.5 
+distance(x) = 114.39727 
+Ih gbar = 0.0003786708 
+should be = 0.00036871405 
+x = 1 
+distance(x) = 133.40546 
+Ih gbar = 0.0003786708 
+should be = 0.00039289544 
+distance 0.0 = 133.40546 
+distance 0.5 = 155.49909 
+distance 1.0 = 177.59273 
+GAcell_v2[0].apic[10] { nseg=3  L=44.1873  Ra=100
+	GAcell_v2[0].apic[9] connect GAcell_v2[0].apic[10] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=2.18487}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000388084}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 133.40546 
+Ih gbar = 0.0003880843 
+should be = 0.00039289544 
+x = 0.16666667 
+distance(x) = 140.77 
+Ih gbar = 0.0003880843 
+should be = 0.00040255134 
+x = 0.5 
+distance(x) = 155.49909 
+Ih gbar = 0.0004073953 
+should be = 0.00042235942 
+x = 0.83333333 
+distance(x) = 170.22818 
+Ih gbar = 0.000437613 
+should be = 0.00044284811 
+x = 1 
+distance(x) = 177.59273 
+Ih gbar = 0.000437613 
+should be = 0.00045335497 
+distance 0.0 = 177.59273 
+distance 0.5 = 225.50799 
+distance 1.0 = 273.42324 
+GAcell_v2[0].apic[11] { nseg=5  L=95.8305  Ra=100
+	GAcell_v2[0].apic[10] connect GAcell_v2[0].apic[11] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.125}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000451204}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 177.59273 
+Ih gbar = 0.0004512036 
+should be = 0.00045335497 
+x = 0.1 
+distance(x) = 187.17578 
+Ih gbar = 0.0004512036 
+should be = 0.00046729538 
+x = 0.3 
+distance(x) = 206.34188 
+Ih gbar = 0.0004792975 
+should be = 0.0004961125 
+x = 0.5 
+distance(x) = 225.50799 
+Ih gbar = 0.000508654 
+should be = 0.0005262247 
+x = 0.7 
+distance(x) = 244.67409 
+Ih gbar = 0.0005393298 
+should be = 0.00055769019 
+x = 0.9 
+distance(x) = 263.84019 
+Ih gbar = 0.0005879478 
+should be = 0.00059056978 
+x = 1 
+distance(x) = 273.42324 
+Ih gbar = 0.0005879478 
+should be = 0.00060755961 
+distance 0.0 = 177.59273 
+distance 0.5 = 249.24489 
+distance 1.0 = 320.89706 
+GAcell_v2[0].apic[12] { nseg=7  L=143.304  Ra=100
+	GAcell_v2[0].apic[10] connect GAcell_v2[0].apic[12] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.125}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000452141}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 177.59273 
+Ih gbar = 0.0004521405 
+should be = 0.00045335497 
+x = 0.071428571 
+distance(x) = 187.82875 
+Ih gbar = 0.0004521405 
+should be = 0.00046825645 
+x = 0.21428571 
+distance(x) = 208.3008 
+Ih gbar = 0.0004822391 
+should be = 0.00049912981 
+x = 0.35714286 
+distance(x) = 228.77285 
+Ih gbar = 0.0005137847 
+should be = 0.00053148743 
+x = 0.5 
+distance(x) = 249.24489 
+Ih gbar = 0.0005468469 
+should be = 0.00056540069 
+x = 0.64285714 
+distance(x) = 269.71694 
+Ih gbar = 0.0005814985 
+should be = 0.00060094437 
+x = 0.78571429 
+distance(x) = 290.18899 
+Ih gbar = 0.0006178161 
+should be = 0.00063819685 
+x = 0.92857143 
+distance(x) = 310.66104 
+Ih gbar = 0.0006755924 
+should be = 0.00067724028 
+x = 1 
+distance(x) = 320.89706 
+Ih gbar = 0.0006755924 
+should be = 0.00069746035 
+distance 0.0 = 133.40546 
+distance 0.5 = 149.82714 
+distance 1.0 = 166.24883 
+GAcell_v2[0].apic[13] { nseg=1  L=32.8434  Ra=100
+	GAcell_v2[0].apic[9] connect GAcell_v2[0].apic[13] (0), 1
+	/* First segment only */
+	insert morphology { diam=2.41525}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000421907}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 133.40546 
+Ih gbar = 0.0004219066 
+should be = 0.00039289544 
+x = 0.5 
+distance(x) = 149.82714 
+Ih gbar = 0.0004219066 
+should be = 0.0004146523 
+x = 1 
+distance(x) = 166.24883 
+Ih gbar = 0.0004219066 
+should be = 0.00043724428 
+distance 0.0 = 166.24883 
+distance 0.5 = 262.1137 
+distance 1.0 = 357.97857 
+GAcell_v2[0].apic[14] { nseg=9  L=191.73  Ra=100
+	GAcell_v2[0].apic[13] connect GAcell_v2[0].apic[14] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.56618}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000436643}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 166.24883 
+Ih gbar = 0.0004366428 
+should be = 0.00043724428 
+x = 0.055555556 
+distance(x) = 176.90049 
+Ih gbar = 0.0004366428 
+should be = 0.00045235979 
+x = 0.16666667 
+distance(x) = 198.20379 
+Ih gbar = 0.0004672175 
+should be = 0.00048372158 
+x = 0.27777778 
+distance(x) = 219.50709 
+Ih gbar = 0.0004993234 
+should be = 0.00051665386 
+x = 0.38888889 
+distance(x) = 240.8104 
+Ih gbar = 0.0005330369 
+should be = 0.00055123526 
+x = 0.5 
+distance(x) = 262.1137 
+Ih gbar = 0.0005684387 
+should be = 0.00058754838 
+x = 0.61111111 
+distance(x) = 283.41701 
+Ih gbar = 0.0006056133 
+should be = 0.00062567992 
+x = 0.72222222 
+distance(x) = 304.72031 
+Ih gbar = 0.0006446495 
+should be = 0.00066572095 
+x = 0.83333333 
+distance(x) = 326.02361 
+Ih gbar = 0.0006856404 
+should be = 0.00070776708 
+x = 0.94444444 
+distance(x) = 347.32692 
+Ih gbar = 0.0007510076 
+should be = 0.00075191874 
+x = 1 
+distance(x) = 357.97857 
+Ih gbar = 0.0007510076 
+should be = 0.00077481688 
+distance 0.0 = 166.24883 
+distance 0.5 = 172.48871 
+distance 1.0 = 178.72858 
+GAcell_v2[0].apic[15] { nseg=1  L=12.4797  Ra=100
+	GAcell_v2[0].apic[13] connect GAcell_v2[0].apic[15] (0), 1
+	/* First segment only */
+	insert morphology { diam=2.25}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000439208}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 166.24883 
+Ih gbar = 0.0004392083 
+should be = 0.00043724428 
+x = 0.5 
+distance(x) = 172.48871 
+Ih gbar = 0.0004392083 
+should be = 0.00044605431 
+x = 1 
+distance(x) = 178.72858 
+Ih gbar = 0.0004392083 
+should be = 0.00045499133 
+distance 0.0 = 178.72858 
+distance 0.5 = 185.81323 
+distance 1.0 = 192.89788 
+GAcell_v2[0].apic[16] { nseg=1  L=14.1693  Ra=100
+	GAcell_v2[0].apic[15] connect GAcell_v2[0].apic[16] (0), 1
+	/* First segment only */
+	insert morphology { diam=1.46425}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000459462}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 178.72858 
+Ih gbar = 0.0004594622 
+should be = 0.00045499133 
+x = 0.5 
+distance(x) = 185.81323 
+Ih gbar = 0.0004594622 
+should be = 0.00046529455 
+x = 1 
+distance(x) = 192.89788 
+Ih gbar = 0.0004594622 
+should be = 0.00047576657 
+distance 0.0 = 192.89788 
+distance 0.5 = 268.10818 
+distance 1.0 = 343.31848 
+GAcell_v2[0].apic[17] { nseg=7  L=150.421  Ra=100
+	GAcell_v2[0].apic[16] connect GAcell_v2[0].apic[17] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.425}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000475265}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 192.89788 
+Ih gbar = 0.0004752652 
+should be = 0.00047576657 
+x = 0.071428571 
+distance(x) = 203.64221 
+Ih gbar = 0.0004752652 
+should be = 0.00049197636 
+x = 0.21428571 
+distance(x) = 225.13087 
+Ih gbar = 0.0005080638 
+should be = 0.00052561934 
+x = 0.35714286 
+distance(x) = 246.61952 
+Ih gbar = 0.0005425196 
+should be = 0.00056096207 
+x = 0.5 
+distance(x) = 268.10818 
+Ih gbar = 0.0005787162 
+should be = 0.00059809041 
+x = 0.64285714 
+distance(x) = 289.59684 
+Ih gbar = 0.0006167415 
+should be = 0.00063709458 
+x = 0.78571429 
+distance(x) = 311.0855 
+Ih gbar = 0.000656688 
+should be = 0.00067806935 
+x = 0.92857143 
+distance(x) = 332.57415 
+Ih gbar = 0.0007204235 
+should be = 0.00072111428 
+x = 1 
+distance(x) = 343.31848 
+Ih gbar = 0.0007204235 
+should be = 0.00074344554 
+distance 0.0 = 192.89788 
+distance 0.5 = 254.2785 
+distance 1.0 = 315.65911 
+GAcell_v2[0].apic[18] { nseg=7  L=122.761  Ra=100
+	GAcell_v2[0].apic[16] connect GAcell_v2[0].apic[18] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.425}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00047233}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 192.89788 
+Ih gbar = 0.00047233 
+should be = 0.00047576657 
+x = 0.071428571 
+distance(x) = 201.66654 
+Ih gbar = 0.00047233 
+should be = 0.00048896565 
+x = 0.21428571 
+distance(x) = 219.20386 
+Ih gbar = 0.0004988553 
+should be = 0.00051617372 
+x = 0.35714286 
+distance(x) = 236.74118 
+Ih gbar = 0.0005264693 
+should be = 0.00054449854 
+x = 0.5 
+distance(x) = 254.2785 
+Ih gbar = 0.0005552167 
+should be = 0.00057398595 
+x = 0.64285714 
+distance(x) = 271.81582 
+Ih gbar = 0.000585144 
+should be = 0.00060468366 
+x = 0.78571429 
+distance(x) = 289.35313 
+Ih gbar = 0.0006162997 
+should be = 0.00063664136 
+x = 0.92857143 
+distance(x) = 306.89045 
+Ih gbar = 0.0006654473 
+should be = 0.00066991076 
+x = 1 
+distance(x) = 315.65911 
+Ih gbar = 0.0006654473 
+should be = 0.00068705409 
+distance 0.0 = 178.72858 
+distance 0.5 = 198.14388 
+distance 1.0 = 217.55917 
+GAcell_v2[0].apic[19] { nseg=1  L=38.8306  Ra=100
+	GAcell_v2[0].apic[15] connect GAcell_v2[0].apic[19] (0), 1
+	/* First segment only */
+	insert morphology { diam=2.80722}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000496322}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 178.72858 
+Ih gbar = 0.0004963221 
+should be = 0.00045499133 
+x = 0.5 
+distance(x) = 198.14388 
+Ih gbar = 0.0004963221 
+should be = 0.00048363121 
+x = 1 
+distance(x) = 217.55917 
+Ih gbar = 0.0004963221 
+should be = 0.00051357532 
+distance 0.0 = 217.55917 
+distance 0.5 = 225.45084 
+distance 1.0 = 233.34252 
+GAcell_v2[0].apic[20] { nseg=1  L=15.7833  Ra=100
+	GAcell_v2[0].apic[19] connect GAcell_v2[0].apic[20] (0), 1
+	/* First segment only */
+	insert morphology { diam=2.825}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000521031}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 217.55917 
+Ih gbar = 0.0005210306 
+should be = 0.00051357532 
+x = 0.5 
+distance(x) = 225.45084 
+Ih gbar = 0.0005210306 
+should be = 0.00052613294 
+x = 1 
+distance(x) = 233.34252 
+Ih gbar = 0.0005210306 
+should be = 0.00053891993 
+distance 0.0 = 233.34252 
+distance 0.5 = 243.16517 
+distance 1.0 = 252.98782 
+GAcell_v2[0].apic[21] { nseg=1  L=19.6453  Ra=100
+	GAcell_v2[0].apic[20] connect GAcell_v2[0].apic[21] (0), 1
+	/* First segment only */
+	insert morphology { diam=1.74878}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000553061}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 233.34252 
+Ih gbar = 0.0005530613 
+should be = 0.00053891993 
+x = 0.5 
+distance(x) = 243.16517 
+Ih gbar = 0.0005530613 
+should be = 0.00055516248 
+x = 1 
+distance(x) = 252.98782 
+Ih gbar = 0.0005530613 
+should be = 0.00057177513 
+distance 0.0 = 252.98782 
+distance 0.5 = 291.74052 
+distance 1.0 = 330.49322 
+GAcell_v2[0].apic[22] { nseg=3  L=77.5054  Ra=100
+	GAcell_v2[0].apic[21] connect GAcell_v2[0].apic[22] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.7}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000574923}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 252.98782 
+Ih gbar = 0.0005749231 
+should be = 0.00057177513 
+x = 0.16666667 
+distance(x) = 265.90539 
+Ih gbar = 0.0005749231 
+should be = 0.00059419967 
+x = 0.5 
+distance(x) = 291.74052 
+Ih gbar = 0.0006206387 
+should be = 0.00064109208 
+x = 0.83333333 
+distance(x) = 317.57565 
+Ih gbar = 0.0006944978 
+should be = 0.00069084719 
+x = 1 
+distance(x) = 330.49322 
+Ih gbar = 0.0006944978 
+should be = 0.00071685247 
+distance 0.0 = 330.49322 
+distance 0.5 = 352.11333 
+distance 1.0 = 373.73343 
+GAcell_v2[0].apic[23] { nseg=3  L=43.2402  Ra=100
+	GAcell_v2[0].apic[22] connect GAcell_v2[0].apic[23] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.7}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000708972}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 330.49322 
+Ih gbar = 0.0007089719 
+should be = 0.00071685247 
+x = 0.16666667 
+distance(x) = 337.69992 
+Ih gbar = 0.0007089719 
+should be = 0.00073169916 
+x = 0.5 
+distance(x) = 352.11333 
+Ih gbar = 0.0007386479 
+should be = 0.00076213902 
+x = 0.83333333 
+distance(x) = 366.52673 
+Ih gbar = 0.0007850425 
+should be = 0.00079360204 
+x = 1 
+distance(x) = 373.73343 
+Ih gbar = 0.0007850425 
+should be = 0.00080972793 
+distance 0.0 = 330.49322 
+distance 0.5 = 343.96278 
+distance 1.0 = 357.43234 
+GAcell_v2[0].apic[24] { nseg=1  L=26.9391  Ra=100
+	GAcell_v2[0].apic[22] connect GAcell_v2[0].apic[24] (0), 1
+	/* First segment only */
+	insert morphology { diam=1.7}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000749849}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 330.49322 
+Ih gbar = 0.0007498495 
+should be = 0.00071685247 
+x = 0.5 
+distance(x) = 343.96278 
+Ih gbar = 0.0007498495 
+should be = 0.00074480223 
+x = 1 
+distance(x) = 357.43234 
+Ih gbar = 0.0007498495 
+should be = 0.00077362897 
+distance 0.0 = 252.98782 
+distance 0.5 = 305.30187 
+distance 1.0 = 357.61592 
+GAcell_v2[0].apic[25] { nseg=5  L=104.628  Ra=100
+	GAcell_v2[0].apic[21] connect GAcell_v2[0].apic[25] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.43849}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000570719}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 252.98782 
+Ih gbar = 0.0005707186 
+should be = 0.00057177513 
+x = 0.1 
+distance(x) = 263.45063 
+Ih gbar = 0.0005707186 
+should be = 0.00058988699 
+x = 0.3 
+distance(x) = 284.37625 
+Ih gbar = 0.0006073303 
+should be = 0.00062744113 
+x = 0.5 
+distance(x) = 305.30187 
+Ih gbar = 0.0006457421 
+should be = 0.0006668417 
+x = 0.7 
+distance(x) = 326.22749 
+Ih gbar = 0.0006860425 
+should be = 0.00070817948 
+x = 0.9 
+distance(x) = 347.15311 
+Ih gbar = 0.0007502385 
+should be = 0.00075154971 
+x = 1 
+distance(x) = 357.61592 
+Ih gbar = 0.0007502385 
+should be = 0.00077402804 
+distance 0.0 = 233.34252 
+distance 0.5 = 249.13026 
+distance 1.0 = 264.91801 
+GAcell_v2[0].apic[26] { nseg=1  L=31.5755  Ra=100
+	GAcell_v2[0].apic[20] connect GAcell_v2[0].apic[26] (0), 1
+	/* First segment only */
+	insert morphology { diam=2.56409}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000573229}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 233.34252 
+Ih gbar = 0.0005732291 
+should be = 0.00053891993 
+x = 0.5 
+distance(x) = 249.13026 
+Ih gbar = 0.0005732291 
+should be = 0.00056520633 
+x = 1 
+distance(x) = 264.91801 
+Ih gbar = 0.0005732291 
+should be = 0.00059246206 
+distance 0.0 = 264.91801 
+distance 0.5 = 295.60219 
+distance 1.0 = 326.28637 
+GAcell_v2[0].apic[27] { nseg=3  L=61.3684  Ra=100
+	GAcell_v2[0].apic[26] connect GAcell_v2[0].apic[27] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=2.00394}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000590964}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 264.91801 
+Ih gbar = 0.0005909643 
+should be = 0.00059246206 
+x = 0.16666667 
+distance(x) = 275.14607 
+Ih gbar = 0.0005909643 
+should be = 0.00061065382 
+x = 0.5 
+distance(x) = 295.60219 
+Ih gbar = 0.0006277077 
+should be = 0.00064834305 
+x = 0.83333333 
+distance(x) = 316.05831 
+Ih gbar = 0.0006861587 
+should be = 0.0006878428 
+x = 1 
+distance(x) = 326.28637 
+Ih gbar = 0.0006861587 
+should be = 0.00070829863 
+distance 0.0 = 326.28637 
+distance 0.5 = 351.97907 
+distance 1.0 = 377.67177 
+GAcell_v2[0].apic[28] { nseg=3  L=51.3854  Ra=100
+	GAcell_v2[0].apic[27] connect GAcell_v2[0].apic[28] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.16928}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000703221}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 326.28637 
+Ih gbar = 0.0007032207 
+should be = 0.00070829863 
+x = 0.16666667 
+distance(x) = 334.85061 
+Ih gbar = 0.0007032207 
+should be = 0.00072579988 
+x = 0.5 
+distance(x) = 351.97907 
+Ih gbar = 0.0007383669 
+should be = 0.00076185082 
+x = 0.83333333 
+distance(x) = 369.10754 
+Ih gbar = 0.0007937443 
+should be = 0.0007993463 
+x = 1 
+distance(x) = 377.67177 
+Ih gbar = 0.0007937443 
+should be = 0.00081865373 
+distance 0.0 = 326.28637 
+distance 0.5 = 380.45048 
+distance 1.0 = 434.61458 
+GAcell_v2[0].apic[29] { nseg=5  L=108.328  Ra=100
+	GAcell_v2[0].apic[27] connect GAcell_v2[0].apic[29] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.17011}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000707797}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 326.28637 
+Ih gbar = 0.0007077967 
+should be = 0.00070829863 
+x = 0.1 
+distance(x) = 337.1192 
+Ih gbar = 0.0007077967 
+should be = 0.00073049368 
+x = 0.3 
+distance(x) = 358.78484 
+Ih gbar = 0.0007527196 
+should be = 0.00077657301 
+x = 0.5 
+distance(x) = 380.45048 
+Ih gbar = 0.0007999314 
+should be = 0.00082500006 
+x = 0.7 
+distance(x) = 402.11612 
+Ih gbar = 0.0008495485 
+should be = 0.00087589443 
+x = 0.9 
+distance(x) = 423.78176 
+Ih gbar = 0.0009287541 
+should be = 0.00092938184 
+x = 1 
+distance(x) = 434.61458 
+Ih gbar = 0.0009287541 
+should be = 0.00095713896 
+distance 0.0 = 264.91801 
+distance 0.5 = 271.03647 
+distance 1.0 = 277.15492 
+GAcell_v2[0].apic[30] { nseg=1  L=12.2369  Ra=100
+	GAcell_v2[0].apic[26] connect GAcell_v2[0].apic[30] (0), 1
+	/* First segment only */
+	insert morphology { diam=2.01449}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000594497}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 264.91801 
+Ih gbar = 0.0005944968 
+should be = 0.00059246206 
+x = 0.5 
+distance(x) = 271.03647 
+Ih gbar = 0.0005944968 
+should be = 0.0006032931 
+x = 1 
+distance(x) = 277.15492 
+Ih gbar = 0.0005944968 
+should be = 0.0006142772 
+distance 0.0 = 277.15492 
+distance 0.5 = 357.71152 
+distance 1.0 = 438.26811 
+GAcell_v2[0].apic[31] { nseg=9  L=161.113  Ra=100
+	GAcell_v2[0].apic[30] connect GAcell_v2[0].apic[31] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.45655}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000610435}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 277.15492 
+Ih gbar = 0.0006104355 
+should be = 0.0006142772 
+x = 0.055555556 
+distance(x) = 286.10566 
+Ih gbar = 0.0006104355 
+should be = 0.0006306262 
+x = 0.16666667 
+distance(x) = 304.00712 
+Ih gbar = 0.0006433116 
+should be = 0.00066434856 
+x = 0.27777778 
+distance(x) = 321.90859 
+Ih gbar = 0.0006775656 
+should be = 0.0006994844 
+x = 0.38888889 
+distance(x) = 339.81005 
+Ih gbar = 0.0007132554 
+should be = 0.00073609294 
+x = 0.5 
+distance(x) = 357.71152 
+Ih gbar = 0.0007504412 
+should be = 0.00077423592 
+x = 0.61111111 
+distance(x) = 375.61298 
+Ih gbar = 0.0007891856 
+should be = 0.00081397766 
+x = 0.72222222 
+distance(x) = 393.51445 
+Ih gbar = 0.0008295539 
+should be = 0.00085538516 
+x = 0.83333333 
+distance(x) = 411.41591 
+Ih gbar = 0.0008716143 
+should be = 0.00089852825 
+x = 0.94444444 
+distance(x) = 429.31738 
+Ih gbar = 0.0009380334 
+should be = 0.00094347967 
+x = 1 
+distance(x) = 438.26811 
+Ih gbar = 0.0009380334 
+should be = 0.00096665707 
+distance 0.0 = 277.15492 
+distance 0.5 = 623.6638 
+distance 1.0 = 970.17267 
+GAcell_v2[0].apic[32] { nseg=35  L=693.018  Ra=100
+	GAcell_v2[0].apic[30] connect GAcell_v2[0].apic[32] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.97578}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000612146}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 277.15492 
+Ih gbar = 0.0006121456 
+should be = 0.0006142772 
+x = 0.014285714 
+distance(x) = 287.05518 
+Ih gbar = 0.0006121456 
+should be = 0.00063238032 
+x = 0.042857143 
+distance(x) = 306.85568 
+Ih gbar = 0.0006486686 
+should be = 0.00066984347 
+x = 0.071428571 
+distance(x) = 326.65619 
+Ih gbar = 0.0006868885 
+should be = 0.00070904727 
+x = 0.1 
+distance(x) = 346.4567 
+Ih gbar = 0.0007268843 
+should be = 0.0007500726 
+x = 0.12857143 
+distance(x) = 366.2572 
+Ih gbar = 0.0007687384 
+should be = 0.00079300409 
+x = 0.15714286 
+distance(x) = 386.05771 
+Ih gbar = 0.0008125371 
+should be = 0.00083793031 
+x = 0.18571429 
+distance(x) = 405.85822 
+Ih gbar = 0.0008583709 
+should be = 0.00088494393 
+x = 0.21428571 
+distance(x) = 425.65873 
+Ih gbar = 0.0009063343 
+should be = 0.00093414195 
+x = 0.24285714 
+distance(x) = 445.45923 
+Ih gbar = 0.0009565261 
+should be = 0.00098562586 
+x = 0.27142857 
+distance(x) = 465.25974 
+Ih gbar = 0.0010090501 
+should be = 0.0010395019 
+x = 0.3 
+distance(x) = 485.06025 
+Ih gbar = 0.0010640145 
+should be = 0.0010958811 
+x = 0.32857143 
+distance(x) = 504.86075 
+Ih gbar = 0.0011215326 
+should be = 0.0011548799 
+x = 0.35714286 
+distance(x) = 524.66126 
+Ih gbar = 0.0011817233 
+should be = 0.00121662 
+x = 0.38571429 
+distance(x) = 544.46177 
+Ih gbar = 0.0012447106 
+should be = 0.0012812287 
+x = 0.41428571 
+distance(x) = 564.26227 
+Ih gbar = 0.0013106244 
+should be = 0.0013488393 
+x = 0.44285714 
+distance(x) = 584.06278 
+Ih gbar = 0.0013796009 
+should be = 0.0014195913 
+x = 0.47142857 
+distance(x) = 603.86329 
+Ih gbar = 0.0014517821 
+should be = 0.0014936306 
+x = 0.5 
+distance(x) = 623.6638 
+Ih gbar = 0.0015273172 
+should be = 0.0015711101 
+x = 0.52857143 
+distance(x) = 643.4643 
+Ih gbar = 0.0016063618 
+should be = 0.0016521894 
+x = 0.55714286 
+distance(x) = 663.26481 
+Ih gbar = 0.0016890791 
+should be = 0.001737036 
+x = 0.58571429 
+distance(x) = 683.06532 
+Ih gbar = 0.0017756397 
+should be = 0.0018258248 
+x = 0.61428571 
+distance(x) = 702.86582 
+Ih gbar = 0.0018662221 
+should be = 0.001918739 
+x = 0.64285714 
+distance(x) = 722.66633 
+Ih gbar = 0.0019610133 
+should be = 0.0020159702 
+x = 0.67142857 
+distance(x) = 742.46684 
+Ih gbar = 0.0020602087 
+should be = 0.0021177192 
+x = 0.7 
+distance(x) = 762.26734 
+Ih gbar = 0.0021640131 
+should be = 0.0022241956 
+x = 0.72857143 
+distance(x) = 782.06785 
+Ih gbar = 0.0022726405 
+should be = 0.0023356193 
+x = 0.75714286 
+distance(x) = 801.86836 
+Ih gbar = 0.0023863151 
+should be = 0.0024522201 
+x = 0.78571429 
+distance(x) = 821.66887 
+Ih gbar = 0.0025052714 
+should be = 0.0025742385 
+x = 0.81428571 
+distance(x) = 841.46937 
+Ih gbar = 0.0026297547 
+should be = 0.0027019263 
+x = 0.84285714 
+distance(x) = 861.26988 
+Ih gbar = 0.0027600219 
+should be = 0.0028355468 
+x = 0.87142857 
+distance(x) = 881.07039 
+Ih gbar = 0.0028963418 
+should be = 0.0029753757 
+x = 0.9 
+distance(x) = 900.87089 
+Ih gbar = 0.0030389954 
+should be = 0.0031217015 
+x = 0.92857143 
+distance(x) = 920.6714 
+Ih gbar = 0.0031882772 
+should be = 0.0032748261 
+x = 0.95714286 
+distance(x) = 940.47191 
+Ih gbar = 0.003344495 
+should be = 0.0034350652 
+x = 0.98571429 
+distance(x) = 960.27241 
+Ih gbar = 0.003592536 
+should be = 0.0036027496 
+x = 1 
+distance(x) = 970.17267 
+Ih gbar = 0.003592536 
+should be = 0.0036894912 
+distance 0.0 = 970.17267 
+distance 0.5 = 974.05447 
+distance 1.0 = 977.93627 
+GAcell_v2[0].apic[33] { nseg=1  L=7.7636  Ra=100
+	GAcell_v2[0].apic[32] connect GAcell_v2[0].apic[33] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.79}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.00451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00366021}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 970.17267 
+Ih gbar = 0.0036602067 
+should be = 0.0036894912 
+x = 0.5 
+distance(x) = 974.05447 
+Ih gbar = 0.0036602067 
+should be = 0.003724043 
+x = 1 
+distance(x) = 977.93627 
+Ih gbar = 0.0036602067 
+should be = 0.0037589038 
+distance 0.0 = 977.93627 
+distance 0.5 = 1143.3596 
+distance 1.0 = 1308.7829 
+GAcell_v2[0].apic[34] { nseg=17  L=330.847  Ra=100
+	GAcell_v2[0].apic[33] connect GAcell_v2[0].apic[34] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.79}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.00451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00374674}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 977.93627 
+Ih gbar = 0.0037467436 
+should be = 0.0037589038 
+x = 0.029411765 
+distance(x) = 987.66705 
+Ih gbar = 0.0037467436 
+should be = 0.0038476684 
+x = 0.088235294 
+distance(x) = 1007.1286 
+Ih gbar = 0.0039257211 
+should be = 0.0040312531 
+x = 0.14705882 
+distance(x) = 1026.5902 
+Ih gbar = 0.0041128689 
+should be = 0.0042232184 
+x = 0.20588235 
+distance(x) = 1046.0517 
+Ih gbar = 0.0043085599 
+should be = 0.0044239468 
+x = 0.26470588 
+distance(x) = 1065.5133 
+Ih gbar = 0.0045131842 
+should be = 0.0046338385 
+x = 0.32352941 
+distance(x) = 1084.9749 
+Ih gbar = 0.0047271495 
+should be = 0.0048533117 
+x = 0.38235294 
+distance(x) = 1104.4364 
+Ih gbar = 0.0049508824 
+should be = 0.0050828038 
+x = 0.44117647 
+distance(x) = 1123.898 
+Ih gbar = 0.0051848285 
+should be = 0.0053227721 
+x = 0.5 
+distance(x) = 1143.3596 
+Ih gbar = 0.0054294543 
+should be = 0.005573695 
+x = 0.55882353 
+distance(x) = 1162.8211 
+Ih gbar = 0.0056852472 
+should be = 0.0058360724 
+x = 0.61764706 
+distance(x) = 1182.2827 
+Ih gbar = 0.005952717 
+should be = 0.0061104273 
+x = 0.67647059 
+distance(x) = 1201.7443 
+Ih gbar = 0.0062323967 
+should be = 0.0063973065 
+x = 0.73529412 
+distance(x) = 1221.2058 
+Ih gbar = 0.0065248437 
+should be = 0.0066972816 
+x = 0.79411765 
+distance(x) = 1240.6674 
+Ih gbar = 0.0068306409 
+should be = 0.0070109506 
+x = 0.85294118 
+distance(x) = 1260.129 
+Ih gbar = 0.0071503977 
+should be = 0.0073389384 
+x = 0.91176471 
+distance(x) = 1279.5905 
+Ih gbar = 0.0074847513 
+should be = 0.0076818989 
+x = 0.97058824 
+distance(x) = 1299.0521 
+Ih gbar = 0.0080151167 
+should be = 0.0080405154 
+x = 1 
+distance(x) = 1308.7829 
+Ih gbar = 0.0080151167 
+should be = 0.0082259167 
+distance 0.0 = 1308.7829 
+distance 0.5 = 1424.2458 
+distance 1.0 = 1539.7088 
+GAcell_v2[0].apic[35] { nseg=11  L=230.926  Ra=100
+	GAcell_v2[0].apic[34] connect GAcell_v2[0].apic[35] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00821467}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1308.7829 
+Ih gbar = 0.0082146673 
+should be = 0.0082259167 
+x = 0.045454545 
+distance(x) = 1319.2795 
+Ih gbar = 0.0082146673 
+should be = 0.0084306042 
+x = 0.13636364 
+distance(x) = 1340.2728 
+Ih gbar = 0.0086284752 
+should be = 0.0088550642 
+x = 0.22727273 
+distance(x) = 1361.266 
+Ih gbar = 0.0090626961 
+should be = 0.0093004627 
+x = 0.31818182 
+distance(x) = 1382.2593 
+Ih gbar = 0.009518337 
+should be = 0.0097678326 
+x = 0.40909091 
+distance(x) = 1403.2526 
+Ih gbar = 0.0099964547 
+should be = 0.010258258 
+x = 0.5 
+distance(x) = 1424.2458 
+Ih gbar = 0.010498158 
+should be = 0.010772876 
+x = 0.59090909 
+distance(x) = 1445.2391 
+Ih gbar = 0.01102461 
+should be = 0.01131288 
+x = 0.68181818 
+distance(x) = 1466.2324 
+Ih gbar = 0.011577032 
+should be = 0.011879522 
+x = 0.77272727 
+distance(x) = 1487.2256 
+Ih gbar = 0.012156705 
+should be = 0.012474116 
+x = 0.86363636 
+distance(x) = 1508.2189 
+Ih gbar = 0.012764973 
+should be = 0.013098042 
+x = 0.95454545 
+distance(x) = 1529.2122 
+Ih gbar = 0.013734095 
+should be = 0.013752746 
+x = 1 
+distance(x) = 1539.7088 
+Ih gbar = 0.013734095 
+should be = 0.014092112 
+distance 0.0 = 1308.7829 
+distance 0.5 = 1317.7273 
+distance 1.0 = 1326.6718 
+GAcell_v2[0].apic[36] { nseg=1  L=17.889  Ra=100
+	GAcell_v2[0].apic[34] connect GAcell_v2[0].apic[36] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.57}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00835811}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1308.7829 
+Ih gbar = 0.0083581137 
+should be = 0.0082259167 
+x = 0.5 
+distance(x) = 1317.7273 
+Ih gbar = 0.0083581137 
+should be = 0.0084000255 
+x = 1 
+distance(x) = 1326.6718 
+Ih gbar = 0.0083581137 
+should be = 0.0085777431 
+distance 0.0 = 1326.6718 
+distance 0.5 = 1373.604 
+distance 1.0 = 1420.5362 
+GAcell_v2[0].apic[37] { nseg=5  L=93.8644  Ra=100
+	GAcell_v2[0].apic[36] connect GAcell_v2[0].apic[37] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.654828}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0085438}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1326.6718 
+Ih gbar = 0.0085437953 
+should be = 0.0085777431 
+x = 0.1 
+distance(x) = 1336.0583 
+Ih gbar = 0.0085437953 
+should be = 0.0087682045 
+x = 0.3 
+distance(x) = 1354.8311 
+Ih gbar = 0.0089273692 
+should be = 0.0091616522 
+x = 0.5 
+distance(x) = 1373.604 
+Ih gbar = 0.0093278202 
+should be = 0.0095724115 
+x = 0.7 
+distance(x) = 1392.3769 
+Ih gbar = 0.0097458907 
+should be = 0.010001244 
+x = 0.9 
+distance(x) = 1411.1498 
+Ih gbar = 0.010407738 
+should be = 0.010448945 
+x = 1 
+distance(x) = 1420.5362 
+Ih gbar = 0.010407738 
+should be = 0.010680129 
+distance 0.0 = 1326.6718 
+distance 0.5 = 1340.9058 
+distance 1.0 = 1355.1398 
+GAcell_v2[0].apic[38] { nseg=1  L=28.468  Ra=100
+	GAcell_v2[0].apic[36] connect GAcell_v2[0].apic[38] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.57}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00893381}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1326.6718 
+Ih gbar = 0.0089338146 
+should be = 0.0085777431 
+x = 0.5 
+distance(x) = 1340.9058 
+Ih gbar = 0.0089338146 
+should be = 0.0088681839 
+x = 1 
+distance(x) = 1355.1398 
+Ih gbar = 0.0089338146 
+should be = 0.0091682635 
+distance 0.0 = 1355.1398 
+distance 0.5 = 1380.9505 
+distance 1.0 = 1406.7612 
+GAcell_v2[0].apic[39] { nseg=3  L=51.6214  Ra=100
+	GAcell_v2[0].apic[38] connect GAcell_v2[0].apic[39] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00911533}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1355.1398 
+Ih gbar = 0.0091153298 
+should be = 0.0091682635 
+x = 0.16666667 
+distance(x) = 1363.7434 
+Ih gbar = 0.0091153298 
+should be = 0.0093544513 
+x = 0.5 
+distance(x) = 1380.9505 
+Ih gbar = 0.009489285 
+should be = 0.0097380327 
+x = 0.83333333 
+distance(x) = 1398.1576 
+Ih gbar = 0.010078633 
+should be = 0.010137056 
+x = 1 
+distance(x) = 1406.7612 
+Ih gbar = 0.010078633 
+should be = 0.010342551 
+distance 0.0 = 1406.7612 
+distance 0.5 = 1442.6205 
+distance 1.0 = 1478.4798 
+GAcell_v2[0].apic[40] { nseg=3  L=71.7186  Ra=100
+	GAcell_v2[0].apic[39] connect GAcell_v2[0].apic[40] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0103636}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1406.7612 
+Ih gbar = 0.010363611 
+should be = 0.010342551 
+x = 0.16666667 
+distance(x) = 1418.7143 
+Ih gbar = 0.010363611 
+should be = 0.010634865 
+x = 0.5 
+distance(x) = 1442.6205 
+Ih gbar = 0.010957551 
+should be = 0.011244094 
+x = 0.83333333 
+distance(x) = 1466.5267 
+Ih gbar = 0.011911816 
+should be = 0.011887662 
+x = 1 
+distance(x) = 1478.4798 
+Ih gbar = 0.011911816 
+should be = 0.012222924 
+distance 0.0 = 1406.7612 
+distance 0.5 = 1421.1492 
+distance 1.0 = 1435.5372 
+GAcell_v2[0].apic[41] { nseg=1  L=28.776  Ra=100
+	GAcell_v2[0].apic[39] connect GAcell_v2[0].apic[41] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.57}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0107782}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1406.7612 
+Ih gbar = 0.010778162 
+should be = 0.010342551 
+x = 0.5 
+distance(x) = 1421.1492 
+Ih gbar = 0.010778162 
+should be = 0.0106954 
+x = 1 
+distance(x) = 1435.5372 
+Ih gbar = 0.010778162 
+should be = 0.011060088 
+distance 0.0 = 1355.1398 
+distance 0.5 = 1368.1942 
+distance 1.0 = 1381.2486 
+GAcell_v2[0].apic[42] { nseg=1  L=26.1088  Ra=100
+	GAcell_v2[0].apic[38] connect GAcell_v2[0].apic[42] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.57}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0094959}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1355.1398 
+Ih gbar = 0.0094958952 
+should be = 0.0091682635 
+x = 0.5 
+distance(x) = 1368.1942 
+Ih gbar = 0.0094958952 
+should be = 0.0094522228 
+x = 1 
+distance(x) = 1381.2486 
+Ih gbar = 0.0094958952 
+should be = 0.009744813 
+distance 0.0 = 1381.2486 
+distance 0.5 = 1467.6196 
+distance 1.0 = 1553.9906 
+GAcell_v2[0].apic[43] { nseg=9  L=172.742  Ra=100
+	GAcell_v2[0].apic[42] connect GAcell_v2[0].apic[43] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00971111}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1381.2486 
+Ih gbar = 0.009711106 
+should be = 0.009744813 
+x = 0.055555556 
+distance(x) = 1390.8454 
+Ih gbar = 0.009711106 
+should be = 0.0099655637 
+x = 0.16666667 
+distance(x) = 1410.039 
+Ih gbar = 0.010156003 
+should be = 0.010421914 
+x = 0.27777778 
+distance(x) = 1429.2325 
+Ih gbar = 0.010620924 
+should be = 0.010898802 
+x = 0.38888889 
+distance(x) = 1448.4261 
+Ih gbar = 0.01110677 
+should be = 0.011397155 
+x = 0.5 
+distance(x) = 1467.6196 
+Ih gbar = 0.011614483 
+should be = 0.011917936 
+x = 0.61111111 
+distance(x) = 1486.8132 
+Ih gbar = 0.012145045 
+should be = 0.012462157 
+x = 0.72222222 
+distance(x) = 1506.0067 
+Ih gbar = 0.012699488 
+should be = 0.013030872 
+x = 0.83333333 
+distance(x) = 1525.2003 
+Ih gbar = 0.013278884 
+should be = 0.013625182 
+x = 0.94444444 
+distance(x) = 1544.3939 
+Ih gbar = 0.014197237 
+should be = 0.014246241 
+x = 1 
+distance(x) = 1553.9906 
+Ih gbar = 0.014197237 
+should be = 0.014567176 
+distance 0.0 = 1381.2486 
+distance 0.5 = 1468.7266 
+distance 1.0 = 1556.2046 
+GAcell_v2[0].apic[44] { nseg=9  L=174.956  Ra=100
+	GAcell_v2[0].apic[42] connect GAcell_v2[0].apic[44] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0097139}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1381.2486 
+Ih gbar = 0.0097138952 
+should be = 0.009744813 
+x = 0.055555556 
+distance(x) = 1390.9684 
+Ih gbar = 0.0097138952 
+should be = 0.0099684247 
+x = 0.16666667 
+distance(x) = 1410.408 
+Ih gbar = 0.01016475 
+should be = 0.010430885 
+x = 0.27777778 
+distance(x) = 1429.8475 
+Ih gbar = 0.010636163 
+should be = 0.010914433 
+x = 0.38888889 
+distance(x) = 1449.2871 
+Ih gbar = 0.01112907 
+should be = 0.011420029 
+x = 0.5 
+distance(x) = 1468.7266 
+Ih gbar = 0.011644452 
+should be = 0.011948678 
+x = 0.61111111 
+distance(x) = 1488.1662 
+Ih gbar = 0.012183335 
+should be = 0.012501432 
+x = 0.72222222 
+distance(x) = 1507.6057 
+Ih gbar = 0.012746789 
+should be = 0.01307939 
+x = 0.83333333 
+distance(x) = 1527.0453 
+Ih gbar = 0.013335935 
+should be = 0.013683702 
+x = 0.94444444 
+distance(x) = 1546.4849 
+Ih gbar = 0.014270402 
+should be = 0.014315568 
+x = 1 
+distance(x) = 1556.2046 
+Ih gbar = 0.014270402 
+should be = 0.014642224 
+distance 0.0 = 977.93627 
+distance 0.5 = 1120.8593 
+distance 1.0 = 1263.7824 
+GAcell_v2[0].apic[45] { nseg=15  L=285.846  Ra=100
+	GAcell_v2[0].apic[33] connect GAcell_v2[0].apic[45] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.79}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.00451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00374492}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 977.93627 
+Ih gbar = 0.0037449223 
+should be = 0.0037589038 
+x = 0.033333333 
+distance(x) = 987.46447 
+Ih gbar = 0.0037449223 
+should be = 0.0038458002 
+x = 0.1 
+distance(x) = 1006.5209 
+Ih gbar = 0.0039200104 
+should be = 0.0040253954 
+x = 0.16666667 
+distance(x) = 1025.5773 
+Ih gbar = 0.0041029212 
+should be = 0.0042130147 
+x = 0.23333333 
+distance(x) = 1044.6337 
+Ih gbar = 0.0042940042 
+should be = 0.0044090164 
+x = 0.3 
+distance(x) = 1063.6901 
+Ih gbar = 0.0044936245 
+should be = 0.0046137753 
+x = 0.36666667 
+distance(x) = 1082.7465 
+Ih gbar = 0.0047021635 
+should be = 0.0048276825 
+x = 0.43333333 
+distance(x) = 1101.8029 
+Ih gbar = 0.0049200198 
+should be = 0.0050511467 
+x = 0.5 
+distance(x) = 1120.8593 
+Ih gbar = 0.0051476095 
+should be = 0.005284595 
+x = 0.56666667 
+distance(x) = 1139.9157 
+Ih gbar = 0.0053853676 
+should be = 0.0055284734 
+x = 0.63333333 
+distance(x) = 1158.9722 
+Ih gbar = 0.0056337484 
+should be = 0.005783248 
+x = 0.7 
+distance(x) = 1178.0286 
+Ih gbar = 0.0058932265 
+should be = 0.0060494055 
+x = 0.76666667 
+distance(x) = 1197.085 
+Ih gbar = 0.0061642977 
+should be = 0.0063274545 
+x = 0.83333333 
+distance(x) = 1216.1414 
+Ih gbar = 0.00644748 
+should be = 0.0066179264 
+x = 0.9 
+distance(x) = 1235.1978 
+Ih gbar = 0.0067433144 
+should be = 0.0069213761 
+x = 0.96666667 
+distance(x) = 1254.2542 
+Ih gbar = 0.0072120322 
+should be = 0.0072383835 
+x = 1 
+distance(x) = 1263.7824 
+Ih gbar = 0.0072120322 
+should be = 0.0074021596 
+distance 0.0 = 1263.7824 
+distance 0.5 = 1405.2342 
+distance 1.0 = 1546.6859 
+GAcell_v2[0].apic[46] { nseg=15  L=282.904  Ra=100
+	GAcell_v2[0].apic[45] connect GAcell_v2[0].apic[46] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00737353}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1263.7824 
+Ih gbar = 0.0073735279 
+should be = 0.0074021596 
+x = 0.033333333 
+distance(x) = 1273.2125 
+Ih gbar = 0.0073735279 
+should be = 0.0075678124 
+x = 0.1 
+distance(x) = 1292.0728 
+Ih gbar = 0.0077071898 
+should be = 0.0079100633 
+x = 0.16666667 
+distance(x) = 1310.933 
+Ih gbar = 0.0080556024 
+should be = 0.0082674446 
+x = 0.23333333 
+distance(x) = 1329.7932 
+Ih gbar = 0.0084194178 
+should be = 0.0086406253 
+x = 0.3 
+distance(x) = 1348.6535 
+Ih gbar = 0.008799317 
+should be = 0.0090303037 
+x = 0.36666667 
+distance(x) = 1367.5137 
+Ih gbar = 0.009196011 
+should be = 0.0094372093 
+x = 0.43333333 
+distance(x) = 1386.3739 
+Ih gbar = 0.0096102422 
+should be = 0.0098621036 
+x = 0.5 
+distance(x) = 1405.2342 
+Ih gbar = 0.010042786 
+should be = 0.010305782 
+x = 0.56666667 
+distance(x) = 1424.0944 
+Ih gbar = 0.010494452 
+should be = 0.010769074 
+x = 0.63333333 
+distance(x) = 1442.9546 
+Ih gbar = 0.010966086 
+should be = 0.011252849 
+x = 0.7 
+distance(x) = 1461.8149 
+Ih gbar = 0.011458569 
+should be = 0.01175801 
+x = 0.76666667 
+distance(x) = 1480.6751 
+Ih gbar = 0.011972825 
+should be = 0.012285503 
+x = 0.83333333 
+distance(x) = 1499.5353 
+Ih gbar = 0.012509815 
+should be = 0.012836317 
+x = 0.9 
+distance(x) = 1518.3956 
+Ih gbar = 0.013070545 
+should be = 0.01341148 
+x = 0.96666667 
+distance(x) = 1537.2558 
+Ih gbar = 0.01395846 
+should be = 0.014012072 
+x = 1 
+distance(x) = 1546.6859 
+Ih gbar = 0.01395846 
+should be = 0.014322252 
+distance 0.0 = 1263.7824 
+distance 0.5 = 1286.0105 
+distance 1.0 = 1308.2387 
+GAcell_v2[0].apic[47] { nseg=3  L=44.4562  Ra=100
+	GAcell_v2[0].apic[45] connect GAcell_v2[0].apic[47] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00733863}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1263.7824 
+Ih gbar = 0.0073386269 
+should be = 0.0074021596 
+x = 0.16666667 
+distance(x) = 1271.1918 
+Ih gbar = 0.0073386269 
+should be = 0.007532013 
+x = 0.5 
+distance(x) = 1286.0105 
+Ih gbar = 0.007598363 
+should be = 0.0077984351 
+x = 0.83333333 
+distance(x) = 1300.8293 
+Ih gbar = 0.0080049012 
+should be = 0.0080740684 
+x = 1 
+distance(x) = 1308.2387 
+Ih gbar = 0.0080049012 
+should be = 0.0082154383 
+distance 0.0 = 1308.2387 
+distance 0.5 = 1347.6796 
+distance 1.0 = 1387.1206 
+GAcell_v2[0].apic[48] { nseg=3  L=78.8819  Ra=100
+	GAcell_v2[0].apic[47] connect GAcell_v2[0].apic[48] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00825529}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1308.2387 
+Ih gbar = 0.0082552891 
+should be = 0.0082154383 
+x = 0.16666667 
+distance(x) = 1321.3856 
+Ih gbar = 0.0082552891 
+should be = 0.0084722716 
+x = 0.5 
+distance(x) = 1347.6796 
+Ih gbar = 0.0087792958 
+should be = 0.0090097672 
+x = 0.83333333 
+distance(x) = 1373.9736 
+Ih gbar = 0.0096270123 
+should be = 0.0095806764 
+x = 1 
+distance(x) = 1387.1206 
+Ih gbar = 0.0096270123 
+should be = 0.0098793054 
+distance 0.0 = 1387.1206 
+distance 0.5 = 1422.9912 
+distance 1.0 = 1458.8618 
+GAcell_v2[0].apic[49] { nseg=3  L=71.7412  Ra=100
+	GAcell_v2[0].apic[48] connect GAcell_v2[0].apic[49] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.455438}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00989952}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1387.1206 
+Ih gbar = 0.0098995243 
+should be = 0.0098793054 
+x = 0.16666667 
+distance(x) = 1399.0774 
+Ih gbar = 0.0098995243 
+should be = 0.010158832 
+x = 0.5 
+distance(x) = 1422.9912 
+Ih gbar = 0.01046749 
+should be = 0.010741419 
+x = 0.83333333 
+distance(x) = 1446.9049 
+Ih gbar = 0.011380043 
+should be = 0.011356853 
+x = 1 
+distance(x) = 1458.8618 
+Ih gbar = 0.011380043 
+should be = 0.011677462 
+distance 0.0 = 1387.1206 
+distance 0.5 = 1412.088 
+distance 1.0 = 1437.0554 
+GAcell_v2[0].apic[50] { nseg=3  L=49.9348  Ra=100
+	GAcell_v2[0].apic[48] connect GAcell_v2[0].apic[50] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0098159}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1387.1206 
+Ih gbar = 0.0098158998 
+should be = 0.0098793054 
+x = 0.16666667 
+distance(x) = 1395.443 
+Ih gbar = 0.0098158998 
+should be = 0.010073055 
+x = 0.5 
+distance(x) = 1412.088 
+Ih gbar = 0.010204666 
+should be = 0.010471829 
+x = 0.83333333 
+distance(x) = 1428.7329 
+Ih gbar = 0.010816365 
+should be = 0.010886121 
+x = 1 
+distance(x) = 1437.0554 
+Ih gbar = 0.010816365 
+should be = 0.011099274 
+distance 0.0 = 1308.2387 
+distance 0.5 = 1426.5601 
+distance 1.0 = 1544.8816 
+GAcell_v2[0].apic[51] { nseg=11  L=236.643  Ra=100
+	GAcell_v2[0].apic[47] connect GAcell_v2[0].apic[51] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0082092}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1308.2387 
+Ih gbar = 0.0082091982 
+should be = 0.0082154383 
+x = 0.045454545 
+distance(x) = 1318.9952 
+Ih gbar = 0.0082091982 
+should be = 0.0084249943 
+x = 0.13636364 
+distance(x) = 1340.5081 
+Ih gbar = 0.0086332289 
+should be = 0.0088599403 
+x = 0.22727273 
+distance(x) = 1362.0211 
+Ih gbar = 0.0090787077 
+should be = 0.0093168865 
+x = 0.31818182 
+distance(x) = 1383.5341 
+Ih gbar = 0.0095467196 
+should be = 0.0097969457 
+x = 0.40909091 
+distance(x) = 1405.0471 
+Ih gbar = 0.010038404 
+should be = 0.010301287 
+x = 0.5 
+distance(x) = 1426.5601 
+Ih gbar = 0.010554959 
+should be = 0.010831139 
+x = 0.59090909 
+distance(x) = 1448.0731 
+Ih gbar = 0.011097642 
+should be = 0.011387791 
+x = 0.68181818 
+distance(x) = 1469.5861 
+Ih gbar = 0.011667774 
+should be = 0.0119726 
+x = 0.77272727 
+distance(x) = 1491.0991 
+Ih gbar = 0.012266745 
+should be = 0.012586989 
+x = 0.86363636 
+distance(x) = 1512.6121 
+Ih gbar = 0.012896012 
+should be = 0.013232455 
+x = 0.95454545 
+distance(x) = 1534.1251 
+Ih gbar = 0.013900094 
+should be = 0.01391057 
+x = 1 
+distance(x) = 1544.8816 
+Ih gbar = 0.013900094 
+should be = 0.014262383 
+distance 0.0 = 1263.7824 
+distance 0.5 = 1276.5221 
+distance 1.0 = 1289.2617 
+GAcell_v2[0].apic[52] { nseg=1  L=25.4793  Ra=100
+	GAcell_v2[0].apic[45] connect GAcell_v2[0].apic[52] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.57}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00765654}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1263.7824 
+Ih gbar = 0.0076565387 
+should be = 0.0074021596 
+x = 0.5 
+distance(x) = 1276.5221 
+Ih gbar = 0.0076565387 
+should be = 0.0076268034 
+x = 1 
+distance(x) = 1289.2617 
+Ih gbar = 0.0076565387 
+should be = 0.0078581083 
+distance 0.0 = 1289.2617 
+distance 0.5 = 1361.7466 
+distance 1.0 = 1434.2316 
+GAcell_v2[0].apic[53] { nseg=7  L=144.97  Ra=100
+	GAcell_v2[0].apic[52] connect GAcell_v2[0].apic[53] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.647055}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00784475}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1289.2617 
+Ih gbar = 0.007844746 
+should be = 0.0078581083 
+x = 0.071428571 
+distance(x) = 1299.6167 
+Ih gbar = 0.007844746 
+should be = 0.0080511604 
+x = 0.21428571 
+distance(x) = 1320.3267 
+Ih gbar = 0.0082348401 
+should be = 0.0084512963 
+x = 0.35714286 
+distance(x) = 1341.0367 
+Ih gbar = 0.0086439117 
+should be = 0.008870898 
+x = 0.5 
+distance(x) = 1361.7466 
+Ih gbar = 0.0090728839 
+should be = 0.0093109127 
+x = 0.64285714 
+distance(x) = 1382.4566 
+Ih gbar = 0.0095227248 
+should be = 0.0097723333 
+x = 0.78571429 
+distance(x) = 1403.1666 
+Ih gbar = 0.0099944497 
+should be = 0.010256201 
+x = 0.92857143 
+distance(x) = 1423.8766 
+Ih gbar = 0.010745413 
+should be = 0.010763608 
+x = 1 
+distance(x) = 1434.2316 
+Ih gbar = 0.010745413 
+should be = 0.011026495 
+distance 0.0 = 1289.2617 
+distance 0.5 = 1401.7652 
+distance 1.0 = 1514.2686 
+GAcell_v2[0].apic[54] { nseg=11  L=225.007  Ra=100
+	GAcell_v2[0].apic[52] connect GAcell_v2[0].apic[54] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0078424}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1289.2617 
+Ih gbar = 0.0078424031 
+should be = 0.0078581083 
+x = 0.045454545 
+distance(x) = 1299.4893 
+Ih gbar = 0.0078424031 
+should be = 0.0080487572 
+x = 0.13636364 
+distance(x) = 1319.9445 
+Ih gbar = 0.0082274716 
+should be = 0.0084437381 
+x = 0.22727273 
+distance(x) = 1340.3996 
+Ih gbar = 0.0086310372 
+should be = 0.0088576921 
+x = 0.31818182 
+distance(x) = 1360.8548 
+Ih gbar = 0.0090539882 
+should be = 0.0092915307 
+x = 0.40909091 
+distance(x) = 1381.31 
+Ih gbar = 0.009497256 
+should be = 0.0097462089 
+x = 0.5 
+distance(x) = 1401.7652 
+Ih gbar = 0.0099618163 
+should be = 0.010222728 
+x = 0.59090909 
+distance(x) = 1422.2203 
+Ih gbar = 0.010448692 
+should be = 0.010722137 
+x = 0.68181818 
+distance(x) = 1442.6755 
+Ih gbar = 0.010958955 
+should be = 0.011245535 
+x = 0.77272727 
+distance(x) = 1463.1307 
+Ih gbar = 0.011493729 
+should be = 0.011794075 
+x = 0.86363636 
+distance(x) = 1483.5858 
+Ih gbar = 0.012054191 
+should be = 0.012368964 
+x = 0.95454545 
+distance(x) = 1504.041 
+Ih gbar = 0.012945765 
+should be = 0.012971468 
+x = 1 
+distance(x) = 1514.2686 
+Ih gbar = 0.012945765 
+should be = 0.013283488 
+distance 0.0 = 977.93627 
+distance 0.5 = 1084.178 
+distance 1.0 = 1190.4197 
+GAcell_v2[0].apic[55] { nseg=11  L=212.483  Ra=100
+	GAcell_v2[0].apic[33] connect GAcell_v2[0].apic[55] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.79}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.00451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00374609}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 977.93627 
+Ih gbar = 0.0037460922 
+should be = 0.0037589038 
+x = 0.045454545 
+distance(x) = 987.5946 
+Ih gbar = 0.0037460922 
+should be = 0.0038470002 
+x = 0.13636364 
+distance(x) = 1006.9113 
+Ih gbar = 0.0039236779 
+should be = 0.0040291573 
+x = 0.22727273 
+distance(x) = 1026.2279 
+Ih gbar = 0.0041093087 
+should be = 0.0042195666 
+x = 0.31818182 
+distance(x) = 1045.5446 
+Ih gbar = 0.004303349 
+should be = 0.0044186018 
+x = 0.40909091 
+distance(x) = 1064.8613 
+Ih gbar = 0.0045061798 
+should be = 0.0046266538 
+x = 0.5 
+distance(x) = 1084.178 
+Ih gbar = 0.0047181993 
+should be = 0.0048441311 
+x = 0.59090909 
+distance(x) = 1103.4946 
+Ih gbar = 0.0049398238 
+should be = 0.0050714605 
+x = 0.68181818 
+distance(x) = 1122.8113 
+Ih gbar = 0.0051714884 
+should be = 0.0053090886 
+x = 0.77272727 
+distance(x) = 1142.128 
+Ih gbar = 0.0054136479 
+should be = 0.0055574817 
+x = 0.86363636 
+distance(x) = 1161.4447 
+Ih gbar = 0.0056667778 
+should be = 0.0058171276 
+x = 0.95454545 
+distance(x) = 1180.7613 
+Ih gbar = 0.0060681355 
+should be = 0.0060885361 
+x = 1 
+distance(x) = 1190.4197 
+Ih gbar = 0.0060681355 
+should be = 0.006228817 
+distance 0.0 = 1190.4197 
+distance 0.5 = 1344.2377 
+distance 1.0 = 1498.0557 
+GAcell_v2[0].apic[56] { nseg=15  L=307.636  Ra=100
+	GAcell_v2[0].apic[55] connect GAcell_v2[0].apic[56] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.575016}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00621669}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1190.4197 
+Ih gbar = 0.0062166924 
+should be = 0.006228817 
+x = 0.033333333 
+distance(x) = 1200.6742 
+Ih gbar = 0.0062166924 
+should be = 0.006381198 
+x = 0.1 
+distance(x) = 1221.1833 
+Ih gbar = 0.0065244971 
+should be = 0.0066969261 
+x = 0.16666667 
+distance(x) = 1241.6923 
+Ih gbar = 0.0068471273 
+should be = 0.0070278613 
+x = 0.23333333 
+distance(x) = 1262.2014 
+Ih gbar = 0.007185297 
+should be = 0.0073747361 
+x = 0.3 
+distance(x) = 1282.7105 
+Ih gbar = 0.0075397546 
+should be = 0.0077383181 
+x = 0.36666667 
+distance(x) = 1303.2195 
+Ih gbar = 0.0079112848 
+should be = 0.0081194121 
+x = 0.43333333 
+distance(x) = 1323.7286 
+Ih gbar = 0.0083007098 
+should be = 0.0085188615 
+x = 0.5 
+distance(x) = 1344.2377 
+Ih gbar = 0.0087088914 
+should be = 0.0089375505 
+x = 0.56666667 
+distance(x) = 1364.7468 
+Ih gbar = 0.0091367332 
+should be = 0.0093764056 
+x = 0.63333333 
+distance(x) = 1385.2558 
+Ih gbar = 0.0095851821 
+should be = 0.0098363983 
+x = 0.7 
+distance(x) = 1405.7649 
+Ih gbar = 0.01005523 
+should be = 0.010318547 
+x = 0.76666667 
+distance(x) = 1426.274 
+Ih gbar = 0.010547919 
+should be = 0.010823918 
+x = 0.83333333 
+distance(x) = 1446.783 
+Ih gbar = 0.011064338 
+should be = 0.01135363 
+x = 0.9 
+distance(x) = 1467.2921 
+Ih gbar = 0.01160563 
+should be = 0.011908856 
+x = 0.96666667 
+distance(x) = 1487.8012 
+Ih gbar = 0.012466842 
+should be = 0.012490824 
+x = 1 
+distance(x) = 1498.0557 
+Ih gbar = 0.012466842 
+should be = 0.012792237 
+distance 0.0 = 1190.4197 
+distance 0.5 = 1299.3597 
+distance 1.0 = 1408.2997 
+GAcell_v2[0].apic[57] { nseg=11  L=217.88  Ra=100
+	GAcell_v2[0].apic[55] connect GAcell_v2[0].apic[57] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.68}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00621155}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1190.4197 
+Ih gbar = 0.0062115511 
+should be = 0.006228817 
+x = 0.045454545 
+distance(x) = 1200.3233 
+Ih gbar = 0.0062115511 
+should be = 0.0063759243 
+x = 0.13636364 
+distance(x) = 1220.1306 
+Ih gbar = 0.0065083431 
+should be = 0.0066803563 
+x = 0.22727273 
+distance(x) = 1239.9379 
+Ih gbar = 0.0068189299 
+should be = 0.006998938 
+x = 0.31818182 
+distance(x) = 1259.7451 
+Ih gbar = 0.0071439524 
+should be = 0.0073323273 
+x = 0.40909091 
+distance(x) = 1279.5524 
+Ih gbar = 0.0074840818 
+should be = 0.0076812122 
+x = 0.5 
+distance(x) = 1299.3597 
+Ih gbar = 0.0078400202 
+should be = 0.008046313 
+x = 0.59090909 
+distance(x) = 1319.167 
+Ih gbar = 0.0082125023 
+should be = 0.0084283834 
+x = 0.68181818 
+distance(x) = 1338.9742 
+Ih gbar = 0.0086022971 
+should be = 0.0088282122 
+x = 0.77272727 
+distance(x) = 1358.7815 
+Ih gbar = 0.0090102093 
+should be = 0.0092466247 
+x = 0.86363636 
+distance(x) = 1378.5888 
+Ih gbar = 0.0094370809 
+should be = 0.0096844848 
+x = 0.95454545 
+distance(x) = 1398.3961 
+Ih gbar = 0.010114876 
+should be = 0.010142696 
+x = 1 
+distance(x) = 1408.2997 
+Ih gbar = 0.010114876 
+should be = 0.010379728 
+distance 0.0 = 1408.2997 
+distance 0.5 = 1497.9668 
+distance 1.0 = 1587.6338 
+GAcell_v2[0].apic[58] { nseg=9  L=179.334  Ra=100
+	GAcell_v2[0].apic[57] connect GAcell_v2[0].apic[58] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.45}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0103527}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1408.2997 
+Ih gbar = 0.010352702 
+should be = 0.010379728 
+x = 0.055555556 
+distance(x) = 1418.2627 
+Ih gbar = 0.010352702 
+should be = 0.010623675 
+x = 0.16666667 
+distance(x) = 1438.1887 
+Ih gbar = 0.010844972 
+should be = 0.011128617 
+x = 0.27777778 
+distance(x) = 1458.1147 
+Ih gbar = 0.011360263 
+should be = 0.011657173 
+x = 0.38888889 
+distance(x) = 1478.0407 
+Ih gbar = 0.011899651 
+should be = 0.012210446 
+x = 0.5 
+distance(x) = 1497.9668 
+Ih gbar = 0.012464263 
+should be = 0.012789592 
+x = 0.61111111 
+distance(x) = 1517.8928 
+Ih gbar = 0.013055279 
+should be = 0.013395821 
+x = 0.72222222 
+distance(x) = 1537.8188 
+Ih gbar = 0.013673933 
+should be = 0.014030401 
+x = 0.83333333 
+distance(x) = 1557.7448 
+Ih gbar = 0.014321519 
+should be = 0.014694656 
+x = 0.94444444 
+distance(x) = 1577.6708 
+Ih gbar = 0.015350119 
+should be = 0.015389975 
+x = 1 
+distance(x) = 1587.6338 
+Ih gbar = 0.015350119 
+should be = 0.015749734 
+distance 0.0 = 1408.2997 
+distance 0.5 = 1443.7625 
+distance 1.0 = 1479.2254 
+GAcell_v2[0].apic[59] { nseg=3  L=70.9257  Ra=100
+	GAcell_v2[0].apic[57] connect GAcell_v2[0].apic[59] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.45}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0103977}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1408.2997 
+Ih gbar = 0.010397657 
+should be = 0.010379728 
+x = 0.16666667 
+distance(x) = 1420.1206 
+Ih gbar = 0.010397657 
+should be = 0.010669788 
+x = 0.5 
+distance(x) = 1443.7625 
+Ih gbar = 0.010986748 
+should be = 0.011274043 
+x = 0.83333333 
+distance(x) = 1467.4044 
+Ih gbar = 0.011932502 
+should be = 0.01191197 
+x = 1 
+distance(x) = 1479.2254 
+Ih gbar = 0.011932502 
+should be = 0.012244142 
+distance 0.0 = 970.17267 
+distance 0.5 = 1079.2415 
+distance 1.0 = 1188.3104 
+GAcell_v2[0].apic[60] { nseg=11  L=218.138  Ra=100
+	GAcell_v2[0].apic[32] connect GAcell_v2[0].apic[60] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.79}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.00451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00367918}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 970.17267 
+Ih gbar = 0.0036791765 
+should be = 0.0036894912 
+x = 0.045454545 
+distance(x) = 980.08802 
+Ih gbar = 0.0036791765 
+should be = 0.003778362 
+x = 0.13636364 
+distance(x) = 999.91872 
+Ih gbar = 0.0038584823 
+should be = 0.0039622834 
+x = 0.22727273 
+distance(x) = 1019.7494 
+Ih gbar = 0.0040461321 
+should be = 0.0041547637 
+x = 0.31818182 
+distance(x) = 1039.5801 
+Ih gbar = 0.0042425144 
+should be = 0.0043562012 
+x = 0.40909091 
+distance(x) = 1059.4108 
+Ih gbar = 0.0044480354 
+should be = 0.0045670127 
+x = 0.5 
+distance(x) = 1079.2415 
+Ih gbar = 0.0046631204 
+should be = 0.0047876344 
+x = 0.59090909 
+distance(x) = 1099.0722 
+Ih gbar = 0.0048882146 
+should be = 0.0050185228 
+x = 0.68181818 
+distance(x) = 1118.9029 
+Ih gbar = 0.0051237836 
+should be = 0.0052601558 
+x = 0.77272727 
+distance(x) = 1138.7337 
+Ih gbar = 0.0053703149 
+should be = 0.0055130332 
+x = 0.86363636 
+distance(x) = 1158.5644 
+Ih gbar = 0.0056283187 
+should be = 0.0057776785 
+x = 0.95454545 
+distance(x) = 1178.3951 
+Ih gbar = 0.0060380098 
+should be = 0.0060546391 
+x = 1 
+distance(x) = 1188.3104 
+Ih gbar = 0.0060380098 
+should be = 0.0061979158 
+distance 0.0 = 1188.3104 
+distance 0.5 = 1244.1776 
+distance 1.0 = 1300.0448 
+GAcell_v2[0].apic[61] { nseg=5  L=111.734  Ra=100
+	GAcell_v2[0].apic[60] connect GAcell_v2[0].apic[61] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.572349}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00619927}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1188.3104 
+Ih gbar = 0.0061992682 
+should be = 0.0061979158 
+x = 0.1 
+distance(x) = 1199.4838 
+Ih gbar = 0.0061992682 
+should be = 0.0063633252 
+x = 0.3 
+distance(x) = 1221.8307 
+Ih gbar = 0.0065344521 
+should be = 0.0067071373 
+x = 0.5 
+distance(x) = 1244.1776 
+Ih gbar = 0.0068872643 
+should be = 0.0070690315 
+x = 0.7 
+distance(x) = 1266.5245 
+Ih gbar = 0.0072586319 
+should be = 0.0074499587 
+x = 0.9 
+distance(x) = 1288.8713 
+Ih gbar = 0.0078526233 
+should be = 0.00785092 
+x = 1 
+distance(x) = 1300.0448 
+Ih gbar = 0.0078526233 
+should be = 0.0080592405 
+distance 0.0 = 1300.0448 
+distance 0.5 = 1310.9503 
+distance 1.0 = 1321.8557 
+GAcell_v2[0].apic[62] { nseg=1  L=21.8109  Ra=100
+	GAcell_v2[0].apic[61] connect GAcell_v2[0].apic[62] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.57}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00826438}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1300.0448 
+Ih gbar = 0.0082643824 
+should be = 0.0080592405 
+x = 0.5 
+distance(x) = 1310.9503 
+Ih gbar = 0.0082643824 
+should be = 0.0082677787 
+x = 1 
+distance(x) = 1321.8557 
+Ih gbar = 0.0082643824 
+should be = 0.008481599 
+distance 0.0 = 1321.8557 
+distance 0.5 = 1327.874 
+distance 1.0 = 1333.8922 
+GAcell_v2[0].apic[63] { nseg=1  L=12.0365  Ra=100
+	GAcell_v2[0].apic[62] connect GAcell_v2[0].apic[63] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.457047}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00850059}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1321.8557 
+Ih gbar = 0.0085005913 
+should be = 0.008481599 
+x = 0.5 
+distance(x) = 1327.874 
+Ih gbar = 0.0085005913 
+should be = 0.0086019075 
+x = 1 
+distance(x) = 1333.8922 
+Ih gbar = 0.0085005913 
+should be = 0.0087238883 
+distance 0.0 = 1333.8922 
+distance 0.5 = 1347.2375 
+distance 1.0 = 1360.5829 
+GAcell_v2[0].apic[64] { nseg=1  L=26.6906  Ra=100
+	GAcell_v2[0].apic[63] connect GAcell_v2[0].apic[64] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.45}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00904823}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1333.8922 
+Ih gbar = 0.0090482341 
+should be = 0.0087238883 
+x = 0.5 
+distance(x) = 1347.2375 
+Ih gbar = 0.0090482341 
+should be = 0.00900046 
+x = 1 
+distance(x) = 1360.5829 
+Ih gbar = 0.0090482341 
+should be = 0.0092856284 
+distance 0.0 = 1360.5829 
+distance 0.5 = 1397.6306 
+distance 1.0 = 1434.6784 
+GAcell_v2[0].apic[65] { nseg=3  L=74.0955  Ra=100
+	GAcell_v2[0].apic[64] connect GAcell_v2[0].apic[65] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.45}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00931319}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1360.5829 
+Ih gbar = 0.0093131879 
+should be = 0.0092856284 
+x = 0.16666667 
+distance(x) = 1372.9321 
+Ih gbar = 0.0093131879 
+should be = 0.0095574026 
+x = 0.5 
+distance(x) = 1397.6306 
+Ih gbar = 0.0098661507 
+should be = 0.0101246 
+x = 0.83333333 
+distance(x) = 1422.3291 
+Ih gbar = 0.010756609 
+should be = 0.010724856 
+x = 1 
+distance(x) = 1434.6784 
+Ih gbar = 0.010756609 
+should be = 0.011037979 
+distance 0.0 = 1360.5829 
+distance 0.5 = 1392.2145 
+distance 1.0 = 1423.8462 
+GAcell_v2[0].apic[66] { nseg=3  L=63.2633  Ra=100
+	GAcell_v2[0].apic[64] connect GAcell_v2[0].apic[66] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.45}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00927398}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1360.5829 
+Ih gbar = 0.0092739837 
+should be = 0.0092856284 
+x = 0.16666667 
+distance(x) = 1371.1267 
+Ih gbar = 0.0092739837 
+should be = 0.0095171891 
+x = 0.5 
+distance(x) = 1392.2145 
+Ih gbar = 0.0097421965 
+should be = 0.0099974546 
+x = 0.83333333 
+distance(x) = 1413.3023 
+Ih gbar = 0.010488379 
+should be = 0.010501521 
+x = 1 
+distance(x) = 1423.8462 
+Ih gbar = 0.010488379 
+should be = 0.010762845 
+distance 0.0 = 1423.8462 
+distance 0.5 = 1473.735 
+distance 1.0 = 1523.6239 
+GAcell_v2[0].apic[67] { nseg=5  L=99.7777  Ra=100
+	GAcell_v2[0].apic[66] connect GAcell_v2[0].apic[67] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.45}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0107352}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1423.8462 
+Ih gbar = 0.010735208 
+should be = 0.010762845 
+x = 0.1 
+distance(x) = 1433.8239 
+Ih gbar = 0.010735208 
+should be = 0.011016028 
+x = 0.3 
+distance(x) = 1453.7795 
+Ih gbar = 0.011246139 
+should be = 0.011540111 
+x = 0.5 
+distance(x) = 1473.735 
+Ih gbar = 0.011781 
+should be = 0.012088741 
+x = 0.7 
+distance(x) = 1493.6906 
+Ih gbar = 0.012340912 
+should be = 0.012663065 
+x = 0.9 
+distance(x) = 1513.6461 
+Ih gbar = 0.01323033 
+should be = 0.013264288 
+x = 1 
+distance(x) = 1523.6239 
+Ih gbar = 0.01323033 
+should be = 0.013575378 
+distance 0.0 = 1423.8462 
+distance 0.5 = 1437.2447 
+distance 1.0 = 1450.6432 
+GAcell_v2[0].apic[68] { nseg=1  L=26.7971  Ra=100
+	GAcell_v2[0].apic[66] connect GAcell_v2[0].apic[68] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.45}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0111643}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1423.8462 
+Ih gbar = 0.011164283 
+should be = 0.010762845 
+x = 0.5 
+distance(x) = 1437.2447 
+Ih gbar = 0.011164283 
+should be = 0.011104171 
+x = 1 
+distance(x) = 1450.6432 
+Ih gbar = 0.011164283 
+should be = 0.011456148 
+distance 0.0 = 1450.6432 
+distance 0.5 = 1467.0792 
+distance 1.0 = 1483.5152 
+GAcell_v2[0].apic[69] { nseg=1  L=32.8719  Ra=100
+	GAcell_v2[0].apic[68] connect GAcell_v2[0].apic[69] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.45}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0120522}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1450.6432 
+Ih gbar = 0.012052209 
+should be = 0.011456148 
+x = 0.5 
+distance(x) = 1467.0792 
+Ih gbar = 0.012052209 
+should be = 0.011902957 
+x = 1 
+distance(x) = 1483.5152 
+Ih gbar = 0.012052209 
+should be = 0.012366931 
+distance 0.0 = 1450.6432 
+distance 0.5 = 1463.9977 
+distance 1.0 = 1477.3523 
+GAcell_v2[0].apic[70] { nseg=1  L=26.7091  Ra=100
+	GAcell_v2[0].apic[68] connect GAcell_v2[0].apic[70] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.45}
+	insert capacitance { cm=2}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0118806}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1450.6432 
+Ih gbar = 0.0118806 
+should be = 0.011456148 
+x = 0.5 
+distance(x) = 1463.9977 
+Ih gbar = 0.0118806 
+should be = 0.0118179 
+x = 1 
+distance(x) = 1477.3523 
+Ih gbar = 0.0118806 
+should be = 0.012190905 
+distance 0.0 = 1333.8922 
+distance 0.5 = 1406.3967 
+distance 1.0 = 1478.9011 
+GAcell_v2[0].apic[71] { nseg=7  L=145.009  Ra=100
+	GAcell_v2[0].apic[63] connect GAcell_v2[0].apic[71] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.45}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00870914}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1333.8922 
+Ih gbar = 0.0087091424 
+should be = 0.0087238883 
+x = 0.071428571 
+distance(x) = 1344.25 
+Ih gbar = 0.0087091424 
+should be = 0.0089378079 
+x = 0.21428571 
+distance(x) = 1364.9656 
+Ih gbar = 0.0091414071 
+should be = 0.0093811998 
+x = 0.35714286 
+distance(x) = 1385.6811 
+Ih gbar = 0.0095947065 
+should be = 0.0098461679 
+x = 0.5 
+distance(x) = 1406.3967 
+Ih gbar = 0.010070064 
+should be = 0.010333762 
+x = 0.64285714 
+distance(x) = 1427.1122 
+Ih gbar = 0.010568554 
+should be = 0.010845084 
+x = 0.78571429 
+distance(x) = 1447.8278 
+Ih gbar = 0.0110913 
+should be = 0.011381287 
+x = 0.92857143 
+distance(x) = 1468.5433 
+Ih gbar = 0.011923501 
+should be = 0.011943582 
+x = 1 
+distance(x) = 1478.9011 
+Ih gbar = 0.011923501 
+should be = 0.012234909 
+distance 0.0 = 1321.8557 
+distance 0.5 = 1402.2292 
+distance 1.0 = 1482.6027 
+GAcell_v2[0].apic[72] { nseg=9  L=160.747  Ra=100
+	GAcell_v2[0].apic[62] connect GAcell_v2[0].apic[72] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00843901}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1321.8557 
+Ih gbar = 0.0084390099 
+should be = 0.008481599 
+x = 0.055555556 
+distance(x) = 1330.7861 
+Ih gbar = 0.0084390099 
+should be = 0.0086607217 
+x = 0.16666667 
+distance(x) = 1348.6469 
+Ih gbar = 0.0087991812 
+should be = 0.0090301645 
+x = 0.27777778 
+distance(x) = 1366.5076 
+Ih gbar = 0.0091744141 
+should be = 0.0094150565 
+x = 0.38888889 
+distance(x) = 1384.3684 
+Ih gbar = 0.0095653382 
+should be = 0.0098160437 
+x = 0.5 
+distance(x) = 1402.2292 
+Ih gbar = 0.0099726099 
+should be = 0.010233799 
+x = 0.61111111 
+distance(x) = 1420.09 
+Ih gbar = 0.010396913 
+should be = 0.010669024 
+x = 0.72222222 
+distance(x) = 1437.9507 
+Ih gbar = 0.010838959 
+should be = 0.011122449 
+x = 0.83333333 
+distance(x) = 1455.8115 
+Ih gbar = 0.01129949 
+should be = 0.011594835 
+x = 0.94444444 
+distance(x) = 1473.6723 
+Ih gbar = 0.012026646 
+should be = 0.012086976 
+x = 1 
+distance(x) = 1482.6027 
+Ih gbar = 0.012026646 
+should be = 0.01234071 
+distance 0.0 = 1300.0448 
+distance 0.5 = 1412.9667 
+distance 1.0 = 1525.8885 
+GAcell_v2[0].apic[73] { nseg=11  L=225.844  Ra=100
+	GAcell_v2[0].apic[61] connect GAcell_v2[0].apic[73] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00804386}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1300.0448 
+Ih gbar = 0.0080438589 
+should be = 0.0080592405 
+x = 0.045454545 
+distance(x) = 1310.3104 
+Ih gbar = 0.0080438589 
+should be = 0.0082553989 
+x = 0.13636364 
+distance(x) = 1330.8417 
+Ih gbar = 0.0084401076 
+should be = 0.0086618477 
+x = 0.22727273 
+distance(x) = 1351.3729 
+Ih gbar = 0.0088554627 
+should be = 0.0090878948 
+x = 0.31818182 
+distance(x) = 1371.9042 
+Ih gbar = 0.0092908457 
+should be = 0.0095344852 
+x = 0.40909091 
+distance(x) = 1392.4354 
+Ih gbar = 0.0097472221 
+should be = 0.01000261 
+x = 0.5 
+distance(x) = 1412.9667 
+Ih gbar = 0.010225604 
+should be = 0.010493306 
+x = 0.59090909 
+distance(x) = 1433.4979 
+Ih gbar = 0.010727053 
+should be = 0.011007663 
+x = 0.68181818 
+distance(x) = 1454.0292 
+Ih gbar = 0.011252682 
+should be = 0.011546822 
+x = 0.77272727 
+distance(x) = 1474.5604 
+Ih gbar = 0.011803655 
+should be = 0.012111978 
+x = 0.86363636 
+distance(x) = 1495.0917 
+Ih gbar = 0.012381195 
+should be = 0.012704385 
+x = 0.95454545 
+distance(x) = 1515.6229 
+Ih gbar = 0.013300137 
+should be = 0.013325357 
+x = 1 
+distance(x) = 1525.8885 
+Ih gbar = 0.013300137 
+should be = 0.013646983 
+distance 0.0 = 1188.3104 
+distance 0.5 = 1256.5458 
+distance 1.0 = 1324.7811 
+GAcell_v2[0].apic[74] { nseg=7  L=136.471  Ra=100
+	GAcell_v2[0].apic[60] connect GAcell_v2[0].apic[74] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.68}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00617846}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1188.3104 
+Ih gbar = 0.0061784638 
+should be = 0.0061979158 
+x = 0.071428571 
+distance(x) = 1198.0583 
+Ih gbar = 0.0061784638 
+should be = 0.0063419852 
+x = 0.21428571 
+distance(x) = 1217.5541 
+Ih gbar = 0.0064689706 
+should be = 0.0066399702 
+x = 0.35714286 
+distance(x) = 1237.0499 
+Ih gbar = 0.0067727629 
+should be = 0.0069515826 
+x = 0.5 
+distance(x) = 1256.5458 
+Ih gbar = 0.0070904481 
+should be = 0.0072774457 
+x = 0.64285714 
+distance(x) = 1276.0416 
+Ih gbar = 0.0074226618 
+should be = 0.0076182111 
+x = 0.78571429 
+distance(x) = 1295.5374 
+Ih gbar = 0.0077700682 
+should be = 0.0079745603 
+x = 0.92857143 
+distance(x) = 1315.0332 
+Ih gbar = 0.0083211928 
+should be = 0.0083472061 
+x = 1 
+distance(x) = 1324.7811 
+Ih gbar = 0.0083211928 
+should be = 0.0085398718 
+distance 0.0 = 1324.7811 
+distance 0.5 = 1406.3278 
+distance 1.0 = 1487.8746 
+GAcell_v2[0].apic[75] { nseg=9  L=163.093  Ra=100
+	GAcell_v2[0].apic[74] connect GAcell_v2[0].apic[75] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.388446}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00849959}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1324.7811 
+Ih gbar = 0.0084995891 
+should be = 0.0085398718 
+x = 0.055555556 
+distance(x) = 1333.8419 
+Ih gbar = 0.0084995891 
+should be = 0.0087228603 
+x = 0.16666667 
+distance(x) = 1351.9634 
+Ih gbar = 0.0088676992 
+should be = 0.0091004463 
+x = 0.27777778 
+distance(x) = 1370.0848 
+Ih gbar = 0.0092514323 
+should be = 0.0094940572 
+x = 0.38888889 
+distance(x) = 1388.2063 
+Ih gbar = 0.0096514512 
+should be = 0.0099043733 
+x = 0.5 
+distance(x) = 1406.3278 
+Ih gbar = 0.010068447 
+should be = 0.010332104 
+x = 0.61111111 
+distance(x) = 1424.4493 
+Ih gbar = 0.010503141 
+should be = 0.010777987 
+x = 0.72222222 
+distance(x) = 1442.5708 
+Ih gbar = 0.010956283 
+should be = 0.011242794 
+x = 0.83333333 
+distance(x) = 1460.6923 
+Ih gbar = 0.011428657 
+should be = 0.011727328 
+x = 0.94444444 
+distance(x) = 1478.8138 
+Ih gbar = 0.012175073 
+should be = 0.012232425 
+x = 1 
+distance(x) = 1487.8746 
+Ih gbar = 0.012175073 
+should be = 0.012492957 
+distance 0.0 = 1324.7811 
+distance 0.5 = 1418.5424 
+distance 1.0 = 1512.3037 
+GAcell_v2[0].apic[76] { nseg=9  L=187.523  Ra=100
+	GAcell_v2[0].apic[74] connect GAcell_v2[0].apic[76] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.45}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.00852663}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 1324.7811 
+Ih gbar = 0.0085266311 
+should be = 0.0085398718 
+x = 0.055555556 
+distance(x) = 1335.199 
+Ih gbar = 0.0085266311 
+should be = 0.0087505985 
+x = 0.16666667 
+distance(x) = 1356.0349 
+Ih gbar = 0.0089525322 
+should be = 0.009187463 
+x = 0.27777778 
+distance(x) = 1376.8707 
+Ih gbar = 0.0093992816 
+should be = 0.0096457125 
+x = 0.38888889 
+distance(x) = 1397.7066 
+Ih gbar = 0.0098678999 
+should be = 0.010126394 
+x = 0.5 
+distance(x) = 1418.5424 
+Ih gbar = 0.010359458 
+should be = 0.010630605 
+x = 0.61111111 
+distance(x) = 1439.3783 
+Ih gbar = 0.010875078 
+should be = 0.011159498 
+x = 0.72222222 
+distance(x) = 1460.2141 
+Ih gbar = 0.011415938 
+should be = 0.011714281 
+x = 0.83333333 
+distance(x) = 1481.05 
+Ih gbar = 0.011983273 
+should be = 0.01229622 
+x = 0.94444444 
+distance(x) = 1501.8858 
+Ih gbar = 0.012886771 
+should be = 0.012906647 
+x = 1 
+distance(x) = 1512.3037 
+Ih gbar = 0.012886771 
+should be = 0.013222976 
+distance 0.0 = 217.55917 
+distance 0.5 = 274.7091 
+distance 1.0 = 331.85902 
+GAcell_v2[0].apic[77] { nseg=5  L=114.3  Ra=100
+	GAcell_v2[0].apic[19] connect GAcell_v2[0].apic[77] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.602055}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000514126}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 217.55917 
+Ih gbar = 0.000514126 
+should be = 0.00051357532 
+x = 0.1 
+distance(x) = 228.98916 
+Ih gbar = 0.000514126 
+should be = 0.0005318375 
+x = 0.3 
+distance(x) = 251.84913 
+Ih gbar = 0.0005511651 
+should be = 0.00056983006 
+x = 0.5 
+distance(x) = 274.7091 
+Ih gbar = 0.0005901981 
+should be = 0.00060986785 
+x = 0.7 
+distance(x) = 297.56907 
+Ih gbar = 0.0006313323 
+should be = 0.00065206097 
+x = 0.9 
+distance(x) = 320.42904 
+Ih gbar = 0.0006972226 
+should be = 0.00069652543 
+x = 1 
+distance(x) = 331.85902 
+Ih gbar = 0.0006972226 
+should be = 0.00071964738 
+distance 0.0 = 59.648479 
+distance 0.5 = 167.02944 
+distance 1.0 = 274.41039 
+GAcell_v2[0].apic[78] { nseg=11  L=214.762  Ra=100
+	GAcell_v2[0].apic[6] connect GAcell_v2[0].apic[78] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.712429}
+	insert Im { gImbar_Im=0.000381}
+	insert NaTa_t { gNaTa_tbar_NaTa_t=0.0213}
+	insert na_ion { ena=50}
+	insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00881}
+	insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000451}
+	insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00106}
+	insert SK_E2 { gSK_E2bar_SK_E2=0.00284}
+	insert k_ion { ek=-85}
+	insert pas { g_pas=8.22e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.000303231}
+	insert CaDynamics_E2 { gamma_CaDynamics_E2=0.000523 decay_CaDynamics_E2=135 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+	insert ca_ion {}
+}
+x = 0 
+distance(x) = 59.648479 
+Ih gbar = 0.0003032314 
+should be = 0.00030467715 
+x = 0.045454545 
+distance(x) = 69.410384 
+Ih gbar = 0.0003032314 
+should be = 0.00031551412 
+x = 0.13636364 
+distance(x) = 88.934195 
+Ih gbar = 0.0003250845 
+should be = 0.00033792976 
+x = 0.22727273 
+distance(x) = 108.45801 
+Ih gbar = 0.0003479384 
+should be = 0.00036137201 
+x = 0.31818182 
+distance(x) = 127.98182 
+Ih gbar = 0.0003718391 
+should be = 0.0003858879 
+x = 0.40909091 
+distance(x) = 147.50563 
+Ih gbar = 0.0003968343 
+should be = 0.00041152659 
+x = 0.5 
+distance(x) = 167.02944 
+Ih gbar = 0.0004229744 
+should be = 0.00043833952 
+x = 0.59090909 
+distance(x) = 186.55325 
+Ih gbar = 0.0004503116 
+should be = 0.00046638045 
+x = 0.68181818 
+distance(x) = 206.07706 
+Ih gbar = 0.0004789008 
+should be = 0.00049570563 
+x = 0.77272727 
+distance(x) = 225.60087 
+Ih gbar = 0.0005087994 
+should be = 0.00052637388 
+x = 0.86363636 
+distance(x) = 245.12468 
+Ih gbar = 0.0005400674 
+should be = 0.0005584467 
+x = 0.95454545 
+distance(x) = 264.64849 
+Ih gbar = 0.0005896747 
+should be = 0.00059198843 
+x = 1 
+distance(x) = 274.41039 
+Ih gbar = 0.0005896747 
+should be = 0.00060933104 
+distance 0.0 = 11.080941 
+distance 0.5 = 18.137377 
+distance 1.0 = 25.193814 
+GAcell_v2[0].dend[0] { nseg=1  L=14.1129  Ra=100
+	GAcell_v2[0].soma connect GAcell_v2[0].dend[0] (0), 0.977273
+	/* First segment only */
+	insert morphology { diam=2.61633}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 25.193814 
+distance 0.5 = 64.273021 
+distance 1.0 = 103.35223 
+GAcell_v2[0].dend[1] { nseg=3  L=78.1584  Ra=100
+	GAcell_v2[0].dend[0] connect GAcell_v2[0].dend[1] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.981672}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 103.35223 
+distance 0.5 = 147.59967 
+distance 1.0 = 191.84711 
+GAcell_v2[0].dend[2] { nseg=5  L=88.4949  Ra=100
+	GAcell_v2[0].dend[1] connect GAcell_v2[0].dend[2] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.460318}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 103.35223 
+distance 0.5 = 115.4693 
+distance 1.0 = 127.58638 
+GAcell_v2[0].dend[3] { nseg=1  L=24.2342  Ra=100
+	GAcell_v2[0].dend[1] connect GAcell_v2[0].dend[3] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.457994}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 25.193814 
+distance 0.5 = 32.075311 
+distance 1.0 = 38.956808 
+GAcell_v2[0].dend[4] { nseg=1  L=13.763  Ra=100
+	GAcell_v2[0].dend[0] connect GAcell_v2[0].dend[4] (0), 1
+	/* First segment only */
+	insert morphology { diam=1.1472}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 38.956808 
+distance 0.5 = 60.424038 
+distance 1.0 = 81.891268 
+GAcell_v2[0].dend[5] { nseg=3  L=42.9345  Ra=100
+	GAcell_v2[0].dend[4] connect GAcell_v2[0].dend[5] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.801971}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 81.891268 
+distance 0.5 = 149.30261 
+distance 1.0 = 216.71396 
+GAcell_v2[0].dend[6] { nseg=7  L=134.823  Ra=100
+	GAcell_v2[0].dend[5] connect GAcell_v2[0].dend[6] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.459532}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.071428571 
+Ih gbar = 0.0002 
+x = 0.21428571 
+Ih gbar = 0.0002 
+x = 0.35714286 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.64285714 
+Ih gbar = 0.0002 
+x = 0.78571429 
+Ih gbar = 0.0002 
+x = 0.92857143 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 81.891268 
+distance 0.5 = 131.94184 
+distance 1.0 = 181.99241 
+GAcell_v2[0].dend[7] { nseg=5  L=100.101  Ra=100
+	GAcell_v2[0].dend[5] connect GAcell_v2[0].dend[7] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.462318}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 38.956808 
+distance 0.5 = 101.2797 
+distance 1.0 = 163.60258 
+GAcell_v2[0].dend[8] { nseg=7  L=124.646  Ra=100
+	GAcell_v2[0].dend[4] connect GAcell_v2[0].dend[8] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.486578}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.071428571 
+Ih gbar = 0.0002 
+x = 0.21428571 
+Ih gbar = 0.0002 
+x = 0.35714286 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.64285714 
+Ih gbar = 0.0002 
+x = 0.78571429 
+Ih gbar = 0.0002 
+x = 0.92857143 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 163.60258 
+distance 0.5 = 232.7679 
+distance 1.0 = 301.93321 
+GAcell_v2[0].dend[9] { nseg=7  L=138.331  Ra=100
+	GAcell_v2[0].dend[8] connect GAcell_v2[0].dend[9] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.071428571 
+Ih gbar = 0.0002 
+x = 0.21428571 
+Ih gbar = 0.0002 
+x = 0.35714286 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.64285714 
+Ih gbar = 0.0002 
+x = 0.78571429 
+Ih gbar = 0.0002 
+x = 0.92857143 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 163.60258 
+distance 0.5 = 252.11685 
+distance 1.0 = 340.63112 
+GAcell_v2[0].dend[10] { nseg=9  L=177.029  Ra=100
+	GAcell_v2[0].dend[8] connect GAcell_v2[0].dend[10] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.347367}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.055555556 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.27777778 
+Ih gbar = 0.0002 
+x = 0.38888889 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.61111111 
+Ih gbar = 0.0002 
+x = 0.72222222 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 0.94444444 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 25.193814 
+distance 0.5 = 163.52656 
+distance 1.0 = 301.8593 
+GAcell_v2[0].dend[11] { nseg=13  L=276.665  Ra=100
+	GAcell_v2[0].dend[0] connect GAcell_v2[0].dend[11] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=1.24231}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.038461538 
+Ih gbar = 0.0002 
+x = 0.11538462 
+Ih gbar = 0.0002 
+x = 0.19230769 
+Ih gbar = 0.0002 
+x = 0.26923077 
+Ih gbar = 0.0002 
+x = 0.34615385 
+Ih gbar = 0.0002 
+x = 0.42307692 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.57692308 
+Ih gbar = 0.0002 
+x = 0.65384615 
+Ih gbar = 0.0002 
+x = 0.73076923 
+Ih gbar = 0.0002 
+x = 0.80769231 
+Ih gbar = 0.0002 
+x = 0.88461538 
+Ih gbar = 0.0002 
+x = 0.96153846 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 11.080941 
+distance 0.5 = 26.852461 
+distance 1.0 = 42.623981 
+GAcell_v2[0].dend[12] { nseg=1  L=31.543  Ra=100
+	GAcell_v2[0].soma connect GAcell_v2[0].dend[12] (0), 0.781017
+	/* First segment only */
+	insert morphology { diam=2.14225}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 42.623981 
+distance 0.5 = 56.05931 
+distance 1.0 = 69.494638 
+GAcell_v2[0].dend[13] { nseg=1  L=26.8707  Ra=100
+	GAcell_v2[0].dend[12] connect GAcell_v2[0].dend[13] (0), 1
+	/* First segment only */
+	insert morphology { diam=1.09166}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 69.494638 
+distance 0.5 = 148.15739 
+distance 1.0 = 226.82013 
+GAcell_v2[0].dend[14] { nseg=7  L=157.325  Ra=100
+	GAcell_v2[0].dend[13] connect GAcell_v2[0].dend[14] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.692042}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.071428571 
+Ih gbar = 0.0002 
+x = 0.21428571 
+Ih gbar = 0.0002 
+x = 0.35714286 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.64285714 
+Ih gbar = 0.0002 
+x = 0.78571429 
+Ih gbar = 0.0002 
+x = 0.92857143 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 69.494638 
+distance 0.5 = 78.702055 
+distance 1.0 = 87.909472 
+GAcell_v2[0].dend[15] { nseg=1  L=18.4148  Ra=100
+	GAcell_v2[0].dend[13] connect GAcell_v2[0].dend[15] (0), 1
+	/* First segment only */
+	insert morphology { diam=1.02}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 87.909472 
+distance 0.5 = 112.87389 
+distance 1.0 = 137.83831 
+GAcell_v2[0].dend[16] { nseg=3  L=49.9288  Ra=100
+	GAcell_v2[0].dend[15] connect GAcell_v2[0].dend[16] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.652671}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 137.83831 
+distance 0.5 = 183.53232 
+distance 1.0 = 229.22634 
+GAcell_v2[0].dend[17] { nseg=5  L=91.388  Ra=100
+	GAcell_v2[0].dend[16] connect GAcell_v2[0].dend[17] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 137.83831 
+distance 0.5 = 190.13309 
+distance 1.0 = 242.42787 
+GAcell_v2[0].dend[18] { nseg=5  L=104.59  Ra=100
+	GAcell_v2[0].dend[16] connect GAcell_v2[0].dend[18] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 87.909472 
+distance 0.5 = 94.41348 
+distance 1.0 = 100.91749 
+GAcell_v2[0].dend[19] { nseg=1  L=13.008  Ra=100
+	GAcell_v2[0].dend[15] connect GAcell_v2[0].dend[19] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.813881}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 100.91749 
+distance 0.5 = 161.06653 
+distance 1.0 = 221.21558 
+GAcell_v2[0].dend[20] { nseg=7  L=120.298  Ra=100
+	GAcell_v2[0].dend[19] connect GAcell_v2[0].dend[20] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.5848}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.071428571 
+Ih gbar = 0.0002 
+x = 0.21428571 
+Ih gbar = 0.0002 
+x = 0.35714286 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.64285714 
+Ih gbar = 0.0002 
+x = 0.78571429 
+Ih gbar = 0.0002 
+x = 0.92857143 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 221.21558 
+distance 0.5 = 257.89904 
+distance 1.0 = 294.5825 
+GAcell_v2[0].dend[21] { nseg=3  L=73.3669  Ra=100
+	GAcell_v2[0].dend[20] connect GAcell_v2[0].dend[21] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.456668}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 221.21558 
+distance 0.5 = 283.72081 
+distance 1.0 = 346.22603 
+GAcell_v2[0].dend[22] { nseg=7  L=125.01  Ra=100
+	GAcell_v2[0].dend[20] connect GAcell_v2[0].dend[22] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.360196}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.071428571 
+Ih gbar = 0.0002 
+x = 0.21428571 
+Ih gbar = 0.0002 
+x = 0.35714286 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.64285714 
+Ih gbar = 0.0002 
+x = 0.78571429 
+Ih gbar = 0.0002 
+x = 0.92857143 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 100.91749 
+distance 0.5 = 186.33226 
+distance 1.0 = 271.74703 
+GAcell_v2[0].dend[23] { nseg=9  L=170.83  Ra=100
+	GAcell_v2[0].dend[19] connect GAcell_v2[0].dend[23] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.47532}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.055555556 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.27777778 
+Ih gbar = 0.0002 
+x = 0.38888889 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.61111111 
+Ih gbar = 0.0002 
+x = 0.72222222 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 0.94444444 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 42.623981 
+distance 0.5 = 69.029559 
+distance 1.0 = 95.435137 
+GAcell_v2[0].dend[24] { nseg=3  L=52.8112  Ra=100
+	GAcell_v2[0].dend[12] connect GAcell_v2[0].dend[24] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.972298}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 95.435137 
+distance 0.5 = 103.81441 
+distance 1.0 = 112.19368 
+GAcell_v2[0].dend[25] { nseg=1  L=16.7585  Ra=100
+	GAcell_v2[0].dend[24] connect GAcell_v2[0].dend[25] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.57}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 112.19368 
+distance 0.5 = 162.48579 
+distance 1.0 = 212.77791 
+GAcell_v2[0].dend[26] { nseg=5  L=100.584  Ra=100
+	GAcell_v2[0].dend[25] connect GAcell_v2[0].dend[26] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 112.19368 
+distance 0.5 = 132.50976 
+distance 1.0 = 152.82584 
+GAcell_v2[0].dend[27] { nseg=3  L=40.6322  Ra=100
+	GAcell_v2[0].dend[25] connect GAcell_v2[0].dend[27] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.46047}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 95.435137 
+distance 0.5 = 121.19665 
+distance 1.0 = 146.95816 
+GAcell_v2[0].dend[28] { nseg=3  L=51.523  Ra=100
+	GAcell_v2[0].dend[24] connect GAcell_v2[0].dend[28] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.457084}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 42.623981 
+distance 0.5 = 46.253892 
+distance 1.0 = 49.883804 
+GAcell_v2[0].dend[29] { nseg=1  L=7.25982  Ra=100
+	GAcell_v2[0].dend[12] connect GAcell_v2[0].dend[29] (0), 1
+	/* First segment only */
+	insert morphology { diam=1.26329}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 49.883804 
+distance 0.5 = 75.660612 
+distance 1.0 = 101.43742 
+GAcell_v2[0].dend[30] { nseg=3  L=51.5536  Ra=100
+	GAcell_v2[0].dend[29] connect GAcell_v2[0].dend[30] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.866089}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 49.883804 
+distance 0.5 = 55.62674 
+distance 1.0 = 61.369675 
+GAcell_v2[0].dend[31] { nseg=1  L=11.4859  Ra=100
+	GAcell_v2[0].dend[29] connect GAcell_v2[0].dend[31] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.801093}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 61.369675 
+distance 0.5 = 70.526439 
+distance 1.0 = 79.683203 
+GAcell_v2[0].dend[32] { nseg=1  L=18.3135  Ra=100
+	GAcell_v2[0].dend[31] connect GAcell_v2[0].dend[32] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.68}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 79.683203 
+distance 0.5 = 93.974278 
+distance 1.0 = 108.26535 
+GAcell_v2[0].dend[33] { nseg=1  L=28.5822  Ra=100
+	GAcell_v2[0].dend[32] connect GAcell_v2[0].dend[33] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.787551}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 108.26535 
+distance 0.5 = 130.70653 
+distance 1.0 = 153.14771 
+GAcell_v2[0].dend[34] { nseg=3  L=44.8824  Ra=100
+	GAcell_v2[0].dend[33] connect GAcell_v2[0].dend[34] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.722745}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 108.26535 
+distance 0.5 = 138.55381 
+distance 1.0 = 168.84227 
+GAcell_v2[0].dend[35] { nseg=3  L=60.5769  Ra=100
+	GAcell_v2[0].dend[33] connect GAcell_v2[0].dend[35] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.594486}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 79.683203 
+distance 0.5 = 130.68082 
+distance 1.0 = 181.67844 
+GAcell_v2[0].dend[36] { nseg=5  L=101.995  Ra=100
+	GAcell_v2[0].dend[32] connect GAcell_v2[0].dend[36] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.68}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 61.369675 
+distance 0.5 = 72.940963 
+distance 1.0 = 84.512251 
+GAcell_v2[0].dend[37] { nseg=1  L=23.1426  Ra=100
+	GAcell_v2[0].dend[31] connect GAcell_v2[0].dend[37] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.68}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 84.512251 
+distance 0.5 = 98.895415 
+distance 1.0 = 113.27858 
+GAcell_v2[0].dend[38] { nseg=1  L=28.7663  Ra=100
+	GAcell_v2[0].dend[37] connect GAcell_v2[0].dend[38] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.651858}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 113.27858 
+distance 0.5 = 146.77161 
+distance 1.0 = 180.26464 
+GAcell_v2[0].dend[39] { nseg=3  L=66.9861  Ra=100
+	GAcell_v2[0].dend[38] connect GAcell_v2[0].dend[39] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 113.27858 
+distance 0.5 = 134.8532 
+distance 1.0 = 156.42782 
+GAcell_v2[0].dend[40] { nseg=3  L=43.1492  Ra=100
+	GAcell_v2[0].dend[38] connect GAcell_v2[0].dend[40] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.241088}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 84.512251 
+distance 0.5 = 172.70892 
+distance 1.0 = 260.9056 
+GAcell_v2[0].dend[41] { nseg=9  L=176.393  Ra=100
+	GAcell_v2[0].dend[37] connect GAcell_v2[0].dend[41] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.68}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.055555556 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.27777778 
+Ih gbar = 0.0002 
+x = 0.38888889 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.61111111 
+Ih gbar = 0.0002 
+x = 0.72222222 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 0.94444444 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 0 
+distance 0.5 = 14.03057 
+distance 1.0 = 28.061141 
+GAcell_v2[0].dend[42] { nseg=1  L=28.0611  Ra=100
+	GAcell_v2[0].soma connect GAcell_v2[0].dend[42] (0), 0
+	/* First segment only */
+	insert morphology { diam=0.854017}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 28.061141 
+distance 0.5 = 39.014103 
+distance 1.0 = 49.967064 
+GAcell_v2[0].dend[43] { nseg=1  L=21.9059  Ra=100
+	GAcell_v2[0].dend[42] connect GAcell_v2[0].dend[43] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.772243}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 49.967064 
+distance 0.5 = 80.806649 
+distance 1.0 = 111.64623 
+GAcell_v2[0].dend[44] { nseg=3  L=61.6792  Ra=100
+	GAcell_v2[0].dend[43] connect GAcell_v2[0].dend[44] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.68}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 111.64623 
+distance 0.5 = 143.99332 
+distance 1.0 = 176.3404 
+GAcell_v2[0].dend[45] { nseg=3  L=64.6942  Ra=100
+	GAcell_v2[0].dend[44] connect GAcell_v2[0].dend[45] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.453472}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 111.64623 
+distance 0.5 = 151.47778 
+distance 1.0 = 191.30933 
+GAcell_v2[0].dend[46] { nseg=3  L=79.6631  Ra=100
+	GAcell_v2[0].dend[44] connect GAcell_v2[0].dend[46] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 49.967064 
+distance 0.5 = 111.97104 
+distance 1.0 = 173.97501 
+GAcell_v2[0].dend[47] { nseg=7  L=124.008  Ra=100
+	GAcell_v2[0].dend[43] connect GAcell_v2[0].dend[47] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.68}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.071428571 
+Ih gbar = 0.0002 
+x = 0.21428571 
+Ih gbar = 0.0002 
+x = 0.35714286 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.64285714 
+Ih gbar = 0.0002 
+x = 0.78571429 
+Ih gbar = 0.0002 
+x = 0.92857143 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 173.97501 
+distance 0.5 = 237.33965 
+distance 1.0 = 300.70429 
+GAcell_v2[0].dend[48] { nseg=7  L=126.729  Ra=100
+	GAcell_v2[0].dend[47] connect GAcell_v2[0].dend[48] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.454641}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.071428571 
+Ih gbar = 0.0002 
+x = 0.21428571 
+Ih gbar = 0.0002 
+x = 0.35714286 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.64285714 
+Ih gbar = 0.0002 
+x = 0.78571429 
+Ih gbar = 0.0002 
+x = 0.92857143 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 173.97501 
+distance 0.5 = 202.98574 
+distance 1.0 = 231.99647 
+GAcell_v2[0].dend[49] { nseg=3  L=58.0215  Ra=100
+	GAcell_v2[0].dend[47] connect GAcell_v2[0].dend[49] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.454358}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 28.061141 
+distance 0.5 = 35.354764 
+distance 1.0 = 42.648388 
+GAcell_v2[0].dend[50] { nseg=1  L=14.5872  Ra=100
+	GAcell_v2[0].dend[42] connect GAcell_v2[0].dend[50] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.593792}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 42.648388 
+distance 0.5 = 50.845415 
+distance 1.0 = 59.042442 
+GAcell_v2[0].dend[51] { nseg=1  L=16.3941  Ra=100
+	GAcell_v2[0].dend[50] connect GAcell_v2[0].dend[51] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.57}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 59.042442 
+distance 0.5 = 173.72132 
+distance 1.0 = 288.4002 
+GAcell_v2[0].dend[52] { nseg=11  L=229.358  Ra=100
+	GAcell_v2[0].dend[51] connect GAcell_v2[0].dend[52] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.045454545 
+Ih gbar = 0.0002 
+x = 0.13636364 
+Ih gbar = 0.0002 
+x = 0.22727273 
+Ih gbar = 0.0002 
+x = 0.31818182 
+Ih gbar = 0.0002 
+x = 0.40909091 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.59090909 
+Ih gbar = 0.0002 
+x = 0.68181818 
+Ih gbar = 0.0002 
+x = 0.77272727 
+Ih gbar = 0.0002 
+x = 0.86363636 
+Ih gbar = 0.0002 
+x = 0.95454545 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 59.042442 
+distance 0.5 = 109.29901 
+distance 1.0 = 159.55557 
+GAcell_v2[0].dend[53] { nseg=5  L=100.513  Ra=100
+	GAcell_v2[0].dend[51] connect GAcell_v2[0].dend[53] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 42.648388 
+distance 0.5 = 53.800893 
+distance 1.0 = 64.953398 
+GAcell_v2[0].dend[54] { nseg=1  L=22.305  Ra=100
+	GAcell_v2[0].dend[50] connect GAcell_v2[0].dend[54] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.57}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 0 
+distance 0.5 = 6.6963226 
+distance 1.0 = 13.392645 
+GAcell_v2[0].dend[55] { nseg=1  L=13.3926  Ra=100
+	GAcell_v2[0].soma connect GAcell_v2[0].dend[55] (0), 0
+	/* First segment only */
+	insert morphology { diam=1.13}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 13.392645 
+distance 0.5 = 27.7035 
+distance 1.0 = 42.014354 
+GAcell_v2[0].dend[56] { nseg=1  L=28.6217  Ra=100
+	GAcell_v2[0].dend[55] connect GAcell_v2[0].dend[56] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.688636}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 42.014354 
+distance 0.5 = 174.20168 
+distance 1.0 = 306.389 
+GAcell_v2[0].dend[57] { nseg=13  L=264.375  Ra=100
+	GAcell_v2[0].dend[56] connect GAcell_v2[0].dend[57] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.638648}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.038461538 
+Ih gbar = 0.0002 
+x = 0.11538462 
+Ih gbar = 0.0002 
+x = 0.19230769 
+Ih gbar = 0.0002 
+x = 0.26923077 
+Ih gbar = 0.0002 
+x = 0.34615385 
+Ih gbar = 0.0002 
+x = 0.42307692 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.57692308 
+Ih gbar = 0.0002 
+x = 0.65384615 
+Ih gbar = 0.0002 
+x = 0.73076923 
+Ih gbar = 0.0002 
+x = 0.80769231 
+Ih gbar = 0.0002 
+x = 0.88461538 
+Ih gbar = 0.0002 
+x = 0.96153846 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 42.014354 
+distance 0.5 = 82.302557 
+distance 1.0 = 122.59076 
+GAcell_v2[0].dend[58] { nseg=5  L=80.5764  Ra=100
+	GAcell_v2[0].dend[56] connect GAcell_v2[0].dend[58] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.242908}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 13.392645 
+distance 0.5 = 36.874955 
+distance 1.0 = 60.357264 
+GAcell_v2[0].dend[59] { nseg=3  L=46.9646  Ra=100
+	GAcell_v2[0].dend[55] connect GAcell_v2[0].dend[59] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.802443}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 60.357264 
+distance 0.5 = 83.533308 
+distance 1.0 = 106.70935 
+GAcell_v2[0].dend[60] { nseg=3  L=46.3521  Ra=100
+	GAcell_v2[0].dend[59] connect GAcell_v2[0].dend[60] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.577016}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 60.357264 
+distance 0.5 = 77.788784 
+distance 1.0 = 95.220303 
+GAcell_v2[0].dend[61] { nseg=1  L=34.863  Ra=100
+	GAcell_v2[0].dend[59] connect GAcell_v2[0].dend[61] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.502973}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 95.220303 
+distance 0.5 = 128.21783 
+distance 1.0 = 161.21536 
+GAcell_v2[0].dend[62] { nseg=3  L=65.9951  Ra=100
+	GAcell_v2[0].dend[61] connect GAcell_v2[0].dend[62] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.45}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 95.220303 
+distance 0.5 = 127.01314 
+distance 1.0 = 158.80598 
+GAcell_v2[0].dend[63] { nseg=3  L=63.5857  Ra=100
+	GAcell_v2[0].dend[61] connect GAcell_v2[0].dend[63] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.45}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 11.080941 
+distance 0.5 = 28.597344 
+distance 1.0 = 46.113747 
+GAcell_v2[0].dend[64] { nseg=1  L=35.0328  Ra=100
+	GAcell_v2[0].soma connect GAcell_v2[0].dend[64] (0), 0.187136
+	/* First segment only */
+	insert morphology { diam=1.09211}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 46.113747 
+distance 0.5 = 94.187343 
+distance 1.0 = 142.26094 
+GAcell_v2[0].dend[65] { nseg=5  L=96.1472  Ra=100
+	GAcell_v2[0].dend[64] connect GAcell_v2[0].dend[65] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.366243}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 46.113747 
+distance 0.5 = 49.349898 
+distance 1.0 = 52.58605 
+GAcell_v2[0].dend[66] { nseg=1  L=6.4723  Ra=100
+	GAcell_v2[0].dend[64] connect GAcell_v2[0].dend[66] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.80487}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 52.58605 
+distance 0.5 = 158.33192 
+distance 1.0 = 264.07779 
+GAcell_v2[0].dend[67] { nseg=11  L=211.492  Ra=100
+	GAcell_v2[0].dend[66] connect GAcell_v2[0].dend[67] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.574935}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.045454545 
+Ih gbar = 0.0002 
+x = 0.13636364 
+Ih gbar = 0.0002 
+x = 0.22727273 
+Ih gbar = 0.0002 
+x = 0.31818182 
+Ih gbar = 0.0002 
+x = 0.40909091 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.59090909 
+Ih gbar = 0.0002 
+x = 0.68181818 
+Ih gbar = 0.0002 
+x = 0.77272727 
+Ih gbar = 0.0002 
+x = 0.86363636 
+Ih gbar = 0.0002 
+x = 0.95454545 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 52.58605 
+distance 0.5 = 160.72466 
+distance 1.0 = 268.86326 
+GAcell_v2[0].dend[68] { nseg=11  L=216.277  Ra=100
+	GAcell_v2[0].dend[66] connect GAcell_v2[0].dend[68] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.463447}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.045454545 
+Ih gbar = 0.0002 
+x = 0.13636364 
+Ih gbar = 0.0002 
+x = 0.22727273 
+Ih gbar = 0.0002 
+x = 0.31818182 
+Ih gbar = 0.0002 
+x = 0.40909091 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.59090909 
+Ih gbar = 0.0002 
+x = 0.68181818 
+Ih gbar = 0.0002 
+x = 0.77272727 
+Ih gbar = 0.0002 
+x = 0.86363636 
+Ih gbar = 0.0002 
+x = 0.95454545 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 11.080941 
+distance 0.5 = 22.918883 
+distance 1.0 = 34.756824 
+GAcell_v2[0].dend[69] { nseg=1  L=23.6759  Ra=100
+	GAcell_v2[0].soma connect GAcell_v2[0].dend[69] (0), 0.977273
+	/* First segment only */
+	insert morphology { diam=1.3373}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 34.756824 
+distance 0.5 = 49.190057 
+distance 1.0 = 63.62329 
+GAcell_v2[0].dend[70] { nseg=1  L=28.8665  Ra=100
+	GAcell_v2[0].dend[69] connect GAcell_v2[0].dend[70] (0), 1
+	/* First segment only */
+	insert morphology { diam=1.03196}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 63.62329 
+distance 0.5 = 155.03235 
+distance 1.0 = 246.44141 
+GAcell_v2[0].dend[71] { nseg=9  L=182.818  Ra=100
+	GAcell_v2[0].dend[70] connect GAcell_v2[0].dend[71] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.710522}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.055555556 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.27777778 
+Ih gbar = 0.0002 
+x = 0.38888889 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.61111111 
+Ih gbar = 0.0002 
+x = 0.72222222 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 0.94444444 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 63.62329 
+distance 0.5 = 127.3172 
+distance 1.0 = 191.01111 
+GAcell_v2[0].dend[72] { nseg=7  L=127.388  Ra=100
+	GAcell_v2[0].dend[70] connect GAcell_v2[0].dend[72] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.591447}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.071428571 
+Ih gbar = 0.0002 
+x = 0.21428571 
+Ih gbar = 0.0002 
+x = 0.35714286 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.64285714 
+Ih gbar = 0.0002 
+x = 0.78571429 
+Ih gbar = 0.0002 
+x = 0.92857143 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 34.756824 
+distance 0.5 = 56.505115 
+distance 1.0 = 78.253406 
+GAcell_v2[0].dend[73] { nseg=3  L=43.4966  Ra=100
+	GAcell_v2[0].dend[69] connect GAcell_v2[0].dend[73] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.601629}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 78.253406 
+distance 0.5 = 112.8905 
+distance 1.0 = 147.52759 
+GAcell_v2[0].dend[74] { nseg=3  L=69.2742  Ra=100
+	GAcell_v2[0].dend[73] connect GAcell_v2[0].dend[74] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 78.253406 
+distance 0.5 = 85.348897 
+distance 1.0 = 92.444387 
+GAcell_v2[0].dend[75] { nseg=1  L=14.191  Ra=100
+	GAcell_v2[0].dend[73] connect GAcell_v2[0].dend[75] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.57}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 92.444387 
+distance 0.5 = 109.12443 
+distance 1.0 = 125.80448 
+GAcell_v2[0].dend[76] { nseg=1  L=33.3601  Ra=100
+	GAcell_v2[0].dend[75] connect GAcell_v2[0].dend[76] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.455644}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 92.444387 
+distance 0.5 = 111.54307 
+distance 1.0 = 130.64175 
+GAcell_v2[0].dend[77] { nseg=1  L=38.1974  Ra=100
+	GAcell_v2[0].dend[75] connect GAcell_v2[0].dend[77] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.452061}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 11.080941 
+distance 0.5 = 45.312785 
+distance 1.0 = 79.544629 
+GAcell_v2[0].dend[78] { nseg=3  L=68.4637  Ra=100
+	GAcell_v2[0].soma connect GAcell_v2[0].dend[78] (0), 0.345261
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.888209}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 79.544629 
+distance 0.5 = 81.192635 
+distance 1.0 = 82.84064 
+GAcell_v2[0].dend[79] { nseg=1  L=3.29601  Ra=100
+	GAcell_v2[0].dend[78] connect GAcell_v2[0].dend[79] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.973188}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 82.84064 
+distance 0.5 = 116.01665 
+distance 1.0 = 149.19266 
+GAcell_v2[0].dend[80] { nseg=3  L=66.352  Ra=100
+	GAcell_v2[0].dend[79] connect GAcell_v2[0].dend[80] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.589048}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 149.19266 
+distance 0.5 = 199.461 
+distance 1.0 = 249.72935 
+GAcell_v2[0].dend[81] { nseg=5  L=100.537  Ra=100
+	GAcell_v2[0].dend[80] connect GAcell_v2[0].dend[81] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.349649}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 149.19266 
+distance 0.5 = 175.67803 
+distance 1.0 = 202.16341 
+GAcell_v2[0].dend[82] { nseg=3  L=52.9707  Ra=100
+	GAcell_v2[0].dend[80] connect GAcell_v2[0].dend[82] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.57}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 82.84064 
+distance 0.5 = 142.67923 
+distance 1.0 = 202.51782 
+GAcell_v2[0].dend[83] { nseg=5  L=119.677  Ra=100
+	GAcell_v2[0].dend[79] connect GAcell_v2[0].dend[83] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.648632}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 202.51782 
+distance 0.5 = 233.70355 
+distance 1.0 = 264.88928 
+GAcell_v2[0].dend[84] { nseg=3  L=62.3715  Ra=100
+	GAcell_v2[0].dend[83] connect GAcell_v2[0].dend[84] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.351673}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.16666667 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.83333333 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 202.51782 
+distance 0.5 = 210.38829 
+distance 1.0 = 218.25875 
+GAcell_v2[0].dend[85] { nseg=1  L=15.7409  Ra=100
+	GAcell_v2[0].dend[83] connect GAcell_v2[0].dend[85] (0), 1
+	/* First segment only */
+	insert morphology { diam=0.364963}
+	insert capacitance { cm=2}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 79.544629 
+distance 0.5 = 127.536 
+distance 1.0 = 175.52737 
+GAcell_v2[0].dend[86] { nseg=5  L=95.9827  Ra=100
+	GAcell_v2[0].dend[78] connect GAcell_v2[0].dend[86] (0), 1
+	/* First segment only */
+	insert capacitance { cm=2}
+	insert morphology { diam=0.458263}
+	insert pas { g_pas=7.97e-05 e_pas=-90}
+	insert Ih { gIhbar_Ih=0.0002}
+}
+x = 0 
+Ih gbar = 0.0002 
+x = 0.1 
+Ih gbar = 0.0002 
+x = 0.3 
+Ih gbar = 0.0002 
+x = 0.5 
+Ih gbar = 0.0002 
+x = 0.7 
+Ih gbar = 0.0002 
+x = 0.9 
+Ih gbar = 0.0002 
+x = 1 
+Ih gbar = 0.0002 
+distance 0.0 = 11.080941 
+distance 0.5 = 26.080941 
+distance 1.0 = 41.080941 
+GAcell_v2[0].axon[0] { nseg=1  L=30  Ra=100
+	GAcell_v2[0].soma connect GAcell_v2[0].axon[0] (0), 0.5
+	/* First segment only */
+	insert morphology { diam=1}
+	insert capacitance { cm=1}
+	insert pas { g_pas=4.43e-05 e_pas=-90}
+}
+distance 0.0 = 41.080941 
+distance 0.5 = 56.080941 
+distance 1.0 = 71.080941 
+GAcell_v2[0].axon[1] { nseg=1  L=30  Ra=100
+	GAcell_v2[0].axon[0] connect GAcell_v2[0].axon[1] (0), 1
+	/* First segment only */
+	insert morphology { diam=1}
+	insert capacitance { cm=1}
+	insert pas { g_pas=4.43e-05 e_pas=-90}
+}
+error after was
+2.69654	3.02527	1.06	0.55603	0	
+
+expected error was
+2.7	3.02	1.09	0.817	0	
+
+Sum of error is 7.3378476 
+count of target trace list is 4 

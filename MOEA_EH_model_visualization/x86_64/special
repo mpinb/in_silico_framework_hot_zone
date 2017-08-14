@@ -1,0 +1,13 @@
+#!/bin/sh
+if test "x${NRNHOME}" = "x" ; then
+	NRNHOME="/nas1/Data_arco/prgr/neuron/nrn"
+fi
+if test "x${NRNBIN}" = "x" ; then
+	NRNBIN="/nas1/Data_arco/prgr/neuron/nrn/x86_64/bin/"
+fi
+if test "" = "yes" ; then
+	NRNIV="${NRNBIN}nrniv.app/Contents/MacOS/nrniv"
+else
+	NRNIV="${NRNBIN}nrniv"
+fi
+"${NRNIV}" -dll "/nas1/Data_arco/project_src/MOEA_EH_model_visualization/x86_64/.libs/libnrnmech.so" "$@"

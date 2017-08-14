@@ -1,0 +1,4139 @@
+numprocs=7
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+		1 
+	1 
+	1 
+	1 
+1 
+	1 
+	1 
+	1 
+		1 
+	1 
+	1 
+1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	1 
+	0 
+	0 
+	0 
+	0 
+	0 
+	0 
+	0 
+Creating cell
+Creating cell
+Creating cell
+Creating cell
+Creating cell
+Creating cell
+Creating cell
+/*---------------------------------------------------------------------------*/
+/* Special case 86_L5_CDK20041214:                                           */
+/* Scale diameter of apical dendrites 0-32 by 2.5 (RE)                       */
+/* Otherwise, apical trunk is too thin (<2mu) to allow coupling between      */
+/* somatic Na+ and apical Ca2+ spiking zones                                 */
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/* Special case 86_L5_CDK20041214:                                           */
+/* Scale diameter of apical dendrites 0-32 by 2.5 (RE)                       */
+/* Otherwise, apical trunk is too thin (<2mu) to allow coupling between      */
+/* somatic Na+ and apical Ca2+ spiking zones                                 */
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/* Special case 86_L5_CDK20041214:                                           */
+/* Scale diameter of apical dendrites 0-32 by 2.5 (RE)                       */
+/* Otherwise, apical trunk is too thin (<2mu) to allow coupling between      */
+/* somatic Na+ and apical Ca2+ spiking zones                                 */
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/* Special case 86_L5_CDK20041214:                                           */
+/* Scale diameter of apical dendrites 0-32 by 2.5 (RE)                       */
+/* Otherwise, apical trunk is too thin (<2mu) to allow coupling between      */
+/* somatic Na+ and apical Ca2+ spiking zones                                 */
+/*---------------------------------------------------------------------------*/
+full list is of length 2 
+target trace list still unassigned
+/*---------------------------------------------------------------------------*/
+/* Special case 86_L5_CDK20041214:                                           */
+/* Scale diameter of apical dendrites 0-32 by 2.5 (RE)                       */
+/* Otherwise, apical trunk is too thin (<2mu) to allow coupling between      */
+/* somatic Na+ and apical Ca2+ spiking zones                                 */
+/*---------------------------------------------------------------------------*/
+full list is of length 2 
+target trace list still unassigned
+full list is of length 2 
+target trace list still unassigned
+full list is of length 2 
+target trace list still unassigned
+full list is of length 2 
+target trace list still unassigned
+/*---------------------------------------------------------------------------*/
+/* Special case 86_L5_CDK20041214:                                           */
+/* Scale diameter of apical dendrites 0-32 by 2.5 (RE)                       */
+/* Otherwise, apical trunk is too thin (<2mu) to allow coupling between      */
+/* somatic Na+ and apical Ca2+ spiking zones                                 */
+/*---------------------------------------------------------------------------*/
+full list is of length 2 
+full list is of length 2 
+full list is of length 2 
+full list is of length 2 
+	0 
+	0 
+	0 
+	0 
+	0 
+	0 
+full list is of length 2 
+	0 
+target trace list still unassigned
+	0 
+full list is of length 2 
+	0 
+	0 
+full list is of length 2 
+	0 
+	0 
+	0 
+record path is ga_result_86_CDK20041214_BAC_run1_seed_1234
+/*---------------------------------------------------------------------------*/
+/* Special case 86_L5_CDK20041214:                                           */
+/* Scale diameter of apical dendrites 0-32 by 2.5 (RE)                       */
+/* Otherwise, apical trunk is too thin (<2mu) to allow coupling between      */
+/* somatic Na+ and apical Ca2+ spiking zones                                 */
+/*---------------------------------------------------------------------------*/
+genome file printed
+full list is of length 2 
+target trace list still unassigned
+full list is of length 2 
+	0 
+	0 
+Commencing run
+	0 
+	0 
+Organism calculation in generation 0 took 342.23006 
+Minimum error in this generation is 230.32084 
+Calculation of fronts took 3.999552 
+39  unique solutions in first front
+generation ran for  346.33592 
+
+Organism calculation in generation 1 took 353.87532 
+Minimum error in this generation is 229.85154 
+Calculation of fronts took 4.054894 
+38  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  358.07884 
+
+Organism calculation in generation 2 took 354.72028 
+Minimum error in this generation is 229.85154 
+Calculation of fronts took 3.6217389 
+47  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  358.50222 
+
+Organism calculation in generation 3 took 348.88229 
+Minimum error in this generation is 229.85154 
+Calculation of fronts took 3.5259171 
+65  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  352.60012 
+
+Organism calculation in generation 4 took 349.69767 
+Minimum error in this generation is 229.85154 
+Calculation of fronts took 3.4524848 
+78  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  353.36342 
+
+Organism calculation in generation 5 took 353.04157 
+Minimum error in this generation is 229.8358 
+Calculation of fronts took 3.4539862 
+83  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  356.70139 
+
+Organism calculation in generation 6 took 350.06897 
+Minimum error in this generation is 229.8358 
+Calculation of fronts took 3.454767 
+80  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  353.73046 
+
+Organism calculation in generation 7 took 345.18792 
+Minimum error in this generation is 229.82268 
+Calculation of fronts took 3.3788218 
+83  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  348.79612 
+
+Organism calculation in generation 8 took 347.34803 
+Minimum error in this generation is 229.18445 
+Calculation of fronts took 3.46122 
+87  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  351.02636 
+
+Organism calculation in generation 9 took 349.23363 
+Minimum error in this generation is 229.18445 
+Calculation of fronts took 3.4378741 
+76  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  352.89681 
+
+Organism calculation in generation 10 took 348.844 
+Minimum error in this generation is 229.18445 
+Calculation of fronts took 3.404058 
+68  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  352.47842 
+
+Organism calculation in generation 11 took 349.29252 
+Minimum error in this generation is 133.87357 
+Calculation of fronts took 5.2700341 
+36  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  354.74393 
+
+Organism calculation in generation 12 took 342.49457 
+Minimum error in this generation is 133.87357 
+Calculation of fronts took 4.0526619 
+39  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  346.7204 
+
+Organism calculation in generation 13 took 341.01891 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 5.9425349 
+27  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  347.11012 
+
+Organism calculation in generation 14 took 327.22171 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 4.0082469 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.37026 
+
+Organism calculation in generation 15 took 329.03682 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 4.0151289 
+32  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.208 
+
+Organism calculation in generation 16 took 334.11458 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.774153 
+28  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  338.03855 
+
+Organism calculation in generation 17 took 326.8699 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.7114351 
+27  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.73786 
+
+Organism calculation in generation 18 took 328.21847 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.742599 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.11729 
+
+Organism calculation in generation 19 took 333.17932 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.7481661 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  337.08691 
+
+Organism calculation in generation 20 took 327.47555 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.7418861 
+33  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.3743 
+
+Organism calculation in generation 21 took 327.58134 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.7379332 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.47871 
+
+Organism calculation in generation 22 took 330.12484 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.782969 
+27  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  334.07049 
+
+Organism calculation in generation 23 took 326.78865 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.693311 
+27  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.64651 
+
+Organism calculation in generation 24 took 326.45038 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.764663 
+24  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.3875 
+
+Organism calculation in generation 25 took 328.52423 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.89224 
+22  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.58175 
+
+Organism calculation in generation 26 took 340.37321 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.8875551 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  344.42314 
+
+Organism calculation in generation 27 took 329.703 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.730413 
+22  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.59626 
+
+Organism calculation in generation 28 took 328.77089 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.7461991 
+25  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.67889 
+
+Organism calculation in generation 29 took 326.55334 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.717442 
+27  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.4384 
+
+Organism calculation in generation 30 took 334.36138 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.723599 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  338.26118 
+
+Organism calculation in generation 31 took 329.10198 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.708863 
+29  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.00017 
+
+Organism calculation in generation 32 took 331.5343 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.671577 
+33  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  335.38813 
+
+Organism calculation in generation 33 took 330.0705 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.706902 
+34  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.94567 
+
+Organism calculation in generation 34 took 326.71473 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6804471 
+38  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.56323 
+
+Organism calculation in generation 35 took 335.98347 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6656868 
+35  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  339.82738 
+
+Organism calculation in generation 36 took 330.43367 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6322589 
+27  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  334.2361 
+
+Organism calculation in generation 37 took 328.08559 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.7243412 
+21  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.97838 
+
+Organism calculation in generation 38 took 331.71349 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.7678509 
+19  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  335.64744 
+
+Organism calculation in generation 39 took 327.81036 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6872571 
+20  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.6631 
+
+Organism calculation in generation 40 took 330.36055 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.733011 
+19  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  334.27375 
+
+Organism calculation in generation 41 took 326.43693 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.7079999 
+22  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.31962 
+
+Organism calculation in generation 42 took 327.30471 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.5960848 
+23  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.08287 
+
+Organism calculation in generation 43 took 329.26051 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6556711 
+23  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.08902 
+
+Organism calculation in generation 44 took 334.81524 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6602919 
+24  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  338.65438 
+
+Organism calculation in generation 45 took 332.45673 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6752129 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  336.30715 
+
+Organism calculation in generation 46 took 331.46886 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.5780602 
+29  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  335.22478 
+
+Organism calculation in generation 47 took 327.3947 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.682503 
+29  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.25793 
+
+Organism calculation in generation 48 took 328.95375 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.581845 
+24  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.70893 
+
+Organism calculation in generation 49 took 330.66257 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6319849 
+25  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  334.46974 
+
+Organism calculation in generation 50 took 328.25979 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.669873 
+23  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.11293 
+
+Organism calculation in generation 51 took 326.13431 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.7012289 
+23  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.01208 
+
+Organism calculation in generation 52 took 328.08533 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.7659171 
+23  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.03201 
+
+Organism calculation in generation 53 took 325.09825 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6144118 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.88857 
+
+Organism calculation in generation 54 took 328.38411 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.5873718 
+24  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.15411 
+
+Organism calculation in generation 55 took 327.09236 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6968012 
+24  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.96597 
+
+Organism calculation in generation 56 took 321.7245 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.5589619 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  325.46011 
+
+Organism calculation in generation 57 took 327.15869 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.5533202 
+27  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.8891 
+
+Organism calculation in generation 58 took 327.52422 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.477634 
+29  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.17147 
+
+Organism calculation in generation 59 took 327.58946 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.577194 
+30  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.3461 
+
+Organism calculation in generation 60 took 324.16158 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6325378 
+29  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.98185 
+
+Organism calculation in generation 61 took 323.17873 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6115351 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  326.97207 
+
+Organism calculation in generation 62 took 332.78489 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.6055019 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  336.57154 
+
+Organism calculation in generation 63 took 326.55472 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.644613 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.38101 
+
+Organism calculation in generation 64 took 324.03942 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.5788009 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.79846 
+
+Organism calculation in generation 65 took 324.8656 
+Minimum error in this generation is 127.76095 
+Calculation of fronts took 3.600693 
+32  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.64556 
+
+Organism calculation in generation 66 took 329.38683 
+Minimum error in this generation is 127.19792 
+Calculation of fronts took 3.6103458 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.18027 
+
+Organism calculation in generation 67 took 323.25766 
+Minimum error in this generation is 127.19792 
+Calculation of fronts took 3.6403232 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.07601 
+
+Organism calculation in generation 68 took 328.09004 
+Minimum error in this generation is 127.19792 
+Calculation of fronts took 3.5962179 
+24  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.86635 
+
+Organism calculation in generation 69 took 323.61641 
+Minimum error in this generation is 127.19792 
+Calculation of fronts took 3.5752871 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.37099 
+
+Organism calculation in generation 70 took 325.93729 
+Minimum error in this generation is 127.19792 
+Calculation of fronts took 3.5792351 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.70487 
+
+Organism calculation in generation 71 took 325.82021 
+Minimum error in this generation is 127.19792 
+Calculation of fronts took 3.5556481 
+28  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.56177 
+
+Organism calculation in generation 72 took 327.14021 
+Minimum error in this generation is 127.19792 
+Calculation of fronts took 3.5638011 
+28  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.88465 
+
+Organism calculation in generation 73 took 325.39029 
+Minimum error in this generation is 127.19792 
+Calculation of fronts took 3.5825942 
+29  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.15316 
+
+Organism calculation in generation 74 took 327.33123 
+Minimum error in this generation is 127.19792 
+Calculation of fronts took 3.535742 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.04396 
+
+Organism calculation in generation 75 took 327.94108 
+Minimum error in this generation is 127.19792 
+Calculation of fronts took 3.5697091 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.68454 
+
+Organism calculation in generation 76 took 325.74805 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 4.2837989 
+29  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.1977 
+
+Organism calculation in generation 77 took 331.6223 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5675051 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  335.36227 
+
+Organism calculation in generation 78 took 330.20773 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5740318 
+32  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.96255 
+
+Organism calculation in generation 79 took 323.29993 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.674161 
+32  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.15238 
+
+Organism calculation in generation 80 took 326.92492 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.6017139 
+33  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.70339 
+
+Organism calculation in generation 81 took 330.27294 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.602237 
+32  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  334.04781 
+
+Organism calculation in generation 82 took 328.08012 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.590734 
+34  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.84769 
+
+Organism calculation in generation 83 took 325.16717 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5697331 
+36  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.9123 
+
+Organism calculation in generation 84 took 322.68455 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.658325 
+38  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  326.51438 
+
+Organism calculation in generation 85 took 324.3432 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5982881 
+35  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.11358 
+
+Organism calculation in generation 86 took 329.17072 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5958281 
+37  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.9493 
+
+Organism calculation in generation 87 took 324.37503 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5581131 
+39  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.11198 
+
+Organism calculation in generation 88 took 328.56031 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5220861 
+39  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.26503 
+
+Organism calculation in generation 89 took 328.42077 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.562525 
+40  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.163 
+
+Organism calculation in generation 90 took 321.95593 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.499274 
+42  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  325.64161 
+
+Organism calculation in generation 91 took 324.63012 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.6679718 
+32  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.48922 
+
+Organism calculation in generation 92 took 325.88345 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.534313 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.59361 
+
+Organism calculation in generation 93 took 322.67461 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5562119 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  326.416 
+
+Organism calculation in generation 94 took 325.38142 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.4888771 
+32  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.04623 
+
+Organism calculation in generation 95 took 327.50627 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5263591 
+32  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.22337 
+
+Organism calculation in generation 96 took 325.62761 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.4905741 
+34  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.2997 
+
+Organism calculation in generation 97 took 326.63104 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.489084 
+35  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.30019 
+
+Organism calculation in generation 98 took 328.05217 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.4403582 
+37  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.67422 
+
+Organism calculation in generation 99 took 322.76166 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5526111 
+40  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  326.49527 
+
+Organism calculation in generation 100 took 322.88589 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5805509 
+37  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  326.65168 
+
+Organism calculation in generation 101 took 326.56189 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.6508639 
+38  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.40359 
+
+Organism calculation in generation 102 took 324.19919 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.446764 
+40  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.83989 
+
+Organism calculation in generation 103 took 326.86574 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.444566 
+43  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.49319 
+
+Organism calculation in generation 104 took 324.5086 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.544488 
+43  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.2353 
+
+Organism calculation in generation 105 took 321.84553 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.470732 
+45  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  325.50515 
+
+Organism calculation in generation 106 took 326.8832 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.50317 
+47  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.58391 
+
+Organism calculation in generation 107 took 330.75607 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.4484811 
+49  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  334.40424 
+
+Organism calculation in generation 108 took 330.77946 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5645502 
+51  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  334.52403 
+
+Organism calculation in generation 109 took 324.33337 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.4437921 
+52  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.96042 
+
+Organism calculation in generation 110 took 327.36154 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5868828 
+55  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.15413 
+
+Organism calculation in generation 111 took 322.33361 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.4515119 
+56  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  325.97123 
+
+Organism calculation in generation 112 took 328.95751 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.592411 
+57  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.73254 
+
+Organism calculation in generation 113 took 327.41328 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.4394331 
+59  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.0411 
+
+Organism calculation in generation 114 took 324.1728 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5079 
+58  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.86929 
+
+Organism calculation in generation 115 took 326.00017 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5200591 
+60  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.71193 
+
+Organism calculation in generation 116 took 325.69154 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.502234 
+60  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.37917 
+
+Organism calculation in generation 117 took 322.51429 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5370002 
+64  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  326.24731 
+
+Organism calculation in generation 118 took 323.99 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.524524 
+65  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.71265 
+
+Organism calculation in generation 119 took 322.51099 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.464833 
+57  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  326.16324 
+
+Organism calculation in generation 120 took 326.00975 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.518312 
+58  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.72213 
+
+Organism calculation in generation 121 took 325.0699 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.4871562 
+61  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.74553 
+
+Organism calculation in generation 122 took 329.54725 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.427089 
+63  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.16545 
+
+Organism calculation in generation 123 took 328.0777 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5665731 
+64  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.84066 
+
+Organism calculation in generation 124 took 328.82759 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5881541 
+66  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.60779 
+
+Organism calculation in generation 125 took 323.3112 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.437072 
+67  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  326.95117 
+
+Organism calculation in generation 126 took 324.94425 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.4093509 
+67  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.54759 
+
+Organism calculation in generation 127 took 326.41723 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5096421 
+65  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.1142 
+
+Organism calculation in generation 128 took 322.91916 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.4164872 
+66  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  326.52402 
+
+Organism calculation in generation 129 took 325.937 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.469815 
+68  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.59928 
+
+Organism calculation in generation 130 took 325.23144 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.6044459 
+62  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.02095 
+
+Organism calculation in generation 131 took 326.46275 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.550416 
+64  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.19871 
+
+Organism calculation in generation 132 took 324.63229 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5775499 
+68  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.39589 
+
+Organism calculation in generation 133 took 328.13965 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.4826109 
+68  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.82447 
+
+Organism calculation in generation 134 took 322.87821 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.399637 
+69  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  326.48273 
+
+Organism calculation in generation 135 took 329.42989 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.3826082 
+69  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.00587 
+
+Organism calculation in generation 136 took 321.70216 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5605109 
+65  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  325.45067 
+
+Organism calculation in generation 137 took 326.51203 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.516618 
+66  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.22343 
+
+Organism calculation in generation 138 took 323.4078 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.449477 
+68  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.05169 
+
+Organism calculation in generation 139 took 328.19409 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5143461 
+72  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.90076 
+
+Organism calculation in generation 140 took 319.65672 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.5305641 
+73  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  323.38398 
+
+Organism calculation in generation 141 took 323.91221 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.413995 
+75  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.51864 
+
+Organism calculation in generation 142 took 329.69719 
+Minimum error in this generation is 124.50557 
+Calculation of fronts took 3.453594 
+76  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.3404 
+
+Organism calculation in generation 143 took 325.31787 
+Minimum error in this generation is 124.06363 
+Calculation of fronts took 3.3979468 
+71  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.91044 
+
+Organism calculation in generation 144 took 326.19817 
+Minimum error in this generation is 124.06363 
+Calculation of fronts took 3.4399581 
+74  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.8312 
+
+Organism calculation in generation 145 took 328.05981 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 4.253072 
+59  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.49406 
+
+Organism calculation in generation 146 took 328.87347 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.4297011 
+59  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.50202 
+
+Organism calculation in generation 147 took 328.61364 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.580317 
+60  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.3717 
+
+Organism calculation in generation 148 took 327.23375 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.5431371 
+61  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.97159 
+
+Organism calculation in generation 149 took 328.7258 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.5168931 
+63  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.42689 
+
+Organism calculation in generation 150 took 327.28725 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.4823909 
+63  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.95541 
+
+Organism calculation in generation 151 took 325.99839 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.6436601 
+65  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.82986 
+
+Organism calculation in generation 152 took 328.94292 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.4776001 
+67  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.61101 
+
+Organism calculation in generation 153 took 332.57281 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.4937401 
+66  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  336.25692 
+
+Organism calculation in generation 154 took 330.00318 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.720571 
+66  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.91039 
+
+Organism calculation in generation 155 took 330.01218 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.4776652 
+70  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.69338 
+
+Organism calculation in generation 156 took 328.4091 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.533617 
+69  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.14027 
+
+Organism calculation in generation 157 took 329.4538 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.577559 
+62  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.21991 
+
+Organism calculation in generation 158 took 329.23735 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.740952 
+62  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.16824 
+
+Organism calculation in generation 159 took 323.99364 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.6493518 
+65  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.84478 
+
+Organism calculation in generation 160 took 328.54721 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.511374 
+68  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  332.24597 
+
+Organism calculation in generation 161 took 326.90188 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.566931 
+68  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  330.655 
+
+Organism calculation in generation 162 took 324.85623 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.6223831 
+68  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.67046 
+
+Organism calculation in generation 163 took 325.95184 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.769388 
+67  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.92053 
+
+Organism calculation in generation 164 took 325.37728 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.511405 
+71  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.08206 
+
+Organism calculation in generation 165 took 325.41064 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.575382 
+72  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.17462 
+
+Organism calculation in generation 166 took 324.92695 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.6399021 
+75  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  328.75656 
+
+Organism calculation in generation 167 took 331.23534 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.8298178 
+63  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  335.25191 
+
+Organism calculation in generation 168 took 325.57392 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.574348 
+65  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  329.34066 
+
+Organism calculation in generation 169 took 329.13564 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.7444191 
+66  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  333.06459 
+
+Organism calculation in generation 170 took 327.22017 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.7601569 
+67  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.16542 
+
+Organism calculation in generation 171 took 323.82672 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.553612 
+67  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  327.56243 
+
+Organism calculation in generation 172 took 333.01868 
+Minimum error in this generation is 121.15971 
+Calculation of fronts took 3.600383 
+67  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  336.80105 
+
+Organism calculation in generation 173 took 327.54864 
+Minimum error in this generation is 35.146898 
+Calculation of fronts took 3.502378 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.23785 
+
+Organism calculation in generation 174 took 327.47263 
+Minimum error in this generation is 35.146898 
+Calculation of fronts took 3.5248568 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  331.1892 
+
+Organism calculation in generation 175 took 334.01989 
+Minimum error in this generation is 35.146898 
+Calculation of fronts took 3.4050069 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  337.61663 
+
+Organism calculation in generation 176 took 338.81545 
+Minimum error in this generation is 35.146898 
+Calculation of fronts took 3.4745369 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  342.4824 
+
+Organism calculation in generation 177 took 337.71176 
+Minimum error in this generation is 35.146898 
+Calculation of fronts took 3.469516 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  341.36727 
+
+Organism calculation in generation 178 took 335.90813 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.4268448 
+2  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  339.53142 
+
+Organism calculation in generation 179 took 342.958 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.4955099 
+2  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  346.64854 
+
+Organism calculation in generation 180 took 346.5371 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.440824 
+2  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  350.17802 
+
+Organism calculation in generation 181 took 344.33675 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.533442 
+2  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  348.07477 
+
+Organism calculation in generation 182 took 346.04036 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.4277661 
+2  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  349.67217 
+
+Organism calculation in generation 183 took 352.92936 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.4166579 
+2  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  356.55273 
+
+Organism calculation in generation 184 took 358.55617 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.5570731 
+2  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  362.32441 
+
+Organism calculation in generation 185 took 352.64709 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.5703061 
+2  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  356.42773 
+
+Organism calculation in generation 186 took 354.42202 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.487498 
+2  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  358.12189 
+
+Organism calculation in generation 187 took 365.30374 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.489953 
+2  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  369.01492 
+
+Organism calculation in generation 188 took 366.50466 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.430583 
+2  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  370.15859 
+
+Organism calculation in generation 189 took 366.10966 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.4628441 
+3  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  369.78864 
+
+Organism calculation in generation 190 took 375.3295 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.5186851 
+3  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  379.0596 
+
+Organism calculation in generation 191 took 374.47337 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.4336691 
+3  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  378.13548 
+
+Organism calculation in generation 192 took 384.84701 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.469573 
+3  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.53705 
+
+Organism calculation in generation 193 took 370.37358 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.4988539 
+4  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  374.10375 
+
+Organism calculation in generation 194 took 379.32485 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.495997 
+5  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  383.04509 
+
+Organism calculation in generation 195 took 375.38954 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.4778199 
+5  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  379.10866 
+
+Organism calculation in generation 196 took 371.60208 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.4171839 
+5  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  375.25681 
+
+Organism calculation in generation 197 took 372.10888 
+Minimum error in this generation is 27.841053 
+Calculation of fronts took 3.459137 
+6  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  375.80073 
+
+Organism calculation in generation 198 took 372.4094 
+Minimum error in this generation is 24.440749 
+Calculation of fronts took 3.4640369 
+7  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  376.10911 
+
+Organism calculation in generation 199 took 376.37718 
+Minimum error in this generation is 24.440749 
+Calculation of fronts took 3.4196401 
+9  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  380.03133 
+
+Organism calculation in generation 200 took 383.97313 
+Minimum error in this generation is 24.440749 
+Calculation of fronts took 3.5607162 
+10  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.76596 
+
+Organism calculation in generation 201 took 390.70766 
+Minimum error in this generation is 24.440749 
+Calculation of fronts took 3.52599 
+11  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.47014 
+
+Organism calculation in generation 202 took 370.98335 
+Minimum error in this generation is 24.440749 
+Calculation of fronts took 3.525543 
+11  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  374.75461 
+
+Organism calculation in generation 203 took 387.60881 
+Minimum error in this generation is 24.440749 
+Calculation of fronts took 3.5064259 
+11  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.35644 
+
+Organism calculation in generation 204 took 376.5764 
+Minimum error in this generation is 17.722106 
+Calculation of fronts took 3.4253659 
+12  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  380.24638 
+
+Organism calculation in generation 205 took 378.70051 
+Minimum error in this generation is 17.073861 
+Calculation of fronts took 3.424459 
+12  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  382.37425 
+
+Organism calculation in generation 206 took 373.04544 
+Minimum error in this generation is 17.073861 
+Calculation of fronts took 3.5595021 
+12  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  376.85845 
+
+Organism calculation in generation 207 took 378.48578 
+Minimum error in this generation is 17.073861 
+Calculation of fronts took 3.5334761 
+12  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  382.27894 
+
+Organism calculation in generation 208 took 384.24427 
+Minimum error in this generation is 17.073861 
+Calculation of fronts took 3.521683 
+13  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.03598 
+
+Organism calculation in generation 209 took 382.11014 
+Minimum error in this generation is 17.073861 
+Calculation of fronts took 3.517453 
+16  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  385.88436 
+
+Organism calculation in generation 210 took 380.5338 
+Minimum error in this generation is 17.073861 
+Calculation of fronts took 3.5830381 
+16  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.37614 
+
+Organism calculation in generation 211 took 389.84414 
+Minimum error in this generation is 17.073861 
+Calculation of fronts took 3.5613401 
+17  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.66716 
+
+Organism calculation in generation 212 took 379.9646 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.5078509 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  383.74395 
+
+Organism calculation in generation 213 took 382.34938 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.5849998 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.20293 
+
+Organism calculation in generation 214 took 378.10568 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.5458419 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  381.91955 
+
+Organism calculation in generation 215 took 382.90245 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.5475779 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.7226 
+
+Organism calculation in generation 216 took 380.60612 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.6657531 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.54696 
+
+Organism calculation in generation 217 took 381.34024 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.682483 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  385.29778 
+
+Organism calculation in generation 218 took 374.19659 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.644063 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  378.13953 
+
+Organism calculation in generation 219 took 385.19503 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.681509 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.16749 
+
+Organism calculation in generation 220 took 372.69719 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 4.324929 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  377.31379 
+
+Organism calculation in generation 221 took 376.26064 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.7556312 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  380.31561 
+
+Organism calculation in generation 222 took 378.1914 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.76562 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  382.25427 
+
+Organism calculation in generation 223 took 382.979 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.728158 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.01361 
+
+Organism calculation in generation 224 took 386.01422 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.8276162 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.15887 
+
+Organism calculation in generation 225 took 378.79944 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.8518178 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  382.9653 
+
+Organism calculation in generation 226 took 378.4762 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 4.0471199 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  382.83817 
+
+Organism calculation in generation 227 took 385.92206 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 4.0258479 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.26329 
+
+Organism calculation in generation 228 took 384.76102 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 4.0041518 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.07758 
+
+Organism calculation in generation 229 took 378.11131 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 4.0446341 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  382.49129 
+
+Organism calculation in generation 230 took 383.74386 
+Minimum error in this generation is 14.614155 
+Calculation of fronts took 3.9227462 
+1  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.98679 
+
+Organism calculation in generation 231 took 380.24193 
+Minimum error in this generation is 12.825498 
+Calculation of fronts took 3.7774911 
+3  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.34169 
+
+Organism calculation in generation 232 took 376.66245 
+Minimum error in this generation is 12.825498 
+Calculation of fronts took 3.6275842 
+3  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  380.62359 
+
+Organism calculation in generation 233 took 376.68154 
+Minimum error in this generation is 12.825498 
+Calculation of fronts took 3.5710871 
+4  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  380.59021 
+
+Organism calculation in generation 234 took 382.16357 
+Minimum error in this generation is 12.825498 
+Calculation of fronts took 3.563231 
+4  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.06065 
+
+Organism calculation in generation 235 took 385.22921 
+Minimum error in this generation is 12.825498 
+Calculation of fronts took 3.586617 
+5  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.15307 
+
+Organism calculation in generation 236 took 380.29571 
+Minimum error in this generation is 12.405561 
+Calculation of fronts took 3.5351529 
+6  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.1778 
+
+Organism calculation in generation 237 took 374.44201 
+Minimum error in this generation is 12.405561 
+Calculation of fronts took 3.5313389 
+6  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  378.32805 
+
+Organism calculation in generation 238 took 375.69083 
+Minimum error in this generation is 12.405561 
+Calculation of fronts took 4.2475379 
+6  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  380.28765 
+
+Organism calculation in generation 239 took 379.70422 
+Minimum error in this generation is 11.797614 
+Calculation of fronts took 3.631767 
+7  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  383.69617 
+
+Organism calculation in generation 240 took 372.69343 
+Minimum error in this generation is 11.797614 
+Calculation of fronts took 3.6916938 
+7  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  376.7464 
+
+Organism calculation in generation 241 took 383.41059 
+Minimum error in this generation is 11.797614 
+Calculation of fronts took 3.679873 
+7  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.45128 
+
+Organism calculation in generation 242 took 378.95389 
+Minimum error in this generation is 11.797614 
+Calculation of fronts took 3.7759662 
+7  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  383.10133 
+
+Organism calculation in generation 243 took 383.29294 
+Minimum error in this generation is 11.797614 
+Calculation of fronts took 3.74265 
+7  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.38799 
+
+Organism calculation in generation 244 took 382.9093 
+Minimum error in this generation is 10.975992 
+Calculation of fronts took 3.7723529 
+9  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.03816 
+
+Organism calculation in generation 245 took 379.96794 
+Minimum error in this generation is 10.975992 
+Calculation of fronts took 3.715107 
+10  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.0455 
+
+Organism calculation in generation 246 took 385.45123 
+Minimum error in this generation is 10.975992 
+Calculation of fronts took 3.775135 
+10  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.57759 
+
+Organism calculation in generation 247 took 379.26853 
+Minimum error in this generation is 10.975992 
+Calculation of fronts took 3.7647409 
+11  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  383.38404 
+
+Organism calculation in generation 248 took 382.89542 
+Minimum error in this generation is 10.975992 
+Calculation of fronts took 3.8322072 
+12  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.07785 
+
+Organism calculation in generation 249 took 379.68732 
+Minimum error in this generation is 10.975992 
+Calculation of fronts took 3.827069 
+12  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  383.86042 
+
+Organism calculation in generation 250 took 378.7621 
+Minimum error in this generation is 10.975992 
+Calculation of fronts took 3.7987618 
+13  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  382.8999 
+
+Organism calculation in generation 251 took 385.32057 
+Minimum error in this generation is 10.975992 
+Calculation of fronts took 3.7311342 
+14  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.3978 
+
+Organism calculation in generation 252 took 384.43223 
+Minimum error in this generation is 10.975992 
+Calculation of fronts took 3.6891041 
+15  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.46683 
+
+Organism calculation in generation 253 took 377.22337 
+Minimum error in this generation is 10.975992 
+Calculation of fronts took 3.692555 
+15  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  381.26252 
+
+Organism calculation in generation 254 took 384.69712 
+Minimum error in this generation is 10.975992 
+Calculation of fronts took 3.8091588 
+15  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.84839 
+
+Organism calculation in generation 255 took 379.5968 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.910594 
+16  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  383.85183 
+
+Organism calculation in generation 256 took 380.0375 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.766422 
+17  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.15421 
+
+Organism calculation in generation 257 took 380.32471 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.758266 
+17  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.4361 
+
+Organism calculation in generation 258 took 381.53766 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.852592 
+17  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  385.74233 
+
+Organism calculation in generation 259 took 375.31214 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.9060512 
+18  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  379.5669 
+
+Organism calculation in generation 260 took 384.28402 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.918138 
+19  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.55355 
+
+Organism calculation in generation 261 took 383.59575 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 4.0203161 
+20  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.97059 
+
+Organism calculation in generation 262 took 379.6787 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 4.0311351 
+21  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.07252 
+
+Organism calculation in generation 263 took 378.73373 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 4.0318651 
+22  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  383.13769 
+
+Organism calculation in generation 264 took 382.34729 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 4.083688 
+24  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.80361 
+
+Organism calculation in generation 265 took 387.82558 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 4.0409911 
+24  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.24084 
+
+Organism calculation in generation 266 took 380.80575 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 4.0556469 
+25  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  385.24384 
+
+Organism calculation in generation 267 took 387.40851 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.9965191 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.78044 
+
+Organism calculation in generation 268 took 388.9315 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.9530311 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.2683 
+
+Organism calculation in generation 269 took 390.87607 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.876838 
+26  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  395.1443 
+
+Organism calculation in generation 270 took 381.95517 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.972677 
+27  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.33943 
+
+Organism calculation in generation 271 took 390.17356 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.899725 
+27  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.46938 
+
+Organism calculation in generation 272 took 382.6149 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.9700801 
+31  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.96686 
+
+Organism calculation in generation 273 took 388.65539 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.9440751 
+33  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.97398 
+
+Organism calculation in generation 274 took 387.00315 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.9028459 
+34  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.25901 
+
+Organism calculation in generation 275 took 395.95402 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.7679989 
+38  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  400.05732 
+
+Organism calculation in generation 276 took 386.46997 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.7507138 
+40  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.53415 
+
+Organism calculation in generation 277 took 394.76654 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.6718321 
+41  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  398.72434 
+
+Organism calculation in generation 278 took 392.89307 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.5932889 
+48  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  396.74869 
+
+Organism calculation in generation 279 took 393.02401 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.591239 
+51  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  396.8612 
+
+Organism calculation in generation 280 took 393.13404 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.5533381 
+54  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  396.91106 
+
+Organism calculation in generation 281 took 391.56213 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.4493721 
+58  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  395.21813 
+
+Organism calculation in generation 282 took 396.0249 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.4458261 
+59  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.66088 
+
+Organism calculation in generation 283 took 398.74157 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.4166632 
+61  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  402.34181 
+
+Organism calculation in generation 284 took 398.11763 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.502048 
+63  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  401.79734 
+
+Organism calculation in generation 285 took 398.19505 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.3852391 
+67  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  401.75633 
+
+Organism calculation in generation 286 took 397.049 
+Minimum error in this generation is 9.8021638 
+Calculation of fronts took 3.375639 
+69  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  400.602 
+
+Organism calculation in generation 287 took 395.98062 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.4390941 
+72  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.5982 
+
+Organism calculation in generation 288 took 397.37453 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.329988 
+75  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  400.88128 
+
+Organism calculation in generation 289 took 399.38794 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.3503718 
+65  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  402.91772 
+
+Organism calculation in generation 290 took 392.76998 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.296221 
+68  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  396.24727 
+
+Organism calculation in generation 291 took 400.19803 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.283221 
+69  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  403.66854 
+
+Organism calculation in generation 292 took 393.22087 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.271987 
+73  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  396.68088 
+
+Organism calculation in generation 293 took 390.89424 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.35268 
+79  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.43608 
+
+Organism calculation in generation 294 took 393.56021 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.3479011 
+81  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  397.09674 
+
+Organism calculation in generation 295 took 392.05536 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.316402 
+85  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  395.57969 
+
+Organism calculation in generation 296 took 391.4999 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.2571931 
+84  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.95187 
+
+Organism calculation in generation 297 took 388.21905 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.2447629 
+84  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.65508 
+
+Organism calculation in generation 298 took 386.87312 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.23824 
+87  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.30759 
+
+Organism calculation in generation 299 took 392.35274 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.2385261 
+93  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  395.78932 
+
+Organism calculation in generation 300 took 388.52585 
+Minimum error in this generation is 9.5688879 
+Calculation of fronts took 3.143647 
+106  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.86713 
+
+Organism calculation in generation 301 took 384.02453 
+Minimum error in this generation is 9.5177931 
+Calculation of fronts took 3.199909 
+104  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.42294 
+
+Organism calculation in generation 302 took 384.11617 
+Minimum error in this generation is 9.5177931 
+Calculation of fronts took 3.1501091 
+108  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.46088 
+
+Organism calculation in generation 303 took 386.813 
+Minimum error in this generation is 9.5177931 
+Calculation of fronts took 3.137109 
+103  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.15155 
+
+Organism calculation in generation 304 took 387.34053 
+Minimum error in this generation is 9.5177931 
+Calculation of fronts took 3.104856 
+106  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.63405 
+
+Organism calculation in generation 305 took 384.11374 
+Minimum error in this generation is 9.5177931 
+Calculation of fronts took 3.0692408 
+112  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.36524 
+
+Organism calculation in generation 306 took 381.46136 
+Minimum error in this generation is 9.3053382 
+Calculation of fronts took 3.0671179 
+122  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.71262 
+
+Organism calculation in generation 307 took 388.99541 
+Minimum error in this generation is 9.3053382 
+Calculation of fronts took 3.036804 
+131  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.23344 
+
+Organism calculation in generation 308 took 382.59059 
+Minimum error in this generation is 9.1330879 
+Calculation of fronts took 3.0681789 
+140  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  385.85011 
+
+Organism calculation in generation 309 took 381.14328 
+Minimum error in this generation is 9.1330879 
+Calculation of fronts took 3.102551 
+148  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.43918 
+
+Organism calculation in generation 310 took 383.21468 
+Minimum error in this generation is 9.1330879 
+Calculation of fronts took 3.0987899 
+152  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.51824 
+
+Organism calculation in generation 311 took 377.10191 
+Minimum error in this generation is 9.1330879 
+Calculation of fronts took 3.1015792 
+157  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  380.41675 
+
+Organism calculation in generation 312 took 380.73937 
+Minimum error in this generation is 9.1330879 
+Calculation of fronts took 3.0900609 
+161  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.05005 
+
+Organism calculation in generation 313 took 380.19535 
+Minimum error in this generation is 9.1330879 
+Calculation of fronts took 3.1739602 
+170  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  383.6015 
+
+Organism calculation in generation 314 took 380.60366 
+Minimum error in this generation is 9.1330879 
+Calculation of fronts took 3.0667059 
+176  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  383.9056 
+
+Organism calculation in generation 315 took 381.93191 
+Minimum error in this generation is 9.1330879 
+Calculation of fronts took 3.07951 
+180  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  385.25559 
+
+Organism calculation in generation 316 took 384.57297 
+Minimum error in this generation is 9.1330879 
+Calculation of fronts took 3.1360559 
+186  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.95133 
+
+Organism calculation in generation 317 took 390.56631 
+Minimum error in this generation is 9.1330879 
+Calculation of fronts took 3.1027369 
+204  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.93535 
+
+Organism calculation in generation 318 took 381.17092 
+Minimum error in this generation is 8.8958809 
+Calculation of fronts took 3.1377101 
+203  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.56584 
+
+Organism calculation in generation 319 took 387.5311 
+Minimum error in this generation is 8.834548 
+Calculation of fronts took 3.169378 
+198  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.96153 
+
+Organism calculation in generation 320 took 382.59361 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1147909 
+203  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  385.96363 
+
+Organism calculation in generation 321 took 382.12601 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.101347 
+210  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  385.49252 
+
+Organism calculation in generation 322 took 384.4501 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.109834 
+219  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.83001 
+
+Organism calculation in generation 323 took 384.77189 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.169261 
+226  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.21666 
+
+Organism calculation in generation 324 took 384.73354 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1568382 
+229  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.17631 
+
+Organism calculation in generation 325 took 383.31045 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1595881 
+229  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.74608 
+
+Organism calculation in generation 326 took 384.1669 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.180135 
+236  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.6382 
+
+Organism calculation in generation 327 took 382.72507 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1622291 
+244  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.18248 
+
+Organism calculation in generation 328 took 383.67317 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1520131 
+257  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.12267 
+
+Organism calculation in generation 329 took 384.23162 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1466541 
+269  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.6818 
+
+Organism calculation in generation 330 took 383.49978 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.146426 
+283  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.95729 
+
+Organism calculation in generation 331 took 384.52775 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1946092 
+285  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.02271 
+
+Organism calculation in generation 332 took 387.13494 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1198449 
+303  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.57004 
+
+Organism calculation in generation 333 took 387.53264 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1056211 
+307  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.94206 
+
+Organism calculation in generation 334 took 386.15414 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1425951 
+325  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.60714 
+
+Organism calculation in generation 335 took 384.14001 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.117923 
+340  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.58032 
+
+Organism calculation in generation 336 took 391.03628 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1062381 
+358  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.47251 
+
+Organism calculation in generation 337 took 389.22162 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1713052 
+365  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.72733 
+
+Organism calculation in generation 338 took 389.67558 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.1688631 
+389  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.18062 
+
+Organism calculation in generation 339 took 380.87641 
+Minimum error in this generation is 7.8963453 
+Calculation of fronts took 3.203265 
+397  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.42191 
+
+Organism calculation in generation 340 took 380.52736 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.2284589 
+391  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.09522 
+
+Organism calculation in generation 341 took 386.13148 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.211405 
+409  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.69169 
+
+Organism calculation in generation 342 took 385.33956 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.218379 
+419  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.9186 
+
+Organism calculation in generation 343 took 381.06831 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.1974871 
+437  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.63516 
+
+Organism calculation in generation 344 took 381.35906 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.2330849 
+444  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.95847 
+
+Organism calculation in generation 345 took 386.39448 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.270458 
+451  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.04923 
+
+Organism calculation in generation 346 took 382.93472 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.302248 
+465  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.63421 
+
+Organism calculation in generation 347 took 383.88121 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.245239 
+485  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.51618 
+
+Organism calculation in generation 348 took 384.98651 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.3472149 
+479  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.71928 
+
+Organism calculation in generation 349 took 384.72993 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.367676 
+473  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.46184 
+
+Organism calculation in generation 350 took 384.36495 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.3595791 
+479  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.11357 
+
+Organism calculation in generation 351 took 384.18606 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.3724821 
+492  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.96148 
+
+Organism calculation in generation 352 took 385.58107 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.311434 
+509  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.28089 
+
+Organism calculation in generation 353 took 382.90185 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.3634 
+516  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.66605 
+
+Organism calculation in generation 354 took 383.20007 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.348953 
+506  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.92832 
+
+Organism calculation in generation 355 took 380.58655 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.3109131 
+519  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.28563 
+
+Organism calculation in generation 356 took 383.57682 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.3653312 
+513  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.32103 
+
+Organism calculation in generation 357 took 382.66306 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.3544149 
+513  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.40063 
+
+Organism calculation in generation 358 took 387.74295 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.3644969 
+521  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.49556 
+
+Organism calculation in generation 359 took 383.62315 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.3108132 
+546  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.32595 
+
+Organism calculation in generation 360 took 383.08834 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.3451509 
+571  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.82238 
+
+Organism calculation in generation 361 took 383.16167 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.307421 
+555  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.8576 
+
+Organism calculation in generation 362 took 388.49474 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.2957141 
+573  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.18493 
+
+Organism calculation in generation 363 took 383.18976 
+Minimum error in this generation is 7.6693968 
+Calculation of fronts took 3.269803 
+572  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  386.84012 
+
+Organism calculation in generation 364 took 383.46176 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.243154 
+556  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.07039 
+
+Organism calculation in generation 365 took 381.05197 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.2559011 
+574  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.70067 
+
+Organism calculation in generation 366 took 388.15428 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.362335 
+575  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.91648 
+
+Organism calculation in generation 367 took 387.46682 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3192658 
+556  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.1652 
+
+Organism calculation in generation 368 took 387.93105 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3380351 
+569  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.66613 
+
+Organism calculation in generation 369 took 384.06614 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3081081 
+572  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.75677 
+
+Organism calculation in generation 370 took 389.0987 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3475552 
+581  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.83389 
+
+Organism calculation in generation 371 took 383.92857 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3437259 
+582  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.66473 
+
+Organism calculation in generation 372 took 387.19486 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3460121 
+594  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.94263 
+
+Organism calculation in generation 373 took 380.93565 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3823431 
+573  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  384.70444 
+
+Organism calculation in generation 374 took 385.51375 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3121181 
+589  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.21929 
+
+Organism calculation in generation 375 took 383.7093 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3126869 
+600  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  387.42287 
+
+Organism calculation in generation 376 took 386.42364 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.309438 
+620  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.1318 
+
+Organism calculation in generation 377 took 385.58839 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.388665 
+623  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.3797 
+
+Organism calculation in generation 378 took 384.45451 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.321444 
+639  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.1766 
+
+Organism calculation in generation 379 took 388.41021 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3129139 
+660  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.13417 
+
+Organism calculation in generation 380 took 384.38248 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3460419 
+666  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.14511 
+
+Organism calculation in generation 381 took 391.22362 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3351948 
+671  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.98475 
+
+Organism calculation in generation 382 took 388.5058 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.2619221 
+683  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.18963 
+
+Organism calculation in generation 383 took 388.84652 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.301579 
+703  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.58039 
+
+Organism calculation in generation 384 took 389.19718 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3800969 
+708  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.00994 
+
+Organism calculation in generation 385 took 388.19654 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.4000711 
+706  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.03021 
+
+Organism calculation in generation 386 took 391.87752 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3362012 
+729  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  395.66077 
+
+Organism calculation in generation 387 took 390.65252 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.325439 
+742  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.43033 
+
+Organism calculation in generation 388 took 385.18655 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3935518 
+743  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.04204 
+
+Organism calculation in generation 389 took 385.35745 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3064749 
+764  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.12389 
+
+Organism calculation in generation 390 took 393.09196 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.4029131 
+764  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  396.97388 
+
+Organism calculation in generation 391 took 389.81785 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.379575 
+774  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.67148 
+
+Organism calculation in generation 392 took 386.93296 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.476485 
+701  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.85209 
+
+Organism calculation in generation 393 took 389.50207 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3337569 
+714  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.27767 
+
+Organism calculation in generation 394 took 385.0333 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3083179 
+718  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  388.78459 
+
+Organism calculation in generation 395 took 388.71217 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3999012 
+734  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.57361 
+
+Organism calculation in generation 396 took 385.81183 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3846939 
+746  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.66596 
+
+Organism calculation in generation 397 took 386.54349 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3584211 
+773  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.37418 
+
+Organism calculation in generation 398 took 387.2461 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3526158 
+795  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.10549 
+
+Organism calculation in generation 399 took 388.21884 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.3980989 
+804  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.11376 
+
+Organism calculation in generation 400 took 385.51293 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.386183 
+815  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.40616 
+
+Organism calculation in generation 401 took 390.28218 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.428704 
+826  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.22961 
+
+Organism calculation in generation 402 took 388.53084 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.464092 
+836  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.52102 
+
+Organism calculation in generation 403 took 389.50634 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.424798 
+855  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.47927 
+
+Organism calculation in generation 404 took 385.10067 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.4873412 
+869  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.12652 
+
+Organism calculation in generation 405 took 385.22046 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.418735 
+881  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.19653 
+
+Organism calculation in generation 406 took 386.9044 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.430723 
+903  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.90074 
+
+Organism calculation in generation 407 took 388.90552 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.4405541 
+919  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.92835 
+
+Organism calculation in generation 408 took 388.08677 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.5319219 
+949  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.21357 
+
+Organism calculation in generation 409 took 389.28271 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.5773799 
+915  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.43735 
+
+Organism calculation in generation 410 took 386.53454 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.4403598 
+945  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.5859 
+
+Organism calculation in generation 411 took 385.21346 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.53281 
+880  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  389.28001 
+
+Organism calculation in generation 412 took 388.41048 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.4497988 
+896  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.42331 
+
+Organism calculation in generation 413 took 388.78668 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.447839 
+913  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.80825 
+
+Organism calculation in generation 414 took 390.55785 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.4697552 
+920  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.60028 
+
+Organism calculation in generation 415 took 387.38897 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.4443672 
+953  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.43243 
+
+Organism calculation in generation 416 took 387.7827 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.5417662 
+959  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.94064 
+
+Organism calculation in generation 417 took 387.60602 
+Minimum error in this generation is 7.1528514 
+Calculation of fronts took 3.4772561 
+987  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.71451 
+
+Organism calculation in generation 418 took 388.15273 
+Minimum error in this generation is 7.1522225 
+Calculation of fronts took 3.5455899 
+989  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.33055 
+
+Organism calculation in generation 419 took 388.49165 
+Minimum error in this generation is 7.1522225 
+Calculation of fronts took 3.548825 
+1017  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  392.69994 
+
+Organism calculation in generation 420 took 389.43349 
+Minimum error in this generation is 7.1522225 
+Calculation of fronts took 3.4771612 
+994  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.5385 
+
+Organism calculation in generation 421 took 389.62883 
+Minimum error in this generation is 7.1522225 
+Calculation of fronts took 3.4805009 
+1019  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.75821 
+
+Organism calculation in generation 422 took 390.57472 
+Minimum error in this generation is 7.1522225 
+Calculation of fronts took 3.5344281 
+1019  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.77292 
+
+Organism calculation in generation 423 took 386.27124 
+Minimum error in this generation is 7.0969345 
+Calculation of fronts took 3.5933549 
+986  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  390.5054 
+
+Organism calculation in generation 424 took 387.64504 
+Minimum error in this generation is 7.0969345 
+Calculation of fronts took 3.5395401 
+1013  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.83875 
+
+Organism calculation in generation 425 took 392.91462 
+Minimum error in this generation is 7.0969345 
+Calculation of fronts took 3.513757 
+994  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  397.05442 
+
+Organism calculation in generation 426 took 392.53286 
+Minimum error in this generation is 7.0969345 
+Calculation of fronts took 3.5197301 
+1021  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  396.70733 
+
+Organism calculation in generation 427 took 393.28212 
+Minimum error in this generation is 7.0969345 
+Calculation of fronts took 3.5236619 
+1017  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  397.4469 
+
+Organism calculation in generation 428 took 393.26916 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.5153811 
+1003  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  397.42217 
+
+Organism calculation in generation 429 took 387.28326 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.5174651 
+1022  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.46127 
+
+Organism calculation in generation 430 took 391.4315 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.509733 
+1046  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  395.62188 
+
+Organism calculation in generation 431 took 390.78813 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.555418 
+1003  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.97006 
+
+Organism calculation in generation 432 took 389.05291 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.5326831 
+1006  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.22066 
+
+Organism calculation in generation 433 took 387.22557 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.507823 
+1039  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  391.42 
+
+Organism calculation in generation 434 took 389.09066 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.5729151 
+1013  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  393.30131 
+
+Organism calculation in generation 435 took 401.70351 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.5779731 
+1039  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  406.01324 
+
+Organism calculation in generation 436 took 393.89133 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.5456131 
+1002  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  398.06626 
+
+Organism calculation in generation 437 took 395.20178 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6111431 
+1046  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.49242 
+
+Organism calculation in generation 438 took 392.70704 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.568186 
+1042  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  396.94245 
+
+Organism calculation in generation 439 took 390.72087 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.5395629 
+1020  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  394.924 
+
+Organism calculation in generation 440 took 396.76509 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.5824821 
+1040  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  401.01771 
+
+Organism calculation in generation 441 took 394.78693 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.601254 
+1034  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.05716 
+
+Organism calculation in generation 442 took 395.07382 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6188262 
+1040  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.35946 
+
+Organism calculation in generation 443 took 396.53271 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6047289 
+1037  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  400.80111 
+
+Organism calculation in generation 444 took 392.38146 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.5646961 
+1046  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  396.62219 
+
+Organism calculation in generation 445 took 393.7844 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6033981 
+1030  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  398.05182 
+
+Organism calculation in generation 446 took 391.31994 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.55741 
+1043  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  395.54571 
+
+Organism calculation in generation 447 took 394.83186 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.5448868 
+1019  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.02508 
+
+Organism calculation in generation 448 took 393.6723 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6261301 
+1024  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  397.95514 
+
+Organism calculation in generation 449 took 391.86324 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6320601 
+1031  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  396.1424 
+
+Organism calculation in generation 450 took 397.98625 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.5912621 
+1052  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  402.25613 
+
+Organism calculation in generation 451 took 395.04219 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.563719 
+1054  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.29548 
+
+Organism calculation in generation 452 took 399.75051 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.618288 
+1058  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  404.05724 
+
+Organism calculation in generation 453 took 395.17178 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6202099 
+1067  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.50639 
+
+Organism calculation in generation 454 took 397.83756 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.7055469 
+1082  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  402.33799 
+
+Organism calculation in generation 455 took 416.75531 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.850925 
+1038  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  421.28375 
+
+Organism calculation in generation 456 took 406.3306 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6823552 
+1045  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  410.80326 
+
+Organism calculation in generation 457 took 404.70379 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6338248 
+1060  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  409.01592 
+
+Organism calculation in generation 458 took 394.78032 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.619554 
+1082  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.10053 
+
+Organism calculation in generation 459 took 395.29873 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.595031 
+1068  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.61021 
+
+Organism calculation in generation 460 took 397.01098 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.55585 
+1081  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  401.27961 
+
+Organism calculation in generation 461 took 393.06055 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.59411 
+1104  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  397.37591 
+
+Organism calculation in generation 462 took 394.05396 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6512721 
+1091  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  398.42874 
+
+Organism calculation in generation 463 took 394.92008 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6310389 
+1104  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.51641 
+
+Organism calculation in generation 464 took 414.66987 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.7603621 
+1096  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  419.38308 
+
+Organism calculation in generation 465 took 406.89987 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6406031 
+1101  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  411.29146 
+
+Organism calculation in generation 466 took 397.11604 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6210589 
+1101  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  401.47115 
+
+Organism calculation in generation 467 took 392.34809 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.663377 
+1115  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  396.74204 
+
+Organism calculation in generation 468 took 394.0214 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.690567 
+1133  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  398.46578 
+
+Organism calculation in generation 469 took 397.52014 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.67454 
+1126  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  401.93708 
+
+Organism calculation in generation 470 took 395.1005 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.7186811 
+1133  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.57178 
+
+Organism calculation in generation 471 took 396.12496 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.685425 
+1139  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  400.56395 
+
+Organism calculation in generation 472 took 396.2523 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.669359 
+1149  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  400.73676 
+
+Organism calculation in generation 473 took 395.12018 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.7039268 
+1148  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  399.60907 
+
+Organism calculation in generation 474 took 397.73226 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.709131 
+1157  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  402.2136 
+
+Organism calculation in generation 475 took 395.73784 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.6953158 
+1161  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  400.21908 
+
+Organism calculation in generation 476 took 397.31573 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.725734 
+1168  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  401.82047 
+
+Organism calculation in generation 477 took 393.08594 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.7229469 
+1183  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  397.60501 
+
+Organism calculation in generation 478 took 395.96943 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.756007 
+1193  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  400.54096 
+
+Organism calculation in generation 479 took 394.37483 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.7637198 
+1208  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  398.95466 
+
+Organism calculation in generation 480 took 399.26628 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.730773 
+1186  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  403.79708 
+
+Organism calculation in generation 481 took 399.72182 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.76527 
+1219  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  404.33134 
+
+Organism calculation in generation 482 took 396.85872 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.772424 
+1199  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  401.43616 
+
+Organism calculation in generation 483 took 400.09753 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.7739961 
+1234  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  404.71503 
+
+Organism calculation in generation 484 took 400.68411 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.8062301 
+1237  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  405.34614 
+
+Organism calculation in generation 485 took 400.24506 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.7989759 
+1195  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  404.83306 
+
+Organism calculation in generation 486 took 402.06337 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.758642 
+1245  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  406.67664 
+
+Organism calculation in generation 487 took 397.74395 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.8021681 
+1237  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  402.38891 
+
+Organism calculation in generation 488 took 398.45749 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.8546112 
+1267  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  403.20025 
+
+Organism calculation in generation 489 took 397.65949 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.876055 
+1272  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  402.42441 
+
+Organism calculation in generation 490 took 399.1651 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.8497031 
+1279  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  403.90377 
+
+Organism calculation in generation 491 took 401.15369 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.855382 
+1302  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  405.93083 
+
+Organism calculation in generation 492 took 398.69787 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.8847198 
+1310  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  403.5111 
+
+Organism calculation in generation 493 took 399.51412 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.922323 
+1337  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  404.3924 
+
+Organism calculation in generation 494 took 401.09539 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.9185209 
+1328  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  405.96779 
+
+Organism calculation in generation 495 took 403.43159 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.90622 
+1347  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  408.30212 
+
+Organism calculation in generation 496 took 400.96466 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.9066348 
+1326  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  405.81478 
+
+Organism calculation in generation 497 took 402.67405 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.9562659 
+1354  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  407.60636 
+
+Organism calculation in generation 498 took 400.91611 
+Minimum error in this generation is 6.9575274 
+Calculation of fronts took 3.9619851 
+1368  unique solutions in first front
+done printing population error file
+done printing population genome file
+generation ran for  405.87063 
+
+run took 184885.38  seconds
+	0 
