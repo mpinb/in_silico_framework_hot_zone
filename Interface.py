@@ -25,6 +25,18 @@ import numpy as np
 import dask
 import dask.dataframe as dd
 
+# todo: the version is not specific to model_data_base
+# ideally, the _version.py file would not live in the 
+# subfolder mondel data base but in the top folder.
+# But then it does not work anymore ...
+# Currently, git needs to be installed to be able to get
+# the current version. Use versioneer.py to be able 
+# to bundle package without the need of having git installed.
+from model_data_base._version import get_versions
+versions = get_versions()
+__version__ = versions['version']
+__git_revision__ = versions['full-revisionid']
+
 from model_data_base.model_data_base import ModelDataBase
 from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
@@ -91,7 +103,7 @@ def split_synapse_activation(sa, selfcheck = True, excitatory = excitatory, inhi
 
 try: ##to avoid import errors in distributed system because of missing matplotlib backend
     import matplotlib
-	import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt
     from model_data_base.plotfunctions.average_std import average_std as average_std
     from model_data_base.plotfunctions.histogram import histogram as histogram
     from model_data_base.plotfunctions.manylines import manylines
