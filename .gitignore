@@ -14,6 +14,10 @@ test_model_data_base/data/*
 !test_model_data_base/data/test_data/
 trash_it_now/
 *.pyc
+mechanisms/channels/x86_64
+mechanisms/channels/*~
+mechanisms/netcon/x86_64
+mechanisms/netcon/*~
 
 # Eclipse Core
 .project
