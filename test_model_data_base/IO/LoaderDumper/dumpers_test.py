@@ -2,24 +2,22 @@ from ...context import *
 from model_data_base.model_data_base import ModelDataBase
 from ... import decorators
 import unittest
-import os, shutil
-from mock import MagicMock
 import numpy as np
 from pandas.util.testing import assert_frame_equal
 import dask.dataframe as dd
 import pandas as pd
 import dask
 from  model_data_base.IO.LoaderDumper import dask_to_csv, numpy_to_npy, pandas_to_msgpack, \
-                                to_pickle, pandas_to_pickle, dask_to_msgpack
+                                to_pickle, pandas_to_pickle, dask_to_msgpack, \
+                                dask_to_categorized_msgpack, to_cloudpickle
 from numpy.testing import assert_array_equal
-from IO.LoaderDumper import dask_to_categorized_msgpack, to_cloudpickle
 
 
 def robust_del_fun(mdb, key):
-     try:
-         del mdb[key]
-     except KeyError:
-         pass
+    try:
+        del mdb[key]
+    except KeyError:
+        pass
             
 class Tests(unittest.TestCase):       
     def setUp(self): 
