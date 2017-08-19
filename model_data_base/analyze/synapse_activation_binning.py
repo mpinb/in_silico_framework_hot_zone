@@ -122,9 +122,6 @@ def synapse_activation_postprocess_dask(ddf, **kwargs):
     else:
         return ret
 
-
-
-
 def save_groupby(mdb, result, groupby):
     '''saves the result of synapse_activation_postprocess_dask to a model data base.
     
