@@ -18,7 +18,7 @@ class Tests(unittest.TestCase):
         self.testhist = temporal_binning.universal(self.pdf, bin_size = 10, min_time = 0)
     
     def test_histogram_can_be_called_with_tuple(self):
-         histogram(self.testhist)
+        histogram(self.testhist)
                   
     def test_histogram_can_be_called_with_series(self):
         from  matplotlib.figure import Figure

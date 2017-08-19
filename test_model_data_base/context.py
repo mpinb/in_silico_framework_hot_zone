@@ -18,6 +18,8 @@ if os.path.exists(files_generated_by_tests):
 os.makedirs(files_generated_by_tests)
 
 class FreshlyInitializedMdb(object):
+    '''context manager that provides a freshly initalized mdb for 
+    testing purposes'''
     def __enter__(self):
         self.path = tempfile.mkdtemp()
         self.mdb = model_data_base.ModelDataBase(self.path)

@@ -17,7 +17,6 @@ def histogram(hist_bins,
     In this case, the label attribute has no function (to be precise: it is overwritten
     by the decorator subsequent_calls_per_line)
     '''
-    print hist_bins
     if isinstance(hist_bins, pd.Series):
         hist_bins = hist_bins.iloc[0]
         
