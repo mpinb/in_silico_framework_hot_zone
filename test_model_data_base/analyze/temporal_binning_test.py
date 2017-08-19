@@ -32,9 +32,8 @@ class Tests(unittest.TestCase):
     
     @decorators.testlevel(1)    
     def test_binning_real_data(self):
-        mdb = ModelDataBase(test_mdb_folder)            
-            
-        pdf = mdb['spike_times']
+        with FreshlyInitializedMdb() as mdb:            
+            pdf = mdb['spike_times']
         #if dask: convert to pandas
         try:
             pdf = pdf.compute()

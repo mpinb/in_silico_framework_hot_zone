@@ -2,6 +2,7 @@ from ...context import *
 from model_data_base.model_data_base import ModelDataBase
 from ... import decorators
 import unittest
+import tempfile
 import numpy as np
 from pandas.util.testing import assert_frame_equal
 import dask.dataframe as dd
@@ -19,11 +20,14 @@ def robust_del_fun(mdb, key):
     except KeyError:
         pass
             
-class Tests(unittest.TestCase):       
-    def setUp(self): 
-        mdb = ModelDataBase(test_mdb_folder) 
-        self.mdb = mdb 
-        
+class Tests_small(unittest.TestCase): 
+    def setUp(self):
+        # set up model_data_base in temporary folder and initialize it.
+        # This additionally is an implicit test, which ensures that the
+        # initialization routine does not throw an error.
+        self.path = tempfile.mkdtemp()
+        self.mdb = model_data_base.ModelDataBase(self.path)
+        self.mdb.settings.show_computation_progress = False         
         self.pdf = pd.DataFrame({0: [1,2,3,4,5,6], 1: ['1', '2', '3', '1', '2', '3'], '2': [1, '2', 3, 1, '2', 3], \
                                  'myname': ['bla', 'bla', 'bla', 'bla', 'bla', 'bla']})  
         self.ddf = dd.from_pandas(self.pdf, npartitions = 2)
@@ -31,14 +35,17 @@ class Tests(unittest.TestCase):
         self.pdf2 = pd.DataFrame({0: [1,2,3,4,5,6], 1: ['1', '2', '3', '1', '2', '3'], '2': [1, 2, 3, 1, 2, 3], \
                                  'myname': ['bla', 'bla', 'bla', 'bla', 'bla', 'bla']})  
         self.ddf2 = dd.from_pandas(self.pdf2, npartitions = 2)
-                    
-        assert(self.ddf.npartitions > 1)
-        
+        assert(self.ddf.npartitions > 1)        
+                       
+    def tearDown(self):
+        if os.path.exists(self.path):
+            shutil.rmtree(self.path)
+            
     def clean_up(self):
         robust_del_fun(self.mdb, 'synapse_activation2')
         robust_del_fun(self.mdb, 'voltage_traces2')
-        robust_del_fun(self.mdb, 'test')       
-        
+        robust_del_fun(self.mdb, 'test')   
+            
     def data_frame_generic_small(self, pdf, ddf, dumper): 
         #index not set        
         self.clean_up()
@@ -89,7 +96,17 @@ class Tests(unittest.TestCase):
         fun(np.random.randint(5, size=(100,)))
         fun(np.array([]))
         
-        
+class Tests_real_data(unittest.TestCase): 
+    def setUp(self):
+        # set up model_data_base in temporary folder and initialize it.
+        # This additionally is an implicit test, which ensures that the
+        # initialization routine does not throw an error.
+        self.fmdb = FreshlyInitializedMdb()
+        self.mdb = self.fmdb.__enter__()
+                       
+    def tearDown(self):
+        self.fmdb.__exit__()
+                    
     def real_data_generic(self, dumper):
         self.mdb.setitem('voltage_traces2', self.mdb['voltage_traces'], dumper = dumper)
         dummy = self.mdb['voltage_traces2']
@@ -113,8 +130,5 @@ class Tests(unittest.TestCase):
 
     @decorators.testlevel(2)
     def test_dask_to_msgpack_real_data(self):
-        self.real_data_generic(dask_to_msgpack)          
-         
-
-        
+        self.real_data_generic(dask_to_msgpack)
         

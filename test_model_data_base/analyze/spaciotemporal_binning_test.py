@@ -14,10 +14,7 @@ class Tests(unittest.TestCase):
                  '2': [15, np.NaN, 11, 12, 21, 30, 30],
                  '3': [np.NaN, np.NaN, 11.5, 30, np.NaN, np.NaN, np.NaN]}
         
-        self.test_dataframe = pd.DataFrame(self.test_dataframe)
-        
-        self.mdb = ModelDataBase(test_mdb_folder) 
-        assert('synapse_activation' in self.mdb.keys())
+        self.test_dataframe = pd.DataFrame(self.test_dataframe)        
         
     def test_binning_small_pandas_df(self):
         '''binning a smale pandas.DataFrame'''
@@ -47,8 +44,8 @@ class Tests(unittest.TestCase):
     def test_binning_real_data(self):
         '''binning dask dataframes has to deliver the same
         results as binning pandas dataframes'''
-        mdb = self.mdb           
-            
-        x = universal(mdb['synapse_activation'].compute(get=dask.multiprocessing.get), 'soma_distance')
-        y = universal(mdb['synapse_activation'], 'soma_distance')
-        np.testing.assert_equal(x,y)
+        with FreshlyInitializedMdb() as mdb:   
+            assert('synapse_activation' in mdb.keys())                 
+            x = universal(mdb['synapse_activation'].compute(get=dask.multiprocessing.get), 'soma_distance')
+            y = universal(mdb['synapse_activation'], 'soma_distance')
+            np.testing.assert_equal(x,y)

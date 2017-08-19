@@ -12,20 +12,23 @@ import os
 
 
 
-class Tests(unittest.TestCase):       
+class Tests(unittest.TestCase):          
     def setUp(self):
-        self.mdb = ModelDataBase(test_mdb_folder) 
-        assert('synapse_activation' in self.mdb.keys())
-        assert('spike_times' in self.mdb.keys())
-    
-    @decorators.testlevel(2)    
+        self.synapse_file_path = os.path.join(test_data_folder, \
+                                              '20150815-1530_20240', \
+                                              'simulation_run0000_synapses.csv')
+        
+        self.assert_(os.path.exists(self.synapse_file_path)) 
+        
     def test_saved_and_reloded_synapse_file_is_identical(self):
-        synapse_pdf = self.mdb['synapse_activation'].loc[self.mdb['sim_trail_index'][0]].compute(get=dask.threaded.get)
+        synapse_pdf = read_pandas_synapse_activation_from_roberts_format(\
+                             self.synapse_file_path, sim_trail_index = 'asdasd')        
+        
         try:
             path = tempfile.mkdtemp()
             path_file = os.path.join(path, 'test.csv')
             write_pandas_synapse_activation_to_roberts_format(path_file, synapse_pdf)
-            synapse_pdf_reloaded = read_pandas_synapse_activation_from_roberts_format(path_file, sim_trail_index = self.mdb['sim_trail_index'][0]) 
+            synapse_pdf_reloaded = read_pandas_synapse_activation_from_roberts_format(path_file, sim_trail_index = 'asdasd') 
         except:
             raise
         finally:
