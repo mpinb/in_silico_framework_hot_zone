@@ -267,7 +267,7 @@ class RecordingSiteManager(object):
         returns list of (x,y,z) points
         '''
         if not landmarkFilename.endswith('.landmarkAscii'):
-            errstr = 'Wrong input format: has to be landmarkAscii format'
+            errstr = 'Wrong input format: has to be landmarkAscii format. Path: {p}'.format(p=landmarkFilename)
             raise RuntimeError(errstr)
         
         landmarks = []
