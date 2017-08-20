@@ -14,11 +14,6 @@ from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_t
 import numpy as np
 import pandas as pd
 h = neuron.h
-#neuron.load_mechanisms('/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/first_testing/mechanisms')
-neuron.load_mechanisms('/nas1/Data_arco/L5tt_blubb/mechanisms/')
-neuron.load_mechanisms('/nas1/Data_arco/project_src/simrun/simrun/mechanisms/netcon')
-#neuron.load_mechanisms('/home/rcegger/bin/nrn-7.2/share/examples/nrniv/netcon')
-
 
 def scale_apical(cell):
     '''
