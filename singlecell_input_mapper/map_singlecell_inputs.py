@@ -43,15 +43,15 @@ import time
 # export PYTHONPATH=/path/to/singlecell_input_mapper:$PYTHONPATH
 #===============================================================================
 import numpy as np
-import singlecell_input_mapper as sim
-
+from . import singlecell_input_mapper as sim
+import getting_started
 #===============================================================================
 # This is the only line that needs to be adapted to your system.
 # Change the string 'prefix' to the folder where all anatomical data is
 # located on your system (assuming you just unpack the data and do not change
 # the directory structure)
 #===============================================================================
-prefix = '/home/abast/test/SingleCellInputMapper/barrel_cortex'
+prefix = os.path.join(getting_started.parent, 'barrel_cortex')
 
 #===============================================================================
 # If you change the directory structure of the anatomical input data,
