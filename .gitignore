@@ -19,6 +19,10 @@ mechanisms/channels/*~
 mechanisms/netcon/x86_64
 mechanisms/netcon/*~
 
+#only template should be part of repository
+getting_started/biophysical_constraints/86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param
+getting_started/functional_constraints/network.param
+
 # Eclipse Core
 .project
 
