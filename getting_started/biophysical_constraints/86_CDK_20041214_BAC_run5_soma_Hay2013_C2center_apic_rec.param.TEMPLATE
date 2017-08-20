@@ -9,7 +9,7 @@
 	
 	"NMODL_mechanisms":
 	{
-        "channels": "[IN_SILICO_FRAMEWORK_DIR]/mechanisms/channels/",
+        "channels": "/",
 	},
 	
 	"mech_globals":
@@ -340,7 +340,7 @@
 		"tStop": 250.0,
 		"dt": 0.025,
 		"T": 34.0,
-		"recordingSites": "[IN_SILICO_FRAMEWORK_DIR]/getting_started/anatomical_constraints/apical_proximal_distal_rec_sites.landmarkAscii"]
+		"recordingSites": ["[IN_SILICO_FRAMEWORK_DIR]/getting_started/apical_proximal_distal_rec_sites.landmarkAscii"],
 	},
 }
 

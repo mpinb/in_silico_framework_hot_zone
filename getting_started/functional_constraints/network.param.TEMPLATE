@@ -8740,7 +8740,7 @@
     },
   },
   "NMODL_mechanisms": {
-    "synapses": "[IN_SILICO_FRAMEWORK_DIR]/mechanisms/channels",
-    "VecStim": "[IN_SILICO_FRAMEWORK_DIR]/mechanisms/netcon",
+    "synapses": "/",
+    "VecStim": "/",
   },
 }

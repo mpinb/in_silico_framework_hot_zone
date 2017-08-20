@@ -8740,7 +8740,7 @@
     },
   },
   "NMODL_mechanisms": {
-    "synapses": "/nas1/Data_arco/project_src/in_silico_framework/mechanisms/channels",
-    "VecStim": "/nas1/Data_arco/project_src/in_silico_framework/mechanisms/netcon",
+    "synapses": "/",
+    "VecStim": "/",
   },
 }

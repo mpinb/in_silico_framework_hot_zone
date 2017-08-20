@@ -22,14 +22,15 @@ import test_simrun2, test_simrun2.decorators
 test_model_data_base.decorators.current_testlevel = 100#'all'#0#'all'#'0
 test_simrun2.decorators.current_testlevel = 100#'all'#0#'all'#'0
 
-#######################################
+#######################################git git
 # SELECT TESTS YOU WANT TO RUN HERE
 #
 # Valid values are strings, which contain a module name, that can be 
 # imported. Choose '.' to run all available tests within this module
 #######################################
 run = '.'
-#run = 'test_model_data_base.IO.roberts_formats_test'
+#run = 'test_simrun2'
+#run = 'test_model_data_base.analyze.spaciotemporal_binning_test'
 ################################
 # verbosity of testrunner
 ################################
