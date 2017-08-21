@@ -3,9 +3,6 @@ import tables
 import neuron
 parent = os.path.abspath(os.path.dirname(__file__))
 
-def compile_mechanisms():
-    pass
-
 arch = [platform.machine(), 'i686', 'x86_64', 'powerpc', 'umac']
 
 try:
@@ -24,6 +21,7 @@ except AssertionError:
         print "Could not complile mechanisms. Please do it manually"
         raise
     
-    
+
+print "Loading mechanisms from " + parent
 neuron.load_mechanisms(os.path.join(parent, 'channels'))
 neuron.load_mechanisms(os.path.join(parent, 'netcon'))
