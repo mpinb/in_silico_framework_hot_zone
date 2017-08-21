@@ -3,7 +3,7 @@ Created on Mar 8, 2012
 
 @author: regger
 '''
-from singlecell_input_mapper.scalar_field import ScalarField
+from .scalar_field import ScalarField
 
 labels2int = {\
     "Neuron":                 2,\

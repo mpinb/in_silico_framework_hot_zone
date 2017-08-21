@@ -49,7 +49,7 @@ class NetworkMapper:
 #        seed = int(time.time())
 #        self.ranGen = np.random.RandomState(seed)
     
-    def create_network_embedding(self, postCellName, boutonDensities):
+    def create_network_embedding(self, postCellName, boutonDensities, nrOfSamples = 50):
         '''
         Public interface:
         used for creating fixed network connectivity.
@@ -65,9 +65,6 @@ class NetworkMapper:
         columns = self.cells.keys()
         preCellTypes = self.cells[columns[0]]
         cellTypeSynapseDensities = self._precompute_column_celltype_synapse_densities(boutonDensities)
-        
-#        nrOfSamples = 100 # used for testing convergence (~=infinity)
-        nrOfSamples = 50
         sampleConnectivityData = []
         cellTypeSpecificPopulation = []
         for i in range(nrOfSamples):

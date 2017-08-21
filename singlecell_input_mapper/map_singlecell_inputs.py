@@ -68,7 +68,7 @@ exTypes = ('VPM','L2','L34','L4py','L4sp','L4ss','L5st','L5tt','L6cc','L6ccinv',
 inhTypes = ('SymLocal1','SymLocal2','SymLocal3','SymLocal4','SymLocal5','SymLocal6',\
             'L1','L23Trans','L45Sym','L45Peak','L56Trans')
 
-def map_singlecell_inputs(cellName, cellTypeName):
+def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples = 50):
     if not (cellTypeName in exTypes) and not (cellTypeName in inhTypes):
         errstr = 'Unknown cell type %s!'
         raise TypeError(errstr)
@@ -111,7 +111,7 @@ def map_singlecell_inputs(cellName, cellTypeName):
                                     ExPSTDensity, InhPSTDensity)
     inputMapper.exCellTypes = exTypes
     inputMapper.inhCellTypes = inhTypes
-    inputMapper.create_network_embedding(cellName, boutonDensities)
+    inputMapper.create_network_embedding(cellName, boutonDensities, nrOfSamples = nrOfSamples)
     
     endTime = time.time()
     duration = (endTime - startTime)/60.0
