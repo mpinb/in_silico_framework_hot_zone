@@ -15,6 +15,67 @@ class Tests(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.path_fresh_mdb)
         
+    def test_get_dumper_string_by_dumper_module(self):
+        '''dumper string should be the modules name wrt IO.LoaderDumpers'''
+        s1 = model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
+        s2 = 'to_pickle'
+        self.assertEqual(s1, s2)
+    
+    def test_get_dumper_string_by_savedir(self):
+        '''dumper string should be the same if it is determined
+        post hoc (by providing the path to an already existing folder)
+        or from the module reference directly.'''
+        self.fresh_mdb.setitem('test', 1, dumper = to_pickle)
+        s1 = self.fresh_mdb._detect_dumper_string_of_existing_key('test')
+        s2 = model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
+        self.assertEqual(s1, s2)
+        
+    def test_can_detect_self_as_dumper(self):
+        '''dumper string should be the same if it is determined
+        post hoc (by providing the path to an already existing folder)
+        or from the module reference directly.'''
+        self.fresh_mdb.setitem('test', 1, dumper = 'self')
+        s1 = self.fresh_mdb._detect_dumper_string_of_existing_key('test')
+        self.assertEqual(s1, 'self')
+        
+    def test_metadata_update(self):
+        '''the method _update_metadata_if_necessary has the purpose of
+        providing a smooth transition from databases, that had not implemented
+        metadata to the newer version. This function should not overwrite
+        existing metadata'''
+        self.fresh_mdb.setitem('test', 1, dumper = 'self')
+        self.fresh_mdb.setitem('test2', 1, dumper = to_pickle)
+        
+        self.assertEqual(self.fresh_mdb.metadata['test']['version'], \
+                         model_data_base.get_versions()['version'])
+        self.assertEqual(self.fresh_mdb.metadata['test2']['version'], \
+                         model_data_base.get_versions()['version'])
+        self.assertEqual(self.fresh_mdb.metadata['test']['dumper'], 'self')
+        self.assertEqual(self.fresh_mdb.metadata['test2']['dumper'], 'to_pickle')
+        self.assertEqual(self.fresh_mdb.metadata['test']['metadata_creation_time'], \
+                         'together_with_new_key')
+        self.assertEqual(self.fresh_mdb.metadata['test2']['metadata_creation_time'], \
+                         'together_with_new_key')
+        
+        # directly after deleting metadata database, every information is "unknown"
+        metadata_db_path = os.path.join(self.path_fresh_mdb, 'metadata.db')
+        assert(os.path.exists(metadata_db_path))
+        os.remove(os.path.join(self.path_fresh_mdb, 'metadata.db')) 
+        
+        self.assertEqual(self.fresh_mdb.metadata['test']['dumper'], 'unknown')
+        self.assertEqual(self.fresh_mdb.metadata['test2']['dumper'], 'unknown')
+        
+        #after initialization, the metdata is rebuild
+        mdb = ModelDataBase(self.path_fresh_mdb)
+        self.assertEqual(mdb.metadata['test']['version'], "unknown")
+        self.assertEqual(mdb.metadata['test2']['version'], "unknown")
+        self.assertEqual(mdb.metadata['test']['dumper'], 'self')
+        self.assertEqual(mdb.metadata['test2']['dumper'], 'to_pickle')
+        self.assertEqual(mdb.metadata['test']['metadata_creation_time'], \
+                         'post_hoc')
+        self.assertEqual(mdb.metadata['test2']['metadata_creation_time'], \
+                         'post_hoc')        
+
     def test_check_working_dir_clean_for_build_works_correctly(self):
         #can create database in empty folder
         testpath = tempfile.mkdtemp()

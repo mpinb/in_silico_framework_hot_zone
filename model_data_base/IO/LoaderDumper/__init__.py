@@ -18,9 +18,27 @@ and has to be passed to the get function. This is wrapped in the following load 
 which is the intended way to reload arbitrary objects saved with a Dumper.
 '''
 
-def load(savedir):
+def load(savedir, load_data = True):
     '''Standard interface to load data, that was saved to savedir
     with an arbitrary dumper'''
     with open(os.path.join(savedir, 'Loader.pickle')) as file_:
         myloader = cloudpickle.load(file_)
-    return myloader.get(savedir)
+    if load_data:
+        return myloader.get(savedir)
+    else:
+        return myloader
+
+def get_dumper_string_by_dumper_module(dumper_module):
+    name = dumper_module.__name__
+    prefix = 'model_data_base.IO.LoaderDumper.'
+    assert(name.startswith(prefix))
+    return name[len(prefix):]
+    
+def get_dumper_string_by_savedir(savedir):
+    import inspect
+    with open(os.path.join(savedir, 'Loader.pickle')) as file_:
+        myloader = cloudpickle.load(file_)
+    dumper = inspect.getmodule(myloader)
+    return get_dumper_string_by_dumper_module(dumper)
+    
+    

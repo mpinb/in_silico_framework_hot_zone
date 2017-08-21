@@ -19,8 +19,8 @@ import test_simrun2, test_simrun2.decorators
 #
 # Valid values are integers and 'all'
 ####################################### 
-test_model_data_base.decorators.current_testlevel = 100#'all'#0#'all'#'0
-test_simrun2.decorators.current_testlevel = 100#'all'#0#'all'#'0
+test_model_data_base.decorators.current_testlevel = 10#'all'#0#'all'#'0
+test_simrun2.decorators.current_testlevel = 10#'all'#0#'all'#'0
 
 #######################################git git
 # SELECT TESTS YOU WANT TO RUN HERE
