@@ -19,8 +19,8 @@ import test_simrun2, test_simrun2.decorators
 #
 # Valid values are integers and 'all'
 ####################################### 
-test_model_data_base.decorators.current_testlevel = 0#'all'#0#'all'#'0
-test_simrun2.decorators.current_testlevel = 0#'all'#0#'all'#'0
+test_model_data_base.decorators.current_testlevel = 10#'all'#0#'all'#'0
+test_simrun2.decorators.current_testlevel = 10#'all'#0#'all'#'0
 
 #######################################git git
 # SELECT TESTS YOU WANT TO RUN HERE
@@ -30,7 +30,7 @@ test_simrun2.decorators.current_testlevel = 0#'all'#0#'all'#'0
 #######################################
 run = '.'
 #run = 'test_simrun2'
-run = 'test_model_data_base.model_data_base_register_test'
+#run = 'test_model_data_base.model_data_base_register_test'
 ################################
 # verbosity of testrunner
 ################################
@@ -40,9 +40,10 @@ verbosity = 2
 if __name__ == "__main__":
     testRunner = unittest.TextTestRunner(verbosity = verbosity)
 
-#     tests = unittest.defaultTestLoader.discover(run, pattern = '*_test.py')
-#     testRunner.run(tests)          
-    
+if run == '.':
+    tests = unittest.defaultTestLoader.discover(run, pattern = '*_test.py')
+    testRunner.run(tests)          
+else:
     test = __import__(run, globals(), locals(), [], 0)
     suite = eval('unittest.TestLoader().loadTestsFromTestCase(%s.Tests)' % run)        
     testRunner.run(suite)
