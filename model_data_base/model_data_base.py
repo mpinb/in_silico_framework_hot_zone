@@ -4,7 +4,7 @@ Created on Aug 15, 2016
 @author: arco
 '''
 
-import os
+import os, random, string
 import shutil
 import tempfile
 import datetime
@@ -211,6 +211,8 @@ class ModelDataBase(object):
         self.settings = settings #settings is imported above
         self.forceload = forceload
         self.readonly = readonly #possible values: False, True, 'warning'
+        self._first_init = False
+        self._unique_id = None
         
         try:
             self.read_db()
@@ -218,18 +220,36 @@ class ModelDataBase(object):
             if nocreate:
                 raise MdbException("Did not find a database in {path}. A new empty database will not be created since nocreate is set to True.")
             _check_working_dir_clean_for_build(basedir)
-            self.first_init()
+            self._first_init = True
+            self._registeredDumpers = ['self'] #self: stores the data in the underlying database
             self.save_db()
+            self._set_unique_id()
         
         self._sql_backend = SQLBackend(os.path.join(self.basedir, 'sqlitedict.db'))
         self._sql_metadata_backend = SQLBackend(os.path.join(self.basedir, 'metadata.db'))
         self.metadata = SQLMetadataAccessor(self._sql_metadata_backend)
-        self._update_metadata_if_necessary()
-            
-    def first_init(self):
-        '''function to initialize this db with default values, if it has never been
-        initialized before'''
-        self._registeredDumpers = ['self'] #self: stores the data in the underlying database
+        
+        #############################
+        # the following code helps to smoothly transient databases of the old
+        # format (does not implement _unique_id and metadata) to the new format.
+        # Should be commented out soon.
+        ##############################
+        self._update_metadata_if_necessary()        
+        if self._unique_id is None:
+            self._set_unique_id()
+    
+    def _set_unique_id(self):
+        if self._unique_id is not None:
+            raise ValueError("self._unique_id is already set!")
+        time = os.stat(os.path.join(self.basedir, 'dbcore.pickle')).st_mtime
+        time = datetime.datetime.utcfromtimestamp(time)
+        time = time.strftime("%Y-%m-%d")
+        random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(7))
+        self._unique_id = '_'.join([time, str(os.getpid()), random_string])
+        self.save_db()      
+        
+    def get_id(self):
+        return self._unique_id 
         
     def registerDumper(self, dumperModule):
         '''caveat: make sure to provide the MODULE, not the class'''
@@ -245,7 +265,8 @@ class ModelDataBase(object):
             
     def save_db(self):
         '''saves the data which defines the state of this database to dbcore.pickle'''
-        out = {'_registeredDumpers': self._registeredDumpers} ## things that define the state of this mdb and should be saved
+        out = {'_registeredDumpers': self._registeredDumpers, \
+               '_unique_id': self._unique_id} ## things that define the state of this mdb and should be saved
         with open(os.path.join(self.basedir, 'dbcore.pickle'), 'w') as f:
             pickle.dump(out, f)
         
@@ -273,7 +294,8 @@ class ModelDataBase(object):
     def get_managed_folder(self, key):
         '''deprecated!
         
-        Use create_managed_folder instead'''    
+        Use create_managed_folder instead'''   
+        warnings.warn("Get_managed_folder is deprecated.  Use create_managed_folder instead.") 
         return self.create_managed_folder(key)
     
     def create_sub_mdb(self, key):
@@ -291,6 +313,7 @@ class ModelDataBase(object):
         '''deprecated!
         
         Use create_sub_mdb instead'''
+        warnings.warn("get_sub_mdb is deprecated.  Use create_sub_mdb instead.")         
         return self.create_sub_mdb(key)
     
     def __getitem__(self, arg):

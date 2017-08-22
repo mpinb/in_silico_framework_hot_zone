@@ -15,6 +15,22 @@ class Tests(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.path_fresh_mdb)
         
+    def test_unique_is_set_on_initialization(self):
+        self.assert_(self.fresh_mdb._unique_id is not None)
+        
+    def test_unique_id_stays_the_same_on_reload(self):
+        mdb1 = self.fresh_mdb
+        mdb2 = ModelDataBase(self.path_fresh_mdb)
+        self.assertEqual(mdb1._unique_id, mdb2._unique_id)
+        
+    def test_new_unique_id_is_generated_if_it_is_not_set_yet(self):
+        self.fresh_mdb._unique_id = None
+        self.fresh_mdb.save_db()
+        self.assert_(self.fresh_mdb._unique_id is None)
+        mdb = ModelDataBase(self.path_fresh_mdb)
+        self.assert_(mdb._unique_id is not None)
+        print mdb._unique_id
+        
     def test_get_dumper_string_by_dumper_module(self):
         '''dumper string should be the modules name wrt IO.LoaderDumpers'''
         s1 = model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
