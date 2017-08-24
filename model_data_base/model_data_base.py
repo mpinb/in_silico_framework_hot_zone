@@ -15,6 +15,7 @@ import IO.LoaderDumper.pandas_to_msgpack
 import IO.LoaderDumper.just_create_folder
 import IO.LoaderDumper.just_create_mdb
 from collections import defaultdict
+# import model_data_base_register ## moved to end of file since this is a circular import
 
 
 import analyze
@@ -219,6 +220,8 @@ class ModelDataBase(object):
         except IOError:
             if nocreate:
                 raise MdbException("Did not find a database in {path}. A new empty database will not be created since nocreate is set to True.")
+            if readonly:
+                raise MdbException("Did not find a database in {path}. A new empty database will not be created since readonly is set to True.")
             _check_working_dir_clean_for_build(basedir)
             self._first_init = True
             self._registeredDumpers = ['self'] #self: stores the data in the underlying database
@@ -234,9 +237,18 @@ class ModelDataBase(object):
         # format (does not implement _unique_id and metadata) to the new format.
         # Should be commented out soon.
         ##############################
-        self._update_metadata_if_necessary()        
-        if self._unique_id is None:
-            self._set_unique_id()
+        if not self.readonly:
+            self._update_metadata_if_necessary()        
+            if self._unique_id is None:
+                self._set_unique_id()
+            self._register_this_database()
+
+    def _register_this_database(self):
+        try:
+            model_data_base_register.register_mdb(self)
+        except MdbException as e:
+            warnings.warn(str(e))
+            
     
     def _set_unique_id(self):
         if self._unique_id is not None:
@@ -298,23 +310,26 @@ class ModelDataBase(object):
         warnings.warn("Get_managed_folder is deprecated.  Use create_managed_folder instead.") 
         return self.create_managed_folder(key)
     
-    def create_sub_mdb(self, key):
+    def create_sub_mdb(self, key, register = 'as_parent'):
         '''creates a ModelDataBase within a ModelDataBase. Example:
         mdb.create_sub_mdb('my_sub_database')
         mdb['my_sub_database']['sme_key'] = ['some_value']
         '''
+        if register == 'as_parent':
+            ##todo
+            pass
         if key in self.keys():
             raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         else:
             self.setitem(key, None, dumper = IO.LoaderDumper.just_create_mdb)
         return self[key]
     
-    def get_sub_mdb(self,key):
+    def get_sub_mdb(self,key, register = 'as_parent'):
         '''deprecated!
         
         Use create_sub_mdb instead'''
         warnings.warn("get_sub_mdb is deprecated.  Use create_sub_mdb instead.")         
-        return self.create_sub_mdb(key)
+        return self.create_sub_mdb(key, register = register)
     
     def __getitem__(self, arg):
         '''items can be retrieved from the ModelDataBase using this syntax:
@@ -542,6 +557,9 @@ class ModelDataBase(object):
 
     def __reduce__(self):
         return (self.__class__, (self.basedir, self.forceload, self.readonly, True))
+    
+import model_data_base_register
+
 
                       
         

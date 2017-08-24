@@ -1,7 +1,9 @@
 import os
 from .model_data_base import ModelDataBase, MdbException
+from tuplecloudsqlitedict import SqliteDict
 
-_foldername = '.model_data_base_register'
+
+_foldername = '.model_data_base_register.db'
 
 class ModelDataBaseRegister():
     def __init__(self, basedir, search_mdbs = "on_first_init"):
@@ -9,8 +11,12 @@ class ModelDataBaseRegister():
             basedir = os.path.join(basedir, _foldername)
         assert(basedir.endswith(_foldername))
         self.basedir = basedir
-        self.mdb = ModelDataBase(basedir)
-        if search_mdbs == "on_first_init" and self.mdb._first_init:
+        if not os.path.exists(self.basedir):
+            self._first_init = True
+        else:
+            self._first_init = False
+        self.mdb = SqliteDict(self.basedir, autocommit=True)
+        if search_mdbs == "on_first_init" and self._first_init:
             self.search_mdbs(os.path.dirname(self.basedir))
         elif search_mdbs == True:
             self.search_mdbs(os.path.dirname(self.basedir))
@@ -38,8 +44,7 @@ def _get_mdb_register(dir_):
             return ModelDataBaseRegister(path)
         dir_ = os.path.dirname(dir_)
         if dir_ == '/':
-            raise MdbException("Did not find a ModelDataBaseRegister in parents of {path}"\
-                               .format(path = dir_))
+            raise MdbException("Did not find a ModelDataBaseRegister.")
         
 def register_mdb(mdb):
     mdbr = _get_mdb_register(mdb.basedir)

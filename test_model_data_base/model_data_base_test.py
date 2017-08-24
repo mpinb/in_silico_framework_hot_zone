@@ -1,11 +1,13 @@
 from .context import *
 from model_data_base.model_data_base import ModelDataBase, MdbException
+from  model_data_base import model_data_base_register 
 import model_data_base.IO.LoaderDumper.to_pickle  as to_pickle
 from . import decorators
 import unittest
 import os, shutil
 import numpy as np
 import tempfile
+import warnings
 
 class Tests(unittest.TestCase):       
     def setUp(self):        
@@ -14,6 +16,25 @@ class Tests(unittest.TestCase):
         
     def tearDown(self):
         shutil.rmtree(self.path_fresh_mdb)
+        
+#     def test_register_modes(self):
+#         self.assertRaises(MdbException, \
+#                           lambda: ModelDataBase(self.path_fresh_mdb, register = "on_every_init"))
+#         self.assertRaises(MdbException, \
+#                           lambda: ModelDataBase(os.path.join(self.path_fresh_mdb, 'subfolder'),\
+#                                                   register = "on_every_init"), register = "on_first_init")
+#         ModelDataBase(self.path_fresh_mdb, register = "on_first_init")
+#         with warnings.catch_warnings() as w:
+#             ModelDataBase(self.path_fresh_mdb, register = "try_on_every_init")
+#             ModelDataBase(os.path.join(self.path_fresh_mdb, 'subfolder'),\
+#                                                   register = "try_on_every_init")
+#             assert(len(w >= 2))
+            
+    def test_register_works(self):
+        mdbr = model_data_base_register.ModelDataBaseRegister(self.path_fresh_mdb)
+        self.assertIn(self.fresh_mdb._unique_id, mdbr.mdb.keys())
+        submdb = self.fresh_mdb.get_sub_mdb("something")
+        self.assertIn(submdb._unique_id, mdbr.mdb.keys())
         
     def test_unique_is_set_on_initialization(self):
         self.assert_(self.fresh_mdb._unique_id is not None)
