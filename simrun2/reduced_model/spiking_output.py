@@ -29,15 +29,15 @@ def convolve_matrix_with_kernel(X, kernel):
 #    X = rolling_window(X, len(kernel))
 #    return np.dot(X, kernel)
 
-def synaptic_input_to_lda_values(X, t, start = 0, n = 1000):
-    #calculate lda values of selected trails (start, n) at selected timepoint (t)
-    EXC = np.c_[np.zeros((n,l)), X[:,:300]]
-    INH = np.c_[np.zeros((n,l)), X[:,300:]]
-    EXC = EXC[:,180+t+l:265+t+l]
-    INH = INH[:,180+t+l:265+t+l]
-    #calculate PSTH from lda_values
-    lda_values = np.dot(np.concatenate([EXC, INH], axis = 1), coef_)
-    return lda_values
+# def synaptic_input_to_lda_values(X, t, start = 0, n = 1000):
+#     #calculate lda values of selected trails (start, n) at selected timepoint (t)
+#     EXC = np.c_[np.zeros((n,l)), X[:,:300]]
+#     INH = np.c_[np.zeros((n,l)), X[:,300:]]
+#     EXC = EXC[:,180+t+l:265+t+l]
+#     INH = INH[:,180+t+l:265+t+l]
+#     #calculate PSTH from lda_values
+#     lda_values = np.dot(np.concatenate([EXC, INH], axis = 1), coef_)
+#     return lda_values
 
 def data2Convolutions(X_dict, kernel_dict):
     return {name: convolve_matrix_with_kernel(X_dict[name], kernel_dict[name]) for name in X_dict.keys()}
