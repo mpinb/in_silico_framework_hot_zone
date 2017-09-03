@@ -1,9 +1,9 @@
-import Interface as I
 import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import warnings
+import collections
 
 class ReducedModelKernel(dict):
     pass
@@ -13,10 +13,13 @@ def _kernel_postprocess(clfs, n = 2, names = ['EXC', 'INH']):
     Returns: dictionary with keys EXC and INH
     
     This function is not pure!'''
+    if not (n == len(names)):
+        raise ValueError("Length of provides has to be n")    
     clfs['kernel_dict'] = []
     for clf in clfs['classifier_']:
         l = len(clf.coef_[0])
-        assert(l%n == 0) ### even numer
+        if not (l%n == 0):
+            raise ValueError("Length of classifier vector has to be a multiple of n")
         ln = l/n
         out = ReducedModelKernel()
         for lv in range(n):  
@@ -24,8 +27,15 @@ def _kernel_postprocess(clfs, n = 2, names = ['EXC', 'INH']):
             interval = clfs['classifier_'][0].coef_[0][lv*ln:(lv+1)*ln]
             out[name] = interval
         clfs['kernel_dict'].append(out)
+    
+    return clfs
+        
 
+    
+    
+            
 def get_kernel_C2_grid(output_window_min = 255, output_window_max = 265, input_window_width = 80, normalize_group_size = True, plot = True):
+    import Interface as I
     '''returns : clfs, lookup_series, pdf'''
     def spike_in_interval(st, tmin, tmax):
         return ((st>=tmin) & (st<tmax)).any(axis = 1)    
