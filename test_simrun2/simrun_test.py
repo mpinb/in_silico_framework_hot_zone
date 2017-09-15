@@ -125,12 +125,20 @@ class Tests(unittest.TestCase):
             assert_frame_equal(df1, df2)
                 
             #voltage traces
-            path1 = glob.glob(os.path.join(dummy[0][0][1], '*_vm_all_traces*.csv'))[0]
-            path2 = glob.glob(os.path.join(os.path.dirname(example_path), '*_vm_all_traces.csv'))[0]
+            path1 = glob.glob(os.path.join(dummy[0][0][1], '*_vm_all_traces*.csv'))
+            assert(len(path1) == 1)
+            path1 = path1[0]
+            path2 = glob.glob(os.path.join(os.path.dirname(example_path), '*_vm_all_traces.csv'))
+            assert(len(path2) == 1)
+            path2 = path2[0]
             pdf1 = pd.read_csv(path2, sep = '\t')[['t', 'Vm run 00']]
             pdf2 = pd.read_csv(path1, sep = '\t')
             pdf2 = pdf2[pdf2['t'] >=100].reset_index(drop = True)
-            assert_frame_equal(pdf1, pdf2)
+            #print pdf1.values
+            #print pdf2.values
+            #for x,y in zip(pdf1[pdf1.t<265].values.squeeze(), pdf2[pdf2.t<265].values.squeeze()):
+            #    print x,y
+            np.testing.assert_almost_equal(pdf1.values, pdf2.values, decimal = 3)
         except:
             raise
         finally:

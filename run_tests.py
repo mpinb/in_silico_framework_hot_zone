@@ -29,7 +29,7 @@ test_simrun2.decorators.current_testlevel = 10#'all'#0#'all'#'0
 # imported. Choose '.' to run all available tests within this module
 #######################################
 run = '.'
-#run = 'test_simrun2'
+#run = 'test_simrun2.simrun_test'
 #run = 'test_model_data_base.model_data_base_register_test'
 ################################
 # verbosity of testrunner
