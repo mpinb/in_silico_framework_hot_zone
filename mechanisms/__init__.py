@@ -1,5 +1,10 @@
 import os, platform
-import tables
+
+try:
+    import tables
+except ImportError:
+    pass
+
 import neuron
 parent = os.path.abspath(os.path.dirname(__file__))
 
@@ -22,6 +27,6 @@ except AssertionError:
         raise
     
 
-print "Loading mechanisms from " + parent
+print "Loading mechanisms:"
 neuron.load_mechanisms(os.path.join(parent, 'channels'))
 neuron.load_mechanisms(os.path.join(parent, 'netcon'))

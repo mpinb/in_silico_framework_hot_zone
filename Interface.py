@@ -24,6 +24,18 @@ import pandas as pd
 import numpy as np
 import dask
 import dask.dataframe as dd
+import warnings
+import traceback
+import sys
+
+# def warn_with_traceback(message, category, filename, lineno, file=None, line=None):
+#  
+#     log = file if hasattr(file,'write') else sys.stderr
+#     traceback.print_stack(file=log)
+#     log.write(warnings.formatwarning(message, category, filename, lineno, line))
+#  
+# warnings.showwarning = warn_with_traceback
+
 
 # todo: the version is not specific to model_data_base,
 # therefore - ideally - the _version.py file would not live in the 
@@ -36,6 +48,9 @@ from model_data_base._version import get_versions
 versions = get_versions()
 __version__ = versions['version']
 __git_revision__ = versions['full-revisionid']
+
+print "Current version: {version}".format(version = __version__)
+print "Current pid: {pid}".format(pid = os.getpid())
 
 from model_data_base.model_data_base import ModelDataBase
 from model_data_base.analyze.burst_detection import burst_detection
@@ -70,21 +85,7 @@ from model_data_base.analyze import split_synapse_activation, color_cellTypeColo
 from model_data_base.utils import silence_stdout
 from model_data_base.utils import select, pandas_to_array, pooled_std
 from model_data_base.utils import skit, chunkIt
-
-def cache(function):
-    import cPickle, hashlib
-    memo = {}
-    def get_key(*args, **kwargs):
-        return hashlib.md5(cPickle.dumps([args, kwargs])).hexdigest()
-    def wrapper(*args, **kwargs):
-        key = get_key(*args, **kwargs)
-        if key in memo:
-            return memo[key]
-        else:
-            rv = function(*args, **kwargs)
-            memo[key] = rv
-            return rv
-    return wrapper
+from model_data_base.utils import cache
 
 try: ##to avoid import errors in distributed system because of missing matplotlib backend
     import matplotlib
@@ -128,3 +129,5 @@ import single_cell_analyzer as sca
 import single_cell_parser as scp
 
 from singlecell_input_mapper.map_singlecell_inputs import map_singlecell_inputs
+
+if get_versions()['dirty']: warnings.warn('The source folder has uncommited changes!')

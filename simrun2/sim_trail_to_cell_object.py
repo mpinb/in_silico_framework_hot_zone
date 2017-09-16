@@ -1,8 +1,7 @@
 import os, os.path
 #os.chdir('/nas1/Data_arco/simrun/simrun/')
 
-import matplotlib
-matplotlib.use('Agg')
+from _matplotlib_import import *
 import sys
 import time
 

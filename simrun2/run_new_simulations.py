@@ -5,8 +5,7 @@ ongoing activity L2 neuron model
 
 @author: robert
 '''
-import matplotlib
-matplotlib.use('Agg')
+from _matplotlib_import import *
 import sys
 import time
 import os, os.path
