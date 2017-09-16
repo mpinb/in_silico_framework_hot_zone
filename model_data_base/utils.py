@@ -163,3 +163,18 @@ def skit(*funcs, **kwargs):
 
 def unique(list_):
     return list(pd.Series(list_).drop_duplicates())
+
+def cache(function):
+    import cPickle, hashlib
+    memo = {}
+    def get_key(*args, **kwargs):
+        return hashlib.md5(cPickle.dumps([args, kwargs])).hexdigest()
+    def wrapper(*args, **kwargs):
+        key = get_key(*args, **kwargs)
+        if key in memo:
+            return memo[key]
+        else:
+            rv = function(*args, **kwargs)
+            memo[key] = rv
+            return rv
+    return wrapper
