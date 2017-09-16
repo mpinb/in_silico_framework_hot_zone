@@ -1,35 +1,57 @@
 from __future__ import absolute_import
 #from ..context import *
-from simrun2.reduced_model.get_kernel import _kernel_postprocess
+from simrun2.reduced_model.get_kernel import concatenate_return_boundaries, ReducedLdaModel,\
+    compare_lists_by_none_values
 import unittest
 import numpy as np
+import pandas as pd
+from test_model_data_base.context import FreshlyInitializedMdb
+
+def get_test_X_y(n_samples = 1000, n_timepoints = 100):
+    X = np.random.randint(0, 21, size = (n_samples,n_timepoints))
+    v1 = np.array([0]*25+[1]*50+[0]*25)
+    dummy = (np.dot(X,v1) - 500) / 20. 
+    y = dummy > np.random.rand(dummy.size)
+    return X,y
 
 class Tests(unittest.TestCase): 
-    def test_kernel_postprocess(self):
-        class ClfMock():
-                pass    
+    def test_get_kernel(self):
+        with FreshlyInitializedMdb() as mdb:
+            X,y = get_test_X_y(n_samples = 5000)
+            mdb['test_synapse_activation'] = X
+            mdb['spike_times'] = pd.DataFrame(y).astype('f8').replace(0, np.NaN).replace(1, 100)
+            Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
+                         synapse_activation_window_width = 50)
+            Rm.fit([mdb])
+            #Rm.plot()
+        
+        assert(200 < np.array(Rm.lda_values).mean() < 400)
+        assert(Rm.lookup_series[0][150] == 0)
+        assert(Rm.lookup_series[0][500] == 1)
+        assert(0.1 < Rm.lookup_series[0][350] < 0.9)
+        mean1, std1 = Rm.kernel_dict[0].values()[0][:25].mean(), Rm.kernel_dict[0].values()[0][:25].std()
+        mean2, std2 = Rm.kernel_dict[0].values()[0][25:].mean(), Rm.kernel_dict[0].values()[0][25:].std()
+        assert(max([std1,std2]) / min([std1,std2]) < 2)
+        assert(abs(mean1-mean2) / max([std1,std2]) > 3)
+        
+    def test_concatenate_return_boundaries(self):
+        a = np.array([[1,2,3],[2,3,4]])
+        b = a + 1
+        c = (b + 1)[:,:2]
+        
+        values = [a,b,c]
+        X, boundaries = concatenate_return_boundaries(values, axis = 1)
+        for lv, v in enumerate(values):
+            np.testing.assert_equal(v, X[:, boundaries[lv][0]:boundaries[lv][1]])
             
-        def generate_test_clfs(n_clfs, n_names, n_lda_values):
-            clfs = {}
-            l = clfs['classifier_'] = list()
-            for lv in range(n_clfs):
-                clf = ClfMock()
-                l.append(clf)
-                clf.coef_ = [np.ones(n_lda_values)]
-            return clfs
+        t_values = [np.transpose(v) for v in values]
+        X_2, boundaries_2 = concatenate_return_boundaries(t_values, axis = 0)
+        assert(boundaries == boundaries_2)
         
-        out = _kernel_postprocess(generate_test_clfs(10, 2, 100))
-        self.assertEqual(len(out['kernel_dict'][0]['EXC']), 50)
-        self.assertEqual(len(out['kernel_dict'][0]['INH']), 50)
-        self.assertEqual(len(out['kernel_dict']), 10)
-        
-        out = _kernel_postprocess(generate_test_clfs(10, 3, 150), n=3, names = ['a', 'b', 'c'])
-        self.assertEqual(len(out['kernel_dict'][0]['a']), 50)
-        self.assertEqual(len(out['kernel_dict'][0]['b']), 50)
-        self.assertEqual(len(out['kernel_dict'][0]['c']), 50)
-        
-        clfs = generate_test_clfs(10, 3, 151)
-        self.assertRaises(ValueError, lambda: _kernel_postprocess(clfs, n=3, names = ['a', 'b', 'c']))
+    def test_compare_lists_by_none_values(self):
+        assert(compare_lists_by_none_values(['', None, None], [1, None, None]))
+        assert(not compare_lists_by_none_values(['', None, None], [None, None, None]))
+        assert(not compare_lists_by_none_values(['', None, None], [None, '', None]))       
 
 if __name__ == "__main__":
     testRunner = unittest.TextTestRunner(verbosity = 3)
