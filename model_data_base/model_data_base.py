@@ -334,12 +334,24 @@ class ModelDataBase(object):
     def __getitem__(self, arg):
         '''items can be retrieved from the ModelDataBase using this syntax:
         item = my_model_data_base[key]'''
-        dummy = self._sql_backend._direct_dbget(arg)
-        if isinstance(dummy, LoaderWrapper):
-            dummy = IO.LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
-        if isinstance(dummy, FunctionWrapper):
-            dummy = dummy.fun()
-        return dummy     
+        try:        
+            # general case                
+            dummy = self._sql_backend._direct_dbget(arg)
+            if isinstance(dummy, LoaderWrapper):
+                dummy = IO.LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
+            if isinstance(dummy, FunctionWrapper):
+                dummy = dummy.fun()
+            return dummy   
+        except KeyError:  
+            # special case: if we have nested mdbs, allow accessing it with
+            # mdb[key_in_parent_mdb, key_in_child_mdb] instead of forcing
+            # mdb[key_in_parent_mdb][key_in_child_mdb]
+            existing_keys = self.keys()
+            if isinstance(arg, tuple) and not arg in existing_keys:
+                for lv in range(len(arg)):
+                    if arg[:lv] in existing_keys:
+                        return self[arg[:lv]][arg[lv:]]
+                raise          
     
     def setitem(self, key, item, **kwargs):
         '''Allows to set items. Compared to the mdb['some_keys'] = my_item syntax,
@@ -351,7 +363,26 @@ class ModelDataBase(object):
             If dumper is not set, the default dumper is used
         **kwargs: other keyword arguments that should be passed to the dumper
         '''
-        
+        if isinstance(key, str): 
+            key = tuple([key])
+        # make sure hierarchy mimics folder structure:
+        # (parent, child) can only exist, if parent is not already set to
+        # some value
+        existing_keys = [tuple([k]) if isinstance(k, str) else k for k in self.keys()]
+        # make sure, first elements of the key are not used already,
+        # e.g. if we want to set ('A', '1'), we have to make sure that 
+        # ('A') is not already set
+        for current_key in [key[:lv] for lv in range(len(key))]:
+            if current_key in existing_keys:
+                raise MdbException("Cannot set {key1}. Conflicting key is {key2}"\
+                                   .format(key1 = key, key2 = key[:lv]))
+        # do it vice versa
+        for current_key in existing_keys:               
+            if len(current_key) <= len(key): continue
+            if key == current_key[:len(key)]:
+                raise MdbException("Cannot set {key1}. Conflicting key is {key2}"\
+                                   .format(key1 = key, key2 = current_key))
+        ## todo: assigning to sub_mdb
         
         #extract dumper from kwargs
         if not 'dumper' in kwargs:

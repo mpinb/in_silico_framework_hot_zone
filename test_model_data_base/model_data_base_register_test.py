@@ -3,9 +3,6 @@ from model_data_base.model_data_base import ModelDataBase, MdbException
 from model_data_base.model_data_base_register import _get_mdb_register, \
         ModelDataBaseRegister, get_mdb_by_unique_id, register_mdb
 import unittest
-import os, shutil
-import tempfile
-from statsmodels.base.data import ModelData
 
 class Tests(unittest.TestCase):       
     def setUp(self):        

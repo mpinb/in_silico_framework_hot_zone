@@ -164,7 +164,26 @@ class Tests(unittest.TestCase):
     def test_can_instantiate_sub_mdb(self):
         self.fresh_mdb.create_sub_mdb('test_sub_mdb')
         self.assertIsInstance(self.fresh_mdb['test_sub_mdb'], ModelDataBase)
+        
+    def test_cannot_set_hierarchical_key_it_is_already_used_in_hierarchy(self):
+        self.fresh_mdb['A'] = 1
+        self.fresh_mdb[('B', '1')] = 2
+        def fun(): self.fresh_mdb['A', '1'] = 1
+        def fun2(): self.fresh_mdb['B'] = 1
+        def fun3(): self.fresh_mdb['B', '1'] = 1
+        def fun4(): self.fresh_mdb['B', '1', '2'] = 1
+        self.assertRaises(MdbException, fun)
+        self.assertRaises(MdbException, fun2)
+        fun3()
+        self.assertRaises(MdbException, fun4)     
     
+    def test_keys_of_sub_mdbs_can_be_called_with_a_single_tuple(self):
+        sub_mdb = self.fresh_mdb.create_sub_mdb(('A', '1'))
+        sub_mdb['B'] = 1
+        sub_mdb['C', '1'] = 2
+        self.assertEqual(self.fresh_mdb['A','1','B'], 1)
+        self.assertEqual(self.fresh_mdb['A','1','C', '1'], 2)
+        
     def test_sub_mdb_does_not_overwrite_existing_keys(self):
         self.fresh_mdb.setitem('asd', 1)
         self.assertRaises(MdbException, lambda: self.fresh_mdb.create_sub_mdb('asd'))
