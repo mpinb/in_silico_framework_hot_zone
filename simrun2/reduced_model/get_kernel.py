@@ -270,7 +270,9 @@ class ReducedLdaModel(ReducedModel):
 ###################################
 # methods to get special kernels
 ###################################            
-def get_kernel_C2_grid(keys_to_synapse_activation_data, \
+def get_kernel_C2_grid(keys_to_synapse_activation_data = [
+        ('synapse_activation', 'binned_t1', 'EI', 'proximal','EXC', 'prox'),
+        ('synapse_activation', 'binned_t1', 'EI', 'proximal','INH', 'prox')], \
                 synapse_activation_window_width = 80, \
                 synapse_activation_window_min = None, \
                 synapse_activation_window_max = None,\
