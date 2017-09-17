@@ -2,6 +2,9 @@ import pandas as pd
 import dask
 import numpy as np
 
+def spike_in_interval(st, tmin, tmax):
+    return ((st>=tmin) & (st<tmax)).any(axis = 1)  
+
 def simple_spike_detection(t, v, tBegin=None, tEnd=None, threshold=0.0, mode='regular'):
     '''
     copied from robert

@@ -136,11 +136,8 @@ class ReducedLdaModelResult():
         self.lda_dict = lda_dict
         self.lda_values = lda_values
         self.p_spike = p_spike
-        
-class ReducedModel():
-    pass
 
-class ReducedLdaModel(ReducedModel):
+class ReducedLdaModel():
     def __init__(self, \
                 keys_to_synapse_activation_data, \
                 synapse_activation_window_width = 80, \

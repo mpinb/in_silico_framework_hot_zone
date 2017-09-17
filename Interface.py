@@ -58,7 +58,7 @@ from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_r
 from model_data_base.analyze.temporal_binning import universal as temporal_binning
 from model_data_base.analyze.synapse_activation_binning import synapse_activation_postprocess_dask as synapse_activation_binning_dask
 
-from model_data_base.analyze.spike_detection import spike_detection 
+from model_data_base.analyze.spike_detection import spike_detection, spike_in_interval
 from model_data_base.analyze.spaciotemporal_binning import universal as spaciotemporal_binning
 from model_data_base.analyze import split_synapse_activation
 from model_data_base.analyze.analyze_input_mapper_result import compare_to_neuronet
