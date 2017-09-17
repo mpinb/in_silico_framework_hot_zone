@@ -28,7 +28,7 @@ test_simrun2.decorators.current_testlevel = 10#'all'#0#'all'#'0
 # Valid values are strings, which contain a module name, that can be 
 # imported. Choose '.' to run all available tests within this module
 #######################################
-run = '.'
+run = 'test_simrun2.reduced_model.get_kernel_test'
 #run = 'test_simrun2.simrun_test'
 #run = 'test_model_data_base.model_data_base_register_test'
 ################################

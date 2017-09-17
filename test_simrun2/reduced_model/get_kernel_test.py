@@ -33,7 +33,7 @@ class Tests(unittest.TestCase):
         assert(0.1 < Rm.lookup_series[0][350] < 0.9)
         mean1, std1 = Rm.kernel_dict[0].values()[0][:25].mean(), Rm.kernel_dict[0].values()[0][:25].std()
         mean2, std2 = Rm.kernel_dict[0].values()[0][25:].mean(), Rm.kernel_dict[0].values()[0][25:].std()
-        np.testing.assert_array_less(max([std1,std2]) / min([std1,std2]), 2)
+        np.testing.assert_array_less(max([std1,std2]) / min([std1,std2]), 3)
         np.testing.assert_array_less(3, abs(mean1-mean2) / max([std1,std2]))
         
     def test_ReducedLdaModel_apply(self):
@@ -66,7 +66,7 @@ class Tests(unittest.TestCase):
             t2 = time.time()
             Rm.apply_static(mdb, model_number = mn)
             t2 = time.time() - t2     
-            np.testing.assert_array_less(t1/t2, 100)
+            np.testing.assert_array_less(10, t1/t2)
             
         with FreshlyInitializedMdb() as mdb:
             X,y = get_test_X_y(n_samples = 500)
