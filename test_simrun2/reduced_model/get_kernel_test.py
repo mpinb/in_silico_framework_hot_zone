@@ -2,9 +2,10 @@ from __future__ import absolute_import
 #from ..context import *
 from simrun2.reduced_model.get_kernel import concatenate_return_boundaries, ReducedLdaModel,\
     compare_lists_by_none_values
-import unittest
+import unittest, time
 import numpy as np
 import pandas as pd
+import dask
 from test_model_data_base.context import FreshlyInitializedMdb
 
 def get_test_X_y(n_samples = 1000, n_timepoints = 100):
@@ -15,7 +16,8 @@ def get_test_X_y(n_samples = 1000, n_timepoints = 100):
     return X,y
 
 class Tests(unittest.TestCase): 
-    def test_get_kernel(self):
+    def test_ReducedLdaModel_inference(self):
+        '''compare model infered from test data to expectancy'''
         with FreshlyInitializedMdb() as mdb:
             X,y = get_test_X_y(n_samples = 5000)
             mdb['test_synapse_activation'] = X
@@ -23,7 +25,7 @@ class Tests(unittest.TestCase):
             Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
                          synapse_activation_window_width = 50)
             Rm.fit([mdb])
-            #Rm.plot()
+            Rm.plot() # make sure this can be executed
         
         assert(200 < np.array(Rm.lda_values).mean() < 400)
         assert(Rm.lookup_series[0][150] == 0)
@@ -31,8 +33,59 @@ class Tests(unittest.TestCase):
         assert(0.1 < Rm.lookup_series[0][350] < 0.9)
         mean1, std1 = Rm.kernel_dict[0].values()[0][:25].mean(), Rm.kernel_dict[0].values()[0][:25].std()
         mean2, std2 = Rm.kernel_dict[0].values()[0][25:].mean(), Rm.kernel_dict[0].values()[0][25:].std()
-        assert(max([std1,std2]) / min([std1,std2]) < 2)
-        assert(abs(mean1-mean2) / max([std1,std2]) > 3)
+        np.testing.assert_array_less(max([std1,std2]) / min([std1,std2]), 2)
+        np.testing.assert_array_less(3, abs(mean1-mean2) / max([std1,std2]))
+        
+    def test_ReducedLdaModel_apply(self):
+        '''compare model infered from test data to expectancy'''
+        with FreshlyInitializedMdb() as mdb:
+            X,y = get_test_X_y(n_samples = 5000)
+            mdb['test_synapse_activation'] = X
+            mdb['spike_times'] = pd.DataFrame(y).astype('f8').replace(0, np.NaN).replace(1, 100)
+            Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
+                         synapse_activation_window_width = 50)
+            Rm.fit([mdb])
+            mn = 0
+            res = Rm.apply_static(mdb, model_number = mn)
+        np.testing.assert_equal(res.lda_values, Rm.lda_values[mn])
+        
+    def test_ReducedLdaModel_caching(self):
+        '''compare model infered from test data to expectancy'''
+        with FreshlyInitializedMdb() as mdb:
+            X,y = get_test_X_y(n_samples = 500)
+            mdb['test_synapse_activation'] = X
+            mdb['spike_times'] = pd.DataFrame(y).astype('f8').replace(0, np.NaN).replace(1, 100)
+            Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
+                         synapse_activation_window_width = 50)
+            Rm.fit([mdb])
+            mn = 0
+            
+            t1 = time.time()
+            Rm.apply_static(mdb, model_number = mn)
+            t1 = time.time()-t1
+            t2 = time.time()
+            Rm.apply_static(mdb, model_number = mn)
+            t2 = time.time() - t2     
+            np.testing.assert_array_less(t1/t2, 100)
+            
+        with FreshlyInitializedMdb() as mdb:
+            X,y = get_test_X_y(n_samples = 500)
+            mdb['test_synapse_activation'] = X
+            mdb['spike_times'] = pd.DataFrame(y).astype('f8').replace(0, np.NaN).replace(1, 100)
+            Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
+                         synapse_activation_window_width = 50, cache = False)
+            Rm.fit([mdb])
+            mn = 0
+            t1 = time.time()
+            Rm.apply_static(mdb, model_number = mn)
+            t1 = time.time()-t1
+            t2 = time.time()
+            Rm.apply_static(mdb, model_number = mn)
+            t2 = time.time() - t2     
+            np.testing.assert_array_less(max(t1,t2) / float(min(t1,t2)), 1.5)
+
+        
+
         
     def test_concatenate_return_boundaries(self):
         a = np.array([[1,2,3],[2,3,4]])
