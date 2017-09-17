@@ -113,9 +113,11 @@ def get_lookup_series_from_lda_values_spike_data(lda_values, spike, mask = None,
         pdf = pdf2[~mask]
     else:
         pdf = pdf2
-    groupby_ = (pdf.lda_values/lookup_series_stepsize).astype(int)
+    groupby_ = (pdf.lda_values/lookup_series_stepsize).round().astype(int)
     groupby_ = groupby_*lookup_series_stepsize
     lookup_series = pdf.groupby(groupby_).apply(lambda x: len(x[x.spike])/float(len(x)))
+    lookup_series = pdf.groupby(pdf.lda_values.round()).apply(lambda x: len(x[x.spike])/float(len(x)))
+
     return interpolate_lookup_series(lookup_series)
 
 # def get_lookup_series_depending_on_refractory_period(refractory_period, lda_values, st, binsize_calculate = 10):
@@ -233,7 +235,7 @@ class ReducedLdaModel(ReducedModel):
             lookup_series = self.lookup_series[lv]
             lookup_series.plot(ax = fig.add_subplot(111), color = 'b')
             fig.axes[-1].set_ylabel('p_spike')
-            pd.Series(self.lda_values[0]).astype(int).value_counts()\
+            pd.Series(self.lda_values[0]).round().astype(int).value_counts()\
                 .sort_index().plot(secondary_y = True, color = 'g')
             fig.axes[-1].set_ylabel('# datapoints')
                 
@@ -253,7 +255,7 @@ class ReducedLdaModel(ReducedModel):
         lda_value_dict = {k: np.dot(data_dict[k][:, min_index:max_index], \
                           self.kernel_dict[model_number][k]) for k in self.keys_to_synapse_activation_data}
         lda_values = sum(lda_value_dict.values())
-        p_spike = self.lookup_series[model_number].loc[lda_values.astype(int)]
+        p_spike = self.lookup_series[model_number].loc[lda_values.round().astype(int)]
         return ReducedLdaModelResult(self, lda_value_dict, lda_values, p_spike)
     
     @dask.delayed
