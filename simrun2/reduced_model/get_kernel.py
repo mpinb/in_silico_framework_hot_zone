@@ -244,20 +244,31 @@ class ReducedLdaModel():
                                            output_window_max = self.output_window_max))
         ax.set_xlabel('lda_value')
        
-    def apply_static(self, mdb = None, data_dict = None, model_number = 0):
+    def apply_static(self, mdb = None, data_dict = None, model_number = 0, delayed = True):
         if data_dict is None:
             data_dict = get_data_dict_from_mdb(mdb, self.keys_to_synapse_activation_data)
-        min_index = self.synapse_activation_window_min
-        max_index = self.synapse_activation_window_max
-        lda_value_dict = {k: np.dot(data_dict[k][:, min_index:max_index], \
-                          self.kernel_dict[model_number][k]) for k in self.keys_to_synapse_activation_data}
-        lda_values = sum(lda_value_dict.values())
-        p_spike = self.lookup_series[model_number].loc[lda_values.round().astype(int)]
-        return ReducedLdaModelResult(self, lda_value_dict, lda_values, p_spike)
+            
+        fun = _apply_static_helper
+        if delayed: fun = dask.delayed(fun)
+        return fun(self.lookup_series[model_number], data_dict, \
+                             self.synapse_activation_window_min, self.synapse_activation_window_max, \
+                             self.kernel_dict[model_number])
     
     @dask.delayed
-    def apply_rolling(self, mdb = None, data_dict = None):
-        pass
+    def apply_rolling(self, mdb = None, data_dict = None, model_number = 0, refractory_period = 0,\
+                      delayed = False):
+        import spiking_output
+        rm = spiking_output.get_reduced_model(self.kernel_dict[model_number], \
+                                         self.nonlinearity_LUT, \
+                                         refractory_period, \
+                                         combine_fun = sum, \
+                                         LUT_resolution = 1)
+        
+        if delayed:
+            rm = delayed(rm)
+        
+        return rm(data_dict)
+        
     
     @dask.delayed
     def apply_static_param(self, ):
@@ -266,6 +277,14 @@ class ReducedLdaModel():
     @dask.delayed
     def apply_rolling_param(self):
         pass
+    
+def _apply_static_helper(lookup_series, data_dict, min_index, max_index, kernel_dict):
+    '''optimized to require minimal datatransfer to allow efficient multiprocessing'''
+    lda_value_dict = {k: np.dot(data_dict[k][:, min_index:max_index], \
+                          kernel_dict[k]) for k in data_dict.keys()}
+    lda_values = sum(lda_value_dict.values())
+    p_spike = lookup_series.loc[lda_values.round().astype(int)]
+    return ReducedLdaModelResult(None, lda_value_dict, lda_values, p_spike)
 ###################################
 # methods to get special kernels
 ###################################            
