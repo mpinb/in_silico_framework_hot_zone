@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import warnings
 import collections
 from model_data_base import utils as mdb_utils
+from functools import partial
 
 #############################################
 # general methods
@@ -28,12 +29,10 @@ def compare_lists_by_none_values(l1, l2):
             if x is not None: return False
     return True
 
-##############################################
-# core methods for calculating lda kernels
-##############################################
-def get_data_dict_from_mdb(mdb, keys):
-    return {key: mdb[key] for key in keys}
-
+##################################################
+# methods for selecting synapse activation data out of a model_data_base instance
+# and to convert it to a format suitable for scipy.linear_discriminant_analysis
+#####################################################
 def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
                             synapse_acivation_window_min, synapse_activation_window_max, \
                             output_window_min, output_window_max, refractory_period = 0):
@@ -52,13 +51,6 @@ def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
     
     if not refractory_period == 0:
         raise NotImplementedError()
-    
-#     print 'synapse_acivation_window_min: ', synapse_acivation_window_min
-#     print 'synapse_activation_window_max: ', synapse_activation_window_max
-#     print 'output_window_min: ', output_window_min
-#     print 'output_window_max: ', output_window_max
-#     print 'refractory_period: ', refractory_period
-    
 
     ys = []
     Xs = []
@@ -88,6 +80,10 @@ def _kernel_dict_from_clfs(clfs, boundaries):
         kernel_dict.append(out) 
     return kernel_dict
 
+#################################
+# methods specific for the task of building a reduced model
+#################################
+
 def interpolate_lookup_series(lookup_series):
     stepsize = 1
     diff = max(lookup_series.index) - min(lookup_series.index)
@@ -99,7 +95,7 @@ def interpolate_lookup_series(lookup_series):
     s[lookup_series.index] = lookup_series
     return s.interpolate(method = 'linear')
 
-def get_lookup_series_from_lda_values_spike_data(lda_values, spike, mask = None,\
+def get_lookup_series_from_lda_values_spike_data(lda_values, spike, spike_before = None,\
                                                  lookup_series_stepsize = 3):
     '''
     
@@ -109,15 +105,13 @@ def get_lookup_series_from_lda_values_spike_data(lda_values, spike, mask = None,
         If True: the respective trail will be ignored.
     '''
     pdf2 = pd.DataFrame(dict(lda_values = lda_values, spike = spike))
-    if mask is not None:
-        pdf = pdf2[~mask]
+    if spike_before is not None:
+        pdf = pdf2[~spike_before]
     else:
         pdf = pdf2
     groupby_ = (pdf.lda_values/lookup_series_stepsize).round().astype(int)
     groupby_ = groupby_*lookup_series_stepsize
     lookup_series = pdf.groupby(groupby_).apply(lambda x: len(x[x.spike])/float(len(x)))
-    lookup_series = pdf.groupby(pdf.lda_values.round()).apply(lambda x: len(x[x.spike])/float(len(x)))
-
     return interpolate_lookup_series(lookup_series)
 
 # def get_lookup_series_depending_on_refractory_period(refractory_period, lda_values, st, binsize_calculate = 10):
@@ -129,6 +123,10 @@ def get_lookup_series_from_lda_values_spike_data(lda_values, spike, mask = None,
 #     lookup_series = pdf2.groupby((pdf2.lda_values/binsize_calculate).round()*binsize_calculate).apply(lambda x: len(x[x.spike])/float(len(x)))
 #     lookup_series = interpolate_lookup_series(lookup_series)
 #     return lookup_series
+
+##################################
+# classes managing all the steps necessary to build a reduced model
+##################################
 
 class ReducedLdaModelResult():
     def __init__(self, RM, lda_dict, lda_values, p_spike):
@@ -243,45 +241,53 @@ class ReducedLdaModel():
                                    .format(output_window_min = self.output_window_min, \
                                            output_window_max = self.output_window_max))
         ax.set_xlabel('lda_value')
-       
-    def apply_static(self, mdb = None, data_dict = None, model_number = 0, delayed = True):
-        if data_dict is None:
-            data_dict = get_data_dict_from_mdb(mdb, self.keys_to_synapse_activation_data)
-            
-        fun = _apply_static_helper
-        if delayed: fun = dask.delayed(fun)
-        return fun(self.lookup_series[model_number], data_dict, \
-                             self.synapse_activation_window_min, self.synapse_activation_window_max, \
-                             self.kernel_dict[model_number])
     
-    @dask.delayed
-    def apply_rolling(self, mdb = None, data_dict = None, model_number = 0, refractory_period = 0,\
-                      delayed = False):
+    def get_minimodel_static(self, model_number = 0):
+        '''returns partial, which can be called with keywords mdb or data_dict.
+        
+        The partial is constructed such that it can be serialized fast, allowing
+        efficient multiprocessing. This is the recommended way of sending a reduced
+        model through a network connection.'''
+        return partial(_apply_static_helper, self.lookup_series[model_number], \
+                                 self.synapse_activation_window_min, \
+                                 self.synapse_activation_window_max, \
+                                 self.kernel_dict[model_number])
+        
+    def apply_static(self, data, model_number = 0):
+        rm = self.get_minimodel_static(model_number)
+        return rm(data)
+        
+    def get_minimodel_rolling(self, refractory_period = None, model_number = 0):
+        '''returns partial, which can be called with keywords mdb or data_dict.
+        
+        The partial is constructed such that it can be serialized fast, allowing
+        efficient multiprocessing. This is the recommended way of sending a reduced
+        model through a network connection.'''
         import spiking_output
+        if refractory_period is not None:
+            raise NotImplementedError()
         rm = spiking_output.get_reduced_model(self.kernel_dict[model_number], \
-                                         self.nonlinearity_LUT, \
+                                         self.lookup_series[model_number], \
                                          refractory_period, \
                                          combine_fun = sum, \
                                          LUT_resolution = 1)
         
-        if delayed:
-            rm = delayed(rm)
-        
-        return rm(data_dict)
-        
+        return rm
     
-    @dask.delayed
-    def apply_static_param(self, ):
-        pass
+    def apply_rolling(self):
+        raise NotImplementedError() 
     
-    @dask.delayed
+    def apply_static_param(self):
+        raise NotImplementedError()
+    
     def apply_rolling_param(self):
-        pass
+        raise NotImplementedError()
     
-def _apply_static_helper(lookup_series, data_dict, min_index, max_index, kernel_dict):
+def _apply_static_helper(lookup_series, min_index, max_index, kernel_dict, data):
     '''optimized to require minimal datatransfer to allow efficient multiprocessing'''
-    lda_value_dict = {k: np.dot(data_dict[k][:, min_index:max_index], \
-                          kernel_dict[k]) for k in data_dict.keys()}
+    # preparing data
+    lda_value_dict = {k: np.dot(data[k][:, min_index:max_index], \
+                          kernel_dict[k]) for k in kernel_dict.keys()}
     lda_values = sum(lda_value_dict.values())
     p_spike = lookup_series.loc[lda_values.round().astype(int)]
     return ReducedLdaModelResult(None, lda_value_dict, lda_values, p_spike)

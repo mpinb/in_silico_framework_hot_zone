@@ -43,7 +43,7 @@ class Tests(unittest.TestCase):
             mdb['test_synapse_activation'] = X
             mdb['spike_times'] = pd.DataFrame(y).astype('f8').replace(0, np.NaN).replace(1, 100)
             Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
-                         synapse_activation_window_width = 50)
+                         synapse_activation_window_width = 50, cache = False)
             Rm.fit([mdb])
             mn = 0
             res = Rm.apply_static(mdb, model_number = mn)
@@ -66,7 +66,7 @@ class Tests(unittest.TestCase):
             t2 = time.time()
             Rm.apply_static(mdb, model_number = mn)
             t2 = time.time() - t2     
-            np.testing.assert_array_less(10, t1/t2)
+            np.testing.assert_array_less(50, t1/t2)
             
         with FreshlyInitializedMdb() as mdb:
             X,y = get_test_X_y(n_samples = 500)
@@ -82,7 +82,7 @@ class Tests(unittest.TestCase):
             t2 = time.time()
             Rm.apply_static(mdb, model_number = mn)
             t2 = time.time() - t2     
-            np.testing.assert_array_less(max(t1,t2) / float(min(t1,t2)), 1.5)
+            np.testing.assert_array_less(max(t1,t2) / float(min(t1,t2)), 2)
 
         
 
