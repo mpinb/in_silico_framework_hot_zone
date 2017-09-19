@@ -28,6 +28,7 @@ import warnings
 import traceback
 import sys
 
+
 # def warn_with_traceback(message, category, filename, lineno, file=None, line=None):
 #  
 #     log = file if hasattr(file,'write') else sys.stderr
@@ -131,3 +132,12 @@ import single_cell_parser as scp
 from singlecell_input_mapper.map_singlecell_inputs import map_singlecell_inputs
 
 if get_versions()['dirty']: warnings.warn('The source folder has uncommited changes!')
+
+try:
+    import distributed
+    @cache
+    def cluster():
+        return distributed.Client()
+    print "setting up local multiprocessing framework ... done"
+except ImportError:
+    pass
