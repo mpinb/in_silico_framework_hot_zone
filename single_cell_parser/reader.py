@@ -89,7 +89,7 @@ def read_hoc_file(fname=''):
                     segmentInsertOrder[tmpLine.split()[1]] = insertCnt
                     tmpHocLabelList.append(tmpLine.split()[1])
                     insertCnt += 1
-                if 'dend' in line and 'create' in line:
+                if ('dend' in line or 'BasalDendrite') in line and 'create' in line:
                     tmpLabelList.append('Dendrite')
                     readPts = 1
                     edgePtCnt = 0

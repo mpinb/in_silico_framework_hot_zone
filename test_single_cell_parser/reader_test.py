@@ -1,0 +1,12 @@
+from __future__ import absolute_import
+import unittest
+from single_cell_parser.reader import read_hoc_file
+from .context import *
+
+
+class Tests(unittest.TestCase): 
+    def test_can_load_hoc_file_with_label_BasalDendrite(self):
+        '''compare model infered from test data to expectancy'''
+        path = os.path.join(this_folder, 'data', '85.hoc')
+        print path
+        read_hoc_file(path)
