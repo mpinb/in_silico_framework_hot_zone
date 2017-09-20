@@ -24,7 +24,7 @@ def make_groups_equal_size(X,y):
 assert(len(make_groups_equal_size(np.array([[1,2,3],[2,3,4],[3,4,5], [4,5,6]]), np.array([0,0,1,1]))[0]) == 4)
 assert(len(make_groups_equal_size(np.array([[1,2,3],[2,3,4],[3,4,5], [4,5,6]]), np.array([0,0,0,1]))[0]) == 2)
 
-def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', normalize_group_size = True, verbosity = 0, test_size = 0.4, solver = 'eigen'):
+def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', normalize_group_size = True, verbosity = 0, test_size = 0.4, solver = 'eigen', max_tries = 2):
     '''
     X: training data
     y: target values
@@ -57,7 +57,7 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
                 classifier.fit(X_train, y_train)
                 break
             except ValueError:
-                if lv >= 100:
+                if lv >= max_tries:
                     raise RuntimeError("Can't select data, that is accepted by estimator!")
                 lv = lv + 1
                 continue
