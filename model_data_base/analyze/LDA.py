@@ -75,13 +75,13 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
         print('score 1:   max %f min %f mean %f' % (max(score_1), min(score_1), np.mean(score_1)))
         print('score 0:   max %f min %f mean %f' % (max(score_0), min(score_0), np.mean(score_0)))
         print('score ROC-AUC:   max %f min %f mean %f' % (max(score_rocauc), min(score_rocauc), np.mean(score_rocauc)))
-		
     if verbosity > 0:    
         print('score: %f' % score)
         print ''
     
     if return_ == 'all': 
-        return dict(score_all = score_all, score_0 = score_0, score_1 = score_1, score = score, classifier_ = classifier_)
+        return dict(score_all = score_all, score_0 = score_0, score_1 = score_1, score = score, \
+                    score_rocauc = score_rocauc, classifier_ = classifier_)
     elif return_ == 'score':
         return(score)
     
