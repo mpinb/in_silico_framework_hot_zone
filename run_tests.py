@@ -9,6 +9,8 @@ plt.switch_backend('agg')
 # import modules, whose tests should run 
 import test_model_data_base, test_model_data_base.decorators
 import test_simrun2, test_simrun2.decorators
+import test_single_cell_parser, test_single_cell_parser.decorators
+
 
 #######################################
 # SET TESTLEVEL HERE
@@ -28,7 +30,7 @@ test_simrun2.decorators.current_testlevel = 10#'all'#0#'all'#'0
 # Valid values are strings, which contain a module name, that can be 
 # imported. Choose '.' to run all available tests within this module
 #######################################
-run = 'test_simrun2.reduced_model.get_kernel_test'
+run = '.'#test_single_cell_parser.reader_test'
 #run = 'test_simrun2.simrun_test'
 #run = 'test_model_data_base.model_data_base_register_test'
 ################################

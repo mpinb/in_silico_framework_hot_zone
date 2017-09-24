@@ -134,30 +134,49 @@ class SQLBackend(object):
     
     def _direct_dbget(self, arg):
         '''Backend method to retrive item from the database'''
+        dict_ = self._vectorized_direct_dbget([arg])
+        assert(len(dict_) == 1)
+        return dict_.values()[0]
+    
+    def _vectorized_direct_dbget(self, keys):
+        '''this allows to get many values at once, reducing the overhead of repeated 
+        opening and closing the connection'''
         try:
-            sqllitedict = self._get_sql()
-            dummy = sqllitedict[arg]
+            sqllitedict = self._get_sql()    
+            dummy = {key: sqllitedict[key] for key in keys}
         finally:
             sqllitedict.close() 
         return dummy
     
     def _direct_dbset(self, key, item):
         '''Backend method to add a key-value pair to the sqlite database'''
+        self._vectorized_direct_dbset({key: item})
+
+    def _vectorized_direct_dbset(self, dict_):
+        '''this allows to set many values at once, reducing the overhead of repeated 
+        opening and closing the connection'''
         try:
             sqllitedict = self._get_sql()
-            sqllitedict[key] = item
+            for k, v in dict_.iteritems():
+                sqllitedict[k] = v
         except:
             raise
         finally: 
-            sqllitedict.close()  
+            sqllitedict.close()     
 
     def _direct_dbdel(self, arg):
         '''Backend method to delete item from the sqlite database.'''
+        self._vectorized_direct_dbdel([arg])
+            
+    def _vectorized_direct_dbdel(self, keys):
+        '''this allows to delete many values at once, reducing the overhead of repeated 
+        opening and closing the connection'''        
         try:
             sqllitedict = self._get_sql()
-            del sqllitedict[arg]
+            for k in keys:
+                del sqllitedict[k]
         finally:
-            sqllitedict.close()      
+            sqllitedict.close()         
     
     def keys(self):
         try:
@@ -165,7 +184,8 @@ class SQLBackend(object):
             keys = sqllitedict.keys()
             return sorted(keys)
         finally:
-            sqllitedict.close()                
+            sqllitedict.close()
+                        
 
 class SQLMetadataAccessor():
     def __init__(self, sql_backend):
@@ -249,7 +269,6 @@ class ModelDataBase(object):
         except MdbException as e:
             warnings.warn(str(e))
             
-    
     def _set_unique_id(self):
         if self._unique_id is not None:
             raise ValueError("self._unique_id is already set!")
@@ -509,7 +528,8 @@ class ModelDataBase(object):
     
     def _update_metadata_if_necessary(self):
         for key in self.keys():
-            if key in self.metadata.keys():
+            metadata_keys = self.metadata.keys()
+            if key in metadata_keys:
                 continue
             else:
                 print "Updating metadata for key {key}".format(key = str(key))
