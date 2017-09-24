@@ -27,6 +27,18 @@ import dask.dataframe as dd
 import warnings
 import traceback
 import sys
+import collections
+
+try:
+    from IPython import display
+except ImportError:
+    pass
+
+try:
+    import seaborn as sns
+except ImportError:
+    pass
+
 
 
 # def warn_with_traceback(message, category, filename, lineno, file=None, line=None):
@@ -137,7 +149,13 @@ try:
     import distributed
     @cache
     def cluster():
-        return distributed.Client()
+        c = distributed.Client()
+        # import matplotlib to avoid error with missing Qt backend
+        def fun():
+            import matplotlib
+            matplotlib.use('Agg')
+        c.run(fun)
+        return c
     print "setting up local multiprocessing framework ... done"
 except ImportError:
     pass
