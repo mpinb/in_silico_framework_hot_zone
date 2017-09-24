@@ -111,7 +111,13 @@ def pandas_to_array(pdf, x_component_fun, y_component_fun, value_fun):
                          lambda index, values: values.bla)
     '''
     out_dict = defaultdict(lambda: {})
-    for index, values in pdf.iterrows():
+    if isinstance(pdf, pd.DataFrame):
+        iterator = pdf.iterrows()
+    elif isinstance(pdf, pd.Series):
+        iterator = pdf.iteritems()
+    elif isinstance(pdf, dict):
+        iterator = pd.Series(pdf).iteritems()
+    for index, values in iterator:
         x = x_component_fun(index, values)
         y = y_component_fun(index, values)
         dummy = out_dict[x]
@@ -119,7 +125,6 @@ def pandas_to_array(pdf, x_component_fun, y_component_fun, value_fun):
         dummy[y] = value_fun(index, values)
     
     return pd.DataFrame.from_dict(out_dict)
-
 
 def select(df, **kwargs):
     for kwarg in kwargs:

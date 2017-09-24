@@ -7,14 +7,25 @@ from pandas.util.testing import assert_frame_equal
 
 class Test(unittest.TestCase):
     def test_pandas_to_array(self):
-        '''pandas to array is supposed to convert a pandas series to an array
-        according to simple rules'''
-        pdf = pd.Series({'x_1_y_1': 10, 'x_2_y_1': 15, 'x_3_y_1': 7,'x_1_y_2': 2, 'x_2_y_2': 0, 'x_3_y_2': -1}).to_frame(name = 'bla')
+        '''make sure pandas to array works with dict, series and dataframe'''
+        dict_ = {'x_1_y_1': 10, 'x_2_y_1': 15, 'x_3_y_1': 7,'x_1_y_2': 2, 'x_2_y_2': 0, 'x_3_y_2': -1}
+        s = pd.Series(dict_)
+        pdf = s.to_frame(name = 'bla')
 
-        pdf2 = pandas_to_array(pdf, lambda index, values: index.split('_')[1], \
+        out_dict_ = pandas_to_array(dict_, lambda index, values: index.split('_')[1], \
                          lambda index, values: index.split('_')[-1], \
-                         lambda index, values: values.bla)
+                         lambda index, values: values)
         
-        pdf3 = pd.DataFrame({'1': [10,2], '2': [15,0], '3': [7,-1], 'index': ['1','2']}).set_index('index')
-        pdf3.index.name = None
-        assert_frame_equal(pdf2, pdf3)
+        out_s = pandas_to_array(s, lambda index, values: index.split('_')[1], \
+                         lambda index, values: index.split('_')[-1], \
+                         lambda index, values: values)
+        
+        out_pdf = pandas_to_array(pdf, lambda index, values: index.split('_')[1], \
+                         lambda index, values: index.split('_')[-1], \
+                         lambda index, values: values.bla)        
+        
+        pdf_expected_output = pd.DataFrame({'1': [10,2], '2': [15,0], '3': [7,-1], 'index': ['1','2']}).set_index('index')
+        pdf_expected_output.index.name = None
+        assert_frame_equal(pdf_expected_output, out_dict_)
+        assert_frame_equal(pdf_expected_output, out_s)
+        assert_frame_equal(pdf_expected_output, out_pdf)
