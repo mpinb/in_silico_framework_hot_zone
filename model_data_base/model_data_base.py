@@ -527,13 +527,10 @@ class ModelDataBase(object):
             self._sql_metadata_backend._direct_dbset(key, out)
     
     def _update_metadata_if_necessary(self):
-        metadata_keys = self.metadata.keys()        
-        for key in self.keys():
-            if key in metadata_keys:
-                continue
-            else:
-                print "Updating metadata for key {key}".format(key = str(key))
-                self._write_metadata_for_existing_key(key)
+        keys_in_mdb_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
+        for key in keys_in_mdb_without_metadata:
+            print "Updating metadata for key {key}".format(key = str(key))
+            self._write_metadata_for_existing_key(key)
         
     def get_metadata(self, key):
         return self.metadata[key]
