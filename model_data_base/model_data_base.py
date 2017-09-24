@@ -527,8 +527,8 @@ class ModelDataBase(object):
             self._sql_metadata_backend._direct_dbset(key, out)
     
     def _update_metadata_if_necessary(self):
+        metadata_keys = self.metadata.keys()        
         for key in self.keys():
-            metadata_keys = self.metadata.keys()
             if key in metadata_keys:
                 continue
             else:
