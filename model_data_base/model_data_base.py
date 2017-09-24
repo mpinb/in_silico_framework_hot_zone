@@ -241,7 +241,7 @@ class ModelDataBase(object):
                 raise MdbException("Did not find a database in {path}. A new empty database will not be created since readonly is set to True.")
             _check_working_dir_clean_for_build(basedir)
             self._first_init = True
-            self._registeredDumpers = [IO.LoaderDumper.to_pickle] #self: stores the data in the underlying database
+            self._registeredDumpers = [IO.LoaderDumper.to_cloudpickle] #self: stores the data in the underlying database
             self.save_db()
             self._set_unique_id()
         
