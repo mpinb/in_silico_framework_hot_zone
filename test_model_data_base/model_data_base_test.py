@@ -198,3 +198,30 @@ class Tests(unittest.TestCase):
         self.fresh_mdb['test'] = 1
         self.fresh_mdb['test'] = self.fresh_mdb['test']+1
         self.assertEqual(self.fresh_mdb['test'], 2)
+        
+    def test_deleting_an_item_really_deletes_it(self):
+        self.fresh_mdb['test'] = 1
+        del self.fresh_mdb['test']
+        assert len(self.fresh_mdb.keys()) == 0
+        
+    def test_maybe_calculate_runs_calculation_the_first_time_and_gets_result_from_mdb_afterwards(self):
+        flag = []
+        def fun():
+            flag.append('fun_was_called')
+            return 1
+        res = self.fresh_mdb.maybe_calculate('my_key_where_result_of_fun_should_be_stored', fun)
+        self.assertEqual(res, 1)
+        self.assertEqual(len(self.fresh_mdb.keys()), 1)
+        self.assertEqual(len(flag), 1)
+        res = self.fresh_mdb.maybe_calculate('my_key_where_result_of_fun_should_be_stored', fun)
+        self.assertEqual(res, 1)
+        self.assertEqual(len(self.fresh_mdb.keys()), 1)
+        self.assertEqual(len(flag), 1)
+        fun()
+        self.assertEqual(len(flag), 2)
+        
+    def test_accessing_non_existent_key_raises_KeyError(self):
+        self.assertRaises(KeyError, lambda: self.fresh_mdb['some_nonexistent_key'])
+        
+        
+         

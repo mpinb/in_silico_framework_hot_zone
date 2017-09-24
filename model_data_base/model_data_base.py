@@ -5,24 +5,22 @@ Created on Aug 15, 2016
 '''
 
 import os, random, string
+import contextlib
 import shutil
 import tempfile
 import datetime
 import cloudpickle as pickle
-import IO
-import IO.LoaderDumper.to_cloudpickle
-import IO.LoaderDumper.pandas_to_msgpack
 import IO.LoaderDumper.just_create_folder
 import IO.LoaderDumper.just_create_mdb
+import IO.LoaderDumper.to_pickle
+
 from collections import defaultdict
 # import model_data_base_register ## moved to end of file since this is a circular import
 
 
-import analyze
 import dask.diagnostics
 import settings
 from tuplecloudsqlitedict import SqliteDict
-from copy import deepcopy
 import warnings
 import re
 import inspect
@@ -112,7 +110,6 @@ def _check_working_dir_clean_for_build(working_dir):
                                + "Cannot create the directories specified in %s" % working_dir)
 
 ###methods to hide dask progress bar based on settings:
-import contextlib
 @contextlib.contextmanager
 def empty_context_manager(*args, **kwargs):
     '''does nothing. is meant to replace ProgressBar, if no output is needed'''
@@ -244,7 +241,7 @@ class ModelDataBase(object):
                 raise MdbException("Did not find a database in {path}. A new empty database will not be created since readonly is set to True.")
             _check_working_dir_clean_for_build(basedir)
             self._first_init = True
-            self._registeredDumpers = ['self'] #self: stores the data in the underlying database
+            self._registeredDumpers = [IO.LoaderDumper.to_pickle] #self: stores the data in the underlying database
             self.save_db()
             self._set_unique_id()
         
@@ -370,7 +367,7 @@ class ModelDataBase(object):
                 for lv in range(len(arg)):
                     if arg[:lv] in existing_keys:
                         return self[arg[:lv]][arg[lv:]]
-                raise          
+            raise          
     
     def setitem(self, key, item, **kwargs):
         '''Allows to set items. Compared to the mdb['some_keys'] = my_item syntax,
@@ -559,7 +556,6 @@ class ModelDataBase(object):
         if isinstance(dummy, LoaderWrapper):
             self._robust_rmtree(key, os.path.join(self.basedir,dummy.relpath))
         self._sql_backend._direct_dbdel(key)
-                       
                 
     def maybe_calculate(self, key, fun, **kwargs):
         '''This function returns the corresponding value of key,
@@ -593,7 +589,7 @@ class ModelDataBase(object):
             if force_calculation:
                 raise ValueError
             return self[key]
-        except:
+        except KeyError:
             with get_progress_bar_function()():
                 ret = fun()
                 self.setitem(key, ret, **kwargs)
