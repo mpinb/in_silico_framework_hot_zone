@@ -1,5 +1,10 @@
-import Interface as I
 import numpy as np
+from model_data_base.utils import silence_stdout
+import single_cell_parser as scp
+import single_cell_analyzer as sca 
+from model_data_base.analyze import excitatory, inhibitory
+
+# import Interface as I # moved to bottom becose auf circular import
 
 
 def get_cell_activations(network_param, tStop = 350):
@@ -22,15 +27,15 @@ def get_cell_activations(network_param, tStop = 350):
     return out_dict
 
 def get_number_of_synapses_closer_than_x(distance, network_param, cell_param):
-    cell = I.scp.create_cell(cell_param.neuron)
+    cell = scp.create_cell(cell_param.neuron)
     cell_param.sim.tStop = 1
-    evokedNW = I.scp.NetworkMapper(cell, network_param.network, cell_param.sim)
+    evokedNW = scp.NetworkMapper(cell, network_param.network, cell_param.sim)
     evokedNW.create_saved_network2() 
     out = {}
     for type_ in cell.synapses.keys():
-        out[type_] = len([x for x in I.sca.compute_syn_distances(cell, type_) if x <= distance])
+        out[type_] = len([x for x in sca.compute_syn_distances(cell, type_) if x <= distance])
     return out
-get_number_of_synapses_closer_than_x = I.silence_stdout(get_number_of_synapses_closer_than_x)
+get_number_of_synapses_closer_than_x = silence_stdout(get_number_of_synapses_closer_than_x)
 
 def get_expectancy_value_of_activated_prox_synapses_by_celltype(cell_param, network_param, seed = None, tStop = 345, proximal = None, distal = None):
     if proximal is not None:
@@ -43,11 +48,10 @@ def get_expectancy_value_of_activated_prox_synapses_by_celltype(cell_param, netw
 
 def get_expectancy_value_of_activated_prox_synapses_by_EI(cell_param, network_param, seed = None, tStop = 345, proximal = None, distal = None):
     dict_ = get_expectancy_value_of_activated_prox_synapses_by_celltype(cell_param, network_param, seed = seed, tStop = tStop, proximal = proximal, distal = distal)
-    EXC =  sum([dict_[key] for key in dict_.keys() if key.split('_')[0] in I.excitatory])
-    INH =  sum([dict_[key] for key in dict_.keys() if key.split('_')[0] in I.inhibitory])
+    EXC =  sum([dict_[key] for key in dict_.keys() if key.split('_')[0] in excitatory])
+    INH =  sum([dict_[key] for key in dict_.keys() if key.split('_')[0] in inhibitory])
     return EXC, INH
 
 def get_poisson_realizations_from_expectancy_values(expectancy_values, nSweeps = 1000):
-    return np.vstack([np.random.poisson(lam=x, size = nSweeps) for x in expectancy_values])
-
-
+    dummy = np.vstack([np.random.poisson(lam=x, size = nSweeps) for x in expectancy_values])
+    return np.transpose(dummy)

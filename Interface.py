@@ -131,7 +131,7 @@ try:
 except ImportError:
     print "Could not import full-compartmental-model stuff"
 
-from simrun2.reduced_model import synapse_activations \
+from simrun2.reduced_model import synapse_activation \
     as rm_synapse_activations
 #from simrun2.reduced_model import spiking_output \
 #    as simrun_reduced_model_spiking_output
