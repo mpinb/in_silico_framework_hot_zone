@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="style.css" type="text/css">
     
     <script type="text/javascript" src="jquery.min.js"></script>
-    <script type="text/javascript" src="jquery.debounce.min.js"></script>
+    <script type="text/javascript" src="jquery.ba-throttle-debounce.min.js"></script>
     <script type="text/javascript" src="jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="jquery.hotkeys.js"></script>
     <script type="text/javascript" src="coverage_html.js"></script>
@@ -22,7 +22,7 @@
 <div id="header">
     <div class="content">
         <h1>Coverage report:
-            <span class="pc_cov">43%</span>
+            <span class="pc_cov">49%</span>
         </h1>
 
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
@@ -65,11 +65,11 @@
         <tfoot>
             <tr class="total">
                 <td class="name left">Total</td>
-                <td>10118</td>
-                <td>5772</td>
+                <td>10157</td>
+                <td>5206</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="4346 10118">43%</td>
+                <td class="right" data-ratio="4951 10157">49%</td>
             </tr>
         </tfoot>
         <tbody>
@@ -77,10 +77,10 @@
             <tr class="file">
                 <td class="name left"><a href="Interface_py.html">Interface.py</a></td>
                 <td>97</td>
-                <td>39</td>
+                <td>18</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="58 97">60%</td>
+                <td class="right" data-ratio="79 97">81%</td>
             </tr>
             
             <tr class="file">
@@ -104,10 +104,10 @@
             <tr class="file">
                 <td class="name left"><a href="model_data_base_IO_LoaderDumper___init___py.html">model_data_base/IO/LoaderDumper/__init__.py</a></td>
                 <td>19</td>
-                <td>6</td>
+                <td>1</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="13 19">68%</td>
+                <td class="right" data-ratio="18 19">95%</td>
             </tr>
             
             <tr class="file">
@@ -122,28 +122,28 @@
             <tr class="file">
                 <td class="name left"><a href="model_data_base_IO_LoaderDumper_dask_to_categorized_msgpack_py.html">model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.py</a></td>
                 <td>78</td>
-                <td>38</td>
+                <td>7</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="40 78">51%</td>
+                <td class="right" data-ratio="71 78">91%</td>
             </tr>
             
             <tr class="file">
                 <td class="name left"><a href="model_data_base_IO_LoaderDumper_dask_to_csv_py.html">model_data_base/IO/LoaderDumper/dask_to_csv.py</a></td>
                 <td>71</td>
-                <td>53</td>
+                <td>17</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="18 71">25%</td>
+                <td class="right" data-ratio="54 71">76%</td>
             </tr>
             
             <tr class="file">
                 <td class="name left"><a href="model_data_base_IO_LoaderDumper_dask_to_msgpack_py.html">model_data_base/IO/LoaderDumper/dask_to_msgpack.py</a></td>
                 <td>67</td>
-                <td>27</td>
+                <td>16</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="40 67">60%</td>
+                <td class="right" data-ratio="51 67">76%</td>
             </tr>
             
             <tr class="file">
@@ -158,19 +158,28 @@
             <tr class="file">
                 <td class="name left"><a href="model_data_base_IO_LoaderDumper_just_create_mdb_py.html">model_data_base/IO/LoaderDumper/just_create_mdb.py</a></td>
                 <td>12</td>
-                <td>4</td>
+                <td>1</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="8 12">67%</td>
+                <td class="right" data-ratio="11 12">92%</td>
             </tr>
             
             <tr class="file">
                 <td class="name left"><a href="model_data_base_IO_LoaderDumper_numpy_to_npy_py.html">model_data_base/IO/LoaderDumper/numpy_to_npy.py</a></td>
                 <td>13</td>
-                <td>5</td>
+                <td>1</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="8 13">62%</td>
+                <td class="right" data-ratio="12 13">92%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="model_data_base_IO_LoaderDumper_pandas_to_msgpack_py.html">model_data_base/IO/LoaderDumper/pandas_to_msgpack.py</a></td>
+                <td>13</td>
+                <td>1</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="12 13">92%</td>
             </tr>
             
             <tr class="file">
@@ -194,19 +203,19 @@
             <tr class="file">
                 <td class="name left"><a href="model_data_base_IO_LoaderDumper_to_cloudpickle_py.html">model_data_base/IO/LoaderDumper/to_cloudpickle.py</a></td>
                 <td>14</td>
-                <td>1</td>
+                <td>0</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="13 14">93%</td>
+                <td class="right" data-ratio="14 14">100%</td>
             </tr>
             
             <tr class="file">
                 <td class="name left"><a href="model_data_base_IO_LoaderDumper_to_pickle_py.html">model_data_base/IO/LoaderDumper/to_pickle.py</a></td>
                 <td>14</td>
-                <td>0</td>
+                <td>1</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="14 14">100%</td>
+                <td class="right" data-ratio="13 14">93%</td>
             </tr>
             
             <tr class="file">
@@ -216,6 +225,15 @@
                 <td>0</td>
                 
                 <td class="right" data-ratio="5 5">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="model_data_base_IO_dask_wrappers_py.html">model_data_base/IO/dask_wrappers.py</a></td>
+                <td>26</td>
+                <td>11</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="15 26">58%</td>
             </tr>
             
             <tr class="file">
@@ -275,10 +293,10 @@
             <tr class="file">
                 <td class="name left"><a href="model_data_base_analyze__helper_functions_py.html">model_data_base/analyze/_helper_functions.py</a></td>
                 <td>30</td>
-                <td>12</td>
+                <td>2</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="18 30">60%</td>
+                <td class="right" data-ratio="28 30">93%</td>
             </tr>
             
             <tr class="file">
@@ -302,10 +320,10 @@
             <tr class="file">
                 <td class="name left"><a href="model_data_base_analyze_spaciotemporal_binning_py.html">model_data_base/analyze/spaciotemporal_binning.py</a></td>
                 <td>25</td>
-                <td>17</td>
+                <td>2</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="8 25">32%</td>
+                <td class="right" data-ratio="23 25">92%</td>
             </tr>
             
             <tr class="file">
@@ -329,19 +347,19 @@
             <tr class="file">
                 <td class="name left"><a href="model_data_base_analyze_temporal_binning_py.html">model_data_base/analyze/temporal_binning.py</a></td>
                 <td>35</td>
-                <td>15</td>
+                <td>6</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="20 35">57%</td>
+                <td class="right" data-ratio="29 35">83%</td>
             </tr>
             
             <tr class="file">
                 <td class="name left"><a href="model_data_base_cloudsqlitedict_py.html">model_data_base/cloudsqlitedict.py</a></td>
                 <td>287</td>
-                <td>108</td>
+                <td>104</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="179 287">62%</td>
+                <td class="right" data-ratio="183 287">64%</td>
             </tr>
             
             <tr class="file">
@@ -383,10 +401,10 @@
             <tr class="file">
                 <td class="name left"><a href="model_data_base_model_data_base_py.html">model_data_base/model_data_base.py</a></td>
                 <td>317</td>
-                <td>105</td>
+                <td>30</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="212 317">67%</td>
+                <td class="right" data-ratio="287 317">91%</td>
             </tr>
             
             <tr class="file">
@@ -482,10 +500,10 @@
             <tr class="file">
                 <td class="name left"><a href="model_data_base_tuplecloudsqlitedict_py.html">model_data_base/tuplecloudsqlitedict.py</a></td>
                 <td>26</td>
-                <td>4</td>
+                <td>1</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="22 26">85%</td>
+                <td class="right" data-ratio="25 26">96%</td>
             </tr>
             
             <tr class="file">
@@ -860,10 +878,10 @@
             <tr class="file">
                 <td class="name left"><a href="test_model_data_base_IO_LoaderDumper_dumpers_test_py.html">test_model_data_base/IO/LoaderDumper/dumpers_test.py</a></td>
                 <td>95</td>
-                <td>94</td>
+                <td>0</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="1 95">1%</td>
+                <td class="right" data-ratio="95 95">100%</td>
             </tr>
             
             <tr class="file">
@@ -878,19 +896,19 @@
             <tr class="file">
                 <td class="name left"><a href="test_model_data_base_IO_dask_wrappers_test_py.html">test_model_data_base/IO/dask_wrappers_test.py</a></td>
                 <td>19</td>
-                <td>18</td>
+                <td>0</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="1 19">5%</td>
+                <td class="right" data-ratio="19 19">100%</td>
             </tr>
             
             <tr class="file">
                 <td class="name left"><a href="test_model_data_base_IO_roberts_formats_test_py.html">test_model_data_base/IO/roberts_formats_test.py</a></td>
                 <td>26</td>
-                <td>25</td>
+                <td>2</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="1 26">4%</td>
+                <td class="right" data-ratio="24 26">92%</td>
             </tr>
             
             <tr class="file">
@@ -914,19 +932,19 @@
             <tr class="file">
                 <td class="name left"><a href="test_model_data_base_analyze_spaciotemporal_binning_test_py.html">test_model_data_base/analyze/spaciotemporal_binning_test.py</a></td>
                 <td>35</td>
-                <td>34</td>
+                <td>0</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="1 35">3%</td>
+                <td class="right" data-ratio="35 35">100%</td>
             </tr>
             
             <tr class="file">
                 <td class="name left"><a href="test_model_data_base_analyze_temporal_binning_test_py.html">test_model_data_base/analyze/temporal_binning_test.py</a></td>
                 <td>36</td>
-                <td>35</td>
+                <td>0</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="1 36">3%</td>
+                <td class="right" data-ratio="36 36">100%</td>
             </tr>
             
             <tr class="file">
@@ -1004,10 +1022,10 @@
             <tr class="file">
                 <td class="name left"><a href="test_model_data_base_model_data_base_test_py.html">test_model_data_base/model_data_base_test.py</a></td>
                 <td>151</td>
-                <td>147</td>
+                <td>0</td>
                 <td>0</td>
                 
-                <td class="right" data-ratio="4 151">3%</td>
+                <td class="right" data-ratio="151 151">100%</td>
             </tr>
             
             <tr class="file">
@@ -1183,8 +1201,8 @@
 <div id="footer">
     <div class="content">
         <p>
-            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.2</a>,
-            created at 2017-09-26 13:49
+            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4.1</a>,
+            created at 2017-09-26 21:07
         </p>
     </div>
 </div>

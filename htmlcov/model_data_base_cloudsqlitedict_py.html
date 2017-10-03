@@ -8,7 +8,7 @@
     
     
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for model_data_base/cloudsqlitedict.py: 62%</title>
+    <title>Coverage for model_data_base/cloudsqlitedict.py: 64%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -24,15 +24,15 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>model_data_base/cloudsqlitedict.py</b> :
-            <span class="pc_cov">62%</span>
+            <span class="pc_cov">64%</span>
         </h1>
 
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
 
         <h2 class="stats">
             287 statements &nbsp;
-            <span class="run hide_run shortkey_r button_toggle_run">179 run</span>
-            <span class="mis shortkey_m button_toggle_mis">108 missing</span>
+            <span class="run hide_run shortkey_r button_toggle_run">183 run</span>
+            <span class="mis shortkey_m button_toggle_mis">104 missing</span>
             <span class="exc shortkey_x button_toggle_exc">0 excluded</span>
 
             
@@ -152,8 +152,8 @@
 <p id="n83" class="pln"><a href="#n83">83</a></p>
 <p id="n84" class="stm run hide_run"><a href="#n84">84</a></p>
 <p id="n85" class="stm run hide_run"><a href="#n85">85</a></p>
-<p id="n86" class="stm run hide_run"><a href="#n86">86</a></p>
-<p id="n87" class="stm run hide_run"><a href="#n87">87</a></p>
+<p id="n86" class="stm mis"><a href="#n86">86</a></p>
+<p id="n87" class="stm mis"><a href="#n87">87</a></p>
 <p id="n88" class="pln"><a href="#n88">88</a></p>
 <p id="n89" class="stm run hide_run"><a href="#n89">89</a></p>
 <p id="n90" class="stm run hide_run"><a href="#n90">90</a></p>
@@ -299,8 +299,8 @@
 <p id="n230" class="stm mis"><a href="#n230">230</a></p>
 <p id="n231" class="pln"><a href="#n231">231</a></p>
 <p id="n232" class="stm run hide_run"><a href="#n232">232</a></p>
-<p id="n233" class="stm mis"><a href="#n233">233</a></p>
-<p id="n234" class="stm mis"><a href="#n234">234</a></p>
+<p id="n233" class="stm run hide_run"><a href="#n233">233</a></p>
+<p id="n234" class="stm run hide_run"><a href="#n234">234</a></p>
 <p id="n235" class="pln"><a href="#n235">235</a></p>
 <p id="n236" class="stm run hide_run"><a href="#n236">236</a></p>
 <p id="n237" class="stm run hide_run"><a href="#n237">237</a></p>
@@ -317,13 +317,13 @@
 <p id="n248" class="stm run hide_run"><a href="#n248">248</a></p>
 <p id="n249" class="pln"><a href="#n249">249</a></p>
 <p id="n250" class="stm run hide_run"><a href="#n250">250</a></p>
-<p id="n251" class="stm mis"><a href="#n251">251</a></p>
+<p id="n251" class="stm run hide_run"><a href="#n251">251</a></p>
 <p id="n252" class="stm mis"><a href="#n252">252</a></p>
 <p id="n253" class="pln"><a href="#n253">253</a></p>
-<p id="n254" class="stm mis"><a href="#n254">254</a></p>
+<p id="n254" class="stm run hide_run"><a href="#n254">254</a></p>
 <p id="n255" class="stm mis"><a href="#n255">255</a></p>
-<p id="n256" class="stm mis"><a href="#n256">256</a></p>
-<p id="n257" class="stm mis"><a href="#n257">257</a></p>
+<p id="n256" class="stm run hide_run"><a href="#n256">256</a></p>
+<p id="n257" class="stm run hide_run"><a href="#n257">257</a></p>
 <p id="n258" class="pln"><a href="#n258">258</a></p>
 <p id="n259" class="stm run hide_run"><a href="#n259">259</a></p>
 <p id="n260" class="stm mis"><a href="#n260">260</a></p>
@@ -681,8 +681,8 @@
 <p id="t83" class="pln"><span class="com"># some Python 3 vs 2 imports</span><span class="strut">&nbsp;</span></p>
 <p id="t84" class="stm run hide_run"><span class="key">try</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t85" class="stm run hide_run">    <span class="key">from</span> <span class="nam">collections</span> <span class="key">import</span> <span class="nam">UserDict</span> <span class="key">as</span> <span class="nam">DictClass</span><span class="strut">&nbsp;</span></p>
-<p id="t86" class="stm run hide_run"><span class="key">except</span> <span class="nam">ImportError</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t87" class="stm run hide_run">    <span class="key">from</span> <span class="nam">UserDict</span> <span class="key">import</span> <span class="nam">DictMixin</span> <span class="key">as</span> <span class="nam">DictClass</span><span class="strut">&nbsp;</span></p>
+<p id="t86" class="stm mis"><span class="key">except</span> <span class="nam">ImportError</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t87" class="stm mis">    <span class="key">from</span> <span class="nam">UserDict</span> <span class="key">import</span> <span class="nam">DictMixin</span> <span class="key">as</span> <span class="nam">DictClass</span><span class="strut">&nbsp;</span></p>
 <p id="t88" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t89" class="stm run hide_run"><span class="key">try</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t90" class="stm run hide_run">    <span class="key">from</span> <span class="nam">queue</span> <span class="key">import</span> <span class="nam">Queue</span><span class="strut">&nbsp;</span></p>
@@ -828,8 +828,8 @@
 <p id="t230" class="stm mis">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">iteritems</span><span class="op">(</span><span class="op">)</span> <span class="key">if</span> <span class="nam">major_version</span> <span class="op">></span> <span class="num">2</span> <span class="key">else</span> <span class="nam">list</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">iteritems</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t231" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t232" class="stm run hide_run">    <span class="key">def</span> <span class="nam">__contains__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">key</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t233" class="stm mis">        <span class="nam">HAS_ITEM</span> <span class="op">=</span> <span class="str">'SELECT 1 FROM "%s" WHERE key = ?'</span> <span class="op">%</span> <span class="nam">self</span><span class="op">.</span><span class="nam">tablename</span><span class="strut">&nbsp;</span></p>
-<p id="t234" class="stm mis">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">conn</span><span class="op">.</span><span class="nam">select_one</span><span class="op">(</span><span class="nam">HAS_ITEM</span><span class="op">,</span> <span class="op">(</span><span class="nam">key</span><span class="op">,</span><span class="op">)</span><span class="op">)</span> <span class="key">is</span> <span class="key">not</span> <span class="nam">None</span><span class="strut">&nbsp;</span></p>
+<p id="t233" class="stm run hide_run">        <span class="nam">HAS_ITEM</span> <span class="op">=</span> <span class="str">'SELECT 1 FROM "%s" WHERE key = ?'</span> <span class="op">%</span> <span class="nam">self</span><span class="op">.</span><span class="nam">tablename</span><span class="strut">&nbsp;</span></p>
+<p id="t234" class="stm run hide_run">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">conn</span><span class="op">.</span><span class="nam">select_one</span><span class="op">(</span><span class="nam">HAS_ITEM</span><span class="op">,</span> <span class="op">(</span><span class="nam">key</span><span class="op">,</span><span class="op">)</span><span class="op">)</span> <span class="key">is</span> <span class="key">not</span> <span class="nam">None</span><span class="strut">&nbsp;</span></p>
 <p id="t235" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t236" class="stm run hide_run">    <span class="key">def</span> <span class="nam">__getitem__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">key</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t237" class="stm run hide_run">        <span class="nam">GET_ITEM</span> <span class="op">=</span> <span class="str">'SELECT value FROM "%s" WHERE key = ?'</span> <span class="op">%</span> <span class="nam">self</span><span class="op">.</span><span class="nam">tablename</span><span class="strut">&nbsp;</span></p>
@@ -846,13 +846,13 @@
 <p id="t248" class="stm run hide_run">        <span class="nam">self</span><span class="op">.</span><span class="nam">conn</span><span class="op">.</span><span class="nam">execute</span><span class="op">(</span><span class="nam">ADD_ITEM</span><span class="op">,</span> <span class="op">(</span><span class="nam">key</span><span class="op">,</span> <span class="nam">encode</span><span class="op">(</span><span class="nam">value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t249" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t250" class="stm run hide_run">    <span class="key">def</span> <span class="nam">__delitem__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">key</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t251" class="stm mis">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">flag</span> <span class="op">==</span> <span class="str">'r'</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t251" class="stm run hide_run">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">flag</span> <span class="op">==</span> <span class="str">'r'</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t252" class="stm mis">            <span class="key">raise</span> <span class="nam">RuntimeError</span><span class="op">(</span><span class="str">'Refusing to delete from read-only SqliteDict'</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t253" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t254" class="stm mis">        <span class="key">if</span> <span class="nam">key</span> <span class="key">not</span> <span class="key">in</span> <span class="nam">self</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t254" class="stm run hide_run">        <span class="key">if</span> <span class="nam">key</span> <span class="key">not</span> <span class="key">in</span> <span class="nam">self</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t255" class="stm mis">            <span class="key">raise</span> <span class="nam">KeyError</span><span class="op">(</span><span class="nam">key</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t256" class="stm mis">        <span class="nam">DEL_ITEM</span> <span class="op">=</span> <span class="str">'DELETE FROM "%s" WHERE key = ?'</span> <span class="op">%</span> <span class="nam">self</span><span class="op">.</span><span class="nam">tablename</span><span class="strut">&nbsp;</span></p>
-<p id="t257" class="stm mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">conn</span><span class="op">.</span><span class="nam">execute</span><span class="op">(</span><span class="nam">DEL_ITEM</span><span class="op">,</span> <span class="op">(</span><span class="nam">key</span><span class="op">,</span><span class="op">)</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t256" class="stm run hide_run">        <span class="nam">DEL_ITEM</span> <span class="op">=</span> <span class="str">'DELETE FROM "%s" WHERE key = ?'</span> <span class="op">%</span> <span class="nam">self</span><span class="op">.</span><span class="nam">tablename</span><span class="strut">&nbsp;</span></p>
+<p id="t257" class="stm run hide_run">        <span class="nam">self</span><span class="op">.</span><span class="nam">conn</span><span class="op">.</span><span class="nam">execute</span><span class="op">(</span><span class="nam">DEL_ITEM</span><span class="op">,</span> <span class="op">(</span><span class="nam">key</span><span class="op">,</span><span class="op">)</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t258" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t259" class="stm run hide_run">    <span class="key">def</span> <span class="nam">update</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">items</span><span class="op">=</span><span class="op">(</span><span class="op">)</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwds</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t260" class="stm mis">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">flag</span> <span class="op">==</span> <span class="str">'r'</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
@@ -1131,8 +1131,8 @@
 <div id="footer">
     <div class="content">
         <p>
-            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.2</a>,
-            created at 2017-09-26 13:49
+            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4.1</a>,
+            created at 2017-09-26 21:07
         </p>
     </div>
 </div>
