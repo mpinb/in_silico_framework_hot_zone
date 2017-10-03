@@ -27,9 +27,11 @@ class ModelDataBaseRegister():
                 continue
             try:
                 mdb = ModelDataBase(dir_, readonly = True)
-                self.mdb[mdb._unique_id] = os.path.abspath(dir_)
-            except MdbException:
-                continue
+                self.add_mdb(mdb)
+            except (KeyboardInterrupt, SystemExit):
+                raise
+            except Exception as e:
+                self.mdb['failed', dir_] = e
         
         print self.mdb.keys()
     
