@@ -7,7 +7,12 @@ from model_data_base.tuplecloudsqlitedict import SqliteDict
 
 class Tests(unittest.TestCase):
     def setUp(self):
-        self.path = os.path.join(files_generated_by_tests, 'tuplecloudsql_test.db')
+        self.tempdir = tempfile.mkdtemp()
+        self.path = os.path.join(self.tempdir, 'tuplecloudsql_test.db')
+        
+    def tearDown(self):
+        if os.path.exists(self.tempdir):
+            shutil.rmtree(self.tempdir)
         
     def test_can_be_instanciated(self):
         if os.path.exists(self.path):
