@@ -1,6 +1,6 @@
 import os
 from .model_data_base import ModelDataBase, MdbException
-from tuplecloudsqlitedict import SqliteDict
+from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
 
 
 _foldername = '.model_data_base_register.db'
@@ -15,7 +15,7 @@ class ModelDataBaseRegister():
             self._first_init = True
         else:
             self._first_init = False
-        self.mdb = SqliteDict(self.basedir, autocommit=True)
+        self.mdb = SQLBackend(self.basedir)
         if search_mdbs == "on_first_init" and self._first_init:
             self.search_mdbs(os.path.dirname(self.basedir))
         elif search_mdbs == True:
@@ -30,10 +30,12 @@ class ModelDataBaseRegister():
                 self.add_mdb(mdb)
             except (KeyboardInterrupt, SystemExit):
                 raise
+            except MdbException: # if there is no database
+                continue
             except Exception as e:
                 self.mdb['failed', dir_] = e
         
-        print self.mdb.keys()
+        #print self.mdb.keys()
     
     def add_mdb(self, mdb):
         self.mdb[mdb._unique_id] = os.path.abspath(mdb.basedir)
@@ -42,6 +44,7 @@ def _get_mdb_register(dir_):
     dir_ = os.path.abspath(dir_)
     while True:
         path = os.path.join(dir_, _foldername)
+        print path        
         if os.path.exists(path):
             return ModelDataBaseRegister(path)
         dir_ = os.path.dirname(dir_)

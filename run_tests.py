@@ -10,6 +10,7 @@ plt.switch_backend('agg')
 import test_model_data_base, test_model_data_base.decorators
 import test_simrun2, test_simrun2.decorators
 import test_single_cell_parser, test_single_cell_parser.decorators
+import distributed
 
 
 #######################################
@@ -32,7 +33,7 @@ test_simrun2.decorators.current_testlevel = 10#'all'#0#'all'#'0
 #######################################
 run = '.'#test_single_cell_parser.reader_test'
 #run = 'test_simrun2.simrun_test'
-#run = 'test_model_data_base.model_data_base_register_test'
+#run = 'test_model_data_base.sqlite_backend.sqlite_backend_test'
 ################################
 # verbosity of testrunner
 ################################

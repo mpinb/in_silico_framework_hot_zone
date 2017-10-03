@@ -1,6 +1,6 @@
 '''this module contains base settings of the model data base'''
 
-import dask
+import dask, dask.multiprocessing
 import pandas as pd
 scheduler = dask.multiprocessing.get 
 multiprocessing_scheduler = scheduler

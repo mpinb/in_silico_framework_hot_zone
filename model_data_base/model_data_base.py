@@ -13,6 +13,8 @@ import cloudpickle as pickle
 import IO.LoaderDumper.just_create_folder
 import IO.LoaderDumper.just_create_mdb
 import IO.LoaderDumper.to_pickle
+import IO.LoaderDumper.to_cloudpickle
+from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
 
 from collections import defaultdict
 # import model_data_base_register ## moved to end of file since this is a circular import
@@ -20,7 +22,6 @@ from collections import defaultdict
 
 import dask.diagnostics
 import settings
-from tuplecloudsqlitedict import SqliteDict
 import warnings
 import re
 import inspect
@@ -120,69 +121,7 @@ def get_progress_bar_function():
         PB = dask.diagnostics.ProgressBar
     else:
         PB = empty_context_manager
-    return PB
-
-class SQLBackend(object):
-    def __init__(self, path):
-        self.path = path
-        
-    def _get_sql(self):
-        return SqliteDict(self.path, autocommit=True)
-    
-    def _direct_dbget(self, arg):
-        '''Backend method to retrive item from the database'''
-        dict_ = self._vectorized_direct_dbget([arg])
-        assert(len(dict_) == 1)
-        return dict_.values()[0]
-    
-    def _vectorized_direct_dbget(self, keys):
-        '''this allows to get many values at once, reducing the overhead of repeated 
-        opening and closing the connection'''
-        try:
-            sqllitedict = self._get_sql()    
-            dummy = {key: sqllitedict[key] for key in keys}
-        finally:
-            sqllitedict.close() 
-        return dummy
-    
-    def _direct_dbset(self, key, item):
-        '''Backend method to add a key-value pair to the sqlite database'''
-        self._vectorized_direct_dbset({key: item})
-
-    def _vectorized_direct_dbset(self, dict_):
-        '''this allows to set many values at once, reducing the overhead of repeated 
-        opening and closing the connection'''
-        try:
-            sqllitedict = self._get_sql()
-            for k, v in dict_.iteritems():
-                sqllitedict[k] = v
-        except:
-            raise
-        finally: 
-            sqllitedict.close()     
-
-    def _direct_dbdel(self, arg):
-        '''Backend method to delete item from the sqlite database.'''
-        self._vectorized_direct_dbdel([arg])
-            
-    def _vectorized_direct_dbdel(self, keys):
-        '''this allows to delete many values at once, reducing the overhead of repeated 
-        opening and closing the connection'''        
-        try:
-            sqllitedict = self._get_sql()
-            for k in keys:
-                del sqllitedict[k]
-        finally:
-            sqllitedict.close()         
-    
-    def keys(self):
-        try:
-            sqllitedict = self._get_sql()
-            keys = sqllitedict.keys()
-            return sorted(keys)
-        finally:
-            sqllitedict.close()
-                        
+    return PB           
 
 class SQLMetadataAccessor():
     def __init__(self, sql_backend):
@@ -191,7 +130,7 @@ class SQLMetadataAccessor():
     def __getitem__(self, key):
         out = defaultdict(lambda: 'unknown')
         if key in self.sql_backend.keys():
-            out.update(self.sql_backend._direct_dbget(key))
+            out.update(self.sql_backend[key])
         return out
     
     def keys(self):
@@ -352,7 +291,7 @@ class ModelDataBase(object):
         item = my_model_data_base[key]'''
         try:        
             # general case                
-            dummy = self._sql_backend._direct_dbget(arg)
+            dummy = self._sql_backend[arg]
             if isinstance(dummy, LoaderWrapper):
                 dummy = IO.LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
             if isinstance(dummy, FunctionWrapper):
@@ -422,7 +361,7 @@ class ModelDataBase(object):
         #check if there is already a subdirectory assigned to this key. If so: store folder to delete it after new item is set.
         old_folder = None
         if key in self.keys():
-            dummy = self._sql_backend._direct_dbget(key)
+            dummy = self._sql_backend[key]
             if isinstance(dummy, LoaderWrapper):
                 old_folder = dummy.relpath
                                 
@@ -437,7 +376,7 @@ class ModelDataBase(object):
                 
         #if dumper is 'self': store in this DB
         if dumper == 'self':
-            self._sql_backend._direct_dbset(key, item)
+            self._sql_backend[key] = item
                 
         #if dumper is something else: 
         #generate temp directory, save the object in that directory using dump()
@@ -447,7 +386,7 @@ class ModelDataBase(object):
             basedir_absolute, basedir_relative = self.get_mkdtemp(prefix = slugify(key))
             try:
                 dumper.dump(item, basedir_absolute, **kwargs)
-                self._sql_backend._direct_dbset(key, LoaderWrapper(basedir_relative))
+                self._sql_backend[key] = LoaderWrapper(basedir_relative)
             except Exception as e:
                 print("An error occured. Tidy up. Please do not interrupt.")
                 try:
@@ -484,10 +423,10 @@ class ModelDataBase(object):
         if get_versions()['dirty']:
             warnings.warn('The database source folder has uncommited changes!')
         
-        self._sql_metadata_backend._direct_dbset(key, out)
+        self._sql_metadata_backend[key] = out
     
     def _detect_dumper_string_of_existing_key(self, key):
-        dumper = self._sql_backend._direct_dbget(key)
+        dumper = self._sql_backend[key]
         if isinstance(dumper, LoaderWrapper):
             dumper = IO.LoaderDumper.get_dumper_string_by_savedir(os.path.join(self.basedir, dumper.relpath))
         else:
@@ -495,7 +434,7 @@ class ModelDataBase(object):
         return dumper
     
     def _get_dumper_folder(self, key):
-        dumper = self._sql_backend._direct_dbget(key)
+        dumper = self._sql_backend[key]
         if isinstance(dumper, LoaderWrapper):
             return os.path.join(self.basedir, dumper.relpath)
         else:
@@ -521,7 +460,7 @@ class ModelDataBase(object):
             if get_versions()['dirty']:
                 warnings.warn('The database source folder has uncommited changes!')
             
-            self._sql_metadata_backend._direct_dbset(key, out)
+            self._sql_metadata_backend[key] = out
     
     def _update_metadata_if_necessary(self):
         keys_in_mdb_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
@@ -552,10 +491,10 @@ class ModelDataBase(object):
             
     def __delitem__(self, key):
         '''items can be deleted using del my_model_data_base[key]'''
-        dummy = self._sql_backend._direct_dbget(key)
+        dummy = self._sql_backend[key]
         if isinstance(dummy, LoaderWrapper):
             self._robust_rmtree(key, os.path.join(self.basedir,dummy.relpath))
-        self._sql_backend._direct_dbdel(key)
+        del self._sql_backend[key]
                 
     def maybe_calculate(self, key, fun, **kwargs):
         '''This function returns the corresponding value of key,
