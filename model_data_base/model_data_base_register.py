@@ -44,7 +44,7 @@ def _get_mdb_register(dir_):
     dir_ = os.path.abspath(dir_)
     while True:
         path = os.path.join(dir_, _foldername)
-        print path        
+        #print path        
         if os.path.exists(path):
             return ModelDataBaseRegister(path)
         dir_ = os.path.dirname(dir_)
