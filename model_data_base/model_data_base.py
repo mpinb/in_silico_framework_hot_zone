@@ -175,9 +175,12 @@ class ModelDataBase(object):
             self.read_db()
         except IOError:
             if nocreate:
-                raise MdbException("Did not find a database in {path}. A new empty database will not be created since nocreate is set to True.")
+                return
+                raise MdbException("Did not find a database in {path}. A new empty database will not be created since nocreate is set to True."\
+                                   .format(path = basedir))
             if readonly:
-                raise MdbException("Did not find a database in {path}. A new empty database will not be created since readonly is set to True.")
+                raise MdbException("Did not find a database in {path}. A new empty database will not be created since readonly is set to True.")\
+                    .format(path = basedir)
             _check_working_dir_clean_for_build(basedir)
             self._first_init = True
             self._registeredDumpers = [IO.LoaderDumper.to_cloudpickle] #self: stores the data in the underlying database
