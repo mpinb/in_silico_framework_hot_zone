@@ -1,5 +1,7 @@
 import sys, os
 from six import StringIO
+from cPickle import PicklingError
+import cloudpickle
 
 
 def chunkIt(seq, num):
@@ -173,7 +175,12 @@ def cache(function):
     import cPickle, hashlib
     memo = {}
     def get_key(*args, **kwargs):
-        return hashlib.md5(cPickle.dumps([args, kwargs])).hexdigest()
+        try:
+            hash = hashlib.md5(cPickle.dumps([args, kwargs])).hexdigest()
+        except TypeError:
+            hash = hashlib.md5(cloudpickle.dumps([args, kwargs])).hexdigest()
+        return hash
+    
     def wrapper(*args, **kwargs):
         key = get_key(*args, **kwargs)
         if key in memo:

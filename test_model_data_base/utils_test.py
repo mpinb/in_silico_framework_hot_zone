@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 from pandas.util.testing import assert_frame_equal
 
-class Test(unittest.TestCase):
+class Tests(unittest.TestCase):
     def test_pandas_to_array(self):
         '''make sure pandas to array works with dict, series and dataframe'''
         dict_ = {'x_1_y_1': 10, 'x_2_y_1': 15, 'x_3_y_1': 7,'x_1_y_2': 2, 'x_2_y_2': 0, 'x_3_y_2': -1}
@@ -29,3 +29,21 @@ class Test(unittest.TestCase):
         assert_frame_equal(pdf_expected_output, out_dict_)
         assert_frame_equal(pdf_expected_output, out_s)
         assert_frame_equal(pdf_expected_output, out_pdf)
+        
+    def test_cache(self):
+        '''Is really caching values, can cache functions'''
+        flag = []
+        @cache
+        def fun(x):
+            flag.append(x)
+            return x
+        
+        assert(len(flag) == 0)
+        fun(1)
+        assert(len(flag) == 1)
+        fun(1)
+        assert(len(flag) == 1)
+        fun(fun)
+        assert(len(flag) == 2)
+        
+        
