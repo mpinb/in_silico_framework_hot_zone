@@ -289,6 +289,13 @@ def _apply_static_helper(lookup_series, min_index, max_index, kernel_dict, data)
     lda_value_dict = {k: np.dot(data[k][:, min_index:max_index], \
                           kernel_dict[k]) for k in kernel_dict.keys()}
     lda_values = sum(lda_value_dict.values())
+    indices = lda_values.round().astype(int)
+    if max(indices) > max(lookup_series.index):
+        warnings.warn("lda values leave range of training data by more than 30%!")
+        indices[indices>max(lookup_series.index)] = max(lookup_series.index)
+    if max(indices) > max(lookup_series):
+        warnings.warn("lda values leave range of training data by more than 30%!")        
+        indices[indices<min(lookup_series.index)] = min(lookup_series.index)
     p_spike = lookup_series.loc[lda_values.round().astype(int)]
     return ReducedLdaModelResult(None, lda_value_dict, lda_values, p_spike)
 ###################################
