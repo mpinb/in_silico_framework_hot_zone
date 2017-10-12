@@ -175,7 +175,7 @@ class ModelDataBase(object):
             self.read_db()
         except IOError:
             if nocreate:
-                return
+                # return  # debugging
                 raise MdbException("Did not find a database in {path}. A new empty database will not be created since nocreate is set to True."\
                                    .format(path = basedir))
             if readonly:
