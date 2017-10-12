@@ -26,7 +26,7 @@ class Tests(unittest.TestCase):
                          synapse_activation_window_width = 50)
             Rm.fit([mdb])
             Rm.plot() # make sure this can be executed
-        
+         
         assert(200 < np.array(Rm.lda_values).mean() < 400)
         assert(Rm.lookup_series[0][150] == 0)
         assert(Rm.lookup_series[0][500] == 1)
@@ -35,7 +35,7 @@ class Tests(unittest.TestCase):
         mean2, std2 = Rm.kernel_dict[0].values()[0][25:].mean(), Rm.kernel_dict[0].values()[0][25:].std()
         np.testing.assert_array_less(max([std1,std2]) / min([std1,std2]), 3)
         np.testing.assert_array_less(3, abs(mean1-mean2) / max([std1,std2]))
-        
+         
     def test_ReducedLdaModel_apply(self):
         '''compare model infered from test data to expectancy'''
         with FreshlyInitializedMdb() as mdb:
@@ -49,6 +49,22 @@ class Tests(unittest.TestCase):
             res = Rm.apply_static(mdb, model_number = mn)
         np.testing.assert_equal(res.lda_values, Rm.lda_values[mn])
         
+    def test_ReducedLdaModel_apply_data_outside_trainingsdata(self):
+        '''compare model infered from test data to expectancy'''
+        with FreshlyInitializedMdb() as mdb:
+            X,y = get_test_X_y(n_samples = 5000)
+            mdb['test_synapse_activation'] = X
+            mdb['spike_times'] = pd.DataFrame(y).astype('f8').replace(0, np.NaN).replace(1, 100)
+            Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
+                         synapse_activation_window_width = 50, cache = False)
+            Rm.fit([mdb])
+            mn = 0
+        res = Rm.apply_static({'test_synapse_activation': X-10000}, model_number = mn)
+        assert(res.p_spike.values.mean() == 0)
+        res = Rm.apply_static({'test_synapse_activation': X+10000}, model_number = mn)
+        assert(res.p_spike.values.mean() == 1)
+        
+        
     def test_ReducedLdaModel_caching(self):
         '''compare model infered from test data to expectancy'''
         with FreshlyInitializedMdb() as mdb:
@@ -59,7 +75,7 @@ class Tests(unittest.TestCase):
                          synapse_activation_window_width = 50)
             Rm.fit([mdb])
             mn = 0
-            
+             
             t1 = time.time()
             Rm.apply_static(mdb, model_number = mn)
             t1 = time.time()-t1
@@ -67,7 +83,7 @@ class Tests(unittest.TestCase):
             Rm.apply_static(mdb, model_number = mn)
             t2 = time.time() - t2     
             np.testing.assert_array_less(50, t1/t2)
-            
+             
         with FreshlyInitializedMdb() as mdb:
             X,y = get_test_X_y(n_samples = 500)
             mdb['test_synapse_activation'] = X
@@ -83,24 +99,24 @@ class Tests(unittest.TestCase):
             Rm.apply_static(mdb, model_number = mn)
             t2 = time.time() - t2     
             np.testing.assert_array_less(max(t1,t2) / float(min(t1,t2)), 2)
-
-        
-
-        
+ 
+         
+ 
+         
     def test_concatenate_return_boundaries(self):
         a = np.array([[1,2,3],[2,3,4]])
         b = a + 1
         c = (b + 1)[:,:2]
-        
+         
         values = [a,b,c]
         X, boundaries = concatenate_return_boundaries(values, axis = 1)
         for lv, v in enumerate(values):
             np.testing.assert_equal(v, X[:, boundaries[lv][0]:boundaries[lv][1]])
-            
+             
         t_values = [np.transpose(v) for v in values]
         X_2, boundaries_2 = concatenate_return_boundaries(t_values, axis = 0)
         assert(boundaries == boundaries_2)
-        
+         
     def test_compare_lists_by_none_values(self):
         assert(compare_lists_by_none_values(['', None, None], [1, None, None]))
         assert(not compare_lists_by_none_values(['', None, None], [None, None, None]))
