@@ -296,7 +296,7 @@ def _apply_static_helper(lookup_series, min_index, max_index, kernel_dict, data)
     if min(indices) > min(lookup_series):
         warnings.warn("lda values leave range of training data by more than 30%!")        
         indices[indices<min(lookup_series.index)] = min(lookup_series.index)
-    p_spike = lookup_series.loc[lda_values.round().astype(int)]
+    p_spike = lookup_series.loc[indices]
     return ReducedLdaModelResult(None, lda_value_dict, lda_values, p_spike)
 ###################################
 # methods to get special kernels
