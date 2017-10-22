@@ -4,6 +4,8 @@ Created on Mar 8, 2012
 @author: regger
 '''
 from .scalar_field import ScalarField
+from .generate_nr_of_cells_spreadsheet import con_file_to_NumberOfConnectedCells_sheet
+
 
 labels2int = {\
     "Neuron":                 2,\
@@ -177,6 +179,11 @@ def write_anatomical_realization_map(fname=None, functionalMap=None, anatomicalI
             line += str(con[2])
             line += '\n'
             outputFile.write(line)
+    
+    # added by arco: single_cell_parser needs number of connected cells spreadsheet
+    # this can be generated out of the .con file. 
+    # todo: find a less ugly method to do this 
+    con_file_to_NumberOfConnectedCells_sheet(fname)
 
 def write_sample_connectivity_summary(fname=None, cellTypeSummaryData=None, columnSummaryData=None):
     if fname is None or cellTypeSummaryData is None or columnSummaryData is None:
