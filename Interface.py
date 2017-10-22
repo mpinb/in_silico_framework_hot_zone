@@ -80,6 +80,7 @@ from model_data_base.analyze.analyze_input_mapper_result import compare_to_neuro
 from model_data_base.IO.LoaderDumper import dask_to_csv as dumper_dask_to_csv
 from model_data_base.IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
 from model_data_base.IO.LoaderDumper import pandas_to_pickle as dumper_pandas_to_pickle
+from model_data_base.IO.LoaderDumper import pandas_to_msgpack as dumper_pandas_to_msgpack
 from model_data_base.IO.LoaderDumper import dask_to_msgpack as dumper_dask_to_msgpack
 from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack as dumper_dask_to_categorized_msgpack
 from model_data_base.IO.LoaderDumper import cell as dumper_cell
@@ -146,6 +147,10 @@ import single_cell_analyzer as sca
 import single_cell_parser as scp
 
 from singlecell_input_mapper.map_singlecell_inputs import map_singlecell_inputs
+from singlecell_input_mapper.evoked_network_param_from_template import create_network_parameter \
+           as create_evoked_network_parameter
+from singlecell_input_mapper.ongoing_network_param_from_template import create_network_parameter \
+           as create_ongoing_network_parameter           
 
 if get_versions()['dirty']: warnings.warn('The source folder has uncommited changes!')
 
