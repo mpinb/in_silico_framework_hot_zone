@@ -204,6 +204,23 @@ class Tests(unittest.TestCase):
         del self.fresh_mdb['test']
         assert len(self.fresh_mdb.keys()) == 0
         
+    def test_overwriting_an_item_deletes_old_version(self):
+        def count_number_of_subfolders(key):
+            '''counts the number of folders that are in the mdb
+            basedir that match a given key'''
+            folders = [f for f in os.listdir(self.fresh_mdb.basedir) if key in f]
+            return len(folders)
+        
+        self.assertEqual(count_number_of_subfolders('test'), 0)
+        self.fresh_mdb['test'] = 1
+        self.assertEqual(count_number_of_subfolders('test'), 1)
+        self.fresh_mdb['test'] = 1
+        self.assertEqual(count_number_of_subfolders('test'), 1)
+        del self.fresh_mdb['test']
+        self.assertEqual(count_number_of_subfolders('test'), 0)
+        
+        
+        
     def test_maybe_calculate_runs_calculation_the_first_time_and_gets_result_from_mdb_afterwards(self):
         flag = []
         def fun():

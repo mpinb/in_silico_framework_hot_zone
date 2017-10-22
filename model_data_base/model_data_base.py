@@ -174,13 +174,13 @@ class ModelDataBase(object):
         try:
             self.read_db()
         except IOError:
+            errstr = "Did not find a database in {path}. ".format(path = basedir) + \
+                    "A new empty database will not be created since "+\
+                    "{mode} is set to True."
             if nocreate:
-                # return  # debugging
-                raise MdbException("Did not find a database in {path}. A new empty database will not be created since nocreate is set to True."\
-                                   .format(path = basedir))
+                raise MdbException(errstr.format(mode = 'nocreate'))
             if readonly:
-                raise MdbException("Did not find a database in {path}. A new empty database will not be created since readonly is set to True.")\
-                    .format(path = basedir)
+                raise MdbException(errstr.format(mode = 'readonly'))
             _check_working_dir_clean_for_build(basedir)
             self._first_init = True
             self._registeredDumpers = [IO.LoaderDumper.to_cloudpickle] #self: stores the data in the underlying database
@@ -363,7 +363,7 @@ class ModelDataBase(object):
         
         #check if there is already a subdirectory assigned to this key. If so: store folder to delete it after new item is set.
         old_folder = None
-        if key in self.keys():
+        if key in existing_keys:
             dummy = self._sql_backend[key]
             if isinstance(dummy, LoaderWrapper):
                 old_folder = dummy.relpath
