@@ -1,26 +1,15 @@
+'''
+Created 2016/2017
+
+@author: arco
+'''
+
 import numpy as np
 import pandas as pd
 import sys, os
 
-def silence_stdout(fun, outfilename = None):
-    '''robustly silences a function and restores stdout afterwars
-    outfile: output can be redirected to file'''
-    def silent_fun(*args, **kwargs):
-        stdout_bak = sys.stdout
-        if outfilename is None:
-            sys.stdout = open(os.devnull, "w")
-        else:
-            sys.stdout = open(outfilename, 'w')
-        try:
-            res = fun(*args, **kwargs)
-        except:
-            raise
-        finally:
-            if outfilename:
-                sys.stdout.close()
-            sys.stdout = stdout_bak
-        return res
-    return silent_fun
+from model_data_base.utils import silence_stdout
+import single_cell_parser as scp
 
 def convert_hoc_array_to_np_array(hoc_array):
     '''converts hoc array to list of lists'''
@@ -56,7 +45,6 @@ def cell_to_serializable_object(cell, paramFile):
     return sc# out, t
 
 
-import single_cell_parser as scp
 def restore_cell_from_serializable_object(sc):
     cellParam = silence_stdout(scp.build_parameters)(sc['param'])
     cell = silence_stdout(scp.create_cell)(cellParam.neuron)
