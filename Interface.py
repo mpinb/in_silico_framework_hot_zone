@@ -70,7 +70,6 @@ from model_data_base.model_data_base import ModelDataBase
 from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
 from model_data_base.analyze.temporal_binning import universal as temporal_binning
-from model_data_base.analyze.synapse_activation_binning import synapse_activation_postprocess_dask as synapse_activation_binning_dask
 
 from model_data_base.analyze.spike_detection import spike_detection, spike_in_interval
 from model_data_base.analyze.spaciotemporal_binning import universal as spaciotemporal_binning
@@ -80,22 +79,23 @@ from model_data_base.analyze.analyze_input_mapper_result import compare_to_neuro
 from model_data_base.IO.LoaderDumper import dask_to_csv as dumper_dask_to_csv
 from model_data_base.IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
 from model_data_base.IO.LoaderDumper import pandas_to_pickle as dumper_pandas_to_pickle
+from model_data_base.IO.LoaderDumper import pandas_to_msgpack as dumper_pandas_to_msgpack
 from model_data_base.IO.LoaderDumper import dask_to_msgpack as dumper_dask_to_msgpack
 from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack as dumper_dask_to_categorized_msgpack
 from model_data_base.IO.LoaderDumper import cell as dumper_cell
 from model_data_base.IO.LoaderDumper import to_pickle as dumper_to_pickle
 from model_data_base.IO.LoaderDumper import to_cloudpickle as dumper_to_cloudpickle
 
-
 from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 from model_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format
 from model_data_base.IO.roberts_formats import read_InputMapper_summary
 
-#from model_data_base.mdb_initializers import load_crossing_over_results as mdb_init_crossing_over
-#from model_data_base.mdb_initializers import load_roberts_simulationdata as mdb_init_roberts_simulations
 from model_data_base.mdb_initializers import load_simrun_general as mdb_init_simrun_general
-#for compatibility
+from model_data_base.mdb_initializers import synapse_activation_binning as mdb_init_synapse_activation_binning
+
+#for compatibility, deprecated!
+synapse_activation_binning_dask = mdb_init_synapse_activation_binning.synapse_activation_postprocess_dask
 mdb_init_crossing_over = mdb_init_roberts_simulations = mdb_init_simrun_general
 
 from model_data_base.analyze import split_synapse_activation, color_cellTypeColorMap, excitatory, inhibitory
@@ -146,6 +146,10 @@ import single_cell_analyzer as sca
 import single_cell_parser as scp
 
 from singlecell_input_mapper.map_singlecell_inputs import map_singlecell_inputs
+from singlecell_input_mapper.evoked_network_param_from_template import create_network_parameter \
+           as create_evoked_network_parameter
+from singlecell_input_mapper.ongoing_network_param_from_template import create_network_parameter \
+           as create_ongoing_network_parameter           
 
 if get_versions()['dirty']: warnings.warn('The source folder has uncommited changes!')
 

@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from ..context import *
-from model_data_base.misc.add_nparray_aligned import *
+from model_data_base.analyze._add_nparray_aligned import *
 
 class Tests(unittest.TestCase):
     def setUp(self):

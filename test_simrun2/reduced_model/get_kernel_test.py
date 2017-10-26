@@ -16,7 +16,7 @@ def get_test_X_y(n_samples = 1000, n_timepoints = 100):
     return X,y
 
 class Tests(unittest.TestCase): 
-    def test_ReducedLdaModel_inference(self):
+    def test_statistical_ReducedLdaModel_inference(self):
         '''compare model infered from test data to expectancy'''
         with FreshlyInitializedMdb() as mdb:
             X,y = get_test_X_y(n_samples = 5000)
@@ -36,7 +36,7 @@ class Tests(unittest.TestCase):
         np.testing.assert_array_less(max([std1,std2]) / min([std1,std2]), 3)
         np.testing.assert_array_less(3, abs(mean1-mean2) / max([std1,std2]))
          
-    def test_ReducedLdaModel_apply(self):
+    def test_statistical_ReducedLdaModel_apply(self):
         '''compare model infered from test data to expectancy'''
         with FreshlyInitializedMdb() as mdb:
             X,y = get_test_X_y(n_samples = 5000)
@@ -49,7 +49,7 @@ class Tests(unittest.TestCase):
             res = Rm.apply_static(mdb, model_number = mn)
         np.testing.assert_equal(res.lda_values, Rm.lda_values[mn])
         
-    def test_ReducedLdaModel_apply_data_outside_trainingsdata(self):
+    def test_statistical_ReducedLdaModel_apply_data_outside_trainingsdata(self):
         '''compare model infered from test data to expectancy'''
         with FreshlyInitializedMdb() as mdb:
             X,y = get_test_X_y(n_samples = 5000)
@@ -64,8 +64,7 @@ class Tests(unittest.TestCase):
         res = Rm.apply_static({'test_synapse_activation': X+10000}, model_number = mn)
         assert(res.p_spike.values.mean() == 1)
         
-        
-    def test_ReducedLdaModel_caching(self):
+    def test_statistical_ReducedLdaModel_caching(self):
         '''compare model infered from test data to expectancy'''
         with FreshlyInitializedMdb() as mdb:
             X,y = get_test_X_y(n_samples = 500)
@@ -99,9 +98,6 @@ class Tests(unittest.TestCase):
             Rm.apply_static(mdb, model_number = mn)
             t2 = time.time() - t2     
             np.testing.assert_array_less(max(t1,t2) / float(min(t1,t2)), 2)
- 
-         
- 
          
     def test_concatenate_return_boundaries(self):
         a = np.array([[1,2,3],[2,3,4]])

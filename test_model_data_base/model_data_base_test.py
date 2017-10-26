@@ -8,6 +8,7 @@ import os, shutil
 import numpy as np
 import tempfile
 import warnings
+from pandas.util.testing import assert_frame_equal
 
 class Tests(unittest.TestCase):       
     def setUp(self):        
@@ -33,10 +34,10 @@ class Tests(unittest.TestCase):
     def test_register_works(self):
         mdbr = model_data_base_register.ModelDataBaseRegister(self.path_fresh_mdb)
         self.assertIn(self.fresh_mdb._unique_id, mdbr.mdb.keys())
-        submdb = self.fresh_mdb.get_sub_mdb("something")
+        submdb = self.fresh_mdb.create_sub_mdb("something")
         self.assertIn(submdb._unique_id, mdbr.mdb.keys())
         
-    def test_unique_is_set_on_initialization(self):
+    def test_unique_id_is_set_on_initialization(self):
         self.assert_(self.fresh_mdb._unique_id is not None)
         
     def test_unique_id_stays_the_same_on_reload(self):
@@ -204,6 +205,23 @@ class Tests(unittest.TestCase):
         del self.fresh_mdb['test']
         assert len(self.fresh_mdb.keys()) == 0
         
+    def test_overwriting_an_item_deletes_old_version(self):
+        def count_number_of_subfolders(key):
+            '''counts the number of folders that are in the mdb
+            basedir that match a given key'''
+            folders = [f for f in os.listdir(self.fresh_mdb.basedir) if key in f]
+            return len(folders)
+        
+        self.assertEqual(count_number_of_subfolders('test'), 0)
+        self.fresh_mdb['test'] = 1
+        self.assertEqual(count_number_of_subfolders('test'), 1)
+        self.fresh_mdb['test'] = 1
+        self.assertEqual(count_number_of_subfolders('test'), 1)
+        del self.fresh_mdb['test']
+        self.assertEqual(count_number_of_subfolders('test'), 0)
+        
+        
+        
     def test_maybe_calculate_runs_calculation_the_first_time_and_gets_result_from_mdb_afterwards(self):
         flag = []
         def fun():
@@ -223,5 +241,22 @@ class Tests(unittest.TestCase):
     def test_accessing_non_existent_key_raises_KeyError(self):
         self.assertRaises(KeyError, lambda: self.fresh_mdb['some_nonexistent_key'])
         
-        
-         
+    def test_compare_old_mdb_with_freshly_initialized_one(self):
+        '''ensure compatibility with old versions'''
+        old_path = os.path.join(parent, \
+                                'test_model_data_base', \
+                                'data',\
+                                'already_initialized_mdb_for_compatibility_testing')
+        print old_path
+        old_mdb = ModelDataBase(old_path, \
+                                readonly = True, \
+                                nocreate = True)
+        with FreshlyInitializedMdb() as fmdb:
+            assert_frame_equal(fmdb['voltage_traces'].compute(), \
+                               fmdb['voltage_traces'].compute())
+            assert_frame_equal(fmdb['synapse_activation'].compute(), \
+                               fmdb['synapse_activation'].compute())
+            assert_frame_equal(fmdb['cell_activation'].compute(), \
+                               fmdb['cell_activation'].compute())
+    
+            

@@ -10,13 +10,13 @@ Exemplary use:
     save_groupby(mdb, values, groupby)
 '''
 
-
+from __future__ import absolute_import
+from collections import defaultdict
 import numpy as np
 import dask
-import Interface as I
-from model_data_base.analyze import excitatory, inhibitory
-#general function
-from collections import defaultdict
+from ..analyze import excitatory, inhibitory
+from ..analyze.temporal_binning import universal as temporal_binning
+from ..IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
 
 def prefun(df):
     dummy = df.synapse_type.str.split('_')
@@ -32,7 +32,7 @@ def postfun(s):
     return np.vstack(s.values)
 
 def applyfun(pdf):
-    return I.temporal_binning(pdf, min_time = 0, max_time = 300, normalize = False)[1]
+    return temporal_binning(pdf, min_time = 0, max_time = 300, normalize = False)[1]
 
 
 
@@ -126,12 +126,43 @@ def save_groupby(mdb, result, groupby):
     '''saves the result of synapse_activation_postprocess_dask to a model data base.
     
     A new model data base within mdb is created and the numpy arrays are stored there.'''
-    identifier = tuple(['synapse_activation', 'binned_t1'] + groupby)
+    if not isinstance(groupby, list): groupby = [groupby]    
+    identifier = tuple(['synapse_activation_binned', 't1'] + ['__'.join(groupby)])
     try:
         del mdb[identifier]
     except:
         pass
-    sub_mdb = mdb.get_sub_mdb(identifier)
+    sub_mdb = mdb.create_sub_mdb(identifier)
     for key in result:
-        sub_mdb.setitem(key, result[key], dumper = I.dumper_numpy_to_npy)
+        sub_mdb.setitem(key, result[key], dumper = dumper_numpy_to_npy)
         
+def init(mdb, groupby = '', get = None):
+    '''
+    Binning synapse activations.
+    
+    mdb: ModelDataBase object, which is already initalized, such that 
+         the key mdb['synapse_activation'] exists.
+    
+    groupby: (default: ''): species for which subgroups the bins should be 
+            calculated. Available values include: 
+                'celltype', 
+                'presynaptic_column', 
+                'proximal', (soma distance < 500 ym)
+                'EI' (Lumping the EXC / INH celltypes together)
+            It can also be any column in the specified dataframe.
+            Can be a list, if "sub-subgroups" should be calculated.
+
+    get: allows to specify a dask scheduler for the computation
+    
+    Not implemented yet:
+        (prefun: function to apply on each partition before binning)
+        (applyfun: actual binning function)
+        (postfun: function to merge results together for one partition)
+        
+    
+    returns: None. The binned synapse activation data will be stored in mdb.
+    '''
+    
+    synapse_activation_postprocess_dask(mdb['synapse_activation'], \
+                                        groupby = groupby, mdb = mdb, \
+                                        get = get)
