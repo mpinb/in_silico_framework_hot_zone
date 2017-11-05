@@ -72,7 +72,7 @@ def crossing_over(mdb, sim_trails, time, cellParamName, evokedUpParamName, dirPr
         path = os.path.join(dirPrefix, sim_trail)
         if not os.path.exists(path):
             os.makedirs(path)
-        print path
+        #print path
         dirPrefixes.append(path)
         delayeds.append(delayed_crossing_over_helper(sa, time, cellParamName, evokedUpParamName, dirPrefix = path, nSweeps = nSweeps, tStop = tStop, silent = silent, scale_apical = scale_apical))
     pdf = pd.DataFrame(dict(sim_trail_index = sim_trails, simResultDirPrefixes = dirPrefixes))

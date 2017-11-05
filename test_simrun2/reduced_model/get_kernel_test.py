@@ -35,6 +35,10 @@ class Tests(unittest.TestCase):
         mean2, std2 = Rm.kernel_dict[0].values()[0][25:].mean(), Rm.kernel_dict[0].values()[0][25:].std()
         np.testing.assert_array_less(max([std1,std2]) / min([std1,std2]), 3)
         np.testing.assert_array_less(3, abs(mean1-mean2) / max([std1,std2]))
+        #import Interface as I
+        #mdb = I.ModelDataBase('/nas1/Data_arco/project_src/in_silico_framework/test_model_data_base/data/already_initialized_mdb_for_compatibility_testing/', nocreate = True)
+        #Rm.mdb_list = None
+        #mdb['reduced_model'] = Rm
          
     def test_statistical_ReducedLdaModel_apply(self):
         '''compare model infered from test data to expectancy'''

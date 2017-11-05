@@ -23,6 +23,7 @@ import simrun2.crossing_over.crossing_over_simple_interface
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 
 import getting_started
+import mechanisms
 
 getting_started_folder = getting_started.parent
 
@@ -58,7 +59,6 @@ class Tests(unittest.TestCase):
             raise
         finally:
             shutil.rmtree(dirPrefix)
-        print dummy
         self.assertIsInstance(dummy[0][0][0], str)        
       
     @decorators.testlevel(2)    
@@ -84,7 +84,6 @@ class Tests(unittest.TestCase):
             raise
         finally:
             shutil.rmtree(dirPrefix)
-        print dummy
         self.assertIsInstance(dummy[0][0], str)  
           
     @decorators.testlevel(2)              
@@ -97,7 +96,6 @@ class Tests(unittest.TestCase):
             cellParam.neuron.filename = os.path.join(parent, 'test_simrun2',\
                          'data', \
                          '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2_B1border.hoc')
-            print cellParam.neuron.filename
             cellParamName_other_position = os.path.join(dirPrefix, 'other_position.param')                
             cellParam.save(cellParamName_other_position)
             dummy2 = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName_other_position, networkName, [example_path], simName='', dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
