@@ -71,8 +71,8 @@ def write_landmark_file(fname=None, landmarkList=None):
     
     if not landmarkList:
         print 'Landmark list empty!'
-        return
-    nrCoords = len(landmarkList[0])
+        #return
+    nrCoords = 3 if not landmarkList else len(landmarkList[0])
     if nrCoords != 3:
         err_str = 'Landmarks have wrong format! Number of coordinates is ' + str(nrCoords) + ', should be 3'
         raise RuntimeError(err_str)
@@ -367,7 +367,7 @@ def write_presynaptic_spike_times(fname=None, cells=None):
                 line += '\n'
                 outputFile.write(line)
 
-def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoints=False):
+def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoints=False, step_frames = 10):
     '''
     write Amira SpatialGraph files corresponding to time steps
     of entire simulation run. Recorded quantities are passed
@@ -573,7 +573,7 @@ def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoin
     for i in range(len(tVec)):
 #        only write every 10th time step for visualization
 #        (step size for vis. will then be 0.25ms)
-        if i%10:
+        if i%step_frames:
             continue
         stepFName = fname
         stepFName += '_'
