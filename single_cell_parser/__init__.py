@@ -55,7 +55,7 @@ def load_NMODL_parameters(parameters):
     except AttributeError:
         pass
 
-def create_cell(parameters, scaleFunc=None, allPoints=False):
+def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = True):
     '''
     default way of creating NEURON cell models;
     includes spatial discretization and inserts
@@ -69,8 +69,9 @@ def create_cell(parameters, scaleFunc=None, allPoints=False):
     print 'Loading cell morphology...'
     parser = CellParser(parameters.filename)
     parser.spatialgraph_to_cell(axon, scaleFunc)
-    print 'Setting up biophysical model...'
-    parser.set_up_biophysics(parameters, allPoints)
+    if setUpBiophysics:
+        print 'Setting up biophysical model...'
+        parser.set_up_biophysics(parameters, allPoints)
     print '-------------------------------'
     return parser.cell
 
