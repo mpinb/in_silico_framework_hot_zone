@@ -1,6 +1,6 @@
 '''
-the initialize function in this module is meant to be used to load in simulation results produced by 
-the simrun module or by roberts NeuroSim respectively.
+Use the init function in this module to load simulation data generated 
+with the simrun2 module into a ModelDataBase.
 '''
 
 import os, glob, shutil, fnmatch
@@ -9,6 +9,8 @@ import numpy as np
 import pandas as pd
 import dask.dataframe as dd
 import dask
+import single_cell_parser as scp
+import single_cell_analyzer as sca
 from model_data_base import utils
 from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, to_cloudpickle, to_pickle
 from model_data_base.model_data_base import get_progress_bar_function
@@ -17,6 +19,7 @@ from model_data_base.IO.roberts_formats import read_pandas_cell_activation_from_
 from model_data_base.analyze.spike_detection import spike_detection
 from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.IO.LoaderDumper import dask_to_msgpack
+from simrun2.reduced_model.spiking_output import out
 
 ############################################
 # Step one: create filelist containing paths to all soma voltage trace files
@@ -148,12 +151,18 @@ def get_max_commas(paths):
 
 def load_dendritic_voltage_traces_helper(mdb, suffix, divisions = None):
     m = mdb['metadata'] 
+    if not suffix.endswith('.csv'):
+        suffix = suffix + '.csv'
+    if not suffix.startswith('_'):
+        suffix = '_' + suffix
+    #print os.path.join(mdb['simresult_path'], m.iloc[0].path, m.iloc[0].path.split('_')[-1] + suffix)
     #old naming convention
     if os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, m.iloc[0].path.split('_')[-1] + suffix)):
         fnames = [os.path.join(x.path, x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
     #new naming convention
     elif os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, 'seed_' + m.iloc[0].path.split('_')[-1] + suffix)):
         fnames = [os.path.join(x.path, 'seed_' + x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
+    #print suffix
     fnames = utils.unique(fnames)
     ddf = read_voltage_traces_by_filenames(mdb['simresult_path'], fnames, divisions = divisions)
     return ddf
@@ -209,7 +218,7 @@ def write_param_files_to_folder(df, folder, path_column, hash_column):
     df = df.drop_duplicates(subset = hash_column)
     df2 = pd.DataFrame()
     df2['from_'] = df[path_column]
-    df2['to_'] = df.apply(lambda x: os.path.join(folder, x[hash_column]), axis = 1)
+    df2['to_'] = df.apply(lambda x: os.path.join(folder, x[hash_column] + '.param'), axis = 1)
     ddf = dd.from_pandas(df2, npartitions = 200).to_delayed()
     return dask.delayed([parallel_copy_helper(d) for d in ddf])
 
@@ -240,7 +249,7 @@ def _build_synapse_activation(mdb, repartition = False):
     def template(key, paths, file_reader_fun, dumper): 
         print('counting commas')
         max_commas = get_max_commas(paths) + 1
-        print max_commas
+        #print max_commas
         print('generate dataframe')
         path_sti_tuples = zip(paths, list(mdb['sim_trail_index']))
         if repartition and len(paths) > 10000:
@@ -265,19 +274,43 @@ def _build_synapse_activation(mdb, repartition = False):
     print '---building cell activation dataframe---'
     paths = list(simresult_path + '/' + m.path + '/' + m.cells_file_name)    
     template('cell_activation', paths, dask.delayed(read_ca, traverse = False), to_cloudpickle)    
-  
+
+def _get_rec_site_managers(mdb):
+    param_files = glob.glob(os.path.join(mdb['parameterfiles_cell_folder'],\
+                                         '*.param'))
+    #print param_files
+    if len(param_files) > 1:
+        raise NotImplementedError("Cannot initialize database with dendritic recordings if"\
+                                  +"more than one cell parameter file is used in the specified"\
+                                  +"directory" + str(param_files))
+    #############
+    # the following code is adapted from simrun2
+    #############
+    neuronParameters = scp.build_parameters(param_files[0])
+    rec_sites = neuronParameters.sim.recordingSites
+    cellParam = neuronParameters.neuron
+    cell = scp.create_cell(cellParam, setUpBiophysics=True)
+    recSiteManagers = [sca.RecordingSiteManager(recFile, cell) for recFile in rec_sites]
+    out =  {recSite.label:  recSite.label + '_vm_dend_traces.csv' \
+            for RSManager in recSiteManagers \
+            for recSite in RSManager.recordingSites}
+    return out
 
 def _build_dendritic_voltage_traces(mdb, suffix_dict = None):
     print '---building dendritic voltage traces dataframes---'
     
     if suffix_dict is None:
-        suffix_dict = dict(Vm_proximal = '_apical_proximal_distal_rec_sites_ID_001_sec_025_seg_001_x_0.500_somaDist_198.1_vm_dend_traces.csv', \
-                       Vm_distal = '_apical_proximal_distal_rec_sites_ID_000_sec_038_seg_032_x_0.929_somaDist_920.7_vm_dend_traces.csv')
-
+        suffix_dict = _get_rec_site_managers(mdb)
+    
     out = load_dendritic_voltage_traces(mdb, suffix_dict)
-    for key in out:
-        mdb.setitem(key, out[key], dumper = to_cloudpickle)
-    mdb.setitem('dendritic_voltage_traces_keys', out.keys(), dumper = 'self')
+    if not 'dendritic_recordings' in mdb.keys():
+        mdb.create_sub_mdb('dendritic_recordings')
+    
+    sub_mdb = mdb['dendritic_recordings']
+    
+    for recSiteLabel in suffix_dict.keys():
+        sub_mdb.setitem(('Vm', recSiteLabel), out[recSiteLabel], dumper = to_cloudpickle)
+    #mdb.setitem('dendritic_voltage_traces_keys', out.keys(), dumper = to_cloudpickle)
         
 def _build_param_files(mdb):
     print '---moving parameter files---'    
@@ -289,22 +322,26 @@ def _build_param_files(mdb):
 
 def init(mdb, simresult_path,  \
          core = True, voltage_traces = True, synapse_activation = True, dendritic_voltage_traces = True, \
-         parameterfiles = True, spike_times = True,  burst_times = True, repartition = True):
+         parameterfiles = True, spike_times = True,  burst_times = True, repartition = True, get = None):
+    '''Use this function to load simulation data generated with the simrun2 module 
+    into a ModelDataBase. 
     
-    '''This initializes a ModelDataBase object by loading simulation results in it.
-    You can specify which data should be included.
+    After initialization, you can access the data from the model_data_base in the following manner:
+    mdb['synapse_activation'], mdb['cell_activation'], mdb['voltage_traces'], mdb['spike_times'], ...
+    Use mdb.keys() to view all available data.
     
-    The result will be a database, in which you can access e.g. the synapse activation table
-    using
-    mdb['synapse_activation'].
+    Note that the database does not contain the actual data, instead it contains links 
+    to the original / external data.
     
-    You can have a look on what is stored in the database by calling mdb.keys().
+    After initialization, it is recomeded to use the optimize method. This converts
+    the data to a high performance binary format and makes unpickling more robust against 
+    version changes of third party libraries. Also, it makes the database self-containing,
+    i.e. you can move it to another machine or subfolder and everything still works.
     
-    At this point, the database refers to external data, i.e. it is not self containing.
-    To move all data in the database folder using a speed optimized format, call the optimize
-    function.
+    get: scheduler for task execution. If None, mdb.settings.multiprocessing_scheduler is used.
     '''
-    with dask.set_options(get = mdb.settings.multiprocessing_scheduler):
+    get = mdb.settings.multiprocessing_scheduler if get is None else get
+    with dask.set_options(get = get):
         with get_progress_bar_function()(): 
             mdb['simresult_path'] = simresult_path  
             if core: _build_core(mdb)
@@ -336,7 +373,7 @@ def _get_dumper(value):
     else:
         raise NotImplementedError()
     
-def optimize(mdb, dumper = None, select = None):
+def optimize(mdb, dumper = None, select = None, get = None):
     '''
     This function speeds up the access to simulation data and makes the database
     self-containing and more robust. It can only be used after initializing the database (do so 
@@ -350,13 +387,16 @@ def optimize(mdb, dumper = None, select = None):
     
     This function deals with these drawbacks. It will save the data in subfolders of the 
     specified model_data_base dircetory using an optimized format, which is much faster than csv
-    (it categorizes the data and saves each partition using the pandas msgpack extension). 
+    (it categorizes the data and saves each partition using the pandas msgpack extension,
+    using blosc compression). 
     It also repartitions dataframes such that they contain 5000 partitions at maximum.
     The references to the data is then saved using pickle, but in a way that we only depend
     on the public api of third party libraries but not their internal structure.
 
     select: If None, all data will be converted. You can specify a list of items that
     should be optimized, if only a subset should be optimized.
+    
+    get: scheduler for task execution. If None, mdb.settings.multiprocessing_scheduler is used.
     '''
     print '--- save data in optimized format to database ---'
     keys = mdb.keys()
@@ -365,7 +405,8 @@ def optimize(mdb, dumper = None, select = None):
         keys_for_rewrite.extend(mdb['dendritic_voltage_traces_keys'])       
     if select is None:
         select = keys_for_rewrite
-        
+    
+    get = mdb.settings.multiprocessing_scheduler if get is None else get
     with dask.set_options(get = mdb.settings.multiprocessing_scheduler):
         with get_progress_bar_function()(): 
             for key in mdb.keys():
