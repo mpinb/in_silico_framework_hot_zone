@@ -5,7 +5,7 @@ sys.path.insert(0, parent)
 
 from model_data_base import *
 import getting_started
-
+import mechanisms
 # set up paths
 test_data_folder = os.path.join(getting_started.parent, \
                               'example_simulation_data', \
@@ -32,7 +32,8 @@ class FreshlyInitializedMdb(object):
         from model_data_base.mdb_initializers.load_simrun_general import init
         from model_data_base.utils import silence_stdout
         init = silence_stdout(init)
-        init(self.mdb, test_data_folder)       
+        init(self.mdb, test_data_folder)
+       
         return self.mdb
     
     def __exit__(self, *args, **kwargs):

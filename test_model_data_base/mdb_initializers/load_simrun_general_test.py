@@ -23,16 +23,16 @@ class Tests(unittest.TestCase):
         
     def test_optimization_works_dumpers_default(self):
         optimize(self.mdb, dumper = None)
-    
+     
     def test_optimization_works_dumpers_csv(self):
         optimize(self.mdb, dumper = dask_to_csv)
-        
+         
     def test_optimization_works_dumpers_msgpack(self):
         optimize(self.mdb, dumper = dask_to_msgpack)     
-        
+         
     def test_optimization_works_dumpers_categorized_msgpack(self):
         optimize(self.mdb, dumper = dask_to_categorized_msgpack)                
-        
+         
     @decorators.testlevel(2)            
     def test_dataintegrity_no_empty_rows(self):
         e = self.mdb
@@ -44,7 +44,7 @@ class Tests(unittest.TestCase):
             cell_activation['isnan']=cell_activation['0'].apply(lambda x: np.isnan(x)) 
             first_column = e['voltage_traces'].columns[0]
             voltage_traces['isnan']=voltage_traces[first_column].apply(lambda x: np.isnan(x)) 
-         
+          
             self.assertEqual(0, len(synapse_activation[synapse_activation.isnan == True]))
             self.assertEqual(0, len(cell_activation[cell_activation.isnan == True]))
             self.assertEqual(0, len(voltage_traces[voltage_traces.isnan == True]))
