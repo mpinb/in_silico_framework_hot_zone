@@ -32,13 +32,19 @@ from network_realizations import create_synapse_realization
 from network_realizations import create_functional_network
 #from sim_control import SimControl
 import neuron
-from sumatra.parameters import build_parameters
+from sumatra.parameters import build_parameters as build_parameters_sumatra
 from sumatra.parameters import NTParameterSet
 import numpy as np
 
 #------------------------------------------------------------------------------ 
 # commonly used functions required for running single neuron simulations
 #------------------------------------------------------------------------------ 
+def build_parameters(filename):
+    from model_data_base.mdbopen import resolve_mdb_path
+    filename = resolve_mdb_path(filename)
+    return build_parameters_sumatra(filename)
+    
+
 def load_NMODL_parameters(parameters):
     '''
     automatically loads NMODL mechanisms from paths in parameter file
