@@ -2,7 +2,7 @@ from __future__ import absolute_import
 import os
 from .model_data_base import ModelDataBase, MdbException
 from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
-
+from .utils import cache
 _foldername = '.model_data_base_register.db'
 
 class ModelDataBaseRegister():
@@ -40,14 +40,14 @@ class ModelDataBaseRegister():
     def add_mdb(self, mdb):
         self.mdb[mdb._unique_id] = os.path.abspath(mdb.basedir)
 
-mdbr = ModelDataBaseRegister(os.path.dirname(__file__))
-        
-def _get_mdb_register(dir_):
+@cache        
+def _get_mdb_register():
+    mdbr = ModelDataBaseRegister(os.path.dirname(__file__))
     return mdbr
 
-def _set_mdb_register(dir_):
-    global mdbr
-    mdbr = ModelDataBaseRegister(dir_)
+#def _set_mdb_register(dir_):
+#    global mdbr
+#    mdbr = ModelDataBaseRegister(dir_)
     
 #     dir_ = os.path.abspath(dir_)
 #     while True:
