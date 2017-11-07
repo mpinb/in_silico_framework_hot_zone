@@ -4,9 +4,10 @@ from .model_data_base import ModelDataBase, MdbException
 from .model_data_base_register import get_mdb_by_unique_id
 
 def resolve_mdb_path(path):
-    if not '//' in path:
+    if not path.startswith('mdb://'):
         return path
-    path_splitted = path.split('//')
+    
+    path_splitted = path.split('//')[1].split('/')
 
     try:
         mdb = get_mdb_by_unique_id(path_splitted[0])
@@ -17,7 +18,7 @@ def resolve_mdb_path(path):
     except KeyError:
         raise KeyError("Trying to load {}. The Database has been found at {}. ".format(path, mdb.basedir) + \
         "However, this Database does not contain the key {}".format(path_splitted[1]))
-    return os.path.join(managed_folder,path_splitted[2])
+    return os.path.join(managed_folder,*path_splitted[2:])
 
 
 # def resolve_mdb_path(mdb, path):
@@ -66,7 +67,7 @@ def create_mdb_path(path):
         raise KeyError("Found a Database at {}. ".format(mdb.basedir)+\
                        "However, there is no key pointing to the subfolder {} in it."\
                        .format(path_minus_mdb_basedir.split('/')[0]))
-    return '//'.join([mdb.get_id(), key, os.path.relpath(path, mdb[key])])
+    return os.path.join('mdb://', mdb.get_id(), key, os.path.relpath(path, mdb[key]))
 
 
 class mdbopen:
