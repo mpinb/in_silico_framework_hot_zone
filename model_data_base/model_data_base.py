@@ -15,7 +15,6 @@ import IO.LoaderDumper.just_create_mdb
 import IO.LoaderDumper.to_pickle
 import IO.LoaderDumper.to_cloudpickle
 from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
-
 from collections import defaultdict
 # import model_data_base_register ## moved to end of file since this is a circular import
 
@@ -137,7 +136,7 @@ class SQLMetadataAccessor():
         return self.sql_backend.keys()
 
 class ModelDataBase(object):
-    def __init__(self, basedir, forceload = False, readonly = False, nocreate = False):
+    def __init__(self, basedir, forceload = False, readonly = False, nocreate = False, forcecreate = False):
         '''
         Class responsible for storing information, meant to be used as an interface to simulation 
         results. If the dask backends are used to save the data, it will be out of memory,
@@ -181,7 +180,8 @@ class ModelDataBase(object):
                 raise MdbException(errstr.format(mode = 'nocreate'))
             if readonly:
                 raise MdbException(errstr.format(mode = 'readonly'))
-            _check_working_dir_clean_for_build(basedir)
+            if not forcecreate:
+                _check_working_dir_clean_for_build(basedir)
             self._first_init = True
             self._registeredDumpers = [IO.LoaderDumper.to_cloudpickle] #self: stores the data in the underlying database
             self.save_db()
@@ -544,8 +544,18 @@ class ModelDataBase(object):
     def __reduce__(self):
         return (self.__class__, (self.basedir, self.forceload, self.readonly, True))
     
+class RegisteredFolder(ModelDataBase):
+    def __init__(self, path):
+        ModelDataBase.__init__(self, path, forcecreate = True)
+        self.setitem('self', None, dumper = IO.LoaderDumper.just_create_folder)
+        dumper = IO.LoaderDumper.just_create_folder
+        dumper.dump(None, path)
+        self._sql_backend['self'] = LoaderWrapper('')
+        self.setitem = None
+        
+    
 import model_data_base_register
-
+import mdbopen
 
                       
         
