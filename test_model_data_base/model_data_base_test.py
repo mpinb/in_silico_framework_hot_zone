@@ -31,11 +31,11 @@ class Tests(unittest.TestCase):
 #                                                   register = "try_on_every_init")
 #             assert(len(w >= 2))
              
-    def test_register_works(self):
-        mdbr = model_data_base_register.ModelDataBaseRegister(self.path_fresh_mdb)
-        self.assertIn(self.fresh_mdb._unique_id, mdbr.mdb.keys())
-        submdb = self.fresh_mdb.create_sub_mdb("something")
-        self.assertIn(submdb._unique_id, mdbr.mdb.keys())
+#     def test_register_works(self):
+#         mdbr = model_data_base_register.ModelDataBaseRegister(self.path_fresh_mdb)
+#         self.assertIn(self.fresh_mdb._unique_id, mdbr.mdb.keys())
+#         submdb = self.fresh_mdb.create_sub_mdb("something")
+#         self.assertIn(submdb._unique_id, mdbr.mdb.keys())
          
     def test_unique_id_is_set_on_initialization(self):
         self.assert_(self.fresh_mdb._unique_id is not None)

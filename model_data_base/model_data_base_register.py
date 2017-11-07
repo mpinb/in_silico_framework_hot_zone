@@ -1,7 +1,7 @@
+from __future__ import absolute_import
 import os
 from .model_data_base import ModelDataBase, MdbException
 from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
-
 
 _foldername = '.model_data_base_register.db'
 
@@ -39,26 +39,37 @@ class ModelDataBaseRegister():
     
     def add_mdb(self, mdb):
         self.mdb[mdb._unique_id] = os.path.abspath(mdb.basedir)
+
+mdbr = ModelDataBaseRegister(os.path.dirname(__file__))
         
 def _get_mdb_register(dir_):
-    dir_ = os.path.abspath(dir_)
-    while True:
-        path = os.path.join(dir_, _foldername)
-        #print path        
-        if os.path.exists(path):
-            return ModelDataBaseRegister(path)
-        dir_ = os.path.dirname(dir_)
-        if dir_ == '/':
-            raise MdbException("Did not find a ModelDataBaseRegister.")
+    return mdbr
+
+def _set_mdb_register(dir_):
+    global mdbr
+    mdbr = ModelDataBaseRegister(dir_)
+    
+#     dir_ = os.path.abspath(dir_)
+#     while True:
+#         path = os.path.join(dir_, _foldername)
+#         #print path        
+#         if os.path.exists(path):
+#             return ModelDataBaseRegister(path)
+#         dir_ = os.path.dirname(dir_)
+#         if dir_ == '/':
+#             raise MdbException("Did not find a ModelDataBaseRegister.")
         
 def register_mdb(mdb):
     mdbr = _get_mdb_register(mdb.basedir)
     mdbr.add_mdb(mdb)
     
-def get_mdb_by_unique_id(parentdir_or_mdb, unique_id):
-    if isinstance(parentdir_or_mdb, ModelDataBase):
-        parentdir_or_mdb = parentdir_or_mdb.basedir
-    mdbr = _get_mdb_register(parentdir_or_mdb)
+# def get_mdb_by_unique_id(parentdir_or_mdb, unique_id):
+#     if isinstance(parentdir_or_mdb, ModelDataBase):
+#         parentdir_or_mdb = parentdir_or_mdb.basedir
+#     mdbr = _get_mdb_register(parentdir_or_mdb)
+#     return ModelDataBase(mdbr.mdb[unique_id])
+
+def get_mdb_by_unique_id(unique_id):
     return ModelDataBase(mdbr.mdb[unique_id])
         
 
