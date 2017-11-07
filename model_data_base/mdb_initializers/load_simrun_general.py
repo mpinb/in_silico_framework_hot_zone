@@ -13,13 +13,13 @@ import single_cell_parser as scp
 import single_cell_analyzer as sca
 from model_data_base import utils
 from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, to_cloudpickle, to_pickle
-from model_data_base.model_data_base import get_progress_bar_function
+from model_data_base.model_data_base import get_progress_bar_function,\
+    MdbException
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format as read_sa
 from model_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format as read_ca
 from model_data_base.analyze.spike_detection import spike_detection
 from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.IO.LoaderDumper import dask_to_msgpack
-from simrun2.reduced_model.spiking_output import out
 
 ############################################
 # Step one: create filelist containing paths to all soma voltage trace files
@@ -162,7 +162,7 @@ def load_dendritic_voltage_traces_helper(mdb, suffix, divisions = None):
     #new naming convention
     elif os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, 'seed_' + m.iloc[0].path.split('_')[-1] + suffix)):
         fnames = [os.path.join(x.path, 'seed_' + x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
-    #print suffix
+    print suffix
     fnames = utils.unique(fnames)
     ddf = read_voltage_traces_by_filenames(mdb['simresult_path'], fnames, divisions = divisions)
     return ddf
@@ -208,19 +208,66 @@ def generate_param_file_hashes(simresult_path, sim_trail_index, get = dask.multi
     delayeds = [_helper(df) for df in ddf]
     return dask.delayed(delayeds)
 
-@dask.delayed
-def parallel_copy_helper(df):
-    for name, value in df.iterrows():
-        shutil.copy(value.from_, value.to_)
+#####################################
+# step seven point one: replace paths in param files with relative mdbpaths
+#####################################
+from ..mdbopen import create_mdb_path 
+def create_mdb_path_print(path, replace_dict = {}):
+    ## replace_dict: todo
+    try:
+        return create_mdb_path(path), True
+    except MdbException as e:
+        print e
+        return path, False
+    
+def cell_param_to_mdbpath(neuron):
+    flag = True
+    neuron['neuron']['filename'], flag_ = create_mdb_path_print(neuron['neuron']['filename'])
+    flag = flag and flag_
+    rec_sites = [create_mdb_path_print(p) for p in neuron['sim']['recordingSites']]
+    neuron['sim']['recordingSites'] = [r[0] for r in rec_sites]
+    flag = flag and all([r[1] for r in rec_sites])
+    neuron['NMODL_mechanisms']['channels'], flag =  create_mdb_path_print(neuron['NMODL_mechanisms']['channels'])
+    flag = flag and flag_
+    return flag
 
-def write_param_files_to_folder(df, folder, path_column, hash_column):
+def network_param_to_mdbpath(network):
+    flag = True
+    network['NMODL_mechanisms']['VecStim'], flag_ = create_mdb_path_print(network['NMODL_mechanisms']['VecStim'])
+    flag = flag and flag_    
+    network['NMODL_mechanisms']['synapses'], flag_ = create_mdb_path_print(network['NMODL_mechanisms']['synapses'])
+    flag = flag and flag_    
+    for k in network['network'].keys():
+        network['network'][k]['synapses']['connectionFile'], flag_ = create_mdb_path_print(network['network'][k]['synapses']['connectionFile'])
+        flag = flag and flag_
+        network['network'][k]['synapses']['distributionFile'], flag_ = create_mdb_path_print(network['network'][k]['synapses']['distributionFile'])
+        flag = flag and flag_
+    return flag
+
+@dask.delayed
+def parallel_copy_helper(df, transform_fun = None):
+    for name, value in df.iterrows():
+        param = scp.build_parameters(value.from_)
+        print 'ready to transform'
+        transform_fun(param)
+        param.save(value.to_)
+#             
+#         if transform_fun is None:
+#             shutil.copy(value.from_, value.to_)
+#         else:
+#             param = scp.build_parameters(value.from_)
+#             print 'ready to transform'
+#             transform_fun(param)
+#             param.save(value.to_)
+
+def write_param_files_to_folder(df, folder, path_column, hash_column, transform_fun = None):
     print "move parameterfiles"
     df = df.drop_duplicates(subset = hash_column)
     df2 = pd.DataFrame()
     df2['from_'] = df[path_column]
     df2['to_'] = df.apply(lambda x: os.path.join(folder, x[hash_column] + '.param'), axis = 1)
     ddf = dd.from_pandas(df2, npartitions = 200).to_delayed()
-    return dask.delayed([parallel_copy_helper(d) for d in ddf])
+    return dask.delayed([parallel_copy_helper(d, transform_fun = transform_fun) for d in ddf])
 
 ###########################################################################################
 # Build database using the helper functions above
@@ -311,13 +358,19 @@ def _build_dendritic_voltage_traces(mdb, suffix_dict = None):
     for recSiteLabel in suffix_dict.keys():
         sub_mdb.setitem(('Vm', recSiteLabel), out[recSiteLabel], dumper = to_cloudpickle)
     #mdb.setitem('dendritic_voltage_traces_keys', out.keys(), dumper = to_cloudpickle)
-        
+    
 def _build_param_files(mdb):
     print '---moving parameter files---'    
     df = pd.concat(generate_param_file_hashes(mdb['simresult_path'], mdb['sim_trail_index']).compute())
     df.set_index('sim_trail_index', inplace = True)
-    write_param_files_to_folder(df, mdb.create_managed_folder('parameterfiles_cell_folder'), 'path_neuron', 'hash_neuron').compute()
-    write_param_files_to_folder(df, mdb.create_managed_folder('parameterfiles_network_folder'), 'path_network', 'hash_network').compute()
+    write_param_files_to_folder(df, \
+                                mdb.create_managed_folder('parameterfiles_cell_folder'), \
+                                'path_neuron', 'hash_neuron', \
+                                transform_fun = cell_param_to_mdbpath).compute()
+    write_param_files_to_folder(df, \
+                                mdb.create_managed_folder('parameterfiles_network_folder'), \
+                                'path_network', 'hash_network',\
+                                network_param_to_mdbpath).compute()
     mdb['parameterfiles'] = df    
 
 def init(mdb, simresult_path,  \
