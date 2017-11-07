@@ -163,6 +163,15 @@ try:
             import matplotlib
             matplotlib.use('Agg')
         c.run(fun)
+        
+        # switch off work stealing, otherwise, simulations may run twice
+        # update: work stealing is now transactional, see 
+        # https://github.com/dask/distributed/commit/efb7f1ab3c14d6b2ca15dcd04ca1c2b226cc7cbb
+        # Until this commit is provided through the conda channels, we switch work stealing off completely
+        def switch_of_work_stealing(dask_scheduler=None):
+            dask_scheduler.extensions['stealing']._pc.stop()
+                    
+        c.run_on_scheduler(switch_of_work_stealing)
         return c
     print "setting up local multiprocessing framework ... done"
 except ImportError:
