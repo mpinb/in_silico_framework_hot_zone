@@ -70,7 +70,7 @@ def create_mdb_path(path):
 
 
 class mdbopen:
-    def __init__(self, path, mode):
+    def __init__(self, path, mode = 'r'):
         self.path = path
         self.mode = mode
         
