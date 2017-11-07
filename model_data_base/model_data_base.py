@@ -53,19 +53,20 @@ class LoaderWrapper:
     The process of storing data in a subfolder is as follows:
     1. The subfolder is generated using the mkdtemp method
     2. the respective dumper puts its data there
-    3. the dumper also saves a Loader.pickle file there.
+    3. the dumper also saves a Loader.pickle file there. This contains an object
+       with a get method (call it to restore the data) and everything else
+       necessary to recover the data
     4. A LoaderWrapper object pointing to the datafolder with a relative
         path (to allow moving of the database) is saved under the respective key
         in the model_data_base
         
     The process of loading in the data is as follows:
     1. the user request it: mdb['somekey']
-    2. the result is a LoaderWrapper object
+    2. the LoaderWrapper object is loaded from the backend sql database
     3. the Loader.pickle file in the respective folder is loaded
     4. the get-methdo of the unpickled object is called with the
         absolute path to the folder.
     5. the returned object is returned to the user
-    
     '''
     def __init__(self, relpath):
         self.relpath = relpath
@@ -80,7 +81,6 @@ class FunctionWrapper:
     2. create an instance of this class and pass your function
     3. save it in the database with wathever dumper you want'''
     def __init__(self, fun):
-        warnings.warn("FunctionWrapper is deprecated!")
         self.fun = fun
                 
 class MdbException(Exception):
