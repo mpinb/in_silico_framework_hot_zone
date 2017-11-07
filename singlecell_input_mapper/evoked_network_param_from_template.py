@@ -3,6 +3,7 @@
 import sys, os
 import single_cell_parser as scp
 import getting_started
+from model_data_base.mdbopen import mdbopen
 
 #evokedPrefix = '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/evoked_activity/'
 #evokedPrefix = '/home/abast/test/neurosim_getting_started/getting_started_files/functional_constraints/evoked_activity/PW_SuW_RF_CDK/'
@@ -434,7 +435,7 @@ def whisker_evoked_PSTH(column, deflectedWhisker, cellType):
 
 def load_cell_number_file(cellNumberFileName):
     cellTypeColumnNumbers = {}
-    with open(cellNumberFileName, 'r') as cellNumberFile:
+    with mdbopen(cellNumberFileName, 'r') as cellNumberFile:
         lineCnt = 0
         for line in cellNumberFile:
             if line:

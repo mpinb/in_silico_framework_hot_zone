@@ -2,6 +2,7 @@
 
 import sys
 import single_cell_parser as scp
+from model_data_base.mdbopen import mdbopen
 
 def create_network_parameter(templateParamName, cellNumberFileName, synFileName, conFileName, outFileName):
     print '*************'
@@ -32,7 +33,7 @@ def create_network_parameter(templateParamName, cellNumberFileName, synFileName,
 
 def load_cell_number_file(cellNumberFileName):
     cellTypeColumnNumbers = {}
-    with open(cellNumberFileName, 'r') as cellNumberFile:
+    with mdbopen(cellNumberFileName, 'r') as cellNumberFile:
         lineCnt = 0
         for line in cellNumberFile:
             if line:

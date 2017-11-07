@@ -3,9 +3,10 @@ Created on Mar 8, 2012
 
 @author: regger
 '''
+from __future__ import absolute_import
 from .scalar_field import ScalarField
 from .generate_nr_of_cells_spreadsheet import con_file_to_NumberOfConnectedCells_sheet
-
+from model_data_base.mdbopen import mdbopen
 
 labels2int = {\
     "Neuron":                 2,\
@@ -83,7 +84,7 @@ def write_landmark_file(fname=None, landmarkList=None):
     if not fname.endswith('.landmarkAscii'):
         fname += '.landmarkAscii'
     
-    with open(fname, 'w') as landmarkFile:
+    with mdbopen(fname, 'w') as landmarkFile:
         nrOfLandmarks = len(landmarkList)
         header = '# AmiraMesh 3D ASCII 2.0\n\n'\
                 'define Markers ' + str(nrOfLandmarks) + '\n\n'\
@@ -112,7 +113,7 @@ def write_cell_synapse_locations(fname=None, synapses=None, cellID=None):
         fname += '.syn'
     
     synFormat = None
-    with open(fname, 'w') as outputFile:
+    with mdbopen(fname, 'w') as outputFile:
         header = '# Synapse distribution file\n'
         header += '# corresponding to cell: '
         header += cellID
@@ -165,7 +166,7 @@ def write_anatomical_realization_map(fname=None, functionalMap=None, anatomicalI
     if not fname.endswith('.con') and not fname.endswith('.CON'):
         fname += '.con'
     
-    with open(fname, 'w') as outputFile:
+    with mdbopen(fname, 'w') as outputFile:
         header = '# Anatomical connectivity realization file; only valid with synapse realization:\n'
         header += '# ' + anatomicalID
         header += '\n'
@@ -220,7 +221,7 @@ def write_sample_connectivity_summary(fname=None, cellTypeSummaryData=None, colu
                     'L1','L23Trans','L45Peak','L45Sym','L56Trans','SymLocal1','SymLocal2',\
                     'SymLocal3','SymLocal4','SymLocal5','SymLocal6')
     
-    with open(fname, 'w') as outFile:
+    with mdbopen(fname, 'w') as outFile:
         header1 = '# connectivity per cell type summary\n'
         header1 += 'Presynaptic cell type\tNumber of synapses\tMean path length to soma\tSD path length to soma\t'
         header1 += 'Connected presynaptic cells\tTotal presynaptic cells\tConvergence\t'
@@ -403,7 +404,7 @@ def write_population_connectivity_summary(fname=None, populationDistribution=Non
                     'L1','L23Trans','L45Peak','L45Sym','L56Trans','SymLocal1','SymLocal2',\
                     'SymLocal3','SymLocal4','SymLocal5','SymLocal6')
     
-    with open(fname, 'w') as outFile:
+    with mdbopen(fname, 'w') as outFile:
         header0 = '# connectivity per cell type population summary\n'
         header0 += 'Presynaptic cell type\tNumber of synapses\tSTD\tMean path length to soma\tSTD\tSD path length to soma\tSTD\t'
         header0 += 'Connected presynaptic cells\tSTD\tTotal presynaptic cells\tConvergence\tSTD\t'
@@ -555,7 +556,7 @@ def write_population_and_sample_connectivity_summary(fname=None, populationDistr
                     'L1','L23Trans','L45Peak','L45Sym','L56Trans','SymLocal1','SymLocal2',\
                     'SymLocal3','SymLocal4','SymLocal5','SymLocal6')
     
-    with open(fname, 'w') as outFile:
+    with mdbopen(fname, 'w') as outFile:
         header0 = '# connectivity per cell type population summary\n'
         header0 += 'Presynaptic cell type\tNumber of synapses\tSTD\tMean path length to soma\tSTD\tSD path length to soma\tSTD\t'
         header0 += 'Connected presynaptic cells\tSTD\tTotal presynaptic cells\tConvergence\tSTD\t'
@@ -842,7 +843,7 @@ def write_scalar_field(fname=None, scalarField=None):
     if not fname.endswith('.am') and not fname.endswith('.AM'):
         fname += '.am'
     
-    with open(fname, 'w') as outFile:
+    with mdbopen(fname, 'w') as outFile:
         extent = scalarField.extent
         bounds = scalarField.boundingBox
         spacing = scalarField.spacing
