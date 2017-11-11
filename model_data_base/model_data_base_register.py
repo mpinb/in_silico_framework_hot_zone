@@ -60,7 +60,7 @@ def _get_mdb_register():
 #             raise MdbException("Did not find a ModelDataBaseRegister.")
         
 def register_mdb(mdb):
-    mdbr = _get_mdb_register(mdb.basedir)
+    mdbr = _get_mdb_register()
     mdbr.add_mdb(mdb)
     
 # def get_mdb_by_unique_id(parentdir_or_mdb, unique_id):
@@ -70,7 +70,9 @@ def register_mdb(mdb):
 #     return ModelDataBase(mdbr.mdb[unique_id])
 
 def get_mdb_by_unique_id(unique_id):
-    return ModelDataBase(mdbr.mdb[unique_id])
+    mdb = _get_mdb_register().mdb[unique_id]
+    assert mdb.get_id() == unique_id
+    return mdb
         
 
         
