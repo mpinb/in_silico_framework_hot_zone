@@ -112,7 +112,7 @@ try: ##to avoid import errors in distributed system because of missing matplotli
         from model_data_base.plotfunctions.histogram import histogram as histogram
         from model_data_base.plotfunctions.manylines import manylines
         from model_data_base.plotfunctions.rasterplot import rasterplot
-        from model_data_base.plotfunctions.cell_to_ipython_animation import cell_to_ipython_animation, display_animation
+        from model_data_base.plotfunctions.cell_to_ipython_animation import cell_to_ipython_animation, cell_to_animation, display_animation
         from model_data_base.plotfunctions._figure_array_converter import show_pixel_object, PixelObject
     except ImportError:
         print "Could not import plotfunctions!"
