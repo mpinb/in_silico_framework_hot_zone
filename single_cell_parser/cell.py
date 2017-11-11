@@ -65,6 +65,7 @@ class Cell(object):
 #        TODO: this should be read from parameter file (e_pas)
         self.E = -70.0
         self.changeSynParamDict = {}
+        self.tVec = None
     
     def re_init_cell(self, replayMode=False):
         '''re-initialize for next simulation run'''
@@ -75,7 +76,7 @@ class Cell(object):
             for syn in self.synapses[synType]:
                 syn.disconnect_hoc_synapse()
             if replayMode:
-                self.synapses[synType] = []
+                self.synapses[synType] = []                
     
     def record_range_var(self, var, mech=None):
         #allow specifying mech and var in var. this is closer to the neuron syntax
@@ -170,6 +171,10 @@ class Cell(object):
             except KeyError:
                 print 'Synapses of type ' + preType + ' not present on cell'
             return
+
+    def init_time_recording(self):
+        self.tVec = h.Vector()
+        self.tVec.record(h._ref_t, sec = self.sections[0])          
     
     def change_synapse_parameters(self):
         '''
@@ -547,7 +552,7 @@ class PySection(nrn.Section):
                 for seg in self:
                     vec = h.Vector()
                     hRef = eval('seg.'+mech+'._ref_'+var)
-                    print ('seg.'+mech+'._ref_'+var)
+                    #print ('seg.'+mech+'._ref_'+var)
                     vec.record(hRef, sec=self)
                     self.recordVars[key].append(vec)
 

@@ -100,7 +100,7 @@ class CellParser(object):
 #        scale dendrites if necessary
         if scaleFunc:
             scaleFunc(self.cell)
-    
+                
     def set_up_biophysics(self, parameters, full=False):
         '''
         default method for initializing membrane properties
@@ -133,7 +133,7 @@ class CellParser(object):
                 self._add_spines(label, parameters[label].properties.spines)
             if parameters[label].mechanisms.range.has_key('ar')\
                 and parameters[label].properties.has_key('spines'):
-                self._add_spines_ar(label, parameters[label].properties.spines)
+                self._add_spines_ar(label, parameters[label].properties.spines)                
         
     def get_cell(self):
         '''

@@ -61,7 +61,8 @@ def load_NMODL_parameters(parameters):
     except AttributeError:
         pass
 
-def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = True):
+def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = True,\
+                silent = False):
     '''
     default way of creating NEURON cell models;
     includes spatial discretization and inserts
@@ -79,6 +80,7 @@ def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = T
         print 'Setting up biophysical model...'
         parser.set_up_biophysics(parameters, allPoints)
     print '-------------------------------'
+    parser.cell.init_time_recording()
     return parser.cell
 
 def init_neuron_run(simparam, vardt=False, *events):
@@ -94,8 +96,8 @@ def init_neuron_run(simparam, vardt=False, *events):
     '''
 #    use fixed time step for now
     neuron.h.load_file('stdrun.hoc')
+    cvode = neuron.h.CVode()    
     if vardt:
-        cvode = neuron.h.CVode()
         cvode.active(1)
         # minimum tolerance: heuristically
         # tested with BAC firing
@@ -108,6 +110,8 @@ def init_neuron_run(simparam, vardt=False, *events):
 #    cvode.condition_order(2)
 #    cvode.atol(1e-3)
 #    cvode.rtol(1e-12)
+    else:
+        cvode.active(0)
     eventList = []
     for event in events:
         e = Event(event)
