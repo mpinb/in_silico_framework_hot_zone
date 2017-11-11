@@ -2,7 +2,8 @@ import sys, os
 from six import StringIO
 from cPickle import PicklingError
 import cloudpickle
-
+import contextlib
+import io
 
 def chunkIt(seq, num):
     '''splits seq in num lists, which have approximately equal size.
@@ -18,27 +19,48 @@ def chunkIt(seq, num):
     
     return [o for o in out if o] #filter out empty lists
 
+class silence_stdout():
+    '''Silences stdout. Can be used as context manager and decorator.
+    https://stackoverflow.com/a/2829036/5082048
+    '''
+    def __init__(self, fun = None):
+        self.save_stdout = sys.stdout
+        if fun is not None:
+            return self(fun)
+        
+    def __enter__(self):
+        sys.stdout = io.BytesIO()
+        
+    def __exit__(self, *args, **kwargs):
+        sys.stdout = self.save_stdout
+        
+    def __call__(self, func):
+        def wrapper(*args, **kwds):
+            with self:
+                return func(*args, **kwds)
+        return wrapper
+    
+silence_stdout = silence_stdout()
 
-def silence_stdout(fun, outfilename = None):
-    '''robustly silences a function and restores stdout afterwars
-    outfile: output can be redirected to file'''
-    def silent_fun(*args, **kwargs):
-        stdout_bak = sys.stdout
-        if outfilename is None:
-            sys.stdout = open(os.devnull, "w")
-        else:
-            sys.stdout = open(outfilename, 'w')
-        try:
-            res = fun(*args, **kwargs)
-        except:
-            raise
-        finally:
-            if outfilename:
-                sys.stdout.close()
-            sys.stdout = stdout_bak
-        return res
-    return silent_fun
-
+# def silence_stdout(fun, outfilename = None):
+#     '''robustly silences a function and restores stdout afterwars
+#     outfile: output can be redirected to file'''
+#     def silent_fun(*args, **kwargs):
+#         stdout_bak = sys.stdout
+#         if outfilename is None:
+#             sys.stdout = open(os.devnull, "w")
+#         else:
+#             sys.stdout = open(outfilename, 'w')
+#         try:
+#             res = fun(*args, **kwargs)
+#         except:
+#             raise
+#         finally:
+#             if outfilename:
+#                 sys.stdout.close()
+#             sys.stdout = stdout_bak
+#         return res
+#     return silent_fun
 
 def convertible_to_int(x):
         try:
