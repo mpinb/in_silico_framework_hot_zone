@@ -1,7 +1,7 @@
 from __future__ import print_function
 import os
 
-parent = os.path.abspath(os.path.dirname(__file__))
+getting_started_dir = parent = os.path.abspath(os.path.dirname(__file__))
 
 def generate_param_files_with_valid_references():
     IN_SILICO_FRAMEWORK_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
