@@ -470,9 +470,6 @@ class ModelDataBase(object):
         for key in keys_in_mdb_without_metadata:
             print "Updating metadata for key {key}".format(key = str(key))
             self._write_metadata_for_existing_key(key)
-        
-    def get_metadata(self, key):
-        return self.metadata[key]
                
     def __setitem__(self, key, item):
         '''items can be set using my_model_data_base[key] = item
