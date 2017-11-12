@@ -6,6 +6,7 @@ import glob
 import IPython.display
 import jinja2
 import functools
+from base64 import b64encode
 
 html_template = 'animation_template.html'
  
@@ -22,9 +23,15 @@ def get_default_axis(range_var):
         return (0,1600), (-500*10e-5,2*10e-5)
     else:
         return (0,1600), (-2*10e-5,2*10e-5)
+    
+def _load_base64(filename, extension = 'png'):
+    #https://github.com/jakevdp/JSAnimation/blob/master/JSAnimation/html_writer.py
+        with open(filename, 'rb') as f:
+            data = f.read()
+        return 'data:image/{0};base64,{1}'.format(extension,b64encode(data).decode('ascii'))
+        
      
-     
-def display_animation(files, interval=10, style=False, animID = None):
+def display_animation(files, interval=10, style=False, animID = None, embedded = False):
     '''creates an IPython animation out of files specified in a globstring or a list of paths.
      
     animID: unique integer to identify the animation in the javascript environment of IPython
@@ -37,11 +44,15 @@ def display_animation(files, interval=10, style=False, animID = None):
         animID = np.random.randint(10000000000000) # needs to be unique within one ipynb
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
     template = env.get_template(html_template)
- 
-    try:            # frames are local and can be expanded
+    
+    if os.path.isdir(files): # folder provieded --> convert to globstring
+        files = os.path.join(files, '*.png')
+    try:            # globstring provided
         listFrames = sorted(glob.glob(files))
-    except:         # frames are remote ressources
+    except:         # list of files provided
         listFrames = files
+    if embedded:
+        listFrames = [_load_base64(f) for f in listFrames]
     htmlSrc = template.render(ID=animID, listFrames=listFrames, interval=interval, style=style)
      
     return IPython.display.HTML(htmlSrc)
