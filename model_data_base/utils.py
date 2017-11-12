@@ -42,25 +42,16 @@ class silence_stdout():
     
 silence_stdout = silence_stdout()
 
-# def silence_stdout(fun, outfilename = None):
-#     '''robustly silences a function and restores stdout afterwars
-#     outfile: output can be redirected to file'''
-#     def silent_fun(*args, **kwargs):
-#         stdout_bak = sys.stdout
-#         if outfilename is None:
-#             sys.stdout = open(os.devnull, "w")
-#         else:
-#             sys.stdout = open(outfilename, 'w')
-#         try:
-#             res = fun(*args, **kwargs)
-#         except:
-#             raise
-#         finally:
-#             if outfilename:
-#                 sys.stdout.close()
-#             sys.stdout = stdout_bak
-#         return res
-#     return silent_fun
+import tempfile
+import shutil
+class mkdtemp():
+    def __enter__(self):
+        self.tempdir = tempfile.mkdtemp()
+        return self.tempdir
+    
+    def __exit__(self, *args, **kwargs):
+        if os.path.exists(self.tempdir):
+            shutil.rmtree(self.tempdir)
 
 def convertible_to_int(x):
         try:
