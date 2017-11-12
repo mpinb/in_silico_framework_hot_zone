@@ -47,6 +47,7 @@ class Cell(object):
         TODO: this should be read from parameter file (e_pas)
         self.E = -70.0
         '''
+        self.hoc_path = None
         self.id = None
         self.soma = None
 #        TODO: implement trees in python to avoid

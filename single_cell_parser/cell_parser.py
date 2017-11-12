@@ -21,7 +21,9 @@ class CellParser(object):
         '''
         Constructor
         '''
-        self.hoc_fname = hocFilename
+        self.hoc_path = hocFilename
+#         self.hoc_fname = self.hoc_path.split('/')[-1]
+        
 #        implement parameters to be read from
 #        corresponding membrane file
 #        (analogous to synapse distribution,
@@ -37,13 +39,14 @@ class CellParser(object):
         for scaling dendritic diameters.
         scaleFunc takes cell object as argument
         '''
-        edgeList = reader.read_hoc_file(self.hoc_fname)
-        self.hoc_fname = self.hoc_fname.split('/')[-1]
-        part1 = self.hoc_fname.split('_')[0]
-        part2 = self.hoc_fname.split('_')[1]
-        part3 = self.hoc_fname.split('.')[-2]
+        edgeList = reader.read_hoc_file(self.hoc_path)
+        #part1 = self.hoc_fname.split('_')[0]
+        #part2 = self.hoc_fname.split('_')[1]
+        #part3 = self.hoc_fname.split('.')[-2]
         self.cell = Cell()
-        self.cell.id = '_'.join([part1, part2, part3])
+        #self.cell.id = '_'.join([part1, part2, part3])
+        self.cell.hoc_path = self.hoc_path # sotre path to hoc_file in cell object
+        
         
 #        first loop: create all Sections
         for edge in edgeList:
