@@ -85,6 +85,7 @@ from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack as dumpe
 from model_data_base.IO.LoaderDumper import cell as dumper_cell
 from model_data_base.IO.LoaderDumper import to_pickle as dumper_to_pickle
 from model_data_base.IO.LoaderDumper import to_cloudpickle as dumper_to_cloudpickle
+from model_data_base.IO.LoaderDumper import to_msgpack as dumper_to_msgpack
 
 from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
