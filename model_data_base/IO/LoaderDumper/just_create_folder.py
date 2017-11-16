@@ -6,21 +6,31 @@ def check(obj):
     '''checks wherther obj can be saved with this dumper'''
     return obj is None #isinstance(obj, np) #basically everything can be saved with pickle
 
+## this was used to store more data in the ManagedFolder
+## it turned out to be complex to inherit from an immutable datatype
+## https://stackoverflow.com/questions/2673651/inheritance-from-str-or-int
+##
+# class ManagedFolder(str):
+#     def __new__(cls, s, mdb):
+#         obj = str.__new__(cls, s)
+#         obj.mdb = mdb
+#         return obj
+#     def __init__(self, s, mdb):
+#         str.__init__(s)
+#         self.mdb = mdb
+#     def join(self, *args):
+#         return ManagedFolder(os.path.join(self, *args), self.mdb)
+#     def __reduce__(self):
+#         return self.__class__, (str(self), self.mdb)
+
 class ManagedFolder(str):
-    def __new__(cls, s, mdb):
-        obj = str.__new__(cls, s)
-        obj.mdb = mdb
-        return obj
-    def __init__(self, s, mdb):
-        str.__init__(s)
-        self.mdb = mdb
     def join(self, *args):
-        return ManagedFolder(os.path.join(self, *args), self.mdb)
+        return ManagedFolder(os.path.join(self, *args))
 
 class Loader(parent_classes.Loader):
     def get(self, savedir):
         #return savedir
-        return ManagedFolder(savedir, None)
+        return ManagedFolder(savedir)
     
 def dump(obj, savedir):
     with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
