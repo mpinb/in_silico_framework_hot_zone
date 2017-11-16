@@ -21,7 +21,7 @@ from _decorators import return_figure_or_axis
 
 @return_figure_or_axis
 def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
-              fig = None, figsize = (15,3), returnPixelObject = False):
+              fig = None, figsize = (15,3), returnPixelObject = False, get = None):
     '''parallelizes the plot of many lines'''
     assert(fig is not None) # decorator takes care, that it is allwys axes
     if returnPixelObject:
@@ -55,7 +55,8 @@ def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
         
         #print df.npartitions
         figures_list = df.map_partitions(fun2, meta = ('A', 'object'))
-        figures_list = figures_list.compute(get = dask.async.get_sync)#multiprocessing_scheduler)
+        get = dask.multiprocessing.get if get is None else get
+        figures_list = figures_list.compute(get = get)#multiprocessing_scheduler)
         #print figures_list
         #if fig is None: fig = plt.figure(figsize = figsize)
         #plt.axis('off')
