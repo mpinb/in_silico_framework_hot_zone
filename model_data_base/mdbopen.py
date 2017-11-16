@@ -2,6 +2,7 @@ from __future__ import absolute_import
 import os
 from .model_data_base import ModelDataBase, MdbException
 from .model_data_base_register import get_mdb_by_unique_id
+from .utils import cache
 
 def resolve_mdb_path(path):
     if not path.startswith('mdb://'):
@@ -35,19 +36,19 @@ def resolve_mdb_path(path):
 #         "However, this Database does not contain the key {}".format(path_splitted[1]))
 #     return os.path.join(managed_folder,path_splitted[2])
 
+@cache
 def create_mdb_path(path):
     mdb_path = path
     while True:
-        try:
-            print mdb_path
-            mdb = ModelDataBase(mdb_path, nocreate = True)
+        if (os.path.isdir(mdb_path)) and ('dbcore.pickle' in os.listdir(mdb_path)):
             break
-        except MdbException:
-            pass
-        mdb_path = os.path.dirname(mdb_path)
+        else:
+            mdb_path = os.path.dirname(mdb_path)
         if mdb_path == '/':
-            raise MdbException("The path {} does not seem to be within a ModelDatabase!".format(path))
-    
+            raise MdbException("The path {} does not seem to be within a ModelDatabase!".format(path))        
+    mdb = ModelDataBase(mdb_path, nocreate = True)
+        
+    #print path
     path_minus_mdb_basedir = os.path.relpath(path, mdb.basedir)
     
     key = None
