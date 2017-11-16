@@ -194,7 +194,7 @@ class Loader(parent_classes.Loader):
         self.index_name = index_name
         self.meta = meta
         self.divisions = divisions
-    def get(self, savedir, verbose = True):  
+    def get(self, savedir, verbose = False):  
         #if dtypes is not defined (old mdb_versions) set it to None
         try:
             self.dtypes
