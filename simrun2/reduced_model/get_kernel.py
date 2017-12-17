@@ -54,6 +54,7 @@ def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
 
     ys = []
     Xs = []
+    spike_before = []    
     for mdb in mdb_list:
         # get spike times for current mdb
         st = mdb['spike_times']
@@ -63,12 +64,17 @@ def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
                       for k in keys_to_synapse_activation_data]
         
         X, boundaries = concatenate_return_boundaries(mdb_values, axis = 1)
+        
+        spike_before.append(np.array(spike_in_interval(st, \
+                                                       output_window_min - refractory_period, \
+                                                       output_window_min)))     
         ys.append(y)
         Xs.append(X)
     
     y = np.concatenate(ys, axis = 0)
     X = np.concatenate(Xs, axis = 0)
-    return X, dict(zip(keys_to_synapse_activation_data, boundaries)), y 
+    spike_before = np.concatenate(spike_before, axis = 0)
+    return X, dict(zip(keys_to_synapse_activation_data, boundaries)), y, spike_before
 
 def _kernel_dict_from_clfs(clfs, boundaries):
     '''splits result of lda estimator based on boundaries'''  
@@ -113,16 +119,6 @@ def get_lookup_series_from_lda_values_spike_data(lda_values, spike, spike_before
     groupby_ = groupby_*lookup_series_stepsize
     lookup_series = pdf.groupby(groupby_).apply(lambda x: len(x[x.spike])/float(len(x)))
     return interpolate_lookup_series(lookup_series)
-
-# def get_lookup_series_depending_on_refractory_period(refractory_period, lda_values, st, binsize_calculate = 10):
-#     pdf = pd.DataFrame(dict(lda_values = lda_values, \
-#                         spike = spike_in_interval(st, 260, 261), \
-#                         spike_before = spike_in_interval(st, 260-refractory_period, 260)))
-# 
-#     pdf2 = pdf[~pdf.spike_before]
-#     lookup_series = pdf2.groupby((pdf2.lda_values/binsize_calculate).round()*binsize_calculate).apply(lambda x: len(x[x.spike])/float(len(x)))
-#     lookup_series = interpolate_lookup_series(lookup_series)
-#     return lookup_series
 
 ##################################
 # classes managing all the steps necessary to build a reduced model
@@ -175,7 +171,7 @@ class ReducedLdaModel():
     
     def fit(self, mdb_list):    
         self.mdb_list = mdb_list
-        X, boundaries, y = _kernel_preprocess_data(mdb_list, \
+        X, boundaries, y, spike_before = _kernel_preprocess_data(mdb_list, \
                                 self.keys_to_synapse_activation_data, \
                                 self.synapse_activation_window_min, \
                                 self.synapse_activation_window_max, \
@@ -183,11 +179,13 @@ class ReducedLdaModel():
                                 refractory_period = self.refractory_period)
         
         self.y = y
+        self.spike_before = spike_before
         
         import Interface as I
-        self.clfs = I.lda_prediction_rates(X, y, verbosity = self.verbosity, return_ = 'all', 
-                                      normalize_group_size = self.normalize_group_size, \
-                                      test_size = self.test_size)
+        self.clfs = I.lda_prediction_rates(X[~spike_before], y[~spike_before], \
+                                           verbosity = self.verbosity, return_ = 'all', \
+                                           normalize_group_size = self.normalize_group_size, \
+                                           test_size = self.test_size)
         
         self.kernel_dict = _kernel_dict_from_clfs(self.clfs, boundaries)
         ## todo: kernel_dicts
@@ -202,7 +200,8 @@ class ReducedLdaModel():
                 lda_values_dict[k] = np.dot(X[:,b[0]:b[1]], kernel_dict[k])
             lda_values = sum(lda_values_dict.values())
             lookup_series = get_lookup_series_from_lda_values_spike_data(lda_values, y, \
-                                         lookup_series_stepsize = self.lookup_series_stepsize)
+                                         lookup_series_stepsize = self.lookup_series_stepsize, \
+                                         spike_before = self.spike_before)
             self.lookup_series.append(lookup_series)
             self.lda_value_dicts.append(lda_values_dict)
             self.lda_values.append(lda_values)
