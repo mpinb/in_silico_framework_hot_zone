@@ -48,13 +48,11 @@ def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
      - spike_times
      - a dictionary with the same keys as data_dict. Values are the respective columns
        in which this data can be found in the large matrix'''
-    
-    if not refractory_period == 0:
-        raise NotImplementedError()
 
     ys = []
     Xs = []
-    spike_before = []    
+    spike_before = []
+    sts = []    
     for mdb in mdb_list:
         # get spike times for current mdb
         st = mdb['spike_times']
@@ -64,17 +62,15 @@ def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
                       for k in keys_to_synapse_activation_data]
         
         X, boundaries = concatenate_return_boundaries(mdb_values, axis = 1)
-        
-        spike_before.append(np.array(spike_in_interval(st, \
-                                                       output_window_min - refractory_period, \
-                                                       output_window_min)))     
+  
         ys.append(y)
         Xs.append(X)
+        sts.append(st)
     
     y = np.concatenate(ys, axis = 0)
     X = np.concatenate(Xs, axis = 0)
-    spike_before = np.concatenate(spike_before, axis = 0)
-    return X, dict(zip(keys_to_synapse_activation_data, boundaries)), y, spike_before
+    st = pd.concat(sts)
+    return X, dict(zip(keys_to_synapse_activation_data, boundaries)), y, st
 
 def _kernel_dict_from_clfs(clfs, boundaries):
     '''splits result of lda estimator based on boundaries'''  
@@ -120,6 +116,41 @@ def get_lookup_series_from_lda_values_spike_data(lda_values, spike, spike_before
     lookup_series = pdf.groupby(groupby_).apply(lambda x: len(x[x.spike])/float(len(x)))
     return interpolate_lookup_series(lookup_series)
 
+##############################
+# visualize reduced model
+##############################
+def get_plt_axis():
+        fig = plt.figure(figsize = (15,3), dpi = 300)
+        ax = fig.add_subplot(111) 
+        return fig, ax
+
+def plot_kernel_dict(kernel_dict, ax = None):  
+    if ax is None: fig, ax = get_plt_axis()
+    ax.set_title('kernel shape')
+    ax.set_xlabel('# time bin')      
+    # plot kernel
+    for lv in range(len(kernel_dict)):
+        d = kernel_dict[lv]
+        ax.set_prop_cycle(None)
+        for k, v in d.iteritems():
+            if lv == 0:
+                ax.plot(v, label = k)
+            else:
+                ax.plot(v)
+    plt.legend()
+
+def plot_LUT(lookup_series, lda_values = None, ax = None):
+    if ax is None: fig, ax = get_plt_axis()    
+    # plot data distribution and probability curve 
+    for lv in range(len(lookup_series)):
+        ls = lookup_series[lv]
+        ls.plot(ax = ax, color = 'b')
+        ax.set_ylabel('p_spike')
+        if lda_values is not None:
+            pd.Series(lda_values[lv]).round().astype(int).value_counts()\
+                .sort_index().plot(secondary_y = True, color = 'g')
+        ax.set_ylabel('# datapoints')
+    ax.set_xlabel('lda_value')
 ##################################
 # classes managing all the steps necessary to build a reduced model
 ##################################
@@ -171,7 +202,7 @@ class ReducedLdaModel():
     
     def fit(self, mdb_list):    
         self.mdb_list = mdb_list
-        X, boundaries, y, spike_before = _kernel_preprocess_data(mdb_list, \
+        X, boundaries, y, st = _kernel_preprocess_data(mdb_list, \
                                 self.keys_to_synapse_activation_data, \
                                 self.synapse_activation_window_min, \
                                 self.synapse_activation_window_max, \
@@ -179,10 +210,13 @@ class ReducedLdaModel():
                                 refractory_period = self.refractory_period)
         
         self.y = y
-        self.spike_before = spike_before
+        self.st = st
+        self.spike_before =  spike_in_interval(st, \
+                                               self.output_window_min - self.refractory_period, \
+                                               self.output_window_min).values
         
         import Interface as I
-        self.clfs = I.lda_prediction_rates(X[~spike_before], y[~spike_before], \
+        self.clfs = I.lda_prediction_rates(X[~self.spike_before], y[~self.spike_before], \
                                            verbosity = self.verbosity, return_ = 'all', \
                                            normalize_group_size = self.normalize_group_size, \
                                            test_size = self.test_size)
@@ -205,40 +239,30 @@ class ReducedLdaModel():
             self.lookup_series.append(lookup_series)
             self.lda_value_dicts.append(lda_values_dict)
             self.lda_values.append(lda_values)
-    
-    def plot(self):
-        fig = plt.figure(figsize = (15,3), dpi = 300)
-        ax = fig.add_subplot(111)    
-        ax.set_title('kernel shape')
-        ax.set_xlabel('# time bin')
-        
-        # plot kernel
-        for lv in range(len(self.kernel_dict)):
-            d = self.kernel_dict[lv]
-            ax.set_prop_cycle(None)
-            for k, v in d.iteritems():
-                if lv == 0:
-                    ax.plot(v, label = k)
-                else:
-                    ax.plot(v)
-        plt.legend()
-        
-        # plot data distribution and probability curve 
-        fig = plt.figure(figsize = (15,3), dpi = 300)
-        for lv in range(len(self.kernel_dict)):
-            lookup_series = self.lookup_series[lv]
-            lookup_series.plot(ax = fig.add_subplot(111), color = 'b')
-            fig.axes[-1].set_ylabel('p_spike')
-            pd.Series(self.lda_values[0]).round().astype(int).value_counts()\
-                .sort_index().plot(secondary_y = True, color = 'g')
-            fig.axes[-1].set_ylabel('# datapoints')
-                
             
-        ax = fig.axes[-1]
+    def get_lookup_series_for_different_refractory_period(self, refractory_period):
+        spike_before =  spike_in_interval(self.st,\
+                                          self.output_window_min - refractory_period, \
+                                          self.output_window_min).values
+        
+        out = []
+        for lv in range(len(self.kernel_dict)):
+            dummy = get_lookup_series_from_lda_values_spike_data(self.lda_values[lv], self.y, 
+                                                                 lookup_series_stepsize = self.lookup_series_stepsize, 
+                                                                 spike_before = spike_before)
+            out.append(dummy)
+        return out
+        
+    def plot(self):
+        fig, ax = get_plt_axis()
+        plot_kernel_dict(self.kernel_dict, ax)
+        fig, ax = get_plt_axis()
+        plot_LUT(self.lookup_series, self.lda_values, ax)
         ax.set_title('probability of spike in interval '\
-                                   + '[{output_window_min}:{output_window_max}] depending on lda_value'\
-                                   .format(output_window_min = self.output_window_min, \
-                                           output_window_max = self.output_window_max))
+                      + '[{output_window_min}:{output_window_max}] depending on lda_value, refractory_period = {ref}'
+                      .format(output_window_min = self.output_window_min, \
+                              output_window_max = self.output_window_max, \
+                              ref = self.refractory_period))
         ax.set_xlabel('lda_value')
     
     def get_minimodel_static(self, model_number = 0):
@@ -256,17 +280,20 @@ class ReducedLdaModel():
         rm = self.get_minimodel_static(model_number)
         return rm(data)
         
-    def get_minimodel_rolling(self, refractory_period = None, model_number = 0):
+    def get_minimodel_rolling(self, refractory_period = 0, model_number = 0):
         '''returns partial, which can be called with keywords mdb or data_dict.
         
         The partial is constructed such that it can be serialized fast, allowing
         efficient multiprocessing. This is the recommended way of sending a reduced
         model through a network connection.'''
         import spiking_output
-        if refractory_period is not None:
-            raise NotImplementedError()
+        # nonlinearity_LUT has a different format in the spiking output format:
+        # the key should be the refractory period, the value a single pd.Series object
+        # containing the LUT
+        nonlinearity_LUT = {refractory_period: \
+                            self.get_lookup_series_for_different_refractory_period(refractory_period)[model_number]}
         rm = spiking_output.get_reduced_model(self.kernel_dict[model_number], \
-                                         self.lookup_series[model_number], \
+                                         nonlinearity_LUT, \
                                          refractory_period, \
                                          combine_fun = sum, \
                                          LUT_resolution = 1)
