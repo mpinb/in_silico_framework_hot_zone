@@ -3,7 +3,7 @@ Created on Jan 28, 2013
 
 ongoing activity L2 neuron model
 
-@author: robert
+@author: robert, arco
 '''
 from _matplotlib_import import * 
 import sys
