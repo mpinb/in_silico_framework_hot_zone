@@ -5,7 +5,8 @@ ongoing activity L2 neuron model
 
 @author: robert, arco
 '''
-from _matplotlib_import import *
+from __future__ import absolute_import
+from ._matplotlib_import import *
 import sys
 import time
 import os, os.path
@@ -18,41 +19,13 @@ import single_cell_analyzer as sca
 import numpy as np
 h = neuron.h
 import dask
-from silence_stdout import silence_stdout
-from seed_manager import get_seed
-
-def scale_apical(cell):
-    '''
-    scale apical diameters depending on
-    distance to soma; therefore only possible
-    after creating complete cell
-    '''
-    dendScale = 2.5
-    scaleCount = 0
-    for sec in cell.sections:
-        if sec.label == 'ApicalDendrite':
-            dist = cell.distance_to_soma(sec, 1.0)
-            if dist > 1000.0:
-                continue
-#            for cell 86:
-            if scaleCount > 32:
-                break
-            scaleCount += 1
-#            dummy = h.pt3dclear(sec=sec)
-            for i in range(sec.nrOfPts):
-                oldDiam = sec.diamList[i]
-                newDiam = dendScale*oldDiam
-                h.pt3dchange(i, newDiam, sec=sec)
-#                x, y, z = sec.pts[i]
-#                sec.diamList[i] = sec.diamList[i]*dendScale
-#                d = sec.diamList[i]
-#                dummy = h.pt3dadd(x, y, z, d, sec=sec)
-    
-    print 'Scaled %d apical sections...' % scaleCount
+from .seed_manager import get_seed
+from .utils import *
     
     
-def _evoked_activity(cellParamName, evokedUpParamName, simName = '', dirPrefix = '', seed = None, nSweeps = 1000, tStop = 345.0, \
-                    tStim = 245.0, scale_apical = scale_apical):
+def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
+                     seed = None, nSweeps = 1000, tStop = 345.0,
+                     tStim = 245.0, scale_apical = scale_apical):
     '''
     pre-stimulus ongoing activity
     and evoked activity
@@ -77,13 +50,9 @@ def _evoked_activity(cellParamName, evokedUpParamName, simName = '', dirPrefix =
     assert seed is not None
     np.random.seed(seed)
     print("seed: %i" % seed)
-    import neuron
-    neuron.load_mechanisms('/nas1/Data_arco/L5tt_blubb/mechanisms/')
-    neuron.load_mechanisms('/nas1/Data_arco/project_src/simrun/simrun/mechanisms/netcon')
 
-
-    neuronParameters = scp.build_parameters(cellParamName)
-    evokedUpNWParameters = scp.build_parameters(evokedUpParamName) ##sumatra function for reading in parameter file
+    neuronParameters = load_param_file_if_path_is_provided(cellParamName)
+    evokedUpNWParameters = load_param_file_if_path_is_provided(evokedUpParamName) ##sumatra function for reading in parameter file
     scp.load_NMODL_parameters(neuronParameters)
     scp.load_NMODL_parameters(evokedUpNWParameters)
     cellParam = neuronParameters.neuron
@@ -173,17 +142,12 @@ def _evoked_activity(cellParamName, evokedUpParamName, simName = '', dirPrefix =
     neuronParameters.save(os.path.join(dirName, uniqueID + '_neuron_model.param'))
     evokedUpNWParameters.save(os.path.join(dirName, uniqueID+ '_network_model.param'))
     return dirName
-
-class defaultValues:
-    name = 'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center'
-    cellParamName = '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/network_embedding/postsynaptic_location/3x3_C2_sampling/C2center/86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param'
-    networkName = 'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_active_ex_timing_C2center.param'
     
-def run_new_simulations(cellParamName, evokedUpParamName, simName = '', dirPrefix = '', \
+def run_new_simulations(cellParamName, evokedUpParamName, dirPrefix = '', \
                                  nSweeps = 1000, nprocs = 40, tStop = 345, silent = True, \
                                  scale_apical = scale_apical):
     '''Generates nSweeps*nprocs synapse activation files and puts them in
-    the folder dirPrefix/results/simName. Returns delayed object, which can
+    the folder dirPrefix/results/[unique_identifier]. Returns delayed object, which can
     be computed with an arbitrary dask scheduler. For each process, a new
     seed is generated using the seed generator.
     
@@ -209,7 +173,7 @@ def run_new_simulations(cellParamName, evokedUpParamName, simName = '', dirPrefi
         
     Returns: Delayed object. Can be computed with arbitrary scheduler.'''
     
-    myfun = lambda seed: _evoked_activity(cellParamName, evokedUpParamName, simName = simName, \
+    myfun = lambda seed: _evoked_activity(cellParamName, evokedUpParamName,
                                          dirPrefix = dirPrefix, seed = seed, nSweeps = nSweeps, \
                                          tStop = tStop, scale_apical = scale_apical)
     if silent:

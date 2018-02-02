@@ -1,10 +1,7 @@
 import os, os.path
-#os.chdir('/nas1/Data_arco/simrun/simrun/')
-
 from _matplotlib_import import *
 import sys
 import time
-
 import glob, shutil
 import neuron
 import single_cell_parser as scp
@@ -12,36 +9,8 @@ import single_cell_analyzer as sca
 from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 import numpy as np
 import pandas as pd
+from .utils import *
 h = neuron.h
-
-def scale_apical(cell):
-    '''
-    scale apical diameters depending on
-    distance to soma; therefore only possible
-    after creating complete cell
-    '''
-    dendScale = 2.5
-    scaleCount = 0
-    for sec in cell.sections:
-        if sec.label == 'ApicalDendrite':
-            dist = cell.distance_to_soma(sec, 1.0)
-            if dist > 1000.0:
-                continue
-#            for cell 86:
-            if scaleCount > 32:
-                break
-            scaleCount += 1
-#            dummy = h.pt3dclear(sec=sec)
-            for i in range(sec.nrOfPts):
-                oldDiam = sec.diamList[i]
-                newDiam = dendScale*oldDiam
-                h.pt3dchange(i, newDiam, sec=sec)
-#                x, y, z = sec.pts[i]
-#                sec.diamList[i] = sec.diamList[i]*dendScale
-#                d = sec.diamList[i]
-#                dummy = h.pt3dadd(x, y, z, d, sec=sec)
-    
-    print 'Scaled %d apical sections...' % scaleCount
 
 def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = False, \
                             scale_apical = scale_apical, range_vars = None, silent = True):
@@ -107,8 +76,8 @@ def trail_to_cell_object(name = None, cellName = None, networkName = None, synap
         cellName = cellName
         evokedUpParamName = networkName
         
-        neuronParameters = scp.build_parameters(cellName)
-        evokedUpNWParameters = scp.build_parameters(evokedUpParamName) ##sumatra function for reading in parameter file
+        neuronParameters = load_param_file_if_path_is_provided(cellName)
+        evokedUpNWParameters = load_param_file_if_path_is_provided(evokedUpParamName) ##sumatra function for reading in parameter file
         scp.load_NMODL_parameters(neuronParameters)
         scp.load_NMODL_parameters(evokedUpNWParameters)
         cellParam = neuronParameters.neuron

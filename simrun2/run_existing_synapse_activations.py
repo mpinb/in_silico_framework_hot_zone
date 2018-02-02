@@ -5,7 +5,8 @@ ongoing activity L2 neuron model
 
 @author: robert, arco
 '''
-from _matplotlib_import import * 
+from __future__ import absolute_import
+from ._matplotlib_import import * 
 import sys
 import time
 import os, os.path
@@ -16,57 +17,12 @@ import single_cell_analyzer as sca
 import numpy as np
 h = neuron.h
 import dask
-from silence_stdout import silence_stdout
-from seed_manager import get_seed
 import pandas as pd
-
-def chunkIt(seq, num):
-    '''splits seq in num lists, which have approximately equal size.
-    https://stackoverflow.com/questions/2130016/splitting-a-list-of-arbitrary-size-into-only-roughly-n-equal-parts
-    '''
-    avg = len(seq) / float(num)
-    out = []
-    last = 0.0
+from .utils import *
     
-    while last < len(seq):
-        out.append(seq[int(last):int(last + avg)])
-        last += avg
-    
-    return [o for o in out if o] #filter out empty lists
-  
-  
-def scale_apical(cell):
-    '''
-    scale apical diameters depending on
-    distance to soma; therefore only possible
-    after creating complete cell
-    '''
-    dendScale = 2.5
-    scaleCount = 0
-    for sec in cell.sections:
-        if sec.label == 'ApicalDendrite':
-            dist = cell.distance_to_soma(sec, 1.0)
-            if dist > 1000.0:
-                continue
-#            for cell 86:
-            if scaleCount > 32:
-                break
-            scaleCount += 1
-#            dummy = h.pt3dclear(sec=sec)
-            for i in range(sec.nrOfPts):
-                oldDiam = sec.diamList[i]
-                newDiam = dendScale*oldDiam
-                h.pt3dchange(i, newDiam, sec=sec)
-#                x, y, z = sec.pts[i]
-#                sec.diamList[i] = sec.diamList[i]*dendScale
-#                d = sec.diamList[i]
-#                dummy = h.pt3dadd(x, y, z, d, sec=sec)
-    
-    print 'Scaled %d apical sections...' % scaleCount
-    
-    
-def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files, simName = '', \
-                     dirPrefix = '', tStop = 345.0, scale_apical = scale_apical, post_hook = {}):
+def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files, \
+                     dirPrefix = '', tStop = 345.0, scale_apical = scale_apical, post_hook = {}, \
+                     auto_organize_results_folder = True):
     '''
     pre-stimulus ongoing activity
     and evoked activity
@@ -93,7 +49,11 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
         print('warning: empty_simulation')
         return
     
-    neuronParameters = scp.build_parameters(cellParamName)
+    if isinstance(cellParamName, str):
+        neuronParameters = scp.build_parameters(cellParamName)
+    else:
+        neuronParameters = cellParamName
+    
     evokedUpNWParameters = scp.build_parameters(evokedUpParamName) ##sumatra function for reading in parameter file
     scp.load_NMODL_parameters(neuronParameters)
     scp.load_NMODL_parameters(evokedUpNWParameters)
@@ -103,8 +63,12 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
     cell = scp.create_cell(cellParam, scaleFunc=scale_apical)
             
     uniqueID = str(os.getpid())
-    dirName = os.path.join(dirPrefix, 'results', \
+    if auto_organize_results_folder:
+        dirName = os.path.join(dirPrefix, 'results', \
                            time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
+    else:
+        dirName = dirPrefix
+        
     if not os.path.exists(dirName):
         os.makedirs(dirName)
     
@@ -185,9 +149,6 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
     
     vTraces = np.array(vTraces)
     dendTraces = []
-    
-
-    
     scp.write_all_traces(dirName+'/'+uniqueID+'_vm_all_traces.csv', t[offsetBin:], vTraces)
     for RSManager in recSiteManagers:
         for recSite in RSManager.recordingSites:
@@ -209,14 +170,9 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
     else:
         return ret_df, dirName
 
-class defaultValues:
-    name = 'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center'
-    cellParamName = '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/network_embedding/postsynaptic_location/3x3_C2_sampling/C2center/86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param'
-    networkName = 'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_active_ex_timing_C2center.param'
-    
 def run_existing_synapse_activations(cellParamName, evokedUpParamName, synapseActivation, simName = '', dirPrefix = '', \
                                  nprocs = 40, tStop = 345, silent = True, \
-                                 scale_apical = scale_apical, post_hook = {}):
+                                 scale_apical = scale_apical, post_hook = {}, auto_organize_results_folder = True):
     '''Generates nSweeps*nprocs synapse activation files and puts them in
     the folder dirPrefix/results/simName. Returns delayed object, which can
     be computed with an arbitrary dask scheduler. For each process, a new
@@ -245,6 +201,9 @@ def run_existing_synapse_activations(cellParamName, evokedUpParamName, synapseAc
         
     Returns: Delayed object. Can be computed with arbitrary scheduler.'''
     
+    if not auto_organize_results_folder:
+        if not nprocs == 1:
+            raise NotImplementedError()
     if isinstance(synapseActivation, str):
         synapseActivation = glob.glob(str)
         if not synapseActivation:
@@ -255,8 +214,9 @@ def run_existing_synapse_activations(cellParamName, evokedUpParamName, synapseAc
     
     myfun = lambda synapse_activation_files: _evoked_activity(cellParamName, evokedUpParamName, \
                                          synapse_activation_files, \
-                                         simName = simName, dirPrefix = dirPrefix,
-                                         tStop = tStop, scale_apical = scale_apical, post_hook = post_hook)
+                                         dirPrefix = dirPrefix,
+                                         tStop = tStop, scale_apical = scale_apical, post_hook = post_hook, \
+                                         auto_organize_results_folder = auto_organize_results_folder)
     if silent:
         myfun = silence_stdout(myfun)
         
