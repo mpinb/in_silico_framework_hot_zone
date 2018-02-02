@@ -104,7 +104,7 @@ from model_data_base.utils import silence_stdout
 from model_data_base.utils import select, pandas_to_array, pooled_std
 from model_data_base.utils import skit, chunkIt
 from model_data_base.utils import cache
-
+from model_data_base import utils
 try: ##to avoid import errors in distributed system because of missing matplotlib backend
     import matplotlib
     import matplotlib.pyplot as plt
