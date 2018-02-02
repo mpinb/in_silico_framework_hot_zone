@@ -39,10 +39,20 @@ import numpy as np
 #------------------------------------------------------------------------------ 
 # commonly used functions required for running single neuron simulations
 #------------------------------------------------------------------------------ 
-def build_parameters(filename):
+def build_parameters(filename, fast_but_security_risk = True):
     from model_data_base.mdbopen import resolve_mdb_path
     filename = resolve_mdb_path(filename)
-    return build_parameters_sumatra(filename)
+        
+    if fast_but_security_risk:
+        # taking advantage of the fact that sumatra NTParameterSet produces 
+        # valid python code
+        with open(filename, 'r') as f:
+            dummy = eval(f.read())
+        return NTParameterSet(dummy)
+    else:
+        # slow, but does not call the evil 'eval' 
+        return build_parameters_sumatra(filename)
+        
     
 
 def load_NMODL_parameters(parameters):
