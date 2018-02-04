@@ -53,7 +53,7 @@ class Tests(unittest.TestCase):
     def test_generate_synapse_activation_returns_filelist(self):
         dirPrefix = tempfile.mkdtemp()
         try:
-            dummy = simrun2.generate_synapse_activations.generate_synapse_activations(cellParamName, networkName, simName='', dirPrefix=dirPrefix, nSweeps=1, nprocs=1, tStop=345, silent=True)
+            dummy = simrun2.generate_synapse_activations.generate_synapse_activations(cellParamName, networkName, dirPrefix=dirPrefix, nSweeps=1, nprocs=1, tStop=345, silent=True)
             dummy = dummy.compute(get = dask.async.get_sync)
         except:
             raise
@@ -65,7 +65,7 @@ class Tests(unittest.TestCase):
     def test_run_existing_synapse_activation_returns_identifier_dataframe_anf_results_folder(self):        
         dirPrefix = tempfile.mkdtemp()
         try:
-            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], simName='', dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
+            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
             dummy = dummy.compute(get = dask.async.get_sync)
         except:
             raise
@@ -78,7 +78,7 @@ class Tests(unittest.TestCase):
     def test_run_new_simulations_returns_dirname(self):
         dirPrefix = tempfile.mkdtemp()
         try:
-            dummy = simrun2.run_new_simulations.run_new_simulations(cellParamName, networkName, simName='', dirPrefix=dirPrefix, nSweeps=1, nprocs=1, tStop=345, silent=True)
+            dummy = simrun2.run_new_simulations.run_new_simulations(cellParamName, networkName, dirPrefix=dirPrefix, nSweeps=1, nprocs=1, tStop=345, silent=True)
             dummy = dummy.compute(get = dask.async.get_sync)
         except:
             raise
@@ -90,7 +90,7 @@ class Tests(unittest.TestCase):
     def test_position_of_morphology_does_not_matter_after_network_mapping(self):  
         try:
             dirPrefix = tempfile.mkdtemp()
-            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], simName='', dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
+            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
             dummy = dummy.compute(get = dask.async.get_sync)
             cellParam = I.scp.build_parameters(cellParamName)
             cellParam.neuron.filename = os.path.join(parent, 'test_simrun2',\
@@ -98,7 +98,7 @@ class Tests(unittest.TestCase):
                          '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2_B1border.hoc')
             cellParamName_other_position = os.path.join(dirPrefix, 'other_position.param')                
             cellParam.save(cellParamName_other_position)
-            dummy2 = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName_other_position, networkName, [example_path], simName='', dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
+            dummy2 = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName_other_position, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
             dummy2 = dummy2.compute(get = dask.async.get_sync)
             df1 = I.read_pandas_synapse_activation_from_roberts_format(os.path.join(dummy[0][0][1], 'simulation_run%s_synapses.csv' % dummy[0][0][0].iloc[0].number))
             df2 = I.read_pandas_synapse_activation_from_roberts_format(os.path.join(dummy2[0][0][1], 'simulation_run%s_synapses.csv' % dummy[0][0][0].iloc[0].number))
@@ -112,7 +112,7 @@ class Tests(unittest.TestCase):
     def test_reproduce_simulation_trail_from_roberts_model_control(self):
         dirPrefix = tempfile.mkdtemp()
         try:
-            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], simName='', dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
+            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
             dummy = dummy.compute(get = dask.async.get_sync)
                 
             #synapse activation
