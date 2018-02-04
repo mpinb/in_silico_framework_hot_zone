@@ -132,7 +132,7 @@ try:
     from simrun2.sim_trail_to_cell_object import trail_to_cell_object \
         as simrun_trail_to_cell_object
     from simrun2 import crossing_over as simrun_crossing_over_module
-    from simrun2.parameters_to_cell import simrun_parameters_to_cell
+    from simrun2.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
     from simrun2.crossing_over.crossing_over_simple_interface import crossing_over as simrun_crossing_over_simple_interface
 except ImportError:
     print "Could not import full-compartmental-model simulator"
