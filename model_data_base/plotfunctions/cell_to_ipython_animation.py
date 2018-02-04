@@ -45,11 +45,11 @@ def display_animation(files, interval=10, style=False, animID = None, embedded =
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
     template = env.get_template(html_template)
     
-    if os.path.isdir(files): # folder provieded --> convert to globstring
-        files = os.path.join(files, '*.png')
-    try:            # globstring provided
+    if isinstance(files, str):
+        if os.path.isdir(files): # folder provieded --> convert to globstring
+            files = os.path.join(files, '*.png')
         listFrames = sorted(glob.glob(files))
-    except:         # list of files provided
+    else:
         listFrames = files
     if embedded:
         listFrames = [_load_base64(f) for f in listFrames]
