@@ -15,27 +15,22 @@ import dask
 from .seed_manager import get_seed
 from .utils import *
 
-def parameters_to_cell(neuronParameters, evokedUpNWParameters, synfile = None,\
+def parameters_to_cell(neuronParam, networkParam, synfile = None,\
                      dirPrefix = '', tStop = 345.0, scale_apical = scale_apical, post_hook = {}, allPoints=False):
     
-    cellParam = neuronParameters.neuron
-    paramEvokedUp = evokedUpNWParameters.network
-
-    cell = scp.create_cell(cellParam, scaleFunc=scale_apical, allPoints=allPoints)
+    neuronParam = load_param_file_if_path_is_provided(neuronParam)
+    networkParam = load_param_file_if_path_is_provided(networkParam)
+        
+    cell = scp.create_cell(neuronParam.neuron, scaleFunc=scale_apical, allPoints=allPoints)
     
-    neuronParameters.sim.tStop = tStop
-    dt = neuronParameters.sim.dt
-
-    synParametersEvoked = paramEvokedUp
+    neuronParam.sim.tStop = tStop
+    dt = neuronParam.sim.dt
     
-    evokedNW = scp.NetworkMapper(cell, synParametersEvoked, neuronParameters.sim)
+    evokedNW = scp.NetworkMapper(cell, networkParam.network, neuronParam.sim)
     if synfile is None:
         evokedNW.create_saved_network2()
     else:
         evokedNW.reconnect_saved_synapses(synfile)    
-
-    synTypes = cell.synapses.keys()
-    synTypes.sort()
 
     tVec = h.Vector()
     tVec.record(h._ref_t)
