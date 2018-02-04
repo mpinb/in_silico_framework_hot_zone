@@ -35,5 +35,5 @@ def parameters_to_cell(neuronParam, networkParam, synfile = None,\
     tVec = h.Vector()
     tVec.record(h._ref_t)
     cell.t = tVec
-    scp.init_neuron_run(neuronParameters.sim, vardt=False) #trigger the actual simulation
+    scp.init_neuron_run(neuronParam.sim, vardt=False) #trigger the actual simulation
     return cell
