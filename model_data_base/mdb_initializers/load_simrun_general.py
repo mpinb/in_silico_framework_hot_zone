@@ -93,12 +93,7 @@ def create_metadata(mdb):
         '''number of digits like 0001 or 000001 is not consitent accros 
         simulation results. This function takes care of this.'''
         ret = len(os.path.basename(glob.glob(globstring)[0]).split('_')[1].lstrip('run'))
-        return ret
-    
-    testpath = os.path.join(simresult_path, os.path.dirname(list(sim_trail_index)[0]), \
-                            '*%s*.csv')
-    zfill_synapses = determine_zfill_used_in_simulation(testpath % 'synapses')    
-    zfill_cells = determine_zfill_used_in_simulation(testpath % 'cells')    
+        return ret 
         
     def voltage_trace_file_list(x):
         '''returns part of the metadata dataframe.'''
@@ -115,14 +110,21 @@ def create_metadata(mdb):
     
     def synaptic_file_list(x):
         '''returns part of the metadata dataframe.'''
+        testpath = os.path.join(simresult_path, os.path.dirname(list(sim_trail_index)[0]), \
+                                '*%s*.csv')
+        zfill_synapses = determine_zfill_used_in_simulation(testpath % 'synapses')    
+        zfill_cells = determine_zfill_used_in_simulation(testpath % 'cells')       
         synapses_file_name = "simulation_run%s_synapses.csv" % str(int(x.trailnr)).zfill(zfill_synapses)
         cells_file_name = "simulation_run%s_presynaptic_cells.csv" % str(int(x.trailnr)).zfill(zfill_cells)
         return pd.Series({'synapses_file_name': synapses_file_name, 'cells_file_name': cells_file_name}) 
     
     sim_trail_index = pd.DataFrame(dict(sim_trail_index = list(sim_trail_index)))
     path_trailnr = sim_trail_index.apply(voltage_trace_file_list, axis = 1)
-    synaptic_files = path_trailnr.apply(synaptic_file_list, axis = 1)     
-    sim_trail_index_complete = pd.concat((sim_trail_index, path_trailnr, synaptic_files), axis = 1)
+    try:
+        synaptic_files = path_trailnr.apply(synaptic_file_list, axis = 1)     
+        sim_trail_index_complete = pd.concat((sim_trail_index, path_trailnr, synaptic_files), axis = 1)
+    except IndexError: # special case if synapse activation data is not in the simulation folder
+        sim_trail_index_complete = pd.concat((sim_trail_index, path_trailnr), axis = 1)
     return sim_trail_index_complete
 
 ###########################################
@@ -383,8 +385,10 @@ def _build_param_files(mdb):
     mdb['parameterfiles'] = df    
 
 def init(mdb, simresult_path,  \
-         core = True, voltage_traces = True, synapse_activation = True, dendritic_voltage_traces = True, \
-         parameterfiles = True, spike_times = True,  burst_times = True, repartition = True, get = None):
+         core = True, voltage_traces = True, synapse_activation = True, \
+         dendritic_voltage_traces = True, parameterfiles = True, \
+         spike_times = True,  burst_times = True, \
+         repartition = True, get = None):
     '''Use this function to load simulation data generated with the simrun2 module 
     into a ModelDataBase. 
     
