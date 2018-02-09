@@ -419,7 +419,8 @@ class ModelDataBase(object):
         
         out = {'dumper': dumper, \
                'time': tuple(datetime.datetime.utcnow().timetuple()), \
-               'metadata_creation_time': 'together_with_new_key'}
+               'metadata_creation_time': 'together_with_new_key', \
+               'module_versions': _module_versions.get_module_versions()}
         
         out.update(get_versions())
         
@@ -553,7 +554,7 @@ class RegisteredFolder(ModelDataBase):
     
 import model_data_base_register
 import mdbopen
-
+import _module_versions
                       
         
     

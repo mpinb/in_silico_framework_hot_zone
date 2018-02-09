@@ -38,7 +38,7 @@ except ImportError:
 try:
     import seaborn as sns
 except ImportError:
-    pass
+    print "Could not import seaborn"
 
 
 
@@ -178,3 +178,16 @@ try:
     print "setting up local multiprocessing framework ... done"
 except ImportError:
     pass
+
+
+
+def print_module_versions():
+    print "The loaded modules with __version__ attribute are:"
+    from model_data_base._module_versions import get_module_versions
+    module_versions = ["{}: {}".format(x,get_module_versions()[x])\
+                       for x in sorted(get_module_versions().keys())]
+    print ', '.join(module_versions)
+    
+print('')
+print('')
+print_module_versions() 
