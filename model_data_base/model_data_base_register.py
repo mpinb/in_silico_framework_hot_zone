@@ -3,6 +3,7 @@ import os
 from .model_data_base import ModelDataBase, MdbException
 from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
 from .utils import cache
+from .settings import model_data_base_register_path
 _foldername = '.model_data_base_register.db'
 
 class ModelDataBaseRegister():
@@ -42,7 +43,8 @@ class ModelDataBaseRegister():
 
 @cache        
 def _get_mdb_register():
-    mdbr = ModelDataBaseRegister(os.path.dirname(__file__))
+
+    mdbr = ModelDataBaseRegister(model_data_base_register_path)
     return mdbr
 
 #def _set_mdb_register(dir_):
@@ -70,7 +72,8 @@ def register_mdb(mdb):
 #     return ModelDataBase(mdbr.mdb[unique_id])
 
 def get_mdb_by_unique_id(unique_id):
-    mdb = _get_mdb_register().mdb[unique_id]
+    mdb_path = _get_mdb_register().mdb[unique_id]
+    mdb = ModelDataBase(mdb_path)
     assert mdb.get_id() == unique_id
     return mdb
         
