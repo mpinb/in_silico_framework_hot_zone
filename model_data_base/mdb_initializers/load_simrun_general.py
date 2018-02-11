@@ -124,7 +124,6 @@ def create_metadata(mdb):
         synaptic_files = path_trailnr.apply(synaptic_file_list, axis = 1)     
         sim_trail_index_complete = pd.concat((sim_trail_index, path_trailnr, synaptic_files), axis = 1)
     except IndexError: # special case if synapse activation data is not in the simulation folder
-        raise
         sim_trail_index_complete = pd.concat((sim_trail_index, path_trailnr), axis = 1)
     return sim_trail_index_complete
 
