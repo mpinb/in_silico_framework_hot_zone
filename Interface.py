@@ -29,6 +29,7 @@ import warnings
 import traceback
 import sys
 import collections
+from distutils.version import LooseVersion, StrictVersion
 
 try:
     from IPython import display
@@ -169,11 +170,17 @@ try:
         # switch off work stealing, otherwise, simulations may run twice
         # update: work stealing is now transactional, see 
         # https://github.com/dask/distributed/commit/efb7f1ab3c14d6b2ca15dcd04ca1c2b226cc7cbb
-        # Until this commit is provided through the conda channels, we switch work stealing off completely
-        def switch_of_work_stealing(dask_scheduler=None):
-            dask_scheduler.extensions['stealing']._pc.stop()
-                    
-        c.run_on_scheduler(switch_of_work_stealing)
+        # Until this commit is provided through the conda channels, we switch work stealing off completely        
+        if LooseVersion(distributed.__version__) < LooseVersion('1.20.0'):
+            warnings.warn("Your version of distributed seems to be < '1.20.0'. Work stealing is " + 
+                          "therefore not transactional. This means, that simulations might run " + 
+                          "more than once in an unpredictable manner. To ensure that " + \
+                          "simulations do not run twice, work stealing is switched of now. " + \
+                          "However, this will have a negative impact on work balancing on the scheduler. " + \
+                          "Please update distributed to a version >= 1.20.0.")
+            def switch_of_work_stealing(dask_scheduler=None):
+                dask_scheduler.extensions['stealing']._pc.stop()
+            c.run_on_scheduler(switch_of_work_stealing)
         return c
     print "setting up local multiprocessing framework ... done"
 except ImportError:
