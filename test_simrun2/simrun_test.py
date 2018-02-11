@@ -21,6 +21,7 @@ import simrun2.run_existing_synapse_activations
 import simrun2.sim_trail_to_cell_object
 import simrun2.crossing_over.crossing_over_simple_interface
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
+from model_data_base.compatibility import synchronous_scheduler
 
 import getting_started
 import mechanisms
@@ -54,7 +55,7 @@ class Tests(unittest.TestCase):
         dirPrefix = tempfile.mkdtemp()
         try:
             dummy = simrun2.generate_synapse_activations.generate_synapse_activations(cellParamName, networkName, dirPrefix=dirPrefix, nSweeps=1, nprocs=1, tStop=345, silent=True)
-            dummy = dummy.compute(get = dask.async.get_sync)
+            dummy = dummy.compute(get = synchronous_scheduler)
         except:
             raise
         finally:
@@ -66,7 +67,7 @@ class Tests(unittest.TestCase):
         dirPrefix = tempfile.mkdtemp()
         try:
             dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
-            dummy = dummy.compute(get = dask.async.get_sync)
+            dummy = dummy.compute(get = synchronous_scheduler)
         except:
             raise
         finally:
@@ -79,7 +80,7 @@ class Tests(unittest.TestCase):
         dirPrefix = tempfile.mkdtemp()
         try:
             dummy = simrun2.run_new_simulations.run_new_simulations(cellParamName, networkName, dirPrefix=dirPrefix, nSweeps=1, nprocs=1, tStop=345, silent=True)
-            dummy = dummy.compute(get = dask.async.get_sync)
+            dummy = dummy.compute(get = synchronous_scheduler)
         except:
             raise
         finally:
@@ -91,7 +92,7 @@ class Tests(unittest.TestCase):
         try:
             dirPrefix = tempfile.mkdtemp()
             dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
-            dummy = dummy.compute(get = dask.async.get_sync)
+            dummy = dummy.compute(get = synchronous_scheduler)
             cellParam = I.scp.build_parameters(cellParamName)
             cellParam.neuron.filename = os.path.join(parent, 'test_simrun2',\
                          'data', \
@@ -99,7 +100,7 @@ class Tests(unittest.TestCase):
             cellParamName_other_position = os.path.join(dirPrefix, 'other_position.param')                
             cellParam.save(cellParamName_other_position)
             dummy2 = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName_other_position, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
-            dummy2 = dummy2.compute(get = dask.async.get_sync)
+            dummy2 = dummy2.compute(get = synchronous_scheduler)
             df1 = I.read_pandas_synapse_activation_from_roberts_format(os.path.join(dummy[0][0][1], 'simulation_run%s_synapses.csv' % dummy[0][0][0].iloc[0].number))
             df2 = I.read_pandas_synapse_activation_from_roberts_format(os.path.join(dummy2[0][0][1], 'simulation_run%s_synapses.csv' % dummy[0][0][0].iloc[0].number))
             assert_frame_equal(df1, df2)            
@@ -113,7 +114,7 @@ class Tests(unittest.TestCase):
         dirPrefix = tempfile.mkdtemp()
         try:
             dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
-            dummy = dummy.compute(get = dask.async.get_sync)
+            dummy = dummy.compute(get = synchronous_scheduler)
                 
             #synapse activation
             df1 = read_pandas_synapse_activation_from_roberts_format(os.path.join(dummy[0][0][1], 'simulation_run%s_synapses.csv' % dummy[0][0][0].iloc[0].number))
@@ -166,7 +167,7 @@ class Tests(unittest.TestCase):
             with test_model_data_base.context.FreshlyInitializedMdb() as mdb:
                 sim_trail = list(mdb['sim_trail_index'])[0]
                 pdf, res = simrun2.crossing_over.crossing_over_simple_interface.crossing_over(mdb, sim_trail, t, cellParamName, networkName, dirPrefix = dirPrefix, nSweeps=2, tStop=345)
-                res = res.compute(get = dask.async.get_sync)
+                res = res.compute(get = synchronous_scheduler)
                 df = pd.read_csv(glob.glob(os.path.join(res[0][0][0][1], '*vm_all_traces.csv'))[0], sep = '\t')
                 assert_almost_equal(df[df.t<t]['Vm run 00'].values, df[df.t<t]['Vm run 01'].values)
         except:

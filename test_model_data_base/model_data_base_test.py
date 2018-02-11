@@ -250,7 +250,7 @@ class Tests(unittest.TestCase):
         old_mdb = ModelDataBase(old_path, \
                                 readonly = True, \
                                 nocreate = True)
-        old_mdb['reduced_model']
+        #old_mdb['reduced_model']
         
         with FreshlyInitializedMdb() as fmdb:
             assert_frame_equal(fmdb['voltage_traces'].compute(), \
