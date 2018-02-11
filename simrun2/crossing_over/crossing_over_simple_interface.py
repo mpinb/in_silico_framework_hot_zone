@@ -10,6 +10,8 @@ from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_t
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 import neuron
 h = neuron.h
+from model_data_base.compatibility import synchronous_scheduler
+
 
 def scale_apical(cell):
     '''
@@ -41,7 +43,7 @@ def scale_apical(cell):
 def crossing_over_helper(pdf, time, cellParamName, evokedUpParamName, dirPrefix='', nSweeps=1000, tStop=345, silent=True, scale_apical = scale_apical):
     synfile_temppath = tempfile.mkdtemp(dir = dirPrefix, prefix = 'new_synapse_activation')
     delayed = generate_synapse_activations(cellParamName, evokedUpParamName, dirPrefix = synfile_temppath, nSweeps=nSweeps, nprocs = 1, silent = silent)
-    synfiles = delayed.compute(get = dask.async.get_sync)[0]
+    synfiles = delayed.compute(get = synchronous_scheduler)[0]
 
     pdf = filter_by_time(pdf, lambda x: x <= time)
     merged_synfile_temppath = tempfile.mkdtemp(dir = dirPrefix, prefix = 'merged_synapse_activation')
