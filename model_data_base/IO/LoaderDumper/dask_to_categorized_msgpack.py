@@ -24,7 +24,7 @@ import dask.delayed
 import pandas as pd
 import parent_classes
 import glob
-from model_data_base import settings
+from ... import settings
 
 ####
 # if you want to use this as template to implement another dask dumper: 
@@ -173,7 +173,7 @@ def my_dask_writer(ddf, path, optimize_graph = False, get = settings.multiproces
         dask_options = dask.context._globals
         dask.set_options(callbacks=set()) #disable progress bars etc. 
         for number in numbers:
-            pdf = ddf.get_partition(number).compute(get = dask.async.get_sync)
+            pdf = ddf.get_partition(number).compute(get = settings.synchronous_scheduler)
             fun(pdf, path, number, ndigits)
         dask.context._globals = dask_options
     
