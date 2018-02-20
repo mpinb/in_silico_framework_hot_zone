@@ -15,7 +15,8 @@ The recommendet use is to import it in a jupyter notebook in the following manne
     import Interface as I
     
 '''
-
+import matplotlib
+matplotlib.use('Agg')
 import os
 import sys
 import tempfile
