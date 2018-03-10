@@ -8,12 +8,13 @@ import numpy as np
 import pandas as pd
 from six import BytesIO
 
+import sumatra
 from model_data_base.utils import silence_stdout
 from .cell_parser import CellParser
 
 def convert_hoc_array_to_np_array(hoc_array):
     '''converts hoc array to list of lists'''
-    return np.array(hoc_array)
+    return [np.array(x) for x in hoc_array]
 
 def convert_dict_of_hoc_arrays_to_dict_of_np_arrays(hoc_array_dict):
     '''converts dictionary of hoc arrays to dictionary of list of lists'''
@@ -27,7 +28,9 @@ def cell_to_serializable_object(cell):
     (recorded range vars, voltage) and that can be serialized.'''
     out = {}
     out['sections'] = []
-    out['tVec'] = convert_hoc_array_to_np_array(cell.tVec)
+    out['tVec'] = np.array(cell.tVec)
+    out['parameters'] = cell.parameters
+    out['allPoints'] = cell.allPoints
     for lv, sec in enumerate(cell.sections):
         dummy = {}
         dummy['recVList'] = convert_hoc_array_to_np_array(sec.recVList)
@@ -61,6 +64,10 @@ def restore_cell_from_serializable_object(sc):
             # we do not scale! maybe trigger a warning?
             # or better deprecate the scale apical function?        
             parser.spatialgraph_to_cell(axon, scaleFunc = None)
+            
+            # the following is needed to assure that the reconstructed cell
+            # has an equal amount of segments compared to the original cell
+            parser.set_up_biophysics(sumatra.parameters.NTParameterSet(sc['parameters']), sc['allPoints'])
         
         ##############################
         # end of code from single_cell_parser.create_cell
