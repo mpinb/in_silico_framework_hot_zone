@@ -7,6 +7,8 @@ import IPython.display
 import jinja2
 import functools
 from base64 import b64encode
+import multiprocessing
+from ..utils import chunkIt
 
 html_template = 'animation_template.html'
  
@@ -71,7 +73,7 @@ def get_lines(cell, n, range_vars = 'Vm'):
     if isinstance(range_vars, str):
         range_vars = [range_vars]
          
-    cmap = {'Soma': 'k', 'Dendrite': 'b', 'ApicalDendrite': 'r', 'AIS': 'r', 'Myelin': 'y'}
+    cmap = {'Soma': 'k', 'Dendrite': 'b', 'ApicalDendrite': 'r', 'AIS': 'g', 'Myelin': 'y'}
     out_all_lines = []
     for currentSec in cell.sections:
         out = {}
@@ -124,14 +126,17 @@ def get_lines(cell, n, range_vars = 'Vm'):
 #%time silent = [get_lines(cell, i) for i in range(1000)]
  
 def init_fig(xlim = (0,1500), ylim = (-80,0)):
-    fig = plt.figure()
+    fig = plt.figure(figsize = (5,3), dpi = 72)
     ax = fig.add_subplot(111)
     ax.set_xlim(xlim)
     ax.set_ylim(ylim)
     return fig, ax
  
-def plot_lines(lines, ax):
+import copy
+def plot_lines_fun(lines, ax):
     '''generate plots out of lines '''
+    out_lines = []
+    lines = copy.deepcopy(lines)
     for line in lines:
         x = line['x']
         y = line['y']
@@ -139,16 +144,25 @@ def plot_lines(lines, ax):
         del line['x']
         del line['y']
         del line['t']
-        ax.plot(x,y,**line)
+        dummy,  = ax.plot(x,y,**line)
+        out_lines.append(dummy)
         ax.set_title("%.3f" % t)
+    return out_lines
  
  
-@dask.delayed
-def _in_parallel_context(path, lines_object, xlim = (0,1500), ylim = (-80,0)):
+#@dask.delayed(traverse = False)
+def _in_parallel_context(paths, lines_objects, xlim = (0,1500), ylim = (-80,0)):
+    # some ideas how to speed up figure drawing are taken from here: 
+    # http://bastibe.de/2013-05-30-speeding-up-matplotlib.html
     '''helper function to launch generation of images in parallel'''
-    fig, ax = init_fig(xlim, ylim)
-    plot_lines(lines_object, ax)
-    fig.savefig(path)
+    fig, ax = init_fig(xlim, ylim)    
+    plot_lines = plot_lines_fun(lines_objects[0], ax)
+
+    for path, lines_object in zip(paths, lines_objects):
+        for line, plot_line in zip(lines_object, plot_lines):
+            plot_line.set_ydata(line['y'])
+            ax.set_title("%.3f" % line['t'])
+        fig.savefig(path)
     plt.close()
      
 def parallelMovieMaker(basedir, lines, xlim = (0,1500), ylim = (-80,0)):
@@ -164,9 +178,16 @@ def parallelMovieMaker(basedir, lines, xlim = (0,1500), ylim = (-80,0)):
     basepath = tempfile.mkdtemp(dir = basedir, prefix = 'animation_')
     print "files are here: {}".format(os.path.join(basepath, '*.png'))
     paths = [os.path.join(basepath, str(i).zfill(6) + '.png') for i in range(len(lines))]
-     
-    delayed_list = [_in_parallel_context(path, line, xlim = xlim, ylim = ylim) for  path, line in zip(paths, lines)]
-    dask.delayed(delayed_list).compute(get = dask.multiprocessing.get)
+    
+    # split paths and lines in chunks
+    paths_chunks = chunkIt(paths, multiprocessing.cpu_count())
+    lines_chunks = chunkIt(lines, multiprocessing.cpu_count())
+    delayed_list = [_in_parallel_context(path, line, xlim = xlim, ylim = ylim) \
+                    for path, line in zip(paths_chunks, lines_chunks)]
+    
+    #dask.compute(delayed_list, get = dask.get, optimize = False)
+    #print "start computing"
+    #dask.delayed(delayed_list).compute(get = dask.get, optimize = False)
     
     return paths
      
