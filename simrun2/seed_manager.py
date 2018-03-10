@@ -1,6 +1,7 @@
 import numpy as np
-path = '/nas1/Data_arco/used_seeds'
-
+#path = '/nas1/Data_arco/used_seeds'
+import os
+path = os.path.join(os.path.dirname(__file__), 'used_seeds')
 
 def get_seed(recursion_depth = 0):
     '''makes sure, that every random simulation can be initiated with a new seed'''
