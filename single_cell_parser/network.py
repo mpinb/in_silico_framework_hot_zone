@@ -600,7 +600,8 @@ class NetworkMapper:
             functionalMap = connections[synType]
             anatomicalRealizationName = self.nwParam[synType].synapses.distributionFile.split('/')[-1]
             if anatomicalID != anatomicalRealizationName:
-                errstr = 'Functional mapping does not correspond to anatomical realization %s' % anatomicalRealizationName
+                errstr = 'Functional mapping %s does not correspond to anatomical realization %s' \
+                % (anatomicalID, anatomicalRealizationName)
                 raise RuntimeError(errstr)
             for con in functionalMap:
                 cellType, cellID, synID = con
@@ -691,7 +692,8 @@ class NetworkMapper:
             functionalMap = connections[synType]
             anatomicalRealizationName = self.nwParam[synType].synapses.distributionFile.split('/')[-1]
             if anatomicalID != anatomicalRealizationName:
-                errstr = 'Functional mapping does not correspond to anatomical realization %s' % anatomicalRealizationName
+                errstr = 'Functional mapping %s does not correspond to anatomical realization %s' \
+                % (anatomicalID, anatomicalRealizationName)            
                 raise RuntimeError(errstr)
             if self.nwParam[synType].celltype == 'pointcell':
                 nrOfSyns = len(synapses[synType])
