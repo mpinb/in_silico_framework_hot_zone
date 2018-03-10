@@ -91,6 +91,9 @@ def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = T
         parser.set_up_biophysics(parameters, allPoints)
     print '-------------------------------'
     parser.cell.init_time_recording()
+    parser.cell.parameters = parameters
+    parser.cell.scaleFunc = scaleFunc
+    parser.cell.allPoints = allPoints
     return parser.cell
 
 def init_neuron_run(simparam, vardt=False, *events):
