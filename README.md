@@ -1,9 +1,9 @@
 ## Setup
  1. download and install Anaconda 2.7 https://www.continuum.io/Downloads
  2. install neuron such that you can import it as python module. 
-     Version 7.4 has been tested, newer versions are likely to work. 
-     Detailed installation instructions can be found here http://www.davison.webfactional.com/notes/installation-neuron-python/ or here https://www.neuron.yale.edu/phpBB/viewtopic.php?t=3489. 
-     If you use Ubuntu and you have trouble compling neuron, it has been reported that installing the following packages solves the problem: `sudo apt-get install bison flex g++ libxt-dev xorg-dev python-dev libncurses5-dev`
+     - Version 7.4 has been tested, newer versions are likely to work. 
+     - Detailed installation instructions can be found here http://www.davison.webfactional.com/notes/installation-neuron-python/ or here https://www.neuron.yale.edu/phpBB/viewtopic.php?t=3489. 
+     - If you use Ubuntu and you have trouble compling neuron, it has been reported that installing the following packages solves the problem: `sudo apt-get install bison flex g++ libxt-dev xorg-dev python-dev libncurses5-dev`
  3. Add the neuron folder to your PATH environment variable, such that you can run `nrnivmodl` anywhere
  3. install the following dependencies:
     - sumatra, *used for parameterfiles*: `pip install sumatra`
