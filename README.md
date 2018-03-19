@@ -22,6 +22,6 @@
 Due to the statistical nature of the model, some tests might fail from time to time. These tests have the word _statistical_ in their description. If such a test fails, run the testsuite again. If that test fails again, there most likely is an issue. Tests, that do not have a _statistical_ flag in their description may never fail.
 
 Run the following commands to install fast compression libraries:
-    `conda install -c anaconda lz4 
+    ```conda install -c anaconda lz4 
     conda install -c anaconda blosc 
-    conda install -c conda-forge python-blosc` 
+    conda install -c conda-forge python-blosc```
