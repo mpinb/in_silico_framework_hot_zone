@@ -13,6 +13,10 @@
     - seaborn: *statistical data visualization*: `conda install seaborn==0.8.0`
     - fasterners: *robust file based locking*: `pip install fasteners`
     - jinja2: *html template engine, required for embedded animations*: `pip install jinja2`
+ 3. Run the following commands to install fast compression libraries:
+    - `conda install -c anaconda lz4`
+    - `conda install -c anaconda blosc`
+    - `conda install -c conda-forge python-blosc`
  4. Clone or pull this repository: `git clone https://github.com/abast/in_silico_framework.git`. 
  5. Add your in_silico_framework folder to the PYTHONPATH variable
  6. Unzip the following folder: in_silico_framework/getting_started/barrel_cortex.zip such that the following file exists: `in_silico_framework/getting_started/barrel_cortex/nrCells.csv`
@@ -21,7 +25,4 @@
  
 Due to the statistical nature of the model, some tests might fail from time to time. These tests have the word _statistical_ in their description. If such a test fails, run the testsuite again. If that test fails again, there most likely is an issue. Tests, that do not have a _statistical_ flag in their description may never fail.
 
-Run the following commands to install fast compression libraries:
-- `conda install -c anaconda lz4`
-- `conda install -c anaconda blosc`
-- `conda install -c conda-forge python-blosc`
+
