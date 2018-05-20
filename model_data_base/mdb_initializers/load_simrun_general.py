@@ -71,7 +71,7 @@ def read_voltage_traces_from_csv(prefix, fname):
 
 def read_voltage_traces_from_npz(prefix, fname):
     '''this is the same as read_voltage_traces_from_file, but it reads npz files, not csv'''
-    data = np.load(fname)['arr_0']
+    data = np.load(os.path.join(prefix, fname))['arr_0']
     data = np.transpose(data)
     vt = data[1:, :]
     t = np.array([0.025*n for n in range(data.shape[1])])
