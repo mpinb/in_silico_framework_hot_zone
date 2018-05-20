@@ -71,6 +71,8 @@ def read_voltage_traces_from_csv(prefix, fname):
 
 def read_voltage_traces_from_npz(prefix, fname):
     '''this is the same as read_voltage_traces_from_file, but it reads npz files, not csv'''
+    import warnings
+    warnings.warn("You are loading voltage traces from npz files. This only works, if you are using a fixed stepsize of 0.025 ms")
     data = np.load(os.path.join(prefix, fname))['arr_0']
     data = np.transpose(data)
     vt = data[1:, :]
@@ -79,7 +81,7 @@ def read_voltage_traces_from_npz(prefix, fname):
     index=[str(os.path.join(sim_trial_index_base, str(index).zfill(6))) 
            for index in range(len(vt))] ##this will be the sim_trail_index
     
-    df = pd.DataFrame(ct, columns=t)
+    df = pd.DataFrame(vt, columns=t)
     df['sim_trail_index'] = index
     df.set_index('sim_trail_index', inplace = True)
     
