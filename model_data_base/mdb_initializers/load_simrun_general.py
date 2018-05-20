@@ -71,10 +71,10 @@ def read_voltage_traces_from_csv(prefix, fname):
 
 def read_voltage_traces_from_npz(prefix, fname):
     '''this is the same as read_voltage_traces_from_file, but it reads npz files, not csv'''
-    data = I.np.load(fname)['arr_0']
-    data = I.np.transpose(data)
+    data = np.load(fname)['arr_0']
+    data = np.transpose(data)
     vt = data[1:, :]
-    t = I.np.array([0.025*n for n in range(data.shape[1])])
+    t = np.array([0.025*n for n in range(data.shape[1])])
     sim_trial_index_base = os.path.dirname(os.path.relpath(fname, prefix))
     index=[str(os.path.join(sim_trial_index_base, str(index).zfill(6))) 
            for index in range(len(vt))] ##this will be the sim_trail_index
