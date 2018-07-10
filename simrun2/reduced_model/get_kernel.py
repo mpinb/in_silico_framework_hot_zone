@@ -335,7 +335,7 @@ def get_kernel_C2_grid(keys_to_synapse_activation_data = [
                 synapse_activation_window_max = None,\
                 output_window_min = 255, output_window_max = 265, refractory_period = 0,\
                 normalize_group_size = True, test_size = 0.4, verbosity = 2, \
-                lookup_series_stepsize = 5, cache = True):
+                lookup_series_stepsize = 5, cache = True, mdbs = 'mdbs_inhrobert'):
     import Interface as I
     '''returns : clfs, lookup_series, pdf'''
     def spike_in_interval(st, tmin, tmax):
@@ -348,7 +348,18 @@ def get_kernel_C2_grid(keys_to_synapse_activation_data = [
         mdbs['C2'] = I.ModelDataBase('/nas1/Data_arco/results/20170214_use_cell_grid_with_soma_at_constant_depth_below_layer_4_to_evaluate_location_dependency_of_evoked_responses/mdb/')
         return mdbs
     
-    mdbs = get_mdbs_inhrobert()
+    def get_mdbs_inh24():    
+        basedir = '/nas1/Data_arco/results/20170509_grid_with_tuned_INH_v2/mdbs/{stim}'
+        stim = ['B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'D1', 'D2', 'D3']    
+        mdbs = {s: I.ModelDataBase(basedir.format(stim = s)) for s in stim}
+        return mdbs
+    
+    if mdbs == 'mdbs_inhrobert':
+        mdbs = get_mdbs_inhrobert()
+    elif mdbs == 'mdbs_inh24':
+        mdbs = get_mdbs_inh24()
+    else:
+        pass # mdbs needs to be a dictionary
 
     #extract training values
     rm = ReducedLdaModel(keys_to_synapse_activation_data, \
