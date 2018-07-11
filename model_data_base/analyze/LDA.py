@@ -38,6 +38,10 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
     score_0 = []
     score_1 = []
     score_rocauc = []
+    score_all_full_data = []
+    score_0_full_data = []
+    score_1_full_data = []
+    score_rocauc_full_data = []    
     classifier_ = []
     lv = 0
     
@@ -66,6 +70,12 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
         score_1.append(classifier.score(X_test[y_test == 1, :],y_test[y_test==1]))
         score_0.append(classifier.score(X_test[y_test == 0, :],y_test[y_test==0]))
         score_rocauc.append(roc_auc_score(y_test, np.dot(X_test, classifier.coef_.squeeze())))
+        if True: #normalize_group_size:
+            score_all_full_data.append(classifier.score(X_in,y_in))
+            score_1_full_data.append(classifier.score(X_in[y_in == 1, :],y_in[y_in==1]))        
+            score_0_full_data.append(classifier.score(X_in[y_in == 0, :],y_in[y_in==0]))                
+            score_rocauc_full_data.append(roc_auc_score(y_in, np.dot(X_in, classifier.coef_.squeeze())))
+
         classifier_.append(classifier)
 
     score = (np.median(score_1) + np.median(score_0))
@@ -75,13 +85,19 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
         print('score 1:   max %f min %f mean %f' % (max(score_1), min(score_1), np.mean(score_1)))
         print('score 0:   max %f min %f mean %f' % (max(score_0), min(score_0), np.mean(score_0)))
         print('score ROC-AUC:   max %f min %f mean %f' % (max(score_rocauc), min(score_rocauc), np.mean(score_rocauc)))
+        if True:#normalize_group_size:
+            print('score all full data: max %f min %f mean %f' % (max(score_all_full_data), min(score_all_full_data), np.mean(score_all_full_data)))
+            print('score 1 full data:   max %f min %f mean %f' % (max(score_1_full_data), min(score_1_full_data), np.mean(score_1_full_data)))
+            print('score 0 full data:   max %f min %f mean %f' % (max(score_0_full_data), min(score_0_full_data), np.mean(score_0_full_data)))
+            print('score ROC-AUC full data:   max %f min %f mean %f' % (max(score_rocauc_full_data), min(score_rocauc_full_data), np.mean(score_rocauc_full_data)))            
     if verbosity > 0:    
         print('score: %f' % score)
         print ''
     
     if return_ == 'all': 
         return dict(score_all = score_all, score_0 = score_0, score_1 = score_1, score = score, \
-                    score_rocauc = score_rocauc, classifier_ = classifier_)
+                    score_rocauc = score_rocauc, score_rocauc_full_data = score_rocauc_full_data, \
+                    classifier_ = classifier_)
     elif return_ == 'score':
         return(score)
     
