@@ -24,6 +24,8 @@ def prefun(df):
     df['presynaptic_column'] = dummy.str[1]
     df['proximal'] = (df.soma_distance < 500).replace(True, 'prox').replace(False, 'dist')
     df['EI'] = df['celltype'].isin(excitatory).replace(True, 'EXC').replace(False, 'INH')
+    bs = 50
+    df['binned_somadist'] = df.soma_distance.div(bs).map(np.floor).astype(int).map(lambda x: '{}to{}'.format(x*bs, x*bs+bs))    
     return df
 
 def postfun(s):
@@ -66,6 +68,14 @@ def merge_results_together(dicts):
     for key in out.keys():
         out[key] = np.vstack(out[key])
     return out
+
+def tree_reduction(delayeds, aggregate_fun, length = 7):
+    if len(delayeds) > length:
+        chunks = [delayeds[i:i+length] for i  in range(0, len(delayeds), length)]
+        delayeds = [aggregate_fun(chunk) for chunk in chunks]
+        return tree_reduction(delayeds, aggregate_fun, length)
+    else:
+        return aggregate_fun(delayeds)
     
 def synapse_activation_postprocess_dask(ddf, **kwargs):
     '''
@@ -113,7 +123,7 @@ def synapse_activation_postprocess_dask(ddf, **kwargs):
         get = None        
          
     ds = [fun(d, **kwargs) for d in ds]
-    ret = dask.delayed(merge_results_together(ds))
+    ret = tree_reduction(ds, merge_results_together)
     
     if mdb is not None:
         assert('groupby' in kwargs)
