@@ -253,10 +253,10 @@ class ReducedLdaModel():
             out.append(dummy)
         return out
         
-    def plot(self):
-        fig, ax = get_plt_axis()
+    def plot(self, return_fig = False):
+        fig1, ax = get_plt_axis()
         plot_kernel_dict(self.kernel_dict, ax)
-        fig, ax = get_plt_axis()
+        fig2, ax = get_plt_axis()
         plot_LUT(self.lookup_series, self.lda_values, ax)
         ax.set_title('probability of spike in interval '\
                       + '[{output_window_min}:{output_window_max}] depending on lda_value, refractory_period = {ref}'
@@ -264,6 +264,7 @@ class ReducedLdaModel():
                               output_window_max = self.output_window_max, \
                               ref = self.refractory_period))
         ax.set_xlabel('lda_value')
+        if return_fig: return fig1, fig2
     
     def get_minimodel_static(self, model_number = 0):
         '''returns partial, which can be called with keywords mdb or data_dict.
