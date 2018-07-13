@@ -16,7 +16,7 @@ import numpy as np
 import dask
 from ..analyze import excitatory, inhibitory
 from ..analyze.temporal_binning import universal as temporal_binning
-from ..IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
+from ..IO.LoaderDumper import numpy_to_msgpack as numpy_to_msgpack
 
 def prefun(df):
     dummy = df.synapse_type.str.split('_')
@@ -144,7 +144,7 @@ def save_groupby(mdb, result, groupby):
         pass
     sub_mdb = mdb.create_sub_mdb(identifier)
     for key in result:
-        sub_mdb.setitem(key, result[key], dumper = dumper_numpy_to_npy)
+        sub_mdb.setitem(key, result[key], dumper = numpy_to_msgpack)
         
 def init(mdb, groupby = '', get = None):
     '''
