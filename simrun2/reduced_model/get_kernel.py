@@ -35,7 +35,7 @@ def compare_lists_by_none_values(l1, l2):
 #####################################################
 def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
                             synapse_acivation_window_min, synapse_activation_window_max, \
-                            output_window_min, output_window_max, refractory_period = 0):
+                            output_window_min, output_window_max, aggfun = None):
     '''takes a dictionary containing synapse activation data. This data is then
     concatenated to one large matrix, which can be used for the lda estimator.
     
@@ -58,10 +58,16 @@ def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
         st = mdb['spike_times']
         y = np.array(spike_in_interval(st, output_window_min, output_window_max))
         # get values for current mdb
-        mdb_values = [mdb[k][:, synapse_acivation_window_min:synapse_activation_window_max]\
-                      for k in keys_to_synapse_activation_data]
+        mdb_values = {k: mdb[k][:, synapse_acivation_window_min:synapse_activation_window_max]\
+                      for k in keys_to_synapse_activation_data}
         
-        X, boundaries = concatenate_return_boundaries(mdb_values, axis = 1)
+        if aggfun is None:
+            keys = keys_to_synapse_activation_data
+            mdb_values_list = [mdb_values[k] for k in keys]
+        else:
+            keys, mdb_values_list = aggfun(mdb_values)
+        
+        X, boundaries = concatenate_return_boundaries(mdb_values_list, axis = 1)
   
         ys.append(y)
         Xs.append(X)
@@ -70,7 +76,7 @@ def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
     y = np.concatenate(ys, axis = 0)
     X = np.concatenate(Xs, axis = 0)
     st = pd.concat(sts)
-    return X, dict(zip(keys_to_synapse_activation_data, boundaries)), y, st
+    return X, dict(zip(keys, boundaries)), y, st
 
 def _kernel_dict_from_clfs(clfs, boundaries):
     '''splits result of lda estimator based on boundaries'''  
@@ -89,6 +95,7 @@ def _kernel_dict_from_clfs(clfs, boundaries):
 def interpolate_lookup_series(lookup_series):
     stepsize = 1
     diff = max(lookup_series.index) - min(lookup_series.index)
+    print 'lookup_series:', diff, len(lookup_series)
     index = np.arange(int(min(lookup_series.index) - 0.3 * diff), \
                                                    int(max(lookup_series.index) + 0.3 * diff), \
                                                    stepsize)
@@ -170,7 +177,7 @@ class ReducedLdaModel():
                 synapse_activation_window_max = None,\
                 output_window_min = 255, output_window_max = 265, refractory_period = 0,\
                 normalize_group_size = True, test_size = 0.4, verbosity = 2, \
-                lookup_series_stepsize = 5, cache = True):
+                lookup_series_stepsize = 5, cache = True, aggfun = None):
         
         dummy = [synapse_activation_window_min, synapse_activation_window_max, synapse_activation_window_width]
         if compare_lists_by_none_values(dummy, [1, 1, 1]):
@@ -195,6 +202,7 @@ class ReducedLdaModel():
         self.test_size = test_size
         self.verbosity = verbosity
         self.lookup_series_stepsize = lookup_series_stepsize
+        self.aggfun = aggfun
         
         if cache:
             self.apply_rolling = mdb_utils.cache(self.apply_rolling)
@@ -207,7 +215,7 @@ class ReducedLdaModel():
                                 self.synapse_activation_window_min, \
                                 self.synapse_activation_window_max, \
                                 self.output_window_min, self.output_window_max, \
-                                refractory_period = self.refractory_period)
+                                aggfun = self.aggfun)
         
         self.y = y
         self.st = st
@@ -229,7 +237,7 @@ class ReducedLdaModel():
         self.lda_values = []
         for kernel_dict in self.kernel_dict:
             lda_values_dict = {}
-            for k in self.keys_to_synapse_activation_data:
+            for k in boundaries.keys():
                 b = boundaries[k]
                 lda_values_dict[k] = np.dot(X[:,b[0]:b[1]], kernel_dict[k])
             lda_values = sum(lda_values_dict.values())
