@@ -200,7 +200,7 @@ class ModelDataBase(object):
             self._update_metadata_if_necessary()        
             if self._unique_id is None:
                 self._set_unique_id()
-            self._register_this_database()
+            #self._register_this_database()
 
     def _register_this_database(self):
         try:
@@ -538,6 +538,13 @@ class ModelDataBase(object):
     def keys(self):
         '''returns the keys of the database'''
         return self._sql_backend.keys()
+    
+    def get_readonly(self):
+        '''returns a new ModelDataBase, which is readonly.
+        
+        Usecase: If you want to use the database for distributed computations, which only require
+        loading in data, a readonoly database can speed things up as some checks can be ommitted'''
+        return ModelDataBase(self.basedir, forceload = False, readonly = True, nocreate = True, forcecreate = False)
 
     def __reduce__(self):
         return (self.__class__, (self.basedir, self.forceload, self.readonly, True))
