@@ -2,7 +2,8 @@ from __future__ import absolute_import
 from .tuplecloudsqlitedict import SqliteDict
 import os, time
 
-
+from threading import ThreadError
+import warnings
 ###################################################
 # additional locking
 ###################################################
@@ -25,8 +26,11 @@ def aquire_lock(path):
     return mylock
         
 def release_lock(mylock):
-    if not locking: return 
-    mylock.release()
+    if not locking: return
+    try:
+        mylock.release()
+    except ThreadError as e:
+        warnings.warn(str(e))
     
 class SQLiteBackend(object):
     def __init__(self, path):
