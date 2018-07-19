@@ -40,7 +40,7 @@ def convolve_matrix_with_kernel(X, kernel):
 #     return lda_values
 
 def data2Convolutions(X_dict, kernel_dict):
-    return {name: convolve_matrix_with_kernel(X_dict[name], kernel_dict[name]) for name in X_dict.keys()}
+    return {name: convolve_matrix_with_kernel(X_dict[name], kernel_dict[name]) for name in kernel_dict.keys()}
 
 def convolutions2weightedNetInputs(convolutions_dict, combine_fun = sum):
     return combine_fun([convolutions_dict[name] for name in convolutions_dict.keys()])
