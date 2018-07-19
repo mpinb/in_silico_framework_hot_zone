@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.metrics import roc_curve, roc_auc_score
-
+import pandas as pd
 
 def make_groups_equal_size(X,y):
     X_true = X[y == 1]
@@ -41,7 +41,8 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
     score_all_full_data = []
     score_0_full_data = []
     score_1_full_data = []
-    score_rocauc_full_data = []    
+    score_rocauc_full_data = []   
+    value_counts = []        
     classifier_ = []
     lv = 0
     
@@ -70,6 +71,7 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
         score_1.append(classifier.score(X_test[y_test == 1, :],y_test[y_test==1]))
         score_0.append(classifier.score(X_test[y_test == 0, :],y_test[y_test==0]))
         score_rocauc.append(roc_auc_score(y_test, np.dot(X_test, classifier.coef_.squeeze())))
+        value_counts.append(pd.Series(y_train).value_counts().to_dict())
         if True: #normalize_group_size:
             score_all_full_data.append(classifier.score(X_in,y_in))
             score_1_full_data.append(classifier.score(X_in[y_in == 1, :],y_in[y_in==1]))        
@@ -97,7 +99,7 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
     if return_ == 'all': 
         return dict(score_all = score_all, score_0 = score_0, score_1 = score_1, score = score, \
                     score_rocauc = score_rocauc, score_rocauc_full_data = score_rocauc_full_data, \
-                    classifier_ = classifier_)
+                    classifier_ = classifier_, value_counts = value_counts)
     elif return_ == 'score':
         return(score)
     
