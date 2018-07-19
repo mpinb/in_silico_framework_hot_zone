@@ -95,7 +95,7 @@ def _kernel_dict_from_clfs(clfs, boundaries):
 def interpolate_lookup_series(lookup_series):
     stepsize = 1
     diff = max(lookup_series.index) - min(lookup_series.index)
-    print 'lookup_series:', diff, len(lookup_series)
+    #print 'lookup_series:', diff, len(lookup_series)
     index = np.arange(int(min(lookup_series.index) - 0.3 * diff), \
                                                    int(max(lookup_series.index) + 0.3 * diff), \
                                                    stepsize)
@@ -208,7 +208,7 @@ class ReducedLdaModel():
             self.apply_rolling = mdb_utils.cache(self.apply_rolling)
             self.apply_static = mdb_utils.cache(self.apply_static)
     
-    def fit(self, mdb_list):    
+    def fit(self, mdb_list, clfs = None):    
         self.mdb_list = mdb_list
         X, boundaries, y, st = _kernel_preprocess_data(mdb_list, \
                                 self.keys_to_synapse_activation_data, \
@@ -224,10 +224,13 @@ class ReducedLdaModel():
                                                self.output_window_min).values
         
         import Interface as I
-        self.clfs = I.lda_prediction_rates(X[~self.spike_before], y[~self.spike_before], \
+        if clfs is None:
+            self.clfs = I.lda_prediction_rates(X[~self.spike_before], y[~self.spike_before], \
                                            verbosity = self.verbosity, return_ = 'all', \
                                            normalize_group_size = self.normalize_group_size, \
                                            test_size = self.test_size)
+        else: 
+            self.clfs = clfs
         
         self.kernel_dict = _kernel_dict_from_clfs(self.clfs, boundaries)
         ## todo: kernel_dicts
