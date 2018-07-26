@@ -20,7 +20,6 @@ from collections import defaultdict
 
 
 import dask.diagnostics
-import settings
 import warnings
 import re
 import inspect
@@ -116,10 +115,11 @@ def empty_context_manager(*args, **kwargs):
     yield
 
 def get_progress_bar_function():
-    if settings.show_computation_progress:
-        PB = dask.diagnostics.ProgressBar
-    else:
-        PB = empty_context_manager
+    PB = empty_context_manager    
+#     if settings.show_computation_progress:
+#         PB = dask.diagnostics.ProgressBar
+#     else:
+#         PB = empty_context_manager
     return PB           
 
 class SQLMetadataAccessor():
@@ -164,7 +164,6 @@ class ModelDataBase(object):
         '''
                 
         self.basedir = os.path.abspath(basedir)
-        self.settings = settings #settings is imported above
         self.forceload = forceload
         self.readonly = readonly #possible values: False, True, 'warning'
         self._first_init = False
@@ -183,7 +182,7 @@ class ModelDataBase(object):
             if not forcecreate:
                 _check_working_dir_clean_for_build(basedir)
             self._first_init = True
-            self._registeredDumpers = [IO.LoaderDumper.to_cloudpickle] #self: stores the data in the underlying database
+            self._registeredDumpers = [IO.LoaderDumper.to_cloudpickle]
             self.save_db()
             self._set_unique_id()
         
@@ -191,16 +190,16 @@ class ModelDataBase(object):
         self._sql_metadata_backend = SQLBackend(os.path.join(self.basedir, 'metadata.db'))
         self.metadata = SQLMetadataAccessor(self._sql_metadata_backend)
         
-        #############################
-        # the following code helps to smoothly transient databases of the old
-        # format (does not implement _unique_id and metadata) to the new format.
-        # Should be commented out soon.
-        ##############################
         if not self.readonly:
-            self._update_metadata_if_necessary()        
+            #self._register_this_database()            
+            self._update_metadata_if_necessary()
+            #############################
+            # the following code helps to smoothly transient databases of the old
+            # format (does not implement _unique_id and metadata) to the new format.
+            # Should be commented out soon.
+            ##############################                    
             if self._unique_id is None:
                 self._set_unique_id()
-            #self._register_this_database()
 
     def _register_this_database(self):
         try:
@@ -214,7 +213,8 @@ class ModelDataBase(object):
         time = os.stat(os.path.join(self.basedir, 'dbcore.pickle')).st_mtime
         time = datetime.datetime.utcfromtimestamp(time)
         time = time.strftime("%Y-%m-%d")
-        random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(7))
+        random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) 
+                                for _ in range(7))
         self._unique_id = '_'.join([time, str(os.getpid()), random_string])
         self.save_db()      
         
@@ -235,8 +235,9 @@ class ModelDataBase(object):
             
     def save_db(self):
         '''saves the data which defines the state of this database to dbcore.pickle'''
+        ## things that define the state of this mdb and should be saved
         out = {'_registeredDumpers': self._registeredDumpers, \
-               '_unique_id': self._unique_id} ## things that define the state of this mdb and should be saved
+               '_unique_id': self._unique_id} 
         with open(os.path.join(self.basedir, 'dbcore.pickle'), 'w') as f:
             pickle.dump(out, f)
         
@@ -447,7 +448,7 @@ class ModelDataBase(object):
     def _write_metadata_for_existing_key(self, key):
             '''this is private API and should only
             be called from within ModelDataBase.
-            Can othervise be destructive!!!'''
+            Can othervise be destructive as it overwrites metadata!!!'''
             dumper = self._detect_dumper_string_of_existing_key(key)
             
             if dumper == 'self':

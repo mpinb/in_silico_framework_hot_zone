@@ -3,10 +3,12 @@ import unittest
 # switch matplotlib backend to make sure that test suite can 
 # runs on machines that do not have graphic libraries installed (Qt, ...)
 import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
-plt.switch_backend('agg') 
+#plt.switch_backend('agg') 
 
 # import modules, whose tests should run 
+
 import test_model_data_base, test_model_data_base.decorators
 import test_simrun2, test_simrun2.decorators
 import test_single_cell_parser, test_single_cell_parser.decorators

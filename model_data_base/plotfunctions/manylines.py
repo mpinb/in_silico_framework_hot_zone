@@ -16,8 +16,10 @@ import dask
 import unittest
 from model_data_base.plotfunctions._figure_array_converter import fig2np, PixelObject
 from _decorators import return_figure_or_axis, ForceReturnException
-from ..settings import npartitions, multiprocessing_scheduler
 from _decorators import return_figure_or_axis
+from compatibility import multiprocessing_scheduler
+
+npartitions = 80
 
 @return_figure_or_axis
 def manylines(df, axis = None, colormap = None, groupby_attribute = None, \

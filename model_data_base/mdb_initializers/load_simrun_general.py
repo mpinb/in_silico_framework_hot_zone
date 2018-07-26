@@ -20,7 +20,8 @@ from model_data_base.IO.roberts_formats import read_pandas_cell_activation_from_
 from model_data_base.analyze.spike_detection import spike_detection
 from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.IO.LoaderDumper import dask_to_msgpack
-from model_data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module                 
+from model_data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module  
+import compatibility               
 
 
 ############################################
@@ -434,9 +435,9 @@ def init(mdb, simresult_path,  \
     version changes of third party libraries. Also, it makes the database self-containing,
     i.e. you can move it to another machine or subfolder and everything still works.
     
-    get: scheduler for task execution. If None, mdb.settings.multiprocessing_scheduler is used.
+    get: scheduler for task execution. If None, compatibility.multiprocessing_scheduler is used.
     '''
-    get = mdb.settings.multiprocessing_scheduler if get is None else get
+    get = compatibility.multiprocessing_scheduler if get is None else get
     with dask.set_options(get = get):
         #with get_progress_bar_function()(): 
         mdb['simresult_path'] = simresult_path  
@@ -492,7 +493,7 @@ def optimize(mdb, dumper = None, select = None, get = None):
     select: If None, all data will be converted. You can specify a list of items that
     should be optimized, if only a subset should be optimized.
     
-    get: scheduler for task execution. If None, mdb.settings.multiprocessing_scheduler is used.
+    get: scheduler for task execution. If None, compatibility.multiprocessing_scheduler is used.
     '''
     keys = mdb.keys()
     keys_for_rewrite = select if select is not None else ['synapse_activation', \
@@ -500,7 +501,7 @@ def optimize(mdb, dumper = None, select = None, get = None):
                                                           'voltage_traces', \
                                                           'dendritic_recordings']     
     
-    get = mdb.settings.multiprocessing_scheduler if get is None else get
+    get = compatibility.multiprocessing_scheduler if get is None else get
     with dask.set_options(get = get):
         #with get_progress_bar_function()(): 
         for key in mdb.keys():

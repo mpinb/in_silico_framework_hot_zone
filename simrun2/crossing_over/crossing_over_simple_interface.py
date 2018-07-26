@@ -10,7 +10,7 @@ from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_t
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 import neuron
 h = neuron.h
-from model_data_base.compatibility import synchronous_scheduler
+from compatibility import synchronous_scheduler
 
 
 def scale_apical(cell):
@@ -55,14 +55,16 @@ def crossing_over_helper(pdf, time, cellParamName, evokedUpParamName, dirPrefix=
         merged_synfile_paths.append(os.path.join(merged_synfile_temppath, os.path.basename(synfilename)))
         write_pandas_synapse_activation_to_roberts_format(merged_synfile_paths[-1], synfile)
     delayed = run_existing_synapse_activations(cellParamName, evokedUpParamName, merged_synfile_paths, dirPrefix=dirPrefix, nprocs=1, tStop=tStop, silent=silent, scale_apical=scale_apical)
-    ret = delayed.compute(get = dask.async.get_sync)
+    ret = delayed.compute(get = synchronous_scheduler)
     shutil.rmtree(synfile_temppath)
     shutil.rmtree(merged_synfile_temppath)
     return ret
 
 
 delayed_crossing_over_helper = dask.delayed(crossing_over_helper)
-def crossing_over(mdb, sim_trails, time, cellParamName, evokedUpParamName, dirPrefix='', nSweeps=1000, tStop=345, silent=True, scale_apical = scale_apical):
+def crossing_over(mdb, sim_trails, time, cellParamName, evokedUpParamName, 
+                  dirPrefix='', nSweeps=1000, tStop=345, silent=True, 
+                  scale_apical = scale_apical):
     if isinstance(sim_trails, str):
         sim_trails = [sim_trails]
     dirPrefixes = []

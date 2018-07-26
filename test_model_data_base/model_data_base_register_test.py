@@ -29,6 +29,7 @@ class Tests(unittest.TestCase):
         mdb2 = ModelDataBase(p2)
         mdb3 = ModelDataBase(p3)
         
+        for mdb in [mdb1, mdb2, mdb3]: mdb._register_this_database()
         
         mdbr = ModelDataBaseRegister(self.basetempdir)
         

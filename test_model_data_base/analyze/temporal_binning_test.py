@@ -5,8 +5,9 @@ import unittest
 import pandas as pd
 import numpy as np
 import dask.dataframe as dd
-from model_data_base.settings import npartitions
 from model_data_base.model_data_base import ModelDataBase
+
+npartitions = 80
 
 class Tests(unittest.TestCase):
     def setUp(self):

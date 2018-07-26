@@ -3,7 +3,7 @@ import dask
 import dask.dataframe as dd
 import matplotlib.pyplot as plt
 from _decorators import *
-from ..settings import multiprocessing_scheduler
+from compatibility import multiprocessing_scheduler
 from ..analyze._helper_functions import is_int
 from _figure_array_converter import fig2np
 

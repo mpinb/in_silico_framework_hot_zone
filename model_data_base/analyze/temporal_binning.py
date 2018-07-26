@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import dask.dataframe as dd
 import dask
-from .. import settings
+import compatibility
 
 def temporal_binning_pd(df, bin_size = 1, min_time = None, max_time = None, normalize = True):
     if not isinstance(df, pd.DataFrame):
@@ -39,7 +39,7 @@ def temporal_binning_dask(ddf, bin_size = 1, min_time = None, max_time = None, n
     
     #bin each partition separately and sum to get result
 #     meta = pd.Series(zip(*(t_bins,data)))
-    out = ddf.map_partitions(fun2, meta = float).compute(get=settings.multiprocessing_scheduler).sum()
+    out = ddf.map_partitions(fun2, meta = float).compute(get=compatibility.multiprocessing_scheduler).sum()
     
     if normalize: 
         out = out / float(len(ddf))

@@ -28,7 +28,7 @@ class FreshlyInitializedMdb(object):
     def __enter__(self):
         self.path = tempfile.mkdtemp()
         self.mdb = model_data_base.ModelDataBase(self.path)
-        self.mdb.settings.show_computation_progress = False
+        #self.mdb.settings.show_computation_progress = False
         from model_data_base.mdb_initializers.load_simrun_general import init
         from model_data_base.utils import silence_stdout
         init = silence_stdout(init)

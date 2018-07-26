@@ -1,7 +1,7 @@
 import pandas as pd
 import dask
 import dask.dataframe as dd
-from ..settings import multiprocessing_scheduler
+from compatibility import multiprocessing_scheduler
 
 def burst_detection_helper(proximal_voltage_series, st, burst_cutoff):    
     sim_trial_index = proximal_voltage_series.name

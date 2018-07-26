@@ -21,7 +21,7 @@ import simrun2.run_existing_synapse_activations
 import simrun2.sim_trail_to_cell_object
 import simrun2.crossing_over.crossing_over_simple_interface
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
-from model_data_base.compatibility import synchronous_scheduler
+from compatibility import synchronous_scheduler
 
 import getting_started
 import mechanisms
@@ -166,7 +166,12 @@ class Tests(unittest.TestCase):
             t = np.random.randint(100, high = 150)
             with test_model_data_base.context.FreshlyInitializedMdb() as mdb:
                 sim_trail = list(mdb['sim_trail_index'])[0]
-                pdf, res = simrun2.crossing_over.crossing_over_simple_interface.crossing_over(mdb, sim_trail, t, cellParamName, networkName, dirPrefix = dirPrefix, nSweeps=2, tStop=345)
+                pdf, res = simrun2.crossing_over.crossing_over_simple_interface.crossing_over(mdb, sim_trail, t, 
+                                                                                              cellParamName, 
+                                                                                              networkName, 
+                                                                                              dirPrefix = dirPrefix, 
+                                                                                              nSweeps=2, 
+                                                                                              tStop=345)
                 res = res.compute(get = synchronous_scheduler)
                 df = pd.read_csv(glob.glob(os.path.join(res[0][0][0][1], '*vm_all_traces.csv'))[0], sep = '\t')
                 assert_almost_equal(df[df.t<t]['Vm run 00'].values, df[df.t<t]['Vm run 01'].values)
