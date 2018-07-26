@@ -5,7 +5,7 @@ import dask.delayed
 import pandas as pd
 import parent_classes
 import glob
-from ... import settings
+import compatibility
 
 
 ####################################################
@@ -37,7 +37,7 @@ def bundle_delayeds(*args):
     '''
     pass
 
-def my_to_csv(ddf, path, optimize_graph = False, index = None, get = settings.multiprocessing_scheduler):
+def my_to_csv(ddf, path, optimize_graph = False, index = None, get = compatibility.multiprocessing_scheduler):
     ''' Very simple method to store a dask dataframe to a bunch of csv files.
     The reason for it's creation is a lot of frustration with the respective 
     dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
@@ -103,13 +103,14 @@ class Loader(parent_classes.Loader):
     
         
         
-def dump(obj, savedir, repartition = False):
+def dump(obj, savedir, repartition = False, get = None):
     if repartition:
         if obj.npartitions > 10000:
             obj = obj.repartition(npartitions = 5000)
-            
+
+    get = compatibility.multiprocessing_scheduler if get is None else get          
     index_flag = obj.index.name is not None
-    my_to_csv(obj, os.path.join(savedir, fileglob), get = settings.multiprocessing_scheduler, index = index_flag)
+    my_to_csv(obj, os.path.join(savedir, fileglob), get = get, index = index_flag)
     #obj.to_csv(os.path.join(savedir, fileglob), get = settings.multiprocessing_scheduler, index = index_flag)
     meta = obj._meta
     index_name = obj.index.name

@@ -24,7 +24,7 @@ import dask.delayed
 import pandas as pd
 import parent_classes
 import glob
-from ... import settings
+import compatibility
 
 ####
 # if you want to use this as template to implement another dask dumper: 
@@ -153,7 +153,7 @@ def bundle_delayeds(*args):
 ######################################################
 from model_data_base.utils import chunkIt
 import cloudpickle
-def my_dask_writer(ddf, path, optimize_graph = False, get = settings.multiprocessing_scheduler):
+def my_dask_writer(ddf, path, optimize_graph = False, get = compatibility.multiprocessing_scheduler):
     ''' Very simple method to store a dask dataframe to a bunch of files.
     The reason for it's creation is a lot of frustration with the respective 
     dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
@@ -173,7 +173,7 @@ def my_dask_writer(ddf, path, optimize_graph = False, get = settings.multiproces
         dask_options = dask.context._globals
         dask.set_options(callbacks=set()) #disable progress bars etc. 
         for number in numbers:
-            pdf = ddf.get_partition(number).compute(get = settings.synchronous_scheduler)
+            pdf = ddf.get_partition(number).compute(get = compatibility.synchronous_scheduler)
             fun(pdf, path, number, ndigits)
         dask.context._globals = dask_options
     
@@ -221,7 +221,8 @@ class Loader(parent_classes.Loader):
     
         
         
-def dump(obj, savedir, repartition = False, get = None):       
+def dump(obj, savedir, repartition = False, get = None):   
+    get = compatibility.multiprocessing_scheduler if get is None else get
     my_dask_writer(obj, os.path.join(savedir, fileglob), get = get)
     meta = obj._meta
     index_name = obj.index.name
