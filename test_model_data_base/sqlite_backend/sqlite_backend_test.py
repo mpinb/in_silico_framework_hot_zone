@@ -6,6 +6,8 @@ import numpy as np
 import dask
 import distributed
 from ..context import *
+from .. import decorators
+
 import pickle
 from model_data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SqliteDict
 
@@ -36,7 +38,8 @@ class Tests(unittest.TestCase):
         self.assertEqual(db[('test',)], 'test')  
         db[('test','abc')] = 'test2'
         self.assertEqual(db[('test','abc')], 'test2')  
-        
+    
+    @decorators.testlevel(1)            
     def test_pixelObject_can_be_assigned(self):
         db = self.db
         #plot figure and convert it to PixelObject
@@ -49,7 +52,8 @@ class Tests(unittest.TestCase):
         #save and reload PixelObject
         db[('test', 'myPixelObject')] = po
         po_reconstructed = db[('test', 'myPixelObject')]
-        
+    
+    @decorators.testlevel(1)            
     def test_concurrent_writes(self):
         keys = [str(lv) for lv in range(100)]
         job = {key: write_data_to_dict(self.path, key) for key in keys}
