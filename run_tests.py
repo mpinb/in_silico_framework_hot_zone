@@ -24,8 +24,8 @@ import distributed
 #
 # Valid values are integers and 'all'
 ####################################### 
-test_model_data_base.decorators.current_testlevel = 10#'all'#0#'all'#'0
-test_simrun2.decorators.current_testlevel = 10#'all'#0#'all'#'0
+test_model_data_base.decorators.current_testlevel = 1#'all'#0#'all'#'0
+test_simrun2.decorators.current_testlevel = 1#'all'#0#'all'#'0
 
 #######################################git git
 # SELECT TESTS YOU WANT TO RUN HERE
@@ -37,7 +37,7 @@ run = '.'#test_single_cell_parser.reader_test'
 #run = 'test_model_data_base.model_data_base_test'
 #run = 'test_model_data_base.mdb_initializers.load_simrun_general_test'
 #run = 'test_simrun2.simrun_test'
-#run = 'test_model_data_base.sqlite_backend.sqlite_backend_test'
+#run = 'test_model_data_base.sqlite_backend.sqlite_backend_test'move cluster
 #run = 'test_model_data_base.model_data_base_register_test'
 ################################
 # verbosity of testrunner

@@ -312,16 +312,29 @@ class ModelDataBase(object):
                         return self[arg[:lv]][arg[lv:]]
             raise          
     
-    def setitem(self, key, item, **kwargs):
-        '''Allows to set items. Compared to the mdb['some_keys'] = my_item syntax,
-        this method allows more control over how the item is stored in the database.
-        
-        key: key
-        item: item that should be saved
-        dumper= dumper module to use, e.g. model_data_base.IO.LoaderDumper.numpy_to_npy
-            If dumper is not set, the default dumper is used
-        **kwargs: other keyword arguments that should be passed to the dumper
-        '''
+    def _check_writing_privilege(self, key):
+        '''raises MdbException, if we don't have permission to write to key '''
+        if self.readonly is True:
+            raise MdbException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+        #this exists, so jupyter notebooks will not crash when they try to write something
+        elif self.readonly is 'warning': 
+            warnings.warn("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+        elif self.readonly is False:
+            pass
+        else:
+            raise MdbException("Readonly attribute is in unknown state. Should be True, False or 'warning, but is: %s" % self.readonly)
+    
+    def _find_dumper(self, item):
+        '''finds the dumper of a given item.'''
+        dumper = None
+        for d in self._registeredDumpers:
+            if d == 'self' or d.check(item):
+                dumper = d
+                break
+        return dumper
+    
+    def _check_key_validity(self, key):
+        '''raises an MdbException, if key is invalid'''
         if isinstance(key, str): 
             key = tuple([key])
         # make sure hierarchy mimics folder structure:
@@ -341,43 +354,30 @@ class ModelDataBase(object):
             if key == current_key[:len(key)]:
                 raise MdbException("Cannot set {key1}. Conflicting key is {key2}"\
                                    .format(key1 = key, key2 = current_key))
-        ## todo: assigning to sub_mdb
-        
-        #extract dumper from kwargs
-        if not 'dumper' in kwargs:
-            dumper = None
-        else:
-            dumper = kwargs['dumper']
-            del kwargs['dumper']
-            
-            
-        #check if we have writing privilege
-        if self.readonly is True:
-            raise MdbException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
-        #this exists, so jupyter notebooks will not crash when they try to write something
-        elif self.readonly is 'warning': 
-            warnings.warn("DB is in readonly mode. Blocked writing attempt to key %s" % key)
-        elif self.readonly is False:
-            pass
-        else:
-            raise MdbException("Readonly attribute is in unknown state. Should be True, False or 'warning, but is: %s" % self.readonly)
-        
-        #check if there is already a subdirectory assigned to this key. If so: store folder to delete it after new item is set.
+    
+    def _get_savedir(self, key):
+        '''returns directory in which the data is stored. Returns None if dumper is self.'''
         old_folder = None
-        if key in existing_keys:
+        if self.check_if_key_exists(key):
             dummy = self._sql_backend[key]
             if isinstance(dummy, LoaderWrapper):
                 old_folder = dummy.relpath
-                                
-        #find dumper
-        if dumper is None:
-            for d in self._registeredDumpers:
-                if d == 'self' or d.check(item):
-                    dumper = d
-                    break
+        return old_folder
     
-        assert(dumper is not None)
-                
+    def check_if_key_exists(self, key):
+        if isinstance(key, str): 
+            key = tuple([key])        
+            
+        existing_keys = [tuple([k]) if isinstance(k, str) else k for k in self.keys()]
+
+        if key in existing_keys:
+            return True
+        else:
+            return False
+        
+    def _setitem_no_metadata(self, key, item, dumper, **kwargs):
+        '''private API! Used for storing data. Writing metadata needs to be done
+        in addition!'''
         #if dumper is 'self': store in this DB
         if dumper == 'self':
             self._sql_backend[key] = item
@@ -390,7 +390,6 @@ class ModelDataBase(object):
             basedir_absolute, basedir_relative = self.get_mkdtemp(prefix = slugify(key))
             try:
                 dumper.dump(item, basedir_absolute, **kwargs)
-                self._sql_backend[key] = LoaderWrapper(basedir_relative)
             except Exception as e:
                 print("An error occured. Tidy up. Please do not interrupt.")
                 try:
@@ -398,14 +397,52 @@ class ModelDataBase(object):
                 except:
                     print 'could not delete folder %s' % basedir_absolute
                 raise e
-                
+            self._sql_backend[key] = LoaderWrapper(basedir_relative)
+            
+    
+    def setitem(self, key, item, **kwargs):
+        '''Allows to set items. Compared to the mdb['some_keys'] = my_item syntax,
+        this method allows more control over how the item is stored in the database.
         
+        key: key
+        item: item that should be saved
+        dumper= dumper module to use, e.g. model_data_base.IO.LoaderDumper.numpy_to_npy
+            If dumper is not set, the default dumper is used
+        **kwargs: other keyword arguments that should be passed to the dumper
+        '''
+        if isinstance(key, str): key = tuple([key])
+        
+        #make sure, key is valid and not conflicting with other keys
+        self._check_key_validity(key)
+        
+        #extract dumper from kwargs
+        if not 'dumper' in kwargs:
+            dumper = None
+        else:
+            dumper = kwargs['dumper']
+            del kwargs['dumper']
+                    
+        #check if we have writing privilege
+        self._check_writing_privilege(key)
+        
+        # check if there is already a subdirectory assigned to this key. 
+        # If so: store folder to delete it after new item is set.
+        old_folder = self._get_savedir(key)
+                                
+        #find dumper
+        if dumper is None:
+            dumper = self._find_dumper(item)
+        assert(dumper is not None)
+        
+        #write data
+        self._setitem_no_metadata(key, item, dumper, **kwargs)
+        
+        #delete old data directory        
         if old_folder is not None:
             self._robust_rmtree(key, os.path.join(self.basedir, old_folder))
             
         #write metadata
         self._write_metadata_for_new_key(key, dumper)
-    
     
     def _write_metadata_for_new_key(self, key, dumper):
         '''this is private API and should only
@@ -422,14 +459,20 @@ class ModelDataBase(object):
                'time': tuple(datetime.datetime.utcnow().timetuple()), \
                'metadata_creation_time': 'together_with_new_key', \
                'module_versions': _module_versions.get_module_versions()}
-        
+
         out.update(get_versions())
-        
+
         if get_versions()['dirty']:
             warnings.warn('The database source folder has uncommited changes!')
         
         self._sql_metadata_backend[key] = out
-    
+
+    def _delete_metadata(self, key):
+        '''this is private API and should only
+        be called from within ModelDataBase.
+        Can othervise be destructive!!!'''        
+        del self._sql_metadata_backend[key]    
+
     def _detect_dumper_string_of_existing_key(self, key):
         dumper = self._sql_backend[key]
         if isinstance(dumper, LoaderWrapper):
@@ -437,14 +480,14 @@ class ModelDataBase(object):
         else:
             dumper = 'self'
         return dumper
-    
+
     def _get_dumper_folder(self, key):
         dumper = self._sql_backend[key]
         if isinstance(dumper, LoaderWrapper):
             return os.path.join(self.basedir, dumper.relpath)
         else:
             return None        
-            
+
     def _write_metadata_for_existing_key(self, key):
             '''this is private API and should only
             be called from within ModelDataBase.
@@ -468,6 +511,9 @@ class ModelDataBase(object):
             self._sql_metadata_backend[key] = out
     
     def _update_metadata_if_necessary(self):
+        '''ckecks, wehter metadata is missing. Is so, it tries to estimate metadata, i.e. it sets the
+        time based on the timestamp of the files. When metadata is created in that way,
+        the field `metadata_creation_time` is set to `post_hoc`'''
         keys_in_mdb_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
         for key in keys_in_mdb_without_metadata:
             print "Updating metadata for key {key}".format(key = str(key))
@@ -497,6 +543,47 @@ class ModelDataBase(object):
         if isinstance(dummy, LoaderWrapper):
             self._robust_rmtree(key, os.path.join(self.basedir,dummy.relpath))
         del self._sql_backend[key]
+        self._delete_metadata(key)
+    
+    def _write_metadata_for_new_dumper(self, key, new_dumper):
+        #update metadata
+        if inspect.ismodule(new_dumper):
+            dumper = IO.LoaderDumper.get_dumper_string_by_dumper_module(new_dumper)
+        elif isinstance(dumper, str):
+            pass
+                
+        metadata = self.metadata[key]
+        if not 'dumper_updates' in metadata:
+            metadata['dumper_update'] = [{k: metadata[k] for k in ['dumper', 'time', 'module_versions']}]
+        new_dumper = IO.LoaderDumper.get_dumper_string_by_dumper_module(new_dumper)
+        dumper_update = {'dumper': new_dumper, \
+               'time': tuple(datetime.datetime.utcnow().timetuple()), \
+               'module_versions': _module_versions.get_module_versions()}
+        dumper_update.update(get_versions())
+
+        metadata['dumper_update'].append(dumper_update)
+        metadata['dumper'] = new_dumper
+        
+        self._sql_metadata_backend[key] = metadata
+        
+                
+    def change_dumper(self, key, new_dumper, **kwargs):
+        if get_versions()['dirty']:
+            warnings.warn('The database source folder has uncommited changes!')
+                    
+        if new_dumper == 'self':
+            raise NotImplementedError()
+        
+        old_folder = self._get_savedir(key)
+        item = self[key]
+        self._setitem_no_metadata(key, item, new_dumper, **kwargs)
+        if old_folder is not None:
+            self._robust_rmtree(key, os.path.join(self.basedir, old_folder))
+        
+        #update metadata
+        self._write_metadata_for_new_dumper(key, new_dumper)
+        
+        
                 
     def maybe_calculate(self, key, fun, **kwargs):
         '''This function returns the corresponding value of key,

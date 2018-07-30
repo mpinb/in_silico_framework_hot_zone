@@ -51,7 +51,6 @@ class Tests(unittest.TestCase):
         self.assert_(self.fresh_mdb._unique_id is None)
         mdb = ModelDataBase(self.path_fresh_mdb)
         self.assert_(mdb._unique_id is not None)
-        print mdb._unique_id
          
     def test_get_dumper_string_by_dumper_module(self):
         '''dumper string should be the modules name wrt IO.LoaderDumpers'''
@@ -220,8 +219,6 @@ class Tests(unittest.TestCase):
         del self.fresh_mdb['test']
         self.assertEqual(count_number_of_subfolders('test'), 0)
          
-         
-         
     def test_maybe_calculate_runs_calculation_the_first_time_and_gets_result_from_mdb_afterwards(self):
         flag = []
         def fun():
@@ -240,7 +237,8 @@ class Tests(unittest.TestCase):
          
     def test_accessing_non_existent_key_raises_KeyError(self):
         self.assertRaises(KeyError, lambda: self.fresh_mdb['some_nonexistent_key'])
-        
+    
+    @decorators.testlevel(1)
     def test_compare_old_mdb_with_freshly_initialized_one(self):
         '''ensure compatibility with old versions'''
         old_path = os.path.join(parent, \
@@ -262,3 +260,22 @@ class Tests(unittest.TestCase):
             assert_frame_equal(fmdb['metadata'], \
                                fmdb['metadata'])
             
+    def test_check_if_key_exists_can_handle_str_and_tuple_keys(self):
+        self.fresh_mdb['a'] = 1
+        self.fresh_mdb['b', 'b'] = 1
+        self.assertTrue(self.fresh_mdb.check_if_key_exists('a'))
+        self.assertTrue(self.fresh_mdb.check_if_key_exists(('a',)))   
+        self.assertTrue(self.fresh_mdb.check_if_key_exists(('b', 'b')))
+        self.assertFalse(self.fresh_mdb.check_if_key_exists(('a', 'b')))  
+        self.assertFalse(self.fresh_mdb.check_if_key_exists('b'))
+        
+    def test_dumper_can_be_updated_and_metadata_is_adapted(self):
+        self.fresh_mdb.setitem('a', 1, dumper = 'self')
+        m = self.fresh_mdb.metadata['a']        
+        self.assertTrue(m['dumper'] =='self')                
+        self.fresh_mdb.change_dumper('a', to_pickle)
+        m = self.fresh_mdb.metadata['a']
+        self.assertTrue(m['dumper'] =='to_pickle')        
+        self.assertTrue('dumper_update' in m.keys())
+        du = m['dumper_update']
+        self.assertTrue(du[1]['dumper'] == 'to_pickle')
