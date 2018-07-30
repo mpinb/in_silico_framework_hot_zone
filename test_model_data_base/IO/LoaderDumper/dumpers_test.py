@@ -10,7 +10,8 @@ import pandas as pd
 import dask
 from  model_data_base.IO.LoaderDumper import dask_to_csv, numpy_to_npy, pandas_to_msgpack, \
                                 to_pickle, pandas_to_pickle, dask_to_msgpack, \
-                                dask_to_categorized_msgpack, to_cloudpickle
+                                dask_to_categorized_msgpack, to_cloudpickle, reduced_lda_model
+from test_simrun2.reduced_model.get_kernel_test import get_test_Rm
 from numpy.testing import assert_array_equal
 
 
@@ -94,6 +95,30 @@ class Tests_small(unittest.TestCase):
         fun(np.random.randint(5, size=(100, 100)))    
         fun(np.random.randint(5, size=(100,)))
         fun(np.array([]))
+        
+    def test_reduced_lda_model(self):
+        Rm = get_test_Rm()
+        # does not change the original object
+        st = Rm.st
+        lda_values = Rm.lda_values
+        lda_value_dicts = Rm.lda_value_dicts
+        mdb_list = Rm.mdb_list
+        
+        self.mdb.setitem('rm', Rm, dumper = reduced_lda_model)
+        
+        self.assertIs(st, Rm.st)
+        self.assertIs(lda_values, Rm.lda_values)
+        self.assertIs(lda_value_dicts, Rm.lda_value_dicts)
+        self.assertIs(mdb_list, Rm.mdb_list)
+        
+        # can be loaded
+        Rm_reloaded = self.mdb['rm']
+        
+        # is functional
+        Rm_reloaded.plot()
+        self.mdb.setitem('rm2', Rm_reloaded, dumper = reduced_lda_model)
+        Rm_reloaded.Rm.get_lookup_series_for_different_refractory_period(10)
+
         
 class Tests_real_data(unittest.TestCase): 
     def setUp(self):

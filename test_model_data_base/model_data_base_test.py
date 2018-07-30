@@ -260,6 +260,10 @@ class Tests(unittest.TestCase):
             assert_frame_equal(fmdb['metadata'], \
                                fmdb['metadata'])
             
+        # reduced model can be loaded
+        Rm = old_mdb['reduced_lda_model']
+        Rm.plot() # to make sure, this can be called
+                        
     def test_check_if_key_exists_can_handle_str_and_tuple_keys(self):
         self.fresh_mdb['a'] = 1
         self.fresh_mdb['b', 'b'] = 1
