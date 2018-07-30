@@ -5,6 +5,9 @@ The attribute `mdb_list`, which contains instances of ModelDataBase, is replaced
 by a list of strings that only contain the unique_id of each database. This prevents
 unpickling errors in case the ModelDataBase has been removed.
 
+Older versions of reduced models, that do not have the attribute `st` will be stored with
+an empty dataframe (Rm.st = pd.DataFrame) to be compliant with the new version
+
 Reading: takes 24% of the time, to_cloudpickle needs (4 x better reading speed)
 Writing: takes 170% of the time, to_cloudpickle needs (70% lower writing speed)
 Filesize: takes 14% of the space, to cloudpickle needs (7 x more space efficient)
@@ -15,6 +18,8 @@ from simrun2.reduced_model.get_kernel import ReducedLdaModel
 from model_data_base.model_data_base import ModelDataBase
 import pandas_to_msgpack
 import numpy_to_npz
+import pandas as pd
+
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''
     return isinstance(obj, ReducedLdaModel) #basically everything can be saved with pickle
@@ -37,7 +42,10 @@ def dump(obj, savedir):
     mdb = ModelDataBase(savedir)
     Rm = obj
     # keep references of original objects
-    st = Rm.st
+    try: # some older versions do not have this attribute
+        st = Rm.st
+    except AttributeError:
+        st = Rm.st = pd.DataFrame()
     lda_values = Rm.lda_values
     lda_value_dicts = Rm.lda_value_dicts
     mdb_list = Rm.mdb_list
