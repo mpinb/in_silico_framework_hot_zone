@@ -396,7 +396,7 @@ class ModelDataBase(object):
                     shutil.rmtree(basedir_absolute)
                 except:
                     print 'could not delete folder %s' % basedir_absolute
-                raise e
+                raise
             self._sql_backend[key] = LoaderWrapper(basedir_relative)
             
     
