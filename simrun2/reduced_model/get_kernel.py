@@ -146,16 +146,23 @@ def plot_kernel_dict(kernel_dict, ax = None):
                 ax.plot(v)
     plt.legend()
 
-def plot_LUT(lookup_series, lda_values = None, ax = None):
+def plot_LUT(lookup_series, lda_values = None, min_items = None, ax = None):
     if ax is None: fig, ax = get_plt_axis()    
     # plot data distribution and probability curve 
     for lv in range(len(lookup_series)):
+        if lda_values is not None:
+            binned_lda_values = pd.Series(lda_values[lv]).round().astype(int).\
+                                    value_counts().sort_index()
+            binned_lda_values.plot(secondary_y = True, color = 'g')        
         ls = lookup_series[lv]
+        ls.plot(ax = ax, color = 'lightblue')
+        if min_items: 
+            max_ = max(binned_lda_values[binned_lda_values > min_items].index)
+            min_ = min(binned_lda_values[binned_lda_values > min_items].index)
+            
+            ls = ls[(ls.index <= max_) & (ls.index >= min_)]
         ls.plot(ax = ax, color = 'b')
         ax.set_ylabel('p_spike')
-        if lda_values is not None:
-            pd.Series(lda_values[lv]).round().astype(int).value_counts()\
-                .sort_index().plot(secondary_y = True, color = 'g')
         ax.set_ylabel('# datapoints')
     ax.set_xlabel('lda_value')
 ##################################
@@ -264,11 +271,11 @@ class ReducedLdaModel():
             out.append(dummy)
         return out
         
-    def plot(self, return_fig = False):
+    def plot(self, return_fig = False, min_items = 0):
         fig1, ax = get_plt_axis()
         plot_kernel_dict(self.kernel_dict, ax)
         fig2, ax = get_plt_axis()
-        plot_LUT(self.lookup_series, self.lda_values, ax)
+        plot_LUT(self.lookup_series, self.lda_values, min_items, ax)
         ax.set_title('probability of spike in interval '\
                       + '[{output_window_min}:{output_window_max}] depending on lda_value, refractory_period = {ref}'
                       .format(output_window_min = self.output_window_min, \
