@@ -13,7 +13,9 @@ from .utils import *
 h = neuron.h
 
 def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = False, \
-                            scale_apical = scale_apical, range_vars = None, silent = True):
+                            scale_apical = scale_apical, range_vars = None, silent = True, \
+                            synapse_modfun = lambda x: x, neuron_modfun = lambda x: x, \
+                            network_modfun = lambda x: x):
     '''Resimulates simulation trail and returns cell object.
     Expects Instance of ModelDataBase and sim_trail index.
     The mdb has to contain the paths to the parameterfiles at the following location: 
@@ -40,8 +42,13 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
         m = metadata.iloc[0]
         parameter_table = mdb['parameterfiles']
         cellName = parameter_table.loc[sim_trail_index].hash_neuron
+        cellName = os.path.join(mdb['parameterfiles_cell_folder'], cellName)
+        cellName = neuron_modfun(cellName)
         networkName = parameter_table.loc[sim_trail_index].hash_network
+        networkName = os.path.join(mdb['parameterfiles_network_folder'], networkName)
+        networkName = network_modfun(networkName)
         synapse_activation_file = os.path.join(mdb['simresult_path'], m['path'], m['synapses_file_name'])
+        synapse_activation_file = synapse_modfun(synapse_activation_file)
         dummy =  trail_to_cell_object(cellName = os.path.join(mdb['parameterfiles_cell_folder'], cellName), \
                                     networkName = os.path.join(mdb['parameterfiles_network_folder'], networkName), \
                                     synapse_activation_file = synapse_activation_file, \
