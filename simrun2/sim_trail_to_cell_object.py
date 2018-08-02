@@ -49,8 +49,8 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
         networkName = network_modfun(networkName)
         synapse_activation_file = os.path.join(mdb['simresult_path'], m['path'], m['synapses_file_name'])
         synapse_activation_file = synapse_modfun(synapse_activation_file)
-        dummy =  trail_to_cell_object(cellName = os.path.join(mdb['parameterfiles_cell_folder'], cellName), \
-                                    networkName = os.path.join(mdb['parameterfiles_network_folder'], networkName), \
+        dummy =  trail_to_cell_object(cellName = cellName, \
+                                    networkName = networkName, \
                                     synapse_activation_file = synapse_activation_file, \
                                     range_vars = range_vars, 
                                     scale_apical = scale_apical, 
