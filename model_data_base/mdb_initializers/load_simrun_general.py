@@ -21,7 +21,9 @@ from model_data_base.analyze.spike_detection import spike_detection
 from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.IO.LoaderDumper import dask_to_msgpack
 from model_data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module  
-import compatibility               
+import compatibility        
+import warnings
+       
 
 
 ############################################
@@ -72,13 +74,12 @@ def read_voltage_traces_from_csv(prefix, fname):
 
 def read_voltage_traces_from_npz(prefix, fname):
     '''this is the same as read_voltage_traces_from_file, but it reads npz files, not csv'''
-    import warnings
     warnings.warn("You are loading voltage traces from npz files. This only works, if you are using a fixed stepsize of 0.025 ms")
     data = np.load(os.path.join(prefix, fname))['arr_0']
     data = np.transpose(data)
     vt = data[1:, :]
     t = np.array([0.025*n for n in range(data.shape[1])])
-    sim_trial_index_base = os.path.dirname(os.path.relpath(fname, prefix))
+    sim_trial_index_base = os.path.dirname(fname) #os.path.dirname(os.path.relpath(prefix, fname))
     index=[str(os.path.join(sim_trial_index_base, str(index).zfill(6))) 
            for index in range(len(vt))] ##this will be the sim_trail_index
     
@@ -113,10 +114,10 @@ def get_voltage_traces_divisions_by_metadata(metadata):
 ############################################
 def create_metadata(mdb):
     '''Generates metadata out of a pd.Series containing the sim_trail_indices'''
-    
     def determine_zfill_used_in_simulation(globstring):
         '''number of digits like 0001 or 000001 is not consitent accros 
         simulation results. This function takes care of this.'''
+        #print globstring
         ret = len(os.path.basename(glob.glob(globstring)[0]).split('_')[1].lstrip('run'))
         return ret 
         
@@ -138,20 +139,33 @@ def create_metadata(mdb):
         testpath = os.path.join(simresult_path, os.path.dirname(list(sim_trail_index.sim_trail_index)[0]), \
                                 '*%s*.csv')
         zfill_synapses = determine_zfill_used_in_simulation(testpath % 'synapses')    
-        zfill_cells = determine_zfill_used_in_simulation(testpath % 'cells')       
         synapses_file_name = "simulation_run%s_synapses.csv" % str(int(x.trailnr)).zfill(zfill_synapses)
+        return pd.Series({'synapses_file_name': synapses_file_name})
+    
+    def cells_file_list(x):
+        '''returns part of the metadata dataframe.'''
+        testpath = os.path.join(simresult_path, os.path.dirname(list(sim_trail_index.sim_trail_index)[0]), \
+                                '*%s*.csv')
+        zfill_cells = determine_zfill_used_in_simulation(testpath % 'cells')       
         cells_file_name = "simulation_run%s_presynaptic_cells.csv" % str(int(x.trailnr)).zfill(zfill_cells)
-        return pd.Series({'synapses_file_name': synapses_file_name, 'cells_file_name': cells_file_name}) 
+        return pd.Series({'cells_file_name': cells_file_name}) 
     
     sim_trail_index = mdb['sim_trail_index']
     simresult_path = mdb['simresult_path']
     sim_trail_index = pd.DataFrame(dict(sim_trail_index = list(sim_trail_index)))
-    path_trailnr = sim_trail_index.apply(voltage_trace_file_list, axis = 1)        
+    path_trailnr = sim_trail_index.apply(voltage_trace_file_list, axis = 1)  
+    sim_trail_index_complete = pd.concat((sim_trail_index, path_trailnr), axis = 1)      
     try:
         synaptic_files = path_trailnr.apply(synaptic_file_list, axis = 1)     
-        sim_trail_index_complete = pd.concat((sim_trail_index, path_trailnr, synaptic_files), axis = 1)
+        sim_trail_index_complete = pd.concat((sim_trail_index_complete, synaptic_files), axis = 1)
     except IndexError: # special case if synapse activation data is not in the simulation folder
-        sim_trail_index_complete = pd.concat((sim_trail_index, path_trailnr), axis = 1)
+        warnings.warn('could not find synapse activation files')
+    try:
+        cell_files = path_trailnr.apply(cells_file_list, axis = 1) 
+        sim_trail_index_complete = pd.concat((sim_trail_index_complete, cell_files), axis = 1)
+    except IndexError:
+        warnings.warn('could not find cell activation files')
+
     return sim_trail_index_complete
 
 ###########################################
@@ -352,12 +366,14 @@ def _build_synapse_activation(mdb, repartition = False):
         simresult_path = simresult_path[:-1]
         
     m = mdb['metadata'].reset_index()
-    print '---building synapse activation dataframe---'
-    paths = list(simresult_path + '/' + m.path + '/' + m.synapses_file_name)
-    template('synapse_activation', paths, dask.delayed(read_sa, traverse = False), to_cloudpickle)
-    print '---building cell activation dataframe---'
-    paths = list(simresult_path + '/' + m.path + '/' + m.cells_file_name)    
-    template('cell_activation', paths, dask.delayed(read_ca, traverse = False), to_cloudpickle)    
+    if 'synapses_file_name' in m.columns:
+        print '---building synapse activation dataframe---'
+        paths = list(simresult_path + '/' + m.path + '/' + m.synapses_file_name)
+        template('synapse_activation', paths, dask.delayed(read_sa, traverse = False), to_cloudpickle)
+    if 'cells_file_name' in m.columns:
+        print '---building cell activation dataframe---'
+        paths = list(simresult_path + '/' + m.path + '/' + m.cells_file_name)    
+        template('cell_activation', paths, dask.delayed(read_ca, traverse = False), to_cloudpickle)    
 
 def _get_rec_site_managers(mdb):
     param_files = glob.glob(os.path.join(mdb['parameterfiles_cell_folder'],'*'))
@@ -416,7 +432,7 @@ def _build_param_files(mdb):
     mdb['parameterfiles'] = df    
 
 def init(mdb, simresult_path,  \
-         core = True, voltage_traces = True, synapse_activation = True, \
+         core = True, voltage_traces = True, synapse_activation = True,  
          dendritic_voltage_traces = True, parameterfiles = True, \
          spike_times = True,  burst_times = True, \
          repartition = True, get = None):
