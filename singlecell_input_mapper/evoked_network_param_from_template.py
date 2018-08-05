@@ -357,7 +357,8 @@ deflectionOffset = 245.0 #ms; to allow same analysis as CDK JPhys 2007
 # write cluster parameter file yes/no
 clusterParameters = False
 
-def create_network_parameter(templateParamName, cellNumberFileName, synFileName, conFileName, whisker, outFileName):
+def create_network_parameter(templateParamName, cellNumberFileName, 
+                             synFileName, conFileName, whisker, outFileName, write_all_celltypes = False):
     print '*************'
     print 'creating network parameter file from template %s' % templateParamName
     print '*************'
