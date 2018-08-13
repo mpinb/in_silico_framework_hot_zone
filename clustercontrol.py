@@ -75,9 +75,9 @@ try:
                           "simulations do not run twice, work stealing is switched of now. " + \
                           "However, this will have a negative impact on work balancing on the scheduler. " + \
                           "Please update distributed to a version >= 1.20.0.")
-            def switch_of_work_stealing(dask_scheduler=None):
-                dask_scheduler.extensions['stealing']._pc.stop()
-            c.run_on_scheduler(switch_of_work_stealing)
+            #def switch_of_work_stealing(dask_scheduler=None):
+            #    dask_scheduler.extensions['stealing']._pc.stop()
+            #c.run_on_scheduler(switch_of_work_stealing)
         return c
     print "setting up local multiprocessing framework ... done"
 except ImportError:
