@@ -327,3 +327,20 @@ Channel	SK_E2_apic
    	param4              0
    }
 }
+
+Channel	SKv3_1_hot_zone
+{
+   Type                SKv3_1_copy
+   Section              apic
+   Suffix	SKv3_1
+   Distribution        linear
+   Numerical_Parameters
+   Distribution        abstep
+   Numerical_Parameters
+   {
+   	param1              1
+   	param2              0.0
+   	param3              900.0
+   	param4              1100.0
+   }
+}

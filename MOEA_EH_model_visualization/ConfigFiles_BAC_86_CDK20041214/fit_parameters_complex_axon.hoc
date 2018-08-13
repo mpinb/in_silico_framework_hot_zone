@@ -445,3 +445,17 @@ Parameter CaDynamics_E2.apic.decay
    		CellSection	apic
    	}
 }
+
+Parameter SKv3_1_hot_zone.apic.gSKv3_1bar
+{
+	Type	Channel_conductance
+	Min                 0
+	Max                 4e-2
+	ParameterName	gSKv3_1bar
+
+	String_Parameters
+   	{
+   		ChannelSuffix		SKv3_1_copy
+   		CellSection	apic
+   	}
+}
