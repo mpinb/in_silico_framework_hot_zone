@@ -3,8 +3,6 @@ Objective bAP_pair_one
 	String_Parameters
 	{
 		F1	bAP_APwidth
-		F2  bAP_APheight
-		F3  bAP_spikecount
 	}
 }
 
@@ -12,8 +10,31 @@ Objective bAP_pair_two
 {
 	String_Parameters
 	{
+		F1  bAP_APheight
+	}
+}
+
+Objective bAP_pair_three
+{
+	String_Parameters
+	{
+		F1  bAP_spikecount
+	}
+}
+
+Objective bAP_pair_four
+{
+	String_Parameters
+	{
 		F1  bAP_att2
-		F2  bAP_att3
+	}
+}
+
+Objective bAP_pair_five
+{
+	String_Parameters
+	{
+		F1  bAP_att3
 	}
 }
 
@@ -22,8 +43,6 @@ Objective BAC_pair_one
 	String_Parameters
 	{
 		F1	BAC_ahpdepth
-		F2  BAC_APheight
-		F3  BAC_ISI
 	}
 }
 
@@ -31,12 +50,35 @@ Objective BAC_pair_two
 {
 	String_Parameters
 	{
-		F1  BAC_caSpike_height
-		F2  BAC_caSpike_width
+		F1  BAC_APheight
 	}
 }
 
 Objective BAC_pair_three
+{
+	String_Parameters
+	{
+		F1  BAC_ISI
+	}
+}
+
+Objective BAC_pair_four
+{
+	String_Parameters
+	{
+		F1  BAC_caSpike_height
+	}
+}
+
+Objective BAC_pair_five
+{
+	String_Parameters
+	{
+		F1  BAC_caSpike_width
+	}
+}
+
+Objective BAC_pair_six
 {
 	String_Parameters
 	{
