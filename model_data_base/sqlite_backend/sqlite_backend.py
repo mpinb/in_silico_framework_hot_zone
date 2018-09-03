@@ -4,6 +4,7 @@ import os, time
 
 from threading import ThreadError
 import warnings
+
 ###################################################
 # additional locking
 ###################################################
@@ -16,21 +17,23 @@ import warnings
 
 locking = True
 if locking:
-    import fasteners
+    from .. import distributed_lock
 
 def aquire_lock(path):
     if not locking: return
     path = path + '.lock'
-    mylock = fasteners.InterProcessLock(path)
-    mylock.acquire(blocking=True)
+    mylock = distributed_lock.get_lock(path)
+    mylock.acquire()
     return mylock
         
 def release_lock(mylock):
     if not locking: return
-    try:
-        mylock.release()
-    except ThreadError as e:
-        warnings.warn(str(e))
+    mylock.release()
+    #try:
+    #    mylock.release()
+    #except ThreadError as e:
+    #    warnings.warn(str(e))
+
     
 class SQLiteBackend(object):
     def __init__(self, path):
