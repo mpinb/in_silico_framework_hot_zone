@@ -293,8 +293,8 @@ Channel	Ca_HVA_apic
    {
    	param1              1
    	param2              0.1
-   	param3              900.0
-   	param4              1100.0
+   	param3              414.0
+   	param4              614.0
    }
 }
 
@@ -308,8 +308,8 @@ Channel	Ca_LVAst_apic
    {
    	param1              1
    	param2              0.01
-   	param3              900.0
-   	param4              1100.0
+   	param3              414.0
+   	param4              614.0
    }
 }
 

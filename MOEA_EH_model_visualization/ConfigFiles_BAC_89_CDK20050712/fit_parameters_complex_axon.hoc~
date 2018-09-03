@@ -148,7 +148,7 @@ Parameter NaTa_t.axon.gNaTa_tbar
     String_Parameters
     {
         ChannelSuffix       NaTa_t
-        CellSection axon
+        CellSection soma
     }
 }
 
@@ -162,7 +162,7 @@ Parameter Nap_Et2.axon.gNap_Et2bar
     String_Parameters
     {
         ChannelSuffix       Nap_Et2
-        CellSection axon
+        CellSection soma
     }
 }
 
@@ -176,7 +176,7 @@ Parameter K_Pst.axon.gK_Pstbar
     String_Parameters
     {
         ChannelSuffix       K_Pst
-        CellSection axon
+        CellSection soma
     }
 }
 
@@ -190,7 +190,7 @@ Parameter K_Tst.axon.gK_Tstbar
     String_Parameters
     {
         ChannelSuffix       K_Tst
-        CellSection axon
+        CellSection soma
     }
 }
 
@@ -204,7 +204,7 @@ Parameter SK_E2.axon.gSK_E2bar
     String_Parameters
     {
         ChannelSuffix       SK_E2
-        CellSection axon
+        CellSection soma
     }
 }
 
@@ -218,7 +218,7 @@ Parameter SKv3_1.axon.gSKv3_1bar
     String_Parameters
     {
         ChannelSuffix       SKv3_1
-        CellSection axon
+        CellSection soma
     }
 }
 
@@ -232,7 +232,7 @@ Parameter Ca_HVA.axon.gCa_HVAbar
     String_Parameters
     {
         ChannelSuffix       Ca_HVA
-        CellSection axon
+        CellSection soma
     }
 }
 
@@ -246,7 +246,7 @@ Parameter Ca_LVAst.axon.gCa_LVAstbar
     String_Parameters
     {
         ChannelSuffix       Ca_LVAst
-        CellSection axon
+        CellSection soma
     }
 }
 
@@ -260,7 +260,7 @@ Parameter CaDynamics_E2.axon.gamma
     String_Parameters
     {
         ChannelSuffix       CaDynamics_E2
-        CellSection axon
+        CellSection soma
     }
 }
 
@@ -274,7 +274,7 @@ Parameter CaDynamics_E2.axon.decay
     String_Parameters
     {
         ChannelSuffix       CaDynamics_E2
-        CellSection axon
+        CellSection soma
     }
 }
 
