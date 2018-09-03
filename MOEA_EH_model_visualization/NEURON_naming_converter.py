@@ -24,6 +24,7 @@ def read_hoc_file(hoc_filename):
 	apical_name_count = 0
 	hoc_file = open(hoc_filename, 'r')
 	for line in hoc_file:
+		line = line.replace('BasalDendrite', 'dend')
 		if line and 'create' in line:
 			if 'soma' in line:
 				splitLine = line.strip().split(' ')
@@ -123,6 +124,7 @@ def write_hoc_file(hoc_filename, structureCounts, soma_name_map, axon_name_map, 
 	out_file.write(createApicalStr)
 	out_file.write('\n')
 	for line in hoc_file:
+		line = line.replace('BasalDendrite', 'dend')	
 		if line and 'create' in line:
 			continue
 		if line and ('soma' in line or 'axon' in line or 'dend' in line or 'apical' in line):
