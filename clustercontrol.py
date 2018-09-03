@@ -13,9 +13,9 @@ def list_all_screens():
         run_command_remotely(server, 'screen -ls', print_command = False)    
         
 def start_cluster(servers = 'all', nice = 8, nprocs_update = {}, tmpdir = '/tmp/abast', scheduler = 'rall', suffix = ''):
-    ip_lookup = {'katz': '22', 'nernst': '21', 'rall': '20', 'cajal': '26', 'golgi': '23', 'hodgkin': '25'}
+    ip_lookup = {'katz': '22', 'nernst': '21', 'rall': '20', 'cajal': '26', 'golgi': '23', 'hodgkin': '25', 'spock': '12', 'riker': '13'}
     
-    n_procs = {'katz': 40, 'nernst': 35, 'rall': 40, 'cajal': 24, 'golgi': 24, 'hodgkin': 24}
+    n_procs = {'katz': 40, 'nernst': 35, 'rall': 40, 'cajal': 24, 'golgi': 24, 'hodgkin': 24, 'spock': 4, 'riker': 4}
     n_procs.update(nprocs_update)
     
     if servers == 'all': servers = n_procs.keys()
