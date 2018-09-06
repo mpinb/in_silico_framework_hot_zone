@@ -43,7 +43,7 @@ proc import_morphology() { local special86
     forsec "dend" basal.append()
     forsec "apic" apical.append()
 	
-	special86 = 1
+	special86 = 0 
 	if(special86) {
 		print "/*---------------------------------------------------------------------------*/"
 		print "/* Special case 86_L5_CDK20041214:                                           */"
