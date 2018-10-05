@@ -223,8 +223,13 @@ def cell_to_animation(cell, xlim = None, ylim = None, tstart = 245, tend = 310, 
 
 @functools.wraps(cell_to_animation)
 def cell_to_ipython_animation(*args, **kwargs):
+    try:
+        embedded = kwargs['embedded']
+        del kwargs['embedded']
+    except KeyError:
+        embedded = False
     paths = cell_to_animation(*args, **kwargs)
-    ani = display_animation(paths)
+    ani = display_animation(paths, embedded = embedded)
     return ani
 
 
