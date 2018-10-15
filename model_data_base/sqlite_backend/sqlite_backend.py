@@ -61,9 +61,14 @@ class SQLiteBackend(object):
         opening and closing the connection'''
         try:
             sqllitedict = self._get_sql()    
-            dummy = {key: sqllitedict[key] for key in keys}          
+            dummy = {key: sqllitedict[key] for key in keys}   
+        except:
+            raise       
         finally:
-            self._close_sql(sqllitedict)
+            try:
+                self._close_sql(sqllitedict)
+            except:
+                pass
         return dummy
     
     def __setitem__(self, key, item):
@@ -77,8 +82,13 @@ class SQLiteBackend(object):
             sqllitedict = self._get_sql()
             for k, v in dict_.iteritems():
                 sqllitedict[k] = v
+        except:
+            raise
         finally: 
-            self._close_sql(sqllitedict)    
+            try:
+                self._close_sql(sqllitedict) 
+            except:
+                pass
 
     def __delitem__(self, arg):
         '''Backend method to delete item from the sqlite database.'''
@@ -91,13 +101,21 @@ class SQLiteBackend(object):
             sqllitedict = self._get_sql()
             for k in keys:
                 del sqllitedict[k]          
+        except:
+            raise
         finally:
-            self._close_sql(sqllitedict)       
-    
+            try:
+                self._close_sql(sqllitedict)
+            except:
+                pass
+
     def keys(self):
         try:
             sqllitedict = self._get_sql()
             keys = sqllitedict.keys()
             return sorted(keys)
         finally:
-            self._close_sql(sqllitedict)
+            try:
+                self._close_sql(sqllitedict)
+            except:
+                pass
