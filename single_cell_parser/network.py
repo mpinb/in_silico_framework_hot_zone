@@ -694,7 +694,7 @@ class NetworkMapper:
             if anatomicalID != anatomicalRealizationName:
                 errstr = 'Functional mapping %s does not correspond to anatomical realization %s' \
                 % (anatomicalID, anatomicalRealizationName)            
-                raise RuntimeError(errstr)
+                #raise RuntimeError(errstr)
             if self.nwParam[synType].celltype == 'pointcell':
                 nrOfSyns = len(synapses[synType])
                 nrOfCells = len(self.cells[synType])
