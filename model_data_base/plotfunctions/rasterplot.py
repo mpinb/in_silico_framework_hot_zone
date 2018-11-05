@@ -6,6 +6,56 @@ from _decorators import *
 from compatibility import multiprocessing_scheduler
 from ..analyze._helper_functions import is_int
 from _figure_array_converter import fig2np
+from .. utils import convertible_to_int
+
+def rasterplot2(st, ax = None, x_offset = 0, c = None, 
+                    plot_kwargs = {}, y_offset = None, y_plot_length = 1):
+    if ax is None:
+        ax = plt.figure().add_subplot(111)
+    if c is not None:
+        plot_kwargs['c'] = c
+    st = st[[c for c in st.columns if convertible_to_int(c)]]
+    if y_offset is None:
+        y = len(st)
+    else:
+        y = y_offset
+    for i, v in st.iterrows():
+        dummy = [([v-x_offset, v-x_offset], [y, y-y_plot_length]) for v in list(v)]
+        for d in dummy:
+            ax.plot(d[0], d[1], **plot_kwargs)
+        y = y-1
+
+def rasterplot2_pdf_grouped(pdf, grouplabel, ax = None, xlim = None, x_offset = 0):
+    if ax is None:
+        fig = plt.figure(figsize = (7,4), dpi = 600)
+        ax = fig.add_subplot(111)
+    yticks = []
+    ylabels = []
+    offset = 0
+    labels = pdf[grouplabel].drop_duplicates()
+    for label in labels:
+        df = pdf[pdf[grouplabel] == label]
+        offset += len(df)
+        rasterplot2(df, ax = ax, y_offset=offset, x_offset = x_offset,\
+                          plot_kwargs = {'c': 'k', 'linewidth': 2, 'solid_capstyle': 'butt'})
+        plt.axhline(offset, c = 'grey', linewidth = .1)
+        yticks.append(offset - len(df) / 2.)
+        ylabels.append(label)
+    ax.set_xlim(*xlim)
+    ax.set_ylim(0,offset + .2)
+    ax.set_yticks(yticks)
+    ax.set_yticklabels(ylabels)
+    try:
+        import seaborn as sns
+        sns.despine()
+    except ImportError:
+        pass
+    try:
+        from IPython import display
+        display.display(fig)
+    except ImportError:
+        pass
+    plt.close()    
 
 @dask_to_pandas
 @return_figure_or_axis
