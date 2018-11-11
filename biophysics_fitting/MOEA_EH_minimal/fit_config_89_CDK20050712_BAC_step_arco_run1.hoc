@@ -15,7 +15,7 @@ Fit L5CSPC_cAC
 		ParameterConfigFile		fit_parameters_complex_axon.hoc
 		ObjectiveConfigFile	fit_objectives_L5PC_BAC_Step_distinct.hoc
 		ModelOutName	       try_out.hoc
-		MorphologyFile         89_L5_CDK20050712_nr6L5B_dend_PC_neuron_transform_registered_C2_NEURON_Import3D_names_arco.hoc
+		MorphologyFile         empty.hoc
 		MType               L5PC
 		EType               cADpyr
 		PopulationFile	random
