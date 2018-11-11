@@ -89,6 +89,182 @@ class my_ibea_evaluator(bpop.evaluators.Evaluator):
         return None # because of serialization issues, evaluate with lists is unused. 
         # Instead, the mymap function defines, which function is used to evaluate the parameters!!!
 
+
+
+############################################################
+# the following is taken from bluepyopt.deapext.algorithms.py
+# it is changed such that the checkpoint only saves the population, but not the history 
+# and hall of fame, as this can be easily reconstructed from the data saved by 
+# mymap
+############################################################
+
+"""Optimisation class"""
+
+"""
+Copyright (c) 2016, EPFL/Blue Brain Project
+ This file is part of BluePyOpt <https://github.com/BlueBrain/BluePyOpt>
+ This library is free software; you can redistribute it and/or modify it under
+ the terms of the GNU Lesser General Public License version 3.0 as published
+ by the Free Software Foundation.
+ This library is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+ details.
+ You should have received a copy of the GNU Lesser General Public License
+ along with this library; if not, write to the Free Software Foundation, Inc.,
+ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+"""
+
+# pylint: disable=R0914, R0912
+
+
+import random
+import logging
+
+import deap.algorithms
+import deap.tools
+import pickle
+
+logger = logging.getLogger('__main__')
+
+
+def _evaluate_invalid_fitness(toolbox, population):
+    '''Evaluate the individuals with an invalid fitness
+    Returns the count of individuals with invalid fitness
+    '''
+    invalid_ind = [ind for ind in population if not ind.fitness.valid]
+    fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
+    for ind, fit in zip(invalid_ind, fitnesses):
+        ind.fitness.values = fit
+
+    return len(invalid_ind)
+
+
+def _update_history_and_hof(halloffame, history, population):
+    '''Update the hall of fame with the generated individuals
+    Note: History and Hall-of-Fame behave like dictionaries
+    '''
+    if halloffame is not None:
+        halloffame.update(population)
+
+    history.update(population)
+
+
+def _record_stats(stats, logbook, gen, population, invalid_count):
+    '''Update the statistics with the new population'''
+    record = stats.compile(population) if stats is not None else {}
+    logbook.record(gen=gen, nevals=invalid_count, **record)
+
+
+def _get_offspring(parents, toolbox, cxpb, mutpb):
+    '''return the offsprint, use toolbox.variate if possible'''
+    if hasattr(toolbox, 'variate'):
+        return toolbox.variate(parents, toolbox, cxpb, mutpb)
+    return deap.algorithms.varAnd(parents, toolbox, cxpb, mutpb)
+
+
+def eaAlphaMuPlusLambdaCheckpoint(
+        population,
+        toolbox,
+        mu,
+        cxpb,
+        mutpb,
+        ngen,
+        stats=None,
+        halloffame=None,
+        cp_frequency=1,
+        cp_filename=None,
+        continue_cp=False):
+    r"""This is the :math:`(~\alpha,\mu~,~\lambda)` evolutionary algorithm
+    Args:
+        population(list of deap Individuals)
+        toolbox(deap Toolbox)
+        mu(int): Total parent population size of EA
+        cxpb(float): Crossover probability
+        mutpb(float): Mutation probability
+        ngen(int): Total number of generation to run
+        stats(deap.tools.Statistics): generation of statistics
+        halloffame(deap.tools.HallOfFame): hall of fame
+        cp_frequency(int): generations between checkpoints
+        cp_filename(ModelDataBase or None): mdb_run, where the checkpoint is stored in [generation]_checlpoint. Was: path to checkpoint filename
+        continue_cp(bool): whether to continue
+    """
+    # added by arco
+    if cp_filename is not None:
+        assert isinstance(cp_filename, I.ModelDataBase)
+    if continue_cp:
+        raise NotImplementedError()
+    assert(halloffame is None)
+    # end added by arco
+
+    if continue_cp:
+        # A file name has been given, then load the data from the file
+        cp = pickle.load(open(cp_filename, "r"))
+        population = cp["population"]
+        parents = cp["parents"]
+        start_gen = cp["generation"]
+        halloffame = cp["halloffame"]
+        logbook = cp["logbook"]
+        history = cp["history"]
+        random.setstate(cp["rndstate"])
+    else:
+        # Start a new evolution
+        start_gen = 1
+        parents = population[:]
+
+        ## commented out by arco ... as we record every evaluation, we do not need the bluepyopt history as it slows down the iteration
+        #logbook = deap.tools.Logbook()
+        #logbook.header = ['gen', 'nevals'] + (stats.fields if stats else [])
+        #history = deap.tools.History()
+        ## end commented out by arco
+
+        # TODO this first loop should be not be repeated !
+        invalid_count = _evaluate_invalid_fitness(toolbox, population)
+        ## commented out by arco ... as we record every evaluation, we do not need the bluepyopt history as it slows down the iteration
+        #_update_history_and_hof(halloffame, history, population)
+        #_record_stats(stats, logbook, start_gen, population, invalid_count)
+        ## end commented out by arco
+
+
+    # Begin the generational process
+    for gen in range(start_gen + 1, ngen + 1):
+        offspring = _get_offspring(parents, toolbox, cxpb, mutpb)
+
+        population = parents + offspring
+
+        invalid_count = _evaluate_invalid_fitness(toolbox, offspring)
+        ## commented out by arco
+        #_update_history_and_hof(halloffame, history, population)
+        #_record_stats(stats, logbook, gen, population, invalid_count)
+        ## end commented out by arco
+
+        # Select the next generation parents
+        parents = toolbox.select(population, mu)
+
+        ## commented out by arco
+        #logger.info(logbook.stream)
+        ## end commented out by arco
+
+        if(cp_filename and cp_frequency and
+           gen % cp_frequency == 0):
+            cp = dict(population=population,
+                      generation=gen,
+                      parents=parents,
+                      halloffame=None, #halloffame, // arco
+                      history=None, # history, // arco
+                      logbook=None, # logbook, // arco
+                      rndstate=random.getstate())
+            # save checkpoint in mdb
+            cp_filename.setitem('{}_checkpoint'.format(gen), cp, dumper = I.dumper_to_pickle)
+            #pickle.dump(cp, open(cp_filename, "wb"))
+            #logger.debug('Wrote checkpoint to %s', cp_filename)
+
+    return population, logbook, history
+
+####################################################
+# end taken from bluepyopt
+#####################################################
+
 def run(self,
             max_ngen=10,
             offspring_size=None,
@@ -113,22 +289,24 @@ def run(self,
         print "initialized with population of size %s" % len(pop)
         assert (continue_cp == False)
 
-    stats = deap.tools.Statistics(key=lambda ind: ind.fitness.sum)
-    import numpy
-    stats.register("avg", numpy.mean)
-    stats.register("std", numpy.std)
-    stats.register("min", numpy.min)
-    stats.register("max", numpy.max)
+    ## commented out by arco
+    #stats = deap.tools.Statistics(key=lambda ind: ind.fitness.sum)
+    #import numpy
+    #stats.register("avg", numpy.mean)
+    #stats.register("std", numpy.std)
+    #stats.register("min", numpy.min)
+    #stats.register("max", numpy.max)
+    ## end commented out by arco
 
-    pop, log, history = algorithms.eaAlphaMuPlusLambdaCheckpoint(
+    pop, log, history = eaAlphaMuPlusLambdaCheckpoint(
         pop,
         self.toolbox,
         offspring_size,
         self.cxpb,
         self.mutpb,
         max_ngen,
-        stats=stats,
-        halloffame=self.hof,
+        stats=None, # arco
+        halloffame= None, # self.hof,
         cp_frequency=cp_frequency,
         continue_cp=continue_cp,
         cp_filename=cp_filename)
@@ -170,6 +348,6 @@ def start_run(mdb_setup, n, pop = None, client = None,
                                               seed=n)
     p, hof, log, hst = run(opt, 
                            max_ngen=max_ngen, 
-                           cp_filename = mdb_run['checkpoint'].join('checkpoint.pickle'), 
+                           cp_filename = mdb_run, 
                            pop = pop)
     return p, hof, log, hst
