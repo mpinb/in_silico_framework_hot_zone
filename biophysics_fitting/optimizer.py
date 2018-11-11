@@ -2,7 +2,7 @@ import bluepyopt as bpop
 import numpy
 import deap
 from bluepyopt.deapext import algorithms
-
+import Interface as I
 def robust_int(x):
     try: 
         return int(x)
