@@ -31,6 +31,7 @@ import traceback
 import sys
 import collections
 from functools import partial
+from collections import defaultdict
 
 try:
     from IPython import display
