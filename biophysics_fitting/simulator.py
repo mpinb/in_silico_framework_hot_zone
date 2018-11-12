@@ -89,6 +89,7 @@ class Simulator:
         self.setup = Simulator_Setup()
 
     def get_simulated_cell(self, params, stim): 
+        '''returns cell and parameters used to set up cell'''
         t = time.time()
         # get cell object with biophysics            
         cell, params = self.setup.get(params) 
@@ -104,12 +105,12 @@ class Simulator:
         return cell, params
 
     def run(self, params):
+        '''returns recordings as it is setup in self.setup'''
         import time        
         self.setup.check()
-
         out = {}            
         for stim in self.setup.get_stims(): # , fun in self.setup.stim_setup_funs:
-            cell, params = self.get_simulated_cell(self, params, stim)
+            cell, params = self.get_simulated_cell(params, stim)
             # extract result
             name, fun = self.setup.get_stim_response_measure_fun(stim)
             print name, param_selector(params, name)
