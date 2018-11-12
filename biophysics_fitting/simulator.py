@@ -6,6 +6,8 @@ Created on Nov 08, 2018
 
 import single_cell_parser as scp
 from .parameters import param_selector
+import time        
+
 
 class Simulator_Setup:
     def __init__(self):
@@ -106,7 +108,6 @@ class Simulator:
 
     def run(self, params):
         '''returns recordings as it is setup in self.setup'''
-        import time        
         self.setup.check()
         out = {}            
         for stim in self.setup.get_stims(): # , fun in self.setup.stim_setup_funs:
