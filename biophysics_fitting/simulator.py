@@ -87,31 +87,35 @@ class Simulator_Setup:
 class Simulator:
     def __init__(self):
         self.setup = Simulator_Setup()
-        
+
+    def get_simulated_cell(self, params, stim): 
+        t = time.time()
+        # get cell object with biophysics            
+        cell, params = self.setup.get(params) 
+        # set up stimulus
+        name, fun = self.setup.get_stim_setup_fun_by_stim(stim)
+        print name, param_selector(params, name)
+        fun(cell, params = param_selector(params, name))
+        # run simulation
+        name, fun = self.setup.get_stim_run_fun_by_stim(stim)
+        print name,param_selector(params, name)
+        cell = fun(cell, params = param_selector(params, name))
+        print "simulating {} took {} seconds".format(stim, time.time()-t)
+        return cell, params
+
     def run(self, params):
         import time        
         self.setup.check()
 
         out = {}            
         for stim in self.setup.get_stims(): # , fun in self.setup.stim_setup_funs:
-            t = time.time()
-            # get cell object with biophysics            
-            cell, params = self.setup.get(params) 
-            # set up stimulus
-            name, fun = self.setup.get_stim_setup_fun_by_stim(stim)
-            print name, param_selector(params, name)
-            fun(cell, params = param_selector(params, name))
-            # run simulation
-            name, fun = self.setup.get_stim_run_fun_by_stim(stim)
-            print name,param_selector(params, name)
-            cell = fun(cell, params = param_selector(params, name))
+            cell, params = self.get_simulated_cell(self, params, stim)
             # extract result
             name, fun = self.setup.get_stim_response_measure_fun(stim)
             print name, param_selector(params, name)
             result = fun(cell, params = param_selector(params, name))
             del cell            
             out.update({name: result})
-            print "simulating {} took {} seconds".format(stim, time.time()-t)
         return out
 
 
