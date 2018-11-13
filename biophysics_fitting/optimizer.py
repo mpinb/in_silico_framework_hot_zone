@@ -298,7 +298,7 @@ def run(self,
     #stats.register("max", numpy.max)
     ## end commented out by arco
 
-    pop, log, history = eaAlphaMuPlusLambdaCheckpoint(
+    pop = eaAlphaMuPlusLambdaCheckpoint(
         pop,
         self.toolbox,
         offspring_size,
@@ -311,7 +311,7 @@ def run(self,
         continue_cp=continue_cp,
         cp_filename=cp_filename)
 
-    return pop, self.hof, log, history
+    return pop
 
 def start_run(mdb_setup, n, pop = None, client = None, 
               offspring_size=1000, eta=10, mutpb=0.3, cxpb=0.7, max_ngen = 600):
