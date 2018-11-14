@@ -599,10 +599,10 @@ class NetworkMapper:
             connections, anatomicalID = reader.read_functional_realization_map(funcMapName)
             functionalMap = connections[synType]
             anatomicalRealizationName = self.nwParam[synType].synapses.distributionFile.split('/')[-1]
-            if anatomicalID != anatomicalRealizationName:
-                errstr = 'Functional mapping %s does not correspond to anatomical realization %s' \
-                % (anatomicalID, anatomicalRealizationName)
-                raise RuntimeError(errstr)
+            #if anatomicalID != anatomicalRealizationName:
+            #    errstr = 'Functional mapping %s does not correspond to anatomical realization %s' \
+            #    % (anatomicalID, anatomicalRealizationName)
+            #    raise RuntimeError(errstr)
             for con in functionalMap:
                 cellType, cellID, synID = con
                 if cellType != synType:
@@ -785,33 +785,36 @@ class NetworkMapper:
                 syn.weight[recepStr].append(receptor.weight)
         
 
-def activate_functional_synapse(syn, cell, preSynCell, synParameters, tChange=None, synParametersChange=None, forceSynapseActivation = False):
+def activate_functional_synapse(syn, cell, preSynCell, synParameters, tChange=None, synParametersChange=None, forceSynapseActivation = False, releaseTimes = None):
     '''Default method to activate single synapse.
     Currently, this implementation expects all presynaptic spike
     times to be pre-computed; can thus not be used in recurrent
     network models at this point.'''
-    releaseTimes = []
 #     try:
 #         conductance_delay = synParameters.delay
 #     except KeyError:
 #         conductance_delay = 0.0    
     conductance_delay = 0.0
         
-        
-    if synParameters.has_key('releaseProb') and synParameters.releaseProb != 'dynamic':
-        prel = synParameters.releaseProb
-        if tChange is not None:
-            prelChange = synParametersChange.releaseProb
-        for t in preSynCell.spikeTimes:
+    if releaseTimes is None:
+        releaseTimes = []
+        if synParameters.has_key('releaseProb') and synParameters.releaseProb != 'dynamic':
+            prel = synParameters.releaseProb
             if tChange is not None:
-                if t >= tChange: 
-                    if np.random.rand() < prelChange: ##change parameters within simulation time
-                        releaseTimes.append(t + conductance_delay)
-                    continue
-            if np.random.rand() < prel or forceSynapseActivation:
-                releaseTimes.append(t + conductance_delay)
+                prelChange = synParametersChange.releaseProb
+            for t in preSynCell.spikeTimes:
+                if tChange is not None:
+                    if t >= tChange: 
+                        if np.random.rand() < prelChange: ##change parameters within simulation time
+                            releaseTimes.append(t + conductance_delay)
+                        continue
+                if np.random.rand() < prel or forceSynapseActivation:
+                    releaseTimes.append(t + conductance_delay)
+        else:
+            releaseTimes = [t + conductance_delay for t in preSynCell.spikeTimes]
     else:
-        releaseTimes = [t + conductance_delay for t in preSynCell.spikeTimes]
+        print "releaseTimes have been explicitly set", releaseTimes
+        
     if not len(releaseTimes):
         return
     releaseTimes.sort()
