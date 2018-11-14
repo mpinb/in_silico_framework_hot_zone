@@ -308,11 +308,11 @@ class CellParser(object):
         '''
         edgeList = reader.read_hoc_file(self.hoc_fname)
         self.hoc_fname = self.hoc_fname.split('/')[-1]
-        part1 = self.hoc_fname.split('_')[0]
-        part2 = self.hoc_fname.split('_')[1]
-        part3 = self.hoc_fname.split('.')[-2]
+        #part1 = self.hoc_fname.split('_')[0]
+        #part2 = self.hoc_fname.split('_')[1]
+        #part3 = self.hoc_fname.split('.')[-2]
         self.cell = Cell()
-        self.cell.id = '_'.join([part1, part2, part3])
+        self.cell.id = self.hoc_fname # '_'.join([part1, part2, part3])
         
 #        first loop: create all Sections
         for edge in edgeList:
