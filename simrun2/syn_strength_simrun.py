@@ -12,36 +12,46 @@ import neuron
 import single_cell_parser as scp
 import single_cell_analyzer as sca
 import matplotlib.pyplot as plt
+from single_cell_parser.network import activate_functional_synapse
 h = neuron.h
 
-def unitary_connections(modelName, networkName):
-    neuronParameters = scp.build_parameters(modelName)
-    nwParameters = scp.build_parameters(networkName)
-    scp.load_NMODL_parameters(nwParameters)
-    scp.load_NMODL_parameters(neuronParameters)
+def unitary_connections(modelName, networkName, scale_apical = lambda x: x, dirPrefix = ''):
+    '''modelName, networkName: either paths to parametrfiles or sumatra.NTParameterSet objects'''
+    if isinstance(modelName, str):
+        neuronParameters = scp.build_parameters(modelName)
+    else:
+        neuronParameters = modelName
+    if isinstance(networkName, str):
+        nwParameters = scp.build_parameters(networkName)
+    else:
+        nwParameters = networkName
+
+    ## loading mechanisms is now handeld by the mechanism module
+    #scp.load_NMODL_parameters(nwParameters)
+    #scp.load_NMODL_parameters(neuronParameters)
     cellParam = neuronParameters.neuron
     preParam = nwParameters.network
     
     cell = scp.create_cell(cellParam, scaleFunc=scale_apical)
     nwMap = scp.NetworkMapper(cell, preParam)
-    nwMap.create_saved_network()
+    ##nwMap.create_saved_network()
+    nwMap.create_saved_network2()
     nwMap.re_init_network()
 #    for synType in cell.synapses.keys():
 #        for syn in cell.synapses[synType]:
 #            syn.releaseSite.turn_off()
-    
+      
     cellTypePrefix = nwMap.cells.keys()[0].split('_')[0]
     totalNrCells = 0
     for cellType in nwMap.cells.keys():
         totalNrCells += len(nwMap.connected_cells[cellType])
         for syn in cell.synapses[cellType]:
-            syn.releaseSite.turn_off()
+            syn.disconnect_hoc_synapse()
+
+##            syn.releaseSite.turn_off()
     
     uniqueID = str(os.getpid())
-    dirName = 'results/unitary_connections/'
-    dirName += cellTypePrefix
-    dirName += '_3x3/'
-    dirName += time.strftime('%Y%m%d-%H%M')
+    dirName = os.path.join(dirPrefix, 'results', 'unitary_connections', cellTypePrefix + '_3x3/' + time.strftime('%Y%m%d-%H%M'))
     if not os.path.exists(dirName):
         os.makedirs(dirName)
     
@@ -56,6 +66,7 @@ def unitary_connections(modelName, networkName):
         nmdaAmpaRatio = preParam[cellType].synapses.receptors[recepName].weight[1]
         gExRange = np.arange(1.6, 2.2, 0.2)
     #    gExRange = [1.0]
+
         for gEx in gExRange:
             gAMPA = gEx
             gNMDA = nmdaAmpaRatio*gAMPA
@@ -65,10 +76,16 @@ def unitary_connections(modelName, networkName):
             print 'gNMDA = %.2f nS' % gNMDA
             
             for syn in cell.synapses[cellType]:
-                if syn.is_active():
-                    syn.netcons[0].weight[0] = gAMPA
-                    syn.netcons[0].weight[1] = gNMDA
+                ##if syn.is_active():
+                ##    syn.netcons[0].weight[0] = gAMPA
+                ##    syn.netcons[0].weight[1] = gNMDA                
+                print 'Setting synapse weight'
+                syn.weight = {'glutamate_syn': [gAMPA, gNMDA]}
             
+            synParameters = scp.NTParameterSet({'receptors': {'glutamate_syn': {'delay': 0.0,
+                                            'parameter': {'decayampa': 0.5, 'decaynmda': 0.6},
+                                            'threshold': 0.0,
+                                            'weight': [gAMPA, gNMDA]}}})            
             somaT, somaV, = [], []
             print 'testing %d %s cells' % (typeNrCells, cellType)
             cellID = 0
@@ -76,9 +93,11 @@ def unitary_connections(modelName, networkName):
                 print 'testing cell %d  (%d of %d)' % (preSynCellID, cellID+1, typeNrCells)
                 preSynCell = nwMap.cells[cellType][preSynCellID]
                 for syn in preSynCell.synapseList:
-#                    syn.releaseSite.append(110.0)
-                    syn.releaseSite.append(tOffset+spikeTime)
-                    syn.releaseSite.play()
+                    activate_functional_synapse(syn, cell, preSynCell, synParameters, releaseTimes = [tOffset+spikeTime]) 
+                    syn              
+                    #syn.releaseSite.append(tOffset+spikeTime)
+                    #syn.releaseSite.play()
+                    
                 tVec = h.Vector()
                 tVec.record(h._ref_t)
                 scp.init_neuron_run(neuronParameters.sim)
@@ -100,7 +119,8 @@ def unitary_connections(modelName, networkName):
                 write_sim_results(traceFName, t, vmSoma)
                 
                 for syn in preSynCell.synapseList:
-                    syn.releaseSite.turn_off()
+                    syn.disconnect_hoc_synapse()
+                ##   syn.releaseSite.turn_off()
                 for sec in cell.sections:
                     sec._re_init_vm_recording()
                     sec._re_init_range_var_recording()
