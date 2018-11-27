@@ -1,7 +1,7 @@
 radii
 ==============================
 
-This project aim is to find the radii of neurons
+This project's aim is to find radii of neurons
 
 Project Organization
 ------------
