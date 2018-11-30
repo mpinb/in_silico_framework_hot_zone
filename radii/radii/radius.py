@@ -19,6 +19,7 @@ def getEuclideanDistance(x,y):
     return np.sqrt((x[0]-y[0])**2+(x[1]-y[1])**2)
 
 def getRadiiHalfMax(image,pts,):
+
     halfmaxvalues = []
     min_radii = []
     avg_radii = []
@@ -47,10 +48,12 @@ def getRadiiHalfMax(image,pts,):
         backvaluesgrandlist.append(backvalues)
         fronthalfmaxgrandlist.append(front_contour_pts)
         backhalfmaxgrandlist.append(back_contour_pts)
+
     return [halfmaxvalues,min_radii,avg_radii,front_contour,back_contour,rayimages,minrayimages,mincontptimages, frontvaluesgrandlist, backvaluesgrandlist, fronthalfmaxgrandlist, backhalfmaxgrandlist]
 
 
 def getHalfMaxRadiusAtThisPoint(im,pt):
+
     # Radius list
     tmpim_rays = im #sitk.Image()
     tmpim_minray = im #sitk.Image()
@@ -115,8 +118,26 @@ def getHalfMaxRadiusAtThisPoint(im,pt):
     return [halfmaxvalue,np.min(np.array(rad_list)),np.mean(np.array(rad_list)),fronthalfmaxptlist[min_ind],backhalfmaxptlist[min_ind], tmpim_rays,tmpim_minray,tmpim_mincontpts, frontvalueslist, backvalueslist, fronthalfmaxptlist, backhalfmaxptlist]
 
 def getHalfMaxPoint(image,linear_profile,centerpt):
-    centerpixelvalue = image.GetPixel([centerpt[0],centerpt[1],0])
-    contour_pt = centerpt# linear_profile[0] #getMinFromLineProfile(linear_profile,image)
+    # centerpixelvalue = image.GetPixel([centerpt[0],centerpt[1],0])
+
+    # print("-----------------------------------")
+    orig_centerpixelvalue = image.GetPixel(centerpt)
+    # print("value of original center point")
+    # print(orig_centerpixelvalue)
+
+    centerpt_new = getMaxfromLineProfile(linear_profile, image)
+    new_centerpixelvalue = image.GetPixel(centerpt_new)
+    # print("value of new center point")
+    # print(new_centerpixelvalue)
+    # print("-----------------------------------")
+
+    # if (new_centerpixelvalue >= 2.0 * orig_centerpixelvalue):
+    #     centerpixelvalue = new_centerpixelvalue
+    #     contour_pt = centerpt_new
+    # else:
+    centerpixelvalue = orig_centerpixelvalue
+    contour_pt = centerpt
+
     pixel_value_list = []
     # image linear_profile
     for i in range(len(linear_profile)-1):
@@ -128,8 +149,14 @@ def getHalfMaxPoint(image,linear_profile,centerpt):
             contour_pt = linear_profile[i]
             break
 
-
     return contour_pt,pixel_value_list
+
+def getMaxfromLineProfile(linear_profile, image):
+    values = []
+    for i in range(len(linear_profile)):
+        values.append(image.GetPixel(linear_profile[i]))
+        indexOfMaxValue = np.argmax(np.array(values))
+    return linear_profile[indexOfMaxValue]
 
 def getMinFromLineProfile(linear_profile,image):
     values = []
