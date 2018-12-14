@@ -131,12 +131,12 @@ def getHalfMaxPoint(image,linear_profile,centerpt):
     # print(new_centerpixelvalue)
     # print("-----------------------------------")
 
-    # if (new_centerpixelvalue >= 2.0 * orig_centerpixelvalue):
-    #     centerpixelvalue = new_centerpixelvalue
-    #     contour_pt = centerpt_new
-    # else:
-    centerpixelvalue = orig_centerpixelvalue
-    contour_pt = centerpt
+    if (new_centerpixelvalue >= 2.0 * orig_centerpixelvalue):
+        centerpixelvalue = new_centerpixelvalue
+        contour_pt = centerpt_new
+    else:
+        centerpixelvalue = orig_centerpixelvalue
+        contour_pt = centerpt
 
     pixel_value_list = []
     # image linear_profile
