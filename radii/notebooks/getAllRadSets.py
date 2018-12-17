@@ -6,7 +6,7 @@
 
 import os
 import sys
-import cv2
+
 nb_dir = os.path.split(os.getcwd())[0]
 if (nb_dir not in sys.path):
     sys.path.append(nb_dir)
