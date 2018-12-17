@@ -12,5 +12,12 @@ outputFolderPath = str('../output/neuron1/hoc/')
 sampleFile = amDataPath + "500_GP_WR639_cell_1547_SP5C_checked_RE.hoc"
 
 points = tr.read.hocFile(sampleFile)
-print(points)
+distances = tr.getDistance.nodes(points)
+uniqEdge1 = max(distances)
+distances.remove(uniqEdge1)
+distances.remove(uniqEdge1)
+uniqEdge2 = max(distances)
+
+print(uniqEdge1, uniqEdge2)
+
 
