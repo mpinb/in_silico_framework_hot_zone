@@ -6,6 +6,8 @@ def nodes(points):
     for node_i in nodes:
         for node_j in nodes:
             distances.append(distance(node_i, node_j))
+
+    distances = list(dict.fromkeys(distances))
     return distances
 
 def findNodes(points):
@@ -14,10 +16,24 @@ def findNodes(points):
         if (point not in nodes):
             if (points.count(point) > 1):
                 nodes.append(point)
-    return nodes
+    return nodes  
 
 
 def distance(point_i, point_j):
     return np.sqrt((point_j[0]-point_i[0])**2 + (point_j[1]-point_i[1])**2 +
                    (point_j[2]-point_i[2])**2)
 
+
+def matchPoints(setA, setB, m):
+
+    distancesA = nodes(setA)
+    distancesB = nodes(setB)
+    matchedSet = []
+    for i in range(1, m):
+        edgeA = max(distancesA)
+        edgeB = max(distancesB)
+        matchedSet.append([edgeA, edgeB])
+        distancesA.remove(edgeA)
+        distancesB.remove(edgeB)
+
+    return  matchedSet
