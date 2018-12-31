@@ -14,12 +14,6 @@ sampleFile = amDataPath + "500_GP_WR639_cell_1547_SP5C_checked_RE.hoc"
 set1 = tr.read.hocFile(sampleFile)
 numberOfMatches = 4
 
-points = tr.matchPoints(set1, set1, numberOfMatches) 
-distances = tr.getDistance.nodes(points)
-uniqEdge1 = max(distances)
-distances.remove(uniqEdge1)
-distances.remove(uniqEdge1)
-uniqEdge2 = max(distances)
+matchedSet = tr.getDistance.matchEdges(set1, set1, numberOfMatches)
 
-print(uniqEdge1, uniqEdge2)
-
+print(matchedSet)

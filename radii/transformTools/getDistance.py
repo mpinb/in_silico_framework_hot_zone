@@ -1,14 +1,34 @@
 import numpy as np
 
+
 def nodes(points):
+
+    class Edge:
+        def __init__(self, distance, start, end):
+            self.distance = distance
+            self.start = start
+            self.end = end
+
+        def __str__(self):
+            return str(self.__class__) + ": " + str(self.__dict__)
+
+        def __repr__(self):
+            return str(self.__class__) + ": " + str(self.__dict__)
+
     distances = []
+    edges = []
     nodes = findNodes(points)
+
     for node_i in nodes:
         for node_j in nodes:
-            distances.append(distance(node_i, node_j))
+            tempDistance = distance(node_i, node_j)
+            if (tempDistance not in distances):
+                distances.append(tempDistance)
+                tempEdge = Edge(tempDistance, node_i, node_j)
+                edges.append(tempEdge)
 
-    distances = list(dict.fromkeys(distances))
-    return distances
+    return edges
+
 
 def findNodes(points):
     nodes = []
@@ -16,7 +36,7 @@ def findNodes(points):
         if (point not in nodes):
             if (points.count(point) > 1):
                 nodes.append(point)
-    return nodes  
+    return nodes
 
 
 def distance(point_i, point_j):
@@ -24,16 +44,25 @@ def distance(point_i, point_j):
                    (point_j[2]-point_i[2])**2)
 
 
-def matchPoints(setA, setB, m):
+def longestEdge(edges):
+    longestEdge = edges[0]
+    for edge in edges:
+        if (edge.distance > longestEdge.distance):
+            longestEdge = edge
+    return longestEdge
 
-    distancesA = nodes(setA)
-    distancesB = nodes(setB)
+
+def matchEdges(setA, setB, m):
+
+    edgesA = nodes(setA)
+    edgesB = nodes(setB)
     matchedSet = []
-    for i in range(1, m):
-        edgeA = max(distancesA)
-        edgeB = max(distancesB)
-        matchedSet.append([edgeA, edgeB])
-        distancesA.remove(edgeA)
-        distancesB.remove(edgeB)
 
-    return  matchedSet
+    for i in range(m):
+        edgeA = longestEdge(edgesA)
+        edgeB = longestEdge(edgesB)
+        matchedSet.append([edgeA, edgeB])
+        edgesA.remove(edgeA)
+        edgesB.remove(edgeB)
+
+    return matchedSet
