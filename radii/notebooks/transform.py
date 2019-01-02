@@ -5,15 +5,22 @@ if (nb_dir not in sys.path):
     sys.path.append(nb_dir)
 
 import transformTools as tr
+import radii as radi
 
-amDataPath = str('../data/neuron1/hoc/')
+hocDataPath = str('../data/neuron1/hoc/')
+amDataPath = str('../data/neuron1/am_final/')
 outputFolderPath = str('../output/neuron1/hoc/')
 
-sampleFile = amDataPath + "500_GP_WR639_cell_1547_SP5C_checked_RE.hoc"
+hocFile = hocDataPath + "500_GP_WR639_cell_1547_SP5C_checked_RE.hoc"
+amFile = amDataPath + 'final_spatial_graph_with_radius_data.am'
 
-set1 = tr.read.hocFile(sampleFile)
-numberOfMatches = 4
+set1 = tr.read.hocFile(hocFile)
 
-matchedSet = tr.getDistance.matchEdges(set1, set1, numberOfMatches)
+points = radi.spacialGraph.getSpatialGraphPoints(amFile)
+set2 = list(map(lambda x: map(lambda y: int(y/0.092), x), points))
+
+numberOfEdges = 2
+
+matchedSet = tr.getDistance.matchEdges(set1, set2, numberOfEdges)
 
 print(matchedSet)

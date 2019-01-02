@@ -52,6 +52,52 @@ def longestEdge(edges):
     return longestEdge
 
 
+def matchDirection(set):
+
+    centerOfSet1 = 0.0
+    centerOfSet2 = 0.0
+    length = len(set)
+
+    for i in range(length):
+        centerOfSet1 = centerOfSet1 + (np.array(set[i][0].start) +
+                                       np.array(set[i][0].end))/length
+
+        centerOfSet2 = centerOfSet2 + (np.array(set[i][1].start) +
+                                       np.array(set[i][1].end))/length
+
+    print("centerOfSet1 and Set2")
+    print(centerOfSet1)
+    print(centerOfSet1)
+
+    for i in range(length):
+
+        deltaSet1 = distance(centerOfSet1, set[i][0].start)\
+            - distance(centerOfSet1, set[i][0].end)
+
+        print("points from set 1")
+        print(set[i][0].start)
+        print(set[i][0].end)
+
+        deltaSet2 = distance(centerOfSet2, set[i][1].start)\
+            - distance(centerOfSet2, set[i][1].end)
+
+        print("points from set 2")
+        print(set[i][1].start)
+        print(set[i][1].end)
+
+        print("deltaSet1")
+        print(deltaSet1)
+        print("deltaSet2")
+        print(deltaSet2)
+        if (deltaSet1*deltaSet2 < 0):
+            print("check if we go inside the if")
+            temp = set[i][1].start
+            set[i][1].start = set[i][1].end
+            set[i][1].end = temp
+
+    return set
+
+
 def matchEdges(setA, setB, m):
 
     edgesA = nodes(setA)
@@ -65,4 +111,5 @@ def matchEdges(setA, setB, m):
         edgesA.remove(edgeA)
         edgesB.remove(edgeB)
 
+    matchedSet = matchDirection(matchedSet)
     return matchedSet
