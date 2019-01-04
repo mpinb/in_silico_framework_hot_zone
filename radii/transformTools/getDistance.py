@@ -36,6 +36,8 @@ def findNodes(points):
         if (point not in nodes):
             if (points.count(point) > 1):
                 nodes.append(point)
+
+    print(nodes)
     return nodes
 
 
@@ -59,6 +61,14 @@ def matchDirection(set):
     length = len(set)
 
     for i in range(length):
+        print(i)
+        print("edg1:")
+        print(set[i][0].start)
+        print(set[i][0].end)
+        print("edg2:")
+        print(set[i][1].start)
+        print(set[i][1].end)
+
         centerOfSet1 = centerOfSet1 + (np.array(set[i][0].start) +
                                        np.array(set[i][0].end))/length
 

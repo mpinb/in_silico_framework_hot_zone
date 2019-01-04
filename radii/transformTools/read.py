@@ -8,18 +8,20 @@ def hocFile(inputFilePath):
         points = []
 
         for lineNumber, line in enumerate(lines):
-            soma = line.rfind("create")
+            soma = line.rfind("soma")
             dend = line.rfind("dend")
             apical = line.rfind("apical")
             createCommand = line.rfind("create")
             pt3daddCommand = line.rfind("pt3dadd")
 
-            if (createCommand > -1 & (soma + dend + apical > -3)):
+            if not neuron_section and ((createCommand > -1)
+                                       and (soma + apical + dend > -3)):
                 neuron_section = True
-            elif (line == '\n'):
+
+            if neuron_section and (line == '\n'):
                 neuron_section = False
 
-            if (pt3daddCommand > -1 & neuron_section):
+            if (pt3daddCommand > -1) and neuron_section:
                 matches = re.findall('-?\d+\.\d+', line)
                 point = map(float, matches)
                 points.append(point)

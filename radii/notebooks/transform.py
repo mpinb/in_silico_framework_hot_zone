@@ -16,11 +16,16 @@ amFile = amDataPath + 'final_spatial_graph_with_radius_data.am'
 
 set1 = tr.read.hocFile(hocFile)
 
-points = radi.spacialGraph.getSpatialGraphPoints(amFile)
-set2 = list(map(lambda x: map(lambda y: int(y/0.092), x), points))
+hocFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/hocFile.txt'
+with open(hocFile, 'w') as f:
+    for item in set1:
+        f.write('{:f}\t{:f}\t{:f} \n'.format(item[0], item[1], item[2]))
+
+# points = radi.spacialGraph.getSpatialGraphPoints(amFile)
+# set2 = list(map(lambda x: map(lambda y: int(y/0.092), x), points))
 
 numberOfEdges = 2
 
-matchedSet = tr.getDistance.matchEdges(set1, set2, numberOfEdges)
+# matchedSet = tr.getDistance.matchEdges(set1, set2, numberOfEdges)
 
-print(matchedSet)
+# print(matchedSet)
