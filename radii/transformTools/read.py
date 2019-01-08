@@ -6,6 +6,9 @@ def hocFile(inputFilePath):
         lines = hocFile.readlines()
         neuron_section = False
         points = []
+        lastPoint = []
+
+        in_neuron_line_number = 0
 
         for lineNumber, line in enumerate(lines):
             soma = line.rfind("soma")
@@ -20,12 +23,18 @@ def hocFile(inputFilePath):
 
             if neuron_section and (line == '\n'):
                 neuron_section = False
+                in_neuron_line_number = 0
+                points.append(lastPoint)
+                lastPoint = []
 
             if (pt3daddCommand > -1) and neuron_section:
+                in_neuron_line_number = in_neuron_line_number + 1;
                 matches = re.findall('-?\d+\.\d+', line)
                 point = map(float, matches)
-                points.append(point)
+                if (in_neuron_line_number == 1):
+                    points.append(point)
+                else:
+                    lastPoint = point
 
     return points
-
 

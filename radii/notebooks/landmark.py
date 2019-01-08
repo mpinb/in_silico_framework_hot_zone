@@ -5,7 +5,8 @@ import re
 
 
 inputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/hocFile.txt'
-outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/hocFile'
+# outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/hocFile'
+outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/hocFile_reduced'
 
 points = []
 
