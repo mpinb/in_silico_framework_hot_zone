@@ -346,8 +346,8 @@ def start_run(mdb_setup, n, pop = None, client = None,
                                               eta=eta, mutpb=mutpb, cxpb=cxpb, 
                                               map_function = get_mymap(mdb_setup, mdb_run, client), 
                                               seed=n)
-    p, hof, log, hst = run(opt, 
+    pop = run(opt, 
                            max_ngen=max_ngen, 
                            cp_filename = mdb_run, 
                            pop = pop)
-    return p, hof, log, hst
+    return pop
