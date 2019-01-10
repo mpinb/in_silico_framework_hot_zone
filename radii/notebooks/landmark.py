@@ -4,9 +4,10 @@ import Interface as I
 import re
 
 
-inputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/hocFile.txt'
+inputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/conFile.txt'
 # outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/hocFile'
-outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/hocFile_reduced'
+# outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/hocFile_reduced'
+outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/conFile_transformed'
 
 points = []
 

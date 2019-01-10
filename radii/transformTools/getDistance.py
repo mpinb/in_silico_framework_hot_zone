@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.spatial import ConvexHull
 
 
 def nodes(points):
@@ -17,7 +18,8 @@ def nodes(points):
 
     distances = []
     edges = []
-    nodes = findNodes(points)
+    # nodes = findNodes(points)
+    nodes = findHullPoints(points)
 
     for node_i in nodes:
         for node_j in nodes:
@@ -30,7 +32,18 @@ def nodes(points):
     return edges
 
 
+def findHullPoints(points):
+    convexPoints = []
+    hull = ConvexHull(points)
+    convexVertices = hull.vertices
+    for verIndex in convexVertices:
+        convexPoints.append(points[verIndex])
+    print(len(convexPoints))
+    return convexPoints
+
+
 def findNodes(points):
+
     nodes = []
     for point in points:
         if (point not in nodes):
@@ -70,10 +83,13 @@ def matchDirection(set):
         print(set[i][1].end)
 
         centerOfSet1 = centerOfSet1 + (np.array(set[i][0].start) +
-                                       np.array(set[i][0].end))/length
+                                       np.array(set[i][0].end))
 
         centerOfSet2 = centerOfSet2 + (np.array(set[i][1].start) +
-                                       np.array(set[i][1].end))/length
+                                       np.array(set[i][1].end))
+
+    centerOfSet1 = centerOfSet1/length
+    centerOfSet2 = centerOfSet2/length
 
     print("centerOfSet1 and Set2")
     print(centerOfSet1)
@@ -84,21 +100,14 @@ def matchDirection(set):
         deltaSet1 = distance(centerOfSet1, set[i][0].start)\
             - distance(centerOfSet1, set[i][0].end)
 
-        print("points from set 1")
-        print(set[i][0].start)
-        print(set[i][0].end)
-
         deltaSet2 = distance(centerOfSet2, set[i][1].start)\
             - distance(centerOfSet2, set[i][1].end)
-
-        print("points from set 2")
-        print(set[i][1].start)
-        print(set[i][1].end)
 
         print("deltaSet1")
         print(deltaSet1)
         print("deltaSet2")
         print(deltaSet2)
+
         if (deltaSet1*deltaSet2 < 0):
             print("check if we go inside the if")
             temp = set[i][1].start
@@ -108,6 +117,14 @@ def matchDirection(set):
     return set
 
 
+def removeSameEdges(setEg, edg):
+    setEg.remove(edg)
+    print(setEg)
+    for el in setEg:
+        if (edg.start == el.start or edg.start == el.end or edg.end == el.start or edg.end == el.end):
+            setEg.remove(el)
+    return setEg
+
 def matchEdges(setA, setB, m):
 
     edgesA = nodes(setA)
@@ -115,11 +132,14 @@ def matchEdges(setA, setB, m):
     matchedSet = []
 
     for i in range(m):
-        edgeA = longestEdge(edgesA)
-        edgeB = longestEdge(edgesB)
-        matchedSet.append([edgeA, edgeB])
-        edgesA.remove(edgeA)
-        edgesB.remove(edgeB)
+        print(i)
+        edgA = longestEdge(edgesA)
+        edgB = longestEdge(edgesB)
+        print("inside the matchedSetEdge:")
+        print(edgA)
+        edgesA = removeSameEdges(edgesA, edgA)
+        edgesB = removeSameEdges(edgesB, edgB)
+        matchedSet.append([edgA, edgB])
 
     matchedSet = matchDirection(matchedSet)
     return matchedSet

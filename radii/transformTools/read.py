@@ -35,6 +35,5 @@ def hocFile(inputFilePath):
                     points.append(point)
                 else:
                     lastPoint = point
-
     return points
 
