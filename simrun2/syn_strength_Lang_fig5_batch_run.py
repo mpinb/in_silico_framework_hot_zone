@@ -8,10 +8,14 @@ import glob
 import numpy as np
 import matplotlib.pyplot as plt
 
-def create_summary(dirName, cellTypeNames):
+def create_summary(dirName, cellTypeName):
     fnames = []
+    cellTypeNames = [cellTypeName]
     scan_directory(dirName, fnames, cellTypeNames)
     print 'Analyzing %d files!' % len(fnames)
+    print 'cell type names', str (cellTypeNames)
+#    for f in  fnames:
+#        print f
     allData = {}
     for fname in fnames:
         splitName = fname.split('_')
@@ -30,8 +34,38 @@ def create_summary(dirName, cellTypeNames):
             allData[gAMPA][gNMDA]['T'] = list(fileData[1][:])
     
     tPSPStart = 100.0
+
+    # There has been a controvery what detection threasholds for the aPSP should be used. Roberts thesis, page 65f. mentions 0.1mV for intracortical cells and 0.15mV for thalamocortocal projections.
+    #
+    # However, in the code I found it to be the other way round. 
+    #
+    # As robert suggested, I've then been looking up the threashold in the papers, Robert is refering to in his thesis.
+    # This is, for the intracortical threashold Schnepel & Boucsein, Cerebral Cortex, 2015. However, in that paper, I find a threashold of 0.15 mV.
+    # Roberts thesis mentions a threashold of 0.15 mV for thalamocortical connections and refers to the Constantiople & Bruno, Science, 2013
+    # However, here the smallest reported aPSP is ~ 0.2mV. I mailed him and he pointed me to Bruno & Sakmann, Science, 2006, because here
+    # the similar method has been used, however with thalamocortical connections from VPM to L4. Here, as Robert said, I find a value
+    # of 0.165mV as lowest aPSP amplitude which matches the 0.15mV robert mentioned in his thesis.
+    #
+    # I therefore conclude that I can use a uniform threashold of 0.15mV
+    
+    #################################
+    # roberts code with the old threasholds
+    #################################
+
 #    detectionThreshold = 0.1 # VPM
-    detectionThreshold = 0.15 # intracortical
+#    detectionThreshold = 0.15 # intracortical
+
+    ##########################
+    # use uniform threashold now
+    ##############################
+
+    if  cellTypeName in ['L6cc','L2','L4py','L4ss','L4sp','L5st','L6ct','L34','L6ccinv','L5tt', 'VPM']:
+        detectionThreshold = 0.1 # VPM
+    else:
+        raise NotImplementedError()
+
+    print 'detectionThreshold: ', detectionThreshold
+
     summaryData = {}
     for gAMPAStr in allData.keys():
         summaryData[gAMPAStr] = {}
@@ -108,6 +142,7 @@ def scan_directory(path, fnames, cellTypeNames):
             scan_directory(fname, fnames, cellTypeNames)
         elif fname.endswith('vmax.csv'):
             for cellTypeName in cellTypeNames:
+                #if cellTypeName in [ff for f in fname.split('/') for ff in f.split('_')] and fname not in fnames:
                 if cellTypeName in fname and fname not in fnames:
                     fnames.append(fname)
         else:
