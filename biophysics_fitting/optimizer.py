@@ -356,7 +356,7 @@ def start_run(mdb_setup, n, pop = None, client = None,
                                               map_function = get_mymap(mdb_setup, mdb_run, client), 
                                               seed=n)
     if pop is not None:
-	    print("regenerating provided population with a number of objectives of {}".format(len_objectives))
+	    print("recreating provided population with a number of objectives of {}".format(len_objectives))
 	    pop = get_population_with_different_n_objectives(pop, len_objectives)
     pop = run(opt, 
                            max_ngen=max_ngen, 
