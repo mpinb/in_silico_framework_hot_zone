@@ -341,7 +341,7 @@ def start_run(mdb_setup, n, pop = None, client = None,
     parameter_df = mdb_setup['params']
     evaluator_fun = mdb_setup['get_Evaluator'](mdb_setup)
     evaluator = my_ibea_evaluator(parameter_df, len_objectives)
-    print('starting multi objective optimization with {} objectives and {} parameters'.format((len_objectives, len(parameter_df))))
+    print('starting multi objective optimization with {} objectives and {} parameters'.format(len_objectives, len(parameter_df)))
     mdb_run = setup_mdb_run(mdb_setup, n)
     opt = bpop.optimisations.DEAPOptimisation(evaluator, offspring_size=offspring_size,                                                                                                                                            
                                               eta=eta, mutpb=mutpb, cxpb=cxpb, 
