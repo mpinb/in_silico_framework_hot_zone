@@ -2,6 +2,7 @@ import bluepyopt as bpop
 import numpy
 import deap
 from bluepyopt.deapext import algorithms
+from bluepyopt.deapext.optimisations import WSListIndividual
 import Interface as I
 def robust_int(x):
     try: 
@@ -313,6 +314,14 @@ def run(self,
 
     return pop
 
+def get_population_with_different_n_objectives(old_pop, n_objectives):
+    '''function to adapt the number of objectives of individuals'''
+    pop = []
+    for p in old_pop:
+        ind = WSListIndividual(p, obj_size = n_objectives)
+        pop.append(ind)
+    return pop
+	
 def start_run(mdb_setup, n, pop = None, client = None, 
               offspring_size=1000, eta=10, mutpb=0.3, cxpb=0.7, max_ngen = 600):
     '''function to start an optimization run as specified in mdb_setup. The following attributes need
@@ -336,7 +345,6 @@ def start_run(mdb_setup, n, pop = None, client = None,
     # - mymap also creates a sub mdb in mdb_setup. The name of the sub_mdb is specified by n: It is str(n)
     #   mdb_setup[str(n)] then contains all the saved results
     mymap = get_mymap(mdb_setup, n, client)
-    
     len_objectives = len(mdb_setup['get_Combiner'](mdb_setup).setup.names)
     parameter_df = mdb_setup['params']
     evaluator_fun = mdb_setup['get_Evaluator'](mdb_setup)
@@ -347,6 +355,9 @@ def start_run(mdb_setup, n, pop = None, client = None,
                                               eta=eta, mutpb=mutpb, cxpb=cxpb, 
                                               map_function = get_mymap(mdb_setup, mdb_run, client), 
                                               seed=n)
+    if pop is not None:
+	    print("regenerating provided population with a number of objectives of {}".format(len_objectives))
+	    pop = get_population_with_different_n_objectives(pop, len_objectives)
     pop = run(opt, 
                            max_ngen=max_ngen, 
                            cp_filename = mdb_run, 
