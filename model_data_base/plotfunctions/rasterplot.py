@@ -25,7 +25,7 @@ def rasterplot2(st, ax = None, x_offset = 0, c = None,
             ax.plot(d[0], d[1], **plot_kwargs)
         y = y-1
 
-def rasterplot2_pdf_grouped(pdf, grouplabel, ax = None, xlim = None, x_offset = 0):
+def rasterplot2_pdf_grouped(pdf, grouplabel, ax = None, xlim = None, x_offset = 0, color = 'k'):
     if ax is None:
         fig = plt.figure(figsize = (7,4), dpi = 600)
         ax = fig.add_subplot(111)
@@ -37,11 +37,11 @@ def rasterplot2_pdf_grouped(pdf, grouplabel, ax = None, xlim = None, x_offset = 
         df = pdf[pdf[grouplabel] == label]
         offset += len(df)
         rasterplot2(df, ax = ax, y_offset=offset, x_offset = x_offset,\
-                          plot_kwargs = {'c': 'k', 'linewidth': 2, 'solid_capstyle': 'butt'})
+                          plot_kwargs = {'c': color, 'linewidth': 2, 'solid_capstyle': 'butt'})
         plt.axhline(offset, c = 'grey', linewidth = .1)
         yticks.append(offset - len(df) / 2.)
         ylabels.append(label)
-    ax.set_xlim(*xlim)
+    if xlim is not None: ax.set_xlim(*xlim)
     ax.set_ylim(0,offset + .2)
     ax.set_yticks(yticks)
     ax.set_yticklabels(ylabels)
@@ -53,7 +53,7 @@ def rasterplot2_pdf_grouped(pdf, grouplabel, ax = None, xlim = None, x_offset = 
     try:
         from IPython import display
         display.display(fig)
-    except ImportError:
+    except (ImportError, UnboundLocalError):
         pass
     plt.close()    
 
