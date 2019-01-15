@@ -2,7 +2,7 @@ import numpy as np
 from scipy.spatial import ConvexHull
 
 
-def nodes(points):
+def constructEdges(points):
 
     class Edge:
         def __init__(self, distance, start, end):
@@ -16,11 +16,12 @@ def nodes(points):
         def __repr__(self):
             return str(self.__class__) + ": " + str(self.__dict__)
 
+    nodes = points
+
     distances = []
     edges = []
-    # nodes = findNodes(points)
-    nodes = findHullPoints(points)
-
+    i = 0
+    j = 0
     for node_i in nodes:
         for node_j in nodes:
             tempDistance = distance(node_i, node_j)
@@ -28,18 +29,21 @@ def nodes(points):
                 distances.append(tempDistance)
                 tempEdge = Edge(tempDistance, node_i, node_j)
                 edges.append(tempEdge)
-
+            j = j + 1
+            print(i, j)
+        i = i + 1
+        j = 0
+        print(i)
     return edges
 
 
 def findHullPoints(points):
-    convexPoints = []
-    hull = ConvexHull(points)
-    convexVertices = hull.vertices
-    for verIndex in convexVertices:
-        convexPoints.append(points[verIndex])
-    print(len(convexPoints))
-    return convexPoints
+    conPoints = []
+    convexSet = ConvexHull(points)
+
+    for verIndex in convexSet.vertices:
+        conPoints.append(points[verIndex])
+    return conPoints
 
 
 def findNodes(points):
@@ -59,12 +63,26 @@ def distance(point_i, point_j):
                    (point_j[2]-point_i[2])**2)
 
 
-def longestEdge(edges):
-    longestEdge = edges[0]
-    for edge in edges:
-        if (edge.distance > longestEdge.distance):
-            longestEdge = edge
-    return longestEdge
+def longestOptimalEdges(edges):
+    sortedEdges = sorted(edges, key=lambda x: x.distance, reverse=True)
+
+    firstLongestEdge = sortedEdges[0]
+
+    span = getMean(sortedEdges)/10
+
+    isFound = False
+    index = 1
+    while (isFound is False):
+        secondLongestEdge = sortedEdges[index]
+        side1 = distance(secondLongestEdge.start, firstLongestEdge.start)
+        side2 = distance(secondLongestEdge.end, firstLongestEdge.start)
+        side3 = distance(secondLongestEdge.start, firstLongestEdge.end)
+        side4 = distance(secondLongestEdge.end, firstLongestEdge.end)
+        if (side1 > span and side2 > span and side3 > span and side4 > span):
+            isFound = True
+        index = index + 1
+
+    return [firstLongestEdge, secondLongestEdge]
 
 
 def matchDirection(set):
@@ -93,7 +111,7 @@ def matchDirection(set):
 
     print("centerOfSet1 and Set2")
     print(centerOfSet1)
-    print(centerOfSet1)
+    print(centerOfSet2)
 
     for i in range(length):
 
@@ -125,21 +143,37 @@ def removeSameEdges(setEg, edg):
             setEg.remove(el)
     return setEg
 
+
+def getMean(set):
+    mean = 0.
+    for edg in set:
+        mean = mean + edg.distance
+
+    mean = mean / len(set)
+    return mean
+
+
 def matchEdges(setA, setB, m):
 
-    edgesA = nodes(setA)
-    edgesB = nodes(setB)
+    hullPointsA = findHullPoints(setA)
+    hullPointsB = findHullPoints(setB)
+
+    edgesA = constructEdges(hullPointsA)
+    edgesB = constructEdges(hullPointsB)
+
     matchedSet = []
 
-    for i in range(m):
-        print(i)
-        edgA = longestEdge(edgesA)
-        edgB = longestEdge(edgesB)
-        print("inside the matchedSetEdge:")
-        print(edgA)
-        edgesA = removeSameEdges(edgesA, edgA)
-        edgesB = removeSameEdges(edgesB, edgB)
-        matchedSet.append([edgA, edgB])
+    longestEdgesA = longestOptimalEdges(edgesA)
+    longestEdgesB = longestOptimalEdges(edgesB)
+
+    A_firstLongestEdg = longestEdgesA[0]
+    A_secondLongestEdg = longestEdgesA[1]
+
+    B_firstLongestEdg = longestEdgesB[0]
+    B_secondLongestEdg = longestEdgesB[1]
+
+    matchedSet.append([A_firstLongestEdg, B_firstLongestEdg])
+    matchedSet.append([A_secondLongestEdg, B_secondLongestEdg])
 
     matchedSet = matchDirection(matchedSet)
     return matchedSet
