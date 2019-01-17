@@ -20,3 +20,17 @@ def read(file):
             row = []
 
     return matrix
+
+
+def getTransformation(src, dst):
+    x = np.transpose(np.matrix([src[0], src[1], src[2], src[3]]))
+    y = np.transpose(np.matrix([dst[0], dst[1], dst[2], dst[3]]))
+
+    # add ones on the bottom of x and y
+    x = np.vstack((x,[1,1,1,1]))
+    y = np.vstack((y,[1,1,1,1]))
+    # solve for A2
+    trMatrix = y * x.I
+
+    return trMatrix
+

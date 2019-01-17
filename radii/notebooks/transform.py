@@ -61,23 +61,48 @@ numberOfEdges = 2
 
 matchedSet = tr.getDistance.matchEdges(set1, set2, numberOfEdges)
 
-# print(matchedSet)
+src = []
+dst = []
+for point in matchedSet:
+    src.append(point[0].start)
+    dst.append(point[1].start)
 
-egHocFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/egHoc.txt'
-egAmFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/egAm.txt'
+    src.append(point[0].end)
+    dst.append(point[1].end)
 
-with open(egHocFile, 'w') as f:
-    for item in matchedSet:
-        startPoint = item[0].start
-        endPoint = item[0].end
-        f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
-        f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
+trMatrix2 = tr.exTrMatrix.getTransformation(dst, src)
+
+newPoints = []
+for point in set2:
+    point.append(1)
+    p = np.dot(trMatrix2, np.array(point))
+    newPoints.append(p)
+
+# print(list(newPoints[3]))
+# print(newPoints[1])
+# for it in newPoints:
+#     print(it.item((0,3)))
+
+# egHocFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/egHoc.txt'
+# egAmFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/egAm.txt'
+
+# with open(egHocFile, 'w') as f:
+#     for item in matchedSet:
+#         startPoint = item[0].start
+#         endPoint = item[0].end
+#         f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
+#         f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
 
 
-with open(egAmFile, 'w') as f:
-    for item in matchedSet:
-        startPoint = item[1].start
-        endPoint = item[1].end
-        f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
-        f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
+# with open(egAmFile, 'w') as f:
+#     for item in matchedSet:
+#         startPoint = item[1].start
+#         endPoint = item[1].end
+#         f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
+#         f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
+
+amTrFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/amTransformed.txt'
+with open(amTrFile, 'w') as f:
+    for it in newPoints:
+        f.write('{:f}\t{:f}\t{:f} \n'.format(it.item(0,0), it.item(0,1), it.item(0,2)))
 
