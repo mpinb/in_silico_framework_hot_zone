@@ -55,7 +55,7 @@ def rasterplot2_pdf_grouped(pdf, grouplabel, ax = None, xlim = None, x_offset = 
         display.display(fig)
     except (ImportError, UnboundLocalError):
         pass
-    plt.close()    
+    #plt.close()    
 
 @dask_to_pandas
 @return_figure_or_axis
