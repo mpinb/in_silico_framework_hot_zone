@@ -8,7 +8,7 @@ import glob
 import numpy as np
 import matplotlib.pyplot as plt
 
-def create_summary(dirName, cellTypeName, detectionThreshold = 0.1):
+def create_summary(dirName, cellTypeName, detectionThreshold = 0.1, makeplots = False):
     fnames = []
     cellTypeNames = [cellTypeName]
     scan_directory(dirName, fnames, cellTypeNames)
@@ -24,12 +24,14 @@ def create_summary(dirName, cellTypeName, detectionThreshold = 0.1):
         if gAMPA not in allData.keys():
             allData[gAMPA] = {}
         if allData[gAMPA].has_key(gNMDA):
-            fileData = create_plots(fname)
+            if makeplots: create_plots(fname)
+            fileData = load_data(fname)
             allData[gAMPA][gNMDA]['Vm'].extend(fileData[0])
             allData[gAMPA][gNMDA]['T'].extend(fileData[1])
         else:
             allData[gAMPA][gNMDA] = {}
-            fileData = create_plots(fname)
+            if makeplots: create_plots(fname)
+            fileData = load_data(fname)
             allData[gAMPA][gNMDA]['Vm'] = list(fileData[0][:])
             allData[gAMPA][gNMDA]['T'] = list(fileData[1][:])
     
@@ -81,7 +83,8 @@ def create_summary(dirName, cellTypeName, detectionThreshold = 0.1):
                     VmDetected.append(Vm[i])
                     tPSPDetected.append(tPSP[i])
                 else:
-                    print 'ignoring aPSP of {}, because it is smaller than the threashold of {}'.format(Vm[i], detectionThreshold)
+                    pass
+                    #print 'ignoring aPSP of {}, because it is smaller than the threashold of {}'.format(Vm[i], detectionThreshold)
             epspMean = np.mean(VmDetected)
             epspStd = np.std(VmDetected)
             epspMed = np.median(VmDetected)
@@ -151,9 +154,18 @@ def scan_directory(path, fnames, cellTypeNames):
                     fnames.append(fname)
         else:
             continue
-            
-def create_plots(fname):
+
+def load_data(fname):
     synID, somaV, somaT = np.loadtxt(fname, skiprows=1, unpack=True)
+    try: ## why?
+        return list(somaV), list(somaT)
+    except TypeError:
+        return [somaV], [somaT]
+
+def create_plots(fname):
+    somaV, somaT = load_data(fname)
+    somaV = np.array(somaV)
+    somaT = np.array(somaT)
     
     outName = fname[:-4]
     epspName = outName + '_epsp_hist.pdf'
@@ -166,25 +178,20 @@ def create_plots(fname):
     plt.hist(somaV,bins=np.arange(0,1,.05))
     plt.xlabel('uEPSP amplitude at soma [$mV$]')
     plt.ylabel('frequency')
-    titleStr = 'mean uEPSP = %.2f$\pm$%.2f $mV$; median = %.2f' % (epspMean,epspStd,epspMed)
+    titleStr = os.path.basename(fname) + ' mean uEPSP = %.2f$\pm$%.2f $mV$; median = %.2f' % (epspMean,epspStd,epspMed)
     plt.title(titleStr)
     plt.savefig(epspName, bbox_inches=0)
     
-    tMean = np.mean(somaT-10.0)
-    tStd = np.std(somaT-10.0)
-    tMed = np.median(somaT-10.0)
-    plt.figure()
-    plt.hist(somaT-10.0,bins=12)
-    plt.xlabel('time to uEPSP peak at soma [$ms$]')
-    plt.ylabel('frequency')
-    titleStr2 = 'mean dt = %.2f$\pm$%.2f $mV$; median = %.2f' % (tMean,tStd,tMed)
-    plt.title(titleStr2)
-    plt.savefig(dtName, bbox_inches=0)
-    
-    try:
-        return list(somaV), list(somaT)
-    except TypeError:
-        return [somaV], [somaT]
+    #tMean = np.mean(somaT-10.0)
+    #tStd = np.std(somaT-10.0)
+    #tMed = np.median(somaT-10.0)
+    #plt.figure()
+    #plt.hist(somaT-10.0,bins=12)
+    #plt.xlabel('time to uEPSP peak at soma [$ms$]')
+    #plt.ylabel('frequency')
+    #titleStr2 = fname + 'mean dt = %.2f$\pm$%.2f $mV$; median = %.2f' % (tMean,tStd,tMed)
+    #plt.title(titleStr2)
+    #plt.savefig(dtName, bbox_inches=0)
 
 if __name__ == '__main__':
     dirName = sys.argv[1]
