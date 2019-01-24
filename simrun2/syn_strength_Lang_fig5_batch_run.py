@@ -62,7 +62,8 @@ def create_summary(dirName, cellTypeName, detectionThreshold = 0.1):
     # use uniform threashold now
     ##############################
 
-    if  not cellTypeName in ['L6cc','L2','L4py','L4ss','L4sp','L5st','L6ct','L34','L6ccinv','L5tt', 'VPM']:
+    if  not cellTypeName in ['L2', 'L34', 'L4', 'L5st', 'L5tt', 'L6cc', 'L6ct', 'VPM']:
+        print cellTypeName
         raise NotImplementedError()
 
     print 'detectionThreshold: ', detectionThreshold
@@ -79,6 +80,8 @@ def create_summary(dirName, cellTypeName, detectionThreshold = 0.1):
                 if Vm[i] > detectionThreshold:
                     VmDetected.append(Vm[i])
                     tPSPDetected.append(tPSP[i])
+                else:
+                    print 'ignoring aPSP of {}, because it is smaller than the threashold of {}'.format(Vm[i], detectionThreshold)
             epspMean = np.mean(VmDetected)
             epspStd = np.std(VmDetected)
             epspMed = np.median(VmDetected)
@@ -152,31 +155,31 @@ def scan_directory(path, fnames, cellTypeNames):
 def create_plots(fname):
     synID, somaV, somaT = np.loadtxt(fname, skiprows=1, unpack=True)
     
-#    outName = fname[:-4]
-#    epspName = outName + '_epsp_hist.pdf'
-#    dtName = outName + '_dt_hist.pdf'
-#    
-#    epspMean = np.mean(somaV)
-#    epspStd = np.std(somaV)
-#    epspMed = np.median(somaV)
-#    plt.figure()
-#    plt.hist(somaV,bins=9)
-#    plt.xlabel('uEPSP amplitude at soma [$mV$]')
-#    plt.ylabel('frequency')
-#    titleStr = 'mean uEPSP = %.2f$\pm$%.2f $mV$; median = %.2f' % (epspMean,epspStd,epspMed)
-#    plt.title(titleStr)
-#    plt.savefig(epspName, bbox_inches=0)
-#    
-#    tMean = np.mean(somaT-10.0)
-#    tStd = np.std(somaT-10.0)
-#    tMed = np.median(somaT-10.0)
-#    plt.figure()
-#    plt.hist(somaT-10.0,bins=12)
-#    plt.xlabel('time to uEPSP peak at soma [$ms$]')
-#    plt.ylabel('frequency')
-#    titleStr2 = 'mean dt = %.2f$\pm$%.2f $mV$; median = %.2f' % (tMean,tStd,tMed)
-#    plt.title(titleStr2)
-#    plt.savefig(dtName, bbox_inches=0)
+    outName = fname[:-4]
+    epspName = outName + '_epsp_hist.pdf'
+    dtName = outName + '_dt_hist.pdf'
+    
+    epspMean = np.mean(somaV)
+    epspStd = np.std(somaV)
+    epspMed = np.median(somaV)
+    plt.figure()
+    plt.hist(somaV,bins=np.arange(0,1,.05))
+    plt.xlabel('uEPSP amplitude at soma [$mV$]')
+    plt.ylabel('frequency')
+    titleStr = 'mean uEPSP = %.2f$\pm$%.2f $mV$; median = %.2f' % (epspMean,epspStd,epspMed)
+    plt.title(titleStr)
+    plt.savefig(epspName, bbox_inches=0)
+    
+    tMean = np.mean(somaT-10.0)
+    tStd = np.std(somaT-10.0)
+    tMed = np.median(somaT-10.0)
+    plt.figure()
+    plt.hist(somaT-10.0,bins=12)
+    plt.xlabel('time to uEPSP peak at soma [$ms$]')
+    plt.ylabel('frequency')
+    titleStr2 = 'mean dt = %.2f$\pm$%.2f $mV$; median = %.2f' % (tMean,tStd,tMed)
+    plt.title(titleStr2)
+    plt.savefig(dtName, bbox_inches=0)
     
     try:
         return list(somaV), list(somaT)
