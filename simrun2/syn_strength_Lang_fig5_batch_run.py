@@ -8,7 +8,7 @@ import glob
 import numpy as np
 import matplotlib.pyplot as plt
 
-def create_summary(dirName, cellTypeName):
+def create_summary(dirName, cellTypeName, detectionThreshold = 0.1):
     fnames = []
     cellTypeNames = [cellTypeName]
     scan_directory(dirName, fnames, cellTypeNames)
@@ -47,6 +47,9 @@ def create_summary(dirName, cellTypeName):
     # of 0.165mV as lowest aPSP amplitude which matches the 0.15mV robert mentioned in his thesis.
     #
     # I therefore conclude that I can use a uniform threashold of 0.15mV
+    #
+    # Marcel suggests to use a threashold of 0.1 to have more data in the analysis.
+    # I also make a sensitivity analysis
     
     #################################
     # roberts code with the old threasholds
@@ -59,9 +62,7 @@ def create_summary(dirName, cellTypeName):
     # use uniform threashold now
     ##############################
 
-    if  cellTypeName in ['L6cc','L2','L4py','L4ss','L4sp','L5st','L6ct','L34','L6ccinv','L5tt', 'VPM']:
-        detectionThreshold = 0.1 # VPM
-    else:
+    if  not cellTypeName in ['L6cc','L2','L4py','L4ss','L4sp','L5st','L6ct','L34','L6ccinv','L5tt', 'VPM']:
         raise NotImplementedError()
 
     print 'detectionThreshold: ', detectionThreshold
