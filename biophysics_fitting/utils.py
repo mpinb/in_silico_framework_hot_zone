@@ -1,3 +1,9 @@
+'''
+Created on Nov 01, 2018
+
+@author: abast
+'''
+
 import numpy as np
 from functools import partial
 
@@ -43,7 +49,7 @@ def tVec(cell):
 def vmSoma(cell):
     return np.array(cell.soma.recVList[0])
 
-def vmApical(cell, dist = None):
+def _get_apical_sec_and_i_at_distance(cell, dist):
     sec, target_x = get_inner_section_at_distance(cell, dist)
     # roberts code to get closest segment
     mindx  = 1
@@ -52,5 +58,25 @@ def vmApical(cell, dist = None):
         if dx < mindx:
             mindx = dx
             minSeg = i
+    return sec, mindx, minSeg
+
+def vmApical(cell, dist = None):
+    sec, mindx, minSeg = _get_apical_sec_and_i_at_distance(cell, dist)
     return np.array(sec.recVList[minSeg])  
+
+def vmApical_position(cell, dist = None):
+    sec, mindx, i = _get_apical_sec_and_i_at_distance(cell, dist)
+    target_x = [seg for seg in sec][i].x
+    print target_x
+    
+    minDist = 1e9
+    closest_point_to_section = None
+    for j in range(len(sec.pts)):
+        pt = sec.pts[j]
+        ptx = sec.relPts[j]
+        dx = abs(ptx-target_x)
+        if dx < mindx:
+            closest_point_to_section = pt
+            mindx = dx     
+    return closest_point_to_section
 
