@@ -23,7 +23,7 @@ def exRadSets(path_to_am, path_to_tif, path_to_output_folder):
             points = readPoints(path_to_am + spacialGraphFile)
             spacialGraphIndicator = re.findall(r'[sS]\d+', spacialGraphFile)[0]
             outputFile = path_to_output_folder + spacialGraphIndicator + \
-                "_with_r" + ".am" 
+                "_with_r" + ".am"
             for imageFile in os.listdir(path_to_tif):
                 if imageFile.startswith(spacialGraphIndicator):
                     image = readImage(path_to_tif + imageFile)

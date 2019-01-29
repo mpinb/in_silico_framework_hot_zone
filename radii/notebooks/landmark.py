@@ -6,12 +6,12 @@ import re
 
 # inputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/conFile.txt'
 # inputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/egAm.txt'
-inputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/amTransformed.txt'
+inputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/amTransformed2.txt'
 # outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/hocFile'
 # outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/hocFile_reduced'
 # outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/conFile_transformed'
 # outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/egAm_landmark'
-outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/am_transformed_landmark'
+outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/am2_transformed_landmark'
 
 points = []
 
