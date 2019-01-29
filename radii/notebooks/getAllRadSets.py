@@ -15,11 +15,11 @@ if (nb_dir not in sys.path):
 # In[2]:
 
 
-amDataPath = str('../data/neuron1/am/')
-tifDataPath = str('../data/neuron1/tif/max_z_projections/')
-amOutputPath = str('../output/neuron1/am/')
-outputFolderPath = str('../output/neuron1/am/')
-tifOutputPath = str('../output/neuron1/tif/')
+amDataPath = str('../data/report/input/am/')
+tifDataPath = str('../data/report/input/tif/max_z_projections/')
+amOutputPath = str('../data/report/output/am/')
+outputFolderPath = str('../data/report/output/am/')
+tifOutputPath = str('../data/report/output/tif/')
 
 
 # In[3]:
