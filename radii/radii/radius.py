@@ -1,10 +1,12 @@
 import SimpleITK as sitk
 import numpy as np
+from scipy.stats import norm
+from scipy.optimize import curve_fit
 
 
 XY_RESOLUTION = 0.092
 Z_RESOLUTION = 0.5
-XY_SIZE = 4
+XY_SIZE = 20
 Z_SIZE = 4
 PROX_IM_SIZE = 20
 XY_SIZE_PIXELS = XY_SIZE / XY_RESOLUTION
@@ -117,31 +119,67 @@ def getHalfMaxRadiusAtThisPoint(im,pt):
     halfmaxvalue = im.GetPixel([pt[0],pt[1],0]) / 2.0
     return [halfmaxvalue,np.min(np.array(rad_list)),np.mean(np.array(rad_list)),fronthalfmaxptlist[min_ind],backhalfmaxptlist[min_ind], tmpim_rays,tmpim_minray,tmpim_mincontpts, frontvalueslist, backvalueslist, fronthalfmaxptlist, backhalfmaxptlist]
 
+def gaus(x,a,x0,sigma):
+    return a*exp(-(x-x0)**2/(2*sigma**2))
+
+def getHalfMaxPoint2(image,linear_profile,centerpt):
+    n = len(linear_profile)
+    x = np.array(linear_profile)
+
+    pixel_values = []
+    for i in range(len(linear_profile)):
+        pixelvalue = image.GetPixel(linear_profile[i])
+        pixel_values.append(pixelvalue)
+
+    y = np.array(pixel_values)
+
+    mean = sum(x*y)/n
+    sigma = sum(y*(x-mean)**2)/n
+
+
+    popt,pcov = curve_fit(gaus,x,y,p0=[1,mean,sigma])
+    print(popt)
+    # parameters = norm.fit(pixel_values)
+    # for i in raneg(len(linear_profile)):
+    #     if (pixel_values[i])
+    contour_pt = 10
+    pixel_value_list = pixel_values
+    return contour_pt,pixel_value_list
+
+
 def getHalfMaxPoint(image,linear_profile,centerpt):
-    # centerpixelvalue = image.GetPixel([centerpt[0],centerpt[1],0])
+    centerpixelvalue = image.GetPixel([centerpt[0],centerpt[1],0])
 
     # print("-----------------------------------")
-    orig_centerpixelvalue = image.GetPixel(centerpt)
+    # orig_centerpixelvalue = image.GetPixel(centerpt)
     # print("value of original center point")
     # print(orig_centerpixelvalue)
 
-    centerpt_new = getMaxfromLineProfile(linear_profile, image)
-    new_centerpixelvalue = image.GetPixel(centerpt_new)
+    # centerpt_new = getMaxfromLineProfile(linear_profile, image)
+    # new_centerpixelvalue = image.GetPixel(centerpt_new)
     # print("value of new center point")
     # print(new_centerpixelvalue)
     # print("-----------------------------------")
 
-    if (new_centerpixelvalue >= 2.0 * orig_centerpixelvalue):
-        centerpixelvalue = new_centerpixelvalue
-        contour_pt = centerpt_new
-    else:
-        centerpixelvalue = orig_centerpixelvalue
-        contour_pt = centerpt
+    # if (new_centerpixelvalue >= 10.0 * orig_centerpixelvalue):
+    #     centerpixelvalue = new_centerpixelvalue
+    #     contour_pt = centerpt_new
+    # else:
+    #     centerpixelvalue = orig_centerpixelvalue
+    #     contour_pt = centerpt
+
+
+    # uncomment the below two lines to get the old result from the radii
+    # centerpixelvalue = orig_centerpixelvalue
+    # contour_pt = centerpt
 
     pixel_value_list = []
     # image linear_profile
+    contour_pt = centerpt
+    if centerpixelvalue < 50:
+        return centerpt, pixel_value_list
+
     for i in range(len(linear_profile)-1):
-        contour_pt = linear_profile[i]
         pixelvalue1 = image.GetPixel(linear_profile[i])
         pixelvalue2 = image.GetPixel(linear_profile[i+1])
         pixel_value_list.append(pixelvalue1)
@@ -149,7 +187,7 @@ def getHalfMaxPoint(image,linear_profile,centerpt):
             contour_pt = linear_profile[i]
             break
 
-    return contour_pt,pixel_value_list
+    return contour_pt, pixel_value_list
 
 def getMaxfromLineProfile(linear_profile, image):
     values = []
