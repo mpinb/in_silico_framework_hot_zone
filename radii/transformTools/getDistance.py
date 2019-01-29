@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from scipy.spatial import ConvexHull
 
 
@@ -30,10 +31,8 @@ def constructEdges(points):
                 tempEdge = Edge(tempDistance, node_i, node_j)
                 edges.append(tempEdge)
             j = j + 1
-            print(i, j)
         i = i + 1
         j = 0
-        print(i)
     return edges
 
 
@@ -54,14 +53,12 @@ def findNodes(points):
             if (points.count(point) > 1):
                 nodes.append(point)
 
-    print(nodes)
     return nodes
 
-
 def distance(point_i, point_j):
-    return np.sqrt((point_j[0]-point_i[0])**2 + (point_j[1]-point_i[1])**2 +
+    dist = math.sqrt((point_j[0]-point_i[0])**2 + (point_j[1]-point_i[1])**2 +
                    (point_j[2]-point_i[2])**2)
-
+    return dist
 
 def longestOptimalEdges(edges):
     sortedEdges = sorted(edges, key=lambda x: x.distance, reverse=True)
@@ -92,13 +89,6 @@ def matchDirection(set):
     length = len(set)
 
     for i in range(length):
-        print(i)
-        print("edg1:")
-        print(set[i][0].start)
-        print(set[i][0].end)
-        print("edg2:")
-        print(set[i][1].start)
-        print(set[i][1].end)
 
         centerOfSet1 = centerOfSet1 + (np.array(set[i][0].start) +
                                        np.array(set[i][0].end))
@@ -109,10 +99,6 @@ def matchDirection(set):
     centerOfSet1 = centerOfSet1/length
     centerOfSet2 = centerOfSet2/length
 
-    print("centerOfSet1 and Set2")
-    print(centerOfSet1)
-    print(centerOfSet2)
-
     for i in range(length):
 
         deltaSet1 = distance(centerOfSet1, set[i][0].start)\
@@ -121,13 +107,7 @@ def matchDirection(set):
         deltaSet2 = distance(centerOfSet2, set[i][1].start)\
             - distance(centerOfSet2, set[i][1].end)
 
-        print("deltaSet1")
-        print(deltaSet1)
-        print("deltaSet2")
-        print(deltaSet2)
-
         if (deltaSet1*deltaSet2 < 0):
-            print("check if we go inside the if")
             temp = set[i][1].start
             set[i][1].start = set[i][1].end
             set[i][1].end = temp
@@ -137,7 +117,6 @@ def matchDirection(set):
 
 def removeSameEdges(setEg, edg):
     setEg.remove(edg)
-    print(setEg)
     for el in setEg:
         if (edg.start == el.start or edg.start == el.end or edg.end == el.start or edg.end == el.end):
             setEg.remove(el)
