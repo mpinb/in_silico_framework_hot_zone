@@ -17,10 +17,11 @@ from .parameters import set_fixed_params, param_to_kwargs
 
 from .simulator import Simulator, run_fun
 from .L5tt_parameter_setup import get_L5tt_template, set_morphology, set_ephys, set_hot_zone
+# moved to bottom to resolve circular import
+# from .hay_evaluation import hay_evaluate_BAC, hay_evaluate_bAP, hay_evaluate_StepOne, hay_evaluate_StepTwo, hay_evaluate_StepThree
 
 from .evaluator import Evaluator
 from toolz.dicttoolz import merge
-from .hay_evaluation import hay_evaluate_BAC, hay_evaluate_bAP, hay_evaluate_StepOne, hay_evaluate_StepTwo, hay_evaluate_StepThree
 
 from .combiner import Combiner
 
@@ -275,3 +276,5 @@ def get_feasible_model_objectives():
     pdf.set_index('objective', drop = True, inplace = True)
     pdf['y'] = s
     return pdf
+
+from .hay_evaluation import hay_evaluate_BAC, hay_evaluate_bAP, hay_evaluate_StepOne, hay_evaluate_StepTwo, hay_evaluate_StepThree

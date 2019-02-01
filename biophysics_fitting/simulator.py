@@ -65,10 +65,8 @@ class Simulator_Setup:
     def get_stim_response_measure_fun(self, stim):
         l = [x for x in self.stim_response_measure_funs if x[0].split('.')[0] == stim]
         return l[0]     
-        
-    def get(self, params):
-        '''this is the main interface, as it initializes a cell corresponding to
-        the configuration'''
+    
+    def get_cell_params(self, params):
         for name, fun in self.params_modify_funs:
             params = fun(params) 
         cell_param = self.cell_param_generator()
@@ -77,7 +75,13 @@ class Simulator_Setup:
             #print len(params), len(param_selector(params, name))            
             cell_param = fun(cell_param, params = param_selector(params, name))
             self._check_not_none(cell_param, 'cell_param', name)
-        cell = self.cell_generator(cell_param)
+        return cell_param      
+        
+    def get(self, params):
+        '''this is the main interface, as it initializes a cell corresponding to
+        the configuration'''
+        cell_params = self.get_cell_params(params)
+        cell = self.cell_generator(cell_params)
         for name, fun in self.cell_modify_funs:
             print name
             #print len(param_selector(params, name))

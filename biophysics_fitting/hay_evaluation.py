@@ -10,7 +10,8 @@ import pandas as pd
 import neuron
 h = neuron.h
 
-from .hay_specification import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
+# moved to the bottom to resolve circular import
+# from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
 
 neuron_basedir = os.path.join(os.path.dirname(__file__), 'MOEA_EH_minimal')
 
@@ -215,3 +216,4 @@ def hay_evaluate_StepThree(tVec = None, vList = None):
     return hay_evaluate(cur_stim, tVec, vList)
 
 
+from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
