@@ -272,8 +272,9 @@ def cell_param_to_mdbpath(neuron):
     rec_sites = [create_mdb_path_print(p) for p in neuron['sim']['recordingSites']]
     neuron['sim']['recordingSites'] = [r[0] for r in rec_sites]
     flag = flag and all([r[1] for r in rec_sites])
-    neuron['NMODL_mechanisms']['channels'], flag =  create_mdb_path_print(neuron['NMODL_mechanisms']['channels'])
-    flag = flag and flag_
+    if 'channels' in neuron['NMODL_mechanisms']:
+        neuron['NMODL_mechanisms']['channels'], flag =  create_mdb_path_print(neuron['NMODL_mechanisms']['channels'])
+        flag = flag and flag_
     return flag
 
 def network_param_to_mdbpath(network):
