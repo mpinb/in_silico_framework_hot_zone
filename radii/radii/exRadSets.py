@@ -16,7 +16,8 @@ import re
 import radii as radi
 import SimpleITK as sitk
 
-
+# extraxt radii sets of bunch of files from the folder of "path_to_am"
+# and writ them to and output folder
 def exRadSets(path_to_am, path_to_tif, path_to_output_folder):
     for spacialGraphFile in os.listdir(path_to_am):
         if spacialGraphFile.endswith(".am"):
@@ -34,19 +35,20 @@ def exRadSets(path_to_am, path_to_tif, path_to_output_folder):
                     break
 
 
+# reading image file
 def readImage(imageFile):
     imageFileReader = sitk.ImageFileReader()
     imageFileReader.SetFileName(imageFile)
     image = imageFileReader.Execute()
     return image
 
-
+# return points of a am file, by using the function "getSpatialGraphPoints"
 def readPoints(dataFile):
     points = radi.spacialGraph.getSpatialGraphPoints(dataFile)
     points = list(map(lambda x: map(lambda y: int(y/0.092), x), points))
     return points
 
-
+# This function will write the result of the extracted radii to final am file
 def writeResult(inputDataFile, outputDataFile, result):
     radii = result[1]
     radii = [r*0.092 for r in radii]
