@@ -1,5 +1,7 @@
 import re
 
+
+# Reading all neuronal points of a hoc file
 def hocFileComplete(inputFilePath):
     with open(inputFilePath, 'r') as hocFile:
         lines = hocFile.readlines()
@@ -27,6 +29,8 @@ def hocFileComplete(inputFilePath):
     return points
 
 
+# Reading hoc file with only two points (top and bottom) from each section of
+# neuronal points of a hoc file
 def hocFileReduced(inputFilePath):
     with open(inputFilePath, 'r') as hocFile:
         lines = hocFile.readlines()
@@ -63,6 +67,9 @@ def hocFileReduced(inputFilePath):
                     lastPoint = point
     return points
 
+
+# Reading all points of am file with also their radius form the
+# thickness part of the file
 def amFile(inputFilePath):
     with open(inputFilePath, 'r') as amFile:
         lines = amFile.readlines()
@@ -103,12 +110,6 @@ def amFile(inputFilePath):
 
             if in_thickness_section and (line == '\n'):
                 in_thickness_section = False
-
-        print(points[0])
-        print(rads[0])
-
-        print(points[64458])
-        print(rads[64458])
 
         print(len(points))
         print(len(rads))
