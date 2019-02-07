@@ -5,64 +5,75 @@ import time
 
 from scipy.spatial import ConvexHull
 
+# Bellow we check if the current path of the current file is in the system
+# path, and if it is not we add it, so we can easily import the written
+# modules from the other folders.
 nb_dir = os.path.split(os.getcwd())[0]
 if (nb_dir not in sys.path):
     sys.path.append(nb_dir)
 
+# importing modules from folders:
+# radii/radii/tranfromTools
+# radii/radii/radii
 import transformTools as tr
 import radii as radi
 
+# Creating varianles for the address of hoc, am_final, and hoc-output Folders
 hocDataPath = str('../data/neuron1/hoc/')
 amDataPath = str('../data/neuron1/am_final/')
 outputFolderPath = str('../output/neuron1/hoc/')
 
+# Adding the name of files to their folder path and assing them to variables
 hocFile = hocDataPath + "500_GP_WR639_cell_1547_SP5C_checked_RE.hoc"
 hocFileOutput = outputFolderPath + "hocFileWithRad.hoc"
 amFile = amDataPath + 'algined_slices_only_dendrite.am'
 
-# extract set1 points
-
-# remove radius from the set
-
+# extract set1 points:
+# Read the hoc points (reduced), then removing their radius from them
+# ( we need it to have only 3d data points to use an external package)
 pointsWithRadius = tr.read.hocFileReduced(hocFile)
 set1 = []
 for el in pointsWithRadius:
     set1.append([el[0], el[1], el[2]])
-# extract set2 points
+
+
+# extract set2 points:
+# read the spacial Graph points
 points = radi.spacialGraph.getSpatialGraphPoints(amFile)
 set2 = points
 
-# trMatrix = tr.exTrMatrix.read(amFile)
 
+# -- Bellow (commented) there is a test for looking at the convecHall points in a landmark file
+# trMatrix = tr.exTrMatrix.read(amFile)
 # conPoints = []
 # convexSet2 = ConvexHull(points)
-
 # for verIndex in convexSet2.vertices:
 #     conPoints.append(points[verIndex])
-
-
 # calculate transformation matrix:
-
 # set2 = []
 # for point in points:
 #     point.append(1)
 #     p = np.dot(np.array(point), trMatrix)
 #     set2.append(p)
-
-
 # conFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/conFile.txt'
 # with open(conFile, 'w') as f:
 #     for item in set2:
 #         f.write('{:f}\t{:f}\t{:f} \n'.format(item[0], item[1], item[2]))
 
 
-# find longest matched edges from set1 points and set2 points
+# In this section we are finding the longest matched edges from set1 and set2:
 
+# Choosing the number of edges that we need to find their corresponds
+# from set2 to set1, for extrating teansformation matrix we need 4 points,
+# so we need two edges.
 numberOfEdges = 2
 
+# Getting the mached set of edges
 print("in the matchSet process")
 matchedSet = tr.getDistance.matchEdges(set1, set2, numberOfEdges)
 
+# Here after finding the matched set, we sperate the source points
+# and destination points.
 src = []
 dst = []
 for point in matchedSet:
@@ -72,13 +83,19 @@ for point in matchedSet:
     src.append(point[0].end)
     dst.append(point[1].end)
 
+# Calculate the transformation matrix based on 4 source
+# points and 4 destination points.
 print("In the calculations of the transofrmation matrix")
 trMatrix2 = tr.exTrMatrix.getTransformation(dst, src)
 
 
+# In the below we read the points from amFile (actual set2 with their radius)
+# again but this time also we read their correspoinding radii
 amPoints4D = tr.read.amFile(amFile)
 
 
+# Now after getting the initial am points with their radius we will apply the
+# transformation matrix on them
 print("Applying the transofrmation matrix to the initial am points")
 trAmPoints4D = []
 for point4D in amPoints4D:
@@ -88,6 +105,10 @@ for point4D in amPoints4D:
     p_listed = p.tolist()[0]
     trAmPoints4D.append([p_listed[0], p_listed[1], p_listed[2], point4D[3]])
 
+
+# it is small test to see if the amFileReader is working well enough or not
+# for this we check some sample points from the both am readers function
+# and compare them
 print(amPoints4D[0])
 print(trAmPoints4D[0])
 
@@ -103,27 +124,17 @@ print(trAmPoints4D[11])
 print(amPoints4D[56])
 print(trAmPoints4D[56])
 
-# amPoints = []
-# for point in set2:
-#     point.append(1)
-#     p = np.dot(trMatrix2, np.array(point))
-#     amPoints.append(p)
-
-# transformedPoints = []
-# for it in amPoints:
-#     transformedPoints.append([it.item(0,0), it.item(0,1), it.item(0,2)])
-
-
-# Tested
+# In the below we read the hoc file again this time completely,
+# i.e. without just taking two points from each sections
 print("reading hoc file completely")
 hocPointsComplete = tr.read.hocFileComplete(hocFile)
 hocSet = []
 for el in hocPointsComplete:
     hocSet.append([el[0], el[1], el[2]])
 
-print("in the process of converting list of numpy array to list of lists")
-# trAmPoints4DList = [p.tolist()[0] for p in trAmPoints4D]
 trAmPoints4DList = trAmPoints4D
+# a small test to see if the previous transofrmation on trAmPoints4DList
+# does not change the 4th coloumn which contains the radii
 print(trAmPoints4DList[0])
 print(amPoints4D[0])
 
@@ -145,10 +156,9 @@ print(amPoints4D[17892])
 print(trAmPoints4DList[1293])
 print(amPoints4D[1293])
 
-
-
+# In the below we are trying to find the closest points between transformed
+# am points and hoc points
 print("In the process of finding pairs in between hoc file and the transoformed points to add radi to hocpoint")
-
 startTime = time.time()
 pairs = radi.addRadii.findPairs(trAmPoints4DList, hocSet)
 endTime = time.time()
@@ -178,8 +188,7 @@ initialAmPointsWithRad2 = radi.spacialGraph.getSpatialGraphPoints(amFile)
 
 
 
-# Little Test of the function above
-
+# Little Test of the reading functions again
 print(initialAmPointsWithRad[0])
 print(initialAmPointsWithRad2[0])
 print("---------")
@@ -196,10 +205,12 @@ startTime = time.time()
 hocWithRad = []
 newHPoint = []
 
+
+# In the below codes, we are adding radii to corresponding hoc point,
+# based on the pairs that we found from the above codes
 print("adding radii to corresponding hoc point, based on the pairs")
 
 outTestFolder = str('../output/neuron1/test/')
-
 pairesFile = "pairs.txt"
 trAmPoints4DFile = "trAmPoints4D.txt"
 amPoints4DFile = "amPoints4D.txt"
@@ -227,19 +238,11 @@ for pair in pairs:
     hocWithRad.append(newHPoint)
     newHPoint = []
 
-# for p in pairs:
-#     for idx, it in enumerate(transformedPoints):
-#         hocPointNoRad = p[0]
-#         if it[0]==p[1][0] and it[1]==p[1][1] and it[2]==p[1][2]:
-#             hocPointNoRad.append(initialAmPointsWithRad[idx][3][0])
-#             hocWithRad.append(hocPointNoRad)
-#             continue
 endTime = time.time()
 print(endTime - startTime)
 
 
-# Little Test of the function above
-
+# test between to different hoc file arrays derived from above functions
 print(hocSet[0])
 print(hocWithRad[0])
 print("---------")
@@ -256,13 +259,14 @@ print(hocSet[13100])
 print(hocWithRad[13100])
 print("---------")
 
+# In the below we are writing the final hoc file with its radii
 print("writing the final result in the output hocFile")
-
 startTime = time.time()
 tr.write.hocFile(hocFile, hocFileOutput, hocWithRad)
 endTime = time.time()
 print(endTime - startTime)
 
+# These are sample code to write landmark files from different sets
 # print(list(newPoints[3]))
 # print(newPoints[1])
 # for it in newPoints:
@@ -287,8 +291,8 @@ print(endTime - startTime)
 #         f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
 
 
-amTrFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/amTransformed2.txt'
-with open(amTrFile, 'w') as f:
-    for it in trAmPoints4DList:
-        f.write('{:f}\t{:f}\t{:f} \n'.format(it[0], it[1], it[2]))
+# amTrFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/amTransformed2.txt'
+# with open(amTrFile, 'w') as f:
+#     for it in trAmPoints4DList:
+#         f.write('{:f}\t{:f}\t{:f} \n'.format(it[0], it[1], it[2]))
 
