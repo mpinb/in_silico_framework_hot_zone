@@ -66,9 +66,13 @@ class Simulator_Setup:
         l = [x for x in self.stim_response_measure_funs if x[0].split('.')[0] == stim]
         return l[0]     
     
-    def get_cell_params(self, params):
+    def get_params(self, params):
         for name, fun in self.params_modify_funs:
-            params = fun(params) 
+            params = fun(params)
+        return params			
+
+    def get_cell_params(self, params):
+        params = self.get_params(params)
         cell_param = self.cell_param_generator()
         for name, fun in self.cell_param_modify_funs:
             print name
@@ -80,10 +84,10 @@ class Simulator_Setup:
     def get(self, params):
         '''this is the main interface, as it initializes a cell corresponding to
         the configuration'''
+        params = self.get_params(params)
         cell_params = self.get_cell_params(params)
         cell = self.cell_generator(cell_params)
         for name, fun in self.cell_modify_funs:
-            print name
             #print len(param_selector(params, name))
             cell = fun(cell, params = param_selector(params, name))
             self._check_not_none(cell, 'cell', name)
@@ -101,11 +105,11 @@ class Simulator:
         cell, params = self.setup.get(params) 
         # set up stimulus
         name, fun = self.setup.get_stim_setup_fun_by_stim(stim)
-        print name, param_selector(params, name)
+        #print name, param_selector(params, name)
         fun(cell, params = param_selector(params, name))
         # run simulation
         name, fun = self.setup.get_stim_run_fun_by_stim(stim)
-        print name,param_selector(params, name)
+        #print name,param_selector(params, name)
         cell = fun(cell, params = param_selector(params, name))
         print "simulating {} took {} seconds".format(stim, time.time()-t)
         return cell, params
@@ -118,7 +122,8 @@ class Simulator:
             cell, params = self.get_simulated_cell(params, stim)
             # extract result
             name, fun = self.setup.get_stim_response_measure_fun(stim)
-            print name, param_selector(params, name)
+            #print name, param_selector(params, name)
+            #print params
             result = fun(cell, params = param_selector(params, name))
             del cell            
             out.update({name: result})
