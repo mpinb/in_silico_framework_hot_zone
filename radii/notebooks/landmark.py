@@ -1,4 +1,7 @@
 # Please run this file in after using source_isf
+# With the help of  I.scp.write_landmark_file,
+# This piece of code will write a text file to
+# a landmark file
 
 import Interface as I
 import re
@@ -15,6 +18,8 @@ outputFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/am2_transfor
 
 points = []
 
+# opening and reading txt file and set their points to a list of
+# arrays of points
 with open(inputFile, 'r') as hocFile:
     lines = hocFile.readlines()
     for line in lines:
@@ -22,4 +27,5 @@ with open(inputFile, 'r') as hocFile:
         point = map(float, matches)
         points.append(point)
 
+# Writing landmark file
 I.scp.write_landmark_file(outputFile, points)

@@ -1,5 +1,9 @@
 import re
 
+
+# Writing points with their radius to a specific hoc file.
+# basically it do this: reading a file without the
+# radii of neuronal points and add the radius to them in another hoc file
 def hocFile(inputFilePath, outputFilePath, hocPointsWithRad):
     with open(inputFilePath, 'r') as readHocFile:
         with open(outputFilePath, 'w') as writeHocFile:

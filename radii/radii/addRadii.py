@@ -2,19 +2,25 @@
 import transformTools as tr
 
 
+# This function will find closest point between all points in the
+# hocPoints to a dual point form trPoints
 def findNextPair(trPoints, hocPoint):
     dual = trPoints[0]
-    minDistance = tr.getDistance.distance2(dual[:4], hocPoint)
+    minDistance = tr.getDistance.distance(dual[:4], hocPoint)
     for newPoint in trPoints:
         # print("please Point:", newPoint)
-        dist = tr.getDistance.distance2(newPoint[:4], hocPoint)
+        dist = tr.getDistance.distance(newPoint[:4], hocPoint)
         # print("2nd please Point:", newPoint)
         if dist <= minDistance:
             minDistance = dist
             dual = newPoint
     return dual
 
-
+# Since it is hard and time consuming to comput the function "findNextPair"
+# for all points so we need somehow reduce the amount of points that we are
+# considering to feed the "findNextPair" function. The below function will
+# help this by considering a cubic space around the concerning points
+# and only taking into account those points that are inside of the cubic
 def filterPoints(transformedPoints, hocPoints, observerIndex):
     trP = transformedPoints
     preIdx = observerIndex - 1
@@ -72,6 +78,12 @@ def filterPoints(transformedPoints, hocPoints, observerIndex):
     return subSet
 
 
+# In the function below we manage the whole process of finding pair points,
+# First it will choose one point from transformedPoints set and
+# will find its closest candidate from the hoc points set and,
+# then it will repeat this task for all points in the
+# set transformedPoints by applying two functions of
+# filterPoints and findNextPair
 def findPairs(transformedPoints, hocPoints):
     hocFirstPoint = hocPoints[0]
     dualPair = findNextPair(transformedPoints, hocFirstPoint)
@@ -81,10 +93,8 @@ def findPairs(transformedPoints, hocPoints):
     for hIdx, hPoint in enumerate(hocPoints[1:]):
         subTransformedPoints = filterPoints(transformedPoints, hocPoints, hIdx)
         if (subTransformedPoints != []):
-            # print("in the subTransformedPoints:", "processed points:", hIdx, "length of subSet", len(subTransformedPoints) )
             dualPair = findNextPair(subTransformedPoints, hPoint)
             pairs.append([dualPair, hPoint])
-            # transformedPoints = [x for x in transformedPoints if x not in subTransformedPoints]
         else:
             dualPair = findNextPair(transformedPoints, hPoint)
             pairs.append([dualPair, hPoint])
