@@ -175,7 +175,8 @@ def eaAlphaMuPlusLambdaCheckpoint(
         halloffame=None,
         cp_frequency=1,
         cp_filename=None,
-        continue_cp=False):
+        continue_cp=False,
+		mdb = None):
     r"""This is the :math:`(~\alpha,\mu~,~\lambda)` evolutionary algorithm
     Args:
         population(list of deap Individuals)
@@ -229,6 +230,10 @@ def eaAlphaMuPlusLambdaCheckpoint(
 
     # Begin the generational process
     for gen in range(start_gen + 1, ngen + 1):
+
+        if mdb is not None:
+            I.utils.wait_until_key_removed(mdb, 'pause')
+
         offspring = _get_offspring(parents, toolbox, cxpb, mutpb)
 
         population = parents + offspring
@@ -272,7 +277,8 @@ def run(self,
             continue_cp=False,
             cp_filename=None,
             cp_frequency=1,
-            pop = None):
+            pop = None,
+            mdb = None):
     
     """Copy pasted from the BluePyOpt package, however extended, such that a start population can be defined.
     Note: the population needs to be in a special format. Use methods in biophysics_fitting.population 
@@ -310,7 +316,8 @@ def run(self,
         halloffame= None, # self.hof,
         cp_frequency=cp_frequency,
         continue_cp=continue_cp,
-        cp_filename=cp_filename)
+        cp_filename=cp_filename,
+        mdb = mdb)
 
     return pop
 
@@ -361,5 +368,5 @@ def start_run(mdb_setup, n, pop = None, client = None,
     pop = run(opt, 
                            max_ngen=max_ngen, 
                            cp_filename = mdb_run, 
-                           pop = pop)
+                           pop = pop, mdb = mdb_setup)
     return pop

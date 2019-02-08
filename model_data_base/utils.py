@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, time
 from six import StringIO
 from cPickle import PicklingError
 import cloudpickle
@@ -237,3 +237,16 @@ def fancy_dict_compare(dict_1, dict_2, dict_1_name = 'd1', dict_2_name = 'd2', p
             key_err += "Key %s%s not in %s\n" % (dict_2_name, path, dict_1_name)
 
     return key_err + value_err + err
+	
+def wait_until_key_removed(mdb, key, delay = 5):
+    already_printed = False
+    while True:
+        if key in mdb.keys():
+            if not already_printed:
+                print("waiting till key {} is removed from the database. I will check every {} seconds.".format(key, delay))
+                already_printed = True				
+            time.sleep(5)
+        else:
+            if already_printed:
+                print("Key {} has been removed. Continuing.".format(key))
+            return
