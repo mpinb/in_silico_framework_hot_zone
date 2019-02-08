@@ -94,6 +94,6 @@ ENV/
 .idea
 
 # Cookiecutter folders
-/data/
-/figures/
-/output/
+#/data/
+#/figures/
+#/output/
