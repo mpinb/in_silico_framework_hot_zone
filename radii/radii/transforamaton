@@ -1,0 +1,264 @@
+# Template HX Script
+module -name "transforamaton" \
+       -category "Templates" \
+       -icon "TVDefScriptObject" \
+       -proc \
+{
+_template begin "transforamaton" 
+
+_template input "500_GP_WR639_cell_1547_SP5C_checked_RE.hoc" "final_spatial_graph_with_radius.am"
+_template types 0 HxGraphInterface
+_template types 0 HxGraphInterface
+_template types 1 HxGraphInterface
+_template submodules 0 HxSpatialGraphView HxSpatialGraphView
+_template submodules 1 HxSpatialGraphView
+
+set _continue [_template prompt]
+
+if $_continue {
+if {[catch {
+
+remove_tmpio
+
+# Amira Project
+set hideNewModules 1
+if { [_template duplicate_colormaps] || ! [exists "grayScale.am"] } {
+[ load ${AMIRA_ROOT}/data/colormaps/grayScale.am ] setLabel "grayScale.am"
+"grayScale.am" setNoRemoveAll 1
+"grayScale.am" setVar "CustomHelp" {HxColormap256}
+"grayScale.am" master disconnect
+"grayScale.am" Datafield disconnect
+"grayScale.am" fire
+"grayScale.am" setMinMax 0 255
+"grayScale.am" flags setValue 1
+"grayScale.am" shift setMinMax -1 1
+"grayScale.am" shift setButtons 0
+"grayScale.am" shift setEditButton 1
+"grayScale.am" shift setIncrement 0.133333
+"grayScale.am" shift setValue 0
+"grayScale.am" shift setSubMinMax -1 1
+"grayScale.am" scale setMinMax 0 1
+"grayScale.am" scale setButtons 0
+"grayScale.am" scale setEditButton 1
+"grayScale.am" scale setIncrement 0.1
+"grayScale.am" scale setValue 1
+"grayScale.am" scale setSubMinMax 0 1
+"grayScale.am" fire
+"grayScale.am" setViewerMask 16383
+}
+
+set hideNewModules 1
+if { [_template duplicate_colormaps] || ! [exists "physics.icol"] } {
+[ load ${AMIRA_ROOT}/data/colormaps/physics.icol ] setLabel "physics.icol"
+"physics.icol" setNoRemoveAll 1
+"physics.icol" master disconnect
+"physics.icol" Datafield disconnect
+"physics.icol" fire
+"physics.icol" setMinMax 0 1
+"physics.icol" flags setValue 1
+"physics.icol" shift setMinMax -1 1
+"physics.icol" shift setButtons 0
+"physics.icol" shift setEditButton 1
+"physics.icol" shift setIncrement 0.133333
+"physics.icol" shift setValue 0
+"physics.icol" shift setSubMinMax -1 1
+"physics.icol" scale setMinMax 0 1
+"physics.icol" scale setButtons 0
+"physics.icol" scale setEditButton 1
+"physics.icol" scale setIncrement 0.1
+"physics.icol" scale setValue 1
+"physics.icol" scale setSubMinMax 0 1
+"physics.icol" fire
+"physics.icol" setViewerMask 16383
+}
+
+set hideNewModules 0
+create HxSpatialGraphView "Spatial Graph View"
+"Spatial Graph View" setVar "CustomHelp" {HxSpatialGraphView}
+"Spatial Graph View" data connect "[_template var 0]"
+"Spatial Graph View" Statistics disconnect
+"Spatial Graph View" nodeColormap setDefaultColor 1 0.8 0.5
+"Spatial Graph View" nodeColormap setDefaultAlpha 0.500000
+"Spatial Graph View" nodeColormap setLocalRange 1
+"Spatial Graph View" nodeColormap setLocalMinMax 0.000000 1.000000
+"Spatial Graph View" nodeColormap enableAlpha 1
+"Spatial Graph View" nodeColormap enableAlphaToggle 1
+"Spatial Graph View" nodeColormap setAutoAdjustRangeMode 1
+"Spatial Graph View" nodeColormap setColorbarMinMax 0 1
+"Spatial Graph View" nodeColormap connect "physics.icol"
+"Spatial Graph View" segmentColormap setDefaultColor 1 0.8 0.5
+"Spatial Graph View" segmentColormap setDefaultAlpha 0.500000
+"Spatial Graph View" segmentColormap setLocalRange 1
+"Spatial Graph View" segmentColormap setLocalMinMax 0.000000 1.000000
+"Spatial Graph View" segmentColormap enableAlpha 1
+"Spatial Graph View" segmentColormap enableAlphaToggle 1
+"Spatial Graph View" segmentColormap setAutoAdjustRangeMode 1
+"Spatial Graph View" segmentColormap setColorbarMinMax 0 1
+"Spatial Graph View" segmentColormap connect "physics.icol"
+"Spatial Graph View" fire
+"Spatial Graph View" itemsToShow setValue 0 0
+"Spatial Graph View" itemsToShow setToggleVisible 0 1
+"Spatial Graph View" itemsToShow setValue 1 1
+"Spatial Graph View" itemsToShow setToggleVisible 1 1
+"Spatial Graph View" nodeScale setIndex 0 0
+"Spatial Graph View" nodeScaleFactor setMinMax 0 1301.64697265625
+"Spatial Graph View" nodeScaleFactor setButtons 0
+"Spatial Graph View" nodeScaleFactor setEditButton 1
+"Spatial Graph View" nodeScaleFactor setIncrement 86.7765
+"Spatial Graph View" nodeScaleFactor setValue 65.0823
+"Spatial Graph View" nodeScaleFactor setSubMinMax 0 1301.64697265625
+"Spatial Graph View" nodeColoring setIndex 0 0
+"Spatial Graph View" nodeLabelColoringOptions setValue 0
+"Spatial Graph View" nodeColor setColor 0 0.8 0.8 0.8
+"Spatial Graph View" segmentStyle setValue 0 1
+"Spatial Graph View" segmentStyle setToggleVisible 0 1
+"Spatial Graph View" segmentStyle setValue 1 0
+"Spatial Graph View" segmentStyle setToggleVisible 1 1
+"Spatial Graph View" segmentStyle setValue 2 0
+"Spatial Graph View" segmentStyle setToggleVisible 2 1
+"Spatial Graph View" tubeScale setIndex 0 0
+"Spatial Graph View" tubeScaleFactor setMinMax 0 1301.64697265625
+"Spatial Graph View" tubeScaleFactor setButtons 0
+"Spatial Graph View" tubeScaleFactor setEditButton 1
+"Spatial Graph View" tubeScaleFactor setIncrement 86.7765
+"Spatial Graph View" tubeScaleFactor setValue 65.0823
+"Spatial Graph View" tubeScaleFactor setSubMinMax 0 1301.64697265625
+"Spatial Graph View" segmentWidth setMinMax 0 10
+"Spatial Graph View" segmentWidth setButtons 0
+"Spatial Graph View" segmentWidth setEditButton 1
+"Spatial Graph View" segmentWidth setIncrement 0.666667
+"Spatial Graph View" segmentWidth setValue 1
+"Spatial Graph View" segmentWidth setSubMinMax 0 10
+"Spatial Graph View" segmentColoring setIndex 0 0
+"Spatial Graph View" segmentLabelColoringOptions setValue 0
+"Spatial Graph View" segmentColor setColor 0 0.8 0.8 0.8
+"Spatial Graph View" pointSize setMinMax 0 15
+"Spatial Graph View" pointSize setButtons 0
+"Spatial Graph View" pointSize setEditButton 1
+"Spatial Graph View" pointSize setIncrement 1
+"Spatial Graph View" pointSize setValue 4
+"Spatial Graph View" pointSize setSubMinMax 0 15
+"Spatial Graph View" setVisibility HIJMPLPPJPHEAAAAFNBNDDMN HIJMPLPPJPHEAAAAFNBNDDMN
+"Spatial Graph View" fire
+"Spatial Graph View" setViewerMask 16383
+"Spatial Graph View" setPickable 1
+
+set hideNewModules 0
+create HxSpatialGraphView "Spatial Graph View 2"
+"Spatial Graph View 2" setVar "CustomHelp" {HxSpatialGraphView}
+"Spatial Graph View 2" data connect "[_template var 1]"
+"Spatial Graph View 2" Statistics disconnect
+"Spatial Graph View 2" nodeColormap setDefaultColor 1 0.8 0.5
+"Spatial Graph View 2" nodeColormap setDefaultAlpha 0.500000
+"Spatial Graph View 2" nodeColormap setLocalRange 1
+"Spatial Graph View 2" nodeColormap setLocalMinMax 0.000000 1.000000
+"Spatial Graph View 2" nodeColormap enableAlpha 1
+"Spatial Graph View 2" nodeColormap enableAlphaToggle 1
+"Spatial Graph View 2" nodeColormap setAutoAdjustRangeMode 1
+"Spatial Graph View 2" nodeColormap setColorbarMinMax 0 1
+"Spatial Graph View 2" nodeColormap connect "physics.icol"
+"Spatial Graph View 2" segmentColormap setDefaultColor 1 0.8 0.5
+"Spatial Graph View 2" segmentColormap setDefaultAlpha 0.500000
+"Spatial Graph View 2" segmentColormap setLocalRange 1
+"Spatial Graph View 2" segmentColormap setLocalMinMax 0.000000 1.000000
+"Spatial Graph View 2" segmentColormap enableAlpha 1
+"Spatial Graph View 2" segmentColormap enableAlphaToggle 1
+"Spatial Graph View 2" segmentColormap setAutoAdjustRangeMode 1
+"Spatial Graph View 2" segmentColormap setColorbarMinMax 0 1
+"Spatial Graph View 2" segmentColormap connect "physics.icol"
+"Spatial Graph View 2" fire
+"Spatial Graph View 2" itemsToShow setValue 0 1
+"Spatial Graph View 2" itemsToShow setToggleVisible 0 1
+"Spatial Graph View 2" itemsToShow setValue 1 1
+"Spatial Graph View 2" itemsToShow setToggleVisible 1 1
+"Spatial Graph View 2" nodeScale setIndex 0 0
+"Spatial Graph View 2" nodeScaleFactor setMinMax 0 103.952613830566
+"Spatial Graph View 2" nodeScaleFactor setButtons 0
+"Spatial Graph View 2" nodeScaleFactor setEditButton 1
+"Spatial Graph View 2" nodeScaleFactor setIncrement 6.93017
+"Spatial Graph View 2" nodeScaleFactor setValue 0
+"Spatial Graph View 2" nodeScaleFactor setSubMinMax 0 103.952613830566
+"Spatial Graph View 2" nodeColoring setIndex 0 0
+"Spatial Graph View 2" nodeLabelColoringOptions setValue 0
+"Spatial Graph View 2" nodeColor setColor 0 0.8 0.214493 0.214493
+"Spatial Graph View 2" segmentStyle setValue 0 1
+"Spatial Graph View 2" segmentStyle setToggleVisible 0 1
+"Spatial Graph View 2" segmentStyle setValue 1 0
+"Spatial Graph View 2" segmentStyle setToggleVisible 1 1
+"Spatial Graph View 2" segmentStyle setValue 2 0
+"Spatial Graph View 2" segmentStyle setToggleVisible 2 1
+"Spatial Graph View 2" tubeScale setIndex 0 0
+"Spatial Graph View 2" tubeScaleFactor setMinMax 0 103.952613830566
+"Spatial Graph View 2" tubeScaleFactor setButtons 0
+"Spatial Graph View 2" tubeScaleFactor setEditButton 1
+"Spatial Graph View 2" tubeScaleFactor setIncrement 6.93017
+"Spatial Graph View 2" tubeScaleFactor setValue 5.19763
+"Spatial Graph View 2" tubeScaleFactor setSubMinMax 0 103.952613830566
+"Spatial Graph View 2" segmentWidth setMinMax 0 10
+"Spatial Graph View 2" segmentWidth setButtons 0
+"Spatial Graph View 2" segmentWidth setEditButton 1
+"Spatial Graph View 2" segmentWidth setIncrement 0.666667
+"Spatial Graph View 2" segmentWidth setValue 1
+"Spatial Graph View 2" segmentWidth setSubMinMax 0 10
+"Spatial Graph View 2" segmentColoring setIndex 0 0
+"Spatial Graph View 2" segmentLabelColoringOptions setValue 0
+"Spatial Graph View 2" segmentColor setColor 0 0.0637681 0.8 0.479899
+"Spatial Graph View 2" pointSize setMinMax 0 15
+"Spatial Graph View 2" pointSize setButtons 0
+"Spatial Graph View 2" pointSize setEditButton 1
+"Spatial Graph View 2" pointSize setIncrement 1
+"Spatial Graph View 2" pointSize setValue 4
+"Spatial Graph View 2" pointSize setSubMinMax 0 15
+"Spatial Graph View 2" setVisibility HIJMPLPPBPDPAAAAAOCOBPOB HIJMPLPPBPDPAAAAAOCOBPOB
+"Spatial Graph View 2" fire
+"Spatial Graph View 2" setViewerMask 16383
+"Spatial Graph View 2" setPickable 1
+
+set hideNewModules 0
+create HxAxis "Global Axes"
+"Global Axes" data disconnect
+"Global Axes" fire
+"Global Axes" axis setValue 0 1
+"Global Axes" axis setToggleVisible 0 1
+"Global Axes" axis setValue 1 1
+"Global Axes" axis setToggleVisible 1 1
+"Global Axes" axis setValue 2 1
+"Global Axes" axis setToggleVisible 2 1
+"Global Axes" options setValue 0 1
+"Global Axes" options setToggleVisible 0 1
+"Global Axes" options setValue 1 0
+"Global Axes" options setToggleVisible 1 1
+"Global Axes" options setValue 2 0
+"Global Axes" options setToggleVisible 2 1
+"Global Axes" thickness setMinMax 1 15
+"Global Axes" thickness setButtons 0
+"Global Axes" thickness setEditButton 1
+"Global Axes" thickness setIncrement 0.933333
+"Global Axes" thickness setValue 5
+"Global Axes" thickness setSubMinMax 1 15
+"Global Axes" color setColor 0 1 0 0
+"Global Axes" color setColor 1 0 1 0
+"Global Axes" color setColor 2 0 0 1
+"Global Axes" color setColor 3 1 0.8 0.5
+"Global Axes" axisNames setState {text 1 x text 3 y text 5 z }
+"Global Axes" font setState {name: "Arial Unicode MS" size: 10 buttonText: Select bold: 0 italic: 0 color: 0.8 0.8 0.8}
+"Global Axes" fire
+"Global Axes" setBoundingBox 0 9343.69 0 9343.69 0 9343.69
+"Global Axes" setDelta 0 
+"Global Axes" setLocalMode 0 
+"Global Axes" setFlip 0 0 
+"Global Axes" setFlip 1 0 
+"Global Axes" setFlip 2 0 
+"Global Axes" fire
+"Global Axes" setViewerMask 16383
+"Global Axes" setPickable 1
+
+set hideNewModules 0
+
+
+} errmsg]} { echo "Error while executing template transforamaton:
+$errmsg" }
+}
+
+_template end
+}
