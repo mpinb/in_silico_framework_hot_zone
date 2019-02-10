@@ -1,3 +1,10 @@
+"""Partly copy pasted from the BluePyOpt package, however extended, such that a start population can be defined.
+Also extended, such that the optimizations can be organized in a model data base.
+Also extended to be executed on a distributed system using dask.
+Also extended to return all objectives, not only the combined ones.
+Note: the population needs to be in a special format. Use methods in biophysics_fitting.population 
+to create a population."""
+
 import bluepyopt as bpop
 import numpy
 import deap
@@ -9,13 +16,18 @@ def robust_int(x):
         return int(x)
     except:
         return None
-    
-def save_result(mdb_run, features, objectives):
+
+def get_max_generation(mdb_run):
+    '''returns the index of the next iteration'''
     keys = [robust_int(x) for x in mdb_run.keys() if robust_int(x) is not None]
     if not keys:
-        current_key = 0
+        current_key = -1
     else:
-        current_key = max(keys) + 1
+        current_key = max(keys)
+    return current_key
+
+def save_result(mdb_run, features, objectives):
+    current_key = get_max_generation(mdb_run) + 1
     mdb_run.setitem(str(current_key), 
                     I.pd.concat([objectives, features], axis = 1), 
                     dumper = I.dumper_pandas_to_msgpack)
@@ -174,7 +186,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
         stats=None,
         halloffame=None,
         cp_frequency=1,
-        cp_filename=None,
+        mdb_run=None,
         continue_cp=False,
 		mdb = None):
     r"""This is the :math:`(~\alpha,\mu~,~\lambda)` evolutionary algorithm
@@ -192,16 +204,15 @@ def eaAlphaMuPlusLambdaCheckpoint(
         continue_cp(bool): whether to continue
     """
     # added by arco
-    if cp_filename is not None:
-        assert isinstance(cp_filename, I.ModelDataBase)
-    if continue_cp:
-        raise NotImplementedError()
+    if mdb_run is not None:
+        assert isinstance(mdb_run, I.ModelDataBase) # mdb_run
     assert(halloffame is None)
     # end added by arco
 
     if continue_cp:
         # A file name has been given, then load the data from the file
-        cp = pickle.load(open(cp_filename, "r"))
+        key = '{}_checkpoint'.format(get_max_generation(mdb_run))
+        cp = mdb_run[key] #pickle.load(open(cp_filename, "r"))
         population = cp["population"]
         parents = cp["parents"]
         start_gen = cp["generation"]
@@ -209,6 +220,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
         logbook = cp["logbook"]
         history = cp["history"]
         random.setstate(cp["rndstate"])
+        print 'continuing optimization from generation {}'.format(start_gen)
     else:
         # Start a new evolution
         start_gen = 1
@@ -251,7 +263,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
         #logger.info(logbook.stream)
         ## end commented out by arco
 
-        if(cp_filename and cp_frequency and
+        if(mdb_run and cp_frequency and
            gen % cp_frequency == 0):
             cp = dict(population=population,
                       generation=gen,
@@ -261,7 +273,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
                       logbook=None, # logbook, // arco
                       rndstate=random.getstate())
             # save checkpoint in mdb
-            cp_filename.setitem('{}_checkpoint'.format(gen), cp, dumper = I.dumper_to_pickle)
+            mdb_run.setitem('{}_checkpoint'.format(gen), cp, dumper = I.dumper_to_pickle)
             #pickle.dump(cp, open(cp_filename, "wb"))
             #logger.debug('Wrote checkpoint to %s', cp_filename)
 
@@ -304,7 +316,7 @@ def run(self,
     #stats.register("min", numpy.min)
     #stats.register("max", numpy.max)
     ## end commented out by arco
-
+    
     pop = eaAlphaMuPlusLambdaCheckpoint(
         pop,
         self.toolbox,
@@ -329,7 +341,7 @@ def get_population_with_different_n_objectives(old_pop, n_objectives):
         pop.append(ind)
     return pop
 	
-def start_run(mdb_setup, n, pop = None, client = None, 
+def start_run(mdb_setup, n, pop = None, client = None, continue_cp = False,
               offspring_size=1000, eta=10, mutpb=0.3, cxpb=0.7, max_ngen = 600):
     '''function to start an optimization run as specified in mdb_setup. The following attributes need
     to be defined in mdb_setup:
@@ -351,22 +363,66 @@ def start_run(mdb_setup, n, pop = None, client = None,
     #   place to insert a routine that saves all features before they get sumarized.
     # - mymap also creates a sub mdb in mdb_setup. The name of the sub_mdb is specified by n: It is str(n)
     #   mdb_setup[str(n)] then contains all the saved results
+
+    mdb_run = setup_mdb_run(mdb_setup, n)
     mymap = get_mymap(mdb_setup, n, client)
     len_objectives = len(mdb_setup['get_Combiner'](mdb_setup).setup.names)
     parameter_df = mdb_setup['params']
     evaluator_fun = mdb_setup['get_Evaluator'](mdb_setup)
     evaluator = my_ibea_evaluator(parameter_df, len_objectives)
-    print('starting multi objective optimization with {} objectives and {} parameters'.format(len_objectives, len(parameter_df)))
-    mdb_run = setup_mdb_run(mdb_setup, n)
     opt = bpop.optimisations.DEAPOptimisation(evaluator, offspring_size=offspring_size,                                                                                                                                            
                                               eta=eta, mutpb=mutpb, cxpb=cxpb, 
                                               map_function = get_mymap(mdb_setup, mdb_run, client), 
                                               seed=n)
-    if pop is not None:
-	    print("recreating provided population with a number of objectives of {}".format(len_objectives))
-	    pop = get_population_with_different_n_objectives(pop, len_objectives)
+    
+    if continue_cp == True:
+        # if we want to continue a preexisting optimization, no population may be provided
+        # also check, whether the optimization really exists
+        assert(pop is None)
+        if not str(n) in mdb_setup.keys():
+            raise ValueError('run {} is not in mdb_setup. Nothing to continue'.format(n))
+    if continue_cp == False:
+        # if we want to start a new optimization, ckeck that there is not an old optimizatation
+        # that would be overwritten.
+        if get_max_generation(mdb_run) > 0:
+            raise ValueError('for n = {}, an optimization is already in mdb_setup. Either choose continue_cp=True or delete the optimization.'.format(n))
+        if pop is not None:
+            # if population is provided, make sure it fits the number of objectives of the current optimization
+            print("recreating provided population with a number of objectives of {}".format(len_objectives))
+            pop = get_population_with_different_n_objectives(pop, len_objectives)
+        else: 
+            # else generate a new population
+            pop = opt.toolbox.population(n=offspring_size)    
+    
+    print('starting multi objective optimization with {} objectives and {} parameters'.format(len_objectives, len(parameter_df)))    
+    
+    pop = eaAlphaMuPlusLambdaCheckpoint(
+        pop,
+        opt.toolbox,
+        offspring_size,
+        opt.cxpb,
+        opt.mutpb,
+        max_ngen,
+        stats=None, # arco
+        halloffame= None, # self.hof,
+        cp_frequency=1,
+        continue_cp=continue_cp,
+        mdb_run=mdb_run,
+        mdb = mdb_setup)
+
+    return pop
+    
     pop = run(opt, 
                            max_ngen=max_ngen, 
-                           cp_filename = mdb_run, 
+                           cp_filename = mdb_run, continue_cp=continue_cp,
                            pop = pop, mdb = mdb_setup)
     return pop
+
+
+#########################
+# fast tests
+#########################
+assert(get_max_generation({'0': 1}) == 0)
+assert(get_max_generation({'0': 1, '10': 2}) == 10)
+assert(get_max_generation({'0': 1, 10: 2}) == 10)
+assert(get_max_generation({'3': 1, '10_ckeckpoint': 2}) == 3)
