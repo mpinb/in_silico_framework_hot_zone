@@ -91,6 +91,7 @@ def synapse_activation_postprocess_dask(ddf, **kwargs):
                 'presynaptic_column', 
                 'proximal', (soma distance < 500 ym)
                 'EI' (Lumping the EXC / INH celltypes together)
+                'binned_somadist' synapse counts for all 50 microns
             It can also be any column in the specified dataframe.
             Can be a list, if "sub-subgroups" should be calculated.
         mdb: if specified, the result will be computed immediately and 
