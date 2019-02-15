@@ -156,7 +156,11 @@ def scan_directory(path, fnames, cellTypeNames):
             continue
 
 def load_data(fname):
-    synID, somaV, somaT = np.loadtxt(fname, skiprows=1, unpack=True)
+    try:
+        synID, somaV, somaT = np.loadtxt(fname, skiprows=1, unpack=True)
+    except ValueError:
+        print 'file {} is empty! Skipping. Please doulbe-check!'.format(fname)
+        return [],[]
     try: ## why?
         return list(somaV), list(somaT)
     except TypeError:
