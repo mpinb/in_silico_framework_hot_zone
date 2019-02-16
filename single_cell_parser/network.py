@@ -44,6 +44,8 @@ class NetworkMapper:
         self.postCell = postCell
         self.nwParam = nwParam
         self.simParam = simParam
+        postCell.network_param = nwParam
+        postCell.network_sim_param = simParam
     
     def create_network(self, synWeightName=None, change=None):
         '''

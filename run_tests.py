@@ -26,6 +26,7 @@ import distributed
 ####################################### 
 test_model_data_base.decorators.current_testlevel = 10#'all'#0#'all'#'0
 test_simrun2.decorators.current_testlevel = 10#'all'#0#'all'#'0
+test_single_cell_parser.decorators.current_testlevel = 10#'all'#0#'all'#'0
 
 #######################################git git
 # SELECT TESTS YOU WANT TO RUN HERE
@@ -33,7 +34,8 @@ test_simrun2.decorators.current_testlevel = 10#'all'#0#'all'#'0
 # Valid values are strings, which contain a module name, that can be 
 # imported. Choose '.' to run all available tests within this module
 #######################################
-run = '.'#test_single_cell_parser.reader_test'
+run = '.'
+run = 'test_single_cell_parser.init_test'
 #run = 'test_model_data_base.model_data_base_test'
 #run = 'test_model_data_base.mdb_initializers.load_simrun_general_test'
 #run = 'test_simrun2.simrun_test'

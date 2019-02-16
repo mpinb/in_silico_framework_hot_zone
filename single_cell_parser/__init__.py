@@ -100,6 +100,7 @@ def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = T
     parser.cell.parameters = parameters
     parser.cell.scaleFunc = scaleFunc
     parser.cell.allPoints = allPoints
+    parser.cell.neuronParam = parameters
     return parser.cell
 
 def init_neuron_run(simparam, vardt=False, *events):

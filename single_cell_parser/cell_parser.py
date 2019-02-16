@@ -150,7 +150,9 @@ class CellParser(object):
                 self._add_spines(label, parameters[label].properties.spines)
             if parameters[label].mechanisms.range.has_key('ar')\
                 and parameters[label].properties.has_key('spines'):
-                self._add_spines_ar(label, parameters[label].properties.spines)                
+                self._add_spines_ar(label, parameters[label].properties.spines)
+                
+        self.cell.neuron_param = parameters            
         
     def apply_cell_modify_functions(self, parameters):
         if 'cell_modify_functions' in parameters.keys():
@@ -168,6 +170,8 @@ class CellParser(object):
             self.cell_modify_functions_applied = True
         else:
             print 'No cell_modify_functions to apply'
+            
+        self.cell.neuron_param = parameters
     
     def get_cell(self):
         '''

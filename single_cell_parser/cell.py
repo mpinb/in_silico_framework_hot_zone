@@ -67,6 +67,10 @@ class Cell(object):
         self.E = -70.0
         self.changeSynParamDict = {}
         self.tVec = None
+        self.neuron_param = None
+        self.neuron_sim_param = None
+        self.network_param = None
+        self.network_sim_param = None
     
     def re_init_cell(self, replayMode=False):
         '''re-initialize for next simulation run'''
