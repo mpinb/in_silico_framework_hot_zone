@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 import single_cell_parser as scp
-from getting_started import getting_started_dir # path to getting started folder
+import getting_started
 from model_data_base.utils import fancy_dict_compare
 import os, unittest
 from .context import *
@@ -8,10 +8,10 @@ from .context import *
 
 class Tests(unittest.TestCase): 
     def setUp(self):
-        self.cell_param = os.path.join(getting_started_dir, \
+        self.cell_param = os.path.join(getting_started.getting_started_dir, \
                             'biophysical_constraints', \
                             '86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param')
-        self.network_param = os.path.join(getting_started_dir, \
+        self.network_param = os.path.join(getting_started.getting_started_dir, \
                             'functional_constraints', \
                             'network.param')
         
@@ -26,7 +26,18 @@ class Tests(unittest.TestCase):
         
         comp = fancy_dict_compare(bp(self.network_param, fast_but_security_risk = True), \
                                   bp(self.network_param, fast_but_security_risk = False))
-        self.assertEqual(comp, '')        
+        self.assertEqual(comp, '')   
+        
+    def test_cell_modify_functions_in_neuron_param_is_respected(self):
+        import mechanisms
+        neuron_param = scp.build_parameters(getting_started.neuronParam)   
+        cell = scp.create_cell(neuron_param.neuron)
+        diam_unscaled = next(s for s in cell.sections if s.label == 'ApicalDendrite').diam
+        neuron_param.neuron['cell_modify_functions'] = scp.NTParameterSet({'scale_apical': {'scale': 10}})
+        cell = scp.create_cell(neuron_param.neuron)
+        diam_scaled = next(s for s in cell.sections if s.label == 'ApicalDendrite').diam
+        self.assertAlmostEqual(diam_unscaled * 10, diam_scaled, 4)
+             
         
         
         

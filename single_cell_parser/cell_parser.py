@@ -1,14 +1,20 @@
 '''
 Created on Mar 8, 2012
 
-@author: regger
+@author: regger, abast
+
+abast: 
+february 2019: deprecated scaleFunc keyword, added support to specify cell_modify_functions 
+within the parameters
 '''
 
+import warnings
 from neuron import h
 import numpy as np
 import math
 import reader
 from cell import PySection, Cell
+import cell_modify_functions
 
 class CellParser(object):
     '''
@@ -30,6 +36,7 @@ class CellParser(object):
 #        every cell could have its own optimized
 #        channel distributions)
         self.membraneParams = {}
+        self.cell_modify_functions_applied = False
     
     def spatialgraph_to_cell(self, axon=False, scaleFunc=None):
         '''
@@ -102,6 +109,9 @@ class CellParser(object):
         
 #        scale dendrites if necessary
         if scaleFunc:
+            warnings.warn('Keyword scaleFunc is deprecated! ' + 
+                          'New: To ensure reproducability, scaleFunc should be '+
+                          'specified in the parameters, as described in single_cell_parser.cell_modify_funs')            
             scaleFunc(self.cell)
                 
     def set_up_biophysics(self, parameters, full=False):
@@ -116,6 +126,8 @@ class CellParser(object):
         for label in parameters.keys():
             if label == 'filename':
                 continue
+            if label == 'cell_modify_functions':
+                continue            
             print '    Adding membrane properties to %s' % label
             self.insert_membrane_properties(label, parameters[label].properties)
         
@@ -125,6 +137,8 @@ class CellParser(object):
         
         for label in parameters.keys():
             if label == 'filename':
+                continue
+            if label == 'cell_modify_functions':
                 continue
             print '    Adding membrane range mechanisms to %s' % label
             self.insert_range_mechanisms(label, parameters[label].mechanisms.range)
@@ -138,6 +152,23 @@ class CellParser(object):
                 and parameters[label].properties.has_key('spines'):
                 self._add_spines_ar(label, parameters[label].properties.spines)                
         
+    def apply_cell_modify_functions(self, parameters):
+        if 'cell_modify_functions' in parameters.keys():
+            if self.cell_modify_functions_applied == True:
+                print 'Cell modify functions have already been applied. We '+\
+                'are now modifying the cell again. Please doublecheck, whether '+\
+                'this is intended. This should not occur, if the cell is setup '+\
+                'up using the recommended way, i.e. by calling '+\
+                'single_cell_parser.create_cell'
+            for funname in parameters.cell_modify_functions.keys():
+                kwargs = parameters.cell_modify_functions[funname]
+                print 'Applying cell_modify_function {} with parameters {}'.format(funname, str(kwargs))
+                fun = cell_modify_functions.get(funname)
+                self.cell = fun(self.cell, **kwargs)
+            self.cell_modify_functions_applied = True
+        else:
+            print 'No cell_modify_functions to apply'
+    
     def get_cell(self):
         '''
         returns cell if it is set up for simulations

@@ -35,6 +35,7 @@ import neuron
 from sumatra.parameters import build_parameters as build_parameters_sumatra
 from sumatra.parameters import NTParameterSet
 import numpy as np
+import warnings
 
 #------------------------------------------------------------------------------ 
 # commonly used functions required for running single neuron simulations
@@ -78,6 +79,10 @@ def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = T
     includes spatial discretization and inserts
     biophysical mechanisms according to parameter file
     '''
+    if scaleFunc is not None:
+        warnings.warn('Keyword scaleFunc is deprecated! ' + 
+                      'New: To ensure reproducability, scaleFunc should be '+
+                      'specified in the parameters, as described in single_cell_parser.cell_modify_funs')
     print '-------------------------------'
     print 'Starting setup of cell model...'
     axon = False
@@ -90,6 +95,7 @@ def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = T
         print 'Setting up biophysical model...'
         parser.set_up_biophysics(parameters, allPoints)
     print '-------------------------------'
+    parser.apply_cell_modify_functions(parameters)
     parser.cell.init_time_recording()
     parser.cell.parameters = parameters
     parser.cell.scaleFunc = scaleFunc
