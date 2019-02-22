@@ -5,11 +5,11 @@ Created on Nov 08, 2018
 '''
 
 import os
+from collections import defaultdict
 import numpy as np
 import pandas as pd
 import neuron
 h = neuron.h
-
 # moved to the bottom to resolve circular import
 # from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
 
@@ -156,19 +156,27 @@ def hay_evaluate(cur_stim, tvec, vList):
     hoc_vList = h.List()
     for v in vList:
         hoc_vList.append(h.Vector().from_python(v))
-    x = h.calculator.get_organism_stimulus_error(feature_mean_list.o(cur_stim),
-                                       feature_std_list.o(cur_stim),
-                                       hoc_tvec,
-                                       hoc_vList,
-                                       apc_vector, ## seems to be unused?
-                                       stim1,
-                                       penalty,
-                                       use_density,
-                                       cur_stim, # $o4 argument
-                                       stimulus_feature_type_list.o(cur_stim),
-                                       stim_vec,
-                                       minspikenum)
+    try:
+        x = h.calculator.get_organism_stimulus_error(feature_mean_list.o(cur_stim),
+                                           feature_std_list.o(cur_stim),
+                                           hoc_tvec,
+                                           hoc_vList,
+                                           apc_vector, ## seems to be unused?
+                                           stim1,
+                                           penalty,
+                                           use_density,
+                                           cur_stim, # $o4 argument
+                                           stimulus_feature_type_list.o(cur_stim),
+                                           stim_vec,
+                                           minspikenum)
+        
+    except RuntimeError: 
+        # if incomplete simulation data is provided to the hay evaluate function,        
+        # this raises an hoc error 
+        return {k.s: 1000 for k in list(h.evaluator.stimulus_feature_name_list.o(cur_stim))}
+    
     return {h.evaluator.stimulus_feature_name_list.o(cur_stim).o(lv).s: x for lv, x in enumerate(x)}
+        
 
 # # cleanly startup distance calculator
 
