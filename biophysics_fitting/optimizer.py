@@ -73,6 +73,14 @@ def get_mymap(mdb_setup, mdb_run, c):
     def mymap(func, iterable):
         params_list = map(list, iterable)
         params_pd = I.pd.DataFrame(params_list, columns = params)
+        futures = c.map(objective_fun, params_list)
+        I.distributed.wait(futures)
+        for lv, f in enumerate(futures):
+            if not f.status == 'finished':
+                errstr = 'Problem with future number {}\n'.format(lv)
+                errstr += 'Exception: {}\n'.format(f.exception())
+                errstr += 'Parameters are: {}\n'.format(dict(params_pd.iloc[lv]))
+                raise ValueError(errstr)
         features_dicts = c.gather(c.map(objective_fun, params_list))
         features_pd = I.pd.DataFrame(features_dicts)
         save_result(mdb_run, params_pd, features_pd)
