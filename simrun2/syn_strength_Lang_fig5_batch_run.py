@@ -3,6 +3,7 @@ create plots corresponding to Lang et al. Fig. 5
 '''
 
 import sys
+import warnings
 import os.path
 import glob
 import numpy as np
@@ -64,9 +65,9 @@ def create_summary(dirName, cellTypeName, detectionThreshold = 0.1, makeplots = 
     # use uniform threashold now
     ##############################
 
-    if  not cellTypeName in ['L2', 'L34', 'L4', 'L5st', 'L5tt', 'L6cc', 'L6ct', 'VPM']:
-        print cellTypeName
-        raise NotImplementedError()
+    #if  not cellTypeName in ['L2', 'L34', 'L4', 'L5st', 'L5tt', 'L6cc', 'L6ct', 'VPM']:
+    #    print cellTypeName
+    #    raise NotImplementedError()
 
     print 'detectionThreshold: ', detectionThreshold
 
