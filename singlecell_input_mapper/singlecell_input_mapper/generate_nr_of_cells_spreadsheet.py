@@ -9,7 +9,7 @@ def con_file_to_NumberOfConnectedCells_sheet(con_file):
     #read in .con_file
     con_pdf = pd.read_csv(con_file, sep='\t', skiprows = 3, names = ['type', 'cell_ID', 'synapse_ID'])
     #groupb by celltype
-    con_pdf = con_pdf.groupby('type').apply(lambda x: len(x)).to_frame(name = 'Connected presynaptic cells').reset_index()
+    con_pdf = con_pdf.groupby('type').apply(lambda x: len(x.cell_ID.drop_duplicates())).to_frame(name = 'Connected presynaptic cells').reset_index()
     #split type column in celltype and column
     con_pdf['Presynaptic cell type'] = con_pdf.apply(lambda x: x.type.split('_')[0],axis = 1)
     con_pdf['Presynaptic column'] = con_pdf.apply(lambda x: x.type.split('_')[1],axis = 1)
