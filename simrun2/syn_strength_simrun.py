@@ -68,7 +68,7 @@ def unitary_connections(modelName, networkName, scale_apical = lambda x: x, dirP
         spikeTime = preParam[cellType].spikeT
         recepName = preParam[cellType].synapses.receptors.keys()[0]
         nmdaAmpaRatio = preParam[cellType].synapses.receptors[recepName].weight[1]
-        gExRange = np.arange(1.6, 2.2, 0.2)
+        gExRange = [0.5, 1.0, 1.5, 2.0] # np.arange(1.6, 2.2, 0.2)
     #    gExRange = [1.0]
 
         for gEx in gExRange:
