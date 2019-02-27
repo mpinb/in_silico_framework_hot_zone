@@ -11,6 +11,8 @@ import numpy as np
 import neuron
 import single_cell_parser as scp
 import single_cell_analyzer as sca
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from single_cell_parser.network import activate_functional_synapse
 h = neuron.h
