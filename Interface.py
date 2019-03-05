@@ -168,6 +168,7 @@ try:
 except ImportError:
     pass
 
+defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
 
 def print_module_versions():
     print "The loaded modules with __version__ attribute are:"
