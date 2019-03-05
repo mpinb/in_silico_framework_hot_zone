@@ -32,6 +32,7 @@ import sys
 import collections
 from functools import partial
 from collections import defaultdict
+import cloudpickle
 
 try:
     from IPython import display
