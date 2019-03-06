@@ -815,7 +815,8 @@ def activate_functional_synapse(syn, cell, preSynCell, synParameters, tChange=No
         else:
             releaseTimes = [t + conductance_delay for t in preSynCell.spikeTimes]
     else:
-        print "releaseTimes have been explicitly set", releaseTimes
+        pass
+        #print "releaseTimes have been explicitly set", releaseTimes
         
     if not len(releaseTimes):
         return
