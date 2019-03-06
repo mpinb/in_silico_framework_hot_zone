@@ -70,6 +70,11 @@ __git_revision__ = versions['full-revisionid']
 print "Current version: {version}".format(version = __version__)
 print "Current pid: {pid}".format(pid = os.getpid())
 
+import barrel_cortex
+excitatory = barrel_cortex.excitatory
+inhibitory = barrel_cortex.excitatory
+color_cellTypeColorMap = barrel_cortex.color_cellTypeColorMap
+
 from model_data_base.model_data_base import ModelDataBase
 from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
@@ -106,7 +111,7 @@ from model_data_base.mdb_initializers import synapse_activation_binning as mdb_i
 synapse_activation_binning_dask = mdb_init_synapse_activation_binning.synapse_activation_postprocess_dask
 mdb_init_crossing_over = mdb_init_roberts_simulations = mdb_init_simrun_general
 
-from model_data_base.analyze import split_synapse_activation, color_cellTypeColorMap, excitatory, inhibitory
+from model_data_base.analyze import split_synapse_activation #, color_cellTypeColorMap, excitatory, inhibitory
 from model_data_base.utils import silence_stdout
 from model_data_base.utils import select, pandas_to_array, pooled_std
 from model_data_base.utils import skit, chunkIt
@@ -170,6 +175,7 @@ except ImportError:
     pass
 
 defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
+
 
 def print_module_versions():
     print "The loaded modules with __version__ attribute are:"
