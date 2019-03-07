@@ -149,6 +149,9 @@ try:
 except ImportError:
     print "Could not import full-compartmental-model simulator"
 
+import single_cell_analyzer as sca
+import single_cell_parser as scp
+
 from simrun2.reduced_model import synapse_activation \
     as rm_synapse_activations
 #from simrun2.reduced_model import spiking_output \
@@ -156,8 +159,8 @@ from simrun2.reduced_model import synapse_activation \
 from simrun2.reduced_model import get_kernel \
     as rm_get_kernel
 
-import single_cell_analyzer as sca
-import single_cell_parser as scp
+import simrun3.synaptic_strength_fitting
+
 
 from singlecell_input_mapper.map_singlecell_inputs import map_singlecell_inputs
 from singlecell_input_mapper.evoked_network_param_from_template import create_network_parameter \
