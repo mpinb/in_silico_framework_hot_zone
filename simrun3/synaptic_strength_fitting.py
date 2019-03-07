@@ -22,7 +22,6 @@ class PSPs:
         confile: path to .con-file of the network realization that should be used
         gExRange: synaptic strength values to be checked
         vardt: should the variable step size solver be used=
-        save_vmax_dir: should the results be saved to a folder in csv format?
         '''
         assert('neuron' in neuron_param.keys())
         self.neuron_param = neuron_param
