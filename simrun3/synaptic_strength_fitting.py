@@ -16,7 +16,7 @@ from .get_cell_with_network import get_cell_with_network
 class PSPs:
     '''main class for calculation of ePSP amplitudes and synaptic strength fitting'''
     def __init__(self, neuron_param = None, confile = None, gExRange = [0.5, 1.0, 1.5, 2.0], 
-                 AMPA_component = 1, NMDA_component = 1, vardt = True, save_vmax_dir = None):
+                 AMPA_component = 1, NMDA_component = 1, vardt = True):
         ''' 
         neuron_param: I.scp.NTParameterSet structure specifying the biophysical model
         confile: path to .con-file of the network realization that should be used
