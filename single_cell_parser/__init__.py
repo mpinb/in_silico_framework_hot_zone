@@ -30,6 +30,7 @@ from cell_parser import CellParser
 from network import NetworkMapper
 from network_realizations import create_synapse_realization
 from network_realizations import create_functional_network
+import network_param_modify_functions
 #from sim_control import SimControl
 import neuron
 from sumatra.parameters import build_parameters as build_parameters_sumatra
