@@ -1,0 +1,27 @@
+Stimulus bAP
+{
+   Type                bAP
+  
+   Numerical_Parameters
+   {
+   	SomaStepAmp           1.9
+   	RecSite1Distance 835
+   	RecSite2Distance 1015
+   }
+}
+
+Stimulus BAC
+{
+   Type                BAC
+
+   Numerical_Parameters
+   {
+   	SomaStepAmp           1.9
+   	ApicStimIMax           0.5
+   	RiseTimeConstant  1.0
+   	DecayTimeConstant 5.0
+   	RecSiteDistance 835
+   }
+}
+
+

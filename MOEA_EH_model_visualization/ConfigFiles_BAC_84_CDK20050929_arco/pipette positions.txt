@@ -1,0 +1,2 @@
+Distance from Soma to Bifurcation Cell 86: 743 nm
+Distance from Soma to Bifurcation Cell 84: 807 nm
