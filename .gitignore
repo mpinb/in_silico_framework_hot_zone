@@ -20,6 +20,11 @@ mechanisms/channels/x86_64
 mechanisms/channels/*~
 mechanisms/netcon/x86_64
 mechanisms/netcon/*~
+getting_started/barrel_cortex/*
+!getting_started/barrel_cortex/*.7z.*
+MOEA_EH_model_visualization/**/*~
+.*
+simrun2/used_seeds
 
 #only template should be part of repository
 getting_started/biophysical_constraints/86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param
