@@ -3,7 +3,9 @@ Also extended, such that the optimizations can be organized in a model data base
 Also extended to be executed on a distributed system using dask.
 Also extended to return all objectives, not only the combined ones.
 Note: the population needs to be in a special format. Use methods in biophysics_fitting.population 
-to create a population."""
+to create a population.
+
+The main interface is the function start_run."""
 
 import bluepyopt as bpop
 import numpy
@@ -78,7 +80,7 @@ def get_mymap(mdb_setup, mdb_run, c):
         for lv, f in enumerate(futures):
             if not f.status == 'finished':
                 errstr = 'Problem with future number {}\n'.format(lv)
-                errstr += 'Exception: {}\n'.format(f.exception())
+                errstr += 'Exception: {}:{}\n'.format(type(f.exception()), f.exception())
                 errstr += 'Parameters are: {}\n'.format(dict(params_pd.iloc[lv]))
                 raise ValueError(errstr)
         features_dicts = c.gather(c.map(objective_fun, params_list))
@@ -359,8 +361,20 @@ def start_run(mdb_setup, n, pop = None, client = None, continue_cp = False,
     - get_Evaluator ... function, that returns a biophysics_fitting.evaluator.Evaluator object.
     - get_Combiner ... function, that returns a biophysics_fitting.combiner.Combiner object
     
+    get_Simulator, get_Evaluator, get_Combiner accept the mdb_setup model_data_base as argument.
+    
+    This allows, that e.g. the Simular can depend on the model_data_base. Therefore it is e.g. possible, 
+    that the path to the morphology is not saved as absolute path. Instead, fixed parameters can be
+    updated accordingly.
+    
     For an exemplary setup of a Simulaotr, Evaluator and Combiner object, see 
-    biophysics_fitting.hay_complete_default_setup'''
+    biophysics_fitting.hay_complete_default_setup.
+    
+    For on examplary setup of a complete optimization project see 
+    20190111_fitting_CDK_morphologies_Kv3_1_slope_step.ipynb
+    
+    You can also have a look at the test case in test_biophysics_fitting.test_optimizer.py
+    '''
     # CAVE! get_mymap is doing more, than just to return a map function.
     # - the map function ignores the first argument. 
     #   The first argument (i.e. the function to be mapped on the iterable) is ignored.
