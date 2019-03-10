@@ -66,7 +66,7 @@ def dump(obj, savedir):
                 new_lda_value_dicts[-1][k] = key
                 lv +=1
         Rm.lda_value_dicts = new_lda_value_dicts
-        Rm.mdb_list = [m._unique_id for m in Rm.mdb_list]    
+        Rm.mdb_list = [m.get_id() for m in Rm.mdb_list]    
         mdb['Rm'] = Rm
     finally:
     # revert changes to object, deepcopy was causing pickling errors
