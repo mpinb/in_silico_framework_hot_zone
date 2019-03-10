@@ -252,11 +252,12 @@ class ModelDataBase(object):
         relative_path = os.path.relpath(absolute_path, self.basedir)
         return absolute_path, relative_path
 
-    def create_managed_folder(self, key):
+    def create_managed_folder(self, key, raise_ = True):
         '''creates a folder in the mdb directory and saves the path in 'key'.
         You can delete the folder using del mdb[key]'''
         #todo: make sure that existing key will not be overwritten
         if key in self.keys():
+            if raise_:
                 raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         else:           
             self.setitem(key, None, dumper = IO.LoaderDumper.just_create_folder)
@@ -269,7 +270,7 @@ class ModelDataBase(object):
         warnings.warn("Get_managed_folder is deprecated.  Use create_managed_folder instead.") 
         return self.create_managed_folder(key)
     
-    def create_sub_mdb(self, key, register = 'as_parent'):
+    def create_sub_mdb(self, key, register = 'as_parent', raise_ = True):
         '''creates a ModelDataBase within a ModelDataBase. Example:
         mdb.create_sub_mdb('my_sub_database')
         mdb['my_sub_database']['sme_key'] = ['some_value']
@@ -278,7 +279,8 @@ class ModelDataBase(object):
             ##todo
             pass
         if key in self.keys():
-            raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
+            if raise_:
+                raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         else:
             self.setitem(key, None, dumper = IO.LoaderDumper.just_create_mdb)
         return self[key]
