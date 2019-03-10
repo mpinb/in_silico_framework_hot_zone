@@ -5,7 +5,7 @@ Created on Nov 08, 2018
 '''
 
 import pandas as pd
-import numpy as numpy
+
 def param_to_kwargs(fun):
     '''returns a function that can be called with params = [some_Series].
     The content of Series is added to kwargs'''
@@ -49,36 +49,3 @@ def param_selector(params, s):
 
 def set_fixed_params(params, fixed_params = None):
     return params.append(fixed_params)
-
-
-
-
-##########################################
-# tests
-# todo: move in test suite
-# currently automatically run on import ... should not be a problem since the evaluation is fast
-################################################
-
-def test_param_selectors():
-    params = pd.Series({'a.a': 1, 'a.b': 2, 'b.x': 3, 'c.x': 1, 'c.a.b': 7})
-    assert(len(param_selector(params, 'a')) == 2)
-    assert(param_selector(params, 'a')['a'] == 1)
-    assert(param_selector(params, 'a')['b'] == 2)
-
-    assert(len(param_selector(params, 'b')) == 1)
-    assert(param_selector(params, 'b')['x'] == 3)
-    
-    assert(len(param_selector(params, 'c')) == 2) 
-    assert(len(param_selector(params, 'c.a')) == 1) 
-    assert(param_selector(params, 'c.a')['b'] == 7)
-test_param_selectors()
-
-def test_param_to_kwargs():
-    params = pd.Series({'a': 1, 'b': 2})
-    def fun(**kwargs):
-        assert(len(kwargs.keys()) == 2)
-        assert(kwargs['a'] == 1)
-        assert(kwargs['b'] == 2)
-    param_to_kwargs(fun)(params = params)
-test_param_to_kwargs()    
-
