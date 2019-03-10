@@ -179,6 +179,13 @@ except ImportError:
 
 defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
 
+import biophysics_fitting
+from biophysics_fitting import hay_complete_default_setup as bfit_hay_complete_default_setup
+from biophysics_fitting import L5tt_parameter_setup as bfit_L5tt_parameter_setup
+from biophysics_fitting.parameters import param_to_kwargs as bfit_param_to_kwargs
+from biophysics_fitting.optimizer import start_run as bfit_start_run
+
+from functools import partial
 
 def print_module_versions():
     print "The loaded modules with __version__ attribute are:"
