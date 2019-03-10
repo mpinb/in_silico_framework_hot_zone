@@ -1,11 +1,11 @@
-import Interface as I
+import pandas as pd
 
 def get_EPSP_measurement():
     EPSP_mean = [0.49,0.49,0.35,0.47,0.46,0.44,0.44,0.571]
     EPSP_med = [0.35,0.35,0.33,0.33,0.36,0.31,0.31,0.463]
     EPSP_max = [1.9,1.9,1.0,1.25,1.5,1.8,1.8,1.18]
     celltypes = ['L2', 'L34', 'L4', 'L5st', 'L5tt', 'L6cc', 'L6ct', 'VPM_C2']
-    return I.pd.DataFrame({'EPSP_mean_measured': EPSP_mean, 
+    return pd.DataFrame({'EPSP_mean_measured': EPSP_mean, 
                            'EPSP_med_measured':EPSP_med, 
                            'EPSP_max_measured': EPSP_max}, index = celltypes)
     
