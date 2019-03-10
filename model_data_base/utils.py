@@ -44,6 +44,7 @@ silence_stdout = silence_stdout()
 
 import tempfile
 import shutil
+
 class mkdtemp():
     def __enter__(self):
         self.tempdir = tempfile.mkdtemp()
@@ -250,3 +251,13 @@ def wait_until_key_removed(mdb, key, delay = 5):
             if already_printed:
                 print("Key {} has been removed. Continuing.".format(key))
             return
+        
+def get_file_or_folder_that_startswith(path, startswith):
+    paths = [p for p in os.listdir(path) if p.startswith(startswith)]
+    assert len(paths) == 1
+    return os.path.join(path,paths[0])
+
+def get_file_or_folder_that_endswith(path, endswith):
+    paths = [p for p in os.listdir(path) if p.endswith(endswith)]
+    assert len(paths) == 1
+    return os.path.join(path,paths[0])
