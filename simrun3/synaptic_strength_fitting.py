@@ -16,7 +16,7 @@ from .get_cell_with_network import get_cell_with_network
 class PSPs:
     '''main class for calculation of ePSP amplitudes and synaptic strength fitting'''
     def __init__(self, neuron_param = None, confile = None, gExRange = [0.5, 1.0, 1.5, 2.0], 
-                 AMPA_component = 1, NMDA_component = 1, vardt = True):
+                 AMPA_component = 1, NMDA_component = 1, vardt = True, save_vmax_dir = None):
         ''' 
         neuron_param: I.scp.NTParameterSet structure specifying the biophysical model
         confile: path to .con-file of the network realization that should be used
@@ -24,6 +24,8 @@ class PSPs:
         vardt: should the variable step size solver be used=
         '''
         assert('neuron' in neuron_param.keys())
+        if not save_vmax_dir is None:
+            raise NotImplementedError()
         self.neuron_param = neuron_param
         self.confile = confile
         self.gExRange = gExRange
@@ -164,6 +166,8 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
         for syn in preSynCell.synapseList:
             syn.weight = {'glutamate_syn': [gAMPA, gNMDA]}  
             activate_functional_synapse(syn, cell, preSynCell, synParameters, releaseTimes = [tOffset+spikeTime])
+    
+    neuron_param.sim.tStop = 150
     
     I.scp.init_neuron_run(neuron_param.sim, vardt = vardt)
     t,v = I.np.array(cell.tVec), I.np.array(cell.soma.recVList)[0,:]
