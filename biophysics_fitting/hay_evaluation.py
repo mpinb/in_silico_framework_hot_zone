@@ -10,12 +10,20 @@ import numpy as np
 import pandas as pd
 import neuron
 h = neuron.h
+import warnings
 # moved to the bottom to resolve circular import
 # from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
 
 neuron_basedir = os.path.join(os.path.dirname(__file__), 'MOEA_EH_minimal')
 
 def setup_hay_evaluator(testing = False):
+    '''
+    this adds a stump cell to the neuron environment,which is
+    necessary to acces the hay evaluate functions. For the vairalbe time step solver,
+    this changes the step size and can therefore minimally change the results.
+    before testing reproducability, it is therefore necessary to initialize
+    the evaluator
+    '''
     # todo: this also creates a cell which is simulated in neuron
     # therefore the evaluator should be set up without 
     # creating a cell
@@ -25,6 +33,14 @@ def setup_hay_evaluator(testing = False):
     assert(os.path.exists(neuron_basedir))
     import neuron
     h = neuron.h
+    
+    warnings.warn("Setting up hay evaluator. This loads several variables " + 
+                  "to the NEURON envioronment. Also, it creates a unconnected " + 
+                  "cell (which is very small ~ 1 compartment) which has the purpose " + 
+                  "to 'just be there' such that the functionality necessary to evaluate " + 
+                  "voltage traces is available. This has the side effect that in the " + 
+                  "case of the variable time step solver, the timesteps can be changed."
+                  )
     
     central_file_name = 'fit_config_89_CDK20050712_BAC_step_arco_run1.hoc'
     try:
@@ -40,6 +56,12 @@ def setup_hay_evaluator(testing = False):
         if testing: 
             test()          
 
+objectives_step = ['AI1','AI2','AI3','APh1','APh2','APh3','APw1','APw2','APw3','DI1','DI2',
+'ISIcv1','ISIcv2','ISIcv3','TTFS1','TTFS2','TTFS3','fAHPd1','fAHPd2','fAHPd3',
+'mf1','mf2','mf3','sAHPd1','sAHPd2','sAHPd3','sAHPt1','sAHPt2','sAHPt3']
+
+objectives_BAC = ['BAC_APheight', 'BAC_ISI', 'BAC_ahpdepth', 'BAC_caSpike_height', 'BAC_caSpike_width', 
+                      'BAC_spikecount', 'bAP_APheight', 'bAP_APwidth', 'bAP_att2', 'bAP_att3', 'bAP_spikecount']
 
 ##############################################
 # used to test reproducibility
