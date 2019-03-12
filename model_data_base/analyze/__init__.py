@@ -1,9 +1,9 @@
-import Interface
+import barrel_cortex
 from spike_detection import spike_detection
 import spaciotemporal_binning
 
-excitatory = Interface.barrel_cortex.excitatory
-inhibitory = Interface.barrel_cortex.inhibitory
+excitatory = barrel_cortex.excitatory
+inhibitory = barrel_cortex.inhibitory
 
 def split_synapse_activation(sa, selfcheck = True, excitatory = excitatory, inhibiotry = inhibitory):
     '''Splits synapse activation in EXC and INH component.
