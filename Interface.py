@@ -72,7 +72,7 @@ print "Current pid: {pid}".format(pid = os.getpid())
 
 import barrel_cortex
 excitatory = barrel_cortex.excitatory
-inhibitory = barrel_cortex.excitatory
+inhibitory = barrel_cortex.inhibitory
 color_cellTypeColorMap = barrel_cortex.color_cellTypeColorMap
 
 from model_data_base.model_data_base import ModelDataBase
