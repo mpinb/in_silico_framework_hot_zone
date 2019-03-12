@@ -24,5 +24,5 @@ def get_pdf_selected(pdf, BAC_limit = 3.5, step_limit = 4.5,
     
     objectives = objectives_BAC + objectives_step
     pdf['sort_column'] = pdf[objectives].max(axis = 1)
-    p = pdf[(pdf[objectives].max(axis = 1) < 5) & (pdf[objectives_BAC].max(axis = 1) < 3.5)].sort_values('sort_column').head()
+    p = pdf[(pdf[objectives_step].max(axis = 1) < step_limit) & (pdf[objectives_BAC].max(axis = 1) < BAC_limit)].sort_values('sort_column').head()
     return p, str(p.index[0])
