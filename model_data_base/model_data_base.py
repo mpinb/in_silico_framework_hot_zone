@@ -249,6 +249,7 @@ class ModelDataBase(object):
         '''creates a directory in the model_data_base directory and 
         returns the path'''
         absolute_path = tempfile.mkdtemp(prefix = prefix + '_', suffix = '_' + suffix, dir = self.basedir) 
+        os.chmod(absolute_path, 0o755)
         relative_path = os.path.relpath(absolute_path, self.basedir)
         return absolute_path, relative_path
 
