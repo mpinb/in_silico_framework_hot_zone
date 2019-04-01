@@ -1,16 +1,8 @@
-import os
-import sys
 import numpy as np
 import time
 
 from scipy.spatial import ConvexHull
 
-# Bellow we check if the current path of the current file is in the system
-# path, and if it is not we add it, so we can easily import the written
-# modules from the other folders.
-nb_dir = os.path.split(os.getcwd())[0]
-if (nb_dir not in sys.path):
-    sys.path.append(nb_dir)
 
 # importing modules from folders:
 # radii/radii/tranfromTools
@@ -18,15 +10,25 @@ if (nb_dir not in sys.path):
 import transformTools as tr
 import radii as radi
 
+
+
+import Interface as I
+from getting_started import getting_started_dir
+
+
+
+
+
 # Creating varianles for the address of hoc, am_final, and hoc-output Folders
-hocDataPath = str('../data/neuron1/hoc/')
-amDataPath = str('../data/neuron1/am_final/')
-outputFolderPath = str('../output/neuron1/hoc/')
+hocDataPath = str('radii/data/neuron1/hoc/')
+amDataPath = str('radii/data/neuron1/am_final/')
+outputFolderPath = str('radii/data/neuron1/output/')
 
 # Adding the name of files to their folder path and assing them to variables
-hocFile = hocDataPath + "500_GP_WR639_cell_1547_SP5C_checked_RE.hoc"
-hocFileOutput = outputFolderPath + "hocFileWithRad.hoc"
-amFile = amDataPath + 'algined_slices_only_dendrite.am'
+hocFile = I.os.path.join(getting_started_dir, hocDataPath,"500_GP_WR639_cell_1547_SP5C_checked_RE.hoc")
+hocFileOutput = I.os.path.join(getting_started_dir,outputFolderPath,"hocFileWithRad.hoc")
+amFile = I.os.path.join(getting_started_dir,  amDataPath,'algined_slices_only_dendrite.am')
+
 
 # extract set1 points:
 # Read the hoc points (reduced), then removing their radius from them
@@ -210,14 +212,16 @@ newHPoint = []
 # based on the pairs that we found from the above codes
 print("adding radii to corresponding hoc point, based on the pairs")
 
-outTestFolder = str('../output/neuron1/test/')
+outTestFolder = str('radii/data/neuron1/test/')
+
 pairesFile = "pairs.txt"
 trAmPoints4DFile = "trAmPoints4D.txt"
 amPoints4DFile = "amPoints4D.txt"
 
-testPairs = outTestFolder + pairesFile
-testTrAmPoints4D = outTestFolder + trAmPoints4DFile
-testAmPoints4D = outTestFolder + amPoints4DFile
+testPairs = I.os.path.join(getting_started_dir, outTestFolder,pairesFile)
+testTrAmPoints4D = I.os.path.join(getting_started_dir, outTestFolder, trAmPoints4DFile)
+testAmPoints4D = I.os.path.join(getting_started_dir, outTestFolder, amPoints4DFile)
+
 
 with open(testPairs, 'w') as f:
     for pai in pairs:
