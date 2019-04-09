@@ -39,9 +39,9 @@ def applyfun(pdf):
 
 
 def synapse_activation_postprocess_pandas(pdf, groupby = '', \
-                                          prefun = prefun, 
-                                          applyfun = applyfun, 
-                                          postfun = postfun):
+                                          prefun = None, 
+                                          applyfun = None, 
+                                          postfun = None):
     '''see docstring of synapse_activation_postprocess_dask'''
 
     if not isinstance(groupby, list): groupby = [groupby]
@@ -147,7 +147,10 @@ def save_groupby(mdb, result, groupby):
     for key in result:
         sub_mdb.setitem(key, result[key], dumper = numpy_to_msgpack)
         
-def init(mdb, groupby = '', get = None):
+def init(mdb, groupby = '', get = None, 
+         prefun = prefun, 
+         applyfun = applyfun, 
+         postfun = postfun):
     '''
     Binning synapse activations.
     
@@ -176,4 +179,7 @@ def init(mdb, groupby = '', get = None):
     
     synapse_activation_postprocess_dask(mdb['synapse_activation'], \
                                         groupby = groupby, mdb = mdb, \
-                                        get = get)
+                                        get = get, \
+                                        prefun = prefun, \
+                                        applyfun = applyfun, \
+                                        postfun = postfun)
