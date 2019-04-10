@@ -1,16 +1,27 @@
 
 import numpy as np
-
+import math
 
 class RadiusCalculator:
     def __init__(self, xyResolution=0.092, zResolution=0.5, xySize=20,
-                 numberOfRays=36):
+                 numberOfRays=36, tresholdPercentage=0.5):
         self.xyResolution = xyResolution
         self.zResolution = zResolution
         self.xySize = xySize
         self.numberOfRays = numberOfRays
         self.rayLengthPerDirection = xySize / 2.0
         self.rayLengthPerDirectionOfImageCoordinates = self.rayLengthPerDirection/xyResolution
+        self.tresholdPercentage = tresholdPercentage
+
+    def getProfileOfThesePoints(self, image, points):
+        temp = []
+        AllPointsMinRadii = []
+
+        for point in points:
+            temp = self.getRadiusFromProfile(image, point)
+            AllPointsMinRadii.append(temp[3])
+
+        return AllPointsMinRadii
 
     def getProfileAtThisPoint(self, image, point):
         raysProfiles = []
@@ -23,6 +34,9 @@ class RadiusCalculator:
 
             ray = self.constructRay(frontCoordinates, backCoordinates, point)
             rays.append(ray)
+
+
+
 
             rayProfile = self.getProfileValues(image, ray)
             raysProfiles.append(rayProfile)
@@ -41,13 +55,13 @@ class RadiusCalculator:
         for i in range(self.numberOfRays):
             phi = i*(np.pi/self.numberOfRays)
 
-            frontProfileIndices = self.getRayPointCoordinates(image, point, phi, front=True)
-            backProfileIndices = self.getRayPointCoordinates(image, point, phi, front=False)
+            frontCoordinate = self.getRayPointCoordinates(image, point, phi, front=True)
+            backCoordinate = self.getRayPointCoordinates(image, point, phi, front=False)
 
-            backCounterPoint = self.getCounterIndex(image, point, frontProfileIndices)
-            frontCounterPoint = self.getCounterIndex(image, point, backProfileIndices)
+            backCounterPoint = self.getCounterIndex(image, point, backCoordinate)
+            frontCounterPoint = self.getCounterIndex(image, point, frontCoordinate)
 
-            ray = self.constructRay(frontProfileIndices, backProfileIndices, point)
+            ray = self.constructRay(frontCoordinate, backCoordinate, point)
 
             rayProfile = self.getProfileValues(image, ray)
             raysProfileList.append(rayProfile)
@@ -58,14 +72,14 @@ class RadiusCalculator:
                 radiusList.append(radius)
 
             if (radius < minRadius):
-                frontProfile = self.getProfileValues(image, frontProfileIndices)
-                backProfile = self.getProfileValues(image, backProfileIndices)
+                frontProfile = self.getProfileValues(image, frontCoordinate)
+                backProfile = self.getProfileValues(image, backCoordinate)
                 minRadius = radius
-        return [backProfile, frontProfile, radiusList, minRadius, backCounterPoint, frontCounterPoint, counterList, raysProfileList]
+        return backProfile, frontProfile, radiusList, minRadius, backCounterPoint, frontCounterPoint, counterList, raysProfileList
 
 
     def constructRay(self, frontProfileIndices, backProfileIndices, point):
-        centerPointIndex = [int(round(point[0])), int(round(point[1]))]
+        centerPointIndex = [int(point[0]), int(point[1])]
         ray = list(reversed(backProfileIndices)) + [centerPointIndex] + frontProfileIndices
         return ray
 
@@ -80,7 +94,8 @@ class RadiusCalculator:
 
     def getCounterIndex(self, image, point, profileIndices):
         pointValue = image.GetPixel([int(point[0]), int(point[1])])
-        pointHalfValue = pointValue/2.0
+        # pointHalfValue = pointValue/2.0
+        pointTresholdValue = pointValue*self.tresholdPercentage
 
         profileIndicesLength = len(profileIndices)
         contourIndices = []
@@ -88,7 +103,7 @@ class RadiusCalculator:
             pixel_1_value = image.GetPixel(profileIndices[i])
             pixel_2_value = image.GetPixel(profileIndices[i+1])
 
-            if pixel_1_value >= pointHalfValue and pixel_2_value <= pointHalfValue:
+            if pixel_1_value >= pointTresholdValue and pixel_2_value <= pointTresholdValue:
                 contourIndices = profileIndices[i]
                 break
 
