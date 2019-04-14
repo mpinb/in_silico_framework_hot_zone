@@ -13,6 +13,7 @@ import single_cell_analyzer as sca
 from .seed_manager import get_seed
 from .utils import *
 import os
+import socket
 
 
 
@@ -50,10 +51,13 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', seed = No
     
     cell = scp.create_cell(cellParam)
             
+    uniqueID = 'seed' + str(seed) + '_pid' + str(os.getpid())
     dirName = os.path.join(dirPrefix, 'results', \
-                           time.strftime('%Y%m%d-%H%M') + '_' + str(seed))
+                           time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
     if not os.path.exists(dirName):
         os.makedirs(dirName)
+    with open(os.path.join(dirName, 'hostname_' + socket.gethostname()), 'w') as f:
+        pass  
 
 
     #tOffset = 0.0 # avoid numerical transients
