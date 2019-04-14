@@ -139,7 +139,7 @@ class PSPs:
 # Second part: functions to simulate PSPs 
 #############################################
 def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, preSynCellID, gAMPA, gNMDA, vardt = False):
-    '''core function, that actually activates a single synapse runs the simulation.
+    '''core function, that actually activates a single synapse and runs the simulation.
     cell_nw_generator: simrun3.get_cell_with_network.get_cell_with_network
     neuron_param: single_cell_parser.NTParameterSet specifying biophysical properties
     network_param: single_cell_parser.NTParameterSet specifying network properties
@@ -195,6 +195,8 @@ def run_ex_synapses(neuron_param, network_param, celltype, gAMPDA, gNMDA, vardt 
         t,v = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
                              celltype, preSynCellID, gAMPDA, gNMDA, vardt = vardt)
         somaT.append(t), somaV.append(v)
+    print 'deleting cell_nw_generator, cell, nwMap'
+    del cell_nw_generator, cell, nwMap
     return t_baseline, v_baseline, somaT, somaV
 
 def generate_ex_network_param_from_network_embedding(confile):
