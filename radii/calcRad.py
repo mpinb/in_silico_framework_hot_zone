@@ -4,7 +4,7 @@ import math
 
 class RadiusCalculator:
     def __init__(self, xyResolution=0.092, zResolution=0.5, xySize=20,
-                 numberOfRays=36, tresholdPercentage=0.5, numberOfRaysForPostMeasurment=36):
+                 numberOfRays=36, tresholdPercentage=0.5, numberOfRaysForPostMeasurment=20):
         self.xyResolution = xyResolution
         self.zResolution = zResolution
         self.xySize = xySize
@@ -13,7 +13,7 @@ class RadiusCalculator:
         self.rayLengthPerDirectionOfImageCoordinates = self.rayLengthPerDirection/xyResolution
         self.tresholdPercentage = tresholdPercentage
 
-        self.rayLengthPerDirectionOfImageCoordinatesForPostMeasurment = self.rayLengthPerDirectionOfImageCoordinates
+        self.rayLengthPerDirectionOfImageCoordinatesForPostMeasurment = 0.50/xyResolution # self.rayLengthPerDirectionOfImageCoordinates/10
         self.numberOfRaysForPostMeasurment = numberOfRaysForPostMeasurment
         self.debug_postMeasurementPoints = []
 
@@ -57,11 +57,12 @@ class RadiusCalculator:
         backProfile = []
         frontProfile = []
         rays = []
+        selectedProfileIndex = 1000
         backRadius = 0
         frontRadius = 0
 
         if postMeasurment == 'yes':
-            rays, raysProfilelist = self.getHigherResolutionProfiles(image, point)
+            rays, raysProfileList = self.getHigherResolutionProfiles(image, point)
             point = self.postMeasurmentFunction(image, rays, raysProfileList)
             self.debug_postMeasurementPoints.append(point)
             return self.getRadiusFromProfile(image, point, postMeasurment='no')
@@ -79,32 +80,27 @@ class RadiusCalculator:
             rayProfile = self.getProfileValues(image, ray)
             raysProfileList.append(rayProfile)
 
-
         for i, ray in enumerate(rays):
 
             rayLength = len(ray)
             halfRayLength = (rayLength-1)/2
 
-            backCounterPoint = self.getCounterIndex(image, point, ray[0:halfRayLength])
-            frontCounterPoint = self.getCounterIndex(image, point, ray[halfRayLength+1:rayLength])
+            backCounterPoint = self.getCounterIndex(image, point, list(reversed(ray[0:halfRayLength+1])))
+            frontCounterPoint = self.getCounterIndex(image, point, ray[halfRayLength:rayLength])
 
-
-            if (len(backCounterPoint) == 2):
-                backRadius = self.getDistance(backCounterPoint, point)
-
-            if (len(frontCounterPoint) == 2):
-                frontRadius = self.getDistance(frontCounterPoint, point)
-
+            if (len(backCounterPoint) == 2 and len(frontCounterPoint) == 2):
+                radius = self.getDistance(backCounterPoint,frontCounterPoint)
             counterList.append([backCounterPoint, frontCounterPoint])
 
-            radius = frontRadius + backRadius
             radiusList.append(radius)
 
             if (radius < minRadius):
                 frontProfile = self.getProfileValues(image, frontCoordinate)
                 backProfile = self.getProfileValues(image, backCoordinate)
                 minRadius = radius
-        return backProfile, frontProfile, radiusList, minRadius, backCounterPoint, frontCounterPoint, counterList, raysProfileList, rays
+                selectedProfileIndex = i
+        # assert (minRadius < 100)
+        return backProfile, frontProfile, radiusList, minRadius, backCounterPoint, frontCounterPoint, counterList, raysProfileList, rays, selectedProfileIndex
 
 
     def getHigherResolutionProfiles(self, image, point):
