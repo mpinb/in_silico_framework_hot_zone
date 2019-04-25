@@ -168,10 +168,13 @@ class ModelSelection:
             raise ValueError()
         return self.pdf_XY.loc[modelid][self.objectives]
 
-    def get_cell_param(self, modelid):
+    def get_cell_param(self, modelid, add_sim_param = False, recordingSites = [], tStop = 295):
         simulator = self.get_simulator()
-        param_names = self.param_names # mdb['params'].index
-        cell_param = simulator.setup.get_cell_params(self.get_parameters(modelid))        
+        cell_param = simulator.setup.get_cell_params(self.get_parameters(modelid)) 
+        if add_sim_param:
+            cell_param = _add_sim_to_neuron_param(cell_param, 
+                                                  recordingSites = recordingSites, 
+                                                  tStop = tStop)
         return cell_param
     
     def get_simulator(self):
@@ -413,7 +416,93 @@ class SynapticStrengthFitting:
         I.scp.write_landmark_file(outfile, syn_coordinates)
         return syn_coordinates 
 
+############################################
+# write landmark files
+############################################
 
+def write_landmark_file(model_selection):
+    with I.silence_stdout:
+        cell, _ = model_selection.get_cell_with_biophysics(model_selection.selected_models[0])
+
+    fixed_params = model_selection.l6_config.mdb['fixed_params']
+    
+    landmark_positions = [biophysics_fitting.utils.vmApical_position(cell, dist = d) 
+                          for d in [fixed_params['bAP.hay_measure.recSite1'], fixed_params['bAP.hay_measure.recSite2']]] 
+    
+    I.scp.write_landmark_file(model_selection.l6_config.mdb['morphology']\
+                              .join('recSites.landmarkAscii'), landmark_positions)
+#############################################
+# general method for setting up simulations of evoked activity
+#############################################
+class EvokedActivitySimulationSetup:
+    def __init__(self, output_dir_key = None, synaptic_strength_fitting = None, 
+                 stims = None, locs = None, INHscalings = None, tStim = 245, tEnd = 295):
+        self.output_dir_key = output_dir_key
+        self.synaptic_strength_fitting = synaptic_strength_fitting
+        self.model_selection = synaptic_strength_fitting.model_selection
+        self.l6_config = self.model_selection.l6_config
+        self.stims = stims
+        self.locs = locs
+        self.INHscaling = INHscalings
+        self.tStim = tStim
+        self.tEnd = tEnd
+        self.ds = []
+        self.futures = None
+            
+    def setup(self):
+        mdb = self.l6_config.mdb
+        for model_id in self.model_selection.selected_models:
+            syn_strength = self.synaptic_strength_fitting.get_optimal_g(model_id)['optimal g']
+            print 'syn_strength'
+            I.display.display(syn_strength)
+            if not self.output_dir_key in mdb[str(model_id)].keys():
+                mdb[str(model_id)].create_managed_folder(self.output_dir_key)
+            landmark_name = mdb['morphology'].join('recSites.landmarkAscii')        
+            cell_param = self.model_selection.get_cell_param(model_id, add_sim_param = True,
+                                                        recordingSites = [landmark_name])
+            cell_param_name = mdb[str(model_id)]['PW_fitting'].join('cell.param')
+            cell_param.save(cell_param_name)
+            for INH_scaling in self.INHscaling:            
+                for stim in self.stims:
+                    for loc in self.locs:
+                        network_param = self.l6_config.get_network_param(stim = stim, 
+                                                                    loc = loc, 
+                                                                    stim_onset=self.tStim)
+                        I.scp.network_param_modify_functions.change_evoked_INH_scaling(network_param, INH_scaling)
+                        I.scp.network_param_modify_functions.change_glutamate_syn_weights(network_param, syn_strength)
+                        network_param_name = mdb[str(model_id)][self.output_dir_key].join('network_INH_{}_stim_{}_loc_{}.param'.format(INH_scaling, stim, loc))
+                        network_param.save(network_param_name)
+                        outdir = mdb[str(model_id)][self.output_dir_key].join(str(INH_scaling)).join(stim).join(str(loc))
+                        print model_id, INH_scaling, stim, loc
+                        d = I.simrun_run_new_simulations(cell_param_name, network_param_name, 
+                                                         dirPrefix = outdir, 
+                                                         nSweeps = 200, 
+                                                         nprocs = 1, 
+                                                         scale_apical = lambda x: x,
+                                                         silent = False)
+                        self.ds.append(d)
+
+    def run(self, client, fire_and_forget = False):
+        if len(self.ds) == 0:
+            raise RuntimeError("You must run the setup method first")
+        self.futures = client.compute(self.ds)
+        if fire_and_forget:
+            I.distributed.fire_and_forget(self.futures)
+            
+    def init_mdb(self, client, dendritic_voltage_traces = False):
+        mdb = self.l6_config.mdb
+        for model_id in self.model_selection.selected_models:
+            mdb_key = self.output_dir_key + '_mdb'
+            if mdb_key in mdb[str(model_id)].keys():
+                del mdb[str(model_id)][mdb_key]
+            if not mdb_key in mdb[str(model_id)].keys():
+                mdb_init = mdb[str(model_id)].create_sub_mdb(mdb_key)
+                I.mdb_init_simrun_general.init(mdb_init, mdb[str(model_id)][self.output_dir_key], 
+                                               burst_times = False, 
+                                               get = client.get,
+                                               dendritic_voltage_traces = dendritic_voltage_traces)        
+            
+            
 #####
 # unused so far
 
