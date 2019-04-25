@@ -9,6 +9,8 @@ import Interface as I
 activate_functional_synapse = I.scp.network.activate_functional_synapse
 from .utils import get_cellnumbers_from_confile, split_network_param_in_one_elem_dicts
 from .get_cell_with_network import get_cell_with_network
+from biophysics_fitting.hay_evaluation import objectives_BAC, objectives_step
+
 
 ###############################
 # First part: class to manage synaptic strength fitting
@@ -89,7 +91,7 @@ class PSPs:
                     raise RuntimeError(errstr)
         return out
     
-    def get_voltage_and_timing(self, method = 'dynamic_baseline'):
+    def get_voltage_and_timing(self, method = 'dynamic_baseline', merged = False, merge_celltype_kwargs = {}):
         '''calculate maxmimum and timing of the EPSPS
         method: dynamic_baseline: a simulation without any synaptic activation is 
             substracted from a simulation with cell activation. The maximum and 
@@ -101,28 +103,16 @@ class PSPs:
             returned. 
         '''
         res = self.get_voltage_traces()
-        if method == 'dynamic_baseline':
-            vt = {k: {k: {k: [get_tMax_vMax_baseline(v[0], v[1], v[2][lv], v[3][lv])
-                              for lv in range(len(v[2]))]
-                          for k, v in v.iteritems()}
-                      for k, v in v.iteritems()}
-                  for k, v in res.iteritems()}
-        elif method == 'constant_baseline':
-            vt = {k: {k: {k: [get_tMax_vMax(v[2][lv], v[3][lv])
-                              for lv in range(len(v[2]))]
-                          for k, v in v.iteritems()}
-                      for k, v in v.iteritems()}
-                  for k, v in res.iteritems()}
-        else:
-            errstr = 'method must be dynamic_baseline or constant_baseline'
-            raise ValueError(errstr)
-        return vt
-    
+        if merged:
+            res = merge_celltypes(res, **merge_celltype_kwargs)
+        return get_voltage_and_timing(res, method)
+        
     def get_summary_statistics(self, method = 'dynamic_baseline',
                                merge_celltype_kwargs = {},
                                ePSP_summary_statistics_kwargs = {}):
-        vt = self.get_voltage_and_timing(method)
-        vt = merge_celltypes(vt, **merge_celltype_kwargs)
+        vt = self.get_voltage_and_timing(method, 
+                                         merged = True, 
+                                         merge_celltype_kwargs=merge_celltype_kwargs)
         return ePSP_summary_statistics(vt, **ePSP_summary_statistics_kwargs)
     
     def get_optimal_g(self, 
@@ -135,10 +125,105 @@ class PSPs:
         calculate_optimal_g(pdf)
         return pdf
     
+    def visualize_psps(self, g = 1.0, method = 'dynamic_baseline', merge_celltype_kwargs={}):
+        psp = self
+        vt = psp.get_voltage_and_timing(method, merged = True, 
+                                        merge_celltype_kwargs=merge_celltype_kwargs)        
+        #vt = I.simrun3.synaptic_strength_fitting.get_voltage_and_timing(vt, method)
+        pdf = I.pd.concat([I.pd.Series([x[1] for x in vt[name][g][g]], name = name) 
+             for name in vt.keys()], axis = 1)
+        fig = I.plt.figure(figsize = (10,len(vt)*1.3))
+        ax = fig.add_subplot(111)
+        pdf.plot(kind = 'hist', subplots = True, bins = I.np.arange(0,pdf.max().max(), 0.01), ax = ax)  
+    
+    def _get_cell_and_nw_map(self, network_param = None):
+        neuron_param = self.neuron_param
+        if network_param is None:
+            network_param = self.network_param # psp.network_params_by_celltype[0]  
+        cell_nw_generator = I.simrun3.get_cell_with_network.get_cell_with_network(neuron_param, 
+                                                                                  network_param)
+        cell, nwMap = cell_nw_generator()
+        return cell, nwMap
+    
+    def get_synapse_coordinates(self, population, flatten = False, cell_indices=None):
+        _, nwMap = self._get_cell_and_nw_map()
+        cells = nwMap.cells[population]
+        if cell_indices is not None:
+            cells = [cells[lv] for lv in cell_indices]
+        synapses = [c.synapseList for c in cells]
+        syn_coordinates = [[syn.coordinates for syn in synlist] for synlist in synapses]
+        if flatten:
+            syn_coordinates = [x for x in syn_coordinates for x in x]
+        return syn_coordinates
+
+    def get_merged_synapse_coordinates(self, mergestring, flatten = False):
+        _, nwMap = self._get_cell_and_nw_map()  
+        cells = []
+        for k in sorted(nwMap.cells.keys()):
+            if not mergestring in k:
+                continue
+            print k
+            cells.extend(nwMap.cells[k])
+        synapses = [c.synapseList for c in cells]
+        syn_coordinates = [[syn.coordinates for syn in synlist] for synlist in synapses]
+        if flatten:
+            syn_coordinates = [x for x in syn_coordinates for x in x]
+        return syn_coordinates 
+    
+    def get_synapse_coordinates_with_psp_amplitude(self, population, g = 1.0, merged = True, select_synapses_per_cell = None):   
+        if merged:
+            coordinates = self.get_merged_synapse_coordinates(population)
+            values = self.get_voltage_and_timing(merged = True, 
+                                                 merge_celltype_kwargs=dict(detection_strings = [population]))
+        else:
+            coordinates = self.get_synapse_coordinates(population)
+            values = self.get_voltage_and_timing(merged = False)
+        values = [x[1] for x in values[population][g][g]]
+        if select_synapses_per_cell is None:
+            dummy = [list(c) + [v] for clist, v in zip(coordinates, values)
+                     for c in clist]
+        else:
+            dummy = [list(c) + [v] for clist, v in zip(coordinates, values)
+                     for c in clist if len(clist) == select_synapses_per_cell]            
+        return I.np.array(dummy)
+   
+    #neuron_param = PSP_c2center_robert.neuron_param
+    #############
+    # changing the hoc_file: does it resolve the issue?
+    #####################
+    ####################
+    
+
+    def plot_vt(self, population, 
+                opacity = 1, 
+                g = 1.0, 
+                merge = True, 
+                merge_celltype_kwargs={},
+                fig = None): 
+        vt = self.get_voltage_traces() # d.compute(get = I.dask.get)
+        if merge: 
+            vt = merge_celltypes(vt, **merge_celltype_kwargs)
+        vt = vt[population][g][g]
+        if fig is None:
+            fig = I.plt.figure(figsize = (10,5))
+        fig.suptitle(population)            
+        ax = fig.add_subplot(121)
+        ax.plot(vt[0], vt[1], c = 'r')
+        for lv in range(len(vt[2])):
+            ax.plot(vt[2][lv], vt[3][lv], alpha = opacity, c = 'k')
+        t_baseline,v_baseline = I.np.arange(0,150,0.025), I.np.interp(I.np.arange(0,150,0.025), 
+                                                                      vt[0], vt[1])
+        ax = fig.add_subplot(122)
+        for lv in range(len(vt[2])):
+            t,v = vt[2][lv], vt[3][lv]
+            t,v = I.np.arange(0,150,0.025), I.np.interp(I.np.arange(0,150,0.025), t, v)
+            ax.plot(t,v-v_baseline, alpha = opacity, c = 'k')       
+         
+    
 #############################################
 # Second part: functions to simulate PSPs 
 #############################################
-def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, preSynCellID, gAMPA, gNMDA, vardt = False):
+def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, preSynCellID, gAMPA, gNMDA, vardt = False, return_cell = False):
     '''core function, that actually activates a single synapse and runs the simulation.
     cell_nw_generator: simrun3.get_cell_with_network.get_cell_with_network
     neuron_param: single_cell_parser.NTParameterSet specifying biophysical properties
@@ -170,6 +255,10 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     neuron_param.sim.tStop = 150
     
     I.scp.init_neuron_run(neuron_param.sim, vardt = vardt)
+    
+    if return_cell:
+        return cell
+    
     t,v = I.np.array(cell.tVec), I.np.array(cell.soma.recVList)[0,:]
     
     # without the following lines, the simulation will crash from time to time
@@ -181,21 +270,20 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
 def run_ex_synapses(neuron_param, network_param, celltype, gAMPDA, gNMDA, vardt = False, 
                     save_vmax_dir = None):
     '''method to consecutively calculate all EPSPs of all presynaptic cells of one celltype.'''
-    if isinstance(neuron_param, str):
-        neuron_param = I.cloudpickle.loads(neuron_param)
-    if isinstance(network_param, str):
-        network_param = I.cloudpickle.loads(network_param)    
-    with I.silence_stdout:
-        cell_nw_generator = get_cell_with_network(neuron_param, network_param)
-        cell, nwMap = cell_nw_generator()
+    neuron_param = I.scp.NTParameterSet(I.cloudpickle.loads(neuron_param).as_dict())
+    network_param = I.scp.NTParameterSet(I.cloudpickle.loads(network_param).as_dict())    
+    # with I.silence_stdout:
+    cell_nw_generator = get_cell_with_network(neuron_param, network_param)
+    cell, nwMap = cell_nw_generator()
     somaT, somaV, = [], []
     t_baseline, v_baseline = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
                                             celltype, None, gAMPDA, gNMDA, vardt = vardt)
-    for preSynCellID in range(len(nwMap.connected_cells[celltype])):
+    n_cells = len(nwMap.connected_cells[celltype])
+    for preSynCellID in range(n_cells):
+        print("Activating presyanaptic cell {} of {} cells".format(preSynCellID + 1, n_cells))
         t,v = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
                              celltype, preSynCellID, gAMPDA, gNMDA, vardt = vardt)
         somaT.append(t), somaV.append(v)
-    print 'deleting cell_nw_generator, cell, nwMap'
     del cell_nw_generator, cell, nwMap
     return t_baseline, v_baseline, somaT, somaV
 
@@ -231,6 +319,54 @@ def generate_ex_network_param_from_network_embedding(confile):
 ###############################################
 # Third part: functions to analyze PSPs
 ###############################################
+def get_voltage_and_timing(vt, method = 'dynamic_baseline'):
+    '''calculate maxmimum and timing of the EPSPS
+    vt: voltage traces, as returned by PSP.get_voltage_traces()
+    method: dynamic_baseline: a simulation without any synaptic activation is 
+        substracted from a simulation with cell activation. The maximum and 
+        timepoint of maximum is returned
+    method: constant_baseline: the voltage at t = 110ms (= directly before
+        synapse activation) is considered as baseline and substracted
+        from all voltages at all timepoints.
+        The maximum and timepoint of the maximum after t = 110ms is 
+        returned. 
+    '''
+    res = vt
+    if method == 'dynamic_baseline':
+        vt = {k: {k: {k: [get_tMax_vMax_baseline(v[0], v[1], v[2][lv], v[3][lv])
+                          for lv in range(len(v[2]))]
+                      for k, v in v.iteritems()}
+                  for k, v in v.iteritems()}
+              for k, v in res.iteritems()}
+    elif method == 'constant_baseline':
+        vt = {k: {k: {k: [get_tMax_vMax(v[2][lv], v[3][lv])
+                          for lv in range(len(v[2]))]
+                      for k, v in v.iteritems()}
+                  for k, v in v.iteritems()}
+              for k, v in res.iteritems()}
+    else:
+        errstr = 'method must be dynamic_baseline or constant_baseline'
+        raise ValueError(errstr)
+    return vt
+
+def get_summary_statistics(self, method = 'dynamic_baseline',
+                           merge_celltype_kwargs = {},
+                           ePSP_summary_statistics_kwargs = {}):
+    vt = self.get_voltage_and_timing(method, merged = True,
+                                     merge_celltype_kwargs=merge_celltype_kwargs)
+    vt = merge_celltypes(vt, **merge_celltype_kwargs)
+    return ePSP_summary_statistics(vt, **ePSP_summary_statistics_kwargs)
+
+def get_optimal_g(self, 
+                  measured_data, 
+                  method = 'dynamic_baseline',
+                  threashold = 0.1):
+    pdf = self.get_summary_statistics(method = method, threashold = threashold)
+    pdf = pdf.reset_index()
+    pdf = pdf.groupby('celltype').apply(linear_fit_pdf)
+    pdf = I.pd.concat([pdf, measured_data], axis = 1)
+    calculate_optimal_g(pdf)
+    return pdf
 
 def get_tMax_vMax_baseline(t_baseline,v_baseline, t,v):
     '''this method calculates the ePSP amplitude by subtracting a voltage trace without
@@ -242,7 +378,8 @@ def get_tMax_vMax_baseline(t_baseline,v_baseline, t,v):
     except:
         raise RuntimeError() 
     t_baseline,v_baseline = I.np.arange(0,150,0.025), I.np.interp(I.np.arange(0,150,0.025), t_baseline, v_baseline)
-    return I.sca.analyze_voltage_trace(v-v_baseline, t)
+    return get_tMax_vMax(t, v-v_baseline)
+    # return I.sca.analyze_voltage_trace(v-v_baseline, t)
 
 def get_tMax_vMax(t,v):
     '''This method calculates the ePSP amplitude by subtracting the voltage
@@ -258,16 +395,19 @@ def merge_celltypes(vt,
     '''concatenates voltagetraces of celltypes'''
     out = I.defaultdict_defaultdict()
     for detection_string in detection_strings:
-        for celltype in vt.keys():
+        for celltype in sorted(vt.keys()):
             if not celltype.split('_')[0] in celltype_must_be_in:
                 print 'skipping {}'.format(celltype)
                 continue
-            for gAMPA in vt[celltype].keys():
-                for gNMDA in vt[celltype][gAMPA].keys():
+            for gAMPA in sorted(vt[celltype].keys()):
+                for gNMDA in sorted(vt[celltype][gAMPA].keys()):
                     if detection_string in celltype:
+                        # print celltype
                         if not isinstance(out[detection_string][gAMPA][gNMDA], list):
-                            out[detection_string][gAMPA][gNMDA] = []
-                        out[detection_string][gAMPA][gNMDA].extend(vt[celltype][gAMPA][gNMDA])
+                            out[detection_string][gAMPA][gNMDA] = [vt[celltype][gAMPA][gNMDA][0],vt[celltype][gAMPA][gNMDA][1],[],[]]
+                        out[detection_string][gAMPA][gNMDA][2].extend(vt[celltype][gAMPA][gNMDA][2])
+                        out[detection_string][gAMPA][gNMDA][3].extend(vt[celltype][gAMPA][gNMDA][3])
+                        
     return out
 
 def ePSP_summary_statistics(vt, threashold = 0.1, tPSPStart = 100.0):
@@ -314,4 +454,6 @@ def calculate_optimal_g(pdf):
     med = (pdf['EPSP_med_measured']-pdf['EPSP med_offset']) / pdf['EPSP med_slope']
     max_ = (pdf['EPSP_max_measured']-pdf['EPSP max_offset']) / pdf['EPSP max_slope']
     pdf['optimal g'] = (2 * mean + 2 * med + 1 * max_ ) * 1 / 5.
-    return 
+    pdf['optimal g mean'] = mean #(2 * mean + 2 * med  + 1 * max_ ) * 1 / 5.
+    pdf['optimal g median'] = med #(2 * mean + 2 * med  + 1 * max_ ) * 1 / 5.
+    pdf['optimal g max'] = max_ #(2 * mean + 2 * med  + 1 * max_ ) * 1 / 5.
