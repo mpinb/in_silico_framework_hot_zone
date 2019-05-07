@@ -222,7 +222,16 @@ def load_dendritic_voltage_traces(mdb, suffix_key_dict):
 ###########################################
 #Step seven: load parameterfiles
 ###########################################    
-      
+def get_file(self, suffix):
+        '''if folder only contains one file of specified suffix, this file is returned'''
+        l = [f for f in os.listdir(self) if f.endswith(suffix)]
+        if len(l) == 0:
+            raise ValueError('The folder {} does not contain a file with the suffix {}'.format(self, suffix))
+        elif len(l) > 1:
+            raise ValueError('The folder {} contains several files with the suffix {}'.format(self, suffix))
+        else:
+            return os.path.join(self, l[0])
+
 def generate_param_file_hashes(simresult_path, sim_trail_index, get = dask.multiprocessing.get):
     print "find unique parameterfiles"
     def fun(x):
@@ -232,11 +241,15 @@ def generate_param_file_hashes(simresult_path, sim_trail_index, get = dask.multi
 
     def fun_network(x):
         sim_trail_folder, identifier = fun(x)
-        return os.path.join(simresult_path, sim_trail_folder, identifier + '_network_model.param')
+        #return os.path.join(simresult_path, sim_trail_folder, identifier + '_network_model.param')
+        return get_file(os.path.join(simresult_path, sim_trail_folder), '_network_model.param')
+
 
     def fun_neuron(x):
         sim_trail_folder, identifier = fun(x)
-        return os.path.join(simresult_path, sim_trail_folder, identifier + '_neuron_model.param')
+        # return os.path.join(simresult_path, sim_trail_folder, identifier + '_neuron_model.param')
+        return get_file(os.path.join(simresult_path, sim_trail_folder), '_neuron_model.param')
+
     
     @dask.delayed
     def _helper(df):
