@@ -436,7 +436,8 @@ def write_landmark_file(model_selection):
 #############################################
 class EvokedActivitySimulationSetup:
     def __init__(self, output_dir_key = None, synaptic_strength_fitting = None, 
-                 stims = None, locs = None, INHscalings = None, tStim = 245, tEnd = 295):
+                 stims = None, locs = None, INHscalings = None, tStim = 245, tEnd = 295,
+                 models = None):
         self.output_dir_key = output_dir_key
         self.synaptic_strength_fitting = synaptic_strength_fitting
         self.model_selection = synaptic_strength_fitting.model_selection
@@ -448,10 +449,14 @@ class EvokedActivitySimulationSetup:
         self.tEnd = tEnd
         self.ds = []
         self.futures = None
+        self.models = models
+        if self.models is None:
+            self.models = self.synaptic_strength_fitting.model_selection.selected_models
             
     def setup(self):
         mdb = self.l6_config.mdb
-        for model_id in self.model_selection.selected_models:
+        
+        for model_id in self.models:
             syn_strength = self.synaptic_strength_fitting.get_optimal_g(model_id)['optimal g']
             print 'syn_strength'
             I.display.display(syn_strength)
@@ -502,7 +507,135 @@ class EvokedActivitySimulationSetup:
                                                get = client.get,
                                                dendritic_voltage_traces = dendritic_voltage_traces)        
             
-            
+
+############
+# PW fitting
+############
+
+def signchange(x,y):
+    if x / abs(x) == y / abs(y):
+        return False
+    else:
+        return True
+assert(signchange(-2,1))
+assert(~signchange(2,1))
+assert(~signchange(-22,-1))
+assert(signchange(22,-1789))
+
+def linear_interpolation_between_pairs(X,Y, x):
+    assert(x<=max(X))
+    assert(x>=min(X))
+    pair = [lv for lv in range(len(X)-1) if signchange(X[lv]-x, X[lv+1]-x)]
+    assert(len(pair) == 1)
+    pair = pair[0]
+    m = (Y[pair+1]-Y[pair]) / (X[pair+1]-X[pair])
+    c = Y[pair]-X[pair]*m
+    return m*x+c    
+
+class PWfitting:
+    def __init__(self, l6_config, model_selection, min_time = 8, max_time = 25):
+        self.l6_config = l6_config
+        self.model_selection = model_selection
+        self.min_time = min_time
+        self.max_time = max_time
+        ### get target value
+        st_CDK = I.ModelDataBase('/nas1/Data_arco/results/20190114_spiketimes_database')['CDK_PassiveTouch']
+        st_CDK = I.select(st_CDK, stim = 'D2')
+        self.CDK_target_value_avg_L5tt = I.temporal_binning(st_CDK, min_time = min_time, 
+                                                       max_time = max_time, 
+                                                       bin_size = max_time-min_time)[1][0]
+        self.CDK_target_value_same_cell = I.temporal_binning(I.select(st_CDK, cell = int(l6_config.biophysical_model_mdb_key)), 
+                                                      min_time = min_time, 
+                                                             max_time = max_time, 
+                                                             bin_size = max_time-min_time)[1][0]
+
+        print 'CDK_target_value_avg_L5tt: %s' % self.CDK_target_value_avg_L5tt
+        print 'CDK_target_value_same_cell: %s' % self.CDK_target_value_same_cell
+        
+        st_robert_control = I.ModelDataBase('/nas1/Data_arco/results/mdb_robert_3x3/')['spike_times']
+        st_robert_control = st_robert_control[st_robert_control.index.str.split('_').str[0] == 'C2']
+        self.target_robert = I.temporal_binning(st_robert_control, min_time = 245+min_time, 
+                                                max_time = 245+max_time, 
+                                                bin_size = max_time-min_time)[1][0]
+        print 'target_robert: %s' % self.target_robert
+
+    def _get_INH_dependent_n_spikes(self, model):
+        st = self.l6_config.mdb[str(model)]['PW_fitting_mdb']['spike_times']
+        st['INH'] = st.index.str.split('/').str[0]
+        fun = lambda x: I.temporal_binning(x, 
+                                           min_time = 245+self.min_time, 
+                                           max_time = 245+self.max_time, 
+                                           bin_size = self.max_time - self.min_time)[1][0]
+        s = st.groupby('INH').apply(fun)
+        s.name = model
+        return s
+    
+    def plot_INH_pspike_relationship(self):
+
+
+        colors = ['k', 'r', 'b', 'g', 'orange', 'pink']
+        model_color = [[model, colors[lv]] 
+                       for lv, model 
+                       in enumerate(self.model_selection.selected_models)]
+        for m, c in model_color:
+            s = self._get_INH_dependent_n_spikes(m)
+            I.plt.plot(s.index, s, 'o', c = c, label = str(m))
+        I.plt.axhline(self.CDK_target_value_avg_L5tt, color = 'k')
+        I.plt.axhline(self.CDK_target_value_same_cell)
+        I.plt.axhline(self.target_robert)
+        I.plt.xticks(s.index.astype('f'))
+        I.plt.xlabel('INH')
+        I.plt.ylabel('spikes per trial 0-25ms poststim')
+        I.plt.legend()
+        I.sns.despine()
+        
+    def get_INH_scaling_dict(self):
+        INH_scaling_dict = {}
+        for model in self.model_selection.selected_models:
+            try:
+                s = self._get_INH_dependent_n_spikes(model)
+                INH_scaling_dict[model] = linear_interpolation_between_pairs(s.astype('float'), 
+                                                                             s.index.astype('float'), 
+                                                                             self.CDK_target_value_avg_L5tt)
+            except AssertionError:
+                pass
+        return INH_scaling_dict
+    
+    def _plot_PSTHs(self, INH, CDK_PW = True, robert = True, models = True, plottype = 'hist'):
+            mdb = self.l6_config.mdb
+            if plottype == 'hist':
+                plotfun = I.histogram
+            elif plottype == 'line':
+                def plotfun(bins, label = None, fig = None, colormap = None):
+                    fig.plot(bins[0][:-1], bins[1], color = colormap[label], label = label)
+            st_CDK = I.ModelDataBase('/nas1/Data_arco/results/20190114_spiketimes_database')['CDK_PassiveTouch']
+            st_CDK = I.select(st_CDK, stim = 'D2')
+            CDK_bins = I.temporal_binning(st_CDK, min_time = -144, max_time = 100, bin_size = 1)
+            CDK_bins = [range(245-144,245+100+1), CDK_bins[1]]
+            st_robert_control = I.ModelDataBase('/nas1/Data_arco/results/mdb_robert_3x3/')['spike_times']
+            st_robert_control = st_robert_control[st_robert_control.index.str.split('_').str[0] == 'C2']
+            robert_bins = I.temporal_binning(st_robert_control, min_time = 0, max_time = 245+50, bin_size = 1)
+            cmap = I.defaultdict(lambda: None)
+            cmap['CDK_PW'] = 'grey'
+            cmap['robert'] = 'blue'
+            fig = I.plt.figure(figsize = (15,3))
+            if CDK_PW: plotfun(CDK_bins,label = 'CDK_PW', fig = fig.add_subplot(111), colormap = cmap)   
+            if robert: plotfun(robert_bins,label = 'robert', fig = fig.add_subplot(111), colormap = cmap)    
+
+            if models:
+                for model in self.model_selection.selected_models:  
+                    st = mdb[str(model)]['PW_fitting_mdb']['spike_times']
+                    st = st[st.index.str.split('/').str[0] == str(INH)]
+                    plotfun(I.temporal_binning(st, min_time = 0, max_time = 350), 
+                                fig = fig.add_subplot(111), 
+                                label = str(model), colormap = cmap)
+            I.plt.ylim([0,0.3])        
+            I.plt.title(str(INH))
+            I.plt.legend()
+            return fig
+    def plot_PSTHs(self):
+        for INH in I.np.arange(0.5,2.1,.1):
+            self._plot_PSTHs(INH, CDK_PW = True, robert = True)
 #####
 # unused so far
 
