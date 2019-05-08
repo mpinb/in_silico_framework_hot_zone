@@ -484,7 +484,8 @@ class EvokedActivitySimulationSetup:
                                                          nSweeps = 200, 
                                                          nprocs = 1, 
                                                          scale_apical = lambda x: x,
-                                                         silent = False)
+                                                         silent = False,
+                                                         tStop = self.tEnd)
                         self.ds.append(d)
 
     def run(self, client, fire_and_forget = False):
