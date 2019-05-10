@@ -18,6 +18,8 @@ from ..analyze import excitatory, inhibitory
 from ..analyze.temporal_binning import universal as temporal_binning
 from ..IO.LoaderDumper import numpy_to_msgpack as numpy_to_msgpack
 
+maxtime = 400
+
 def prefun(df):
     dummy = df.synapse_type.str.split('_')
     df['celltype'] = dummy.str[0]
@@ -29,12 +31,12 @@ def prefun(df):
     return df
 
 def postfun(s):
-    defaultvalue = np.zeros(300)
+    defaultvalue = np.zeros(maxtime)
     s = s.map(lambda x: defaultvalue if x is None else x)
     return np.vstack(s.values)
 
 def applyfun(pdf):
-    return temporal_binning(pdf, min_time = 0, max_time = 300, normalize = False)[1]
+    return temporal_binning(pdf, min_time = 0, max_time = maxtime, normalize = False)[1]
 
 
 
