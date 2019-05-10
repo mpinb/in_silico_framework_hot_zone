@@ -223,7 +223,8 @@ class PSPs:
 #############################################
 # Second part: functions to simulate PSPs 
 #############################################
-def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, preSynCellID, gAMPA, gNMDA, vardt = False, return_cell = False):
+def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, preSynCellID, gAMPA, gNMDA, 
+                   vardt = False, return_cell = False, synapse_ids = None):
     '''core function, that actually activates a single synapse and runs the simulation.
     cell_nw_generator: simrun3.get_cell_with_network.get_cell_with_network
     neuron_param: single_cell_parser.NTParameterSet specifying biophysical properties
@@ -231,7 +232,9 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     celltype: presynaptic celltype
     preSynCellID: number of presynaptic cell that should be activated. None: No cell will be activated.
     gEx: conductance of AMPA and NMDA component
-    vardt: whether variable stepsize solver should be used '''
+    vardt: whether variable stepsize solver should be used
+    synapse_ids: if None, all synapses assigned to the presynaptic cell get activated.
+        if a list of integers, only synapses with the specified indices get acivated'''
     tOffset = 100
     spikeTime = 10 
     
@@ -246,9 +249,14 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     for syn in cell.synapses[celltype]:             
         syn.weight = {'glutamate_syn': [gAMPA, gNMDA]}     
     
+
     if preSynCellID is not None:
         preSynCell = nwMap.cells[celltype][preSynCellID]
-        for syn in preSynCell.synapseList:
+        if synapse_ids is None:
+            synapse_list = preSynCell.synapseList
+        else:
+            synapse_list = [preSynCell.synapseList[id] for id in synapse_ids]       
+        for syn in synapse_list:
             syn.weight = {'glutamate_syn': [gAMPA, gNMDA]}  
             activate_functional_synapse(syn, cell, preSynCell, synParameters, releaseTimes = [tOffset+spikeTime])
     
@@ -268,7 +276,7 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     return t,v
 
 def run_ex_synapses(neuron_param, network_param, celltype, gAMPDA, gNMDA, vardt = False, 
-                    save_vmax_dir = None):
+                    activate = 'cells'):
     '''method to consecutively calculate all EPSPs of all presynaptic cells of one celltype.'''
     neuron_param = I.scp.NTParameterSet(I.cloudpickle.loads(neuron_param).as_dict())
     network_param = I.scp.NTParameterSet(I.cloudpickle.loads(network_param).as_dict())    
@@ -279,12 +287,20 @@ def run_ex_synapses(neuron_param, network_param, celltype, gAMPDA, gNMDA, vardt 
     t_baseline, v_baseline = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
                                             celltype, None, gAMPDA, gNMDA, vardt = vardt)
     n_cells = len(nwMap.connected_cells[celltype])
-    for preSynCellID in range(n_cells):
-        print("Activating presyanaptic cell {} of {} cells".format(preSynCellID + 1, n_cells))
-        t,v = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
-                             celltype, preSynCellID, gAMPDA, gNMDA, vardt = vardt)
-        somaT.append(t), somaV.append(v)
-    del cell_nw_generator, cell, nwMap
+    if activate == 'cells':
+        for preSynCellID in range(n_cells):
+            print("Activating presyanaptic cell {} of {} cells".format(preSynCellID + 1, n_cells))
+            t,v = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
+                                 celltype, preSynCellID, gAMPDA, gNMDA, vardt = vardt)
+            somaT.append(t), somaV.append(v)
+        del cell_nw_generator, cell, nwMap
+    if activate == 'synapses':
+        for preSynCellID in range(n_cells):
+            print("Activating presyanaptic cell {} of {} cells".format(preSynCellID + 1, n_cells))
+            t,v = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
+                                 celltype, preSynCellID, gAMPDA, gNMDA, vardt = vardt)
+            somaT.append(t), somaV.append(v)
+        del cell_nw_generator, cell, nwMap        
     return t_baseline, v_baseline, somaT, somaV
 
 def generate_ex_network_param_from_network_embedding(confile):
