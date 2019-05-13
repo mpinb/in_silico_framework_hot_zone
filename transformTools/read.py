@@ -1,3 +1,5 @@
+
+import os
 import re
 
 
@@ -104,16 +106,26 @@ def amFile(inputFilePath):
                 in_edge_section = False
 
             if in_thickness_section and (line != '\n'):
-                matches = re.findall('-?\d+\.\d+e[+-]?\d+', line)
+                matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
                 rad = map(float, matches)
                 rads.append(rad)
 
             if in_thickness_section and (line == '\n'):
                 in_thickness_section = False
 
-        print(len(points))
-        print(len(rads))
         for idx, point in enumerate(points):
             pointsWithRad.append([point[0], point[1], point[2], rads[idx][0]])
 
-        return pointsWithRad
+    return pointsWithRad
+
+def multipleAmFiles(inputFolderPath):
+    oneAmFilePoints =[]
+    allAmPoints = []
+
+    for am_file in os.listdir(inputFolderPath):
+        oneAmFilePoints =[]
+        if am_file.endswith(".am"):
+            pathToAmFile = inputFolderPath + str(am_file)
+            oneAmFilePoints = amFile(pathToAmFile)
+            allAmPoints = allAmPoints + oneAmFilePoints
+    return allAmPoints

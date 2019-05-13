@@ -36,3 +36,40 @@ def hocFile(inputFilePath, outputFilePath, hocPointsWithRad):
                 else:
                     writeHocFile.write(line)
     return
+
+## by arco.
+## Modified with Amir (adding uncertainty)
+def amFileWithRadiusAndUncertainty(inpath, outpath, pointsWithRad, uncertainties):
+    
+    with open(inpath) as f:
+        data = f.readlines()
+
+    for lv, line in enumerate(data):
+        if line.rfind("POINT { float[3] EdgePointCoordinates } @")>-1:
+            edge_points_id = int(line[line.rfind("POINT { float[3] EdgePointCoordinates } @")+len("POINT { float[3] EdgePointCoordinates } @"):])
+            break
+
+    thickness_id = edge_points_id + 1
+    uncertainty_id = thickness_id + 1
+
+    data = data[:lv+1] + ['POINT { float thickness } @' + str(thickness_id) + '\n'] + data[lv+1:]
+    data = data[:lv+2] + ['POINT { float uncertainty } @' + str(uncertainty_id) + '\n'] + data[lv+2:]
+
+    with open(outpath, 'w') as f:
+
+        f.writelines(data)
+
+        f.write('\n')
+        f.write('@'+str(edge_points_id) + '\n')
+        for point in pointsWithRad :
+            f.write(str(point[0])+'\t'+str(point[1])+'\t'+str(point[2])+'\n')
+
+        f.write('\n')
+        f.write('@'+str(thickness_id) + '\n')
+        for point in pointsWithRad:
+            f.write(str(point[3])+'\n')
+
+        f.write('\n')
+        f.write('@'+str(uncertainty_id) + '\n')
+        for e in uncertainties:
+            f.write(str(e)+'\n')
