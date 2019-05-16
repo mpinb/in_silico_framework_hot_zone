@@ -18,7 +18,7 @@ import SimpleITK as sitk
 
 class RadiusCalculatorForManyFiles:
     def __init__(self, xyResolution=0.092, zResolution=0.5, xySize=20,
-                 numberOfRays=36, tresholdPercentage=0.5, numberOfRaysForPostMeasurment=20):
+                 numberOfRays=10, tresholdPercentage=0.5, numberOfRaysForPostMeasurment=20):
         self.xyResolution = xyResolution
         self.zResolution = zResolution
         self.xySize = xySize
@@ -34,20 +34,30 @@ class RadiusCalculatorForManyFiles:
     # extraxt radii sets of bunch of files from the folder of "path_to_am"
     # and writ them to and output folder
     def exRadSets(self, path_to_am, path_to_tif, path_to_output_folder, postMeasurment='no'):
-        for spacialGraphFile in os.listdir(path_to_am):
-            if spacialGraphFile.endswith(".am"):
-                points = self.readPoints(path_to_am + spacialGraphFile)
-                spacialGraphIndicator = re.findall(r'[sS]\d+', spacialGraphFile)[0]
-                outputFile = path_to_output_folder + spacialGraphIndicator + \
-                    "_with_r" + ".am"
-                for imageFile in os.listdir(path_to_tif):
-                    if imageFile.startswith(spacialGraphIndicator):
-                        image = self.readImage(path_to_tif + imageFile)
-                        # result = radi.radius.getRadiiHalfMax(image, points)
-                        result = self.radiusCalculator.getProfileOfThesePoints(image, points, postMeasurment)
-                        print(imageFile)
-                        self.writeResult(path_to_am + spacialGraphFile, outputFile, result)
-                        break
+        if (os.path.isdir(path_to_am) and os.path.isdir(path_to_tif)):
+            for spacialGraphFile in os.listdir(path_to_am):
+                if spacialGraphFile.endswith(".am"):
+                    points = self.readPoints(path_to_am + spacialGraphFile)
+                    spacialGraphIndicator = re.findall(r'[sS]\d+', spacialGraphFile)[0]
+                    outputFile = path_to_output_folder + spacialGraphIndicator + \
+                        "_with_r" + ".am"
+                    for imageFile in os.listdir(path_to_tif):
+                        if imageFile.startswith(spacialGraphIndicator):
+                            image = self.readImage(path_to_tif + imageFile)
+                            # result = radi.radius.getRadiiHalfMax(image, points)
+                            result = self.radiusCalculator.getProfileOfThesePoints(image, points, postMeasurment)
+                            print(imageFile)
+                            self.writeResult(path_to_am + spacialGraphFile, outputFile, result)
+                            break
+        else:
+            points = self.readPoints(path_to_am)
+            amFileName = os.path.basename(path_to_am)
+            outputFile = path_to_output_folder + "/" + amFileName
+            imageFile = path_to_tif
+            image = self.readImage(imageFile)
+            result = self.radiusCalculator.getProfileOfThesePoints(image, points, postMeasurment)
+            print(imageFile)
+            self.writeResult(path_to_am, outputFile, result)
 
 
     # reading image file
