@@ -12,9 +12,9 @@ class RadiiPipeline:
         self.outputDirectory = self.initOutputDirectory(outputFolder)
 
         self.amWithErrorsDirectory = self.outputDirectory + "/amWithErrors/"
-        self.amOutput025 = self.outputDirectory + "/am025"
-        self.amOutput050 = self.outputDirectory + "/am050"
-        self.amOutput075 = self.outputDirectory + "/am075"
+        self.amOutput025 = self.outputDirectory + "/am025/"
+        self.amOutput050 = self.outputDirectory + "/am050/"
+        self.amOutput075 = self.outputDirectory + "/am075/"
         self.amWithUcrs = {}
         self.points025 = {}
         self.points050 = {}
@@ -95,6 +95,7 @@ class RadiiPipeline:
         self.writeUncertainties()
 
     def readExtractedRadii(self):
+        print(self.amOutput025)
         self.allAmPointsWithRadius025, self.points025 = tr.read.multipleAmFiles(self.amOutput025)
         self.allAmPointsWithRadius050, self.points050 = tr.read.multipleAmFiles(self.amOutput050)
         self.allAmPointsWithRadius075, self.points075 = tr.read.multipleAmFiles(self.amOutput075)
