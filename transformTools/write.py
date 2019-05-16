@@ -105,18 +105,32 @@ def multipleAmFilesWithRadiusAndUncertainty(inputFolderPath, outputFolderPath, a
     points = []
     ucr = []
     pointsWithRad = []
-    for specialGraphFile in os.listdir(inputFolderPath):
-        if specialGraphFile.endswith(".am"):
+    if os.path.isdir(inputFolderPath):
+        for specialGraphFile in os.listdir(inputFolderPath):
+            if specialGraphFile.endswith(".am"):
 
-            spacialGraphIndicator = re.findall(r'[sS]\d+', specialGraphFile)[0]
-            am_file = spacialGraphIndicator + "_with_r" + ".am"
+                spacialGraphIndicator = re.findall(r'[sS]\d+', specialGraphFile)[0]
+                am_file = spacialGraphIndicator + "_with_r" + ".am"
 
-            points = amFilesWithError[str(am_file)]
-            pointsWithRad = [point[0:4] for point in points]
-            ucrs = [point[4:6] for point in points]
+                points = amFilesWithError[str(am_file)]
+                pointsWithRad = [point[0:4] for point in points]
+                ucrs = [point[4:6] for point in points]
 
-            inputFile = inputFolderPath + str(specialGraphFile)
-            outputFile = outputFolderPath + str(specialGraphFile)
+                inputFile = inputFolderPath + str(specialGraphFile)
+                outputFile = outputFolderPath + str(specialGraphFile)
 
-            # write_spacial_graph_with_error(inputFile, outputFile, ucr)
-            amFileWithRadiusAndUncertainty(inputFile, outputFile, pointsWithRad, ucrs)
+                # write_spacial_graph_with_error(inputFile, outputFile, ucr)
+                amFileWithRadiusAndUncertainty(inputFile, outputFile, pointsWithRad, ucrs)
+    else:
+        inputFile = inputFolderPath
+        amFileName = os.path.basename(inputFile)
+        outputFile = outputFolderPath + amFileName
+
+        points = amFilesWithError[str(amFileName)]
+        pointsWithRad = [point[0:4] for point in points]
+        ucrs = [point[4:6] for point in points]
+
+        amFileWithRadiusAndUncertainty(inputFile, outputFile, pointsWithRad, ucrs)
+
+
+
