@@ -7,3 +7,4 @@ from . import radius
 from . import exRadSets
 from . import addRadii
 from . import calcRad
+from . import calcError

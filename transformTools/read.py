@@ -118,14 +118,21 @@ def amFile(inputFilePath):
 
     return pointsWithRad
 
+
+# Input a folder path which contains the am files
+# Output the am files with radius as a dictionary of am files paths
+# and a full array of all points with their radii
+
 def multipleAmFiles(inputFolderPath):
     oneAmFilePoints =[]
     allAmPoints = []
+    amFilesSet = {}
 
     for am_file in os.listdir(inputFolderPath):
         oneAmFilePoints =[]
         if am_file.endswith(".am"):
             pathToAmFile = inputFolderPath + str(am_file)
             oneAmFilePoints = amFile(pathToAmFile)
+            amFilesSet[str(am_file)] = oneAmFilePoints
             allAmPoints = allAmPoints + oneAmFilePoints
-    return allAmPoints
+    return allAmPoints, amFilesSet
