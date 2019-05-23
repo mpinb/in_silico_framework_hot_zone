@@ -69,7 +69,7 @@ class RadiiPipeline:
                 spatialGraphName = re.findall(r'[sS]\d+', am)[0]
                 for imageFilePath in self.maxZPathList:
                     imageName = os.path.basename(imageFilePath)
-                    if imageName.startswith(spatialGraphName):
+                    if spatialGraphName in imageName:
                         radi025.exRadSets(amPth, imageFilePath, self.amOutput025, postMeasurment='yes')
                         break
         if (tr050):
@@ -79,7 +79,7 @@ class RadiiPipeline:
                 spatialGraphName = re.findall(r'[sS]\d+', am)[0]
                 for imageFilePath in self.maxZPathList:
                     imageName = os.path.basename(imageFilePath)
-                    if imageName.startswith(spatialGraphName):
+                    if spatialGraphName in imageName:
                         radi050.exRadSets(amPth, imageFilePath, self.amOutput050, postMeasurment='yes')
                         break
 
