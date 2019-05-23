@@ -1,13 +1,17 @@
 import os
+import numpy as np
 import radii as radi
 import transformTools as tr
 import re
+import time
+
 
 class RadiiPipeline:
-    def __init__(self, amInputPathList, maxZPathList, hocFile, outputFolder):
+    def __init__(self, amInputPathList, maxZPathList, hocFile, outputFolder, amWithRad="default"):
         self.amInputPathList = amInputPathList
         self.maxZPathList = maxZPathList
         self.hocFile = hocFile
+        self.amWithRad = amWithRad
 
         self.outputDirectory = self.initOutputDirectory(outputFolder)
 
@@ -15,6 +19,7 @@ class RadiiPipeline:
         self.amOutput025 = self.outputDirectory + "/am025/"
         self.amOutput050 = self.outputDirectory + "/am050/"
         self.amOutput075 = self.outputDirectory + "/am075/"
+        self.hocFileOutput = self.outputDirectory + "hocFileWithRad.hoc"
         self.amWithUcrs = {}
         self.points025 = {}
         self.points050 = {}
@@ -104,4 +109,84 @@ class RadiiPipeline:
         for amInputPath in self.amInputPathList:
             tr.write.multipleAmFilesWithRadiusAndUncertainty(amInputPath, self.amWithErrorsDirectory, self.amWithUcrs)
 
+    def getAmFileWithRad(self):
 
+        assert self.amWithRad != "Default"
+        amFile = self.amWithRad
+        return amFile
+
+    def findTransformation(self, amWithRad):
+
+        assert self.amWithRad != "Default"
+
+        self.amWithRad = amWithRad
+
+        pointsWithRadius = tr.read.hocFileReduced(self.hocFile)
+        set1 = []
+
+        for el in pointsWithRadius:
+            set1.append([el[0], el[1], el[2]])
+
+        amFile = self.amWithRad
+
+        set2 = radi.spacialGraph.getSpatialGraphPoints(amFile)
+
+        numberOfEdges = 2
+
+        matchedSet = tr.getDistance.matchEdges(set1, set2, numberOfEdges)
+
+        src = []
+        dst = []
+        for point in matchedSet:
+            src.append(point[0].start)
+            dst.append(point[1].start)
+
+            src.append(point[0].end)
+            dst.append(point[1].end)
+
+        print("In the calculations of the transofrmation matrix")
+        trMatrix2 = tr.exTrMatrix.getTransformation(dst, src)
+
+
+        amPoints4D = tr.read.amFile(amFile)
+
+        print("Applying the transofrmation matrix to the initial am points")
+        trAmPoints4D = []
+        for point4D in amPoints4D:
+            point = point4D[:3]
+            point.append(1)
+            p = np.dot(trMatrix2, np.array(point))
+            p_listed = p.tolist()[0]
+            trAmPoints4D.append([p_listed[0], p_listed[1], p_listed[2], point4D[3]])
+
+        hocPointsComplete = tr.read.hocFileComplete(self.hocFile)
+        hocSet = []
+        for el in hocPointsComplete:
+            hocSet.append([el[0], el[1], el[2]])
+
+        trAmPoints4DList = trAmPoints4D
+
+        print("In the process of finding pairs in between hoc file and the transoformed points to add radi to hocpoint")
+        startTime = time.time()
+        pairs = radi.addRadii.findPairs(trAmPoints4DList, hocSet)
+        endTime = time.time()
+        print(endTime - startTime)
+
+        startTime = time.time()
+        hocWithRad = []
+        newHPoint = []
+
+        for pair in pairs:
+            newHPoint = pair[1]
+            dual = pair[0]
+            newHPoint.append(dual[3])
+            hocWithRad.append(newHPoint)
+            newHPoint = []
+
+        endTime = time.time()
+        print(endTime - startTime)
+
+        print("writing the final result in the output hocFile")
+        tr.write.hocFile(self.hocFile, self.hocFileOutput, hocWithRad)
+
+        return 0
