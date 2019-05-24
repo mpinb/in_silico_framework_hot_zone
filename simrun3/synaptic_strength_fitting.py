@@ -18,7 +18,9 @@ from biophysics_fitting.hay_evaluation import objectives_BAC, objectives_step
 class PSPs:
     '''main class for calculation of ePSP amplitudes and synaptic strength fitting'''
     def __init__(self, neuron_param = None, confile = None, gExRange = [0.5, 1.0, 1.5, 2.0], 
-                 AMPA_component = 1, NMDA_component = 1, vardt = True, save_vmax_dir = None):
+                 AMPA_component = 1, NMDA_component = 1, vardt = True,
+                 mode = 'cells', exc_inh = 'exc',
+                 tStim = 110, tEnd = 150):
         ''' 
         neuron_param: I.scp.NTParameterSet structure specifying the biophysical model
         confile: path to .con-file of the network realization that should be used
@@ -32,30 +34,54 @@ class PSPs:
         self.confile = confile
         self.gExRange = gExRange
         self.vardt = vardt
-        self.save_vmax_dir = save_vmax_dir
         self.AMPA_component = AMPA_component
         self.NMDA_component = NMDA_component
+        self.mode = mode
+        self.tStim = tStim
+        self.tEnd = tEnd
         self._keys = []
         self._delayeds = []
         self._simfun = I.dask.delayed(run_ex_synapses)
         self.futures = None
         self.result = None
         
-        self.network_param = generate_ex_network_param_from_network_embedding(self.confile)
+        if exc_inh == 'exc':
+            self.network_param = generate_ex_network_param_from_network_embedding(self.confile)
+        elif exc_inh == 'inh':
+            self.network_param = generate_inh_network_param_from_network_embedding(self.confile)
         self.network_params_by_celltype = split_network_param_in_one_elem_dicts(self.network_param)
-        self._setup_computation()
         
-    def _setup_computation(self):
-        for n in self.network_params_by_celltype:
-            assert(len(n.network.keys()) == 1)
-            celltype = n.network.keys()[0]
-            n.network[celltype]['synapses']
-            for gEx in self.gExRange:
-                self._keys.append((celltype, gEx*self.AMPA_component, gEx*self.NMDA_component))
-                d = self._simfun(I.cloudpickle.dumps(self.neuron_param), I.cloudpickle.dumps(n), 
-                                 celltype, gEx*self.AMPA_component, gEx*self.NMDA_component, vardt = self.vardt, 
-                                 save_vmax_dir = self.save_vmax_dir)
-                self._delayeds.append(d)
+        self._setup_computation(exc_inh)
+        
+    def _setup_computation(self, exc_inh):
+        if exc_inh == 'exc':
+            print 'setting up computation for exc cells'
+            for n in self.network_params_by_celltype:
+                assert(len(n.network.keys()) == 1)
+                celltype = n.network.keys()[0]
+                n.network[celltype]['synapses']
+                for gEx in self.gExRange:
+                    self._keys.append((celltype, gEx*self.AMPA_component, gEx*self.NMDA_component))
+                    d = self._simfun(I.cloudpickle.dumps(self.neuron_param), I.cloudpickle.dumps(n), 
+                                     celltype, gAMPA = gEx*self.AMPA_component, 
+                                     gNMDA = gEx*self.NMDA_component, vardt = self.vardt, 
+                                     mode = self.mode,
+                                     tStim = self.tStim, tEnd = self.tEnd)
+                    self._delayeds.append(d)
+        elif exc_inh == 'inh':
+            print 'setting up computation for inh cells'
+            for n in self.network_params_by_celltype:
+                assert(len(n.network.keys()) == 1)
+                celltype = n.network.keys()[0]
+                n.network[celltype]['synapses']
+                for gEx in self.gExRange:
+                    self._keys.append((celltype, gEx, gEx))
+                    d = self._simfun(I.cloudpickle.dumps(self.neuron_param), I.cloudpickle.dumps(n), 
+                                     celltype, gGABA = gEx, 
+                                     vardt = self.vardt, 
+                                     mode = self.mode,
+                                     tStim = self.tStim, tEnd = self.tEnd)
+                    self._delayeds.append(d)                
         
     def run(self, client, rerun = False):
         '''start running computation on dask.distributed.Client
@@ -105,7 +131,7 @@ class PSPs:
         res = self.get_voltage_traces()
         if merged:
             res = merge_celltypes(res, **merge_celltype_kwargs)
-        return get_voltage_and_timing(res, method)
+        return get_voltage_and_timing(res, method, tStim = self.tStim, tEnd = self.tEnd)
         
     def get_summary_statistics(self, method = 'dynamic_baseline',
                                merge_celltype_kwargs = {},
@@ -134,7 +160,12 @@ class PSPs:
              for name in vt.keys()], axis = 1)
         fig = I.plt.figure(figsize = (10,len(vt)*1.3))
         ax = fig.add_subplot(111)
-        pdf.plot(kind = 'hist', subplots = True, bins = I.np.arange(0,pdf.max().max(), 0.01), ax = ax)  
+        lower_bound = min(0, pdf.min().min())
+        upper_bound = max(0, pdf.max().max())
+        pdf.plot(kind = 'hist', 
+                 subplots = True, 
+                 bins = I.np.arange(lower_bound,upper_bound, 0.01), 
+                 ax = ax)  
     
     def _get_cell_and_nw_map(self, network_param = None):
         neuron_param = self.neuron_param
@@ -211,20 +242,33 @@ class PSPs:
         ax.plot(vt[0], vt[1], c = 'r')
         for lv in range(len(vt[2])):
             ax.plot(vt[2][lv], vt[3][lv], alpha = opacity, c = 'k')
-        t_baseline,v_baseline = I.np.arange(0,150,0.025), I.np.interp(I.np.arange(0,150,0.025), 
+        t_baseline,v_baseline = I.np.arange(0,self.tEnd,0.025), I.np.interp(I.np.arange(0,self.tEnd,0.025), 
                                                                       vt[0], vt[1])
         ax = fig.add_subplot(122)
         for lv in range(len(vt[2])):
             t,v = vt[2][lv], vt[3][lv]
-            t,v = I.np.arange(0,150,0.025), I.np.interp(I.np.arange(0,150,0.025), t, v)
+            t,v = I.np.arange(0,self.tEnd,0.025), I.np.interp(I.np.arange(0,self.tEnd,0.025), t, v)
             ax.plot(t,v-v_baseline, alpha = opacity, c = 'k')       
          
     
 #############################################
 # Second part: functions to simulate PSPs 
 #############################################
-def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, preSynCellID, gAMPA, gNMDA, 
-                   vardt = False, return_cell = False, synapse_ids = None):
+def set_ex_synapse_weight(syn, weight):
+    if weight is not None:
+        assert(len(weight) == 2)
+        gAMPA = weight[0]
+        gNMDA = weight[1]
+        syn.weight = {'glutamate_syn': [gAMPA, gNMDA]}
+    
+def set_inh_synapse_weight(syn, weight):
+    if weight is not None:
+        gGABA = weight
+        syn.weight = {'gaba_syn': gGABA}    
+
+def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, preSynCellID, 
+                   gAMPA = None, gNMDA = None, gGABA = None,
+                   vardt = False, return_cell = False, synapseID = None, tEnd = None, tStim = None):
     '''core function, that actually activates a single synapse and runs the simulation.
     cell_nw_generator: simrun3.get_cell_with_network.get_cell_with_network
     neuron_param: single_cell_parser.NTParameterSet specifying biophysical properties
@@ -235,9 +279,9 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     vardt: whether variable stepsize solver should be used
     synapse_ids: if None, all synapses assigned to the presynaptic cell get activated.
         if a list of integers, only synapses with the specified indices get acivated'''
-    tOffset = 100
-    spikeTime = 10 
-    
+    spikeTime = 0 
+    assert(tStim is not None)
+    assert(tEnd is not None)
     cell, nwMap = cell_nw_generator()
     
     for cellType in nwMap.cells.keys():
@@ -246,21 +290,25 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     
     synParameters = network_param.network[celltype]['synapses']
     
-    for syn in cell.synapses[celltype]:             
-        syn.weight = {'glutamate_syn': [gAMPA, gNMDA]}     
-    
+    for syn in cell.synapses[celltype]:
+        syn.weight = {}
+        if 'glutamate_syn' in synParameters.receptors.keys():          
+            syn.weight['glutamate_syn'] = [gAMPA, gNMDA]
+        if 'gaba_syn' in synParameters.receptors.keys(): 
+            syn.weight['gaba_syn'] = [gGABA]
 
     if preSynCellID is not None:
+        assert(((gAMPA is not None) and (gNMDA is not None)) or (gGABA is not None))
         preSynCell = nwMap.cells[celltype][preSynCellID]
-        if synapse_ids is None:
+        if synapseID is None:
             synapse_list = preSynCell.synapseList
         else:
-            synapse_list = [preSynCell.synapseList[id] for id in synapse_ids]       
+            synapse_list = [preSynCell.synapseList[synapseID]]       
         for syn in synapse_list:
-            syn.weight = {'glutamate_syn': [gAMPA, gNMDA]}  
-            activate_functional_synapse(syn, cell, preSynCell, synParameters, releaseTimes = [tOffset+spikeTime])
+            # syn.weight = {'glutamate_syn': [gAMPA, gNMDA]}  
+            activate_functional_synapse(syn, cell, preSynCell, synParameters, releaseTimes = [tStim+spikeTime])
     
-    neuron_param.sim.tStop = 150
+    neuron_param.sim.tStop = tEnd
     
     I.scp.init_neuron_run(neuron_param.sim, vardt = vardt)
     
@@ -275,9 +323,13 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     
     return t,v
 
-def run_ex_synapses(neuron_param, network_param, celltype, gAMPDA, gNMDA, vardt = False, 
-                    activate = 'cells'):
+def run_ex_synapses(neuron_param, network_param, celltype, gAMPA = None, gNMDA = None, gGABA = None,
+                    vardt = False,
+                    tStim = None,
+                    tEnd = None,
+                    mode = 'cells'):
     '''method to consecutively calculate all EPSPs of all presynaptic cells of one celltype.'''
+
     neuron_param = I.scp.NTParameterSet(I.cloudpickle.loads(neuron_param).as_dict())
     network_param = I.scp.NTParameterSet(I.cloudpickle.loads(network_param).as_dict())    
     # with I.silence_stdout:
@@ -285,21 +337,34 @@ def run_ex_synapses(neuron_param, network_param, celltype, gAMPDA, gNMDA, vardt 
     cell, nwMap = cell_nw_generator()
     somaT, somaV, = [], []
     t_baseline, v_baseline = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
-                                            celltype, None, gAMPDA, gNMDA, vardt = vardt)
+                                            celltype, None, gAMPA = gAMPA, gNMDA = gNMDA, gGABA = gGABA, 
+                                            vardt = vardt, 
+                                            tStim = tStim, tEnd = tEnd)
     n_cells = len(nwMap.connected_cells[celltype])
-    if activate == 'cells':
+    if mode == 'cells':
         for preSynCellID in range(n_cells):
-            print("Activating presyanaptic cell {} of {} cells".format(preSynCellID + 1, n_cells))
+            print("Activating presyanaptic cell {} of {} cells of celltype {}".format(preSynCellID + 1, 
+                                                                                      n_cells,
+                                                                                      celltype))
             t,v = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
-                                 celltype, preSynCellID, gAMPDA, gNMDA, vardt = vardt)
+                                 celltype, preSynCellID, gAMPA, gNMDA, vardt = vardt,
+                                 tStim = tStim, tEnd = tEnd)
             somaT.append(t), somaV.append(v)
         del cell_nw_generator, cell, nwMap
-    if activate == 'synapses':
+    if mode == 'synapses':
         for preSynCellID in range(n_cells):
-            print("Activating presyanaptic cell {} of {} cells".format(preSynCellID + 1, n_cells))
-            t,v = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
-                                 celltype, preSynCellID, gAMPDA, gNMDA, vardt = vardt)
-            somaT.append(t), somaV.append(v)
+            n_synapses = len(nwMap.cells[celltype][preSynCellID].synapseList)
+            for preSynCellSynapseID in range(n_synapses):
+                print("Activating synapse {} of presyanaptic cell {} of {} cells of celltype {}".format(preSynCellSynapseID + 1, 
+                                                                                         preSynCellID + 1, 
+                                                                                         n_cells,
+                                                                                         celltype))
+                t,v = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
+                                     celltype, preSynCellID, gAMPA = gAMPA, gNMDA = gNMDA, 
+                                     gGABA = gGABA, vardt = vardt,
+                                     synapseID = preSynCellSynapseID,
+                                     tStim = tStim, tEnd = tEnd)
+                somaT.append(t), somaV.append(v)
         del cell_nw_generator, cell, nwMap        
     return t_baseline, v_baseline, somaT, somaV
 
@@ -332,10 +397,35 @@ def generate_ex_network_param_from_network_embedding(confile):
         out['network'][k]['synapses']['receptors'] = param_template
     return I.scp.NTParameterSet(out) 
 
+def generate_inh_network_param_from_network_embedding(confile):
+    param_template = {'gaba_syn': {'delay': 0.0,
+     'parameter': {'decaygaba': 1.0,
+                   'decaytime': 20.0,
+                   'e': -80.0,
+                   'facilgaba': 0.0,
+                   'risetime': 1.0},
+     'threshold': 0.0,
+     'weight': 1.0}}
+    
+    out = I.defaultdict_defaultdict()
+    for k, cellnumber in get_cellnumbers_from_confile(confile).iteritems():
+        if not k.split('_')[0] in I.inhibitory:
+            continue
+        out['network'][k]['cellNr'] = cellnumber
+        out['network'][k]['activeFrac'] = 1.0
+        out['network'][k]['celltype'] = 'pointcell'
+        out['network'][k]['spikeNr'] = 1
+        out['network'][k]['spikeT'] = 10
+        out['network'][k]['spikeWidth'] = 1.0
+        out['network'][k]['synapses']['connectionFile'] = confile
+        out['network'][k]['synapses']['distributionFile'] = confile[:-3] + 'syn'
+        out['network'][k]['synapses']['receptors'] = param_template
+    return I.scp.NTParameterSet(out)     
+
 ###############################################
 # Third part: functions to analyze PSPs
 ###############################################
-def get_voltage_and_timing(vt, method = 'dynamic_baseline'):
+def get_voltage_and_timing(vt, method = 'dynamic_baseline', tStim = None, tEnd = None):
     '''calculate maxmimum and timing of the EPSPS
     vt: voltage traces, as returned by PSP.get_voltage_traces()
     method: dynamic_baseline: a simulation without any synaptic activation is 
@@ -349,13 +439,13 @@ def get_voltage_and_timing(vt, method = 'dynamic_baseline'):
     '''
     res = vt
     if method == 'dynamic_baseline':
-        vt = {k: {k: {k: [get_tMax_vMax_baseline(v[0], v[1], v[2][lv], v[3][lv])
+        vt = {k: {k: {k: [get_tMax_vMax_baseline(v[0], v[1], v[2][lv], v[3][lv], tStim, tEnd)
                           for lv in range(len(v[2]))]
                       for k, v in v.iteritems()}
                   for k, v in v.iteritems()}
               for k, v in res.iteritems()}
     elif method == 'constant_baseline':
-        vt = {k: {k: {k: [get_tMax_vMax(v[2][lv], v[3][lv])
+        vt = {k: {k: {k: [get_tMax_vMax(v[2][lv], v[3][lv], tStim, tEnd)
                           for lv in range(len(v[2]))]
                       for k, v in v.iteritems()}
                   for k, v in v.iteritems()}
@@ -384,26 +474,46 @@ def get_optimal_g(self,
     calculate_optimal_g(pdf)
     return pdf
 
-def get_tMax_vMax_baseline(t_baseline,v_baseline, t,v):
+def get_tMax_vMax_baseline(t_baseline,v_baseline, t,v, tStim = None, tEnd = None):
     '''this method calculates the ePSP amplitude by subtracting a voltage trace without
     any synapse activation from a voltage trace with synapse activation.
     t_basline, v_baseline: voltage trace without synapse activation
     t,v: voltage trace with synapse activation'''
+    assert(tStim is not None)
+    assert(tEnd is not None)    
     try:
-        t,v = I.np.arange(0,150,0.025), I.np.interp(I.np.arange(0,150,0.025), t, v)
+        t,v = I.np.arange(0,tEnd,0.025), I.np.interp(I.np.arange(0,tEnd,0.025), t, v)
     except:
         raise RuntimeError() 
-    t_baseline,v_baseline = I.np.arange(0,150,0.025), I.np.interp(I.np.arange(0,150,0.025), t_baseline, v_baseline)
-    return get_tMax_vMax(t, v-v_baseline)
+    t_baseline,v_baseline = I.np.arange(0,tEnd,0.025), I.np.interp(I.np.arange(0,tEnd,0.025), t_baseline, v_baseline)
+    return get_tMax_vMax(t, v-v_baseline, tStim = tStim, tEnd = tEnd)
     # return I.sca.analyze_voltage_trace(v-v_baseline, t)
 
-def get_tMax_vMax(t,v):
+def analyze_voltage_trace(vTrace, tTrace):
+    """
+    takes neuron Vectors and finds time and
+    amplitude of max voltage deflection (pos and negative direction)
+    
+    modified from single cell analyzer
+    """
+    v = I.np.array(vTrace)
+    t = I.np.array(tTrace)
+    max_abs_v = I.np.abs(v)
+    maxT = t[I.np.argmax(max_abs_v)]
+    maxV = v[I.np.argmax(max_abs_v)]
+    return maxT, maxV
+
+def get_tMax_vMax(t,v, tStim = None, tEnd = None):
     '''This method calculates the ePSP amplitude by subtracting the voltage
     directly before the epsp, which is supposed to be at 160ms, from the voltagetrace.'''
-    t,v = I.np.arange(0,150,0.025), I.np.interp(I.np.arange(0,150,0.025), t, v) 
-    baseline = I.np.median(v[4360:4400]) # 1ms pre-stim
+    assert(tStim is not None)
+    assert(tEnd is not None)
+    t,v = I.np.arange(0,tEnd,0.025), I.np.interp(I.np.arange(0,tEnd,0.025), t, v) 
+    start_index = int(tStim - 1 / 0.025)
+    stop_index = int(tStim / 0.025)
+    baseline = I.np.median(v[start_index:stop_index]) # 1ms pre-stim
     v -= baseline
-    return I.sca.analyze_voltage_trace(v[4400:], t[4400:])
+    return analyze_voltage_trace(v[stop_index:], t[stop_index:])
 
 def merge_celltypes(vt, 
                     detection_strings = ['L2', 'L34', 'L4', 'L5st', 'L5tt', 'L6cc', 'L6ct', 'VPM_C2'], 
