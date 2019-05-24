@@ -28,8 +28,6 @@ class PSPs:
         vardt: should the variable step size solver be used=
         '''
         assert('neuron' in neuron_param.keys())
-        if not save_vmax_dir is None:
-            raise NotImplementedError()
         self.neuron_param = neuron_param
         self.confile = confile
         self.gExRange = gExRange
