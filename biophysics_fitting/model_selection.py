@@ -8,8 +8,8 @@ def get_model_pdf_from_mdb(mdb):
         return pdf.set_index('model_id')
     
     out = I.defaultdict(lambda: [])
-    max_i = max([int(x) for x in mdb.keys() if I.utils.convertible_to_int(x)])
-    for i in range(1, max_i + 1):
+    indices = [int(x) for x in mdb.keys() if I.utils.convertible_to_int(x)]
+    for i in indices:
         if not str(i) in mdb.keys():
             continue
         max_j =  max([int(x) for x in mdb[str(i)].keys() if I.utils.convertible_to_int(x)])
