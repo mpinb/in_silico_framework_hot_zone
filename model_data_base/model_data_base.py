@@ -136,7 +136,8 @@ class SQLMetadataAccessor():
         return self.sql_backend.keys()
 
 class ModelDataBase(object):
-    def __init__(self, basedir, forceload = False, readonly = False, nocreate = False, forcecreate = False):
+    def __init__(self, basedir, forceload = False, readonly = False, nocreate = False, 
+                 forcecreate = False):
         '''
         Class responsible for storing information, meant to be used as an interface to simulation 
         results. If the dask backends are used to save the data, it will be out of memory,
@@ -168,6 +169,7 @@ class ModelDataBase(object):
         self.readonly = readonly #possible values: False, True, 'warning'
         self._first_init = False
         self._unique_id = None
+        self._registered_to_path = None
         
         try:
             self.read_db()
@@ -183,14 +185,20 @@ class ModelDataBase(object):
                 _check_working_dir_clean_for_build(basedir)
             self._first_init = True
             self._registeredDumpers = [IO.LoaderDumper.to_cloudpickle]
-            self.save_db()
+            self.save_db()                        
             self._set_unique_id()
+            self._register_this_database()
+            self.save_db()
+            
         
         self._sql_backend = SQLBackend(os.path.join(self.basedir, 'sqlitedict.db'))
         self._sql_metadata_backend = SQLBackend(os.path.join(self.basedir, 'metadata.db'))
         self.metadata = SQLMetadataAccessor(self._sql_metadata_backend)
         
         if not self.readonly:
+            if self._registered_to_path is None:
+                self._register_this_database()
+                self.save_db()
             #self._register_this_database()            
             self._update_metadata_if_necessary()
             #############################
@@ -202,8 +210,11 @@ class ModelDataBase(object):
                 self._set_unique_id()
 
     def _register_this_database(self):
+        print 'registering database with unique_id {} to the absolute path {}'.format(
+                        self._unique_id, self.basedir)
         try:
             model_data_base_register.register_mdb(self)
+            self._registered_to_path = self.basedir
         except MdbException as e:
             warnings.warn(str(e))
             
@@ -237,7 +248,8 @@ class ModelDataBase(object):
         '''saves the data which defines the state of this database to dbcore.pickle'''
         ## things that define the state of this mdb and should be saved
         out = {'_registeredDumpers': self._registeredDumpers, \
-               '_unique_id': self._unique_id} 
+               '_unique_id': self._unique_id,
+               '_registered_to_path': self._registered_to_path} 
         with open(os.path.join(self.basedir, 'dbcore.pickle'), 'w') as f:
             pickle.dump(out, f)
         
