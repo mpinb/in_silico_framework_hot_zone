@@ -38,6 +38,7 @@ class RadiusCalculatorForManyFiles:
             for spacialGraphFile in os.listdir(path_to_am):
                 if spacialGraphFile.endswith(".am"):
                     points = self.readPoints(path_to_am + spacialGraphFile)
+                    if points == "error": continue
                     spacialGraphIndicator = re.findall(r'[sS]\d+', spacialGraphFile)[0]
                     outputFile = path_to_output_folder + spacialGraphIndicator + \
                         "_with_r" + ".am"
@@ -51,14 +52,16 @@ class RadiusCalculatorForManyFiles:
                             break
         else:
             points = self.readPoints(path_to_am)
+            if points == "error": return "error"
             amFileName = os.path.basename(path_to_am)
             outputFile = path_to_output_folder + "/" + amFileName
             imageFile = path_to_tif
             image = self.readImage(imageFile)
             result = self.radiusCalculator.getProfileOfThesePoints(image, points, postMeasurment)
-            print(imageFile)
+            print(" ")
+            print("program ran for the file:" + imageFile)
             self.writeResult(path_to_am, outputFile, result)
-
+        return "safe"
 
     # reading image file
     def readImage(self, imageFile):
@@ -69,7 +72,30 @@ class RadiusCalculatorForManyFiles:
 
     # return points of a am file, by using the function "getSpatialGraphPoints"
     def readPoints(self, dataFile):
-        points = radi.spacialGraph.getSpatialGraphPoints(dataFile)
+        try:
+            points = radi.spacialGraph.getSpatialGraphPoints(dataFile)
+        except IOError as fnf_error:
+            print(" ")
+            print(fnf_error)
+            print("for the file:")
+            print(dataFile)
+            print("in readPoints()")
+            return "error"
+        except UnicodeError as ucode_error:
+            print(" ")
+            print(ucode_error)
+            print("for the file:")
+            print(dataFile)
+            print("in readPoints()")
+            return "error"
+        except ValueError as val_error:
+            print(" ")
+            print(val_error)
+            print("for the file:")
+            print(dataFile)
+            print("in readPoints()")
+            return "error"
+
         points = list(map(lambda x: map(lambda y: int(y/0.092), x), points))
         return points
 
@@ -77,4 +103,27 @@ class RadiusCalculatorForManyFiles:
     def writeResult(self, inputDataFile, outputDataFile, result):
         radii = result
         radii = [r*0.092 for r in radii]
-        radi.spacialGraph.write_spacial_graph_with_thickness(inputDataFile, outputDataFile, radii)
+        try:
+            radi.spacialGraph.write_spacial_graph_with_thickness(inputDataFile, outputDataFile, radii)
+        except IOError as fnf_error:
+            print(" ")
+            print(fnf_error)
+            print("for the file:")
+            print(dataFile)
+            print("in wirteResult()")
+            return "error"
+        except UnicodeError as ucode_error:
+            print(" ")
+            print(ucode_error)
+            print("for the file:")
+            print(dataFile)
+            print("in wirteResult()")
+            return "error"
+        except ValueError as val_error:
+            print(" ")
+            print(val_error)
+            print("for the file:")
+            print(dataFile)
+            print("in wirteResult()")
+            return "error"
+
