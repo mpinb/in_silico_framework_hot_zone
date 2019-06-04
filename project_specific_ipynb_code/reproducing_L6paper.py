@@ -684,4 +684,6 @@ class PWfitting:
 #     if return_cell:
 #         return cell
 #     else:
-#         return I.np.array(cell.tVec), I.np.array(cell.s
+#         return I.np.array(cell.tVec), I.np.array(cell.soma.recVList[0])
+#   
+
