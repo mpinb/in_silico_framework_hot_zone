@@ -1,5 +1,6 @@
 import numpy as np
 from model_data_base.utils import convertible_to_int
+from collections import defaultdict
 
 def roll_rows_independently(A, r):
     '''https://stackoverflow.com/questions/20360675/roll-rows-of-a-matrix-independently%5D'''
@@ -92,9 +93,12 @@ class ParseVT:
         #offsets = (I.np.array(offsets) / dt).astype('i8')
         return synapses, np.array(offsets).astype(int)   
     
-    def parse_sa(self, sa):
+    def parse_sa(self, sa, weights = None):
         synapses, offsets = self._get_offsets_and_indices_from_sa(sa)
         array  = self.get_vt_by_synapses(synapses)
+        if weights is not None:
+            c = np.array([weights[s] for s in synapses])
+            array = (array.T * c).T
         extended_array = np.concatenate([np.zeros(array.shape), array, 
                                            np.zeros(array.shape)], axis = 1)
         extended_array_rolled = roll_rows_independently(extended_array, offsets)[:,array.shape[1]:array.shape[1]*2]

@@ -24,6 +24,9 @@ def get_parameterfiles_df_with_confile_and_neuron_param_path(mdb):
     map_to_parampath = {v: create_mdb_path(os.path.join(mdb['parameterfiles_cell_folder'], v)) 
                              for k,v, in parameterfiles.hash_neuron.drop_duplicates().iteritems()}    
     parameterfiles['neuron_param_mdbpath'] = parameterfiles['hash_neuron'].map(map_to_parampath)
+    map_to_parampath = {v: create_mdb_path(os.path.join(mdb['parameterfiles_network_folder'], v)) 
+                             for k,v, in parameterfiles.hash_network.drop_duplicates().iteritems()}    
+    parameterfiles['network_param_mdbpath'] = parameterfiles['hash_network'].map(map_to_parampath)
     return parameterfiles
 
 def get_PSP_determinants_from_mdb(mdb):
