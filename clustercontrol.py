@@ -12,24 +12,44 @@ def list_all_screens():
     for server in {'katz', 'nernst', 'rall', 'cajal', 'hodgkin', 'golgi'}:
         run_command_remotely(server, 'screen -ls', print_command = False)    
         
-def start_cluster(servers = 'all', nice = 8, nprocs_update = {}, tmpdir = '/tmp/abast', scheduler = 'rall', suffix = ''):
-    ip_lookup = {'katz': '22', 'nernst': '21', 'rall': '20', 'cajal': '26', 'golgi': '23', 'hodgkin': '25', 'spock': '12', 'riker': '13'}
+# def start_cluster(servers = 'all', nice = 8, nprocs_update = {}, tmpdir = '/tmp/abast', scheduler = 'rall', suffix = ''):
+#     ip_lookup = {'katz': '22', 'nernst': '21', 'rall': '20', 'cajal': '26', 'golgi': '23', 'hodgkin': '25', 'spock': '12', 'riker': '13'}
+#     
+#     n_procs = {'katz': 40, 'nernst': 35, 'rall': 40, 'cajal': 24, 'golgi': 24, 'hodgkin': 24, 'spock': 4, 'riker': 4}
+#     n_procs.update(nprocs_update)
+#     
+#     if servers == 'all': servers = n_procs.keys()
+#     elif servers == 'new': servers = ['rall', 'nernst', 'katz']
+#     elif servers == 'old': servers = ['cajal', 'golgi', 'hodgkin']
+#     
+#     print 'starting scheduler'
+#     command = 'source_isf; screen -S scheduler_{suffix} -dm bash -c "dask-scheduler"'.format(suffix = suffix)
+#     run_command_remotely(scheduler, command)
+#     
+#     print 'starting workers'
+#     template = 'source_isf; screen -S workers_{suffix} -dm bash -c "nice -n {nice} dask-worker --nthreads 1  --nprocs {nprocs} {ip}:8786 --local-directory {tmpdir} --memory-limit=100e9"'
+#     for server in servers:
+#         command = template.format(suffix = suffix, nice = nice, nprocs = n_procs[server], ip = '10.40.130.'+ip_lookup[scheduler], tmpdir = tmpdir)
+#         run_command_remotely(server, command)
+        
+def start_cluster(servers = 'all', nice = 8, nprocs_update = {}, tmpdir = '/tmp/abast', scheduler = 'rall', suffix = '', port = 8786):
+    ip_lookup = {'katz': '22', 'nernst': '21', 'rall': '20', 'cajal': '26', 'ibs3005': '27', 'golgi': '23', 'hodgkin': '25', 'spock': '12', 'riker': '13'}
     
-    n_procs = {'katz': 40, 'nernst': 35, 'rall': 40, 'cajal': 24, 'golgi': 24, 'hodgkin': 24, 'spock': 4, 'riker': 4}
+    n_procs = {'katz': 40, 'nernst': 35, 'rall': 40, 'cajal': 24, 'golgi': 24, 'hodgkin': 24, 'spock': 4, 'riker': 4, 'ibs3005': 18}
     n_procs.update(nprocs_update)
     
-    if servers == 'all': servers = n_procs.keys()
+    if servers == 'all': servers = ['rall', 'nernst', 'katz'] + ['rall', 'nernst', 'katz']
     elif servers == 'new': servers = ['rall', 'nernst', 'katz']
     elif servers == 'old': servers = ['cajal', 'golgi', 'hodgkin']
     
     print 'starting scheduler'
-    command = 'source_isf; screen -S scheduler_{suffix} -dm bash -c "dask-scheduler"'.format(suffix = suffix)
+    command = 'source /nas1/Data_arco/.bashrc; source_isf; screen -S scheduler_{suffix} -dm bash -c "source /nas1/Data_arco/.bashrc; source_isf; dask-scheduler --port {port} --bokeh-port {bokeh_port}"'.format(suffix = suffix, port = str(port), bokeh_port = str(port+1))
     run_command_remotely(scheduler, command)
     
     print 'starting workers'
-    template = 'source_isf; screen -S workers_{suffix} -dm bash -c "nice -n {nice} dask-worker --nthreads 1  --nprocs {nprocs} {ip}:8786 --local-directory {tmpdir} --memory-limit=100e9"'
+    template = 'source /nas1/Data_arco/.bashrc; source_isf; screen -S workers_{suffix} -dm bash -c "source /nas1/Data_arco/.bashrc \n source_isf; nice -n {nice} dask-worker --nthreads 1  --nprocs {nprocs} {ip}:{port} --local-directory {tmpdir} --memory-limit=100e9"'
     for server in servers:
-        command = template.format(suffix = suffix, nice = nice, nprocs = n_procs[server], ip = '10.40.130.'+ip_lookup[scheduler], tmpdir = tmpdir)
+        command = template.format(suffix = suffix, nice = nice, nprocs = n_procs[server], ip = '10.40.130.'+ip_lookup[scheduler], port = port, tmpdir = tmpdir)
         run_command_remotely(server, command)
 
 import cloudpickle
