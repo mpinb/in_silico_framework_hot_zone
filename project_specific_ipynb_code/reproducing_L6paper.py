@@ -352,6 +352,10 @@ class SynapticStrengthFitting:
     def run_synaptic_strength_fitting(self, client, loc = 'C2center'):
         mdb = self.model_selection.l6_config.mdb
         for model in self.model_selection.selected_models:
+            if 'syn_strength_fitting' in mdb[model].keys():
+                print 'skipping model {} as it seems to be simulated already. If the simulation '.format(model)
+                'run was incomplete, you can delete the data by running del l6_config.mdb[\'{}\'][\'{}\']'.format(model, 'syn_strength_fitting')                
+                continue         
             cell_param = self.model_selection.get_cell_param(model)
             cell_param = _add_sim_to_neuron_param(cell_param)
             confile = mdb['network_embedding'][loc].get_file('.con')
