@@ -106,13 +106,13 @@ class PSPs:
             # calculate maximum voltage in the respective simulation
             # list comprehension used to flatten the list
             max = I.np.max([x for x in self.result[lv][3] for x in x])
-            if  max > -45:
-                errstr = "Result Nr {} has a maximum membrane potential of {} mV. ".format(lv, max) +\
-                         "Make sure, the cell does not depolarize during initialization "+\
-                         "as a suprathreashold activity can potentially change the PSP."
-                print errstr
-                if max > 0:
-                    raise RuntimeError(errstr)
+            #if  max > -45:
+            #    errstr = "Result Nr {} has a maximum membrane potential of {} mV. ".format(lv, max) +\
+            #             "Make sure, the cell does not depolarize during initialization "+\
+            #             "as a suprathreashold activity can potentially change the PSP."
+            #    warnings.warn(errstr)
+                #if max > 0:
+                #    raise RuntimeError(errstr)
         return out
     
     def get_voltage_and_timing(self, method = 'dynamic_baseline', merged = False, merge_celltype_kwargs = {}):

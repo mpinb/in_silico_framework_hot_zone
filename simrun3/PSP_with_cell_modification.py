@@ -17,7 +17,8 @@ class PSP_with_current_injection:
     defined potential by the injection of a constant current.'''
     def __init__(self, neuron_param, confile, 
                  target_vm = -70, delay = 100, duration = 200, 
-                 optimize_for_timepoint = 150, tEnd = 300):
+                 optimize_for_timepoint = 150, tEnd = 300,
+                 cell_modify_functions = {}):
         self.confile = confile
         self.neuron_param = I.scp.NTParameterSet(neuron_param.as_dict())
         self.target_vm = target_vm
@@ -26,6 +27,11 @@ class PSP_with_current_injection:
         self.optimize_for_timepoint = optimize_for_timepoint
         self.tEnd = tEnd
         self.holding_current = None
+        self.cell_modify_functions = cell_modify_functions
+        if len(cell_modify_functions) > 0:
+            if not 'cell_modify_functions' in self.neuron_param.neuron.keys():
+                self.neuron_param.neuron['cell_modify_functions'] = {}
+            self.neuron_param.neuron['cell_modify_functions'].update(cell_modify_functions)
         
     def optimize_holding_current(self, bounds = (0, .7)):
         '''finds the current that needs to be injected to hold the somatic potential at target_vm.
@@ -43,12 +49,15 @@ class PSP_with_current_injection:
             self.holding_current = x.x
         else:
             raise RuntimeError("A solution has not been found")
+        self.plot_current_injection_voltage_trace()        
+        
 
     def _objective_fun(self, current):
         '''function that gets optimized. Receives current, returns squared deviation from self.target_vm 
         at timepoint self.optimize_for_timepoint'''
         tVec, vm = self._get_current_dependent_vt(current)
-        if max(vm) > -40: # there may be no spikes
+        if max(vm[tVec > self.delay]) > -40: # there may be no spikes
+            print 'careful: there are spikes during the PSP experiment!'
             return 10000
         tNew = I.np.arange(0,self.tEnd, 0.025)
         vmNew = I.np.interp(tNew, tVec, vm)
@@ -71,7 +80,8 @@ class PSP_with_current_injection:
             self.optimize_holding_current()            
             #raise RuntimeError("Call optimize_holding_current first!")
         tVec, vt = self._get_current_dependent_vt(self.holding_current)
-        I.plt.plot(tVec, vt)        
+        I.plt.plot(tVec, vt) 
+        I.display.display(I.plt.gcf())       
         
     def get_neuron_param_with_current_injection(self):
         '''returns neuron_param, where a current injection is set up such that 
