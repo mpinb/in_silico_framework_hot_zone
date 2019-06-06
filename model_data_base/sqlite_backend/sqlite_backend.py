@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from .tuplecloudsqlitedict import SqliteDict
 import os, time
+from ..utils import DelayedKeyboardInterrupt
 
 from threading import ThreadError
 import warnings
@@ -59,17 +60,18 @@ class SQLiteBackend(object):
     def _vectorized_getitem(self, keys):
         '''this allows to get many values at once, reducing the overhead of repeated 
         opening and closing the connection'''
-        try:
-            sqllitedict = self._get_sql()    
-            dummy = {key: sqllitedict[key] for key in keys}   
-        except:
-            raise       
-        finally:
+        with DelayedKeyboardInterrupt():
             try:
-                self._close_sql(sqllitedict)
+                sqllitedict = self._get_sql()    
+                dummy = {key: sqllitedict[key] for key in keys}   
             except:
-                pass
-        return dummy
+                raise       
+            finally:
+                try:
+                    self._close_sql(sqllitedict)
+                except:
+                    pass
+            return dummy
     
     def __setitem__(self, key, item):
         '''Backend method to add a key-value pair to the sqlite database'''
@@ -78,17 +80,18 @@ class SQLiteBackend(object):
     def _vectorized_setitem(self, dict_):
         '''this allows to set many values at once, reducing the overhead of repeated 
         opening and closing the connection'''
-        try:
-            sqllitedict = self._get_sql()
-            for k, v in dict_.iteritems():
-                sqllitedict[k] = v
-        except:
-            raise
-        finally: 
+        with DelayedKeyboardInterrupt():
             try:
-                self._close_sql(sqllitedict) 
+                sqllitedict = self._get_sql()
+                for k, v in dict_.iteritems():
+                    sqllitedict[k] = v
             except:
-                pass
+                raise
+            finally: 
+                try:
+                    self._close_sql(sqllitedict) 
+                except:
+                    pass
 
     def __delitem__(self, arg):
         '''Backend method to delete item from the sqlite database.'''
@@ -96,26 +99,28 @@ class SQLiteBackend(object):
             
     def _vectorized_delitem(self, keys):
         '''this allows to delete many values at once, reducing the overhead of repeated 
-        opening and closing the connection'''        
-        try:
-            sqllitedict = self._get_sql()
-            for k in keys:
-                del sqllitedict[k]          
-        except:
-            raise
-        finally:
+        opening and closing the connection'''
+        with DelayedKeyboardInterrupt():
             try:
-                self._close_sql(sqllitedict)
+                sqllitedict = self._get_sql()
+                for k in keys:
+                    del sqllitedict[k]          
             except:
-                pass
+                raise
+            finally:
+                try:
+                    self._close_sql(sqllitedict)
+                except:
+                    pass
 
     def keys(self):
-        try:
-            sqllitedict = self._get_sql()
-            keys = sqllitedict.keys()
-            return sorted(keys)
-        finally:
+        with DelayedKeyboardInterrupt():
             try:
-                self._close_sql(sqllitedict)
-            except:
-                pass
+                sqllitedict = self._get_sql()
+                keys = sqllitedict.keys()
+                return sorted(keys)
+            finally:
+                try:
+                    self._close_sql(sqllitedict)
+                except:
+                    pass
