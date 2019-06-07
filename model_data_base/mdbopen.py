@@ -5,6 +5,12 @@ from .model_data_base_register import get_mdb_by_unique_id
 from .utils import cache
 
 def resolve_mdb_path(path):
+    # This has the purpose to map projects, that robert has run on the CIN cluster, to local paths
+    if '/gpfs01/bethge/home/regger/data/' in path:
+        print 'found CIN cluster prefix'
+        print 'old path', path
+        path = path.replace('/gpfs01/bethge/home/regger/data/', '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/')
+        print 'new path', path
     if not path.startswith('mdb://'):
         return path
     
