@@ -18,7 +18,8 @@ class PSP_with_current_injection:
     def __init__(self, neuron_param, confile, 
                  target_vm = -70, delay = 100, duration = 200, 
                  optimize_for_timepoint = 150, tEnd = 300,
-                 cell_modify_functions = {}):
+                 cell_modify_functions = {},
+                 bounds = (0,0.7)):
         self.confile = confile
         self.neuron_param = I.scp.NTParameterSet(neuron_param.as_dict())
         self.target_vm = target_vm
@@ -28,16 +29,19 @@ class PSP_with_current_injection:
         self.tEnd = tEnd
         self.holding_current = None
         self.cell_modify_functions = cell_modify_functions
+        self.bounds = bounds
         if len(cell_modify_functions) > 0:
             if not 'cell_modify_functions' in self.neuron_param.neuron.keys():
                 self.neuron_param.neuron['cell_modify_functions'] = {}
+                print cell_modify_functions
             self.neuron_param.neuron['cell_modify_functions'].update(cell_modify_functions)
         
-    def optimize_holding_current(self, bounds = (0, .7)):
+    def optimize_holding_current(self):
         '''finds the current that needs to be injected to hold the somatic potential at target_vm.
         target_vm is defined during initialization of the object.
         bounds: (min_current, max_current) in which the optimizer searches'''
         print 'starting optimization of holding current. target membrane potential is {} mV'.format(self.target_vm)
+        bounds = self.bounds
         x = minimize_scalar(I.partial(self._objective_fun), 
                             tol = .01, 
                             bounds = bounds, 
@@ -48,6 +52,7 @@ class PSP_with_current_injection:
             print 'current / mV: {}'.format(I.np.sqrt(x.x))
             self.holding_current = x.x
         else:
+            self.plot_current_injection_voltage_trace()        
             raise RuntimeError("A solution has not been found")
         self.plot_current_injection_voltage_trace()        
         
@@ -62,7 +67,7 @@ class PSP_with_current_injection:
         tNew = I.np.arange(0,self.tEnd, 0.025)
         vmNew = I.np.interp(tNew, tVec, vm)
         out = (vmNew[int(self.optimize_for_timepoint / 0.025)] - self.target_vm)**2
-        print out
+        print vmNew, out
         return out
 
     def _get_current_dependent_vt(self, current):
