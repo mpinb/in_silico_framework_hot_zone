@@ -270,17 +270,22 @@ class DelayedKeyboardInterrupt(object):
     '''context manager, that allows to delay a KeyboardInterrupt'''
     def __enter__(self):
         self.signal_received = False
-        self.old_handler = signal.signal(signal.SIGINT, self.handler)
+        self.we_are_in_main_thread = True
+        try:
+            self.old_handler = signal.signal(signal.SIGINT, self.handler)
+        except ValueError:
+            self.we_are_in_main_thread = False
 
     def handler(self, sig, frame):
         self.signal_received = (sig, frame)
         logging.debug('SIGINT received. Delaying KeyboardInterrupt.')
 
     def __exit__(self, type, value, traceback):
-        signal.signal(signal.SIGINT, self.old_handler)
-        if self.signal_received:
-            self.old_handler(*self.signal_received)
+        if self.we_are_in_main_thread:
+            signal.signal(signal.SIGINT, self.old_handler)
+            if self.signal_received:
+                self.old_handler(*self.signal_received)
 
-with DelayedKeyboardInterrupt():
-    # stuff here will not be interrupted by SIGINT
-    critical_code()
+#with DelayedKeyboardInterrupt():
+#    # stuff here will not be interrupted by SIGINT
+#    critical_code()
