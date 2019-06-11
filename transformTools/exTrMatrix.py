@@ -31,9 +31,10 @@ def getTransformation(src, dst):
     y = np.transpose(np.matrix([dst[0], dst[1], dst[2], dst[3]]))
 
     # add ones on the bottom of x and y
-    x = np.vstack((x,[1,1,1,1]))
-    y = np.vstack((y,[1,1,1,1]))
+    x = np.matrix(np.vstack((x,[1.0,1.0,1.0,1.0])))
+    y = np.matrix(np.vstack((y,[1.0,1.0,1.0,1.0])))
     # solve for A2
+
     trMatrix = y * x.I
 
     return trMatrix

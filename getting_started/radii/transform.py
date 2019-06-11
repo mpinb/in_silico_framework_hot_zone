@@ -270,33 +270,33 @@ tr.write.hocFile(hocFile, hocFileOutput, hocWithRad)
 endTime = time.time()
 print(endTime - startTime)
 
-# These are sample code to write landmark files from different sets
-# print(list(newPoints[3]))
-# print(newPoints[1])
-# for it in newPoints:
-#     print(it.item((0,3)))
+#These are sample code to write landmark files from different sets
+#print(list(newPoints[3]))
+#print(newPoints[1])
+#for it in newPoints:
+#    print(it.item((0,3)))
 
-# egHocFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/egHoc.txt'
-# egAmFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/egAm.txt'
+egHocFile = '/home/amir/Projects/in_silico_framework/getting_started/radii/data/neuron1/egHoc.txt'
+egAmFile = '/home/amir/Projects/in_silico_framework/getting_started/radii/data/neuron1/egAm.txt'
 
-# with open(egHocFile, 'w') as f:
-#     for item in matchedSet:
-#         startPoint = item[0].start
-#         endPoint = item[0].end
-#         f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
-#         f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
-
-
-# with open(egAmFile, 'w') as f:
-#     for item in matchedSet:
-#         startPoint = item[1].start
-#         endPoint = item[1].end
-#         f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
-#         f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
+with open(egHocFile, 'w') as f:
+    for item in matchedSet:
+        startPoint = item[0].start
+        endPoint = item[0].end
+        f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
+        f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
 
 
-# amTrFile = '/home/amir/Projects/radii/radii/data/neuron1/landmark/amTransformed2.txt'
-# with open(amTrFile, 'w') as f:
-#     for it in trAmPoints4DList:
-#         f.write('{:f}\t{:f}\t{:f} \n'.format(it[0], it[1], it[2]))
+with open(egAmFile, 'w') as f:
+    for item in matchedSet:
+        startPoint = item[1].start
+        endPoint = item[1].end
+        f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
+        f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
+
+
+amTrFile = '/home/amir/Projects/in_silico_framework/getting_started/radii/data/neuron1/amTransformed2.txt'
+with open(amTrFile, 'w') as f:
+    for it in trAmPoints4DList:
+        f.write('{:f}\t{:f}\t{:f} \n'.format(it[0], it[1], it[2]))
 
