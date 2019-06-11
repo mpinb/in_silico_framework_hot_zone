@@ -25,7 +25,8 @@ def hocFileComplete(inputFilePath):
                 neuron_section = False
 
             if (pt3daddCommand > -1) and neuron_section:
-                matches = re.findall('-?\d+\.\d+', line)
+                line = line.replace("pt3dadd", "")
+                matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
                 point = map(float, matches)
                 points.append(point)
     return points
@@ -43,26 +44,34 @@ def hocFileReduced(inputFilePath):
         in_neuron_line_number = 0
 
         for lineNumber, line in enumerate(lines):
+            # raw_input("Press Enter to continue...")
             soma = line.rfind("soma")
             dend = line.rfind("dend")
             apical = line.rfind("apical")
             createCommand = line.rfind("create")
             pt3daddCommand = line.rfind("pt3dadd")
-
+            # print("line:")
+            # print(lineNumber)
+            # print("the content:")
+            # print(line)
             if not neuron_section and ((createCommand > -1)
                                        and (soma + apical + dend > -3)):
                 neuron_section = True
+                # print("in_neuron True")
 
             if neuron_section and (line == '\n'):
                 neuron_section = False
                 in_neuron_line_number = 0
                 points.append(lastPoint)
                 lastPoint = []
+                # print("in_neuron True and line empty")
 
             if (pt3daddCommand > -1) and neuron_section:
                 in_neuron_line_number = in_neuron_line_number + 1;
-                matches = re.findall('-?\d+\.\d+', line)
+                line = line.replace("pt3dadd", "")
+                matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
                 point = map(float, matches)
+                # print("in p3dadd command")
                 if (in_neuron_line_number == 1):
                     points.append(point)
                 else:
