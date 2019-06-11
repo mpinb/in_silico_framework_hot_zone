@@ -60,22 +60,24 @@ def distance(point_i, point_j):
 # their start or end points are so close to another edge's start or end points
 def longestOptimalEdges(edges):
     sortedEdges = sorted(edges, key=lambda x: x.distance, reverse=True)
+    sortedEdges_revers = sorted(edges, key=lambda x: x.distance, reverse=False)
 
     firstLongestEdge = sortedEdges[0]
 
-    span = getMean(sortedEdges)/2.0
+    span = getMean(sortedEdges)/5.0
+    shortestEdges = []
 
-    isFound = False
-    index = 1
-    while (isFound is False):
-        secondLongestEdge = sortedEdges[index]
-        side1 = distance(secondLongestEdge.start, firstLongestEdge.start)
-        side2 = distance(secondLongestEdge.end, firstLongestEdge.start)
-        side3 = distance(secondLongestEdge.start, firstLongestEdge.end)
-        side4 = distance(secondLongestEdge.end, firstLongestEdge.end)
-        if (side1 > span and side2 > span and side3 > span and side4 > span):
-            isFound = True
-        index = index + 1
+    for edg in sortedEdges_revers:
+        shortEdge = edg
+        side1 = distance(shortEdge.start, firstLongestEdge.start)
+        side2 = distance(shortEdge.end, firstLongestEdge.start)
+        side3 = distance(shortEdge.start, firstLongestEdge.end)
+        side4 = distance(shortEdge.end, firstLongestEdge.end)
+        if (edg.distance > span and side1 > span and side2 > span and side3 > span and side4 > span):
+            shortestEdges.append(shortEdge)
+
+    sorted_shortestEdges = sorted(shortestEdges, key=lambda x: x.distance, reverse=True)
+    secondLongestEdge = sorted_shortestEdges[0]
 
     return [firstLongestEdge, secondLongestEdge]
 
@@ -118,13 +120,29 @@ def matchDirection(sett):
 
 
     if (deltaA*deltaB < 0.0):
-        print("yessss")
-        for i in range(length):
-            tempStart = sett[i][1].start
-            tempEnd = sett[i][1].end
-            sett[i][1].end = tempStart
-            sett[i][1].start = tempEnd
+        tempStart = sett[1][1].start
+        tempEnd = sett[1][1].end
+        sett[1][1].end = tempStart
+        sett[1][1].start = tempEnd
 
+    second_longestEdgCenter_A = (np.array(sett[1][0].start) + np.array(sett[1][0].end))/2.0
+    second_longestEdgCenter_B = (np.array(sett[1][1].start) + np.array(sett[1][1].end))/2.0
+
+    second_disA_start = distance(sett[0][0].start , second_longestEdgCenter_A)
+    second_disB_start = distance(sett[0][1].start , second_longestEdgCenter_B)
+
+    second_disA_end = distance(sett[0][0].end , second_longestEdgCenter_A)
+    second_disB_end = distance(sett[0][1].end , second_longestEdgCenter_B)
+
+    deltaA_sec = second_disA_start - second_disA_end
+    deltaB_sec = second_disB_start - second_disB_end
+
+
+    if (deltaA_sec*deltaB_sec < 0.0):
+        tempStart = sett[0][1].start
+        tempEnd = sett[0][1].end
+        sett[0][1].end = tempStart
+        sett[0][1].start = tempEnd
 
 
     # for i in range(length):
@@ -196,7 +214,7 @@ def getMean(sett):
     for edg in sett:
         mean = mean + edg.distance
 
-    mean = mean / (10.0*len(sett))
+    mean = mean / len(sett)
     return mean
 
 
@@ -210,7 +228,6 @@ def matchEdges(setA, setB, m):
 
     edgesA = constructEdges(hullPointsA)
     edgesB = constructEdges(hullPointsB)
-
     matchedSet = []
 
     longestEdgesA = longestOptimalEdges(edgesA)
