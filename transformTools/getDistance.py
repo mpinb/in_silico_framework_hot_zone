@@ -63,7 +63,7 @@ def longestOptimalEdges(edges):
 
     firstLongestEdge = sortedEdges[0]
 
-    span = getMean(sortedEdges)/10
+    span = getMean(sortedEdges)/2.0
 
     isFound = False
     index = 1
@@ -96,37 +96,88 @@ def longestOptimalEdges(edges):
 # A_end to center_end, THEN the distance of B_start to center_b must also be
 # less than the distance of B_end to center_b, otherwise we need to swap the
 # points of B_start with B_end with each other to be match with A_start and A_end
-def matchDirection(set):
+def matchDirection(sett):
 
     centerOfSet1 = 0.0
     centerOfSet2 = 0.0
-    length = len(set)
+    length = len(sett)
 
-    for i in range(length):
 
-        centerOfSet1 = centerOfSet1 + (np.array(set[i][0].start) +
-                                       np.array(set[i][0].end))
 
-        centerOfSet2 = centerOfSet2 + (np.array(set[i][1].start) +
-                                       np.array(set[i][1].end))
+    longestEdgCenter_A = (np.array(sett[0][0].start) + np.array(sett[0][0].end))/2.0
+    longestEdgCenter_B = (np.array(sett[0][1].start) + np.array(sett[0][1].end))/2.0
 
-    centerOfSet1 = centerOfSet1/length
-    centerOfSet2 = centerOfSet2/length
+    disA_start = distance(sett[1][0].start , longestEdgCenter_A)
+    disB_start = distance(sett[1][1].start , longestEdgCenter_B)
 
-    for i in range(length):
+    disA_end = distance(sett[1][0].end , longestEdgCenter_A)
+    disB_end = distance(sett[1][1].end , longestEdgCenter_B)
 
-        deltaSet1 = distance(centerOfSet1, set[i][0].start)\
-            - distance(centerOfSet1, set[i][0].end)
+    deltaA = disA_start - disA_end
+    deltaB = disB_start - disB_end
 
-        deltaSet2 = distance(centerOfSet2, set[i][1].start)\
-            - distance(centerOfSet2, set[i][1].end)
 
-        if (deltaSet1*deltaSet2 < 0):
-            temp = set[i][1].start
-            set[i][1].start = set[i][1].end
-            set[i][1].end = temp
+    if (deltaA*deltaB < 0.0):
+        print("yessss")
+        for i in range(length):
+            tempStart = sett[i][1].start
+            tempEnd = sett[i][1].end
+            sett[i][1].end = tempStart
+            sett[i][1].start = tempEnd
 
-    return set
+
+
+    # for i in range(length):
+
+    #     centerOfSet1 = centerOfSet1 + (np.array(sett[i][0].start) +
+    #                                    np.array(sett[i][0].end))
+
+    #     centerOfSet2 = centerOfSet2 + (np.array(sett[i][1].start) +
+    #                                    np.array(sett[i][1].end))
+
+    #     print("centerOfMass:")
+    #     print(i)
+    #     print(centerOfSet1)
+    #     print(centerOfSet2)
+    # centerOfSet1 = centerOfSet1/length
+    # centerOfSet2 = centerOfSet2/length
+    # print("centerOfMass:")
+    # print(centerOfSet1)
+    # print(centerOfSet2)
+
+
+    # for i in range(length):
+
+    #     deltaSet1 = distance(centerOfSet1, sett[i][0].start)\
+    #         - distance(centerOfSet1, sett[i][0].end)
+
+    #     deltaSet2 = distance(centerOfSet2, sett[i][1].start)\
+    #         - distance(centerOfSet2, sett[i][1].end)
+
+    #     startToCenter_set1 = distance(centerOfSet1, sett[i][0].start)
+    #     endToCenter_set1 = distance(centerOfSet1, sett[i][0].end)
+
+    #     startToCenter_set2 = distance(centerOfSet2, sett[i][1].start)
+    #     endToCenter_set2 = distance(centerOfSet2, sett[i][1].end)
+
+
+    #     if (startToCenter_set1 < endToCenter_set1 and startToCenter_set2 < endToCenter_set2):
+    #         continue
+    #     else:
+    #         print("yessss")
+    #         tempStart = sett[i][1].start
+    #         tempEnd = sett[i][1].end
+    #         sett[i][1].end = tempStart
+    #         sett[i][1].start = tempEnd
+
+        # print(deltaSet2)
+        # if (deltaSet1*deltaSet2 < 0):
+        #     print("yessssss")
+        #     temp = sett[i][1].start
+        #     sett[i][1].start = sett[i][1].end
+        #     sett[i][1].end = temp
+
+    return sett
 
 
 # We do not use this function in the code, but this function will remove
@@ -140,12 +191,12 @@ def removeSameEdges(setEg, edg):
     return setEg
 
 # Calculate the avarege length of all edges in an edges set
-def getMean(set):
+def getMean(sett):
     mean = 0.
-    for edg in set:
+    for edg in sett:
         mean = mean + edg.distance
 
-    mean = mean / len(set)
+    mean = mean / (10.0*len(sett))
     return mean
 
 
@@ -174,5 +225,5 @@ def matchEdges(setA, setB, m):
     matchedSet.append([A_firstLongestEdg, B_firstLongestEdg])
     matchedSet.append([A_secondLongestEdg, B_secondLongestEdg])
 
-    matchedSet = matchDirection(matchedSet)
-    return matchedSet
+    directedMatchedSet = matchDirection(matchedSet)
+    return directedMatchedSet
