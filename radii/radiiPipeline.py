@@ -19,7 +19,7 @@ class RadiiPipeline:
         self.amOutput025 = self.outputDirectory + "/am025/"
         self.amOutput050 = self.outputDirectory + "/am050/"
         self.amOutput075 = self.outputDirectory + "/am075/"
-        self.hocFileOutput = self.outputDirectory + "hocFileWithRad.hoc"
+        self.hocFileOutput = self.outputDirectory + "/hocFileWithRad.hoc"
         self.amWithUcrs = {}
         self.points025 = {}
         self.points050 = {}
@@ -121,31 +121,32 @@ class RadiiPipeline:
 
         self.amWithRad = amWithRad
 
-        pointsWithRadius = tr.read.hocFileReduced(self.hocFile)
-        set1 = []
+        pointsWithRadius = tr.read.hocFileComplete(self.hocFile)
+        #  pointsWithRadius = tr.read.hocFileReduced(self.hocFile)
+        hocSet = []
 
         for el in pointsWithRadius:
-            set1.append([el[0], el[1], el[2]])
+            hocSet.append([el[0], el[1], el[2]])
 
         amFile = self.amWithRad
 
-        set2 = radi.spacialGraph.getSpatialGraphPoints(amFile)
+        amSet = radi.spacialGraph.getSpatialGraphPoints(amFile)
 
         numberOfEdges = 2
 
-        matchedSet = tr.getDistance.matchEdges(set1, set2, numberOfEdges)
+        matchedSet = tr.getDistance.matchEdges(hocSet, amSet, numberOfEdges)
 
-        src = []
-        dst = []
+        src_hoc = []
+        dst_am = []
         for point in matchedSet:
-            src.append(point[0].start)
-            dst.append(point[1].start)
+            src_hoc.append(point[0].start)
+            src_hoc.append(point[0].end)
 
-            src.append(point[0].end)
-            dst.append(point[1].end)
+            dst_am.append(point[1].start)
+            dst_am.append(point[1].end)
 
         print("In the calculations of the transofrmation matrix")
-        trMatrix2 = tr.exTrMatrix.getTransformation(dst, src)
+        trMatrix2 = tr.exTrMatrix.getTransformation(dst_am, src_hoc)
 
 
         amPoints4D = tr.read.amFile(amFile)
@@ -154,21 +155,25 @@ class RadiiPipeline:
         trAmPoints4D = []
         for point4D in amPoints4D:
             point = point4D[:3]
-            point.append(1)
-            p = np.dot(trMatrix2, np.array(point))
+            mPoint = np.matrix(point)
+            mTrPoint = mPoint.T
+
+            p = trMatrix2*np.matrix(np.vstack((mTrPoint, 1.0)))
+            p = np.array(p.T)
             p_listed = p.tolist()[0]
+            # raw_input("somet")
             trAmPoints4D.append([p_listed[0], p_listed[1], p_listed[2], point4D[3]])
 
-        hocPointsComplete = tr.read.hocFileComplete(self.hocFile)
-        hocSet = []
-        for el in hocPointsComplete:
-            hocSet.append([el[0], el[1], el[2]])
+        #  hocPointsComplete = tr.read.hocFileComplete(self.hocFile)
+        #  hocSet = []
+        #  for el in hocPointsComplete:
+            #  hocSet.append([el[0], el[1], el[2]])
 
         trAmPoints4DList = trAmPoints4D
 
         print("In the process of finding pairs in between hoc file and the transoformed points to add radi to hocpoint")
         startTime = time.time()
-        pairs = radi.addRadii.findPairs(trAmPoints4DList, hocSet)
+        #  pairs = radi.addRadii.findPairs(trAmPoints4DList, hocSet)
         endTime = time.time()
         print(endTime - startTime)
 
@@ -176,17 +181,39 @@ class RadiiPipeline:
         hocWithRad = []
         newHPoint = []
 
-        for pair in pairs:
-            newHPoint = pair[1]
-            dual = pair[0]
-            newHPoint.append(dual[3])
-            hocWithRad.append(newHPoint)
-            newHPoint = []
-
+        #  for pair in pairs:
+            #  newHPoint = pair[1]
+            #  dual = pair[0]
+            #  newHPoint.append(dual[3])
+            #  hocWithRad.append(newHPoint)
+            #  newHPoint = []
+#
         endTime = time.time()
         print(endTime - startTime)
 
         print("writing the final result in the output hocFile")
-        tr.write.hocFile(self.hocFile, self.hocFileOutput, hocWithRad)
+        #  tr.write.hocFile(self.hocFile, self.hocFileOutput, hocWithRad)
+        egHocFile = self.outputDirectory + '/egHoc.txt'
+        egAmFile = self.outputDirectory + '/egAm.txt'
 
+        with open(egHocFile, 'w') as f:
+            for item in matchedSet:
+                startPoint = item[0].start
+                endPoint = item[0].end
+                f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
+                f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
+
+
+        with open(egAmFile, 'w') as f:
+            for item in matchedSet:
+                startPoint = item[1].start
+                endPoint = item[1].end
+                f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
+                f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
+
+
+        amTrFile = self.outputDirectory + '/amTransformed2.txt'
+        with open(amTrFile, 'w') as f:
+            for it in trAmPoints4DList:
+                f.write('{:f}\t{:f}\t{:f} \n'.format(it[0], it[1], it[2]))
         return 0
