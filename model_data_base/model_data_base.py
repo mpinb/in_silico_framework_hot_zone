@@ -40,7 +40,10 @@ def slugify(value):
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
     value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
     value = unicode(re.sub('[-\s]+', '-', value))
-    return str(value)
+    value = str(value)
+    if len(value) >= 50:
+        value = value[50]
+    return value
     
 class LoaderWrapper:
     '''This is a pointer to data, which is stored elsewhere.
