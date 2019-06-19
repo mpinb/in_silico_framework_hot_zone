@@ -4,6 +4,10 @@ from collections import defaultdict
 
 def roll_rows_independently(A, r):
     '''https://stackoverflow.com/questions/20360675/roll-rows-of-a-matrix-independently%5D'''
+    if not isinstance(A, np.ndarray):
+        raise ValueError()
+    if not isinstance(r, np.ndarray):
+        raise ValueError()    
     rows, column_indices = np.ogrid[:A.shape[0], :A.shape[1]]
     # Use always a negative shift, so that column_indices are valid.
     # (could also use module operation)    
@@ -44,7 +48,7 @@ class ParseVT:
         psp = self.psp
         index = []
         array = []
-        for celltype in self.vt.keys():
+        for celltype in sorted(self.vt.keys()):
             for synapse_id in range(len(vt[celltype][1.][1.][2])):
                 index.append((celltype, synapse_id))
                 t,v = vt[celltype][1.][1.][2][synapse_id], vt[celltype][1.][1.][3][synapse_id]
@@ -52,7 +56,8 @@ class ParseVT:
                 t_baseline,v_baseline = vt[celltype][1.][1.][0], vt[celltype][1.][1.][1] 
                 t_baseline,v_baseline = np.arange(0,tEnd,dt), np.interp(np.arange(0,tEnd,dt), 
                                                                         t_baseline, v_baseline)
-                out = (v-v_baseline)[psp.tStim / dt:]
+                cutoff_index = int(np.round(psp.tStim / dt))
+                out = (v-v_baseline)[cutoff_index:]
                 out = np.concatenate([out, np.zeros(int(tStop/dt) - len(out))])
                 array.append(out)
         self.vt_array = np.array(array)
