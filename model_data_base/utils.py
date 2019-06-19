@@ -267,7 +267,8 @@ import logging
 
 # see https://stackoverflow.com/questions/842557/how-to-prevent-a-block-of-code-from-being-interrupted-by-keyboardinterrupt-in-py
 class DelayedKeyboardInterrupt(object):
-    '''context manager, that allows to delay a KeyboardInterrupt'''
+    '''context manager, that allows to delay a KeyboardInterrupt
+    extended, such that it also works in subthreads.'''
     def __enter__(self):
         self.signal_received = False
         self.we_are_in_main_thread = True
