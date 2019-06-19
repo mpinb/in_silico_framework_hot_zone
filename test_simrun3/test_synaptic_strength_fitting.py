@@ -4,7 +4,6 @@ import unittest
 import context
 
 import simrun3.synaptic_strength_fitting 
-reload(simrun3.synaptic_strength_fitting ) 
 PSPs = simrun3.synaptic_strength_fitting.PSPs
 
 # class FakeFuture():
