@@ -1,5 +1,6 @@
 #input: path of the data.
 #output: pints in an array
+import math
 
 def getSpatialGraphPoints(spatial_graph):
     with open(spatial_graph, 'r') as csb:
@@ -94,4 +95,7 @@ def write_spacial_graph_with_thickness(inpath, outpath, radii):
         f.write('\n')
         f.write('@'+str(thickness_id) + '\n')
         for r in radii:
-            f.write(str(r)+'\n')
+            if math.isnan(r):
+                f.write(str(0.0)+'\n')
+            else:
+                f.write(str(r)+'\n')

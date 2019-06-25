@@ -1,7 +1,7 @@
 
 import os
 import re
-
+import math
 
 # Reading all neuronal points of a hoc file
 def hocFileComplete(inputFilePath):
@@ -116,6 +116,8 @@ def amFile(inputFilePath):
 
             if in_thickness_section and (line != '\n'):
                 matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
+                if matches == []:
+                    matches = [0.0,0.0]
                 rad = map(float, matches)
                 rads.append(rad)
 
