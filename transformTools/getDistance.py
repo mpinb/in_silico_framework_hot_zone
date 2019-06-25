@@ -58,13 +58,13 @@ def distance(point_i, point_j):
 # here we sort the edges from the set of edges based on their length,
 # we do not consider some edges, like the one that
 # their start or end points are so close to another edge's start or end points
-def longestOptimalEdges(edges):
+def longestOptimalEdges(edges, spanFactor):
     sortedEdges = sorted(edges, key=lambda x: x.distance, reverse=True)
     sortedEdges_revers = sorted(edges, key=lambda x: x.distance, reverse=False)
 
     firstLongestEdge = sortedEdges[0]
 
-    span = getMean(sortedEdges)/5.0
+    span = getMean(sortedEdges)/spanFactor
     shortestEdges = []
 
     for edg in sortedEdges_revers:
@@ -221,7 +221,7 @@ def getMean(sett):
 # Function below will find mateched points between two sets of points
 # the parameter m is indicating how many edges we want to match,
 # notice each edges have two points
-def matchEdges(setA, setB, m):
+def matchEdges(setA, setB, m, spanFactor):
 
     hullPointsA = findHullPoints(setA)
     hullPointsB = findHullPoints(setB)
@@ -230,8 +230,8 @@ def matchEdges(setA, setB, m):
     edgesB = constructEdges(hullPointsB)
     matchedSet = []
 
-    longestEdgesA = longestOptimalEdges(edgesA)
-    longestEdgesB = longestOptimalEdges(edgesB)
+    longestEdgesA = longestOptimalEdges(edgesA, spanFactor)
+    longestEdgesB = longestOptimalEdges(edgesB, spanFactor)
 
     A_firstLongestEdg = longestEdgesA[0]
     A_secondLongestEdg = longestEdgesA[1]
