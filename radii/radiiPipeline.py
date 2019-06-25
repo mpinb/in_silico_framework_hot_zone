@@ -12,6 +12,7 @@ class RadiiPipeline:
         self.maxZPathList = maxZPathList
         self.hocFile = hocFile
         self.amWithRad = amWithRad
+        self.spanFactor = 10.0
 
         self.outputDirectory = self.initOutputDirectory(outputFolder)
 
@@ -115,15 +116,17 @@ class RadiiPipeline:
         amFile = self.amWithRad
         return amFile
 
-    def findTransformation(self, amWithRad):
+    def findTransformation(self, amWithRad, spanFactor = 10.0, addRadii = True):
 
         assert self.amWithRad != "Default"
 
         self.amWithRad = amWithRad
+        self.spanFactor = spanFactor
 
         pointsWithRadius = tr.read.hocFileComplete(self.hocFile)
         #  pointsWithRadius = tr.read.hocFileReduced(self.hocFile)
         hocSet = []
+        pairs = []
 
         for el in pointsWithRadius:
             hocSet.append([el[0], el[1], el[2]])
@@ -134,7 +137,7 @@ class RadiiPipeline:
 
         numberOfEdges = 2
 
-        matchedSet = tr.getDistance.matchEdges(hocSet, amSet, numberOfEdges)
+        matchedSet = tr.getDistance.matchEdges(hocSet, amSet, numberOfEdges, spanFactor)
 
         src_hoc = []
         dst_am = []
@@ -164,16 +167,17 @@ class RadiiPipeline:
             # raw_input("somet")
             trAmPoints4D.append([p_listed[0], p_listed[1], p_listed[2], point4D[3]])
 
-        #  hocPointsComplete = tr.read.hocFileComplete(self.hocFile)
-        #  hocSet = []
-        #  for el in hocPointsComplete:
-            #  hocSet.append([el[0], el[1], el[2]])
+        hocPointsComplete = tr.read.hocFileComplete(self.hocFile)
+        hocSet = []
+        for el in hocPointsComplete:
+            hocSet.append([el[0], el[1], el[2]])
 
         trAmPoints4DList = trAmPoints4D
 
         print("In the process of finding pairs in between hoc file and the transoformed points to add radi to hocpoint")
         startTime = time.time()
-        #  pairs = radi.addRadii.findPairs(trAmPoints4DList, hocSet)
+        if addRadii:
+            pairs = radi.addRadii.findPairs(trAmPoints4DList, hocSet)
         endTime = time.time()
         print(endTime - startTime)
 
@@ -181,18 +185,20 @@ class RadiiPipeline:
         hocWithRad = []
         newHPoint = []
 
-        #  for pair in pairs:
-            #  newHPoint = pair[1]
-            #  dual = pair[0]
-            #  newHPoint.append(dual[3])
-            #  hocWithRad.append(newHPoint)
-            #  newHPoint = []
-#
+        for pair in pairs:
+            newHPoint = pair[1]
+            dual = pair[0]
+            newHPoint.append(dual[3])
+            hocWithRad.append(newHPoint)
+            newHPoint = []
+
         endTime = time.time()
         print(endTime - startTime)
 
-        print("writing the final result in the output hocFile")
-        #  tr.write.hocFile(self.hocFile, self.hocFileOutput, hocWithRad)
+        if (addRadii):
+            print("writing the final result in the output hocFile")
+            tr.write.hocFile(self.hocFile, self.hocFileOutput, hocWithRad)
+        
         egHocFile = self.outputDirectory + '/egHoc.txt'
         egAmFile = self.outputDirectory + '/egAm.txt'
 
@@ -212,7 +218,7 @@ class RadiiPipeline:
                 f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
 
 
-        amTrFile = self.outputDirectory + '/amTransformed2.txt'
+        amTrFile = self.outputDirectory + '/amTransformed.txt'
         with open(amTrFile, 'w') as f:
             for it in trAmPoints4DList:
                 f.write('{:f}\t{:f}\t{:f} \n'.format(it[0], it[1], it[2]))
