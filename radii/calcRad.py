@@ -39,9 +39,6 @@ class RadiusCalculator:
             ray = self.constructRay(frontCoordinates, backCoordinates, point)
             rays.append(ray)
 
-
-
-
             rayProfile = self.getProfileValues(image, ray)
             raysProfiles.append(rayProfile)
 

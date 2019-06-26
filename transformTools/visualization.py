@@ -10,6 +10,11 @@ from getting_started import getting_started_dir
 
 
 def readPoints(pFile):
+    """
+    This function will read 3 points as an array from txt files
+    only need to provide the path of the file as the input and in return you will
+    get the array of points
+    """
     points = []
     with open(pFile, 'r') as amLand:
         lines = amLand.readlines()
@@ -21,6 +26,12 @@ def readPoints(pFile):
 
 
 def plotCell(points, clr, sz):
+    """
+    In this function we use plotly to create 3d shapes of neurons, this is the setup of the coordinates
+    and Colors and how to show the lines. One can change for example the height or the width of the produced image.
+    parameters: points are the (x,y,z) array points, clr is the color and sz is the size of the graph.
+
+    """
 
     x = pd.Series([point[0] for point in points])
     y = pd.Series([point[1] for point in points])

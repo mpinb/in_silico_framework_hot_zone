@@ -2,10 +2,14 @@ import os
 import re
 
 
-# Writing points with their radius to a specific hoc file.
-# basically it do this: reading a file without the
-# radii of neuronal points and add the radius to them in another hoc file
 def hocFile(inputFilePath, outputFilePath, hocPointsWithRad):
+    """
+    # Writing points with their radius to a specific hoc file.
+    # basically it do this: reading a file without the
+    # radii of neuronal points and add the radius to them in another hoc file
+    """
+
+
     with open(inputFilePath, 'r') as readHocFile:
         with open(outputFilePath, 'w') as writeHocFile:
             lines = readHocFile.readlines()
@@ -44,9 +48,12 @@ def hocFile(inputFilePath, outputFilePath, hocPointsWithRad):
                     writeHocFile.write(line)
     return
 
-## by arco.
-## Modified with Amir (adding uncertainty)
 def amFileWithRadiusAndUncertainty(inpath, outpath, pointsWithRad, uncertainties):
+    """
+    this function will produce amfile with radius and its uncertainties
+    To get this function to work provide the input of the original amFile and as an output provide another patt.
+    pointsWithRad and uncertainties parameters are also should be arrays.
+    """
 
     with open(inpath) as f:
         data = f.readlines()
@@ -86,6 +93,10 @@ def amFileWithRadiusAndUncertainty(inpath, outpath, pointsWithRad, uncertainties
 
 
 def write_spacial_graph_with_error(inpath, outpath, radii):
+    """
+    This function write the radii of specialGraphFile in the
+    outputFIile path provided as parameter.
+    """
     with open(inpath) as f:
         data = f.readlines()
 
@@ -108,6 +119,11 @@ def write_spacial_graph_with_error(inpath, outpath, radii):
 
 def multipleAmFilesWithRadiusAndUncertainty(inputFolderPath, outputFolderPath, amFilesWithError):
 
+    """
+    write the pints with their radii and uncertainties for bunch of amfiles.
+    if you want to only write one amFile you can use write_spacial_graph_with_error() function.
+
+    """
     points = []
     ucr = []
     pointsWithRad = []

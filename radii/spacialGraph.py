@@ -1,8 +1,11 @@
-#input: path of the data.
-#output: pints in an array
 import math
 
 def getSpatialGraphPoints(spatial_graph):
+
+    """
+    #input: path of the data.
+    #output: pints in an array
+    """
     with open(spatial_graph, 'r') as csb:
         edge_ids = []
         edge_num_points = []
@@ -76,8 +79,8 @@ def getSpatialGraphPoints(spatial_graph):
 
     return edge_point_coords
 
-## by arco
 def write_spacial_graph_with_thickness(inpath, outpath, radii):
+    '''by arco'''
     with open(inpath) as f:
         data = f.readlines()
 

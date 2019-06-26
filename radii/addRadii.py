@@ -2,9 +2,11 @@
 import transformTools as tr
 
 
-# This function will find closest point between all points in the
-# hocPoints to a dual point form trPoints
 def findNextPair(trPoints, hocPoint):
+    """
+    This function will find closest point between all points in the
+    hocPoints to a dual point form trPoints
+    """
     dual = trPoints[0]
     minDistance = tr.getDistance.distance(dual[:4], hocPoint)
     for newPoint in trPoints:
@@ -14,12 +16,18 @@ def findNextPair(trPoints, hocPoint):
             dual = newPoint
     return dual
 
-# Since it is hard and time consuming to comput the function "findNextPair"
-# for all points so we need somehow reduce the amount of points that we are
-# considering to feed the "findNextPair" function. The below function will
-# help this by considering a cubic space around the concerning points
-# and only taking into account those points that are inside of the cubic
 def filterPoints(transformedPoints, hocPoints, observerIndex):
+
+    """
+    Since it is hard and time consuming to comput the function findNextPair
+    for all points so we need somehow reduce the amount of points that we are
+    considering to feed the findNextPair function. The below function will
+    help this by considering a cubic space around the concerning points
+    and only taking into account those points that are inside of the cubic
+    """
+
+
+
     trP = transformedPoints
     preIdx = observerIndex - 1
     nextIdx = observerIndex + 1
@@ -76,13 +84,15 @@ def filterPoints(transformedPoints, hocPoints, observerIndex):
     return subSet
 
 
-# In the function below we manage the whole process of finding pair points,
-# First it will choose one point from transformedPoints set and
-# will find its closest candidate from the hoc points set and,
-# then it will repeat this task for all points in the
-# set transformedPoints by applying two functions of
-# filterPoints and findNextPair
 def findPairs(transformedPoints, hocPoints):
+    """
+    In the function below we manage the whole process of finding pair points,
+    First it will choose one point from transformedPoints set and
+    will find its closest candidate from the hoc points set and,
+    then it will repeat this task for all points in the
+    set transformedPoints by applying two functions of
+    filterPoints and findNextPair
+    """
     hocFirstPoint = hocPoints[0]
     dualPair = findNextPair(transformedPoints, hocFirstPoint)
     pairs = []
