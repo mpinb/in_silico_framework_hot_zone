@@ -7,6 +7,14 @@ import time
 
 
 class RadiiPipeline:
+    """
+    Inputs:
+    1. amInputPathList: an array contains the paths of am files
+    2. maxZPathList: an array contains list of path of maxZ projection image files.
+    3. outputFolder: Is a path to the outputFolder that the final result will be written.
+    4. amWithRad: if provided then the class can be use to run the findTransformation method.
+
+    """
     def __init__(self, amInputPathList, maxZPathList, hocFile, outputFolder, amWithRad="default"):
         self.amInputPathList = amInputPathList
         self.maxZPathList = maxZPathList
@@ -27,6 +35,12 @@ class RadiiPipeline:
         self.points075 = {}
 
     def runRayBurstOnSlices(self, tr025=True, tr050=True, tr075=True):
+        """
+        Will call the extrationRadii method for different Treshhold.
+        each tresholdPercentage can be optionally removed by making its parameter false:
+        like tr025 = Fales
+
+        """
         self.createOutputDirectories()
         self.extractRadii(tr025, tr050, tr075)
         res = self.hocFile
@@ -34,6 +48,10 @@ class RadiiPipeline:
 
 
     def initOutputDirectory(self, folder):
+        """
+        The ouptut directory need to be initilize to have different folders for each tresholdPercentage.
+        if the folders are exist the function will not touch them
+        """
         cellPath = os.path.dirname(os.path.dirname(self.amInputPathList[0]))
         cellFolderName = os.path.basename(cellPath)
         outputDirectory = folder + cellFolderName
@@ -43,7 +61,7 @@ class RadiiPipeline:
 
 
     def createOutputDirectories(self):
-
+     '''will creat the output directory with the name of the cell'''
 
         if not os.path.isdir(self.amWithErrorsDirectory):
             os.mkdir(self.amWithErrorsDirectory)
@@ -59,6 +77,7 @@ class RadiiPipeline:
 
 
     def extractRadii(self, tr025=True, tr050=True, tr075=True):
+    '''will handle the calling of exRadSets function for different tresholdPercentages '''
 
         if not os.path.isdir(self.amWithErrorsDirectory):
             os.mkdir(self.amWithErrorsDirectory)
@@ -96,27 +115,45 @@ class RadiiPipeline:
                         break
 
     def extractUncertainties(self):
+        '''extract uncertainties for diff. tresholds and add them to file by calling addUncertainties'''
         self.readExtractedRadii()
         self.amWithUcrs = radi.calcError.addUncertainties(self.points050, self.points025, self.points075)
         self.writeUncertainties()
 
     def readExtractedRadii(self):
+        '''will hanld reading ampoints with radii and uncertainties for diff. tresholds'''
         print(self.amOutput025)
         self.allAmPointsWithRadius025, self.points025 = tr.read.multipleAmFiles(self.amOutput025)
         self.allAmPointsWithRadius050, self.points050 = tr.read.multipleAmFiles(self.amOutput050)
         self.allAmPointsWithRadius075, self.points075 = tr.read.multipleAmFiles(self.amOutput075)
 
     def writeUncertainties(self):
+        '''will write uncertainties in the output files'''
         for amInputPath in self.amInputPathList:
             tr.write.multipleAmFilesWithRadiusAndUncertainty(amInputPath, self.amWithErrorsDirectory, self.amWithUcrs)
 
     def getAmFileWithRad(self):
-
+        '''check if it need to ger amFile or not.'''
         assert self.amWithRad != "Default"
         amFile = self.amWithRad
         return amFile
 
     def findTransformation(self, amWithRad, spanFactor = 10.0, addRadii = True):
+
+        """
+        find the transformation between amFile and HocFile.
+        inputs:
+        1. amWithRad: final Provided amFile which contains the radii of points.
+        2. spanFactor: Default value is 10.0, it will adjust the choosing of the edges by a span.
+        3. addRadii: if it provided False it will not go to the step finding the pairs bbetween transformedPoints
+        and HocPoints, this will lead to faster run for experimenting the transformion quality.
+
+        outputs:
+        1. provide the final hocPointsWithRad if addRadii is true.
+        2. it will write the amTransformed and egAm and egHoc in text format files. These are by their order contain
+        the transformed am points, choosed am edges, and choosed hoc edges.
+
+        """
 
         assert self.amWithRad != "Default"
 
@@ -198,7 +235,7 @@ class RadiiPipeline:
         if (addRadii):
             print("writing the final result in the output hocFile")
             tr.write.hocFile(self.hocFile, self.hocFileOutput, hocWithRad)
-        
+
         egHocFile = self.outputDirectory + '/egHoc.txt'
         egAmFile = self.outputDirectory + '/egAm.txt'
 

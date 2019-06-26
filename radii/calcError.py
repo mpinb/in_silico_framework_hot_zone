@@ -1,11 +1,13 @@
 import numpy as np
 
-# input:
-# 1. amFilsDict050: set of slices conatian points with their radii calculated for the base treshold
-# 2. amFilesDict025: set of slices conatian of points with their radii calculated for the lower bound treshold
-# 3. amFilesDict075: set of slices conatian of points with their radii calculated for the upper bound treshold
-
 def addUncertainties(amFilesDict050, amFilesDict025, amFilesDict075):
+    """
+    input:
+    1. amFilsDict050: set of slices conatian points with their radii calculated for the base treshold
+    2. amFilesDict025: set of slices conatian of points with their radii calculated for the lower bound treshold
+    3. amFilesDict075: set of slices conatian of points with their radii calculated for the upper bound treshold
+
+    """
     points = []
     points025 = []
     points075 = []

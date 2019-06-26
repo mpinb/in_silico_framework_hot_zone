@@ -3,8 +3,8 @@ import os
 import re
 import math
 
-# Reading all neuronal points of a hoc file
 def hocFileComplete(inputFilePath):
+'''Reading all neuronal points of a hoc file'''
     with open(inputFilePath, 'r') as hocFile:
         lines = hocFile.readlines()
         neuron_section = False
@@ -32,9 +32,12 @@ def hocFileComplete(inputFilePath):
     return points
 
 
-# Reading hoc file with only two points (top and bottom) from each section of
-# neuronal points of a hoc file
 def hocFileReduced(inputFilePath):
+    """
+    Reading hoc file with only two points (top and bottom) from each section of
+    neuronal points of a hoc file
+
+    """
     with open(inputFilePath, 'r') as hocFile:
         lines = hocFile.readlines()
         neuron_section = False
@@ -78,10 +81,12 @@ def hocFileReduced(inputFilePath):
                     lastPoint = point
     return points
 
-
-# Reading all points of am file with also their radius form the
-# thickness part of the file
 def amFile(inputFilePath):
+    """
+    Reading all points of am file with also their radius form the
+    thickness part of the file
+
+    """
     with open(inputFilePath, 'r') as amFile:
         lines = amFile.readlines()
         points = []
@@ -130,11 +135,14 @@ def amFile(inputFilePath):
     return pointsWithRad
 
 
-# Input a folder path which contains the am files
-# Output the am files with radius as a dictionary of am files paths
-# and a full array of all points with their radii
-
 def multipleAmFiles(inputFolderPath):
+
+    """
+    Input a folder path which contains the am files
+    Output the am files with radius as a dictionary of am files paths
+    and a full array of all points with their radii
+    """
+
     oneAmFilePoints =[]
     allAmPoints = []
     amFilesSet = {}
