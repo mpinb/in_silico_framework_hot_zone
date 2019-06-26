@@ -147,20 +147,42 @@ class RadiusCalculator:
         profileValues = []
         profileIndicesLength = len(profileIndices)
         for i in range(profileIndicesLength):
-            profileValues.append(image.GetPixel(profileIndices[i]))
+            try:
+                intensityValue = image.GetPixel(profileIndices[i])
+            except RuntimeError as error:
+                print(error)
+                intensityValue = 0.0
+            profileValues.append(intensityValue)
         return profileValues
 
 
     def getCounterIndex(self, image, point, profileIndices):
-        pointValue = image.GetPixel([int(point[0]), int(point[1])])
+
+        try:
+            pointValue = image.GetPixel([int(point[0]), int(point[1])])
+        except RuntimeError as error:
+            print(error)
+            pointValue = 0.0
+
         # pointHalfValue = pointValue/2.0
         pointTresholdValue = pointValue*self.tresholdPercentage
 
         profileIndicesLength = len(profileIndices)
         contourIndices = []
         for i in range(profileIndicesLength-1):
-            pixel_1_value = image.GetPixel(profileIndices[i])
-            pixel_2_value = image.GetPixel(profileIndices[i+1])
+
+            try:
+                pixel_1_value = image.GetPixel(profileIndices[i])
+            except IndexError as error:
+                print(error)
+                pixel_1_value = 0.0
+
+            try:
+                pixel_2_value = image.GetPixel(profileIndices[i+1])
+            except IndexError as error:
+                print(error)
+                pixel_2_value = 0.0
+
 
             if pixel_1_value >= pointTresholdValue and pixel_2_value <= pointTresholdValue:
                 contourIndices = profileIndices[i]
