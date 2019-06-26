@@ -28,7 +28,13 @@ def hocFile(inputFilePath, outputFilePath, hocPointsWithRad):
                     neuron_section = False
 
                 if (pt3daddCommand > -1) and neuron_section:
+
                     hocPoint = hocPointsWithRad[in_neuron_line_number]
+
+                    line = line.replace("pt3dadd", "")
+                    matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
+                    point = map(float, matches)
+
                     writeHocFile.write('{{pt3dadd({:f},{:f},{:f},{:f})}}\n'.format(hocPoint[0],
                                                                     hocPoint[1],
                                                                     hocPoint[2],

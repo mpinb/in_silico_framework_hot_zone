@@ -8,9 +8,7 @@ def findNextPair(trPoints, hocPoint):
     dual = trPoints[0]
     minDistance = tr.getDistance.distance(dual[:4], hocPoint)
     for newPoint in trPoints:
-        # print("please Point:", newPoint)
         dist = tr.getDistance.distance(newPoint[:4], hocPoint)
-        # print("2nd please Point:", newPoint)
         if dist <= minDistance:
             minDistance = dist
             dual = newPoint

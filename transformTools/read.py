@@ -115,7 +115,7 @@ def amFile(inputFilePath):
                 in_edge_section = False
 
             if in_thickness_section and (line != '\n'):
-                matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
+                matches = re.findall('-?\d+\.\d+e[+-]?\d+', line)
                 if matches == []:
                     matches = [0.0,0.0]
                 rad = map(float, matches)

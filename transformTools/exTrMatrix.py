@@ -36,6 +36,6 @@ def getTransformation(src, dst):
     # solve for A2
 
     trMatrix = y * x.I
-
+    print(trMatrix)
     return trMatrix
 

@@ -125,11 +125,11 @@ class RadiiPipeline:
 
         pointsWithRadius = tr.read.hocFileComplete(self.hocFile)
         #  pointsWithRadius = tr.read.hocFileReduced(self.hocFile)
-        hocSet = []
+        hocPointsSet = []
         pairs = []
 
         for el in pointsWithRadius:
-            hocSet.append([el[0], el[1], el[2]])
+            hocPointsSet.append([el[0], el[1], el[2]])
 
         amFile = self.amWithRad
 
@@ -137,7 +137,7 @@ class RadiiPipeline:
 
         numberOfEdges = 2
 
-        matchedSet = tr.getDistance.matchEdges(hocSet, amSet, numberOfEdges, spanFactor)
+        matchedSet = tr.getDistance.matchEdges(hocPointsSet, amSet, numberOfEdges, spanFactor)
 
         src_hoc = []
         dst_am = []
@@ -150,7 +150,6 @@ class RadiiPipeline:
 
         print("In the calculations of the transofrmation matrix")
         trMatrix2 = tr.exTrMatrix.getTransformation(dst_am, src_hoc)
-
 
         amPoints4D = tr.read.amFile(amFile)
 
