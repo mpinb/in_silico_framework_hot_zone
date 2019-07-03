@@ -4,7 +4,7 @@ import re
 import math
 
 def hocFileComplete(inputFilePath):
-'''Reading all neuronal points of a hoc file'''
+    '''Reading all neuronal points of a hoc file'''
     with open(inputFilePath, 'r') as hocFile:
         lines = hocFile.readlines()
         neuron_section = False

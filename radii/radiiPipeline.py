@@ -61,7 +61,7 @@ class RadiiPipeline:
 
 
     def createOutputDirectories(self):
-     '''will creat the output directory with the name of the cell'''
+        '''will creat the output directory with the name of the cell'''
 
         if not os.path.isdir(self.amWithErrorsDirectory):
             os.mkdir(self.amWithErrorsDirectory)
@@ -77,7 +77,7 @@ class RadiiPipeline:
 
 
     def extractRadii(self, tr025=True, tr050=True, tr075=True):
-    '''will handle the calling of exRadSets function for different tresholdPercentages '''
+        '''will handle the calling of exRadSets function for different tresholdPercentages '''
 
         if not os.path.isdir(self.amWithErrorsDirectory):
             os.mkdir(self.amWithErrorsDirectory)
