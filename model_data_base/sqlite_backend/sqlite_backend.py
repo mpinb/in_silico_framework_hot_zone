@@ -16,7 +16,7 @@ import warnings
 # it is now optional to switch on an aditional filebased lock. 
 # This has the disadvantage that it also blocks concurrent reading.
 
-locking = True
+locking = False
 if locking:
     from .. import distributed_lock
 
