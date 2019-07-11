@@ -19,29 +19,40 @@ class CelltypeSpecificSynapticWeights:
     def __init__(self):
         self._celltype_to_syn_weight = {}
 
-    def init_with_network_param(self, n):
+    def init_with_network_param(self, n, select_celltypes = None, use_default_weight = None):
         out = self._celltype_to_syn_weight
         for celltype in n.network:
-            #confile = n.network[celltype].synapses.connectionFile
-            #cellNr = n.network[celltype].cellNr
-            receptors = n.network[celltype].synapses.receptors
-            if len(receptors) > 1:
-                raise NotImplementedError()
-            receptor_key = receptors.keys()[0]
-            receptor = receptors[receptor_key]
-            if receptor_key not in ['glutamate_syn', 'gaba_syn']:
-                raise NotImplementedError()
-            if receptor_key == 'gaba_syn': 
-                out[celltype] = receptor.weight
-            elif receptor_key == 'glutamate_syn':
-                if not receptor.weight[0] == receptor.weight[1]:
+            if select_celltypes is not None:
+                if not celltype.split('_')[0] in select_celltypes:
+                    print 'setting weight of celltype {} to 0, as it is not within selected celltypes'.format(celltype)
+                    out[celltype] = 0
+                    continue
+            if use_default_weight is not None:
+                out[celltype] = use_default_weight
+            else: #read weight
+                #confile = n.network[celltype].synapses.connectionFile
+                #cellNr = n.network[celltype].cellNr
+                receptors = n.network[celltype].synapses.receptors
+                if len(receptors) > 1:
                     raise NotImplementedError()
-                out[celltype] =  receptor.weight[0]
+                receptor_key = receptors.keys()[0]
+                receptor = receptors[receptor_key]
+                if receptor_key not in ['glutamate_syn', 'gaba_syn']:
+                    raise NotImplementedError()
+                if receptor_key == 'gaba_syn': 
+                    out[celltype] = receptor.weight
+                elif receptor_key == 'glutamate_syn':
+                    if not receptor.weight[0] == receptor.weight[1]:
+                        raise NotImplementedError()
+                    out[celltype] =  receptor.weight[0]
+        print 'final weights lookup dict:'
+        print out
                 
     def __getitem__(self, k):
         return self._celltype_to_syn_weight[k[0]]
 
-def sa_to_vt_bypassing_lock(mdb_loader_dict, descriptor, classname, sa, individual_weights = False):
+def sa_to_vt_bypassing_lock(mdb_loader_dict, descriptor, classname, sa, 
+                            individual_weights = False, select_celltypes = None):
     '''simulates the somatic summation model for given synapse activation. 
     The synapse activation dataframe sa may contain several simtrails.
     The PSPs matching the anatomical location are automatically loaded. For this,
@@ -61,14 +72,14 @@ def sa_to_vt_bypassing_lock(mdb_loader_dict, descriptor, classname, sa, individu
         psp = mdb_loader_dict[descriptor, classname, name[0], name[1]]()
         pvt = ParseVT(psp, dt = 0.1, tStop=350)
         for sti in row:
-            if individual_weights:
-                weights_dict = CelltypeSpecificSynapticWeights()
-                n = parameterfiles.loc[sti]['network_param_mdbpath']
-                print 'loading synaptic weights from network param file ', n
-                n = scp.build_parameters(n)
-                weights_dict.init_with_network_param(n)
-            else:
-                weights_dict = defaultdict(lambda: 1)
+            weights_dict = CelltypeSpecificSynapticWeights()
+            n = parameterfiles.loc[sti]['network_param_mdbpath']
+            print 'loading synaptic weights from network param file ', n
+            n = scp.build_parameters(n)
+            default_weight =  None if individual_weights else 1
+            weights_dict.init_with_network_param(n, select_celltypes=select_celltypes,
+                                 use_default_weight = default_weight)
+            
             index.append(sti)
             t,v = pvt.parse_sa(sa.loc[sti], weights=weights_dict)
             out.append(v)
@@ -84,6 +95,7 @@ def get_mdb_loader_dict(mdb, descriptor = None, PSPClass_name = None):
                        for k,v in mdb_loader_dict.iteritems()}   
     return mdb_loader_dict
 
+import barrel_cortex
 class DistributedDDFWithSaveMethod:
     def __init__(self, mdb = None, key = None, ddf = None, dumper = None, get = None):
         self.ddf = ddf
@@ -96,12 +108,20 @@ class DistributedDDFWithSaveMethod:
         self._mdb.setitem(self._key, self.ddf, dumper = self._dumper, get = self._get)
         
 def init(mdb, description_key = None, PSPClass_name = None, client = None, block_till_saved = False, 
-         persistent_df = True, individual_weights = False):
+         persistent_df = True, individual_weights = False, select_celltypes = None):
     mdb_loader_dict = get_mdb_loader_dict(mdb, description_key, PSPClass_name)
     part = partial(sa_to_vt_bypassing_lock, mdb_loader_dict, description_key, PSPClass_name, 
-                   individual_weights = individual_weights)
+                   individual_weights = individual_weights, select_celltypes = select_celltypes)
     if individual_weights:
         description_key = description_key + '_individual_weights'
+    if select_celltypes is not None:
+        if select_celltypes == barrel_cortex.excitatory:
+            suffix = 'EXC'
+        elif select_celltypes == barrel_cortex.inhibitory:
+            suffix = 'INH'
+        else:
+            suffix = '_'.join(sorted(select_celltypes))
+        description_key += suffix
     sa = mdb['synapse_activation']
     if persistent_df:
         sa = client.persist(sa)
