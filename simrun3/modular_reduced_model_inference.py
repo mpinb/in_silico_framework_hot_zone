@@ -64,8 +64,11 @@ class Rm(object):
     def extract(self, name):
         return self.data_extractors[name].get()
     
-    def run(self, client = None, n_workers = None):
+    def run(self, client = None, n_workers = None, strategy_selection = None):
         for strategy_name in sorted(self.strategies.keys()):
+            if strategy_selection is not None:
+                if not strategy_name in strategy_selection:
+                    continue
             strategy = self.strategies[strategy_name]
             for solver_name in sorted(strategy.solvers.keys()):
                 solver = strategy.solvers[solver_name]
@@ -322,7 +325,6 @@ class RaisedCosineBasis(object):
         v[cos_arg >= numpy.pi] = 0
         v[cos_arg <= -numpy.pi] = 0
         return backend.array(t.astype('f4')), backend.array(v.astype('f4'))
-
 ## data extractors
 class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
     '''extracts array of the shape (trial, time, space) from spatiotemporal synapse activation binning'''
@@ -420,7 +422,6 @@ class DataExtractor_spikeInInterval(DataExtractor):
             
     def get(self):
         return self.sii
-        
 class DataExtractor_ISI(DataExtractor):
     def __init__(self, t = None):
         self.t = t
@@ -437,7 +438,6 @@ class DataExtractor_ISI(DataExtractor):
         
     def get(self):
         return self.ISI
-    
 class DataExtractor_daskDataframeColumn(DataExtractor):
     def __init__(self, key, column, client = None):
         if not isinstance(key, tuple):
@@ -500,7 +500,6 @@ class Strategy_ISIcutoff(Strategy):
         min_ = self.cutoff_range[0]
         max_ = self.cutoff_range[1]
         return numpy.random.rand(1)*(max_ - min_) + min_
-    
 class Strategy_ISIexponential(Strategy):
     def __init__(self, name, max_isi = 100):
         super(Strategy_ISIexponential, self).__init__(name)
@@ -680,7 +679,6 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
                 c = self.get_color_by_group(group)
                 self.RaisedCosineBasis_temporal.visualize_x(x_t, ax = ax_t, plot_kwargs = {'c': c})
                 self.RaisedCosineBasis_spatial.visualize_x(x_z, ax = ax_z, plot_kwargs = {'c': c})  
-
 class Strategy_linearCombinationOfData(Strategy):
     def __init__(self, name, data_keys):
         super(Strategy_linearCombinationOfData, self).__init__(name)        
@@ -697,7 +695,6 @@ class Strategy_linearCombinationOfData(Strategy):
     @staticmethod
     def _get_score_static(data_values, x):
         return np.dot(data_values.T, x)
-    
 class CombineStrategies_sum(Strategy):
     def __init__(self, name):
         super(CombineStrategies_sum, self).__init__(name)
