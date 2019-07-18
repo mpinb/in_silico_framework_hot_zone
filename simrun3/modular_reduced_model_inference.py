@@ -1,18 +1,31 @@
-import cPickle as pickle
+'''
+This module implements a framework to 
+'''
+
+
 import Interface as I
 import sklearn.metrics
 import scipy.optimize
+import numpy
+try:
+    import cupy
+    import cupy as np    
+    CUPY_ENABLED = True
+except ImportError:
+    import numpy as np    
+    print 'CuPy could not be imported.'
+    CUPY_ENABLED = False
 
-# def instancemethod_serialization_helper(pickled_instance, method_name, 
-#                                          method_args=[], method_kwargs = {}):
-#     instance_ = pickle.loads(pickled_instance)
-#     method_ = getattr(instance_, method_name)
-#     return method_(*method_args, **method_kwargs)
+import pandas as pd
+import matplotlib.pyplot as plt
 
-def solver_serialization_helper(pickled_solver, split, x0):
-    solver = pickle.loads(pickled_solver)
-    solver.strategy.set_split(split)
-    return solver.optimize(x0 = x0)
+
+def convert_to_numpy(x):
+    if CUPY_ENABLED:
+        return cupy.asnumpy(x)
+    else:
+        return x
+
 class Rm(object):
     def __init__(self, name, mdb, tmin = None, tmax = None, width = None):
         self.name = name
@@ -51,14 +64,17 @@ class Rm(object):
     def extract(self, name):
         return self.data_extractors[name].get()
     
-    def run(self, client = None):
+    def run(self, client = None, n_workers = None):
         for strategy_name in sorted(self.strategies.keys()):
             strategy = self.strategies[strategy_name]
             for solver_name in sorted(strategy.solvers.keys()):
                 solver = strategy.solvers[solver_name]
                 if client is not None:
                     print 'starting remote optimization', strategy_name, solver_name
-                    solver.optimize_all_splits(client)
+                    workers = client.scheduler_info()['workers'].keys()                    
+                    if n_workers is not None:
+                        workers = workers[:n_workers]                     
+                    solver.optimize_all_splits(client, workers = workers)
                     self.results_remote = True
                 else:
                     print 'starting local optimization', strategy_name, solver_name
@@ -78,12 +94,22 @@ class Strategy(object):
     def __init__(self, name):
         self.name = name
         self.solvers = {}
-        self.split = None
+        # self.split = None
+        self.cupy_split = None
+        self.numpy_split = None
+        self.setup_done = False
         
     def setup(self, data, DataSplitEvaluation):
+        if self.setup_done:
+            return
         self.data = data
         self.DataSplitEvaluation = DataSplitEvaluation
+        self.y = self.data['y'].values.astype('f4')
         self._setup()
+        self.get_y = I.partial(self.get_y_static, self.y)                
+        self.get_score = I.partial(self.get_score_static, self._get_score)  
+        self._objective_function = I.partial(self._objective_function_static, self.get_score, self.get_y)
+        self.setup_done = True
         
     def _setup(self):
         pass
@@ -91,27 +117,38 @@ class Strategy(object):
     def _get_x0(self):
         pass
     
-    def set_split(self, split):
-        self.split = split
+    def set_split(self, split, setup = True):
+        cupy_split = np.array(split) # cupy, if cupy is there, numpy otherwise
+        numpy_split = numpy.array(split) # allways numpy
+        self.get_score = I.partial(self.get_score_static, self._get_score, cupy_split = cupy_split)
+        self.get_y = I.partial(self.get_y_static, self.y, numpy_split = numpy_split)
+        self._objective_function = I.partial(self._objective_function_static, self.get_score, self.get_y)
+        if setup:
+            for solver in self.solvers.values():
+                solver._setup()            
         return self
     
-    def get_score(self, x):
-        score = self._get_score(x)        
-        if self.split:
-            return score[self.split]
+    @staticmethod
+    def get_score_static(_get_score, x, cupy_split = None):
+        x = np.array(x).astype('f4')
+        score = _get_score(x)        
+        if cupy_split is not None:
+            return score[cupy_split]
         else:
             return score
-        
-    def get_y(self):
-        if self.split:
-            return self.data['y'][self.split]
-        else:
-            return self.data['y']
     
-    def _objective_function(self, x):
-        s = self.get_score(x)
-        y = self.get_y()
-        return -1 * sklearn.metrics.roc_auc_score(y, s) 
+    @staticmethod
+    def get_y_static(y, numpy_split = None):
+        if numpy_split is not None:
+            return y[numpy_split]
+        else:
+            return y
+    
+    @staticmethod
+    def _objective_function_static(get_score, get_y, x):
+        s = get_score(x)
+        y = get_y()
+        return -1 * sklearn.metrics.roc_auc_score(y, convert_to_numpy(s)) 
     
     def add_solver(self, solver, setup = True):
         assert solver.name not in self.solvers.keys()
@@ -124,23 +161,21 @@ class Solver(object):
         
     def setup(self, strategy):
         self.strategy = strategy
+        self._setup()
+        
+    def _setup(self):
+        pass
     
-    def optimize_all_splits(self, client = None):
+    def optimize_all_splits(self, client = None, workers = None):
         out = {}
-        if client:
-            self_serialized = pickle.dumps(self)
-            self_serialized = client.scatter(self_serialized)
         for name, split in self.strategy.DataSplitEvaluation.splits.iteritems():
+            x0 = self.strategy._get_x0()    
+            self.strategy.set_split(split['train'])
             if client:
-                x0 = self.strategy._get_x0()
-                out[name] = client.submit(solver_serialization_helper,
-                                          self_serialized, #pickle.dumps(self),
-                                          split['train'],
-                                          x0)
-                # out[name] = client.submit(self.optimize, x0 = x0)
+                               
+                out[name] = client.submit(self.optimize, x0 = x0, workers = workers)
             else:
-                self.strategy.set_split(split['train'])
-                out[name] = self.optimize()
+                out[name] = self.optimize(x0 = x0)
         self.strategy.DataSplitEvaluation.add_result(self, out)
         return out
 class DataExtractor(object):
@@ -181,7 +216,7 @@ class DataSplitEvaluation(object):
             l = range(n)
         else:
             n = len(l)
-        I.np.random.shuffle(l)
+        np.random.shuffle(np.array(l))
         train = l[:int(n*percentage_train)]
         test = l[int(n*percentage_train):]
         subtest1 = test[:int(len(test)/2)]
@@ -242,22 +277,25 @@ class DataSplitEvaluation(object):
                 'score': score_index,
                 'x': x_index,
                 'success': success_index}
-        out = I.pd.DataFrame(out)
+        out = pd.DataFrame(out)
         out = out.set_index(['strategy','solver','split','subsplit', 'run']).sort_index()
         return out  
 class RaisedCosineBasis(object):
-    def __init__(self, a = 2, c = 1, phis = I.np.arange(1,11, 0.5), width = 80, reversed_ = False):
+    def __init__(self, a = 2, c = 1, phis = numpy.arange(1,11, 0.5), width = 80, reversed_ = False,
+                 backend = numpy):
         self.a = a
         self.c = c
         self.phis = phis
         self.reversed_ = reversed_
-        self.compute(width)
+        self.backend = backend
+        self.width = width
+        self.compute(self.width)
         
     def compute(self, width = 80):
         self.width = width
-        self.t = I.np.arange(width)
+        self.t = numpy.arange(width)
         rev = -1 if self.reversed_ else 1
-        self.basis = [self.get_raised_cosine(self.a,self.c,phi,self.t)[1][::rev] for phi in self.phis]
+        self.basis = [self.get_raised_cosine(self.a,self.c,phi,self.t, backend = self.backend)[1][::rev] for phi in self.phis]
         return self
     
     def get(self):
@@ -268,34 +306,36 @@ class RaisedCosineBasis(object):
 
     def visualize(self, ax = None, plot_kwargs = {}):
         if ax is None:
-            ax = I.plt.figure().add_subplot(111)
+            ax = plt.figure().add_subplot(111)
         for b in self.get():
             ax.plot(self.t, b, **plot_kwargs)
             
     def visualize_x(self, x, ax = None, plot_kwargs = {}):
         if ax is None:
-            ax = I.plt.figure().add_subplot(111)        
+            ax = plt.figure().add_subplot(111)        
         ax.plot(self.t, self.get_superposition(x), **plot_kwargs)
     
     @staticmethod
-    def get_raised_cosine(a = 1, c = 1, phi = 0, t = I.np.arange(0,80, 1)):
-        cos_arg = a*I.np.log(t+c) - phi
-        v = .5*I.np.cos(cos_arg) + .5
-        v[cos_arg >= I.np.pi] = 0
-        v[cos_arg <= -I.np.pi] = 0
-        return t,v
+    def get_raised_cosine(a = 1, c = 1, phi = 0, t = numpy.arange(0,80, 1), backend = numpy):
+        cos_arg = a*numpy.log(t+c) - phi
+        v = .5*numpy.cos(cos_arg) + .5
+        v[cos_arg >= numpy.pi] = 0
+        v[cos_arg <= -numpy.pi] = 0
+        return backend.array(t.astype('f4')), backend.array(v.astype('f4'))
 
 ## data extractors
 class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
     '''extracts array of the shape (trial, time, space) from spatiotemporal synapse activation binning'''
     def __init__(self, key):
         self.key = key
+        self.data = None
         
     def setup(self, Rm):
         self.mdb = Rm.mdb
         self.tmin = Rm.tmin
         self.tmax = Rm.tmax
         self.width = Rm.width
+        self.data = {g: self._get_spatiotemporal_input(g) for g in self.get_groups()}
     
     @staticmethod
     def get_spatial_bin_level(key):
@@ -340,14 +380,14 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
                 out.append(k)
         return out
 
-    def get_spatiotemporal_input(self, group):
+    def _get_spatiotemporal_input(self, group):
         '''returns spatiotemporal input in the following dimensions:
         (trial, time, space)'''
         mdb = self.mdb
         key = self.key        
         keys = self.get_sorted_keys_by_group(group)
         out = [mdb[key][k][:,self.tmax-self.width:self.tmax] for k in keys]
-        out = I.np.dstack(out)
+        out = numpy.dstack(out)
         print out.shape
         return out
     
@@ -356,10 +396,11 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
         E.g. if the synapse activation is grouped by excitatory / inhibitory identity and spatial bins,
         the dictionary would be {'EXC': matrix_with_dimensions[trial, time, space], 
                                  'INH': matrix_with_dimensions[trial, time, space]}'''
-        return {g: self.get_spatiotemporal_input(g) for g in self.get_groups()}
+        return self.data # {g: self.get_spatiotemporal_input(g) for g in self.get_groups()}
 class DataExtractor_spiketimes(DataExtractor):
     def setup(self, Rm):
         self.mdb = Rm.mdb
+        self.st = None
         
     def get(self):
         return self.mdb['spike_times']
@@ -374,10 +415,12 @@ class DataExtractor_spikeInInterval(DataExtractor):
         if self.tmax is None:
             self.tmax = Rm.tmax
         self.mdb = Rm.mdb
+        st = self.mdb['spike_times']
+        self.sii = I.spike_in_interval(st, tmin = self.tmin, tmax = self.tmax)
             
     def get(self):
-        st = self.mdb['spike_times']
-        return I.spike_in_interval(st, tmin = self.tmin, tmax = self.tmax)
+        return self.sii
+        
 class DataExtractor_ISI(DataExtractor):
     def __init__(self, t = None):
         self.t = t
@@ -386,12 +429,15 @@ class DataExtractor_ISI(DataExtractor):
         self.mdb = Rm.mdb
         if self.t is None:
             self.t = Rm.tmin
-        
-    def get(self):
+            
         st = self.mdb['spike_times']
         t = self.t
-        st[st>t] = I.np.NaN
-        return st.max(axis=1)
+        st[st>t] = numpy.NaN
+        self.ISI = st.max(axis=1) - t
+        
+    def get(self):
+        return self.ISI
+    
 class DataExtractor_daskDataframeColumn(DataExtractor):
     def __init__(self, key, column, client = None):
         if not isinstance(key, tuple):
@@ -420,40 +466,41 @@ class DataExtractor_daskDataframeColumn(DataExtractor):
     def get(self):
         return self.data
 class Solver_COBYLA(Solver):
-    def __init__(self, name, method = 'COBYLA'):
+    def __init__(self, name):
         self.name = name        
-        self.method = method
-            
-    def optimize(self, maxiter = 5000, x0 = None):
-        if x0 is None:
-            x0 = self.strategy._get_x0()
-        out = scipy.optimize.minimize(self.strategy._objective_function, x0,
-                                      method = self.method, options = dict(maxiter = maxiter,
+    
+    def _setup(self):
+        self.optimize = I.partial(self._optimize, self.strategy._objective_function, maxiter = 5000)
+        
+    @staticmethod
+    def _optimize(_objective_function, maxiter = 5000, x0 = None):
+        out = scipy.optimize.minimize(_objective_function, x0,
+                                      method = 'COBYLA', options = dict(maxiter = maxiter,
                                                                        disp = True))        
-        return out 
+        return out
 class Strategy_ISIcutoff(Strategy):
     def __init__(self, name, cutoff_range = (0,4), penalty = -10**10):
         super(Strategy_ISIcutoff, self).__init__(name)
         self.cutoff_range = cutoff_range
         self.penalty = penalty
-
-    
-    def _setup(self):
-        self.ISI = self.data['ISI'].fillna(-100)
         
-    def _get_score(self, x):
+    def _setup(self):
+        self.ISI = np.array(self.data['ISI'].fillna(-100))
+        self._get_score = I.partial(self._get_score_static, self.ISI, self.penalty)
+    
+    @staticmethod
+    def _get_score_static(ISI, penalty, x):
+        ISIc = ISI.copy()
         x = x[0]*-1
-        ISI = I.np.array(self.ISI)
-        non_refractory = (ISI <= x)
-        refractory = (ISI > x)
-        ISI[refractory] = self.penalty
-        ISI[non_refractory] = 0
-        return ISI
+        ISIc[ISI <= x] = 0    
+        ISIc[ISI > x] = penalty
+        return ISIc
         
     def _get_x0(self):
         min_ = self.cutoff_range[0]
         max_ = self.cutoff_range[1]
-        return I.np.random.rand(1)*(max_ - min_) + min_
+        return numpy.random.rand(1)*(max_ - min_) + min_
+    
 class Strategy_ISIexponential(Strategy):
     def __init__(self, name, max_isi = 100):
         super(Strategy_ISIexponential, self).__init__(name)
@@ -461,50 +508,58 @@ class Strategy_ISIexponential(Strategy):
         self.max_isi = 100
         
     def _setup(self):
-        self.ISI = self.data['ISI']
-        
-    def _get_x0(self):
-        return (I.np.random.rand(2)*I.np.array([-10, 15]))
-    
-    def _get_score(self, x):
-        ISI = self.ISI
+        ISI = self.data['ISI']
         ISI = ISI * -1
-        ISI = ISI.fillna(self.max_isi)
-        ISI = -1 * I.np.exp(x[0]*(ISI-x[1]))        
-        return ISI.replace([I.np.inf, -I.np.inf], I.np.nan).fillna(-10**10).values
+        ISI = ISI.fillna(self.max_isi)   
+        self.ISI = ISI     
+        self._get_score = I.partial(self._get_score_static, self.ISI)
+    
+    @staticmethod
+    def _get_x0():
+        return (numpy.random.rand(2)*numpy.array([-10, 15]))
+    
+    @staticmethod
+    def _get_score_static(ISI, x):
+        ISI = ISI.replace([np.inf, -np.inf], np.nan).fillna(-10**10).values
+        return np.array(ISI)
     
     def visualize(self, optimizer_output, normalize = True):
-        fig = I.plt.figure()
+        fig = plt.figure()
         ax = fig.add_subplot(111)
-        x = I.np.arange(0,50)
+        x = np.arange(0,50)
         for o in optimizer_output:
-            v = -1 * I.np.exp(o.x[0]*(x-x[1]))
+            v = -1 * np.exp(o.x[0]*(x-x[1]))
             if normalize:
-                v = v / I.np.max(I.np.abs(v))
+                v = v / np.max(np.abs(v))
             ax.plot(v)
 class Strategy_ISIraisedCosine(Strategy):
     def __init__(self, name, RaisedCosineBasis_postspike):
         super(Strategy_ISIraisedCosine, self).__init__(name)
+        # datatype needs to match backend, recompute
         self.RaisedCosineBasis_postspike = RaisedCosineBasis_postspike
+        RaisedCosineBasis_postspike.backend = np
+        RaisedCosineBasis_postspike.compute()
         
     def _setup(self):
-        self.ISI = self.data['ISI']
-        
-    def _get_x0(self):
-        return (I.np.random.rand(len(self.RaisedCosineBasis_postspike.phis))*2-1)*5
-    
-    def _get_score(self, x):
-        ISI = self.ISI
+        ISI = self.data['ISI']
         ISI = ISI * -1
-        width = self.RaisedCosineBasis_postspike.width
+        width = self.RaisedCosineBasis_postspike.width        
         ISI[ISI>=width] = width
         ISI = ISI.fillna(width)
         ISI = ISI.astype(int)-1
-        kernel = self.RaisedCosineBasis_postspike.get_superposition(x)
-        return kernel[ISI.values]
+        self.ISI = np.array(ISI)
+        self._get_score = I.partial(self._get_score_static, self.RaisedCosineBasis_postspike, self.ISI)
+        
+    def _get_x0(self):
+        return (numpy.random.rand(len(self.RaisedCosineBasis_postspike.phis))*2-1)*5
+    
+    @staticmethod
+    def _get_score_static(RaisedCosineBasis_postspike, ISI, x):
+        kernel = RaisedCosineBasis_postspike.get_superposition(x)
+        return kernel[ISI]
     
     def visualize(self, optimizer_output, normalize = True, only_succesful = True):
-        fig = I.plt.figure()
+        fig = plt.figure()
         ax = fig.add_subplot(111)
         for x in optimizer_output:
             if only_succesful:
@@ -519,7 +574,7 @@ class Strategy_ISIraisedCosine(Strategy):
     def normalize_x(self, x):
         v = self.RaisedCosineBasis_postspike.get_superposition(x)
         v = v-[v[-1]]
-        v = v / I.np.abs(v[0])
+        v = v / np.abs(v[0])
         return v
 class Strategy_spatiotemporalRaisedCosine(Strategy):
     '''requires keys: spatiotemporalSa, st, y, ISI'''
@@ -531,8 +586,9 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
     def _setup(self):
         self.compute_basis()
         self.groups = sorted(self.base_vectors_arrays_dict.keys())
-        self.len_groups = len(self.groups)
         self.len_z, self.len_t, self.len_trials = self.base_vectors_arrays_dict.values()[0].shape
+        self.convert_x = I.partial(self._convert_x_static, self.groups, self.len_z)
+        self._get_score = I.partial(self._get_score_static, self.convert_x, self.base_vectors_arrays_dict)
         
     def compute_basis(self):
         '''computes_base_vector_array with shape (spatial, temporal, trials)'''
@@ -544,33 +600,36 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
             base_vector_array = []            
             for z in self.RaisedCosineBasis_spatial.compute(len_z).get():
                 base_vector_row = []
-                tSa = I.np.dot(stSa,z).squeeze()
+                tSa = numpy.dot(stSa,z).squeeze()
                 for t in self.RaisedCosineBasis_temporal.compute(len_t).get():
-                    base_vector_row.append(I.np.dot(tSa, t))
+                    base_vector_row.append(numpy.dot(tSa, t))
                 base_vector_array.append(base_vector_row)
-            base_vectors_arrays_dict[group] = I.np.array(base_vector_array)
+            base_vectors_arrays_dict[group] = np.array(numpy.array(base_vector_array).astype('f4'))
         self.base_vectors_arrays_dict = base_vectors_arrays_dict
             
     def _get_x0(self):
-        return I.np.random.rand((self.len_z + self.len_t)*self.len_groups)*2-1
+        return numpy.random.rand((self.len_z + self.len_t)*len(self.groups))*2-1
     
-    def convert_x(self, x):
+    @staticmethod
+    def _convert_x_static(groups, len_z, x):
+        len_groups = len(groups)
         out = {}
-        x = x.reshape(self.len_groups, len(x) / self.len_groups)
-        for lv, group in enumerate(self.groups):
-            x_z = x[lv, :self.len_z]
-            x_t = x[lv, self.len_z:]
+        x = x.reshape(len_groups, len(x) / len_groups)
+        for lv, group in enumerate(groups):
+            x_z = x[lv, :len_z]
+            x_t = x[lv, len_z:]
             out[group] = x_z, x_t
         return out    
     
-    def _get_score(self, x):
+    @staticmethod
+    def _get_score_static(convert_x, base_vectors_arrays_dict, x):
         outs = []
-        for group, (x_z, x_t) in self.convert_x(x).iteritems():
-            array = self.base_vectors_arrays_dict[group]
-            out = I.np.dot(x_t, array).squeeze()
-            out = I.np.dot(x_z, out).squeeze()
+        for group, (x_z, x_t) in convert_x(x).iteritems():
+            array = base_vectors_arrays_dict[group]
+            out = np.dot(x_t, array).squeeze()
+            out = np.dot(x_z, out).squeeze()
             outs.append(out)
-        return sum(outs)
+        return np.vstack(outs).sum(axis = 0)
     
     def normalize(self, x, flipkey = None):
         '''normalize such that exc and inh peak is at 1 and -1, respectively.
@@ -582,12 +641,12 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
         x_inh_t = x[('INH',)][1]
         x_exc_z = x[('EXC',)][0]
         x_inh_z = x[('INH',)][0]
-        norm_exc = b.get_superposition(x_exc_t)[I.np.argmax(I.np.abs(b.get_superposition(x_exc_t)))]
-        norm_inh = -1*b.get_superposition(x_inh_t)[I.np.argmax(I.np.abs(b.get_superposition(x_inh_t)))]
+        norm_exc = b.get_superposition(x_exc_t)[np.argmax(np.abs(b.get_superposition(x_exc_t)))]
+        norm_inh = -1*b.get_superposition(x_inh_t)[np.argmax(np.abs(b.get_superposition(x_inh_t)))]
         # spatial
         b = self.RaisedCosineBasis_spatial
-        # norm_spatial = sum(I.np.abs(b.get_superposition(x_exc_z)) + I.np.abs(b.get_superposition(x_inh_z)))
-        norm_spatial = max(I.np.abs(b.get_superposition(x_exc_z * norm_exc)))
+        # norm_spatial = sum(np.abs(b.get_superposition(x_exc_z)) + np.abs(b.get_superposition(x_inh_z)))
+        norm_spatial = max(np.abs(b.get_superposition(x_exc_z * norm_exc)))
         # print norm_exc, norm_inh, norm_spatial
         x[('EXC',)] = (x_exc_z*norm_exc/norm_spatial, x_exc_t/norm_exc)
         x[('INH',)] = (x_inh_z*norm_inh/norm_spatial, x_inh_t/norm_inh)
@@ -595,7 +654,7 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
         x_out = []
         for group in self.groups:
             x_out += list(x[group][0]) + list(x[group][1])
-        return I.np.array(x_out)
+        return np.array(x_out)
     
     def get_color_by_group(self, group):
         if 'EXC' in group:
@@ -606,7 +665,7 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
             return None
 
     def visualize(self, optimizer_output, only_successful = False, normalize = True):
-        fig = I.plt.figure(figsize = (10,5))
+        fig = plt.figure(figsize = (10,5))
         ax_z = fig.add_subplot(1,2,1)
         ax_t = fig.add_subplot(1,2,2)
         for out in optimizer_output:
@@ -621,6 +680,7 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
                 c = self.get_color_by_group(group)
                 self.RaisedCosineBasis_temporal.visualize_x(x_t, ax = ax_t, plot_kwargs = {'c': c})
                 self.RaisedCosineBasis_spatial.visualize_x(x_z, ax = ax_z, plot_kwargs = {'c': c})  
+
 class Strategy_linearCombinationOfData(Strategy):
     def __init__(self, name, data_keys):
         super(Strategy_linearCombinationOfData, self).__init__(name)        
@@ -628,13 +688,16 @@ class Strategy_linearCombinationOfData(Strategy):
         self.data_values = None
     
     def _setup(self):
-        self.data_values = I.np.array([self.data[k] for k in self.data_keys])
+        self.data_values = np.array([self.data[k] for k in self.data_keys])
+        self._get_score = I.partial(self._get_score_static, self.data_values)
     
     def _get_x0(self):
-        return I.np.random.rand(len(self.data_keys))*2-1
+        return numpy.random.rand(len(self.data_keys))*2-1
     
-    def _get_score(self, x):
-        return I.np.dot(self.data_values.T, x)
+    @staticmethod
+    def _get_score_static(data_values, x):
+        return np.dot(data_values.T, x)
+    
 class CombineStrategies_sum(Strategy):
     def __init__(self, name):
         super(CombineStrategies_sum, self).__init__(name)
@@ -643,30 +706,33 @@ class CombineStrategies_sum(Strategy):
         self.split = None
         
     def setup(self, data, DataSplitEvaluation):
-        self.data = data
-        self.DataSplitEvaluation = DataSplitEvaluation
+        super(CombineStrategies_sum, self).setup(data, DataSplitEvaluation)                        
         for s in self.strategies:
             s.setup(data,DataSplitEvaluation)
             self.lens.append(len(s._get_x0()))
             
     def set_split(self, split):
-        self.split = split
+        super(CombineStrategies_sum, self).set_split(split)        
         for s in self.strategies:
-            print 'Setting split in ', s.name
             s.set_split(split)
         return self
-        
+  
+    def _setup(self):
+        score_functions = [strategy.get_score for strategy in self.strategies]
+        self._get_score = I.partial(self._get_score_static, score_functions, self.lens)
+              
     def add_strategy(self, s, setup = True):
         self.strategies.append(s)
     
-    def get_score(self, x):
+    @staticmethod
+    def _get_score_static(score_functions, lens, x):
         out = 0
         len_ = 0
-        for s, l in zip(self.strategies, self.lens):
-            out += s.get_score(x[len_:len_+l])
+        for sf, l in zip(score_functions, lens):
+            out += sf(x[len_:len_+l])
             len_ += l
         return out
     
     def _get_x0(self):
         out = [s._get_x0() for s in self.strategies]
-        return I.np.concatenate(out)                
+        return numpy.concatenate(out)                
