@@ -207,6 +207,9 @@ def load_dendritic_voltage_traces_helper(mdb, suffix, divisions = None):
     #new naming convention
     elif os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, 'seed_' + m.iloc[0].path.split('_')[-1] + suffix)):
         fnames = [os.path.join(x.path, 'seed_' + x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
+    #brand new naming convention
+    elif os.path.exists(os.path.join(mdb['simresult_path'], m.iloc[0].path, m.iloc[0].path.split('_')[-2] + '_' + m.iloc[0].path.split('_')[-1] + suffix)):
+        fnames = [os.path.join(x.path, x.path.split('_')[-2] + '_' + x.path.split('_')[-1] + suffix) for index, x in m.iterrows()]
     #print suffix
     fnames = utils.unique(fnames)
     ddf = read_voltage_traces_by_filenames(mdb['simresult_path'], fnames, divisions = divisions)
