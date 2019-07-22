@@ -476,6 +476,29 @@ class NetworkMapper:
                 spikeTimes = offset + tBegin + (tEnd - tBegin)*np.random.uniform(size=len(active))
                 for j in range(len(active)):
                     self.cells[preCellType][active[j]].append(spikeTimes[j])
+        elif dist == 'PSTH_poissontrain':
+            bins = networkParameters.intervals
+            rates = networkParameters.rates
+            offset = networkParameters.offset
+            noise = 1.0
+            start = 0.0
+            stop = -1.0
+            nSpikes = None
+            if len(bins) != len(rates):
+                errstr = 'Time bins and rates of PSTH_poissontrain for cell type %s have unequal length! ' % preCellType
+                errstr += 'len(bins) = %d - len(rates) = %d' % (len(bins), len(rates))
+                raise RuntimeError(errstr)
+
+            for i in range(len(bins)): ##fill all cells bin after bin
+                tBegin, tEnd = bins[i]
+                interval = 1000. / rates[i]
+                print 'initializing spike trains with mean rate %.2f Hz for cell type %s' % (1000.0/interval, preCellType)
+                for cell in self.cells[preCellType]:
+                    print 'calling compute_spike_train_times with',  'interval', \
+                    interval, 'noise', noise, 'tBegin', tBegin, 'tEnd', tEnd, \
+                    'nSpikes', nSpikes
+                    cell.compute_spike_train_times(interval, noise, tBegin, tEnd, nSpikes)
+
         else:
             errstr = 'Unknown spike time distribution: %s' % dist
             raise RuntimeError(errstr)
