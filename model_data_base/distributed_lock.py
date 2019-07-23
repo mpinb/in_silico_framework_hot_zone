@@ -10,8 +10,9 @@ config_path = os.path.join(os.path.dirname(__file__), 'distributed_lock_settings
 if os.path.exists(config_path):
     config = yaml.load(config_path)
 else:
-    config = [dict(type = 'redis', config = dict(host = 'spock', port = 8885, socket_timeout = 1)),
-              dict(type = 'redis', config = dict(host = 'localhost', port = 6379, socket_timeout = 1))]
+    #config = [dict(type = 'redis', config = dict(host = 'spock', port = 8885, socket_timeout = 1)),
+    #          dict(type = 'redis', config = dict(host = 'localhost', port = 6379, socket_timeout = 1))]
+    config = [dict(type = 'file')]    
 
 
 def get_client():
@@ -36,6 +37,13 @@ def get_client():
     raise RuntimeError('could not connect to a locking server.')
 
 server, client = get_client()
+
+def update_config(c):
+    global server
+    global client
+    global config
+    config = c
+    server, client = get_client()
 
 def get_lock(name):
     if server['type'] is 'file':
