@@ -6,20 +6,24 @@
 import fasteners
 import os
 import shutil
+import sys
 
 
 # In[2]:
 
-management_dir = '/nas1/Data_arco/management_dir_test'
-
+management_dir = '/ptmp/abast/management_dir_test'
+management_dir = sys.argv[1]
+print 'using management dir' , management_dir
 
 # In[3]:
 
 #if os.path.exists(management_dir):
 #    shutil.rmtree(management_dir)
 if not os.path.exists(management_dir):
-    os.makedirs(management_dir)
-
+    try:    
+        os.makedirs(management_dir)
+    except OSError: # if another process was faster creating it
+        pass
 
 # In[21]:
 
@@ -149,3 +153,6 @@ if process_number == 0:
     setup_dask_scheduler(management_dir)
 setup_dask_workers(management_dir)
 
+
+import time
+time.sleep(300)
