@@ -47,8 +47,11 @@ def update_config(c):
     server, client = get_client()
 
 def get_lock(name):
-    if server['type'] is 'file':
+    if server['type'] == 'file':
         import fasteners
         return fasteners.InterProcessLock(name)
     elif server['type'] == 'redis':
         return redis.lock.Lock(client, name, timeout = 300)
+    else:
+        raise RuntimeError('supported server types are redis and file. ' + 
+            'Current locking config is: {}'.format(str(server)))
