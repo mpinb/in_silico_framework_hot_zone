@@ -5,14 +5,16 @@ import yaml
 import os
 import warnings
 
-config_path = os.path.join(os.path.dirname(__file__), 'distributed_lock_settings.yaml')
-
-if os.path.exists(config_path):
-    config = yaml.load(config_path)
+if 'ISF_DISTRIBUTED_LOCK_CONFIG' in os.environ:
+    config_path = os.environ['ISF_DISTRIBUTED_LOCK_CONFIG']
+    with open(os.environ['ISF_DISTRIBUTED_LOCK_CONFIG'], 'r') as f:
+        config = yaml.load(f)
 else:
-    #config = [dict(type = 'redis', config = dict(host = 'spock', port = 8885, socket_timeout = 1)),
-    #          dict(type = 'redis', config = dict(host = 'localhost', port = 6379, socket_timeout = 1))]
-    config = [dict(type = 'file')]    
+    warnings.warn('environment variable ISF_DISTRIBUTED_LOCK_CONFIG is not set. ' + 
+                  'Falling back to default configuration.')
+    config = [dict(type = 'redis', config = dict(host = 'spock', port = 8885, socket_timeout = 1)),
+              dict(type = 'redis', config = dict(host = 'localhost', port = 6379, socket_timeout = 1)),
+              dict(type = 'file')]
 
 
 def get_client():
@@ -29,7 +31,6 @@ def get_client():
                 pass
         elif server['type'] == 'file':
             warnings.warn('Using file based locking.'
-            'Please make sure that you only provide names, that can be filenames, ideally absolute paths.'
             'Please be careful on nfs mounts as file based locking has issues in this case.')
             return server, None
         else:
