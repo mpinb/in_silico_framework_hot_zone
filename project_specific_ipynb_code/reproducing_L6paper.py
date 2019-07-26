@@ -645,6 +645,26 @@ class PWfitting:
     def plot_PSTHs(self):
         for INH in I.np.arange(0.5,2.1,.1):
             self._plot_PSTHs(INH, CDK_PW = True, robert = True)
+   
+def get_all_L6_simulation_dbs():
+    mdb = I.ModelDataBase('/nas1/Data_arco/results/20190507_metaanalysis_of_L6_control_experiments')
+    # create mdb dict
+    mdbs = {}
+    for k in mdb.keys():
+        if k == 'local': continue
+        m = mdb[k]
+        l6_config = m['l6_config']
+        selected_models = m['selected_models']
+        for model in selected_models:
+            model_run = model.split('_')[-3]
+            morphology = k.split('_')[4]        
+            try:
+                m = l6_config.mdb[model]['3x3_control_mdb']
+            except:
+                print 'skipping ',morphology, model_run
+                continue
+            mdbs[str(model_run) + '_' + str(morphology)] = m
+    return mdbs
 #####
 # unused so far
 
