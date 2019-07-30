@@ -85,7 +85,8 @@ class RobustDaskDelayedExecution:
     def reset_status(self):
         keys = _get_keys(self.mdb)
         for k in keys:
-            _set_value(self.mdb, (k, 'status'), 'not_started')
+            if k[1] == 'status':
+                _set_value(self.mdb, k, 'not_started')
 
         
         
