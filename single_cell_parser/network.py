@@ -491,14 +491,16 @@ class NetworkMapper:
 
             for i in range(len(bins)): ##fill all cells bin after bin
                 tBegin, tEnd = bins[i]
-                interval = 1000. / rates[i]
+                try:
+                    interval = 1000. / rates[i]
+                except ZeroDivisionError:
+                    continue
                 print 'initializing spike trains with mean rate %.2f Hz for cell type %s' % (1000.0/interval, preCellType)
                 for cell in self.cells[preCellType]:
                     #print 'calling compute_spike_train_times with',  'interval', \
                     #interval, 'noise', noise, 'tBegin', tBegin, 'tEnd', tEnd, \
                     #'nSpikes', nSpikes
                     cell.compute_spike_train_times(interval, noise, tBegin, tEnd, nSpikes)
-
         else:
             errstr = 'Unknown spike time distribution: %s' % dist
             raise RuntimeError(errstr)
