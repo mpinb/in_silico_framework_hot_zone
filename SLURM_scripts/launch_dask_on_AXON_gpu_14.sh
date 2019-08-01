@@ -9,4 +9,4 @@
 #SBATCH --ntasks-per-node=20
 
 srun -n14 -N14 -c20 python $MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1.py $MYBASEDIR/management_dir_$RANDOM
-sleep 3000
+## sleep 3000
