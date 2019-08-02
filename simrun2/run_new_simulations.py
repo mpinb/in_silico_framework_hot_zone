@@ -21,6 +21,7 @@ h = neuron.h
 import dask
 from .seed_manager import get_seed
 from .utils import *
+from model_data_base.mdbopen import resolve_mdb_path
 
 import socket
     
@@ -52,8 +53,8 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
     assert seed is not None
     np.random.seed(seed)
     print("seed: %i" % seed)
-    neuronParameters = load_param_file_if_path_is_provided(cellParamName)
-    evokedUpNWParameters = load_param_file_if_path_is_provided(evokedUpParamName) ##sumatra function for reading in parameter file
+    neuronParameters = load_param_file_if_path_is_provided(resolve_mdb_path(cellParamName))
+    evokedUpNWParameters = load_param_file_if_path_is_provided(resolve_mdb_path(evokedUpParamName)) ##sumatra function for reading in parameter file
     scp.load_NMODL_parameters(neuronParameters)
     scp.load_NMODL_parameters(evokedUpNWParameters)
     cellParam = neuronParameters.neuron
@@ -66,7 +67,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
         cell = cell_generator()
                     
     uniqueID = 'seed' + str(seed) + '_pid' + str(os.getpid())
-    dirName = os.path.join(dirPrefix, 'results', \
+    dirName = os.path.join(resolve_mdb_path(dirPrefix), 'results', \
                            time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
     if not os.path.exists(dirName):
         os.makedirs(dirName)
