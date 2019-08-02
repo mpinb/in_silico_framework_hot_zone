@@ -112,8 +112,8 @@ def get_voltage_traces_divisions_by_metadata(metadata):
 ############################################
 #Step four: generate metadata dataframe out of sim_trail_indices
 ############################################
-def create_metadata(mdb):
-    '''Generates metadata out of a pd.Series containing the sim_trail_indices'''
+@dask.delayed
+def create_metadata_parallelization_helper(sim_trail_index, simresult_path):
     def determine_zfill_used_in_simulation(globstring):
         '''number of digits like 0001 or 000001 is not consitent accros 
         simulation results. This function takes care of this.'''
@@ -150,9 +150,7 @@ def create_metadata(mdb):
         cells_file_name = "simulation_run%s_presynaptic_cells.csv" % str(int(x.trailnr)).zfill(zfill_cells)
         return pd.Series({'cells_file_name': cells_file_name}) 
     
-    sim_trail_index = mdb['sim_trail_index']
-    simresult_path = mdb['simresult_path']
-    sim_trail_index = pd.DataFrame(dict(sim_trail_index = list(sim_trail_index)))
+    
     path_trailnr = sim_trail_index.apply(voltage_trace_file_list, axis = 1)  
     sim_trail_index_complete = pd.concat((sim_trail_index, path_trailnr), axis = 1)      
     try:
@@ -165,8 +163,20 @@ def create_metadata(mdb):
         sim_trail_index_complete = pd.concat((sim_trail_index_complete, cell_files), axis = 1)
     except IndexError:
         warnings.warn('could not find cell activation files')
-
     return sim_trail_index_complete
+
+def create_metadata(mdb):
+    '''Generates metadata out of a pd.Series containing the sim_trail_indices'''
+    simresult_path = mdb['simresult_path']
+    sim_trail_index = list(mdb['sim_trail_index'])
+    sim_trail_index = pd.DataFrame(dict(sim_trail_index = list(sim_trail_index)))
+    sim_trail_index_dask = dask.dataframe.from_pandas(sim_trail_index, npartitions = 10)
+    sim_trail_index_delayed = sim_trail_index_dask.to_delayed()
+    sim_trail_index_complete = [create_metadata_parallelization_helper(d, simresult_path) 
+                                for d in sim_trail_index_delayed]
+    sim_trail_index_complete = dask.compute(sim_trail_index_complete)
+    return I.pd.concat(sim_trail_index_complete[0]) # create_metadata_parallelization_helper(sim_trail_index, simresult_path)
+   
 
 ###########################################
 # Step five: rewrite synapse and cell activation data to
