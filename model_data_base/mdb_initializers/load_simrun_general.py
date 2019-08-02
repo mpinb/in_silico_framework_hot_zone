@@ -175,7 +175,7 @@ def create_metadata(mdb):
     sim_trail_index_complete = [create_metadata_parallelization_helper(d, simresult_path) 
                                 for d in sim_trail_index_delayed]
     sim_trail_index_complete = dask.compute(sim_trail_index_complete)
-    return I.pd.concat(sim_trail_index_complete[0]) # create_metadata_parallelization_helper(sim_trail_index, simresult_path)
+    return pd.concat(sim_trail_index_complete[0]) # create_metadata_parallelization_helper(sim_trail_index, simresult_path)
    
 
 ###########################################
