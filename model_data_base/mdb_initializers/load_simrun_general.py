@@ -170,7 +170,7 @@ def create_metadata(mdb):
     simresult_path = mdb['simresult_path']
     sim_trail_index = list(mdb['sim_trail_index'])
     sim_trail_index = pd.DataFrame(dict(sim_trail_index = list(sim_trail_index)))
-    sim_trail_index_dask = dask.dataframe.from_pandas(sim_trail_index, npartitions = 10)
+    sim_trail_index_dask = dask.dataframe.from_pandas(sim_trail_index, npartitions = 200)
     sim_trail_index_delayed = sim_trail_index_dask.to_delayed()
     sim_trail_index_complete = [create_metadata_parallelization_helper(d, simresult_path) 
                                 for d in sim_trail_index_delayed]
