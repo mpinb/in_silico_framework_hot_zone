@@ -138,7 +138,7 @@ class RadiiPipeline:
         amFile = self.amWithRad
         return amFile
 
-    def findTransformation(self, amWithRad, spanFactor = 10.0, addRadii = True):
+    def findTransformation(self, amWithRad, spanFactor = 10.0, addRadii = True, findingPairPoints=True, pairPoints = []):
 
         """
         find the transformation between amFile and HocFile.
@@ -147,7 +147,13 @@ class RadiiPipeline:
         2. spanFactor: Default value is 10.0, it will adjust the choosing of the edges by a span.
         3. addRadii: if it provided False it will not go to the step finding the pairs bbetween transformedPoints
         and HocPoints, this will lead to faster run for experimenting the transformion quality.
-
+        4. auto: If true the algorithm will find pairs of points between two morphologies automatically by itself.
+        otherwise it will use the pairPoints array as a parameter to find the transformation between two morphologies.
+        5. pairPoints: if you pass the auto false then you need to pass the pairPoints which you prepared manually before.
+        the pairpoints format is assume to be like below.
+        [[a1,b1], [a2,b2], [a3,b3], [a4,b4]]
+        a1 is the point number 1 from the morphology a, and b1 is a the point in morphology b which is corresponding 
+        to point a1. You need to exactly prepare 4 points in morphology a and their corresponding points in morphology b.
         outputs:
         1. provide the final hocPointsWithRad if addRadii is true.
         2. it will write the amTransformed and egAm and egHoc in text format files. These are by their order contain
@@ -156,6 +162,8 @@ class RadiiPipeline:
         """
 
         assert self.amWithRad != "Default"
+        if (findingPairPoints == False and pairPoints == []):
+            raise ValueError("When you adjust the input findingPairPoints) to false you need to provide the pairPoints Manuallly and pass it through the array pairPoints")
 
         self.amWithRad = amWithRad
         self.spanFactor = spanFactor
@@ -174,20 +182,28 @@ class RadiiPipeline:
 
         numberOfEdges = 2
 
-        matchedSet = tr.getDistance.matchEdges(hocPointsSet, amSet, numberOfEdges, spanFactor)
-
         src_hoc = []
         dst_am = []
-        for point in matchedSet:
-            src_hoc.append(point[0].start)
-            src_hoc.append(point[0].end)
 
-            dst_am.append(point[1].start)
-            dst_am.append(point[1].end)
+        if (findingPairPoints):
+            matchedSet = tr.getDistance.matchEdges(hocPointsSet, amSet, numberOfEdges, spanFactor)
+
+            for point in matchedSet:
+                src_hoc.append(point[0].start)
+                src_hoc.append(point[0].end)
+
+                dst_am.append(point[1].start)
+                dst_am.append(point[1].end)
+
+        else:
+            src_hoc = pairPoints[1::2]
+            print(src_hoc)
+            dst_am =  pairPoints[::2]
+            print("the dst_am file")
+            print(dst_am)
 
         print("In the calculations of the transofrmation matrix")
         trMatrix2 = tr.exTrMatrix.getTransformation(dst_am, src_hoc)
-
         amPoints4D = tr.read.amFile(amFile)
 
         print("Applying the transofrmation matrix to the initial am points")
@@ -237,19 +253,18 @@ class RadiiPipeline:
 
         egHocFile = self.outputDirectory + '/egHoc.txt'
         egAmFile = self.outputDirectory + '/egAm.txt'
-
         with open(egHocFile, 'w') as f:
-            for item in matchedSet:
-                startPoint = item[0].start
-                endPoint = item[0].end
+            for idx in range(0, len(src_hoc)-1, 2):
+                startPoint = src_hoc[idx]
+                endPoint = src_hoc[idx+1]
                 f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
                 f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
 
 
         with open(egAmFile, 'w') as f:
-            for item in matchedSet:
-                startPoint = item[1].start
-                endPoint = item[1].end
+            for idx in range(0, len(dst_am)-1, 2):
+                startPoint = dst_am[idx]
+                endPoint = dst_am[idx+1]
                 f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
                 f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
 
@@ -259,3 +274,10 @@ class RadiiPipeline:
             for it in trAmPoints4DList:
                 f.write('{:f}\t{:f}\t{:f} \n'.format(it[0], it[1], it[2]))
         return 0
+
+
+    ### test code below
+    def test_something():
+        pass
+
+    test_something()
