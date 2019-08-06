@@ -45,6 +45,8 @@ def resolve_mdb_path(path):
 @cache
 def create_mdb_path(path):
     mdb_path = path
+    if path.startswith('mdb://'):
+        return path
     while True:
         if (os.path.isdir(mdb_path)) and ('dbcore.pickle' in os.listdir(mdb_path)):
             break
