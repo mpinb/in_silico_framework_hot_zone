@@ -153,10 +153,34 @@ if process_number == 0:
     setup_dask_scheduler(management_dir)
 setup_dask_workers(management_dir)
 
-
 import time
-<<<<<<< HEAD
-time.sleep(60*60*24*365)
-=======
-time.sleep(300)
->>>>>>> 53e2a97dd874064a568f8b1fac7db105137838c3
+if not process_number == 0:
+    # compute job will be started from first process
+    time.sleep(60*60*24*365)
+
+
+def iteratively_register_sub_mdbs(mdb):
+    mdb._register_this_database()
+    for k in mdb.keys():
+        if mdb.metadata[k]['dumper'] == 'just_create_mdb':
+            iteratively_register_sub_mdbs(mdb[k])
+            
+import Interface as I
+import simrun3.robust_dask_delayed_execution
+
+mdb = I.ModelDataBase('/axon/scratch/abast/results/20190726_network_embedding_with_random_synapse_locations_for_L5tt_models')
+iteratively_register_sub_mdbs(mdb)
+
+delayeds_db = mdb['delayeds_db']
+
+rde = simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution(delayeds_db)
+
+ds = rde.run_mdb()
+
+sfile =  _get_sfile(management_dir)
+client = I.distributed.Client(scheduler_file=sfile)
+
+futures = client.compute(ds)
+
+time.sleep(60*60*24*7)
+## client.gather(futures)
