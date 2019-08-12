@@ -2,11 +2,13 @@
 #SBATCH -p p.gpu # partition (queue)
 #SBATCH -N 1 # number of nodes
 #SBATCH -n 1 # number of cores
-#SBATCH --mem 100000 # memory pool for all cores
+#SBATCH --mem MaxMemPerNode # UNLIMITED # 100000 # memory pool for all cores
 #SBATCH -t 1-0:00 # time (D-HH:MM)
 #SBATCH -o out.slurm.%N.%j.slurm # STDOUT
 #SBATCH -e err.slurm.%N.%j.slurm # STDERR
 #SBATCH --ntasks-per-node=20
-
-srun -n1 -N1 -c20 python $MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1.py $MYBASEDIR/management_dir_$RANDOM
+module load cuda
+unset XDG_RUNTIME_DIR
+export SLURM_CPU_BIND=none
+srun -n1 -N1 -c20 python $MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1.py $MYBASEDIR/management_dir_$1
 ## sleep 3000

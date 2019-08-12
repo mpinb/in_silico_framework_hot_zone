@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH -p p.axon # partition (queue)
-#SBATCH -N 12 # number of nodes
-#SBATCH -n 12 # number of cores
+#SBATCH -N 6 # number of nodes
+#SBATCH -n 6 # number of cores
 #SBATCH --mem MaxMemPerNode # 100000 # memory pool for all cores
 #SBATCH -t 1-0:00 # time (D-HH:MM)
 #SBATCH -o out.slurm.%N.%j.slurm # STDOUT
@@ -9,5 +9,5 @@
 #SBATCH --ntasks-per-node=40
 unset XDG_RUNTIME_DIR
 export SLURM_CPU_BIND=none
-srun -n12 -N12 -c40 python $MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1.py $MYBASEDIR/management_dir_$1
+srun -n6 -N6 -c40 python $MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1.py $MYBASEDIR/management_dir_$1
 ## sleep 3000
