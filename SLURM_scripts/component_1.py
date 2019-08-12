@@ -158,7 +158,7 @@ def setup_dask_workers(management_dir):
     import psutil
     n_cpus = psutil.cpu_count(logical=False)
     sfile = _get_sfile(management_dir)
-    command = 'screen -S dask_workers_test -dm bash -c "source ~/.bashrc; source_isf; ' +     'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e10"'.format(nprocs = n_cpus, sfile = sfile)
+    command = 'screen -S dask_workers_test -dm bash -c "source ~/.bashrc; source_isf; ' +     'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=10e25"'.format(nprocs = n_cpus, sfile = sfile)
     command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9 &'.format(nprocs = n_cpus, sfile = sfile)
 
     print command
