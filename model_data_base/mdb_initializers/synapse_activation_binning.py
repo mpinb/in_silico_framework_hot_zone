@@ -130,11 +130,15 @@ def synapse_activation_postprocess_dask(ddf, **kwargs):
     
     if mdb is not None:
         assert('groupby' in kwargs)
-        data = ret.compute(get = get)
-        save_groupby(mdb, data, kwargs['groupby'])
+        save_groupby_delayed = dask.delayed(save_groupby)
+        ret_saved = save_groupby_delayed(mdb, ret, kwargs['groupby'])
+        ret_saved.compute(get = get)
+        # data = ret.compute(get = get)
+        # save_groupby(mdb, data, kwargs['groupby'])
     else:
         return ret
 
+@dask.delayed
 def save_groupby(mdb, result, groupby):
     '''saves the result of synapse_activation_postprocess_dask to a model data base.
     
