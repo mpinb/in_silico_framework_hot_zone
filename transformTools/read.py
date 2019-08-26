@@ -112,7 +112,9 @@ def amFile(inputFilePath):
                 continue
 
             if in_edge_section and (line != '\n'):
-                matches = re.findall('-?\d+\.\d+e[+-]?\d+', line)
+                # please test if their results are compatible or not
+                # matches = re.findall('-?\d+\.\d+e[+-]?\d+', line)
+                matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+', line)
                 point = map(float, matches)
                 points.append(point)
 
@@ -120,7 +122,9 @@ def amFile(inputFilePath):
                 in_edge_section = False
 
             if in_thickness_section and (line != '\n'):
-                matches = re.findall('-?\d+\.\d+e[+-]?\d+', line)
+                # please test if their results are compatible or not
+                # matches = re.findall('-?\d+\.\d+e[+-]?\d+', line)
+                matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+', line)
                 if matches == []:
                     matches = [0.0,0.0]
                 rad = map(float, matches)
