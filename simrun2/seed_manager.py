@@ -16,6 +16,7 @@ def get_seed(recursion_depth = 0):
     used_seeds.extend(list(range(10000)))
     
     seed = np.random.randint(4294967295) #Seed must be between 0 and 4294967295
+    return seed
     if not seed in used_seeds:
         used_seeds.append(seed)
         used_seeds = np.array(used_seeds)

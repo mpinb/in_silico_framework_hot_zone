@@ -23,7 +23,7 @@ from model_data_base.IO.LoaderDumper import dask_to_msgpack
 from model_data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module  
 import compatibility        
 import warnings
-       
+import scandir       
 
 
 ############################################
@@ -32,7 +32,7 @@ import warnings
 
 def make_filelist(directory, suffix = 'vm_all_traces.csv'):
     matches = []
-    for root, dirnames, filenames in os.walk(directory):
+    for root, dirnames, filenames in scandir.walk(directory):
         for filename in fnmatch.filter(filenames, '*'+suffix):
             dummy = os.path.join(root, filename)
             matches.append(os.path.relpath(dummy, directory))
