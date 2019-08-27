@@ -406,6 +406,16 @@ class DataExtractor_spiketimes(DataExtractor):
         
     def get(self):
         return self.mdb['spike_times']
+class DataExtractor_object(DataExtractor):
+    def __init__(self, key):
+        self.key = key
+    
+    def setup(self, Rm):
+        self.mdb = Rm.mdb
+        self.data = Rm[self.key]
+        
+    def get(self):
+        return self.data
 class DataExtractor_spikeInInterval(DataExtractor):
     def __init__(self, tmin = None, tmax = None):
         self.tmin = tmin
