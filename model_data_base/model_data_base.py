@@ -324,7 +324,14 @@ class ModelDataBase(object):
             # mdb[key_in_parent_mdb, key_in_child_mdb] instead of forcing
             # mdb[key_in_parent_mdb][key_in_child_mdb]
             existing_keys = self.keys()
-            existing_keys = map(lambda x: tuple([x]), existing_keys)            
+            
+            def str_to_tuple(x):
+                if isinstance(x, str):
+                    return (x,)
+                else:
+                    return x
+                
+            existing_keys = map(str_to_tuple, existing_keys)            
             if isinstance(arg, tuple) and not arg in existing_keys:
                 for lv in range(len(arg)):
                     if arg[:lv] in existing_keys:
