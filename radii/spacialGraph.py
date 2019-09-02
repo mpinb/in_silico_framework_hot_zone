@@ -1,11 +1,11 @@
 import math
 
 def getSpatialGraphPoints(spatial_graph):
-
     """
     #input: path of the data.
     #output: pints in an array
     """
+
     with open(spatial_graph, 'r') as csb:
         edge_ids = []
         edge_num_points = []

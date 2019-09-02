@@ -3,9 +3,15 @@ import numpy as np
 import radii as radi
 import transformTools as tr
 import re
+import pandas as pd
 import time
+import dask
 
-
+@dask.delayed
+def _paralellization_helper(radiiObject, amPth, imageFilePath, amOutput, postMeasurment='yes'):
+    radiiObject.exRadSets(amPth, imageFilePath, amOutput, postMeasurment='yes')
+	
+	
 class RadiiPipeline:
     """
     Inputs:
@@ -42,7 +48,7 @@ class RadiiPipeline:
 
         """
         self.createOutputDirectories()
-        self.extractRadii(tr025, tr050, tr075)
+        return self.extractRadii(tr025, tr050, tr075)
         res = self.hocFile
         return res
 
@@ -78,20 +84,36 @@ class RadiiPipeline:
 
     def extractRadii(self, tr025=True, tr050=True, tr075=True):
         '''will handle the calling of exRadSets function for different tresholdPercentages '''
-
         if not os.path.isdir(self.amWithErrorsDirectory):
             os.mkdir(self.amWithErrorsDirectory)
 
-        if (tr025):
-            radi025=radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.25)
-            for idx, amPth in enumerate(self.amInputPathList):
-                am = os.path.basename(amPth)
-                spatialGraphName = re.findall(r'[sS]\d+', am)[0]
-                for imageFilePath in self.maxZPathList:
-                    imageName = os.path.basename(imageFilePath)
-                    if spatialGraphName in imageName:
-                        radi025.exRadSets(amPth, imageFilePath, self.amOutput025, postMeasurment='yes')
-                        break
+        delayeds = []
+
+        for idx, amPth in enumerate(self.amInputPathList):
+            am = os.path.basename(amPth)
+            spatialGraphName = re.findall(r'[sS]\d+', am)[0]
+            for imageFilePath in self.maxZPathList:
+                imageName = os.path.basename(imageFilePath)
+                if spatialGraphName in imageName:
+                    if (tr025):
+                        radi025=radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.25)
+                        d = _paralellization_helper(radi025, amPth, imageFilePath, self.amOutput025, postMeasurment='yes')
+                        delayeds.append(d)
+
+                    if (tr050):
+                        radi050=radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.5)
+                        d = _paralellization_helper(radi050, amPth, imageFilePath, self.amOutput050, postMeasurment='yes')
+                        delayeds.append(d)
+
+                    if (tr075):
+                        radi075=radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.75)
+                        d = _paralellization_helper(radi075, amPth, imageFilePath, self.amOutput075, postMeasurment='yes')
+                        delayeds.append(d)
+
+                    #radi025.exRadSets(amPth, imageFilePath, self.amOutput025, postMeasurment='yes')
+                    break
+        return delayeds
+
         if (tr050):
             radi050=radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.50)
             for idx, amPth in enumerate(self.amInputPathList):
@@ -137,6 +159,48 @@ class RadiiPipeline:
         assert self.amWithRad != "Default"
         amFile = self.amWithRad
         return amFile
+
+    # def allData(self):
+    #     # reading extracted radii for the tresholds 025, 050, and 075
+    #     # from their corresponding folder and files, and saving them in arrays again.
+    #     colNames = ["x", "y", "z", "slice", "025", "050", "075"]
+    #     am025Paths = [self.amOutput025 + amFile for amFile in os.listdir(self.amOutput025) if amFile.endswith(".am")]
+    #     am050Paths = [self.amOutput050 + amFile for amFile in os.listdir(self.amOutput050) if amFile.endswith(".am")]
+    #     am075Paths = [self.amOutput075 + amFile for amFile in os.listdir(self.amOutput075) if amFile.endswith(".am")]
+
+
+    #     for amPath in am050Paths:
+    #         am050_pointsWithRad = tr.read.am(amPath)
+    #         amFileName = os.path.basename(amPath)
+    #         sliceNumber = re.findall(r'[sS]\d+', amFileName)[0]
+    #         for imagePath in self.maxZPathList:
+    #             imageName = os.path.basename(imagePath)
+    #             if sliceNumber in imageName:
+    #                 sliceName = imageName
+    #                 break
+    #         point5d = [point4d.append(sliceName) for point4d in am050_pointsWithRad]
+
+
+    #     print(amPathsList)
+    #     # df = pandas.read_csv('hrdata.csv',
+    #     # names=['Employee', 'Hired', 'Salary', 'Sick Days'])
+    #     # df.to_csv('hrdata_modified.csv')
+
+
+    #         radi050=radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.50)
+    #         for idx, amPth in enumerate(self.amInputPathList):
+    #             am = os.path.basename(amPth)
+    #             spatialGraphName = re.findall(r'[sS]\d+', am)[0]
+    #             for imageFilePath in self.maxZPathList:
+    #                 imageName = os.path.basename(imageFilePath)
+    #                 if spatialGraphName in imageName:
+    #                     radi050.exRadSets(amPth, imageFilePath, self.amOutput050, postMeasurment='yes')
+    #                     break
+
+
+
+
+
 
     def findTransformation(self, amWithRad, spanFactor = 10.0, addRadii = True, findingPairPoints=True, pairPoints = []):
 
