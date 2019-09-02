@@ -39,6 +39,9 @@ class RadiiPipeline:
         self.points025 = {}
         self.points050 = {}
         self.points075 = {}
+        self.amPointsTransformed_hoc = []
+        self.am_hoc_pairs = []
+        self.trMatrix = []
 
     def runRayBurstOnSlices(self, tr025=True, tr050=True, tr075=True):
         """
@@ -160,6 +163,9 @@ class RadiiPipeline:
         amFile = self.amWithRad
         return amFile
 
+    def dataAnalysis(self, amTrFolder):
+        return radi.analysisTools.allData(amTrFolder, self)
+
     # def allData(self):
     #     # reading extracted radii for the tresholds 025, 050, and 075
     #     # from their corresponding folder and files, and saving them in arrays again.
@@ -262,38 +268,31 @@ class RadiiPipeline:
         else:
             src_hoc = pairPoints[1::2]
             print(src_hoc)
-            dst_am =  pairPoints[::2]
+            dst_am = pairPoints[::2]
             print("the dst_am file")
             print(dst_am)
 
-        print("In the calculations of the transofrmation matrix")
+        print("In the calculations of the transformation matrix")
         trMatrix2 = tr.exTrMatrix.getTransformation(dst_am, src_hoc)
+
+        self.trMatrix = trMatrix2
         amPoints4D = tr.read.amFile(amFile)
 
         print("Applying the transofrmation matrix to the initial am points")
-        trAmPoints4D = []
-        for point4D in amPoints4D:
-            point = point4D[:3]
-            mPoint = np.matrix(point)
-            mTrPoint = mPoint.T
-
-            p = trMatrix2*np.matrix(np.vstack((mTrPoint, 1.0)))
-            p = np.array(p.T)
-            p_listed = p.tolist()[0]
-            # raw_input("somet")
-            trAmPoints4D.append([p_listed[0], p_listed[1], p_listed[2], point4D[3]])
+        trAmPoints4D = tr.exTrMatrix.applyTransformationMatrix(amPoints4D, trMatrix2)
 
         hocPointsComplete = tr.read.hocFileComplete(self.hocFile)
         hocSet = []
         for el in hocPointsComplete:
             hocSet.append([el[0], el[1], el[2]])
 
-        trAmPoints4DList = trAmPoints4D
+        self.amPointsTransformed_hoc = trAmPoints4D
 
-        print("In the process of finding pairs in between hoc file and the transoformed points to add radi to hocpoint")
+        print("In the process of finding pairs in between hoc file and the transformed points to add radi to hocpoint")
         startTime = time.time()
         if addRadii:
-            pairs = radi.addRadii.findPairs(trAmPoints4DList, hocSet)
+            pairs = radi.addRadii.findPairs(trAmPoints4D, hocSet)
+            self.am_hoc_pairs = pairs
         endTime = time.time()
         print(endTime - startTime)
 
@@ -335,7 +334,7 @@ class RadiiPipeline:
 
         amTrFile = self.outputDirectory + '/amTransformed.txt'
         with open(amTrFile, 'w') as f:
-            for it in trAmPoints4DList:
+            for it in trAmPoints4D:
                 f.write('{:f}\t{:f}\t{:f} \n'.format(it[0], it[1], it[2]))
         return 0
 
