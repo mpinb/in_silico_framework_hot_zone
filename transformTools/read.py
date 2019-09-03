@@ -95,19 +95,33 @@ def amFile(inputFilePath):
         in_edge_section = False
         in_thickness_section = False
 
+        for l_number, l in enumerate(lines):
+            line_thickness = l.rfind("float thickness")
+            line_edge = l.rfind("float[3] EdgePointCoordinates")
+            char_idx = 0
+            if line_thickness > -1:
+                char_idx = l.rfind("@")
+                thickness_sign_number = l[char_idx + 1]
+                thickness_sign = "@"+ thickness_sign_number
+
+            elif (line_edge > -1):
+                char_idx = l.rfind("@")
+                edge_sign_number = l[char_idx + 1 ]
+                edge_sign = "@"+ edge_sign_number
+
         for lineNumber, line in enumerate(lines):
 
-            edge_sign = line.rfind("@8")
+            edge_sign_presense = line.rfind(edge_sign)
             EdgePointCoordinates = line.rfind("EdgePointCoordinates")
 
-            thickness_sign = line.rfind("@9")
+            thickness_sign_presense = line.rfind(thickness_sign)
             thickness = line.rfind("thickness")
 
-            if edge_sign > -1 and EdgePointCoordinates < 0:
+            if edge_sign_presense > -1 and EdgePointCoordinates < 0:
                 in_edge_section = True
                 continue
 
-            if thickness_sign > -1 and thickness < 0:
+            if thickness_sign_presense > -1 and thickness < 0:
                 in_thickness_section = True
                 continue
 
