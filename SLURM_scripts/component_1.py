@@ -146,7 +146,18 @@ def setup_dask_scheduler(management_dir):
     os.system(command)
     print '-'*50
 
-
+def setup_local_cluster():
+    print '-'*50
+    print 'setting up local dask-cluster'
+    import psutil
+    sfile = _get_sfile(management_dir) + '.' + str(process_number)
+    command = 'dask-scheduler --scheduler-file={} --port=4321 &'
+    command = command.format(sfile)
+    print command
+    os.system(command)
+    n_cpus = psutil.cpu_count(logical=False)
+    command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9 &'.format(nprocs = n_cpus, sfile = sfile)
+    print '-'*50
 # In[7]:
 
 #################################################
@@ -186,6 +197,7 @@ if process_number == 0:
     setup_jupyter_notebook()
 setup_locking_config()
 setup_dask_workers(management_dir)
+setup_local_cluster()
 #if not process_number == 0:
 #    # compute job will be started from first process
 #    time.sleep(60*60*24*365)
