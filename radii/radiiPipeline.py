@@ -276,6 +276,7 @@ class RadiiPipeline:
         trMatrix2 = tr.exTrMatrix.getTransformation(dst_am, src_hoc)
 
         self.trMatrix = trMatrix2
+        print(amFile)
         amPoints4D = tr.read.amFile(amFile)
 
         print("Applying the transofrmation matrix to the initial am points")
