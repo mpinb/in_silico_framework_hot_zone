@@ -1,5 +1,11 @@
-from biophysics_fitting.setup_stim import setup_soma_step
+import warnings
 import single_cell_parser as scp
+
+errstr = "The cell_modify_function synaptic_input is experimental! Make sure synapses "
+errstr += "are beeing activated as you expect and have the effect you expect!"
+
+warnings.warn(errstr)
+
 def synaptic_input(cell, network_param = None, synapse_activation_file = None, tStop = None):
     net = scp.build_parameters(network_param)
     sim = scp.NTParameterSet({'tStop': tStop})

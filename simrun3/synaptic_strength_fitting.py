@@ -282,7 +282,9 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     assert(tEnd is not None)
     cell, nwMap = cell_nw_generator()
     
-    for cellType in nwMap.cells.keys():
+    # do not disable cells hat do not originate from this network_param
+    # for cellType in nwMap.cells.keys(): 
+    for cellType in network_param.network.keys():
         for syn in cell.synapses[cellType]:
             syn.disconnect_hoc_synapse()
     
