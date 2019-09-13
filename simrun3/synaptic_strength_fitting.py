@@ -316,8 +316,13 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
         return cell
     
     t,v = I.np.array(cell.tVec), I.np.array(cell.soma.recVList)[0,:]
-    
+
+
     # without the following lines, the simulation will crash from time to time
+    for cellType in nwMap.cells.keys(): 
+        for syn in cell.synapses[cellType]:
+            syn.disconnect_hoc_synapse()
+
     cell.re_init_cell()
     nwMap.re_init_network()
     
