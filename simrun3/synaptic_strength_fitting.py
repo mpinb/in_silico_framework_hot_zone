@@ -319,6 +319,13 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
 
 
     # without the following lines, the simulation will crash from time to time
+    try: 
+        cell.evokedNW.re_init_network()
+        print 'found evokedNW attached to cell'
+        print 'explicitly resetting it.'
+    except AttributeError:
+        pass
+
     for cellType in nwMap.cells.keys(): 
         for syn in cell.synapses[cellType]:
             syn.disconnect_hoc_synapse()
