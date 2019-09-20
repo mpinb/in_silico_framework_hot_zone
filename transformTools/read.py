@@ -3,6 +3,18 @@ import os
 import re
 import math
 
+
+def convert_point(p, x_res = 0.092, y_res = 0.092, z_res = 1.0):
+    out = []
+    scaling = [x_res, y_res, z_res]
+    for lv, pp in enumerate(p):
+        try:
+            s = scaling[lv]
+        except IndexError:
+            s = 1
+        out.append(pp*s)
+    return out
+
 def hocFileComplete(inputFilePath):
     '''Reading all neuronal points of a hoc file'''
     with open(inputFilePath, 'r') as hocFile:

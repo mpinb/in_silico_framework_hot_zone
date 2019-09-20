@@ -55,7 +55,6 @@ def applyTransformationMatrix(points, matrix):
         point = point4D[:3]
         mPoint = np.matrix(point)
         mTrPoint = mPoint.T
-
         p = matrix*np.matrix(np.vstack((mTrPoint, 1.0)))
         p = np.array(p.T)
         p_listed = p.tolist()[0]

@@ -1,6 +1,7 @@
 
 import numpy as np
 import math
+import warnings
 
 class RadiusCalculator:
     def __init__(self, xyResolution=0.092, zResolution=0.5, xySize=20,
@@ -16,6 +17,9 @@ class RadiusCalculator:
         self.rayLengthPerDirectionOfImageCoordinatesForPostMeasurment = 0.50/xyResolution # self.rayLengthPerDirectionOfImageCoordinates/10
         self.numberOfRaysForPostMeasurment = numberOfRaysForPostMeasurment
         self.debug_postMeasurementPoints = []
+        self.orig_pointsWithIntensity = []
+        self.pm_pointsWithIntensity = []
+        self.counterList = []
 
     def getProfileOfThesePoints(self, image, points, postMeasurment='no'):
         temp = []
@@ -55,12 +59,13 @@ class RadiusCalculator:
         frontProfile = []
         rays = []
         selectedProfileIndex = 1000
-        backRadius = 0
-        frontRadius = 0
-
         if postMeasurment == 'yes':
             rays, raysProfileList = self.getHigherResolutionProfiles(image, point)
-            point = self.postMeasurmentFunction(image, rays, raysProfileList)
+            point_pm = self.postMeasurmentFunction(image, rays, raysProfileList)
+            point_pm = [point_pm[0], point_pm[1], point[2]]
+            intensities = self.getProfileValues(image, [point[:2], point_pm[:2]])
+            self.orig_pointsWithIntensity.append([point, intensities[0]])
+            self.pm_pointsWithIntensity.append([point_pm, intensities[1]])
             self.debug_postMeasurementPoints.append(point)
             return self.getRadiusFromProfile(image, point, postMeasurment='no')
 
@@ -97,6 +102,7 @@ class RadiusCalculator:
                 minRadius = radius
                 selectedProfileIndex = i
         # assert (minRadius < 100)
+        self.counterList.append(counterList)
         return backProfile, frontProfile, radiusList, minRadius, backCounterPoint, frontCounterPoint, counterList, raysProfileList, rays, selectedProfileIndex
 
 
@@ -145,9 +151,10 @@ class RadiusCalculator:
         profileIndicesLength = len(profileIndices)
         for i in range(profileIndicesLength):
             try:
-                intensityValue = image.GetPixel(profileIndices[i])
+                pixel = map(lambda x: (int(x)), profileIndices[i])
+                intensityValue = image.GetPixel(pixel)
             except RuntimeError as error:
-                print(error)
+                warnings.warn(error)
                 intensityValue = 0.0
             profileValues.append(intensityValue)
         return profileValues

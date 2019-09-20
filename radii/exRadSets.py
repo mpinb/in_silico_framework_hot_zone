@@ -1,5 +1,6 @@
 import os
 import re
+import transformTools as tr
 import radii as radi
 import SimpleITK as sitk
 
@@ -32,7 +33,6 @@ class RadiusCalculatorForManyFiles:
         self.numberOfRaysForPostMeasurment = numberOfRaysForPostMeasurment
 
         self.radiusCalculator = radi.calcRad.RadiusCalculator(xyResolution=self.xyResolution, zResolution=self.zResolution, xySize=self.xySize, numberOfRays=self.numberOfRays, tresholdPercentage=self.tresholdPercentage)
-
 
 
     def exRadSets(self, path_to_am, path_to_tif, path_to_output_folder, postMeasurment='no'):
@@ -103,7 +103,9 @@ class RadiusCalculatorForManyFiles:
             print("in readPoints()")
             return "error"
 
-        points = list(map(lambda x: map(lambda y: int(y/0.092), x), points))
+#       points = list(map(lambda x: map(lambda y: int(y/0.092), x), points))
+        points = map(lambda x: tr.read.convert_point(x, 1.0/0.092, 1.0/0.092, 1.0), points)
+
         return points
 
     def writeResult(self, inputDataFile, outputDataFile, result):

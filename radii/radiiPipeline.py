@@ -7,11 +7,54 @@ import pandas as pd
 import time
 import dask
 
+def convert_point(p, x_res = 0.092, y_res = 0.092, z_res = 1.0):
+    '''todo: use this function consistently to convert 
+    pixel locations to coordinates!'''
+    out = []
+    scaling = [x_res, y_res, z_res]
+    for lv, pp in enumerate(p):
+        try:
+            s = scaling[lv]
+        except IndexError:
+            s = 1
+        out.append(pp*s)
+    return out
+
 @dask.delayed
 def _paralellization_helper(radiiObject, amPth, imageFilePath, amOutput, postMeasurment='yes'):
     radiiObject.exRadSets(amPth, imageFilePath, amOutput, postMeasurment='yes')
-	
-	
+    sliceName = getSliceName(amPth, imageFilePath)
+    print(sliceName)
+    radiiDetails = dict()
+    radiiDetails["Slice name"] = sliceName
+
+    orig_temp = radiiObject.radiusCalculator.orig_pointsWithIntensity
+    pm_temp = radiiObject.radiusCalculator.pm_pointsWithIntensity
+    ray_points = radiiObject.radiusCalculator.counterList
+    # cave: this needs to be moved to a place wherer we are aware of the x/y/z resolution!
+    # Here, the default (0.092 / 0.092 / 0.5) is used, but that might change from usecase to usecase.
+    
+    orig_temp = map(lambda x: (convert_point(x[0]), x[1]), orig_temp)
+    pm_temp = map(lambda x: (convert_point(x[0]), x[1]), pm_temp)
+   
+    radiiDetails["Treshold"] = radiiObject.tresholdPercentage 
+    radiiDetails["Inten. orig points"] = orig_temp
+    radiiDetails["Inten. post points"] = pm_temp
+    radiiDetails["Ray points"] = ray_points
+
+    return  radiiDetails
+
+def getSliceName(amPth, imageFilePath):
+    am = os.path.basename(amPth)
+    imageName = os.path.basename(imageFilePath)
+    spatialGraphName = re.findall(r'[sS]\d+', am)[0]
+    sliceNumber = int(re.findall(r'\d+', spatialGraphName)[0])
+    if spatialGraphName in imageName:
+        return sliceNumber
+    else:
+        return "No name found"
+
+
 class RadiiPipeline:
     """
     Inputs:
@@ -42,6 +85,7 @@ class RadiiPipeline:
         self.amPointsTransformed_hoc = []
         self.am_hoc_pairs = []
         self.trMatrix = []
+        self.delayeds = []
 
     def runRayBurstOnSlices(self, tr025=True, tr050=True, tr075=True):
         """
@@ -54,7 +98,6 @@ class RadiiPipeline:
         return self.extractRadii(tr025, tr050, tr075)
         res = self.hocFile
         return res
-
 
     def initOutputDirectory(self, folder):
         """
@@ -91,7 +134,6 @@ class RadiiPipeline:
             os.mkdir(self.amWithErrorsDirectory)
 
         delayeds = []
-
         for idx, amPth in enumerate(self.amInputPathList):
             am = os.path.basename(amPth)
             spatialGraphName = re.findall(r'[sS]\d+', am)[0]
@@ -114,30 +156,10 @@ class RadiiPipeline:
                         delayeds.append(d)
 
                     #radi025.exRadSets(amPth, imageFilePath, self.amOutput025, postMeasurment='yes')
+           
                     break
         return delayeds
 
-        if (tr050):
-            radi050=radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.50)
-            for idx, amPth in enumerate(self.amInputPathList):
-                am = os.path.basename(amPth)
-                spatialGraphName = re.findall(r'[sS]\d+', am)[0]
-                for imageFilePath in self.maxZPathList:
-                    imageName = os.path.basename(imageFilePath)
-                    if spatialGraphName in imageName:
-                        radi050.exRadSets(amPth, imageFilePath, self.amOutput050, postMeasurment='yes')
-                        break
-
-        if (tr075):
-            radi075=radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.75)
-            for idx, amPth in enumerate(self.amInputPathList):
-                am = os.path.basename(amPth)
-                spatialGraphName = re.findall(r'[sS]\d+', am)[0]
-                for imageFilePath in self.maxZPathList:
-                    imageName = os.path.basename(imageFilePath)
-                    if imageName.startswith(spatialGraphName):
-                        radi075.exRadSets(amPth, imageFilePath, self.amOutput075, postMeasurment='yes')
-                        break
 
     def extractUncertainties(self):
         '''extract uncertainties for diff. tresholds and add them to file by calling addUncertainties'''
