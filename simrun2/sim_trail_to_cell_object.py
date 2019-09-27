@@ -3,6 +3,7 @@ from _matplotlib_import import *
 import sys
 import time
 import glob, shutil
+import tempfile
 import neuron
 import single_cell_parser as scp
 import single_cell_analyzer as sca
@@ -10,6 +11,7 @@ from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_t
 import numpy as np
 import pandas as pd
 from .utils import *
+
 h = neuron.h
 
 def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = False, \
@@ -47,11 +49,15 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
         networkName = parameter_table.loc[sim_trail_index].hash_network
         networkName = os.path.join(mdb['parameterfiles_network_folder'], networkName)
         networkName = network_modfun(networkName)
-        synapse_activation_file = os.path.join(mdb['simresult_path'], m['path'], m['synapses_file_name'])
-        synapse_activation_file = synapse_modfun(synapse_activation_file)
+        sa = mdb['synapse_activation'].loc[sim_trail_index].compute()
+        # dir_ = tempfile.mkdtemp()
+        # path_ = os.path.join(dir_, 'sa.csv')
+		# write_pandas_synapse_activation_to_roberts_format(path_, sa)
+        # synapse_activation_file = path_ # os.path.join(mdb['simresult_path'], m['path'], m['synapses_file_name'])
+        sa = synapse_modfun(sa)
         dummy =  trail_to_cell_object(cellName = cellName, \
                                     networkName = networkName, \
-                                    synapse_activation_file = synapse_activation_file, \
+                                    synapse_activation_file = sa, \
                                     range_vars = range_vars, 
                                     scale_apical = scale_apical, 
                                     allPoints = allPoints, 
@@ -59,7 +65,7 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
     finally:
         if silent == True:
             sys.stdout = stdout_bak
-
+        
     return dummy
 
 import tempfile
