@@ -9,20 +9,25 @@ def _append(cell, name, item):
         cell.name = []
     cell.name.append(item)
     
-def setup_soma_step(cell, amplitude = None, delay = None, duration = None):
-    iclamp = h.IClamp(0.5, sec=cell.soma)
+def setup_soma_step(cell, amplitude = None, delay = None, duration = None, dist = 0):
+    if dist == 0: 
+        sec = cell.soma
+        x = 0.5
+    else:
+        sec, x = utils.get_inner_section_at_distance(cell, dist)   
+    iclamp = h.IClamp(x, sec=sec)
     iclamp.delay = delay # give the cell time to reach steady state
     iclamp.dur = duration # 5ms rectangular pulse
     iclamp.amp = amplitude # 1.9 ?? todo ampere
     _append(cell, 'iclamp', iclamp)
 
-def setup_apical_epsp_injection(cell, dist = None, amplitude = None, delay = None):
+def setup_apical_epsp_injection(cell, dist = None, amplitude = None, delay = None, rise = 1.0, decay = 5):
     sec, x = utils.get_inner_section_at_distance(cell, dist)   
     iclamp2 = h.epsp(x, sec=sec)
     iclamp2.onset = delay
     iclamp2.imax = amplitude
-    iclamp2.tau0 = 1.0 # rise time constant
-    iclamp2.tau1 = 5 # decay time constant
+    iclamp2.tau0 = rise # rise time constant
+    iclamp2.tau1 = decay # decay time constant
     _append(cell, 'epsp', iclamp2)
     
 def setup_bAP(cell):
