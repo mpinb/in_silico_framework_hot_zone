@@ -10,7 +10,7 @@ File extensions
 
 1. .am
 Capabilities:
-- Reading data points in 3d and their corresponding radius
+- Reading  all data point with their associated attribute (e.g. VertexLabels, thickness or radius)
 - Writing data points in 3d and their corresponding radius
 Limitations:
 - Not able to read other data than 3d positional points and their radius
@@ -19,17 +19,23 @@ Limitations:
 
 2 .hoc
 Capabilities:
-- Reading data points in 3d and their corresponding radius
-- Writing data points in 3d and their corresponding radius
+- Reading data points (point coordinates and their associated radius) of kind:
+    1. ApicalDendrite
+    2. BasalDendrite
+    3. Dendrite
+    4. Soma
+from the hoc file.
+- Writing data points (as kind of what it can read) in 3d and their associated radius
 Limitations:
 - Not able to construct the tree structure from the hoc file.
 - Not able to read the white matter data.
 
 3 .hx
 Capabilities:
-- Read and Write data with the help of Amira.
+- Read transformation matrix (the one for complete morphology not
+each transformation for each file.) and the path files of the each slice.
 Limitations:
-- Need to connect to Amira.
+- To read the transformations of each slice, it needs to connect to Amira.
 
 Tests
 -----
@@ -42,19 +48,17 @@ import os
 from random import randrange
 
 
-class am:
+class Am:
 
-    def __init__(self, input_path, output_path=None, commands=None):
+    def __init__(self, input_path, output_path=None):
 
         if output_path is None:
             output_path = os.path.dirname(input_path) + "output_" + str(randrange(100))
-        if commands is None:
-            commands = {'EdgePointCoordinates': 'POINT { float[3] EdgePointCoordinates }',
-                        'thickness': 'POINT { float thickness }'}
+
+        self.commands = {}
         self.input_path = input_path
         self.output_path = output_path
-        self.commands = commands
-        self.points = []
+        self.all_data = {}
 
     def read(self):
         """
@@ -63,22 +67,18 @@ class am:
         and 1d radius data.
 
         """
-        commands_sign = []
         data = []
-        all_data =[]
-        config_end = 0
         with open(self.input_path, 'r') as f:
+            self.commands, config_end = _read_commands(f)
             lines = f.readlines()
-            for c in self.commands:
-                for l_number, line in enumerate(lines):
-                    if line.rfind(c) > -1:
-                        commands_sign.append("@" + line[line.rfind("@") + 1])
-                        config_end = l_number
-                        continue
-            for cs in commands_sign:
+            for cs in self.commands:
+                command_sign = self.commands[cs]
+                # command_sign (eg. @1 or @2 ) are the initialized value of commands dict keys
+                # which provided by the _read_commands function.
                 data_section = False
+                data = []
                 for line in lines[config_end + 1:]:
-                    if line.rfind(cs):
+                    if line.rfind(command_sign):
                         data_section = True
                         continue
                     if data_section and line != '\n':
@@ -86,18 +86,17 @@ class am:
                         data.append(d)
                     elif data_section and line == '\n':
                         data_section = False
-                        all_data = [dt + [data[idt]] for idt, dt in enumerate(all_data)]
-            self.points = all_data
-        return all_data
+                self.all_data[cs] = data
+        return self.all_data
 
 
-class hoc:
+class Hoc:
 
     def __init__(self):
         pass
 
 
-class amira_utils:
+class Amira_utils:
 
     def __init__(self):
         pass
@@ -109,3 +108,19 @@ def _read_data(line):
         matches = [0.0]
     data = map(float, matches)
     return data
+
+
+def _read_commands(read_file):
+    lines = read_file.readlines()
+    commands = {}
+    config_end = 0
+    for idx, line in enumerate(lines):
+        if line.rfind("@"):
+            # command_sign supposes to hold the values like @1 or @2 or ...
+            command_sign = "@" + line[line.rfind("@") + 1]
+            if line.replace(command_sign, ""):
+                commands[line] = command_sign
+            else:
+                config_end = idx
+                break
+    return commands, config_end
