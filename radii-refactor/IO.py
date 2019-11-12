@@ -69,7 +69,7 @@ class Am:
         """
         data = []
         with open(self.input_path, 'r') as f:
-            self.commands, config_end = _read_commands(f)
+            self.commands, config_end = self._read_commands()
             lines = f.readlines()
             for cs in self.commands:
                 command_sign = self.commands[cs]
@@ -88,6 +88,23 @@ class Am:
                         data_section = False
                 self.all_data[cs] = data
         return self.all_data
+
+    def _read_commands(self):
+        with open(self.input_path, 'r') as fc:
+            lines = fc.readlines()
+            commands = {}
+            config_end = 0
+            for idx, line in enumerate(lines):
+                if line.rfind("@") > -1:
+                    # command_sign supposes to hold the values like @1 or @2 or ...
+                    command_sign = "@" + line[line.rfind("@") + 1]
+                    if line.replace(command_sign, "") != "\n":
+                        print line
+                        commands[line.replace(command_sign + "\n", "")] = command_sign
+                    else:
+                        config_end = idx
+                        break
+        return commands, config_end
 
 
 class Hoc:
@@ -110,17 +127,3 @@ def _read_data(line):
     return data
 
 
-def _read_commands(read_file):
-    lines = read_file.readlines()
-    commands = {}
-    config_end = 0
-    for idx, line in enumerate(lines):
-        if line.rfind("@"):
-            # command_sign supposes to hold the values like @1 or @2 or ...
-            command_sign = "@" + line[line.rfind("@") + 1]
-            if line.replace(command_sign, ""):
-                commands[line] = command_sign
-            else:
-                config_end = idx
-                break
-    return commands, config_end
