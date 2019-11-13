@@ -56,20 +56,19 @@ class Am:
             output_path = os.path.dirname(input_path) + "output_" + str(randrange(100))
 
         self.commands = {}
+        self.config = {}
         self.input_path = input_path
         self.output_path = output_path
         self.all_data = {}
 
     def read(self):
         """
-        Reading data form am file in the order of provided am commands in the
-        dictionary's command, the default dictionary contains the 3d positions data
-        and 1d radius data.
+        Reading all data of of the am file
 
         """
         data = []
         with open(self.input_path, 'r') as f:
-            self.commands, config_end = self._read_commands()
+            self.commands, config_end = self._read_config_and_commands()
             lines = f.readlines()
             for cs in self.commands:
                 command_sign = self.commands[cs]
@@ -89,7 +88,22 @@ class Am:
                 self.all_data[cs] = data
         return self.all_data
 
-    def _read_commands(self):
+    def write(self, input_path=None, output_path=None, all_data=None):
+        """
+        Writing data from a dictionary into an am file.
+        """
+        if input_path is None:
+            input_path = self.input_path
+        if output_path is None:
+            output_path = self.output_path
+        if all_data is None:
+            all_data = self.all_data
+
+        with open(output_path, 'w') as f:
+            f.writelines(self.config)
+            _write_from_dict(f, all_data)
+
+    def _read_config_and_commands(self):
         with open(self.input_path, 'r') as fc:
             lines = fc.readlines()
             commands = {}
@@ -103,6 +117,7 @@ class Am:
                     else:
                         config_end = idx
                         break
+            self.config["config"] = lines[:config_end + 1]
         return commands, config_end
 
 
@@ -129,3 +144,5 @@ def _read_data(line):
     return data
 
 
+def _write_from_dict(data_file, data_dict):
+    pass
