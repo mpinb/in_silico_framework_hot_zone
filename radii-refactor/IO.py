@@ -78,7 +78,7 @@ class Am:
                 data_section = False
                 data = []
                 for line in lines[config_end + 1:]:
-                    if line.rfind(command_sign):
+                    if line.rfind(command_sign) > -1:
                         data_section = True
                         continue
                     if data_section and line != '\n':
@@ -97,10 +97,9 @@ class Am:
             for idx, line in enumerate(lines):
                 if line.rfind("@") > -1:
                     # command_sign supposes to hold the values like @1 or @2 or ...
-                    command_sign = "@" + line[line.rfind("@") + 1]
-                    if line.replace(command_sign, "") != "\n":
-                        print line
-                        commands[line.replace(command_sign + "\n", "")] = command_sign
+                    command_sign = "@" + line[line.rfind("@") + 1:].strip()
+                    if line.replace(command_sign, "").strip() != "":
+                        commands[line.replace(command_sign, "").strip()] = command_sign
                     else:
                         config_end = idx
                         break
@@ -120,7 +119,10 @@ class Amira_utils:
 
 
 def _read_data(line):
-    matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+', line)
+    print line
+    print "hi"
+    matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+|\-?\d+[e]?', line)
+    print matches
     if not matches:
         matches = [0.0]
     data = map(float, matches)

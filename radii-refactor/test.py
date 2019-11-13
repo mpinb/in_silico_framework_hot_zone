@@ -5,7 +5,11 @@ import os
 import IO
 from definitions import ROOT_DIR
 
-
+def compare_points(p1, p2):
+    if p1 == p2:
+        return True
+    else:
+        return False
 def __test_am_read():
     am_path = os.path.join(ROOT_DIR, 'test_files/S13_final_done_Alison_zScale_40.am')
     print "------"
@@ -33,8 +37,13 @@ def __test_am_read():
 
 #   Test 4
     print "TEST 4"
-    print 'all_data["EDGE { int EdgeLabels } "]'
-    print am_object.all_data["EDGE { int EdgeLabels } "]
+    print 'all_data["POINT { float[3] EdgePointCoordinates }"]'
+    defined_point = [1.849200057983398E01, 5.106000137329102E01, 1.310999989509583E00]
+    point =  am_object.all_data["POINT { float[3] EdgePointCoordinates }"][3]
+
+    print "The point read from the file is as the same as the one from the " \
+          "Am.read() method: " + \
+          str(compare_points(defined_point, point))
     print "-------"
     return 0
 
