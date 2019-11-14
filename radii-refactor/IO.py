@@ -76,7 +76,7 @@ class Am:
                 # which provided by the _read_commands function.
                 data_section = False
                 data = []
-                for line in lines[config_end + 1:]:
+                for line in lines[config_end:]:
                     if line.rfind(command_sign) > -1:
                         data_section = True
                         continue
@@ -100,8 +100,8 @@ class Am:
             all_data = self.all_data
 
         with open(output_path, 'w') as f:
-            f.writelines(self.config)
-            _write_from_dict(f, all_data)
+            #        f.writelines(self.config)
+            _write_from_dict(f, all_data, self.commands)
 
     def _read_config_and_commands(self):
         with open(self.input_path, 'r') as fc:
@@ -117,7 +117,7 @@ class Am:
                     else:
                         config_end = idx
                         break
-            self.config["config"] = lines[:config_end + 1]
+            self.all_data["config"] = lines[:config_end]
         return commands, config_end
 
 
@@ -134,15 +134,22 @@ class Amira_utils:
 
 
 def _read_data(line):
-    print line
-    print "hi"
     matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+|\-?\d+[e]?', line)
-    print matches
     if not matches:
         matches = [0.0]
     data = map(float, matches)
     return data
 
 
-def _write_from_dict(data_file, data_dict):
-    pass
+def _write_from_dict(data_file, data_dict, commands):
+    data_file.writelines(data_dict["config"])
+    for cs in commands:
+        data_file.write("\n")
+        data_file.write(commands[cs])
+        data_file.write("\n")
+        for data in data_dict[cs]:
+            string = ' '.join(map(str, data))
+            for item in string:
+                data_file.write(item)
+            data_file.write("\n")
+
