@@ -256,6 +256,7 @@ class Hoc:
                     else:
                         writeHocFile.write(line)
 
+
 class Amira_utils:
 
     def __init__(self):
@@ -281,11 +282,3 @@ def _write_from_dict(data_file, data_dict, commands):
             for item in string:
                 data_file.write(item)
             data_file.write("\n")
-
-
-
-
-
-
-
-
