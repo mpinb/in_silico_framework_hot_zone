@@ -66,7 +66,6 @@ class Am:
         Reading all data of of the am file
 
         """
-        data = []
         with open(self.input_path, 'r') as f:
             self.commands, config_end = self._read_config_and_commands()
             lines = f.readlines()
@@ -123,9 +122,139 @@ class Am:
 
 class Hoc:
 
-    def __init__(self):
-        pass
+    def __init__(self, input_path, output_path=None):
 
+        if output_path is None:
+            output_path = os.path.dirname(input_path) + "output_" + str(randrange(100))
+
+        self.input_path = input_path
+        self.output_path = output_path
+
+    def read_complete(self):
+        """Reading all points of a hoc file"""
+        with open(self.input_path, 'r') as hocFile:
+            lines = hocFile.readlines()
+            neuron_section = False
+            points = []
+
+            for lineNumber, line in enumerate(lines):
+                soma = line.rfind("soma")
+                dend = line.rfind("dend")
+                apical = line.rfind("apical")
+                createCommand = line.rfind("create")
+                pt3daddCommand = line.rfind("pt3dadd")
+
+                if not neuron_section and ((createCommand > -1)
+                                           and (soma + apical + dend > -3)):
+                    neuron_section = True
+
+                if neuron_section and (line == '\n'):
+                    neuron_section = False
+
+                if (pt3daddCommand > -1) and neuron_section:
+                    line = line.replace("pt3dadd", "")
+                    matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
+                    point = map(float, matches)
+                    points.append(point)
+        return points
+
+    def read_only_nodes(self):
+        """
+        Reading hoc file with only two points (top and bottom) from each section of
+        neuronal points of a hoc file
+
+        """
+        with open(self.input_path, 'r') as hocFile:
+            lines = hocFile.readlines()
+            neuron_section = False
+            points = []
+            lastPoint = []
+
+            in_neuron_line_number = 0
+
+            for lineNumber, line in enumerate(lines):
+                # raw_input("Press Enter to continue...")
+                soma = line.rfind("soma")
+                dend = line.rfind("dend")
+                apical = line.rfind("apical")
+                createCommand = line.rfind("create")
+                pt3daddCommand = line.rfind("pt3dadd")
+                # print("line:")
+                # print(lineNumber)
+                # print("the content:")
+                # print(line)
+                if not neuron_section and ((createCommand > -1)
+                                           and (soma + apical + dend > -3)):
+                    neuron_section = True
+                    # print("in_neuron True")
+
+                if neuron_section and (line == '\n'):
+                    neuron_section = False
+                    in_neuron_line_number = 0
+                    points.append(lastPoint)
+                    lastPoint = []
+                    # print("in_neuron True and line empty")
+
+                if (pt3daddCommand > -1) and neuron_section:
+                    in_neuron_line_number = in_neuron_line_number + 1;
+                    line = line.replace("pt3dadd", "")
+                    matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
+                    point = map(float, matches)
+                    # print("in p3dadd command")
+                    if (in_neuron_line_number == 1):
+                        points.append(point)
+                    else:
+                        lastPoint = point
+        return points
+
+    def write(self, points_with_rad, input_path=None, output_path=None):
+        """
+        # Writing points with their radius to a specific hoc file.
+        # basically it do this: reading a file without the
+        # radii of neuronal points and add the radius to them in another hoc file
+        """
+
+        if input_path is None:
+            input_path = self.input_path
+        if output_path is None:
+            output_path = self.output_path
+
+        with open(input_path, 'r') as readHocFile:
+            with open(output_path, 'w') as writeHocFile:
+                lines = readHocFile.readlines()
+                neuron_section = False
+
+                in_neuron_line_number = 0
+
+                for lineNumber, line in enumerate(lines):
+                    soma = line.rfind("soma")
+                    dend = line.rfind("dend")
+                    apical = line.rfind("apical")
+                    createCommand = line.rfind("create")
+                    pt3daddCommand = line.rfind("pt3dadd")
+
+                    if not neuron_section and ((createCommand > -1)
+                                               and (soma + apical + dend > -3)):
+                        neuron_section = True
+
+                    if neuron_section and (line == '\n'):
+                        neuron_section = False
+
+                    if (pt3daddCommand > -1) and neuron_section:
+
+                        hocPoint = points_with_rad[in_neuron_line_number]
+
+                        line = line.replace("pt3dadd", "")
+                        matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
+                        point = map(float, matches)
+
+                        writeHocFile.write('{{pt3dadd({:f},{:f},{:f},{:f})}}\n'.format(hocPoint[0],
+                                                                                       hocPoint[1],
+                                                                                       hocPoint[2],
+                                                                                       hocPoint[3]))
+                        in_neuron_line_number = in_neuron_line_number + 1;
+                    else:
+                        writeHocFile.write(line)
 
 class Amira_utils:
 
@@ -152,4 +281,11 @@ def _write_from_dict(data_file, data_dict, commands):
             for item in string:
                 data_file.write(item)
             data_file.write("\n")
+
+
+
+
+
+
+
 
