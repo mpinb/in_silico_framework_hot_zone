@@ -1,3 +1,26 @@
+"""
+radii Module
+
+==========
+This module contains methods to do extract radii from image.
+
+
+Capabilities:
+----------------------
+-
+-
+
+Limitations:
+-----------
+
+
+Tests
+-----
+
+- The test functions are inside the test.py. One can also use them as example of how to use the functions.
+
+"""
+
 
 import numpy as np
 import warnings

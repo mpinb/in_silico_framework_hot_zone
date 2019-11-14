@@ -24,9 +24,12 @@ import re
 import numpy as np
 
 
-class Data_structure:
-    def __init__(self):
-        pass
+class Data:
+    def __init__(self, coordinate_2d=None, coordinate=None, coordinate_with_radius=None, pixel_coordinate=None):
+        self.coordinate_2d = coordinate_2d      # TYPE: 2d list of floats
+        self.coordinate = coordinate        # TYPE: 3d list of floats
+        self.coordinate_with_radius = coordinate_with_radius    # TYPE: 4d list of floats
+        self.pixel_coordinate = pixel_coordinate        # TYPE: 2d list of integers
 
 
 class Matrix:
