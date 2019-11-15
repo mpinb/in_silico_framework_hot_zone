@@ -42,7 +42,7 @@ def __test_am_read():
 
 #   Test 4
     print "TEST 4"
-    print 'all_data["POINT { float[3] EdgePointCoordinates }"]'
+    print 'profile_data["POINT { float[3] EdgePointCoordinates }"]'
     defined_point = [1.849200057983398E01, 5.106000137329102E01, 1.310999989509583E00]
     point = am_object.all_data["POINT { float[3] EdgePointCoordinates }"][3]
 

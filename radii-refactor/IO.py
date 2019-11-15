@@ -168,7 +168,7 @@ class Hoc:
         
         Inputs:
         - 1. radii: A list of radii, which are floats values, the order of 
-        radii list must be match with the oder of self.all_data["points"]
+        radii list must be match with the oder of self.profile_data["points"]
         
         - 2. input_path, if not given it will use self.input_path, the method will use this 
         as a sample hoc file to create another Hoc file with radii added to the corresponding points 
