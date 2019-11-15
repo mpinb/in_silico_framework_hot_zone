@@ -43,6 +43,7 @@ Tests
 - The test functions are inside the test.py. One can also use them as example of how to use the functions.
 
 """
+import Interface as I
 import re
 import os
 from random import randrange
@@ -80,7 +81,7 @@ class Am:
                         data_section = True
                         continue
                     if data_section and line != '\n':
-                        d = _read_data(line)
+                        d = _read_numbers_in_line(line)
                         data.append(d)
                     elif data_section and line == '\n':
                         data_section = False
@@ -97,10 +98,20 @@ class Am:
             output_path = self.output_path
         if all_data is None:
             all_data = self.all_data
+        self._write_from_dict()
 
-        with open(output_path, 'w') as f:
-            #        f.writelines(self.config)
-            _write_from_dict(f, all_data, self.commands)
+    def _write_from_dict(self):
+        with open(self.output_path, "w") as data_file:
+            data_file.writelines(self.all_data["config"])
+            for cs in self.commands:
+                data_file.write("\n")
+                data_file.write(self.commands[cs])
+                data_file.write("\n")
+                for data in self.all_data[cs]:
+                    string = ' '.join(map(str, data))
+                    for item in string:
+                        data_file.write(item)
+                    data_file.write("\n")
 
     def _read_config_and_commands(self):
         with open(self.input_path, 'r') as fc:
@@ -126,92 +137,44 @@ class Hoc:
 
         if output_path is None:
             output_path = os.path.dirname(input_path) + "output_" + str(randrange(100))
-
-        self.input_path = input_path
         self.output_path = output_path
+        self.input_path = input_path
+        self.edges = I.scp.reader.read_hoc_file(input_path)
+        self.all_data = {}
+        self._process()
 
-    def read_complete(self):
-        """Reading all points of a hoc file"""
-        with open(self.input_path, 'r') as hocFile:
-            lines = hocFile.readlines()
-            neuron_section = False
-            points = []
+    def _process(self):
+        self._extract_nodes()
+        self._extract_all_pts()
 
-            for lineNumber, line in enumerate(lines):
-                soma = line.rfind("soma")
-                dend = line.rfind("dend")
-                apical = line.rfind("apical")
-                createCommand = line.rfind("create")
-                pt3daddCommand = line.rfind("pt3dadd")
+    def _extract_nodes(self):
+        nodes = []
+        for e in self.edges:
+            nodes.append(e.edgePts[0])
+            nodes.append(e.edgePts[-1])
+        self.all_data['nodes'] = nodes
 
-                if not neuron_section and ((createCommand > -1)
-                                           and (soma + apical + dend > -3)):
-                    neuron_section = True
+    def _extract_all_pts(self):
+        pts = []
+        for e in self.edges:
+            pts.extend(e.edgePts)
+        self.all_data['all_points'] = pts
 
-                if neuron_section and (line == '\n'):
-                    neuron_section = False
-
-                if (pt3daddCommand > -1) and neuron_section:
-                    line = line.replace("pt3dadd", "")
-                    matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
-                    point = map(float, matches)
-                    points.append(point)
-        return points
-
-    def read_only_nodes(self):
+    def update_radii(self, radii, input_path=None, output_path=None):
         """
-        Reading hoc file with only two points (top and bottom) from each section of
-        neuronal points of a hoc file
-
-        """
-        with open(self.input_path, 'r') as hocFile:
-            lines = hocFile.readlines()
-            neuron_section = False
-            points = []
-            lastPoint = []
-
-            in_neuron_line_number = 0
-
-            for lineNumber, line in enumerate(lines):
-                # raw_input("Press Enter to continue...")
-                soma = line.rfind("soma")
-                dend = line.rfind("dend")
-                apical = line.rfind("apical")
-                createCommand = line.rfind("create")
-                pt3daddCommand = line.rfind("pt3dadd")
-                # print("line:")
-                # print(lineNumber)
-                # print("the content:")
-                # print(line)
-                if not neuron_section and ((createCommand > -1)
-                                           and (soma + apical + dend > -3)):
-                    neuron_section = True
-                    # print("in_neuron True")
-
-                if neuron_section and (line == '\n'):
-                    neuron_section = False
-                    in_neuron_line_number = 0
-                    points.append(lastPoint)
-                    lastPoint = []
-                    # print("in_neuron True and line empty")
-
-                if (pt3daddCommand > -1) and neuron_section:
-                    in_neuron_line_number = in_neuron_line_number + 1;
-                    line = line.replace("pt3dadd", "")
-                    matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
-                    point = map(float, matches)
-                    # print("in p3dadd command")
-                    if (in_neuron_line_number == 1):
-                        points.append(point)
-                    else:
-                        lastPoint = point
-        return points
-
-    def write(self, points_with_rad, input_path=None, output_path=None):
-        """
-        # Writing points with their radius to a specific hoc file.
+        # Writing radius of points to a specific hoc file.
         # basically it do this: reading a file without the
         # radii of neuronal points and add the radius to them in another hoc file
+        
+        Inputs:
+        - 1. radii: A list of radii, which are floats values, the order of 
+        radii list must be match with the oder of self.all_data["points"]
+        
+        - 2. input_path, if not given it will use self.input_path, the method will use this 
+        as a sample hoc file to create another Hoc file with radii added to the corresponding points 
+        
+        - 3. output_path: The path of the desired output hoc file. If not given, the method will use self.output_path.   
+        - 3. output_path: The path of the desired output hoc file. If not given, the method will use self.output_path.
         """
 
         if input_path is None:
@@ -242,7 +205,7 @@ class Hoc:
 
                     if (pt3daddCommand > -1) and neuron_section:
 
-                        hocPoint = points_with_rad[in_neuron_line_number]
+                        hocPoint = radii[in_neuron_line_number]
 
                         line = line.replace("pt3dadd", "")
                         matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
@@ -252,7 +215,7 @@ class Hoc:
                                                                                        hocPoint[1],
                                                                                        hocPoint[2],
                                                                                        hocPoint[3]))
-                        in_neuron_line_number = in_neuron_line_number + 1;
+                        in_neuron_line_number = in_neuron_line_number + 1
                     else:
                         writeHocFile.write(line)
 
@@ -263,22 +226,27 @@ class Amira_utils:
         pass
 
 
-def _read_data(line):
+def _read_numbers_in_line(line):
+    """
+    Find numbers of in a line, the matches is a list contains
+    the numbers that the regex command matches in the line.
+    The number formats that this regex support are as an examples:
+    egs:
+    - 12 -> 12.0
+    - -12 -> -12.0
+    - 1.22 -> 1.22
+    - -1.22 -> -1.22
+    - 2.407640075683594e+02  -> 2.407640075683594e+02
+    - -2.407640075683594e+02 -> -2.407640075683594e+02
+    - -2.407640075683594e-02 -> -2.407640075683594e-02
+    - 2.407640075683594e-02 -> 2.407640075683594e-02
+    - -2.407640075683594 -> -2.407640075683594
+    - 2.521719970703125e+02, 3.437120056152344e+02, 6.554999947547913e-01, -> 2.521719970703125e+02
+    3.437120056152344e+02 6.554999947547913e-01
+
+    """
     matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+|\-?\d+[e]?', line)
     if not matches:
-        matches = [0.0]
+        raise RuntimeError("Expected number in line {} but did not find any".format(line))
     data = map(float, matches)
     return data
-
-
-def _write_from_dict(data_file, data_dict, commands):
-    data_file.writelines(data_dict["config"])
-    for cs in commands:
-        data_file.write("\n")
-        data_file.write(commands[cs])
-        data_file.write("\n")
-        for data in data_dict[cs]:
-            string = ' '.join(map(str, data))
-            for item in string:
-                data_file.write(item)
-            data_file.write("\n")
