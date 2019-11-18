@@ -61,7 +61,11 @@ class Radius_extractor:
         self.contour_list = []
         self.profile_data = {}
 
-    def get_intensity_profiles_by_point(self, image, point):
+    def get_intensity_profiles_by_point(self, point):
+        """
+        This method is useful when one need a profile of just one point in the image provided in at init.
+        """
+        image = self.image
         if self._max_seed_correction_radius_in_image_coordinates:
             point = self._correct_seed(point)
         rays_profiles = []
@@ -72,171 +76,179 @@ class Radius_extractor:
             front_coordinates = self.get_ray_point_coordinates(image, point, phi, front=True)
             back_coordinates = self.get_ray_point_coordinates(image, point, phi, front=False)
 
-            ray = self.constructRay(front_coordinates, back_coordinates, point)
+            ray = self.construct_ray(front_coordinates, back_coordinates, point)
             rays.append(ray)
 
-            ray_profile = self.getProfileValues(image, ray)
+            ray_profile = self.get_profile_values(image, ray)
             rays_profiles.append(ray_profile)
 
         return rays, rays_profiles
 
-    def get_intensity_profile_by_points(self, image, points):
+    def get_intensity_profile_by_points(self):
+        """
+        This is the main method of the class.
+        To extract the radius of points from the image, after initiating the class, this method need to be called.
+
+        """
+        image = self.image
+        points = self.points
         temp = []
         radii_from_all_points = []
 
         for point in points:
-            temp = self.get_radius_from_profile(image, point)
+            temp = self.get_radius_from_profile(point)
             radii_from_all_points.append(temp[3])
 
         return radii_from_all_points
 
-    def get_radius_from_profile(self, image, point):
+    def get_radius_from_profile(self, point):
+        image = self.image
         profile_data = {}
         radius_list = []
-        minRadius = 100
+        min_radius = 100
         radius = 100
         contour_list = []
-        raysProfileList = []
-        backProfile = []
-        frontProfile = []
+        rays_profile_list = []
+        back_profile = []
+        front_profile = []
         rays = []
-        selectedProfileIndex = 1000
+        selected_profile_index = 1000
 
         for i in range(self.number_of_rays):
             phi = i * (np.pi / self.number_of_rays)
 
-            frontCoordinate = self.get_ray_point_coordinates(image, point, phi, front=True, postMeasurment='no')
-            backCoordinate = self.get_ray_point_coordinates(image, point, phi, front=False, postMeasurment='no')
+            front_coordinate = self.get_ray_point_coordinates(image, point, phi, front=True, postMeasurment='no')
+            back_coordinate = self.get_ray_point_coordinates(image, point, phi, front=False, postMeasurment='no')
 
-            ray = self.constructRay(frontCoordinate, backCoordinate, point)
+            ray = self.construct_ray(front_coordinate, back_coordinate, point)
             rays.append(ray)
 
-            rayProfile = self.getProfileValues(image, ray)
-            raysProfileList.append(rayProfile)
+            ray_profile = self.get_profile_values(image, ray)
+            rays_profile_list.append(ray_profile)
 
         for i, ray in enumerate(rays):
 
-            rayLength = len(ray)
-            halfRayLength = (rayLength - 1) / 2
+            ray_length = len(ray)
+            half_ray_length = (ray_length - 1) / 2
 
-            back_contour_point = self.getCounterIndex(image, point, list(reversed(ray[0:halfRayLength + 1])))
-            front_contour_point = self.getCounterIndex(image, point, ray[halfRayLength:rayLength])
+            back_contour_point = self.get_counter_index(image, point, list(reversed(ray[0:half_ray_length + 1])))
+            front_contour_point = self.get_counter_index(image, point, ray[half_ray_length:ray_length])
             profile_data["back_contour_point"] = back_contour_point
             profile_data["front_contour_point"] = front_contour_point
             if len(back_contour_point) == 2 and len(front_contour_point) == 2:
-                radius = self.getDistance(back_contour_point, front_contour_point)
+                radius = self.get_distance(back_contour_point, front_contour_point)
             contour_list.append([back_contour_point, front_contour_point])
 
             radius_list.append(radius)
 
-            if (radius < minRadius):
-                profile_data["frontProfile"] = self.getProfileValues(image, frontCoordinate)
-                profile_data["backProfile"] = self.getProfileValues(image, backCoordinate)
-                profile_data["minRadius"] = radius
-                profile_data["selectedProfileIndex"] = i
-        # assert (minRadius < 100)
+            if radius < min_radius:
+                profile_data["front_profile"] = self.get_profile_values(image, front_coordinate)
+                profile_data["back_profile"] = self.get_profile_values(image, back_coordinate)
+                profile_data["min_radius"] = radius
+                profile_data["selected_profile_index"] = i
+        # assert (min_radius < 100)
         self.contour_list.append(contour_list)
         self.profile_data["contour_list"] = self.contour_list
-        return backProfile, frontProfile, radius_list, minRadius, back_contour_point, front_contour_point, contour_list, raysProfileList, rays, selectedProfileIndex
+        return back_profile, front_profile, radius_list, min_radius, back_contour_point, front_contour_point, contour_list, rays_profile_list, rays, selected_profile_index
 
-    def getHigherResolutionProfiles(self, image, point):
-        raysProfileList = []
+    def get_higher_resolution_profiles(self, image, point):
+        rays_profile_list = []
         rays = []
         for i in range(self._max_seed_correction_radius_in_image_coordinates):
             phi = i * (np.pi / self._max_seed_correction_radius_in_image_coordinates)
 
-            frontCoordinate = self.get_ray_point_coordinates(image, point, phi, front=True, postMeasurment='yes')
-            backCoordinate = self.get_ray_point_coordinates(image, point, phi, front=False, postMeasurment='yes')
+            front_coordinate = self.get_ray_point_coordinates(image, point, phi, front=True, postMeasurment='yes')
+            back_coordinate = self.get_ray_point_coordinates(image, point, phi, front=False, postMeasurment='yes')
 
-            ray = self.constructRay(frontCoordinate, backCoordinate, point)
+            ray = self.construct_ray(front_coordinate, back_coordinate, point)
             rays.append(ray)
 
-            rayProfile = self.getProfileValues(image, ray)
-            raysProfileList.append(rayProfile)
+            ray_profile = self.get_profile_values(image, ray)
+            rays_profile_list.append(ray_profile)
 
-        return rays, raysProfileList
+        return rays, rays_profile_list
 
-    def postMeasurmentFunction(self, image, rays, raysProfileList):
+    def post_measurment_function(self, rays, rays_profile_list):
 
-        maxIntensity = 0
-        centerPoint = rays[0][(len(rays[0]) - 1) / 2]
-        for idx, rayProfile in enumerate(raysProfileList):
+        max_intensity = 0
+        center_point = rays[0][(len(rays[0]) - 1) / 2]
+        for idx, rayProfile in enumerate(rays_profile_list):
 
-            indexOfMaxValue = np.argmax(np.array(rayProfile))
-            newMaxIntensity = rayProfile[indexOfMaxValue]
+            index_of_max_value = np.argmax(np.array(rayProfile))
+            new_max_intensity = rayProfile[index_of_max_value]
 
-            floatingPoint = rays[idx][indexOfMaxValue]
-            if newMaxIntensity > maxIntensity:
-                maxIntensity = newMaxIntensity
-                centerPoint = floatingPoint
+            floating_point = rays[idx][index_of_max_value]
+            if new_max_intensity > max_intensity:
+                max_intensity = new_max_intensity
+                center_point = floating_point
 
-        return centerPoint
+        return center_point
 
-    def constructRay(self, frontProfileIndices, backProfileIndices, point):
-        centerPointIndex = [int(point[0]), int(point[1])]
-        ray = list(reversed(backProfileIndices)) + [centerPointIndex] + frontProfileIndices
+    def construct_ray(self, front_profile_indices, back_profile_indices, point):
+        center_point_index = [int(point[0]), int(point[1])]
+        ray = list(reversed(back_profile_indices)) + [center_point_index] + front_profile_indices
         return ray
 
-    def getProfileValues(self, image, profileIndices):
-        profileValues = []
-        profileIndicesLength = len(profileIndices)
-        for i in range(profileIndicesLength):
+    def get_profile_values(self, image, profile_indices):
+        profile_values = []
+        profile_indices_length = len(profile_indices)
+        for i in range(profile_indices_length):
             try:
-                pixel = map(lambda x: (int(x)), profileIndices[i])
-                intensityValue = image.GetPixel(pixel)
+                pixel = map(lambda x: (int(x)), profile_indices[i])
+                intensity_value = image.GetPixel(pixel)
             except RuntimeError as error:
                 warnings.warn(error)
-                intensityValue = 0.0
-            profileValues.append(intensityValue)
-        return profileValues
+                intensity_value = 0.0
+            profile_values.append(intensity_value)
+        return profile_values
 
-    def getCounterIndex(self, image, point, profileIndices):
+    def get_counter_index(self, image, point, profile_indices):
 
         try:
-            pointValue = image.GetPixel([int(point[0]), int(point[1])])
+            point_value = image.GetPixel([int(point[0]), int(point[1])])
         except RuntimeError as error:
             print(error)
-            pointValue = 0.0
+            point_value = 0.0
 
-        # pointHalfValue = pointValue/2.0
-        pointTresholdValue = pointValue * self.threshold_percentage
+        # pointHalfValue = point_value/2.0
+        point_threshold_value = point_value * self.threshold_percentage
 
-        profileIndicesLength = len(profileIndices)
-        contourIndices = []
-        for i in range(profileIndicesLength - 1):
+        profile_indices_length = len(profile_indices)
+        contour_indices = []
+        for i in range(profile_indices_length - 1):
 
             try:
-                pixel_1_value = image.GetPixel(profileIndices[i])
+                pixel_1_value = image.GetPixel(profile_indices[i])
             except IndexError as error:
                 print(error)
                 pixel_1_value = 0.0
 
             try:
-                pixel_2_value = image.GetPixel(profileIndices[i + 1])
+                pixel_2_value = image.GetPixel(profile_indices[i + 1])
             except IndexError as error:
                 print(error)
                 pixel_2_value = 0.0
 
-            if pixel_1_value >= pointTresholdValue and pixel_2_value <= pointTresholdValue:
-                contourIndices = profileIndices[i]
+            if pixel_1_value >= point_threshold_value >= pixel_2_value:
+                contour_indices = profile_indices[i]
                 break
 
-        return contourIndices
+        return contour_indices
 
-    def getDistance(self, point_1, point_2):
+    def get_distance(self, point_1, point_2):
         return np.sqrt((point_1[0] - point_2[0]) ** 2 + (point_1[1] - point_2[1]) ** 2)
 
-    def get_ray_point_coordinates(self, image, point, phi, front, postMeasurment='no'):
-
+    def get_ray_point_coordinates(self, point, phi, front, postMeasurment='no'):
+        image = self.image
         if postMeasurment == 'no':
-            rayLength = self._ray_length_per_direction_of_image_coordinates
+            ray_length = self._ray_length_per_direction_of_image_coordinates
         elif postMeasurment == 'yes':
-            rayLength = self.ray_length_per_direction_of_image_coordinates_for_post_measurement
+            ray_length = self.ray_length_per_direction_of_image_coordinates_for_post_measurement
 
-        profileIndices = []
+        profile_indices = []
 
-        imageWidth = image.GetWidth()
-        imageHeight = image.GetHeight()
+        image_width = image.GetWidth()
+        image_height = image.GetHeight()
 
         x_i = point[0]
         y_i = point[1]
@@ -244,7 +256,7 @@ class Radius_extractor:
         x_f = x_i
         y_f = y_i
 
-        for index in range(int(rayLength)):
+        for index in range(int(ray_length)):
 
             if (front):
                 x_f = x_f + 1
@@ -263,12 +275,12 @@ class Radius_extractor:
             x_f = x_f + x_i
             y_f = y_f + y_i
 
-            if (x_new <= 1 or y_new <= 1 or x_new >= imageWidth or y_new >= imageHeight):
+            if x_new <= 1 or y_new <= 1 or x_new >= image_width or y_new >= image_height:
                 break
             else:
-                profileIndices.append([int(x_new), int(y_new)])
+                profile_indices.append([int(x_new), int(y_new)])
 
-        return profileIndices
+        return profile_indices
 
     def _read_image(self, image_file):
         '''Reading image file '''
