@@ -129,13 +129,49 @@ class InferMorphologyTransformation:
         return self.transformed_points
 
 
-def convert_point(points=None, x_res=0.092, y_res=0.092, z_res=1.0):
+class ConvertPoints:
+    """
+    This class converts points from coordinate_2d to image_coordinate_2d adn vice versa
+    inputs.
+    x_res: The pixel size in micron for x axis
+    y_res: The pixel size in micron for y axis
+    z_res: The pixel size in micron for z axis
+
+    """
+
+    def __init__(self, x_res=0.092, y_res=0.092, z_res=1.0):
+        self.x_res = x_res
+        self.y_res = y_res
+        self.z_res = z_res
+
+    def coordinate_2d_to_image_coordinate_2d(self, coordinate_2d):
+        """
+        Converted points from coordinate_2d to image_coordinate_2d
+
+        :param coordinate_2d: TYPE: transformation.Data.coordinate_2d
+        :return: image_coordinate_2d: TYPE: transformation.Data.image_coordinate_2d
+        """
+        points = coordinate_2d
+        scaling = [1.0 / self.x_res, 1.0 / self.y_res, 1.0 / self.z_res]
+        return _scaling(points, scaling)
+
+    def image_coordinate_2d_to_coordinate_2d(self, image_coordinate_2d):
+        """
+        Converted points from image_coordinate_2d to coordinate_2d
+
+        :param coordinate_2d: TYPE: transformation.Data.image_coordinate_2d
+        :return: image_coordinate_2d: TYPE: transformation.Data.coordinate_2d
+        """
+        points = image_coordinate_2d
+        scaling = [1.0 / self.x_res, 1.0 / self.y_res, 1.0 / self.z_res]
+        return _scaling(points, scaling)
+
+
+def _scaling(points, scaling):
     if points is None:
         points = points
         assert points
-
     out = []
-    scaling = [x_res, y_res, z_res]
     for lv, pp in enumerate(points):
         try:
             s = scaling[lv]

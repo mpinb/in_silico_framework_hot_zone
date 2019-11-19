@@ -289,6 +289,7 @@ class Radius_extractor:
 
     def _correct_seed(self, point):
         center = point
+        image
         pixel_values = self.image.AbsImageFilter(self.circle(center))
         corrected_point = get_index_of_maximum(max(pixel_values))
         return pixel_values

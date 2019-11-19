@@ -43,7 +43,7 @@ Tests
 - The test functions are inside the test.py. One can also use them as example of how to use the functions.
 
 """
-import Interface as I
+# import Interface as I
 import re
 import os
 from random import randrange

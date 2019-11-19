@@ -17,6 +17,7 @@ def compare_points(p1, p2):
 
 def __test_am_read():
     am_path = os.path.join(ROOT_DIR, 'test_files/S13_final_done_Alison_zScale_40.am')
+    print am_path
     print "***********"
     print "TEST Am.read() method:"
     print "***********"
