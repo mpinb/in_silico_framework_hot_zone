@@ -476,6 +476,21 @@ class NetworkMapper:
                 spikeTimes = offset + tBegin + (tEnd - tBegin)*np.random.uniform(size=len(active))
                 for j in range(len(active)):
                     self.cells[preCellType][active[j]].append(spikeTimes[j])
+        elif dist == 'PSTH_absolute_number':
+            bins = networkParameters.intervals
+            number_active_synapses = networkParameters.number_active_synapses
+            offset = networkParameters.offset
+            if len(bins) != len(number_active_synapses):
+                errstr = 'Time bins and probabilities of PSTH for cell type %s have unequal length! ' % preCellType
+                errstr += 'len(bins) = %d - len(probabilities) = %d' % (len(bins), len(probabilities))
+                raise RuntimeError(errstr)
+            for i in range(len(bins)): ##fill all cells bin after bin
+                tBegin, tEnd = bins[i]
+                nas = number_active_synapses[i]
+                active = np.random.choice(range(nrOfCells), nas, replace = False) # np.where(np.random.uniform(size=nrOfCells) < spikeProb)
+                spikeTimes = offset + tBegin + (tEnd - tBegin)*np.random.uniform(size=len(active))
+                for j in range(len(active)):
+                    self.cells[preCellType][active[j]].append(spikeTimes[j])                    
         elif dist == 'PSTH_poissontrain':
             bins = networkParameters.intervals
             rates = networkParameters.rates
