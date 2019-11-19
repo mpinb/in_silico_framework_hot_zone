@@ -3,6 +3,8 @@ This file is used for testing IO.py.
 """
 import os
 import IO
+import radii as rad
+import SimpleITK as sitk
 from definitions import ROOT_DIR
 
 
@@ -40,7 +42,7 @@ def __test_am_read():
     print am_object.commands
     print "-------"
 
-#   Test 4
+    #   Test 4
     print "TEST 4"
     print 'profile_data["POINT { float[3] EdgePointCoordinates }"]'
     defined_point = [1.849200057983398E01, 5.106000137329102E01, 1.310999989509583E00]
@@ -66,6 +68,25 @@ def __test_am_write():
     am_object.write()
 
 
-__test_am_read()
+def __test_correct_seed():
+    print "***********"
+    print "TEST radii._correct_seed() method:"
+    print "***********"
+    # image point and its value, extracted using ImageJ:
+    # x = 2400, y = 2364, value = 150
+    image_point = [2400, 2364]
+    image_file = os.path.join(ROOT_DIR, 'test_files/S13_max_z_projection.tif')
+    rx_object = rad.Radius_extractor([], image_file)
+    value = rx_object._correct_seed(image_point)
+    print value
 
+print "----------"
+print "TEST IO.py"
+print "----------"
+__test_am_read()
 __test_am_write()
+
+print "----------"
+print "TEST radii.py"
+print "----------"
+__test_correct_seed()

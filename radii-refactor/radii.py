@@ -291,7 +291,7 @@ class Radius_extractor:
         center = point
         pixel_values = self.image.AbsImageFilter(self.circle(center))
         corrected_point = get_index_of_maximum(max(pixel_values))
-        return corrected_point
+        return pixel_values
 
     def circle(self, point):
         image_x = sitk.VectorIndexSelectionCast(self.image, 0)
