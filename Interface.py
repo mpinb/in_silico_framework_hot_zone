@@ -118,6 +118,10 @@ from model_data_base.utils import select, pandas_to_array, pooled_std
 from model_data_base.utils import skit, chunkIt
 from model_data_base.utils import cache
 from model_data_base import utils
+
+from model_data_base.model_data_base_register import get_mdb_by_unique_id
+from model_data_base.mdbopen import resolve_mdb_path, create_mdb_path
+
 try: ##to avoid import errors in distributed system because of missing matplotlib backend
     import matplotlib
     import matplotlib.pyplot as plt
@@ -187,6 +191,11 @@ from biophysics_fitting.parameters import param_to_kwargs as bfit_param_to_kwarg
 from biophysics_fitting.optimizer import start_run as bfit_start_run
 
 from functools import partial
+
+def svg2emf(filename, path_to_inkscape = "/usr/bin/inkscape"):
+    '''converts svg to emf, which can be imported in word using inkscape. '''
+    command = ' '.join(['env -i', path_to_inkscape, "--file", filename,  "--export-emf",  filename[:-4]+".emf"])
+    print os.system(command)
 
 def print_module_versions():
     print "The loaded modules with __version__ attribute are:"
