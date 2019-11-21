@@ -43,7 +43,8 @@ Tests
 - The test functions are inside the test.py. One can also use them as example of how to use the functions.
 
 """
-# import Interface as I
+
+from lib.reader import read_hoc_file
 import re
 import os
 from random import randrange
@@ -139,7 +140,7 @@ class Hoc:
             output_path = os.path.dirname(input_path) + "output_" + str(randrange(100))
         self.output_path = output_path
         self.input_path = input_path
-        self.edges = I.scp.reader.read_hoc_file(input_path)
+        self.edges = read_hoc_file(input_path)
         self.all_data = {}
         self._process()
 

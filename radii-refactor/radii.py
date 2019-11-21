@@ -61,7 +61,7 @@ class Radius_extractor:
             5. ray_length_front_to_back_in_micron: maximum distance from the seed point considered in micrometer.
 
         """
-        points_in_image_coordinates = tr.convert_point(points, xy_resolution, xy_resolution, z_resolution)
+        points_in_image_coordinates = tr._convert_point(points, xy_resolution, xy_resolution, z_resolution)
         self.points = tr.Data(image_coordinate_2d=points_in_image_coordinates).image_coordinate_2d
         # TYPE: Must be transformation.Data.image_coordinate_2d
         self.points_with_intensity = []
