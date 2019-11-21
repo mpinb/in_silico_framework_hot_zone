@@ -27,7 +27,6 @@ import SimpleITK as sitk
 import transformation as tr
 
 
-
 def construct_ray_from_half_rays(front_ray_indices, back_ray_indices, point):
     center_point_index = [int(point[0]), int(point[1])]
     ray = list(reversed(back_ray_indices)) + [center_point_index] + front_ray_indices
@@ -48,7 +47,7 @@ def get_index_of_maximum(param):
 
 class Radius_extractor:
     def __init__(self, points, image_file, xy_resolution=0.092, z_resolution=0.5, ray_length_front_to_back_in_micron=20,
-                 number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=20):
+                 number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=1):
         """ This is the main method for extracting radii
         - Inputs:
             1. points: must be in the type transformation.Data.coordinate_2d, so they are a list of
@@ -61,12 +60,11 @@ class Radius_extractor:
             5. ray_length_front_to_back_in_micron: maximum distance from the seed point considered in micrometer.
 
         """
-        points_in_image_coordinates = tr._convert_point(points, xy_resolution, xy_resolution, z_resolution)
+        self.convert_points = tr.ConvertPoints(xy_resolution, xy_resolution, z_resolution)
+        points_in_image_coordinates = self.convert_points.coordinate_2d_to_image_coordinate_2d(points)
         self.points = tr.Data(image_coordinate_2d=points_in_image_coordinates).image_coordinate_2d
+        self.seed_corrected_points = []
         # TYPE: Must be transformation.Data.image_coordinate_2d
-        self.points_with_intensity = []
-        self.recorded_seed_corrected_points = []
-        self.seed_corrected_points_with_intensity = []
         self.image = _read_image(image_file)
         self.xy_resolution = xy_resolution
         self.z_resolution = z_resolution
@@ -80,6 +78,8 @@ class Radius_extractor:
         self._ray_length_per_direction_of_image_coordinates = self._ray_length_per_direction_in_micron / xy_resolution
         self.threshold_percentage = threshold_percentage
         self._max_seed_correction_radius_in_image_coordinates = max_seed_correction_radius_in_micron / xy_resolution
+        self._max_seed_correction_radius_in_image_coordinates_in_pixel = \
+            int(self._max_seed_correction_radius_in_image_coordinates)
         self.contour_list = []
         self.profile_data = {}
         self.all_data = {}
@@ -93,7 +93,7 @@ class Radius_extractor:
         _____
         point: The TYPE Must be transformation.coordinate_2d.
         """
-        point = tr.convert_point(point)
+        point = self.convert_points.coordinate_2d_to_image_coordinate_2d(point)
         if self._max_seed_correction_radius_in_image_coordinates:
             point = self._correct_seed(point)
         rays_profiles = []
@@ -289,13 +289,22 @@ class Radius_extractor:
 
     def _correct_seed(self, point):
         center = point
-        image
-        pixel_values = self.image.AbsImageFilter(self.circle(center))
-        corrected_point = get_index_of_maximum(max(pixel_values))
-        return pixel_values
+        #       circle = self.circle(center)
+        image = self.image
+        radius = self._max_seed_correction_radius_in_image_coordinates_in_pixel
+        sliced_image = image[center[0] - radius:center[0] + radius,
+                       center[1] - radius:center[1] + radius]
+        print "IMAGE INFORMATION:"
+        print sliced_image
+        circle_area = [[sliced_image[idx, idy], idx, idy] for idx in range(2 * radius)
+                       for idy in range(2 * radius) if self._circle_filter(idx, idy)]
+        max_pixel = max(circle_area)
+        corrected_point = max_pixel[1]+ center[0], max_pixel[2]+center[1]
+        return corrected_point
 
-    def circle(self, point):
-        image_x = sitk.VectorIndexSelectionCast(self.image, 0)
-        image_y = sitk.VectorIndexSelectionCast(self.image, 1)
-        radius = self._max_seed_correction_radius_in_image_coordinates
-        return (sitk.Sqrt((image_x - point[0]) ** 2 + (image_y - point[1]) ** 2)) < radius
+    def _circle_filter(self, x, y):
+        r = self._max_seed_correction_radius_in_image_coordinates_in_pixel
+        if np.sqrt(x ** 2 + y ** 2) < r:
+            return True
+        else:
+            return False
