@@ -154,3 +154,30 @@ def read_hoc_file(fname=''):
             raise IOError('Logical error reading hoc file: Number of labels does not equal number of edges')
 
         return cell
+
+def read_landmark_file(landmarkFilename):
+    '''
+    returns list of (x,y,z) points
+    '''
+    if not landmarkFilename.endswith('.landmarkAscii'):
+        errstr = 'Wrong input format: has to be landmarkAscii format'
+        raise RuntimeError(errstr)
+
+    landmarks = []
+    with open(landmarkFilename, 'r') as landmarkFile:
+        readPoints = False
+        for line in landmarkFile:
+            stripLine = line.strip()
+            if not stripLine:
+                continue
+            if stripLine[:2] == '@1':
+                readPoints = True
+                continue
+            if readPoints:
+                splitLine = stripLine.split()
+                x = float(splitLine[0])
+                y = float(splitLine[1])
+                z = float(splitLine[2])
+                landmarks.append((x, y, z))
+
+    return landmarks

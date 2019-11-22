@@ -27,27 +27,9 @@ import SimpleITK as sitk
 import transformation as tr
 
 
-def construct_ray_from_half_rays(front_ray_indices, back_ray_indices, point):
-    center_point_index = [int(point[0]), int(point[1])]
-    ray = list(reversed(back_ray_indices)) + [center_point_index] + front_ray_indices
-    return ray
-
-
-def _read_image(image_file):
-    """Reading image file """
-    image_file_reader = sitk.ImageFileReader()
-    image_file_reader.SetFileName(image_file)
-    image = image_file_reader.Execute()
-    return image
-
-
-def get_index_of_maximum(param):
-    pass
-
-
 class Radius_extractor:
     def __init__(self, points, image_file, xy_resolution=0.092, z_resolution=0.5, ray_length_front_to_back_in_micron=20,
-                 number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=1):
+                 number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=10):
         """ This is the main method for extracting radii
         - Inputs:
             1. points: must be in the type transformation.Data.coordinate_2d, so they are a list of
@@ -61,8 +43,9 @@ class Radius_extractor:
 
         """
         self.convert_points = tr.ConvertPoints(xy_resolution, xy_resolution, z_resolution)
-        points_in_image_coordinates = self.convert_points.coordinate_2d_to_image_coordinate_2d(points)
-        self.points = tr.Data(image_coordinate_2d=points_in_image_coordinates).image_coordinate_2d
+        points_in_image_coordinates_2d = self.convert_points.coordinate_2d_to_image_coordinate_2d(points)
+        self.points = points_in_image_coordinates_2d  # image_coordinate_2d, TYPE: 2d list of floats,
+        # but converted in the unit of the image.
         self.seed_corrected_points = []
         # TYPE: Must be transformation.Data.image_coordinate_2d
         self.image = _read_image(image_file)
@@ -81,36 +64,7 @@ class Radius_extractor:
         self._max_seed_correction_radius_in_image_coordinates_in_pixel = \
             int(self._max_seed_correction_radius_in_image_coordinates)
         self.contour_list = []
-        self.profile_data = {}
         self.all_data = {}
-
-    def get_intensity_profiles_by_point(self, point):
-        """
-        This method is useful when one needs the ray and rays intensity profiles of just one point in the image
-        provided in at init.
-
-        Inputs:
-        _____
-        point: The TYPE Must be transformation.coordinate_2d.
-        """
-        point = self.convert_points.coordinate_2d_to_image_coordinate_2d(point)
-        if self._max_seed_correction_radius_in_image_coordinates:
-            point = self._correct_seed(point)
-        rays_profiles = []
-        rays = []
-        for i in range(self.number_of_rays):
-            phi = i * (np.pi / self.number_of_rays)
-
-            front_coordinates = self.get_ray_points_indices(point, phi, front=True)
-            back_coordinates = self.get_ray_points_indices(point, phi, front=False)
-
-            ray = construct_ray_from_half_rays(front_coordinates, back_coordinates, point)
-            rays.append(ray)
-
-            ray_profile = self.get_intensity_profile_from_ray_indices(ray)
-            rays_profiles.append(ray_profile)
-
-        return rays, rays_profiles
 
     def get_all_data_by_points(self):
         """
@@ -127,7 +81,6 @@ class Radius_extractor:
             all_data[point] = data
 
         self.all_data = all_data
-        return self.all_data
 
     def get_all_data_by_point(self, point):
         """
@@ -144,8 +97,8 @@ class Radius_extractor:
             point = self._correct_seed(point)
         all_data = {"seed_corrected_point": point}
         radii_list = []
-        min_radius = 100
-        radius = 100
+        min_radius = np.Inf
+        radius = 0
         contour_list = []
         rays_intensity_profile = []
         rays_indices = []
@@ -156,7 +109,7 @@ class Radius_extractor:
             front_ray_indices = self.get_ray_points_indices(point, phi, front=True)
             back_ray_indices = self.get_ray_points_indices(point, phi, front=False)
 
-            ray_indices = construct_ray_from_half_rays(front_ray_indices, back_ray_indices, point)
+            ray_indices = _construct_ray_from_half_rays(front_ray_indices, back_ray_indices, point)
             rays_indices.append(ray_indices)
 
             ray_intensity_profile = self.get_intensity_profile_from_ray_indices(ray_indices)
@@ -288,23 +241,46 @@ class Radius_extractor:
         return ray_points_indices
 
     def _correct_seed(self, point):
-        center = point
-        #       circle = self.circle(center)
-        image = self.image
         radius = self._max_seed_correction_radius_in_image_coordinates_in_pixel
-        sliced_image = image[center[0] - radius:center[0] + radius,
-                       center[1] - radius:center[1] + radius]
-        print "IMAGE INFORMATION:"
-        print sliced_image
-        circle_area = [[sliced_image[idx, idy], idx, idy] for idx in range(2 * radius)
-                       for idy in range(2 * radius) if self._circle_filter(idx, idy)]
-        max_pixel = max(circle_area)
-        corrected_point = max_pixel[1]+ center[0], max_pixel[2]+center[1]
+        image = self.image
+        center = point
+
+        image_array = sitk.GetArrayFromImage(image)
+        cropped_image = _crop_image(image_array, center, radius, circle=True)
+        indices_of_max_value = np.argwhere(cropped_image == np.amax(cropped_image))
+        corrected_point = [indices_of_max_value[0][0] + point[0], indices_of_max_value[0][1] + point[1]]
+
         return corrected_point
 
-    def _circle_filter(self, x, y):
-        r = self._max_seed_correction_radius_in_image_coordinates_in_pixel
-        if np.sqrt(x ** 2 + y ** 2) < r:
-            return True
-        else:
-            return False
+
+def _circle_filter(x, y, r):
+    if x ** 2 + y ** 2 <= r ** 2:
+        return 1
+    else:
+        return 0
+
+
+def _crop_image(image_array, center, radius, circle=False):
+    c1, c2 = center
+    b_pad = np.pad(image_array, radius, 'constant', constant_values=0)
+    return_ = b_pad[c1:c1 + 2 * radius + 1, c2:c2 + 2 * radius + 1]
+    if circle:
+        return_ = [[value * _circle_filter(row_lv - radius, col_lv - radius, radius)
+                    for col_lv, value in enumerate(row)]
+                   for row_lv, row in enumerate(return_)]
+        return_ = np.array(return_)
+    return return_
+
+
+def _construct_ray_from_half_rays(front_ray_indices, back_ray_indices, point):
+    center_point_index = [int(point[0]), int(point[1])]
+    ray = list(reversed(back_ray_indices)) + [center_point_index] + front_ray_indices
+    return ray
+
+
+def _read_image(image_file):
+    """Reading image file """
+    image_file_reader = sitk.ImageFileReader()
+    image_file_reader.SetFileName(image_file)
+    image = image_file_reader.Execute()
+    return image

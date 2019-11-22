@@ -82,7 +82,7 @@ class Am:
                         data_section = True
                         continue
                     if data_section and line != '\n':
-                        d = _read_numbers_in_line(line)
+                        d = read_numbers_in_line(line)
                         data.append(d)
                     elif data_section and line == '\n':
                         data_section = False
@@ -227,7 +227,7 @@ class Amira_utils:
         pass
 
 
-def _read_numbers_in_line(line):
+def read_numbers_in_line(line):
     """
     Find numbers of in a line, the matches is a list contains
     the numbers that the regex command matches in the line.
@@ -248,6 +248,6 @@ def _read_numbers_in_line(line):
     """
     matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+|\-?\d+[e]?', line)
     if not matches:
-        raise RuntimeError("Expected number in line {} but did not _get_transformation_matrix_from_aligned_point any".format(line))
+        raise RuntimeError("Expected number in line {} but did not set_transformation_matrix_explicitly any".format(line))
     data = map(float, matches)
     return data

@@ -20,42 +20,27 @@ Tests
 - The test functions are inside the test.py. One can also use them as example of how to use the functions.
 
 """
-import re
+import IO
+import lib.reader as reader
 import numpy as np
 
 
-class Data:
-
-    def __init__(self, coordinate_2d=None, coordinate=None, coordinate_with_radius=None, pixel_coordinate=None,
-                 image_coordinate_2d=None):
-        self.coordinate_2d = coordinate_2d  # TYPE: 2d list of floats
-        self.image_coordinate_2d = image_coordinate_2d  # TYPE: 2d list of floats, but converted in the unit of the
-        # image.
-        self.coordinate = coordinate  # TYPE: 3d list of floats
-        self.coordinate_with_radius = coordinate_with_radius  # TYPE: 4d list of floats
-        self.pixel_coordinate = pixel_coordinate  # TYPE: 2d list of integers
-
-
 class InferMorphologyTransformation:
-    def __init__(self, src_morphology=None, dst_morphology=None, input_path=None, alignment_matrix=None, matrix=None,
+    def __init__(self, src_points=None, dst_points=None, input_path=None, alignment_matrix=None, matrix=None,
                  points=None):
         self.input_path = input_path
-        self.alignment_matrix = alignment_matrix
         self.matrix = matrix
-        self.src_morphology = src_morphology
-        self.dst_morphology = dst_morphology
+        self.src_points = src_points
+        self.dst_points = dst_points
         self.points = points
         self.transformed_points = None
-        self.converted_points = None
 
-    def _read_transformation_matrix_from_am(self, input_path=None):
+    def set_transformation_matrix_from_am_file(self):
         """
         This method can extract the amira transformation matrix written in am file.
 
         """
-        if input_path is None:
-            input_path = self.input_path
-            assert input_path
+        input_path = self.input_path
 
         matrix = []
         vector = []
@@ -64,31 +49,45 @@ class InferMorphologyTransformation:
             lines = f.readlines()
             for idx, line in enumerate(lines):
                 if line.rfind("TransformationMatrix") > -1:
-                    matches = re.findall('-?\d+\.\d+|-?\d+', line)
-                    vector = map(float, matches)
+                    vector = IO.read_numbers_in_line(line)
             for i in range(4):
                 for j in range(4):
                     k = j + i * 4
                     row.append(vector[k])
                 matrix.append(row)
                 row = []
-        self.alignment_matrix = matrix
-        return self.alignment_matrix
+        self.matrix = matrix
 
-    def _get_transformation_matrix_from_aligned_point(self, src_points=None, dst_point=None):
+    def set_transformation_matrix_from_landmark_file(self, input_path=None):
+        """
+        This method can extract the amira transformation matrix written in am file.
+
+        """
+        if input_path is None:
+            input_path = self.input_path
+            assert input_path
+        pair_landmark_points = reader.read_landmark_file(input_path)
+        pair_landmark_points = [list(plp) for plp in pair_landmark_points]
+
+        points_system_1 = pair_landmark_points[::2]
+        points_system_2 = pair_landmark_points[1::2]
+
+        self.set_transformation_matrix_explicitly(points_system_1, points_system_2)
+
+    def set_transformation_matrix_explicitly(self, src_points=None, dst_points=None):
         """
         This function will calculate the affine transformation matrix from
         8 points (4 source points and 4 destination points)
 
         """
         if src_points is None:
-            src_points = self.src_morphology
+            src_points = self.src_points
             assert src_points
         if src_points is None:
-            dst_point = self.dst_morphology
-            assert dst_point
+            dst_points = self.dst_points
+            assert dst_points
 
-        dst = dst_point
+        dst = dst_points
         src = src_points
 
         x = np.transpose(np.matrix([src[0], src[1], src[2], src[3]]))
@@ -101,19 +100,13 @@ class InferMorphologyTransformation:
 
         matrix = y * x.I
         self.matrix = matrix
-        return self.matrix
 
-    def transform_points(self, points=None, matrix=None):
+    def execute_transformation_matrix(self):
         """
         transforms the first 3 coordinates of the points.
         """
-        if points is None:
-            points = self.points
-            assert points
-
-        if matrix is None:
-            matrix = self.matrix
-            assert matrix
+        points = self.points
+        matrix = self.matrix
 
         transformed_points = []
         for point4D in points:
@@ -126,7 +119,6 @@ class InferMorphologyTransformation:
             transformed_points.append(p_listed[0:3] + point4D[3:])
 
         self.transformed_points = transformed_points
-        return self.transformed_points
 
 
 class ConvertPoints:
@@ -148,8 +140,9 @@ class ConvertPoints:
         """
         Converted points from coordinate_2d to image_coordinate_2d
 
-        :param coordinate_2d: TYPE: transformation.Data.coordinate_2d
-        :return: image_coordinate_2d: TYPE: transformation.Data.image_coordinate_2d
+        :param coordinate_2d: TYPE: coordinate_2d
+        :return: image_coordinate_2d: TYPE: 2d list of floats, but converted in the unit of the image.
+
         """
         points = coordinate_2d
         scaling = [1.0 / self.x_res, 1.0 / self.y_res, 1.0 / self.z_res]
@@ -159,11 +152,11 @@ class ConvertPoints:
         """
         Converted points from image_coordinate_2d to coordinate_2d
 
-        :param coordinate_2d: TYPE: transformation.Data.image_coordinate_2d
-        :return: image_coordinate_2d: TYPE: transformation.Data.coordinate_2d
+        :param image_coordinate_2d: TYPE: 2d list of floats, but converted in th
+        :return: coordinate_2d: TYPE: 2d list of floats
         """
         points = image_coordinate_2d
-        scaling = [1.0 / self.x_res, 1.0 / self.y_res, 1.0 / self.z_res]
+        scaling = [self.x_res, self.y_res, self.z_res]
         return _scaling(points, scaling)
 
 
@@ -182,5 +175,6 @@ def _scaling(points, scaling):
     return converted_points
 
 
-def get_distance(point_1, point_2):
-    return np.sqrt((point_1[0] - point_2[0]) ** 2 + (point_1[1] - point_2[1]) ** 2)
+def get_distance(p1, p2):
+    assert(len(p1) == len(p2))
+    return np.sqrt(sum((pp1-pp2)**2 for pp1, pp2 in zip(p1, p2)))
