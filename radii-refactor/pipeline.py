@@ -1,5 +1,5 @@
 import os
-import radii as radi
+import thickness as radi
 import transformTools as tr
 import re
 import time
@@ -170,7 +170,7 @@ class RadiiPipeline:
         self.writeUncertainties()
 
     def readExtractedRadii(self):
-        '''will hanld reading ampoints with radii and uncertainties for diff. tresholds'''
+        '''will hanld reading ampoints with thicknesses and uncertainties for diff. tresholds'''
         print(self.amOutput025)
         self.allAmPointsWithRadius025, self.points025 = tr.read.multipleAmFiles(self.amOutput025)
         self.allAmPointsWithRadius050, self.points050 = tr.read.multipleAmFiles(self.amOutput050)
@@ -191,7 +191,7 @@ class RadiiPipeline:
         return radi.analysisTools.allData(amTrFolder, self)
 
     # def allData(self):
-    #     # reading extracted radii for the tresholds 025, 050, and 075
+    #     # reading extracted thicknesses for the tresholds 025, 050, and 075
     #     # from their corresponding folder and files, and saving them in arrays again.
     #     colNames = ["x", "y", "z", "slice", "025", "050", "075"]
     #     am025Paths = [self.amOutput025 + amFile for amFile in os.listdir(self.amOutput025) if amFile.endswith(".am")]
@@ -229,7 +229,7 @@ class RadiiPipeline:
         """
         find the transformation between amFile and HocFile.
         inputs:
-        1. amWithRad: final Provided amFile which contains the radii of points.
+        1. amWithRad: final Provided amFile which contains the thicknesses of points.
         2. spanFactor: Default value is 10.0, it will adjust the choosing of the edges by a span.
         3. addRadii: if it provided False it will not go to the step finding the pairs bbetween transformedPoints
         and HocPoints, this will lead to faster run for experimenting the transformion quality.

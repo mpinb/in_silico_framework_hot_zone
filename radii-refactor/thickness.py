@@ -1,8 +1,8 @@
 """
-radii Module
+Thickness Module
 
 ==========
-This module contains methods to do extract radii from image.
+This module contains methods to do extract thicknesses from image.
 
 
 Capabilities:
@@ -27,16 +27,14 @@ import SimpleITK as sitk
 import transformation as tr
 
 
-class Radius_extractor:
+class Thickness_extractor:
     def __init__(self, points, image_file, xy_resolution=0.092, z_resolution=0.5, ray_length_front_to_back_in_micron=20,
                  number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=10):
-        """ This is the main method for extracting radii
+        """ This is the main method for extracting Thickness
         - Inputs:
             1. points: must be in the type transformation.Data.coordinate_2d, so they are a list of
             2d values in micrometer
-            2. image is a tif file with the relative resolution of xy_resolution to the points
-             which are in micrometer
-
+            2. Image is the path to tif file with a pixel size of xy_resolution.
             3. xy_resolution: pixelSize in micrometers as acquired by the microscope in one optical section.
             4. z_resolution: z distance in micrometers between optical sections
             5. ray_length_front_to_back_in_micron: maximum distance from the seed point considered in micrometer.
@@ -69,7 +67,7 @@ class Radius_extractor:
     def get_all_data_by_points(self):
         """
         This is the main method of the class.
-        To extract the radius of points from the image, after initiating the class, this method need to be called.
+        To extract the thicknesses of points from the image, after initiating the class, this method need to be called.
 
         """
 
@@ -84,21 +82,23 @@ class Radius_extractor:
 
     def get_all_data_by_point(self, point):
         """
+        Computes coordinates of rays and intensity profiles for one point.
+
         :param point: The TYPE Must be transformation.coordinate_2d.
         so the point is in Micrometer unit.
         :return: A dictionary of points as keys and all_data as the value.
         all_data itself is a dictionary of:
-        1. back_profile, 2. front_profile, 3. radii_list,
-        4. min_radius, 5. back_contour_index, 6. front_contour_index,
+        1. back_profile, 2. front_profile, 3. thicknesses_list,
+        4. min_thickness, 5. back_contour_index, 6. front_contour_index,
         7. contour_list, 8. rays_intensity_profile, 9. rays_indices, 10. selected_profile_index
 
         """
         if self._max_seed_correction_radius_in_image_coordinates:
             point = self._correct_seed(point)
         all_data = {"seed_corrected_point": point}
-        radii_list = []
-        min_radius = np.Inf
-        radius = 0
+        thicknesses_list = []
+        min_thickness = np.Inf
+        thickness = 0
         contour_list = []
         rays_intensity_profile = []
         rays_indices = []
@@ -128,19 +128,19 @@ class Radius_extractor:
             all_data["back_contour_index"] = back_contour_index
             all_data["front_contour_index"] = front_contour_index
             if len(back_contour_index) == 2 and len(front_contour_index) == 2:
-                radius = tr.get_distance(back_contour_index, front_contour_index)
+                thickness = tr.get_distance(back_contour_index, front_contour_index)
             contour_list.append([back_contour_index, front_contour_index])
 
-            radii_list.append(radius)
+            thicknesses_list.append(thickness)
 
-            if radius < min_radius:
-                all_data["min_radius"] = radius
+            if thickness < min_thickness:
+                all_data["min_thickness"] = thickness
                 all_data["selected_ray_index"] = i
 
-        # assert (min_radius < 100)
+        # assert (min_thickness < 100)
         contour_list.append(contour_list)
         all_data["contour_list"] = contour_list
-        all_data["radii_list"] = radii_list
+        all_data["thicknesses_list"] = thicknesses_list
         return all_data
 
     def get_intensity_profile_from_ray_indices(self, ray_indices):
@@ -153,7 +153,7 @@ class Radius_extractor:
                 intensity_value = image.GetPixel(pixel)
             except RuntimeError as error:
                 warnings.warn(error)
-                intensity_value = 0.0
+                intensity_value = 0
             profile_values.append(intensity_value)
         return profile_values
 
@@ -164,7 +164,7 @@ class Radius_extractor:
             point_value = image.GetPixel([int(point[0]), int(point[1])])
         except RuntimeError as error:
             warnings.warn("Point outside the image! Assuming intensity = 0")
-            point_value = 0.0
+            point_value = 0
 
         # pointHalfValue = point_value/2.0
         point_threshold_value = point_value * self.threshold_percentage
@@ -273,6 +273,13 @@ def _crop_image(image_array, center, radius, circle=False):
 
 
 def _construct_ray_from_half_rays(front_ray_indices, back_ray_indices, point):
+    """puts together two half rays and center point and returns full ray.
+
+    front_ray_indices: List of lists of two integers reflecting the x-y-pixel position for the front_ray
+    back_ray_indices: as above, for the back_ray
+    point: center point of the ray (list of two integers)
+
+    """
     center_point_index = [int(point[0]), int(point[1])]
     ray = list(reversed(back_ray_indices)) + [center_point_index] + front_ray_indices
     return ray

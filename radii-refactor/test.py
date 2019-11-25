@@ -6,7 +6,7 @@ import os
 import numpy as np
 
 import IO
-import radii as rad
+import thickness as th
 import SimpleITK as sitk
 from definitions import ROOT_DIR
 
@@ -74,14 +74,14 @@ def __test_am_write():
 
 def __test_correct_seed():
     print "***********"
-    print "TEST radii._correct_seed() method:"
+    print "TEST thicknesses._correct_seed() method:"
     print "***********"
     # image point and its value, extracted using ImageJ:
     # x = 2400, y = 2364, value = 150
-    # the maximum value in a area of radius 10 micron is 181 at [2403, 2447]
+    # the maximum value in a area of thickness 10 micron is 181 at [2403, 2447]
     image_point = [2400, 2364]
     image_file = os.path.join(ROOT_DIR, 'test_files/S13_max_z_projection.tif')
-    rx_object = rad.Radius_extractor([], image_file)
+    rx_object = th.Thickness_extractor([], image_file)
     corrected_point = rx_object._correct_seed(image_point)
     print "The _correct_seed function correct the point [2400, 2364] to  [2403, 2447]:"
     if corrected_point == [2403, 2447]:
@@ -91,10 +91,10 @@ def __test_correct_seed():
 
     a = [[1, 2, 3, 4, 5], [2, 3, 4, 5, 6], [3, 4, 5, 6, 7]]
     a = np.array(a)
-    np.testing.assert_array_almost_equal(rad._crop_image(a, (0, 0), 0), np.array([[1]]))
-    np.testing.assert_array_almost_equal(rad._crop_image(a, (0, 0), 1), np.array([[0, 0, 0], [0, 1, 2], [0, 2, 3]]))
-    np.testing.assert_array_almost_equal(rad._crop_image(a, (0, 4), 1), np.array([[0, 0, 0], [4, 5, 0], [5, 6, 0]]))
-    np.testing.assert_array_almost_equal(rad._crop_image(a, [1, 2], 1, circle=True),
+    np.testing.assert_array_almost_equal(th._crop_image(a, (0, 0), 0), np.array([[1]]))
+    np.testing.assert_array_almost_equal(th._crop_image(a, (0, 0), 1), np.array([[0, 0, 0], [0, 1, 2], [0, 2, 3]]))
+    np.testing.assert_array_almost_equal(th._crop_image(a, (0, 4), 1), np.array([[0, 0, 0], [4, 5, 0], [5, 6, 0]]))
+    np.testing.assert_array_almost_equal(th._crop_image(a, [1, 2], 1, circle=True),
                                          np.array([[0, 3, 0], [3, 4, 5], [0, 5, 0]]))
 
 
@@ -105,6 +105,6 @@ __test_am_read()
 __test_am_write()
 
 print "----------"
-print "TEST radii.py"
+print "TEST thicknesses.py"
 print "----------"
 __test_correct_seed()

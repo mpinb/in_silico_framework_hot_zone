@@ -21,7 +21,6 @@ Tests
 
 """
 import IO
-import lib.reader as reader
 import numpy as np
 
 
@@ -66,7 +65,7 @@ class InferMorphologyTransformation:
         if input_path is None:
             input_path = self.input_path
             assert input_path
-        pair_landmark_points = reader.read_landmark_file(input_path)
+        pair_landmark_points = IO.read_landmark_file(input_path)
         pair_landmark_points = [list(plp) for plp in pair_landmark_points]
 
         points_system_1 = pair_landmark_points[::2]

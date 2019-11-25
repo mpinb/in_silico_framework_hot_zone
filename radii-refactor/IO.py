@@ -10,22 +10,22 @@ File extensions
 
 1. .am
 Capabilities:
-- Reading  all data point with their associated attribute (e.g. VertexLabels, thickness or radius)
-- Writing data points in 3d and their corresponding radius
+- Reading  all data point with their associated attribute (e.g. VertexLabels, thickness)
+- Writing data points in 3d and their corresponding thickness
 Limitations:
-- Not able to read other data than 3d positional points and their radius
+- Not able to read other data than 3d positional points and their thickness
 - Only able to read and write in ascii format (In this module in the class amira_utils the are methods one can use to
  convert amira binary format to ascii format, for more details look at the amira_utils class docstring)
 
 2 .hoc
 Capabilities:
-- Reading data points (point coordinates and their associated radius) of kind:
+- Reading data points (point coordinates and their associated thickness) of kind:
     1. ApicalDendrite
     2. BasalDendrite
     3. Dendrite
     4. Soma
 from the hoc file.
-- Writing data points (as kind of what it can read) in 3d and their associated radius
+- Writing data points (as kind of what it can read) in 3d and their associated thickness
 Limitations:
 - Not able to construct the tree structure from the hoc file.
 - Not able to read the white matter data.
@@ -43,8 +43,6 @@ Tests
 - The test functions are inside the test.py. One can also use them as example of how to use the functions.
 
 """
-
-from lib.reader import read_hoc_file
 import re
 import os
 from random import randrange
@@ -89,16 +87,10 @@ class Am:
                 self.all_data[cs] = data
         return self.all_data
 
-    def write(self, input_path=None, output_path=None, all_data=None):
+    def write(self):
         """
         Writing data from a dictionary into an am file.
         """
-        if input_path is None:
-            input_path = self.input_path
-        if output_path is None:
-            output_path = self.output_path
-        if all_data is None:
-            all_data = self.all_data
         self._write_from_dict()
 
     def _write_from_dict(self):
@@ -161,27 +153,25 @@ class Hoc:
             pts.extend(e.edgePts)
         self.all_data['all_points'] = pts
 
-    def update_radii(self, radii, input_path=None, output_path=None):
+    def update_thicknesses(self, thicknesses):
         """
-        # Writing radius of points to a specific hoc file.
+        # Writing thicknesses of points to a specific hoc file.
         # basically it do this: reading a file without the
-        # radii of neuronal points and add the radius to them in another hoc file
+        # thicknesses of neuronal points and add the thickness to them in another hoc file
         
         Inputs:
-        - 1. radii: A list of radii, which are floats values, the order of 
-        radii list must be match with the oder of self.profile_data["points"]
+        - 1. thicknesses: A list of thicknesses, which are floats values, the order of
+        thicknesses list must be match with the oder of self.profile_data["points"]
         
         - 2. input_path, if not given it will use self.input_path, the method will use this 
-        as a sample hoc file to create another Hoc file with radii added to the corresponding points 
+        as a sample hoc file to create another Hoc file with thicknesses added to the corresponding points
         
         - 3. output_path: The path of the desired output hoc file. If not given, the method will use self.output_path.   
         - 3. output_path: The path of the desired output hoc file. If not given, the method will use self.output_path.
         """
 
-        if input_path is None:
-            input_path = self.input_path
-        if output_path is None:
-            output_path = self.output_path
+        input_path = self.input_path
+        output_path = self.output_path
 
         with open(input_path, 'r') as readHocFile:
             with open(output_path, 'w') as writeHocFile:
@@ -206,7 +196,7 @@ class Hoc:
 
                     if (pt3daddCommand > -1) and neuron_section:
 
-                        hocPoint = radii[in_neuron_line_number]
+                        hocPoint = thicknesses[in_neuron_line_number]
 
                         line = line.replace("pt3dadd", "")
                         matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
@@ -251,3 +241,188 @@ def read_numbers_in_line(line):
         raise RuntimeError("Expected number in line {} but did not set_transformation_matrix_explicitly any".format(line))
     data = map(float, matches)
     return data
+
+
+class Edge(object):
+    '''
+    Edge object contains list of points,
+    diameter at each point, label,
+    string hocLabel, parentID
+    Used during reading of hoc files
+    '''
+
+    def is_valid(self):
+        if not self.label:
+            self.valid = False
+            return False
+        if not self.hocLabel:
+            self.valid = False
+            return False
+        if not self.edgePts:
+            self.valid = False
+            return False
+        self.valid = True
+        return True
+
+
+def read_hoc_file(fname=''):
+    if not fname.endswith('.hoc') and not fname.endswith('.HOC'):
+        raise IOError('Input file is not a .hoc file!')
+
+    with open(fname, 'r') as neuronFile:
+        print "Reading hoc file", fname
+        #        cell = co.Cell()
+        #        simply store list of edges
+        #        cell is parsed in CellParser
+        cell = []
+
+        '''
+        set up all temporary data structures
+        that hold the cell morphology
+        before turning it into a Cell
+        '''
+        tmpEdgePtList = []
+        tmpEdgePtCntList = []
+        tmpDiamList = []
+        tmpLabelList = []
+        tmpHocLabelList = []
+        segmentInsertOrder = {}
+        segmentParentMap = {}
+        segmentConMap = {}
+        readPts = edgePtCnt = insertCnt = 0
+
+        for line in neuronFile:
+            if line:
+                '''skip comments'''
+                if '/*' in line and '*/' in line:
+                    continue
+                #                    '''ignore daVinci registration'''
+                #                    if '/* EOF */' in line:
+                #                        break
+
+                '''read pts belonging to current segment'''
+                if readPts:
+                    if 'Spine' in line:
+                        continue
+                    if 'pt3dadd' in line:
+                        ptStr = line.partition('(')[2].partition(')')[0]
+                        ptStrList = ptStr.split(',')
+                        tmpEdgePtList.append([float(ptStrList[0]), float(ptStrList[1]), float(ptStrList[2])])
+                        tmpDiamList.append(float(ptStrList[3]))
+                        edgePtCnt += 1
+                        continue
+                    elif 'pt3dadd' not in line and edgePtCnt:
+                        readPts = 0
+                        tmpEdgePtCntList.append(edgePtCnt)
+                        edgePtCnt = 0
+
+                '''determine type of section'''
+                '''and insert section name'''
+                if 'soma' in line and 'create' in line:
+                    tmpLabelList.append('Soma')
+                    readPts = 1
+                    edgePtCnt = 0
+                    tmpLine = line.strip('{} \t\n\r')
+                    segmentInsertOrder[tmpLine.split()[1]] = insertCnt
+                    tmpHocLabelList.append(tmpLine.split()[1])
+                    insertCnt += 1
+                if ('dend' in line or 'BasalDendrite' in line) and 'create' in line:
+                    tmpLabelList.append('Dendrite')
+                    readPts = 1
+                    edgePtCnt = 0
+                    tmpLine = line.strip('{} \t\n\r')
+                    segmentInsertOrder[tmpLine.split()[1]] = insertCnt
+                    tmpHocLabelList.append(tmpLine.split()[1])
+                    insertCnt += 1
+                if 'apical' in line and 'create' in line:
+                    tmpLabelList.append('ApicalDendrite')
+                    readPts = 1
+                    edgePtCnt = 0
+                    tmpLine = line.strip('{} \t\n\r')
+                    segmentInsertOrder[tmpLine.split()[1]] = insertCnt
+                    tmpHocLabelList.append(tmpLine.split()[1])
+                    insertCnt += 1
+                if 'axon' in line and 'create' in line:
+                    tmpLabelList.append('Axon')
+                    readPts = 1
+                    edgePtCnt = 0
+                    tmpLine = line.strip('{} \t\n\r')
+                    segmentInsertOrder[tmpLine.split()[1]] = insertCnt
+                    tmpHocLabelList.append(tmpLine.split()[1])
+                    insertCnt += 1
+
+                '''determine connectivity'''
+                if 'connect' in line:
+                    #                        if 'soma' in line:
+                    #                            segmentParentMap[insertCnt-1] = 'soma'
+                    #                            continue
+                    splitLine = line.split(',')
+                    parentStr = splitLine[1].strip()
+                    name_end = parentStr.find('(')
+                    conEnd = parentStr.find(')')
+                    segmentParentMap[insertCnt - 1] = parentStr[:name_end]
+                    segmentConMap[insertCnt - 1] = float(parentStr[name_end + 1:conEnd])
+
+        #            end for loop
+
+        '''make sure EOF doesn't mess anything up'''
+        if len(tmpEdgePtCntList) == len(tmpLabelList) - 1 and edgePtCnt:
+            tmpEdgePtCntList.append(edgePtCnt)
+
+        '''put everything into Cell'''
+        ptListIndex = 0
+        if len(tmpEdgePtCntList) == len(tmpLabelList):
+            for n in range(len(tmpEdgePtCntList)):
+                #                data belonging to this segment
+                thisSegmentID = tmpLabelList[n]
+                thisNrOfEdgePts = tmpEdgePtCntList[n]
+                thisSegmentPtList = tmpEdgePtList[ptListIndex:ptListIndex + thisNrOfEdgePts]
+                thisSegmentDiamList = tmpDiamList[ptListIndex:ptListIndex + thisNrOfEdgePts]
+                ptListIndex += thisNrOfEdgePts
+                #                create edge
+                segment = Edge()
+                segment.label = thisSegmentID
+                segment.hocLabel = tmpHocLabelList[n]
+                segment.edgePts = thisSegmentPtList
+                segment.diameterList = thisSegmentDiamList
+                if thisSegmentID != 'Soma':
+                    segment.parentID = segmentInsertOrder[segmentParentMap[n]]
+                    segment.parentConnect = segmentConMap[n]
+                else:
+                    segment.parentID = None
+                if segment.is_valid():
+                    cell.append(segment)
+                else:
+                    raise IOError('Logical error reading hoc file: invalid segment')
+
+        else:
+            raise IOError('Logical error reading hoc file: Number of labels does not equal number of edges')
+
+        return cell
+
+def read_landmark_file(landmarkFilename):
+    '''
+    returns list of (x,y,z) points
+    '''
+    if not landmarkFilename.endswith('.landmarkAscii'):
+        errstr = 'Wrong input format: has to be landmarkAscii format'
+        raise RuntimeError(errstr)
+
+    landmarks = []
+    with open(landmarkFilename, 'r') as landmarkFile:
+        readPoints = False
+        for line in landmarkFile:
+            stripLine = line.strip()
+            if not stripLine:
+                continue
+            if stripLine[:2] == '@1':
+                readPoints = True
+                continue
+            if readPoints:
+                splitLine = stripLine.split()
+                x = float(splitLine[0])
+                y = float(splitLine[1])
+                z = float(splitLine[2])
+                landmarks.append((x, y, z))
+
+    return landmarks
