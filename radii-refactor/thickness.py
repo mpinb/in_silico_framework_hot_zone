@@ -128,8 +128,9 @@ class Thickness_extractor:
             front_contour_index = self.get_contour_index(point, ray_indices[half_ray_length:ray_length])
             all_data["back_contour_index"] = back_contour_index
             all_data["front_contour_index"] = front_contour_index
-            if len(back_contour_index) == 2 and len(front_contour_index) == 2:
-                thickness = tr.get_distance(back_contour_index, front_contour_index)
+            assert (len(back_contour_index) == 2)
+            assert (len(front_contour_index) == 2)
+            thickness = tr.get_distance(back_contour_index, front_contour_index)
             contour_list.append([back_contour_index, front_contour_index])
 
             thicknesses_list.append(thickness)

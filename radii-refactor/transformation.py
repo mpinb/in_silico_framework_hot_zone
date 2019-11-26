@@ -24,17 +24,16 @@ import IO
 import numpy as np
 
 
-class InferMorphologyTransformation:
-    def __init__(self, src_points=None, dst_points=None, input_path=None, alignment_matrix=None, matrix=None,
-                 points=None):
-        self.input_path = input_path
-        self.matrix = matrix
-        self.src_points = src_points
-        self.dst_points = dst_points
-        self.points = points
+class AffineTransformation:
+    def __init__(self):
+        self.input_path = None
+        self.matrix = None
+        self.src_points = None
+        self.dst_points = None
+        self.points = None
         self.transformed_points = None
 
-    def set_transformation_matrix_from_am_file(self):
+    def set_transformation_matrix_by_am_file(self):
         """
         This method can extract the amira transformation matrix written in am file.
 
@@ -57,10 +56,18 @@ class InferMorphologyTransformation:
                 row = []
         self.matrix = matrix
 
-    def set_transformation_matrix_from_landmark_file(self, input_path=None):
+    def set_transformation_matrix_by_landmark_file(self, input_path=None):
         """
-        This method can extract the amira transformation matrix written in am file.
+        This method computes the transformation based on a landmark file containing 8 points.
+        The points are alternating between first and second coordinate system. Each pair of points is
+        set on corresponding structures. E.g. in the case of aligning morphologies,
+        you would set the landmarks as follows:
 
+        (1) On a characteristic point on the morphology in coordinate system 1
+        (2) On the corresponding point on the morphology in coordinate system 2
+        (1) On another characteristic point on the morphology in coordinate system 1
+        (2) On the corresponding point on the morphology in coordinate system 2
+            ... until you have 4 pairs of points.
         """
         if input_path is None:
             input_path = self.input_path
@@ -71,23 +78,17 @@ class InferMorphologyTransformation:
         points_system_1 = pair_landmark_points[::2]
         points_system_2 = pair_landmark_points[1::2]
 
-        self.set_transformation_matrix_explicitly(points_system_1, points_system_2)
+        self.set_transformation_matrix_by_aligned_points(points_system_1, points_system_2)
 
-    def set_transformation_matrix_explicitly(self, src_points=None, dst_points=None):
+    def set_transformation_matrix_by_aligned_points(self, src_points, dst_points):
         """
         This function will calculate the affine transformation matrix from
         8 points (4 source points and 4 destination points)
 
         """
-        if src_points is None:
-            src_points = self.src_points
-            assert src_points
-        if src_points is None:
-            dst_points = self.dst_points
-            assert dst_points
 
-        dst = dst_points
-        src = src_points
+        dst, self.dst_points = dst_points
+        src, self.src_points = src_points
 
         x = np.transpose(np.matrix([src[0], src[1], src[2], src[3]]))
         y = np.transpose(np.matrix([dst[0], dst[1], dst[2], dst[3]]))
@@ -100,12 +101,13 @@ class InferMorphologyTransformation:
         matrix = y * x.I
         self.matrix = matrix
 
-    def execute_transformation_matrix(self):
-        """
-        transforms the first 3 coordinates of the points.
-        """
-        points = self.points
+    def transform_points(self, points, forwards=True):
+        """Applies transformation on points
+        forwards: True: transforms from coordinate system 1 to coordinate system 2
+        False: transforms from coordinate system 2 to coordinate system 1"""
         matrix = self.matrix
+        if forwards is False:
+            matrix = np.linalg.inv(self.matrix)
 
         transformed_points = []
         for point4D in points:
@@ -175,5 +177,5 @@ def _scaling(points, scaling):
 
 
 def get_distance(p1, p2):
-    assert(len(p1) == len(p2))
-    return np.sqrt(sum((pp1-pp2)**2 for pp1, pp2 in zip(p1, p2)))
+    assert (len(p1) == len(p2))
+    return np.sqrt(sum((pp1 - pp2) ** 2 for pp1, pp2 in zip(p1, p2)))

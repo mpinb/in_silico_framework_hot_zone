@@ -1,8 +1,5 @@
-import os
-from random import randrange
-
 import thickness as th
-import transformTools as tr
+import transformation as tr
 import IO
 import utils as u
 
@@ -15,7 +12,9 @@ class SliceData:
         self.output_path = None
         self.am_object = None
         self.points = None
+        self.transformed_points = None
         self.slice_thicknesses_object = None
+        self.transformed_points = None
 
     def set_am_file_path(self, path):
         self.am_file_path = path
@@ -52,14 +51,15 @@ class SliceData:
 
 class ExtractThicknessPipeline:
     def __init__(self):
+        # ---- files and folders
         self.hoc_file = None
         self.hoc_object = None
         self.am_paths = []
         self.tif_paths = []
         self._3D = False
         self.output_folder = None
-        self.thresholds_list = [0.5]
         # --- thickness extractor class parameters:
+        self.thresholds_list = [0.5]
         self.xy_resolution = None
         self.z_resolution = None
         self.number_of_rays = None
@@ -67,6 +67,11 @@ class ExtractThicknessPipeline:
         self.max_seed_correction_radius_in_micron = None
         # --- objects and dicts
         self.am_tif = {}
+        self.all_slices = {}
+        # --- transformation
+        # pair_points are set/list/dict of 4 points from
+        self.bijective_points = None
+        self.transformation_object = None
 
     def set_am_paths_by_list(self, am_paths_list):
         self.am_paths = am_paths_list
@@ -118,10 +123,21 @@ class ExtractThicknessPipeline:
         self.ray_length_front_to_back_in_micron = ray_length_front_to_back_in_micron
         self.max_seed_correction_radius_in_micron = max_seed_correction_radius_in_micron
 
+    def set_bijective_points_by_list(self, bi_points):
+        self.bijective_points = bi_points
+
+    def set_bijective_points_by_file(self, input_path):
+        self.bijective_points = IO.read_landmark_file(input_path)
+
+    def set_bijective_points_automatically(self):
+        """ TODO: This function will call the poor function that we developed and not working well"""
+
     def run(self):
         self._initialize_project()
         self._extract_thicknesses()
-        # self._transform_points()
+        self._transform_points()
+        self._update_hoc_file_with_thicknesses()
+        self.compute_all_data_table()
 
     def _initialize_project(self):
 
@@ -149,6 +165,21 @@ class ExtractThicknessPipeline:
                                      s.number_of_rays, threshold,
                                      s.max_seed_correction_radius_in_micron)
                 slice_object.write_output()
+                self.all_slices[slice_object.slice_name] = slice_object
 
-    # def _transform_points(self):
-    #     pass
+    def _transform_points(self):
+        transformation_object = tr.AffineTransformation()
+        transformation_object.set_transformation_matrix_by_aligned_points(self.bijective_points[:3],
+                                                                          self.bijective_points[3:])
+        for slice_name in self.all_slices:
+            slice_object = self.all_slices[slice_name]
+            transformation_object.transformed_points(slice_object.points, True)
+            slice_object.transformed_points = transformation_object.transformed_points
+
+        self.transformation_object = transformation_object
+
+    def _update_hoc_file_with_thicknesses(self):
+        pass
+
+    def compute_all_data_table(self):
+        pass

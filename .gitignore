@@ -68,3 +68,6 @@ getting_started/functional_constraints/network.param
 
 # Code Recommenders
 .recommenders/
+
+# Virtual enviroments
+venv/

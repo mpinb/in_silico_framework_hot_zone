@@ -238,7 +238,7 @@ def read_numbers_in_line(line):
     """
     matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+|\-?\d+[e]?', line)
     if not matches:
-        raise RuntimeError("Expected number in line {} but did not set_transformation_matrix_explicitly any".format(line))
+        raise RuntimeError("Expected number in line {} but did not set_transformation_matrix_by_aligned_points any".format(line))
     data = map(float, matches)
     return data
 
