@@ -1,361 +1,154 @@
 import os
-import thickness as radi
+from random import randrange
+
+import thickness as th
 import transformTools as tr
-import re
-import time
-import dask
+import IO
+import utils as u
 
 
-def convert_point(p, x_res=0.092, y_res=0.092, z_res=1.0):
-    '''todo: use this function consistently to convert
-    pixel locations to coordinates!'''
-    out = []
-    scaling = [x_res, y_res, z_res]
-    for lv, pp in enumerate(p):
-        try:
-            s = scaling[lv]
-        except IndexError:
-            s = 1
-        out.append(pp * s)
-    return out
+class SliceData:
+    def __init__(self):
+        self.slice_name = None
+        self.am_file_path = None
+        self.image_file_path = None
+        self.output_path = None
+        self.am_object = None
+        self.points = None
+        self.slice_thicknesses_object = None
 
+    def set_am_file_path(self, path):
+        self.am_file_path = path
 
-@dask.delayed
-def _paralellization_helper(radiiObject, amPth, imageFilePath, amOutput, postMeasurment='yes'):
-    radiiObject.exRadSets(amPth, imageFilePath, amOutput, postMeasurment='yes')
-    sliceName = getSliceName(amPth, imageFilePath)
-    print(sliceName)
-    radiiDetails = dict()
-    radiiDetails["Slice name"] = sliceName
+    def set_image_file_path(self, path):
+        self.image_file_path = path
 
-    orig_temp = radiiObject.radiusCalculator.orig_pointsWithIntensity
-    pm_temp = radiiObject.radiusCalculator.pm_pointsWithIntensity
-    ray_points = radiiObject.radiusCalculator.counterList
-    # cave: this needs to be moved to a place wherer we are aware of the x/y/z resolution!
-    # Here, the default (0.092 / 0.092 / 0.5) is used, but that might change from usecase to usecase.
+    def set_output_path(self, path):
+        self.output_path = path
 
-    orig_temp = map(lambda x: (convert_point(x[0]), x[1]), orig_temp)
-    pm_temp = map(lambda x: (convert_point(x[0]), x[1]), pm_temp)
+    def write_output(self):
+        self.am_object.write()
 
-    radiiDetails["Treshold"] = radiiObject.tresholdPercentage
-    radiiDetails["Inten. orig points"] = orig_temp
-    radiiDetails["Inten. post points"] = pm_temp
-    radiiDetails["Ray points"] = ray_points
-
-    return radiiDetails
-
-
-def getSliceName(amPth, imageFilePath):
-    am = os.path.basename(amPth)
-    imageName = os.path.basename(imageFilePath)
-    spatialGraphName = re.findall(r'[sS]\d+', am)[0]
-    sliceNumber = int(re.findall(r'\d+', spatialGraphName)[0])
-    if spatialGraphName in imageName:
-        return sliceNumber
-    else:
-        return "No name found"
-
-
-class RadiiPipeline:
-    """
-    Inputs:
-    1. amInputPathList: an array contains the paths of am files
-    2. maxZPathList: an array contains list of path of maxZ projection image files.
-    3. outputFolder: Is a path to the outputFolder that the final result will be written.
-    4. amWithRad: if provided then the class can be use to run the findTransformation method.
-
-    """
-
-    def __init__(self, amInputPathList, maxZPathList, hocFile, outputFolder, amWithRad="default"):
-        self.amInputPathList = amInputPathList
-        self.maxZPathList = maxZPathList
-        self.hocFile = hocFile
-        self.amWithRad = amWithRad
-        self.spanFactor = 10.0
-
-        self.outputDirectory = self.initOutputDirectory(outputFolder)
-
-        self.amWithErrorsDirectory = self.outputDirectory + "/amWithErrors/"
-        self.amOutput025 = self.outputDirectory + "/am025/"
-        self.amOutput050 = self.outputDirectory + "/am050/"
-        self.amOutput075 = self.outputDirectory + "/am075/"
-        self.hocFileOutput = self.outputDirectory + "/hocFileWithRad.hoc"
-        self.amWithUcrs = {}
-        self.points025 = {}
-        self.points050 = {}
-        self.points075 = {}
-        self.amPointsTransformed_hoc = []
-        self.am_hoc_pairs = []
-        self.trMatrix = []
-        self.delayeds = []
-
-    def runRayBurstOnSlices(self, tr025=True, tr050=True, tr075=True):
-        """
-        Will call the extrationRadii method for different Treshhold.
-        each tresholdPercentage can be optionally removed by making its parameter false:
-        like tr025 = Fales
-
-        """
-        self.createOutputDirectories()
-        return self.extractRadii(tr025, tr050, tr075)
-        res = self.hocFile
-        return res
-
-    def initOutputDirectory(self, folder):
-        """
-        The ouptut directory need to be initilize to have different folders for each tresholdPercentage.
-        if the folders are exist the function will not touch them
-        """
-        cellPath = os.path.dirname(os.path.dirname(self.amInputPathList[0]))
-        cellFolderName = os.path.basename(cellPath)
-        outputDirectory = folder + cellFolderName
-        if not (os.path.isdir(outputDirectory)):
-            os.mkdir(outputDirectory)
-        return outputDirectory
-
-    def createOutputDirectories(self):
-        '''will creat the output directory with the name of the cell'''
-
-        if not os.path.isdir(self.amWithErrorsDirectory):
-            os.mkdir(self.amWithErrorsDirectory)
-
-        if not os.path.isdir(self.amOutput025):
-            os.mkdir(self.amOutput025)
-
-        if not os.path.isdir(self.amOutput050):
-            os.mkdir(self.amOutput050)
-
-        if not os.path.isdir(self.amOutput075):
-            os.mkdir(self.amOutput075)
-
-    def extractRadii(self, tr025=True, tr050=True, tr075=True):
-        '''will handle the calling of exRadSets function for different tresholdPercentages '''
-        if not os.path.isdir(self.amWithErrorsDirectory):
-            os.mkdir(self.amWithErrorsDirectory)
-
-        delayeds = []
-        for idx, amPth in enumerate(self.amInputPathList):
-            am = os.path.basename(amPth)
-            spatialGraphName = re.findall(r'[sS]\d+', am)[0]
-            for imageFilePath in self.maxZPathList:
-                imageName = os.path.basename(imageFilePath)
-                if spatialGraphName in imageName:
-                    if (tr025):
-                        radi025 = radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.25)
-                        d = _paralellization_helper(radi025, amPth, imageFilePath, self.amOutput025,
-                                                    postMeasurment='yes')
-                        delayeds.append(d)
-
-                    if (tr050):
-                        radi050 = radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.5)
-                        d = _paralellization_helper(radi050, amPth, imageFilePath, self.amOutput050,
-                                                    postMeasurment='yes')
-                        delayeds.append(d)
-
-                    if (tr075):
-                        radi075 = radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.75)
-                        d = _paralellization_helper(radi075, amPth, imageFilePath, self.amOutput075,
-                                                    postMeasurment='yes')
-                        delayeds.append(d)
-
-                    # radi025.exRadSets(amPth, imageFilePath, self.amOutput025, postMeasurment='yes')
-
-                    break
-        return delayeds
-
-    def extractUncertainties(self):
-        '''extract uncertainties for diff. tresholds and add them to file by calling addUncertainties'''
-        self.readExtractedRadii()
-        self.amWithUcrs = radi.calcError.addUncertainties(self.points050, self.points025, self.points075)
-        self.writeUncertainties()
-
-    def readExtractedRadii(self):
-        '''will hanld reading ampoints with thicknesses and uncertainties for diff. tresholds'''
-        print(self.amOutput025)
-        self.allAmPointsWithRadius025, self.points025 = tr.read.multipleAmFiles(self.amOutput025)
-        self.allAmPointsWithRadius050, self.points050 = tr.read.multipleAmFiles(self.amOutput050)
-        self.allAmPointsWithRadius075, self.points075 = tr.read.multipleAmFiles(self.amOutput075)
-
-    def writeUncertainties(self):
-        '''will write uncertainties in the output files'''
-        for amInputPath in self.amInputPathList:
-            tr.write.multipleAmFilesWithRadiusAndUncertainty(amInputPath, self.amWithErrorsDirectory, self.amWithUcrs)
-
-    def getAmFileWithRad(self):
-        '''check if it need to ger amFile or not.'''
-        assert self.amWithRad != "Default"
-        amFile = self.amWithRad
-        return amFile
-
-    def dataAnalysis(self, amTrFolder):
-        return radi.analysisTools.allData(amTrFolder, self)
-
-    # def allData(self):
-    #     # reading extracted thicknesses for the tresholds 025, 050, and 075
-    #     # from their corresponding folder and files, and saving them in arrays again.
-    #     colNames = ["x", "y", "z", "slice", "025", "050", "075"]
-    #     am025Paths = [self.amOutput025 + amFile for amFile in os.listdir(self.amOutput025) if amFile.endswith(".am")]
-    #     am050Paths = [self.amOutput050 + amFile for amFile in os.listdir(self.amOutput050) if amFile.endswith(".am")]
-    #     am075Paths = [self.amOutput075 + amFile for amFile in os.listdir(self.amOutput075) if amFile.endswith(".am")]
-
-    #     for amPath in am050Paths:
-    #         am050_pointsWithRad = tr.read.am(amPath)
-    #         amFileName = os.path.basename(amPath)
-    #         sliceNumber = re.findall(r'[sS]\d+', amFileName)[0]
-    #         for imagePath in self.maxZPathList:
-    #             imageName = os.path.basename(imagePath)
-    #             if sliceNumber in imageName:
-    #                 sliceName = imageName
-    #                 break
-    #         point5d = [point4d.append(sliceName) for point4d in am050_pointsWithRad]
-
-    #     print(amPathsList)
-    #     # df = pandas.read_csv('hrdata.csv',
-    #     # names=['Employee', 'Hired', 'Salary', 'Sick Days'])
-    #     # df.to_csv('hrdata_modified.csv')
-
-    #         radi050=radi.exRadSets.RadiusCalculatorForManyFiles(tresholdPercentage=0.50)
-    #         for idx, amPth in enumerate(self.amInputPathList):
-    #             am = os.path.basename(amPth)
-    #             spatialGraphName = re.findall(r'[sS]\d+', am)[0]
-    #             for imageFilePath in self.maxZPathList:
-    #                 imageName = os.path.basename(imageFilePath)
-    #                 if spatialGraphName in imageName:
-    #                     radi050.exRadSets(amPth, imageFilePath, self.amOutput050, postMeasurment='yes')
-    #                     break
-
-    def findTransformation(self, amWithRad, spanFactor=10.0, addRadii=True, findingPairPoints=True, pairPoints=[]):
-
-        """
-        find the transformation between amFile and HocFile.
-        inputs:
-        1. amWithRad: final Provided amFile which contains the thicknesses of points.
-        2. spanFactor: Default value is 10.0, it will adjust the choosing of the edges by a span.
-        3. addRadii: if it provided False it will not go to the step finding the pairs bbetween transformedPoints
-        and HocPoints, this will lead to faster run for experimenting the transformion quality.
-        4. auto: If true the algorithm will find pairs of points between two morphologies automatically by itself.
-        otherwise it will use the pairPoints array as a parameter to find the transformation between two morphologies.
-        5. pairPoints: if you pass the auto false then you need to pass the pairPoints which you prepared manually before.
-        the pairpoints format is assume to be like below.
-        [[a1,b1], [a2,b2], [a3,b3], [a4,b4]]
-        a1 is the point number 1 from the morphology a, and b1 is a the point in morphology b which is corresponding
-        to point a1. You need to exactly prepare 4 points in morphology a and their corresponding points in morphology b.
-        outputs:
-        1. provide the final hocPointsWithRad if addRadii is true.
-        2. it will write the amTransformed and egAm and egHoc in text format files. These are by their order contain
-        the transformed am points, choosed am edges, and choosed hoc edges.
-
-        """
-
-        assert self.amWithRad != "Default"
-        if (findingPairPoints == False and pairPoints == []):
-            raise ValueError(
-                "When you adjust the input findingPairPoints) to false you need to provide the pairPoints Manuallly and pass it through the array pairPoints")
-
-        self.amWithRad = amWithRad
-        self.spanFactor = spanFactor
-
-        pointsWithRadius = tr.read.hocFileComplete(self.hocFile)
-        #  pointsWithRadius = tr.read.hocFileReduced(self.hocFile)
-        hocPointsSet = []
-        pairs = []
-
-        for el in pointsWithRadius:
-            hocPointsSet.append([el[0], el[1], el[2]])
-
-        amFile = self.amWithRad
-
-        amSet = radi.spacialGraph.getSpatialGraphPoints(amFile)
-
-        numberOfEdges = 2
-
-        src_hoc = []
-        dst_am = []
-
-        if (findingPairPoints):
-            matchedSet = tr.getDistance.matchEdges(hocPointsSet, amSet, numberOfEdges, spanFactor)
-
-            for point in matchedSet:
-                src_hoc.append(point[0].start)
-                src_hoc.append(point[0].end)
-
-                dst_am.append(point[1].start)
-                dst_am.append(point[1].end)
-
+    def set_slice_name(self, slice_name=None):
+        if slice_name is None:
+            self.slice_name = slice_name
         else:
-            src_hoc = pairPoints[1::2]
-            print(src_hoc)
-            dst_am = pairPoints[::2]
-            print("the dst_am file")
-            print(dst_am)
+            self.slice_name = u.get_slice_name(self.am_file_path, self.image_file_path)
 
-        print("In the calculations of the transformation matrix")
-        trMatrix2 = tr.exTrMatrix.getTransformation(dst_am, src_hoc)
+    def compute(self, xy_resolution, z_resolution,
+                ray_length_front_to_back_in_micron,
+                number_of_rays, threshold_percentage,
+                max_seed_correction_radius_in_micron):
+        self.am_object = IO.Am(self.am_file_path, self.output_path)
+        self.am_object.read()
+        self.points = self.am_object.all_data["points"]
+        slice_thicknesses_object = th.Thickness_extractor(self.points, self.image_file_path,
+                                                          xy_resolution, z_resolution,
+                                                          ray_length_front_to_back_in_micron,
+                                                          number_of_rays, threshold_percentage,
+                                                          max_seed_correction_radius_in_micron)
+        self.slice_thicknesses_object = slice_thicknesses_object
 
-        self.trMatrix = trMatrix2
-        print(amFile)
-        amPoints4D = tr.read.amFile(amFile)
 
-        print("Applying the transofrmation matrix to the initial am points")
-        trAmPoints4D = tr.exTrMatrix.applyTransformationMatrix(amPoints4D, trMatrix2)
+class ExtractThicknessPipeline:
+    def __init__(self):
+        self.hoc_file = None
+        self.hoc_object = None
+        self.am_paths = []
+        self.tif_paths = []
+        self._3D = False
+        self.output_folder = None
+        self.thresholds_list = [0.5]
+        # --- thickness extractor class parameters:
+        self.xy_resolution = None
+        self.z_resolution = None
+        self.number_of_rays = None
+        self.ray_length_front_to_back_in_micron = None
+        self.max_seed_correction_radius_in_micron = None
+        # --- objects and dicts
+        self.am_tif = {}
 
-        hocPointsComplete = tr.read.hocFileComplete(self.hocFile)
-        hocSet = []
-        for el in hocPointsComplete:
-            hocSet.append([el[0], el[1], el[2]])
+    def set_am_paths_by_list(self, am_paths_list):
+        self.am_paths = am_paths_list
 
-        self.amPointsTransformed_hoc = trAmPoints4D
+    def set_am_paths_by_folder(self, folder_path_to_am_files):
+        self.am_paths = u.get_files_by_folder(folder_path_to_am_files, file_extension="am")
 
-        print("In the process of finding pairs in between hoc file and the transformed points to add radi to hocpoint")
-        startTime = time.time()
-        if addRadii:
-            pairs = radi.addRadii.findPairs(trAmPoints4D, hocSet)
-            self.am_hoc_pairs = pairs
-        endTime = time.time()
-        print(endTime - startTime)
+    def set_am_paths_by_hx(self, folder_path_to_hx_file):
+        self.am_paths = u.get_am_paths_from_hx(folder_path_to_hx_file)
 
-        startTime = time.time()
-        hocWithRad = []
-        newHPoint = []
+    def set_output_path(self, path_to_output_folder):
+        self.output_folder = path_to_output_folder
+        if self.hoc_object is not None:
+            self.hoc_object.output_path = self.output_folder
 
-        for pair in pairs:
-            newHPoint = pair[1]
-            dual = pair[0]
-            newHPoint.append(dual[3])
-            hocWithRad.append(newHPoint)
-            newHPoint = []
+    def set_hoc_file(self, path_to_hoc_file):
+        self.hoc_file = path_to_hoc_file
+        if self.output_folder is None:
+            raise RuntimeError("Please first set_output_path")
+        else:
+            self.hoc_object = IO.Hoc(self.hoc_file,
+                                     self.output_folder + "/"
+                                     + u.get_file_name_from_path(self.hoc_file))
 
-        endTime = time.time()
-        print(endTime - startTime)
+    def set_tif_paths_by_list(self, tif_paths_list):
+        self.tif_paths = tif_paths_list
 
-        if (addRadii):
-            print("writing the final result in the output hocFile")
-            tr.write.hocFile(self.hocFile, self.hocFileOutput, hocWithRad)
+    def set_tif_paths_by_folder(self, folder_path_to_tif_files):
+        self.tif_paths = u.get_files_by_folder(folder_path_to_tif_files, file_extension="tif")
 
-        egHocFile = self.outputDirectory + '/egHoc.txt'
-        egAmFile = self.outputDirectory + '/egAm.txt'
-        with open(egHocFile, 'w') as f:
-            for idx in range(0, len(src_hoc) - 1, 2):
-                startPoint = src_hoc[idx]
-                endPoint = src_hoc[idx + 1]
-                f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
-                f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
+    def set_3d_tif_stack_by_folder(self, folder_path_to_3d_tif_files):
+        self.tif_paths = u.get_files_by_folder(folder_path_to_3d_tif_files, file_extension="tif")
+        self._3D = True
 
-        with open(egAmFile, 'w') as f:
-            for idx in range(0, len(dst_am) - 1, 2):
-                startPoint = dst_am[idx]
-                endPoint = dst_am[idx + 1]
-                f.write('{:f}\t{:f}\t{:f} \n'.format(startPoint[0], startPoint[1], startPoint[2]))
-                f.write('{:f}\t{:f}\t{:f} \n'.format(endPoint[0], endPoint[1], endPoint[2]))
+    def set_thresholds(self, thresholds_list):
+        """
+        :param thresholds_list: A list contains thresholds values for extracting thicknesses
+        :return: A setter function, No return, if not set the default value of 0.5 will be used
+        """
+        self.thresholds_list = thresholds_list
 
-        amTrFile = self.outputDirectory + '/amTransformed.txt'
-        with open(amTrFile, 'w') as f:
-            for it in trAmPoints4D:
-                f.write('{:f}\t{:f}\t{:f} \n'.format(it[0], it[1], it[2]))
-        return 0
+    def set_thickness_extractor_parameters(self, xy_resolution,
+                                           z_resolution, number_of_rays,
+                                           ray_length_front_to_back_in_micron,
+                                           max_seed_correction_radius_in_micron):
+        self.xy_resolution = xy_resolution
+        self.z_resolution = z_resolution
+        self.number_of_rays = number_of_rays
+        self.ray_length_front_to_back_in_micron = ray_length_front_to_back_in_micron
+        self.max_seed_correction_radius_in_micron = max_seed_correction_radius_in_micron
 
-    ### test code below
-    def test_something():
-        pass
+    def run(self):
+        self._initialize_project()
+        self._extract_thicknesses()
+        # self._transform_points()
 
-    test_something()
+    def _initialize_project(self):
+
+        if self.output_folder is None:
+            self.output_folder = u.make_directories(self.output_folder)
+        for threshold in self.thresholds_list:
+            u.make_directories(self.output_folder + "/" + str(threshold))
+
+    def _extract_thicknesses(self):
+        thresholds = self.thresholds_list
+        if self.am_paths is None or self.tif_paths is None:
+            raise RuntimeError("You need to set am and tif paths")
+        for threshold in thresholds:
+            for am_file in self.am_paths:
+                slice_object = SliceData()
+                slice_object.set_am_file_path(am_file)
+                slice_object.set_image_file_path(u.get_am_image_match(am_file,
+                                                                      self.tif_paths)[am_file])
+                slice_object.set_slice_name()
+                slice_object.set_output_path(self.output_folder + "/" +
+                                             u.get_file_name_from_path(am_file))
+                s = self
+                slice_object.compute(s.xy_resolution, s.z_resolution,
+                                     s.ray_length_front_to_back_in_micron,
+                                     s.number_of_rays, threshold,
+                                     s.max_seed_correction_radius_in_micron)
+                slice_object.write_output()
+
+    # def _transform_points(self):
+    #     pass

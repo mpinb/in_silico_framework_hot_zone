@@ -93,9 +93,10 @@ class Thickness_extractor:
         7. contour_list, 8. rays_intensity_profile, 9. rays_indices, 10. selected_profile_index
 
         """
+        all_data = {"original_point": point}
         if self._max_seed_correction_radius_in_image_coordinates:
             point = self._correct_seed(point)
-        all_data = {"seed_corrected_point": point}
+        all_data["seed_corrected_point"] = point
         thicknesses_list = []
         min_thickness = np.Inf
         thickness = 0

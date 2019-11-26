@@ -98,6 +98,11 @@ def __test_correct_seed():
                                          np.array([[0, 3, 0], [3, 4, 5], [0, 5, 0]]))
 
 
+def __test_pipeline():
+
+    pass
+
+
 print "----------"
 print "TEST IO.py"
 print "----------"
@@ -108,3 +113,8 @@ print "----------"
 print "TEST thicknesses.py"
 print "----------"
 __test_correct_seed()
+
+print "----------"
+print "TEST pipeline.py"
+print "----------"
+__test_pipeline()
