@@ -14,7 +14,7 @@ class SliceData:
         self.points = None
         self.transformed_points = None
         self.slice_thicknesses_object = None
-        self.transformed_points = None
+        self.transformation_object = None
 
     def set_am_file_path(self, path):
         self.am_file_path = path
@@ -29,11 +29,12 @@ class SliceData:
         self.am_object.write()
 
     def set_slice_name(self, slice_name=None):
-        if slice_name is None:
+        if slice_name is not None:
             self.slice_name = slice_name
         else:
             self.slice_name = u.get_slice_name(self.am_file_path, self.image_file_path)
 
+    # TODO: provide default values
     def compute(self, xy_resolution, z_resolution,
                 ray_length_front_to_back_in_micron,
                 number_of_rays, threshold_percentage,
@@ -71,7 +72,6 @@ class ExtractThicknessPipeline:
         # --- transformation
         # pair_points are set/list/dict of 4 points from
         self.bijective_points = None
-        self.transformation_object = None
 
     def set_am_paths_by_list(self, am_paths_list):
         self.am_paths = am_paths_list
@@ -106,6 +106,7 @@ class ExtractThicknessPipeline:
         self.tif_paths = u.get_files_by_folder(folder_path_to_3d_tif_files, file_extension="tif")
         self._3D = True
 
+    # TODO: EG: to put in init with defaults, set_thresholds, set_thickness..
     def set_thresholds(self, thresholds_list):
         """
         :param thresholds_list: A list contains thresholds values for extracting thicknesses
@@ -131,13 +132,14 @@ class ExtractThicknessPipeline:
 
     def set_bijective_points_automatically(self):
         """ TODO: This function will call the poor function that we developed and not working well"""
+        pass
 
     def run(self):
         self._initialize_project()
         self._extract_thicknesses()
         self._transform_points()
         self._update_hoc_file_with_thicknesses()
-        self.compute_all_data_table()
+        self._compute_all_data_table()
 
     def _initialize_project(self):
 
@@ -165,21 +167,28 @@ class ExtractThicknessPipeline:
                                      s.number_of_rays, threshold,
                                      s.max_seed_correction_radius_in_micron)
                 slice_object.write_output()
-                self.all_slices[slice_object.slice_name] = slice_object
+                self.all_slices[(slice_object.slice_name, threshold)] = slice_object
 
     def _transform_points(self):
         transformation_object = tr.AffineTransformation()
         transformation_object.set_transformation_matrix_by_aligned_points(self.bijective_points[:3],
                                                                           self.bijective_points[3:])
-        for slice_name in self.all_slices:
-            slice_object = self.all_slices[slice_name]
+        for slice_object in self.all_slices.values():
             transformation_object.transformed_points(slice_object.points, True)
             slice_object.transformed_points = transformation_object.transformed_points
-
-        self.transformation_object = transformation_object
+            slice_object.transformation_object = transformation_object
 
     def _update_hoc_file_with_thicknesses(self):
-        pass
+        all_transformed_points = [point for slice_object in self.all_slices.values()
+                                  for point in slice_object.transformed_points]
 
-    def compute_all_data_table(self):
+        for hoc_point in self.hoc_object.all_data["points"]:
+            nearest_point = u.get_nearest_point(hoc_point, all_transformed_points)
+            self.hoc_object.all_data["thicknesses"] = [
+                slice_object.slice_thicknesses_object.all_data[nearest_point]["min_thickness"]
+                for slice_object in self.all_slices.values()]
+
+        self.hoc_object.update_thicknesses()
+
+    def _compute_all_data_table(self):
         pass

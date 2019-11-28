@@ -133,7 +133,7 @@ class Hoc:
         self.output_path = output_path
         self.input_path = input_path
         self.edges = read_hoc_file(input_path)
-        self.all_data = {}
+        self.all_data = {"thicknesses": [], "nodes": [], "points": []}
         self._process()
 
     def _process(self):
@@ -151,9 +151,9 @@ class Hoc:
         pts = []
         for e in self.edges:
             pts.extend(e.edgePts)
-        self.all_data['all_points'] = pts
+        self.all_data['points'] = pts
 
-    def update_thicknesses(self, thicknesses):
+    def update_thicknesses(self):
         """
         # Writing thicknesses of points to a specific hoc file.
         # basically it do this: reading a file without the
@@ -169,7 +169,7 @@ class Hoc:
         - 3. output_path: The path of the desired output hoc file. If not given, the method will use self.output_path.   
         - 3. output_path: The path of the desired output hoc file. If not given, the method will use self.output_path.
         """
-
+        thicknesses = self.all_data["thicknesses"]
         input_path = self.input_path
         output_path = self.output_path
 
@@ -238,7 +238,8 @@ def read_numbers_in_line(line):
     """
     matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+|\-?\d+[e]?', line)
     if not matches:
-        raise RuntimeError("Expected number in line {} but did not set_transformation_matrix_by_aligned_points any".format(line))
+        raise RuntimeError(
+            "Expected number in line {} but did not set_transformation_matrix_by_aligned_points any".format(line))
     data = map(float, matches)
     return data
 
@@ -399,6 +400,7 @@ def read_hoc_file(fname=''):
             raise IOError('Logical error reading hoc file: Number of labels does not equal number of edges')
 
         return cell
+
 
 def read_landmark_file(landmarkFilename):
     '''

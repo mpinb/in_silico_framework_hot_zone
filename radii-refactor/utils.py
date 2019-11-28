@@ -1,7 +1,8 @@
-from random import randrange
 import os
-from definitions import ROOT_DIR
 import re
+from random import randrange
+from definitions import ROOT_DIR
+import transformation as tr
 
 
 def get_am_paths_from_hx(hx_path, verbose=False):
@@ -53,6 +54,21 @@ def get_am_image_match(am_paths, tif_paths):
             if slice_name in tif_file_name:
                 am_image_match[am_path] = tif_path
     return am_image_match
+
+
+def get_nearest_point(point, points):
+    neighbours = get_neighbours_of_point(point, points)
+    if neighbours is []:
+        neighbours = points
+    distances = [tr.get_distance(point, neighbour) for neighbour in neighbours]
+    nearest_point = neighbours[distances.index(min(distances))]
+    return nearest_point
+
+
+def get_neighbours_of_point(point, points, width=10):
+    cube = [[axis - width, axis + width] for axis in point]
+    neighbours = [point for point in points for i in range(3) if cube[i][0] <= point[i] <= cube[i][1]]
+    return neighbours
 
 
 def copyAmFilesToOutputFromHxPath(hx_path, relpath_list, output):
