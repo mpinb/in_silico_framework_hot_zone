@@ -69,6 +69,10 @@ class ExtractThicknessPipeline:
         # --- objects and dicts
         self.am_tif = {}
         self.all_slices = {}
+        self.all_points = []
+        self.all_transformed_points = []
+        self.all_thicknesses = []
+
         # --- transformation
         # pair_points are set/list/dict of 4 points from
         self.bijective_points = None
@@ -179,16 +183,24 @@ class ExtractThicknessPipeline:
             slice_object.transformation_object = transformation_object
 
     def _update_hoc_file_with_thicknesses(self):
-        all_transformed_points = [point for slice_object in self.all_slices.values()
-                                  for point in slice_object.transformed_points]
-
         for hoc_point in self.hoc_object.all_data["points"]:
-            nearest_point = u.get_nearest_point(hoc_point, all_transformed_points)
-            self.hoc_object.all_data["thicknesses"] = [
-                slice_object.slice_thicknesses_object.all_data[nearest_point]["min_thickness"]
-                for slice_object in self.all_slices.values()]
-
+            nearest_point_index = self.all_transformed_points.index(
+                u.get_nearest_point(hoc_point, self.all_transformed_points)
+            )
+            self.hoc_object.all_data["thicknesses"].append(
+                self.all_thicknesses[nearest_point_index]
+            )
         self.hoc_object.update_thicknesses()
 
     def _compute_all_data_table(self):
         pass
+
+    def _concat_all_slices(self):
+        self.all_points = [point for slice_object in self.all_slices.values()
+                           for point in slice_object.points]
+        self.all_transformed_points = [tr_points for slice_object in self.all_slices.values()
+                                       for tr_points in slice_object.transformed_points]
+        self.all_thicknesses = [slice_object.slice_thicknesses_object[point]["min_thickness"]
+                                for slice_object in self.all_slices.values()
+                                for point in slice_object.points]
+        assert len(self.all_points) == len(self.all_transformed_points) == len(self.all_thicknesses)

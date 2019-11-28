@@ -67,8 +67,16 @@ def get_nearest_point(point, points):
 
 def get_neighbours_of_point(point, points, width=10):
     cube = [[axis - width, axis + width] for axis in point]
-    neighbours = [point for point in points for i in range(3) if cube[i][0] <= point[i] <= cube[i][1]]
+    # neighbours = [point for point in points for i in range(3) if cube[i][0] <= point[i] <= cube[i][1]]
+    neighbours = [point for point in points if contains(point, cube)]
     return neighbours
+
+
+def contains(point, cube):
+    if [point[i] for i in range(3) if cube[i][0] <= point[i] <= cube[i][1]] == point:
+        return True
+    else:
+        return False
 
 
 def copyAmFilesToOutputFromHxPath(hx_path, relpath_list, output):
