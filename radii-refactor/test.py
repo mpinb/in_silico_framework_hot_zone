@@ -7,7 +7,7 @@ import numpy as np
 
 import IO
 import thickness as th
-import SimpleITK as sitk
+import pipeline
 from definitions import ROOT_DIR
 
 
@@ -99,20 +99,47 @@ def __test_correct_seed():
 
 
 def __test_pipeline():
+    am_folder_path = os.path.join(ROOT_DIR, 'test_files/am_files')
+    tif_folder_path = os.path.join(ROOT_DIR, 'test_files/image_files')
+    hoc_file_path = os.path.join(ROOT_DIR, 'test_files/WR58_Cell5_L5TT_Final.hoc')
+    output_folder_path = os.path.join(ROOT_DIR, 'test_files/output')
+    bijective_points_path = os.path.join(ROOT_DIR, 'test_files/manual_landmarks.landmarkAscii')
 
-    pass
+    p = pipeline.ExtractThicknessPipeline()
+
+    p.set_am_paths_by_folder(am_folder_path)
+    print "set_am_paths_by_folder test, should print the first am file"
+    print p.am_paths[0]
+
+    p.set_tif_paths_by_folder(tif_folder_path)
+    print "set_tif_paths_by_folder test, should print the first tif file"
+    print p.tif_paths[0]
+    print os.path.basename(p.am_paths[0])
+
+    p.set_output_path(output_folder_path)
+    print "set_output_path test, should print the output folder path"
+    print p.set_output_path
+
+    p.set_hoc_file(hoc_file_path)
+    print "set_hoc_file test, should print the hoc file path"
+    print p.hoc_file
+
+    p.set_thickness_extractor_parameters()
+    p.set_bijective_points_by_file(bijective_points_path)
+
+    p.run()
 
 
 print "----------"
 print "TEST IO.py"
 print "----------"
-__test_am_read()
-__test_am_write()
+# __test_am_read()
+# __test_am_write()
 
 print "----------"
 print "TEST thicknesses.py"
 print "----------"
-__test_correct_seed()
+# __test_correct_seed()
 
 print "----------"
 print "TEST pipeline.py"

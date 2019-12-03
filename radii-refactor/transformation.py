@@ -171,6 +171,8 @@ def _scaling(points, scaling):
             s = scaling[lv]
         except IndexError:
             s = 1
+        print pp 
+        print s
         out.append(pp * s)
     converted_points = out
     return converted_points

@@ -34,7 +34,7 @@ class SliceData:
         if slice_name is not None:
             self.slice_name = slice_name
         else:
-            self.slice_name = u.get_slice_name(self.am_file_path, self.image_file_path) + self.slice_threshold
+            self.slice_name = u.get_slice_name(self.am_file_path, self.image_file_path)
 
     # TODO: provide default values
     def compute(self, xy_resolution, z_resolution,
@@ -43,7 +43,7 @@ class SliceData:
                 max_seed_correction_radius_in_micron):
         self.am_object = IO.Am(self.am_file_path, self.output_path)
         self.am_object.read()
-        self.points = self.am_object.all_data["points"]
+        self.points = self.am_object.all_data["POINT { float[3] EdgePointCoordinates }"]
         slice_thicknesses_object = th.Thickness_extractor(self.points, self.image_file_path,
                                                           xy_resolution, z_resolution,
                                                           ray_length_front_to_back_in_micron,
@@ -72,12 +72,12 @@ class ExtractThicknessPipeline:
         # --- objects and dicts
         self.am_tif = {}
         self.all_slices = {}
-        self.all_points = []
-        self.all_transformed_points = []
+        self.all_points_with_default_threshold = []
+        self.all_transformed_points_with_default_threshold = []
         self.all_thicknesses = {}
 
         # --- transformation
-        # pair_points are set/list/dict of 4 points from
+        # bijective_points are set/list/dict of 4 points from
         self.bijective_points = None
 
     def set_am_paths_by_list(self, am_paths_list):
@@ -121,10 +121,10 @@ class ExtractThicknessPipeline:
         """
         self.thresholds_list = thresholds_list
 
-    def set_thickness_extractor_parameters(self, xy_resolution,
-                                           z_resolution, number_of_rays,
-                                           ray_length_front_to_back_in_micron,
-                                           max_seed_correction_radius_in_micron):
+    def set_thickness_extractor_parameters(self, xy_resolution=0.092,
+                                           z_resolution=0.5, number_of_rays=36,
+                                           ray_length_front_to_back_in_micron=20,
+                                           max_seed_correction_radius_in_micron=10):
         self.xy_resolution = xy_resolution
         self.z_resolution = z_resolution
         self.number_of_rays = number_of_rays
@@ -160,10 +160,11 @@ class ExtractThicknessPipeline:
         if self.am_paths is None or self.tif_paths is None:
             raise RuntimeError("You need to set am and tif paths")
         for threshold in thresholds:
+            all_slices_in_threshold = {}
             for am_file in self.am_paths:
                 slice_object = SliceData(slice_threshold=threshold)
                 slice_object.set_am_file_path(am_file)
-                slice_object.set_image_file_path(u.get_am_image_match(am_file,
+                slice_object.set_image_file_path(u.get_am_image_match([am_file],
                                                                       self.tif_paths)[am_file])
                 slice_object.set_slice_name()
                 slice_object.set_output_path(self.output_folder + "/" + str(threshold) +
@@ -174,22 +175,26 @@ class ExtractThicknessPipeline:
                                      s.number_of_rays, threshold,
                                      s.max_seed_correction_radius_in_micron)
                 slice_object.write_output()
-                self.all_slices[(slice_object.slice_name, slice_object.slice_threshold)] = slice_object
+                all_slices_in_threshold[slice_object] = slice_object
+            self.all_slices[threshold] = all_slices_in_threshold
+            # self.all_slices[(slice_object.slice_name, slice_object.slice_threshold)] = slice_object
 
     def _transform_points(self):
         transformation_object = tr.AffineTransformation()
         transformation_object.set_transformation_matrix_by_aligned_points(self.bijective_points[:3],
                                                                           self.bijective_points[3:])
-        for key in sorted(self.all_slices.keys()):
-            slice_object = self.all_slices[key]
-            transformation_object.transformed_points(slice_object.points, forwards=True)
-            slice_object.transformed_points = transformation_object.transformed_points
-            slice_object.transformation_object = transformation_object
+        for threshold in self.thresholds_list:
+            all_slices_with_same_threshold = self.all_slices[threshold]
+            for key in sorted(all_slices_with_same_threshold.keys()):
+                slice_object = all_slices_with_same_threshold[key]
+                transformation_object.transformed_points(slice_object.points, forwards=True)
+                slice_object.transformed_points = transformation_object.transformed_points
+                slice_object.transformation_object = transformation_object
 
     def _update_hoc_file_with_thicknesses(self):
         for hoc_point in self.hoc_object.all_data["points"]:
-            nearest_point_index = self.all_transformed_points.index(
-                u.get_nearest_point(hoc_point, self.all_transformed_points)
+            nearest_point_index = self.all_transformed_points_with_default_threshold.index(
+                u.get_nearest_point(hoc_point, self.all_transformed_points_with_default_threshold)
             )
             self.hoc_object.all_data["thicknesses"].append(
                 self.all_thicknesses[self.default_threshold][nearest_point_index]
@@ -198,25 +203,27 @@ class ExtractThicknessPipeline:
         self.hoc_object.update_thicknesses()
 
     def _compute_all_data_table(self):
-        table = an.get_all_data_output_table(self.all_slices)
-        pass
+        return an.get_all_data_output_table(self.all_slices, self.default_threshold)
 
     def _stacking_all_slices(self):
-        sorted_keys = sorted(self.all_slices.keys())
-        self.all_points = [point for key in sorted(self.all_slices.keys())
-                           if self.all_slices[key].slice_threshold == self.default_threshold
-                           for point in self.all_slices[key].points]
-        self.all_transformed_points = [tr_points for key in sorted(self.all_slices.keys())
-                                       if self.all_slices[key].slice_threshold == self.default_threshold
-                                       for tr_points in self.all_slices[key].transformed_points]
+        all_slices_with_default_threshold = self.all_slices[self.default_threshold]
+        self.all_points_with_default_threshold = [point for key in sorted(all_slices_with_default_threshold.keys())
+                                                  for point in all_slices_with_default_threshold[key].points]
 
+        self.all_transformed_points_with_default_threshold = [tr_points for key in
+                                                              sorted(all_slices_with_default_threshold.keys())
+                                                              for tr_points in
+                                                              all_slices_with_default_threshold[key].transformed_points]
         for threshold in self.thresholds_list:
-            self.all_thicknesses = {threshold: [self.all_slices[key].slice_thicknesses_object[point]["min_thickness"]
-                                                for key in sorted(self.all_slices.keys())
-                                                if self.all_slices[key].slice_threshold == threshold
-                                                for point in self.all_slices[key].points]}
+            all_slices_with_same_threshold = self.all_slices[threshold]
+            self.all_thicknesses = {
+                threshold: [all_slices_with_same_threshold[key].slice_thicknesses_object[point]["min_thickness"] for key
+                            in sorted(all_slices_with_same_threshold.keys()) for point in
+                            all_slices_with_same_threshold[key].points]}
 
-        assert len(self.all_points) == len(self.all_transformed_points) == len(self.all_thicknesses.values()[0])
+        assert len(self.all_points_with_default_threshold) == len(
+            self.all_transformed_points_with_default_threshold) == len(
+            self.all_thicknesses.values()[0])
         assert len(self.all_thicknesses) == len([1 for thicknesses_in_threshold in self.all_thicknesses.values()
                                                  if len(thicknesses_in_threshold) ==
                                                  len(self.all_thicknesses.values()[0])])
