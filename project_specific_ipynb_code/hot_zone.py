@@ -76,7 +76,7 @@ def get_cell_object_from_hoc(hocpath):
 # database containing mikes cells
 ##########################################
 # id: '2019-09-09_19894_YfrHaoO'
-mdb_cells = I.ModelDataBase('/nas1/Data_arco/results/20190909_VPM_contact_analysis_for_mike_review') 
+## mdb_cells = I.ModelDataBase('/nas1/Data_arco/results/20190909_VPM_contact_analysis_for_mike_review') 
 
 ###########################################
 # test, whether two ranges overlap
