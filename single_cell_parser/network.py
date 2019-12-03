@@ -487,7 +487,12 @@ class NetworkMapper:
             for i in range(len(bins)): ##fill all cells bin after bin
                 tBegin, tEnd = bins[i]
                 nas = number_active_synapses[i]
-                active = np.random.choice(range(nrOfCells), nas, replace = False) # np.where(np.random.uniform(size=nrOfCells) < spikeProb)
+                try:
+                    active = np.random.choice(range(nrOfCells), nas, replace = False) # np.where(np.random.uniform(size=nrOfCells) < spikeProb)
+                except ValueError:
+                    print 'Number of active synapses larger than number of synapses! '
+                    print 'Switching from drawing without replacement to drawing with replacement.'
+                    active = np.random.choice(range(nrOfCells), nas, replace = True)
                 spikeTimes = offset + tBegin + (tEnd - tBegin)*np.random.uniform(size=len(active))
                 for j in range(len(active)):
                     self.cells[preCellType][active[j]].append(spikeTimes[j])                    
