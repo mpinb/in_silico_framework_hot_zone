@@ -181,6 +181,7 @@ class ExtractThicknessPipeline:
 
     def _transform_points(self):
         transformation_object = tr.AffineTransformation()
+        print self.bijective_points
         transformation_object.set_transformation_matrix_by_aligned_points(self.bijective_points[:3],
                                                                           self.bijective_points[3:])
         for threshold in self.thresholds_list:

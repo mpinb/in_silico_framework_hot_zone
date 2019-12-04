@@ -87,8 +87,8 @@ class AffineTransformation:
 
         """
 
-        dst, self.dst_points = dst_points
-        src, self.src_points = src_points
+        dst = self.dst_points = dst_points
+        src = self.src_points = src_points
 
         x = np.transpose(np.matrix([src[0], src[1], src[2], src[3]]))
         y = np.transpose(np.matrix([dst[0], dst[1], dst[2], dst[3]]))
@@ -147,7 +147,7 @@ class ConvertPoints:
         """
         points = coordinate_2d
         scaling = [1.0 / self.x_res, 1.0 / self.y_res, 1.0 / self.z_res]
-        return _scaling(points, scaling)
+        return [_scaling(point, scaling) for point in points]
 
     def image_coordinate_2d_to_coordinate_2d(self, image_coordinate_2d):
         """
@@ -158,7 +158,7 @@ class ConvertPoints:
         """
         points = image_coordinate_2d
         scaling = [self.x_res, self.y_res, self.z_res]
-        return _scaling(points, scaling)
+        return [_scaling(point, scaling) for point in points]
 
 
 def _scaling(points, scaling):
@@ -171,8 +171,6 @@ def _scaling(points, scaling):
             s = scaling[lv]
         except IndexError:
             s = 1
-        print pp 
-        print s
         out.append(pp * s)
     converted_points = out
     return converted_points
