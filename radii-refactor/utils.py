@@ -61,6 +61,7 @@ def get_nearest_point(point, points):
     if neighbours is []:
         neighbours = points
     distances = [tr.get_distance(point, neighbour) for neighbour in neighbours]
+    print distances
     nearest_point = neighbours[distances.index(min(distances))]
     return nearest_point
 

@@ -124,7 +124,7 @@ class ExtractThicknessPipeline:
     def set_thickness_extractor_parameters(self, xy_resolution=0.092,
                                            z_resolution=0.5, number_of_rays=36,
                                            ray_length_front_to_back_in_micron=20,
-                                           max_seed_correction_radius_in_micron=10):
+                                           max_seed_correction_radius_in_micron=0.1):
         self.xy_resolution = xy_resolution
         self.z_resolution = z_resolution
         self.number_of_rays = number_of_rays
@@ -135,7 +135,8 @@ class ExtractThicknessPipeline:
         self.bijective_points = bi_points
 
     def set_bijective_points_by_file(self, input_path):
-        self.bijective_points = IO.read_landmark_file(input_path)
+        bijective_list_points = IO.read_landmark_file(input_path)
+        self.bijective_points = [list(p) for p in bijective_list_points]
 
     def set_bijective_points_automatically(self):
         """ TODO: This function will call the poor function that we developed and not working well"""
@@ -145,6 +146,7 @@ class ExtractThicknessPipeline:
         self._initialize_project()
         self._extract_thicknesses()
         self._transform_points()
+        self._stacking_all_slices()
         self._update_hoc_file_with_thicknesses()
         self._compute_all_data_table()
 
@@ -161,12 +163,15 @@ class ExtractThicknessPipeline:
             raise RuntimeError("You need to set am and tif paths")
         for threshold in thresholds:
             all_slices_in_threshold = {}
+            print "In threshold: " + str(threshold)
             for am_file in self.am_paths:
                 slice_object = SliceData(slice_threshold=threshold)
                 slice_object.set_am_file_path(am_file)
                 slice_object.set_image_file_path(u.get_am_image_match([am_file],
                                                                       self.tif_paths)[am_file])
                 slice_object.set_slice_name()
+                print "--------"
+                print "Working on slice:" + str(slice_object.slice_name)
                 slice_object.set_output_path(self.output_folder + "/" + str(threshold) +
                                              "/" + u.get_file_name_from_path(am_file))
                 s = self
@@ -175,20 +180,19 @@ class ExtractThicknessPipeline:
                                      s.number_of_rays, threshold,
                                      s.max_seed_correction_radius_in_micron)
                 slice_object.write_output()
-                all_slices_in_threshold[slice_object] = slice_object
+                all_slices_in_threshold[slice_object.slice_name] = slice_object
             self.all_slices[threshold] = all_slices_in_threshold
             # self.all_slices[(slice_object.slice_name, slice_object.slice_threshold)] = slice_object
 
     def _transform_points(self):
         transformation_object = tr.AffineTransformation()
-        print self.bijective_points
-        transformation_object.set_transformation_matrix_by_aligned_points(self.bijective_points[:3],
-                                                                          self.bijective_points[3:])
+        transformation_object.set_transformation_matrix_by_aligned_points(self.bijective_points[::2],
+                                                                          self.bijective_points[1::2])
         for threshold in self.thresholds_list:
             all_slices_with_same_threshold = self.all_slices[threshold]
             for key in sorted(all_slices_with_same_threshold.keys()):
                 slice_object = all_slices_with_same_threshold[key]
-                transformation_object.transformed_points(slice_object.points, forwards=True)
+                transformation_object.transform_points(slice_object.points, forwards=True)
                 slice_object.transformed_points = transformation_object.transformed_points
                 slice_object.transformation_object = transformation_object
 
@@ -217,10 +221,10 @@ class ExtractThicknessPipeline:
                                                               all_slices_with_default_threshold[key].transformed_points]
         for threshold in self.thresholds_list:
             all_slices_with_same_threshold = self.all_slices[threshold]
-            self.all_thicknesses = {
-                threshold: [all_slices_with_same_threshold[key].slice_thicknesses_object[point]["min_thickness"] for key
-                            in sorted(all_slices_with_same_threshold.keys()) for point in
-                            all_slices_with_same_threshold[key].points]}
+            self.all_thicknesses = {threshold: [
+                all_slices_with_same_threshold[key].slice_thicknesses_object.all_data[tuple(point[:2])]["min_thickness"]
+                for key in sorted(all_slices_with_same_threshold.keys())
+                for point in all_slices_with_same_threshold[key].points]}
 
         assert len(self.all_points_with_default_threshold) == len(
             self.all_transformed_points_with_default_threshold) == len(

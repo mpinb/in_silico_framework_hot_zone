@@ -102,9 +102,13 @@ class AffineTransformation:
         self.matrix = matrix
 
     def transform_points(self, points, forwards=True):
-        """Applies transformation on points
+        """
+        Applies transformation on points
         forwards: True: transforms from coordinate system 1 to coordinate system 2
-        False: transforms from coordinate system 2 to coordinate system 1"""
+        False: transforms from coordinate system 2 to coordinate system 1
+
+        """
+
         matrix = self.matrix
         if forwards is False:
             matrix = np.linalg.inv(self.matrix)

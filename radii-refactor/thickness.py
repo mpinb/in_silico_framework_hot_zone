@@ -61,8 +61,12 @@ class Thickness_extractor:
         self._max_seed_correction_radius_in_image_coordinates = max_seed_correction_radius_in_micron / xy_resolution
         self._max_seed_correction_radius_in_image_coordinates_in_pixel = \
             int(self._max_seed_correction_radius_in_image_coordinates)
+
+        self.padded_image = _pad_image(self.image, self._max_seed_correction_radius_in_image_coordinates_in_pixel)
         self.contour_list = []
         self.all_data = {}
+
+        self.get_all_data_by_points()
 
     def get_all_data_by_points(self):
         """
@@ -76,7 +80,9 @@ class Thickness_extractor:
 
         for point in points:
             data = self.get_all_data_by_point(point)
-            all_data[point] = data
+            all_data[
+                tuple(self.convert_points.image_coordinate_2d_to_coordinate_2d([point])[0])
+            ] = data
 
         self.all_data = all_data
 
@@ -128,19 +134,21 @@ class Thickness_extractor:
             front_contour_index = self.get_contour_index(point, ray_indices[half_ray_length:ray_length])
             all_data["back_contour_index"] = back_contour_index
             all_data["front_contour_index"] = front_contour_index
-            assert (len(back_contour_index) == 2)
-            assert (len(front_contour_index) == 2)
-            thickness = tr.get_distance(back_contour_index, front_contour_index)
+            if len(back_contour_index) == 2 and len(front_contour_index) == 2:
+                thickness = tr.get_distance(back_contour_index, front_contour_index)
+            else:
+                thickness = 0
+            # assert (len(back_contour_index) == 2)
+            # assert (len(front_contour_index) == 2)
             contour_list.append([back_contour_index, front_contour_index])
 
             thicknesses_list.append(thickness)
 
             if thickness < min_thickness:
-                all_data["min_thickness"] = thickness
+                min_thickness = thickness
+                all_data["min_thickness"] = min_thickness
                 all_data["selected_ray_index"] = i
 
-        # assert (min_thickness < 100)
-        contour_list.append(contour_list)
         all_data["contour_list"] = contour_list
         all_data["thicknesses_list"] = thicknesses_list
         return all_data
@@ -218,7 +226,7 @@ class Thickness_extractor:
 
         for index in range(int(ray_length)):
 
-            if (front):
+            if front:
                 x_f = x_f + 1
             else:
                 x_f = x_f - 1
@@ -244,12 +252,12 @@ class Thickness_extractor:
 
     def _correct_seed(self, point):
         radius = self._max_seed_correction_radius_in_image_coordinates_in_pixel
-        image = self.image
         center = point
 
-        image_array = sitk.GetArrayFromImage(image)
-        cropped_image = _crop_image(image_array, center, radius, circle=True)
+        cropped_image = _crop_image(self.padded_image, center, radius, circle=True)
         indices_of_max_value = np.argwhere(cropped_image == np.amax(cropped_image))
+
+        del cropped_image
         corrected_point = [indices_of_max_value[0][0] + point[0], indices_of_max_value[0][1] + point[1]]
 
         return corrected_point
@@ -262,10 +270,16 @@ def _circle_filter(x, y, r):
         return 0
 
 
+def _pad_image(image, radius):
+    image_array = sitk.GetArrayFromImage(image)
+    return np.pad(image_array, radius, 'constant', constant_values=0)
+
+
 def _crop_image(image_array, center, radius, circle=False):
-    c1, c2 = center
-    b_pad = np.pad(image_array, radius, 'constant', constant_values=0)
-    return_ = b_pad[c1:c1 + 2 * radius + 1, c2:c2 + 2 * radius + 1]
+    c1, c2 = int(center[0]), int(center[1])
+    return_ = image_array[c1:c1 + 2 * radius + 1, c2:c2 + 2 * radius + 1]
+    # return_ = b_pad[c1:c1 + 2 * radius + 1, c2:c2 + 2 * radius + 1]
+
     if circle:
         return_ = [[value * _circle_filter(row_lv - radius, col_lv - radius, radius)
                     for col_lv, value in enumerate(row)]
