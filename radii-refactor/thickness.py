@@ -20,6 +20,7 @@ Tests
 - The test functions are inside the test.py. One can also use them as example of how to use the functions.
 
 """
+import sys
 
 import numpy as np
 import warnings
@@ -78,12 +79,21 @@ class Thickness_extractor:
         points = self.points
         all_data = {}
 
-        for point in points:
+        for idx, point in enumerate(points):
+            print str(idx) + " points from " + str(len(points)) + " are completed."
+            sys.stdout.write("\033[F")
             data = self.get_all_data_by_point(point)
             all_data[
                 tuple(self.convert_points.image_coordinate_2d_to_coordinate_2d([point])[0])
             ] = data
-
+        print str(len(points)) + " points from " + str(len(points)) + " are completed."
+        print "size of all_data and below objects in KBytes: " + str(sys.getsizeof(all_data)/1024)
+        print "self.convert_points: " + str(sys.getsizeof(self.convert_points)/1024)
+        print "self.points: " + str(sys.getsizeof(self.points)/1024)
+        print "self.image: " + str(sys.getsizeof(self.image)/1024)
+        print "self.padded_image: " + str(sys.getsizeof(self.padded_image)/1024)
+        del self.padded_image
+        del self.image
         self.all_data = all_data
 
     def get_all_data_by_point(self, point):

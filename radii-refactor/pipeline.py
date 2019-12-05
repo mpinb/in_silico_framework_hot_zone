@@ -1,8 +1,14 @@
+import sys
+
+import dask
+from dask import distributed
+
 import thickness as th
 import transformation as tr
 import IO
 import utils as u
 import analysis as an
+from dask.distributed import wait, progress
 
 
 class SliceData:
@@ -54,12 +60,15 @@ class SliceData:
 
 class ExtractThicknessPipeline:
     def __init__(self):
+        # ---- flags and settings
+        self._parallel = False
+        self.client = None
+        self._3D = False
         # ---- files and folders
         self.hoc_file = None
         self.hoc_object = None
         self.am_paths = []
         self.tif_paths = []
-        self._3D = False
         self.output_folder = None
         # --- thickness extractor class parameters:
         self.default_threshold = 0.5
@@ -124,7 +133,7 @@ class ExtractThicknessPipeline:
     def set_thickness_extractor_parameters(self, xy_resolution=0.092,
                                            z_resolution=0.5, number_of_rays=36,
                                            ray_length_front_to_back_in_micron=20,
-                                           max_seed_correction_radius_in_micron=0.1):
+                                           max_seed_correction_radius_in_micron=0):
         self.xy_resolution = xy_resolution
         self.z_resolution = z_resolution
         self.number_of_rays = number_of_rays
@@ -142,9 +151,21 @@ class ExtractThicknessPipeline:
         """ TODO: This function will call the poor function that we developed and not working well"""
         pass
 
+    def set_celine_for_parallelize(self, url, port):
+        self.client = distributed.Client(str(url) + ":" + str(port))
+        print self.client
+        self._parallel = True
+
     def run(self):
         self._initialize_project()
-        self._extract_thicknesses()
+        if self._parallel:
+            delays = self._extract_thicknesses_parallel()
+            future = self.client.compute(delays)
+            print future[0].result
+            wait(future)
+        else:
+            self._extract_thicknesses()
+
         self._transform_points()
         self._stacking_all_slices()
         self._update_hoc_file_with_thicknesses()
@@ -181,8 +202,39 @@ class ExtractThicknessPipeline:
                                      s.max_seed_correction_radius_in_micron)
                 slice_object.write_output()
                 all_slices_in_threshold[slice_object.slice_name] = slice_object
+                print "all_slices_in_threshold: " + str(sys.getsizeof(all_slices_in_threshold) / 1024)
             self.all_slices[threshold] = all_slices_in_threshold
             # self.all_slices[(slice_object.slice_name, slice_object.slice_threshold)] = slice_object
+
+    def _extract_thicknesses_parallel(self):
+        thresholds = self.thresholds_list
+        if self.am_paths is None or self.tif_paths is None:
+            raise RuntimeError("You need to set am and tif paths")
+        for threshold in thresholds:
+            all_slices_in_threshold = {}
+            print "In threshold: " + str(threshold)
+            for am_file in self.am_paths:
+                slice_object = SliceData(slice_threshold=threshold)
+                slice_object.set_am_file_path(am_file)
+                slice_object.set_image_file_path(u.get_am_image_match([am_file],
+                                                                      self.tif_paths)[am_file])
+                slice_object.set_slice_name()
+                print "--------"
+                print "Working on slice:" + str(slice_object.slice_name)
+                slice_object.set_output_path(self.output_folder + "/" + str(threshold) +
+                                             "/" + u.get_file_name_from_path(am_file))
+                all_slices_in_threshold[slice_object.slice_name] = slice_object
+            self.all_slices[threshold] = all_slices_in_threshold
+        s = self
+        delays = []
+        for threshold in thresholds:
+            for slice_object in self.all_slices[threshold]:
+                delay = _parallel_helper(slice_object, s.xy_resolution, s.z_resolution,
+                                         s.ray_length_front_to_back_in_micron,
+                                         s.number_of_rays, threshold,
+                                         s.max_seed_correction_radius_in_micron)
+                delays.append(delay)
+        return delays
 
     def _transform_points(self):
         transformation_object = tr.AffineTransformation()
@@ -232,3 +284,16 @@ class ExtractThicknessPipeline:
         assert len(self.all_thicknesses) == len([1 for thicknesses_in_threshold in self.all_thicknesses.values()
                                                  if len(thicknesses_in_threshold) ==
                                                  len(self.all_thicknesses.values()[0])])
+
+
+@dask.delayed
+def _parallel_helper(slice_object, xy_resolution, z_resolution,
+                     ray_length_front_to_back_in_micron,
+                     number_of_rays, threshold,
+                     max_seed_correction_radius_in_micron):
+    slice_object.compute(xy_resolution, z_resolution,
+                         ray_length_front_to_back_in_micron,
+                         number_of_rays, threshold,
+                         max_seed_correction_radius_in_micron)
+
+    return slice_object

@@ -127,6 +127,8 @@ def __test_pipeline():
     p.set_thickness_extractor_parameters()
     p.set_bijective_points_by_file(bijective_points_path)
 
+#   p.set_celine_for_parallelize("localhost", 8780)
+
     p.run()
 
 
