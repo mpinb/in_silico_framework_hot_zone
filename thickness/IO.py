@@ -246,7 +246,7 @@ def read_numbers_in_line(line):
 
 class Edge(object):
     '''
-    Edge object contains list of points,
+    Edge obj contains list of points,
     diameter at each point, label,
     string hocLabel, parentID
     Used during reading of hoc files

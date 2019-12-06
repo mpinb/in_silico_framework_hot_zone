@@ -81,7 +81,7 @@ def __test_correct_seed():
     # the maximum value in a area of thickness 10 micron is 181 at [2403, 2447]
     image_point = [2400, 2364]
     image_file = os.path.join(ROOT_DIR, 'test_files/S13_max_z_projection.tif')
-    rx_object = th.Thickness_extractor([], image_file)
+    rx_object = th.ThicknessExtractor([], image_file)
     corrected_point = rx_object._correct_seed(image_point)
     print "The _correct_seed function correct the point [2400, 2364] to  [2403, 2447]:"
     if corrected_point == [2403, 2447]:
@@ -127,7 +127,7 @@ def __test_pipeline():
     p.set_thickness_extractor_parameters()
     p.set_bijective_points_by_file(bijective_points_path)
 
-#   p.set_celine_for_parallelize("localhost", 8780)
+#   p.set_client_for_parallelize("localhost", 8780)
 
     p.run()
 

@@ -26,9 +26,12 @@ import numpy as np
 import warnings
 import SimpleITK as sitk
 import transformation as tr
+from utils import get_size_of_object
 
 
-class Thickness_extractor:
+
+
+class ThicknessExtractor:
     def __init__(self, points, image_file, xy_resolution=0.092, z_resolution=0.5, ray_length_front_to_back_in_micron=20,
                  number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=10):
         """ This is the main method for extracting Thickness
@@ -87,14 +90,15 @@ class Thickness_extractor:
                 tuple(self.convert_points.image_coordinate_2d_to_coordinate_2d([point])[0])
             ] = data
         print str(len(points)) + " points from " + str(len(points)) + " are completed."
-        print "size of all_data and below objects in KBytes: " + str(sys.getsizeof(all_data)/1024)
-        print "self.convert_points: " + str(sys.getsizeof(self.convert_points)/1024)
-        print "self.points: " + str(sys.getsizeof(self.points)/1024)
-        print "self.image: " + str(sys.getsizeof(self.image)/1024)
-        print "self.padded_image: " + str(sys.getsizeof(self.padded_image)/1024)
-        del self.padded_image
-        del self.image
-        self.all_data = all_data
+        print "size of objects:"
+        print "size of object in MB all_data: " + str(get_size_of_object(all_data)/(1024.*1024.))
+        print "size of object in MB self.points: " + str(get_size_of_object(self.points) /(1024.*1024.))
+        print "size of object in B self.convert_points: " + str(get_size_of_object(self.convert_points))
+        print "size of object in B self.contour_list: " + str(get_size_of_object(self.contour_list))
+
+        self.all_data = all_datad
+        self._tidy_up()
+
 
     def get_all_data_by_point(self, point):
         """
@@ -132,8 +136,8 @@ class Thickness_extractor:
             ray_intensity_profile = self.get_intensity_profile_from_ray_indices(ray_indices)
             rays_intensity_profile.append(ray_intensity_profile)
 
-        all_data["rays_indices"] = rays_indices
-        all_data["rays_intensity_profile"] = rays_intensity_profile
+        # all_data["rays_indices"] = rays_indices
+        # all_data["rays_intensity_profile"] = rays_intensity_profile
 
         for i, ray_indices in enumerate(rays_indices):
 
@@ -271,6 +275,13 @@ class Thickness_extractor:
         corrected_point = [indices_of_max_value[0][0] + point[0], indices_of_max_value[0][1] + point[1]]
 
         return corrected_point
+
+    def _tidy_up(self):
+        del self.image
+        del self.padded_image
+        del self.points
+        del self.convert_points
+        del self.contour_list
 
 
 def _circle_filter(x, y, r):

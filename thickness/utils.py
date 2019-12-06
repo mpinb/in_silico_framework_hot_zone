@@ -3,6 +3,7 @@ import re
 from random import randrange
 from definitions import ROOT_DIR
 import transformation as tr
+import cloudpickle as pickle
 
 
 def get_am_paths_from_hx(hx_path, verbose=False):
@@ -76,3 +77,6 @@ def get_neighbours_of_point(point, points, width=10):
 def contains(point, cube):
     return [point[i] for i in range(3) if cube[i][0] <= point[i] <= cube[i][1]] == point
 
+
+def get_size_of_object(obj):
+    return len(pickle.dumps(obj))
