@@ -59,10 +59,9 @@ def get_am_image_match(am_paths, tif_paths):
 
 def get_nearest_point(point, points):
     neighbours = get_neighbours_of_point(point, points)
-    if neighbours is []:
+    if len(neighbours) is 0:
         neighbours = points
     distances = [tr.get_distance(point, neighbour) for neighbour in neighbours]
-    print distances
     nearest_point = neighbours[distances.index(min(distances))]
     return nearest_point
 

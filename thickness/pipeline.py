@@ -133,7 +133,7 @@ class ExtractThicknessPipeline:
     def set_thickness_extractor_parameters(self, xy_resolution=0.092,
                                            z_resolution=0.5, number_of_rays=36,
                                            ray_length_front_to_back_in_micron=20,
-                                           max_seed_correction_radius_in_micron=0):
+                                           max_seed_correction_radius_in_micron=1):
         self.xy_resolution = xy_resolution
         self.z_resolution = z_resolution
         self.number_of_rays = number_of_rays
@@ -169,7 +169,7 @@ class ExtractThicknessPipeline:
         self._transform_points()
         self._stacking_all_slices()
         self._update_hoc_file_with_thicknesses()
-        self._compute_all_data_table()
+        return self._compute_all_data_table()
 
     def _initialize_project(self):
 
@@ -202,9 +202,7 @@ class ExtractThicknessPipeline:
                                      s.max_seed_correction_radius_in_micron)
                 slice_object.write_output()
                 all_slices_in_threshold[slice_object.slice_name] = slice_object
-                print "all_slices_in_threshold: " + str(sys.getsizeof(all_slices_in_threshold) / 1024)
             self.all_slices[threshold] = all_slices_in_threshold
-            # self.all_slices[(slice_object.slice_name, slice_object.slice_threshold)] = slice_object
 
     def _extract_thicknesses_parallel(self):
         thresholds = self.thresholds_list
@@ -273,10 +271,12 @@ class ExtractThicknessPipeline:
                                                               all_slices_with_default_threshold[key].transformed_points]
         for threshold in self.thresholds_list:
             all_slices_with_same_threshold = self.all_slices[threshold]
+            print len(all_slices_with_default_threshold[25].points)
+            print len(all_slices_with_same_threshold[25].slice_thicknesses_object.all_data)
             self.all_thicknesses = {threshold: [
-                all_slices_with_same_threshold[key].slice_thicknesses_object.all_data[tuple(point[:2])]["min_thickness"]
+                all_slices_with_same_threshold[key].slice_thicknesses_object.all_data[index]["min_thickness"]
                 for key in sorted(all_slices_with_same_threshold.keys())
-                for point in all_slices_with_same_threshold[key].points]}
+                for index in range(len(all_slices_with_same_threshold[key].points))]}
 
         assert len(self.all_points_with_default_threshold) == len(
             self.all_transformed_points_with_default_threshold) == len(

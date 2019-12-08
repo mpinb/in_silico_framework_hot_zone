@@ -9,6 +9,7 @@ import IO
 import thickness as th
 import pipeline
 from definitions import ROOT_DIR
+import pandas as pd
 
 
 def compare_points(p1, p2):
@@ -129,8 +130,9 @@ def __test_pipeline():
 
 #   p.set_client_for_parallelize("localhost", 8780)
 
-    p.run()
-
+    df = p.run()
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+        print(df)
 
 print "----------"
 print "TEST IO.py"

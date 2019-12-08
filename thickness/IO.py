@@ -170,6 +170,7 @@ class Hoc:
         - 3. output_path: The path of the desired output hoc file. If not given, the method will use self.output_path.
         """
         thicknesses = self.all_data["thicknesses"]
+        hoc_points = self.all_data["points"]
         input_path = self.input_path
         output_path = self.output_path
 
@@ -196,16 +197,16 @@ class Hoc:
 
                     if (pt3daddCommand > -1) and neuron_section:
 
-                        hocPoint = thicknesses[in_neuron_line_number]
-
+                        thickness = thicknesses[in_neuron_line_number]
+                        hoc_point = hoc_points[in_neuron_line_number]
                         line = line.replace("pt3dadd", "")
                         matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
                         point = map(float, matches)
 
-                        writeHocFile.write('{{pt3dadd({:f},{:f},{:f},{:f})}}\n'.format(hocPoint[0],
-                                                                                       hocPoint[1],
-                                                                                       hocPoint[2],
-                                                                                       hocPoint[3]))
+                        writeHocFile.write('{{pt3dadd({:f},{:f},{:f},{:f})}}\n'.format(hoc_point[0],
+                                                                                       hoc_point[1],
+                                                                                       hoc_point[2],
+                                                                                       thickness))
                         in_neuron_line_number = in_neuron_line_number + 1
                     else:
                         writeHocFile.write(line)

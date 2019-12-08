@@ -29,8 +29,6 @@ import transformation as tr
 from utils import get_size_of_object
 
 
-
-
 class ThicknessExtractor:
     def __init__(self, points, image_file, xy_resolution=0.092, z_resolution=0.5, ray_length_front_to_back_in_micron=20,
                  number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=10):
@@ -44,8 +42,9 @@ class ThicknessExtractor:
             5. ray_length_front_to_back_in_micron: maximum distance from the seed point considered in micrometer.
 
         """
+        self.original_points = points
         self.convert_points = tr.ConvertPoints(xy_resolution, xy_resolution, z_resolution)
-        points_in_image_coordinates_2d = self.convert_points.coordinate_2d_to_image_coordinate_2d(points)
+        points_in_image_coordinates_2d = self.convert_points.coordinate_2d_to_image_coordinate_2d(self.original_points)
         self.points = points_in_image_coordinates_2d  # image_coordinate_2d, TYPE: 2d list of floats,
         # but converted in the unit of the image.
         self.seed_corrected_points = []
@@ -81,24 +80,16 @@ class ThicknessExtractor:
 
         points = self.points
         all_data = {}
-
         for idx, point in enumerate(points):
-            print str(idx) + " points from " + str(len(points)) + " are completed."
-            sys.stdout.write("\033[F")
+            #         print str(idx) + " points from " + str(len(points)) + " are completed."
+            #        sys.stdout.write("\033[F")
             data = self.get_all_data_by_point(point)
-            all_data[
-                tuple(self.convert_points.image_coordinate_2d_to_coordinate_2d([point])[0])
-            ] = data
-        print str(len(points)) + " points from " + str(len(points)) + " are completed."
-        print "size of objects:"
-        print "size of object in MB all_data: " + str(get_size_of_object(all_data)/(1024.*1024.))
-        print "size of object in MB self.points: " + str(get_size_of_object(self.points) /(1024.*1024.))
-        print "size of object in B self.convert_points: " + str(get_size_of_object(self.convert_points))
-        print "size of object in B self.contour_list: " + str(get_size_of_object(self.contour_list))
+            all_data[idx] = data
 
-        self.all_data = all_datad
+        print "size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.))
+
+        self.all_data = all_data
         self._tidy_up()
-
 
     def get_all_data_by_point(self, point):
         """
@@ -113,13 +104,15 @@ class ThicknessExtractor:
         7. contour_list, 8. rays_intensity_profile, 9. rays_indices, 10. selected_profile_index
 
         """
-        all_data = {"original_point": point}
+
+        all_data = {"converted_point_by_image_coordinate": point}
+        original_point = self.convert_points.image_coordinate_2d_to_coordinate_2d([point])
+        all_data["original_points"] = original_point
         if self._max_seed_correction_radius_in_image_coordinates:
             point = self._correct_seed(point)
         all_data["seed_corrected_point"] = point
         thicknesses_list = []
         min_thickness = np.Inf
-        thickness = 0
         contour_list = []
         rays_intensity_profile = []
         rays_indices = []
