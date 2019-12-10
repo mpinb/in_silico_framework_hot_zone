@@ -49,6 +49,7 @@ class ThicknessExtractor:
         # but converted in the unit of the image.
         self.seed_corrected_points = []
         # TYPE: Must be transformation.Data.image_coordinate_2d
+        self.image_file = image_file
         self.image = _read_image(image_file)
         self.xy_resolution = xy_resolution
         self.z_resolution = z_resolution

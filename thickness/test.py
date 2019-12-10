@@ -128,7 +128,7 @@ def __test_pipeline():
     p.set_thickness_extractor_parameters()
     p.set_bijective_points_by_file(bijective_points_path)
 
-#   p.set_client_for_parallelize("localhost", 8780)
+#   p.set_client_for_parallelization("localhost", 8780)
 
     df = p.run()
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
