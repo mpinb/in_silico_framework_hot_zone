@@ -22,8 +22,13 @@ class SliceData:
         self.transformation_object = None
         self.slice_threshold = slice_threshold
 
-    def set_am_file_path(self, path):
+    def setup_am_file(self, path):
+        if self.output_path is None:
+            raise RuntimeError("Please first set_output_path by set_output_path('path')")
         self.am_file_path = path
+        self.am_object = IO.Am(self.am_file_path, self.output_path)
+        self.am_object.read()
+        self.points = self.am_object.all_data["POINT { float[3] EdgePointCoordinates }"]
 
     def set_image_file_path(self, path):
         self.image_file_path = path
@@ -39,13 +44,6 @@ class SliceData:
             self.slice_name = slice_name
         else:
             self.slice_name = u.get_slice_name(self.am_file_path, self.image_file_path)
-
-    # TODO: provide default values
-
-    def read_inputs(self):
-        self.am_object = IO.Am(self.am_file_path, self.output_path)
-        self.am_object.read()
-        self.points = self.am_object.all_data["POINT { float[3] EdgePointCoordinates }"]
 
     def compute(self, xy_resolution, z_resolution, ray_length_front_to_back_in_micron,
                 number_of_rays, threshold_percentage, max_seed_correction_radius_in_micron):
@@ -158,24 +156,18 @@ class ExtractThicknessPipeline:
 
     def run(self):
         self._initialize_project()
+        self._setup_slice_objects()
+        delays = self._extract_thicknesses()
         if self._parallel:
-            delays = self._extract_thicknesses_parallel()
             futures = self.client.compute(delays)
             wait(futures)
-            for future in futures:
-                thicknesses_object = future.result()
-                threshold = thicknesses_object.threshold_percentage
-                for slice_name in sorted(self.all_slices[threshold]):
-                    slice_object = self.all_slices[threshold][slice_name]
-                    if slice_object.image_file_path == thicknesses_object.image_file:
-                        slice_object.slice_thicknesses_object = thicknesses_object
-                        slice_object.write_output()
-        else:
-            self._extract_thicknesses()
+            self._update_slice_objects_with_future_values(futures)
+        self._write_am_outputs()
         self._transform_points()
         self._stacking_all_slices()
         self._update_hoc_file_with_thicknesses()
-        return self._compute_all_data_table()
+        data_table = self._compute_all_data_table()
+        return data_table
 
     def _initialize_project(self):
 
@@ -184,68 +176,47 @@ class ExtractThicknessPipeline:
         for threshold in self.thresholds_list:
             u.make_directories(self.output_folder + "/" + str(threshold))
 
+    def _setup_slice_objects(self):
+        thresholds = self.thresholds_list
+        if self.am_paths is None or self.tif_paths is None:
+            raise RuntimeError("You need to set am and tif paths")
+        for threshold in thresholds:
+            all_slices_in_threshold = {}
+            print "In threshold: " + str(threshold)
+            for am_file in self.am_paths:
+                slice_object = SliceData(slice_threshold=threshold)
+                slice_object.set_output_path(self.output_folder + "/" + str(threshold) +
+                                             "/" + u.get_file_name_from_path(am_file))
+                slice_object.setup_am_file(am_file)
+                slice_object.set_image_file_path(u.get_am_image_match([am_file],
+                                                                      self.tif_paths)[am_file])
+                slice_object.set_slice_name()
+                print "--------"
+                print "Setting up slice:" + str(slice_object.slice_name)
+
+                all_slices_in_threshold[slice_object.slice_name] = slice_object
+            self.all_slices[threshold] = all_slices_in_threshold
+
     def _extract_thicknesses(self):
         thresholds = self.thresholds_list
-        if self.am_paths is None or self.tif_paths is None:
-            raise RuntimeError("You need to set am and tif paths")
-        for threshold in thresholds:
-            all_slices_in_threshold = {}
-            print "In threshold: " + str(threshold)
-            for am_file in self.am_paths:
-                slice_object = SliceData(slice_threshold=threshold)
-                slice_object.set_am_file_path(am_file)
-                slice_object.set_image_file_path(u.get_am_image_match([am_file],
-                                                                      self.tif_paths)[am_file])
-                slice_object.set_slice_name()
-                print "--------"
-                print "Working on slice:" + str(slice_object.slice_name)
-                slice_object.set_output_path(self.output_folder + "/" + str(threshold) +
-                                             "/" + u.get_file_name_from_path(am_file))
-                slice_object.read_inputs()
-                s = self
-                slice_object.compute(s.xy_resolution, s.z_resolution,
-                                     s.ray_length_front_to_back_in_micron,
-                                     s.number_of_rays, threshold,
-                                     s.max_seed_correction_radius_in_micron)
-                slice_object.write_output()
-                all_slices_in_threshold[slice_object.slice_name] = slice_object
-            self.all_slices[threshold] = all_slices_in_threshold
-    def _setup_slice_objects(self):
-        pass
-    def _extract_thicknesses_parallel(self):
-        # start setup slice objects
-        thresholds = self.thresholds_list
-        if self.am_paths is None or self.tif_paths is None:
-            raise RuntimeError("You need to set am and tif paths")
-        for threshold in thresholds:
-            all_slices_in_threshold = {}
-            print "In threshold: " + str(threshold)
-            for am_file in self.am_paths:
-                slice_object = SliceData(slice_threshold=threshold)
-                slice_object.set_am_file_path(am_file)
-                slice_object.set_image_file_path(u.get_am_image_match([am_file],
-                                                                      self.tif_paths)[am_file])
-                slice_object.set_slice_name()
-                print "--------"
-                print "Working on slice:" + str(slice_object.slice_name)
-                slice_object.set_output_path(self.output_folder + "/" + str(threshold) +
-                                             "/" + u.get_file_name_from_path(am_file))
-                slice_object.read_inputs()
-                ### todo: can this be done when setting am and tif paths?
-                all_slices_in_threshold[slice_object.slice_name] = slice_object
-            self.all_slices[threshold] = all_slices_in_threshold
-        # end setup slice objects
-        s = self
         delays = []
+        s = self
         for threshold in thresholds:
-            for slice_name in sorted(self.all_slices[threshold]):
-                slice_object = self.all_slices[threshold][slice_name]
-                delay = _parallel_helper_delayed(slice_object.points, slice_object.image_file_path, s.xy_resolution,
-                                                 s.z_resolution,
-                                                 s.ray_length_front_to_back_in_micron,
-                                                 s.number_of_rays, threshold,
-                                                 s.max_seed_correction_radius_in_micron)
-                delays.append(delay)
+            for slice_name in sorted(s.all_slices[threshold]):
+                slice_object = s.all_slices[threshold][slice_name]
+                if s._parallel:
+                    delay = _parallel_helper_delayed(slice_object.points, slice_object.image_file_path, s.xy_resolution,
+                                                     s.z_resolution,
+                                                     s.ray_length_front_to_back_in_micron,
+                                                     s.number_of_rays, threshold,
+                                                     s.max_seed_correction_radius_in_micron)
+                    delays.append(delay)
+                else:
+                    slice_object.compute(s.xy_resolution, s.z_resolution,
+                                         s.ray_length_front_to_back_in_micron,
+                                         s.number_of_rays, threshold,
+                                         s.max_seed_correction_radius_in_micron)
+
         return delays
 
     def _transform_points(self):
@@ -296,6 +267,22 @@ class ExtractThicknessPipeline:
         assert len(self.all_thicknesses) == len([1 for thicknesses_in_threshold in self.all_thicknesses.values()
                                                  if len(thicknesses_in_threshold) ==
                                                  len(self.all_thicknesses.values()[0])])
+
+    def _write_am_outputs(self):
+        s = self
+        for threshold in s.thresholds_list:
+            for slice_name in sorted(s.all_slices[threshold]):
+                slice_object = s.all_slices[threshold][slice_name]
+                slice_object.write_output()
+
+    def _update_slice_objects_with_future_values(self, futures):
+        for future in futures:
+            thicknesses_object = future.result()
+            threshold = thicknesses_object.threshold_percentage
+            for slice_name in sorted(self.all_slices[threshold]):
+                slice_object = self.all_slices[threshold][slice_name]
+                if slice_object.image_file_path == thicknesses_object.image_file:
+                    slice_object.slice_thicknesses_object = thicknesses_object
 
 
 def _parallel_helper(points, image_file_path, xy_resolution, z_resolution,
