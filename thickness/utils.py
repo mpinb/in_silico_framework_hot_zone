@@ -6,6 +6,22 @@ import transformation as tr
 import cloudpickle as pickle
 
 
+class SaveData:
+    def __init__(self, data_file):
+        self.data_file = data_file
+
+    def dump(self, data):
+        f = open(self.data_file, 'wb')
+        pickle.dump(data, f)
+        f.close()
+
+    def load(self):
+        if os.path.isfile(self.data_file) is False:
+            return None
+        f = open(self.data_file, 'rb')
+        return pickle.load(f)
+
+
 def get_am_paths_from_hx(hx_path, verbose=False):
     out = []
     with open(hx_path) as f:
@@ -58,7 +74,12 @@ def get_am_image_match(am_paths, tif_paths):
 
 
 def get_nearest_point(point, points):
-    neighbours = get_neighbours_of_point(point, points)
+    neighbours = []
+    width = 10
+    i = 1
+    while len(neighbours) is 0 and i <= 20:
+        neighbours = get_neighbours_of_point(point, points, width)
+        width = width + width
     if len(neighbours) is 0:
         neighbours = points
     distances = [tr.get_distance(point, neighbour) for neighbour in neighbours]

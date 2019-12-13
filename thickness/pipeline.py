@@ -6,7 +6,8 @@ import transformation as tr
 import IO
 import utils as u
 import analysis as an
-from dask.distributed import wait, progress
+from dask.distributed import wait
+import time
 
 
 class SliceData:
@@ -55,12 +56,14 @@ class SliceData:
                                                          max_seed_correction_radius_in_micron)
         self.slice_thicknesses_object = slice_thicknesses_object
 
-
+    
 class ExtractThicknessPipeline:
     def __init__(self):
         # ---- flags and settings
         self._parallel = False
         self.client = None
+        self._save_data = True
+        self.save_data = None
         self._3D = False
         # ---- files and folders
         self.hoc_file = None
@@ -158,25 +161,36 @@ class ExtractThicknessPipeline:
         self._initialize_project()
         self._setup_slice_objects()
         delays = self._extract_thicknesses()
+
         if self._parallel:
-            futures = self.client.compute(delays)
-            wait(futures)
-            self._update_slice_objects_with_future_values(futures)
+            results = None
+            if self._save_data:
+                results = self.save_data.load()
+            if results is None:
+                futures = self.client.compute(delays)
+                wait(futures)
+                results = self.client.gather(futures)
+                self.save_data.dump(results)
+            self._update_slice_objects_with_future_values(results)
         self._write_am_outputs()
         self._transform_points()
         self._stacking_all_slices()
-        self._update_hoc_file_with_thicknesses()
+        # self._update_hoc_file_with_thicknesses()
         data_table = self._compute_all_data_table()
         return data_table
 
     def _initialize_project(self):
-
+        print "---- initialize project ----"
         if self.output_folder is None:
             self.output_folder = u.make_directories(self.output_folder)
         for threshold in self.thresholds_list:
             u.make_directories(self.output_folder + "/" + str(threshold))
+        if self._save_data:
+            data_file = self.output_folder + "/" + "data_file"
+            self.save_data = u.SaveData(data_file)
 
     def _setup_slice_objects(self):
+        print "---- setup slice objects ----"
         thresholds = self.thresholds_list
         if self.am_paths is None or self.tif_paths is None:
             raise RuntimeError("You need to set am and tif paths")
@@ -198,6 +212,7 @@ class ExtractThicknessPipeline:
             self.all_slices[threshold] = all_slices_in_threshold
 
     def _extract_thicknesses(self):
+        print "---- extract thicknesses ----"
         thresholds = self.thresholds_list
         delays = []
         s = self
@@ -205,11 +220,11 @@ class ExtractThicknessPipeline:
             for slice_name in sorted(s.all_slices[threshold]):
                 slice_object = s.all_slices[threshold][slice_name]
                 if s._parallel:
-                    delay = _parallel_helper_delayed(slice_object.points, slice_object.image_file_path, s.xy_resolution,
-                                                     s.z_resolution,
-                                                     s.ray_length_front_to_back_in_micron,
-                                                     s.number_of_rays, threshold,
-                                                     s.max_seed_correction_radius_in_micron)
+                    delay = _parallel_helper(slice_object.points, slice_object.image_file_path, s.xy_resolution,
+                                             s.z_resolution,
+                                             s.ray_length_front_to_back_in_micron,
+                                             s.number_of_rays, threshold,
+                                             s.max_seed_correction_radius_in_micron)
                     delays.append(delay)
                 else:
                     slice_object.compute(s.xy_resolution, s.z_resolution,
@@ -220,6 +235,7 @@ class ExtractThicknessPipeline:
         return delays
 
     def _transform_points(self):
+        print "---- transform points ----"
         transformation_object = tr.AffineTransformation()
         transformation_object.set_transformation_matrix_by_aligned_points(self.bijective_points[::2],
                                                                           self.bijective_points[1::2])
@@ -232,20 +248,29 @@ class ExtractThicknessPipeline:
                 slice_object.transformation_object = transformation_object
 
     def _update_hoc_file_with_thicknesses(self):
-        for hoc_point in self.hoc_object.all_data["points"]:
+
+        print "---- update hoc file with thicknesses ----"
+        total_points = len(self.hoc_object.all_data["points"])
+        for idx, hoc_point in enumerate(self.hoc_object.all_data["points"]):
+            start = time.time()
             nearest_point_index = self.all_transformed_points_with_default_threshold.index(
                 u.get_nearest_point(hoc_point, self.all_transformed_points_with_default_threshold)
             )
             self.hoc_object.all_data["thicknesses"].append(
                 self.all_thicknesses[self.default_threshold][nearest_point_index]
             )
-
+            end = time.time()
+            print "time:" + str(end - start)
+            print "point " + str(idx + 1) + "from " + str(total_points)
+            print "------------"
         self.hoc_object.update_thicknesses()
 
     def _compute_all_data_table(self):
+        print "---- compute all data table ----"
         return an.get_all_data_output_table(self.all_slices, self.default_threshold)
 
     def _stacking_all_slices(self):
+        print "---- stacking all slices ----"
         all_slices_with_default_threshold = self.all_slices[self.default_threshold]
         self.all_points_with_default_threshold = [point for key in sorted(all_slices_with_default_threshold.keys())
                                                   for point in all_slices_with_default_threshold[key].points]
@@ -261,6 +286,7 @@ class ExtractThicknessPipeline:
                 for key in sorted(all_slices_with_same_threshold.keys())
                 for index in range(len(all_slices_with_same_threshold[key].points))]}
 
+        print "Number of all points: " + str(len(self.all_points_with_default_threshold))
         assert len(self.all_points_with_default_threshold) == len(
             self.all_transformed_points_with_default_threshold) == len(
             self.all_thicknesses.values()[0])
@@ -269,15 +295,17 @@ class ExtractThicknessPipeline:
                                                  len(self.all_thicknesses.values()[0])])
 
     def _write_am_outputs(self):
+        print "---- write am outputs ----"
         s = self
         for threshold in s.thresholds_list:
             for slice_name in sorted(s.all_slices[threshold]):
                 slice_object = s.all_slices[threshold][slice_name]
                 slice_object.write_output()
 
-    def _update_slice_objects_with_future_values(self, futures):
-        for future in futures:
-            thicknesses_object = future.result()
+    def _update_slice_objects_with_future_values(self, results):
+        print "---- update slice objects with future values ----"
+        for result in results:
+            thicknesses_object = result
             threshold = thicknesses_object.threshold_percentage
             for slice_name in sorted(self.all_slices[threshold]):
                 slice_object = self.all_slices[threshold][slice_name]
@@ -285,6 +313,7 @@ class ExtractThicknessPipeline:
                     slice_object.slice_thicknesses_object = thicknesses_object
 
 
+@dask.delayed
 def _parallel_helper(points, image_file_path, xy_resolution, z_resolution,
                      ray_length_front_to_back_in_micron,
                      number_of_rays, threshold,
@@ -297,5 +326,4 @@ def _parallel_helper(points, image_file_path, xy_resolution, z_resolution,
 
     return slice_thicknesses_object
 
-
-_parallel_helper_delayed = dask.delayed(_parallel_helper)
+# _parallel_helper_delayed = dask.delayed(_parallel_helper)
