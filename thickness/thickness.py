@@ -27,6 +27,7 @@ import warnings
 import SimpleITK as sitk
 import transformation as tr
 from utils import get_size_of_object
+import utils as u
 
 
 class ThicknessExtractor:
@@ -87,6 +88,7 @@ class ThicknessExtractor:
             data = self.get_all_data_by_point(point)
             all_data[idx] = data
 
+        overlaps = self.get_overlpas()
         print "size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.))
 
         self.all_data = all_data
@@ -276,6 +278,19 @@ class ThicknessExtractor:
         del self.points
         del self.convert_points
         del self.contour_list
+
+    def get_overlaps(self):
+        self.all_data.keys()
+        cubes = [u.get_neighbours_of_point(point, self.points, width=2) for point in self.points]
+        for cube in cubes:
+            for main_point in cube:
+                for neighbour_point in cube:
+                    if main_point is neighbour_point:
+                        continue
+                    
+                point_1 = cube[idx]
+                point_2 = cube[idx + 1]
+        overlaps = u.find_overlaps(self.slice_thicknesses_object)
 
 
 def _circle_filter(x, y, r):

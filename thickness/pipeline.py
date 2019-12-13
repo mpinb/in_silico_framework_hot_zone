@@ -56,7 +56,7 @@ class SliceData:
                                                          max_seed_correction_radius_in_micron)
         self.slice_thicknesses_object = slice_thicknesses_object
 
-    
+
 class ExtractThicknessPipeline:
     def __init__(self):
         # ---- flags and settings

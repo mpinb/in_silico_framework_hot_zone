@@ -100,3 +100,32 @@ def contains(point, cube):
 
 def get_size_of_object(obj):
     return len(pickle.dumps(obj))
+
+
+def find_overlaps(points, listOfNeighbours, radii_Details):
+    overlaps = []
+    for nr_points in listOfNeighbours:
+        main_point = nr_points[0]
+        #        print "in findOverlap(), the radiiDetails is:", radii_Details
+
+        neighbours = nr_points[1:]
+        if not neighbours:
+            continue
+        temp = searchForPointInList(main_point, radii_Details)
+        inedxOfmainPoint = temp[0]
+        main_point_rays = temp[1]
+        #        print "in find_overlaps(), main_point_rays: is", main_point_rays
+        for neighbour_point in neighbours:
+            temp = searchForPointInList(neighbour_point, radii_Details)
+
+            inedxOfNeighbour = temp[0]
+            neighbour_point_rays = temp[1]
+
+            #            print "in find_overlaps(), in for loop, neighbour_rays is:", neighbour_point_rays
+            main_point_contour = makeContourFromRays(main_point_rays)
+            neighbour_point_contour = makeContourFromRays(neighbour_point_rays)
+            if checkOverlaps(main_point_contour, neighbour_point_contour):
+                if (compare_points(main_point, neighbour_point) >= 10E-14):
+                    overlaps.append([main_point, neighbour_point])
+
+    return overlaps
