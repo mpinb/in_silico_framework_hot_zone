@@ -27,6 +27,6 @@ def get_all_data_output_table(all_slices, default_threshold):
             df_individual_slice = pd.concat([df_individual_slice,
                                              df_individual_slice_thicknesses_object_all_data,
                                              ], keys=[slice_object.slice_name])
-            df_all_slices = pd.concat([df_all_slices, df_individual_slice])
+            df_all_slices = pd.concat([df_all_slices, df_individual_slice_thicknesses_object_all_data])
 
     return df_all_slices

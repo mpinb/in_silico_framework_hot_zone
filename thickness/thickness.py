@@ -28,6 +28,7 @@ import SimpleITK as sitk
 import transformation as tr
 from utils import get_size_of_object
 import utils as u
+import itertools
 
 
 class ThicknessExtractor:
@@ -112,11 +113,11 @@ class ThicknessExtractor:
 
         all_data = {"converted_point_by_image_coordinate": point}
         original_point = self.convert_points.image_coordinate_2d_to_coordinate_2d([point])
-        all_data["original_points"] = original_point
+        all_data["original_points"] = original_point[0]
         if self._max_seed_correction_radius_in_image_coordinates:
             point = self._correct_seed(point)
-        all_data["seed_corrected_point"] = point
-        self.seed_corrected_points.append(point)
+        all_data["seed_corrected_point"] = [point[0], point[1], all_data["converted_point_by_image_coordinate"][2]]
+        self.seed_corrected_points.append([point[0], point[1], all_data["converted_point_by_image_coordinate"][2]])
         thicknesses_list = []
         min_thickness = np.Inf
         contour_list = []
@@ -149,11 +150,11 @@ class ThicknessExtractor:
             all_data["front_contour_index"] = front_contour_index
             if len(back_contour_index) == 2 and len(front_contour_index) == 2:
                 thickness = tr.get_distance(back_contour_index, front_contour_index)
+                contour_list.append([back_contour_index, front_contour_index])
             else:
                 thickness = 0
             # assert (len(back_contour_index) == 2)
             # assert (len(front_contour_index) == 2)
-            contour_list.append([back_contour_index, front_contour_index])
 
             thicknesses_list.append(thickness)
 
@@ -324,6 +325,7 @@ def _check_overlap(contour1, contour2):
 
 
 def _slope(p1, p2):
+    print p1
     if p1[0] - p2[0] == 0:
         return np.inf
     return (p1[1] - p2[1]) / (p1[0] - p2[0])
@@ -335,8 +337,10 @@ def _intercept(m, p2):
 
 def _create_polygon_lines_by_contours(contour):
     polygon_lines = []
-    for i, p1 in enumerate(contour):
-        p2 = contour[i + 1] if i + 1 != len(contour) else contour[0]
+    edge_pairs = [[p1, p2] for i, p1 in enumerate(contour) for p2 in contour[i:] if p1 != p2 and p1 != []]
+    for edge_pair in edge_pairs:
+        p1 = edge_pair[0]
+        p2 = edge_pair[1]
         m = _slope(p1, p2)
         b = _intercept(m, p2)
         line = [p1, p2, m, b]
