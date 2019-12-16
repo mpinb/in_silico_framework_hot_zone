@@ -10,13 +10,7 @@ import thickness as th
 import pipeline
 from definitions import ROOT_DIR
 import pandas as pd
-
-
-def compare_points(p1, p2):
-    if p1 == p2:
-        return True
-    else:
-        return False
+import utils as u
 
 
 def __test_am_read():
@@ -55,7 +49,7 @@ def __test_am_read():
 
     print "The point read from the file is as the same as the one from the " \
           "Am.read() method: " + \
-          str(compare_points(defined_point, point))
+          str(u.are_same_points(defined_point, point))
     print "-------"
 
     del am_object

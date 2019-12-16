@@ -69,6 +69,7 @@ class ThicknessExtractor:
 
         self.padded_image = _pad_image(self.image, self._max_seed_correction_radius_in_image_coordinates_in_pixel)
         self.contour_list = []
+        self.all_overlaps = []
         self.all_data = {}
 
         self.get_all_data_by_points()
@@ -87,11 +88,12 @@ class ThicknessExtractor:
             #        sys.stdout.write("\033[F")
             data = self.get_all_data_by_point(point)
             all_data[idx] = data
-
-        overlaps = self.get_overlpas()
-        print "size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.))
+            all_data[idx]["overlaps"] = []
 
         self.all_data = all_data
+        print "size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.))
+
+        self.all_overlaps = self.update_all_data_with_overlaps()
         self._tidy_up()
 
     def get_all_data_by_point(self, point):
@@ -114,6 +116,7 @@ class ThicknessExtractor:
         if self._max_seed_correction_radius_in_image_coordinates:
             point = self._correct_seed(point)
         all_data["seed_corrected_point"] = point
+        self.seed_corrected_points.append(point)
         thicknesses_list = []
         min_thickness = np.Inf
         contour_list = []
@@ -279,18 +282,74 @@ class ThicknessExtractor:
         del self.convert_points
         del self.contour_list
 
-    def get_overlaps(self):
-        self.all_data.keys()
-        cubes = [u.get_neighbours_of_point(point, self.points, width=2) for point in self.points]
+    def update_all_data_with_overlaps(self):
+        points = self.seed_corrected_points
+        overlaps = []
+        cubes = [u.get_neighbours_of_point(point, points, width=2) for point in points]
         for cube in cubes:
-            for main_point in cube:
-                for neighbour_point in cube:
-                    if main_point is neighbour_point:
-                        continue
-                    
-                point_1 = cube[idx]
-                point_2 = cube[idx + 1]
-        overlaps = u.find_overlaps(self.slice_thicknesses_object)
+            if len(cube) == 0:
+                continue
+            overlaps.append(([self.find_overlap(p1, p2) for p1 in cube for p2 in cube if p1 != p2]))
+        return overlaps
+
+    def find_overlap(self, point_1, point_2):
+        data_1 = self._filter_all_data_by_point(point_1)
+        keys_1 = sorted(data_1.keys())
+        contours_1 = data_1[keys_1[0]]["contour_list"]
+
+        data_2 = self._filter_all_data_by_point(point_2)
+        keys_2 = sorted(data_2.keys())
+        contours_2 = data_2[keys_2[0]]["contour_list"]
+
+        if _check_overlap(contours_1, contours_2):
+            self.all_data[keys_1[0]]["overlaps"].append([point_1, point_2])
+            self.all_data[keys_2[0]]["overlaps"].append([point_2, point_1])
+
+            # if u.compare_points(point1, point2) >= 10E-14:
+            return [point_1, point_2]
+
+    def _filter_all_data_by_point(self, point):
+        return dict(filter(lambda x: x[1]["seed_corrected_point"] == point, self.all_data.items()))
+
+
+def _check_overlap(contour1, contour2):
+    polygon_lines1 = _create_polygon_lines_by_contours(contour1)
+    polygon_lines2 = _create_polygon_lines_by_contours(contour2)
+    for line1 in polygon_lines1:
+        for line2 in polygon_lines2:
+            ints = _get_intersection(line1, line2)
+            if line1[0][0] <= ints[0] <= line1[1][0] and line1[0][1] <= ints[1] <= line1[1][1]:
+                return True
+    return False
+
+
+def _slope(p1, p2):
+    if p1[0] - p2[0] == 0:
+        return np.inf
+    return (p1[1] - p2[1]) / (p1[0] - p2[0])
+
+
+def _intercept(m, p2):
+    return -m * p2[0] + p2[1]
+
+
+def _create_polygon_lines_by_contours(contour):
+    polygon_lines = []
+    for i, p1 in enumerate(contour):
+        p2 = contour[i + 1] if i + 1 != len(contour) else contour[0]
+        m = _slope(p1, p2)
+        b = _intercept(m, p2)
+        line = [p1, p2, m, b]
+        polygon_lines.append(line)
+    return polygon_lines
+
+
+def _get_intersection(line1, line2):
+    if line1[2] - line2[2] == 0:
+        return [np.inf, np.inf]
+    x = (line2[3] - line1[3]) / (line1[2] - line2[2])
+    y = line1[2] * x + line1[3]
+    return [x, y]
 
 
 def _circle_filter(x, y, r):
