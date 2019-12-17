@@ -33,12 +33,14 @@ class AffineTransformation:
         self.points = None
         self.transformed_points = None
 
-    def set_transformation_matrix_by_am_file(self):
+    def set_transformation_matrix_by_am_file(self, input_path=None):
         """
         This method can extract the amira transformation matrix written in am file.
 
         """
-        input_path = self.input_path
+        if input_path is None:
+            input_path = self.input_path
+            assert input_path
 
         matrix = []
         vector = []

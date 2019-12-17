@@ -30,6 +30,12 @@ class SliceData:
         self.am_object = IO.Am(self.am_file_path, self.output_path)
         self.am_object.read()
         self.points = self.am_object.all_data["POINT { float[3] EdgePointCoordinates }"]
+        if self.am_object.transformation_matrix_exist:
+            tr_object = tr.AffineTransformation()
+            tr_object.set_transformation_matrix_by_am_file(self.am_file_path)
+            tr_object.transform_points(self.points)
+            self.points = tr_object.transformed_points
+            del tr_object
 
     def set_image_file_path(self, path):
         self.image_file_path = path

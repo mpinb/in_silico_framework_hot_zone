@@ -59,6 +59,7 @@ class Am:
         self.config = {}
         self.input_path = input_path
         self.output_path = output_path
+        self.transformation_matrix_exist = False
         self.all_data = {}
 
     def read(self):
@@ -112,6 +113,8 @@ class Am:
             commands = {}
             config_end = 0
             for idx, line in enumerate(lines):
+                if line.rfind(line.rfind("TransformationMatrix") > -1):
+                    self.transformation_matrix_exist = True
                 if line.rfind("@") > -1:
                     # command_sign supposes to hold the values like @1 or @2 or ...
                     command_sign = "@" + line[line.rfind("@") + 1:].strip()
