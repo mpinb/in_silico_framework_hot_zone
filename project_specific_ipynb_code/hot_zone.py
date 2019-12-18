@@ -76,7 +76,7 @@ def get_cell_object_from_hoc(hocpath):
 # database containing mikes cells
 ##########################################
 # id: '2019-09-09_19894_YfrHaoO'
-mdb_cells = I.ModelDataBase('/nas1/Data_arco/results/20190909_VPM_contact_analysis_for_mike_review') 
+## mdb_cells = I.ModelDataBase('/nas1/Data_arco/results/20190909_VPM_contact_analysis_for_mike_review') 
 
 ###########################################
 # test, whether two ranges overlap
@@ -349,11 +349,12 @@ class Synapse:
         self.x = x
         self.preCellType = preCellType
 
+       
 class ExportSynapses:
     def __init__(self, dendrogram):
         self.d = dendrogram
         self.synapses = None
-        self.functionalMap = None
+        self.functionalMap = []
         self._create_synapses()
         
     def _create_synapses(self):
@@ -374,10 +375,44 @@ class ExportSynapses:
             out[k] = sorted(out[k], key = lambda x: (x.secID, x.x))
         self.synapses = out
 
-    def create_functional_map_with_one_cell_per_synapse_from_cell_object(self):
-        synapses_dict = self.synapses
-        self.functionalMap = [(k, lv, lv) for k in synapses_dict.keys() for lv in range(len(synapses_dict[k]))]  
+    def get_filtered_synapses_dict(self, synapse_types):
+        '''returns self.synapses, but filtered, such that it only contains synapse types 
+        that are an element of synapse_types'''
+        return {k: v for k,v in self.synapses.iteritems() if k in synapse_types}
         
+    def create_functional_map_with_one_cell_per_synapse_from_cell_object(self, synapse_types = None):
+        if synapse_types is None:
+            synapses_dict = self.synapses
+        else:
+            synapses_dict = self.get_filtered_synapses_dict(synapse_types)
+        print synapses_dict.keys()
+        functionalMap = [(k, lv, lv) for k in synapses_dict.keys() for lv in range(len(synapses_dict[k]))]  
+        self.functionalMap.extend(functionalMap)
+        
+    def create_functional_map_with_n_cells(self, synapse_type, n):
+
+        synapses_dict = self.synapses
+        cells = {k: [] for k in range(n)}
+        synapses = list(range(len(synapses_dict[synapse_type])))
+        import random
+        for s in synapses:
+            cell = random.choice(cells.keys())
+            cells[cell].append(s)
+        
+        values = [list(range(len(v))) for v in cells.values() if v]
+        cells = dict(zip(range(len(values)), values)) # if cell has no assigned synapses, skip it
+        
+        functionalMap = []
+        synid = 0
+        for cellid in cells:
+            for _ in cells[cellid]:
+                functionalMap.append((synapse_type, cellid, synid))
+                synid += 1
+        
+        #functionalMap = [(synapse_type, cellid, synid) for cellid in cells for synid in cells[cellid]] 
+        self.functionalMap.extend(functionalMap)
+        
+                
     def save(self, outdir):
         I.scp.writer.write_cell_synapse_locations(I.os.path.join(outdir, 'con.syn'), 
                                                   self.synapses, 
@@ -385,7 +420,8 @@ class ExportSynapses:
         I.scp.writer.write_functional_realization_map(I.os.path.join(outdir, 'con.con'), 
                                                       self.functionalMap, 
                                                       '__no__anatomical__id')
-        
+
+ 
 # reload(hot_zone)
 # k = 'CDK85'
 # with I.silence_stdout:
