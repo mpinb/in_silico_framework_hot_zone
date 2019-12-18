@@ -33,7 +33,7 @@ import itertools
 
 class ThicknessExtractor:
     def __init__(self, points, image_file, xy_resolution=0.092, z_resolution=0.5, ray_length_front_to_back_in_micron=20,
-                 number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=10):
+                 number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=10, _3d=False):
         """ This is the main method for extracting Thickness
         - Inputs:
             1. points: must be in the type transformation.Data.coordinate_2d, so they are a list of
@@ -73,6 +73,10 @@ class ThicknessExtractor:
         self.all_overlaps = []
         self.all_data = {}
 
+        # Set the _3D flag to True, the class will expect to use the full stack images and will not
+        # detect overlap, since it does not needed anymore.
+        self._3D = _3d
+
         self.get_all_data_by_points()
 
     def get_all_data_by_points(self):
@@ -94,7 +98,9 @@ class ThicknessExtractor:
         self.all_data = all_data
         print "size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.))
 
-        self.all_overlaps = self.update_all_data_with_overlaps()
+        if self._3D is False:
+            self.all_overlaps = self.update_all_data_with_overlaps()
+
         self._tidy_up()
 
     def get_all_data_by_point(self, point):
