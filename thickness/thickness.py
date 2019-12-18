@@ -20,6 +20,7 @@ Tests
 - The test functions are inside the test.py. One can also use them as example of how to use the functions.
 
 """
+import os
 import sys
 
 import numpy as np
@@ -32,8 +33,9 @@ import itertools
 
 
 class ThicknessExtractor:
-    def __init__(self, points, image_file, xy_resolution=0.092, z_resolution=0.5, ray_length_front_to_back_in_micron=20,
-                 number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=10, _3d=False):
+    def __init__(self, points, image_file=None, xy_resolution=0.092, z_resolution=0.5, ray_length_front_to_back_in_micron=20,
+                 number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=10, _3d=False,
+                 image_stack=None):
         """ This is the main method for extracting Thickness
         - Inputs:
             1. points: must be in the type transformation.Data.coordinate_2d, so they are a list of
@@ -51,8 +53,26 @@ class ThicknessExtractor:
         # but converted in the unit of the image.
         self.seed_corrected_points = []
         # TYPE: Must be transformation.Data.image_coordinate_2d
+
         self.image_file = image_file
-        self.image = _read_image(image_file)
+        if image_file is not None:
+            self._set_image(image_file)
+
+        self.image_stack = image_stack
+        # We don't set the whole image_stack (eg. : by self._set_image() ) here since the memory usage will
+        # be much less if we read the corresponding image on demand of each point.
+        # image_stack is a dictionary with keys as z_coordinate indicator, and values
+        # of each key is the path of image correspondent to that special z_coordinate. eg:
+        # { "000": "path to the image with z000.tif"
+        #   "001": "path to the image with z001.tif"
+        #   ...
+        #   "102": "path to the image with z101.tif"
+        # }
+        self._3D = _3d
+        self.current_z_coordinate = None
+        # Set the _3D flag to True, the class will expect to use the full stack images and will not
+        # detect overlap, since it does not needed anymore.
+
         self.xy_resolution = xy_resolution
         self.z_resolution = z_resolution
         # ray_length_front_to_back_in_micron, is the size of total ray in micron.
@@ -67,15 +87,14 @@ class ThicknessExtractor:
         self._max_seed_correction_radius_in_image_coordinates = max_seed_correction_radius_in_micron / xy_resolution
         self._max_seed_correction_radius_in_image_coordinates_in_pixel = \
             int(self._max_seed_correction_radius_in_image_coordinates)
-
-        self.padded_image = _pad_image(self.image, self._max_seed_correction_radius_in_image_coordinates_in_pixel)
+        self.padded_image = None
+        if self._3D is False:
+            self.padded_image = _pad_image(self.image, self._max_seed_correction_radius_in_image_coordinates_in_pixel)
         self.contour_list = []
         self.all_overlaps = []
         self.all_data = {}
-
-        # Set the _3D flag to True, the class will expect to use the full stack images and will not
-        # detect overlap, since it does not needed anymore.
-        self._3D = _3d
+        if self.image_file is None and self._3D is False:
+            raise RuntimeError("You need to provide an image_file path")
 
         self.get_all_data_by_points()
 
@@ -85,22 +104,31 @@ class ThicknessExtractor:
         To extract the thicknesses of points from the image, after initiating the class, this method need to be called.
 
         """
-
         points = self.points
+
+        # sort points for the 3D case to load image plane after image plane
+        sort_indices = np.argsort([x[2] for x in self.points])
+        sorted_points = [self.points[x] for x in sort_indices]
+
         all_data = {}
-        for idx, point in enumerate(points):
-            #         print str(idx) + " points from " + str(len(points)) + " are completed."
-            #        sys.stdout.write("\033[F")
+        for idx, point in enumerate(sorted_points):
+
+            if self._3D:
+                self._set_image_file_by_point(point)
             data = self.get_all_data_by_point(point)
             all_data[idx] = data
             all_data[idx]["overlaps"] = []
+            print str(idx) + " points from " + str(len(sorted_points)) + " from slice " + self.image_stack[0] + " are completed."
+            sys.stdout.write("\033[F")
+
+        all_data = {sort_indices[k]: v for k, v in all_data.iteritems()}
+
 
         self.all_data = all_data
         print "size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.))
 
         if self._3D is False:
             self.all_overlaps = self.update_all_data_with_overlaps()
-
         self._tidy_up()
 
     def get_all_data_by_point(self, point):
@@ -317,6 +345,16 @@ class ThicknessExtractor:
 
     def _filter_all_data_by_point(self, point):
         return dict(filter(lambda x: x[1]["seed_corrected_point"] == point, self.all_data.items()))
+
+    def _set_image_file_by_point(self, point):
+        z_coordinate_key = int(point[2])
+        if z_coordinate_key != self.current_z_coordinate:
+            self._set_image(self.image_stack[z_coordinate_key])
+            self.padded_image = _pad_image(self.image, self._max_seed_correction_radius_in_image_coordinates_in_pixel)
+        self.current_z_coordinate = z_coordinate_key
+
+    def _set_image(self, input_path):
+        self.image = _read_image(input_path)
 
 
 def _check_overlap(contour1, contour2):

@@ -15,6 +15,7 @@ class SliceData:
         self.slice_name = slice_name
         self.am_file_path = None
         self.image_file_path = None
+        self.image_stack = {}
         self.output_path = None
         self.am_object = None
         self.points = None
@@ -22,6 +23,8 @@ class SliceData:
         self.slice_thicknesses_object = None
         self.transformation_object = None
         self.slice_threshold = slice_threshold
+        self.image_stack_input_path = None
+        self.image_stack = None
 
     def setup_am_file(self, path):
         if self.output_path is None:
@@ -43,24 +46,32 @@ class SliceData:
     def set_output_path(self, path):
         self.output_path = path
 
-    def write_output(self):
-        self.am_object.write()
-
     def set_slice_name(self, slice_name=None):
         if slice_name is not None:
             self.slice_name = slice_name
         else:
-            self.slice_name = u.get_slice_name(self.am_file_path, self.image_file_path)
+            if self.image_file_path:
+                self.slice_name = u.get_slice_name(self.am_file_path, self.image_file_path)
+            elif self.image_stack_input_path:
+                self.slice_name = u.get_slice_name(self.am_file_path, self.image_stack_input_path)
+            else:
+                raise ValueError('Neither image_file_path nor image_stack_input_path are set. ' +
+                                 'Cannot infer slice name.')
+
+    def set_image_stack(self, input_path, subfolders = None):
+        self.image_stack_input_path = input_path
+        self.image_stack = u.create_image_stack_dict_of_slice(input_path, subfolders)
 
     def compute(self, xy_resolution, z_resolution, ray_length_front_to_back_in_micron,
-                number_of_rays, threshold_percentage, max_seed_correction_radius_in_micron):
-
+                number_of_rays, threshold_percentage, max_seed_correction_radius_in_micron, _3d, image_stack):
         slice_thicknesses_object = th.ThicknessExtractor(self.points, self.image_file_path,
                                                          xy_resolution, z_resolution,
                                                          ray_length_front_to_back_in_micron,
                                                          number_of_rays, threshold_percentage,
-                                                         max_seed_correction_radius_in_micron)
+                                                         max_seed_correction_radius_in_micron, _3d, image_stack)
         self.slice_thicknesses_object = slice_thicknesses_object
+        self.am_object.add_data("POINT { float thickness }", slice_thicknesses_object.all_data["min_thickness"])
+        self.am_object.write()
 
 
 class ExtractThicknessPipeline:
@@ -91,7 +102,8 @@ class ExtractThicknessPipeline:
         self.all_points_with_default_threshold = []
         self.all_transformed_points_with_default_threshold = []
         self.all_thicknesses = {}
-
+        self.image_stack_folder_paths = None
+        self.image_stack_folder_paths_subfolders = None
         # --- transformation
         # bijective_points are set/list/dict of 4 points from
         self.bijective_points = None
@@ -125,9 +137,11 @@ class ExtractThicknessPipeline:
     def set_tif_paths_by_folder(self, folder_path_to_tif_files):
         self.tif_paths = u.get_files_by_folder(folder_path_to_tif_files, file_extension="tif")
 
-    def set_3d_tif_stack_by_folder(self, folder_path_to_3d_tif_files):
-        self.tif_paths = u.get_files_by_folder(folder_path_to_3d_tif_files, file_extension="tif")
+    def set_tif_3d_stack_by_folders(self, folder_paths, subfolders = None):
         self._3D = True
+        self.image_stack_folder_paths = folder_paths
+        self.image_stack_folder_paths_subfolders = subfolders
+
 
     # TODO: EG: to put in init with defaults, set_thresholds, set_thickness..
     def set_thresholds(self, thresholds_list):
@@ -178,7 +192,7 @@ class ExtractThicknessPipeline:
                 results = self.client.gather(futures)
                 self.save_data.dump(results)
             self._update_slice_objects_with_future_values(results)
-        self._write_am_outputs()
+        # self._write_am_outputs()
         self._transform_points()
         self._stacking_all_slices()
         # self._update_hoc_file_with_thicknesses()
@@ -208,12 +222,16 @@ class ExtractThicknessPipeline:
                 slice_object.set_output_path(self.output_folder + "/" + str(threshold) +
                                              "/" + u.get_file_name_from_path(am_file))
                 slice_object.setup_am_file(am_file)
-                slice_object.set_image_file_path(u.get_am_image_match([am_file],
-                                                                      self.tif_paths)[am_file])
+                if self._3D:
+                    slice_object.set_image_stack(u.get_am_image_match([am_file],
+                                                                      self.image_stack_folder_paths)[am_file],
+                                                 self.image_stack_folder_paths_subfolders)
+                else:
+                    slice_object.set_image_file_path(u.get_am_image_match([am_file],
+                                                                          self.tif_paths)[am_file])
                 slice_object.set_slice_name()
                 print "--------"
-                print "Setting up slice:" + str(slice_object.slice_name)
-
+                print "Setting up slice:" + slice_object.slice_name
                 all_slices_in_threshold[slice_object.slice_name] = slice_object
             self.all_slices[threshold] = all_slices_in_threshold
 
@@ -230,13 +248,15 @@ class ExtractThicknessPipeline:
                                              s.z_resolution,
                                              s.ray_length_front_to_back_in_micron,
                                              s.number_of_rays, threshold,
-                                             s.max_seed_correction_radius_in_micron)
+                                             s.max_seed_correction_radius_in_micron, s._3D,
+                                             slice_object.image_stack)
                     delays.append(delay)
                 else:
                     slice_object.compute(s.xy_resolution, s.z_resolution,
                                          s.ray_length_front_to_back_in_micron,
                                          s.number_of_rays, threshold,
-                                         s.max_seed_correction_radius_in_micron)
+                                         s.max_seed_correction_radius_in_micron, s._3D, slice_object.image_stack
+                                         )
 
         return delays
 
@@ -306,7 +326,7 @@ class ExtractThicknessPipeline:
         for threshold in s.thresholds_list:
             for slice_name in sorted(s.all_slices[threshold]):
                 slice_object = s.all_slices[threshold][slice_name]
-                slice_object.write_output()
+                slice_object.write_output(slice_object.points)
 
     def _update_slice_objects_with_future_values(self, results):
         print "---- update slice objects with future values ----"
@@ -323,12 +343,12 @@ class ExtractThicknessPipeline:
 def _parallel_helper(points, image_file_path, xy_resolution, z_resolution,
                      ray_length_front_to_back_in_micron,
                      number_of_rays, threshold,
-                     max_seed_correction_radius_in_micron):
+                     max_seed_correction_radius_in_micron, _3d, image_stack):
     slice_thicknesses_object = th.ThicknessExtractor(points, image_file_path,
                                                      xy_resolution, z_resolution,
                                                      ray_length_front_to_back_in_micron,
                                                      number_of_rays, threshold,
-                                                     max_seed_correction_radius_in_micron)
+                                                     max_seed_correction_radius_in_micron, _3d, image_stack)
 
     return slice_thicknesses_object
 

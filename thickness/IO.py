@@ -113,8 +113,8 @@ class Am:
             commands = {}
             config_end = 0
             for idx, line in enumerate(lines):
-                if line.rfind(line.rfind("TransformationMatrix") > -1):
-                    self.transformation_matrix_exist = True
+                # if line.rfind("TransformationMatrix") > -1:
+                    # self.transformation_matrix_exist = True
                 if line.rfind("@") > -1:
                     # command_sign supposes to hold the values like @1 or @2 or ...
                     command_sign = "@" + line[line.rfind("@") + 1:].strip()
@@ -125,6 +125,14 @@ class Am:
                         break
             self.all_data["config"] = lines[:config_end]
         return commands, config_end
+
+    def add_data(self, cs, data):
+        max_command = max([int(v.strip('@ ')) for v in self.commands.values()])
+        self.commands[cs] = '@' + str(max_command + 1)
+        self.all_data[cs] = data
+
+
+
 
 
 class Hoc:
