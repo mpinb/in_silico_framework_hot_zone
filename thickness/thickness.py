@@ -35,7 +35,7 @@ import itertools
 class ThicknessExtractor:
     def __init__(self, points, image_file=None, xy_resolution=0.092, z_resolution=0.5, ray_length_front_to_back_in_micron=20,
                  number_of_rays=36, threshold_percentage=0.5, max_seed_correction_radius_in_micron=10, _3d=False,
-                 image_stack=None):
+                 image_stack=None, slice_name=None):
         """ This is the main method for extracting Thickness
         - Inputs:
             1. points: must be in the type transformation.Data.coordinate_2d, so they are a list of
@@ -46,6 +46,9 @@ class ThicknessExtractor:
             5. ray_length_front_to_back_in_micron: maximum distance from the seed point considered in micrometer.
 
         """
+
+        # slice_name is a handy object that can help distinguishes between multiple instances of this class.
+        self.slice_name = slice_name
         self.original_points = points
         self.convert_points = tr.ConvertPoints(xy_resolution, xy_resolution, z_resolution)
         points_in_image_coordinates_2d = self.convert_points.coordinate_2d_to_image_coordinate_2d(self.original_points)
@@ -93,6 +96,14 @@ class ThicknessExtractor:
         self.contour_list = []
         self.all_overlaps = []
         self.all_data = {}
+
+        # the thicknesses_list is what you will finally searching for from this class. It contains the min_thickness of
+        # each point which will be fill from all_data after all of the processing. The index of each thickness is the
+        # same as the index of point or in points list. So one can find the corresponding thickness of each point by
+        # looking at its index in thickness_list all over the program. Be careful that the thicknesses in thickness_list
+        # is converted back to the coordinate_3d system. But the corresponding min_thickness
+        # in all_data[point_index]["min_thickness"] is in image_coordinate system
+        self.thickness_list = []
         if self.image_file is None and self._3D is False:
             raise RuntimeError("You need to provide an image_file path")
 
@@ -104,7 +115,6 @@ class ThicknessExtractor:
         To extract the thicknesses of points from the image, after initiating the class, this method need to be called.
 
         """
-        points = self.points
 
         # sort points for the 3D case to load image plane after image plane
         sort_indices = np.argsort([x[2] for x in self.points])
@@ -122,13 +132,13 @@ class ThicknessExtractor:
             sys.stdout.write("\033[F")
 
         all_data = {sort_indices[k]: v for k, v in all_data.iteritems()}
-
-
         self.all_data = all_data
         print "size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.))
 
         if self._3D is False:
             self.all_overlaps = self.update_all_data_with_overlaps()
+
+        self._get_thicknesses_from_all_data()
         self._tidy_up()
 
     def get_all_data_by_point(self, point):
@@ -355,6 +365,10 @@ class ThicknessExtractor:
 
     def _set_image(self, input_path):
         self.image = _read_image(input_path)
+
+    def _get_thicknesses_from_all_data(self):
+        thickness_list = [self.all_data[idx]["min_thickness"] for idx in range(len(self.points))]
+        self.thickness_list = self.convert_points.image_coordinate_2d_to_coordinate_2d(thickness_list)
 
 
 def _check_overlap(contour1, contour2):

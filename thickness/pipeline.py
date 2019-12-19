@@ -58,19 +58,21 @@ class SliceData:
                 raise ValueError('Neither image_file_path nor image_stack_input_path are set. ' +
                                  'Cannot infer slice name.')
 
-    def set_image_stack(self, input_path, subfolders = None):
+    def set_image_stack(self, input_path, subfolders=None):
         self.image_stack_input_path = input_path
         self.image_stack = u.create_image_stack_dict_of_slice(input_path, subfolders)
 
     def compute(self, xy_resolution, z_resolution, ray_length_front_to_back_in_micron,
-                number_of_rays, threshold_percentage, max_seed_correction_radius_in_micron, _3d, image_stack):
+                number_of_rays, threshold_percentage, max_seed_correction_radius_in_micron,
+                _3d, image_stack, slice_name):
         slice_thicknesses_object = th.ThicknessExtractor(self.points, self.image_file_path,
                                                          xy_resolution, z_resolution,
                                                          ray_length_front_to_back_in_micron,
                                                          number_of_rays, threshold_percentage,
-                                                         max_seed_correction_radius_in_micron, _3d, image_stack)
+                                                         max_seed_correction_radius_in_micron,
+                                                         _3d, image_stack, slice_name)
         self.slice_thicknesses_object = slice_thicknesses_object
-        self.am_object.add_data("POINT { float thickness }", slice_thicknesses_object.all_data["min_thickness"])
+        self.am_object.add_data("POINT { float thickness }", self.slice_thicknesses_object.thickness_list)
         self.am_object.write()
 
 
@@ -249,13 +251,14 @@ class ExtractThicknessPipeline:
                                              s.ray_length_front_to_back_in_micron,
                                              s.number_of_rays, threshold,
                                              s.max_seed_correction_radius_in_micron, s._3D,
-                                             slice_object.image_stack)
+                                             slice_object.image_stack, slice_object.slice_name)
                     delays.append(delay)
                 else:
                     slice_object.compute(s.xy_resolution, s.z_resolution,
                                          s.ray_length_front_to_back_in_micron,
                                          s.number_of_rays, threshold,
-                                         s.max_seed_correction_radius_in_micron, s._3D, slice_object.image_stack
+                                         s.max_seed_correction_radius_in_micron, s._3D, slice_object.image_stack,
+                                         slice_object.slice_name
                                          )
 
         return delays
@@ -308,7 +311,7 @@ class ExtractThicknessPipeline:
         for threshold in self.thresholds_list:
             all_slices_with_same_threshold = self.all_slices[threshold]
             self.all_thicknesses = {threshold: [
-                all_slices_with_same_threshold[key].slice_thicknesses_object.all_data[index]["min_thickness"]
+                all_slices_with_same_threshold[key].slice_thicknesses_object.thickness_list[index]
                 for key in sorted(all_slices_with_same_threshold.keys())
                 for index in range(len(all_slices_with_same_threshold[key].points))]}
 
@@ -335,7 +338,7 @@ class ExtractThicknessPipeline:
             threshold = thicknesses_object.threshold_percentage
             for slice_name in sorted(self.all_slices[threshold]):
                 slice_object = self.all_slices[threshold][slice_name]
-                if slice_object.image_file_path == thicknesses_object.image_file:
+                if slice_object.slice_name == thicknesses_object.slice_name:
                     slice_object.slice_thicknesses_object = thicknesses_object
 
 
@@ -343,12 +346,13 @@ class ExtractThicknessPipeline:
 def _parallel_helper(points, image_file_path, xy_resolution, z_resolution,
                      ray_length_front_to_back_in_micron,
                      number_of_rays, threshold,
-                     max_seed_correction_radius_in_micron, _3d, image_stack):
+                     max_seed_correction_radius_in_micron, _3d, image_stack, slice_name):
     slice_thicknesses_object = th.ThicknessExtractor(points, image_file_path,
                                                      xy_resolution, z_resolution,
                                                      ray_length_front_to_back_in_micron,
                                                      number_of_rays, threshold,
-                                                     max_seed_correction_radius_in_micron, _3d, image_stack)
+                                                     max_seed_correction_radius_in_micron, _3d,
+                                                     image_stack, slice_name)
 
     return slice_thicknesses_object
 
