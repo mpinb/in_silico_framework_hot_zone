@@ -97,7 +97,7 @@ class Am:
     def _write_from_dict(self):
         with open(self.output_path, "w") as data_file:
             data_file.writelines(self.all_data["config"])
-            for cs in self.commands:
+            for cs in sorted(self.commands):
                 data_file.write("\n")
                 data_file.write(self.commands[cs])
                 data_file.write("\n")
@@ -130,6 +130,7 @@ class Am:
         max_command = max([int(v.strip('@ ')) for v in self.commands.values()])
         self.commands[cs] = '@' + str(max_command + 1)
         self.all_data[cs] = data
+        self.all_data["config"] = self.all_data["config"] + cs + "\n"
 
 
 

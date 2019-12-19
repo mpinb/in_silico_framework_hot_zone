@@ -72,7 +72,9 @@ class SliceData:
                                                          max_seed_correction_radius_in_micron,
                                                          _3d, image_stack, slice_name)
         self.slice_thicknesses_object = slice_thicknesses_object
-        self.am_object.add_data("POINT { float thickness }", self.slice_thicknesses_object.thickness_list)
+        # data element for am_object must be themselves a list. That is why we put each thickness to a list in below.
+        self.am_object.add_data("POINT { float thickness }",
+                                [[thickness] for thickness in self.slice_thicknesses_object.thickness_list])
         self.am_object.write()
 
 
