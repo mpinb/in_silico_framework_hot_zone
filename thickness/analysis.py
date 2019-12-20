@@ -1,0 +1,32 @@
+import pandas as pd
+
+
+def get_all_data_output_table(all_slices, default_threshold):
+    df_all_slices = pd.DataFrame()
+    for threshold in sorted(all_slices.keys()):
+        all_slices_with_same_threshold = all_slices[threshold]
+        df_individual_slice = pd.DataFrame()
+        for key in sorted(all_slices_with_same_threshold.keys()):
+            slice_object = all_slices_with_same_threshold[key]
+            if threshold == default_threshold:
+                #          df_individual_slice_name = pd.DataFrame(slice_object)
+                df_individual_slice_points = pd.DataFrame(slice_object.points,
+                                                          columns=["x", "y", "z"])
+                df_individual_slice_tr_points = pd.DataFrame(slice_object.transformed_points,
+                                                             columns=["x_tr", "y_tr", "z_tr"])
+                df_individual_slice = pd.concat([
+                    df_individual_slice_points,
+                    df_individual_slice_tr_points,
+                ], axis=1)
+            all_data_keys = sorted(slice_object.slice_thicknesses_object.all_data.keys())
+            df_individual_slice_thicknesses_object_all_data = pd.DataFrame.from_dict(
+                {key: slice_object.slice_thicknesses_object.all_data[key] for key in all_data_keys})
+            df_individual_slice_thicknesses_object_all_data = \
+                df_individual_slice_thicknesses_object_all_data.transpose()
+
+            df_individual_slice = pd.concat([df_individual_slice,
+                                             df_individual_slice_thicknesses_object_all_data,
+                                             ], keys=[slice_object.slice_name])
+            df_all_slices = pd.concat([df_all_slices, df_individual_slice_thicknesses_object_all_data])
+
+    return df_all_slices

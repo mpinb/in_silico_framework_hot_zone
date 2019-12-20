@@ -1,6 +1,7 @@
 
 import numpy as np
 import math
+import warnings
 
 class RadiusCalculator:
     def __init__(self, xyResolution=0.092, zResolution=0.5, xySize=20,
@@ -16,6 +17,9 @@ class RadiusCalculator:
         self.rayLengthPerDirectionOfImageCoordinatesForPostMeasurment = 0.50/xyResolution # self.rayLengthPerDirectionOfImageCoordinates/10
         self.numberOfRaysForPostMeasurment = numberOfRaysForPostMeasurment
         self.debug_postMeasurementPoints = []
+        self.orig_pointsWithIntensity = []
+        self.pm_pointsWithIntensity = []
+        self.counterList = []
 
     def getProfileOfThesePoints(self, image, points, postMeasurment='no'):
         temp = []
@@ -39,9 +43,6 @@ class RadiusCalculator:
             ray = self.constructRay(frontCoordinates, backCoordinates, point)
             rays.append(ray)
 
-
-
-
             rayProfile = self.getProfileValues(image, ray)
             raysProfiles.append(rayProfile)
 
@@ -58,12 +59,13 @@ class RadiusCalculator:
         frontProfile = []
         rays = []
         selectedProfileIndex = 1000
-        backRadius = 0
-        frontRadius = 0
-
         if postMeasurment == 'yes':
             rays, raysProfileList = self.getHigherResolutionProfiles(image, point)
-            point = self.postMeasurmentFunction(image, rays, raysProfileList)
+            point_pm = self.postMeasurmentFunction(image, rays, raysProfileList)
+            point_pm = [point_pm[0], point_pm[1], point[2]]
+            intensities = self.getProfileValues(image, [point[:2], point_pm[:2]])
+            self.orig_pointsWithIntensity.append([point, intensities[0]])
+            self.pm_pointsWithIntensity.append([point_pm, intensities[1]])
             self.debug_postMeasurementPoints.append(point)
             return self.getRadiusFromProfile(image, point, postMeasurment='no')
 
@@ -100,6 +102,7 @@ class RadiusCalculator:
                 minRadius = radius
                 selectedProfileIndex = i
         # assert (minRadius < 100)
+        self.counterList.append(counterList)
         return backProfile, frontProfile, radiusList, minRadius, backCounterPoint, frontCounterPoint, counterList, raysProfileList, rays, selectedProfileIndex
 
 
@@ -147,20 +150,43 @@ class RadiusCalculator:
         profileValues = []
         profileIndicesLength = len(profileIndices)
         for i in range(profileIndicesLength):
-            profileValues.append(image.GetPixel(profileIndices[i]))
+            try:
+                pixel = map(lambda x: (int(x)), profileIndices[i])
+                intensityValue = image.GetPixel(pixel)
+            except RuntimeError as error:
+                warnings.warn(error)
+                intensityValue = 0.0
+            profileValues.append(intensityValue)
         return profileValues
 
 
     def getCounterIndex(self, image, point, profileIndices):
-        pointValue = image.GetPixel([int(point[0]), int(point[1])])
+
+        try:
+            pointValue = image.GetPixel([int(point[0]), int(point[1])])
+        except RuntimeError as error:
+            print(error)
+            pointValue = 0.0
+
         # pointHalfValue = pointValue/2.0
         pointTresholdValue = pointValue*self.tresholdPercentage
 
         profileIndicesLength = len(profileIndices)
         contourIndices = []
         for i in range(profileIndicesLength-1):
-            pixel_1_value = image.GetPixel(profileIndices[i])
-            pixel_2_value = image.GetPixel(profileIndices[i+1])
+
+            try:
+                pixel_1_value = image.GetPixel(profileIndices[i])
+            except IndexError as error:
+                print(error)
+                pixel_1_value = 0.0
+
+            try:
+                pixel_2_value = image.GetPixel(profileIndices[i+1])
+            except IndexError as error:
+                print(error)
+                pixel_2_value = 0.0
+
 
             if pixel_1_value >= pointTresholdValue and pixel_2_value <= pointTresholdValue:
                 contourIndices = profileIndices[i]

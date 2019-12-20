@@ -34,8 +34,9 @@ transformFn = solve_affine( primary_system1, primary_system2,
 
 # test: transform primary_system1 and we should get secondary_system1
 M = np.matrix(secondary_system1).T - transformFn( primary_system1 )
-M = np.matrix(secondary_system2).T - transformFn( primary_system1 )
+# M = np.matrix(secondary_system2).T - transformFn( primary_system1 )
 print(M)
+print(np.matrix(secondary_system1).T)
 # np.linalg.norm of above is 0.02555
 
 # transform another point (x,y,z).
