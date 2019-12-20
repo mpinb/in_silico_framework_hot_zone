@@ -33,12 +33,12 @@ class SliceData:
         self.am_object = IO.Am(self.am_file_path, self.output_path)
         self.am_object.read()
         self.points = self.am_object.all_data["POINT { float[3] EdgePointCoordinates }"]
-        if self.am_object.transformation_matrix_exist:
-            tr_object = tr.AffineTransformation()
-            tr_object.set_transformation_matrix_by_am_file(self.am_file_path)
-            tr_object.transform_points(self.points)
-            self.points = tr_object.transformed_points
-            del tr_object
+        # if self.am_object.transformation_matrix_exist:
+        #    tr_object = tr.AffineTransformation()
+        #    tr_object.set_transformation_matrix_by_am_file(self.am_file_path)
+        #    tr_object.transform_points(self.points)
+        #    self.points = tr_object.transformed_points
+        #    del tr_object
 
     def set_image_file_path(self, path):
         self.image_file_path = path
@@ -79,7 +79,12 @@ class SliceData:
 
 
 class ExtractThicknessPipeline:
-    def __init__(self):
+    def __init__(self, xy_resolution=0.092, z_resolution=0.5, number_of_rays=36,
+                 ray_length_front_to_back_in_micron=20,
+                 max_seed_correction_radius_in_micron=10):
+
+
+
         # ---- flags and settings
         self._parallel = False
         self.client = None
@@ -93,13 +98,16 @@ class ExtractThicknessPipeline:
         self.tif_paths = []
         self.output_folder = None
         # --- thickness extractor class parameters:
+
+        self.xy_resolution = xy_resolution
+        self.z_resolution = z_resolution
+        self.number_of_rays = number_of_rays
+        self.ray_length_front_to_back_in_micron = ray_length_front_to_back_in_micron
+        self.max_seed_correction_radius_in_micron = max_seed_correction_radius_in_micron
+
         self.default_threshold = 0.5
         self.thresholds_list = [self.default_threshold]
-        self.xy_resolution = None
-        self.z_resolution = None
-        self.number_of_rays = None
-        self.ray_length_front_to_back_in_micron = None
-        self.max_seed_correction_radius_in_micron = None
+
         # --- objects and dicts
         self.am_tif = {}
         self.all_slices = {}
@@ -155,16 +163,6 @@ class ExtractThicknessPipeline:
         """
         self.thresholds_list = thresholds_list
 
-    def set_thickness_extractor_parameters(self, xy_resolution=0.092,
-                                           z_resolution=0.5, number_of_rays=36,
-                                           ray_length_front_to_back_in_micron=20,
-                                           max_seed_correction_radius_in_micron=1):
-        self.xy_resolution = xy_resolution
-        self.z_resolution = z_resolution
-        self.number_of_rays = number_of_rays
-        self.ray_length_front_to_back_in_micron = ray_length_front_to_back_in_micron
-        self.max_seed_correction_radius_in_micron = max_seed_correction_radius_in_micron
-
     def set_bijective_points_by_list(self, bi_points):
         self.bijective_points = bi_points
 
@@ -192,14 +190,15 @@ class ExtractThicknessPipeline:
                 results = self.save_data.load()
             if results is None:
                 futures = self.client.compute(delays)
+                self.futures = futures
                 wait(futures)
                 results = self.client.gather(futures)
                 self.save_data.dump(results)
             self._update_slice_objects_with_future_values(results)
-        # self._write_am_outputs()
+            self._write_am_outputs()
         self._transform_points()
         self._stacking_all_slices()
-        # self._update_hoc_file_with_thicknesses()
+        self._update_hoc_file_with_thicknesses()
         data_table = self._compute_all_data_table()
         return data_table
 
@@ -330,8 +329,14 @@ class ExtractThicknessPipeline:
         s = self
         for threshold in s.thresholds_list:
             for slice_name in sorted(s.all_slices[threshold]):
+                ### urgendt todo: update of thickness list should not be done here1!!!!
                 slice_object = s.all_slices[threshold][slice_name]
-                slice_object.write_output(slice_object.points)
+                slice_object.am_object.add_data("POINT { float thickness }",
+                                                [[thickness]
+                                                 for thickness
+                                                 in slice_object.slice_thicknesses_object.thickness_list])
+                slice_object.am_object.write()
+                # slice_object.write_output(slice_object.points)
 
     def _update_slice_objects_with_future_values(self, results):
         print "---- update slice objects with future values ----"

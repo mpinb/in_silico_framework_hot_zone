@@ -57,10 +57,6 @@ class ThicknessExtractor:
         self.seed_corrected_points = []
         # TYPE: Must be transformation.Data.image_coordinate_2d
 
-        self.image_file = image_file
-        if image_file is not None:
-            self._set_image(image_file)
-
         self.image_stack = image_stack
         # We don't set the whole image_stack (eg. : by self._set_image() ) here since the memory usage will
         # be much less if we read the corresponding image on demand of each point.
@@ -91,11 +87,14 @@ class ThicknessExtractor:
         self._max_seed_correction_radius_in_image_coordinates_in_pixel = \
             int(self._max_seed_correction_radius_in_image_coordinates)
         self.padded_image = None
-        if self._3D is False:
-            self.padded_image = _pad_image(self.image, self._max_seed_correction_radius_in_image_coordinates_in_pixel)
         self.contour_list = []
         self.all_overlaps = []
         self.all_data = {}
+
+
+        self.image_file = image_file
+        if image_file is not None:
+            self._set_image(image_file)
 
         # the thicknesses_list is what you will finally searching for from this class. It contains the min_thickness of
         # each point which will be fill from all_data after all of the processing. The index of each thickness is the
@@ -122,21 +121,20 @@ class ThicknessExtractor:
 
         all_data = {}
         for idx, point in enumerate(sorted_points):
-
             if self._3D:
                 self._set_image_file_by_point(point)
             data = self.get_all_data_by_point(point)
             all_data[idx] = data
             all_data[idx]["overlaps"] = []
-            print str(idx) + " points from " + str(len(sorted_points)) + " from slice " + self.image_stack[0] + " are completed."
+            print str(idx) + " points from " + str(len(sorted_points)) + " from slice " + self.slice_name + " are completed."
             sys.stdout.write("\033[F")
 
         all_data = {sort_indices[k]: v for k, v in all_data.iteritems()}
         self.all_data = all_data
         print "size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.))
 
-        if self._3D is False:
-            self.all_overlaps = self.update_all_data_with_overlaps()
+        # if self._3D is False:
+            # self.all_overlaps = self.update_all_data_with_overlaps()
 
         self._get_thicknesses_from_all_data()
         self._tidy_up()
@@ -156,12 +154,10 @@ class ThicknessExtractor:
         """
 
         all_data = {"converted_point_by_image_coordinate": point}
-        original_point = self.convert_points.image_coordinate_2d_to_coordinate_2d([point])
-        all_data["original_points"] = original_point[0]
         if self._max_seed_correction_radius_in_image_coordinates:
             point = self._correct_seed(point)
-        all_data["seed_corrected_point"] = [point[0], point[1], all_data["converted_point_by_image_coordinate"][2]]
-        self.seed_corrected_points.append([point[0], point[1], all_data["converted_point_by_image_coordinate"][2]])
+        all_data["seed_corrected_point"] = point
+        self.seed_corrected_points.append(point)
         thicknesses_list = []
         min_thickness = np.Inf
         contour_list = []
@@ -188,18 +184,17 @@ class ThicknessExtractor:
             ray_length = len(ray_indices)
             half_ray_length = (ray_length - 1) / 2
 
-            back_contour_index = self.get_contour_index(point, list(reversed(ray_indices[0:half_ray_length + 1])))
+            back_contour_index = self.get_contour_index(point, ray_indices[0:half_ray_length + 1][::-1])
             front_contour_index = self.get_contour_index(point, ray_indices[half_ray_length:ray_length])
             all_data["back_contour_index"] = back_contour_index
             all_data["front_contour_index"] = front_contour_index
-            if len(back_contour_index) == 2 and len(front_contour_index) == 2:
-                thickness = tr.get_distance(back_contour_index, front_contour_index)
-                contour_list.append([back_contour_index, front_contour_index])
+            if back_contour_index is None or front_contour_index is None:
+                thickness = 0.
             else:
-                thickness = 0
-            # assert (len(back_contour_index) == 2)
-            # assert (len(front_contour_index) == 2)
-
+                assert (len(back_contour_index) == 2)
+                assert (len(front_contour_index) == 2)
+                thickness = tr.get_distance(back_contour_index, front_contour_index)
+            contour_list.append([back_contour_index, front_contour_index])
             thicknesses_list.append(thickness)
 
             if thickness < min_thickness:
@@ -228,36 +223,44 @@ class ThicknessExtractor:
     def get_contour_index(self, point, ray_indices):
 
         image = self.image
+        point_indices = [int(point[0]), int(point[1])]
         try:
-            point_value = image.GetPixel([int(point[0]), int(point[1])])
+            point_value = image.GetPixel(point_indices)
         except RuntimeError as error:
-            warnings.warn("Point outside the image! Assuming intensity = 0")
-            point_value = 0
+            warnings.warn("Point outside the image! Assuming diameter 0")
+            return None
 
         # pointHalfValue = point_value/2.0
         point_threshold_value = point_value * self.threshold_percentage
-
         profile_indices_length = len(ray_indices)
-        contour_indices = []
-        for i in range(profile_indices_length - 1):
+        contour_indices = None
+        for i in range(profile_indices_length):
 
-            try:
-                pixel_1_value = image.GetPixel(ray_indices[i])
-            except IndexError as error:
-                warnings.warn(error)
-                pixel_1_value = 0.0
+            # this may not fail: point indices are in image
+            # all further points have been queried with
+            # image.GetPixel(ray_indices[i+1])
+            pixel_1_value = image.GetPixel(ray_indices[i])
 
+            # this fails, if we have reached the end of the ray
             try:
-                pixel_2_value = image.GetPixel(ray_indices[i + 1])
+                _index = ray_indices[i+1]
+            except IndexError:
+                warnings.warn("End of ray reached! Center point intensity: {}".format (point_value))
+                return ray_indices[i]
+
+            # this fails, if the ray goes out of the image
+            try:
+                pixel_2_value = image.GetPixel(_index)
             except IndexError as error:
-                warnings.warn(error)
-                pixel_2_value = 0.0
+                warnings.warn("Ray goes out of image! Assuming diameter 0")
 
             if pixel_1_value >= point_threshold_value >= pixel_2_value:
                 contour_indices = ray_indices[i]
                 break
 
+        assert(contour_indices is not None)
         return contour_indices
+
 
     def get_ray_points_indices(self, point, phi, front):
         """
@@ -309,15 +312,20 @@ class ThicknessExtractor:
         return ray_points_indices
 
     def _correct_seed(self, point):
+        # point = [int(point[0]), int(point[1]), point[2]]
         radius = self._max_seed_correction_radius_in_image_coordinates_in_pixel
-        center = point
+        point_in_padded_image = point[0] + radius, point[1] + radius
+        cropped_image = _crop_image(self.padded_image, point_in_padded_image, radius, circle=True)
+        indices_of_max_value = np.argwhere(cropped_image == np.amax(cropped_image)).ravel()
+        corrected_point = [indices_of_max_value[0] + point[0] - radius,
+                           indices_of_max_value[1] + point[1] - radius,
+                           point[2]]
 
-        cropped_image = _crop_image(self.padded_image, center, radius, circle=True)
-        indices_of_max_value = np.argwhere(cropped_image == np.amax(cropped_image))
-
-        del cropped_image
-        corrected_point = [indices_of_max_value[0][0] + point[0], indices_of_max_value[0][1] + point[1]]
-
+        intensity_value = self.image.GetPixel([int(point[0]), int(point[1])])
+        intensity_value2 = self.image.GetPixel([int(corrected_point[0]), int(corrected_point[1])])
+        assert(intensity_value2 >= intensity_value)
+        print 'original_point: {} / {} corrected_point: {} / {}'.format(point, intensity_value,
+                                                                        corrected_point, intensity_value2)
         return corrected_point
 
     def _tidy_up(self):
@@ -360,15 +368,16 @@ class ThicknessExtractor:
         z_coordinate_key = int(point[2])
         if z_coordinate_key != self.current_z_coordinate:
             self._set_image(self.image_stack[z_coordinate_key])
-            self.padded_image = _pad_image(self.image, self._max_seed_correction_radius_in_image_coordinates_in_pixel)
         self.current_z_coordinate = z_coordinate_key
 
     def _set_image(self, input_path):
+        print 'setting image path to {}'.format(input_path)
         self.image = _read_image(input_path)
+        self.padded_image = _pad_image(self.image, self._max_seed_correction_radius_in_image_coordinates_in_pixel)
 
     def _get_thicknesses_from_all_data(self):
         thickness_list = [self.all_data[idx]["min_thickness"] for idx in range(len(self.points))]
-        self.thickness_list = self.convert_points.image_coordinate_2d_to_coordinate_2d(thickness_list)
+        self.thickness_list = self.convert_points.thickness_to_micron(thickness_list)
 
 
 def _check_overlap(contour1, contour2):
@@ -423,12 +432,16 @@ def _circle_filter(x, y, r):
 
 def _pad_image(image, radius):
     image_array = sitk.GetArrayFromImage(image)
+    image_array = np.transpose(image_array)
     return np.pad(image_array, radius, 'constant', constant_values=0)
 
 
 def _crop_image(image_array, center, radius, circle=False):
     c1, c2 = int(center[0]), int(center[1])
-    return_ = image_array[c1:c1 + 2 * radius + 1, c2:c2 + 2 * radius + 1]
+    assert (c1 - radius >= 0)
+    assert (c2 - radius >= 0)
+
+    return_ = image_array[c1 - radius:c1 + radius + 1, c2 - radius:c2 + radius + 1]
     # return_ = b_pad[c1:c1 + 2 * radius + 1, c2:c2 + 2 * radius + 1]
 
     if circle:

@@ -69,7 +69,8 @@ def get_am_image_match(am_paths, tif_paths):
         slice_name = re.findall(r'[sS]\d+', am_file_name)[0]
         for tif_path in tif_paths:
             tif_file_name = os.path.basename(tif_path)
-            if int(slice_name.strip('Ss')) == int(tif_file_name.strip('Ss')):
+            tif_file_name_slice_identifier = re.findall(r'[sS]\d+', tif_file_name)[0]
+            if int(slice_name.strip('Ss')) == int(tif_file_name_slice_identifier.strip('Ss')):
                 am_image_match[am_path] = tif_path
     return am_image_match
 

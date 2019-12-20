@@ -166,6 +166,12 @@ class ConvertPoints:
         scaling = [self.x_res, self.y_res, self.z_res]
         return [_scaling(point, scaling) for point in points]
 
+    def thickness_to_micron(self, thicknesses):
+        '''coverts thickness (scaled with pixel size) to micron.
+        Requires isotropic pixel size in x-y-direction'''
+        if self.x_res != self.y_res:
+            raise NotImplementedError("Requires isotropic pixel size in x-y-direction!")
+        return [t * self.x_res for t in thicknesses]
 
 def _scaling(points, scaling):
     if points is None:

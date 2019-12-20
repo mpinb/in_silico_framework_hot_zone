@@ -67,8 +67,9 @@ class Am:
         Reading all data of of the am file
 
         """
+        self._read_config_and_commands()
+        config_end = self.config_end
         with open(self.input_path, 'r') as f:
-            self.commands, config_end = self._read_config_and_commands()
             lines = f.readlines()
             for cs in self.commands:
                 command_sign = self.commands[cs]
@@ -95,14 +96,29 @@ class Am:
         self._write_from_dict()
 
     def _write_from_dict(self):
+        def format_number(x):
+            if x == int(x):
+                return str(int(x))
+            else:
+                return  '{:.15e}'.format(x)
+
+
         with open(self.output_path, "w") as data_file:
             data_file.writelines(self.all_data["config"])
-            for cs in sorted(self.commands):
+            for cs in self._commands_order:
+                data_file.write("\n")
+                data_file.write(cs + ' ' + self.commands[cs])
+            data_file.write("\n\n")
+            data_file.write("# Data section follows")
+            data_file.write("\n")
+
+            for cs in self._commands_order:
                 data_file.write("\n")
                 data_file.write(self.commands[cs])
                 data_file.write("\n")
                 for data in self.all_data[cs]:
-                    string = ' '.join(map(str, data))
+                    
+                    string = ' '.join(map(format_number, data))
                     for item in string:
                         data_file.write(item)
                     data_file.write("\n")
@@ -111,26 +127,33 @@ class Am:
         with open(self.input_path, 'r') as fc:
             lines = fc.readlines()
             commands = {}
-            config_end = 0
+            commands_order = []
+            header_end = None
             for idx, line in enumerate(lines):
                 # if line.rfind("TransformationMatrix") > -1:
                     # self.transformation_matrix_exist = True
                 if line.rfind("@") > -1:
+                    if header_end is None:
+                        header_end = idx
                     # command_sign supposes to hold the values like @1 or @2 or ...
                     command_sign = "@" + line[line.rfind("@") + 1:].strip()
                     if line.replace(command_sign, "").strip() != "":
-                        commands[line.replace(command_sign, "").strip()] = command_sign
-                    else:
+                        c = line.replace(command_sign, "").strip()
+                        commands_order.append(c)
+                        commands[c] = command_sign
+                    else: # searches for the first isolated occurence of @[number], which indicates beginning of data section
                         config_end = idx
                         break
-            self.all_data["config"] = lines[:config_end]
-        return commands, config_end
+            self.all_data["config"] = lines[:header_end]
+        self.commands = commands
+        self.config_end = config_end
+        self._commands_order = commands_order
 
     def add_data(self, cs, data):
         max_command = max([int(v.strip('@ ')) for v in self.commands.values()])
         self.commands[cs] = '@' + str(max_command + 1)
         self.all_data[cs] = data
-        self.all_data["config"] = self.all_data["config"] + cs + "\n"
+        self._commands_order.append(cs)
 
 
 
