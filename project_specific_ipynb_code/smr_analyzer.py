@@ -365,7 +365,7 @@ class AnalyzeFile:
         return len([t for t in self.spike_times if (t < self.stim_times[0]) and (t > self.stim_times[0] - s)]) / (s / 1000.)
     
     def get_onset_latency(self):
-        return I.np.median([s for s in self.st[0] if s < self.periods['1onset'][1]])
+        return I.np.median([s for s in self.st[0] if self.periods['1onset'][0] <= s <= self.periods['1onset'][1]])
     
     def describe(self):
         af = self
@@ -527,6 +527,9 @@ class AnalyzeFile:
         af = self
         df = self.event_df
         df = df[df.event_class == type_].copy()
+        if len(df) == 0:
+            print 'nothing to show'
+            return
         df['trial_index'] = df.trial.str.split('/').str[1].astype(int)
         df['absolute_time'] = df.apply(lambda x: x.event_time  + af.stim_times[x.trial_index], axis = 1)  
         event_time = df.absolute_time
@@ -554,16 +557,18 @@ class AnalyzeFile:
             I.plt.ylim(-5, 5)
             I.plt.xlabel('t / ms')
             I.plt.ylabel('recorded potential / mV')
+            I.plt.title('{}, {}'.format(df.event_class.values[n], df.period.values[n]))
+            
         
-        if display:
-            I.display.display(fig)
-        if savedir:
-            fig.savefig(I.os.path.join(savedir, '{}_{}ms_creast_{}_trough{}.pdf'.format(type_, 
-                                                                                        int(offset_time), 
-                                                                                        self.lim_creast,
-                                                                                        self.lim_trough)))
-        if close:
-            I.plt.close()
+            if display:
+                I.display.display(fig)
+            if savedir:
+                fig.savefig(I.os.path.join(savedir, '{}_{}_{}ms_creast_{}_trough{}.pdf'.format(type_, df.period.values[n],
+                                                                                            int(offset_time), 
+                                                                                            self.lim_creast,
+                                                                                            self.lim_trough)))
+            if close:
+                I.plt.close()
         
 
 # path = '/nas1/Data_Mike/LongRange_Inputs/VPM_Analysis/WR71_Cell5_L5Int/Physiology/Cell2_1083um_Ongoing_AirPuff_Trial1_Data.smr'
