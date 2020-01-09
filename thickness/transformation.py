@@ -108,6 +108,9 @@ class AffineTransformation:
             transformed_points.append(p_listed[0:3] + point4D[3:])
 
         return transformed_points
+    
+    def get_amira_transformation_matrix(self):
+        return ' '.join(map(str, list(np.array(self.matrix.T).ravel())))
 
 
 class ConvertPoints:
