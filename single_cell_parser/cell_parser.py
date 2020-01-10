@@ -58,7 +58,7 @@ class CellParser(object):
 #        first loop: create all Sections
         for secID, edge in enumerate(edgeList):
             sec = PySection(edge.hocLabel, self.cell.id, edge.label)
-			sec.secID = secID
+            sec.secID = secID
             if sec.label != 'Soma':
                 sec.parentx = edge.parentConnect
                 sec.parentID = edge.parentID
