@@ -61,7 +61,7 @@ def get_main_bifurcation_section(cell):
 #######################################
 # functions to read hoc files
 #######################################
-def get_cell_object_from_hoc(hocpath):
+def get_cell_object_from_hoc(hocpath, setUpBiophysics=True):
     '''returns cell object, which allows accessing points of individual branches'''    
     # import singlecell_input_mapper.singlecell_input_mapper.cell
     # ssm = singlecell_input_mapper.singlecell_input_mapper.cell.CellParser(hocpath)    
@@ -69,7 +69,7 @@ def get_cell_object_from_hoc(hocpath):
     # return ssm.cell
     neuron_param = {'filename': hocpath}
     neuron_param = I.scp.NTParameterSet(neuron_param)
-    cell = I.scp.create_cell(neuron_param)
+    cell = I.scp.create_cell(neuron_param, setUpBiophysics = setUpBiophysics)
     return cell
 
 ##########################################
