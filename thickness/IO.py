@@ -112,7 +112,11 @@ class Am:
             lines = f.readlines()
             for idx, line in enumerate(lines):
                 if line.rfind("TransformationMatrix") > -1:
-                    vector = read_numbers_in_line(line)
+                    # vector = read_numbers_in_line(line)
+                    line = line.strip()
+                    line = line.strip('TransformationMatrix')
+                    line = line.split(' ')
+                    vector = [float(l.strip()) for l in line if l]
             for i in range(4):
                 for j in range(4):
                     k = j + i * 4
