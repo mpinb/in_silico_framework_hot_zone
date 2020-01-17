@@ -12,6 +12,12 @@ from ..utils import chunkIt
 
 html_template = 'animation_template.html'
  
+def find_nearest(array, value):
+    'https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array'
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return idx 
+    
 def get_default_axis(range_var):
     if range_var == 'Vm':
         return (0,1600), (-80,0)
@@ -73,7 +79,7 @@ def get_lines(cell, n, range_vars = 'Vm'):
     if isinstance(range_vars, str):
         range_vars = [range_vars]
          
-    cmap = {'Soma': 'k', 'Dendrite': 'b', 'ApicalDendrite': 'r', 'AIS': 'g', 'Myelin': 'y'}
+    cmap = {'Soma': 'k', 'Dendrite': 'b', 'ApicalDendrite': 'r', 'AIS': 'g', 'Myelin': 'y', 'SpineNeck': 'cyan', 'SpineHead': 'orange'}
     out_all_lines = []
     for currentSec in cell.sections:
         out = {}
@@ -88,28 +94,33 @@ def get_lines(cell, n, range_vars = 'Vm'):
         parentLabel = parentSec.label
  
         while parentLabel != 'Soma':
-            dist += parentSec.L
-            currentSec = parentSec
+            dist += parentSec.L * currentSec.parentx
+            currentSec = parentSec 
             parentSec = currentSec.parent
             parentLabel = parentSec.label
          
+        parent_idx = find_nearest(currentSec_backup.parent.relPts, currentSec_backup.parentx)
+        parent_idx_segment = find_nearest(currentSec_backup.parent.segx, currentSec_backup.parentx)
+        
+         
         #now calculate it segment wise.
         #First point is branchpoint of parent section, because otherwise there will be a gap in the plot
-        distance_dummy = [dist - (1-list(currentSec_backup.parent)[-1].x)*currentSec_backup.parent.L]
+        distance_dummy = [dist] #  + currentSec_backup.parent.relPts[parent_idx]*currentSec_backup.parent.L]
         #calculate each segment distance
         for seg in currentSec_backup:
             distance_dummy.append(dist + seg.x*currentSec_backup.L)
-         
-        # voltage traces are a spiecal case
+        
+        
+        # voltage traces are a special case
         if range_vars[0] == 'Vm':
-            traces_dummy = [currentSec_backup.parent.recVList[-1][n]]
+            traces_dummy = [currentSec_backup.parent.recVList[parent_idx_segment][n]]
             for vec in currentSec_backup.recVList:
                 traces_dummy.append(vec[n])       
         # other range vars are saved differently in the cell object compared to Vm       
         else:
-            vec_list = currentSec_backup.recordVars[range_vars[0]]
+            vec_list = [] # currentSec_backup.recordVars[range_vars[0]]
             try:
-                traces_dummy = [currentSec_backup.parent.recordVars[range_vars[0]][-1][n]]
+                traces_dummy = [currentSec_backup.parent.recordVars[range_vars[0]][parent_idx_segment][n]]
             except:
                 [np.NaN]
             if not vec_list: continue #if range mechanism is not in section: continue
@@ -144,13 +155,13 @@ def plot_lines_fun(lines, ax):
         del line['x']
         del line['y']
         del line['t']
-        dummy,  = ax.plot(x,y,**line)
+        dummy,  = ax.plot(x,y,'.' if len(x) == 1 else '-',**line)
         out_lines.append(dummy)
         ax.set_title("%.3f" % t)
     return out_lines
  
  
-#@dask.delayed(traverse = False)
+@dask.delayed(traverse = False)
 def _in_parallel_context(paths, lines_objects, xlim = (0,1500), ylim = (-80,0)):
     # some ideas how to speed up figure drawing are taken from here: 
     # http://bastibe.de/2013-05-30-speeding-up-matplotlib.html
@@ -185,9 +196,9 @@ def parallelMovieMaker(basedir, lines, xlim = (0,1500), ylim = (-80,0)):
     delayed_list = [_in_parallel_context(path, line, xlim = xlim, ylim = ylim) \
                     for path, line in zip(paths_chunks, lines_chunks)]
     
-    #dask.compute(delayed_list, get = dask.get, optimize = False)
-    #print "start computing"
-    #dask.delayed(delayed_list).compute(get = dask.get, optimize = False)
+    dask.compute(delayed_list, get = dask.multiprocessing.get, optimize = False)
+    print "start computing"
+    dask.delayed(delayed_list).compute(get = dask.multiprocessing.get, optimize = False)
     
     return paths
      
