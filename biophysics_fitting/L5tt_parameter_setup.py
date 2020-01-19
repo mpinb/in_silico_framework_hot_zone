@@ -113,9 +113,13 @@ def set_ephys(cell_param, params = None):
         cell_param[hay_param_to_scp_neuron_param(k)]= float(v)
     return cell_param
 
-def set_hot_zone(cell_param, min_ = None, max_ = None):
+def set_hot_zone(cell_param, min_ = None, max_ = None, outsidescale_sections = None):
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['begin'] = min_
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['end'] = max_
     cell_param['ApicalDendrite'].mechanisms.range['Ca_HVA']['begin'] = min_
     cell_param['ApicalDendrite'].mechanisms.range['Ca_HVA']['end'] = max_
+    if outsidescale_sections is not None:
+        assert(isinstance(outsidescale_sections, list))
+        cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['outsidescale_sections'] = outsidescale_sections
+        cell_param['ApicalDendrite'].mechanisms.range['Ca_HVAst']['outsidescale_sections'] = outsidescale_sections
     return cell_param

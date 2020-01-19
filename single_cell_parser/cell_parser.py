@@ -381,16 +381,24 @@ class CellParser(object):
                 begin = mech['begin']
                 end = mech['end']
                 outsideScale = mech['outsidescale']
+                if 'outsidescale_sections' in mech.keys():
+                    outsideScale_sections = mech['outsidescale_sections']
+                else:
+                    outsideScale_sections = []
                 for sec in self.cell.structures[label]:
+                    secID = self.cell.sections.index(sec)
                     sec.insert(mechName)
                     for seg in sec:
                         paramStrings = []
                         for param in mech.keys():
                             if param == 'spatial' or param == 'begin' or param == 'end'\
-                            or param == 'outsidescale':
+                            or param == 'outsidescale' or param == 'outsidescale_sections':
                                 continue
                             dist = h.distance(seg.x, sec=sec)
-                            if begin <= dist <= end:
+                            if secID in outsideScale_sections:
+                                print 'setting section {} to outsidescale'.format(secID)
+                                rangeVarVal = mech[param]*outsideScale
+                            elif begin <= dist <= end:
                                 rangeVarVal = mech[param]
                             else:
                                 rangeVarVal = mech[param]*outsideScale
