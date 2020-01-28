@@ -74,7 +74,7 @@ class CellParser(object):
         
         #        add dendritic spines (Rieke)
         try:
-            if parameters.spatialgraph_modify_functions.rieke_spines == "True":
+            if 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
                 self.rieke_spines(parameters)
         except AttributeError:
             pass
@@ -138,7 +138,7 @@ class CellParser(object):
                 continue
             if label == 'spatialgraph_modify_functions':
                 continue
-            if parameters.spatialgraph_modify_functions.rieke_spines == 'False':
+            if not 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
                 if label == 'SpineHead' or label == 'SpineNeck':
                     continue
             print '    Adding membrane properties to %s' % label
@@ -155,7 +155,7 @@ class CellParser(object):
                 continue
             if label == 'spatialgraph_modify_functions':
                 continue
-            if parameters.spatialgraph_modify_functions.rieke_spines == 'False':
+            if not 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
                 if label == 'SpineHead' or label == 'SpineNeck':
                     continue
             print '    Adding membrane range mechanisms to %s' % label
@@ -847,11 +847,11 @@ class CellParser(object):
         self.cell.sections.append(hMyelin)
     
     def rieke_spines(self, parameters):
-        spineneckDiam = parameters.spatialgraph_modify_functions.spine_morphology.spineneckDiam
-        spineneckLength = parameters.spatialgraph_modify_functions.spine_morphology.spineneckLength
+        spineneckDiam = parameters.spatialgraph_modify_functions.rieke_spines.spine_morphology.spineneckDiam
+        spineneckLength = parameters.spatialgraph_modify_functions.rieke_spines.spine_morphology.spineneckLength
         
-        spineheadDiam = parameters.spatialgraph_modify_functions.spine_morphology.spineheadDiam
-        spineheadLength = parameters.spatialgraph_modify_functions.spine_morphology.spineheadLength
+        spineheadDiam = parameters.spatialgraph_modify_functions.rieke_spines.spine_morphology.spineheadDiam
+        spineheadLength = parameters.spatialgraph_modify_functions.rieke_spines.spine_morphology.spineheadLength
     
         print("Creating dendritic spines:")
         print("    spine neck length: {}".format(spineneckLength))
@@ -865,7 +865,7 @@ class CellParser(object):
             idx = (np.abs(lst - target)).argmin()
             return idx, lst[idx]
 
-        synFile = parameters.spatialgraph_modify_functions.syn_filepath
+        synFile = parameters.spatialgraph_modify_functions.rieke_spines.syn_filepath
          
         with open(synFile, "r") as synapse_file:
             file_data = synapse_file.readlines()
