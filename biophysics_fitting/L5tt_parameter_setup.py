@@ -109,9 +109,18 @@ def set_morphology(cell_param, filename = None):
     return cell_param
 
 def set_ephys(cell_param, params = None):
+    'updates cell_param file. parameter names reflect the hay naming convention.'
     for k, v in params.iteritems(): 
         cell_param[hay_param_to_scp_neuron_param(k)]= float(v)
     return cell_param
+
+def set_param(cell_param, params = None):
+    'updates cell_param file. parameter names reflect the hierarchy in the cell_param file itself.'
+    for k, v in params.iteritems():
+        p = cell_param
+        for kk in k.split('.')[:-1]:
+            p = p[kk]
+        p[k.split('.')[-1]] = v
 
 def set_hot_zone(cell_param, min_ = None, max_ = None, outsidescale_sections = None):
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['begin'] = min_
