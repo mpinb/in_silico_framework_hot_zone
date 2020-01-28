@@ -87,16 +87,20 @@ def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = T
     print '-------------------------------'
     print 'Starting setup of cell model...'
     axon = False
+    
     if 'AIS' in parameters.keys():
         axon = True
+    
+        
     print 'Loading cell morphology...'
     parser = CellParser(parameters.filename)
-    parser.spatialgraph_to_cell(axon, scaleFunc)
+    parser.spatialgraph_to_cell(parameters, axon, scaleFunc)
     if setUpBiophysics:
         print 'Setting up biophysical model...'
         parser.set_up_biophysics(parameters, allPoints)
     print '-------------------------------'
-    parser.apply_cell_modify_functions(parameters)
+    
+    parser.apply_cell_modify_functions(parameters)       
     parser.cell.init_time_recording()
     parser.cell.parameters = parameters
     parser.cell.scaleFunc = scaleFunc
@@ -163,5 +167,45 @@ class Event():
     def __init__(self, func):
         self.callback = func
         self.fih = neuron.h.FInitializeHandler(1, self.callback)
+           
+def spines_update_synapse_distribution_file(cell, synapse_distribution_file, new_synapse_distribution_file):
+    '''Update the .syn file to correctly point to spine heads as excitatory synapse locations. Spines must already exist, so call after create_cell, using the same .syn file that was used to create the cell. new_synfile will be created if it does not already exist.'''
+    ## update the .syn file
+    spine_heads = []
+    for sec in cell.sections:
+        if sec.label == "SpineHead":
+            spine_heads.append(sec)
+            
+    
+    excitatory = ['L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34', 'L6ccinv', 'L5tt', 'Generic']
+
+    with open(synapse_distribution_file, "r") as synapse_file:
+        file_data = synapse_file.readlines()
+    
+    i = 0
+    
+    for n, line in enumerate(file_data):
+        if n > 3: # line 5 is first line containing data
+            line_split = line.split("\t")
+
+            if (line_split[0].split("_"))[0] in excitatory:                
+
+                file_data[n] = "\t".join((line_split[0], str(cell.sections.index(spine_heads[i])), str(1.0) + "\n"))
+                i += 1
+
+
+    with open(new_synapse_distribution_file, "w") as synapse_file:    
+        synapse_file.writelines(file_data)
+    print "Success: .syn file updated"
+        
+    
+def spines_update_network_paramfile(new_synapse_distribution_file, network_paramfile, new_network_paramfile):
+    '''update the network.param file to point to the new synapse distribution file'''
+    network_param = build_parameters(network_paramfile)
+    for i in network_param.network.keys():
+        network_param.network[i].synapses.distributionFile = new_synapse_distribution_file
+    network_param.save(new_network_paramfile)
+    print "Success: network.param file updated"
+    
 
 

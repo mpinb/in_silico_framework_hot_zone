@@ -38,7 +38,7 @@ class CellParser(object):
         self.membraneParams = {}
         self.cell_modify_functions_applied = False
     
-    def spatialgraph_to_cell(self, axon=False, scaleFunc=None):
+    def spatialgraph_to_cell(self, parameters, axon=False, scaleFunc=None):
         '''
         reads cell morphology from Amira hoc file
         and sets up PySections and Cell object
@@ -71,6 +71,13 @@ class CellParser(object):
         if axon:
             self._create_ais_Hay2013()
 #            self._create_ais()
+        
+        #        add dendritic spines (Rieke)
+        try:
+            if parameters.spatialgraph_modify_functions.rieke_spines == "True":
+                self.rieke_spines(parameters)
+        except AttributeError:
+            pass
         
 #        second loop: connect sections
 #        and create structures dict
@@ -128,7 +135,12 @@ class CellParser(object):
             if label == 'filename':
                 continue
             if label == 'cell_modify_functions':
-                continue            
+                continue
+            if label == 'spatialgraph_modify_functions':
+                continue
+            if parameters.spatialgraph_modify_functions.rieke_spines == 'False':
+                if label == 'SpineHead' or label == 'SpineNeck':
+                    continue
             print '    Adding membrane properties to %s' % label
             self.insert_membrane_properties(label, parameters[label].properties)
         
@@ -141,6 +153,11 @@ class CellParser(object):
                 continue
             if label == 'cell_modify_functions':
                 continue
+            if label == 'spatialgraph_modify_functions':
+                continue
+            if parameters.spatialgraph_modify_functions.rieke_spines == 'False':
+                if label == 'SpineHead' or label == 'SpineNeck':
+                    continue
             print '    Adding membrane range mechanisms to %s' % label
             self.insert_range_mechanisms(label, parameters[label].mechanisms.range)
             if parameters[label].properties.has_key('ions'):
@@ -828,7 +845,72 @@ class CellParser(object):
         hMyelin.parentID = len(self.cell.sections) - 1
         hMyelin.nseg = myelinSeg
         self.cell.sections.append(hMyelin)
+    
+    def rieke_spines(self, parameters):
+        spineneckDiam = parameters.spatialgraph_modify_functions.spine_morphology.spineneckDiam
+        spineneckLength = parameters.spatialgraph_modify_functions.spine_morphology.spineneckLength
         
+        spineheadDiam = parameters.spatialgraph_modify_functions.spine_morphology.spineheadDiam
+        spineheadLength = parameters.spatialgraph_modify_functions.spine_morphology.spineheadLength
+    
+        print("Creating dendritic spines:")
+        print("    spine neck length: {}".format(spineneckLength))
+        print("    spine neck diameter: {}".format(spineneckDiam))
+        print("    spine head length and diameter: {}".format(spineheadDiam))
+       
+        excitatory = ['L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34', 'L6ccinv', 'L5tt', 'Generic']
+
+        def get_closest(lst, target):
+            lst = np.asarray(lst)
+            idx = (np.abs(lst - target)).argmin()
+            return idx, lst[idx]
+
+        synFile = parameters.spatialgraph_modify_functions.syn_filepath
+         
+        with open(synFile, "r") as synapse_file:
+            file_data = synapse_file.readlines()
+            
+        for n, line in enumerate(file_data):
+            if n > 3: # line 5 is first line containing data
+                line_split = line.split("\t")
+                
+                if (line_split[0].split("_"))[0] in excitatory:
+                              
+                    hSpineNeck = PySection(name = "spine_neck", cell = self.cell.id, label = "SpineNeck")
+                    hSpineNeck.nseg = 1
+                    self.cell.sections.append(hSpineNeck)
+                    
+                    hSpineHead = PySection(name = "spine_head", cell = self.cell.id, label = "SpineHead") 
+                    hSpineHead.nseg = 1
+                    self.cell.sections.append(hSpineHead)
+                    
+                    
+                    # 3d geometry for spine neck
+                    section = self.cell.sections[int(line_split[1])]
+
+                    idx, closest_rel_pt = get_closest(section.relPts, float(line_split[2]))
+                    spine_neck_start = section.pts[idx]
+                        
+                    spine_neck_end = [spine_neck_start[0], spine_neck_start[1], spine_neck_start[2] + spineneckLength]
+
+                    points_neck = [spine_neck_start, spine_neck_end]
+                    diameters_neck = [spineneckDiam, spineneckDiam]
+
+                    hSpineNeck.set_3d_geometry(points_neck, diameters_neck) 
+                    hSpineNeck.parentx = closest_rel_pt
+                    hSpineNeck.parentID = int(line_split[1])
+
+
+                    # 3d geometry for spine head
+                    spine_head_start = spine_neck_end
+                    spine_head_end = [spine_head_start[0], spine_head_start[1], spine_head_start[2] + spineheadLength]
+
+                    points_head = [spine_head_start, spine_head_end]
+                    diameters_head = [spineheadDiam, spineheadDiam]
+
+                    hSpineHead.set_3d_geometry(points_head, diameters_head)
+                    hSpineHead.parentx = 1.0
+                    hSpineHead.parentID = self.cell.sections.index(hSpineNeck)
 
 if __name__ == '__main__':
 #    fname = raw_input('Enter hoc filename: ')
