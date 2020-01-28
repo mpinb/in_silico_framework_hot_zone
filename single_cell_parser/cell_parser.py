@@ -76,6 +76,8 @@ class CellParser(object):
         try:
             if 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
                 self.rieke_spines(parameters)
+            else:
+                print "No spines are being added..."
         except AttributeError:
             pass
         
