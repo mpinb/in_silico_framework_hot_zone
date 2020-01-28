@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import dask
 import os
 import glob
-import IPython.display
+import IPython
 import jinja2
 import functools
 from base64 import b64encode
@@ -63,7 +63,7 @@ def display_animation(files, interval=10, style=False, animID = None, embedded =
         listFrames = [_load_base64(f) for f in listFrames]
     htmlSrc = template.render(ID=animID, listFrames=listFrames, interval=interval, style=style)
      
-    return IPython.display.HTML(htmlSrc)
+    IPython.display.display(IPython.display.HTML(htmlSrc))
  
  
 def find_closest_index(list_, value):
@@ -76,17 +76,21 @@ def get_synapse_points(cell, n):
  
 def get_lines(cell, n, range_vars = 'Vm'):
     '''returns list of dictionaries of lines that can be displayed using the plot_lines function'''
+    difference_limit = 1
     if isinstance(range_vars, str):
         range_vars = [range_vars]
          
     cmap = {'Soma': 'k', 'Dendrite': 'b', 'ApicalDendrite': 'r', 'AIS': 'g', 'Myelin': 'y', 'SpineNeck': 'cyan', 'SpineHead': 'orange'}
     out_all_lines = []
+    points_lines = {} # contains data to be plotted as points
     for currentSec in cell.sections:
+        if currentSec.label == "Soma": #don't plot soma
+            continue 
+        
         out = {}
         currentSec_backup = currentSec
-        #don't plot soma
-        if currentSec.label == 'Soma':
-            continue
+        
+        
         parentSec = currentSec.parent
          
         #compute distance from current section to soma
@@ -110,7 +114,6 @@ def get_lines(cell, n, range_vars = 'Vm'):
         for seg in currentSec_backup:
             distance_dummy.append(dist + seg.x*currentSec_backup.L)
         
-        
         # voltage traces are a special case
         if range_vars[0] == 'Vm':
             traces_dummy = [currentSec_backup.parent.recVList[parent_idx_segment][n]]
@@ -127,12 +130,31 @@ def get_lines(cell, n, range_vars = 'Vm'):
             for vec in vec_list:
                 traces_dummy.append(vec[n])
                 #sec.recordVars[range_vars[0]][lv_for_record_vars]
-        out['x'] = distance_dummy
-        out['y'] = traces_dummy
-        out['color'] = cmap[currentSec_backup.label]
-        out['label'] = currentSec_backup.label
-        out['t'] = cell.tVec[n]
-        out_all_lines.append(out)
+        
+        if len(distance_dummy) == 2:
+            label = currentSec_backup.label
+            if not label in points_lines.keys():
+                points_lines[label] = {}
+                points_lines[label]['x'] = []
+                points_lines[label]['y'] = []
+                points_lines[label]['color'] = cmap[label]
+                points_lines[label]['marker'] = '.'
+                points_lines[label]['linestyle'] = 'None'
+                points_lines[label]['t'] = cell.tVec[n]
+            difference = np.abs(traces_dummy[1] - traces_dummy[0])
+            points_lines[label]['x'].append(distance_dummy[1] if difference > difference_limit else float('nan'))
+            points_lines[label]['y'].append(traces_dummy[1])
+
+            
+            
+        else:
+            out['x'] = distance_dummy
+            out['y'] = traces_dummy
+            out['color'] = cmap[currentSec_backup.label]
+            out['label'] = currentSec_backup.label
+            out['t'] = cell.tVec[n]
+            out_all_lines.append(out)
+    out_all_lines.extend(points_lines.values())
     return out_all_lines
 #%time silent = [get_lines(cell, i) for i in range(1000)]
  
@@ -155,13 +177,14 @@ def plot_lines_fun(lines, ax):
         del line['x']
         del line['y']
         del line['t']
-        dummy,  = ax.plot(x,y,'.' if len(x) == 1 else '-',**line)
+        
+        dummy,  = ax.plot(x,y,**line)
         out_lines.append(dummy)
         ax.set_title("%.3f" % t)
     return out_lines
  
  
-@dask.delayed(traverse = False)
+#@dask.delayed(traverse = False)
 def _in_parallel_context(paths, lines_objects, xlim = (0,1500), ylim = (-80,0)):
     # some ideas how to speed up figure drawing are taken from here: 
     # http://bastibe.de/2013-05-30-speeding-up-matplotlib.html
@@ -183,6 +206,7 @@ def parallelMovieMaker(basedir, lines, xlim = (0,1500), ylim = (-80,0)):
     xlim: limits of x axis
     ylim: limits of y axis
     '''
+    print "parallelMovieMaker"
     import tempfile
     if not os.path.exists(basedir):
         os.makedirs(basedir)
@@ -196,9 +220,9 @@ def parallelMovieMaker(basedir, lines, xlim = (0,1500), ylim = (-80,0)):
     delayed_list = [_in_parallel_context(path, line, xlim = xlim, ylim = ylim) \
                     for path, line in zip(paths_chunks, lines_chunks)]
     
-    dask.compute(delayed_list, get = dask.multiprocessing.get, optimize = False)
-    print "start computing"
-    dask.delayed(delayed_list).compute(get = dask.multiprocessing.get, optimize = False)
+    #dask.compute(delayed_list, get = dask.multiprocessing.get, optimize = False)
+    #print "start computing"
+    #dask.delayed(delayed_list).compute(get = dask.multiprocessing.get, optimize = False)
     
     return paths
      
