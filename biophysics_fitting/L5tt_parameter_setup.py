@@ -121,6 +121,7 @@ def set_param(cell_param, params = None):
         for kk in k.split('.')[:-1]:
             p = p[kk]
         p[k.split('.')[-1]] = v
+    return cell_param
 
 def set_hot_zone(cell_param, min_ = None, max_ = None, outsidescale_sections = None):
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['begin'] = min_
