@@ -53,7 +53,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
     assert seed is not None
     np.random.seed(seed)
     print("seed: %i" % seed)
-    if 
+    
     neuronParameters = load_param_file_if_path_is_provided(cellParamName)
     evokedUpNWParameters = load_param_file_if_path_is_provided(evokedUpParamName) ##sumatra function for reading in parameter file
     scp.load_NMODL_parameters(neuronParameters)
