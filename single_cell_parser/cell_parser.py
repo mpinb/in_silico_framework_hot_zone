@@ -157,9 +157,12 @@ class CellParser(object):
                 continue
             if label == 'spatialgraph_modify_functions':
                 continue
-            if not 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
-                if label == 'SpineHead' or label == 'SpineNeck':
-                    continue
+            try:
+                if not 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
+                    if label == 'SpineHead' or label == 'SpineNeck':
+                        continue
+            except AttributeError:
+                pass
             print '    Adding membrane range mechanisms to %s' % label
             self.insert_range_mechanisms(label, parameters[label].mechanisms.range)
             if parameters[label].properties.has_key('ions'):
