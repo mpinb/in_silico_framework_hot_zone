@@ -440,7 +440,7 @@ def write_landmark_file(model_selection):
 #############################################
 class EvokedActivitySimulationSetup:
     def __init__(self, output_dir_key = None, synaptic_strength_fitting = None, 
-                 stims = None, locs = None, INHscalings = None, tStim = 245, tEnd = 295,
+                 stims = None, locs = None, INHscalings = None, ongoing_scale = None, ongoing_scale_pop = None, tStim = 245, tEnd = 295,
                  models = None):
         self.output_dir_key = output_dir_key
         self.synaptic_strength_fitting = synaptic_strength_fitting
@@ -483,6 +483,7 @@ class EvokedActivitySimulationSetup:
                                                                     stim_onset=self.tStim)
                         I.scp.network_param_modify_functions.change_evoked_INH_scaling(network_param, INH_scaling)
                         I.scp.network_param_modify_functions.change_glutamate_syn_weights(network_param, syn_strength)
+                        I.scp.network_param_modify_functions.change_ongoing_interval(network_param, factor = ongoing_scale, pop = ongoing_scale_pop) ##adjust ongoing activity if necessary
                         network_param_name = mdb[str(model_id)][self.output_dir_key].join('network_INH_{}_stim_{}_loc_{}.param'.format(INH_scaling, stim, loc))
                         network_param.save(network_param_name)
                         outdir = mdb[str(model_id)][self.output_dir_key].join(str(INH_scaling)).join(stim).join(str(loc))
