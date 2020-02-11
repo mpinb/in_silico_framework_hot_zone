@@ -457,7 +457,7 @@ class EvokedActivitySimulationSetup:
         if self.models is None:
             self.models = self.synaptic_strength_fitting.model_selection.selected_models
             
-    def setup(self):
+    def setup(self, ongoing_scale, ongoing_scale_pop):
         mdb = self.l6_config.mdb
         
         for model_id in self.models:
