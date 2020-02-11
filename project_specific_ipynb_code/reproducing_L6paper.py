@@ -449,6 +449,8 @@ class EvokedActivitySimulationSetup:
         self.stims = stims
         self.locs = locs
         self.INHscaling = INHscalings
+        self.ongoing_scale = ongoing_scale
+        self.ongoing_scale_pop = ongoing_scale_pop
         self.tStim = tStim
         self.tEnd = tEnd
         self.ds = []
@@ -457,7 +459,7 @@ class EvokedActivitySimulationSetup:
         if self.models is None:
             self.models = self.synaptic_strength_fitting.model_selection.selected_models
             
-    def setup(self, ongoing_scale, ongoing_scale_pop):
+    def setup(self):
         mdb = self.l6_config.mdb
         
         for model_id in self.models:
@@ -483,7 +485,7 @@ class EvokedActivitySimulationSetup:
                                                                     stim_onset=self.tStim)
                         I.scp.network_param_modify_functions.change_evoked_INH_scaling(network_param, INH_scaling)
                         I.scp.network_param_modify_functions.change_glutamate_syn_weights(network_param, syn_strength)
-                        I.scp.network_param_modify_functions.change_ongoing_interval(network_param, factor = ongoing_scale, pop = ongoing_scale_pop) ##adjust ongoing activity if necessary
+                        I.scp.network_param_modify_functions.change_ongoing_interval(network_param, factor = self.ongoing_scale, pop = self.ongoing_scale_pop) ##adjust ongoing activity if necessary
                         network_param_name = mdb[str(model_id)][self.output_dir_key].join('network_INH_{}_stim_{}_loc_{}.param'.format(INH_scaling, stim, loc))
                         network_param.save(network_param_name)
                         outdir = mdb[str(model_id)][self.output_dir_key].join(str(INH_scaling)).join(stim).join(str(loc))
