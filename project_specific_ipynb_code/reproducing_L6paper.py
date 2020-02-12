@@ -440,7 +440,7 @@ def write_landmark_file(model_selection):
 #############################################
 class EvokedActivitySimulationSetup:
     def __init__(self, output_dir_key = None, synaptic_strength_fitting = None, 
-                 stims = None, locs = None, INHscalings = None, ongoing_scale = None, ongoing_scale_pop = None, tStim = 245, tEnd = 295,
+                 stims = None, locs = None, INHscalings = None, ongoing_scale = None, ongoing_scale_pop = None, nProcs = 1, nSweeps = 200, tStim = 245, tEnd = 295,
                  models = None):
         self.output_dir_key = output_dir_key
         self.synaptic_strength_fitting = synaptic_strength_fitting
@@ -449,8 +449,10 @@ class EvokedActivitySimulationSetup:
         self.stims = stims
         self.locs = locs
         self.INHscaling = INHscalings
-        self.ongoing_scale = ongoing_scale
+        self.ongoing_scale = ongoing_scale #rieke
         self.ongoing_scale_pop = ongoing_scale_pop
+        self.nProcs = nProcs
+        self.nSweeps = nSweeps # /rieke
         self.tStim = tStim
         self.tEnd = tEnd
         self.ds = []
@@ -492,8 +494,8 @@ class EvokedActivitySimulationSetup:
                         print model_id, INH_scaling, stim, loc
                         d = I.simrun_run_new_simulations(cell_param_name, network_param_name, 
                                                          dirPrefix = outdir, 
-                                                         nSweeps = 200, 
-                                                         nprocs = 1, 
+                                                         nSweeps = self.nSweeps, 
+                                                         nprocs = self.nProcs, 
                                                          scale_apical = lambda x: x,
                                                          silent = False,
                                                          tStop = self.tEnd)
