@@ -547,13 +547,16 @@ def linear_interpolation_between_pairs(X,Y, x):
     return m*x+c    
 
 class PWfitting:
-    def __init__(self, l6_config, model_selection, min_time = 8, max_time = 25):
+    def __init__(self, l6_config, model_selection, min_time = 8, max_time = 25, mdb_path = '/nas1/Data_arco/results/20190114_spiketimes_database'):
         self.l6_config = l6_config
         self.model_selection = model_selection
         self.min_time = min_time
         self.max_time = max_time
+        self.mdb_path = mdb_path
         ### get target value
-        st_CDK = I.ModelDataBase('/nas1/Data_arco/results/20190114_spiketimes_database')['CDK_PassiveTouch']
+        #st_CDK = I.ModelDataBase('/nas1/Data_arco/results/20190114_spiketimes_database')['CDK_PassiveTouch'] # rieke
+        st_CDK = I.ModelDataBase(self.mdb_path)['CDK_PassiveTouch']
+        
         st_CDK = I.select(st_CDK, stim = 'D2')
         self.CDK_target_value_avg_L5tt = I.temporal_binning(st_CDK, min_time = min_time, 
                                                        max_time = max_time, 
