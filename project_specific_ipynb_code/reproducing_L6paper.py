@@ -633,11 +633,11 @@ class PWfitting:
             elif plottype == 'line':
                 def plotfun(bins, label = None, fig = None, colormap = None):
                     fig.plot(bins[0][:-1], bins[1], color = colormap[label], label = label)
-            st_CDK = I.ModelDataBase('/nas1/Data_arco/results/20190114_spiketimes_database')['CDK_PassiveTouch']
+            st_CDK = I.ModelDataBase(self.mdb_path1)['CDK_PassiveTouch']
             st_CDK = I.select(st_CDK, stim = 'D2')
             CDK_bins = I.temporal_binning(st_CDK, min_time = -144, max_time = 100, bin_size = 1)
             CDK_bins = [range(245-144,245+100+1), CDK_bins[1]]
-            st_robert_control = I.ModelDataBase('/nas1/Data_arco/results/mdb_robert_3x3/')['spike_times']
+            st_robert_control = I.ModelDataBase(self.mdb_path2)['spike_times']
             st_robert_control = st_robert_control[st_robert_control.index.str.split('_').str[0] == 'C2']
             robert_bins = I.temporal_binning(st_robert_control, min_time = 0, max_time = 245+50, bin_size = 1)
             cmap = I.defaultdict(lambda: None)
