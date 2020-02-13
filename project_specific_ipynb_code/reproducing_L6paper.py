@@ -563,7 +563,7 @@ class PWfitting:
         self.CDK_target_value_avg_L5tt = I.temporal_binning(st_CDK, min_time = min_time, 
                                                        max_time = max_time, 
                                                        bin_size = max_time-min_time)[1][0]
-        self.CDK_target_value_same_cell = I.temporal_binning(I.select(st_CDK, cell = int(l6_config.biophysical_model_mdb_key)), 
+        self.CDK_target_value_same_cell = I.temporal_binning(I.select(st_CDK, cell = l6_config.biophysical_model_mdb_key), 
                                                       min_time = min_time, 
                                                              max_time = max_time, 
                                                              bin_size = max_time-min_time)[1][0]
