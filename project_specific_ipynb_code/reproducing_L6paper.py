@@ -547,7 +547,7 @@ def linear_interpolation_between_pairs(X,Y, x):
     return m*x+c    
 
 class PWfitting:
-    def __init__(self, l6_config, model_selection, min_time = 8, max_time = 25, mdb_path1 = '/nas1/Data_arco/results/20190114_spiketimes_database', mdb_path2 = '/nas1/Data_arco/results/mdb_robert_3x3/', stim = 'D2'):
+    def __init__(self, l6_config, model_selection, min_time = 8, max_time = 25, mdb_path1 = '/nas1/Data_arco/results/20190114_spiketimes_database', mdb_path2 = '/nas1/Data_arco/results/mdb_robert_3x3/', stim = 'D2', cellid = l6_config.biophysical_model_mdb_key):
         self.l6_config = l6_config
         self.model_selection = model_selection
         self.min_time = min_time
@@ -555,6 +555,7 @@ class PWfitting:
         self.mdb_path1 = mdb_path1
         self.mdb_path2 = mdb_path2
         self.stim = stim
+        self.cellid = cellid
         ### get target value
         #st_CDK = I.ModelDataBase('/nas1/Data_arco/results/20190114_spiketimes_database')['CDK_PassiveTouch'] # rieke
         st_CDK = I.ModelDataBase(self.mdb_path1)['CDK_PassiveTouch']
@@ -563,7 +564,7 @@ class PWfitting:
         self.CDK_target_value_avg_L5tt = I.temporal_binning(st_CDK, min_time = min_time, 
                                                        max_time = max_time, 
                                                        bin_size = max_time-min_time)[1][0]
-        self.CDK_target_value_same_cell = I.temporal_binning(I.select(st_CDK, cell = l6_config.biophysical_model_mdb_key), 
+        self.CDK_target_value_same_cell = I.temporal_binning(I.select(st_CDK, cell = self.cellid), 
                                                       min_time = min_time, 
                                                              max_time = max_time, 
                                                              bin_size = max_time-min_time)[1][0]
