@@ -35,7 +35,7 @@ class L6config:
         self.biophysical_model_mdb = biophysical_model_mdb
         self.biophysical_model_mdb_key = biophysical_model_mdb_key
         self.anatomical_model_mdb = anatomical_model_mdb 
-        if anatomical_model_mdb_key is None:
+        if anatomical_model_mdb_key is not None:
             self.anatomical_model_mdb_key = anatomical_model_mdb_key    
         else:
             self.anatomical_model_mdb_key = biophysical_model_mdb_key    
