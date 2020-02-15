@@ -57,13 +57,13 @@ def restore_cell_from_serializable_object(sc):
  
         axon = False
         if 'AIS' in set([sec['label'] for sec in sc['sections']]):
-            axon = True  
+            axon = True
         
         parser = CellParser(hoc_file_path)
         with silence_stdout:
             # we do not scale! maybe trigger a warning?
             # or better deprecate the scale apical function?        
-            parser.spatialgraph_to_cell(axon, scaleFunc = None)
+            parser.spatialgraph_to_cell(sumatra.parameters.NTParameterSet(sc['parameters']), axon,  scaleFunc = None)
             
             # the following is needed to assure that the reconstructed cell
             # has an equal amount of segments compared to the original cell

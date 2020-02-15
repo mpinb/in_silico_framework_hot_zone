@@ -42,7 +42,7 @@ def slugify(value):
     value = unicode(re.sub('[-\s]+', '-', value))
     value = str(value)
     if len(value) >= 50:
-        value = value[50]
+        value = value[:50]
     return value
     
 class LoaderWrapper:

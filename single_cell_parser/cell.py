@@ -132,21 +132,26 @@ class Cell(object):
         if label == 'Soma':
             return self.soma.L
         maxDist = 0.0
+
+        if label == "SpineHead" or label == "SpineNeck":
+            distances = [self.distance_to_soma(sec, 1.0) for sec in self.sections if sec.label == label]
+            maxDist = max(distances)
+        else:
 #        set origin to 0 of first branch with this label
-        for sec in self.sections:
-            if sec.label != label:
-                continue
-            if sec.parent.label == 'Soma':
-                silent = h.distance(0, 0.0, sec=sec)
-                break
-        for branchSectionList in self.branches[label]:
-            for sec in branchSectionList:
-                secRef = h.SectionRef(sec=sec)
-                if not secRef.nchild():
-#                    dist = self.distance_to_soma(sec, 1.0)
-                    dist = h.distance(1.0, sec=sec)
-                    if dist > maxDist:
-                        maxDist = dist
+            for sec in self.sections:
+                if sec.label != label:
+                    continue
+                if sec.parent.label == 'Soma':
+                    silent = h.distance(0, 0.0, sec=sec)
+                    break
+            for branchSectionList in self.branches[label]:
+                for sec in branchSectionList:
+                    secRef = h.SectionRef(sec=sec)
+                    if not secRef.nchild():
+    #                    dist = self.distance_to_soma(sec, 1.0)
+                        dist = h.distance(1.0, sec=sec)
+                        if dist > maxDist:
+                            maxDist = dist
         return maxDist
     
     def add_synapse(self, secID, ptID, ptx, preType='Generic', postType='Generic'):

@@ -445,7 +445,7 @@ def write_landmark_file(model_selection):
 #############################################
 class EvokedActivitySimulationSetup:
     def __init__(self, output_dir_key = None, synaptic_strength_fitting = None, 
-                 stims = None, locs = None, INHscalings = None, tStim = 245, tEnd = 295,
+                 stims = None, locs = None, INHscalings = None, ongoing_scale = None, ongoing_scale_pop = None, nProcs = 1, nSweeps = 200, tStim = 245, tEnd = 295,
                  models = None):
         self.output_dir_key = output_dir_key
         self.synaptic_strength_fitting = synaptic_strength_fitting
@@ -454,6 +454,10 @@ class EvokedActivitySimulationSetup:
         self.stims = stims
         self.locs = locs
         self.INHscaling = INHscalings
+        self.ongoing_scale = ongoing_scale #rieke
+        self.ongoing_scale_pop = ongoing_scale_pop
+        self.nProcs = nProcs
+        self.nSweeps = nSweeps # /rieke
         self.tStim = tStim
         self.tEnd = tEnd
         self.ds = []
@@ -488,14 +492,15 @@ class EvokedActivitySimulationSetup:
                                                                     stim_onset=self.tStim)
                         I.scp.network_param_modify_functions.change_evoked_INH_scaling(network_param, INH_scaling)
                         I.scp.network_param_modify_functions.change_glutamate_syn_weights(network_param, syn_strength)
+                        I.scp.network_param_modify_functions.change_ongoing_interval(network_param, factor = self.ongoing_scale, pop = self.ongoing_scale_pop) ##adjust ongoing activity if necessary
                         network_param_name = mdb[str(model_id)][self.output_dir_key].join('network_INH_{}_stim_{}_loc_{}.param'.format(INH_scaling, stim, loc))
                         network_param.save(network_param_name)
                         outdir = mdb[str(model_id)][self.output_dir_key].join(str(INH_scaling)).join(stim).join(str(loc))
                         print model_id, INH_scaling, stim, loc
                         d = I.simrun_run_new_simulations(cell_param_name, network_param_name, 
                                                          dirPrefix = outdir, 
-                                                         nSweeps = 200, 
-                                                         nprocs = 1, 
+                                                         nSweeps = self.nSweeps, 
+                                                         nprocs = self.nProcs, 
                                                          scale_apical = lambda x: x,
                                                          silent = False,
                                                          tStop = self.tEnd)
@@ -547,18 +552,27 @@ def linear_interpolation_between_pairs(X,Y, x):
     return m*x+c    
 
 class PWfitting:
-    def __init__(self, l6_config, model_selection, min_time = 8, max_time = 25):
+    def __init__(self, l6_config, model_selection, min_time = 8, max_time = 25, mdb_path1 = '/nas1/Data_arco/results/20190114_spiketimes_database', mdb_path2 = '/nas1/Data_arco/results/mdb_robert_3x3/', stim = 'D2', cellid = None):
         self.l6_config = l6_config
         self.model_selection = model_selection
         self.min_time = min_time
         self.max_time = max_time
+        self.mdb_path1 = mdb_path1
+        self.mdb_path2 = mdb_path2
+        self.stim = stim
+        if cellid == None:
+            self.cellid = l6_config.biophysical_model_mdb_key
+        else:
+            self.cellid = cellid
         ### get target value
-        st_CDK = I.ModelDataBase('/nas1/Data_arco/results/20190114_spiketimes_database')['CDK_PassiveTouch']
-        st_CDK = I.select(st_CDK, stim = 'D2')
+        #st_CDK = I.ModelDataBase('/nas1/Data_arco/results/20190114_spiketimes_database')['CDK_PassiveTouch'] # rieke
+        st_CDK = I.ModelDataBase(self.mdb_path1)['CDK_PassiveTouch']
+        
+        st_CDK = I.select(st_CDK, stim = self.stim) #changed by rieke
         self.CDK_target_value_avg_L5tt = I.temporal_binning(st_CDK, min_time = min_time, 
                                                        max_time = max_time, 
                                                        bin_size = max_time-min_time)[1][0]
-        self.CDK_target_value_same_cell = I.temporal_binning(I.select(st_CDK, cell = int(l6_config.biophysical_model_mdb_key)), 
+        self.CDK_target_value_same_cell = I.temporal_binning(I.select(st_CDK, cell = self.cellid), 
                                                       min_time = min_time, 
                                                              max_time = max_time, 
                                                              bin_size = max_time-min_time)[1][0]
@@ -566,7 +580,9 @@ class PWfitting:
         print 'CDK_target_value_avg_L5tt: %s' % self.CDK_target_value_avg_L5tt
         print 'CDK_target_value_same_cell: %s' % self.CDK_target_value_same_cell
         
-        st_robert_control = I.ModelDataBase('/nas1/Data_arco/results/mdb_robert_3x3/')['spike_times']
+        #st_robert_control = I.ModelDataBase('/nas1/Data_arco/results/mdb_robert_3x3/')['spike_times']
+        st_robert_control = I.ModelDataBase(self.mdb_path2)['spike_times']
+        
         st_robert_control = st_robert_control[st_robert_control.index.str.split('_').str[0] == 'C2']
         self.target_robert = I.temporal_binning(st_robert_control, min_time = 245+min_time, 
                                                 max_time = 245+max_time, 
@@ -622,11 +638,11 @@ class PWfitting:
             elif plottype == 'line':
                 def plotfun(bins, label = None, fig = None, colormap = None):
                     fig.plot(bins[0][:-1], bins[1], color = colormap[label], label = label)
-            st_CDK = I.ModelDataBase('/nas1/Data_arco/results/20190114_spiketimes_database')['CDK_PassiveTouch']
+            st_CDK = I.ModelDataBase(self.mdb_path1)['CDK_PassiveTouch']
             st_CDK = I.select(st_CDK, stim = 'D2')
             CDK_bins = I.temporal_binning(st_CDK, min_time = -144, max_time = 100, bin_size = 1)
             CDK_bins = [range(245-144,245+100+1), CDK_bins[1]]
-            st_robert_control = I.ModelDataBase('/nas1/Data_arco/results/mdb_robert_3x3/')['spike_times']
+            st_robert_control = I.ModelDataBase(self.mdb_path2)['spike_times']
             st_robert_control = st_robert_control[st_robert_control.index.str.split('_').str[0] == 'C2']
             robert_bins = I.temporal_binning(st_robert_control, min_time = 0, max_time = 245+50, bin_size = 1)
             cmap = I.defaultdict(lambda: None)

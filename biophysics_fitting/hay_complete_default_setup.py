@@ -16,7 +16,7 @@ from .utils import tVec, vmSoma, vmApical
 from .parameters import set_fixed_params, param_to_kwargs
 
 from .simulator import Simulator, run_fun
-from .L5tt_parameter_setup import get_L5tt_template, set_morphology, set_ephys, set_hot_zone
+from .L5tt_parameter_setup import get_L5tt_template, set_morphology, set_ephys, set_hot_zone, set_param, set_many_param
 # moved to bottom to resolve circular import
 # from .hay_evaluation import hay_evaluate_BAC, hay_evaluate_bAP, hay_evaluate_StepOne, hay_evaluate_StepTwo, hay_evaluate_StepThree
 
@@ -60,6 +60,9 @@ def get_Simulator(fixed_params, step = False):
     s.setup.params_modify_funs.append(['fixed_params', partial(set_fixed_params, fixed_params = fixed_params)])
     s.setup.cell_param_modify_funs.append(['morphology', param_to_kwargs(set_morphology)])
     s.setup.cell_param_modify_funs.append(['ephys', set_ephys])
+    s.setup.cell_param_modify_funs.append(['params', set_param])
+    s.setup.cell_param_modify_funs.append(['many_params', set_many_param])
+    
     s.setup.cell_param_modify_funs.append(['hot_zone', param_to_kwargs(set_hot_zone)])
     s.setup.cell_generator = scp.create_cell
     #s.setup.cell_modify_funs.append('apical_dendrite_scaling', apical_dendrite_scaling)
