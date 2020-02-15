@@ -20,6 +20,7 @@ class L6config:
                  biophysical_model_mdb = None, 
                  biophysical_model_mdb_key = None,
                  anatomical_model_mdb = None,
+                 anatomical_model_mdb_key = None,
                  hocpath = None,
                  runs = None,
                  locs = ['C2center', 'C1border', 'C3border', 'B1border', 'B2border', 'B3border', 'D1border', 'D2border', 'D3border'],
@@ -33,7 +34,11 @@ class L6config:
         self.mdb = mdb
         self.biophysical_model_mdb = biophysical_model_mdb
         self.biophysical_model_mdb_key = biophysical_model_mdb_key
-        self.anatomical_model_mdb = anatomical_model_mdb        
+        self.anatomical_model_mdb = anatomical_model_mdb 
+        if anatomical_model_mdb_key is None:
+            self.anatomical_model_mdb_key = anatomical_model_mdb_key    
+        else:
+            self.anatomical_model_mdb_key = biophysical_model_mdb_key    
         self.runs = runs
         self.hocpath = hocpath
         self.locs = locs
@@ -75,7 +80,7 @@ class L6config:
         print 'creating number of cells spreadsheet from confile'
         from singlecell_input_mapper.singlecell_input_mapper import con_file_to_NumberOfConnectedCells_sheet
         for loc in self.locs:
-            d = self.anatomical_model_mdb[self.biophysical_model_mdb_key]
+            d = self.anatomical_model_mdb[self.anatomical_model_mdb_key]
             p = get_file_or_folder_that_startswith(d, loc+'_')
             syn = get_file_or_folder_that_endswith(p, '.syn')
             con = get_file_or_folder_that_endswith(p, '.con')
