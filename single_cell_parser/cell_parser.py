@@ -140,9 +140,9 @@ class CellParser(object):
                 continue
             if label == 'spatialgraph_modify_functions':
                 continue
-            if not 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
-                if label == 'SpineHead' or label == 'SpineNeck':
-                    continue
+            #if not 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
+            #    if label == 'SpineHead' or label == 'SpineNeck':
+            #        continue
             print '    Adding membrane properties to %s' % label
             self.insert_membrane_properties(label, parameters[label].properties)
         
