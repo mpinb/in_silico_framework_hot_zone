@@ -477,7 +477,7 @@ class EvokedActivitySimulationSetup:
             if not self.output_dir_key in mdb[str(model_id)].keys():
                 mdb[str(model_id)].create_managed_folder(self.output_dir_key)
             elif self.output_dir_key in mdb[str(model_id)].keys() and add_to:
-                continue
+                pass
             else:
                 print 'skipping model {} as it seems to be simulated already. If the simulation '.format(model_id)
                 'run was incomplete, you can delete the data by running del l6_config.mdb[\'{}\'][\'{}\']'.format(model_id, self.output_dir_key)
