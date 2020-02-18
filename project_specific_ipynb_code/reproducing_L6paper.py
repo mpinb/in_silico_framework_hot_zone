@@ -461,7 +461,8 @@ class EvokedActivitySimulationSetup:
         if self.models is None:
             self.models = self.synaptic_strength_fitting.model_selection.selected_models
             
-    def setup(self):
+    def setup(self, add_to = False):
+        '''add_to: add more simulation trials to an existing folder'''
         mdb = self.l6_config.mdb
         
         for model_id in self.models:
@@ -470,6 +471,8 @@ class EvokedActivitySimulationSetup:
             I.display.display(syn_strength)
             if not self.output_dir_key in mdb[str(model_id)].keys():
                 mdb[str(model_id)].create_managed_folder(self.output_dir_key)
+            elif self.output_dir_key in mdb[str(model_id)].keys() and add_to:
+                continue
             else:
                 print 'skipping model {} as it seems to be simulated already. If the simulation '.format(model_id)
                 'run was incomplete, you can delete the data by running del l6_config.mdb[\'{}\'][\'{}\']'.format(model_id, self.output_dir_key)
