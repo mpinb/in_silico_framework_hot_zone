@@ -314,23 +314,29 @@ class Dendrogram:
         # if out < 50: return 0
         return out
     
-    def get_number_of_synapses_in_bin(self, min_, max_, select = ['Dendrite', 'ApicalDendrite'], label = 'VPMmike'):
+    def get_number_of_synapses_in_bin(self, min_, max_, select = ['Dendrite', 'ApicalDendrite'], label = None):
         out = 0
         for l in self.dendrogram_db:
             if not 'synapses' in l:
                 continue
             if not l['sec'].label in select:
-                continue                
-            for syn in l['synapses'][label]:
-                if min_ <= syn < max_:
-                    out+=1
+                continue
+            for label in l['synapses'].keys():                 
+                for syn in l['synapses'][label]:
+                    if min_ <= syn < max_:
+                        out+=1
         return out    
     
     def _compute_main_bifurcation_section(self):
-        sec = get_main_bifurcation_section(self.cell)
-        l = self.get_db_by_sec(sec)
-        l['main_bifurcation'] = True
-        self.hot_zone_dist = l['x_dist_end']
+        try:
+            sec = get_main_bifurcation_section(self.cell)
+        except AssertionError:
+            print 'main bifurcation could not be identified!'
+            self.main_bifur_dist = None
+        else:
+            l = self.get_db_by_sec(sec)
+            l['main_bifurcation'] = True
+            self.main_bifur_dist = l['x_dist_end']
         
     def _get_max_somadistance(self):
         out = 0
@@ -385,7 +391,6 @@ class ExportSynapses:
             synapses_dict = self.synapses
         else:
             synapses_dict = self.get_filtered_synapses_dict(synapse_types)
-        print synapses_dict.keys()
         functionalMap = [(k, lv, lv) for k in synapses_dict.keys() for lv in range(len(synapses_dict[k]))]  
         self.functionalMap.extend(functionalMap)
         
@@ -531,16 +536,15 @@ class MapSynapsesByProfile:
         out = []
         n_syn_per_bin = self._get_n_syns_by_profile(density, n)
         for bin_id in n_syn_per_bin:
-            # print n_syn_per_bin
             syn = self._map_single_synapse_in_interval(bins[bin_id], bins[bin_id + 1], select = select)
             out.append(syn)
         return out
     
-    def add_profile(self, name, bins, density, mode = 'soma_dist_micron', select = ['Dendrite', 'ApicalDendrite']):
+    def add_profile(self, name, bins, density, mode = 'soma_dist_micron'):
         if mode == 'soma_dist_micron':
             pass
         elif mode == 'main_bifur':
-            bifur = self.d.hot_zone_dist
+            bifur = self.d.main_bifur_dist
             maxd = self.d._get_max_somadistance()
             # print bifur, maxd
             bins = unnormalize_bins(bins, bifur, maxd)
@@ -555,7 +559,88 @@ class MapSynapsesByProfile:
         self.profiles[name] = (bins,density_unnormalized)      
         
     
+###################################
+# combining syn and con files
+###################################
+
+class NetworkEmbedding:
+    '''class that can read and write syn and confiles.
     
+    Allows adding connections by the + operator.
+    '''
+    def __init__(self):
+        self.synapses = {}
+        self.functionalMap = {}
+    
+    def load(self, synpath = None, conpath = None):
+        if synpath is not None:
+            assert(synpath.endswith('.syn'))
+            conpath = synpath[:-4]+'.con'
+        elif conpath is not None:
+            assert(conpath.endswith('.con'))
+            synpath = conpath[:-4]+'.con'
+        else:
+            raise ValueError("you must specify either synpath or conpath!")
+        self.synapses = I.scp.reader.read_synapse_realization(synpath)
+        self.functionalMap = I.scp.reader.read_functional_realization_map(conpath)[0]        
+    
+    # def add_hoc(self, hocpath):
+    #     self.hocpath = hocpath
+    #     self.cell = get_cell_object_from_hoc(hocpath)
+    #     self.Dendrogram = Dendrogram(self.cell)
+        
+    def _check(self):
+        if not set(self.synapses.keys()) == set(self.functionalMap.keys()):
+            errstr ='Cell types, for which synapses are specified ({}) and for which '.format(str(self.synapses.keys()))
+            errstr += 'functional map is specified ({}) must be identical'.format(str(self.functionalMap.keys()))
+            raise RuntimeError(errstr)
+        for k in self.synapses.keys():
+            if not len(self.synapses[k]) == len(self.functionalMap[k]):
+                errstr = 'Number of entries in synapses and functional map is not the same '
+                errstr += 'for type {}!'.format(k)
+                raise RuntimeError(errstr)
+    
+    def _get_synapse_object_dict(self):
+        out = {}
+        for synapse_type, synapse_list in self.synapses.iteritems():
+            out[synapse_type] = [Synapse(synapse_type, s[0], s[1]) for s in synapse_list]
+        #for k in out:
+        #    out[k] = sorted(out[k], key = lambda x: (x.secID, x.x))
+        return out
+    
+    def save(self, outdir):
+        self._check()
+        synapses = self._get_synapse_object_dict()
+        functionalMap = []
+        for k in synapses.keys():
+            functionalMap.extend(self.functionalMap[k])
+        I.scp.writer.write_cell_synapse_locations(I.os.path.join(outdir, 'con.syn'), 
+                                                  synapses, 
+                                                  cellID='__no__anatomical__id')
+        I.scp.writer.write_functional_realization_map(I.os.path.join(outdir, 'con.con'), 
+                                                  functionalMap, 
+                                                  '__no__anatomical__id')
+    
+    def __add__(self, b):
+        out = NetworkEmbedding()
+        out.synapses = self.synapses
+        out.functionalMap = self.functionalMap
+        out.synapses.update(b.synapses)
+        out.functionalMap.update(b.functionalMap)
+        return out
+
+syn = '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/network_embedding/postsynaptic_location/3x3_C2_sampling/C2center/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389.syn'
+folder_ = I.tempfile.mkdtemp()
+ne = NetworkEmbedding()
+ne.load(syn)
+ne.save(folder_)
+ne2 = NetworkEmbedding()
+ne2.load(I.os.path.join(folder_, 'con.syn'))
+I.shutil.rmtree(folder_)
+
+assert(ne.synapses == ne2.synapses)
+assert(ne.functionalMap == ne2.functionalMap)
+
 ######################################
 # class for loading cells
 #####################################
@@ -587,3 +672,82 @@ class CellLoader():
     def get_synapses(self, id_):
         return mdb_cells[(id_, 'registered_points')]
  
+############################################
+# mapping landmarks on cell
+###########################################
+
+def get_cell_object_from_hoc_no_NEURON(hocpath, setUpBiophysics=True):
+    '''returns cell object, which allows accessing points of individual branches'''    
+    import singlecell_input_mapper.singlecell_input_mapper.cell
+    ssm = singlecell_input_mapper.singlecell_input_mapper.cell.CellParser(hocpath)    
+    ssm.spatialgraph_to_cell()
+    return ssm.cell
+
+def distance_between_points(point1, point2):
+    '''returns distance between two points'''
+    return I.np.sqrt(((point1-point2)**2).sum())
+    # return I.np.sqrt(sum([(p1-p2)**2 for p1, p2 in zip(point1, point2)]))
+
+def register_point_to_line(line_point_1, line_point_2, point):
+    '''registers a point to a line from line_point_1 to line_point_2.
+    
+    Returns: distance, x, projected_point
+    
+    distance: how much the poin gets moved
+    x: between 0 and 1. 
+        0 means, the registered point is identical to line_point_1. 
+        1 means, the registered point is identical to line_point_1.
+    projected_point: 3d coordinates of registered point'''
+    line_point_1 = I.np.array(line_point_1)
+    line_point_2 = I.np.array(line_point_2)
+    point = I.np.array(point)
+    
+    line_vector_length = distance_between_points(line_point_1, line_point_2)
+    line_vector = (line_point_2-line_point_1) # / line_vector_length
+    point_vector =(point-line_point_1)
+    x = I.np.dot(line_vector,point_vector) # / line_vector_length
+    if x > 1:
+        x = 1
+    elif x < 0:
+        x = 0
+    if line_vector_length == 0:
+        factor = 0
+    else:
+        factor = 1. / (line_vector_length*line_vector_length)
+    projected_point = line_point_1 + line_vector*x*factor
+    distance = distance_between_points(point, projected_point)
+    return distance, x * factor, projected_point    
+
+I.np.testing.assert_almost_equal(register_point_to_line([0,0,0],[0,1,1],[0,.5,.5])[0], 0)
+I.np.testing.assert_almost_equal(register_point_to_line([0,0,0],[0,1,1],[0,.5,.5])[1], 0.5)
+I.np.testing.assert_almost_equal(register_point_to_line([0,1,1],[0,2,2],[0,.5,.5])[0], I.np.sqrt(1/2.))
+I.np.testing.assert_almost_equal(register_point_to_line([0,1,1],[0,2,2],[0,.5,.5])[1], 0)
+I.np.testing.assert_almost_equal(register_point_to_line([0,1,1],[0,2,2],[0,1.5,1.5])[0], 0)
+I.np.testing.assert_almost_equal(register_point_to_line([0,1,1],[0,2,2],[0,1.5,1.5])[1], 0.5)
+
+def register_point_to_cell(point, cell, max_dist = 100):
+    def get_point_distances(point, cell):
+        out = []
+        for sec_lv, sec in enumerate(cell.sections):
+            if sec.label in ('Myelin', 'AIS'):
+                continue
+            for lv in range(len(sec.pts)-1):
+                res_ = register_point_to_line(sec.pts[lv], sec.pts[lv+1], point)
+                res_ = (sec_lv, lv), res_
+                out.append(res_)
+        return out    
+    distances = get_point_distances(point, cell)
+    print len(distances)
+    return sorted(distances, key = lambda x: x[1][0])[0]
+
+register_point_to_cell_delayed = I.dask.delayed(register_point_to_cell)
+
+
+def unregister_points_on_cell(points, cell):
+    out = []
+    for (sec_lv, lv), (distance, x, projected_point) in points:
+        line_point_1 = I.np.array(cell.sections[sec_lv].pts[lv])
+        line_point_2 = I.np.array(cell.sections[sec_lv].pts[lv+1])
+        line_vector = line_point_2 - line_point_1
+        out.append(line_point_1 + line_vector*x)
+    return out
