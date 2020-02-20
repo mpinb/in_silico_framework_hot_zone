@@ -29,8 +29,18 @@ def change_glutamate_syn_weights(param, g_optimal = None, pop = barrel_cortex.ex
         if celltype in pop: # I.excitatory:
             index = [x for x in g_optimal.index if x in celltype]
             assert(len(index) == 1)
-            g = g_optimal[index[0]]
-            param.network[key].synapses.receptors.glutamate_syn.weight = [g,g]
+            
+            if type(g_optimal) == I.pd.core.series.Series:
+                g = g_optimal[index[0]]
+                param.network[key].synapses.receptors.glutamate_syn.weight = [g,g]
+                
+            elif type(g_optimal) == I.pd.core.frame.DataFrame:
+                ampa = g_optimal.loc[index]['AMPA']
+                nmda = g_optimal.loc[index]['NMDA']
+                param.network[key].synapses.receptors.glutamate_syn.weight = [ampa,nmda]
+                
+            else:
+                print 'g_optimal is in an unrecognised dataformat'
             
 def change_evoked_INH_scaling(param, factor, pop = barrel_cortex.inhibitory):
     for key in param.network.keys():
