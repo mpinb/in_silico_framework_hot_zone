@@ -445,7 +445,7 @@ def write_landmark_file(model_selection):
 #############################################
 class EvokedActivitySimulationSetup:
     def __init__(self, output_dir_key = None, synaptic_strength_fitting = None, 
-                 stims = None, locs = None, INHscalings = None, ongoing_scales = (1,), ongoing_scales_pop = I.inhibitory, nProcs = 1, nSweeps = 200, tStim = 245, tEnd = 295,
+                 stims = None, locs = None, INHscalings = None, ongoing_scales = (1,), ongoing_scales_pop = I.inhibitory, custom_glutamate_conductances = None, nProcs = 1, nSweeps = 200, tStim = 245, tEnd = 295,
                  models = None):
         self.output_dir_key = output_dir_key
         self.synaptic_strength_fitting = synaptic_strength_fitting
@@ -456,6 +456,7 @@ class EvokedActivitySimulationSetup:
         self.INHscaling = INHscalings
         self.ongoing_scales = ongoing_scales #rieke
         self.ongoing_scales_pop = ongoing_scales_pop
+        self.custom_glutamate_conductances = custom_glutamate_conductances # should be pandas dataframe or series
         self.nProcs = nProcs
         self.nSweeps = nSweeps # /rieke
         self.tStim = tStim
@@ -470,9 +471,13 @@ class EvokedActivitySimulationSetup:
         mdb = self.l6_config.mdb
         
         for model_id in self.models:
-            syn_strength = self.synaptic_strength_fitting.get_optimal_g(model_id)['optimal g']
-            print 'syn_strength'
-            I.display.display(syn_strength)
+            if self.custom_glutamate_conductances == None:
+                syn_strength = self.synaptic_strength_fitting.get_optimal_g(model_id)['optimal g']
+                print 'syn_strength'
+                I.display.display(syn_strength)
+            elif not self.custom_glutamate_conductances == None:
+                syn_strength = self.custom_glutamate_conductances
+                
             if not self.output_dir_key in mdb[str(model_id)].keys():
                 mdb[str(model_id)].create_managed_folder(self.output_dir_key)
             else:
