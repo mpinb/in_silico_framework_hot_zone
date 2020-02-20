@@ -1,4 +1,4 @@
-#import Interface as I
+import Interface as I
 import barrel_cortex
 def change_ongoing_interval(n, factor = 1, pop = None):
     '''scales the ongoing frequency with a factor'''
