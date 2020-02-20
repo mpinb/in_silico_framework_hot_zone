@@ -1,4 +1,5 @@
-import Interface as I
+#import Interface as I
+import pandas as pd
 import barrel_cortex
 def change_ongoing_interval(n, factor = 1, pop = None):
     '''scales the ongoing frequency with a factor'''
@@ -30,7 +31,7 @@ def change_glutamate_syn_weights(param, g_optimal = None, pop = barrel_cortex.ex
             index = [x for x in g_optimal.index if x in celltype]
             assert(len(index) == 1)
             
-            if type(g_optimal) == I.pd.core.series.Series:
+            if type(g_optimal) == pd.core.series.Series:
                 g = g_optimal[index[0]]
                 param.network[key].synapses.receptors.glutamate_syn.weight = [g,g]
                 
