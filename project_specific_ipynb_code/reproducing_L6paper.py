@@ -479,8 +479,7 @@ class EvokedActivitySimulationSetup:
             elif self.output_dir_key in mdb[str(model_id)].keys() and add_to:
                 pass
             else:
-                print 'skipping model {} as it seems to be simulated already. If the simulation '.format(model_id)
-                'run was incomplete, you can delete the data by running del l6_config.mdb[\'{}\'][\'{}\']'.format(model_id, self.output_dir_key)
+                print 'skipping model {} as it seems to be simulated already. If the simulation '.format(model_id)+'run was incomplete, you can delete the data by running del l6_config.mdb[\'{}\'][\'{}\']'.format(model_id, self.output_dir_key)
                 continue
             landmark_name = mdb['morphology'].join('recSites.landmarkAscii')        
             cell_param = self.model_selection.get_cell_param(model_id, add_sim_param = True,
