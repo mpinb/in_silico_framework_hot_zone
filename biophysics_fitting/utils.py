@@ -69,15 +69,8 @@ def vmApical_position(cell, dist = None):
     sec, mindx, i = _get_apical_sec_and_i_at_distance(cell, dist)
     target_x = [seg for seg in sec][i].x
     print target_x
-    
     minDist = 1e9
     closest_point_to_section = None
-    for j in range(len(sec.pts)):
-        pt = sec.pts[j]
-        ptx = sec.relPts[j]
-        dx = abs(ptx-target_x)
-        if dx < mindx:
-            closest_point_to_section = pt
-            mindx = dx     
-    return closest_point_to_section
-
+    print 'len sec pts', len(sec.relPts)
+    index = np.argmin(np.abs(np.array(sec.relPts) - target_x))
+    return sec.pts[index]
