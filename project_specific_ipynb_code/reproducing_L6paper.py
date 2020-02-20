@@ -471,11 +471,11 @@ class EvokedActivitySimulationSetup:
         mdb = self.l6_config.mdb
         
         for model_id in self.models:
-            if self.custom_glutamate_conductances == None:
+            if self.custom_glutamate_conductances is None:
                 syn_strength = self.synaptic_strength_fitting.get_optimal_g(model_id)['optimal g']
                 print 'syn_strength'
                 I.display.display(syn_strength)
-            elif not self.custom_glutamate_conductances == None:
+            elif not self.custom_glutamate_conductances is None:
                 syn_strength = self.custom_glutamate_conductances
                 
             if not self.output_dir_key in mdb[str(model_id)].keys():
