@@ -36,8 +36,8 @@ def change_glutamate_syn_weights(param, g_optimal = None, pop = barrel_cortex.ex
                 param.network[key].synapses.receptors.glutamate_syn.weight = [g,g]
                 
             elif type(g_optimal) == pd.core.frame.DataFrame:
-                ampa = g_optimal.loc[index]['AMPA']
-                nmda = g_optimal.loc[index]['NMDA']
+                ampa = g_optimal.loc[index[0]]['AMPA']
+                nmda = g_optimal.loc[index[0]]['NMDA']
                 param.network[key].synapses.receptors.glutamate_syn.weight = [ampa,nmda]
                 
             else:
