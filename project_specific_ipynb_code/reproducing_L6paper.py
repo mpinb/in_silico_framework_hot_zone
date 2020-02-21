@@ -448,6 +448,7 @@ class EvokedActivitySimulationSetup:
                  stims = None, locs = None, INHscalings = None, ongoing_scales = (1,), ongoing_scales_pop = I.inhibitory, 
                  custom_glutamate_conductances = None, nProcs = 1, nSweeps = 200, 
                  cell_param_modify_functions = [],
+                 network_param_modify_functions = [],
                  tStim = 245, 
                  tEnd = 295,
                  models = None):
@@ -462,6 +463,7 @@ class EvokedActivitySimulationSetup:
         self.ongoing_scales_pop = ongoing_scales_pop
         self.custom_glutamate_conductances = custom_glutamate_conductances # should be pandas dataframe or series
         self.cell_param_modify_functions = cell_param_modify_functions
+        self.network_param_modify_functions = network_param_modify_functions
         self.nProcs = nProcs
         self.nSweeps = nSweeps # /rieke
         self.tStim = tStim
@@ -493,7 +495,7 @@ class EvokedActivitySimulationSetup:
                                                         recordingSites = [landmark_name])
             cell_param_name = mdb[str(model_id)][self.output_dir_key].join('cell.param')
             for cell_param_modify_function in self.cell_param_modify_functions:
-                cell_param = cell_param_modify_function(cell_param)
+                cell_param_modify_function(cell_param)
                 
             cell_param.save(cell_param_name)
             for INH_scaling in self.INHscaling:   
@@ -506,6 +508,8 @@ class EvokedActivitySimulationSetup:
                             I.scp.network_param_modify_functions.change_evoked_INH_scaling(network_param, INH_scaling)
                             I.scp.network_param_modify_functions.change_glutamate_syn_weights(network_param, syn_strength)
                             I.scp.network_param_modify_functions.change_ongoing_interval(network_param, factor = ongoing_scale, pop = self.ongoing_scales_pop) ##adjust ongoing activity if necessary
+                            for network_param_modify_function in self.network_param_modify_functions:
+                                network_param_modify_function(network_param)                            
                             network_param_name = mdb[str(model_id)][self.output_dir_key].join('network_INHevoked_{}_INHongoing_{}_stim_{}_loc_{}.param'.format(INH_scaling, ongoing_scale, stim, loc))
                             network_param.save(network_param_name)
                             outdir = mdb[str(model_id)][self.output_dir_key].join(str(ongoing_scale)).join(str(INH_scaling)).join(stim).join(str(loc))
