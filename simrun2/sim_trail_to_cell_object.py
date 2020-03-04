@@ -17,7 +17,8 @@ h = neuron.h
 def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = False, \
                             scale_apical = scale_apical, range_vars = None, silent = True, \
                             synapse_modfun = lambda x: x, neuron_modfun = lambda x: x, \
-                            network_modfun = lambda x: x):
+                            network_modfun = lambda x: x,
+                            tStop = 345):
     '''Resimulates simulation trail and returns cell object.
     Expects Instance of ModelDataBase and sim_trail index.
     The mdb has to contain the paths to the parameterfiles at the following location: 
@@ -61,7 +62,8 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
                                     range_vars = range_vars, 
                                     scale_apical = scale_apical, 
                                     allPoints = allPoints, 
-                                    compute = compute)
+                                    compute = compute,
+                                    tStop = tStop)
     finally:
         if silent == True:
             sys.stdout = stdout_bak
@@ -70,7 +72,7 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
 
 import tempfile
 def trail_to_cell_object(name = None, cellName = None, networkName = None, synapse_activation_file = None, \
-                    range_vars = None, scale_apical = scale_apical, allPoints = False, compute = True):
+                    range_vars = None, scale_apical = scale_apical, allPoints = False, compute = True, tStop = 345):
     tempdir = None
 
     try:
@@ -104,8 +106,7 @@ def trail_to_cell_object(name = None, cellName = None, networkName = None, synap
         
         
         tOffset = 0.0 # avoid numerical transients
-        tStim = 245.0
-        tStop = 345.0
+        tStop = tStop
         neuronParameters.sim.tStop = tStop
         dt = neuronParameters.sim.dt
         offsetBin = int(tOffset/dt + 0.5)
