@@ -1,4 +1,4 @@
-# distributed:
+distributed:
 #   version: 2
 #   # logging:
 #   #   distributed: info
@@ -16,7 +16,7 @@
 #     work-stealing: True     # workers should steal tasks from each other
 #     worker-ttl: null        # like '60s'. Time to live for workers.  They must heartbeat faster than this
 
-#   worker:
+    worker:
 #     multiprocessing-method: forkserver
 #     use-file-locking: True
 #     connections:            # Maximum concurrent connections for data
