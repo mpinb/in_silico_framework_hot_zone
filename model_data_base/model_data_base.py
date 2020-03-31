@@ -4,7 +4,7 @@ Created on Aug 15, 2016
 @author: arco
 '''
 
-import os, random, string
+import os, random, string, threading
 import contextlib
 import shutil
 import tempfile
@@ -557,17 +557,20 @@ class ModelDataBase(object):
 
     def _robust_rmtree(self, key, path):
         try:
+            print 'start deleting {}'.format(path)
             shutil.rmtree(path)
         except OSError:
             print('The folder ' + path + ' was registered as belonging to ' + \
                   str(key) + '. I tried to delete this folder, because the corresponding key was overwritten. ' + \
                   'Could not delete anything, because folder did not exist in the first place. I just carry on ...')
+        print 'done deleting {}'.format(path)
+
             
     def __delitem__(self, key):
         '''items can be deleted using del my_model_data_base[key]'''
         dummy = self._sql_backend[key]
         if isinstance(dummy, LoaderWrapper):
-            self._robust_rmtree(key, os.path.join(self.basedir,dummy.relpath))
+            threading.Thread(target = lambda : self._robust_rmtree(key, os.path.join(self.basedir,dummy.relpath))).start()
         del self._sql_backend[key]
         self._delete_metadata(key)
     
