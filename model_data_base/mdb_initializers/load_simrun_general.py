@@ -405,11 +405,17 @@ def _build_synapse_activation(mdb, repartition = False):
 def _get_rec_site_managers(mdb):
     param_files = glob.glob(os.path.join(mdb['parameterfiles_cell_folder'],'*'))
     param_files = [p for p in param_files if not p.endswith('Loader.pickle')]
+    print len(param_files)
+    rec_sites = []
+    for param_file in param_files:
+        neuronParameters = scp.build_parameters(param_file)
+        rec_site = neuronParameters.sim.recordingSites
+        rec_sites.append(tuple(rec_site))
+    rec_sites = set(rec_sites)
     #print param_files
-    if len(param_files) > 1:
+    if len(rec_sites) > 1:
         raise NotImplementedError("Cannot initialize database with dendritic recordings if"\
-                                  +"more than one cell parameter file is used in the specified"\
-                                  +"directory" + str(param_files))
+                                  +"the cell parameter files differ in the landmarks they specify for the recording sites.")
     #############
     # the following code is adapted from simrun2
     #############
