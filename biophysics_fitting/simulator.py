@@ -83,7 +83,7 @@ class Simulator_Setup:
         params = self.get_params(params)
         cell_param = self.cell_param_generator()
         for name, fun in self.cell_param_modify_funs:
-            print name
+            #print name
             #print len(params), len(param_selector(params, name))            
             cell_param = fun(cell_param, params = param_selector(params, name))
             self._check_not_none(cell_param, 'cell_param', name)
