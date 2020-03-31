@@ -12,7 +12,6 @@ import socket
 import time
 # In[2]:
 
-management_dir = '/ptmp/abast/management_dir_test'
 management_dir = sys.argv[1]
 print 'using management dir' , management_dir
 
@@ -79,7 +78,6 @@ def get_locking_file_path():
 def setup_locking_server():
     print '-'*50
     print 'setting up locking server'
-    command = 'screen -S redis_server_test -dm bash -c "source ~/.bashrc; source_isf; redis-server --save "" --appendonly no --port 8885 --protected-mode no"'
     command = 'redis-server --save "" --appendonly no --port 8885 --protected-mode no &'    
     print command
     os.system(command)
@@ -139,7 +137,6 @@ def setup_dask_scheduler(management_dir):
     print '-'*50
     print 'setting up dask-scheduler'
     sfile = _get_sfile(management_dir)
-    command = 'screen -S dask_scheduler_test -dm bash -c "source ~/.bashrc; source_isf; dask-scheduler --port=9796 --scheduler-file={}"'
     command = 'dask-scheduler --scheduler-file={} &'
     command = command.format(sfile)
     print command
@@ -169,7 +166,6 @@ def setup_dask_workers(management_dir):
     import psutil
     n_cpus = psutil.cpu_count(logical=False)
     sfile = _get_sfile(management_dir)
-    command = 'screen -S dask_workers_test -dm bash -c "source ~/.bashrc; source_isf; ' +     'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=10e25"'.format(nprocs = n_cpus, sfile = sfile)
     command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9 &'.format(nprocs = n_cpus, sfile = sfile)
 
     print command
@@ -183,21 +179,26 @@ def setup_jupyter_notebook():
     print '-'*50
     print 'setting up jupyter notebook'
     check_locking_config() 
-    command = 'screen -S jupyter -dm bash -c "source ~/.bashrc; source_isf; ' +     '''jupyter-notebook --ip='*' --no-browser --port=11112"'''
     command = "cd notebooks; jupyter-notebook --ip='*' --no-browser --port=11112 &"
     print command
     os.system(command)    
     print '-'*50
-
+    command = "conda activate /axon/scratch/abast/anaconda3/; jupyter-lab --ip='*' --no-browser --port=11113 &"
+    command = 'screen -S jupyterlab -dm bash -c "source ~/.bashrc; source_3; ' +     '''jupyter-lab --ip='*' --no-browser --port=11113"'''
+    command = '''bash -c "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" &'''
+    command = "/axon/scratch/abast/anaconda3/bin/jupyter-lab --ip='*' --no-browser --port=11113"
+    os.system(command)
 # In[8]:
 
 if process_number == 0:
     setup_locking_server()
     setup_dask_scheduler(management_dir)
-    setup_jupyter_notebook()
+    # setup_jupyter_notebook()
 setup_locking_config()
 setup_dask_workers(management_dir)
 setup_local_cluster()
+if process_number == 0:
+    setup_jupyter_notebook()
 #if not process_number == 0:
 #    # compute job will be started from first process
 #    time.sleep(60*60*24*365)
