@@ -261,13 +261,14 @@ class SimulationFlow:
         if 'spike_times' in mode:
             I.mdb_init_simrun_general.init(self.mdb, self.mdb['simrun'], get = client.get,
                                            synapse_activation = False, 
-                                           dendritic_voltage_traces=True, 
+                                           dendritic_voltage_traces=False, 
+                                           core = True,
                                            parameterfiles=False, 
                                            spike_times=True, 
                                            burst_times=False, 
                                            repartition=False)
         if 'delete' in mode:
-            del mdb['simrun']
+            del self.mdb['simrun']
             
     def run_all_remote(self, client, mode = 'full', nSweeps = 1, nprocs = 10, silent = False, tStop = 345):
         def helper():
@@ -276,7 +277,7 @@ class SimulationFlow:
             self.run_simulation(c, nSweeps, nprocs, silent, tStop)
             self.mdb_init(c, mode)
             return self
-        
+        print self.get_description()
         self._future_run_all_remote = client.submit(helper)
 
 ### outside of class as there were deserialization issues
