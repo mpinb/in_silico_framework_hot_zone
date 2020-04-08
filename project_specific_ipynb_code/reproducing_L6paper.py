@@ -8,6 +8,8 @@ from single_cell_parser.network_param_modify_functions import change_ongoing_int
 from single_cell_parser import network
 import biophysics_fitting.utils
 from biophysics_fitting.hay_evaluation import objectives_BAC, objectives_step
+import simrun3.utils
+import simrun3.synaptic_strength_fitting
 
 
 ###########################
@@ -390,6 +392,15 @@ class SynapticStrengthFitting:
             
         #model_id = selected_models[0]
         psp = self.get_psp_from_database(model_id, loc)
+        
+        #### fix to add missing kwargs if old version has been pickled
+        #### this could be entirely avoided if the version used for saving the object would be checked out in git
+        #### to figure out the version, inspect the metadata saved in the model data base
+        #### using mdb.metadata['your_key_to_your_PSP_object']
+        kwargs = simrun3.utils.get_default_arguments(simrun3.synaptic_strength_fitting.PSPs.__init__)
+        simrun3.utils.set_default_arguments_if_not_set(psp, kwargs)
+        #### end of fix    
+        
         vt = psp.get_voltage_and_timing(method, merged=True)
         pdf = I.simrun3.synaptic_strength_fitting.ePSP_summary_statistics(vt,  threashold = threashold)
         pdf_linfit = pdf.reset_index()
@@ -444,6 +455,83 @@ def write_landmark_file(model_selection):
 # general method for setting up simulations of evoked activity
 #############################################
 class EvokedActivitySimulationSetup:
+    def __init__(self, output_dir_key = None, synaptic_strength_fitting = None, 
+                 stims = None, locs = None, INHscalings = None, tStim = 245, tEnd = 295,
+                 models = None):
+        self.output_dir_key = output_dir_key
+        self.synaptic_strength_fitting = synaptic_strength_fitting
+        self.model_selection = synaptic_strength_fitting.model_selection
+        self.l6_config = self.model_selection.l6_config
+        self.stims = stims
+        self.locs = locs
+        self.INHscaling = INHscalings
+        self.tStim = tStim
+        self.tEnd = tEnd
+        self.ds = []
+        self.futures = None
+        self.models = models
+        if self.models is None:
+            self.models = self.synaptic_strength_fitting.model_selection.selected_models
+            
+    def setup(self):
+        mdb = self.l6_config.mdb
+        
+        for model_id in self.models:
+            syn_strength = self.synaptic_strength_fitting.get_optimal_g(model_id)['optimal g']
+            print 'syn_strength'
+            I.display.display(syn_strength)
+            if not self.output_dir_key in mdb[str(model_id)].keys():
+                mdb[str(model_id)].create_managed_folder(self.output_dir_key)
+            else:
+                print 'skipping model {} as it seems to be simulated already. If the simulation '.format(model_id)
+                'run was incomplete, you can delete the data by running del l6_config.mdb[\'{}\'][\'{}\']'.format(model_id, self.output_dir_key)
+                continue
+            landmark_name = mdb['morphology'].join('recSites.landmarkAscii')        
+            cell_param = self.model_selection.get_cell_param(model_id, add_sim_param = True,
+                                                        recordingSites = [landmark_name])
+            cell_param_name = mdb[str(model_id)]['PW_fitting'].join('cell.param')
+            cell_param.save(cell_param_name)
+            for INH_scaling in self.INHscaling:            
+                for stim in self.stims:
+                    for loc in self.locs:
+                        network_param = self.l6_config.get_network_param(stim = stim, 
+                                                                    loc = loc, 
+                                                                    stim_onset=self.tStim)
+                        I.scp.network_param_modify_functions.change_evoked_INH_scaling(network_param, INH_scaling)
+                        I.scp.network_param_modify_functions.change_glutamate_syn_weights(network_param, syn_strength)
+                        network_param_name = mdb[str(model_id)][self.output_dir_key].join('network_INH_{}_stim_{}_loc_{}.param'.format(INH_scaling, stim, loc))
+                        network_param.save(network_param_name)
+                        outdir = mdb[str(model_id)][self.output_dir_key].join(str(INH_scaling)).join(stim).join(str(loc))
+                        print model_id, INH_scaling, stim, loc
+                        d = I.simrun_run_new_simulations(cell_param_name, network_param_name, 
+                                                         dirPrefix = outdir, 
+                                                         nSweeps = 200, 
+                                                         nprocs = 1, 
+                                                         scale_apical = lambda x: x,
+                                                         silent = False,
+                                                         tStop = self.tEnd)
+                        self.ds.append(d)
+    def run(self, client, fire_and_forget = False):
+        if len(self.ds) == 0:
+            raise RuntimeError("You must run the setup method first")
+        self.futures = client.compute(self.ds)
+        if fire_and_forget:
+            I.distributed.fire_and_forget(self.futures)
+            
+    def init_mdb(self, client, dendritic_voltage_traces = False):
+        mdb = self.l6_config.mdb
+        for model_id in self.model_selection.selected_models:
+            mdb_key = self.output_dir_key + '_mdb'
+            if mdb_key in mdb[str(model_id)].keys():
+                del mdb[str(model_id)][mdb_key]
+            if not mdb_key in mdb[str(model_id)].keys():
+                mdb_init = mdb[str(model_id)].create_sub_mdb(mdb_key)
+                I.mdb_init_simrun_general.init(mdb_init, mdb[str(model_id)][self.output_dir_key], 
+                                               burst_times = False, 
+                                               get = client.get,
+                                               dendritic_voltage_traces = dendritic_voltage_traces)        
+            
+class EvokedActivitySimulationSetupRieke:
     def __init__(self, output_dir_key = None, synaptic_strength_fitting = None, 
                  stims = None, locs = None, INHscalings = None, ongoing_scales = (1,), ongoing_scales_pop = I.inhibitory, 
                  custom_glutamate_conductances = None, nProcs = 1, nSweeps = 200, 
@@ -542,9 +630,7 @@ class EvokedActivitySimulationSetup:
                 I.mdb_init_simrun_general.init(mdb_init, mdb[str(model_id)][self.output_dir_key], 
                                                burst_times = False, 
                                                get = client.get,
-                                               dendritic_voltage_traces = dendritic_voltage_traces)        
-            
-
+                                               dendritic_voltage_traces = dendritic_voltage_traces)    
 ############
 # PW fitting
 ############
