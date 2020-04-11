@@ -1,6 +1,6 @@
 import distributed
-#import fasteners
-import redis
+# import fasteners
+# import redis
 import yaml
 import os
 import warnings
@@ -33,6 +33,12 @@ def get_client():
             warnings.warn('Using file based locking.'
             'Please be careful on nfs mounts as file based locking has issues in this case.')
             return server, None
+        elif server['type'] == 'zookeeper':
+            import kazoo.client
+            zk = kazoo.client.KazooClient(**server['config'])
+            zk.start()
+            print ('success!')
+            return server, zk
         else:
             raise NotImplementedError()
     raise RuntimeError('could not connect to a locking server.')
@@ -52,6 +58,8 @@ def get_lock(name):
         return fasteners.InterProcessLock(name)
     elif server['type'] == 'redis':
         return redis.lock.Lock(client, name, timeout = 300)
+    elif server['type'] == 'zookeeper':
+        return client.Lock(name)
     else:
-        raise RuntimeError('supported server types are redis and file. ' + 
+        raise RuntimeError('supported server types are redis, zookeeper and file. ' + 
             'Current locking config is: {}'.format(str(server)))
