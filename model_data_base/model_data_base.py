@@ -10,11 +10,28 @@ import shutil
 import tempfile
 import datetime
 import cloudpickle as pickle
+import yaml
 import IO.LoaderDumper.just_create_folder
 import IO.LoaderDumper.just_create_mdb
 import IO.LoaderDumper.to_pickle
 import IO.LoaderDumper.to_cloudpickle
-from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
+
+if 'ISF_MDB_CONFIG' in os.environ:
+    config_path = os.environ['ISF_MDB_CONFIG']
+    with open(os.environ['ISF_MDB_CONFIG'], 'r') as f:
+        config = yaml.load(f)
+else:
+    # config = dict(backend = dict(type = 'sqlite_remote', url = 'ip:port')) 
+    config = dict(backend = dict(type = 'sqlite'))
+
+if config['backend']['type'] == 'sqlite':
+    from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
+elif config['backend']['type'] == 'sqlite_remote':
+    print "Using remote sqlite backend with config {}".format(config)
+    from .sqlite_backend.sqlite_remote_backend_client import SQLiteBackendRemote as SQLBackend
+else:
+    raise ValueError("backend must be sqlite or sqlite_remote")
+    
 from collections import defaultdict
 # import model_data_base_register ## moved to end of file since this is a circular import
 
@@ -24,7 +41,6 @@ import warnings
 import re
 import inspect
 from _version import get_versions
-
 
 def slugify(value):
     """
@@ -484,11 +500,11 @@ class ModelDataBase(object):
         out = {'dumper': dumper, \
                'time': tuple(datetime.datetime.utcnow().timetuple()), \
                'metadata_creation_time': 'together_with_new_key', \
-               'module_versions': _module_versions.get_module_versions()}
+               'module_versions': module_versions_cache}
 
-        out.update(get_versions())
+        out.update(get_versions_cache)
 
-        if get_versions()['dirty']:
+        if get_versions_cache['dirty']:
             warnings.warn('The database source folder has uncommited changes!')
         
         self._sql_metadata_backend[key] = out
@@ -531,7 +547,7 @@ class ModelDataBase(object):
                    'time': time, \
                    'metadata_creation_time': 'post_hoc'}
             
-            if get_versions()['dirty']:
+            if get_versions_cache['dirty']:
                 warnings.warn('The database source folder has uncommited changes!')
             
             self._sql_metadata_backend[key] = out
@@ -587,17 +603,16 @@ class ModelDataBase(object):
         new_dumper = IO.LoaderDumper.get_dumper_string_by_dumper_module(new_dumper)
         dumper_update = {'dumper': new_dumper, \
                'time': tuple(datetime.datetime.utcnow().timetuple()), \
-               'module_versions': _module_versions.get_module_versions()}
-        dumper_update.update(get_versions())
+               'module_versions': module_versions_cache}
+        dumper_update.update(get_versions_cache)
 
         metadata['dumper_update'].append(dumper_update)
         metadata['dumper'] = new_dumper
         
         self._sql_metadata_backend[key] = metadata
         
-                
     def change_dumper(self, key, new_dumper, **kwargs):
-        if get_versions()['dirty']:
+        if get_versions_cache['dirty']:
             warnings.warn('The database source folder has uncommited changes!')
                     
         if new_dumper == 'self':
@@ -612,8 +627,6 @@ class ModelDataBase(object):
         #update metadata
         self._write_metadata_for_new_dumper(key, new_dumper)
         
-        
-                
     def maybe_calculate(self, key, fun, **kwargs):
         '''This function returns the corresponding value of key,
         if it is already in the database. If it is not in the database,
@@ -681,4 +694,5 @@ import mdbopen
 import _module_versions
                       
         
-    
+get_versions_cache = get_versions()
+module_versions_cache = _module_versions.get_module_versions()
