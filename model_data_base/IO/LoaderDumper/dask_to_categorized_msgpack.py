@@ -19,12 +19,16 @@ Limitations: This is not tested to work well with dataframes that natively conta
 
 import os
 import cloudpickle
+import tempfile
 import dask.dataframe as dd
 import dask.delayed
 import pandas as pd
 import parent_classes
 import glob
 import compatibility
+import time
+from model_data_base.utils import chunkIt, myrepartition, mkdtemp
+import distributed
 
 ####
 # if you want to use this as template to implement another dask dumper: 
@@ -54,10 +58,11 @@ def category_to_str(pdf):
 # custom to_csv method, because the one of dask does eat all the memory
 # this method has to the aim to be as simple as possible
 #####################################################
-def get_writer_function():
+def get_writer_function(categorize):
     '''returns function, that stores pandas dataframe'''
     def ddf_save_chunks(pdf, path, number, digits):
-        str_to_category(pdf)
+        if categorize:
+            str_to_category(pdf)
         pdf.to_msgpack(path.replace('*', str(number).zfill(digits)), compress = 'blosc') ###
     return ddf_save_chunks
 
@@ -153,7 +158,7 @@ def bundle_delayeds(*args):
 ######################################################
 from model_data_base.utils import chunkIt
 import cloudpickle
-def my_dask_writer(ddf, path, optimize_graph = False, get = compatibility.multiprocessing_scheduler):
+def my_dask_writer(ddf, path, optimize_graph = False, get = compatibility.multiprocessing_scheduler, categorize = True, client = None):
     ''' Very simple method to store a dask dataframe to a bunch of files.
     The reason for it's creation is a lot of frustration with the respective 
     dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
@@ -162,24 +167,32 @@ def my_dask_writer(ddf, path, optimize_graph = False, get = compatibility.multip
     Update: this issue was addressed here:
     https://github.com/dask/dask/issues/1888
     '''
-    l = len(ddf.to_delayed())
-    fun = get_writer_function()
-    ndigits = len(str(l))
-    
-
+    fun = get_writer_function(categorize)
+    ndigits = len(str(ddf.npartitions))
+        
     @dask.delayed()
-    def save_chunk(ddf, numbers):    
-        ddf = cloudpickle.loads(ddf)      
+    def save_chunk(s, numbers):   
+        ddf = cloudpickle.loads(s)      
         dask_options = dask.context._globals
-        dask.set_options(callbacks=set()) #disable progress bars etc. 
+        dask.config.set(callbacks=set()) #disable progress bars etc. 
         for number in numbers:
             pdf = ddf.get_partition(number).compute(get = compatibility.synchronous_scheduler)
             fun(pdf, path, number, ndigits)
         dask.context._globals = dask_options
     
-    x = cloudpickle.dumps(ddf) #manual serialization since dask.multiprocessing is slow here
-    delayeds = [save_chunk(x, chunk) for chunk in chunkIt(range(ddf.npartitions), 300)] #max 100 tasks writing at the same time
-    dask.delayed(delayeds).compute(get=get)
+    ddf_scattered = client.scatter(cloudpickle.dumps(ddf))
+    #folder = tempfile.mkdtemp()
+    #path = os.path.join(folder, 'dump')
+    #print path
+    #with open(path, 'w') as f:
+    #    f.write(cloudpickle.dumps(ddf))
+        
+        
+
+    delayeds = [save_chunk(ddf_scattered, chunk) for chunk in chunkIt(range(ddf.npartitions), 1000)] #max 5000 tasks writing at the same time
+    futures = client.compute(delayeds) #dask.delayed(delayeds).compute(get=get)
+    distributed.wait(futures)
+        
         
 ########################################################
 # actual dumper
@@ -187,7 +200,7 @@ def my_dask_writer(ddf, path, optimize_graph = False, get = compatibility.multip
 fileglob = 'dask_to_msgpack.*.csv' ###
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''
-    return isinstance(obj, dd.DataFrame) and (obj.index.dtype == 'object')
+    return isinstance(obj, dd.DataFrame) # and (obj.index.dtype == 'object')
 
 class Loader(parent_classes.Loader):
     def __init__(self, meta, index_name = None, divisions = None):        
@@ -220,10 +233,14 @@ class Loader(parent_classes.Loader):
         return ddf
     
         
-        
-def dump(obj, savedir, repartition = False, get = None):   
+def dump(obj, savedir, repartition = False, get = None, categorize = True, client = None):
+    assert(client is not None)
     get = compatibility.multiprocessing_scheduler if get is None else get
-    my_dask_writer(obj, os.path.join(savedir, fileglob), get = get)
+    if repartition:
+        if obj.npartitions > 10000:
+            obj = myrepartition(obj, 5000)
+    
+    my_dask_writer(obj, os.path.join(savedir, fileglob), get = get, categorize = categorize, client = client)
     meta = obj._meta
     index_name = obj.index.name
     if obj.known_divisions:
