@@ -1,9 +1,16 @@
 import sys, os, time
+import warnings
 from six import StringIO
 from cPickle import PicklingError
 import cloudpickle
 import contextlib
 import io
+import dask.dataframe as dd
+import dask
+import pandas as pd
+import numpy as np
+
+
 
 def chunkIt(seq, num):
     '''splits seq in num lists, which have approximately equal size.
@@ -287,6 +294,89 @@ class DelayedKeyboardInterrupt(object):
             if self.signal_received:
                 self.old_handler(*self.signal_received)
 
-#with DelayedKeyboardInterrupt():
-#    # stuff here will not be interrupted by SIGINT
-#    critical_code()
+###########################
+# this version does not leave behind a file but serialization takes a long time
+##########################
+
+#@dask.delayed
+#def _synchronous_ddf_concat(ddf_delayeds, meta): 
+#    with warnings.catch_warnings():
+#        warnings.filterwarnings('ignore')
+#        ddf_delayeds = cloudpickle.loads(ddf_delayeds)
+#        ddf = dd.from_delayed(ddf_delayeds, meta = meta)
+#        dask_options = dask.context._globals
+#        pdf = ddf.compute(get = dask.get)
+#        dask.context._globals = dask_options
+#        return pdf
+
+
+#def myrepartition(ddf, n, path = None):
+#    '''This repartitions without generating more tasks'''
+#    divisions = ddf.divisions
+#    meta = ddf._meta
+#    delayeds = ddf.to_delayed()
+#    divisions_unknown = any(d is None for d in ddf.divisions)
+#    if divisions_unknown:
+#        chunks_delayeds = chunkIt(delayeds, n)
+#        delayeds = [_synchronous_ddf_concat(cloudpickle.dumps(c), meta) for lv, c in enumerate(chunks_delayeds)]
+#        return dd.from_delayed(delayeds, meta = meta)
+#    else:
+#        assert(len(divisions) - 1 == len(delayeds))
+#        chunks_divisions = chunkIt(divisions[:-1], n)
+#        chunks_delayeds = chunkIt(delayeds, n)
+#        divisions = [c[0] for c in chunks_divisions] + [chunks_divisions[-1][-1]]
+#        delayeds = [_synchronous_ddf_concat(cloudpickle.dumps(c), meta) for lv, c in enumerate(chunks_delayeds)]
+#        assert(len(divisions) - 1 == len(delayeds))
+#        return dd.from_delayed(delayeds, meta = meta, divisions = divisions)
+
+
+###############################
+# this version is not nice ... it leaves behind a file
+# but it showed by far the best performance for dataframes with hundreds of thousands of partitions
+################################
+
+@dask.delayed
+def synchronous_ddf_concat(ddf_path, meta, N, n):    
+    with open(ddf_path) as f:
+        ddf = cloudpickle.load(f)
+    delayeds = ddf.to_delayed()
+    chunks_delayeds = chunkIt(delayeds, N)
+    chunk = chunks_delayeds[n]
+    ddf = dd.from_delayed(chunk, meta = meta)
+    dask_options = dask.context._globals
+    pdf = ddf.compute(get = dask.get)
+    dask.context._globals = dask_options
+    return pdf
+
+def myrepartition(ddf, N):
+    '''This repartitions without generating more tasks'''
+    folder = tempfile.mkdtemp()
+    ddf_path = os.path.join(folder, 'ddf.cloudpickle.dump')
+    with open(ddf_path, 'w') as f:
+        cloudpickle.dump(ddf, f)
+
+    divisions = ddf.divisions
+    meta = ddf._meta
+    delayeds = ddf.to_delayed()
+    divisions_unknown = any(d is None for d in ddf.divisions)
+
+    if divisions_unknown:
+        chunks_delayeds = chunkIt(delayeds, N)
+        delayeds = [synchronous_ddf_concat(ddf_path, meta, N, n) for n in range(N)]
+        return dd.from_delayed(delayeds, meta = meta)
+    else:
+        assert(len(divisions) - 1 == len(delayeds))
+        chunks_divisions = chunkIt(divisions[:-1], N)
+        divisions = [c[0] for c in chunks_divisions] + [chunks_divisions[-1][-1]]
+        delayeds = [synchronous_ddf_concat(ddf_path, meta, N, n) for n in range(N)]
+        assert(len(divisions) - 1 == len(delayeds))
+        return dd.from_delayed(delayeds, meta = meta, divisions = divisions)
+    
+pdf = pd.DataFrame(np.random.randint(100, size = (1000,3)))
+ddf = dask.dataframe.from_pandas(pdf, npartitions = 10)
+pdf2 = myrepartition(ddf, 4).compute(get = dask.get)
+pd.util.testing.assert_frame_equal(pdf, pdf2)
+ddf.divisions = tuple([None] * (ddf.npartitions + 1))
+pdf2 = myrepartition(ddf, 4).compute(get = dask.get)
+pd.util.testing.assert_frame_equal(pdf, pdf2)
+
