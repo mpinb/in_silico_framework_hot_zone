@@ -57,6 +57,7 @@ def get_lock(name):
         import fasteners
         return fasteners.InterProcessLock(name)
     elif server['type'] == 'redis':
+        import redis
         return redis.lock.Lock(client, name, timeout = 300)
     elif server['type'] == 'zookeeper':
         return client.Lock(name)
