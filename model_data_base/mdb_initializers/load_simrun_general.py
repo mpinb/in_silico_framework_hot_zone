@@ -517,6 +517,7 @@ def init(mdb, simresult_path,  \
         raise ValueError('deprecated!')
     if rewrite_in_optimized_format:
         assert(client is not None)
+        get = client.get
     get = compatibility.multiprocessing_scheduler if get is None else get
     with dask.set_options(get = get):
         #with get_progress_bar_function()(): 
