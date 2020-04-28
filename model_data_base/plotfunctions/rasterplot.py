@@ -9,14 +9,14 @@ from _figure_array_converter import fig2np
 from .. utils import convertible_to_int
 
 def rasterplot2(st, ax = None, x_offset = 0, c = None, 
-                    plot_kwargs = {}, y_offset = None, y_plot_length = 1):
+                    plot_kwargs = dict(solid_capstyle = 'butt'), y_offset = None, y_plot_length = 1):
     if ax is None:
         ax = plt.figure().add_subplot(111)
     if c is not None:
         plot_kwargs['c'] = c
     st = st[[c for c in st.columns if convertible_to_int(c)]]
     if y_offset is None:
-        y = len(st)
+        y = len(st[::-1])
     else:
         y = y_offset
     for i, v in st.iterrows():
