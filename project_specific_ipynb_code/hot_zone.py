@@ -751,3 +751,28 @@ def unregister_points_on_cell(points, cell):
         line_vector = line_point_2 - line_point_1
         out.append(line_point_1 + line_vector*x)
     return out
+
+############################
+# function for creating color coded spike raster plots
+############################
+
+def get_st_pattern(st):
+    import sys
+    sys.path.append('../project_src/SpikeAnalysis/')
+    import spike_analysis.core
+    sta2 = spike_analysis.core.SpikeTimesAnalysis(None)
+    sta2._db['st'] = st# sta.get('st_df')
+    sta2.apply_extractor(spike_analysis.core.STAPlugin_annotate_bursts_in_st())
+    return sta2.get('bursts_st')
+
+def event_rasterplot(st, st_prox = None, rasterplot_fun = rasterplot3, **kwargs):
+    '''like I.rasterplot2, but plots doublets red and triplets cyan'''
+    if not 'ax' in kwargs:
+        kwargs['ax'] = I.plt.figure(figsize = (8,4), dpi = 200).add_subplot(111)
+    st_pattern = get_st_pattern(st)
+    #return st_pattern, st
+    rasterplot_fun(st[st_pattern == 'singlet'], c = '#000000', marker = '.',**kwargs)
+    rasterplot_fun(st[st_pattern == 'doublet'], c = '#00aaaa', marker = '.',**kwargs)
+    if st_prox is not None:
+        rasterplot_fun(st_prox, c = 'orange', marker = '.',**kwargs)
+    rasterplot_fun(st[st_pattern == 'triplet'], c = '#ff0000', marker = '.', **kwargs)
