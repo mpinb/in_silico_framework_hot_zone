@@ -102,28 +102,28 @@ def check_locking_config():
     print 'locking configuration'
     print model_data_base.distributed_lock.server
     print model_data_base.distributed_lock.client
-    # assert(model_data_base.distributed_lock.server['type'] == 'redis')
-#    import socket
-#    socket.gethostname()
-#
-#    config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
-#
-#    print 'old locking configuration'
-#    print model_data_base.distributed_lock.server
-#    print model_data_base.distributed_lock.client
-#
-#    import time
-#    while True:
-#        try:
-#            model_data_base.distributed_lock.update_config(config)
-#            break
-#        except RuntimeError:
-#            print 'could not connect, retrying in 1 sec'
-#            time.sleep(1) 
-#
-#    print 'updated locking configuration'
-#    print model_data_base.distributed_lock.server
-#    print model_data_base.distributed_lock.client
+    assert(model_data_base.distributed_lock.server['type'] == 'redis')
+    #import socket
+    #socket.gethostname()
+
+    #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
+
+    #print 'old locking configuration'
+    #print model_data_base.distributed_lock.server
+    #print model_data_base.distributed_lock.client
+
+    #import time
+    #while True:
+    #    try:
+    #        model_data_base.distributed_lock.update_config(config)
+    #        break
+    #    except RuntimeError:
+    #        print 'could not connect, retrying in 1 sec'
+    #        time.sleep(1) 
+
+    #print 'updated locking configuration'
+    #print model_data_base.distributed_lock.server
+    #print model_data_base.distributed_lock.client
 
 
 # In[6]:
@@ -192,10 +192,10 @@ def setup_jupyter_notebook():
 # In[8]:
 
 if process_number == 0:
-    # setup_locking_server()
+    setup_locking_server()
     setup_dask_scheduler(management_dir)
     # setup_jupyter_notebook()
-# setup_locking_config()
+setup_locking_config()
 setup_dask_workers(management_dir)
 setup_local_cluster()
 if process_number == 0:
