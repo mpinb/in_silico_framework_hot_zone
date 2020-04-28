@@ -7,22 +7,28 @@ from compatibility import multiprocessing_scheduler
 from ..analyze._helper_functions import is_int
 from _figure_array_converter import fig2np
 from .. utils import convertible_to_int
-
+        
 def rasterplot2(st, ax = None, x_offset = 0, c = None, 
-                    plot_kwargs = dict(solid_capstyle = 'butt'), y_offset = None, y_plot_length = 1):
+                    plot_kwargs = dict(solid_capstyle = 'butt'), y_offset = None, y_plot_length = 1, marker = 'line'):
     if ax is None:
         ax = plt.figure().add_subplot(111)
     if c is not None:
         plot_kwargs['c'] = c
     st = st[[c for c in st.columns if convertible_to_int(c)]]
     if y_offset is None:
-        y = len(st[::-1])
+        y = len(st)
     else:
         y = y_offset
     for i, v in st.iterrows():
-        dummy = [([v-x_offset, v-x_offset], [y, y-y_plot_length]) for v in list(v)]
-        for d in dummy:
-            ax.plot(d[0], d[1], **plot_kwargs)
+        if marker == 'line': # make a line of defined length
+            dummy = [([v-x_offset, v-x_offset], [y+y_plot_length/2., y-y_plot_length/2.]) for v in list(v)]
+            for d in dummy:
+                ax.plot(d[0], d[1], **plot_kwargs)
+        else: # plot with the specified marker
+            dummy_x = [vv-x_offset for vv in list(v)]
+            dummy_y = [y for vv in list(v)]
+            ax.plot(dummy_x, dummy_y, marker, **plot_kwargs)
+            
         y = y-1
 
 def rasterplot2_pdf_grouped(pdf, grouplabel, ax = None, xlim = None, x_offset = 0, color = 'k'):
