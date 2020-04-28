@@ -256,10 +256,9 @@ class SimulationFlow:
             raise ValueError("mode must be one of ('full', 'full_delete', 'spike_times')")
         I.distributed.wait(self._futures_simulation)
         if 'full' in mode:
-            I.mdb_init_simrun_general.init(self.mdb, self.mdb['simrun'], get = client.get)
-            I.mdb_init_simrun_general.optimize(self.mdb, get = client.get)
+            I.mdb_init_simrun_general.init(self.mdb, self.mdb['simrun'], client = client)
         if 'spike_times' in mode:
-            I.mdb_init_simrun_general.init(self.mdb, self.mdb['simrun'], get = client.get,
+            I.mdb_init_simrun_general.init(self.mdb, self.mdb['simrun'], client = client,
                                            synapse_activation = False, 
                                            dendritic_voltage_traces=False, 
                                            core = True,
@@ -272,6 +271,7 @@ class SimulationFlow:
             
     def run_all_remote(self, client, mode = 'full', nSweeps = 1, nprocs = 10, silent = False, tStop = 345):
         def helper():
+            I.distributed.secede()
             c = I.distributed.get_client(timeout = 300)
             self.create_parameterfiles(c)
             self.run_simulation(c, nSweeps, nprocs, silent, tStop)
