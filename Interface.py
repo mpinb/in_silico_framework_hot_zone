@@ -17,6 +17,7 @@ The recommendet use is to import it in a jupyter notebook in the following manne
 '''
 import matplotlib
 matplotlib.use('Agg')
+matplotlib.rcParams['pdf.fonttype'] = 42
 import os
 import sys
 import tempfile
