@@ -495,7 +495,9 @@ def init(mdb, simresult_path,  \
          core = True, voltage_traces = True, synapse_activation = True,  
          dendritic_voltage_traces = True, parameterfiles = True, \
          spike_times = True,  burst_times = False, \
-         repartition = True, get = None, rewrite_in_optimized_format = True, client = None):
+         repartition = True, get = None, rewrite_in_optimized_format = True, 
+         dendritic_spike_times = True, dendritic_spike_times_threshold = -20.,
+         client = None):
     '''Use this function to load simulation data generated with the simrun2 module 
     into a ModelDataBase. 
     
@@ -535,6 +537,12 @@ def init(mdb, simresult_path,  \
             _build_dendritic_voltage_traces(mdb, repartition = repartition)
             if rewrite_in_optimized_format:
                 optimize(mdb['dendritic_recordings'], select = mdb['dendritic_recordings'].keys(), repartition = False, get = get, client = client)
+            if dendritic_spike_times:
+                m = mdb.create_sub_mdb('dendritic_spike_times')
+                for kk in mdb['dendritic_recordings'].keys():
+                    vt = mdb['dendritic_recordings'][kk]
+                    st = spike_detection(vt, threshold = dendritic_spike_times_threshold)
+                    m.setitem(kk+'_'+str(dendritic_spike_times_threshold), st, dumper = pandas_to_msgpack)                             
         if spike_times: 
             print "---spike times---"
             vt = mdb['voltage_traces']
