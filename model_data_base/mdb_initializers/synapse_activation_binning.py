@@ -12,13 +12,12 @@ Exemplary use:
 
 from __future__ import absolute_import
 from collections import defaultdict
+from functools import partial
 import numpy as np
 import dask
 from ..analyze import excitatory, inhibitory
 from ..analyze.temporal_binning import universal as temporal_binning
 from ..IO.LoaderDumper import numpy_to_msgpack as numpy_to_msgpack
-
-maxtime = 400
 
 def prefun(df):
     dummy = df.synapse_type.str.split('_')
@@ -30,12 +29,12 @@ def prefun(df):
     df['binned_somadist'] = df.soma_distance.div(bs).map(np.floor).astype(int).map(lambda x: '{}to{}'.format(x*bs, x*bs+bs))    
     return df
 
-def postfun(s):
+def postfun(s, maxtime = None):
     defaultvalue = np.zeros(maxtime)
     s = s.map(lambda x: defaultvalue if x is None else x)
     return np.vstack(s.values)
 
-def applyfun(pdf):
+def applyfun(pdf, maxtime = None):
     return temporal_binning(pdf, min_time = 0, max_time = maxtime, normalize = False)[1]
 
 
@@ -156,7 +155,8 @@ def save_groupby(mdb, result, groupby):
 def init(mdb, groupby = '', get = None, 
          prefun = prefun, 
          applyfun = applyfun, 
-         postfun = postfun):
+         postfun = postfun,
+         maxtime = 400):
     '''
     Binning synapse activations.
     
@@ -169,6 +169,7 @@ def init(mdb, groupby = '', get = None,
                 'presynaptic_column', 
                 'proximal', (soma distance < 500 ym)
                 'EI' (Lumping the EXC / INH celltypes together)
+                'binned_somadist', 50 micron bins on soma distance
             It can also be any column in the specified dataframe.
             Can be a list, if "sub-subgroups" should be calculated.
 
@@ -182,7 +183,8 @@ def init(mdb, groupby = '', get = None,
     
     returns: None. The binned synapse activation data will be stored in mdb.
     '''
-    
+    applyfun = partial(applyfun, maxtime = maxtime)
+    postfun = partial(postfun, maxtime = maxtime)
     synapse_activation_postprocess_dask(mdb['synapse_activation'], \
                                         groupby = groupby, mdb = mdb, \
                                         get = get, \
