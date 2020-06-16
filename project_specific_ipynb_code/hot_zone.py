@@ -80,7 +80,7 @@ def get_cell_object_from_hoc(hocpath, setUpBiophysics=True):
 
 ###########################################
 # test, whether two ranges overlap
-#############################################
+############################################
 def range_overlap(beginning1, end1, beginning2, end2, bool_ = True):
     out = min(end1, end2) - max(beginning1, beginning2)
     out = max(0,out)
@@ -140,6 +140,14 @@ class Dendrogram:
         l['synapses'][label].append(x)
         
     def add_synapses(self, label, synlist, mode = 'from_anatomical_synapse_mapper'):
+        '''mode:
+        
+        'from_anatomical_synapse_mapper': to be used if synlist is generated from landmark as it is done
+            with mikes manually mapped VPM synapses
+            
+        'id_relative_position': as in the syn file. Use something like [(syn.secID, syn.x) for syn in cell.synapses['VPM_C2']]
+            to use synapses defined in a single_cell_parser.cell object
+        '''
         if mode == 'from_anatomical_synapse_mapper':
             for syn in synlist:
                 (sec_lv, seg_lv), (dist, x, point) = syn
@@ -629,17 +637,17 @@ class NetworkEmbedding:
         out.functionalMap.update(b.functionalMap)
         return out
 
-syn = '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/network_embedding/postsynaptic_location/3x3_C2_sampling/C2center/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389.syn'
-folder_ = I.tempfile.mkdtemp()
-ne = NetworkEmbedding()
-ne.load(syn)
-ne.save(folder_)
-ne2 = NetworkEmbedding()
-ne2.load(I.os.path.join(folder_, 'con.syn'))
-I.shutil.rmtree(folder_)
+#syn = '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/network_embedding/postsynaptic_location/3x3_C2_sampling/C2center#/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_synapses_20150504-1611_10389.syn'
+#folder_ = I.tempfile.mkdtemp()
+#ne = NetworkEmbedding()
+#ne.load(syn)
+#ne.save(folder_)
+#ne2 = NetworkEmbedding()
+#ne2.load(I.os.path.join(folder_, 'con.syn'))
+#I.shutil.rmtree(folder_)
 
-assert(ne.synapses == ne2.synapses)
-assert(ne.functionalMap == ne2.functionalMap)
+#assert(ne.synapses == ne2.synapses)
+#assert(ne.functionalMap == ne2.functionalMap)
 
 ######################################
 # class for loading cells
@@ -765,7 +773,8 @@ def get_st_pattern(st):
     sta2.apply_extractor(spike_analysis.core.STAPlugin_annotate_bursts_in_st())
     return sta2.get('bursts_st')
 
-def event_rasterplot(st, st_prox = None, rasterplot_fun = rasterplot3, **kwargs):
+from model_data_base.plotfunctions.rasterplot import rasterplot2
+def event_rasterplot(st, st_prox = None, rasterplot_fun = rasterplot2, **kwargs):
     '''like I.rasterplot2, but plots doublets red and triplets cyan'''
     if not 'ax' in kwargs:
         kwargs['ax'] = I.plt.figure(figsize = (8,4), dpi = 200).add_subplot(111)
