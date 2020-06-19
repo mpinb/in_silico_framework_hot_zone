@@ -91,44 +91,45 @@ def synapse_distances_2D(pname):
             for d in dist:
                 distFile.write(str(d)+'\n')
 
-def compute_syn_distances(cell, synType, label=None):
-    '''
-    computes distances of all synapses on dendrite w.r.t. soma
+# def compute_syn_distances(cell, synType, label=None): 
+#     '''
+#     computes distances of all synapses on dendrite w.r.t. soma
     
-    cell is cell object with attached synapses
-    presynaptic cell type given by synType (string)
-    optional: dendrite type given by label (string)
+#     cell is cell object with attached synapses
+#     presynaptic cell type given by synType (string)
+#     optional: dendrite type given by label (string)
     
-    returns 1D numpy array of distances to soma
-    '''
-    if not cell.synapses.has_key(synType):
-        errStr = 'Cell does not have synapses of type %s' % synType
-        raise KeyError(errStr)
+#     returns 1D numpy array of distances to soma
+#     '''
+#     if not cell.synapses.has_key(synType):
+#         errStr = 'Cell does not have synapses of type %s' % synType
+#         raise KeyError(errStr)
     
-    distances = []
-    for syn in cell.synapses[synType]:
-        currentSec = cell.sections[syn.secID]
-        if label is not None and currentSec.label != label:
-            continue
+#     distances = []
+#     for syn in cell.synapses[synType]:
+#         currentSec = cell.sections[syn.secID]
+#         if label is not None and currentSec.label != label:
+#             continue
         
-        if currentSec.label == 'Soma':
-            dist = 0.0
-            distances.append(dist)
-            continue
+#         if currentSec.label == 'Soma':
+#             dist = 0.0
+#             distances.append(dist)
+#             continue
         
-        parentSec = currentSec.parent
-        '''compute distance from synapse location to parent branch first'''
-        dist = 0.0
-        dist = syn.x*currentSec.L
-        parentLabel = parentSec.label
-        while parentLabel != 'Soma':
-            dist += parentSec.L
-            currentSec = parentSec
-            parentSec = currentSec.parent
-            parentLabel = parentSec.label
-        distances.append(dist)
+#         parentSec = currentSec.parent
+#         '''compute distance from synapse location to parent branch first'''
+#         dist = 0.0
+#         dist = syn.x*currentSec.L
+#         parentLabel = parentSec.label
+#         while parentLabel != 'Soma':
+#             dist += parentSec.L
+#             currentSec = parentSec
+#             parentSec = currentSec.parent
+#             parentLabel = parentSec.label
+#         distances.append(dist)
     
-    return np.array(distances)
+#     return np.array(distances)
+
 
 def compute_syn_distances_2Dprojected(cell, synType, label=None):
     '''
@@ -159,3 +160,48 @@ def compute_syn_distances_2Dprojected(cell, synType, label=None):
     
     return np.array(distances)
 
+def compute_syn_distance(cell, syn): ## same as Robert's method but can get one synapse at a time
+    currentSec = cell.sections[syn.secID]
+
+    if currentSec.label == 'Soma':
+        dist = 0.0
+
+    else:
+        parentSec = currentSec.parent
+        '''compute distance from synapse location to parent branch first'''
+        dist = 0.0
+        dist = syn.x*currentSec.L
+        parentLabel = parentSec.label
+        while parentLabel != 'Soma':
+            dist += parentSec.L
+            currentSec = parentSec
+            parentSec = currentSec.parent
+            parentLabel = parentSec.label
+    return dist
+
+def compute_syn_distances(cell, synType, label=None): ## updated to use new method for getting somadistance of one synapse at a time
+    '''
+     computes distances of all synapses on dendrite w.r.t. soma
+    
+     cell is cell object with attached synapses
+     presynaptic cell type given by synType (string)
+     optional: dendrite type given by label (string)
+    
+     returns 1D numpy array of distances to soma
+     '''
+    if not cell.synapses.has_key(synType):
+        errStr = 'Cell does not have synapses of type %s' % synType
+        raise KeyError(errStr)
+    distances = []
+    for syn in cell.synapses[synType]:
+        currentSec = cell.sections[syn.secID]
+        if label is not None and currentSec.label != label:
+            continue
+        
+        if currentSec.label == 'Soma':
+            dist = 0.0
+            distances.append(dist)
+            continue
+            
+        distances.append(compute_syn_distance(cell, syn))
+    return np.array(distances)

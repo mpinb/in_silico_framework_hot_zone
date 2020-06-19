@@ -11,6 +11,9 @@ from collections import Sequence
 import neuron
 nrn = neuron.nrn
 h = neuron.h
+from itertools import chain
+import single_cell_analyzer as sca
+import pandas as pd
 
 class Cell(object):
     '''
@@ -308,6 +311,57 @@ class Cell(object):
 ##                                        syn.netcons[0].weight[i] = recep.weight[i]
 ##                                else:
 ##                                    syn.netcons[0].weight[0] = recep.weight
+
+    
+    def get_synapse_activation_dataframe(self, max_spikes = 20, sim_trial_index = 0): 
+        syn_types = []
+        syn_IDs = []
+        spike_times = []
+        sec_IDs = []
+        pt_IDs = []
+        dend_labels = []
+        soma_distances = []
+
+        for celltype in self.synapses.keys():
+            for syn in range(len(self.synapses[celltype])):
+                if self.synapses[celltype][syn].is_active():
+                    ## get list of active synapses' types and IDs
+                    syn_types.append(celltype)
+                    syn_IDs.append(syn)
+
+                    ## get spike times
+                    st_temp = [self.synapses[celltype][syn].releaseSite.spikeTimes[:]]
+                    st_temp.append([np.nan]* (max_spikes - len(st_temp[0])))
+                    st_temp = list(chain.from_iterable(st_temp))
+                    spike_times.append(st_temp)
+
+                    ## get info about synapse location
+                    secID = self.synapses[celltype][syn].secID
+                    sec_IDs.append(secID)
+                    pt_IDs.append(self.synapses[celltype][syn].ptID)
+                    dend_labels.append(self.sections[secID].label)
+
+                    ## calculate synapse somadistances
+                    sec = self.sections[secID]
+                    soma_distances.append(sca.compute_syn_distance(self, self.synapses[celltype][syn]))
+                    
+
+        ## write synapse activation df
+        columns = ['synapse_type', 'synapse_ID', 'soma_distance', 'section_ID', 
+                   'section_pt_ID', 'dendrite_label']
+        sa_pd = dict(zip(columns, [syn_types, syn_IDs, soma_distances, sec_IDs, pt_IDs, dend_labels]))
+        sa_pd = pd.DataFrame(sa_pd)[columns]
+        
+        st_df = pd.DataFrame(columns = range(max_spikes), data = np.asarray(spike_times))
+    
+        sa_pd = pd.concat([sa_pd, st_df], axis = 1)
+        
+        
+
+        sa_pd.index = [sim_trial_index] * len(sa_pd)
+
+
+        return sa_pd
 
 class PySection(nrn.Section):
     '''
