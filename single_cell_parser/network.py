@@ -127,7 +127,10 @@ class NetworkMapper:
         locations = None
         if synWeightName:
             weights, locations = reader.read_synapse_weight_file(synWeightName)
-        synInfo = reader.read_synapse_activation_file(synInfoName)
+        if isinstance(synInfoName, str):
+            synInfo = reader.read_synapse_activation_file(synInfoName)
+        else:
+            synInfo = synInfoName
         synTypes = synInfo.keys()
         for synType in synTypes:
             print 'Creating synapses and activation times for cell type %s' % synType
