@@ -784,3 +784,77 @@ def event_rasterplot(st, st_prox = None, rasterplot_fun = I.rasterplot2, **kwarg
     if st_prox is not None:
         rasterplot_fun(st_prox, c = 'orange', marker = '.',**kwargs)
     rasterplot_fun(st[st_pattern == 'triplet'], c = '#ff0000', **kwargs)
+    
+############################
+# ephys extraction, which I also provided to Mike for his thesis
+############################
+import spike_analysis.core 
+reload(spike_analysis.core)
+ReaderSmr = spike_analysis.core.ReaderSmr
+SpikeDetectionCreastTrough = spike_analysis.core.SpikeDetectionCreastTrough
+SpikeTimesAnalysis = spike_analysis.core.SpikeTimesAnalysis
+def get_sta(path, offset = 0):
+    sdct = SpikeDetectionCreastTrough.load(path)
+    stim = path.split('/')[-2]
+    sta = SpikeTimesAnalysis(sdct, periods=periods[stim])
+    sta.apply_extractor(spike_analysis.core.STAPlugin_spike_times_dataframe(name = 'st_df', offset = offset))    
+    sta.apply_extractor(spike_analysis.core.STAPlugin_response_probability_in_period(name = 'p_onset', period = '1onset'))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_response_latency_in_period(name = 'latency_onset', period = '1onset'))
+    try:
+        sta.apply_extractor(spike_analysis.core.STAPlugin_quantification_in_period(name = 'f_sustained', period = '2sustained'))
+    except KeyError:
+        pass
+    sta.apply_extractor(spike_analysis.core.STAPlugin_ISIn('ISIn_edf'))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_bursts('bursts_edf'))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe(name = 'singlet_times', 
+                                                                                           column_name = 'event_time',
+                                                                                           source = 'bursts_edf',
+                                                                                           select = {'event_class': 'singlet'}))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe(name = 'doublet_times', 
+                                                                                           column_name = 'event_time',
+                                                                                           source = 'bursts_edf',
+                                                                                           select = {'event_class': 'doublet'}))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe(name = 'triplet_times', 
+                                                                                           column_name = 'event_time',
+                                                                                           source = 'bursts_edf',
+                                                                                           select = {'event_class': 'triplet'}))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_ongoing(name = 'ongoing_doublets',
+                                                              source = 'doublet_times',
+                                                              mode = 'count'))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_ongoing(name = 'ongoing_triplets',
+                                                              source = 'triplet_times',
+                                                              mode = 'count'))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_spike_times_dataframe(name = 'singlet_df',
+                                                                            source = 'singlet_times'))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_spike_times_dataframe(name = 'doublet_df',
+                                                                            source = 'doublet_times'))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_spike_times_dataframe(name = 'triplet_df',
+                                                                            source = 'triplet_times'))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_ongoing('ongoing'))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_ongoing('ongoing_doublet', source = 'doublet_times', mode = 'count'))
+    sta.apply_extractor(spike_analysis.core.STAPlugin_ongoing('ongoing_triplet', source = 'triplet_times', mode = 'count'))
+    try:
+        sta.apply_extractor(spike_analysis.core.STAPlugin_quantification_in_period('n_sustained_triplet', 
+                                                                               source = 'triplet_df', 
+                                                                               mode = 'count_total',
+                                                                               period = '2sustained'))
+    except KeyError:
+        pass
+    sta.apply_extractor(spike_analysis.core.STAPlugin_quantification_in_period('n_onset_singlet', 
+                                                                               source = 'singlet_df', 
+                                                                               mode = 'count_total',
+                                                                               period = '1onset')) 
+    sta.apply_extractor(spike_analysis.core.STAPlugin_quantification_in_period('n_onset_triplet', 
+                                                                               source = 'triplet_df', 
+                                                                               mode = 'count_total',
+                                                                               period = '1onset'))    
+    sta.apply_extractor(spike_analysis.core.STAPlugin_quantification_in_period('n_onset_doublet', 
+                                                                               source = 'doublet_df', 
+                                                                               mode = 'count_total',
+                                                                               period = '1onset'))  
+    sta.apply_extractor(spike_analysis.core.STAPlugin_quantification_in_period('n_spikes_in_onset_period', 
+                                                                               source = 'st_df', 
+                                                                               mode = 'count_total',
+                                                                               period = '1onset')) 
+    sta.apply_extractor(spike_analysis.core.STAPlugin_annotate_bursts_in_st(source = 'st_df'))
+    return sta
