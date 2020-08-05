@@ -2,8 +2,7 @@ import pandas as pd
 from functools import partial
 import numpy as np
 import os
-import single_cell_parser as scp
-from project_specific_ipynb_code.hot_zone import get_cell_object_from_hoc
+# import single_cell_parser as scp # moved to bottom to resolve import error
 from model_data_base.utils import cache
 
 def get_EPSP_measurement():
@@ -27,6 +26,18 @@ inhibitory = ['SymLocal1', 'SymLocal2', 'SymLocal3', 'SymLocal4', 'SymLocal5', '
 # transformation tools
 #########################################
 #p = [[1,2,3], [4,1,2], [1,3,2], [1,1,1], [4,2,5]]
+
+def get_cell_object_from_hoc(hocpath, setUpBiophysics=True):
+    import single_cell_parser as scp
+    '''returns cell object, which allows accessing points of individual branches'''    
+    # import singlecell_input_mapper.singlecell_input_mapper.cell
+    # ssm = singlecell_input_mapper.singlecell_input_mapper.cell.CellParser(hocpath)    
+    # ssm.spatialgraph_to_cell()
+    # return ssm.cell
+    neuron_param = {'filename': hocpath}
+    neuron_param = scp.NTParameterSet(neuron_param)
+    cell = scp.create_cell(neuron_param, setUpBiophysics = setUpBiophysics)
+    return cell
 
 def calculate_point_distance(p1, p2):
     p1, p2 = np.array(p1), np.array(p2)
@@ -129,7 +140,7 @@ def test_transform_point():
     assert((transform_point(transform_point([0,0,0], 1, 0, 0, 'C2'), -1, 0, 0, 'C2') == [0,0,0]).all())
     
 def get_soma_centroid(hocpath):
-    import Interface as I    
+    from model_data_base.utils import silence_stdout
     with I.silence_stdout:
         source_soma_points = get_cell_object_from_hoc(hocpath).soma.pts
     soma_centroid = np.array(source_soma_points).mean(axis = 0)
@@ -163,7 +174,7 @@ def move_hoc_xyz(hocpath, x,y,z, outpath = None, coordinate_system = 'D2'):
 def test_move_hoc_xyz():
     import getting_started
     import Interface as I
-    hocpath = scp.build_parameters(getting_started.neuronParam).neuron.filename
+    hocpath = I.scp.build_parameters(getting_started.neuronParam).neuron.filename
     with I.utils.mkdtemp() as d:
         centroid =  get_soma_centroid(hocpath) 
         outpath1 = os.path.join(d, 'hoc.hoc') 
@@ -187,7 +198,8 @@ def move_hoc_absolute(hocpath, x,y,z, outpath = None):
 
 def test_move_hoc_absolute():
     import getting_started
-    hocpath = scp.build_parameters(getting_started.neuronParam).neuron.filename
+    import Interface as I
+    hocpath = I.scp.build_parameters(getting_started.neuronParam).neuron.filename
     with I.utils.mkdtemp() as d:
         outpath = I.os.path.join(d, 'hoc.hoc') 
         move_hoc_absolute(hocpath, 0,0,0, outpath = outpath)
