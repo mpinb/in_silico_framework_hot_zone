@@ -181,6 +181,22 @@ class Solver(object):
                 out[name] = self.optimize(x0 = x0)
         self.strategy.DataSplitEvaluation.add_result(self, out)
         return out
+    
+    def optimize_one_split(self, client = None, workers = None, index = 0): #rieke
+        out = {}
+        names = sorted(self.strategy.DataSplitEvaluation.splits.keys())
+#         for name, split in self.strategy.DataSplitEvaluation.splits.iteritems():
+        name = names[index]
+        split = self.strategy.DataSplitEvaluation.splits[name]
+        x0 = self.strategy._get_x0()    
+        self.strategy.set_split(split['train'])
+        if client:                               
+            out[name] = client.submit(self.optimize, x0 = x0, workers = workers)
+        else:
+            out[name] = self.optimize(x0 = x0)
+        self.strategy.DataSplitEvaluation.add_result(self, out)
+        return out    
+    
 class DataExtractor(object):
     def get(self):
         pass
@@ -239,7 +255,7 @@ class DataSplitEvaluation(object):
         return self.splits
     
     def add_result(self, solver, x):
-        assert len(self.splits) == len(x)
+#         assert len(self.splits) == len(x) #rieke - want to run individual splits sometimes
         # assert solver.strategy.Rm is self.Rm        
         solver_name = solver.name
         strategy_name = solver.strategy.name
@@ -357,19 +373,24 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
     def get_groups(self):
         '''returns all groups other than spatial binning'''
         mdb = self.mdb
+        if type(mdb) != list:
+            mdb = [mdb]
         key = self.key
         level = self.get_spatial_bin_level(key)
         out = []
-        for k in mdb[key].keys():
-            k = list(k)
-            k.pop(level)
-            out.append(tuple(k))
+        for single_mdb in mdb: #rieke
+            for k in single_mdb[key].keys():
+                k = list(k)
+                k.pop(level)
+                out.append(tuple(k))
         return set(out)
 
-    def get_sorted_keys_by_group(self, group):
+#     def get_sorted_keys_by_group(self, group):
+    def get_sorted_keys_by_group(self, group, mdb = None): #rieke
         '''returns keys sorted such that the first key is the closest to the soma'''
-        mdb = self.mdb
-        key = self.key        
+        if mdb == None: #rieke bc
+            mdb = self.mdb 
+        key = self.key       
         group = list(group)
         level = self.get_spatial_bin_level(key)
         keys = mdb[key].keys()
@@ -386,12 +407,23 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
         '''returns spatiotemporal input in the following dimensions:
         (trial, time, space)'''
         mdb = self.mdb
+        if type(mdb) != list:
+            mdb = [mdb]
         key = self.key        
-        keys = self.get_sorted_keys_by_group(group)
-        out = [mdb[key][k][:,self.tmax-self.width:self.tmax] for k in keys]
-        out = numpy.dstack(out)
-        print out.shape
-        return out
+#         keys = self.get_sorted_keys_by_group(group)
+#         out = [mdb[key][k][:,self.tmax-self.width:self.tmax] for k in keys]
+#         out = numpy.dstack(out)
+        
+        outs = []
+        for single_mdb in mdb:
+            keys = self.get_sorted_keys_by_group(group, mdb = single_mdb)
+            out = [single_mdb[key][k][:,self.tmax-self.width:self.tmax] for k in keys]
+            out = numpy.dstack(out)
+            outs.append(out)
+            
+        outs = numpy.concatenate(outs, axis = 0)
+        print outs.shape
+        return outs
     
     def get(self):
         '''returns dictionary with groups as keys and spatiotemporal inputpatterns as keys.
@@ -405,14 +437,20 @@ class DataExtractor_spiketimes(DataExtractor):
         self.st = None
         
     def get(self):
-        return self.mdb['spike_times']
+        if type(self.mdb) != list:
+            return self.mdb['spike_times']
+        else:
+            st_list = []
+            for single_mdb in self.mdb:
+                st_list.append(single_mdb['spike_times'])
+            return pd.concat(st_list)
 class DataExtractor_object(DataExtractor):
     def __init__(self, key):
         self.key = key
     
     def setup(self, Rm):
         self.mdb = Rm.mdb
-        self.data = Rm[self.key]
+        self.data = Rm[self.key] #rieketodo
         
     def get(self):
         return self.data
@@ -427,7 +465,15 @@ class DataExtractor_spikeInInterval(DataExtractor):
         if self.tmax is None:
             self.tmax = Rm.tmax
         self.mdb = Rm.mdb
-        st = self.mdb['spike_times']
+        if type(self.mdb) != list:
+            st = self.mdb['spike_times']
+            
+        else:
+            st_list = []
+            for single_mdb in self.mdb: #rieketodo: can I use the DataExtractor_spiketimes here?
+                st_list.append(single_mdb['spike_times'])
+            st = pd.concat(st_list)
+        
         self.sii = I.spike_in_interval(st, tmin = self.tmin, tmax = self.tmax)
             
     def get(self):
@@ -441,14 +487,21 @@ class DataExtractor_ISI(DataExtractor):
         if self.t is None:
             self.t = Rm.tmin
             
-        st = self.mdb['spike_times']
+        if type(self.mdb) != list:
+            st = self.mdb['spike_times']
+        else:
+            st_list = []
+            for single_mdb in self.mdb: #rieketodo: can I use the DataExtractor_spiketimes here?
+                st_list.append(single_mdb['spike_times'])
+            st = pd.concat(st_list)
+            
         t = self.t
         st[st>t] = numpy.NaN
         self.ISI = st.max(axis=1) - t
         
     def get(self):
         return self.ISI
-class DataExtractor_daskDataframeColumn(DataExtractor):
+class DataExtractor_daskDataframeColumn(DataExtractor): #rieketodo
     def __init__(self, key, column, client = None):
         if not isinstance(key, tuple):
             self.key = (key,)
