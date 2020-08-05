@@ -727,6 +727,9 @@ class NetworkMapper:
         previousAnatomicalID = None
         totalConnectedCells = 0
         totalActiveSyns = 0
+        
+        cell_counter = dict(zip(self.cells.keys(), [0]*len(self.cells.keys()))) # rieke - for mapping background activity of whole network
+        
         for synType in self.nwParam.keys():
             funcMapName = self.nwParam[synType].synapses.connectionFile
             if funcMapName != previousConnectionFile:
@@ -767,7 +770,9 @@ class NetworkMapper:
                 if cellType != synType:
                     errstr = 'Functional map cell type %s does not correspond to synapse type %s' % (cellType, synType)
                     raise RuntimeError(errstr)
+#                 try:
                 preSynCell = self.cells[synType][cellID]
+#                 except 
                 connectedCells.add(cellID)
 #                if cellType not in visTest.keys():
 #                    visTest[cellType] = []
