@@ -18,6 +18,7 @@ except ImportError:
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import weakref
 
 
 def convert_to_numpy(x):
@@ -25,6 +26,27 @@ def convert_to_numpy(x):
         return cupy.asnumpy(x)
     else:
         return x
+
+# cupy frees GPU memory when all references are deleted
+# as this is difficult to track, use the make_weakref method, which stores all
+# GPU arrays in the _WEAKREF_ARRAY_LIST and returns a weakref object. This can be used to
+# interact with the data, but is not a reference.
+# Therefore, it is sufficient to empty _WEAKREF_ARRAY_LIST, which frees the GPU memory.
+# All weakref objects pointing to GPU arrays will then be invalidated.
+_WEAKREF_ARRAY_LIST = []
+def make_weakref(obj):
+    _WEAKREF_ARRAY_LIST.append(obj)
+    return weakref.proxy(obj)
+
+def clear_memory():
+    del _WEAKREF_ARRAY_LIST[:]
+    
+def dereference(weakrefobj):
+    '''Dereferences a weakref.proxy object, returning a reference to the underlying object itself.
+    Uses private interface ... check after version update!
+    https://stackoverflow.com/questions/19621036/acquiring-a-regular-reference-from-a-weakref-proxy-in-python'''
+    return weakrefobj.__repr__.__self__
+
 
 class Rm(object):
     def __init__(self, name, mdb, tmin = None, tmax = None, width = None):
@@ -121,7 +143,7 @@ class Strategy(object):
         pass
     
     def set_split(self, split, setup = True):
-        cupy_split = np.array(split) # cupy, if cupy is there, numpy otherwise
+        cupy_split = make_weakref(np.array(split)) # cupy, if cupy is there, numpy otherwise
         numpy_split = numpy.array(split) # allways numpy
         self.get_score = I.partial(self.get_score_static, self._get_score, cupy_split = cupy_split)
         self.get_y = I.partial(self.get_y_static, self.y, numpy_split = numpy_split)
@@ -135,13 +157,16 @@ class Strategy(object):
     def get_score_static(_get_score, x, cupy_split = None):
         x = np.array(x).astype('f4')
         score = _get_score(x)        
+#         assert(len(score[dereference(cupy_split)]) < len(score))
+
         if cupy_split is not None:
-            return score[cupy_split]
+            return score[dereference(cupy_split)]
         else:
             return score
     
     @staticmethod
     def get_y_static(y, numpy_split = None):
+#         assert(len(y[numpy_split]) <len(y))
         if numpy_split is not None:
             return y[numpy_split]
         else:
@@ -314,7 +339,7 @@ class RaisedCosineBasis(object):
         self.width = width
         self.t = numpy.arange(width)
         rev = -1 if self.reversed_ else 1
-        self.basis = [self.get_raised_cosine(self.a,self.c,phi,self.t, backend = self.backend)[1][::rev] for phi in self.phis]
+        self.basis = [make_weakref(self.get_raised_cosine(self.a,self.c,phi,self.t, backend = self.backend)[1][::rev]) for phi in self.phis]
         return self
     
     def get(self):
@@ -548,7 +573,7 @@ class Strategy_ISIcutoff(Strategy):
         self.penalty = penalty
         
     def _setup(self):
-        self.ISI = np.array(self.data['ISI'].fillna(-100))
+        self.ISI = make_weakref(np.array(self.data['ISI'].fillna(-100)))
         self._get_score = I.partial(self._get_score_static, self.ISI, self.penalty)
     
     @staticmethod
@@ -609,7 +634,7 @@ class Strategy_ISIraisedCosine(Strategy):
         ISI[ISI>=width] = width
         ISI = ISI.fillna(width)
         ISI = ISI.astype(int)-1
-        self.ISI = np.array(ISI)
+        self.ISI = make_weakref(np.array(ISI))
         self._get_score = I.partial(self._get_score_static, self.RaisedCosineBasis_postspike, self.ISI)
         
     def _get_x0(self):
@@ -618,7 +643,7 @@ class Strategy_ISIraisedCosine(Strategy):
     @staticmethod
     def _get_score_static(RaisedCosineBasis_postspike, ISI, x):
         kernel = RaisedCosineBasis_postspike.get_superposition(x)
-        return kernel[ISI]
+        return kernel[dereference(ISI)]
     
     def visualize(self, optimizer_output, normalize = True, only_succesful = True):
         fig = plt.figure()
@@ -666,7 +691,7 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
                 for t in self.RaisedCosineBasis_temporal.compute(len_t).get():
                     base_vector_row.append(numpy.dot(tSa, t))
                 base_vector_array.append(base_vector_row)
-            base_vectors_arrays_dict[group] = np.array(numpy.array(base_vector_array).astype('f4'))
+            base_vectors_arrays_dict[group] = make_weakref(np.array(numpy.array(base_vector_array).astype('f4')))
         self.base_vectors_arrays_dict = base_vectors_arrays_dict
             
     def _get_x0(self):
@@ -688,8 +713,8 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
         outs = []
         for group, (x_z, x_t) in convert_x(x).iteritems():
             array = base_vectors_arrays_dict[group]
-            out = np.dot(x_t, array).squeeze()
-            out = np.dot(x_z, out).squeeze()
+            out = np.dot(dereference(x_t), dereference(array)).squeeze()
+            out = np.dot(dereference(x_z), dereference(out)).squeeze()
             outs.append(out)
         return np.vstack(outs).sum(axis = 0)
     
@@ -741,7 +766,113 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
             for group, (x_z, x_t) in dict_.iteritems():
                 c = self.get_color_by_group(group)
                 self.RaisedCosineBasis_temporal.visualize_x(x_t, ax = ax_t, plot_kwargs = {'c': c})
-                self.RaisedCosineBasis_spatial.visualize_x(x_z, ax = ax_z, plot_kwargs = {'c': c})  
+                self.RaisedCosineBasis_spatial.visualize_x(x_z, ax = ax_z, plot_kwargs = {'c': c})
+                
+class Strategy_temporalRaisedCosine_spatial_cutoff(Strategy):
+    '''requires keys: temporalSa, st, y, ISI'''
+    def __init__(self, name, RaisedCosineBasis_spatial, RaisedCosineBasis_temporal):
+        super(Strategy_spatiotemporalRaisedCosine, self).__init__(name)
+        self.RaisedCosineBasis_spatial = RaisedCosineBasis_spatial
+        self.RaisedCosineBasis_temporal = RaisedCosineBasis_temporal
+
+    def _setup(self):
+        self.compute_basis()
+        self.groups = sorted(self.base_vectors_arrays_dict.keys())
+        self.len_z, self.len_t, self.len_trials = self.base_vectors_arrays_dict.values()[0].shape
+        self.convert_x = I.partial(self._convert_x_static, self.groups, self.len_z)
+        self._get_score = I.partial(self._get_score_static, self.convert_x, self.base_vectors_arrays_dict)
+        
+    def compute_basis(self):
+        '''computes_base_vector_array with shape (spatial, temporal, trials)'''
+        st = self.data['st']
+        stSa_dict = self.data['spatiotemporalSa']
+        base_vectors_arrays_dict = {}
+        for group, stSa in stSa_dict.iteritems():
+            len_trials, len_t, len_z = stSa.shape
+            base_vector_array = []            
+            for z in self.RaisedCosineBasis_spatial.compute(len_z).get():
+                base_vector_row = []
+                tSa = numpy.dot(stSa,z).squeeze()
+                for t in self.RaisedCosineBasis_temporal.compute(len_t).get():
+                    base_vector_row.append(numpy.dot(tSa, t))
+                base_vector_array.append(base_vector_row)
+            base_vectors_arrays_dict[group] = make_weakref(np.array(numpy.array(base_vector_array).astype('f4')))
+        self.base_vectors_arrays_dict = base_vectors_arrays_dict
+            
+    def _get_x0(self):
+        return numpy.random.rand((self.len_z + self.len_t)*len(self.groups))*2-1
+    
+    @staticmethod
+    def _convert_x_static(groups, len_z, x):
+        len_groups = len(groups)
+        out = {}
+        x = x.reshape(len_groups, len(x) / len_groups)
+        for lv, group in enumerate(groups):
+            x_z = x[lv, :len_z]
+            x_t = x[lv, len_z:]
+            out[group] = x_z, x_t
+        return out    
+    
+    @staticmethod
+    def _get_score_static(convert_x, base_vectors_arrays_dict, x):
+        outs = []
+        for group, (x_z, x_t) in convert_x(x).iteritems():
+            array = base_vectors_arrays_dict[group]
+            out = np.dot(dereference(x_t), dereference(array)).squeeze()
+            out = np.dot(dereference(x_z), dereference(out)).squeeze()
+            outs.append(out)
+        return np.vstack(outs).sum(axis = 0)
+    
+    def normalize(self, x, flipkey = None):
+        '''normalize such that exc and inh peak is at 1 and -1, respectively.
+        normalize, such that sum of all absolute values of all kernels is 1'''
+        x = self.convert_x(x)
+        #temporal
+        b = self.RaisedCosineBasis_temporal
+        x_exc_t = x[('EXC',)][1]
+        x_inh_t = x[('INH',)][1]
+        x_exc_z = x[('EXC',)][0]
+        x_inh_z = x[('INH',)][0]
+        norm_exc = b.get_superposition(x_exc_t)[np.argmax(np.abs(b.get_superposition(x_exc_t)))]
+        norm_inh = -1*b.get_superposition(x_inh_t)[np.argmax(np.abs(b.get_superposition(x_inh_t)))]
+        # spatial
+        b = self.RaisedCosineBasis_spatial
+        # norm_spatial = sum(np.abs(b.get_superposition(x_exc_z)) + np.abs(b.get_superposition(x_inh_z)))
+        norm_spatial = max(np.abs(b.get_superposition(x_exc_z * norm_exc)))
+        # print norm_exc, norm_inh, norm_spatial
+        x[('EXC',)] = (x_exc_z*norm_exc/norm_spatial, x_exc_t/norm_exc)
+        x[('INH',)] = (x_inh_z*norm_inh/norm_spatial, x_inh_t/norm_inh)
+        # output
+        x_out = []
+        for group in self.groups:
+            x_out += list(x[group][0]) + list(x[group][1])
+        return np.array(x_out)
+    
+    def get_color_by_group(self, group):
+        if 'EXC' in group:
+            return 'r'
+        elif 'INH' in group:
+            return 'grey'
+        else:
+            return None
+
+    def visualize(self, optimizer_output, only_successful = False, normalize = True):
+        fig = plt.figure(figsize = (10,5))
+        ax_z = fig.add_subplot(1,2,1)
+        ax_t = fig.add_subplot(1,2,2)
+        for out in optimizer_output:
+            if only_successful:
+                if not out.success:
+                    continue
+            if normalize:
+                dict_ = self.convert_x(self.normalize(out.x))
+            else:
+                dict_ = self.convert_x(out.x)
+            for group, (x_z, x_t) in dict_.iteritems():
+                c = self.get_color_by_group(group)
+                self.RaisedCosineBasis_temporal.visualize_x(x_t, ax = ax_t, plot_kwargs = {'c': c})
+                self.RaisedCosineBasis_spatial.visualize_x(x_z, ax = ax_z, plot_kwargs = {'c': c})                
+
 class Strategy_linearCombinationOfData(Strategy):
     def __init__(self, name, data_keys):
         super(Strategy_linearCombinationOfData, self).__init__(name)        
