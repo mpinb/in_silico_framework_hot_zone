@@ -124,3 +124,43 @@ class SQLiteBackend(object):
                     self._close_sql(sqllitedict)
                 except:
                     pass
+
+class InMemoryBackend(object):
+    def __init__(self, backend, keys = 'all'):
+        if keys == 'all':
+            keys = backend.keys()
+        self._db = backend._vectorized_getitem(keys)
+    
+    def __getitem__(self, arg):
+        '''Backend method to retrive item from the database'''
+        return self._db[arg]
+    
+    def _vectorized_getitem(self, keys):
+        '''this allows to get many values at once, reducing the overhead of repeated 
+        opening and closing the connection'''
+        return {k: self._db[k] for k in keys}
+    
+    def __setitem__(self, key, item):
+        '''Backend method to add a key-value pair to the sqlite database'''
+        errstr = 'This is the in-memory view on a database. You cannot change items.'
+        raise NotImplementedError(errstr)
+        
+    def _vectorized_setitem(self, dict_):
+        '''this allows to set many values at once, reducing the overhead of repeated 
+        opening and closing the connection'''
+        errstr = 'This is the in-memory view on a database. You cannot change items.'
+        raise NotImplementedError(errstr)
+
+    def __delitem__(self, arg):
+        '''Backend method to delete item from the sqlite database.'''
+        errstr = 'This is the in-memory view on a database. You cannot change items.'
+        raise NotImplementedError(errstr)
+            
+    def _vectorized_delitem(self, keys):
+        '''this allows to delete many values at once, reducing the overhead of repeated 
+        opening and closing the connection'''
+        errstr = 'This is the in-memory view on a database. You cannot change items.'
+        raise NotImplementedError(errstr)
+
+    def keys(self):
+        return self._db.keys()

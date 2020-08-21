@@ -31,7 +31,9 @@ elif config['backend']['type'] == 'sqlite_remote':
     from .sqlite_backend.sqlite_remote_backend_client import SQLiteBackendRemote as SQLBackend
 else:
     raise ValueError("backend must be sqlite or sqlite_remote")
-    
+
+from .sqlite_backend.sqlite_backend import InMemoryBackend
+
 from collections import defaultdict
 # import model_data_base_register ## moved to end of file since this is a circular import
 
@@ -228,6 +230,19 @@ class ModelDataBase(object):
             if self._unique_id is None:
                 self._set_unique_id()
 
+    def in_memory(self, keys = 'all', recursive = True):
+        '''Load all data required for accessing data in memory. This can be helpful, if locking 
+        is taking much time, but would not be required. If in_memory has been called, no changes to 
+        the database are possible'''
+        self._sql_backend = InMemoryBackend(self._sql_backend, keys = keys)
+        self._sql_metadata_backend = InMemoryBackend(self._sql_metadata_backend, keys = keys)
+        self.metadata.sql_backend = self._sql_metadata_backend # InMemoryBackend(self._sql_metadata_backend, keys = keys)
+
+        if recursive: 
+            for k in self.keys():
+                if self.metadata[k]['dumper'] == 'just_create_mdb':
+                    self[k].in_memory(recursive = True)
+
     def _register_this_database(self):
         print 'registering database with unique_id {} to the absolute path {}'.format(
                         self._unique_id, self.basedir)
@@ -352,7 +367,7 @@ class ModelDataBase(object):
                 for lv in range(len(arg)):
                     if arg[:lv] in existing_keys:
                         return self[arg[:lv]][arg[lv:]]
-            raise          
+            raise    
     
     def _check_writing_privilege(self, key):
         '''raises MdbException, if we don't have permission to write to key '''
