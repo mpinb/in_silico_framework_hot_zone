@@ -90,7 +90,7 @@ class NetworkMapper:
         print 'network complete!'
         print '***************************'
     
-    def create_saved_network2(self, synWeightName=None):
+    def create_saved_network2(self, synWeightName=None, full_network = False):
         '''
         Public interface
         Used for re-creating network from anatomical
@@ -108,7 +108,7 @@ class NetworkMapper:
         weights = None
         if synWeightName:
             weights, locations = reader.read_synapse_weight_file(synWeightName)
-        self._map_complete_anatomical_realization(weights)
+        self._map_complete_anatomical_realization(weights, full_network = full_network)
         print '***************************'
         print 'network complete!'
         print '***************************'
@@ -715,7 +715,7 @@ class NetworkMapper:
                     activate_functional_synapse(syn, self.postCell, preSynCell, synParameters, tChange, changeParam[synType].synapses)
         print '---------------------------'
     
-    def _map_complete_anatomical_realization(self, weights=None):
+    def _map_complete_anatomical_realization(self, weights=None, full_network = False):
         '''
         Connects anatomical synapses to spike
         generators (PointCells/SpikeTrains) according to anatomical
@@ -728,9 +728,10 @@ class NetworkMapper:
         totalConnectedCells = 0
         totalActiveSyns = 0
         
-        cell_counter = dict(zip(self.cells.keys(), [0]*len(self.cells.keys()))) # rieke - for mapping background activity of whole network
         
         for synType in self.nwParam.keys():
+            if full_network:
+                synapse_counter = 0
             funcMapName = self.nwParam[synType].synapses.connectionFile
             if funcMapName != previousConnectionFile:
                 print 'loading anatomical connectivity file %s' % funcMapName
@@ -770,14 +771,25 @@ class NetworkMapper:
                 if cellType != synType:
                     errstr = 'Functional map cell type %s does not correspond to synapse type %s' % (cellType, synType)
                     raise RuntimeError(errstr)
-#                 try:
-                preSynCell = self.cells[synType][cellID]
-#                 except 
-                connectedCells.add(cellID)
+                
+                if not full_network:
+                    preSynCell = self.cells[synType][cellID]
+                    connectedCells.add(cellID)
+                    syn = synapses[synType][synID]
+                
+                else:
+                    connectedCells.add(cellID)
+                    cell_index = len(connectedCells)-1
+                    preSynCell = self.cells[synType][cell_index]
+                    
+                    syn = synapses[synType][synapse_counter]
+                    synapse_counter += 1
+
+                    
 #                if cellType not in visTest.keys():
 #                    visTest[cellType] = []
 #                visTest[cellType].append((cellType, cellID, synID))
-                syn = synapses[synType][synID]
+                
                 synParameters = self.nwParam[synType].synapses
                 if weights:
                     syn.weight = weights[synType][synID]
