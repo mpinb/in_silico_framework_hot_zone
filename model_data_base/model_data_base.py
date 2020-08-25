@@ -184,7 +184,6 @@ class ModelDataBase(object):
         
         To read out all existing keys, use the keys()-function.
         '''
-                
         self.basedir = os.path.abspath(basedir)
         self.forceload = forceload
         self.readonly = readonly #possible values: False, True, 'warning'
@@ -216,7 +215,7 @@ class ModelDataBase(object):
         self._sql_metadata_backend = SQLBackend(os.path.join(self.basedir, 'metadata.db'))
         self.metadata = SQLMetadataAccessor(self._sql_metadata_backend)
         
-        if not self.readonly:
+        if self.readonly == False:
             if self._registered_to_path is None:
                 self._register_this_database()
                 self.save_db()
@@ -237,11 +236,14 @@ class ModelDataBase(object):
         self._sql_backend = InMemoryBackend(self._sql_backend, keys = keys)
         self._sql_metadata_backend = InMemoryBackend(self._sql_metadata_backend, keys = keys)
         self.metadata.sql_backend = self._sql_metadata_backend # InMemoryBackend(self._sql_metadata_backend, keys = keys)
+        self.readonly = True
 
         if recursive: 
             for k in self.keys():
                 if self.metadata[k]['dumper'] == 'just_create_mdb':
-                    self[k].in_memory(recursive = True)
+                    m = self[k]
+                    m.in_memory(recursive = True)
+                    self._sql_backend._db[k] = m
 
     def _register_this_database(self):
         print 'registering database with unique_id {} to the absolute path {}'.format(
@@ -692,7 +694,14 @@ class ModelDataBase(object):
         return ModelDataBase(self.basedir, forceload = False, readonly = True, nocreate = True, forcecreate = False)
 
     def __reduce__(self):
-        return (self.__class__, (self.basedir, self.forceload, self.readonly, True))
+        if isinstance(self._sql_backend, InMemoryBackend):
+            self._sql_metadata_backend
+            dict_ = {'_sql_backend':self._sql_backend, 
+                     '_sql_metadata_backend': self._sql_metadata_backend, 
+                     'metadata': self.metadata}
+            return (self.__class__, (self.basedir, self.forceload, self.readonly, True), dict_)
+        else:
+            return (self.__class__, (self.basedir, self.forceload, self.readonly, True), {})
     
 class RegisteredFolder(ModelDataBase):
     def __init__(self, path):
