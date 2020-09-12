@@ -78,7 +78,7 @@ def get_mymap(mdb_setup, mdb_run, c):
         futures = c.map(objective_fun, params_list)
         try:
                 features_dicts = c.gather(futures)
-        except I.distributed.client.CancelledError:
+        except (I.distributed.client.CancelledError, I.distributed.scheduler.KilledWorker):
             print 'Futures have been canceled. Waiting for 3 Minutes, then reschedule.'
             del futures
             time.sleep(3*60)

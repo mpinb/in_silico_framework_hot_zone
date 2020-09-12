@@ -861,7 +861,8 @@ class CellParser(object):
         print("Creating dendritic spines:")
         print("    spine neck length: {}".format(spineneckLength))
         print("    spine neck diameter: {}".format(spineneckDiam))
-        print("    spine head length and diameter: {}".format(spineheadDiam))
+        print("    spine head length: {}".format(spineheadLength))
+        print("    spine head diameter: {}".format(spineheadDiam))
        
         excitatory = ['L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34', 'L6ccinv', 'L5tt', 'Generic']
 

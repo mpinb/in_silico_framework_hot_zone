@@ -1,0 +1,446 @@
+import Interface as I
+import pandas as pd
+import dask
+import matplotlib.pyplot as plt
+from biophysics_fitting.hay_evaluation import objectives_BAC, objectives_step
+from model_data_base.utils import convertible_to_int
+I.sys.path.append('/axon/scratch/abast/project_src/SpikeAnalysis/')
+
+def disable_locking_BE_CAREFUL(client):
+    '''Disables locking of model data bases on the client and locally.
+    Use to speed up loading data, but only if you can guarantee that there will not be any write access to any database!'''
+    client.restart()
+    def fun():
+        import model_data_base.distributed_lock
+        import model_data_base.sqlite_backend.sqlite_backend
+        import redis
+        model_data_base.distributed_lock.redis = redis
+        model_data_base.sqlite_backend.sqlite_backend.locking = False
+    client.run(fun)
+    fun()
+
+def get_seeds(mdb, max_generations = None):
+    '''Returns seeds used for running simulations'''
+    seeds = [k for k in mdb.keys() if convertible_to_int(k)]
+    if max_generations is not None:
+        return sorted([s for s in seeds if len(get_generations(mdb[s])) and max(get_generations(mdb[s])) == max_generations])
+    else:
+        return sorted([s for s in seeds if len(get_generations(mdb[s]))])
+
+def get_generations(mdb):
+    '''Returns generations stored in mdb'''
+    return [int(k) for k in mdb.keys() if convertible_to_int(k) and int(k) > 0]
+
+def get_max_objective_from_pdf(pdf, objectives):
+    return pdf[objectives].max(axis = 1).min()
+
+def augment_model_id(pdf, mdb_id, seed, gen):
+        pdf['model_id'] = '_'.join([mdb_id, str(seed), str(gen)])
+        pdf['model_id'] = pdf['model_id'] + '_' + pd.Series(pdf.index).astype('str')
+        return pdf
+
+def augment_pdf(pdf, mdb_id, type_, morphology, seed, lv, gen, 
+                additional_columns = [('scale_apical.scale', 'f4'), 
+                                      ('ephys.SKv3_1.apic.offset', 'f4'), 
+                                      ('ephys.SKv3_1.apic.slope', 'f4'),
+                                      ('hot_zone.outsidescale_sections', 'object')],
+                objectives = objectives_BAC+objectives_step, append = {}):
+    '''type_: identifier of the optimization, e.g. name of optimization project like CDK_remaining_morphologies_step
+    morphology: identifier for the morphology
+    seed: seed
+    lv: enumerator of the seeds
+    gen: generation
+    additional_columns: if heterogenous dataframes are expected, additional columns can be specified, which will be filled with NaN if the don't exist.
+    Returns: dataframe, augmented with the respective columns'''
+    pdf = augment_model_id(pdf, mdb_id, seed, gen)
+    pdf['type_'] = type_
+    pdf['morphology'] = morphology
+    pdf['lv'] = lv
+    pdf['seed'] = seed
+    pdf['max_'] = pdf[objectives].max(axis = 1)
+    pdf['gen'] = gen
+    for k, dtype in additional_columns:
+        if not k in pdf.columns:
+            pdf[k] = float('nan')
+            pdf[k] = pdf[k].astype(dtype)
+    for k in append.keys():
+        try:
+            len(append[k])
+            pdf[k] = [append[k]] * len(pdf)
+        except TypeError:
+            pdf[k] = append[k]
+    return pdf
+
+@dask.delayed
+def _helper(m, seed, lv, gen, type_, morphology, 
+            additional_columns = [('scale_apical.scale', 'f4'), 
+                                      ('ephys.SKv3_1.apic.offset', 'f4'), 
+                                      ('ephys.SKv3_1.apic.slope', 'f4'),
+                                      ('hot_zone.outsidescale_sections', 'object')],
+            append = {},
+            objectives = objectives_BAC+objectives_step):
+    pdf = m[str(seed)][str(gen)]
+    return augment_pdf(pdf, m.get_id(), type_, str(morphology), str(seed), lv, str(gen), additional_columns = additional_columns, append = append,
+                       objectives = objectives)
+
+def get_model_ddf_from_mdb(m, type_ = 'unspecified', morphology = 'unspecified', return_delayeds = False, add_fixed_params = True,
+                           objectives = objectives_BAC + objectives_step):
+    delayeds = []
+    if add_fixed_params:
+        fixed_params = m['get_fixed_params'](m)
+    else:
+        fixed_params = {}
+    for lv, seed in enumerate(get_seeds(m)):
+        for gen in get_generations(m[seed]):
+            delayeds.append(_helper(m, seed, lv, gen, type_, morphology, append = fixed_params, objectives = objectives))
+    if return_delayeds:
+        return delayeds
+    else:
+        return dask.dataframe.from_delayed(delayeds)
+    
+def get_model_ddf_from_encapsulating_mdb(mdbs, type_ = 'unspecified', add_fixed_params = True, objectives = objectives_BAC + objectives_step, return_delayeds = False):
+    delayeds = []
+    for morphology in mdbs.keys():
+        m = mdbs[morphology]
+        delayeds.extend(get_model_ddf_from_mdb(m, morphology = morphology, return_delayeds = True, add_fixed_params = add_fixed_params,
+                                               objectives = objectives))
+    if return_delayeds:
+        return delayeds
+    else:
+        return dask.dataframe.from_delayed(delayeds)
+
+def get_ddf_selected(ddf, BAC_limit = 3.5, step_limit = 4.5,
+                     objectives_BAC = objectives_BAC,
+                     objectives_step = objectives_step,
+                     compute_and_sort = False):
+    
+    objectives = objectives_BAC + objectives_step
+    ddf['sort_column'] = ddf[objectives].max(axis = 1)
+    if len(objectives_step) == 0:
+        ddf = ddf[ddf[objectives_BAC].max(axis = 1) < BAC_limit]
+    else:
+        ddf = ddf[(ddf[objectives_step].max(axis = 1) < step_limit) & (ddf[objectives_BAC].max(axis = 1) < BAC_limit)]
+    return ddf
+
+##########
+# params plot
+
+params_order = ['ephys.NaTa_t.soma.gNaTa_tbar',
+'ephys.Nap_Et2.soma.gNap_Et2bar',
+'ephys.K_Pst.soma.gK_Pstbar',
+'ephys.K_Tst.soma.gK_Tstbar',
+'ephys.SK_E2.soma.gSK_E2bar',
+'ephys.SKv3_1.soma.gSKv3_1bar',
+'ephys.Ca_HVA.soma.gCa_HVAbar',
+'ephys.Ca_LVAst.soma.gCa_LVAstbar',
+'ephys.CaDynamics_E2.soma.gamma',
+'ephys.CaDynamics_E2.soma.decay',
+'ephys.none.soma.g_pas',
+'ephys.none.axon.g_pas',
+'ephys.none.dend.g_pas',
+'ephys.none.apic.g_pas',
+'ephys.NaTa_t.axon.gNaTa_tbar',
+'ephys.Nap_Et2.axon.gNap_Et2bar',
+'ephys.K_Pst.axon.gK_Pstbar',
+'ephys.K_Tst.axon.gK_Tstbar',
+'ephys.SK_E2.axon.gSK_E2bar',
+'ephys.SKv3_1.axon.gSKv3_1bar',
+'ephys.Ca_HVA.axon.gCa_HVAbar',
+'ephys.Ca_LVAst.axon.gCa_LVAstbar',
+'ephys.CaDynamics_E2.axon.gamma',
+'ephys.CaDynamics_E2.axon.decay',
+'ephys.Im.apic.gImbar',
+'ephys.NaTa_t.apic.gNaTa_tbar',
+'ephys.SKv3_1.apic.gSKv3_1bar',
+'ephys.Ca_HVA.apic.gCa_HVAbar',
+'ephys.Ca_LVAst.apic.gCa_LVAstbar',
+'ephys.SK_E2.apic.gSK_E2bar',
+'ephys.CaDynamics_E2.apic.gamma',
+'ephys.CaDynamics_E2.apic.decay',
+'ephys.SKv3_1.apic.offset',
+'ephys.SKv3_1.apic.slope',
+'scale_apical.scale']
+
+params_name_mapping = {
+'ephys.NaTa_t.soma.gNaTa_tbar':'s.Na_t',
+'ephys.Nap_Et2.soma.gNap_Et2bar':'s.Na_p',
+'ephys.K_Pst.soma.gK_Pstbar':'s.K_p',
+'ephys.K_Tst.soma.gK_Tstbar':'s.K_t',
+'ephys.SK_E2.soma.gSK_E2bar':'s.SK',
+'ephys.SKv3_1.soma.gSKv3_1bar':'s.Kv_3.1',
+'ephys.Ca_HVA.soma.gCa_HVAbar':'s.Ca_H',
+'ephys.Ca_LVAst.soma.gCa_LVAstbar':'s.Ca_L',
+'ephys.CaDynamics_E2.soma.gamma':'s.Y',
+'ephys.CaDynamics_E2.soma.decay':'s.T_decay',
+
+'ephys.none.soma.g_pas':'s.leak',
+'ephys.none.axon.g_pas':'ax.leak',
+'ephys.none.dend.g_pas':'b.leak',
+'ephys.none.apic.g_pas':'a.leak',
+
+'ephys.NaTa_t.axon.gNaTa_tbar':'ax.Na_t',
+'ephys.Nap_Et2.axon.gNap_Et2bar':'ax.Na_p',
+'ephys.K_Pst.axon.gK_Pstbar':'ax.K_p',
+'ephys.K_Tst.axon.gK_Tstbar':'ax.K_t',
+'ephys.SK_E2.axon.gSK_E2bar':'ax.SK',
+'ephys.SKv3_1.axon.gSKv3_1bar':'ax.Kv_3.1',
+'ephys.Ca_HVA.axon.gCa_HVAbar':'ax.Ca_H',
+'ephys.Ca_LVAst.axon.gCa_LVAstbar':'ax.Ca_L',
+'ephys.CaDynamics_E2.axon.gamma':'ax.Y',
+'ephys.CaDynamics_E2.axon.decay':'ax.T_decay',
+
+'ephys.Im.apic.gImbar':'a.I_m',
+'ephys.NaTa_t.apic.gNaTa_tbar':'a.Na_t',
+'ephys.SKv3_1.apic.gSKv3_1bar':'a.Kv_3.1',
+'ephys.Ca_HVA.apic.gCa_HVAbar':'a.Ca_H',
+'ephys.Ca_LVAst.apic.gCa_LVAstbar':'a.Ca_L',
+'ephys.SK_E2.apic.gSK_E2bar':'a.SK',
+'ephys.CaDynamics_E2.apic.gamma':'a.Y',
+'ephys.CaDynamics_E2.apic.decay':'a.T_decay',
+
+'ephys.SKv3_1.apic.offset':'a.Kv_3.1_offset',
+'ephys.SKv3_1.apic.slope':'a.Kv_3.1_slope',
+'scale_apical.scale': 'a.scale'
+}
+
+
+def get_param_boundaries():
+    from biophysics_fitting.hay_complete_default_setup import get_hay_params_pdf
+    pdf = get_hay_params_pdf()
+    pdf = pdf.append(pd.DataFrame({'SKv3_1.apic.offset': {'min': 0, 'max': 1}, 
+                                     'SKv3_1.apic.slope': {'min': -3, 'max': 0}}).T)
+    pdf.index = pdf.index.map(lambda x: 'ephys.' + x)
+    pdf = pdf.append(pd.DataFrame({'scale_apical.scale': {'min': 0, 'max': 3}}).T)
+    return pdf
+
+def normalize_params(params_df, normalize_range = True, normalize_naming = True, params_order = params_order, params_name_mapping = params_name_mapping):
+    boundaries = get_param_boundaries()
+    params_df = params_df[boundaries.index]
+    if normalize_range:
+        params_df = params_df.apply(lambda x: (x-boundaries.loc[x.name]['min'])/(boundaries.loc[x.name]['max'] - boundaries.loc[x.name]['min']))
+    
+    params_df = params_df[params_order]
+    
+    if normalize_naming:
+        params_df.columns = params_df.columns.map(lambda x: params_name_mapping[x])
+    return params_df
+
+def min_max_plot(pdf, ax = None, color_marker_map = None, plot_individual_ticks = True):
+    color = dict(boxes='black', whiskers='black', medians='white', caps='black')
+    if ax is None:
+        fig = plt.figure(figsize = (10,4), dpi = 200)
+        ax = fig.add_subplot(111)
+    for lv, c in enumerate(pdf.columns):
+        s = pdf[c]
+        d = .2
+        plt.plot([lv,lv],[s.min(), s.max()], c = 'k')
+        if plot_individual_ticks:
+            for i, x in s.iteritems():
+                if color_marker_map is None:
+                    color = 'k'
+                    marker = '_'
+                else:
+                    color, marker = color_marker_map[i]
+                if marker is not None:
+                    ax.scatter(lv, x, c = color, marker = marker, zorder = 10)
+    ax.set_xticks(range(len(pdf.columns)))
+    _ = ax.set_xticklabels(pdf.columns, rotation=90)
+
+########
+# radii plot
+########
+from project_specific_ipynb_code.hot_zone import get_cell_object_from_hoc, Dendrogram
+
+def radii_plot(cell, ax = None):
+    if ax is None:
+        fig = I.plt.figure(figsize = (15,3))
+        ax = fig.add_subplot(111)
+    d = Dendrogram(cell)
+    for sec in cell.sections:
+        s_ = d.get_db_by_sec(sec)
+        xs = I.np.array(sec.relPts) * sec.L + s_['x_dist_start']
+        ys = sec.diamList
+        if sec.label == 'Dendrite':
+            c = 'k'
+        elif sec.label == 'ApicalDendrite':
+            c = 'r'
+        else:
+            c = 'grey'
+        I.plt.plot(xs, ys, c = c,  linewidth = .5)
+        
+###########
+# refractory period
+###########
+import spike_analysis.core
+
+def plot_vt(voltage_traces, key = 'BAC.hay_measure'):
+    I.plt.figure()
+    I.plt.plot(voltage_traces[key]['tVec'], voltage_traces[key]['vList'][0], c = 'k')
+    try:
+        I.plt.plot(voltage_traces[key]['tVec'], voltage_traces[key]['vList'][1], c = 'r')
+    except IndexError:
+        pass
+    I.display.display(I.plt.gcf())
+    I.plt.close()
+
+@I.cache
+def _helper_get_simulator(m):
+    from copy import deepcopy
+    return deepcopy(m['get_Simulator'](m))
+
+def get_refractory_period_simrun(m, params, delay = None, soma_or_apical = 'soma'):
+    simulator = _helper_get_simulator(m)
+    simulator.setup.stim_setup_funs = [x for x in simulator.setup.stim_setup_funs if 'BAC' in x[0]]
+    simulator.setup.stim_run_funs = [x for x in simulator.setup.stim_run_funs if 'BAC' in x[0]]
+    simulator.setup.stim_response_measure_funs = [x for x in simulator.setup.stim_response_measure_funs if 'BAC' in x[0]]
+    params_selected = params.copy()
+    params_selected['BAC.stim.delay'] = [295, 295+delay]
+    params_selected['BAC.run.tStop'] = 295+delay+400
+    with I.silence_stdout:
+        voltage_traces = simulator.run(params_selected)
+    if soma_or_apical == 'soma':
+        t, v = voltage_traces['BAC.hay_measure']['tVec'], voltage_traces['BAC.hay_measure']['vList'][0]
+        n = len(I.sca.simple_spike_detection(t,v))
+        
+    elif soma_or_apical == 'apical':
+        t, v = voltage_traces['BAC.hay_measure']['tVec'], voltage_traces['BAC.hay_measure']['vList'][0]
+        spike_times = I.sca.simple_spike_detection(t,v, threshold=-20)
+        spike_times = spike_analysis.core.filter_short_ISIs(spike_times, 35)
+        n = len(spike_times)
+        
+        #t, v = voltage_traces['BAC.hay_measure']['tVec'], voltage_traces['BAC.hay_measure']['vList'][1]
+        #reader = spike_analysis.core.ReaderDummy(t,v)
+        #sdct = spike_analysis.core.SpikeDetectionCreastTrough(reader, lim_creast = -20., lim_trough = -60., 
+        #                                       max_creast_trough_interval = 50., tdelta = 10.)
+        #sdct.run_analysis()
+        #n = len(sdct.spike_times)
+        
+    return voltage_traces, n
+
+
+def get_refractory_period(m, params, soma_or_apical = 'soma', delay = 2000, n_threashold = 6, accuracy = 1, verbose = False):
+    _run_helper = I.partial(get_refractory_period_simrun, m, params, soma_or_apical = soma_or_apical)
+    vt, n = _run_helper(delay = delay)
+    if not n >= n_threashold:
+        return -1
+    delay_upper = delay
+    delay_lower = 0
+    while delay_upper - delay_lower >= accuracy:
+        current_delay = (delay_upper + delay_lower ) / 2.
+        if verbose:
+            print 'checking for delay ', current_delay
+        vt, n = _run_helper(delay = current_delay)
+        if n >= n_threashold:
+            delay_upper = current_delay
+            if verbose:
+                print 'reducing upper delay to ', delay_upper
+        else:
+            delay_lower = current_delay
+            if verbose:
+                print 'increasing lower delay to ', delay_lower
+    return delay_lower, delay_upper, delay_lower * 0.5 + delay_upper * 0.5
+            
+    
+def get_refractory_period_analysis(m, params):
+    return {'2_Ca_spikes': get_refractory_period(m, params, soma_or_apical='apical', n_threashold = 2),
+            '6_Na_spikes': get_refractory_period(m, params, soma_or_apical='soma', n_threashold = 6),
+            '5_Na_spikes': get_refractory_period(m, params, soma_or_apical='soma', n_threashold=5),
+            '4_Na_spikes': get_refractory_period(m, params, soma_or_apical='soma', n_threashold=4)}
+
+####################################
+# current analysis
+####################################
+
+I.sys.path.append('/axon/scratch/abast/project_src/SpikeAnalysis/')
+import project_specific_ipynb_code.hot_zone
+
+rangeVarsApical = ['NaTa_t.ina', 'Ca_HVA.ica', 'Ca_LVAst.ica', 'SKv3_1.ik', 'SK_E2.ik', 'Ih.ihcn', 'Im.ik']
+rangeVarsAllChannels = rangeVarsApical + ['Nap_Et2.ina', 'K_Pst.ik', 'K_Tst.ik']
+
+def get_cell(s, p, pdf_best_run_selected = None, range_vars = rangeVarsApical + ['Nap_Et2.ina', 'K_Pst.ik', 'K_Tst.ik']):
+    with I.silence_stdout:
+        cell, p = s.get_simulated_cell(p[params_list], 'BAC')
+    if range_vars:
+        for rv in rangeVarsApical + ['Nap_Et2.ina', 'K_Pst.ik', 'K_Tst.ik']:
+            cell.record_range_var(rv)
+        I.scp.init_neuron_run(I.scp.NTParameterSet({'tStop': 600, 'dt': 0.025, 'T': 34, 'Vinit': -75}), vardt = True)
+    return cell
+
+
+class CurrentAnalysis:
+    def __init__(self, cell, secID = 'bifurcation', segID = -1, rangeVars = None, colormap = None):
+        # set attributes
+        self.cell = cell
+        self.t = cell.tVec
+        if secID == 'bifurcation':
+            sec = project_specific_ipynb_code.hot_zone.get_main_bifurcation_section(cell)
+        else:
+            sec = cell.sections[secID]
+        self.sec = sec
+        self.secID = cell.sections.index(sec)
+        self.segID = segID
+        self.seg = [seg for seg in sec][segID]
+        if rangeVars is None:
+            self.rangeVars = cell.soma.recordVars.keys()
+        else:
+            self.rangeVars = rangeVars
+        self.colormap = colormap
+        
+        # compute currents
+        self._compute_current_arrays()
+
+    
+    def _compute_current_arrays(self):
+        out_depolarizing = []
+        out_hyperpolarizing = []
+        for rv in self.rangeVars:
+            try:
+                x = I.np.array(self.sec.recordVars[rv][-1])
+            except IndexError: # if the mechanism is not present in the current segment
+                x = I.np.array([float('nan')] * len(self.cell.tVec))
+            out_depolarizing.append(I.np.where(x>=0, 0, x))
+            out_hyperpolarizing.append(I.np.where(x<0, 0, x))
+        self.depolarizing_currents = I.np.array(out_depolarizing) * -1
+        self.hyperpolarizing_currents = I.np.array(out_hyperpolarizing) * -1
+        self.depolarizing_currents_sum = self.depolarizing_currents.sum(axis = 0)
+        self.hyperpolarizing_currents_sum = self.hyperpolarizing_currents.sum(axis = 0)
+        self.net_current = self.depolarizing_currents_sum + self.hyperpolarizing_currents_sum
+        self.depolarizing_currents_normalized = self.depolarizing_currents / self.depolarizing_currents_sum
+        self.hyperpolarizing_currents_normalized = self.hyperpolarizing_currents / self.hyperpolarizing_currents_sum * -1
+        self.voltage_trace = self.sec.recVList[self.segID]
+        
+    def plot_areas(self, ax = None, normalized = False, plot_net = False, plot_voltage=False):
+        t = self.t
+        if ax is None:
+            fig = I.plt.figure(figsize = (10,4), dpi = 200)
+            ax = fig.add_subplot(111)
+        def __helper(currents, plot_label = True):
+            dummy = I.np.cumsum(currents, axis = 0)
+            dummy = I.np.vstack([I.np.zeros(dummy.shape[1]), dummy])
+            for lv, rv in enumerate(self.rangeVars):
+                ax.fill_between(t,dummy[lv,:], dummy[lv+1,:], 
+                                label = rv if plot_label else None,
+                                color = self.colormap[rv],
+                                linewidth = 0)
+        
+        if normalized:
+            __helper(self.depolarizing_currents_normalized)
+            __helper(self.hyperpolarizing_currents_normalized, False)
+            ax.plot(t, self.depolarizing_currents_sum+1, c = 'k')
+            ax.plot(t, self.hyperpolarizing_currents_sum-1, c = 'k')
+
+        else:
+            __helper(self.depolarizing_currents)
+            __helper(self.hyperpolarizing_currents, False)
+        if plot_net:
+            ax.plot(t, self.net_current, 'k', label = 'net current')
+        if plot_voltage:
+            ax2 = ax.twinx()
+            ax2.plot(t, self.voltage_trace, 'k')
+            
+    def plot_lines(self, ax = None, legend = True):
+        if ax is None: 
+            fig = I.plt.figure(figsize = (15,6)) 
+            ax = fig.add_subplot(111)  
+        for lv, name in enumerate(self.rangeVars):
+            ax.plot(self.t, I.np.array(self.sec.recordVars[name][self.segID])*-1, label = name)

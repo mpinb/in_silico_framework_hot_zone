@@ -152,34 +152,55 @@ def compute_syn_distances_2Dprojected(cell, synType, label=None):
         currentSec = cell.sections[syn.secID]
         if label is not None and currentSec.label != label:
             continue
-        
         synLoc = syn.coordinates
         diff = synLoc - somaLoc
         dist = np.sqrt(np.dot(diff[:2], diff[:2]))
         distances.append(dist)
-    
     return np.array(distances)
 
-def compute_syn_distance(cell, syn): ## same as Robert's method but can get one synapse at a time
-    currentSec = cell.sections[syn.secID]
+def get_dist(x1, x2):
+    assert(len(x1) == len(x2))
+    return I.np.sqrt(sum((xx1-xx2)**2 for xx1, xx2 in zip(x1, x2)))
 
+def compute_distance_to_soma(sec, x, cell = None, consider_gap_to_soma = False):
+    '''Computes the distance from a point specified by section and sectionx to the soma.
+
+    sec: section of cell, either a PySection object or an int
+    x: float, relative point on section, from 0 to 1
+    cell: single_cell_parser Cell object, optional (only required if sec is given as an int)
+    consider_gap_to_soma: boolean, optional. Accounts for the fact that dendrites don't actually touch the soma.
+
+    '''    
+
+    if isinstance(sec, int) and cell is not None:
+        sec = cell.sections[sec]
+    elif isinstance(sec, int) and cell is None:
+        errStr = 'If sec is specified as an integer, a cell object must be given. Otherwise, specify sec as a PySection object.'
+        raise ValueError(errStr)
+    currentSec = sec
     if currentSec.label == 'Soma':
         dist = 0.0
-
     else:
         parentSec = currentSec.parent
-        '''compute distance from synapse location to parent branch first'''
+        
         dist = 0.0
-        dist = syn.x*currentSec.L
+        dist = x*currentSec.L
         parentLabel = parentSec.label
         while parentLabel != 'Soma':
-            dist += parentSec.L
+            dist += parentSec.L * currentSec.parentx
             currentSec = parentSec
             parentSec = currentSec.parent
             parentLabel = parentSec.label
+        if consider_gap_to_soma:
+            dist += get_dist(currentSec.pts[0], parentSec.pts[-1])
     return dist
 
-def compute_syn_distances(cell, synType, label=None): ## updated to use new method for getting somadistance of one synapse at a time
+def compute_syn_distance(cell, syn, consider_gap_to_soma = False): ## same as Robert's method but can get one synapse at a time
+    currentSec = cell.sections[syn.secID]
+    x = syn.x
+    return compute_distance_to_soma(currentSec, x, consider_gap_to_soma = consider_gap_to_soma)
+
+def compute_syn_distances(cell, synType, label=None, consider_gap_to_soma = False): ## updated to use new method for getting somadistance of one synapse at a time
     '''
      computes distances of all synapses on dendrite w.r.t. soma
     
@@ -197,11 +218,11 @@ def compute_syn_distances(cell, synType, label=None): ## updated to use new meth
         currentSec = cell.sections[syn.secID]
         if label is not None and currentSec.label != label:
             continue
-        
+
         if currentSec.label == 'Soma':
             dist = 0.0
             distances.append(dist)
             continue
-            
-        distances.append(compute_syn_distance(cell, syn))
+
+        distances.append(compute_syn_distance(cell, syn, consider_gap_to_soma))
     return np.array(distances)
