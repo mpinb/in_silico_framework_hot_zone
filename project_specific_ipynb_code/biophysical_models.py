@@ -289,7 +289,12 @@ def _helper_get_simulator(m):
     return deepcopy(m['get_Simulator'](m))
 
 def get_refractory_period_simrun(m, params, delay = None, soma_or_apical = 'soma'):
-    simulator = _helper_get_simulator(m)
+    try:
+        m.basedir
+    except: 
+        simulator = m
+    else:
+        simulator = _helper_get_simulator(m)
     simulator.setup.stim_setup_funs = [x for x in simulator.setup.stim_setup_funs if 'BAC' in x[0]]
     simulator.setup.stim_run_funs = [x for x in simulator.setup.stim_run_funs if 'BAC' in x[0]]
     simulator.setup.stim_response_measure_funs = [x for x in simulator.setup.stim_response_measure_funs if 'BAC' in x[0]]
@@ -303,7 +308,7 @@ def get_refractory_period_simrun(m, params, delay = None, soma_or_apical = 'soma
         n = len(I.sca.simple_spike_detection(t,v))
         
     elif soma_or_apical == 'apical':
-        t, v = voltage_traces['BAC.hay_measure']['tVec'], voltage_traces['BAC.hay_measure']['vList'][0]
+        t, v = voltage_traces['BAC.hay_measure']['tVec'], voltage_traces['BAC.hay_measure']['vList'][1]
         spike_times = I.sca.simple_spike_detection(t,v, threshold=-20)
         spike_times = spike_analysis.core.filter_short_ISIs(spike_times, 35)
         n = len(spike_times)
@@ -318,7 +323,7 @@ def get_refractory_period_simrun(m, params, delay = None, soma_or_apical = 'soma
     return voltage_traces, n
 
 
-def get_refractory_period(m, params, soma_or_apical = 'soma', delay = 2000, n_threashold = 6, accuracy = 1, verbose = False):
+def get_refractory_period(m, params, soma_or_apical = 'soma', delay = 2000, n_threashold = 6, accuracy = 10, verbose = False):
     _run_helper = I.partial(get_refractory_period_simrun, m, params, soma_or_apical = soma_or_apical)
     vt, n = _run_helper(delay = delay)
     if not n >= n_threashold:
@@ -341,11 +346,11 @@ def get_refractory_period(m, params, soma_or_apical = 'soma', delay = 2000, n_th
     return delay_lower, delay_upper, delay_lower * 0.5 + delay_upper * 0.5
             
     
-def get_refractory_period_analysis(m, params):
-    return {'2_Ca_spikes': get_refractory_period(m, params, soma_or_apical='apical', n_threashold = 2),
-            '6_Na_spikes': get_refractory_period(m, params, soma_or_apical='soma', n_threashold = 6),
-            '5_Na_spikes': get_refractory_period(m, params, soma_or_apical='soma', n_threashold=5),
-            '4_Na_spikes': get_refractory_period(m, params, soma_or_apical='soma', n_threashold=4)}
+def get_refractory_period_analysis(m, params, accuracy = 10):
+    return {'2_Ca_spikes': get_refractory_period(m, params, soma_or_apical='apical', n_threashold = 2, accuracy=accuracy),
+            '6_Na_spikes': get_refractory_period(m, params, soma_or_apical='soma', n_threashold = 6, accuracy=accuracy),
+            '5_Na_spikes': get_refractory_period(m, params, soma_or_apical='soma', n_threashold=5, accuracy=accuracy),
+            '4_Na_spikes': get_refractory_period(m, params, soma_or_apical='soma', n_threashold=4, accuracy=accuracy)}
 
 ####################################
 # current analysis
@@ -444,3 +449,93 @@ class CurrentAnalysis:
             ax = fig.add_subplot(111)  
         for lv, name in enumerate(self.rangeVars):
             ax.plot(self.t, I.np.array(self.sec.recordVars[name][self.segID])*-1, label = name)
+            
+######################################
+# change simulator to additionally report apical dendrite currents
+######################################
+from biophysics_fitting.utils import _get_apical_sec_and_i_at_distance
+
+def _init_range_var_recording_in_segment(seg, var_list, mech=None):
+    import neuron
+    out = {}
+    for var in var_list:
+        if '.' in var:
+            mech, var_ = var.split('.')
+            hRef = eval('seg.'+mech+'._ref_'+var_)
+        else:
+            mech = None
+            hRef = eval('seg._ref_'+var)
+        vec = neuron.h.Vector()
+        vec.record(hRef)
+        out[var] = vec
+    return out
+
+def fun_setup_current_recording(cell, params = None):
+    distance = params['distances']
+    seg_soma = [seg for seg in cell.soma][0]
+    seg_AIS = [sec for sec in cell.sections if sec.label == 'AIS'][0]
+    seg_AIS = [seg for seg in seg_AIS][0]
+    segs = [seg_AIS, seg_soma]
+    for d in distance:
+        if I.utils.convertible_to_int(d):
+            sec, mindx, minSeg = _get_apical_sec_and_i_at_distance(cell,d)
+            seg = [seg for seg in sec][minSeg]
+        elif d == 'bifurcation':
+            sec = project_specific_ipynb_code.hot_zone.get_main_bifurcation_section(cell)
+            seg = [seg for seg in sec][-1]
+        segs.append(seg)
+    distance = ['Soma', 'AIS'] + list(distance)
+    range_vars = ['NaTa_t.ina','Ca_LVAst.ica','Ca_HVA.ica','Ih.ihcn','Im.ik','SKv3_1.ik','SK_E2.ik']
+    constants = ['NaTa_t.gNaTa_tbar','Ca_LVAst.gCa_LVAstbar','Ca_HVA.gCa_HVAbar','Ih.gIhbar','Im.gImbar','SKv3_1.gSKv3_1bar','SK_E2.gSK_E2bar']
+    range_vars_soma = ['Nap_Et2.ina','K_Pst.ik','K_Tst.ik'] + ['NaTa_t.ina','Ca_LVAst.ica','Ca_HVA.ica','Ih.ihcn','SKv3_1.ik','SK_E2.ik']
+    constants_soma = ['Nap_Et2.gNap_Et2bar','K_Pst.gK_Pstbar','K_Tst.gK_Tstbar'] + ['NaTa_t.gNaTa_tbar','Ca_LVAst.gCa_LVAstbar','Ca_HVA.gCa_HVAbar','Ih.gIhbar','SKv3_1.gSKv3_1bar','SK_E2.gSK_E2bar']
+    cell.range_vars_dict = {}
+    assert(len(distance) == len(segs))
+    for d, seg in zip(distance, segs):
+        if not d in ('Soma', 'AIS'):
+            range_vars_dict = _init_range_var_recording_in_segment(seg, range_vars)
+            dict_ = {}
+            for c in constants: # dict comprehension does not work as eval doesn't know the seg reference then
+                dict_[c] = eval('seg.'+c)
+            range_vars_dict['constants'] = dict_
+        else:
+            range_vars_dict = _init_range_var_recording_in_segment(seg, range_vars_soma)
+            dict_ = {}
+            for c in constants_soma: # dict comprehension does not work as eval doesn't know the seg reference then
+                dict_[c] = eval('seg.'+c)
+            range_vars_dict['constants'] = dict_        
+        cell.range_vars_dict[d] = range_vars_dict
+    return cell
+
+def _param_modify_function_put_recording_sites_for_range_var_recording(params):
+    if not I.utils.convertible_to_int(params['bAP.hay_measure.recSite1']):
+        raise
+    distances = [float(params['bAP.hay_measure.recSite1']), float(params['bAP.hay_measure.recSite2']), 'bifurcation']
+    params['record_range_vars.distances'] = distances 
+    return params
+
+def return_recorded_range_vars(cell, params = None):
+    return {kk: {k:I.np.array(v) for k, v in range_vars_dict.iteritems()} for kk, range_vars_dict in cell.range_vars_dict.iteritems()}
+
+def modify_simulator_to_record_apical_dendrite_conductances(simulator):
+    s = simulator
+    if not 'range_vars_params' in [k[0] for k in s.setup.params_modify_funs]:
+        s.setup.params_modify_funs.append(['range_vars_params', 
+                                           _param_modify_function_put_recording_sites_for_range_var_recording])
+        s.setup.cell_modify_funs.append(['record_range_vars', fun_setup_current_recording])
+        keys = [k[0] for k in s.setup.stim_response_measure_funs]
+        for k in keys:
+            print k
+            prefix = k.split('.')[0]
+            s.setup.stim_response_measure_funs.append([prefix + '.range_vars', return_recorded_range_vars])
+    return s
+
+def modify_simulator_to_not_run_step(simulator):
+    def delete_step_stuff_from_list(l):
+        return [k for k in l if not 'step' in k[0].lower()]
+
+    s = simulator
+    s.setup.stim_response_measure_funs = delete_step_stuff_from_list(s.setup.stim_response_measure_funs)
+    s.setup.stim_run_funs = delete_step_stuff_from_list(s.setup.stim_run_funs)
+    s.setup.stim_setup_funs = delete_step_stuff_from_list(s.setup.stim_setup_funs)
+    return s
