@@ -48,4 +48,8 @@ def param_selector(params, s):
         raise ValueError()
 
 def set_fixed_params(params, fixed_params = None):
-    return params.append(fixed_params)
+    for k, v in fixed_params.iteritems():
+        if not k in params.index:
+            params[k] = v
+    return params
+    # return params.append(fixed_params)
