@@ -46,8 +46,8 @@ class Simulator_Setup:
         names2 = [x[0] for x in list2]
                  
         # prefix
-        prefix1 = [x.split('.')[0] for x in names1]
-        prefix2 = [x.split('.')[0] for x in names2]
+        prefix1 = list({x.split('.')[0] for x in names1})
+        prefix2 = list({x.split('.')[0] for x in names2})
         
         assert(tuple(sorted(prefix1)) == tuple(sorted(prefix2)))
         
@@ -66,7 +66,7 @@ class Simulator_Setup:
     
     def get_stim_response_measure_fun(self, stim):
         l = [x for x in self.stim_response_measure_funs if x[0].split('.')[0] == stim]
-        return l[0]     
+        return l # [0]     
     
     def get_params(self, params):
         '''returns cell parameters that have been modified by the params_modify_funs.'''
@@ -317,12 +317,13 @@ s.setup.stim_setup_funs.append(BAC.stim_setup, params_to_kwargs(examplary_stim_s
         for stim in self.setup.get_stims(): # , fun in self.setup.stim_setup_funs:
             cell, params = self.get_simulated_cell(params, stim)
             # extract result
-            name, fun = self.setup.get_stim_response_measure_fun(stim)
-            #print name, param_selector(params, name)
-            #print params
-            result = fun(cell, params = param_selector(params, name))
+            for name, fun in self.setup.get_stim_response_measure_fun(stim):
+                #print name, param_selector(params, name)
+                #print params
+                result = fun(cell, params = param_selector(params, name))
+                out.update({name: result})
             del cell            
-            out.update({name: result})
+
         return out
 
 

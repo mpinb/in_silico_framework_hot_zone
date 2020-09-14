@@ -49,6 +49,9 @@ def tVec(cell):
 def vmSoma(cell):
     return np.array(cell.soma.recVList[0])
 
+def vmMax(cell):
+    return np.max([np.max(np.array(sec.recVList), axis = 0) for sec in cell.sections], axis = 0)
+
 def _get_apical_sec_and_i_at_distance(cell, dist):
     sec, target_x = get_inner_section_at_distance(cell, dist)
     # roberts code to get closest segment
@@ -68,6 +71,7 @@ def vmApical(cell, dist = None):
 def vmApical_position(cell, dist = None):
     sec, mindx, i = _get_apical_sec_and_i_at_distance(cell, dist)
     target_x = [seg for seg in sec][i].x
-    print 'len sec pts', len(sec.relPts)
     index = np.argmin(np.abs(np.array(sec.relPts) - target_x))
     return sec.pts[index]
+
+
