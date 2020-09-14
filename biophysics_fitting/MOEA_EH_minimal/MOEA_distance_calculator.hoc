@@ -65,7 +65,7 @@ begintemplate DistanceCalculator
         print "use_control ", use_control
 		rep_num = $9
         print "rep_num ", rep_num
-		ftl = $o10
+		ftl = $o10 // feature type list
 
     minspikenum = $12
         print "minspikenum ", minspikenum
