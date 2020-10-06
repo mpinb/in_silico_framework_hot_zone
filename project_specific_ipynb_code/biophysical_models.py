@@ -225,7 +225,7 @@ def normalize_params(params_df, normalize_range = True, normalize_naming = True,
         params_df.columns = params_df.columns.map(lambda x: params_name_mapping[x])
     return params_df
 
-def min_max_plot(pdf, ax = None, color_marker_map = None, plot_individual_ticks = True):
+def min_max_plot(pdf, ax = None, color_marker_map = None, plot_individual_ticks = True, offset = 0, color_of_stick = 'k'):
     color = dict(boxes='black', whiskers='black', medians='white', caps='black')
     if ax is None:
         fig = plt.figure(figsize = (10,4), dpi = 200)
@@ -233,7 +233,7 @@ def min_max_plot(pdf, ax = None, color_marker_map = None, plot_individual_ticks 
     for lv, c in enumerate(pdf.columns):
         s = pdf[c]
         d = .2
-        plt.plot([lv,lv],[s.min(), s.max()], c = 'k')
+        plt.plot([lv+offset,lv+offset],[s.min(), s.max()], c = color_of_stick)
         if plot_individual_ticks:
             for i, x in s.iteritems():
                 if color_marker_map is None:
@@ -267,6 +267,54 @@ def radii_plot(cell, ax = None):
         else:
             c = 'grey'
         I.plt.plot(xs, ys, c = c,  linewidth = .5)
+        
+def plot_cell(cell, ax = None, offset = [0,0,0]):
+    import numpy as np
+    from matplotlib.collections import LineCollection
+    import matplotlib.pyplot as plt
+    cs = []
+    xs = []
+    ys = []
+    diams = []
+    secs = cell.sections
+    for sec in secs:   
+        if sec.label in ('AIS', 'Myelin'):
+            continue
+        # c = [get_closest_seg(sec,x).SKv3_1.gSKv3_1bar for x in sec.relPts]
+        c = [get_closest_seg(sec,x).Ih.gIhbar for x in sec.relPts]
+        diam = [get_closest_seg(sec,x).diam for x in sec.relPts]
+        x, y = [pt[1]-offset[1] for pt in sec.pts], [pt[2]-offset[2] for pt in sec.pts]
+        cs.extend(c)
+        xs.extend(x)
+        ys.extend(y)
+        diams.extend(diam)
+        a.plot(x,y, c = 'k', linewidth = .1)
+        xx = I.np.array(x)
+        yy = I.np.array(y)
+        llwidths = I.np.array(diam)
+        points = I.np.array([xx, yy]).T.reshape(-1, 1, 2)
+        segments = I.np.concatenate([points[:-1], points[1:]], axis=1)
+        lc = LineCollection(segments, linewidths=llwidths[:-1]*0.5,color='k')
+        a.add_collection(lc)
+    I.plt.gca().set_aspect('equal')
+    
+def compute_soma_distance_radius_dict_of_trunk(cell):
+    sec = get_main_bifurcation_section(cell)
+    out_diams = []
+    out_lens = []
+    out_Ls = []
+    while True:
+        out_diams.append(sec.diamList)
+        out_lens.append(I.np.array(sec.relPts)*sec.L)
+        out_Ls.append(sec.L)
+        sec = sec.parent
+        if sec.label == 'Soma':
+            break
+    out_diams, out_lens, out_Ls = out_diams[::-1], out_lens[::-1], out_Ls[::-1]
+    out_Ls = I.np.cumsum([0] + out_Ls[:-1])
+    out_lens_absolute = [l + out_Ls[lv] for lv, llist in enumerate(out_lens) for l in llist]
+    out_diams = [x for x in out_diams for x in x]
+    return out_lens_absolute, out_diams
         
 ###########
 # refractory period
@@ -539,3 +587,25 @@ def modify_simulator_to_not_run_step(simulator):
     s.setup.stim_run_funs = delete_step_stuff_from_list(s.setup.stim_run_funs)
     s.setup.stim_setup_funs = delete_step_stuff_from_list(s.setup.stim_setup_funs)
     return s
+
+######################################
+
+def boxplot(data, x, ax, c = 'k'):
+    ax.boxplot(data, positions = [x], patch_artist = True,
+              boxprops=dict(facecolor=c, color=c),
+              capprops=dict(color=c),
+              whiskerprops=dict(color=c),
+              flierprops=dict(color=c, markeredgecolor=c),
+              medianprops=dict(color='white'),
+              whis = [0,100])
+
+#####################################
+
+def interpolate_voltage_trace(voltage_trace_):
+    t = voltage_trace_['tVec']
+    t_new = I.np.arange(0, max(t), 0.025)
+    vList_new = [I.np.interp(t_new, t, v) for v in voltage_trace_['vList']] # I.np.interp
+    return {'tVec': t_new, 'vList':vList_new}
+
+def interpolate_voltage_traces(voltage_traces_):
+    return {k: interpolate_voltage_trace(v) for k, v in voltage_traces_.iteritems()}
