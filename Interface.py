@@ -17,7 +17,8 @@ The recommendet use is to import it in a jupyter notebook in the following manne
 '''
 import matplotlib
 matplotlib.use('Agg')
-matplotlib.rcParams['pdf.fonttype'] = 42
+matplotlib.rcParams['pdf.fonttype'] = 42 # for text editable in illustrator
+matplotlib.rcParams['ps.fonttype'] = 42
 import os
 import sys
 import tempfile
