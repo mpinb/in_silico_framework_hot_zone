@@ -646,14 +646,27 @@ assert(~signchange(-22,-1))
 assert(signchange(22,-1789))
 
 def linear_interpolation_between_pairs(X,Y, x):
-    assert(x<=max(X))
-    assert(x>=min(X))
-    pair = [lv for lv in range(len(X)-1) if signchange(X[lv]-x, X[lv+1]-x)]
-    assert(len(pair) == 1)
-    pair = pair[0]
-    m = (Y[pair+1]-Y[pair]) / (X[pair+1]-X[pair])
-    c = Y[pair]-X[pair]*m
-    return m*x+c    
+#     assert(x<=max(X))
+#     assert(x>=min(X))
+#     pair = [lv for lv in range(len(X)-1) if signchange(X[lv]-x, X[lv+1]-x)]
+#     assert(len(pair) == 1)
+#     pair = pair[0]
+#     m = (Y[pair+1]-Y[pair]) / (X[pair+1]-X[pair])
+#     c = Y[pair]-X[pair]*m
+#     return m*x+c 
+    X = I.np.asarray(X)
+    if float(x) in X.astype('float'): # if the value already exists
+        result = Y[I.np.where(X == x)[0][0]]
+    else:
+        pair = [lv for lv in range(len(X)-1) if X[lv] < x < X[lv + 1]]
+     
+        assert(len(pair) == 1)
+        pair = pair[0]
+        m = (Y[pair+1]-Y[pair]) / (X[pair+1]-X[pair])
+        c = Y[pair]-X[pair]*m
+
+        result = m*x+c
+    return result
 
 class PWfitting:
     def __init__(self, l6_config, model_selection, min_time = 8, max_time = 25, mdb_path1 = '/nas1/Data_arco/results/20190114_spiketimes_database', mdb_path2 = '/nas1/Data_arco/results/mdb_robert_3x3/', stim = 'D2', cellid = None):
