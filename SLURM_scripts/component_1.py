@@ -78,11 +78,11 @@ def get_locking_file_path():
 def setup_locking_server():
     print '-'*50
     print 'setting up locking server'
-    command = 'redis-server --save "" --appendonly no --port 8885 --protected-mode no &'    
-    print command
-    os.system(command)
+    #command = 'redis-server --save "" --appendonly no --port 8885 --protected-mode no &'    
+    #print command
+    #os.system(command)
     config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
-    #config = [{'config': {'hosts': 'axon01:21811'}, 'type': 'zookeeper'}]
+    config = [{'config': {'hosts': 'axon01:21811'}, 'type': 'zookeeper'}]
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
     setup_locking_config()
@@ -102,7 +102,7 @@ def check_locking_config():
     print 'locking configuration'
     print model_data_base.distributed_lock.server
     print model_data_base.distributed_lock.client
-    assert(model_data_base.distributed_lock.server['type'] == 'redis')
+    #assert(model_data_base.distributed_lock.server['type'] == 'redis')
     #import socket
     #socket.gethostname()
 
@@ -197,7 +197,7 @@ if process_number == 0:
     # setup_jupyter_notebook()
 setup_locking_config()
 setup_dask_workers(management_dir)
-setup_local_cluster()
+#setup_local_cluster()
 if process_number == 0:
     setup_jupyter_notebook()
 #if not process_number == 0:
