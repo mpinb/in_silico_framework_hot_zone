@@ -765,8 +765,6 @@ def unregister_points_on_cell(points, cell):
 ############################
 
 def get_st_pattern(st):
-    import sys
-    sys.path.append('../project_src/SpikeAnalysis/')
     import spike_analysis.core
     sta2 = spike_analysis.core.SpikeTimesAnalysis(None)
     sta2._db['st'] = st# sta.get('st_df')
@@ -788,6 +786,8 @@ def event_rasterplot(st, st_prox = None, rasterplot_fun = I.rasterplot2, **kwarg
 ############################
 # ephys extraction, which I also provided to Mike for his thesis
 ############################
+import sys
+sys.path.append('../project_src/SpikeAnalysis/')
 import spike_analysis.core 
 reload(spike_analysis.core)
 ReaderSmr = spike_analysis.core.ReaderSmr
