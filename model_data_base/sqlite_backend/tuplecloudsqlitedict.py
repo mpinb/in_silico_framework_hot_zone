@@ -28,8 +28,8 @@ def convert_key(key):
     return key
     
 class SqliteDict(object):
-    def __init__(self, basedir, autocommit = False):
-        self.sqlitedict = cloudsqlitedict.SqliteDict(basedir, autocommit = autocommit)
+    def __init__(self, basedir, autocommit = False, flag = None):
+        self.sqlitedict = cloudsqlitedict.SqliteDict(basedir, autocommit = autocommit, flag = flag)
     
     def __setitem__(self, key, value):
         key = convert_key(key)
