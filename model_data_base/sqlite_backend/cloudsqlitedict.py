@@ -172,7 +172,7 @@ class SqliteDict(DictClass):
             self.clear()
 
     def _new_conn(self):
-        return SqliteMultithread(self.filename, autocommit=self.autocommit, journal_mode=self.journal_mode)
+        return SqliteMultithread(self.filename, autocommit=self.autocommit, journal_mode=self.journal_mode, flag = self.flag)
 
     def __enter__(self):
         if not hasattr(self, 'conn') or self.conn is None:
@@ -354,7 +354,7 @@ class SqliteMultithread(Thread):
     in a separate thread (in the same order they arrived).
 
     """
-    def __init__(self, filename, autocommit, journal_mode):
+    def __init__(self, filename, autocommit, journal_mode, flag):
         super(SqliteMultithread, self).__init__()
         self.filename = filename
         self.autocommit = autocommit
@@ -364,6 +364,7 @@ class SqliteMultithread(Thread):
         self.setDaemon(True)  # python2.5-compatible
         self.exception = None
         self.log = logging.getLogger('sqlitedict.SqliteMultithread')
+        self.flag = flag
         self.start()
 
     def run(self):
@@ -371,10 +372,12 @@ class SqliteMultithread(Thread):
             conn = sqlite3.connect(self.filename, isolation_level=None, check_same_thread=False)
         else:
             conn = sqlite3.connect(self.filename, check_same_thread=False)
-        conn.execute('PRAGMA journal_mode = %s' % self.journal_mode)
+        if not self.flag == 'r':
+            conn.execute('PRAGMA journal_mode = %s' % self.journal_mode)
         conn.text_factory = str
         cursor = conn.cursor()
-        cursor.execute('PRAGMA synchronous=OFF')
+        if not self.flag == 'r':
+            cursor.execute('PRAGMA synchronous=OFF')
 
         res = None
         while True:
