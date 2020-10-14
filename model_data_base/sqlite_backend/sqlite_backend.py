@@ -20,10 +20,24 @@ locking = True
 if locking:
     from .. import distributed_lock
 
-def aquire_lock(path):
+# def aquire_lock(path):
+#     if not locking: return
+#     path = path + '.lock'
+#     mylock = distributed_lock.get_lock(path)
+#     mylock.acquire()
+#     return mylock
+
+def aquire_read_lock(path):
     if not locking: return
     path = path + '.lock'
-    mylock = distributed_lock.get_lock(path)
+    mylock = distributed_lock.get_read_lock(path)
+    mylock.acquire()
+    return mylock
+
+def aquire_write_lock(path):
+    if not locking: return
+    path = path + '.lock'
+    mylock = distributed_lock.get_write_lock(path)
     mylock.acquire()
     return mylock
         
@@ -43,9 +57,16 @@ class SQLiteBackend(object):
             sqlitedict = self._get_sql() # make sure, sqlite-file exists
             self._close_sql(sqlitedict)
         
-    def _get_sql(self):
-        self.lock = aquire_lock(self.path)
-        return SqliteDict(self.path, autocommit=True)
+    def _get_sql(self, readonly = True):
+        if readonly:
+            self.lock = aquire_read_lock(self.path)
+        else: 
+            self.lock = aquire_write_lock(self.path)
+        if readonly:
+            flag = 'r'
+        else:
+            flag = 'c'
+        return SqliteDict(self.path, autocommit=True, flag = flag)
     
     def _close_sql(self, sqlitedict):
         sqlitedict.close()
@@ -82,7 +103,7 @@ class SQLiteBackend(object):
         opening and closing the connection'''
         with DelayedKeyboardInterrupt():
             try:
-                sqllitedict = self._get_sql()
+                sqllitedict = self._get_sql(readonly = False)
                 for k, v in dict_.iteritems():
                     sqllitedict[k] = v
             except:
@@ -102,7 +123,7 @@ class SQLiteBackend(object):
         opening and closing the connection'''
         with DelayedKeyboardInterrupt():
             try:
-                sqllitedict = self._get_sql()
+                sqllitedict = self._get_sql(readonly = False)
                 for k in keys:
                     del sqllitedict[k]          
             except:
