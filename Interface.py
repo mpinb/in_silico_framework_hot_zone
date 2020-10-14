@@ -201,11 +201,11 @@ def svg2emf(filename, path_to_inkscape = "/usr/bin/inkscape"):
     command = ' '.join(['env -i', path_to_inkscape, "--file", filename,  "--export-emf",  filename[:-4]+".emf"])
     print os.system(command)
 
+from model_data_base._module_versions import version_cached
 def print_module_versions():
-    print "The loaded modules with __version__ attribute are:"
-    from model_data_base._module_versions import get_module_versions
-    module_versions = ["{}: {}".format(x,get_module_versions()[x])\
-                       for x in sorted(get_module_versions().keys())]
+    print "Loaded modules with __version__ attribute are:"
+    module_versions = ["{}: {}".format(x,version_cached.get_module_versions()[x])\
+                       for x in sorted(version_cached.get_module_versions().keys())]
     print ', '.join(module_versions)
     
 print('')

@@ -381,7 +381,7 @@ class ModelDataBase(object):
         elif self.readonly is False:
             pass
         else:
-            raise MdbException("Readonly attribute is in unknown state. Should be True, False or 'warning, but is: %s" % self.readonly)
+            raise MdbException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
     
     def _find_dumper(self, item):
         '''finds the dumper of a given item.'''
@@ -514,14 +514,17 @@ class ModelDataBase(object):
         else:
             raise ValueError
         
-        out = {'dumper': dumper, \
-               'time': tuple(datetime.datetime.utcnow().timetuple()), \
-               'metadata_creation_time': 'together_with_new_key', \
-               'module_versions': module_versions_cache}
+        out = {'dumper': dumper,
+               'time': tuple(datetime.datetime.utcnow().timetuple()), 
+               'metadata_creation_time': 'together_with_new_key', 
+               'conda_list': VC.get_conda_list(),
+               'module_versions': VC.get_module_versions(),
+               'history': VC.get_history(),
+               'hostname': VC.get_hostname()}
 
-        out.update(get_versions_cache)
+        out.update(VC.get_git_version())
 
-        if get_versions_cache['dirty']:
+        if VC.get_git_version()['dirty']:
             warnings.warn('The database source folder has uncommited changes!')
         
         self._sql_metadata_backend[key] = out
@@ -564,7 +567,7 @@ class ModelDataBase(object):
                    'time': time, \
                    'metadata_creation_time': 'post_hoc'}
             
-            if get_versions_cache['dirty']:
+            if VC.get_git_version()['dirty']:
                 warnings.warn('The database source folder has uncommited changes!')
             
             self._sql_metadata_backend[key] = out
@@ -618,10 +621,13 @@ class ModelDataBase(object):
         if not 'dumper_updates' in metadata:
             metadata['dumper_update'] = [{k: metadata[k] for k in ['dumper', 'time', 'module_versions']}]
         new_dumper = IO.LoaderDumper.get_dumper_string_by_dumper_module(new_dumper)
-        dumper_update = {'dumper': new_dumper, \
-               'time': tuple(datetime.datetime.utcnow().timetuple()), \
-               'module_versions': module_versions_cache}
-        dumper_update.update(get_versions_cache)
+        dumper_update = {'dumper': new_dumper,
+               'time': tuple(datetime.datetime.utcnow().timetuple()),
+               'conda_list': VC.get_conda_list(),
+               'module_versions': VC.get_module_versions(),
+               'history': VC.get_history(),
+               'hostname': VC.get_hostname()}
+        dumper_update.update(VC.get_git_version())
 
         metadata['dumper_update'].append(dumper_update)
         metadata['dumper'] = new_dumper
@@ -629,7 +635,7 @@ class ModelDataBase(object):
         self._sql_metadata_backend[key] = metadata
         
     def change_dumper(self, key, new_dumper, **kwargs):
-        if get_versions_cache['dirty']:
+        if VC.get_git_version()['dirty']:
             warnings.warn('The database source folder has uncommited changes!')
                     
         if new_dumper == 'self':
@@ -717,6 +723,6 @@ import model_data_base_register
 import mdbopen
 import _module_versions
                       
-        
-get_versions_cache = get_versions()
-module_versions_cache = _module_versions.get_module_versions()
+VC = _module_versions.version_cached
+# get_versions_cache = get_versions()
+# module_versions_cache = _module_versions.get_module_versions()
