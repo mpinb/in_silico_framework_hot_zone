@@ -15,6 +15,8 @@ from synapse_mapper import SynapseMapper
 #import synapse
 from neuron import h
 
+import network_modify_functions
+
 class NetworkMapper:
     '''
     Handles connectivity of presynaptic populations
@@ -109,9 +111,21 @@ class NetworkMapper:
         if synWeightName:
             weights, locations = reader.read_synapse_weight_file(synWeightName)
         self._map_complete_anatomical_realization(weights, full_network = full_network)
+        self._apply_network_modify_functions()
         print '***************************'
         print 'network complete!'
         print '***************************'
+        
+    def _apply_network_modify_functions(self):
+        if 'network_modify_functions' in self.nwParam.keys():
+            print '***************************'
+            print 'applying network modify functions'
+            print '***************************'
+            dict_ = self.nwParam.network_modify_functions
+            for funname, params in dict_.iteritems():
+                fun = network_modify_functions.get(funname)
+                print 'applying', funname, 'with parameters', params
+                fun(self.postCell, self, **params)
     
     def reconnect_saved_synapses(self, synInfoName, synWeightName=None):
         '''
@@ -241,6 +255,8 @@ class NetworkMapper:
                 break
         if loadSynapses:
             for preType in self.nwParam.keys():
+                if preType == 'network_modify_functions': # not a synapse type
+                    continue
                 print 'mapping anatomical synapse locations for cell type %s' % preType
                 synapseFName = self.nwParam[preType].synapses.distributionFile
                 synDist = reader.read_synapse_realization(synapseFName)
@@ -270,6 +286,8 @@ class NetworkMapper:
                 createCells = True
                 break
         for synType in self.nwParam.keys():
+            if synType == 'network_modify_functions': # not a synapse type
+                continue            
             nrOfCells = self.nwParam[synType].cellNr
             print 'creating %d PointCells for cell type %s' % (nrOfCells, synType)
             if createCells:
@@ -304,6 +322,8 @@ class NetworkMapper:
         TODO: PointCells are only useable with one spike currently.
         '''
         for synType in self.nwParam.keys(): ## contains list of celltypes in network: ['L45Peak_D1', 'L45Peak_D2', 'L5tt_B3', 'L45Peak_Delta', 'L2_C1', 'L6ct_E3' ...]
+            if synType == 'network_modify_functions': # not a synapse type
+                continue             
             if self.nwParam[synType].celltype == 'pointcell':
                 self._create_pointcell_activities(synType, self.nwParam[synType])
 #                nrOfCells = self.nwParam[synType].cellNr
@@ -538,6 +558,8 @@ class NetworkMapper:
         '''
         synapses = self.postCell.synapses
         for synType in self.nwParam.keys():
+            if synType == 'network_modify_functions': # not a synapse type
+                continue             
             if not self.nwParam[synType].celltype == 'pointcell':
                 continue
             print 'setting up functional connectivity for cell type %s' % (synType)
@@ -598,6 +620,8 @@ class NetworkMapper:
         functionalMap = {}
         synapses = self.postCell.synapses
         for synType in self.nwParam.keys():
+            if synType == 'network_modify_functions': # not a synapse type
+                continue             
             if not self.nwParam[synType].celltype == 'pointcell':
                 continue
             print 'creating functional connectivity map for cell type %s' % (synType)
@@ -640,6 +664,8 @@ class NetworkMapper:
         
         synapses = self.postCell.synapses
         for synType in self.nwParam.keys():
+            if synType == 'network_modify_functions': # not a synapse type
+                continue             
             if not self.nwParam[synType].celltype == 'pointcell':
                 continue
             print 'setting up functional connectivity for cell type %s' % (synType)
@@ -694,6 +720,8 @@ class NetworkMapper:
         if change is not None:
             tChange, changeParam = change
         for synType in self.nwParam.keys():
+            if synType == 'network_modify_functions': # not a synapse type
+                continue             
             if not self.nwParam[synType].celltype == 'spiketrain':
                 continue
             nrOfSyns = len(synapses[synType])
@@ -730,6 +758,8 @@ class NetworkMapper:
         
         
         for synType in self.nwParam.keys():
+            if synType == 'network_modify_functions': # not a synapse type
+                continue             
             if full_network:
                 synapse_counter = 0
             funcMapName = self.nwParam[synType].synapses.connectionFile
