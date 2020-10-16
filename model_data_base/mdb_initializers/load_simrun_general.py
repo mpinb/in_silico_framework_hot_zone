@@ -326,6 +326,8 @@ def network_param_to_mdbpath(network):
     network['NMODL_mechanisms']['synapses'], flag_ = create_mdb_path_print(network['NMODL_mechanisms']['synapses'])
     flag = flag and flag_    
     for k in network['network'].keys():
+        if k == 'network_modify_functions':
+            continue
         network['network'][k]['synapses']['connectionFile'], flag_ = create_mdb_path_print(network['network'][k]['synapses']['connectionFile'])
         flag = flag and flag_
         network['network'][k]['synapses']['distributionFile'], flag_ = create_mdb_path_print(network['network'][k]['synapses']['distributionFile'])
