@@ -435,7 +435,7 @@ class NetworkMapper:
             stop = self.simParam.tStop
         print 'initializing spike trains with mean rate %.2f Hz for cell type %s' % (1000.0/interval, preCellType)
         for cell in self.cells[preCellType]:
-            cell.compute_spike_train_times(interval, noise, start, stop, nSpikes)
+            cell.compute_spike_train_times(interval, noise, start, stop, nSpikes, spike_source = 'poissontrain')
     
     def _create_pointcell_activities(self, preCellType, networkParameters):
         '''
@@ -464,7 +464,7 @@ class NetworkMapper:
             for i in range(len(active)):
                 if spikeTimes[i] < 0.1:
                     spikeTimes[i] = 0.1
-                self.cells[preCellType][active[i]].append(spikeTimes[i])
+                self.cells[preCellType][active[i]].append(spikeTimes[i], spike_source = 'pointcell_normal')
         elif dist == 'uniform':
             active, = np.where(np.random.uniform(size=nrOfCells) < networkParameters.activeFrac)
             window = networkParameters.window
@@ -473,7 +473,7 @@ class NetworkMapper:
             for i in range(len(active)):
                 if spikeTimes[i] < 0.1:
                     spikeTimes[i] = 0.1
-                self.cells[preCellType][active[i]].append(spikeTimes[i])
+                self.cells[preCellType][active[i]].append(spikeTimes[i], spike_source = 'pointcell_uniform')
         elif dist == 'lognormal':
             active, = np.where(np.random.uniform(size=nrOfCells) < networkParameters.activeFrac)
             mu = networkParameters.mu
@@ -483,7 +483,7 @@ class NetworkMapper:
             for i in range(len(active)):
                 if spikeTimes[i] < 0.1:
                     spikeTimes[i] = 0.1
-                self.cells[preCellType][active[i]].append(spikeTimes[i])
+                self.cells[preCellType][active[i]].append(spikeTimes[i], spike_source = 'pointcell_lognormal')
         elif dist == 'PSTH':
             bins = networkParameters.intervals
             probabilities = networkParameters.probabilities
@@ -498,7 +498,7 @@ class NetworkMapper:
                 active, = np.where(np.random.uniform(size=nrOfCells) < spikeProb)
                 spikeTimes = offset + tBegin + (tEnd - tBegin)*np.random.uniform(size=len(active))
                 for j in range(len(active)):
-                    self.cells[preCellType][active[j]].append(spikeTimes[j])
+                    self.cells[preCellType][active[j]].append(spikeTimes[j], spike_source = 'pointcell_PSTH')
         elif dist == 'PSTH_absolute_number':
             bins = networkParameters.intervals
             number_active_synapses = networkParameters.number_active_synapses
@@ -518,7 +518,7 @@ class NetworkMapper:
                     active = np.random.choice(range(nrOfCells), nas, replace = True)
                 spikeTimes = offset + tBegin + (tEnd - tBegin)*np.random.uniform(size=len(active))
                 for j in range(len(active)):
-                    self.cells[preCellType][active[j]].append(spikeTimes[j])                    
+                    self.cells[preCellType][active[j]].append(spikeTimes[j], spike_source = 'pointcell_PSTH_absolute_number')                    
         elif dist == 'PSTH_poissontrain':
             bins = networkParameters.intervals
             rates = networkParameters.rates
@@ -543,7 +543,7 @@ class NetworkMapper:
                     #print 'calling compute_spike_train_times with',  'interval', \
                     #interval, 'noise', noise, 'tBegin', tBegin, 'tEnd', tEnd, \
                     #'nSpikes', nSpikes
-                    cell.compute_spike_train_times(interval, noise, tBegin, tEnd, nSpikes)
+                    cell.compute_spike_train_times(interval, noise, tBegin, tEnd, nSpikes, spike_source = 'pointcell_PSTH_poissontrain')
         else:
             errstr = 'Unknown spike time distribution: %s' % dist
             raise RuntimeError(errstr)
@@ -909,6 +909,7 @@ def activate_functional_synapse(syn, cell, preSynCell, synParameters, tChange=No
                     releaseTimes.append(t + conductance_delay)
         else:
             releaseTimes = [t + conductance_delay for t in preSynCell.spikeTimes]
+            spike_source = preSynCell.spike_source
     else:
         pass
         #print "releaseTimes have been explicitly set", releaseTimes
@@ -917,6 +918,9 @@ def activate_functional_synapse(syn, cell, preSynCell, synParameters, tChange=No
         return
     releaseTimes.sort()
     releaseSite = PointCell(releaseTimes)
+    releaseSite.spike_source = preSynCell.spike_source
+    syn.spike_source = preSynCell.spike_source
+
     releaseSite.play()
     receptors = synParameters.receptors
     syn.activate_hoc_syn(releaseSite, preSynCell, cell, receptors)
