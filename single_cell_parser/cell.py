@@ -649,6 +649,7 @@ class PointCell(object):
             self.spikes = h.VecStim()
         self.playing = False
         self.synapseList = None
+        self.spike_source = {}
     
     def is_active(self):
         return self.playing
@@ -659,16 +660,19 @@ class PointCell(object):
             self.spikes.play(self.spikeVec)
             self.playing = True
     
-    def append(self, spikeT):
+    def append(self, spikeT, spike_source = None):
         '''append additional spike time'''
+        assert(spike_source is not None)
         self.spikeTimes.append(spikeT)
         self.spikeTimes.sort()
         self.spikeVec.append(spikeT)
         self.spikeVec.sort()
         self.playing = True
+        self.spike_source[spikeT] = spike_source
     
-    def compute_spike_train_times(self, interval, noise, start=0.0, stop=-1.0, nSpikes=None):
+    def compute_spike_train_times(self, interval, noise, start=0.0, stop=-1.0, nSpikes=None, spike_source = None):
         '''Activate point cell'''
+        assert(spike_source is not None)
         self.rand = np.random.RandomState(np.random.randint(123456, 1234567))
         self.spikeInterval = interval
         self.noiseParam = noise
@@ -688,7 +692,7 @@ class PointCell(object):
                         tSpike = 0
                 else:
                     tSpike = lastSpike + self._next_interval()
-                self.append(tSpike)
+                self.append(tSpike, spike_source = spike_source)
                 lastSpike = tSpike
         elif self.stop > self.start:
             lastSpike = 0.0
@@ -701,7 +705,7 @@ class PointCell(object):
                     tSpike = lastSpike + self._next_interval()
                 if tSpike > self.stop:
                     break
-                self.append(tSpike)
+                self.append(tSpike, spike_source = spike_source)
                 lastSpike = tSpike
         
 #        if self.spikeVec.size() and not self.playing:
