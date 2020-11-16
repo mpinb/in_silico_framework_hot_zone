@@ -393,7 +393,7 @@ def create_network_parameter(templateParamName, cellNumberFileName,
         cellTypeParameters = templateParam.network[cellType]
         for column in cellTypeColumnNumbers[cellType].keys():
             numberOfCells = cellTypeColumnNumbers[cellType][column]
-            if numberOfCells == 0:
+            if numberOfCells == 0 and not write_all_celltypes:
                 continue
             cellTypeName = cellType + '_' + column
             nwParam.network[cellTypeName] = cellTypeParameters.tree_copy()
