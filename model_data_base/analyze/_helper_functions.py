@@ -29,16 +29,20 @@ def time_list_from_pd(syn):
         out.append(dummy)
     return pd.concat(out).values
 
-def pd_to_array(x):
-    '''converts pd dataframe to array.
-    not very efficient ... use for small dataframes only.'''
-    if x.empty:
-        return np.array([]) 
-    #x = pdframe.copy()
-    array = []
-    for lv in range(max(x.index.values)+1):
-        if lv in list(x.index.values):
-            array.append(x.loc[lv])
-        else:
-            array.append([0]*len(x.iloc[0]))            
-    return np.array(array)  
+pd_to_array = np.asarray
+
+#def pd_to_array(x):
+#    '''converts pd dataframe to array.
+#    not very efficient ... use for small dataframes only.'''
+#    if x.empty:
+#        return np.array([]) 
+#    #x = pdframe.copy()
+#    array = []
+#    for lv in range(max(x.index.values)+1):
+#        if lv in list(x.index.values):
+#            array.append(x.loc[lv])
+#        else:
+#            array.append([0]*len(x.iloc[0]))            
+#    return np.array(array)
+#pdf = pd.DataFrame(np.random.random(size=(1000,1000)))
+#I.np.testing.assert_equal(np.asarray(pdf),pd_to_array(pdf))
