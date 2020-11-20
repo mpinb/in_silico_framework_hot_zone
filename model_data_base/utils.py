@@ -53,6 +53,7 @@ import tempfile
 import shutil
 
 class mkdtemp():
+    '''context manager creating a temporary folder'''
     def __enter__(self):
         self.tempdir = tempfile.mkdtemp()
         return self.tempdir
@@ -245,7 +246,7 @@ def fancy_dict_compare(dict_1, dict_2, dict_1_name = 'd1', dict_2_name = 'd2', p
             key_err += "Key %s%s not in %s\n" % (dict_2_name, path, dict_1_name)
 
     return key_err + value_err + err
-	
+
 def wait_until_key_removed(mdb, key, delay = 5):
     already_printed = False
     while True:
@@ -294,6 +295,16 @@ class DelayedKeyboardInterrupt(object):
             if self.signal_received:
                 self.old_handler(*self.signal_received)
 
+def flatten(l):
+    '''https://stackoverflow.com/a/2158532/5082048'''
+    import collections
+    for el in l:
+        if isinstance(el, collections.Iterable) and not isinstance(el, basestring):
+            for sub in flatten(el):
+                yield sub
+        else:
+            yield el
+            
 ###########################
 # this version does not leave behind a file but serialization takes a long time
 ##########################
