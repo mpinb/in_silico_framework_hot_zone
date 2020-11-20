@@ -21,6 +21,7 @@ from model_data_base.analyze.spike_detection import spike_detection
 from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.IO.LoaderDumper import dask_to_msgpack
 from model_data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module  
+from model_data_base.utils import mkdtemp
 import compatibility        
 import warnings
 import scandir       
@@ -608,3 +609,27 @@ def optimize(mdb, dumper = None, select = None, get = None, repartition = True, 
 
             
     
+def load_param_files_from_mdb(mdb, sti):
+    import single_cell_parser as scp
+    x = mdb['parameterfiles'].loc[sti]
+    x_neu, x_net = x['hash_neuron'], x['hash_network']
+    neuf = mdb['parameterfiles_cell_folder'].join(x_neu)
+    netf = mdb['parameterfiles_network_folder'].join(x_net)
+    return scp.build_parameters(neuf), scp.build_parameters(netf)
+
+def load_initialized_cell_and_evokedNW_from_mdb(mdb, sti, allPoints=False, reconnect_synapses = True):
+    import dask
+    from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
+    neup, netp = load_param_files_from_mdb(mdb, sti)
+    sa = mdb['synapse_activation']
+    sa = sa.loc[sti].compute(get = dask.get)
+    cell = scp.create_cell(neup.neuron, allPoints=allPoints)
+    evokedNW = scp.NetworkMapper(cell, netp.network, simParam = neup.sim)
+    if reconnect_synapses:
+        with mkdtemp() as folder:
+            path = os.path.join(folder, 'synapses.csv')
+            write_pandas_synapse_activation_to_roberts_format(path, sa)
+            evokedNW.reconnect_saved_synapses(path)
+    else:
+        evokedNW.create_saved_network2()
+    return cell, evokedNW

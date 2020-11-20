@@ -74,10 +74,7 @@ print "Current version: {version}".format(version = __version__)
 print "Current pid: {pid}".format(pid = os.getpid())
 
 import barrel_cortex
-excitatory = barrel_cortex.excitatory
-inhibitory = barrel_cortex.inhibitory
-color_cellTypeColorMap = barrel_cortex.color_cellTypeColorMap
-
+from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
 from model_data_base.model_data_base import ModelDataBase
 from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
@@ -85,6 +82,8 @@ from model_data_base.analyze.temporal_binning import universal as temporal_binni
 
 from model_data_base.analyze.spike_detection import spike_detection, spike_in_interval
 from model_data_base.analyze.spaciotemporal_binning import universal as spaciotemporal_binning
+spatiotemporal_binning = spaciotemporal_binning # fix typo :)
+from model_data_base.analyze.spatial_binning import spatial_binning
 from model_data_base.analyze import split_synapse_activation
 from model_data_base.analyze.analyze_input_mapper_result import compare_to_neuronet
 
@@ -109,7 +108,8 @@ from model_data_base.IO.roberts_formats import read_InputMapper_summary
 
 from model_data_base.mdb_initializers import load_simrun_general as mdb_init_simrun_general
 from model_data_base.mdb_initializers import synapse_activation_binning as mdb_init_synapse_activation_binning
-
+load_param_files_from_mdb = mdb_init_simrun_general.load_param_files_from_mdb
+load_initialized_cell_and_evokedNW_from_mdb = mdb_init_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
 #for compatibility, deprecated!
 synapse_activation_binning_dask = mdb_init_synapse_activation_binning.synapse_activation_postprocess_dask
 mdb_init_crossing_over = mdb_init_roberts_simulations = mdb_init_simrun_general
