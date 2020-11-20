@@ -748,11 +748,15 @@ class NetworkMapper:
         Connects anatomical synapses to spike
         generators (PointCells/SpikeTrains) according to anatomical
         connection file.
+        
+        full_network: set to True if (non-sequential) cellids from barrel cortex embedding are used,
+            set to False, if single_cell network embedding from single_cell_input_mapper is used, in which 
+            cellids are sequential. 
         '''
         previousConnectionFile = ''
         synapses = self.postCell.synapses
-        previousConnections = {}
-        previousAnatomicalID = None
+        # previousConnections = {}
+        # previousAnatomicalID = None
         totalConnectedCells = 0
         totalActiveSyns = 0
         
@@ -769,11 +773,16 @@ class NetworkMapper:
                 previousConnectionFile = funcMapName
             else:
                 print 'anatomical connectivity file already loaded'
-                connections, anatomicalID = previousConnections, previousAnatomicalID
+                # connections, anatomicalID = previousConnections, previousAnatomicalID
             print 'setting up functional connectivity for cell type %s' % (synType)
             activeSyn = 0
             connectedCells = set()
-            functionalMap = connections[synType]
+            try:
+                functionalMap = connections[synType]
+            except KeyError: # if there are celltypes in the network param file that aren't in the functional map (con file)
+                print 'skipping {}, which occurs in nw param but not confile'.format(synType)
+                continue
+            print 'including {}'.format(synType)
             anatomicalRealizationName = self.nwParam[synType].synapses.distributionFile.split('/')[-1]
             if anatomicalID != anatomicalRealizationName:
                 errstr = 'Functional mapping %s does not correspond to anatomical realization %s' \
@@ -835,8 +844,8 @@ class NetworkMapper:
                     preSynCell._add_synapse_pointer(syn)
             self.connected_cells[synType] = connectedCells
             
-            previousConnections = connections
-            previousAnatomicalID = anatomicalID
+            # previousConnections = connections
+            # previousAnatomicalID = anatomicalID
             totalConnectedCells += len(connectedCells)
             totalActiveSyns += activeSyn
             print '    connected cells: %d' % len(connectedCells)
