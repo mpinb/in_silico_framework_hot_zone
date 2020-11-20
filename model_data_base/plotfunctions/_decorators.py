@@ -109,7 +109,7 @@ def return_figure_or_axis(plotfun):
                 if isinstance(fig, Figure):
                     kwargs['fig'] = fig.add_subplot(1,1,1)
                     plotfun(*args, **kwargs)
-                    plt.close(fig)
+                    #plt.close(fig)
                     return fig
                 if isinstance(fig, Axes):
                     return plotfun(*args, **kwargs)
@@ -117,7 +117,7 @@ def return_figure_or_axis(plotfun):
                 fig = plt.figure()
                 kwargs['fig'] = fig.add_subplot(1,1,1)
                 ret = plotfun(*args, **kwargs)
-                plt.close(fig)
+                #plt.close(fig)
                 return fig
         except ForceReturnException as e:
             return e.return_value

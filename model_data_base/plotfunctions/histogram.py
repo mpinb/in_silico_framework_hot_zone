@@ -33,10 +33,10 @@ def histogram(hist_bins,
     else:
         ax.step(x,y, label = label)
     
-    try:
-        plt.close(fig)
-    except TypeError:
-        pass    
+    #try:
+    #    plt.close(fig)
+    #except TypeError:
+    #    pass    
     
     return fig
     
