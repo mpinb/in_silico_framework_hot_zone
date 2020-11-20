@@ -19,6 +19,14 @@ color_cellTypeColorMap = {'L1': 'cyan', 'L2': 'dodgerblue', 'L34': 'blue', 'L4py
                     'L6cc': 'indigo', 'L6ccinv': 'violet', 'L6ct': 'magenta', 'VPM': 'black',\
                     'INH': 'grey', 'EXC': 'red', 'all': 'black', 'PSTH': 'blue'}
 
+color_cellTypeColorMap_L6paper = {'L2': '#119fe4', 'L34': '#0037fe', 'L4py': '#94dc7f',\
+                    'L4sp': '#66b56d', 'L4ss': '#66b56d', 'L5st': '#ffec00', 'L5tt': '#d8d8d8',\
+                    'L6cc': '#ef9f9e', 'L6ccinv': '#e30210', 'L6ct': '#9933fe', 'VPM': '#1d1d1a'}
+
+color_cellTypeColorMap_L6paper_with_INH = {'L2': '#119fe4', 'L34': '#0037fe', 'L4py': '#94dc7f',\
+                    'L4sp': '#66b56d', 'L4ss': '#66b56d', 'L5st': '#ffec00', 'L5tt': 'orange',\
+                    'L6cc': '#ef9f9e', 'L6ccinv': '#e30210', 'L6ct': '#9933fe', 'VPM': '#1d1d1a', 'INH':'#d8d8d8'}
+
 excitatory = ['L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34', 'L6ccinv', 'L5tt', 'Generic']
 inhibitory = ['SymLocal1', 'SymLocal2', 'SymLocal3', 'SymLocal4', 'SymLocal5', 'SymLocal6', 'L45Sym', 'L1', 'L45Peak', 'L56Trans', 'L23Trans', 'GenericINH', 'INH']
 
