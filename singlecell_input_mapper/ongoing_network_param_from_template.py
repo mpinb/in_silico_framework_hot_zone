@@ -4,7 +4,7 @@ import sys
 import single_cell_parser as scp
 from model_data_base.mdbopen import mdbopen
 
-def create_network_parameter(templateParamName, cellNumberFileName, synFileName, conFileName, outFileName):
+def create_network_parameter(templateParamName, cellNumberFileName, synFileName, conFileName, outFileName, write_all_celltypes = False):
     print '*************'
     print 'creating network parameter file from template %s' % templateParamName
     print '*************'
@@ -21,7 +21,7 @@ def create_network_parameter(templateParamName, cellNumberFileName, synFileName,
         cellTypeParameters = templateParam.network[cellType]
         for column in cellTypeColumnNumbers[cellType].keys():
             numberOfCells = cellTypeColumnNumbers[cellType][column]
-            if numberOfCells == 0:
+            if numberOfCells == 0 and not write_all_celltypes:
                 continue
             cellTypeName = cellType + '_' + column
             nwParam.network[cellTypeName] = cellTypeParameters.tree_copy()
