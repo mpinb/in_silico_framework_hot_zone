@@ -26,6 +26,10 @@ def check(obj):
 class ManagedFolder(str):
     def join(self, *args):
         return ManagedFolder(os.path.join(self, *args))
+    
+    def listdir(self):
+        return os.listdir(self)
+    
     def get_file(self, suffix):
         '''if folder only contains one file of specified suffix, this file is returned'''
         l = [f for f in os.listdir(self) if f.endswith(suffix)]
