@@ -783,7 +783,7 @@ class PWfitting:
     def plot_PSTHs(self):
         for INH in I.np.arange(0.5,2.1,.1):
             self._plot_PSTHs(INH, CDK_PW = True, robert = True)
-   
+
 def get_all_L6_simulation_dbs():
     mdb = I.ModelDataBase('/nas1/Data_arco/results/20190507_metaanalysis_of_L6_control_experiments')
     # create mdb dict
@@ -849,3 +849,452 @@ def get_all_L6_simulation_dbs():
 #         return I.np.array(cell.tVec), I.np.array(cell.soma.recVList[0])
 #   
 
+####################################
+# reproduce figure 2
+####################################
+
+# general functions for saving grouped landmarks
+import os
+
+def fig2_grouping_function_celltype(x):
+    return x.split('_')[0]
+
+def fig2_grouping_function_EI(x):
+    celltype = fig2_grouping_function_celltype(x)
+    if celltype in I.excitatory:
+        return 'EXC'
+    elif celltype in I.inhibitory:
+        return 'INH'
+    else:
+        return 'unknown'
+def fig2_grouping_function_TC_IC(x):
+    celltype = fig2_grouping_function_celltype(x)
+    if celltype =='VPM':
+        return 'TC'
+    elif celltype in I.excitatory:
+        return 'IC'
+    elif celltype in I.inhibitory:
+        return 'INH'
+    else:
+        return 'unknown'
+
+def save_fractions_of_landmark_pdf(pdf, outdir, 
+                                   fracs = [0.005,0.01,0.05],
+                                   grouping = [fig2_grouping_function_celltype,
+                                               fig2_grouping_function_EI,
+                                               fig2_grouping_function_TC_IC]):
+    for grouping_fun in grouping:
+        for frac in fracs:
+            landmarks_pdf_frac = pdf.sample(frac = frac)
+            grouping_column = landmarks_pdf_frac.label.apply(grouping_fun)
+            path = os.path.join(outdir, str(frac))
+            if not os.path.exists(path): os.makedirs(path)
+            for name, group in landmarks_pdf_frac.groupby(grouping_column):
+                outpath = I.os.path.join(path, name + '.landmarkAscii')
+                I.scp.write_landmark_file(outpath, list(group.positions))
+                
+# Panel A
+amira_view = '''
+viewer 0 setCameraOrientation 0.391947 0.679242 0.62049 2.37879
+viewer 0 setCameraPosition 1509.44 802.209 -489.014
+viewer 0 setCameraFocalDistance 1579.11
+viewer 0 setCameraNearDistance -705.091
+viewer 0 setCameraFarDistance 3502.41
+viewer 0 setCameraType orthographic
+viewer 0 setCameraHeight 2485.99
+'''
+
+somaloc_bc = I.os.path.join(I.os.path.dirname(__file__), 
+                            'reproducing_L6paper_data', 
+                            'all_soma_locations', 
+                            'BC')
+
+somaloc_vpm = I.os.path.join(I.os.path.dirname(__file__), 
+                            'reproducing_L6paper_data', 
+                            'all_soma_locations', 
+                            'VPM')
+
+whole_bc_syn = I.os.path.join(I.os.path.dirname(__file__), 
+                            'reproducing_L6paper_data', 
+                            'whole_bc_embedding', 
+                            'full_bc_embedding.syn')
+
+whole_bc_con = I.os.path.join(I.os.path.dirname(__file__), 
+                            'reproducing_L6paper_data', 
+                            'whole_bc_embedding', 
+                            'full_bc_embedding.con')
+
+anatomy_folder = I.os.path.join(I.os.path.dirname(__file__), 
+                            'reproducing_L6paper_data', 
+                            'anatomy')
+
+amira_template_folder = I.os.path.join(I.os.path.dirname(__file__), 
+                            'reproducing_L6paper_data', 
+                            'amira_templates')
+
+
+def get_fraction_of_landmarkAscii(frac, path):
+    'returns fraction of landmarkAscii files defined in path'
+    f = I.os.path.basename(path)
+    #print path
+    celltype = f.split('.')[-2]
+    positions = I.scp.read_landmark_file(path)
+    pdf = I.pd.DataFrame({'positions': positions, 'label': celltype})
+    if len(pdf) == 0: # cannot sample from empty pdf
+        return pdf 
+    if frac >= 1:
+        return pdf
+    else:
+        return pdf.sample(frac = frac)
+
+def get_fraction_of_landmarkAscii_dir(frac, basedir = None):
+    'loads all landmarkAscii files in directory and returns dataframe containing'\
+    'position and filename (without suffix i.e. without .landmarkAscii)'
+    out = []
+    for f in I.os.listdir(basedir):
+        if not f.endswith('landmarkAscii'): continue
+        out.append(get_fraction_of_landmarkAscii(1, I.os.path.join(basedir, f)))
+    if frac >= 1:
+            return I.pd.concat(out).sort_values('label').reset_index(drop = True)
+    else:
+        return I.pd.concat(out).sample(frac = frac).sort_values('label').reset_index(drop = True)
+
+get_fraction_of_all_bc_cells = lambda frac: get_fraction_of_landmarkAscii_dir(frac, somaloc_bc)
+
+def get_fraction_of_all_vpm_cells(frac):
+    pdf = get_fraction_of_landmarkAscii_dir(frac, somaloc_vpm)
+    pdf.label = pdf.label.apply(lambda x: 'VPM_' + x.split('_')[-1])
+    pdf = pdf[pdf.label.apply(lambda x: not 'row' in x)]
+    return pdf
+
+get_fraction_of_all_cells = lambda frac: I.pd.concat([get_fraction_of_all_bc_cells(frac), 
+                                                      get_fraction_of_all_vpm_cells(frac)])
+
+#def get_soma_positions_by_celltype(celltype):
+#    basedir = I.os.path.dirname(__file__)
+#    basedir = I.os.path.join(basedir, 'reproducing_L6paper_data')
+#    path = I.os.path.join(basedir, celltype) + '.landmarkAscii'
+#    return I.scp.read_landmark_file(path)
+
+import singlecell_input_mapper.singlecell_input_mapper.writer as writer
+def write_embedding_from_pdf(pdf, dirname, fname):
+    '''This takes a dataframe of the format:
+    
+                    label, position
+                    
+    position is a 3-tuple (x,y,z)
+    
+    and saves it as syn and con file at the folder fname.'''
+    if not I.os.path.exists(fname):
+        I.os.makedirs(fname)
+    out = []
+    for name, df in pdf.groupby('label'):
+        df = I.pd.DataFrame({'type': name, 'cellid': list(range(len(df))), 'positions': df.positions})
+        out.append(df)
+    functionalMap = functionalMap_pdf = I.pd.concat(out)
+    functionalMap = [(row.type, row.cellid, row.cellid) for row in functionalMap.itertuples()]
+    writer.write_anatomical_realization_map(I.os.path.join(dirname, fname + '.con'), functionalMap, 'test.syn')
+    synapses = [(x[0], 1, 0.5) for x in functionalMap]
+    writer.write_cell_synapse_locations(I.os.path.join(dirname, fname + '.syn'), {'synType': synapses}, 'test.syn')
+    functionalMap_pdf['x'] = functionalMap_pdf.positions.apply(lambda x: x[0])
+    functionalMap_pdf['y'] = functionalMap_pdf.positions.apply(lambda x: x[1])
+    functionalMap_pdf['z'] = functionalMap_pdf.positions.apply(lambda x: x[2])
+    return functionalMap_pdf.drop('positions', axis = 1).set_index(['type', 'cellid'])
+
+def create_whole_bc_embedding(outdir):
+    '''creates syn- and confile for an embedding of whole barrel cortex'''
+    return write_embedding_from_pdf(get_fraction_of_all_cells(1), outdir, 'full_bc_embedding')
+
+def get_cellNr(network_param):
+    return {celltype: network_param.network[celltype].cellNr for celltype in network_param.network.keys()}
+
+def get_landmarks_pdf_by_cellNr(network_param, landmarks_pdf_all):
+    cellnr = get_cellNr(network_param)
+    groups = {name: group for name, group in landmarks_pdf_all.groupby('label')}
+    out = []
+    for celltype in cellnr.keys():
+        if not celltype in groups.keys():
+            print('skipping celltype {} as it is not part of the barrel cortex model'.format(celltype))
+            continue
+        if cellnr[celltype] > len(groups[celltype]):
+            print 'specified cellnr {} is larger '.format(cellnr[celltype]) + \
+                  'than number of cells {} of type {}. Using {} cells'.format(len(groups[celltype]),
+                                                                              celltype,
+                                                                              len(groups[celltype]))
+            sample = groups[celltype]
+        else:
+            sample = groups[celltype].sample(cellnr[celltype])
+        out.append(sample)
+    return I.pd.concat(out)
+
+load_param_files_from_mdb = I.mdb_init_simrun_general.load_param_files_from_mdb
+
+def write_hoc_with_0_soma_diameter(hocpath_in, hocpath_out):
+    out = []
+    with open(I.resolve_mdb_path(hocpath_in)) as f:
+        in_soma = False
+        for line in f.readlines():
+            if '{create soma}' in line:
+                in_soma = True
+            if len(line.strip()) == 0:
+                in_soma = False
+            if in_soma and ('pt3dadd' in line):
+                line = line.strip('pt3add{}()').split(',')
+                line = '{pt3dadd('+line[0]+','+line[1]+','+line[2]+',0)}'
+            out.append(line.strip())
+    with open(I.resolve_mdb_path(hocpath_out), 'w') as f:
+        f.write('\n'.join(out))
+
+# function for saving fig2b
+def get_synapse_landmarks_pdf(mdb, sti):
+    neup, netp = I.load_param_files_from_mdb(mdb,sti)
+    cell = I.scp.create_cell(neup.neuron)
+    evokedNW = I.scp.NetworkMapper(cell, netp.network, simParam=neup.sim)
+    evokedNW._assign_anatomical_synapses()
+    out = []
+    for k, synlist in cell.synapses.iteritems():
+        for syn in synlist:
+            out.append((k, syn.coordinates))
+    cell.re_init_cell()
+    evokedNW.re_init_network()
+    return I.pd.DataFrame(out, columns = ['label', 'positions'])
+
+def fig2a_anatomical_embedding(mdb,sti,outdir, 
+                               cells = True, synapses = True,
+                               fracs = [0.005,0.01,0.05,0.1,0.5,1]):
+    # grab all cells 
+    # save them to all_cells/frac_0.005
+    if cells:
+        neup, netp = load_param_files_from_mdb(mdb,sti)
+        landmarks_pdf_all = get_fraction_of_all_cells(1)
+        save_fractions_of_landmark_pdf(landmarks_pdf_all, outdir + '/all_cells',
+                                       fracs = fracs)
+        landmarks_pdf_presynaptic = get_landmarks_pdf_by_cellNr(netp, landmarks_pdf_all)
+        save_fractions_of_landmark_pdf(landmarks_pdf_presynaptic, outdir + '/presynaptic_cells')
+        if I.os.path.exists(outdir + '/anatomy'):
+            I.shutil.rmtree(outdir + '/anatomy')
+        I.shutil.copytree(anatomy_folder, outdir + '/anatomy')   
+        I.shutil.copy(amira_template_folder + '/Presynaptic_Cells.hx', outdir)
+    I.shutil.copy(I.resolve_mdb_path(neup.neuron.filename), outdir + '/anatomy/morphology.hoc')
+    write_hoc_with_0_soma_diameter(outdir + '/anatomy/morphology.hoc',
+                                   outdir + '/anatomy/morphology_no_soma.hoc')
+    if synapses:
+        with I.silence_stdout:
+            landmarks_synapses = get_synapse_landmarks_pdf(mdb, sti)
+        save_fractions_of_landmark_pdf(landmarks_synapses, outdir + '/all_synapses', fracs = fracs)
+        I.shutil.copy(amira_template_folder + '/Synapses.hx', outdir)
+
+def fig2b_functional_embedding(mdb,sti,outdir, 
+                               cells = True, synapses = True,
+                               fracs = [0.005,0.01,0.05,0.1,0.5,1]):
+    # grab all cells 
+    # save them to all_cells/frac_0.005
+    if cells:
+        neup, netp = load_param_files_from_mdb(mdb,sti)
+        landmarks_pdf_all = get_fraction_of_all_cells(1)
+        save_fractions_of_landmark_pdf(landmarks_pdf_all, outdir + '/all_cells',
+                                       fracs = fracs)
+        landmarks_pdf_presynaptic = get_landmarks_pdf_by_cellNr(netp, landmarks_pdf_all)
+        save_fractions_of_landmark_pdf(landmarks_pdf_presynaptic, outdir + '/presynaptic_cells')
+        if I.os.path.exists(outdir + '/anatomy'):
+            I.shutil.rmtree(outdir + '/anatomy')
+        I.shutil.copytree(anatomy_folder, outdir + '/anatomy')   
+        I.shutil.copy(amira_template_folder + '/Presynaptic_Cells.hx', outdir)
+    I.shutil.copy(I.resolve_mdb_path(neup.neuron.filename), outdir + '/anatomy/morphology.hoc')
+    write_hoc_with_0_soma_diameter(outdir + '/anatomy/morphology.hoc',
+                                   outdir + '/anatomy/morphology_no_soma.hoc')
+    if synapses:
+        with I.silence_stdout:
+            landmarks_synapses = get_synapse_landmarks_pdf(mdb, sti)
+        save_fractions_of_landmark_pdf(landmarks_synapses, outdir + '/all_synapses', fracs = fracs)
+        I.shutil.copy(amira_template_folder + '/Synapses.hx', outdir)
+        
+# Panel B
+
+
+
+# Panel C
+@I.dask.delayed
+def _fig2C_data_step1(sa_pd, 
+        ongoing_min_time = None,
+        ongoing_max_time = None,
+        evoked_min_time = None,
+        evoked_max_time = None,
+        PC = None,
+        SCs = None,
+        celltype_group_fun = None):
+    '''returns the dataframe required for reproducing plot Fig2C.
+    Requires a pandas data frame. Use fig2C_data to compute from a dask dataframe.'''
+    sa = sa_pd
+
+    def map_fun(x):
+        if x in PC: return 'PC'
+        if x in SCs: return 'SC'
+        return '2ndSC'
+
+    sa['SC'] = sa.synapse_type.str.split('_').str[1].map(map_fun)
+    sa['celltype'] = celltype_group_fun(sa)
+    out = sa.groupby([sa.index, 'SC', 'celltype']).apply(lambda x: I.temporal_binning(x, 
+                                                       min_time = evoked_min_time, 
+                                                       max_time = evoked_max_time, 
+                                                       bin_size = evoked_max_time - evoked_min_time,
+                                                       normalize = False)[1][0])
+    out2 = sa.groupby([sa.index, 'celltype']).apply(lambda x: I.temporal_binning(x, 
+                                                       min_time = ongoing_min_time, 
+                                                       max_time = ongoing_max_time, 
+                                                       bin_size = ongoing_max_time - ongoing_min_time,
+                                                       normalize = False)[1][0])
+    # make sure ongoing activity is normalized to reflect the same timewindow as evoked activity
+    out2 = out2 * (float(evoked_max_time)-evoked_min_time) / (float(ongoing_max_time)-ongoing_min_time)
+    out2.index = [(i[0], 'ongoing', i[1]) for i in out2.index]
+    return I.pd.concat([out, out2])
+
+
+def _fig2C_data_step2(sa, 
+        ongoing_min_time = None,
+        ongoing_max_time = None,
+        evoked_min_time = None,
+        evoked_max_time = None,
+        PC = None,
+        SCs = None,
+        client = None,
+        celltype_group_fun = None):
+    '''returns the dataframe required for reproducing plot Fig2C.
+    Requires a pandas data frame.'''    
+    ds = [_fig2C_data_step1(d,
+                            ongoing_min_time = ongoing_min_time,
+                            ongoing_max_time = ongoing_max_time,
+                            evoked_min_time = evoked_min_time,
+                            evoked_max_time = evoked_max_time,
+                            PC = PC,
+                            SCs = SCs, 
+                            celltype_group_fun = celltype_group_fun) for d in sa.to_delayed()]
+    fs = client.compute(ds)
+    res = client.gather(fs)
+    return I.pd.concat(res)
+
+def get_std_of_active_synapses(df):
+    d = df.unstack(0)
+    out = d[d.index.get_level_values(0).isin(['PC', 'SC', '2ndSC'])].unstack(-1).sum(axis=0).unstack(0).std(axis=1)
+    out.index = [('std_of_total_active_synapses', i) for i in out.index]
+    return out
+
+def get_mean_number_of_activations(df):
+    return df.unstack(0).mean(axis=1)
+
+def _fig2C_data_step3(df,
+           celltype_renaming_dict = None,
+           combine_L4sp_L4ss = None):
+    df = I.pd.concat([get_mean_number_of_activations(df), get_std_of_active_synapses(df)]).unstack(0)
+    if combine_L4sp_L4ss:
+        df.loc['L4sp',:] = df.loc['L4sp',:] + df.loc['L4ss',:]    
+        df = df.drop('L4ss')    
+    if celltype_renaming_dict is not None:
+        df.index = df.index.map(lambda x: celltype_renaming_dict[x])   
+    return df
+
+def plot_fig2C_data(df, ax = None):
+    if ax is None:
+        fig = I.plt.figure()
+        ax = fig.add_subplot(111)
+    height = 0.5
+    names = []
+    for lv, name in enumerate(reversed(df.index)):#lv, (name, row) in enumerate(df.iterrows()):
+        row = df.loc[name]
+        ax.errorbar(row.PC+row.SC+row['2ndSC'], lv, xerr = row.std_of_total_active_synapses, c = 'k', capsize = 3, zorder = 0)        
+        ax.barh(lv, row.PC, height, left = 0, color = '#888888', edgecolor = 'k')
+        ax.barh(lv, row.SC,  height, left = row.PC, color = '#BBBBBB', edgecolor = 'k')
+        ax.barh(lv, row['2ndSC'],  height, left = row.PC+row.SC, color = '#FFFFFF', edgecolor = 'k')
+        ax.plot([row.ongoing, row.ongoing], [lv-0.35, lv+0.35], c = 'k')        
+        #ax.barh(lv, 2, 0.7, left = row.ongoing-1, color = '#000000')
+        names.append(name)
+    ax.set_yticks(range(len(names)))
+    ax.set_yticklabels(names)
+    ax.set_xticks(range(0, 1800,300))
+
+def fig2C_data(sa, 
+               ongoing_min_time = 245-25,
+               ongoing_max_time = 245,
+               evoked_min_time = 245,
+               evoked_max_time = 245+25,
+               PC = ['C2', 'S1'],
+               SCs = ['B1', 'B2', 'B3', 'D1', 'D2', 'D3', 'C1', 'C3'],
+               client = None,
+               celltype_renaming_dict = {'L2': 'L2PY', 'L34': 'L3PY', 'L4sp': 'L4SP', 
+                              'L4py': 'L4PY', 'L5st':'L5IT', 'L5tt': 'L5PT', 
+                              'L6cc': 'L6cc', 'L6ccinv': 'L6INV', 'L6ct': 'L6CT', 'VPM': 'VPM',
+                              'INH':'INH'},
+              combine_L4sp_L4ss = True,
+              fillna = True,
+              celltype_group_fun = lambda sa: sa.synapse_type.str.split('_').str[0]):
+    data = _fig2C_data_step2(sa, 
+                    ongoing_min_time = ongoing_min_time,
+                    ongoing_max_time = ongoing_max_time,
+                    evoked_min_time = evoked_min_time,
+                    evoked_max_time = evoked_max_time,
+                    PC = PC,
+                    SCs = SCs,
+                    client = client, 
+                    celltype_group_fun = celltype_group_fun)
+    data = _fig2C_data_step3(data,
+               celltype_renaming_dict = celltype_renaming_dict,
+               combine_L4sp_L4ss = combine_L4sp_L4ss)
+    if fillna:
+        data = data.fillna(0)
+    return data
+
+def plot_fig2C_data(df, 
+                    ax = None,
+                    xticks = range(0, 1800,300)):
+    if ax is None:
+        fig = I.plt.figure()
+        ax = fig.add_subplot(111)
+    height = 0.5
+    names = []
+    for lv, name in enumerate(reversed(df.index)):#lv, (name, row) in enumerate(df.iterrows()):
+        row = df.loc[name]
+        ax.errorbar(row.PC+row.SC+row['2ndSC'], lv, xerr = row.std_of_total_active_synapses, c = 'k', capsize = 3, zorder = 0)        
+        ax.barh(lv, row.PC, height, left = 0, color = '#888888', edgecolor = 'k')
+        ax.barh(lv, row.SC,  height, left = row.PC, color = '#BBBBBB', edgecolor = 'k')
+        ax.barh(lv, row['2ndSC'],  height, left = row.PC+row.SC, color = '#FFFFFF', edgecolor = 'k')
+        ax.plot([row.ongoing, row.ongoing], [lv-0.35, lv+0.35], c = 'k')        
+        #ax.barh(lv, 2, 0.7, left = row.ongoing-1, color = '#000000')
+        names.append(name)
+    ax.set_yticks(range(len(names)))
+    ax.set_yticklabels(names)
+    ax.set_xticks(xticks)
+    
+# Panel D
+
+def combine_bins(bins_list):
+    bins_out = []
+    bins_std_out = []
+    for i in bins_list[0].index:
+        bins_values = I.np.mean([b[i][1] for b in bins_list], axis = 0)
+        bins_values_std = I.np.std([b[i][1] for b in bins_list], axis = 0)
+        bins_out.append((b[0][0], bins_values))
+        bins_std_out.append((b[0][0], bins_values_std))        
+    return I.pd.Series(bins_out, index = bins_list[0].index), \
+                I.pd.Series(bins_std_out, index = bins_list[0].index)
+    
+def temporal_synapse_activation_data(sa, 
+                                    celltype_group_fun = lambda sa: sa.synapse_type.str.split('_').str[0],
+                                    min_time = 0,
+                                    max_time = 245+700,
+                                    bin_size = 1,
+                                    client = None):
+    ds = sa.to_delayed()
+    
+    @I.dask.delayed
+    def _helper(sa_pd):
+        bins = sa_pd.groupby(celltype_group_fun(sa_pd))\
+            .apply(lambda x: I.temporal_binning(x, 
+                                                min_time = min_time, 
+                                                max_time = max_time,
+                                                bin_size = bin_size,
+                                                normalize = False))
+        return bins
+    ds = [_helper(d) for d in ds]
+    futures = client.compute(ds)
+    bins_list = client.gather(futures)
+    return combine_bins(bins_list)
