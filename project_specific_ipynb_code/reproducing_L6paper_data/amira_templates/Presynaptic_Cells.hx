@@ -102,77 +102,77 @@ set hideNewModules 0
 "E2_surface.am" setViewerMask 16383
 
 set hideNewModules 0
-[ load ${SCRIPTDIR}/presynaptic_cells/0.05/L2.landmarkAscii ] setLabel "L2.landmarkAscii"
+[ load ${SCRIPTDIR}/presynaptic_cells/selected/L2.landmarkAscii ] setLabel "L2.landmarkAscii"
 "L2.landmarkAscii" setIconPosition 47 548
 "L2.landmarkAscii" setVar "CustomXML" {L2.landmarkAscii_config.xml}
 "L2.landmarkAscii" fire
 "L2.landmarkAscii" setViewerMask 8191
 
 set hideNewModules 0
-[ load ${SCRIPTDIR}/presynaptic_cells/0.05/L4py.landmarkAscii ] setLabel "L4py.landmarkAscii"
+[ load ${SCRIPTDIR}/presynaptic_cells/selected/L4py.landmarkAscii ] setLabel "L4py.landmarkAscii"
 "L4py.landmarkAscii" setIconPosition 36 574
 "L4py.landmarkAscii" setVar "CustomXML" {L4py.landmarkAscii_config.xml}
 "L4py.landmarkAscii" fire
 "L4py.landmarkAscii" setViewerMask 8191
 
 set hideNewModules 0
-[ load ${SCRIPTDIR}/presynaptic_cells/0.05/L4sp.landmarkAscii ] setLabel "L4sp.landmarkAscii"
+[ load ${SCRIPTDIR}/presynaptic_cells/selected/L4sp.landmarkAscii ] setLabel "L4sp.landmarkAscii"
 "L4sp.landmarkAscii" setIconPosition 35 601
 "L4sp.landmarkAscii" setVar "CustomXML" {L4sp.landmarkAscii_config.xml}
 "L4sp.landmarkAscii" fire
 "L4sp.landmarkAscii" setViewerMask 8191
 
 set hideNewModules 0
-[ load ${SCRIPTDIR}/presynaptic_cells/0.05/L4ss.landmarkAscii ] setLabel "L4ss.landmarkAscii"
+[ load ${SCRIPTDIR}/presynaptic_cells/selected/L4ss.landmarkAscii ] setLabel "L4ss.landmarkAscii"
 "L4ss.landmarkAscii" setIconPosition 41 628
 "L4ss.landmarkAscii" setVar "CustomXML" {L4ss.landmarkAscii_config.xml}
 "L4ss.landmarkAscii" fire
 "L4ss.landmarkAscii" setViewerMask 8191
 
 set hideNewModules 0
-[ load ${SCRIPTDIR}/presynaptic_cells/0.05/L5st.landmarkAscii ] setLabel "L5st.landmarkAscii"
+[ load ${SCRIPTDIR}/presynaptic_cells/selected/L5st.landmarkAscii ] setLabel "L5st.landmarkAscii"
 "L5st.landmarkAscii" setIconPosition 46 657
 "L5st.landmarkAscii" setVar "CustomXML" {L5st.landmarkAscii_config.xml}
 "L5st.landmarkAscii" fire
 "L5st.landmarkAscii" setViewerMask 8191
 
 set hideNewModules 0
-[ load ${SCRIPTDIR}/presynaptic_cells/0.05/L5tt.landmarkAscii ] setLabel "L5tt.landmarkAscii"
+[ load ${SCRIPTDIR}/presynaptic_cells/selected/L5tt.landmarkAscii ] setLabel "L5tt.landmarkAscii"
 "L5tt.landmarkAscii" setIconPosition 60 682
 "L5tt.landmarkAscii" setVar "CustomXML" {L5tt.landmarkAscii_config.xml}
 "L5tt.landmarkAscii" fire
 "L5tt.landmarkAscii" setViewerMask 8191
 
 set hideNewModules 0
-[ load ${SCRIPTDIR}/presynaptic_cells/0.05/L6cc.landmarkAscii ] setLabel "L6cc.landmarkAscii"
+[ load ${SCRIPTDIR}/presynaptic_cells/selected/L6cc.landmarkAscii ] setLabel "L6cc.landmarkAscii"
 "L6cc.landmarkAscii" setIconPosition 60 787
 "L6cc.landmarkAscii" setVar "CustomXML" {L6cc.landmarkAscii_config.xml}
 "L6cc.landmarkAscii" fire
 "L6cc.landmarkAscii" setViewerMask 8191
 
 set hideNewModules 0
-[ load ${SCRIPTDIR}/presynaptic_cells/0.05/L34.landmarkAscii ] setLabel "L34.landmarkAscii"
+[ load ${SCRIPTDIR}/presynaptic_cells/selected/L34.landmarkAscii ] setLabel "L34.landmarkAscii"
 "L34.landmarkAscii" setIconPosition 65 759
 "L34.landmarkAscii" setVar "CustomXML" {L34.landmarkAscii_config.xml}
 "L34.landmarkAscii" fire
 "L34.landmarkAscii" setViewerMask 8191
 
 set hideNewModules 0
-[ load ${SCRIPTDIR}/presynaptic_cells/0.05/L6ct.landmarkAscii ] setLabel "L6ct.landmarkAscii"
+[ load ${SCRIPTDIR}/presynaptic_cells/selected/L6ct.landmarkAscii ] setLabel "L6ct.landmarkAscii"
 "L6ct.landmarkAscii" setIconPosition 55 733
 "L6ct.landmarkAscii" setVar "CustomXML" {L6ct.landmarkAscii_config.xml}
 "L6ct.landmarkAscii" fire
 "L6ct.landmarkAscii" setViewerMask 8191
 
 set hideNewModules 0
-[ load ${SCRIPTDIR}/presynaptic_cells/0.05/L6ccinv.landmarkAscii ] setLabel "L6ccinv.landmarkAscii"
+[ load ${SCRIPTDIR}/presynaptic_cells/selected/L6ccinv.landmarkAscii ] setLabel "L6ccinv.landmarkAscii"
 "L6ccinv.landmarkAscii" setIconPosition 37 707
 "L6ccinv.landmarkAscii" setVar "CustomXML" {L6ccinv.landmarkAscii_config.xml}
 "L6ccinv.landmarkAscii" fire
 "L6ccinv.landmarkAscii" setViewerMask 8191
 
 set hideNewModules 0
-[ load ${SCRIPTDIR}/all_cells/0.05/EXC.landmarkAscii ] setLabel "EXC.landmarkAscii"
+[ load ${SCRIPTDIR}/all_cells/selected/EXC.landmarkAscii ] setLabel "EXC.landmarkAscii"
 "EXC.landmarkAscii" setIconPosition 17 -1
 "EXC.landmarkAscii" setVar "CustomXML" {EXC.landmarkAscii_config.xml}
 "EXC.landmarkAscii" fire
