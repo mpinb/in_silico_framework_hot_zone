@@ -568,7 +568,7 @@ class ModelDataBase(object):
                    'metadata_creation_time': 'post_hoc'}
             
             if VC.get_git_version()['dirty']:
-                warnings.warn('The database source folder has uncommited changes!')
+                warnings.warn('The database source folder has uncommitted changes!')
             
             self._sql_metadata_backend[key] = out
     
@@ -636,7 +636,7 @@ class ModelDataBase(object):
         
     def change_dumper(self, key, new_dumper, **kwargs):
         if VC.get_git_version()['dirty']:
-            warnings.warn('The database source folder has uncommited changes!')
+            warnings.warn('The database source folder has uncommitted changes!')
                     
         if new_dumper == 'self':
             raise NotImplementedError()
