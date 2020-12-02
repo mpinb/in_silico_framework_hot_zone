@@ -525,7 +525,7 @@ class ModelDataBase(object):
         out.update(VC.get_git_version())
 
         if VC.get_git_version()['dirty']:
-            warnings.warn('The database source folder has uncommited changes!')
+            warnings.warn('The database source folder has uncommitted changes!')
         
         self._sql_metadata_backend[key] = out
 
