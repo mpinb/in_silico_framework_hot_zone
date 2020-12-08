@@ -877,6 +877,10 @@ def fig2_grouping_function_TC_IC(x):
         return 'INH'
     else:
         return 'unknown'
+    
+def save_pdf_to_landmarkfile(pdf, path):
+    I.scp.write_landmark_file(path, \
+                             [x[1].values for x in pdf.iterrows()])
 
 def save_fractions_of_landmark_pdf(pdf, outdir, 
                                    fracs = [0.005,0.01,0.05],
@@ -892,6 +896,7 @@ def save_fractions_of_landmark_pdf(pdf, outdir,
             for name, group in landmarks_pdf_frac.groupby(grouping_column):
                 outpath = I.os.path.join(path, name + '.landmarkAscii')
                 I.scp.write_landmark_file(outpath, list(group.positions))
+                
                 
 # Panel A
 amira_view = '''
@@ -1061,16 +1066,28 @@ def get_synapse_landmarks_pdf(mdb, sti):
 
 def fig2a_anatomical_embedding(mdb,sti,outdir, 
                                cells = True, synapses = True,
-                               fracs = [0.005,0.01,0.05,0.1,0.5,1]):
+                               fracs = [0.005,0.01,0.05,0.1,0.5,1],
+                               frac_all_cells_selected = 0.05,
+                               frac_presynaptic_cells_selected = 0.05,
+                               frac_synapses_selected = 0.1):
     # grab all cells 
     # save them to all_cells/frac_0.005
+    if I.os.path.exists(outdir):
+        I.shutil.rmtree(outdir)
     if cells:
         neup, netp = load_param_files_from_mdb(mdb,sti)
         landmarks_pdf_all = get_fraction_of_all_cells(1)
         save_fractions_of_landmark_pdf(landmarks_pdf_all, outdir + '/all_cells',
                                        fracs = fracs)
+        # I.os.makedirs(outdir + '/all_cells' + '/selected')
+        I.shutil.copytree(outdir + '/all_cells' + '/{}'.format(frac_all_cells_selected),
+                          outdir + '/all_cells' + '/selected')         
         landmarks_pdf_presynaptic = get_landmarks_pdf_by_cellNr(netp, landmarks_pdf_all)
-        save_fractions_of_landmark_pdf(landmarks_pdf_presynaptic, outdir + '/presynaptic_cells')
+        save_fractions_of_landmark_pdf(landmarks_pdf_presynaptic, outdir + '/presynaptic_cells',
+                                       fracs = fracs)
+        # I.os.makedirs(outdir + '/presynaptic_cells' + '/selected')        
+        I.shutil.copytree(outdir + '/presynaptic_cells' + '/{}'.format(frac_presynaptic_cells_selected),
+                          outdir + '/presynaptic_cells' + '/selected')         
         if I.os.path.exists(outdir + '/anatomy'):
             I.shutil.rmtree(outdir + '/anatomy')
         I.shutil.copytree(anatomy_folder, outdir + '/anatomy')   
@@ -1082,20 +1099,53 @@ def fig2a_anatomical_embedding(mdb,sti,outdir,
         with I.silence_stdout:
             landmarks_synapses = get_synapse_landmarks_pdf(mdb, sti)
         save_fractions_of_landmark_pdf(landmarks_synapses, outdir + '/all_synapses', fracs = fracs)
+        # I.os.makedirs(outdir + '/all_synapses' + '/selected')                
+        I.shutil.copytree(outdir + '/all_synapses' + '/{}'.format(frac_synapses_selected),
+                          outdir + '/all_synapses' + '/selected')  
         I.shutil.copy(amira_template_folder + '/Synapses.hx', outdir)
+
+# Panel B        
+
+def select_cells_that_spike_in_interval(sa, tmin, tmax, set_index = ['synapse_ID', 'synapse_type']):
+    pdf = sa.set_index(list(set_index))
+    pdf = pdf[[c for c in pdf.columns if c.isdigit()]]
+    pdf = pdf[((pdf>=tmin) & (pdf<tmax)).any(axis = 1)]
+    cells_that_spike = pdf.index
+    cells_that_spike = cells_that_spike.tolist()
+    return cells_that_spike
 
 def fig2b_functional_embedding(mdb,sti,outdir, 
-                               cells = True, synapses = True,
-                               fracs = [0.005,0.01,0.05,0.1,0.5,1]):
+                               cells = True, 
+                               synapses = True,
+                               min_time = 245,
+                               max_time = 245+25,
+                               fracs = [0.005,0.01,0.05,0.1,0.5,1],
+                               frac_presynaptic_cells_selected = 0.5,
+                               frac_synapses_selected = 0.1):
     # grab all cells 
     # save them to all_cells/frac_0.005
+    if I.os.path.exists(outdir):
+        I.shutil.rmtree(outdir)    
     if cells:
         neup, netp = load_param_files_from_mdb(mdb,sti)
         landmarks_pdf_all = get_fraction_of_all_cells(1)
-        save_fractions_of_landmark_pdf(landmarks_pdf_all, outdir + '/all_cells',
+        landmarks_pdf_presynaptic = landmarks_pdf_all.groupby('label').apply(lambda x: x.reset_index(drop = True))
+        ca = mdb['cell_activation'].loc[sti].compute()
+        selection = select_cells_that_spike_in_interval(ca,
+                                                        min_time,
+                                                        max_time,
+                                                        set_index = ['presynaptic_cell_type',
+                                                                     'cell_ID']) 
+        landmarks_pdf_presynaptic = landmarks_pdf_presynaptic.loc[selection].dropna()
+        
+        #save_fractions_of_landmark_pdf(landmarks_pdf_all, outdir + '/all_cells',
+        #                               fracs = fracs)
+        save_fractions_of_landmark_pdf(landmarks_pdf_presynaptic, 
+                                       outdir + '/presynaptic_cells',
                                        fracs = fracs)
-        landmarks_pdf_presynaptic = get_landmarks_pdf_by_cellNr(netp, landmarks_pdf_all)
-        save_fractions_of_landmark_pdf(landmarks_pdf_presynaptic, outdir + '/presynaptic_cells')
+        # I.os.makedirs(outdir + '/presynaptic_cells' + '/selected')                        
+        I.shutil.copytree(outdir + '/presynaptic_cells' + '/{}'.format(frac_presynaptic_cells_selected),
+                          outdir + '/presynaptic_cells' + '/selected')   
         if I.os.path.exists(outdir + '/anatomy'):
             I.shutil.rmtree(outdir + '/anatomy')
         I.shutil.copytree(anatomy_folder, outdir + '/anatomy')   
@@ -1106,11 +1156,20 @@ def fig2b_functional_embedding(mdb,sti,outdir,
     if synapses:
         with I.silence_stdout:
             landmarks_synapses = get_synapse_landmarks_pdf(mdb, sti)
+        sa = mdb['synapse_activation'].loc[sti].compute()
+        selection = select_cells_that_spike_in_interval(sa,
+                                                        min_time,
+                                                        max_time, 
+                                                        set_index = ['synapse_type', 'synapse_ID'])  
+        landmarks_synapses = landmarks_synapses.groupby('label').apply(lambda x: x.reset_index(drop = True))     
+        landmarks_synapses = landmarks_synapses.loc[selection]
         save_fractions_of_landmark_pdf(landmarks_synapses, outdir + '/all_synapses', fracs = fracs)
+        # I.os.makedirs(outdir + '/all_synapses' + '/selected')                                
+        I.shutil.copytree(outdir + '/all_synapses' + '/{}'.format(frac_synapses_selected),
+                          outdir + '/all_synapses' + '/selected')           
         I.shutil.copy(amira_template_folder + '/Synapses.hx', outdir)
         
-# Panel B
-
+# Video S1
 
 
 # Panel C
@@ -1263,9 +1322,58 @@ def plot_fig2C_data(df,
     ax.set_yticks(range(len(names)))
     ax.set_yticklabels(names)
     ax.set_xticks(xticks)
-    
-# Panel D
 
+# fig2x active synapses by soma distance
+def combine_bins(bins_list):
+    bins_out = []
+    bins_std_out = []
+    for i in bins_list[0].index:
+        bins_values = I.np.mean([b[i][1] for b in bins_list], axis = 0)
+        bins_values_std = I.np.std([b[i][1] for b in bins_list], axis = 0)
+        bins_out.append((b[0][0], bins_values))
+        bins_std_out.append((b[0][0], bins_values_std))        
+    return I.pd.Series(bins_out, index = bins_list[0].index), \
+                I.pd.Series(bins_std_out, index = bins_list[0].index)
+    
+def spatial_synapse_activation_data(sa, 
+                                    celltype_group_fun = lambda sa: sa.synapse_type.str.split('_').str[0],
+                                    min_time = 0,
+                                    max_time = 245+700,
+                                    spatial_bin_size = 50,
+                                    client = None):
+    ds = sa.to_delayed()
+    
+    @I.dask.delayed
+    def _helper(sa_pd):
+        bins = sa_pd.groupby(celltype_group_fun(sa_pd))\
+            .apply(lambda x: I.spatial_binning(x, 
+                                                min_time = min_time, 
+                                                max_time = max_time,
+                                                spatial_bin_size = spatial_bin_size))
+        return bins
+    ds = [_helper(d) for d in ds]
+    futures = client.compute(ds)
+    bins_list = client.gather(futures)
+    return combine_bins(bins_list)
+
+def fig2x_active_synapses_by_soma_distance(sa, 
+                                           min_time = 245, max_time = 245+50,
+                                           client = None, spatial_bin_size = I.np.arange(0,1500,50),
+                                           ax = None,
+                                           colormap = I.color_cellTypeColorMap_L6paper_with_INH):
+    if ax is None:
+        fig = I.plt.figure(figsize = (10,5))
+        ax = fig.add_subplot(111)
+        
+    bins_mean, bins_std = spatial_synapse_activation_data(sa, min_time = min_time, max_time = max_time, 
+                                                      client = client, spatial_bin_size = I.np.arange(0,1500,50))
+    
+    I.histogram(bins_mean.to_frame(), 
+                colormap = colormap, 
+                fig = ax)
+    I.plt.xlim([min(spatial_bin_size),max(spatial_bin_size)])
+
+# Panel D
 def combine_bins(bins_list):
     bins_out = []
     bins_std_out = []
