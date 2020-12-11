@@ -70,8 +70,8 @@ def write_landmark_file(fname=None, landmarkList=None):
         err_str = 'No landmark output file name given'
         raise RuntimeError(err_str)
     
-    if not landmarkList:
-        print 'Landmark list empty!'
+    #if not landmarkList:
+    #    print 'Landmark list empty!'
         #return
     nrCoords = 3 if not landmarkList else len(landmarkList[0])
     if nrCoords != 3:
