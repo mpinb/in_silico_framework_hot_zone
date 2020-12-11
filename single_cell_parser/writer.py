@@ -368,7 +368,7 @@ def write_presynaptic_spike_times(fname=None, cells=None):
                 line += '\n'
                 outputFile.write(line)
 
-def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoints=False, step_frames = 10):
+def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoints=False, step_frames = 10, selected_index = None):
     '''
     write Amira SpatialGraph files corresponding to time steps
     of entire simulation run. Recorded quantities are passed
@@ -572,6 +572,9 @@ def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoin
         header += "POINT { float " + traces[i] + " } @" + str(i + 8) + "\n"
     
     for i in range(len(tVec)):
+        if selected_index is not None:
+            if not i in selected_index:
+                continue
 #        only write every 10th time step for visualization
 #        (step size for vis. will then be 0.25ms)
         if i%step_frames:
