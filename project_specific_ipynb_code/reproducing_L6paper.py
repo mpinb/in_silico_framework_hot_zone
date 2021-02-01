@@ -419,9 +419,9 @@ class SynapticStrengthFitting:
 #         fig = I.plt.figure(figsize = (10,len(vt)*1.3))
 #         ax = fig.add_subplot(111)
 #         pdf.plot(kind = 'hist', subplots = True, bins = I.np.arange(0,pdf.max().max(), 0.01), ax = ax)
-    def visualize_psps(self, model_id, loc = 'C2center', method = 'dynamic_baseline', g = 1.0):
+    def visualize_psps(self, model_id, loc = 'C2center', method = 'dynamic_baseline', g = 1.0, fig = None):
         psp = self.get_psp_from_database(model_id, loc)
-        psp.visualize_psps(method = method, g = g)
+        psp.visualize_psps(method = method, g = g, fig = None)
 
                 
     def save_synapses_to_landmark_file(self, modelid, population, outfile, loc = 'C2center'):
@@ -959,10 +959,10 @@ def get_fraction_of_landmarkAscii_dir(frac, basedir = None):
     for f in I.os.listdir(basedir):
         if not f.endswith('landmarkAscii'): continue
         out.append(get_fraction_of_landmarkAscii(1, I.os.path.join(basedir, f)))
-    if frac >= 1:
-            return I.pd.concat(out).sort_values('label').reset_index(drop = True)
-    else:
-        return I.pd.concat(out).sample(frac = frac).sort_values('label').reset_index(drop = True)
+    #if frac >= 1:
+    #        return I.pd.concat(out).sort_values('label').reset_index(drop = True)
+    #else:
+    return I.pd.concat(out).sample(frac = frac).sort_values('label').reset_index(drop = True)
 
 get_fraction_of_all_bc_cells = lambda frac: get_fraction_of_landmarkAscii_dir(frac, somaloc_bc)
 
@@ -1321,7 +1321,36 @@ def plot_fig2C_data(df,
         names.append(name)
     ax.set_yticks(range(len(names)))
     ax.set_yticklabels(names)
-    ax.set_xticks(xticks)
+    if xticks:
+        ax.set_xticks(xticks)
+
+@I.dask.delayed
+def _fig2C_convert_synfile_to_syn_activation(synfile_path, index = 0):
+    presyn_cells = []
+    with open(synfile_path, 'r') as synfile:
+        for line in synfile:
+            if not line.startswith('#') and not line.startswith('\n'):
+                presyn_cells.append(line.split('\t')[0])
+            
+    syn_df = I.pd.DataFrame(index = [index] * len(presyn_cells))
+    syn_df['synapse_type'] = presyn_cells
+    syn_df[0] = [1.0] * len(presyn_cells)
+    return syn_df
+
+def fig2C_convert_synfiles_to_mock_sa(synpathlist):
+    '''This is a converter that allows to use the fig2C figure routines,
+    which are typically used to display active synapses, to display
+    anatomical data from syn files:
+    
+    In fig2C_data, specify 
+               ongoing_min_time = 0,
+               ongoing_max_time = 10,
+               evoked_min_time = 0,
+               evoked_max_time = 10'''
+    
+    delayeds = [_fig2C_convert_synfile_to_syn_activation(synpath, index = lv) for lv, synpath in enumerate(synpathlist)]
+    mock_sa_dask_ddf = I.dask.dataframe.from_delayed(delayeds)
+    return mock_sa_dask_ddf
 
 # fig2x active synapses by soma distance
 def combine_bins(bins_list):
