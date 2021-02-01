@@ -78,6 +78,39 @@ def inactivate_evoked_and_ongoing_activity_by_celltype_and_column(param, inact_c
     for celltype in param.network.keys():
         if _celltype_matches(celltype, inact_celltypes, inact_column):
             del param['network'][celltype]
+            
+def multi_stimulus_trial(netp, inter_stimulus_interval = 100, stims = 100, scale_factors = None, pop = None):
+    '''makes a network param file for repeatedly simulating the same whisker stimulus. There is also the option to apply a different evoked activity scaling factor to each stimulus.
+    inter_stimulus_interval: int, milliseconds to wait between each whisker stimulus
+    stims: int, number of stimuli to simulate
+    scale factors: list, optional. A list of scale factors you want to apply to subsequent stimuli. Must have the same length as stims.
+    pop: list, optional. The celltypes you would like the scaling to be applied to.'''
+    if scale_factors is not None:
+        assert len(scale_factors) == stims
+    
+    for syntype in netp.network.keys():
+        try:
+            i=netp.network[syntype].celltype.pointcell.intervals
+        except:
+            continue
+        p=netp.network[syntype].celltype.pointcell.probabilities
+        intervals = []
+        probabilities = []
+        offset = 0
+        if scale_factors is not None and syntype.split('_')[0] in pop:
+            print syntype
+            for lv, factor in enumerate(scale_factors):
+                probabilities.extend([n * factor for n in p])
+                intervals.extend([(x[0]+inter_stimulus_interval*lv,x[1]+inter_stimulus_interval*lv) for x in i])
+            
+        else:
+            for lv in range(stims):
+                probabilities.extend(p)
+                intervals.extend([(x[0]+inter_stimulus_interval*lv,x[1]+inter_stimulus_interval*lv) for x in i])
+        
+
+        netp.network[syntype].celltype.pointcell.intervals = intervals
+        netp.network[syntype].celltype.pointcell.probabilities = probabilities
 
 # testing
 # todo: move to testing module

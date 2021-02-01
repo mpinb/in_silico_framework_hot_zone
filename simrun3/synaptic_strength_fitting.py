@@ -149,14 +149,15 @@ class PSPs:
         calculate_optimal_g(pdf)
         return pdf
     
-    def visualize_psps(self, g = 1.0, method = 'dynamic_baseline', merge_celltype_kwargs={}):
+    def visualize_psps(self, g = 1.0, method = 'dynamic_baseline', merge_celltype_kwargs={}, fig = None):
         psp = self
         vt = psp.get_voltage_and_timing(method, merged = True, 
                                         merge_celltype_kwargs=merge_celltype_kwargs)        
         #vt = I.simrun3.synaptic_strength_fitting.get_voltage_and_timing(vt, method)
         pdf = I.pd.concat([I.pd.Series([x[1] for x in vt[name][g][g]], name = name) 
              for name in vt.keys()], axis = 1)
-        fig = I.plt.figure(figsize = (10,len(vt)*1.3))
+        if fig is None:
+            fig = I.plt.figure(figsize = (10,len(vt)*1.3))
         ax = fig.add_subplot(111)
         lower_bound = min(0, pdf.min().min())
         upper_bound = max(0, pdf.max().max())
