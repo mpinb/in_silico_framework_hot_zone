@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH -p p.gpu # partition (queue)
 #SBATCH -N 1 # number of nodes
-#SBATCH -n 1 # number of cores
+#SBATCH -n 20 # number of cores
 #SBATCH --mem MaxMemPerNode # UNLIMITED # 100000 # memory pool for all cores
 #SBATCH -t 1-0:00 # time (D-HH:MM)
 #SBATCH -o out.slurm.%N.%j.slurm # STDOUT
