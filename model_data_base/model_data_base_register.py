@@ -73,7 +73,7 @@ def register_mdb(mdb):
 
 def get_mdb_by_unique_id(unique_id):
     mdb_path = _get_mdb_register().mdb[unique_id]
-    mdb = ModelDataBase(mdb_path)
+    mdb = ModelDataBase(mdb_path, nocreate=True)
     assert mdb.get_id() == unique_id
     return mdb
         
