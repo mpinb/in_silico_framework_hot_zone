@@ -3,7 +3,8 @@ Created on Nov 08, 2018
 
 @author: abast
 '''
-from __future__ import absolute_import
+if six.PY2:
+    from __future__ import absolute_import
 
 # from functools import partial
 # import numpy as np
@@ -82,7 +83,7 @@ def get_Evaluator(step = False, vInit = False, bAP_kwargs = {}, BAC_kwargs = {})
         raise NotImplementedError
     if vInit:
         raise NotImplementedError
-    e.setup.finalize_funs.append(lambda x: merge(x.values()))    
+    e.setup.finalize_funs.append(lambda x: merge(list(x.values())))    
     return e
 
 ##############################################################

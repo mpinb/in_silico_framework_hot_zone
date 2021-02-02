@@ -45,7 +45,7 @@ except ImportError:
 try:
     import seaborn as sns
 except ImportError:
-    print "Could not import seaborn"
+    print("Could not import seaborn")
 
 
 
@@ -70,8 +70,8 @@ versions = get_versions()
 __version__ = versions['version']
 __git_revision__ = versions['full-revisionid']
 
-print "Current version: {version}".format(version = __version__)
-print "Current pid: {pid}".format(pid = os.getpid())
+print("Current version: {version}".format(version = __version__))
+print("Current pid: {pid}".format(pid = os.getpid()))
 
 import barrel_cortex
 from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
@@ -135,9 +135,9 @@ try: ##to avoid import errors in distributed system because of missing matplotli
         from model_data_base.plotfunctions.cell_to_ipython_animation import cell_to_ipython_animation, cell_to_animation, display_animation
         from model_data_base.plotfunctions._figure_array_converter import show_pixel_object, PixelObject
     except ImportError:
-        print "Could not import plotfunctions!"
+        print("Could not import plotfunctions!")
 except ImportError:
-    print "Could not import matplotlib!"
+    print("Could not import matplotlib!")
 
 try:
     from simrun2.run_existing_synapse_activations import run_existing_synapse_activations \
@@ -156,7 +156,7 @@ try:
     
     from simrun2.crossing_over.crossing_over_simple_interface import crossing_over as simrun_crossing_over_simple_interface
 except ImportError:
-    print "Could not import full-compartmental-model simulator"
+    print("Could not import full-compartmental-model simulator")
 
 import single_cell_analyzer as sca
 import single_cell_parser as scp
@@ -199,14 +199,14 @@ from functools import partial
 def svg2emf(filename, path_to_inkscape = "/usr/bin/inkscape"):
     '''converts svg to emf, which can be imported in word using inkscape. '''
     command = ' '.join(['env -i', path_to_inkscape, "--file", filename,  "--export-emf",  filename[:-4]+".emf"])
-    print os.system(command)
+    print(os.system(command))
 
 from model_data_base._module_versions import version_cached
 def print_module_versions():
-    print "Loaded modules with __version__ attribute are:"
+    print("Loaded modules with __version__ attribute are:")
     module_versions = ["{}: {}".format(x,version_cached.get_module_versions()[x])\
                        for x in sorted(version_cached.get_module_versions().keys())]
-    print ', '.join(module_versions)
+    print(', '.join(module_versions))
     
 print('')
 print('')

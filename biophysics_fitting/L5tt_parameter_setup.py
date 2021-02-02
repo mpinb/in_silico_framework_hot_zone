@@ -110,13 +110,13 @@ def set_morphology(cell_param, filename = None):
 
 def set_ephys(cell_param, params = None):
     'updates cell_param file. parameter names reflect the hay naming convention.'
-    for k, v in params.iteritems(): 
+    for k, v in six.iteritems(params): 
         cell_param[hay_param_to_scp_neuron_param(k)]= float(v)
     return cell_param
 
 def set_param(cell_param, params = None):
     'updates cell_param file. parameter names reflect the hierarchy in the cell_param file itself.'
-    for k, v in params.iteritems():
+    for k, v in six.iteritems(params):
         p = cell_param
         for kk in k.split('.')[:-1]:
             p = p[kk]
@@ -127,11 +127,11 @@ def set_many_param(cell_param, params = None):
     
     master_values = {}
     
-    for k, v in params.iteritems():
+    for k, v in six.iteritems(params):
         if '.' not in k:
             master_values[k] = v
                         
-    for k, v in params.iteritems():
+    for k, v in six.iteritems(params):
         if '.' in k:
             stored_value = master_values[k.split('.')[0]]
             p = cell_param

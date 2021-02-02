@@ -2,6 +2,7 @@ import pandas as pd
 from functools import partial
 import numpy as np
 import os
+import six
 # import single_cell_parser as scp # moved to bottom to resolve import error
 from model_data_base.utils import cache
 
@@ -77,8 +78,8 @@ def read_barrelfield():
     mapping_id_position = [44,13,14,15,16,45,18,19,20,21,46,23,24,25,26,47,30,31,32,33,37,38,39,40]
     mapping_id_position = {x: lv for lv,x in enumerate(mapping_id_position)}
     n_edge_points = 37
-    import StringIO
-    edge_points = StringIO.StringIO()
+    import six.StringIO
+    edge_points = six.StringIO()
     average_barrel_field_path = os.path.join(os.path.dirname(__file__), 'average_barrel_field_L45_border.am')
     with open(average_barrel_field_path) as f:
         skip = True
@@ -94,7 +95,7 @@ def read_barrelfield():
     edge_points = edge_points.apply(lambda x: pd.Series(x.raw.split(' '))[:3].astype(float), axis = 1)
     #edge_points = edge_points.dropna()
 
-    invert_dict = lambda my_map: dict((v, k) for k, v in my_map.iteritems())
+    invert_dict = lambda my_map: dict((v, k) for k, v in six.iteritems(my_map))
     def get_edge_points_by_label(label):
         id_ = mapping_label_id[label]
         position = mapping_id_position[id_] * 37
@@ -348,7 +349,7 @@ def get_3x3_C2_soma_centroids():
              'D3border': [-37.46331304545455, 300.5537810227273, -378.67699979545455]}
 
 def create_3x3(hocpath_C2, outdir):
-    for name, centroid in get_3x3_C2_soma_centroids().iteritems():
+    for name, centroid in six.iteritems(get_3x3_C2_soma_centroids()):
         x,y,z = centroid
         outpath = os.path.join(outdir, name + '.hoc')
         move_hoc_absolute(hocpath_C2, x,y,z, outpath=outpath)
