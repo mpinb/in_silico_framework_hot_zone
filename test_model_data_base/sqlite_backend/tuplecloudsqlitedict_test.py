@@ -18,7 +18,7 @@ class Tests(unittest.TestCase):
     def setUp(self):
         self.tempdir = tempfile.mkdtemp()
         self.path = os.path.join(self.tempdir, 'tuplecloudsql_test.db')
-        self.db = SqliteDict(self.path, autocommit = True)
+        self.db = SqliteDict(self.path, autocommit = True, flag = 'c')
         
     def tearDown(self):
         self.db.close()

@@ -21,7 +21,7 @@ def robust_del_fun(mdb, key):
     except KeyError:
         pass
             
-class Tests_small(unittest.TestCase): 
+class Tests(unittest.TestCase): 
     def setUp(self):
         # set up model_data_base in temporary folder and initialize it.
         # This additionally is an implicit test, which ensures that the
@@ -46,17 +46,23 @@ class Tests_small(unittest.TestCase):
         robust_del_fun(self.mdb, 'voltage_traces2')
         robust_del_fun(self.mdb, 'test')   
             
-    def data_frame_generic_small(self, pdf, ddf, dumper): 
+    def data_frame_generic_small(self, pdf, ddf, dumper, client = None): 
         #index not set        
         self.clean_up()
-        self.mdb.setitem('test', ddf, dumper = dumper)
+        if client is None:
+            self.mdb.setitem('test', ddf, dumper = dumper)
+        else:
+            self.mdb.setitem('test', ddf, dumper = dumper, client = client)
         dummy = self.mdb['test']
         a = dask.compute(dummy)[0].reset_index(drop = True)
         b = pdf.reset_index(drop = True)
         assert_frame_equal(a, b)
         #sorted index set
         self.clean_up()
-        self.mdb.setitem('test', ddf.set_index(0), dumper = dumper)
+        if client is None:
+            self.mdb.setitem('test', ddf.set_index(0), dumper = dumper)
+        else:
+            self.mdb.setitem('test', ddf.set_index(0), dumper = dumper, client = client)
         dummy = self.mdb['test']
         a = dask.compute(dummy)[0]
         b = pdf.set_index(0)
@@ -66,10 +72,10 @@ class Tests_small(unittest.TestCase):
         self.data_frame_generic_small(self.pdf2, self.ddf2, dask_to_csv)
         
     def test_dask_to_msgpack_small(self):
-        self.data_frame_generic_small(self.pdf2, self.ddf2, dask_to_msgpack)     
+        self.data_frame_generic_small(self.pdf2, self.ddf2, dask_to_msgpack, client = client)     
         
     def test_dask_to_categorized_msgpack_small(self):
-        self.data_frame_generic_small(self.pdf2, self.ddf2, dask_to_categorized_msgpack)
+        self.data_frame_generic_small(self.pdf2, self.ddf2, dask_to_categorized_msgpack, client = client)
         
     def test_pandas_to_msgpack_small(self):
         self.data_frame_generic_small(self.pdf, self.pdf, pandas_to_msgpack)
@@ -117,42 +123,4 @@ class Tests_small(unittest.TestCase):
         # is functional
         Rm_reloaded.plot()
         self.mdb.setitem('rm2', Rm_reloaded, dumper = reduced_lda_model)
-        Rm_reloaded.Rm.get_lookup_series_for_different_refractory_period(10)
-
-        
-class Tests_real_data(unittest.TestCase): 
-    def setUp(self):
-        # set up model_data_base in temporary folder and initialize it.
-        # This additionally is an implicit test, which ensures that the
-        # initialization routine does not throw an error.
-        self.fmdb = FreshlyInitializedMdb()
-        self.mdb = self.fmdb.__enter__()
-                       
-    def tearDown(self):
-        self.fmdb.__exit__()
-                    
-    def real_data_generic(self, dumper):
-        self.mdb.setitem('voltage_traces2', self.mdb['voltage_traces'], dumper = dumper)
-        dummy = self.mdb['voltage_traces2']
-        b = self.mdb['voltage_traces'].compute(get = dask.multiprocessing.get)
-        a = dummy.compute(get = dask.multiprocessing.get)
-        assert_frame_equal(a, b)   
-           
-        self.mdb.setitem('synapse_activation2', self.mdb['synapse_activation'], dumper = dumper)
-        dummy = self.mdb['synapse_activation2']
-        b = self.mdb['synapse_activation'].compute(get = dask.multiprocessing.get)
-        a = dummy.compute(get = dask.multiprocessing.get)
-        assert_frame_equal(a, b)        
-
-    @decorators.testlevel(2)
-    def test_dask_to_csv_real_data(self):
-        self.real_data_generic(dask_to_csv)
-
-    @decorators.testlevel(2)
-    def test_dask_to_categorized_msgpack_real_data(self):
-        self.real_data_generic(dask_to_categorized_msgpack)        
-
-    @decorators.testlevel(2)
-    def test_dask_to_msgpack_real_data(self):
-        self.real_data_generic(dask_to_msgpack)
-        
+        Rm_reloaded.get_lookup_series_for_different_refractory_period(10)

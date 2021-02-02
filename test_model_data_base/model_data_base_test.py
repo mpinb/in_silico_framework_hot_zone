@@ -30,10 +30,10 @@ class Tests(unittest.TestCase):
 #             ModelDataBase(os.path.join(self.path_fresh_mdb, 'subfolder'),\
 #                                                   register = "try_on_every_init")
 #             assert(len(w >= 2))
-             
+#             
 #     def test_register_works(self):
 #         mdbr = model_data_base_register.ModelDataBaseRegister(self.path_fresh_mdb)
-#         self.assertIn(self.fresh_mdb._unique_id, mdbr.mdb.keys())
+#         self.assertIn(self.fresh_msdb._unique_id, mdbr.mdb.keys())
 #         submdb = self.fresh_mdb.create_sub_mdb("something")
 #         self.assertIn(submdb._unique_id, mdbr.mdb.keys())
          

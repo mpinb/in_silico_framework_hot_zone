@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 import os, sys, shutil, tempfile
+import distributed
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 sys.path.insert(0, parent)
 
@@ -22,6 +23,8 @@ if os.path.exists(files_generated_by_tests):
     shutil.rmtree(files_generated_by_tests)
 os.makedirs(files_generated_by_tests)
 
+client = distributed.client_object_duck_typed
+
 class FreshlyInitializedMdb(object):
     '''context manager that provides a freshly initalized mdb for 
     testing purposes'''
@@ -31,11 +34,11 @@ class FreshlyInitializedMdb(object):
         #self.mdb.settings.show_computation_progress = False
         from model_data_base.mdb_initializers.load_simrun_general import init
         from model_data_base.utils import silence_stdout
-        init = silence_stdout(init)
-        init(self.mdb, test_data_folder)
+        with silence_stdout:
+            init(self.mdb, test_data_folder, client = client)
        
         return self.mdb
     
     def __exit__(self, *args, **kwargs):
         if os.path.exists(self.path):
-            shutil.rmtree(self.path) 
+            shutil.rmtree(self.path)

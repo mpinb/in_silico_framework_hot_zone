@@ -58,7 +58,7 @@ def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
         st = mdb['spike_times']
         y = np.array(spike_in_interval(st, output_window_min, output_window_max))
         # get values for current mdb
-        mdb_values = {k: mdb[k[0]][k[1]][:, synapse_acivation_window_min:synapse_activation_window_max]\
+        mdb_values = {k: mdb[k][:, synapse_acivation_window_min:synapse_activation_window_max]\
                       for k in keys_to_synapse_activation_data}
         
         if aggfun is None:

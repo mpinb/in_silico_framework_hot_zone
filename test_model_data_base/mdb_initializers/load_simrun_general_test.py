@@ -6,9 +6,13 @@ from .. import decorators
 from model_data_base.mdb_initializers.load_simrun_general import *
 from model_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
 from model_data_base.utils import silence_stdout
+import distributed
 
 optimize = silence_stdout(optimize)
 init = silence_stdout(init)
+client = distributed.client_object_duck_typed
+
+assert(client is not None)
 
 class Tests(unittest.TestCase):
     def setUp(self):
@@ -22,16 +26,16 @@ class Tests(unittest.TestCase):
         self.fmdb.__exit__()
         
     def test_optimization_works_dumpers_default(self):
-        optimize(self.mdb, dumper = None)
+        optimize(self.mdb, dumper = None, client = client)
      
     def test_optimization_works_dumpers_csv(self):
-        optimize(self.mdb, dumper = dask_to_csv)
+        optimize(self.mdb, dumper = dask_to_csv, client = client)
          
     def test_optimization_works_dumpers_msgpack(self):
-        optimize(self.mdb, dumper = dask_to_msgpack)     
+        optimize(self.mdb, dumper = dask_to_msgpack, client = client)     
          
     def test_optimization_works_dumpers_categorized_msgpack(self):
-        optimize(self.mdb, dumper = dask_to_categorized_msgpack)                
+        optimize(self.mdb, dumper = dask_to_categorized_msgpack, client = client)                
          
     @decorators.testlevel(2)            
     def test_dataintegrity_no_empty_rows(self):

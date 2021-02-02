@@ -10,6 +10,9 @@ from model_data_base.mdb_initializers.synapse_activation_binning \
 
 from model_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
 from model_data_base.utils import silence_stdout
+import distributed
+
+client = distributed.client_object_duck_typed
 
 optimize_simrun_general = silence_stdout(optimize_simrun_general)
 
@@ -20,7 +23,7 @@ class Tests(unittest.TestCase):
         # initialization routine does not throw an error
         self.fmdb = FreshlyInitializedMdb()
         self.mdb = self.fmdb.__enter__()
-        optimize_simrun_general(self.mdb)
+        optimize_simrun_general(self.mdb, client = client)
                        
     def tearDown(self):
         self.fmdb.__exit__()

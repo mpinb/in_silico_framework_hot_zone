@@ -16,7 +16,9 @@ import test_single_cell_parser, test_single_cell_parser.decorators
 import test_biophysics_fitting, test_biophysics_fitting.decorators
 import distributed
 
+client = distributed.Client('localhost:8786')
 
+distributed.client_object_duck_typed = client
 #######################################
 # SET TESTLEVEL HERE
 # Choose a low testlevel if you only want to run quick tests.
@@ -38,18 +40,21 @@ test_biophysics_fitting.decorators.current_testlevel = 10
 # imported. Choose '.' to run all available tests within this module
 #######################################
 run = '.'
+#run = 'test_model_data_base.analyze.spaciotemporal_binning_test'
+#run = 'test_model_data_base.IO.LoaderDumper.dumpers_real_data_test'
 #run = 'test_biophysics_fitting.test_optimizer'
 #run = 'test_single_cell_parser.init_test'
 #run = 'test_simrun3.test_synaptic_strength_fitting'
 #run = 'test_model_data_base.model_data_base_test'
 #run = 'test_model_data_base.mdb_initializers.load_simrun_general_test'
+#run = 'test_model_data_base.mdb_initializers.synapse_activation_binning_test'
 #run = 'test_simrun2.simrun_test'
-#run = 'test_model_data_base.sqlite_backend.sqlite_backend_test'move cluster
+#run = 'test_model_data_base.sqlite_backend.sqlite_backend_test'#move cluster
 #run = 'test_model_data_base.model_data_base_register_test'
 ################################
 # verbosity of testrunner
 ################################
-verbosity = 2
+verbosity = 10 
     
     
 if __name__ == "__main__":
