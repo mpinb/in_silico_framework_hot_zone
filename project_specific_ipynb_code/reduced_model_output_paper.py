@@ -10,7 +10,7 @@ def get_surround_whiskers(whisker):
         a list containing all surround whiskers for the provided whisker.'''
     layout = [['A1', 'A2', 'A3', 'A4'], ['B1', 'B2', 'B3', 'B4'], ['C1', 'C2', 'C3', 'C4'], ['D1', 'D2', 'D3', 'D4'], ['E1', 'E2', 'E3', 'E4']]
     greeks = ['Alpha', 'Beta', 'Gamma', 'Delta']
-    greeks_lookup = dict(zip(greeks, [['A1', 'B1', 'Beta'], ['Alpha', 'Gamma', 'B1', 'C2'], ['Beta', 'Delta', 'C1', 'D1'], ['Gamma', 'D1', 'E1']]))
+    greeks_lookup = dict(list(zip(greeks, [['A1', 'B1', 'Beta'], ['Alpha', 'Gamma', 'B1', 'C2'], ['Beta', 'Delta', 'C1', 'D1'], ['Gamma', 'D1', 'E1']])))
     if whisker in greeks:
         sws = greeks_lookup[whisker]
         return sws
@@ -40,10 +40,11 @@ def get_surround_whiskers(whisker):
 # Step 2: for each postsynaptic cell, get presynaptic cells (celltype and cellid)
 def expand(mdb_or_folder): #lists contents without having to switch between keys and listdir
     try:
-        return mdb_or_folder.keys()
+        return list(mdb_or_folder.keys())
     except AttributeError:
         return I.os.listdir(mdb_or_folder)
 
+from six.moves import range as xrange 
 def chunker(seq, size):
     return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
 
@@ -129,15 +130,16 @@ class FakeCell:
     
 def generate_spiketimes(stim, cellNr_dict, tStop = 245+50, mdb = None):
     '''hacks roberts single cell parser to generate pointcell activity defined in network param file'''
+    import six
     simp = I.scp.NTParameterSet({'tStop': tStop})
     network_param = I.scp.build_parameters(mdb['network_param'].join(stim))
-    for celltype, cn in cellNr_dict.iteritems():
+    for celltype, cn in six.iteritems(cellNr_dict):
         network_param.network[celltype].cellNr = cn
     network_mapper = I.scp.NetworkMapper(FakeCell(), network_param.network, simParam=simp)
     with I.silence_stdout:
         network_mapper._create_presyn_cells()
         network_mapper._activate_presyn_cells()
-    return {k:[vv.spikeTimes for vv in v] for k,v in network_mapper.cells.iteritems()}
+    return {k:[vv.spikeTimes for vv in v] for k,v in six.iteritems(network_mapper.cells)}
 
 class ReducedModel:
     def __init__(self, kernel_dict, LUT, ISI_penalty, spatial_bin_size = 50):
@@ -347,7 +349,7 @@ class Network:
         self.somadistance_dict = somadistance_dict
         self.syn_files_by_cellid = {}
         self.con_files_by_cellid = {}
-        self.cell_counts = I.pd.Series(presynaptic_cells_dict.values()).value_counts().to_dict() # counts the number of cells of each celltype, used in _activate_pre_cells
+        self.cell_counts = I.pd.Series(list(presynaptic_cells_dict.values())).value_counts().to_dict() # counts the number of cells of each celltype, used in _activate_pre_cells
         self.pre_cells = I.defaultdict(list) # created by _create_pre_syn_cells, stores PreCell objects by celltype
         self.pre_cells_by_id = {} # created by _create_pre_syn_cells, stores PreCell objects by celltype
         self.post_cells = I.defaultdict(list)
@@ -363,8 +365,9 @@ class Network:
 #             self.syn_files_by_cellid[post_cell_ID] = syn
                
     
+    import six
     def _create_pre_syn_cells(self):
-        for cellID, celltype in self.presynaptic_cells_dict.iteritems():
+        for cellID, celltype in six.iteritems(self.presynaptic_cells_dict):
             pc = PreCell(cellID, celltype)
             self.pre_cells[celltype].append(pc)
             self.pre_cells_by_id[cellID] = pc
@@ -386,18 +389,19 @@ class Network:
 #                                                                              somadistance_dict_future)
 #                     for cellID in self.postsynaptic_cells_list]
         futures = client.compute(delayeds)
-        futures_distances_dict = dict(zip(self.postsynaptic_cells_list, futures))
+        futures_distances_dict = dict(list(zip(self.postsynaptic_cells_list, futures)))
         # note: futures_distances_dict is a 'remote database' which allows to query the data 
         # without the need to send all to the client node
         
         #
         if verbose:
             len_ = len(self.post_cells)
+        import six # rieke - this is probably in a bad place
         for lv, c_post in enumerate(self.post_cells.values()):
             if verbose and lv % 10 == 0:
-                print "{} of {} postsynaptic neurons." .format(lv+1, len_)
+                print("{} of {} postsynaptic neurons." .format(lv+1, len_))
             dict_ = futures_distances_dict[c_post.cellID].result()
-            for c_pre, soma_distances in dict_.iteritems():
+            for c_pre, soma_distances in six.iteritems(dict_):
                 c_pre_object = self.pre_cells_by_id[str(c_pre)]
                 for soma_distance in soma_distances:
                     celltype = c_pre_object.celltype
@@ -412,7 +416,7 @@ class Network:
         if network_param is not None:
             raise NotImplementedError("currently, network activation needs to be specified with mdb and stim keyword.")
         network_mapper = generate_spiketimes(stim, self.cell_counts, tStop = tStop, mdb = mdb)
-        for celltype in self.pre_cells.keys():
+        for celltype in list(self.pre_cells.keys()):
             for pre_cell, spike_times in zip(self.pre_cells[celltype], network_mapper[celltype]):
                 assert(spike_times is not None)
                 del pre_cell.spike_times[:]
@@ -430,7 +434,7 @@ def _get_presyn_cells_with_synapse_distance_parallel(post_cells_dir = None, post
     # using new somadistance lookup format, we can just look up our cellID
     # somadistance_dict = dist_mdb[post_cell_ID]
     # get the distances for all synapses
-    for celltype in read_confile.keys():
+    for celltype in list(read_confile.keys()):
         for c, cell in enumerate(read_confile[celltype]):
             sec = read_synfile[celltype][c][0]
             secx = read_synfile[celltype][c][1]

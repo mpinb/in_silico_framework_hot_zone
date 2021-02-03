@@ -23,7 +23,7 @@ import tempfile
 import dask.dataframe as dd
 import dask.delayed
 import pandas as pd
-import parent_classes
+from . import parent_classes
 import glob
 import compatibility
 import time
@@ -189,7 +189,7 @@ def my_dask_writer(ddf, path, optimize_graph = False, get = compatibility.multip
         
         
 
-    delayeds = [save_chunk(ddf_scattered, chunk) for chunk in chunkIt(range(ddf.npartitions), 1000)] #max 5000 tasks writing at the same time
+    delayeds = [save_chunk(ddf_scattered, chunk) for chunk in chunkIt(list(range(ddf.npartitions)), 1000)] #max 5000 tasks writing at the same time
     futures = client.compute(delayeds) #dask.delayed(delayeds).compute(get=get)
     distributed.wait(futures)
         

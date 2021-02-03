@@ -1,4 +1,6 @@
-from __future__ import absolute_import
+import six
+if six.PY2:
+    from __future__ import absolute_import
 import os
 from .model_data_base import ModelDataBase, MdbException
 from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend

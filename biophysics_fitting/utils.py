@@ -33,8 +33,9 @@ def get_inner_section_at_distance(cell, dist, beyond_dist = 1000, beyond_struct 
     '''Returns the section and relative position of that section, such that the soma distance (along the dendrite) is dist.
     Also, it is assured, that the section returned has children that have a soma distance beyond beyond_dist of the label in
     beyond_struct'''
+    import six
     sec_dist_dict = get_inner_sec_dist_list(cell, beyond_dist, beyond_struct)
-    dummy = {k - dist: v for k,v in sec_dist_dict.iteritems() if k > dist}
+    dummy = {k - dist: v for k,v in six.iteritems(sec_dist_dict) if k > dist}
     closest_sec = dummy[min(dummy)]
     x = (dist - cell.distance_to_soma(closest_sec, 0.0)) / closest_sec.L
     return closest_sec, x

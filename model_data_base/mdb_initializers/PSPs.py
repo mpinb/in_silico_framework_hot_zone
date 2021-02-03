@@ -4,8 +4,8 @@ from model_data_base.mdbopen import create_mdb_path, resolve_mdb_path
 from model_data_base.IO.LoaderDumper import pandas_to_msgpack
 
 def get_confile_form_network_param(n):
-    confile = set([n.network[k].synapses.connectionFile for k in n.network.keys()])
-    synfile = set([n.network[k].synapses.distributionFile for k in n.network.keys()])
+    confile = set([n.network[k].synapses.connectionFile for k in list(n.network.keys())])
+    synfile = set([n.network[k].synapses.distributionFile for k in list(n.network.keys())])
     assert(len(confile) == 1)
     assert(len(synfile) == 1)
     assert(list(confile)[0][:-4] == list(synfile)[0][:-4])
@@ -20,12 +20,13 @@ def get_parameterfiles_df_with_confile_and_neuron_param_path(mdb):
             continue
         n = scp.build_parameters(os.path.join(f, ff))
         map_to_confilepath[ff] = get_confile_form_network_param(n)
+    import six
     parameterfiles['confile'] = parameterfiles.hash_network.map(map_to_confilepath)
     map_to_parampath = {v: create_mdb_path(os.path.join(mdb['parameterfiles_cell_folder'], v)) 
-                             for k,v, in parameterfiles.hash_neuron.drop_duplicates().iteritems()}    
+                             for k,v, in six.iteritems(parameterfiles.hash_neuron.drop_duplicates())}    
     parameterfiles['neuron_param_mdbpath'] = parameterfiles['hash_neuron'].map(map_to_parampath)
     map_to_parampath = {v: create_mdb_path(os.path.join(mdb['parameterfiles_network_folder'], v)) 
-                             for k,v, in parameterfiles.hash_network.drop_duplicates().iteritems()}    
+                             for k,v, in six.iteritems(parameterfiles.hash_network.drop_duplicates())}    
     parameterfiles['network_param_mdbpath'] = parameterfiles['hash_network'].map(map_to_parampath)
     return parameterfiles
 
@@ -56,10 +57,10 @@ def init(mdb, client = None, description_key = None, PSPClass = None, PSPClass_k
     psps_out = []
     keys_out = []
     for index, row in pdf.iterrows():
-        print 'setting up computation of PSPs for network embedding ', row.confile, \
-                    ' and biophysical model ', row.neuron_param_mdbpath
-        print 'corresponding to ', resolve_mdb_path(row.confile), \
-                    resolve_mdb_path(row.neuron_param_mdbpath)
+        print('setting up computation of PSPs for network embedding ', row.confile, \
+                    ' and biophysical model ', row.neuron_param_mdbpath)
+        print('corresponding to ', resolve_mdb_path(row.confile), \
+                    resolve_mdb_path(row.neuron_param_mdbpath))
         neuron_param = resolve_mdb_path(row.neuron_param_mdbpath)
         psp = PSPClass(scp.build_parameters(neuron_param), row.confile, **PSPClass_kwargs)
         psp = psp.get()

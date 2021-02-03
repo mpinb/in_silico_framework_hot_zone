@@ -1,4 +1,6 @@
-from __future__ import absolute_import
+import six
+if six.PY2:
+    from __future__ import absolute_import
 from .tuplecloudsqlitedict import SqliteDict
 import os, time
 from ..utils import DelayedKeyboardInterrupt
@@ -76,7 +78,7 @@ class SQLiteBackend(object):
         '''Backend method to retrive item from the database'''
         dict_ = self._vectorized_getitem([arg])
         assert(len(dict_) == 1)
-        return dict_.values()[0]
+        return list(dict_.values())[0]
     
     def _vectorized_getitem(self, keys):
         '''this allows to get many values at once, reducing the overhead of repeated 
@@ -102,9 +104,10 @@ class SQLiteBackend(object):
         '''this allows to set many values at once, reducing the overhead of repeated 
         opening and closing the connection'''
         with DelayedKeyboardInterrupt():
+            import six
             try:
                 sqllitedict = self._get_sql(readonly = False)
-                for k, v in dict_.iteritems():
+                for k, v in six.iteritems(dict_):
                     sqllitedict[k] = v
             except:
                 raise
@@ -138,7 +141,7 @@ class SQLiteBackend(object):
         with DelayedKeyboardInterrupt():
             try:
                 sqllitedict = self._get_sql()
-                keys = sqllitedict.keys()
+                keys = list(sqllitedict.keys())
                 return sorted(keys)
             finally:
                 try:
@@ -149,7 +152,7 @@ class SQLiteBackend(object):
 class InMemoryBackend(object):
     def __init__(self, backend, keys = 'all'):
         if keys == 'all':
-            keys = backend.keys()
+            keys = list(backend.keys())
         self._db = backend._vectorized_getitem(keys)
     
     def __getitem__(self, arg):
@@ -184,4 +187,4 @@ class InMemoryBackend(object):
         raise NotImplementedError(errstr)
 
     def keys(self):
-        return self._db.keys()
+        return list(self._db.keys())

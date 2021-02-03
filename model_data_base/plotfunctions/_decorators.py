@@ -40,8 +40,8 @@ def dask_to_pandas(fun):
 
 @dask_to_pandas
 def pr(*args, **kwargs):
-    for x in args: print(type(x))
-    for name in kwargs: print('%s: %s' % (name, type(kwargs[name])))
+    for x in args: print((type(x)))
+    for name in kwargs: print(('{:s}: {:s}'.format((name, type(kwargs[name])))))
 
 def subsequent_calls_per_line(plotfun):
     '''decorator, that can be used on plotfunctions,

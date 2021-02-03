@@ -49,8 +49,8 @@ class L6config:
     def setup_mdb(self):
         '''copies all files at the appropriate location in this mdb'''
         mdb = self.mdb
-        if not 'morphology' in mdb.keys():
-            print 'copying morphology {}'.format(self.hocpath)
+        if not 'morphology' in list(mdb.keys()):
+            print('copying morphology {}'.format(self.hocpath))
             mdb.create_managed_folder('morphology')
             I.shutil.copy(self.hocpath, mdb['morphology'])
         
@@ -61,12 +61,12 @@ class L6config:
                   'get_Simulator','get_fixed_params','params']:
             mdb[k] = self.biophysical_model_mdb[self.biophysical_model_mdb_key][k]
             
-        if not 'network_embedding'  in mdb.keys():
-            print 'create network embedding subfolder'
+        if not 'network_embedding'  in list(mdb.keys()):
+            print('create network embedding subfolder')
             mdb.create_sub_mdb('network_embedding')     
         for loc in self.locs:
-            if not loc in mdb['network_embedding'].keys():
-                print 'creating network_embedding subfolder for {}'.format(loc)
+            if not loc in list(mdb['network_embedding'].keys()):
+                print('creating network_embedding subfolder for {}'.format(loc))
                 mdb['network_embedding'].create_managed_folder(loc)
                
         def get_file_or_folder_that_startswith(path, startswith):
@@ -78,8 +78,8 @@ class L6config:
             paths = [p for p in I.os.listdir(path) if p.endswith(endswith)]
             assert len(paths) == 1
             return I.os.path.join(path,paths[0])  
-        print ''
-        print 'creating number of cells spreadsheet from confile'
+        print('')
+        print('creating number of cells spreadsheet from confile')
         from singlecell_input_mapper.singlecell_input_mapper import con_file_to_NumberOfConnectedCells_sheet
         for loc in self.locs:
             d = self.anatomical_model_mdb[self.anatomical_model_mdb_key]
@@ -89,17 +89,17 @@ class L6config:
             I.shutil.copy(syn, mdb['network_embedding'][loc].join('con.syn'))
             I.shutil.copy(con, mdb['network_embedding'][loc].join('con.con'))
             con_file_to_NumberOfConnectedCells_sheet(mdb['network_embedding'][loc].join('con.con'))
-            print con 
+            print(con) 
         
-        print ''            
-        print 'create evoked activity parameterfiles'
+        print('')            
+        print('create evoked activity parameterfiles')
         from getting_started import getting_started_dir
         ongoing_template_param_name = I.os.path.join(getting_started_dir, 'functional_constraints/ongoing_activity/ongoing_activity_celltype_template_exc_conductances_fitted.param')               
-        print 'template: {}'.format(ongoing_template_param_name)
+        print('template: {}'.format(ongoing_template_param_name))
         
         for loc in self.locs:
             for stim in self.stims:
-                print '\tstim: {}, loc: {}'.format(stim,loc)
+                print('\tstim: {}, loc: {}'.format(stim,loc))
                 ongoing_template_param_name = I.os.path.join(getting_started_dir, 'functional_constraints/ongoing_activity/ongoing_activity_celltype_template_exc_conductances_fitted.param')
                 cell_number_file_name = mdb['network_embedding'][loc].join('NumberOfConnectedCells.csv')
                 syn_file_path = mdb['network_embedding'][loc].join('con.syn')
@@ -113,7 +113,7 @@ class L6config:
                                           stim, 
                                           mdb['network_embedding'][loc].join(stim + '_network.param'))
         
-        print 
+        print() 
     def get_network_param(self, loc = 'C2center', stim = 'C2', network_param_modfuns = [], stim_onset = 2000):
         network_param = self.mdb['network_embedding'][loc].join('{}_network.param'.format(stim))
         network_param = I.scp.build_parameters(network_param)
@@ -146,12 +146,13 @@ class ModelSelection:
             self.l6_config.biophysical_model_mdb[self.l6_config.biophysical_model_mdb_key])
         return pdf_XY_splitted, pdf_XY
         
+    import six
     def select_models(self, BAC_limit = 3.5, step_limit = 4.5):
         from biophysics_fitting.model_selection import get_model_pdf_from_mdb, get_pdf_selected            
         selected_models = []
-        for k, pdf in self.pdf_XY_splitted.iteritems():
+        for k, pdf in six.iteritems(self.pdf_XY_splitted):
             if not k in self.l6_config.runs: continue
-            print self.objectives_BAC
+            print(self.objectives_BAC)
             p, selected_model = get_pdf_selected(pdf, BAC_limit = BAC_limit, step_limit = step_limit,
                                                  objectives_BAC=self.objectives_BAC,
                                                  objectives_step=self.objectives_step)
@@ -278,7 +279,7 @@ class ModelResponses:
                                                                        stim_onset = 2000)
         delayeds.extend([self.simulate_synaptic_stim(modelid, o(network_param), 'PW_stim') 
                          for modelid in selected_models])  
-        print len(delayeds)      
+        print(len(delayeds))      
         futures = client.compute(delayeds)
         I.distributed.fire_and_forget(futures)
         return delayeds, futures
@@ -306,7 +307,8 @@ class ModelResponses:
         colormap['hot_zone'] = 'r'
         colormap['soma'] = 'k'
         colormap['AIS'] = 'g'
-        for k, v in self._extract_vm_from_cell(cell).iteritems():
+        import six
+        for k, v in six.iteritems(self._extract_vm_from_cell(cell)):
             ax.plot(cell.tVec, v, label = k, c = colormap[k], alpha = .5 if k == 'AIS' else 1)        
             
     def visualize_selected_models(self, ax_arrangement = [['PW_stim'],
@@ -316,11 +318,12 @@ class ModelResponses:
                             ylim = {'init': (-90, -60)}):
         selected_models = self.modelSelection.selected_models
         mdb = self.modelSelection.l6_config.mdb
+        import six
         for model in selected_models:
-            print selected_models
+            print(selected_models)
             m = mdb[str(model)]['model_responses']         
             fig = I.plt.figure(figsize = (15*0.7,12*.7), dpi = 200)            
-            for ax_position, stim in get_ax_ids(ax_arrangement).iteritems():
+            for ax_position, stim in six.iteritems(get_ax_ids(ax_arrangement)):
                 ax = fig.add_subplot(*ax_position)
                 self._plot_helper(m[stim]['cell'], ax)
                 ax.set_ylim(-90,50)
@@ -359,8 +362,8 @@ class SynapticStrengthFitting:
     def run_synaptic_strength_fitting(self, client, loc = 'C2center'):
         mdb = self.model_selection.l6_config.mdb
         for model in self.model_selection.selected_models:
-            if 'syn_strength_fitting' in mdb[model].keys():
-                print 'skipping model {} as it seems to be simulated already. If the simulation '.format(model)
+            if 'syn_strength_fitting' in list(mdb[model].keys()):
+                print('skipping model {} as it seems to be simulated already. If the simulation '.format(model))
                 'run was incomplete, you can delete the data by running del l6_config.mdb[\'{}\'][\'{}\']'.format(model, 'syn_strength_fitting')                
                 continue         
             cell_param = self.model_selection.get_cell_param(model)
@@ -373,11 +376,12 @@ class SynapticStrengthFitting:
                 psp.run(client)
             self.psps[model][loc] = psp
         
+    import six
     def save_psps_to_mdb(self):
         mdb = self.model_selection.l6_config.mdb
-        for model, psps in self.psps.iteritems():
+        for model, psps in six.iteritems(self.psps):
             mdb[model].create_sub_mdb('syn_strength_fitting', raise_ = False)
-            for loc, psps in psps.iteritems():
+            for loc, psps in six.iteritems(psps):
                 psps.get_voltage_and_timing()
                 mdb[model]['syn_strength_fitting'][loc] = psps
     
@@ -478,12 +482,12 @@ class EvokedActivitySimulationSetup:
         
         for model_id in self.models:
             syn_strength = self.synaptic_strength_fitting.get_optimal_g(model_id)['optimal g']
-            print 'syn_strength'
+            print('syn_strength')
             I.display.display(syn_strength)
-            if not self.output_dir_key in mdb[str(model_id)].keys():
+            if not self.output_dir_key in list(mdb[str(model_id)].keys()):
                 mdb[str(model_id)].create_managed_folder(self.output_dir_key)
             else:
-                print 'skipping model {} as it seems to be simulated already. If the simulation '.format(model_id)
+                print('skipping model {} as it seems to be simulated already. If the simulation '.format(model_id))
                 'run was incomplete, you can delete the data by running del l6_config.mdb[\'{}\'][\'{}\']'.format(model_id, self.output_dir_key)
                 continue
             landmark_name = mdb['morphology'].join('recSites.landmarkAscii')        
@@ -502,7 +506,7 @@ class EvokedActivitySimulationSetup:
                         network_param_name = mdb[str(model_id)][self.output_dir_key].join('network_INH_{}_stim_{}_loc_{}.param'.format(INH_scaling, stim, loc))
                         network_param.save(network_param_name)
                         outdir = mdb[str(model_id)][self.output_dir_key].join(str(INH_scaling)).join(stim).join(str(loc))
-                        print model_id, INH_scaling, stim, loc
+                        print(model_id, INH_scaling, stim, loc)
                         d = I.simrun_run_new_simulations(cell_param_name, network_param_name, 
                                                          dirPrefix = outdir, 
                                                          nSweeps = 200, 
@@ -522,9 +526,9 @@ class EvokedActivitySimulationSetup:
         mdb = self.l6_config.mdb
         for model_id in self.model_selection.selected_models:
             mdb_key = self.output_dir_key + '_mdb'
-            if mdb_key in mdb[str(model_id)].keys():
+            if mdb_key in list(mdb[str(model_id)].keys()):
                 del mdb[str(model_id)][mdb_key]
-            if not mdb_key in mdb[str(model_id)].keys():
+            if not mdb_key in list(mdb[str(model_id)].keys()):
                 mdb_init = mdb[str(model_id)].create_sub_mdb(mdb_key)
                 I.mdb_init_simrun_general.init(mdb_init, mdb[str(model_id)][self.output_dir_key], 
                                                burst_times = False, 
@@ -568,15 +572,15 @@ class EvokedActivitySimulationSetupRieke:
         for model_id in self.models:
             if self.custom_glutamate_conductances is None:
                 syn_strength = self.synaptic_strength_fitting.get_optimal_g(model_id)['optimal g']
-                print 'syn_strength'
+                print('syn_strength')
                 I.display.display(syn_strength)
             elif not self.custom_glutamate_conductances is None:
                 syn_strength = self.custom_glutamate_conductances
                 
-            if not self.output_dir_key in mdb[str(model_id)].keys():
+            if not self.output_dir_key in list(mdb[str(model_id)].keys()):
                 mdb[str(model_id)].create_managed_folder(self.output_dir_key)
             else:
-                print 'skipping model {} as it seems to be simulated already. If the simulation '.format(model_id)+'run was incomplete, you can delete the data by running del l6_config.mdb[\'{}\'][\'{}\']'.format(model_id, self.output_dir_key)
+                print('skipping model {} as it seems to be simulated already. If the simulation '.format(model_id)+'run was incomplete, you can delete the data by running del l6_config.mdb[\'{}\'][\'{}\']'.format(model_id, self.output_dir_key))
                 continue
             landmark_name = mdb['morphology'].join('recSites.landmarkAscii')        
             cell_param = self.model_selection.get_cell_param(model_id, add_sim_param = True,
@@ -601,7 +605,7 @@ class EvokedActivitySimulationSetupRieke:
                             network_param_name = mdb[str(model_id)][self.output_dir_key].join('network_INHevoked_{}_INHongoing_{}_stim_{}_loc_{}.param'.format(INH_scaling, ongoing_scale, stim, loc))
                             network_param.save(network_param_name)
                             outdir = mdb[str(model_id)][self.output_dir_key].join(str(ongoing_scale)).join(str(INH_scaling)).join(stim).join(str(loc))
-                            print model_id, ongoing_scale, INH_scaling, stim, loc
+                            print(model_id, ongoing_scale, INH_scaling, stim, loc)
                             
                             d = I.simrun_run_new_simulations(cell_param_name, network_param_name, 
                                                              dirPrefix = outdir, 
@@ -623,9 +627,9 @@ class EvokedActivitySimulationSetupRieke:
         mdb = self.l6_config.mdb
         for model_id in self.model_selection.selected_models:
             mdb_key = self.output_dir_key + '_mdb'
-            if mdb_key in mdb[str(model_id)].keys():
+            if mdb_key in list(mdb[str(model_id)].keys()):
                 del mdb[str(model_id)][mdb_key]
-            if not mdb_key in mdb[str(model_id)].keys():
+            if not mdb_key in list(mdb[str(model_id)].keys()):
                 mdb_init = mdb[str(model_id)].create_sub_mdb(mdb_key)
                 I.mdb_init_simrun_general.init(mdb_init, mdb[str(model_id)][self.output_dir_key], 
                                                burst_times = False, 
@@ -694,8 +698,8 @@ class PWfitting:
                                                              max_time = max_time, 
                                                              bin_size = max_time-min_time)[1][0]
 
-        print 'CDK_target_value_avg_L5tt: %s' % self.CDK_target_value_avg_L5tt
-        print 'CDK_target_value_same_cell: %s' % self.CDK_target_value_same_cell
+        print('CDK_target_value_avg_L5tt: {:s}'.format(self.CDK_target_value_avg_L5tt))
+        print('CDK_target_value_same_cell: {:s}'.format(self.CDK_target_value_same_cell))
         
         #st_robert_control = I.ModelDataBase('/nas1/Data_arco/results/mdb_robert_3x3/')['spike_times']
         st_robert_control = I.ModelDataBase(self.mdb_path2)['spike_times']
@@ -704,7 +708,7 @@ class PWfitting:
         self.target_robert = I.temporal_binning(st_robert_control, min_time = 245+min_time, 
                                                 max_time = 245+max_time, 
                                                 bin_size = max_time-min_time)[1][0]
-        print 'target_robert: %s' % self.target_robert
+        print('target_robert: {:s}'.format(self.target_robert))
 
     def _get_INH_dependent_n_spikes(self, model):
         st = self.l6_config.mdb[str(model)]['PW_fitting_mdb']['spike_times']
@@ -758,7 +762,7 @@ class PWfitting:
             st_CDK = I.ModelDataBase(self.mdb_path1)['CDK_PassiveTouch']
             st_CDK = I.select(st_CDK, stim = 'D2')
             CDK_bins = I.temporal_binning(st_CDK, min_time = -144, max_time = 100, bin_size = 1)
-            CDK_bins = [range(245-144,245+100+1), CDK_bins[1]]
+            CDK_bins = [list(range(245-144,245+100+1)), CDK_bins[1]]
             st_robert_control = I.ModelDataBase(self.mdb_path2)['spike_times']
             st_robert_control = st_robert_control[st_robert_control.index.str.split('_').str[0] == 'C2']
             robert_bins = I.temporal_binning(st_robert_control, min_time = 0, max_time = 245+50, bin_size = 1)
@@ -788,7 +792,7 @@ def get_all_L6_simulation_dbs():
     mdb = I.ModelDataBase('/nas1/Data_arco/results/20190507_metaanalysis_of_L6_control_experiments')
     # create mdb dict
     mdbs = {}
-    for k in mdb.keys():
+    for k in list(mdb.keys()):
         if k == 'local': continue
         m = mdb[k]
         l6_config = m['l6_config']
@@ -799,7 +803,7 @@ def get_all_L6_simulation_dbs():
             try:
                 m = l6_config.mdb[model]['3x3_control_mdb']
             except:
-                print 'skipping ',morphology, model_run
+                print('skipping ',morphology, model_run)
                 continue
             mdbs[str(model_run) + '_' + str(morphology)] = m
     return mdbs
@@ -1011,21 +1015,21 @@ def create_whole_bc_embedding(outdir):
     return write_embedding_from_pdf(get_fraction_of_all_cells(1), outdir, 'full_bc_embedding')
 
 def get_cellNr(network_param):
-    return {celltype: network_param.network[celltype].cellNr for celltype in network_param.network.keys()}
+    return {celltype: network_param.network[celltype].cellNr for celltype in list(network_param.network.keys())}
 
 def get_landmarks_pdf_by_cellNr(network_param, landmarks_pdf_all):
     cellnr = get_cellNr(network_param)
     groups = {name: group for name, group in landmarks_pdf_all.groupby('label')}
     out = []
-    for celltype in cellnr.keys():
-        if not celltype in groups.keys():
-            print('skipping celltype {} as it is not part of the barrel cortex model'.format(celltype))
+    for celltype in list(cellnr.keys()):
+        if not celltype in list(groups.keys()):
+            print(('skipping celltype {} as it is not part of the barrel cortex model'.format(celltype)))
             continue
         if cellnr[celltype] > len(groups[celltype]):
-            print 'specified cellnr {} is larger '.format(cellnr[celltype]) + \
+            print('specified cellnr {} is larger '.format(cellnr[celltype]) + \
                   'than number of cells {} of type {}. Using {} cells'.format(len(groups[celltype]),
                                                                               celltype,
-                                                                              len(groups[celltype]))
+                                                                              len(groups[celltype])))
             sample = groups[celltype]
         else:
             sample = groups[celltype].sample(cellnr[celltype])
@@ -1057,7 +1061,8 @@ def get_synapse_landmarks_pdf(mdb, sti):
     evokedNW = I.scp.NetworkMapper(cell, netp.network, simParam=neup.sim)
     evokedNW._assign_anatomical_synapses()
     out = []
-    for k, synlist in cell.synapses.iteritems():
+    import six
+    for k, synlist in six.iteritems(cell.synapses):
         for syn in synlist:
             out.append((k, syn.coordinates))
     cell.re_init_cell()
@@ -1267,9 +1272,9 @@ def plot_fig2C_data(df, ax = None):
         ax.plot([row.ongoing, row.ongoing], [lv-0.35, lv+0.35], c = 'k')        
         #ax.barh(lv, 2, 0.7, left = row.ongoing-1, color = '#000000')
         names.append(name)
-    ax.set_yticks(range(len(names)))
+    ax.set_yticks(list(range(len(names))))
     ax.set_yticklabels(names)
-    ax.set_xticks(range(0, 1800,300))
+    ax.set_xticks(list(range(0, 1800,300)))
 
 def fig2C_data(sa, 
                ongoing_min_time = 245-25,
@@ -1304,7 +1309,7 @@ def fig2C_data(sa,
 
 def plot_fig2C_data(df, 
                     ax = None,
-                    xticks = range(0, 1800,300)):
+                    xticks = list(range(0, 1800,300))):
     if ax is None:
         fig = I.plt.figure()
         ax = fig.add_subplot(111)
@@ -1319,7 +1324,7 @@ def plot_fig2C_data(df,
         ax.plot([row.ongoing, row.ongoing], [lv-0.35, lv+0.35], c = 'k')        
         #ax.barh(lv, 2, 0.7, left = row.ongoing-1, color = '#000000')
         names.append(name)
-    ax.set_yticks(range(len(names)))
+    ax.set_yticks(list(range(len(names))))
     ax.set_yticklabels(names)
     if xticks:
         ax.set_xticks(xticks)

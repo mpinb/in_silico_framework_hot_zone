@@ -1,6 +1,6 @@
 import os
-import cPickle
-import parent_classes
+from six.moves import cPickle
+from . import parent_classes
 
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''

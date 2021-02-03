@@ -44,7 +44,7 @@ def compare_single_instance_to_neuronet(neuronet_data, realization_data, figkwar
 from collections import defaultdict
 def realization_data_list_to_dataframe(realization_data_dict):
     out = {}# defaultdict(lambda: {})
-    out_table_names = realization_data_dict[realization_data_dict.keys()[0]].keys()
+    out_table_names = list(realization_data_dict[list(realization_data_dict.keys())[0]].keys())
     
     for out_table_name in out_table_names:
         out[out_table_name] = {}

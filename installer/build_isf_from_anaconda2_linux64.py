@@ -54,15 +54,15 @@ else:
 #conda install pyzmq=16.0.2=py27_0
 
 for c in commands:
-    print '*'*20
-    print c
+    print('*'*20)
+    print(c)
     os.system(c)
 
 # patch pandas
 # this adds support for CategoricalIndex for msgpack format
 # by arco, 208-08-30
 
-print 'patching pandas to support CategoricalIndex in msgpack format'
+print('patching pandas to support CategoricalIndex in msgpack format')
 import os
 import pandas.io.packers
 dest_path = os.path.dirname(pandas.io.packers.__file__)
@@ -72,9 +72,9 @@ with open(dest_path, 'w') as f_dest:
     with open(source_path) as f_source:
 		f_dest.write(f_source.read())
 		
-print 'you need a installation of NEURON. I try to install from the specified directory ...'
-print 'installing NEURON'
-print 'In case, neuron does not work, please go to your neuron directory and recompile it, ideally, while THIS ENVIRONMENT IS ACTIVATED'
+print('you need a installation of NEURON. I try to install from the specified directory ...')
+print('installing NEURON')
+print('In case, neuron does not work, please go to your neuron directory and recompile it, ideally, while THIS ENVIRONMENT IS ACTIVATED')
 
 # wget 
 # ./configure --prefix=/nas1/Data_arco/prgr/nrn_isf_py2.7_florida --with-nrnpython --without-iv

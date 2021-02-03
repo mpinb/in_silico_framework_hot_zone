@@ -1,7 +1,7 @@
 import os
 import cloudpickle
 import numpy as np
-import parent_classes
+from . import parent_classes
 from single_cell_parser.cell import Cell
 from single_cell_parser.serialize_cell import save_cell_to_file
 from single_cell_parser.serialize_cell import load_cell_from_file

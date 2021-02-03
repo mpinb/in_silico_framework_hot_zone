@@ -39,7 +39,7 @@ def pd_to_array(pdf):
     try:
         return pdf.to_numpy()
     except AttributeError:
-        print 'asd'
+        print('asd')
         return pdf.values # legacy version of pandas used in in_silico_framework 2, but now deprecated
     
 #def pd_to_array(x):

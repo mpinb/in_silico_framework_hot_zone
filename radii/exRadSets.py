@@ -104,7 +104,7 @@ class RadiusCalculatorForManyFiles:
             return "error"
 
 #       points = list(map(lambda x: map(lambda y: int(y/0.092), x), points))
-        points = map(lambda x: tr.read.convert_point(x, 1.0/0.092, 1.0/0.092, 1.0), points)
+        points = [tr.read.convert_point(x, 1.0/0.092, 1.0/0.092, 1.0) for x in points]
 
         return points
 

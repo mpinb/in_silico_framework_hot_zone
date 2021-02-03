@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import dask
-from utils import filter_by_time, merge_synapse_activation, _convertible_to_int
+from .utils import filter_by_time, merge_synapse_activation, _convertible_to_int
 
 def skip_time(df, t_skip_start, t_skip_end):
     '''accepts a synapse activation pandas data frame. Returns a dataframe, where

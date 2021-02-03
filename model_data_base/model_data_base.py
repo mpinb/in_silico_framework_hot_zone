@@ -11,10 +11,10 @@ import tempfile
 import datetime
 import cloudpickle as pickle
 import yaml
-import IO.LoaderDumper.just_create_folder
-import IO.LoaderDumper.just_create_mdb
-import IO.LoaderDumper.to_pickle
-import IO.LoaderDumper.to_cloudpickle
+from . import IO.LoaderDumper.just_create_folder
+from . import IO.LoaderDumper.just_create_mdb
+from . import IO.LoaderDumper.to_pickle
+from . import IO.LoaderDumper.to_cloudpickle
 
 if 'ISF_MDB_CONFIG' in os.environ:
     config_path = os.environ['ISF_MDB_CONFIG']
@@ -27,7 +27,7 @@ else:
 if config['backend']['type'] == 'sqlite':
     from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
 elif config['backend']['type'] == 'sqlite_remote':
-    print "Using remote sqlite backend with config {}".format(config)
+    print("Using remote sqlite backend with config {}".format(config))
     from .sqlite_backend.sqlite_remote_backend_client import SQLiteBackendRemote as SQLBackend
 else:
     raise ValueError("backend must be sqlite or sqlite_remote")
@@ -42,7 +42,7 @@ import dask.diagnostics
 import warnings
 import re
 import inspect
-from _version import get_versions
+from ._version import get_versions
 
 def slugify(value):
     """
@@ -53,11 +53,12 @@ def slugify(value):
     a bit modified
     """
     import unicodedata
+    import six
     value = str(value)
-    value = unicode(value, errors = 'ignore')
+    value = six.text_type(value, errors = 'ignore')
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
-    value = unicode(re.sub('[-\s]+', '-', value))
+    value = six.text_type(re.sub('[^\w\s-]', '', value).strip().lower())
+    value = six.text_type(re.sub('[-\s]+', '-', value))
     value = str(value)
     if len(value) >= 50:
         value = value[:50]
@@ -149,12 +150,12 @@ class SQLMetadataAccessor():
         
     def __getitem__(self, key):
         out = defaultdict(lambda: 'unknown')
-        if key in self.sql_backend.keys():
+        if key in list(self.sql_backend.keys()):
             out.update(self.sql_backend[key])
         return out
     
     def keys(self):
-        return self.sql_backend.keys()
+        return list(self.sql_backend.keys())
 
 class ModelDataBase(object):
     def __init__(self, basedir, forceload = False, readonly = False, nocreate = False, 
@@ -239,15 +240,15 @@ class ModelDataBase(object):
         self.readonly = True
 
         if recursive: 
-            for k in self.keys():
+            for k in list(self.keys()):
                 if self.metadata[k]['dumper'] == 'just_create_mdb':
                     m = self[k]
                     m.in_memory(recursive = True)
                     self._sql_backend._db[k] = m
 
     def _register_this_database(self):
-        print 'registering database with unique_id {} to the absolute path {}'.format(
-                        self._unique_id, self.basedir)
+        print('registering database with unique_id {} to the absolute path {}'.format(
+                        self._unique_id, self.basedir))
         try:
             model_data_base_register.register_mdb(self)
             self._registered_to_path = self.basedir
@@ -291,7 +292,7 @@ class ModelDataBase(object):
         
     def itemexists(self, key):
         '''Checks, if item is already in the database'''
-        return key in self.keys()
+        return key in list(self.keys())
                 
     def get_mkdtemp(self, prefix = '', suffix = ''):
         '''creates a directory in the model_data_base directory and 
@@ -305,7 +306,7 @@ class ModelDataBase(object):
         '''creates a folder in the mdb directory and saves the path in 'key'.
         You can delete the folder using del mdb[key]'''
         #todo: make sure that existing key will not be overwritten
-        if key in self.keys():
+        if key in list(self.keys()):
             if raise_:
                 raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         else:           
@@ -327,7 +328,7 @@ class ModelDataBase(object):
         if register == 'as_parent':
             ##todo
             pass
-        if key in self.keys():
+        if key in list(self.keys()):
             if raise_:
                 raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         else:
@@ -356,7 +357,7 @@ class ModelDataBase(object):
             # special case: if we have nested mdbs, allow accessing it with
             # mdb[key_in_parent_mdb, key_in_child_mdb] instead of forcing
             # mdb[key_in_parent_mdb][key_in_child_mdb]
-            existing_keys = self.keys()
+            existing_keys = list(self.keys())
             
             def str_to_tuple(x):
                 if isinstance(x, str):
@@ -364,7 +365,7 @@ class ModelDataBase(object):
                 else:
                     return x
                 
-            existing_keys = map(str_to_tuple, existing_keys)            
+            existing_keys = list(map(str_to_tuple, existing_keys))            
             if isinstance(arg, tuple) and not arg in existing_keys:
                 for lv in range(len(arg)):
                     if arg[:lv] in existing_keys:
@@ -399,7 +400,7 @@ class ModelDataBase(object):
         # make sure hierarchy mimics folder structure:
         # (parent, child) can only exist, if parent is not already set to
         # some value
-        existing_keys = [tuple([k]) if isinstance(k, str) else k for k in self.keys()]
+        existing_keys = [tuple([k]) if isinstance(k, str) else k for k in list(self.keys())]
         # make sure, first elements of the key are not used already,
         # e.g. if we want to set ('A', '1'), we have to make sure that 
         # ('A') is not already set
@@ -427,7 +428,7 @@ class ModelDataBase(object):
         if isinstance(key, str): 
             key = tuple([key])        
             
-        existing_keys = [tuple([k]) if isinstance(k, str) else k for k in self.keys()]
+        existing_keys = [tuple([k]) if isinstance(k, str) else k for k in list(self.keys())]
 
         if key in existing_keys:
             return True
@@ -454,7 +455,7 @@ class ModelDataBase(object):
                 try:
                     shutil.rmtree(basedir_absolute)
                 except:
-                    print 'could not delete folder %s' % basedir_absolute
+                    print('could not delete folder {:s}'.format(basedir_absolute))
                 raise
             self._sql_backend[key] = LoaderWrapper(basedir_relative)
             
@@ -578,7 +579,7 @@ class ModelDataBase(object):
         the field `metadata_creation_time` is set to `post_hoc`'''
         keys_in_mdb_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
         for key in keys_in_mdb_without_metadata:
-            print "Updating metadata for key {key}".format(key = str(key))
+            print("Updating metadata for key {key}".format(key = str(key)))
             self._write_metadata_for_existing_key(key)
                
     def __setitem__(self, key, item):
@@ -593,13 +594,13 @@ class ModelDataBase(object):
 
     def _robust_rmtree(self, key, path):
         try:
-            print 'start deleting {}'.format(path)
+            print('start deleting {}'.format(path))
             shutil.rmtree(path)
         except OSError:
-            print('The folder ' + path + ' was registered as belonging to ' + \
+            print(('The folder ' + path + ' was registered as belonging to ' + \
                   str(key) + '. I tried to delete this folder, because the corresponding key was overwritten. ' + \
-                  'Could not delete anything, because folder did not exist in the first place. I just carry on ...')
-        print 'done deleting {}'.format(path)
+                  'Could not delete anything, because folder did not exist in the first place. I just carry on ...'))
+        print('done deleting {}'.format(path))
 
             
     def __delitem__(self, key):
@@ -690,7 +691,7 @@ class ModelDataBase(object):
         
     def keys(self):
         '''returns the keys of the database'''
-        return self._sql_backend.keys()
+        return list(self._sql_backend.keys())
     
     def get_readonly(self):
         '''returns a new ModelDataBase, which is readonly.
@@ -719,9 +720,9 @@ class RegisteredFolder(ModelDataBase):
         self.setitem = None
         
     
-import model_data_base_register
-import mdbopen
-import _module_versions
+from . import model_data_base_register
+from . import mdbopen
+from . import _module_versions
                       
 VC = _module_versions.version_cached
 # get_versions_cache = get_versions()

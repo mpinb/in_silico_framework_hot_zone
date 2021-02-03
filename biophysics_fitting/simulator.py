@@ -301,7 +301,7 @@ s.setup.stim_setup_funs.append(BAC.stim_setup, params_to_kwargs(examplary_stim_s
         name, fun = self.setup.get_stim_run_fun_by_stim(stim)
         #print name,param_selector(params, name)
         cell = fun(cell, params = param_selector(params, name))
-        print "simulating {} took {} seconds".format(stim, time.time()-t)
+        print("simulating {} took {} seconds".format(stim, time.time()-t))
         return cell, params
 
     def run(self, params):

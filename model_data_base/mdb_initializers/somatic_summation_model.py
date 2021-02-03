@@ -24,7 +24,7 @@ class CelltypeSpecificSynapticWeights:
         for celltype in n.network:
             if select_celltypes is not None:
                 if not celltype.split('_')[0] in select_celltypes:
-                    print 'setting weight of celltype {} to 0, as it is not within selected celltypes'.format(celltype)
+                    print('setting weight of celltype {} to 0, as it is not within selected celltypes'.format(celltype))
                     out[celltype] = 0
                     continue
             if use_default_weight is not None:
@@ -35,7 +35,7 @@ class CelltypeSpecificSynapticWeights:
                 receptors = n.network[celltype].synapses.receptors
                 if len(receptors) > 1:
                     raise NotImplementedError()
-                receptor_key = receptors.keys()[0]
+                receptor_key = list(receptors.keys())[0]
                 receptor = receptors[receptor_key]
                 if receptor_key not in ['glutamate_syn', 'gaba_syn']:
                     raise NotImplementedError()
@@ -45,8 +45,8 @@ class CelltypeSpecificSynapticWeights:
                     if not receptor.weight[0] == receptor.weight[1]:
                         raise NotImplementedError()
                     out[celltype] =  receptor.weight[0]
-        print 'final weights lookup dict:'
-        print out
+        print('final weights lookup dict:')
+        print(out)
                 
     def __getitem__(self, k):
         return self._celltype_to_syn_weight[k[0]]
@@ -61,9 +61,10 @@ def sa_to_vt_bypassing_lock(mdb_loader_dict, descriptor, classname, sa,
     parameterfiles = mdb_loader_dict['parameterfiles']()    
     out = []
     index = []
+    import six
     PSP_identifiers = parameterfiles.loc[sa.index.drop_duplicates()]
     PSP_identifiers = PSP_identifiers.groupby(['neuron_param_mdbpath', 'confile']).apply(lambda x: list(x.index))
-    for name, row in PSP_identifiers.iteritems():
+    for name, row in six.iteritems(PSP_identifiers):
         #print name
         #print ''
         #print row
@@ -74,7 +75,7 @@ def sa_to_vt_bypassing_lock(mdb_loader_dict, descriptor, classname, sa,
         for sti in row:
             weights_dict = CelltypeSpecificSynapticWeights()
             n = parameterfiles.loc[sti]['network_param_mdbpath']
-            print 'loading synaptic weights from network param file ', n
+            print('loading synaptic weights from network param file ', n)
             n = scp.build_parameters(n)
             default_weight =  None if individual_weights else 1
             weights_dict.init_with_network_param(n, select_celltypes=select_celltypes,
@@ -88,11 +89,12 @@ def sa_to_vt_bypassing_lock(mdb_loader_dict, descriptor, classname, sa,
 
 def get_mdb_loader_dict(mdb, descriptor = None, PSPClass_name = None):
     from model_data_base.IO.LoaderDumper import load
-    keys = [k for k in mdb['PSPs'].keys() if (k[1] == PSPClass_name) and (k[0] == descriptor)]
+    import six
+    keys = [k for k in list(mdb['PSPs'].keys()) if (k[1] == PSPClass_name) and (k[0] == descriptor)]
     keys = keys + ['parameterfiles']
     mdb_loader_dict = {k: mdb['PSPs']._sql_backend[k].relpath for k in keys}
     mdb_loader_dict = {k: partial(load, os.path.join(mdb['PSPs'].basedir, v)) 
-                       for k,v in mdb_loader_dict.iteritems()}   
+                       for k,v in six.iteritems(mdb_loader_dict)}   
     return mdb_loader_dict
 
 import barrel_cortex

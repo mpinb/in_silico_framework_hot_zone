@@ -15,7 +15,7 @@ def concatenate_return_boundaries(values, axis = 0):
     X = np.concatenate(values, axis = axis)
     upper_bounds = np.cumsum([v.shape[axis] for v in values])
     lower_bounds = [0] + list(upper_bounds[:-1])
-    boundaries = zip(lower_bounds, upper_bounds)
+    boundaries = list(zip(lower_bounds, upper_bounds))
     return X, boundaries
 
 def spike_in_interval(st, tmin, tmax):
@@ -76,14 +76,15 @@ def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
     y = np.concatenate(ys, axis = 0)
     X = np.concatenate(Xs, axis = 0)
     st = pd.concat(sts)
-    return X, dict(zip(keys, boundaries)), y, st
+    return X, dict(list(zip(keys, boundaries))), y, st
 
+import six
 def _kernel_dict_from_clfs(clfs, boundaries):
     '''splits result of lda estimator based on boundaries'''  
     kernel_dict = []
     for clf in clfs['classifier_']:
         out = dict()
-        for key, b in boundaries.iteritems():
+        for key, b in six.iteritems(boundaries):
             out[key] = clf.coef_[0].squeeze()[b[0]:b[1]]
         kernel_dict.append(out) 
     return kernel_dict
@@ -136,10 +137,11 @@ def plot_kernel_dict(kernel_dict, ax = None):
     ax.set_title('kernel shape')
     ax.set_xlabel('# time bin')      
     # plot kernel
+    import six
     for lv in range(len(kernel_dict)):
         d = kernel_dict[lv]
         ax.set_prop_cycle(None)
-        for k, v in d.iteritems():
+        for k, v in six.iteritems(d):
             if lv == 0:
                 ax.plot(v, label = k)
             else:
@@ -247,7 +249,7 @@ class ReducedLdaModel():
         self.lda_values = []
         for kernel_dict in self.kernel_dict:
             lda_values_dict = {}
-            for k in boundaries.keys():
+            for k in list(boundaries.keys()):
                 b = boundaries[k]
                 lda_values_dict[k] = np.dot(X[:,b[0]:b[1]], kernel_dict[k])
             lda_values = sum(lda_values_dict.values())
@@ -305,7 +307,7 @@ class ReducedLdaModel():
         The partial is constructed such that it can be serialized fast, allowing
         efficient multiprocessing. This is the recommended way of sending a reduced
         model through a network connection.'''
-        import spiking_output
+        from . import spiking_output
         # nonlinearity_LUT has a different format in the spiking output format:
         # the key should be the refractory period, the value a single pd.Series object
         # containing the LUT
@@ -332,7 +334,7 @@ def _apply_static_helper(lookup_series, min_index, max_index, kernel_dict, data)
     '''optimized to require minimal datatransfer to allow efficient multiprocessing'''
     # preparing data
     lda_value_dict = {k: np.dot(data[k][:, min_index:max_index], \
-                          kernel_dict[k]) for k in kernel_dict.keys()}
+                          kernel_dict[k]) for k in list(kernel_dict.keys())}
     lda_values = sum(lda_value_dict.values())
     indices = lda_values.round().astype(int)
     if max(indices) > max(lookup_series.index):
@@ -389,7 +391,7 @@ def get_kernel_C2_grid(keys_to_synapse_activation_data = [
                 normalize_group_size, test_size, verbosity, \
                 lookup_series_stepsize, cache)
     
-    rm.fit(mdbs.values())
+    rm.fit(list(mdbs.values()))
     return rm
 
 get_kernel_C2_grid_cached = mdb_utils.cache(get_kernel_C2_grid)

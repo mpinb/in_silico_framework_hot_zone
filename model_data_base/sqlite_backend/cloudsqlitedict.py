@@ -89,7 +89,7 @@ except ImportError:
 try:
     from queue import Queue
 except ImportError:
-    from Queue import Queue
+    from six.moves import queue as Queue
 
 
 logger = logging.getLogger(__name__)
@@ -221,13 +221,14 @@ class SqliteDict(DictClass):
             yield key, decode(value)
 
     def keys(self):
-        return self.iterkeys() if major_version > 2 else list(self.iterkeys())
+        return iter(self.keys()) if major_version > 2 else list(self.keys())
 
     def values(self):
-        return self.itervalues() if major_version > 2 else list(self.itervalues())
+        return iter(self.values()) if major_version > 2 else list(self.values())
 
     def items(self):
-        return self.iteritems() if major_version > 2 else list(self.iteritems())
+        import six
+        return six.iteritems(self) if major_version > 2 else list(six.iteritems(self))
 
     def __contains__(self, key):
         HAS_ITEM = 'SELECT 1 FROM "%s" WHERE key = ?' % self.tablename
@@ -261,7 +262,7 @@ class SqliteDict(DictClass):
             raise RuntimeError('Refusing to update read-only SqliteDict')
 
         try:
-            items = items.items()
+            items = list(items.items())
         except AttributeError:
             pass
         items = [(k, encode(v)) for k, v in items]
@@ -272,7 +273,8 @@ class SqliteDict(DictClass):
             self.update(kwds)
 
     def __iter__(self):
-        return self.iterkeys()
+        import six.iterkeys as iterkeys
+        return iterkeys(self)
 
     def clear(self):
         if self.flag == 'r':

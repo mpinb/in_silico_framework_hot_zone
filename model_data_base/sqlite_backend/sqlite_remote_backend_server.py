@@ -76,7 +76,7 @@ def release_lock(mylock):
         
 while True:
     msg = socket.recv()
-    print msg
+    print(msg)
     try:
         setget, path, rest = msg.split('\x00\x00', 2)
     except:
@@ -122,7 +122,7 @@ while True:
         socket.send(value)
     elif setget == 'KEYS':
         key = rest
-        print 'sending message'
-        socket.send(cloudpickle.dumps(mdbs[path].keys()))
+        print('sending message')
+        socket.send(cloudpickle.dumps(list(mdbs[path].keys())))
     else:
         raise ValueError()

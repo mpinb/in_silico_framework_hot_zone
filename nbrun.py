@@ -31,7 +31,7 @@ def dict_to_code(mapping):
         A string containing the python code.
     """
     lines = ("{} = {}".format(key, repr(value))
-             for key, value in mapping.items())
+             for key, value in list(mapping.items()))
     return '\n'.join(lines)
 
 def run_notebook(notebook_name, nb_suffix='-out', out_path='.', nb_kwargs=None,

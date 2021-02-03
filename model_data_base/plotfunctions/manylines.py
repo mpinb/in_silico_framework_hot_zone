@@ -15,8 +15,8 @@ import dask.dataframe as dd
 import dask
 import unittest
 from model_data_base.plotfunctions._figure_array_converter import fig2np, PixelObject
-from _decorators import return_figure_or_axis, ForceReturnException
-from _decorators import return_figure_or_axis
+from ._decorators import return_figure_or_axis, ForceReturnException
+from ._decorators import return_figure_or_axis
 from compatibility import multiprocessing_scheduler
 
 npartitions = 80

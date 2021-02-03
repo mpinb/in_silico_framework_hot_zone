@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import dask.dataframe as dd
-from _helper_functions import is_int
+from ._helper_functions import is_int
 from ..plotfunctions._decorators import dask_to_pandas
 from model_data_base.plotfunctions._figure_array_converter import PixelObject
 

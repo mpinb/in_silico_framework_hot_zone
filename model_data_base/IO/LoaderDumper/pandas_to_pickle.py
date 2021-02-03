@@ -1,7 +1,7 @@
 import os
 import cloudpickle
 import pandas as pd
-import parent_classes
+from . import parent_classes
 
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''

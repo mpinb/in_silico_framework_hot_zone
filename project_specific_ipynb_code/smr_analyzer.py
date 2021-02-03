@@ -11,8 +11,9 @@ def read_smr_file(path):
     I.shutil.rmtree(dest_folder)
     return data
 
+import six
 def get_period_label_by_time(periods, t):
-    for k, (tmin, tmax) in periods.iteritems():
+    for k, (tmin, tmax) in six.iteritems(periods):
         if tmin <= t < tmax:
             return k
     return 'undefined'
@@ -213,8 +214,9 @@ class EventAnalysis:
     def update(self):
         self.visualize = VisualizeEventAnalysis(self)
         
+import six
 def get_interval(interval_dict, t):
-    for i, v in interval_dict.iteritems():
+    for i, v in six.iteritems(interval_dict):
         if (t >= v[0]) and (t < v[1]):
             return i
             
@@ -256,7 +258,8 @@ class VisualizeEventAnalysis:
         ax1.set_ylabel('ISI second to third spike')
         ax1.plot([rp,rp],[0,100], c = 'grey')
         ax1.plot([0,100],[rp,rp], c = 'grey')
-        for name, c in colormap.iteritems():
+        import six
+        for name, c in six.iteritems(colormap):
             if c == 'white':
                 continue
             ax1.plot([0,name],[name,0], c = c, linewidth = .5)
@@ -264,13 +267,14 @@ class VisualizeEventAnalysis:
         ax1.set_aspect('equal')
         ax1.set_xlim(0, 30)
         ax1.set_ylim(0, 30)
+        import six
 
-        for name, c in colormap.iteritems():
+        for name, c in six.iteritems(colormap):
             if name > 30: continue
             e_filtered = e[(e.ISI_2 < name) & (e.ISI_2 >= name - 10)]
-            print name, len(e_filtered)
+            print(name, len(e_filtered))
             if len(e_filtered) == 0:
-                print 'skipping'
+                print('skipping')
                 continue
             e_filtered.event_time.plot(kind = 'hist', bins = I.np.arange(0,tmax, 1), cumulative = True,
                                        histtype='step', color = c, ax = ax2, normed = False)
@@ -320,7 +324,7 @@ class AnalyzeFile:
         stim_times = I.np.array(events[stim_times_channel]) * 1000
         self.stim_times = stimulus_injterval_filter(stim_times)
         if len(stim_times) > len(self.stim_times):
-            print 'multi-stimulus detected. using period {}'.format(I.np.diff(self.stim_times)[0])
+            print('multi-stimulus detected. using period {}'.format(I.np.diff(self.stim_times)[0]))
                     
         # automatic detection of creast and trough limit
         if isinstance(lim_creast, str):
@@ -342,7 +346,7 @@ class AnalyzeFile:
         self.st = st = get_st_from_spike_times_and_stim_times(cellid, self.spike_times, self.stim_times)
         if (st.shape[1] == 1):
             st[1] = I.np.NaN        
-        print 'self.st.shape', self.st.shape
+        print('self.st.shape', self.st.shape)
         self.st['cellid'] = cellid
         st = self.st
         if (st.shape[1] == 1):
@@ -359,7 +363,7 @@ class AnalyzeFile:
     def get_ongoing_activity(self, period_prestim = 30000):
         if self.stim_times[0] < period_prestim:
             s = self.stim_times[0]
-            print 'warning! there are no {} s activity pre stimulus. Falling back to {}s'.format(period_prestim / 1000., s / 1000.)
+            print('warning! there are no {} s activity pre stimulus. Falling back to {}s'.format(period_prestim / 1000., s / 1000.))
         else:
             s = period_prestim
         return len([t for t in self.spike_times if (t < self.stim_times[0]) and (t > self.stim_times[0] - s)]) / (s / 1000.)
@@ -528,7 +532,7 @@ class AnalyzeFile:
         df = self.event_df
         df = df[df.event_class == type_].copy()
         if len(df) == 0:
-            print 'nothing to show'
+            print('nothing to show')
             return
         df['trial_index'] = df.trial.str.split('/').str[1].astype(int)
         df['absolute_time'] = df.apply(lambda x: x.event_time  + af.stim_times[x.trial_index], axis = 1)  

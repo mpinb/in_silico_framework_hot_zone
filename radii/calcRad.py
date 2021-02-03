@@ -151,7 +151,7 @@ class RadiusCalculator:
         profileIndicesLength = len(profileIndices)
         for i in range(profileIndicesLength):
             try:
-                pixel = map(lambda x: (int(x)), profileIndices[i])
+                pixel = [(int(x)) for x in profileIndices[i]]
                 intensityValue = image.GetPixel(pixel)
             except RuntimeError as error:
                 warnings.warn(error)

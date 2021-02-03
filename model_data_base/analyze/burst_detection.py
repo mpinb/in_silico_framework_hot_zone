@@ -68,5 +68,5 @@ def burst_detection(ddf, st, burst_cutoff = -55):
         return burst_detection_pd(ddf, st, burst_cutoff)
     if isinstance(ddf, dd.DataFrame):
         delayed_fun = dask.delayed(lambda x: burst_detection_pd(x, st, burst_cutoff))
-        dummy = dask.compute(*map(delayed_fun, ddf.to_delayed()), get = multiprocessing_scheduler)
+        dummy = dask.compute(*list(map(delayed_fun, ddf.to_delayed())), get = multiprocessing_scheduler)
         return pd.concat(dummy)

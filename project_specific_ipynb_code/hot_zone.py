@@ -44,8 +44,9 @@ def get_branching_depth_series(cell):
     a tuple (biforcation order, section) as value'''
     
     inner_sections = get_inner_sec_dist_list(cell)
+    import six
     inner_sections_branching_depth = {k: (get_branching_depth(cell, sec), sec)
-                                      for k, sec in inner_sections.iteritems()}
+                                      for k, sec in six.iteritems(inner_sections)}
     inner_sections_branching_depth = I.pd.Series(inner_sections_branching_depth)
     return inner_sections_branching_depth
 
@@ -192,7 +193,7 @@ class Dendrogram:
 
     def _soma_to_dendrogram(self, cell):
         soma_sections = [s for s in cell.sections if s.label.lower() == 'soma']
-        print "adding {} soma sections".format(len(soma_sections))
+        print("adding {} soma sections".format(len(soma_sections)))
         for lv, sec in enumerate(soma_sections):
             self.dendrogram_db.append({'name': 'Soma__{}__0'.format(lv), 'x_dist_start': I.np.NaN, 'x_dist_end': I.np.NaN, 
                                        'sec': sec, 'x_offset': I.np.NaN})
@@ -329,7 +330,7 @@ class Dendrogram:
                 continue
             if not l['sec'].label in select:
                 continue
-            for label in l['synapses'].keys():                 
+            for label in list(l['synapses'].keys()):                 
                 for syn in l['synapses'][label]:
                     if min_ <= syn < max_:
                         out+=1
@@ -339,7 +340,7 @@ class Dendrogram:
         try:
             sec = get_main_bifurcation_section(self.cell)
         except AssertionError:
-            print 'main bifurcation could not be identified!'
+            print('main bifurcation could not be identified!')
             self.main_bifur_dist = None
         else:
             l = self.get_db_by_sec(sec)
@@ -377,7 +378,7 @@ class ExportSynapses:
         for l in d.dendrogram_db:
             sec_id = d.cell.sections.index(l['sec'])
             if 'synapses' in l:
-                for syntype in l['synapses'].keys():
+                for syntype in list(l['synapses'].keys()):
                     if not syntype in out:
                         out[syntype] = []
                     list_ = l['synapses'][syntype]
@@ -392,14 +393,14 @@ class ExportSynapses:
     def get_filtered_synapses_dict(self, synapse_types):
         '''returns self.synapses, but filtered, such that it only contains synapse types 
         that are an element of synapse_types'''
-        return {k: v for k,v in self.synapses.iteritems() if k in synapse_types}
+        return {k: v for k,v in self.synapses.items() if k in synapse_types}
         
     def create_functional_map_with_one_cell_per_synapse_from_cell_object(self, synapse_types = None):
         if synapse_types is None:
             synapses_dict = self.synapses
         else:
             synapses_dict = self.get_filtered_synapses_dict(synapse_types)
-        functionalMap = [(k, lv, lv) for k in synapses_dict.keys() for lv in range(len(synapses_dict[k]))]  
+        functionalMap = [(k, lv, lv) for k in list(synapses_dict.keys()) for lv in range(len(synapses_dict[k]))]  
         self.functionalMap.extend(functionalMap)
         
     def create_functional_map_with_n_cells(self, synapse_type, n):
@@ -409,11 +410,11 @@ class ExportSynapses:
         synapses = list(range(len(synapses_dict[synapse_type])))
         import random
         for s in synapses:
-            cell = random.choice(cells.keys())
+            cell = random.choice(list(cells.keys()))
             cells[cell].append(s)
         
-        values = [list(range(len(v))) for v in cells.values() if v]
-        cells = dict(zip(range(len(values)), values)) # if cell has no assigned synapses, skip it
+        values = [list(range(len(v))) for v in list(cells.values()) if v]
+        cells = dict(list(zip(list(range(len(values))), values))) # if cell has no assigned synapses, skip it
         
         functionalMap = []
         synid = 0
@@ -599,18 +600,19 @@ class NetworkEmbedding:
         
     def _check(self):
         if not set(self.synapses.keys()) == set(self.functionalMap.keys()):
-            errstr ='Cell types, for which synapses are specified ({}) and for which '.format(str(self.synapses.keys()))
-            errstr += 'functional map is specified ({}) must be identical'.format(str(self.functionalMap.keys()))
+            errstr ='Cell types, for which synapses are specified ({}) and for which '.format(str(list(self.synapses.keys())))
+            errstr += 'functional map is specified ({}) must be identical'.format(str(list(self.functionalMap.keys())))
             raise RuntimeError(errstr)
-        for k in self.synapses.keys():
+        for k in list(self.synapses.keys()):
             if not len(self.synapses[k]) == len(self.functionalMap[k]):
                 errstr = 'Number of entries in synapses and functional map is not the same '
                 errstr += 'for type {}!'.format(k)
                 raise RuntimeError(errstr)
     
+    import six
     def _get_synapse_object_dict(self):
         out = {}
-        for synapse_type, synapse_list in self.synapses.iteritems():
+        for synapse_type, synapse_list in six.iteritems(self.synapses):
             out[synapse_type] = [Synapse(synapse_type, s[0], s[1]) for s in synapse_list]
         #for k in out:
         #    out[k] = sorted(out[k], key = lambda x: (x.secID, x.x))
@@ -620,7 +622,7 @@ class NetworkEmbedding:
         self._check()
         synapses = self._get_synapse_object_dict()
         functionalMap = []
-        for k in synapses.keys():
+        for k in list(synapses.keys()):
             functionalMap.extend(self.functionalMap[k])
         I.scp.writer.write_cell_synapse_locations(I.os.path.join(outdir, 'con.syn'), 
                                                   synapses, 
@@ -745,7 +747,7 @@ def register_point_to_cell(point, cell, max_dist = 100):
                 out.append(res_)
         return out    
     distances = get_point_distances(point, cell)
-    print len(distances)
+    print(len(distances))
     return sorted(distances, key = lambda x: x[1][0])[0]
 
 register_point_to_cell_delayed = I.dask.delayed(register_point_to_cell)

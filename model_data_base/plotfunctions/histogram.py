@@ -1,4 +1,4 @@
-from _decorators import *
+from ._decorators import *
 
 @dask_to_pandas
 @return_figure_or_axis # has to be before subsequent_calls_per_line

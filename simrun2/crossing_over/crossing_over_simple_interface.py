@@ -1,7 +1,7 @@
 import tempfile
 import shutil
 import dask
-from utils import filter_by_time, merge_synapse_activation
+from .utils import filter_by_time, merge_synapse_activation
 from ..generate_synapse_activations import generate_synapse_activations
 from ..run_existing_synapse_activations import run_existing_synapse_activations
 import os

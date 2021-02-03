@@ -1,7 +1,7 @@
 import sys, os, time
 import warnings
 from six import StringIO
-from cPickle import PicklingError
+from six.moves.cPickle import PicklingError # this import format has potential issues (see six documentation) -rieke
 import cloudpickle
 import contextlib
 import io
@@ -169,7 +169,7 @@ def pooled_std(m, s, n):
     M = np.dot(m,n) / float(sum(n))#[mm*nn / float(sum(n)) for mm, nn in zip(m,n)]
     # take carre of n = 0
     dummy = [(ss,mm,nn) for ss,mm,nn in zip(s,m,n) if nn >= 1]
-    s,m,n = zip(*dummy) 
+    s,m,n = list(zip(*dummy)) 
     assert(len(m) == len(s) == len(n) > 0)
     #calculate SD
     s = [ss * np.sqrt((nn-1)/float(nn)) for ss,nn in zip(s,n)] # convert to biased estimator  
@@ -182,10 +182,11 @@ def skit(*funcs, **kwargs):
     adapted from http://stackoverflow.com/a/23430335/5082048
     '''
     out = []
+    import six
     for fun in funcs:
-        out.append({key: value for key, value in kwargs.iteritems() 
-                if key in fun.func_code.co_varnames})
-        if 'kwargs' in fun.func_code.co_varnames:
+        out.append({key: value for key, value in six.iteritems(kwargs) 
+                if key in fun.__code__.co_varnames})
+        if 'kwargs' in fun.__code__.co_varnames:
             out[-1].update(kwargs)
         
     return tuple(out)
@@ -194,7 +195,8 @@ def unique(list_):
     return list(pd.Series(list_).drop_duplicates())
 
 def cache(function):
-    import cPickle, hashlib
+    import hashlib
+    from six.moves import cPickle
     memo = {}
     def get_key(*args, **kwargs):
         try:
@@ -228,9 +230,9 @@ def fancy_dict_compare(dict_1, dict_2, dict_1_name = 'd1', dict_2_name = 'd2', p
     key_err = ''
     value_err = ''
     old_path = path
-    for k in dict_1.keys():
+    for k in list(dict_1.keys()):
         path = old_path + "[%s]" % k
-        if not dict_2.has_key(k):
+        if k not in dict_2:
             key_err += "Key %s%s not in %s\n" % (dict_2_name, path, dict_2_name)
         else:
             if isinstance(dict_1[k], dict) and isinstance(dict_2[k], dict):
@@ -240,9 +242,9 @@ def fancy_dict_compare(dict_1, dict_2, dict_1_name = 'd1', dict_2_name = 'd2', p
                     value_err += "Value of %s%s (%s) not same as %s%s (%s)\n"\
                         % (dict_1_name, path, dict_1[k], dict_2_name, path, dict_2[k])
 
-    for k in dict_2.keys():
+    for k in list(dict_2.keys()):
         path = old_path + "[%s]" % k
-        if not dict_1.has_key(k):
+        if k not in dict_1:
             key_err += "Key %s%s not in %s\n" % (dict_2_name, path, dict_1_name)
 
     return key_err + value_err + err
@@ -250,14 +252,14 @@ def fancy_dict_compare(dict_1, dict_2, dict_1_name = 'd1', dict_2_name = 'd2', p
 def wait_until_key_removed(mdb, key, delay = 5):
     already_printed = False
     while True:
-        if key in mdb.keys():
+        if key in list(mdb.keys()):
             if not already_printed:
-                print("waiting till key {} is removed from the database. I will check every {} seconds.".format(key, delay))
+                print(("waiting till key {} is removed from the database. I will check every {} seconds.".format(key, delay)))
                 already_printed = True				
             time.sleep(5)
         else:
             if already_printed:
-                print("Key {} has been removed. Continuing.".format(key))
+                print(("Key {} has been removed. Continuing.".format(key)))
             return
         
 def get_file_or_folder_that_startswith(path, startswith):
@@ -298,8 +300,9 @@ class DelayedKeyboardInterrupt(object):
 def flatten(l):
     '''https://stackoverflow.com/a/2158532/5082048'''
     import collections
+    import six
     for el in l:
-        if isinstance(el, collections.Iterable) and not isinstance(el, basestring):
+        if isinstance(el, collections.Iterable) and not isinstance(el, six.stringtypes): # not sure about syntax here - rieke
             for sub in flatten(el):
                 yield sub
         else:

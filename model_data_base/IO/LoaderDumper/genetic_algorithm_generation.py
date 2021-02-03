@@ -1,7 +1,7 @@
 import os
 import cloudpickle
 import numpy as np
-import parent_classes
+from . import parent_classes
 import pandas as pd
 
 def check(obj):
