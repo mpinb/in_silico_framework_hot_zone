@@ -1,5 +1,5 @@
 import os, os.path
-from _matplotlib_import import *
+from ._matplotlib_import import *
 import sys
 import time
 import glob, shutil
@@ -130,7 +130,7 @@ def trail_to_cell_object(name = None, cellName = None, networkName = None, synap
             scp.init_neuron_run(neuronParameters.sim, vardt=False) #trigger the actual simulation
             stopTime = time.time()
             simdt = stopTime - startTime
-            print 'NEURON runtime: %.2f s' % simdt
+            print('NEURON runtime: {:.2f} s'.format(simdt))
             t = np.array(tVec)
             vmSoma = np.array(cell.soma.recVList[0])
             cell.t = np.array(t[offsetBin:])

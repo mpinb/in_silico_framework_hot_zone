@@ -27,7 +27,7 @@ class PSPs:
         gExRange: synaptic strength values to be checked
         vardt: should the variable step size solver be used=
         '''
-        assert('neuron' in neuron_param.keys())
+        assert('neuron' in list(neuron_param.keys()))
         self.neuron_param = neuron_param
         self.confile = confile
         self.gExRange = gExRange
@@ -53,10 +53,10 @@ class PSPs:
         
     def _setup_computation(self, exc_inh):
         if exc_inh == 'exc':
-            print 'setting up computation for exc cells'
+            print('setting up computation for exc cells')
             for n in self.network_params_by_celltype:
-                assert(len(n.network.keys()) == 1)
-                celltype = n.network.keys()[0]
+                assert(len(list(n.network.keys())) == 1)
+                celltype = list(n.network.keys())[0]
                 n.network[celltype]['synapses']
                 for gEx in self.gExRange:
                     self._keys.append((celltype, gEx*self.AMPA_component, gEx*self.NMDA_component))
@@ -67,10 +67,10 @@ class PSPs:
                                      tStim = self.tStim, tEnd = self.tEnd)
                     self._delayeds.append(d)
         elif exc_inh == 'inh':
-            print 'setting up computation for inh cells'
+            print('setting up computation for inh cells')
             for n in self.network_params_by_celltype:
-                assert(len(n.network.keys()) == 1)
-                celltype = n.network.keys()[0]
+                assert(len(list(n.network.keys())) == 1)
+                celltype = list(n.network.keys())[0]
                 n.network[celltype]['synapses']
                 for gEx in self.gExRange:
                     self._keys.append((celltype, gEx, gEx))
@@ -155,7 +155,7 @@ class PSPs:
                                         merge_celltype_kwargs=merge_celltype_kwargs)        
         #vt = I.simrun3.synaptic_strength_fitting.get_voltage_and_timing(vt, method)
         pdf = I.pd.concat([I.pd.Series([x[1] for x in vt[name][g][g]], name = name) 
-             for name in vt.keys()], axis = 1)
+             for name in list(vt.keys())], axis = 1)
         if fig is None:
             fig = I.plt.figure(figsize = (10,len(vt)*1.3))
         ax = fig.add_subplot(111)
@@ -192,7 +192,7 @@ class PSPs:
         for k in sorted(nwMap.cells.keys()):
             if not mergestring in k:
                 continue
-            print k
+            print(k)
             cells.extend(nwMap.cells[k])
         synapses = [c.synapseList for c in cells]
         syn_coordinates = [[syn.coordinates for syn in synlist] for synlist in synapses]
@@ -285,7 +285,7 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     
     # do not disable cells hat do not originate from this network_param
     # for cellType in nwMap.cells.keys(): 
-    for cellType in network_param.network.keys():
+    for cellType in list(network_param.network.keys()):
         for syn in cell.synapses[cellType]:
             syn.disconnect_hoc_synapse()
     
@@ -293,9 +293,9 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     
     for syn in cell.synapses[celltype]:
         syn.weight = {}
-        if 'glutamate_syn' in synParameters.receptors.keys():          
+        if 'glutamate_syn' in list(synParameters.receptors.keys()):          
             syn.weight['glutamate_syn'] = [gAMPA, gNMDA]
-        if 'gaba_syn' in synParameters.receptors.keys(): 
+        if 'gaba_syn' in list(synParameters.receptors.keys()): 
             syn.weight['gaba_syn'] = [gGABA]
 
     if preSynCellID is not None:
@@ -322,12 +322,12 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     # without the following lines, the simulation will crash from time to time
     try: 
         cell.evokedNW.re_init_network()
-        print 'found evokedNW attached to cell'
-        print 'explicitly resetting it.'
+        print('found evokedNW attached to cell')
+        print('explicitly resetting it.')
     except AttributeError:
         pass
 
-    for cellType in nwMap.cells.keys(): 
+    for cellType in list(nwMap.cells.keys()): 
         for syn in cell.synapses[cellType]:
             syn.disconnect_hoc_synapse()
 
@@ -396,7 +396,8 @@ def generate_ex_network_param_from_network_embedding(confile):
       'weight': [0.0, 1.0]}}
     
     out = I.defaultdict_defaultdict()
-    for k, cellnumber in get_cellnumbers_from_confile(confile).iteritems():
+    import six
+    for k, cellnumber in six.iteritems(get_cellnumbers_from_confile(confile)):
         if not k.split('_')[0] in I.excitatory:
             continue
         out['network'][k]['cellNr'] = cellnumber
@@ -420,8 +421,9 @@ def generate_inh_network_param_from_network_embedding(confile):
      'threshold': 0.0,
      'weight': 1.0}}
     
+    import six
     out = I.defaultdict_defaultdict()
-    for k, cellnumber in get_cellnumbers_from_confile(confile).iteritems():
+    for k, cellnumber in six.iteritems(get_cellnumbers_from_confile(confile)):
         if not k.split('_')[0] in I.inhibitory:
             continue
         out['network'][k]['cellNr'] = cellnumber
@@ -452,17 +454,18 @@ def get_voltage_and_timing(vt, method = 'dynamic_baseline', tStim = None, tEnd =
     '''
     res = vt
     if method == 'dynamic_baseline':
+        import six
         vt = {k: {k: {k: [get_tMax_vMax_baseline(v[0], v[1], v[2][lv], v[3][lv], tStim, tEnd)
                           for lv in range(len(v[2]))]
-                      for k, v in v.iteritems()}
-                  for k, v in v.iteritems()}
-              for k, v in res.iteritems()}
+                      for k, v in six.iteritems(v)}
+                  for k, v in six.iteritems(v)}
+              for k, v in six.iteritems(res)}
     elif method == 'constant_baseline':
         vt = {k: {k: {k: [get_tMax_vMax(v[2][lv], v[3][lv], tStim, tEnd)
                           for lv in range(len(v[2]))]
-                      for k, v in v.iteritems()}
-                  for k, v in v.iteritems()}
-              for k, v in res.iteritems()}
+                      for k, v in six.iteritems(v)}
+                  for k, v in six.iteritems(v)}
+              for k, v in six.iteritems(res)}
     else:
         errstr = 'method must be dynamic_baseline or constant_baseline'
         raise ValueError(errstr)
@@ -536,7 +539,7 @@ def merge_celltypes(vt,
     for detection_string in detection_strings:
         for celltype in sorted(vt.keys()):
             if not celltype.split('_')[0] in celltype_must_be_in:
-                print 'skipping {}'.format(celltype)
+                print('skipping {}'.format(celltype))
                 continue
             for gAMPA in sorted(vt[celltype].keys()):
                 for gNMDA in sorted(vt[celltype][gAMPA].keys()):
@@ -549,15 +552,16 @@ def merge_celltypes(vt,
                         
     return out
 
+import six
 def ePSP_summary_statistics(vt, threashold = 0.1, tPSPStart = 100.0):
     summaryData = []#I.defaultdict_defaultdict()
-    for celltype, vt in vt.iteritems():
-        for gAMPA, vt in vt.iteritems():
-            for gNMDA, vt in vt.iteritems():
+    for celltype, vt in six.iteritems(vt):
+        for gAMPA, vt in six.iteritems(vt):
+            for gNMDA, vt in six.iteritems(vt):
                 t = list(v[0] for v in vt if v[1] >= threashold)                
                 v = list(v[1] for v in vt if v[1] >= threashold)
                 if len(t) == 0:
-                    print("skipping celltype {}, gAMPA {}, gNMDA {}: no response above threashold of {} found".format(celltype, gAMPA, gNMDA, threashold))
+                    print(("skipping celltype {}, gAMPA {}, gNMDA {}: no response above threashold of {} found".format(celltype, gAMPA, gNMDA, threashold)))
                     continue
                 out = {}                    
                 out['epspMean'] = I.np.mean(v)
