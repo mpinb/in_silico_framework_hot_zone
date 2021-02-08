@@ -14,7 +14,7 @@ def compute_synapse_distances_times(fname, cell, t=None, synTypes=None):
     activeSyns = {}
     synCnt = 0
     if synTypes is None:
-        synTypes = cell.synapses.keys()
+        synTypes = list(cell.synapses.keys())
         synTypes.sort
     for synType in synTypes:
         synDistances[synType] = compute_syn_distances(cell, synType)
@@ -47,13 +47,13 @@ def synapse_distances(pname):
     parser = scp.CellParser(cellParam.filename)
     parser.spatialgraph_to_cell()
     cell = parser.cell
-    for preType in preParam.keys():
+    for preType in list(preParam.keys()):
         synapseFName = preParam[preType].synapses.realization
         synDist = scp.read_synapse_realization(synapseFName)
         mapper = scp.SynapseMapper(cell, synDist)
         mapper.map_synapse_realization()
     
-    for synType in cell.synapses.keys():
+    for synType in list(cell.synapses.keys()):
         dist = compute_syn_distances(cell, synType)
         name = parameters.info.outputname
         name += '_'
@@ -73,13 +73,13 @@ def synapse_distances_2D(pname):
     parser = scp.CellParser(cellParam.filename)
     parser.spatialgraph_to_cell()
     cell = parser.cell
-    for preType in preParam.keys():
+    for preType in list(preParam.keys()):
         synapseFName = preParam[preType].synapses.realization
         synDist = scp.read_synapse_realization(synapseFName)
         mapper = scp.SynapseMapper(cell, synDist)
         mapper.map_synapse_realization()
     
-    for synType in cell.synapses.keys():
+    for synType in list(cell.synapses.keys()):
         dist = compute_syn_distances_2Dprojected(cell, synType)
         name = parameters.info.outputname
         name += '_'
@@ -142,7 +142,7 @@ def compute_syn_distances_2Dprojected(cell, synType, label=None):
     
     returns 1D numpy array of distances to soma
     '''
-    if not cell.synapses.has_key(synType):
+    if synType not in cell.synapses:
         errStr = 'Cell does not have synapses of type %s' % synType
         raise KeyError(errStr)
     
@@ -210,7 +210,7 @@ def compute_syn_distances(cell, synType, label=None, consider_gap_to_soma = Fals
     
      returns 1D numpy array of distances to soma
      '''
-    if not cell.synapses.has_key(synType):
+    if synType not in cell.synapses:
         errStr = 'Cell does not have synapses of type %s' % synType
         raise KeyError(errStr)
     distances = []

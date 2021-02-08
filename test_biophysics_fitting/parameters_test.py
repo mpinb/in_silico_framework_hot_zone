@@ -1,7 +1,7 @@
 import Interface as I
-import decorators
+from . import decorators
 import unittest
-import context
+from . import context
 
 from biophysics_fitting.parameters import param_selector, param_to_kwargs
 
@@ -26,7 +26,7 @@ class Tests(unittest.TestCase):
     def test_param_to_kwargs(self):
         params = I.pd.Series({'a': 1, 'b': 2})
         def fun(**kwargs):
-            assert(len(kwargs.keys()) == 2)
+            assert(len(list(kwargs.keys())) == 2)
             assert(kwargs['a'] == 1)
             assert(kwargs['b'] == 2)
         param_to_kwargs(fun)(params = params)

@@ -92,7 +92,7 @@ class Am:
                     elif data_section and (line == '\n' or '@' in line):
                         data_section = False
                     elif data_section and line != '\n':
-                        d = map(float, line.strip().split(' '))
+                        d = list(map(float, line.strip().split(' ')))
                         # d = read_numbers_in_line(line)
                         data.append(d)
 
@@ -187,7 +187,7 @@ class Am:
         self._commands_order = commands_order
 
     def add_data(self, cs, data):
-        max_command = max([int(v.strip('@ ')) for v in self.commands.values()])
+        max_command = max([int(v.strip('@ ')) for v in list(self.commands.values())])
         self.commands[cs] = '@' + str(max_command + 1)
         self.all_data[cs] = data
         self._commands_order.append(cs)
@@ -273,7 +273,7 @@ class Hoc:
                         hoc_point = hoc_points[in_neuron_line_number]
                         line = line.replace("pt3dadd", "")
                         matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
-                        point = map(float, matches)
+                        point = list(map(float, matches))
 
                         writeHocFile.write('{{pt3dadd({:f},{:f},{:f},{:f})}}\n'.format(hoc_point[0],
                                                                                        hoc_point[1],
@@ -313,7 +313,7 @@ def read_numbers_in_line(line):
     if not matches:
         raise RuntimeError(
             "Expected number in line {} but did not set_transformation_matrix_by_aligned_points any".format(line))
-    data = map(float, matches)
+    data = list(map(float, matches))
     return data
 
 
@@ -344,7 +344,7 @@ def read_hoc_file(fname=''):
         raise IOError('Input file is not a .hoc file!')
 
     with open(fname, 'r') as neuronFile:
-        print "Reading hoc file", fname
+        print("Reading hoc file", fname)
         #        cell = co.Cell()
         #        simply store list of edges
         #        cell is parsed in CellParser

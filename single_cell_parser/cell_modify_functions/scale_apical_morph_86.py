@@ -29,5 +29,5 @@ def scale_apical_morph_86(cell):
 #                d = sec.diamList[i]
 #                dummy = h.pt3dadd(x, y, z, d, sec=sec)
     
-    print 'Scaled %d apical sections...' % scaleCount
+    print('Scaled {:d} apical sections...'.format(scaleCount))
     return cell

@@ -7,9 +7,9 @@ Created on Mar 19, 2012
 import numpy as np
 #import matplotlib.pyplot as plt
 import neuron
-import cell_parser
-import reader
-import synapse_mapper as smap
+from . import cell_parser
+from . import reader
+from . import synapse_mapper as smap
 
 class SimControl(object):
     '''
@@ -72,7 +72,7 @@ class SimControl(object):
     def go(self, simTime=None):
         self.set_recording()
         self.h.celsius = self.T
-        print 'Temperature = %d' % int(self.h.celsius)
+        print('Temperature = {:d}'.format(int(self.h.celsius)))
 #        self.h.dt = self.dt
         self.cvode = self.h.CVode()
         self.cvode.active()

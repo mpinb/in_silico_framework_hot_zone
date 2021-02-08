@@ -3,7 +3,9 @@ Created 2016/2017
 
 @author: arco
 '''
-from __future__ import absolute_import
+import six
+if six.PY2:
+    from __future__ import absolute_import
 import numpy as np
 import pandas as pd
 from six import BytesIO

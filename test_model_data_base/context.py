@@ -1,4 +1,6 @@
-from __future__ import absolute_import
+import six
+if six.PY2:
+    from __future__ import absolute_import
 import os, sys, shutil, tempfile
 import distributed
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))

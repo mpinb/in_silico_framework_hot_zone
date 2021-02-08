@@ -1,4 +1,6 @@
-from __future__ import absolute_import
+import six
+if six.PY2:
+    from __future__ import absolute_import
 #from ..context import *
 from simrun2.reduced_model.synapse_activation import get_poisson_realizations_from_expectancy_values
 import unittest

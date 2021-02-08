@@ -5,9 +5,9 @@ import single_cell_parser as scp
 from model_data_base.mdbopen import mdbopen
 
 def create_network_parameter(templateParamName, cellNumberFileName, synFileName, conFileName, outFileName, write_all_celltypes = False):
-    print '*************'
-    print 'creating network parameter file from template %s' % templateParamName
-    print '*************'
+    print('*************')
+    print('creating network parameter file from template {:s}'.format(templateParamName))
+    print('*************')
     
     templateParam = scp.build_parameters(templateParamName)
     cellTypeColumnNumbers = load_cell_number_file(cellNumberFileName)
@@ -17,9 +17,9 @@ def create_network_parameter(templateParamName, cellNumberFileName, synFileName,
 #    nwParam.NMODL_mechanisms = templateParam.NMODL_mechanisms
     nwParam.network = {}
     
-    for cellType in cellTypeColumnNumbers.keys():
+    for cellType in list(cellTypeColumnNumbers.keys()):
         cellTypeParameters = templateParam.network[cellType]
-        for column in cellTypeColumnNumbers[cellType].keys():
+        for column in list(cellTypeColumnNumbers[cellType].keys()):
             numberOfCells = cellTypeColumnNumbers[cellType][column]
             if numberOfCells == 0 and not write_all_celltypes:
                 continue
@@ -44,7 +44,7 @@ def load_cell_number_file(cellNumberFileName):
             column = splitLine[0]
             cellType = splitLine[1]
             numberOfCells = int(splitLine[2])
-            if not cellTypeColumnNumbers.has_key(cellType):
+            if cellType not in cellTypeColumnNumbers:
                 cellTypeColumnNumbers[cellType] = {}
             cellTypeColumnNumbers[cellType][column] = numberOfCells
     
@@ -61,5 +61,5 @@ if __name__ == '__main__':
         create_network_parameter(templateParamName, cellNumberFileName, synFileName, conFileName, outFileName)
     else:
 #        print 'parameters: [templateParamName] [cellNumberFileName] [synFileName] [conFileName] [outFileName]'
-        print 'parameters: [templateParamName] [cellNumberFileName] [synFileName] [outFileName]'
+        print('parameters: [templateParamName] [cellNumberFileName] [synFileName] [outFileName]')
     

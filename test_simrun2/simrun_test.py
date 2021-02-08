@@ -1,4 +1,4 @@
-from context import *
+from .context import *
 
 import os, sys, glob, shutil, tempfile
 import numpy as np
@@ -11,7 +11,7 @@ import neuron
 
 import Interface as I
 
-import decorators
+from . import decorators
 import unittest
 import numpy as np
 

@@ -1,4 +1,6 @@
-from __future__ import absolute_import
+import six
+if six.PY2:
+    from __future__ import absolute_import
 #from ..context import *
 from simrun2.reduced_model.get_kernel import concatenate_return_boundaries, ReducedLdaModel,\
     compare_lists_by_none_values
@@ -35,8 +37,8 @@ class Tests(unittest.TestCase):
         assert(Rm.lookup_series[0][150] == 0)
         assert(Rm.lookup_series[0][500] == 1)
         assert(0.1 < Rm.lookup_series[0][350] < 0.9)
-        mean1, std1 = Rm.kernel_dict[0].values()[0][:25].mean(), Rm.kernel_dict[0].values()[0][:25].std()
-        mean2, std2 = Rm.kernel_dict[0].values()[0][25:].mean(), Rm.kernel_dict[0].values()[0][25:].std()
+        mean1, std1 = list(Rm.kernel_dict[0].values())[0][:25].mean(), list(Rm.kernel_dict[0].values())[0][:25].std()
+        mean2, std2 = list(Rm.kernel_dict[0].values())[0][25:].mean(), list(Rm.kernel_dict[0].values())[0][25:].std()
         np.testing.assert_array_less(max([std1,std2]) / min([std1,std2]), 3)
         np.testing.assert_array_less(3, abs(mean1-mean2) / max([std1,std2]))
         #import Interface as I

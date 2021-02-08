@@ -1,4 +1,6 @@
-from __future__ import absolute_import
+import six
+if six.PY2:
+    from __future__ import absolute_import
 import unittest
 from single_cell_parser.reader import read_hoc_file
 from .context import *

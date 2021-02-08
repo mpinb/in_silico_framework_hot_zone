@@ -4,7 +4,7 @@ Created on Mar 30, 2012
 @author: regger
 '''
 import numpy as np
-from scalar_field import ScalarField
+from .scalar_field import ScalarField
 import sys
 
 class SynapseMapper(object):
@@ -51,7 +51,7 @@ class SynapseMapper(object):
         newSynapses = []
         if not self.voxelEdgeMap:
             self._create_voxel_edge_map()
-        for structure in self.cell.structures.keys():
+        for structure in list(self.cell.structures.keys()):
             mesh = self.synDist[structure].mesh
             meshIndices = np.transpose(mesh.nonzero())
             for vxIndex in meshIndices:
@@ -84,7 +84,7 @@ class SynapseMapper(object):
         Only needs to be called once at the beginning
         '''
         voxelEdgeMap = self.voxelEdgeMap
-        for structure in self.cell.structures.keys():
+        for structure in list(self.cell.structures.keys()):
 #            use cell.sections, not cell.structures
 #            this makes synapse placement later easier
 #            because we have the cell.sections ID
@@ -203,7 +203,7 @@ class SynapseDensity(object):
             raise RuntimeError(errstr)
         
         synapseDensity = {}
-        for structure in cellPSTDensity.keys():
+        for structure in list(cellPSTDensity.keys()):
             cellMeshShape = cellPSTDensity[structure].mesh.shape
             cellOrigin = cellPSTDensity[structure].origin
             cellExtent = cellPSTDensity[structure].extent
@@ -227,7 +227,7 @@ class SynapseDensity(object):
                         if boutons is not None and normPST is not None and normPST > 0.0:
                             synapseDensity[structure].mesh[ijk] = boutons*cellPST/normPST
         
-        for structure in synapseDensity.keys():
+        for structure in list(synapseDensity.keys()):
             keep = False
             if synapseDensity[structure].mesh.nonzero():
                 keep = True
@@ -245,7 +245,7 @@ class SynapseDensity(object):
         cellMesh, cellOrigin, cellExtent, cellSpacing, cellBoundingBox = self._compute_cell_density_grid()
         cellLengthDensities = {}
         cellSurfaceAreaDensities = {}
-        for structure in self.cell.structures.keys():
+        for structure in list(self.cell.structures.keys()):
             cellLengthDensities[structure] = ScalarField(cellMesh, cellOrigin, cellExtent, cellSpacing, cellBoundingBox)
             cellSurfaceAreaDensities[structure] = ScalarField(cellMesh, cellOrigin, cellExtent, cellSpacing, cellBoundingBox)
         self._compute_length_surface_area_density(cellLengthDensities, cellSurfaceAreaDensities, likeAmira=1)
@@ -257,7 +257,7 @@ class SynapseDensity(object):
         
         self.cellPST['EXC'] = {}
         self.cellPST['INH'] = {}
-        for structure in self.cell.structures.keys():
+        for structure in list(self.cell.structures.keys()):
             self.cellPST['EXC'][structure] = ScalarField(cellMesh, cellOrigin, cellExtent, cellSpacing, cellBoundingBox)
             self.cellPST['INH'][structure] = ScalarField(cellMesh, cellOrigin, cellExtent, cellSpacing, cellBoundingBox)
             exConstants = self.connectionSpreadsheet['EXC'][self.postCellType]
@@ -292,10 +292,10 @@ class SynapseDensity(object):
         section separately -> sections can be treated
         independently of another
         '''
-        print '---------------------------'
+        print('---------------------------')
         totalLength = 0.0
-        for structure in lengthDensity.keys():
-            print 'Computing 3D length/surface area density of structures with label %s' % structure
+        for structure in list(lengthDensity.keys()):
+            print('Computing 3D length/surface area density of structures with label {:s}'.format(structure))
             density1 = lengthDensity[structure]
             density2 = surfaceAreaDensity[structure]
             #===================================================================
@@ -342,7 +342,7 @@ class SynapseDensity(object):
             for n in range(len(clipSegments)):
                 segment = clipSegments[n]
                 segmentRadius = clipSegmentsRadius[n]
-                print '%d of %d done...\r' % (count,nrOfSegments),
+                print('{:d} of {:d} done...\r'.format(count,nrOfSegments), end=' ')
                 sys.stdout.flush()
                 count += 1
                 for i in range(density1.extent[0],density1.extent[1]+1):
@@ -406,8 +406,8 @@ class SynapseDensity(object):
                             density1.mesh[ijk] += length
                             density2.mesh[ijk] += area
                             totalLength += length
-        print 'Total clipped length = %f' % totalLength
-        print '---------------------------'
+        print('Total clipped length = {:f}'.format(totalLength))
+        print('---------------------------')
     
     def _clip_u(self, pq, u1u2):
         '''

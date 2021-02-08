@@ -126,7 +126,7 @@ class ScalarField(object):
         xMin = self.origin[0] + i*self.spacing[0]
         xMax = self.origin[0] + (i+1)*self.spacing[0]
         yMin = self.origin[1] + j*self.spacing[1]
-        yMax = self.origin[1] + (j+1)*self.spacing[01]
+        yMax = self.origin[1] + (j+1)*self.spacing[1] # in case this breaks - it used to say spacing[01] (rieke, 08022021)
         zMin = self.origin[2] + k*self.spacing[2]
         zMax = self.origin[2] + (k+1)*self.spacing[2]
         return xMin, xMax, yMin, yMax, zMin, zMax

@@ -17,8 +17,8 @@ class Tests(unittest.TestCase):
                            'attribute': ['a', 'a', 'a', 'b', 'b']})
         self.colormap = dict(a='r', b='b')
         if savefigs: 
-            print """Testing manyilines plots. Output files are saved in %s. 
-                Please make sure that they display the same data."""
+            print("""Testing manyilines plots. Output files are saved in {:s}. 
+                Please make sure that they display the same data.""")
     
     @decorators.testlevel(1)            
     def test_manylines_no_group(self):

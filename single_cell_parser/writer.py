@@ -140,7 +140,7 @@ def write_cell_synapse_locations(fname=None, synapses=None, cellID=None):
         header += '\n'
         header += '# Type - section - section.x\n\n'
         outputFile.write(header)
-        for synType in synapses.keys():
+        for synType in list(synapses.keys()):
             for syn in synapses[synType]:
                 line = syn.preCellType
                 line += '\t'
@@ -171,7 +171,7 @@ def write_pruned_synapse_locations(fname=None, synapses=None, cellID=None):
         header += '\n'
         header += '# Type - section - section.x - pruned\n\n'
         outputFile.write(header)
-        for synType in synapses.keys():
+        for synType in list(synapses.keys()):
             for syn in synapses[synType]:
                 line = syn.preCellType
                 line += '\t'
@@ -267,9 +267,9 @@ def write_synapse_weight_file(fname=None, cell=None):
         header += 'receptor type\t'
         header += 'synapse weights\n'
         outputFile.write(header)
-        for synType in cell.synapses.keys():
+        for synType in list(cell.synapses.keys()):
             for i in range(len(cell.synapses[synType])):
-                for recepStr in cell.synapses[synType][i].weight.keys():
+                for recepStr in list(cell.synapses[synType][i].weight.keys()):
                     secID = cell.synapses[synType][i].secID
                     ptID = cell.synapses[synType][i].ptID
                     line = synType
@@ -326,7 +326,7 @@ def write_spike_times_file(fname=None, spikeTimes=None):
     with mdbopen(fname, 'w') as outFile:
         header = '# trial\tspike times\n'
         outFile.write(header)
-        trials = spikeTimes.keys()
+        trials = list(spikeTimes.keys())
         trials.sort()
         for trial in trials:
             line = str(trial)
@@ -349,7 +349,7 @@ def write_presynaptic_spike_times(fname=None, cells=None):
     with mdbopen(fname, 'w') as outputFile:
         header = '# presynaptic cell type\tcell ID\tspike times\n'
         outputFile.write(header)
-        preTypes = cells.keys()
+        preTypes = list(cells.keys())
         preTypes.sort()
         for preType in preTypes:
             for i in range(len(cells[preType])):
@@ -709,7 +709,7 @@ def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoin
     
 def write_functional_map(fname, functionalMap):
     totalNrPts = 0
-    for key in functionalMap.keys():
+    for key in list(functionalMap.keys()):
         totalNrPts += len(functionalMap[key])
     
     header = "# AmiraMesh 3D ASCII 2.0" + "\n"
@@ -886,7 +886,7 @@ def write_functional_map(fname, functionalMap):
         outFile.write(header)
         
         outFile.write('\n@1 # Vertices xyz coordinates\n')
-        for key in functionalMap.keys():
+        for key in list(functionalMap.keys()):
             for pair in functionalMap[key]:
                 v1, v2 = pair
                 line1 = '%.6f %.6f %.6f\n' % (v1[0], v1[1], v1[2])
@@ -895,7 +895,7 @@ def write_functional_map(fname, functionalMap):
                 outFile.write(line2)
         
         outFile.write('\n@2 # Vertex Graph Label\n')
-        for key in functionalMap.keys():
+        for key in list(functionalMap.keys()):
             for pair in functionalMap[key]:
                 line = '3\n'
                 outFile.write(line)
@@ -903,26 +903,26 @@ def write_functional_map(fname, functionalMap):
         
         outFile.write('\n@3 # Edge Identifiers\n')
         j = 0
-        for key in functionalMap.keys():
+        for key in list(functionalMap.keys()):
             for pair in functionalMap[key]:
                 line = '%d %d\n' % (2*j, 2*j+1)
                 outFile.write(line)
                 j += 1
         
         outFile.write('\n@4 # Number of Points per Edge\n')
-        for key in functionalMap.keys():
+        for key in list(functionalMap.keys()):
             for pair in functionalMap[key]:
                 line = '2\n'
                 outFile.write(line)
         
         outFile.write('\n@5 # Edge Graph Labels\n')
-        for key in functionalMap.keys():
+        for key in list(functionalMap.keys()):
             for pair in functionalMap[key]:
                 line = '3\n'
                 outFile.write(line)
         
         outFile.write('\n@6 # Point xyz coordinates\n')
-        for key in functionalMap.keys():
+        for key in list(functionalMap.keys()):
             for pair in functionalMap[key]:
                 for pt in pair:
                     line = '%.6f %.6f %.6f\n' % (pt[0], pt[1], pt[2])
@@ -1079,7 +1079,7 @@ def write_landmarks_colorcoded_to_folder(basedir, landmarks, values, vmin = 0, v
     # os.makedirs(basedir)
     lv = 0
     key = lambda x: int(x[1]/vbinsize)    
-    complete_list = zip(landmarks.tolist(), values.tolist())
+    complete_list = list(zip(landmarks.tolist(), values.tolist()))
     complete_list = sorted(complete_list, key = key)
     
     with open(os.path.join(basedir, 'out.hx'), 'w') as f:
@@ -1087,12 +1087,12 @@ def write_landmarks_colorcoded_to_folder(basedir, landmarks, values, vmin = 0, v
         for v, group in groupby(complete_list, key = key):
             v = v*vbinsize                        
             landmark_name = str(v)+'.landmarkAscii'
-            print 'writing landmarks for values between {} and {} to {}'.format(v, 
+            print('writing landmarks for values between {} and {} to {}'.format(v, 
                                                                                 v+vbinsize, 
-                                                                                landmark_name)
+                                                                                landmark_name))
             group = list(zip(*group))
             l, _ = group[0], group[1]        
-            print len(l)
+            print(len(l))
             write_landmark_file(os.path.join(basedir, landmark_name), l)
             c = value_to_color(v, vmin = vmin, vmax =vmax)
             f.write(generate_landmark_template(landmark_name, c, lv, len(l)-1))

@@ -1,7 +1,7 @@
 import Interface as I
-import decorators
+from . import decorators
 import unittest
-import context
+from . import context
 
 from biophysics_fitting import hay_complete_default_setup, L5tt_parameter_setup
 from biophysics_fitting.parameters import param_to_kwargs
@@ -225,17 +225,17 @@ class Tests(unittest.TestCase):
             mdb = set_up_mdb(step = False)
             start_run(mdb['86'], 1, client = c, offspring_size = 2, max_ngen = 2)
             # accessing simulation results of run
-            keys = [int(k) for k in mdb['86']['1'].keys() if I.utils.convertible_to_int(k)]
+            keys = [int(k) for k in list(mdb['86']['1'].keys()) if I.utils.convertible_to_int(k)]
             assert(max(keys) == 2)
             # if continue_cp is not set (defaults to False), an Exception is raised if the same 
             # optimization is started again
             self.assertRaises(ValueError, lambda: start_run(mdb['86'], 1, client = c, offspring_size = 2, max_ngen = 4))
             # with continue_cp = True, the optimization gets continued
             start_run(mdb['86'], 1, client = c, offspring_size = 2, max_ngen = 4, continue_cp = True)
-            keys = [int(k) for k in mdb['86']['1'].keys() if I.utils.convertible_to_int(k)]
+            keys = [int(k) for k in list(mdb['86']['1'].keys()) if I.utils.convertible_to_int(k)]
             assert(max(keys) == 4)
             start_run(mdb['86'], 2, client = c, offspring_size = 2, max_ngen = 2)
-            keys = [int(k) for k in mdb['86']['2'].keys() if I.utils.convertible_to_int(k)]
+            keys = [int(k) for k in list(mdb['86']['2'].keys()) if I.utils.convertible_to_int(k)]
             assert(max(keys) == 2)   
         except:
             I.shutil.rmtree(mdb.basedir)     
@@ -270,7 +270,7 @@ class Tests(unittest.TestCase):
             I.shutil.rmtree(mdb_new.basedir)     
             raise
          
-        for k in features_legacy.keys():
+        for k in list(features_legacy.keys()):
             assert(features_legacy[k] == features_new[k])
             
     def test_reproducability(self):
@@ -291,7 +291,7 @@ class Tests(unittest.TestCase):
             raise
         
         features_legacy = get_features()
-        for k in features_new.keys():
+        for k in list(features_new.keys()):
             assert(features_legacy[k] == features_new[k])
         
               

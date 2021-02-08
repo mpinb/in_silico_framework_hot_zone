@@ -45,7 +45,7 @@ class Tests(unittest.TestCase):
         '''binning dask dataframes has to deliver the same
         results as binning pandas dataframes'''
         with FreshlyInitializedMdb() as mdb:   
-            assert('synapse_activation' in mdb.keys())                 
+            assert('synapse_activation' in list(mdb.keys()))                 
             x = universal(mdb['synapse_activation'].compute(get=dask.multiprocessing.get), 'soma_distance')
             y = universal(mdb['synapse_activation'], 'soma_distance')
             np.testing.assert_equal(x,y)

@@ -75,24 +75,24 @@ def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples = 50):
     
     startTime = time.time()
     
-    print 'Loading cell morphology...'
+    print('Loading cell morphology...')
     parser = sim.CellParser(cellName)
     parser.spatialgraph_to_cell()
     singleCell = parser.get_cell()
     
-    print 'Loading spreadsheets and bouton/PST densities...'
-    print '    Loading numberOfCells spreadsheet %s' % numberOfCellsSpreadsheetName
+    print('Loading spreadsheets and bouton/PST densities...')
+    print('    Loading numberOfCells spreadsheet {:s}'.format(numberOfCellsSpreadsheetName))
     numberOfCellsSpreadsheet = sim.read_celltype_numbers_spreadsheet(numberOfCellsSpreadsheetName)
-    print '    Loading connections spreadsheet %s' % connectionsSpreadsheetName
+    print('    Loading connections spreadsheet {:s}'.format(connectionsSpreadsheetName))
     connectionsSpreadsheet = sim.read_connections_spreadsheet(connectionsSpreadsheetName)
-    print '    Loading PST density %s' % ExPSTDensityName
+    print('    Loading PST density {:s}'.format(ExPSTDensityName))
     ExPSTDensity = sim.read_scalar_field(ExPSTDensityName)
     ExPSTDensity.resize_mesh()
-    print '    Loading PST density %s' % InhPSTDensityName
+    print('    Loading PST density {:s}'.format(InhPSTDensityName))
     InhPSTDensity = sim.read_scalar_field(InhPSTDensityName)
     InhPSTDensity.resize_mesh()
     boutonDensities = {}
-    columns = numberOfCellsSpreadsheet.keys()
+    columns = list(numberOfCellsSpreadsheet.keys())
     preCellTypes = numberOfCellsSpreadsheet[columns[0]]
     
     for col in columns:
@@ -101,7 +101,7 @@ def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples = 50):
             boutonDensities[col][preCellType] = []
             boutonDensityFolder = os.path.join(prefix,boutonDensityFolderName,col,preCellType)
             boutonDensityNames = glob.glob(os.path.join(boutonDensityFolder, '*'))
-            print '    Loading %d bouton densities from %s' % (len(boutonDensityNames), boutonDensityFolder)
+            print('    Loading {:d} bouton densities from {:s}'.format(len(boutonDensityNames), boutonDensityFolder))
             for densityName in boutonDensityNames:
                 boutonDensity = sim.read_scalar_field(densityName)
                 boutonDensity.resize_mesh()
@@ -115,7 +115,7 @@ def map_singlecell_inputs(cellName, cellTypeName, nrOfSamples = 50):
     
     endTime = time.time()
     duration = (endTime - startTime)/60.0
-    print 'Runtime: %.1f minutes' % duration
+    print('Runtime: {:.1f} minutes'.format(duration))
 
 if __name__ == '__main__':
     if len(sys.argv) == 3:
@@ -123,5 +123,5 @@ if __name__ == '__main__':
         cellTypeName = sys.argv[2]
         map_singlecell_inputs(fname, cellTypeName)
     else:
-        print 'Usage: python map_singlecell_inputs.py [morphology filename] [postsynaptic cell type name]'
+        print('Usage: python map_singlecell_inputs.py [morphology filename] [postsynaptic cell type name]')
         

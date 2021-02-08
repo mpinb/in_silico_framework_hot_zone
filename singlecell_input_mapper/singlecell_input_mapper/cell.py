@@ -5,7 +5,7 @@ Created on Apr 28, 2012
 '''
 
 import numpy as np
-import reader
+from . import reader
 
 class Cell(object):
     '''
@@ -80,7 +80,7 @@ class Cell(object):
         return self.boundingBox
     
     def add_synapse(self, secID, ptID, ptx, preType='Generic', postType='Generic'):
-        if not self.synapses.has_key(preType):
+        if preType not in self.synapses:
             self.synapses[preType] = []
         newSyn = Synapse(secID, ptID, ptx, preType, postType)
         newSyn.coordinates = np.array(self.sections[secID].pts[ptID])
@@ -92,7 +92,7 @@ class Cell(object):
             return
 #        remove all
         if preType == 'All' or preType == 'all':
-            for synType in self.synapses.keys():
+            for synType in list(self.synapses.keys()):
                 synapses = self.synapses[synType]
                 del synapses[:]
                 del self.synapses[synType]
@@ -104,7 +104,7 @@ class Cell(object):
                 del synapses[:]
                 del self.synapses[preType]
             except KeyError:
-                print 'Synapses of type ' + preType + ' not present on cell'
+                print('Synapses of type ' + preType + ' not present on cell')
             return
 
 
@@ -330,7 +330,7 @@ class CellParser(object):
         for sec in self.cell.sections:
             if sec.label != 'Soma':
                 sec.parent = self.cell.sections[sec.parentID]
-            if not self.cell.structures.has_key(sec.label):
+            if sec.label not in self.cell.structures:
                 self.cell.structures[sec.label] = [sec]
             else:
                 self.cell.structures[sec.label].append(sec)

@@ -3,7 +3,9 @@ Created on Mar 8, 2012
 
 @author: regger
 '''
-from __future__ import absolute_import
+import six
+if six.PY2:
+    from __future__ import absolute_import
 from .scalar_field import ScalarField
 from .generate_nr_of_cells_spreadsheet import con_file_to_NumberOfConnectedCells_sheet
 from model_data_base.mdbopen import mdbopen
@@ -120,7 +122,7 @@ def write_cell_synapse_locations(fname=None, synapses=None, cellID=None):
         header += '\n'
         header += '# Type - section - section.x\n\n'
         outputFile.write(header)
-        for synType in synapses.keys():
+        for synType in list(synapses.keys()):
             for syn in synapses[synType]:
                 if synFormat is None:
                     try:
@@ -315,7 +317,7 @@ def write_sample_connectivity_summary(fname=None, cellTypeSummaryData=None, colu
         header2 += 'Number of soma synapses\t'
         header2 += 'Connected presynaptic cells (soma synapses)\tConvergence (soma synapses)\n'
         outFile.write(header2)
-        columns = columnSummaryData.keys()
+        columns = list(columnSummaryData.keys())
         columns.sort()
         if len(columns):
 #            preCellTypes = columnSummaryData[columns[0]].keys()
@@ -763,7 +765,7 @@ def write_population_and_sample_connectivity_summary(fname=None, populationDistr
         header2 += 'Number of soma synapses\t'
         header2 += 'Connected presynaptic cells (soma synapses)\tConvergence (soma synapses)\n'
         outFile.write(header2)
-        columns = columnSummaryData.keys()
+        columns = list(columnSummaryData.keys())
         columns.sort()
         if len(columns):
 #            preCellTypes = columnSummaryData[columns[0]].keys()
