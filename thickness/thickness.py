@@ -363,7 +363,7 @@ class ThicknessExtractor:
             return [point_1, point_2]
 
     def _filter_all_data_by_point(self, point):
-        return dict(filter(lambda x: x[1]["seed_corrected_point"] == point, self.all_data.items()))
+        return dict([x for x in list(self.all_data.items()) if x[1]["seed_corrected_point"] == point])
 
     def _set_image_file_by_point(self, point):
         z_coordinate_key = int(point[2])
@@ -372,7 +372,7 @@ class ThicknessExtractor:
         self.current_z_coordinate = z_coordinate_key
 
     def _set_image(self, input_path):
-        print 'setting image path to {}'.format(input_path)
+        print('setting image path to {}'.format(input_path))
         self.image = _read_image(input_path)
         self.padded_image = _pad_image(self.image, self._max_seed_correction_radius_in_image_coordinates_in_pixel)
 
@@ -393,7 +393,7 @@ def _check_overlap(contour1, contour2):
 
 
 def _slope(p1, p2):
-    print p1
+    print(p1)
     if p1[0] - p2[0] == 0:
         return np.inf
     return (p1[1] - p2[1]) / (p1[0] - p2[0])

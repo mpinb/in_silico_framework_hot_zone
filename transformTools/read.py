@@ -39,7 +39,7 @@ def hocFileComplete(inputFilePath):
             if (pt3daddCommand > -1) and neuron_section:
                 line = line.replace("pt3dadd", "")
                 matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
-                point = map(float, matches)
+                point = list(map(float, matches))
                 points.append(point)
     return points
 
@@ -85,7 +85,7 @@ def hocFileReduced(inputFilePath):
                 in_neuron_line_number = in_neuron_line_number + 1;
                 line = line.replace("pt3dadd", "")
                 matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
-                point = map(float, matches)
+                point = list(map(float, matches))
                 # print("in p3dadd command")
                 if (in_neuron_line_number == 1):
                     points.append(point)
@@ -141,7 +141,7 @@ def amFile(inputFilePath):
                 # please test if their results are compatible or not
                 # matches = re.findall('-?\d+\.\d+e[+-]?\d+', line)
                 matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+', line)
-                point = map(float, matches)
+                point = list(map(float, matches))
                 points.append(point)
 
             if in_edge_section and (line == '\n'):
@@ -153,7 +153,7 @@ def amFile(inputFilePath):
                 matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+', line)
                 if matches == []:
                     matches = [0.0,0.0]
-                rad = map(float, matches)
+                rad = list(map(float, matches))
                 rads.append(rad)
 
             if in_thickness_section and (line == '\n'):
