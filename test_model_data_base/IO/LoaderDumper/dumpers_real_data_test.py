@@ -1,6 +1,6 @@
-from .context import *
+from ...context import *
 from model_data_base.model_data_base import ModelDataBase
-from . import decorators
+from ... import decorators
 import unittest
 import tempfile
 import numpy as np

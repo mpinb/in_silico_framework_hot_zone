@@ -1,6 +1,4 @@
-import six
-if six.PY2:
-    from __future__ import absolute_import
+from __future__ import absolute_import
 import single_cell_parser as scp
 import getting_started
 from model_data_base.utils import fancy_dict_compare
