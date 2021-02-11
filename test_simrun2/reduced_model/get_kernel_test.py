@@ -1,6 +1,4 @@
-import six
-if six.PY2:
-    from __future__ import absolute_import
+from __future__ import absolute_import
 #from ..context import *
 from simrun2.reduced_model.get_kernel import concatenate_return_boundaries, ReducedLdaModel,\
     compare_lists_by_none_values

@@ -3,7 +3,7 @@ Created on Apr 28, 2012
 
 @author: regger
 '''
-
+from __future__ import absolute_import
 import numpy as np
 from . import reader
 

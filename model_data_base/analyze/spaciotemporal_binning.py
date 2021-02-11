@@ -1,5 +1,4 @@
-if six.PY2:
-    from __future__ import absolute_import
+from __future__ import absolute_import
 import pandas as pd
 import numpy as np
 import dask

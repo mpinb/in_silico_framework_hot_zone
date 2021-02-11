@@ -5,9 +5,7 @@ ongoing activity L2 neuron model
 
 @author: robert, arco
 '''
-import six
-if six.PY2:
-    from __future__ import absolute_import
+from __future__ import absolute_import
 from ._matplotlib_import import * 
 import sys
 import time

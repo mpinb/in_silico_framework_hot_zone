@@ -28,7 +28,7 @@ If you don't use autocommit (default is no autocommit for performance), then
 don't forget to call `mydict.commit()` when done with a transaction.
 
 """
-
+from __future__ import absolute_import
 import sqlite3
 import os
 import sys
@@ -36,6 +36,7 @@ import tempfile
 import random
 import logging
 import traceback
+import six
 
 from threading import Thread
 
@@ -220,14 +221,13 @@ class SqliteDict(DictClass):
         for key, value in self.conn.select(GET_ITEMS):
             yield key, decode(value)
 
-    def keys(self):
-        return iter(self.keys()) if major_version > 2 else list(self.keys())
+    def keys(self): #rieke removed - recursive
+        return six.iterkeys(self) if major_version > 2 else list(six.iterkeys(self))
 
     def values(self):
-        return iter(self.values()) if major_version > 2 else list(self.values())
+        return six.itervalues(self) if major_version > 2 else list(six.itervalues(self))
 
     def items(self):
-        import six
         return six.iteritems(self) if major_version > 2 else list(six.iteritems(self))
 
     def __contains__(self, key):

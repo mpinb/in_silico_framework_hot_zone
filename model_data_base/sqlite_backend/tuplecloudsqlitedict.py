@@ -44,7 +44,7 @@ class SqliteDict(object):
         return self.sqlitedict.__delitem__(key)
     
     def keys(self):
-        list_ = list(self.sqlitedict.keys())
+        list_ = list(self.sqlitedict.keys()) ###
         out = []
         for l in list_:
             if '@' in l:

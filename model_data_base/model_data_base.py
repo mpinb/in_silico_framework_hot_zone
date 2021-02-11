@@ -3,7 +3,7 @@ Created on Aug 15, 2016
 
 @author: arco
 '''
-
+from __future__ import absolute_import
 import os, random, string, threading
 import contextlib
 import shutil
@@ -11,10 +11,8 @@ import tempfile
 import datetime
 import cloudpickle as pickle
 import yaml
-from . import IO.LoaderDumper.just_create_folder
-from . import IO.LoaderDumper.just_create_mdb
-from . import IO.LoaderDumper.to_pickle
-from . import IO.LoaderDumper.to_cloudpickle
+
+
 
 if 'ISF_MDB_CONFIG' in os.environ:
     config_path = os.environ['ISF_MDB_CONFIG']
@@ -205,7 +203,7 @@ class ModelDataBase(object):
             if not forcecreate:
                 _check_working_dir_clean_for_build(basedir)
             self._first_init = True
-            self._registeredDumpers = [IO.LoaderDumper.to_cloudpickle]
+            self._registeredDumpers = [to_cloudpickle]
             self.save_db()                        
             self._set_unique_id()
             self._register_this_database()
@@ -310,7 +308,7 @@ class ModelDataBase(object):
             if raise_:
                 raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         else:           
-            self.setitem(key, None, dumper = IO.LoaderDumper.just_create_folder)
+            self.setitem(key, None, dumper = just_create_folder)
         return self[key]
         
     def get_managed_folder(self, key):
@@ -332,7 +330,7 @@ class ModelDataBase(object):
             if raise_:
                 raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         else:
-            self.setitem(key, None, dumper = IO.LoaderDumper.just_create_mdb)
+            self.setitem(key, None, dumper = just_create_mdb)
         return self[key]
     
     def get_sub_mdb(self,key, register = 'as_parent'):
@@ -349,7 +347,7 @@ class ModelDataBase(object):
             # general case                
             dummy = self._sql_backend[arg]
             if isinstance(dummy, LoaderWrapper):
-                dummy = IO.LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
+                dummy = LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
             if isinstance(dummy, FunctionWrapper):
                 dummy = dummy.fun()
             return dummy   
@@ -509,7 +507,7 @@ class ModelDataBase(object):
         be called from within ModelDataBase.
         Can othervise be destructive!!!'''        
         if inspect.ismodule(dumper):
-            dumper = IO.LoaderDumper.get_dumper_string_by_dumper_module(dumper)
+            dumper = LoaderDumper.get_dumper_string_by_dumper_module(dumper)
         elif isinstance(dumper, str):
             pass
         else:
@@ -539,7 +537,7 @@ class ModelDataBase(object):
     def _detect_dumper_string_of_existing_key(self, key):
         dumper = self._sql_backend[key]
         if isinstance(dumper, LoaderWrapper):
-            dumper = IO.LoaderDumper.get_dumper_string_by_savedir(os.path.join(self.basedir, dumper.relpath))
+            dumper = LoaderDumper.get_dumper_string_by_savedir(os.path.join(self.basedir, dumper.relpath))
         else:
             dumper = 'self'
         return dumper
@@ -614,14 +612,14 @@ class ModelDataBase(object):
     def _write_metadata_for_new_dumper(self, key, new_dumper):
         #update metadata
         if inspect.ismodule(new_dumper):
-            dumper = IO.LoaderDumper.get_dumper_string_by_dumper_module(new_dumper)
+            dumper = LoaderDumper.get_dumper_string_by_dumper_module(new_dumper)
         elif isinstance(dumper, str):
             pass
                 
         metadata = self.metadata[key]
         if not 'dumper_updates' in metadata:
             metadata['dumper_update'] = [{k: metadata[k] for k in ['dumper', 'time', 'module_versions']}]
-        new_dumper = IO.LoaderDumper.get_dumper_string_by_dumper_module(new_dumper)
+        new_dumper = LoaderDumper.get_dumper_string_by_dumper_module(new_dumper)
         dumper_update = {'dumper': new_dumper,
                'time': tuple(datetime.datetime.utcnow().timetuple()),
                'conda_list': VC.get_conda_list(),
@@ -691,7 +689,7 @@ class ModelDataBase(object):
         
     def keys(self):
         '''returns the keys of the database'''
-        return list(self._sql_backend.keys())
+        return list(self._sql_backend.keys()) ###
     
     def get_readonly(self):
         '''returns a new ModelDataBase, which is readonly.
@@ -713,17 +711,25 @@ class ModelDataBase(object):
 class RegisteredFolder(ModelDataBase):
     def __init__(self, path):
         ModelDataBase.__init__(self, path, forcecreate = True)
-        self.setitem('self', None, dumper = IO.LoaderDumper.just_create_folder)
-        dumper = IO.LoaderDumper.just_create_folder
+        self.setitem('self', None, dumper = just_create_folder)
+        dumper = just_create_folder
         dumper.dump(None, path)
         self._sql_backend['self'] = LoaderWrapper('')
         self.setitem = None
         
     
-from . import model_data_base_register
+
 from . import mdbopen
 from . import _module_versions
+from .IO import LoaderDumper
+
+from .IO.LoaderDumper import just_create_folder
+from .IO.LoaderDumper import just_create_mdb
+from .IO.LoaderDumper import to_pickle
+from .IO.LoaderDumper import to_cloudpickle
                       
 VC = _module_versions.version_cached
+
+from . import model_data_base_register
 # get_versions_cache = get_versions()
 # module_versions_cache = _module_versions.get_module_versions()

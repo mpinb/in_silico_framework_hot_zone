@@ -3,9 +3,7 @@ Created on Mar 8, 2012
 
 @author: regger
 '''
-import six
-if six.PY2:
-    from __future__ import absolute_import
+from __future__ import absolute_import
 from .scalar_field import ScalarField
 from .generate_nr_of_cells_spreadsheet import con_file_to_NumberOfConnectedCells_sheet
 from model_data_base.mdbopen import mdbopen

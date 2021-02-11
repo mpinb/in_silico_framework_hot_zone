@@ -5,9 +5,7 @@ ongoing activity L2 neuron model
 
 @author: robert, arco
 '''
-import six
-if six.PY2:
-    from __future__ import absolute_import
+from __future__ import absolute_import
 from ._matplotlib_import import *
 import sys
 import time
@@ -54,7 +52,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
     '''
     assert seed is not None
     np.random.seed(seed)
-    print(("seed: {:i}".format(seed))
+    print("seed: {}".format(seed))
     
     neuronParameters = load_param_file_if_path_is_provided(cellParamName)
     evokedUpNWParameters = load_param_file_if_path_is_provided(evokedUpParamName) ##sumatra function for reading in parameter file

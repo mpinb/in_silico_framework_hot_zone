@@ -49,6 +49,7 @@ run = '.'
 #run = 'test_model_data_base.mdb_initializers.load_simrun_general_test'
 #run = 'test_model_data_base.mdb_initializers.synapse_activation_binning_test'
 #run = 'test_simrun2.simrun_test'
+#run = 'test_simrun2.reduced_model.get_kernel_test'
 #run = 'test_model_data_base.sqlite_backend.sqlite_backend_test'#move cluster
 #run = 'test_model_data_base.model_data_base_register_test'
 ################################

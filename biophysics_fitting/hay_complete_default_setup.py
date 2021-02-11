@@ -3,8 +3,7 @@ Created on Nov 08, 2018
 
 @author: abast
 '''
-if six.PY2:
-    from __future__ import absolute_import
+from __future__ import absolute_import
 
 
 from functools import partial

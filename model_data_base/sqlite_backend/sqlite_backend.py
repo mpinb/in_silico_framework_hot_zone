@@ -1,6 +1,4 @@
-import six
-if six.PY2:
-    from __future__ import absolute_import
+from __future__ import absolute_import
 from .tuplecloudsqlitedict import SqliteDict
 import os, time
 from ..utils import DelayedKeyboardInterrupt

@@ -8,7 +8,7 @@ For detailed documentation start with the docstring of the Simulator class.
 
 import single_cell_parser as scp
 from .parameters import param_selector
-import time        
+import time
 
 
 class Simulator_Setup:

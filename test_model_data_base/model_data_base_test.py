@@ -9,6 +9,7 @@ import numpy as np
 import tempfile
 import warnings
 from pandas.util.testing import assert_frame_equal
+from model_data_base import IO
 
 class Tests(unittest.TestCase):       
     def setUp(self):        
@@ -54,7 +55,7 @@ class Tests(unittest.TestCase):
          
     def test_get_dumper_string_by_dumper_module(self):
         '''dumper string should be the modules name wrt IO.LoaderDumpers'''
-        s1 = model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
+        s1 = IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
         s2 = 'to_pickle'
         self.assertEqual(s1, s2)
      
@@ -64,7 +65,7 @@ class Tests(unittest.TestCase):
         or from the module reference directly.'''
         self.fresh_mdb.setitem('test', 1, dumper = to_pickle)
         s1 = self.fresh_mdb._detect_dumper_string_of_existing_key('test')
-        s2 = model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
+        s2 = IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
         self.assertEqual(s1, s2)
          
     def test_can_detect_self_as_dumper(self):

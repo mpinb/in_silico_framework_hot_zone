@@ -83,17 +83,17 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
     score = (np.median(score_1) + np.median(score_0))
     
     if verbosity > 1:
-        print(('score all: max {:f} min {:f} mean {:f}'.format((max(score_all), min(score_all), np.mean(score_all)))))
-        print(('score 1:   max {:f} min {:f} mean {:f}'.format((max(score_1), min(score_1), np.mean(score_1)))))
-        print(('score 0:   max {:f} min {:f} mean {:f}'.format((max(score_0), min(score_0), np.mean(score_0)))))
-        print(('score ROC-AUC:   max {:f} min {:f} mean {:f}'.format((max(score_rocauc), min(score_rocauc), np.mean(score_rocauc)))))
+        print('score all: max {} min {} mean {}'.format(max(score_all), min(score_all), np.mean(score_all)))
+        print('score 1:   max {} min {} mean {}'.format(max(score_1), min(score_1), np.mean(score_1)))
+        print('score 0:   max {} min {} mean {}'.format(max(score_0), min(score_0), np.mean(score_0)))
+        print('score ROC-AUC:   max {} min {} mean {}'.format(max(score_rocauc), min(score_rocauc), np.mean(score_rocauc)))
         if True:#normalize_group_size:
-            print(('score all full data: max {:f} min {:f} mean {:f}'.format((max(score_all_full_data), min(score_all_full_data), np.mean(score_all_full_data)))))
-            print(('score 1 full data:   max {:f} min {:f} mean {:f}'.format((max(score_1_full_data), min(score_1_full_data), np.mean(score_1_full_data)))))
-            print(('score 0 full data:   max {:f} min {:f} mean {:f}'.format((max(score_0_full_data), min(score_0_full_data), np.mean(score_0_full_data)))))
-            print(('score ROC-AUC full data:   max {:f} min {:f} mean {:f}'.format((max(score_rocauc_full_data), min(score_rocauc_full_data), np.mean(score_rocauc_full_data)))))            
+            print('score all full data: max {} min {} mean {}'.format(max(score_all_full_data), min(score_all_full_data), np.mean(score_all_full_data)))
+            print('score 1 full data:   max {} min {} mean {}'.format(max(score_1_full_data), min(score_1_full_data), np.mean(score_1_full_data)))
+            print('score 0 full data:   max {} min {} mean {}'.format(max(score_0_full_data), min(score_0_full_data), np.mean(score_0_full_data)))
+            print('score ROC-AUC full data:   max {} min {} mean {}'.format(max(score_rocauc_full_data), min(score_rocauc_full_data), np.mean(score_rocauc_full_data)))            
     if verbosity > 0:    
-        print(('score: {:f}'.format(score)))
+        print(('score: {}'.format(score)))
         print('')
     
     if return_ == 'all': 

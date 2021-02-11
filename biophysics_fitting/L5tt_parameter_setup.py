@@ -1,7 +1,7 @@
 #########################################
 # naming converters scp <--> hay
 #########################################
-
+import six
 def hay_param_to_scp_neuron_param(p):
     p = p.split('.')
     if p[1] == 'axon':

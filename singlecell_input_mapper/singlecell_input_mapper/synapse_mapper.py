@@ -342,7 +342,7 @@ class SynapseDensity(object):
             for n in range(len(clipSegments)):
                 segment = clipSegments[n]
                 segmentRadius = clipSegmentsRadius[n]
-                print('{:d} of {:d} done...\r'.format(count,nrOfSegments), end=' ')
+                print('{:d} of {:d} done...\r'.format(count,nrOfSegments))#, end=' ')
                 sys.stdout.flush()
                 count += 1
                 for i in range(density1.extent[0],density1.extent[1]+1):

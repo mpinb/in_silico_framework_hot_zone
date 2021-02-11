@@ -25,7 +25,7 @@
 #         Tuebingen, Germany
 #         Email: robert.egger@tuebingen.mpg.de
 #===============================================================================
-
+from __future__ import absolute_import
 from .reader import *
 from .writer import *
 from .network_embedding import *

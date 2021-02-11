@@ -20,7 +20,7 @@ def get_default_arguments(func):
     import six
     Returns: dictionary, function names are keys, default values are values'''
     o = inspect.getargspec(func)
-    names = o.args[-len(six.get_function_defaults(func):]
+    names = o.args[-len(six.get_function_defaults(func)):]
     defaults = o.defaults
     return {n: d for n,d in zip(names, defaults) if d is not None}
 

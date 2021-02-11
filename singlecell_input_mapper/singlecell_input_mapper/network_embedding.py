@@ -3,7 +3,7 @@ Created on Nov 17, 2012
 
 @author: regger
 '''
-
+from __future__ import absolute_import
 import os
 import sys
 import time
@@ -203,7 +203,7 @@ class NetworkMapper:
                 count = 0
                 for preCell in self.cells[col][preCellType]:
                     count += 1
-                    print('    Computing synapses for presynaptic cell {:d} of {:d}...\r'.format(count,totalNumber), end=' ')
+                    print('    Computing synapses for presynaptic cell {:d} of {:d}...\r'.format(count,totalNumber))#, end=' ')
                     sys.stdout.flush()
                     densityID = np.random.randint(nrOfDensities)
                     synapseDensity = cellTypeSynapseDensities[col][preCellType][densityID]
@@ -295,7 +295,7 @@ class NetworkMapper:
                 for i in range(totalNumber):
                     preCell = self.cells[col][preCellType][i]
                     count += 1
-                    print('    Computing synapses for presynaptic cell {:d} of {:d}...\r'.format(count,totalNumber), end=' ')
+                    print('    Computing synapses for presynaptic cell {:d} of {:d}...\r'.format(count,totalNumber))#, end=' ')
                     sys.stdout.flush()
                     densityID = densityIDs[i]
                     synapseDensity = cellTypeSynapseDensities[col][preCellType][densityID]
@@ -631,7 +631,7 @@ class NetworkMapper:
         synapseLocations = {}
         cellSynapseLocations = {}
         cellTypeSummaryTable = {}
-         columnSummaryTable = {} # note- this could probably be tidied using I.defaultdict
+        columnSummaryTable = {} # note- this could probably be tidied using I.defaultdict
         columns = list(self.cells.keys())
         for col in columns:
             cellTypes = list(self.cells[col].keys())
