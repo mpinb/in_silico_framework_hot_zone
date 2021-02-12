@@ -76,7 +76,7 @@ print("Current pid: {pid}".format(pid = os.getpid()))
 import barrel_cortex
 from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
 from model_data_base.model_data_base import ModelDataBase
-from model_data_base.analyze.burst_detection import burst_detection
+#from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
 from model_data_base.analyze.temporal_binning import universal as temporal_binning
 

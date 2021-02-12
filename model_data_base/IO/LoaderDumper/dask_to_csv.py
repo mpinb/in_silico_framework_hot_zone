@@ -37,7 +37,7 @@ def bundle_delayeds(*args):
     '''
     pass
 
-def my_to_csv(ddf, path, optimize_graph = False, index = None, get = compatibility.multiprocessing_scheduler):
+def my_to_csv(ddf, path, optimize_graph = False, index = None, client = None): #get = compatibility.multiprocessing_scheduler):
     ''' Very simple method to store a dask dataframe to a bunch of csv files.
     The reason for it's creation is a lot of frustration with the respective 
     dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
@@ -54,7 +54,7 @@ def my_to_csv(ddf, path, optimize_graph = False, index = None, get = compatibili
     save_delayeds = list(zip(ddf, [path]*l, list(range(l)), [digits]*l)) #put all data together
     save_delayeds = list(map(dask.delayed(lambda x: ddf_save_chunks(*x)), save_delayeds)) #call save function with it
     save_delayeds = bundle_delayeds(*save_delayeds) #bundle everything, so dask does not merge the graphs, which takes ages
-    save_delayeds.compute(optimize_graph = optimize_graph, get = get)
+    save_delayeds.compute(optimize_graph = optimize_graph, scheduler = client)
     #dask.compute(save_delayeds, optimize_graph = optimize_graph, get = get)
     
     

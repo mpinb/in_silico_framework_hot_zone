@@ -1,3 +1,5 @@
+import os
+print(os.getpid())
 import unittest
 
 # switch matplotlib backend to make sure that test suite can 
@@ -15,8 +17,12 @@ import test_simrun3, test_simrun3.decorators
 import test_single_cell_parser, test_single_cell_parser.decorators
 import test_biophysics_fitting, test_biophysics_fitting.decorators
 import distributed
+import six
 
-client = distributed.Client('localhost:8786')
+if six.PY2:
+    client = distributed.Client('localhost:8786')
+else:
+    client = distributed.Client('localhost:12345')
 
 distributed.client_object_duck_typed = client
 #######################################
@@ -61,10 +67,10 @@ verbosity = 10
 if __name__ == "__main__":
     testRunner = unittest.TextTestRunner(verbosity = verbosity)
 
-if run == '.':
-    tests = unittest.defaultTestLoader.discover(run, pattern = '*_test.py')
-    testRunner.run(tests)          
-else:
-    test = __import__(run, globals(), locals(), [], 0)
-    suite = eval('unittest.TestLoader().loadTestsFromTestCase(%s.Tests)' % run)        
-    testRunner.run(suite)
+    if run == '.':
+        tests = unittest.defaultTestLoader.discover(run, pattern = '*_test.py')
+        testRunner.run(tests)          
+    else:
+        test = __import__(run, globals(), locals(), [], 0)
+        suite = eval('unittest.TestLoader().loadTestsFromTestCase(%s.Tests)' % run)        
+        testRunner.run(suite)

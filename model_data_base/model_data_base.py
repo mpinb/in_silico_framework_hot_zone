@@ -273,7 +273,7 @@ class ModelDataBase(object):
     
     def read_db(self):
         '''sets the state of the database according to dbcore.pickle''' 
-        with open(os.path.join(self.basedir, 'dbcore.pickle'), 'r') as f:
+        with open(os.path.join(self.basedir, 'dbcore.pickle'), 'rb') as f:
             out = pickle.load(f)
             
         for name in out:
@@ -285,7 +285,7 @@ class ModelDataBase(object):
         out = {'_registeredDumpers': self._registeredDumpers, \
                '_unique_id': self._unique_id,
                '_registered_to_path': self._registered_to_path} 
-        with open(os.path.join(self.basedir, 'dbcore.pickle'), 'w') as f:
+        with open(os.path.join(self.basedir, 'dbcore.pickle'), 'wb') as f:
             pickle.dump(out, f)
         
     def itemexists(self, key):

@@ -1,6 +1,6 @@
 import sys, os, time
 import warnings
-from six import StringIO
+import six
 from six.moves.cPickle import PicklingError # this import format has potential issues (see six documentation) -rieke
 import cloudpickle
 import contextlib
@@ -9,7 +9,7 @@ import dask.dataframe as dd
 import dask
 import pandas as pd
 import numpy as np
-
+import distributed
 
 
 def chunkIt(seq, num):
@@ -80,7 +80,7 @@ def split_file_to_buffers(f, split_str = '#'):
             if stringio is not None:
                 stringio.seek(0)
                 stringios.append(stringio)
-            stringio = StringIO()
+            stringio = six.StringIO()
         stringio.write(line)
         stringio.write("\n")
     stringio.seek(0)
@@ -97,7 +97,7 @@ def first_line_to_key(stringios):
         for lv, line in enumerate(s):
             if lv == 0:
                 name = line.strip()
-                value = StringIO()
+                value = six.StringIO()
             else:
                 value.write(line)
                 value.write("\n")
@@ -351,7 +351,7 @@ def flatten(l):
 
 @dask.delayed
 def synchronous_ddf_concat(ddf_path, meta, N, n):    
-    with open(ddf_path) as f:
+    with open(ddf_path, 'rb') as f:
         ddf = cloudpickle.load(f)
     delayeds = ddf.to_delayed()
     chunks_delayeds = chunkIt(delayeds, N)
@@ -366,7 +366,7 @@ def myrepartition(ddf, N):
     '''This repartitions without generating more tasks'''
     folder = tempfile.mkdtemp()
     ddf_path = os.path.join(folder, 'ddf.cloudpickle.dump')
-    with open(ddf_path, 'w') as f:
+    with open(ddf_path, 'wb') as f:
         cloudpickle.dump(ddf, f)
 
     divisions = ddf.divisions
@@ -386,11 +386,4 @@ def myrepartition(ddf, N):
         assert(len(divisions) - 1 == len(delayeds))
         return dd.from_delayed(delayeds, meta = meta, divisions = divisions)
     
-pdf = pd.DataFrame(np.random.randint(100, size = (1000,3)))
-ddf = dask.dataframe.from_pandas(pdf, npartitions = 10)
-pdf2 = myrepartition(ddf, 4).compute(get = dask.get)
-pd.util.testing.assert_frame_equal(pdf, pdf2)
-ddf.divisions = tuple([None] * (ddf.npartitions + 1))
-pdf2 = myrepartition(ddf, 4).compute(get = dask.get)
-pd.util.testing.assert_frame_equal(pdf, pdf2)
 
