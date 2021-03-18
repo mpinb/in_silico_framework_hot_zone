@@ -9,6 +9,8 @@ from model_data_base.plotfunctions._figure_array_converter import PixelObject, s
 
 savefigs = True
 
+client = distributed.client_object_duck_typed
+
 class Tests(unittest.TestCase):
     def setUp(self):
         self.df = pd.DataFrame({'1': [1,2,3,4,5], \

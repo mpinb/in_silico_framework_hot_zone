@@ -1,5 +1,5 @@
 import os
-print(os.getpid())
+# print(os.getpid())
 import unittest
 
 # switch matplotlib backend to make sure that test suite can 

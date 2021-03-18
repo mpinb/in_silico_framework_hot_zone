@@ -140,7 +140,8 @@ class SQLiteBackend(object):
             try:
                 sqllitedict = self._get_sql()
                 keys = list(sqllitedict.keys())
-                return sorted(keys)
+#                 return sorted(keys) # causes an error if some keys are tuples and others are strings
+                return keys
             finally:
                 try:
                     self._close_sql(sqllitedict)

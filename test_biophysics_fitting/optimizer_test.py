@@ -1,7 +1,9 @@
 import Interface as I
 from . import decorators
 import unittest
-from . import context
+from .context import *
+import context
+import distributed
 
 from biophysics_fitting import hay_complete_default_setup, L5tt_parameter_setup
 from biophysics_fitting.parameters import param_to_kwargs
@@ -220,7 +222,7 @@ class Tests(unittest.TestCase):
 
     @decorators.testlevel(2)    
     def test_mini_optimization_run(self):
-        c = I.distributed.Client('localhost:8786')
+        c = distributed.client_object_duck_typed
         try:
             mdb = set_up_mdb(step = False)
             start_run(mdb['86'], 1, client = c, offspring_size = 2, max_ngen = 2)

@@ -22,6 +22,7 @@ import cloudpickle
 import tempfile
 import dask.dataframe as dd
 import dask.delayed
+import dask
 import pandas as pd
 from . import parent_classes
 import glob
@@ -29,6 +30,7 @@ import compatibility
 import time
 from model_data_base.utils import chunkIt, myrepartition, mkdtemp
 import distributed
+import pandas_msgpack
 
 ####
 # if you want to use this as template to implement another dask dumper: 
@@ -63,7 +65,8 @@ def get_writer_function(categorize):
     def ddf_save_chunks(pdf, path, number, digits):
         if categorize:
             str_to_category(pdf)
-        pdf.to_msgpack(path.replace('*', str(number).zfill(digits)), compress = 'blosc') ###
+#         pdf.to_msgpack(path.replace('*', str(number).zfill(digits)), compress = 'blosc') ###
+        pandas_msgpack.to_msgpack(path.replace('*', str(number).zfill(digits)), pdf, compress = 'blosc')
     return ddf_save_chunks
 
 @dask.delayed()
@@ -158,7 +161,7 @@ def bundle_delayeds(*args):
 ######################################################
 from model_data_base.utils import chunkIt
 import cloudpickle
-def my_dask_writer(ddf, path, optimize_graph = False, get = compatibility.multiprocessing_scheduler, categorize = True, client = None):
+def my_dask_writer(ddf, path, optimize_graph = False, categorize = True, client = None): #get = compatibility.multiprocessing_scheduler,
     ''' Very simple method to store a dask dataframe to a bunch of files.
     The reason for it's creation is a lot of frustration with the respective 
     dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
@@ -176,7 +179,7 @@ def my_dask_writer(ddf, path, optimize_graph = False, get = compatibility.multip
         dask_options = dask.context._globals
         dask.config.set(callbacks=set()) #disable progress bars etc. 
         for number in numbers:
-            pdf = ddf.get_partition(number).compute(get = compatibility.synchronous_scheduler)
+            pdf = ddf.get_partition(number).compute(client = dask.get) #get = compatibility.synchronous_scheduler
             fun(pdf, path, number, ndigits)
         dask.context._globals = dask_options
     
@@ -215,7 +218,8 @@ class Loader(parent_classes.Loader):
             self.dtypes = None
             
             
-        my_reader = lambda x: category_to_str(pd.read_msgpack(x))  ###  
+#         my_reader = lambda x: category_to_str(pd.read_msgpack(x))  ### 
+        my_reader = lambda x: category_to_str(pandas_msgpack.read_msgpack(x))
         
         if self.divisions:
             if verbose: print('loaded dask dataframe with known divisions')
@@ -234,13 +238,14 @@ class Loader(parent_classes.Loader):
     
         
 def dump(obj, savedir, repartition = False, get = None, categorize = True, client = None):
-    assert(client is not None)
-    get = compatibility.multiprocessing_scheduler if get is None else get
+    if client is None:
+        assert get is not None
+        client = get
     if repartition:
         if obj.npartitions > 10000:
             obj = myrepartition(obj, 5000)
     
-    my_dask_writer(obj, os.path.join(savedir, fileglob), get = get, categorize = categorize, client = client)
+    my_dask_writer(obj, os.path.join(savedir, fileglob), categorize = categorize, client = client)
     meta = obj._meta
     index_name = obj.index.name
     if obj.known_divisions:
@@ -248,8 +253,8 @@ def dump(obj, savedir, repartition = False, get = None, categorize = True, clien
     else:
         divisions = None
         
-    with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
-        cloudpickle.dump(Loader(meta, index_name = index_name, divisions = divisions), file_)
-        
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#         cloudpickle.dump(Loader(meta, index_name = index_name, divisions = divisions), file_)
+    compatibility.cloudpickle_fun(Loader(meta, index_name = index_name, divisions = divisions), os.path.join(savedir, 'Loader.pickle'))
         
         

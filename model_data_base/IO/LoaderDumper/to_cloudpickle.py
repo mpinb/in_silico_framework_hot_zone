@@ -1,5 +1,5 @@
 import os
-import cloudpickle
+import compatibility
 from . import parent_classes
 
 def check(obj):
@@ -8,12 +8,17 @@ def check(obj):
 
 class Loader(parent_classes.Loader):
     def get(self, savedir):
-        with open(os.path.join(savedir, 'to_pickle_dump'), 'r') as file_:
-            return cloudpickle.load(file_)
+#         with open(os.path.join(savedir, 'to_pickle_dump'), 'rb') as file_:
+#             return cloudpickle.load(file_, encoding = 'latin1')
+        return compatibility.uncloudpickle_fun(os.path.join(savedir, 'to_pickle_dump'))
     
 def dump(obj, path):
-    with open(os.path.join(path, 'to_pickle_dump'), 'w') as file_:
-        cloudpickle.dump(obj, file_)
+    compatibility.cloudpickle_fun(obj, os.path.join(path, 'to_pickle_dump'))
+    compatibility.cloudpickle_fun(Loader(), os.path.join(path, 'Loader.pickle'))
+#     with open(os.path.join(path, 'to_pickle_dump'), 'wb') as file_:
+#         cloudpickle.dump(obj, file_)
         
-    with open(os.path.join(path, 'Loader.pickle'), 'w') as file_:
-        cloudpickle.dump(Loader(), file_)
+#     with open(os.path.join(path, 'Loader.pickle'), 'wb') as file_:
+#         cloudpickle.dump(Loader(), file_)
+
+    

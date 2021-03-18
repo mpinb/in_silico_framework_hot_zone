@@ -18,7 +18,7 @@ from model_data_base.model_data_base import get_progress_bar_function,\
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format as read_sa
 from model_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format as read_ca
 from model_data_base.analyze.spike_detection import spike_detection
-from model_data_base.analyze.burst_detection import burst_detection
+# from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.IO.LoaderDumper import dask_to_msgpack
 from model_data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module  
 from model_data_base.utils import mkdtemp
@@ -523,33 +523,33 @@ def init(mdb, simresult_path,  \
     if rewrite_in_optimized_format:
         assert(client is not None)
         get = client.get
-    get = compatibility.multiprocessing_scheduler if get is None else get
-    with dask.set_options(get = get):
-        #with get_progress_bar_function()(): 
-        mdb['simresult_path'] = simresult_path  
-        if core:
-            _build_core(mdb, repartition = repartition)
-            if rewrite_in_optimized_format:
-                optimize(mdb, select = ['voltage_traces'], repartition = False, get = get, client = client)
-        if parameterfiles: _build_param_files(mdb, get = get)                          
-        if synapse_activation: 
-            _build_synapse_activation(mdb, repartition = repartition)
-            if rewrite_in_optimized_format:
-                optimize(mdb, select = ['cell_activation', 'synapse_activation'], repartition = False, get = get, client = client)
-        if dendritic_voltage_traces: 
-            _build_dendritic_voltage_traces(mdb, repartition = repartition)
-            if rewrite_in_optimized_format:
-                optimize(mdb['dendritic_recordings'], select = list(mdb['dendritic_recordings'].keys()), repartition = False, get = get, client = client)
-            if dendritic_spike_times:
-                m = mdb.create_sub_mdb('dendritic_spike_times')
-                for kk in list(mdb['dendritic_recordings'].keys()):
-                    vt = mdb['dendritic_recordings'][kk]
-                    st = spike_detection(vt, threshold = dendritic_spike_times_threshold)
-                    m.setitem(kk+'_'+str(dendritic_spike_times_threshold), st, dumper = pandas_to_msgpack)                             
-        if spike_times: 
-            print("---spike times---")
-            vt = mdb['voltage_traces']
-            mdb.setitem('spike_times', spike_detection(vt), dumper = pandas_to_msgpack)                                        
+#     get = compatibility.multiprocessing_scheduler if get is None else get
+#     with dask.set_options(get = get):
+    #with get_progress_bar_function()(): 
+    mdb['simresult_path'] = simresult_path  
+    if core:
+        _build_core(mdb, repartition = repartition)
+        if rewrite_in_optimized_format:
+            optimize(mdb, select = ['voltage_traces'], repartition = False, get = get, client = client) 
+    if parameterfiles: _build_param_files(mdb, get = get)                          
+    if synapse_activation: 
+        _build_synapse_activation(mdb, repartition = repartition)
+        if rewrite_in_optimized_format:
+            optimize(mdb, select = ['cell_activation', 'synapse_activation'], repartition = False, get = get, client = client)
+    if dendritic_voltage_traces: 
+        _build_dendritic_voltage_traces(mdb, repartition = repartition)
+        if rewrite_in_optimized_format:
+            optimize(mdb['dendritic_recordings'], select = list(mdb['dendritic_recordings'].keys()), repartition = False, get = get, client = client) 
+        if dendritic_spike_times:
+            m = mdb.create_sub_mdb('dendritic_spike_times')
+            for kk in list(mdb['dendritic_recordings'].keys()):
+                vt = mdb['dendritic_recordings'][kk]
+                st = spike_detection(vt, threshold = dendritic_spike_times_threshold)
+                m.setitem(kk+'_'+str(dendritic_spike_times_threshold), st, dumper = pandas_to_msgpack)                             
+    if spike_times: 
+        print("---spike times---")
+        vt = mdb['voltage_traces']
+        mdb.setitem('spike_times', spike_detection(vt), dumper = pandas_to_msgpack)                                        
     print('Initialization succesful.') 
         
 def _get_dumper(value):

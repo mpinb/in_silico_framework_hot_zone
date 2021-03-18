@@ -221,14 +221,17 @@ class SqliteDict(DictClass):
         for key, value in self.conn.select(GET_ITEMS):
             yield key, decode(value)
 
-    def keys(self): #rieke removed - recursive
-        return six.iterkeys(self) if major_version > 2 else list(six.iterkeys(self))
+    def keys(self): 
+#         return self.iterkeys() if major_version > 2 else list(self.iterkeys())
+        return list(self.iterkeys())
 
     def values(self):
-        return six.itervalues(self) if major_version > 2 else list(six.itervalues(self))
+#         return self.itervalues() if major_version > 2 else list(self.itervalues())
+        return list(self.itervalues())
 
     def items(self):
-        return six.iteritems(self) if major_version > 2 else list(six.iteritems(self))
+#         return self.iteritems() if major_version > 2 else list(self.iteritems())
+        return list(self.iteritems())
 
     def __contains__(self, key):
         HAS_ITEM = 'SELECT 1 FROM "%s" WHERE key = ?' % self.tablename

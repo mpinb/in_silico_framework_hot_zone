@@ -82,8 +82,7 @@ def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = T
     '''
     if scaleFunc is not None:
         warnings.warn('Keyword scaleFunc is deprecated! ' + 
-                      'New: To ensure reproducability, scaleFunc should be '+
-                      'specified in the parameters, as described in single_cell_parser.cell_modify_funs')
+                      'New: To ensure reproducability, scaleFunc should be specified in the parameters, as described in single_cell_parser.cell_modify_funs')
     print('-------------------------------')
     print('Starting setup of cell model...')
     axon = False

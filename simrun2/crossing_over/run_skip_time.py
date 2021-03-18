@@ -24,7 +24,7 @@ def _save_synapse_activation_to_folder(df, sim_trail_index, dirPrefix):
     return path
 
 def skip_time_and_save(df_db, sim_trail_index, t_skip_start, t_skip_end, dirPrefix):
-    df = df_db.loc[sim_trail_index].compute(get = dask.async.get_sync)
+    df = df_db.loc[sim_trail_index].compute(get = dask.get)
     df = skip_time(df, t_skip_start, t_skip_end)
     return _save_synapse_activation_to_folder(df, sim_trail_index, dirPrefix)
 

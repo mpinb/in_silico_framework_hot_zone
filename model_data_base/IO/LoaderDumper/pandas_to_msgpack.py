@@ -1,7 +1,9 @@
 import os
-import cloudpickle
+# import cloudpickle
+import compatibility
 import pandas as pd
 from . import parent_classes
+import pandas_msgpack
 
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''
@@ -9,12 +11,15 @@ def check(obj):
 
 class Loader(parent_classes.Loader):
     def get(self, savedir):
-        return pd.read_msgpack(os.path.join(savedir, 'pandas_to_msgpack'))
+#         return pd.read_msgpack(os.path.join(savedir, 'pandas_to_msgpack'))
+        return pandas_msgpack.read_msgpack(os.path.join(savedir, 'pandas_to_msgpack'))
     
 def dump(obj, savedir):
-    obj.to_msgpack(os.path.join(savedir, 'pandas_to_msgpack'), compress = 'blosc')
+#     obj.to_msgpack(os.path.join(savedir, 'pandas_to_msgpack'), compress = 'blosc')
+    pandas_msgpack.to_msgpack(os.path.join(savedir, 'pandas_to_msgpack'), obj, compress = 'blosc')
 
-    with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
-        cloudpickle.dump(Loader(), file_)
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#         cloudpickle.dump(Loader(), file_)
+    compatibility.cloudpickle_fun(Loader(), os.path.join(savedir, 'Loader.pickle'))
     
 

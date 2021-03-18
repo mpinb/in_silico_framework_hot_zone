@@ -10,6 +10,8 @@ import dask
 import pandas as pd
 import numpy as np
 import distributed
+import six
+from six.moves import cPickle
 
 
 def chunkIt(seq, num):
@@ -30,13 +32,14 @@ class silence_stdout():
     '''Silences stdout. Can be used as context manager and decorator.
     https://stackoverflow.com/a/2829036/5082048
     '''
+    
     def __init__(self, fun = None):
         self.save_stdout = sys.stdout
         if fun is not None:
             return self(fun)
         
     def __enter__(self):
-        sys.stdout = io.BytesIO()
+        sys.stdout = six.StringIO()
         
     def __exit__(self, *args, **kwargs):
         sys.stdout = self.save_stdout
@@ -48,6 +51,7 @@ class silence_stdout():
         return wrapper
     
 silence_stdout = silence_stdout()
+
 
 import tempfile
 import shutil
@@ -182,7 +186,6 @@ def skit(*funcs, **kwargs):
     adapted from http://stackoverflow.com/a/23430335/5082048
     '''
     out = []
-    import six
     for fun in funcs:
         out.append({key: value for key, value in six.iteritems(kwargs) 
                 if key in fun.__code__.co_varnames})
@@ -196,12 +199,11 @@ def unique(list_):
 
 def cache(function):
     import hashlib
-    from six.moves import cPickle
     memo = {}
     def get_key(*args, **kwargs):
         try:
             hash = hashlib.md5(cPickle.dumps([args, kwargs])).hexdigest()
-        except TypeError:
+        except (TypeError, AttributeError):
             hash = hashlib.md5(cloudpickle.dumps([args, kwargs])).hexdigest()
         return hash
     
@@ -300,7 +302,6 @@ class DelayedKeyboardInterrupt(object):
 def flatten(l):
     '''https://stackoverflow.com/a/2158532/5082048'''
     import collections
-    import six
     for el in l:
         if isinstance(el, collections.Iterable) and not isinstance(el, six.stringtypes): # not sure about syntax here - rieke
             for sub in flatten(el):

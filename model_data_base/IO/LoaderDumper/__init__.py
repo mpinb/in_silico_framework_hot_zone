@@ -1,5 +1,6 @@
 import os 
-import cloudpickle
+# import cloudpickle
+import compatibility
 '''Module implements a database concept, using two interfaces:
 (1) the dump function
 (2) the loader class
@@ -21,8 +22,10 @@ which is the intended way to reload arbitrary objects saved with a Dumper.
 def load(savedir, load_data = True):
     '''Standard interface to load data, that was saved to savedir
     with an arbitrary dumper'''
-    with open(os.path.join(savedir, 'Loader.pickle')) as file_:
-        myloader = cloudpickle.load(file_)
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'rb') as file_:
+#         myloader = cloudpickle.load(file_, encoding = 'latin1')
+    myloader = compatibility.uncloudpickle_fun(os.path.join(savedir, 'Loader.pickle'))
+    
     if load_data:
         return myloader.get(savedir)
     else:
@@ -36,8 +39,9 @@ def get_dumper_string_by_dumper_module(dumper_module):
     
 def get_dumper_string_by_savedir(savedir):
     import inspect
-    with open(os.path.join(savedir, 'Loader.pickle')) as file_:
-        myloader = cloudpickle.load(file_)
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'rb') as file_:
+#         myloader = cloudpickle.load(file_)
+    myloader = compatibility.uncloudpickle_fun(os.path.join(savedir, 'Loader.pickle'))
     dumper = inspect.getmodule(myloader)
     return get_dumper_string_by_dumper_module(dumper)
     

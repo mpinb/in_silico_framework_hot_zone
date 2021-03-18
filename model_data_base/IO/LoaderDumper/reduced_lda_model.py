@@ -20,6 +20,7 @@ from model_data_base.model_data_base_register import get_mdb_by_unique_id
 from . import pandas_to_msgpack
 from . import numpy_to_npz
 import pandas as pd
+import compatibility
 
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''
@@ -76,7 +77,7 @@ def dump(obj, savedir):
         Rm.lda_values = lda_values
         Rm.lda_value_dicts = lda_value_dicts  
         Rm.mdb_list = mdb_list
-        with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
-            cloudpickle.dump(Loader(), file_)
-    
+#         with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#             cloudpickle.dump(Loader(), file_)
+        compatibility.cloudpickle_fun(Loader(), os.path.join(savedir, 'Loader.pickle'))
 

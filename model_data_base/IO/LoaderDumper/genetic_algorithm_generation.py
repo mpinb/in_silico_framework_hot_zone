@@ -1,5 +1,6 @@
 import os
-import cloudpickle
+# import cloudpickle
+import compatibility
 import numpy as np
 from . import parent_classes
 import pandas as pd
@@ -25,5 +26,6 @@ def dump(obj, savedir, generation, parameters, objectives):
     np.savez_compressed(os.path.join(savedir, 'parameters.npz'), arr_0 = obj[0])
     np.savez_compressed(os.path.join(savedir, 'objectives.npz'), arr_0 = obj[1])
     
-    with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
-        cloudpickle.dump(Loader(generation, parameters, objectives), file_, generation, parameters)
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#         cloudpickle.dump(Loader(generation, parameters, objectives), file_, generation, parameters)
+    compatibility.cloudpickle_fun(Loader(generation, parameters, objectives), os.path.join(savedir, 'Loader.pickle'))

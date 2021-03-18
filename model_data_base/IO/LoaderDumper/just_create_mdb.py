@@ -1,5 +1,6 @@
 import os
-import cloudpickle
+# import cloudpickle
+import compatibility
 from . import parent_classes
 import model_data_base
 
@@ -12,7 +13,7 @@ class Loader(parent_classes.Loader):
         return model_data_base.ModelDataBase(os.path.join(savedir, 'mdb'))
     
 def dump(obj, savedir):
-    with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
-        cloudpickle.dump(Loader(), file_)
-    
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#         cloudpickle.dump(Loader(), file_)
+    compatibility.cloudpickle_fun(Loader(), os.path.join(savedir, 'Loader.pickle'))
 

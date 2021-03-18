@@ -41,6 +41,8 @@ import warnings
 import re
 import inspect
 from ._version import get_versions
+import six
+import unicodedata
 
 def slugify(value):
     """
@@ -50,14 +52,11 @@ def slugify(value):
     http://stackoverflow.com/questions/295135/turn-a-string-into-a-valid-filename
     a bit modified
     """
-    import unicodedata
-    import six
-    value = str(value)
-    value = six.text_type(value, errors = 'ignore')
-    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
+    value = six.text_type(value)
+    value = unicodedata.normalize('NFKD', value)
     value = six.text_type(re.sub('[^\w\s-]', '', value).strip().lower())
     value = six.text_type(re.sub('[-\s]+', '-', value))
-    value = str(value)
+    value = six.text_type(value)
     if len(value) >= 50:
         value = value[:50]
     return value
@@ -405,7 +404,7 @@ class ModelDataBase(object):
         for current_key in [key[:lv] for lv in range(len(key))]:
             if current_key in existing_keys:
                 raise MdbException("Cannot set {key1}. Conflicting key is {key2}"\
-                                   .format(key1 = key, key2 = key[:lv]))
+                                   .format(key1 = key, key2 = current_key))
         # do it vice versa
         for current_key in existing_keys:               
             if len(current_key) <= len(key): continue

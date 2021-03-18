@@ -108,9 +108,9 @@ def dump(obj, savedir, repartition = False, get = None):
         if obj.npartitions > 10000:
             obj = obj.repartition(npartitions = 5000)
 
-    get = compatibility.multiprocessing_scheduler if get is None else get          
+#     get = compatibility.multiprocessing_scheduler if get is None else get          
     index_flag = obj.index.name is not None
-    my_to_csv(obj, os.path.join(savedir, fileglob), get = get, index = index_flag)
+    my_to_csv(obj, os.path.join(savedir, fileglob), client = get, index = index_flag)
     #obj.to_csv(os.path.join(savedir, fileglob), get = settings.multiprocessing_scheduler, index = index_flag)
     meta = obj._meta
     index_name = obj.index.name
@@ -119,8 +119,8 @@ def dump(obj, savedir, repartition = False, get = None):
     else:
         divisions = None
         
-    with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
-        cloudpickle.dump(Loader(meta, index_name = index_name, divisions = divisions), file_)
-        
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#         cloudpickle.dump(Loader(meta, index_name = index_name, divisions = divisions), file_)
+    compatibility.cloudpickle_fun(Loader(meta, index_name = index_name, divisions = divisions), os.path.join(savedir, 'Loader.pickle'))
         
         
