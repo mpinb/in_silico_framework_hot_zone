@@ -814,11 +814,12 @@ def reduced_model_network(model, out_mdb = None, rm = None, n_cells = 150, timeb
             WNI_df.iloc[c, timebin] = WNI
 
             # check the last 80 timebins for a spike, apply WNI penalty if there was one
-            min_index = 0 if timebin < 80 else timebin-80
-            if sum(spike_times_df.iloc[c, min_index:timebin]) > 0: #if there was a spike in the last 80 ms
-                last_spike_interval = 80 - I.np.where(spike_times_df.iloc[c, min_index:timebin] == 1)[0][-1]
-                penalty = WNI_boundary[-last_spike_interval]
-                WNI -= penalty
+            if spike_times_df[cellID]: # if there have been spikes in the past
+                last_spike_time = spike_times_df[cellID][-1]
+                last_spike_interval = timebin - last_spike_time
+                if last_spike_interval < 80:
+                    penalty = WNI_boundary[-last_spike_interval]
+                    WNI -= penalty
 
 
             ## get spike probability from WNI
