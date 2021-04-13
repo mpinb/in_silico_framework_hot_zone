@@ -658,7 +658,7 @@ def generate_synapse_location_matrix(n_cells, max_bin = 30):
     return syn_df
 
 @I.dask.delayed
-def reduced_model_network(model, out_mdb = None, rm = None, n_cells = 150, timebins = 10000, connected = True, force = None, biophys_input = False, return_ = False, SAmdb = None, cellIDs = None, adjust_input = True, mdb = None):
+def reduced_model_network(model, out_mdb = None, rm = None, n_cells = 150, timebins = 10000, connected = True, force = None, biophys_input = False, return_ = False, SAmdb = None, cellIDs = None, adjust_input = True):
     '''Runs a network of reduced model neurons. All neurons are the same reduced model.
     model: str
     out_mdb: ModelDataBase
@@ -679,8 +679,7 @@ def reduced_model_network(model, out_mdb = None, rm = None, n_cells = 150, timeb
  '2019-02-23_7062_mvUlY5e_1_551_65',
  '2019-03-05_20241_SZ3iYOZ_707527054352652_109_665',
  '2019-05-10_15406_qBeBpVo_7712997831240842_108_441'], [261, 262, 257, 261, 260, 260, 257, 257]))
-    if not mdb:
-        mdb = I.ModelDataBase('/axon/scratch/abast/results/20201016_rieke_homogeneous_networks')
+    mdb = I.ModelDataBase('/axon/scratch/abast/results/20201016_rieke_homogeneous_networks')
     assert n_cells <= 1086
     if not return_: # you should either return the output or save it to mdb
         assert out_mdb is not None
@@ -701,8 +700,8 @@ def reduced_model_network(model, out_mdb = None, rm = None, n_cells = 150, timeb
         SAexc = mdb[morph]['synapse_activations']['init_L5_SAexc_10']
         SAinh = mdb[morph]['synapse_activations']['init_L5_SAinh_10']
     elif connected and not adjust_input:
-        SAexc = mdb[cond]['synapse_activations']['full_SAexc_10_best_position']
-        SAinh = mdb[cond]['synapse_activations']['full_SAinh_10_best_position']
+        SAexc = mdb[model]['synapse_activations']['full_SAexc_10_best_position']
+        SAinh = mdb[model]['synapse_activations']['full_SAinh_10_best_position']
     elif biophys_input:
         print 'getting synaptic input from biophysical simulations'
               
