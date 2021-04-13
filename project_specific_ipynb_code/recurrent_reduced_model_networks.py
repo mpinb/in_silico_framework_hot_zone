@@ -658,7 +658,7 @@ def generate_synapse_location_matrix(n_cells, max_bin = 30):
     return syn_df
 
 @I.dask.delayed
-def reduced_model_network(model, out_mdb = None, n_cells = 150, timebins = 10000, connected = True, force = None, biophys_input = False, return_ = False, SAmdb = None, cellIDs = None):
+def reduced_model_network(model, out_mdb = None, rm = None, n_cells = 150, timebins = 10000, connected = True, force = None, biophys_input = False, return_ = False, SAmdb = None, cellIDs = None, adjust_input = True, mdb = None):
     '''Runs a network of reduced model neurons. All neurons are the same reduced model.
     model: str
     out_mdb: ModelDataBase
@@ -679,7 +679,8 @@ def reduced_model_network(model, out_mdb = None, n_cells = 150, timebins = 10000
  '2019-02-23_7062_mvUlY5e_1_551_65',
  '2019-03-05_20241_SZ3iYOZ_707527054352652_109_665',
  '2019-05-10_15406_qBeBpVo_7712997831240842_108_441'], [261, 262, 257, 261, 260, 260, 257, 257]))
-    mdb = I.ModelDataBase('/axon/scratch/abast/results/20201016_rieke_homogeneous_networks')
+    if not mdb:
+        mdb = I.ModelDataBase('/axon/scratch/abast/results/20201016_rieke_homogeneous_networks')
     assert n_cells <= 1086
     if not return_: # you should either return the output or save it to mdb
         assert out_mdb is not None
@@ -689,28 +690,22 @@ def reduced_model_network(model, out_mdb = None, n_cells = 150, timebins = 10000
     
     ## get all (separated) excitatory and inhibitory input, spatially binned
     morph = get_CDK_from_model(model)
-    if connected and n_cells < 1086: # in this condition, we need to modify synaptic inputs, as cells that would have provided recurrent input are not simulated
+    if connected and n_cells < 1086 and adjust_input: # in this condition, we need to modify synaptic inputs, as cells that would have provided recurrent input are not simulated
         SAexc = mdb[model]['synapse_activations']['no_l5_SAexc_10_best_position']
         SAinh = mdb[model]['synapse_activations']['no_l5_SAinh_10_best_position']
         print 'adjusting connected synaptic input for {} cells...'.format(n_cells)
         modular_L5_df, con_df, syn_df = get_modular_L5_input(model, timebins = timebins, n_cells = 1086, release_prob = 0.6, offset = 0)
         SAexc, SAinh, cells_to_drop, cells_to_keep = incomplete_network_activation(modular_L5_df, SAexc, SAinh, n_cells = 1086, new_n_cells = n_cells, cellIDs = cellIDs) 
-    elif connected:
+    elif connected and adjust_input:
         print 'getting synaptic input for full network...'
         SAexc = mdb[morph]['synapse_activations']['init_L5_SAexc_10']
         SAinh = mdb[morph]['synapse_activations']['init_L5_SAinh_10']
-
+    elif connected and not adjust_input:
+        SAexc = mdb[cond]['synapse_activations']['full_SAexc_10_best_position']
+        SAinh = mdb[cond]['synapse_activations']['full_SAinh_10_best_position']
     elif biophys_input:
         print 'getting synaptic input from biophysical simulations'
-    #         SAexc = mdb['troubleshooting'][model]['SAexc_biophys']
-    #         SAinh = mdb['troubleshooting'][model]['SAinh_biophys']
-
-    #         SAexc = I.np.asarray(SAexc)
-    #         SAinh = I.np.asarray(SAinh)
-
-    #         SAexc = SAexc[:, :n_cells, :timebins]
-    #         SAinh = SAinh[:, :n_cells, :timebins]
-            
+              
         whisker = biophys_input[0:2]
         pos = biophys_input[3:]
         SAexc = SAmdb[whisker + pos +'_exc']
@@ -726,21 +721,34 @@ def reduced_model_network(model, out_mdb = None, n_cells = 150, timebins = 10000
 
 
     # FETCH REDUCED MODEL
-    rm_mdb = I.ModelDataBase('/axon/scratch/abast/results/20200720_rieke_examining_reduced_model_81grid')
-    tmin = selection[model]
-    trial = '50ISI' + str(tmin) + '_' + str(tmin+1)            
-    selected_kernel_dict = rm_mdb[model][trial]['selected_kernel_dict']
-    
-    s_exc = selected_kernel_dict['s_exc']
-    s_inh = selected_kernel_dict['s_inh']
-    t_exc = selected_kernel_dict['t_exc']
-    t_inh = selected_kernel_dict['t_inh']
+    if rm is None:
+        rm_mdb = I.ModelDataBase('/axon/scratch/abast/results/20200720_rieke_examining_reduced_model_81grid')
+        tmin = selection[model]
+        trial = '50ISI' + str(tmin) + '_' + str(tmin+1)            
+        selected_kernel_dict = rm_mdb[model][trial]['selected_kernel_dict']
 
-    nonlinearities = rm_mdb['nonlinearities_variable_step'][model]
-    LUT = nonlinearities[str(tmin)]
-    
-    WNI_boundary = rm_mdb[model][trial]['WNI_boundary']
-    WNI_boundary -= min(WNI_boundary)
+        s_exc = selected_kernel_dict['s_exc']
+        s_inh = selected_kernel_dict['s_inh']
+        t_exc = selected_kernel_dict['t_exc']
+        t_inh = selected_kernel_dict['t_inh']
+
+        nonlinearities = rm_mdb['nonlinearities_variable_step'][model]
+        LUT = nonlinearities[str(tmin)]
+
+        WNI_boundary = rm_mdb[model][trial]['WNI_boundary']
+        WNI_boundary -= min(WNI_boundary)
+        
+    else:
+        kernel_dict = rm['kernel_dict']
+        s_exc = kernel_dict['s_exc']
+        s_inh = kernel_dict['s_inh']
+        t_exc = kernel_dict['t_exc']
+        t_inh = kernel_dict['t_inh']
+        
+        LUT = rm['LUT']
+        
+        WNI_boundary = rm['post_spike_penalty']
+        WNI_boundary -= min(WNI_boundary)
 
     # APPLY THE REDUCED MODEL
     print 'running reduced model network...'
@@ -761,7 +769,7 @@ def reduced_model_network(model, out_mdb = None, n_cells = 150, timebins = 10000
     SAinh_cumulative = I.np.zeros((n_cells, timebins)) # need to store synapse activations so the temporal kernel can look back
     SAexc_cumulative = I.np.zeros((n_cells, timebins))
 
-    spike_times_df = I.pd.DataFrame(index = range(n_cells)) # dataframe for recording output spikes
+    spike_times_df = I.defaultdict(list) # for recording output spikes
 
     for timebin in range(timebins): # iterate through one timebin at a time, so that recurrent inputs can be applied
 #         print timebin
@@ -836,7 +844,7 @@ def reduced_model_network(model, out_mdb = None, n_cells = 150, timebins = 10000
             ## will the cell spike or not?
             if spiking_probability > I.np.random.uniform() or timebin == target_bin: # cell can spike stochastically or because of a forced spike
                 if timebin > 80: # prevent recurrent spikes before full length of temporal kernel
-                    spikes.append(1) ## the cell spiked! now we might need to care about who it is connected to...
+                    spike_times_df[cellID].append(timebin) ## the cell spiked! now we might need to care about who it is connected to...
                     if connected:
                         for cell2, con in enumerate(con_df.iloc[cell]): # for all other cells in the network
                             assert type(cell2) == int
@@ -851,12 +859,7 @@ def reduced_model_network(model, out_mdb = None, n_cells = 150, timebins = 10000
                                 for syn in range(5): # len(syn_df.iloc[cell, cell2]) for custom number of synapses
                                     if not timebin == timebins-1:
                                         SAexc[syn_df.iloc[cell, cell2][syn]][cell2][timebin+1] += 1.5
-                else:
-                    spikes.append(0)
-            else:
-                spikes.append(0)
-
-        spike_times_df[str(timebin)] = spikes     
+            
 
     if return_ == 'spike_times' and biophys_input:
         spike_times_df.index = [biophys_input] * len(spike_times_df)
