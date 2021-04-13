@@ -597,7 +597,7 @@ def optimize(mdb, dumper = None, select = None, get = None, repartition = True, 
         else:                    
             value = mdb[key]
             if isinstance(value, ModelDataBase):
-                optimize(value, select = value.keys(), get = get)
+                optimize(value, select = value.keys(), get = get, client = client)
             else:
                 dumper = _get_dumper(value)
                 print 'optimizing {} using dumper {}'.format(str(key), \

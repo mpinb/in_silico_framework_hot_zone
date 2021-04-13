@@ -16,6 +16,7 @@ import parent_classes
 import os, cloudpickle
 from simrun2.reduced_model.get_kernel import ReducedLdaModel
 from model_data_base.model_data_base import ModelDataBase
+from model_data_base.model_data_base_register import get_mdb_by_unique_id
 import pandas_to_msgpack
 import numpy_to_npz
 import pandas as pd
@@ -35,7 +36,7 @@ class Loader(parent_classes.Loader):
                 key = 'lda_value_dicts_' + str(lv)
                 d[k] = mdb[key]
                 lv +=1            
-        Rm.lda_values = [sum(lda_value_dict.values()) for lda_value_dict in Rm.lda_value_dicts]
+        Rm.lda_values = [sum(lda_value_dict.values()) for lda_value_dict in Rm.lda_value_dicts]  
         return Rm        
     
 def dump(obj, savedir):
@@ -66,7 +67,8 @@ def dump(obj, savedir):
                 new_lda_value_dicts[-1][k] = key
                 lv +=1
         Rm.lda_value_dicts = new_lda_value_dicts
-        Rm.mdb_list = [m.get_id() for m in Rm.mdb_list]    
+        # convert mdb_list to mdb ids
+        Rm.mdb_list = [m.get_id() if not isinstance(m,str) else m for m in Rm.mdb_list]    
         mdb['Rm'] = Rm
     finally:
     # revert changes to object, deepcopy was causing pickling errors

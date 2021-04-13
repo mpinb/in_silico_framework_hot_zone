@@ -18,10 +18,15 @@ def universal_pd(df, distance_column, spacial_distance_bins = 50, min_time = 0, 
     t_bins = np.arange(min_time, max_time + time_distance_bins, time_distance_bins)
     
     fun = lambda row: np.histogram(row, t_bins)[0]
-    x = df.groupby('zbins')
-    x = x.apply(time_list_from_pd)
+    x = df.groupby('zbins').apply(time_list_from_pd)
+    # if z-bins are missing, fill them
+    for lv in range(max(x.index.values)+1):
+        if not lv in x.index:
+            x[lv] = []
     x = x.apply(fun)
-    return pd_to_array(x)
+    # sort index
+    x = x.sort_index()
+    return np.array(x.tolist())
 
 def universal(df, distance_column, spacial_distance_bins = 50, min_time = 0, \
               max_time = 300, time_distance_bins = 1):

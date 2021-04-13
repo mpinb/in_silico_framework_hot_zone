@@ -29,8 +29,19 @@ def time_list_from_pd(syn):
         out.append(dummy)
     return pd.concat(out).values
 
-pd_to_array = np.asarray
+#def time_list_from_pd(pdf):
+#    '''returns all values in columns that can be converted to int without NaN'''
+#    relevant_columns = [_ for _ in pdf if is_int(_)]
+#    return pd.Series(pdf[relevant_columns].values.flatten()).dropna().values
 
+#pd_to_array = np.asarray
+def pd_to_array(pdf):
+    try:
+        return pdf.to_numpy()
+    except AttributeError:
+        print 'asd'
+        return pdf.values # legacy version of pandas used in in_silico_framework 2, but now deprecated
+    
 #def pd_to_array(x):
 #    '''converts pd dataframe to array.
 #    not very efficient ... use for small dataframes only.'''
