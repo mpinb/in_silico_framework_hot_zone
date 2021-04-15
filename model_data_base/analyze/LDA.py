@@ -57,7 +57,7 @@ def prediction_rates(X_in,y_in, classifier = None, n = 5, return_ = 'score', nor
                     X, y = X_in, y_in                            
                 X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=test_size, random_state=x)
                 #classifier = LDA(n_components=2, shrinkage = 'auto', solver = 'eigen', )
-                classifier = LDA(n_components=2, shrinkage = None, solver = solver)
+                classifier = LDA(n_components=1, shrinkage = None, solver = solver)
                 
                 classifier.fit(X_train, y_train)
                 break

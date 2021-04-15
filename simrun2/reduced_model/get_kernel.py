@@ -241,6 +241,11 @@ class ReducedLdaModel():
         else: 
             self.clfs = clfs
         
+        # added to keep the normalization that was present at the timepoint of development
+        for lv, x in enumerate(self.clfs['classifier_']):
+            norm = 7.260991424242837 / I.np.sqrt(sum([c**2 for c in x.coef_[0]])) 
+            x.coef_[0] =  x.coef_[0] * norm # normalization factor, as length of vector changes between python versions
+        
         self.kernel_dict = _kernel_dict_from_clfs(self.clfs, boundaries)
         ## todo: kernel_dicts
         

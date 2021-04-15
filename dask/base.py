@@ -436,6 +436,12 @@ def compute(*args, **kwargs):
     collections, repack = unpack_collections(*args, traverse=traverse)
     if not collections:
         return args
+    
+    ## 24.02.2021 rieke ####################
+    if 'get' in kwargs:
+        kwargs['scheduler'] = kwargs['get']
+        del kwargs['get']
+    ########################################
 
     schedule = get_scheduler(
         scheduler=kwargs.pop("scheduler", None),

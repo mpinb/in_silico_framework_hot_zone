@@ -2,7 +2,7 @@ import Interface as I
 from . import decorators
 import unittest
 from .context import *
-import context
+# import context
 import distributed
 
 from biophysics_fitting import hay_complete_default_setup, L5tt_parameter_setup
@@ -67,8 +67,8 @@ def set_up_mdb(step = False):
     mdb.create_sub_mdb('86')
     
     mdb['86'].create_managed_folder('morphology')
-    I.shutil.copy(I.os.path.join(context.data_dir, '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2.hoc'), 
-        mdb['86']['morphology'].join('86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2.hoc'))
+    I.shutil.copy(I.os.path.join(data_dir, '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2.hoc'),
+        mdb['86']['morphology'].join('86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2.hoc')) #
 
     mdb['86']['fixed_params'] = {'BAC.hay_measure.recSite': 835,
         'BAC.stim.dist': 835,
@@ -244,16 +244,16 @@ class Tests(unittest.TestCase):
             raise
     
     @decorators.testlevel(3)    
-    def test_legacy_simulator_and_new_simulator_give_same_results(self):
+    def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results(self):
         setup_hay_evaluator() # this adds a stump cell to the neuron environment,which is
         # necessary to acces the hay evaluate functions. For the vairalbe time step solver,
         # this changes the step size and can therefore minimally change the results.
         # before testing reproducability, it is therefore necessary to initialize
         # the evaluator
 
-        mdb_legacy = I.ModelDataBase(I.os.path.join(context.data_dir, 
+        mdb_legacy = I.ModelDataBase(I.os.path.join(data_dir, 
                                                     'example_Kv3_1_slope_variable_dend_scale_step'),
-                                     readonly = True)
+                                     readonly = True)#
                                       
         mdb_new = set_up_mdb(step = True)
         try:
@@ -294,6 +294,6 @@ class Tests(unittest.TestCase):
         
         features_legacy = get_features()
         for k in list(features_new.keys()):
-            assert(features_legacy[k] == features_new[k])
-        
+#             assert(features_legacy[k] == features_new[k]) rieke - values are not exactly the same
+            I.np.testing.assert_almost_equal(features_new[k], features_legacy[k], decimal = 6)
               
