@@ -688,34 +688,39 @@ def reduced_model_network(model, out_mdb = None, rm = None, n_cells = 150, timeb
     
     
     ## get all (separated) excitatory and inhibitory input, spatially binned
-    morph = get_CDK_from_model(model)
-    if connected and n_cells < 1086 and adjust_input: # in this condition, we need to modify synaptic inputs, as cells that would have provided recurrent input are not simulated
-        SAexc = mdb[model]['synapse_activations']['no_l5_SAexc_10_best_position']
-        SAinh = mdb[model]['synapse_activations']['no_l5_SAinh_10_best_position']
-        print 'adjusting connected synaptic input for {} cells...'.format(n_cells)
-        modular_L5_df, con_df, syn_df = get_modular_L5_input(model, timebins = timebins, n_cells = 1086, release_prob = 0.6, offset = 0)
-        SAexc, SAinh, cells_to_drop, cells_to_keep = incomplete_network_activation(modular_L5_df, SAexc, SAinh, n_cells = 1086, new_n_cells = n_cells, cellIDs = cellIDs) 
-    elif connected and adjust_input:
-        print 'getting synaptic input for full network...'
-        SAexc = mdb[morph]['synapse_activations']['init_L5_SAexc_10']
-        SAinh = mdb[morph]['synapse_activations']['init_L5_SAinh_10']
-    elif connected and not adjust_input:
-        SAexc = mdb[model]['synapse_activations']['full_SAexc_10_best_position']
-        SAinh = mdb[model]['synapse_activations']['full_SAinh_10_best_position']
-    elif biophys_input:
-        print 'getting synaptic input from biophysical simulations'
+#     morph = get_CDK_from_model(model)
+#     if connected and n_cells < 1086 and adjust_input: # in this condition, we need to modify synaptic inputs, as cells that would have provided recurrent input are not simulated
+#         SAexc = mdb[model]['synapse_activations']['no_l5_SAexc_10_best_position']
+#         SAinh = mdb[model]['synapse_activations']['no_l5_SAinh_10_best_position']
+#         print 'adjusting connected synaptic input for {} cells...'.format(n_cells)
+#         modular_L5_df, con_df, syn_df = get_modular_L5_input(model, timebins = timebins, n_cells = 1086, release_prob = 0.6, offset = 0)
+#         SAexc, SAinh, cells_to_drop, cells_to_keep = incomplete_network_activation(modular_L5_df, SAexc, SAinh, n_cells = 1086, new_n_cells = n_cells, cellIDs = cellIDs) 
+#     elif connected and adjust_input:
+#         print 'getting synaptic input for full network...'
+#         SAexc = mdb[morph]['synapse_activations']['init_L5_SAexc_10']
+#         SAinh = mdb[morph]['synapse_activations']['init_L5_SAinh_10']
+#     elif connected and not adjust_input:
+#         SAexc = mdb[model]['synapse_activations']['full_SAexc_10_best_position']
+#         SAinh = mdb[model]['synapse_activations']['full_SAinh_10_best_position']
+#     elif biophys_input:
+#         print 'getting synaptic input from biophysical simulations'
               
-        whisker = biophys_input[0:2]
-        pos = biophys_input[3:]
-        SAexc = SAmdb[whisker + pos +'_exc']
-        SAinh = SAmdb[whisker + pos +'_inh']
+#         whisker = biophys_input[0:2]
+#         pos = biophys_input[3:]
+#         SAexc = SAmdb[whisker + pos +'_exc']
+#         SAinh = SAmdb[whisker + pos +'_inh']
 
-    else:
-        print 'adjusting unconnected synaptic input for {} cells...'.format(n_cells)
-        SAexc = mdb[morph]['synapse_activations']['full_SAexc_10']
-        SAinh = mdb[morph]['synapse_activations']['full_SAinh_10']
-        SAexc = SAexc[:, :n_cells, :timebins]
-        SAinh = SAinh[:, :n_cells, :timebins]
+#     else:
+#         print 'adjusting unconnected synaptic input for {} cells...'.format(n_cells)
+#         SAexc = mdb[morph]['synapse_activations']['full_SAexc_10']
+#         SAinh = mdb[morph]['synapse_activations']['full_SAinh_10']
+#         SAexc = SAexc[:, :n_cells, :timebins]
+#         SAinh = SAinh[:, :n_cells, :timebins]
+
+    SAexc = SAmdb[model]['synapse_activations']['full_SAexc_10_best_position']
+    SAinh = SAmdb[model]['synapse_activations']['full_SAinh_10_best_position']
+    SAexc = SAexc[:, :n_cells, :timebins]
+    SAinh = SAinh[:, :n_cells, :timebins]
 
 
 
@@ -755,7 +760,7 @@ def reduced_model_network(model, out_mdb = None, rm = None, n_cells = 150, timeb
     WNI_df = I.pd.DataFrame(index = range(n_cells), columns = range(timebins)) # dataframe for recording WNI values for later reference
 
 
-    if connected and n_cells == 1086:
+    if connected and not adjust_input:
         con_df = I.pd.DataFrame(generate_connection_matrix(n_cells, connected = connected)) #are two cells connected?
 
         syn_df = I.pd.DataFrame(index = range(n_cells), columns = range(n_cells)) #where are the synapses? - is filled even if 2 cells are not connected
@@ -814,8 +819,8 @@ def reduced_model_network(model, out_mdb = None, rm = None, n_cells = 150, timeb
             WNI_df.iloc[c, timebin] = WNI
 
             # check the last 80 timebins for a spike, apply WNI penalty if there was one
-            if spike_times_df[cellID]: # if there have been spikes in the past
-                last_spike_time = spike_times_df[cellID][-1]
+            if spike_times_df[cell]: # if there have been spikes in the past
+                last_spike_time = spike_times_df[cell][-1]
                 last_spike_interval = timebin - last_spike_time
                 if last_spike_interval < 80:
                     penalty = WNI_boundary[-last_spike_interval]
@@ -844,7 +849,7 @@ def reduced_model_network(model, out_mdb = None, rm = None, n_cells = 150, timeb
             ## will the cell spike or not?
             if spiking_probability > I.np.random.uniform() or timebin == target_bin: # cell can spike stochastically or because of a forced spike
                 if timebin > 80: # prevent recurrent spikes before full length of temporal kernel
-                    spike_times_df[cellID].append(timebin) ## the cell spiked! now we might need to care about who it is connected to...
+                    spike_times_df[cell].append(timebin) ## the cell spiked! now we might need to care about who it is connected to...
                     if connected:
                         for cell2, con in enumerate(con_df.iloc[cell]): # for all other cells in the network
                             assert type(cell2) == int
@@ -966,17 +971,23 @@ def run_recurrent_network(self, SA_mdb = None, SAexc = None, SAinh = None, save_
         False saves spike times list only.
     tStop: int'''
     
-    
+    cellIDs = list(cellIDs)
     # load SA arrays if given keys and mdb
     if type(SAexc) == str:
         assert SA_mdb is not None
         SAexc = SA_mdb[SAexc]
         SAinh = SA_mdb[SAinh]
+        
+        if SAexc.shape[2] > len(cellIDs): # then assume cellIDs can be used as indices, select them
+            assert I.utils.convertible_to_int(cellIDs[0])
+            assert max(cellIDs) <= SAexc.shape[2]
+            SAexc = SAexc[:, :, cellIDs]
+            SAinh = SAinh[:, :, cellIDs]
+            
     else: # it's likely being taken from a future object - these are immutable
         SAexc = SAexc.copy()
         SAinh = SAinh.copy()
     
-    #assert n_cells == len(cellIDs)
     n_cells = len(cellIDs)
 
     s_exc = self.kernel_dict['s_exc']
@@ -984,19 +995,10 @@ def run_recurrent_network(self, SA_mdb = None, SAexc = None, SAinh = None, save_
     t_exc = self.kernel_dict['t_exc']
     t_inh = self.kernel_dict['t_inh']
 
-    # make scaled inh kernels
-#     if EI_balance_df:
-#         s_inh = I.np.concatenate([s_inh, I.np.zeros(shape = (200-len(s_inh)))])
-#         scaled_inh_kernels = [s_inh * scaling for scaling in self.EI_balance_df.loc[[str(c) for c in cellIDs]]['inh_scale_factor']]
-#     else:
-#         s_inh = I.np.concatenate([s_inh, I.np.zeros(shape = (200-len(s_inh)))])
-#         scaled_inh_kernels = [s_inh for c in cellIDs]
+
     if connected and con_df is None:
         con_df = I.pd.DataFrame(generate_connection_matrix(1086, connected = True))
         syn_df = generate_synapse_location_matrix(1086, max_bin = SAexc.shape[0])
-    
-    if connected:    
-        all_cells_list = list(con_df.index)
         
     if force is not None:
         cell_forced_spikes = {}
@@ -1038,7 +1040,6 @@ def run_recurrent_network(self, SA_mdb = None, SAexc = None, SAinh = None, save_
         SAexc_timebin = sum([o*s for o, s in zip(SAexc_timebin, s_exc)])
 
           # apply scaled inhibitory kernel for each cell
-        #SAinh_timebin = [sum(SAinh_timebin[:, i] * scaled_inh_kernels[i]) for i in range(n_cells)]
         SAinh_timebin = sum([o*s for o, s in zip(SAinh_timebin, s_inh)])
 
 
@@ -1102,14 +1103,6 @@ def run_recurrent_network(self, SA_mdb = None, SAexc = None, SAinh = None, save_
                             for syn in syns:
                                 SAexc[syn][timebin+1][cellIDs.index(connected_cell)] += 1.5
                     
-#                     for cell2, con in enumerate(con_df.loc[cellID]):
-#                         if con == 1:
-#                             for syn in range(len(syn_df.iloc[cellID, cell2])):
-#                                 SAexc[syn_df.iloc[cellID, cell2][syn]][timebin+1][cell2] += 1
-#                         elif con == 2: #reciprocal connections are stronger as per Hay 2015
-#                             for syn in range(len(syn_df.iloc[cellID, cell2])):
-#                                 SAexc[syn_df.iloc[cellID, cell2][syn]][timebin+1][cell2] += 1.5
-
     
     if isinstance(out_mdb, str):
         with open(out_mdb, 'w') as f:
@@ -1120,7 +1113,9 @@ def run_recurrent_network(self, SA_mdb = None, SAexc = None, SAinh = None, save_
             out_mdb['WNI'] = wni_values
         if connected:
             out_mdb['con'] = con_df
-        
+            
+            
+
 from reduced_model_output_paper import generate_spiketimes
 def _activate_pre_cells_and_remove_simulated(self, stim, tStop = 300, simulated_cells = [], mdb = None):
     '''simulated_cells: list of cellIDs of cells that are simulated in the reduced model network. Their activations are removed from the precomputed background.'''
