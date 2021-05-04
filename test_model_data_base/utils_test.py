@@ -52,10 +52,10 @@ class Tests(unittest.TestCase):
         client = distributed.client_object_duck_typed
         pdf = pd.DataFrame(np.random.randint(100, size = (1000,3)))
         ddf = dask.dataframe.from_pandas(pdf, npartitions = 10)
-        pdf2 = myrepartition(ddf, 4).compute(scheduler = client)
+        pdf2 = myrepartition(ddf, 4).compute(get = client.get)
         pd.util.testing.assert_frame_equal(pdf, pdf2)
         ddf.divisions = tuple([None] * (ddf.npartitions + 1))
-        pdf2 = myrepartition(ddf, 4).compute(scheduler = client)
+        pdf2 = myrepartition(ddf, 4).compute(get = client.get)
         pd.util.testing.assert_frame_equal(pdf, pdf2)
 
         
