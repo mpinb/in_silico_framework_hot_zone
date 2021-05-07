@@ -8,9 +8,9 @@ def max_array_dimensions(*args):
 
     #ignore empty arrays
     args = [a for a in args if len(a.shape) == 2]
-    list_size = map(np.shape, args)
-    list_size = zip(*list_size)
-    list_size = map(max, list_size)
+    list_size = list(map(np.shape, args))
+    list_size = list(zip(*list_size))
+    list_size = list(map(max, list_size))
     return list_size
 
 def add_aligned(*args):

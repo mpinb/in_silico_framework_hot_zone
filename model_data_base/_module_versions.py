@@ -13,7 +13,7 @@ class Versions_cached:
     @staticmethod
     def _get_module_versions():
         out = {}
-        for x in sys.modules.keys():
+        for x in list(sys.modules.keys()):
             if not '.' in x:
                 try:
                     out[x] = sys.modules[x].__version__

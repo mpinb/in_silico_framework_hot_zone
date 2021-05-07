@@ -82,7 +82,7 @@ def get_Evaluator(step = False, vInit = False, bAP_kwargs = {}, BAC_kwargs = {})
         raise NotImplementedError
     if vInit:
         raise NotImplementedError
-    e.setup.finalize_funs.append(lambda x: merge(x.values()))    
+    e.setup.finalize_funs.append(lambda x: merge(list(x.values())))    
     return e
 
 ##############################################################

@@ -103,19 +103,19 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
         
         stopTime = time.time()
         setupdt = stopTime - startTime
-        print 'Network setup time: %.2f s' % setupdt
+        print('Network setup time: {:.2f} s'.format(setupdt))
                 
-        synTypes = cell.synapses.keys()
+        synTypes = list(cell.synapses.keys())
         synTypes.sort()
         
-        print 'Testing evoked response properties run %d of %d' % (nRun+1, len(synapse_activation_files))
+        print('Testing evoked response properties run {:d} of {:d}'.format(nRun+1, len(synapse_activation_files)))
         tVec = h.Vector()
         tVec.record(h._ref_t)
         startTime = time.time()
         scp.init_neuron_run(neuronParameters.sim, vardt=False) #trigger the actual simulation
         stopTime = time.time()
         simdt = stopTime - startTime
-        print 'NEURON runtime: %.2f s' % simdt
+        print('NEURON runtime: {:.2f} s'.format(simdt))
         
         vmSoma = np.array(cell.soma.recVList[0])
         t = np.array(tVec)
@@ -124,12 +124,12 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
         for RSManager in recSiteManagers:
             RSManager.update_recordings()
         
-        print 'writing simulation results'
+        print('writing simulation results')
         fname = 'simulation'
         fname += '_run%07d' % nRun
         
         synName = dirName + '/' + fname + '_synapses.csv'
-        print 'computing active synapse properties'
+        print('computing active synapse properties')
         sca.compute_synapse_distances_times(synName, cell, t, synTypes) #calls scp.write_synapse_activation_file
         preSynCellsName = dirName + '/' + fname + '_presynaptic_cells.csv'
         scp.write_presynaptic_spike_times(preSynCellsName, evokedNW.cells)
@@ -145,7 +145,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
         cell.re_init_cell()
         evokedNW.re_init_network()
 
-        print '-------------------------------'
+        print('-------------------------------')
     
     vTraces = np.array(vTraces)
     dendTraces = []
@@ -160,11 +160,11 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
             dendTraces.append(tmpTraces)
     dendTraces = np.array(dendTraces)
     
-    print 'writing simulation parameter files'
+    print('writing simulation parameter files')
     neuronParameters.save(os.path.join(dirName, uniqueID + '_neuron_model.param'))
     evokedUpNWParameters.save(os.path.join(dirName, uniqueID+ '_network_model.param'))
     
-    print 'writing list of synapse files'
+    print('writing list of synapse files')
     if post_hook: ##
         return ret_df, dirName, post_hook_list
     else:

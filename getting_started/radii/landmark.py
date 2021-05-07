@@ -32,7 +32,7 @@ with open(inputEgHoc, 'r') as hocLand:
     lines = hocLand.readlines()
     for line in lines:
         matches = re.findall('-?\d+\.\d+', line)
-        point = map(float, matches)
+        point = list(map(float, matches))
         points.append(point)
 I.scp.write_landmark_file(outputEgHoc, points)
 
@@ -44,7 +44,7 @@ with open(inputEgAm, 'r') as amLand:
     lines = amLand.readlines()
     for line in lines:
         matches = re.findall('-?\d+\.\d+', line)
-        point = map(float, matches)
+        point = list(map(float, matches))
         points.append(point)
 I.scp.write_landmark_file(outputEgAm, points)
 
@@ -54,6 +54,6 @@ with open(inputAmTr, 'r') as trLand:
     lines = trLand.readlines()
     for line in lines:
         matches = re.findall('-?\d+\.\d+', line)
-        point = map(float, matches)
+        point = list(map(float, matches))
         points.append(point)
 I.scp.write_landmark_file(outputAmTr, points)

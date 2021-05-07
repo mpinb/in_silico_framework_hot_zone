@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from ipywidgets import interact  
 import matplotlib.pyplot as plt
-from histogram import histogram
+from .histogram import histogram
 
 def get_slice_by_x_value(array, xmin, xmax, x):
     step = (xmax-xmin) / float(array.shape[1] - 1)
@@ -22,7 +22,8 @@ def rebin_slice(slice_, min_, max_, wished_binsize, scale_last_bin = False):
 
     nr_consecutive_bins = int(wished_binsize / current_binsize)
     effective_binsize = current_binsize * nr_consecutive_bins
-    print("effective binsize: %s" % effective_binsize)
+    from six.moves import range as xrange
+    print(("effective binsize: {:s}".format(effective_binsize)))
     newslice = [sum(slice_[current: current+nr_consecutive_bins]) for current in xrange(0, len(slice_), nr_consecutive_bins)]
     newbins = np.arange(min_, min_ + effective_binsize*(len(newslice)+1), effective_binsize)
     assert(len(newbins) == len(newslice) + 1)#
@@ -43,7 +44,8 @@ def slider_plot_helper(array, x, xmin, xmax, ymin, ymax, wished_binsize = None, 
     
 def make_plots(pixelObjects, x, wished_binsize = None, axis = 0, normalize_factors =  None):
     out = {}
-    for name, pixelObject in pixelObjects.iteritems():
+    import six
+    for name, pixelObject in six.iteritems(pixelObjects):
         array = pixelObject.array
         extent = pixelObject.extent
         newbins, newslice = slider_plot_helper(array, x, extent[0], extent[1], extent[2], extent[3], \

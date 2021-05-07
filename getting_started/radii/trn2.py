@@ -87,11 +87,11 @@ for point in matchedSet:
     dst_am.append(point[1].start)
     dst_am.append(point[1].end)
     print("mach points 1")
-    print(point[0].start)
-    print(point[1].start)
+    print((point[0].start))
+    print((point[1].start))
     print("mach points 2")
-    print(point[0].end)
-    print(point[1].end)
+    print((point[0].end))
+    print((point[1].end))
 
 # Calculate the transformation matrix based on 4 source
 # points and 4 destination points.
@@ -123,20 +123,20 @@ for point4D in amPoints4D:
 # it is small test to see if the amFileReader is working well enough or not
 # for this we check some sample points from the both am readers function
 # and compare them
-print(amPoints4D[0])
-print(trAmPoints4D[0])
+print((amPoints4D[0]))
+print((trAmPoints4D[0]))
 
-print(amPoints4D[10])
-print(trAmPoints4D[10])
+print((amPoints4D[10]))
+print((trAmPoints4D[10]))
 
-print(amPoints4D[1234])
-print(trAmPoints4D[1234])
+print((amPoints4D[1234]))
+print((trAmPoints4D[1234]))
 
-print(amPoints4D[11])
-print(trAmPoints4D[11])
+print((amPoints4D[11]))
+print((trAmPoints4D[11]))
 
-print(amPoints4D[56])
-print(trAmPoints4D[56])
+print((amPoints4D[56]))
+print((trAmPoints4D[56]))
 
 # In the below we read the hoc file again this time completely,
 # i.e. without just taking two points from each sections
@@ -149,22 +149,22 @@ for el in hocPointsComplete:
 trAmPoints4DList = trAmPoints4D
 # a small test to see if the previous transofrmation on trAmPoints4DList
 # does not change the 4th coloumn which contains the radii
-print(trAmPoints4DList[0])
-print(amPoints4D[0])
+print((trAmPoints4DList[0]))
+print((amPoints4D[0]))
 
-print(trAmPoints4DList[2])
-print(amPoints4D[2])
+print((trAmPoints4DList[2]))
+print((amPoints4D[2]))
 
-print(trAmPoints4DList[100])
-print(amPoints4D[100])
+print((trAmPoints4DList[100]))
+print((amPoints4D[100]))
 
-print(trAmPoints4DList[10])
-print(amPoints4D[10])
+print((trAmPoints4DList[10]))
+print((amPoints4D[10]))
 
 
 
-print(trAmPoints4DList[1293])
-print(amPoints4D[1293])
+print((trAmPoints4DList[1293]))
+print((amPoints4D[1293]))
 
 # In the below we are trying to find the closest points between transformed
 # am points and hoc points

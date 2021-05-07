@@ -1,7 +1,7 @@
 import sys, os, time
 import warnings
-from six import StringIO
-from cPickle import PicklingError
+import six
+from six.moves.cPickle import PicklingError # this import format has potential issues (see six documentation) -rieke
 import cloudpickle
 import contextlib
 import io
@@ -9,7 +9,9 @@ import dask.dataframe as dd
 import dask
 import pandas as pd
 import numpy as np
-
+import distributed
+import six
+from six.moves import cPickle
 
 
 def chunkIt(seq, num):
@@ -30,13 +32,14 @@ class silence_stdout():
     '''Silences stdout. Can be used as context manager and decorator.
     https://stackoverflow.com/a/2829036/5082048
     '''
+    
     def __init__(self, fun = None):
         self.save_stdout = sys.stdout
         if fun is not None:
             return self(fun)
         
     def __enter__(self):
-        sys.stdout = io.BytesIO()
+        sys.stdout = six.StringIO()
         
     def __exit__(self, *args, **kwargs):
         sys.stdout = self.save_stdout
@@ -48,6 +51,7 @@ class silence_stdout():
         return wrapper
     
 silence_stdout = silence_stdout()
+
 
 import tempfile
 import shutil
@@ -80,7 +84,7 @@ def split_file_to_buffers(f, split_str = '#'):
             if stringio is not None:
                 stringio.seek(0)
                 stringios.append(stringio)
-            stringio = StringIO()
+            stringio = six.StringIO()
         stringio.write(line)
         stringio.write("\n")
     stringio.seek(0)
@@ -97,7 +101,7 @@ def first_line_to_key(stringios):
         for lv, line in enumerate(s):
             if lv == 0:
                 name = line.strip()
-                value = StringIO()
+                value = six.StringIO()
             else:
                 value.write(line)
                 value.write("\n")
@@ -169,7 +173,7 @@ def pooled_std(m, s, n):
     M = np.dot(m,n) / float(sum(n))#[mm*nn / float(sum(n)) for mm, nn in zip(m,n)]
     # take carre of n = 0
     dummy = [(ss,mm,nn) for ss,mm,nn in zip(s,m,n) if nn >= 1]
-    s,m,n = zip(*dummy) 
+    s,m,n = list(zip(*dummy)) 
     assert(len(m) == len(s) == len(n) > 0)
     #calculate SD
     s = [ss * np.sqrt((nn-1)/float(nn)) for ss,nn in zip(s,n)] # convert to biased estimator  
@@ -183,9 +187,9 @@ def skit(*funcs, **kwargs):
     '''
     out = []
     for fun in funcs:
-        out.append({key: value for key, value in kwargs.iteritems() 
-                if key in fun.func_code.co_varnames})
-        if 'kwargs' in fun.func_code.co_varnames:
+        out.append({key: value for key, value in six.iteritems(kwargs) 
+                if key in fun.__code__.co_varnames})
+        if 'kwargs' in fun.__code__.co_varnames:
             out[-1].update(kwargs)
         
     return tuple(out)
@@ -194,12 +198,12 @@ def unique(list_):
     return list(pd.Series(list_).drop_duplicates())
 
 def cache(function):
-    import cPickle, hashlib
+    import hashlib
     memo = {}
     def get_key(*args, **kwargs):
         try:
             hash = hashlib.md5(cPickle.dumps([args, kwargs])).hexdigest()
-        except TypeError:
+        except (TypeError, AttributeError):
             hash = hashlib.md5(cloudpickle.dumps([args, kwargs])).hexdigest()
         return hash
     
@@ -228,9 +232,9 @@ def fancy_dict_compare(dict_1, dict_2, dict_1_name = 'd1', dict_2_name = 'd2', p
     key_err = ''
     value_err = ''
     old_path = path
-    for k in dict_1.keys():
+    for k in list(dict_1.keys()):
         path = old_path + "[%s]" % k
-        if not dict_2.has_key(k):
+        if k not in dict_2:
             key_err += "Key %s%s not in %s\n" % (dict_2_name, path, dict_2_name)
         else:
             if isinstance(dict_1[k], dict) and isinstance(dict_2[k], dict):
@@ -240,9 +244,9 @@ def fancy_dict_compare(dict_1, dict_2, dict_1_name = 'd1', dict_2_name = 'd2', p
                     value_err += "Value of %s%s (%s) not same as %s%s (%s)\n"\
                         % (dict_1_name, path, dict_1[k], dict_2_name, path, dict_2[k])
 
-    for k in dict_2.keys():
+    for k in list(dict_2.keys()):
         path = old_path + "[%s]" % k
-        if not dict_1.has_key(k):
+        if k not in dict_1:
             key_err += "Key %s%s not in %s\n" % (dict_2_name, path, dict_1_name)
 
     return key_err + value_err + err
@@ -250,14 +254,14 @@ def fancy_dict_compare(dict_1, dict_2, dict_1_name = 'd1', dict_2_name = 'd2', p
 def wait_until_key_removed(mdb, key, delay = 5):
     already_printed = False
     while True:
-        if key in mdb.keys():
+        if key in list(mdb.keys()):
             if not already_printed:
-                print("waiting till key {} is removed from the database. I will check every {} seconds.".format(key, delay))
+                print(("waiting till key {} is removed from the database. I will check every {} seconds.".format(key, delay)))
                 already_printed = True				
             time.sleep(5)
         else:
             if already_printed:
-                print("Key {} has been removed. Continuing.".format(key))
+                print(("Key {} has been removed. Continuing.".format(key)))
             return
         
 def get_file_or_folder_that_startswith(path, startswith):
@@ -299,7 +303,7 @@ def flatten(l):
     '''https://stackoverflow.com/a/2158532/5082048'''
     import collections
     for el in l:
-        if isinstance(el, collections.Iterable) and not isinstance(el, basestring):
+        if isinstance(el, collections.Iterable) and not isinstance(el, six.stringtypes): # not sure about syntax here - rieke
             for sub in flatten(el):
                 yield sub
         else:
@@ -348,7 +352,7 @@ def flatten(l):
 
 @dask.delayed
 def synchronous_ddf_concat(ddf_path, meta, N, n):    
-    with open(ddf_path) as f:
+    with open(ddf_path, 'rb') as f:
         ddf = cloudpickle.load(f)
     delayeds = ddf.to_delayed()
     chunks_delayeds = chunkIt(delayeds, N)
@@ -363,7 +367,7 @@ def myrepartition(ddf, N):
     '''This repartitions without generating more tasks'''
     folder = tempfile.mkdtemp()
     ddf_path = os.path.join(folder, 'ddf.cloudpickle.dump')
-    with open(ddf_path, 'w') as f:
+    with open(ddf_path, 'wb') as f:
         cloudpickle.dump(ddf, f)
 
     divisions = ddf.divisions
@@ -383,11 +387,4 @@ def myrepartition(ddf, N):
         assert(len(divisions) - 1 == len(delayeds))
         return dd.from_delayed(delayeds, meta = meta, divisions = divisions)
     
-pdf = pd.DataFrame(np.random.randint(100, size = (1000,3)))
-ddf = dask.dataframe.from_pandas(pdf, npartitions = 10)
-pdf2 = myrepartition(ddf, 4).compute(get = dask.get)
-pd.util.testing.assert_frame_equal(pdf, pdf2)
-ddf.divisions = tuple([None] * (ddf.npartitions + 1))
-pdf2 = myrepartition(ddf, 4).compute(get = dask.get)
-pd.util.testing.assert_frame_equal(pdf, pdf2)
 

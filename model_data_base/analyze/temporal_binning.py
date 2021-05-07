@@ -1,4 +1,4 @@
-from spaciotemporal_binning import time_list_from_pd
+from .spaciotemporal_binning import time_list_from_pd
 import pandas as pd
 import numpy as np
 import dask.dataframe as dd
@@ -24,7 +24,7 @@ def temporal_binning_pd(df, bin_size = 1, min_time = None, max_time = None, norm
         
     return t_bins, data
 
-def temporal_binning_dask(ddf, bin_size = 1, min_time = None, max_time = None, normalize = True):
+def temporal_binning_dask(ddf, bin_size = 1, min_time = None, max_time = None, normalize = True, client = None):
 
     if not isinstance (ddf, dd.DataFrame):
         raise RuntimeError("Expected dask.dataframe.Dataframe, got %s" % str(type(ddf)))
@@ -39,7 +39,7 @@ def temporal_binning_dask(ddf, bin_size = 1, min_time = None, max_time = None, n
     
     #bin each partition separately and sum to get result
 #     meta = pd.Series(zip(*(t_bins,data)))
-    out = ddf.map_partitions(fun2, meta = float).compute(get=compatibility.multiprocessing_scheduler).sum()
+    out = ddf.map_partitions(fun2, meta = float).compute(get=client.get).sum()
     
     if normalize: 
         out = out / float(len(ddf))

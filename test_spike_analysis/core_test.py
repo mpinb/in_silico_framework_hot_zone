@@ -114,42 +114,42 @@ class Tests:
         
     def test_SpikeDetectionCreastTrough_lim_detection(self):
         v = []
-        t = range(len(v))
+        t = list(range(len(v)))
         tst = _TestSpikeTimes(t,v, [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough='minimum', lim_creast='minimum', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .4)
         I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
         
         v = [0,.4,0]
-        t = range(len(v))
+        t = list(range(len(v)))
         tst = _TestSpikeTimes(t,v, [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough='minimum', lim_creast='minimum', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .5)
         I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
         
         v = [0,.4,-.4]
-        t = range(len(v))
+        t = list(range(len(v)))
         tst = _TestSpikeTimes(t,v, [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough='minimum', lim_creast='minimum', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .5)
         I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
         
         v = [0,.4,-.4,0.]
-        t = range(len(v))
+        t = list(range(len(v)))
         tst = _TestSpikeTimes(t,v, [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough='minimum', lim_creast='minimum', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .5)
         I.np.testing.assert_almost_equal(sd.lim_trough, -.5)
         
         v = []
-        t = range(len(v))
+        t = list(range(len(v)))
         tst = _TestSpikeTimes(t,v, [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough='zero', lim_creast='zero', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .4)
         I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
 
         v = [0,.4,-.4,0.]
-        t = range(len(v))
+        t = list(range(len(v)))
         tst = _TestSpikeTimes(t,v, [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough='zero', lim_creast='zero', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .5)

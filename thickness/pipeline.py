@@ -1,11 +1,11 @@
 import dask
 from dask import distributed
 
-import thickness as th
-import transformation as tr
-import IO
-import utils as u
-import analysis as an
+from . import thickness as th
+from . import transformation as tr
+from . import IO
+from . import utils as u
+from . import analysis as an
 from dask.distributed import wait
 import time
 
@@ -176,7 +176,7 @@ class ExtractThicknessPipeline:
 
     def set_client_for_parallelization(self, url, port):
         self.client = distributed.Client(str(url) + ":" + str(port))
-        print self.client
+        print(self.client)
         self._parallel = True
 
     def run(self):
@@ -209,7 +209,7 @@ class ExtractThicknessPipeline:
         return data_table
 
     def _initialize_project(self):
-        print "---- initialize project ----"
+        print("---- initialize project ----")
         if self.output_folder is None:
             self.output_folder = u.make_directories(self.output_folder)
         for threshold in self.thresholds_list:
@@ -219,13 +219,13 @@ class ExtractThicknessPipeline:
             self.save_data = u.SaveData(data_file)
 
     def _setup_slice_objects(self):
-        print "---- setup slice objects ----"
+        print("---- setup slice objects ----")
         thresholds = self.thresholds_list
         if self.am_paths is None or self.tif_paths is None:
             raise RuntimeError("You need to set am and tif paths")
         for threshold in thresholds:
             all_slices_in_threshold = {}
-            print "In threshold: " + str(threshold)
+            print("In threshold: " + str(threshold))
             for am_file in self.am_paths:
                 slice_object = SliceData(slice_threshold=threshold)
                 slice_object.set_output_path(self.output_folder + "/" + str(threshold) +
@@ -239,13 +239,13 @@ class ExtractThicknessPipeline:
                     slice_object.set_image_file_path(u.get_am_image_match([am_file],
                                                                           self.tif_paths)[am_file])
                 slice_object.set_slice_name()
-                print "--------"
-                print "Setting up slice:" + slice_object.slice_name
+                print("--------")
+                print("Setting up slice:" + slice_object.slice_name)
                 all_slices_in_threshold[slice_object.slice_name] = slice_object
             self.all_slices[threshold] = all_slices_in_threshold
 
     def _extract_thicknesses(self):
-        print "---- extract thicknesses ----"
+        print("---- extract thicknesses ----")
         thresholds = self.thresholds_list
         delays = []
         s = self
@@ -271,7 +271,7 @@ class ExtractThicknessPipeline:
         return delays
 
     def _transform_points(self):
-        print "---- transform am_points ----"
+        print("---- transform am_points ----")
         at = tr.AffineTransformation()
         at.set_transformation_matrix_by_aligned_points(self.am_to_hoc_bijective_points[::2],
                                                        self.am_to_hoc_bijective_points[1::2])
@@ -286,7 +286,7 @@ class ExtractThicknessPipeline:
 
     def _update_hoc_file_with_thicknesses(self):
 
-        print "---- update hoc file with thicknesses ----"
+        print("---- update hoc file with thicknesses ----")
         total_points = len(self.hoc_object.all_data["am_points"])
         for idx, hoc_point in enumerate(self.hoc_object.all_data["am_points"]):
             start = time.time()
@@ -298,17 +298,17 @@ class ExtractThicknessPipeline:
             )
             end = time.time()
             if not idx % 100:
-                print "time:" + str(end - start)
-                print "point " + str(idx + 1) + "from " + str(total_points)
-                print "------------"
+                print("time:" + str(end - start))
+                print("point " + str(idx + 1) + "from " + str(total_points))
+                print("------------")
         self.hoc_object.update_thicknesses()
 
     def _compute_all_data_table(self):
-        print "---- compute all data table ----"
+        print("---- compute all data table ----")
         return an.get_all_data_output_table(self.all_slices, self.default_threshold)
 
     def _stacking_all_slices(self):
-        print "---- stacking all slices ----"
+        print("---- stacking all slices ----")
         all_slices_with_default_threshold = self.all_slices[self.default_threshold]
         self.all_am_points = [point for key in sorted(all_slices_with_default_threshold.keys())
                               for point in all_slices_with_default_threshold[key].am_points]
@@ -326,16 +326,16 @@ class ExtractThicknessPipeline:
                 for key in sorted(all_slices_with_same_threshold.keys())
                 for index in range(len(all_slices_with_same_threshold[key].am_points))]}
 
-        print "Number of all am_points: " + str(len(self.all_am_points))
+        print("Number of all am_points: " + str(len(self.all_am_points)))
         assert len(self.all_am_points) == len(
             self.all_am_points_in_hoc_coordinate_system) == len(
-            self.all_thicknesses.values()[0])
-        assert len(self.all_thicknesses) == len([1 for thicknesses_in_threshold in self.all_thicknesses.values()
+            list(self.all_thicknesses.values())[0])
+        assert len(self.all_thicknesses) == len([1 for thicknesses_in_threshold in list(self.all_thicknesses.values())
                                                  if len(thicknesses_in_threshold) ==
-                                                 len(self.all_thicknesses.values()[0])])
+                                                 len(list(self.all_thicknesses.values())[0])])
 
     def _write_am_outputs(self):
-        print "---- write am outputs ----"
+        print("---- write am outputs ----")
         s = self
         for threshold in s.thresholds_list:
             for slice_name in sorted(s.all_slices[threshold]):
@@ -349,7 +349,7 @@ class ExtractThicknessPipeline:
                 # slice_object.write_output(slice_object.am_points)
 
     def _update_slice_objects_with_future_values(self, results):
-        print "---- update slice objects with future values ----"
+        print("---- update slice objects with future values ----")
         for result in results:
             thicknesses_object = result
             threshold = thicknesses_object.threshold_percentage

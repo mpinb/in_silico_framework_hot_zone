@@ -18,7 +18,7 @@ class Tests(unittest.TestCase):
                                               '20150815-1530_20240', \
                                               'simulation_run0000_synapses.csv')
         
-        self.assert_(os.path.exists(self.synapse_file_path)) 
+        self.assertTrue(os.path.exists(self.synapse_file_path)) 
         
     def test_saved_and_reloded_synapse_file_is_identical(self):
         synapse_pdf = read_pandas_synapse_activation_from_roberts_format(\

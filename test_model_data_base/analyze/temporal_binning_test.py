@@ -9,6 +9,8 @@ from model_data_base.model_data_base import ModelDataBase
 
 npartitions = 80
 
+client = distributed.client_object_duck_typed
+
 class Tests(unittest.TestCase):
     def setUp(self):
         self.pdf = pd.DataFrame({'blabla': ['a', 1, 3], \
@@ -27,7 +29,7 @@ class Tests(unittest.TestCase):
         
     def test_temporal_binning_dask(self):
         ddf = dd.from_pandas(self.pdf, npartitions = 3)
-        bins, hist = temporal_binning_dask(ddf, bin_size = 10, min_time = 0, max_time = 50, normalize = False)
+        bins, hist = temporal_binning_dask(ddf, bin_size = 10, min_time = 0, max_time = 50, normalize = False, client = client)
         np.testing.assert_array_equal(bins, np.array([0,10,20,30,40,50]))
         np.testing.assert_array_equal(hist, np.array([4,2,0,1,1])) 
     
@@ -43,7 +45,7 @@ class Tests(unittest.TestCase):
         
         ddf = dd.from_pandas(pdf, npartitions = npartitions)
         t_bins_pandas, data_pandas = temporal_binning_pd(pdf, 1, 0, 300)
-        t_bins_dask, data_dask = temporal_binning_dask(ddf, 1, 0, 300)
+        t_bins_dask, data_dask = temporal_binning_dask(ddf, 1, 0, 300, client = client)
         
         #print data_dask
         np.testing.assert_equal(t_bins_pandas, t_bins_dask)

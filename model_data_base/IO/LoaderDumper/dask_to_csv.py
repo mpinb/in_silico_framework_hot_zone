@@ -3,7 +3,7 @@ import cloudpickle
 import dask.dataframe as dd
 import dask.delayed
 import pandas as pd
-import parent_classes
+from . import parent_classes
 import glob
 import compatibility
 
@@ -37,7 +37,7 @@ def bundle_delayeds(*args):
     '''
     pass
 
-def my_to_csv(ddf, path, optimize_graph = False, index = None, get = compatibility.multiprocessing_scheduler):
+def my_to_csv(ddf, path, optimize_graph = False, index = None, client = None): #get = compatibility.multiprocessing_scheduler):
     ''' Very simple method to store a dask dataframe to a bunch of csv files.
     The reason for it's creation is a lot of frustration with the respective 
     dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
@@ -51,10 +51,10 @@ def my_to_csv(ddf, path, optimize_graph = False, index = None, get = compatibili
     ddf = ddf.to_delayed()
     l = len(ddf)
     digits = len(str(l))
-    save_delayeds = zip(ddf, [path]*l, list(range(l)), [digits]*l) #put all data together
-    save_delayeds = map(dask.delayed(lambda x: ddf_save_chunks(*x)), save_delayeds) #call save function with it
+    save_delayeds = list(zip(ddf, [path]*l, list(range(l)), [digits]*l)) #put all data together
+    save_delayeds = list(map(dask.delayed(lambda x: ddf_save_chunks(*x)), save_delayeds)) #call save function with it
     save_delayeds = bundle_delayeds(*save_delayeds) #bundle everything, so dask does not merge the graphs, which takes ages
-    save_delayeds.compute(optimize_graph = optimize_graph, get = get)
+    save_delayeds.compute(optimize_graph = optimize_graph, scheduler = client)
     #dask.compute(save_delayeds, optimize_graph = optimize_graph, get = get)
     
     
@@ -108,9 +108,9 @@ def dump(obj, savedir, repartition = False, get = None):
         if obj.npartitions > 10000:
             obj = obj.repartition(npartitions = 5000)
 
-    get = compatibility.multiprocessing_scheduler if get is None else get          
+#     get = compatibility.multiprocessing_scheduler if get is None else get          
     index_flag = obj.index.name is not None
-    my_to_csv(obj, os.path.join(savedir, fileglob), get = get, index = index_flag)
+    my_to_csv(obj, os.path.join(savedir, fileglob), client = get, index = index_flag)
     #obj.to_csv(os.path.join(savedir, fileglob), get = settings.multiprocessing_scheduler, index = index_flag)
     meta = obj._meta
     index_name = obj.index.name
@@ -119,8 +119,8 @@ def dump(obj, savedir, repartition = False, get = None):
     else:
         divisions = None
         
-    with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
-        cloudpickle.dump(Loader(meta, index_name = index_name, divisions = divisions), file_)
-        
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#         cloudpickle.dump(Loader(meta, index_name = index_name, divisions = divisions), file_)
+    compatibility.cloudpickle_fun(Loader(meta, index_name = index_name, divisions = divisions), os.path.join(savedir, 'Loader.pickle'))
         
         

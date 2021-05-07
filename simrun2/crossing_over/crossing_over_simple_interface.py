@@ -1,7 +1,7 @@
 import tempfile
 import shutil
 import dask
-from utils import filter_by_time, merge_synapse_activation
+from .utils import filter_by_time, merge_synapse_activation
 from ..generate_synapse_activations import generate_synapse_activations
 from ..run_existing_synapse_activations import run_existing_synapse_activations
 import os
@@ -10,7 +10,7 @@ from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_t
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 import neuron
 h = neuron.h
-from compatibility import synchronous_scheduler
+# from compatibility import synchronous_scheduler
 
 
 def scale_apical(cell):
@@ -43,7 +43,7 @@ def scale_apical(cell):
 def crossing_over_helper(pdf, time, cellParamName, evokedUpParamName, dirPrefix='', nSweeps=1000, tStop=345, silent=True, scale_apical = scale_apical):
     synfile_temppath = tempfile.mkdtemp(dir = dirPrefix, prefix = 'new_synapse_activation')
     delayed = generate_synapse_activations(cellParamName, evokedUpParamName, dirPrefix = synfile_temppath, nSweeps=nSweeps, nprocs = 1, silent = silent)
-    synfiles = delayed.compute(get = synchronous_scheduler)[0]
+    synfiles = delayed.compute(get = dask.get)[0]
 
     pdf = filter_by_time(pdf, lambda x: x <= time)
     merged_synfile_temppath = tempfile.mkdtemp(dir = dirPrefix, prefix = 'merged_synapse_activation')
@@ -55,7 +55,7 @@ def crossing_over_helper(pdf, time, cellParamName, evokedUpParamName, dirPrefix=
         merged_synfile_paths.append(os.path.join(merged_synfile_temppath, os.path.basename(synfilename)))
         write_pandas_synapse_activation_to_roberts_format(merged_synfile_paths[-1], synfile)
     delayed = run_existing_synapse_activations(cellParamName, evokedUpParamName, merged_synfile_paths, dirPrefix=dirPrefix, nprocs=1, tStop=tStop, silent=silent, scale_apical=scale_apical)
-    ret = delayed.compute(get = synchronous_scheduler)
+    ret = delayed.compute(get = dask.get)
     shutil.rmtree(synfile_temppath)
     shutil.rmtree(merged_synfile_temppath)
     return ret

@@ -37,7 +37,7 @@ def hocFile(inputFilePath, outputFilePath, hocPointsWithRad):
 
                     line = line.replace("pt3dadd", "")
                     matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
-                    point = map(float, matches)
+                    point = list(map(float, matches))
 
                     writeHocFile.write('{{pt3dadd({:f},{:f},{:f},{:f})}}\n'.format(hocPoint[0],
                                                                     hocPoint[1],

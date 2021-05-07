@@ -58,15 +58,15 @@ def synapse_activation_postprocess_pandas(pdf, groupby = '', \
 @dask.delayed
 def merge_results_together(dicts):
     out = defaultdict(lambda: [])
-    all_keys = set([x for d in dicts for x in d.keys()])
+    all_keys = set([x for d in dicts for x in list(d.keys())])
     for d in dicts:
         for key in all_keys:#d.keys():
             if key in d:
                 out[key].append(d[key])
             else:
-                out[key].append(np.zeros(d[d.keys()[0]].shape)) #fill with zeros
+                out[key].append(np.zeros(d[list(d.keys())[0]].shape)) #fill with zeros
 
-    for key in out.keys():
+    for key in list(out.keys()):
         out[key] = np.vstack(out[key])
     return out
 

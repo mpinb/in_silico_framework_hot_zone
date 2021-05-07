@@ -1,7 +1,8 @@
 import os
-import cloudpickle
+# import cloudpickle
+import compatibility
 import numpy as np
-import parent_classes
+from . import parent_classes
 
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''
@@ -13,5 +14,6 @@ class Loader(parent_classes.Loader):
     
 def dump(obj, savedir):
     np.savez_compressed(os.path.join(savedir, 'np.npz'), arr_0 = obj)
-    with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
-        cloudpickle.dump(Loader(), file_)
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#         cloudpickle.dump(Loader(), file_)
+    compatibility.cloudpickle_fun(Loader(), os.path.join(savedir, 'Loader.pickle'))

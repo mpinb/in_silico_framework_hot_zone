@@ -25,13 +25,13 @@
 #         Tuebingen, Germany
 #         Email: robert.egger@tuebingen.mpg.de
 #===============================================================================
-
-from reader import *
-from writer import *
-from network_embedding import *
-from synapse_mapper import *
-from scalar_field import *
-from cell import CellParser
+from __future__ import absolute_import
+from .reader import *
+from .writer import *
+from .network_embedding import *
+from .synapse_mapper import *
+from .scalar_field import *
+from .cell import CellParser
 
 #===============================================================================
 # for testing only

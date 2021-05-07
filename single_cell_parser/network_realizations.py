@@ -8,11 +8,11 @@ anatomical and functional network realizations.
 '''
 
 import os, time
-import reader
-import writer
-import cell_parser
-from synapse_mapper import SynapseMapper
-from network import NetworkMapper
+from . import reader
+from . import writer
+from . import cell_parser
+from .synapse_mapper import SynapseMapper
+from .network import NetworkMapper
 from sumatra.parameters import build_parameters
 import neuron
 
@@ -24,13 +24,13 @@ def create_synapse_realization(pname):
     parser = cell_parser.CellParser(cellParam.filename)
     parser.spatialgraph_to_cell()
     cell = parser.cell
-    for preType in preParam.keys():
+    for preType in list(preParam.keys()):
         synapseFName = preParam[preType].synapses.distributionFile
         synDist = reader.read_scalar_field(synapseFName)
         mapper = SynapseMapper(cell, synDist)
         mapper.create_synapses(preType)
     
-    for synType in cell.synapses.keys():
+    for synType in list(cell.synapses.keys()):
         name = parameters.info.outputname
         name += '_'
         name += synType
@@ -57,7 +57,7 @@ def create_functional_network(cellParamName, nwParamName):
     preParam = build_parameters(cellParamName)
     neuronParam = preParam.neuron
     nwParam = build_parameters(nwParamName)
-    for mech in nwParam.NMODL_mechanisms.values():
+    for mech in list(nwParam.NMODL_mechanisms.values()):
         neuron.load_mechanisms(mech)
     parser = cell_parser.CellParser(neuronParam.filename)
     parser.spatialgraph_to_cell()

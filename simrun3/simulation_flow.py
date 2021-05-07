@@ -15,9 +15,10 @@ class Dependency():
         self._values = []
         self._keys = None
   
+    import six
     @staticmethod
     def _flatten_dict(dict_):
-        return {(k1,k2):v  for k1 in dict_.keys() for k2,v  in dict_[k1].iteritems()}
+        return {(k1,k2):v  for k1 in list(dict_.keys()) for k2,v  in six.iteritems(dict_[k1])}
     
     def add(self, value, dict_):
         dict_ = self._flatten_dict(dict_)
@@ -34,12 +35,13 @@ class Dependency():
         self._dicts.append(dict_)
         self._values.append(value)
 
+    import six
     def resolve(self, parameters):
         parameters = self._flatten_dict(parameters)
-        parameters = {k: v for k,v in parameters.iteritems() if k in self._keys}
-        if not parameters.keys() == self._keys:
+        parameters = {k: v for k,v in six.iteritems(parameters) if k in self._keys}
+        if not list(parameters.keys()) == self._keys:
             errstr = 'Cannot resolve {} as it does not match the specified parameters which are {}'
-            raise ValueError(errstr.format(parameters.keys(), self._keys))
+            raise ValueError(errstr.format(list(parameters.keys()), self._keys))
         return self._values[self._dicts.index(parameters)]
     
 d = Dependency()
@@ -89,40 +91,41 @@ class SimulationFlow:
         self._network_param_templates = None
         self._final_param_files = None
         
-        if not len(mdb.keys()) == 0:
-            print 'Warning! mdb not empty!'
+        if not len(list(mdb.keys())) == 0:
+            print('Warning! mdb not empty!')
         
         if autosetup:
             self._save_template_parameterfiles()
             self.register('cell', 
                           cell_param_modify_fun = partial(_get_cell_params, self._cell_param_templates), 
-                          id_ = Explore(self.cell_params.keys()))
+                          id_ = Explore(list(self.cell_params.keys())))
             self.register('network', 
                           network_param_modify_fun = partial(_get_network_params, self._network_param_templates), #self._get_network_params, 
-                          loc = Explore(self.network_params.keys()))
+                          loc = Explore(list(self.network_params.keys())))
 
+    import six
     def _save_template_parameterfiles(self, verbose = True):
         try:
             outdir = self.mdb.create_managed_folder('cell_param_templates', raise_ = True)
-            for k, v in self.cell_params.iteritems():
+            for k, v in six.iteritems(self.cell_params):
                 v.save(outdir.join(k))
         except MdbException:
             if verbose:
-                print 'cell_param_templates already saved. skipping.'
+                print('cell_param_templates already saved. skipping.')
         try:
             outdir = self.mdb.create_managed_folder('network_param_templates', raise_ = True)
-            for k, v in self.network_params.iteritems():
+            for k, v in six.iteritems(self.network_params):
                 v.save(outdir.join(k))  
         except MdbException:
             if verbose:
-                print 'network_param_templates already saved. skipping.'
+                print('network_param_templates already saved. skipping.')
         try:
             params_outdir = self.mdb.create_managed_folder('final_param_files', raise_ = True)
             with open(params_outdir.join('hierarchy.txt'), 'w') as f:
                 f.write(self.get_description())
         except MdbException:
             if verbose:
-                print 'final_param_files folder already created. skipping.'
+                print('final_param_files folder already created. skipping.')
             # replace network_param structures with path
         self._cell_param_templates = self.mdb['cell_param_templates']
         self._network_param_templates = self.mdb['network_param_templates']
@@ -171,11 +174,12 @@ class SimulationFlow:
             out_list.append(dict(out))
         return out_list  
     
+    import six
     def _step3_resolve_dependencies(self):
         out_list = self._step2_evaluate_product()
         for d in out_list:
-            for k1, d1 in d.iteritems():
-                for k2, v in d1.iteritems():
+            for k1, d1 in six.iteritems(d):
+                for k2, v in six.iteritems(d1):
                     if isinstance(v, Dependency):
                         d1[k2] = v.resolve(d)
         return out_list
@@ -234,8 +238,8 @@ class SimulationFlow:
         for p in self._relative_paths:
             assert(I.os.path.exists(self._final_param_files.join(p).join('cell.param')))
             assert(I.os.path.exists(self._final_param_files.join(p).join('network.param')))
-        if 'simrun' in self.mdb.keys():
-            print 'Warning! The simrun folder is not empty!'
+        if 'simrun' in list(self.mdb.keys()):
+            print('Warning! The simrun folder is not empty!')
         outdir = self.mdb.create_managed_folder('simrun', raise_ = False)
         self._delayeds_simulation = []
         for p in self._relative_paths:
@@ -277,7 +281,7 @@ class SimulationFlow:
             self.run_simulation(c, nSweeps, nprocs, silent, tStop)
             self.mdb_init(c, mode)
             return self
-        print self.get_description()
+        print(self.get_description())
         self._future_run_all_remote = client.submit(helper)
 
 ### outside of class as there were deserialization issues
@@ -296,7 +300,7 @@ def _execute_parameterfile_creation(parameters,
                                     _final_param_files = None, 
                                    relative_outdir = None):
     def apply_fun(name, fun, param, kwargs):
-        print name
+        print(name)
         if param is None:
             raise ValueError('Did not receive param structure! Cannot apply {} with parameters {}.'.format(name, kwargs))
         param_bak = param.as_dict()

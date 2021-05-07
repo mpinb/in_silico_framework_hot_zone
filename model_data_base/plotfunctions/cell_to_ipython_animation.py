@@ -68,7 +68,7 @@ def display_animation(files, interval=10, style=False, animID = None, embedded =
  
 def find_closest_index(list_, value):
     '''returns index of value within list_, which is closest to the value specified in the arguments'''
-    m = min(range(len(list_)), key=lambda i: abs(list_[i]-value))
+    m = min(list(range(len(list_))), key=lambda i: abs(list_[i]-value))
     return m
  
 def get_synapse_points(cell, n):
@@ -133,7 +133,7 @@ def get_lines(cell, n, range_vars = 'Vm'):
         
         if len(distance_dummy) == 2:
             label = currentSec_backup.label
-            if not label in points_lines.keys():
+            if not label in list(points_lines.keys()):
                 points_lines[label] = {}
                 points_lines[label]['x'] = []
                 points_lines[label]['y'] = []
@@ -154,7 +154,7 @@ def get_lines(cell, n, range_vars = 'Vm'):
             out['label'] = currentSec_backup.label
             out['t'] = cell.tVec[n]
             out_all_lines.append(out)
-    out_all_lines.extend(points_lines.values())
+    out_all_lines.extend(list(points_lines.values()))
     return out_all_lines
 #%time silent = [get_lines(cell, i) for i in range(1000)]
  
@@ -206,12 +206,12 @@ def parallelMovieMaker(basedir, lines, xlim = (0,1500), ylim = (-80,0)):
     xlim: limits of x axis
     ylim: limits of y axis
     '''
-    print "parallelMovieMaker"
+    print("parallelMovieMaker")
     import tempfile
     if not os.path.exists(basedir):
         os.makedirs(basedir)
     basepath = tempfile.mkdtemp(dir = basedir, prefix = 'animation_')
-    print "files are here: {}".format(os.path.join(basepath, '*.png'))
+    print("files are here: {}".format(os.path.join(basepath, '*.png')))
     paths = [os.path.join(basepath, str(i).zfill(6) + '.png') for i in range(len(lines))]
     
     # split paths and lines in chunks

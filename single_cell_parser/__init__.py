@@ -5,32 +5,32 @@ with NeuroNet subcellular synapse distributions
 '''
 
 import tables #so florida servers have no problem with neuron
-from writer import write_cell_simulation
-from writer import write_landmark_file
-from writer import write_cell_synapse_locations
-from writer import write_synapse_activation_file
-from writer import write_synapse_weight_file
-from writer import write_sim_results
-from writer import write_all_traces
-from writer import write_PSTH
-from writer import write_presynaptic_spike_times
-from writer import write_spike_times_file
-from reader import read_scalar_field
-from reader import read_synapse_realization
-from reader import read_synapse_activation_file
-from reader import read_complete_synapse_activation_file
-from reader import read_spike_times_file
-from reader import read_synapse_weight_file
-from reader import read_landmark_file
-from synapse_mapper import SynapseMapper
-from cell import Cell, PySection, PointCell
-from cell import SynParameterChanger
-from cell_parser import CellParser
+from .writer import write_cell_simulation
+from .writer import write_landmark_file
+from .writer import write_cell_synapse_locations
+from .writer import write_synapse_activation_file
+from .writer import write_synapse_weight_file
+from .writer import write_sim_results
+from .writer import write_all_traces
+from .writer import write_PSTH
+from .writer import write_presynaptic_spike_times
+from .writer import write_spike_times_file
+from .reader import read_scalar_field
+from .reader import read_synapse_realization
+from .reader import read_synapse_activation_file
+from .reader import read_complete_synapse_activation_file
+from .reader import read_spike_times_file
+from .reader import read_synapse_weight_file
+from .reader import read_landmark_file
+from .synapse_mapper import SynapseMapper
+from .cell import Cell, PySection, PointCell
+from .cell import SynParameterChanger
+from .cell_parser import CellParser
 #from synapse import activate_functional_synapse
-from network import NetworkMapper
-from network_realizations import create_synapse_realization
-from network_realizations import create_functional_network
-import network_param_modify_functions
+from .network import NetworkMapper
+from .network_realizations import create_synapse_realization
+from .network_realizations import create_functional_network
+from . import network_param_modify_functions
 #from sim_control import SimControl
 import neuron
 from sumatra.parameters import build_parameters as build_parameters_sumatra
@@ -61,14 +61,14 @@ def load_NMODL_parameters(parameters):
     '''
     automatically loads NMODL mechanisms from paths in parameter file
     '''
-    for mech in parameters.NMODL_mechanisms.values():
+    for mech in list(parameters.NMODL_mechanisms.values()):
         neuron.load_mechanisms(mech)
     try:
-        for mech in parameters.mech_globals.keys():
+        for mech in list(parameters.mech_globals.keys()):
                 for param in parameters.mech_globals[mech]:
                     paramStr = param + '_' + mech + '='
                     paramStr += str(parameters.mech_globals[mech][param])
-                    print 'Setting global parameter', paramStr
+                    print('Setting global parameter', paramStr)
                     neuron.h(paramStr)
     except AttributeError:
         pass
@@ -82,23 +82,22 @@ def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = T
     '''
     if scaleFunc is not None:
         warnings.warn('Keyword scaleFunc is deprecated! ' + 
-                      'New: To ensure reproducability, scaleFunc should be '+
-                      'specified in the parameters, as described in single_cell_parser.cell_modify_funs')
-    print '-------------------------------'
-    print 'Starting setup of cell model...'
+                      'New: To ensure reproducability, scaleFunc should be specified in the parameters, as described in single_cell_parser.cell_modify_funs')
+    print('-------------------------------')
+    print('Starting setup of cell model...')
     axon = False
     
-    if 'AIS' in parameters.keys():
+    if 'AIS' in list(parameters.keys()):
         axon = True
     
         
-    print 'Loading cell morphology...'
+    print('Loading cell morphology...')
     parser = CellParser(parameters.filename)
     parser.spatialgraph_to_cell(parameters, axon, scaleFunc)
     if setUpBiophysics:
-        print 'Setting up biophysical model...'
+        print('Setting up biophysical model...')
         parser.set_up_biophysics(parameters, allPoints)
-    print '-------------------------------'
+    print('-------------------------------')
     
     parser.apply_cell_modify_functions(parameters)       
     parser.cell.init_time_recording()
@@ -196,16 +195,16 @@ def spines_update_synapse_distribution_file(cell, synapse_distribution_file, new
 
     with open(new_synapse_distribution_file, "w") as synapse_file:    
         synapse_file.writelines(file_data)
-    print "Success: .syn file updated"
+    print("Success: .syn file updated")
         
     
 def spines_update_network_paramfile(new_synapse_distribution_file, network_paramfile, new_network_paramfile):
     '''update the network.param file to point to the new synapse distribution file'''
     network_param = build_parameters(network_paramfile)
-    for i in network_param.network.keys():
+    for i in list(network_param.network.keys()):
         network_param.network[i].synapses.distributionFile = new_synapse_distribution_file
     network_param.save(new_network_paramfile)
-    print "Success: network.param file updated"
+    print("Success: network.param file updated")
     
 
 

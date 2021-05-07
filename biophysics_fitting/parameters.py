@@ -36,9 +36,10 @@ def param_selector(params, s):
         > b    7
     '''
     split_char = '.'
+    import six
     ssplit = s.split(split_char)    
     selection = pd.Series({k[len(ssplit[0]) + len(split_char):]: v 
-                             for k, v in params.iteritems() 
+                             for k, v in six.iteritems(params) 
                              if k.split(split_char)[0] == ssplit[0]})
     if len(ssplit) == 1:
         return selection
@@ -48,7 +49,8 @@ def param_selector(params, s):
         raise ValueError()
 
 def set_fixed_params(params, fixed_params = None):
-    for k, v in fixed_params.iteritems():
+    import six
+    for k, v in six.iteritems(fixed_params):
         if not k in params.index:
             params[k] = v
     return params

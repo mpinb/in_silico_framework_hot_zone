@@ -42,11 +42,11 @@ def test_BAC_firing(fname):
         if sec.label == 'AIS':
             axonArea += sec.area
     
-    print 'total area = %.2f micron^2' % totalArea
-    print 'soma area = %.2f micron^2' % somaArea
-    print 'apical area = %.2f micron^2' % apicalArea
-    print 'basal area = %.2f micron^2' % basalArea
-    print 'axon area = %.2f micron^2' % axonArea
+    print('total area = {:.2f} micron^2'.format(totalArea))
+    print('soma area = {:.2f} micron^2'.format(somaArea))
+    print('apical area = {:.2f} micron^2'.format(apicalArea))
+    print('basal area = {:.2f} micron^2'.format(basalArea))
+    print('axon area = {:.2f} micron^2'.format(axonArea))
     
     tStop = 3000.0
     neuronParameters.sim.tStop = tStop
@@ -99,14 +99,14 @@ def soma_injection(cell, amplitude, delay, duration, simParam, saveVisualization
     iclamp.dur = duration
     iclamp.amp = amplitude
     
-    print 'soma current injection: %.2f nA' % amplitude
+    print('soma current injection: {:.2f} nA'.format(amplitude))
     tVec = h.Vector()
     tVec.record(h._ref_t)
     startTime = time.time()
     scp.init_neuron_run(simParam, vardt=True)
     stopTime = time.time()
     dt = stopTime - startTime
-    print 'NEURON runtime: %.2f s' % dt
+    print('NEURON runtime: {:.2f} s'.format(dt))
     
     vmSoma = np.array(cell.soma.recVList[0])
     t = np.array(tVec)
@@ -147,7 +147,7 @@ def scale_apical(cell):
 #                d = sec.diamList[i]
 #                dummy = h.pt3dadd(x, y, z, d, sec=sec)
     
-    print 'Scaled %d apical sections...' % scaleCount
+    print('Scaled {:d} apical sections...'.format(scaleCount))
 
 def write_sim_results(fname, t, v):
     with open(fname, 'w') as outputFile:

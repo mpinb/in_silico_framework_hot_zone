@@ -19,7 +19,7 @@ else:
 
 def get_client():
     for server in config:
-        print 'trying to connect to distributed locking server {}'.format(str(server))
+        print('trying to connect to distributed locking server {}'.format(str(server)))
         if server['type'] == 'redis':
             import redis
             try:

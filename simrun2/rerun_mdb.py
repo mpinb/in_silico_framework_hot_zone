@@ -16,10 +16,11 @@ def convertible_to_int(x):
 
 def synapse_activation_df_to_roberts_synapse_activation(sa):
     synapses = dict()
+    import six
     for index, values in sa.iterrows():
         if not values.synapse_type in synapses:
             synapses[values.synapse_type] = []
-        synTimes = [v for k, v in values.iteritems() if convertible_to_int(k) and not np.isnan(v)]
+        synTimes = [v for k, v in six.iteritems(values) if convertible_to_int(k) and not np.isnan(v)]
         tuple_ = values.synapse_ID, values.section_ID, values.section_pt_ID, synTimes, values.soma_distance
         synapses[values.synapse_type].append(tuple_)
     return synapses
@@ -93,19 +94,19 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
                     
         stopTime = time.time()
         setupdt = stopTime - startTime
-        print 'Network setup time: %.2f s' % setupdt
+        print('Network setup time: {:.2f} s'.format(setupdt))
                 
-        synTypes = cell.synapses.keys()
+        synTypes = list(cell.synapses.keys())
         synTypes.sort()
         
-        print 'Testing evoked response properties run %d of %d' % (lv+1, len(stis))
+        print('Testing evoked response properties run {:d} of {:d}'.format(lv+1, len(stis)))
         tVec = h.Vector()
         tVec.record(h._ref_t)
         startTime = time.time()
         scp.init_neuron_run(neuron_param.sim, vardt=False) #trigger the actual simulation
         stopTime = time.time()
         simdt = stopTime - startTime
-        print 'NEURON runtime: %.2f s' % simdt
+        print('NEURON runtime: {:.2f} s'.format(simdt))
         
         vmSoma = np.array(cell.soma.recVList[0])
         t = np.array(tVec)
@@ -114,12 +115,12 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
         for RSManager in recSiteManagers:
             RSManager.update_recordings()
         
-        print 'writing simulation results'
+        print('writing simulation results')
         fname = 'simulation'
         fname += '_run%07d' % sti_number
         
         synName = outdir_absolute + '/' + fname + '_synapses.csv'
-        print 'computing active synapse properties'
+        print('computing active synapse properties')
         sca.compute_synapse_distances_times(synName, cell, t, synTypes) #calls scp.write_synapse_activation_file
         preSynCellsName = outdir_absolute + '/' + fname + '_presynaptic_cells.csv'
         scp.write_presynaptic_spike_times(preSynCellsName, evokedNW.cells)        
@@ -127,7 +128,7 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
         cell.re_init_cell()
         evokedNW.re_init_network()
 
-        print '-------------------------------'
+        print('-------------------------------')
     vTraces = np.array(vTraces)
     dendTraces = []
     uniqueID = sti_base.strip('/').split('_')[-1]
@@ -142,7 +143,7 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
             dendTraces.append(tmpTraces)
     dendTraces = np.array(dendTraces)
     
-    print 'writing simulation parameter files'
+    print('writing simulation parameter files')
     neuron_param.save(os.path.join(outdir_absolute, uniqueID + '_neuron_model.param'))
     network_param.save(os.path.join(outdir_absolute, uniqueID+ '_network_model.param'))        
         

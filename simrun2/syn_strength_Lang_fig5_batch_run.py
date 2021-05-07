@@ -13,8 +13,8 @@ def create_summary(dirName, cellTypeName, detectionThreshold = 0.1, makeplots = 
     fnames = []
     cellTypeNames = [cellTypeName]
     scan_directory(dirName, fnames, cellTypeNames)
-    print 'Analyzing %d files!' % len(fnames)
-    print 'cell type names', str (cellTypeNames)
+    print('Analyzing {:d} files!'.format(len(fnames)))
+    print('cell type names', str (cellTypeNames))
 #    for f in  fnames:
 #        print f
     allData = {}
@@ -22,9 +22,9 @@ def create_summary(dirName, cellTypeName, detectionThreshold = 0.1, makeplots = 
         splitName = fname.split('_')
         gAMPA = splitName[-8]
         gNMDA = splitName[-5]
-        if gAMPA not in allData.keys():
+        if gAMPA not in list(allData.keys()):
             allData[gAMPA] = {}
-        if allData[gAMPA].has_key(gNMDA):
+        if gNMDA in allData[gAMPA]:
             if makeplots: create_plots(fname)
             fileData = load_data(fname)
             allData[gAMPA][gNMDA]['Vm'].extend(fileData[0])
@@ -69,12 +69,12 @@ def create_summary(dirName, cellTypeName, detectionThreshold = 0.1, makeplots = 
     #    print cellTypeName
     #    raise NotImplementedError()
 
-    print 'detectionThreshold: ', detectionThreshold
+    print('detectionThreshold: ', detectionThreshold)
 
     summaryData = {}
-    for gAMPAStr in allData.keys():
+    for gAMPAStr in list(allData.keys()):
         summaryData[gAMPAStr] = {}
-        for gNMDAStr in allData[gAMPAStr].keys():
+        for gNMDAStr in list(allData[gAMPAStr].keys()):
             Vm = allData[gAMPAStr][gNMDAStr]['Vm']
             tPSP = allData[gAMPAStr][gNMDAStr]['T']
             VmDetected = []
@@ -96,7 +96,7 @@ def create_summary(dirName, cellTypeName, detectionThreshold = 0.1, makeplots = 
             tMed = np.median(np.array(tPSPDetected)-tPSPStart)
             summaryData[gAMPAStr][gNMDAStr] = epspMean, epspStd, epspMed, epspMin, epspMax, tMean, tStd, tMed
     
-    gAMPAStr = summaryData.keys()
+    gAMPAStr = list(summaryData.keys())
     gAMPAStr.sort()
     #gNMDAStr = summaryData[gAMPAStr[0]].keys()
     #gNMDAStr.sort()
@@ -111,7 +111,7 @@ def create_summary(dirName, cellTypeName, detectionThreshold = 0.1, makeplots = 
         outFile.write(header)
         for i in range(len(gAMPAStr)):
             gAMPA = gAMPAStr[i]
-            gNMDA = summaryData[gAMPA].keys()[0]
+            gNMDA = list(summaryData[gAMPA].keys())[0]
             line = gAMPA
             line += '\t'
             line += gNMDA
@@ -160,7 +160,7 @@ def load_data(fname):
     try:
         synID, somaV, somaT = np.loadtxt(fname, skiprows=1, unpack=True)
     except ValueError:
-        print 'file {} is empty! Skipping. Please doulbe-check!'.format(fname)
+        print('file {} is empty! Skipping. Please double-check!'.format(fname))
         return [],[]
     try: ## why?
         return list(somaV), list(somaT)

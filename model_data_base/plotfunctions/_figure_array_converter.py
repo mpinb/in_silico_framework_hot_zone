@@ -3,7 +3,7 @@ autor: arco
 date: 16.09.2016
 '''
 import numpy as np
-from _decorators import return_figure_or_axis
+from ._decorators import return_figure_or_axis
 
 class PixelObject():
     '''holds all the information necessary to reconstruct a plot out of an array'''

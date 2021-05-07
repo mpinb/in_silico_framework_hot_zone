@@ -5,6 +5,7 @@ Created on Nov 08, 2018
 '''
 from __future__ import absolute_import
 
+
 from functools import partial
 import numpy as np
 import pandas as pd
@@ -114,7 +115,7 @@ def get_Evaluator(step = False):
         e.setup.evaluate_funs.append(['StepThree.hay_measure', 
                                     hay_evaluate_StepThree, 
                                     'StepThree.hay_features'])
-    e.setup.finalize_funs.append(lambda x: merge(x.values()))    
+    e.setup.finalize_funs.append(lambda x: merge(list(x.values())))    
     return e
 
 ##############################################################

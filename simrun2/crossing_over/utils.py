@@ -73,12 +73,12 @@ def merge_synapse_activation(pdf1, pdf2):
     '''merges two synapse activation data tables'''
     try:
         pdf1 = pdf1.drop('sim_trail_index', axis = 1)
-    except ValueError:
+    except (ValueError, KeyError): # was a ValueError in py2, is KeyError in py3
         pass
     
     try:
         pdf2 = pdf2.drop('sim_trail_index', axis = 1)
-    except ValueError:
+    except (ValueError, KeyError): # was a ValueError in py2, is KeyError in py3:
         pass
     
     x = pdf1.merge(pdf2, on = ['synapse_type', 'synapse_ID', 'soma_distance', 'section_ID', 'section_pt_ID', 'dendrite_label'], how = 'outer')

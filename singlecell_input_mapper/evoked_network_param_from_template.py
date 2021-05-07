@@ -359,9 +359,9 @@ clusterParameters = False
 
 def create_network_parameter(templateParamName, cellNumberFileName, 
                              synFileName, conFileName, whisker, outFileName, write_all_celltypes = False):
-    print '*************'
-    print 'creating network parameter file from template %s' % templateParamName
-    print '*************'
+    print('*************')
+    print('creating network parameter file from template {:s}'.format(templateParamName))
+    print('*************')
     
     templateParam = scp.build_parameters(templateParamName)
     cellTypeColumnNumbers = load_cell_number_file(cellNumberFileName)
@@ -389,9 +389,9 @@ def create_network_parameter(templateParamName, cellNumberFileName,
             nwParamCluster.NMODL_mechanisms[mech] = newMechPath
     
 #    for cellType in cellTypeColumnNumbers.keys():
-    for cellType in templateParam.network.keys():
+    for cellType in list(templateParam.network.keys()):
         cellTypeParameters = templateParam.network[cellType]
-        for column in cellTypeColumnNumbers[cellType].keys():
+        for column in list(cellTypeColumnNumbers[cellType].keys()):
             numberOfCells = cellTypeColumnNumbers[cellType][column]
             if numberOfCells == 0 and not write_all_celltypes:
                 continue
@@ -424,8 +424,8 @@ def create_network_parameter(templateParamName, cellNumberFileName,
         nwParamCluster.save(clusterOutFileName)
 
 def whisker_evoked_PSTH(column, deflectedWhisker, cellType):
-    columns = surroundColumns[deflectedWhisker].keys()
-    evokedTypes = evokedTemplates.keys()
+    columns = list(surroundColumns[deflectedWhisker].keys())
+    evokedTypes = list(evokedTemplates.keys())
     if column not in columns or cellType not in evokedTypes:
         return None
     evokedTemplate = evokedTemplates[cellType]
@@ -447,7 +447,7 @@ def load_cell_number_file(cellNumberFileName):
             column = splitLine[0]
             cellType = splitLine[1]
             numberOfCells = int(splitLine[2])
-            if not cellTypeColumnNumbers.has_key(cellType):
+            if cellType not in cellTypeColumnNumbers:
                 cellTypeColumnNumbers[cellType] = {}
             cellTypeColumnNumbers[cellType][column] = numberOfCells
     
@@ -466,5 +466,5 @@ if __name__ == '__main__':
         create_network_parameter(templateParamName, cellNumberFileName, synFileName, conFileName, whisker, outFileName)
     else:
 #        print 'parameters: [templateParamName] [cellNumberFileName] [synFileName] [conFileName] [deflected whisker] [outFileName]'
-        print 'parameters: [ongoingTemplateParamName] [cellNumberFileName] [synFileName (absolute path)] [deflected whisker] [outFileName]'
+        print('parameters: [ongoingTemplateParamName] [cellNumberFileName] [synFileName (absolute path)] [deflected whisker] [outFileName]')
     

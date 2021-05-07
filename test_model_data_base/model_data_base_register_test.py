@@ -5,7 +5,7 @@ from model_data_base.model_data_base_register import _get_mdb_register, \
 import unittest
 
 def assert_search_mdb_did_not_fail(mdbr):
-    keys = mdbr.mdb.keys()
+    keys = list(mdbr.mdb.keys())
     keys = [k for k in keys if isinstance(k, tuple)]
     #for k in keys: print (mdbr.mdb[k])
     assert(not keys)
@@ -33,13 +33,13 @@ class Tests(unittest.TestCase):
         
         mdbr = ModelDataBaseRegister(self.basetempdir)
         
-        self.assert_(get_mdb_by_unique_id(mdb1.get_id()).basedir == p1)
-        self.assert_(get_mdb_by_unique_id(mdb2.get_id()).basedir == p2)
-        self.assert_(get_mdb_by_unique_id(mdb3.get_id()).basedir == p3)
+        self.assertTrue(get_mdb_by_unique_id(mdb1.get_id()).basedir == p1)
+        self.assertTrue(get_mdb_by_unique_id(mdb2.get_id()).basedir == p2)
+        self.assertTrue(get_mdb_by_unique_id(mdb3.get_id()).basedir == p3)
         
         mdb4 = ModelDataBase(os.path.join(self.basetempdir, 'test4'))
         register_mdb(mdb4)
-        self.assert_(get_mdb_by_unique_id(mdb4.get_id()).basedir == mdb4.basedir)
+        self.assertTrue(get_mdb_by_unique_id(mdb4.get_id()).basedir == mdb4.basedir)
         assert_search_mdb_did_not_fail(mdbr)
         
     def test_unknown_id_raises_KeyError(self):

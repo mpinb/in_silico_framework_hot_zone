@@ -65,19 +65,19 @@ def ongoing_activity(simName, cellName, evokedUpParamName):
         evokedNW.create_saved_network2()
         stopTime = time.time()
         setupdt = stopTime - startTime
-        print 'Network setup time: %.2f s' % setupdt
+        print('Network setup time: {:.2f} s'.format(setupdt))
         
-        synTypes = cell.synapses.keys()
+        synTypes = list(cell.synapses.keys())
         synTypes.sort()
         
-        print 'Testing ongoing response properties run %d of %d' % (nRun+1, nSweeps)
+        print('Testing ongoing response properties run {:d} of {:d}'.format((nRun+1, nSweeps)))
         tVec = h.Vector()
         tVec.record(h._ref_t)
         startTime = time.time()
         scp.init_neuron_run(neuronParameters.sim)
         stopTime = time.time()
         simdt = stopTime - startTime
-        print 'NEURON runtime: %.2f s' % simdt
+        print('NEURON runtime: {:.2f} s'.format(simdt))
         
         vmSoma = np.array(cell.soma.recVList[0])
         t = np.array(tVec)
@@ -86,11 +86,11 @@ def ongoing_activity(simName, cellName, evokedUpParamName):
         for RSManager in recSiteManagers:
             RSManager.update_recordings()
         
-        print 'writing simulation results'
+        print('writing simulation results')
         fname = 'simulation'
         fname += '_run%04d' % nRun
         synName = dirName + '/' + fname + '_synapses.csv'
-        print 'computing active synapse properties'
+        print('computing active synapse properties')
         sca.compute_synapse_distances_times(synName, cell, t, synTypes)
         
         nRun += 1
@@ -100,7 +100,7 @@ def ongoing_activity(simName, cellName, evokedUpParamName):
 #        ongoingNW.re_init_network()
         evokedNW.re_init_network()
 
-        print '-------------------------------'
+        print('-------------------------------')
     
     vTraces = np.array(vTraces)
     dendTraces = []
@@ -115,7 +115,7 @@ def ongoing_activity(simName, cellName, evokedUpParamName):
             dendTraces.append(tmpTraces)
     dendTraces = np.array(dendTraces)
     
-    print 'writing simulation parameter files'
+    print('writing simulation parameter files')
     neuronParameters.save(dirName+'/'+uniqueID+'_neuron_model.param')
     evokedUpNWParameters.save(dirName+'/'+uniqueID+'_network_model.param')
     
@@ -132,7 +132,7 @@ def ongoing_activity(simName, cellName, evokedUpParamName):
             ax.append(plt.plot(tTraces[i], dendTraces[j][i]))
         fig.add_subplot(nrOfPlots,1,nrOfPlots)
         spikeTimes.append(sca.simple_spike_detection(tTraces[i], vTraces[i]))
-        print 'time steps: %d' % len(tTraces[i])
+        print('time steps: {:d}'.format(len(tTraces[i])))
 #        print 'spike times: '
 #        print spikeTimes
         spikes = [i for t in spikeTimes[-1]]
@@ -234,7 +234,7 @@ if __name__ == '__main__':
         networkName = sys.argv[3]
         ongoing_activity(name, cellName, networkName)
     else:
-        print 'Error! Number of arguments is %d; should be 3' % (len(sys.argv)-1)
+        print('Error! Number of arguments is {:d}; should be 3'.format((len(sys.argv)-1)))
     
     
     

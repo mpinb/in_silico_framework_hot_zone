@@ -16,7 +16,7 @@ objectives_step = ['AI1','AI2','AI3','APh1','APh2','APh3','APw1','APw2','APw3','
 objectives_BAC = ['BAC_APheight', 'BAC_ISI', 'BAC_ahpdepth', 'BAC_caSpike_height', 'BAC_caSpike_width', 
                       'BAC_spikecount', 'bAP_APheight', 'bAP_APwidth', 'bAP_att2', 'bAP_att3', 'bAP_spikecount']
 
-from ephys import *
+from .ephys import *
 
 def normalize(raw,mean,std):
     return I.np.mean(I.np.abs(raw-mean))/std
@@ -64,21 +64,22 @@ class BAC:
 
         
     def get(self, **voltage_traces):
+        import six
         spikecount = self.BAC_spikecount(voltage_traces)
         out = {}
-        for name,(_,mean,std) in self.definitions.iteritems():
+        for name,(_,mean,std) in six.iteritems(self.definitions):
             # special case in the original code were in the case of two somatic spikes
             # 7 is substracted from the mean
             if spikecount == 2 and name == 'BAC_caSpike_width': 
                 mean = mean - 7. 
             out_current = getattr(self, name)(voltage_traces)
             out_current['.normalized'] = normalize(out_current['.raw'],mean,std)
-            checks = [v for k,v in out_current.iteritems() if 'check' in k]
+            checks = [v for k,v in six.iteritems(out_current) if 'check' in k]
             if all(checks):
                 out_current[''] = out_current['.normalized']
             else:
                 out_current[''] = 20*std
-            out_current = {name + k: v for k,v in out_current.iteritems()}
+            out_current = {name + k: v for k,v in six.iteritems(out_current)}
             out.update(out_current)
         return self.check(out, voltage_traces)
     
@@ -98,8 +99,9 @@ class BAC:
         if self.punish_last_spike_after_deadline:
             relevant_err_flags = err_flags
         else:
-            relevant_err_flags = {k:v for k,v in err_flags.iteritems() if not 'last_spike_before_deadline' in k}
-        for name in self.definitions.keys():
+            import six
+            relevant_err_flags = {k:v for k,v in six.iteritems(err_flags) if not 'last_spike_before_deadline' in k}
+        for name in list(self.definitions.keys()):
             if not all(relevant_err_flags.values()):
                 out[name] = err
             elif out[name] > self.punish:
@@ -179,15 +181,16 @@ class bAP:
 
     def get(self, **voltage_traces):
         out = {}
-        for name,(_,mean,std) in self.definitions.iteritems():
+        import six
+        for name,(_,mean,std) in six.iteritems(self.definitions):
             out_current = getattr(self, name)(voltage_traces)
             out_current['.normalized'] = normalize(out_current['.raw'],mean,std)
-            checks = [v for k,v in out_current.iteritems() if 'check' in k]
+            checks = [v for k,v in six.iteritems(out_current) if 'check' in k]
             if all(checks):
                 out_current[''] = out_current['.normalized']
             else:
                 out_current[''] = 20*std
-            out_current = {name + k: v for k,v in out_current.iteritems()}
+            out_current = {name + k: v for k,v in six.iteritems(out_current)}
             out.update(out_current)
         return self.check(out, voltage_traces)
     
@@ -207,8 +210,9 @@ class bAP:
         if self.punish_last_spike_after_deadline:
             relevant_err_flags = err_flags
         else:
-            relevant_err_flags = {k:v for k,v in err_flags.iteritems() if not 'last_spike_before_deadline' in k}
-        for name in self.definitions.keys():
+            import six
+            relevant_err_flags = {k:v for k,v in six.iteritems(err_flags) if not 'last_spike_before_deadline' in k}
+        for name in list(self.definitions.keys()):
             if not all(relevant_err_flags.values()):
                 out[name] = err
             elif out[name] > self.punish:

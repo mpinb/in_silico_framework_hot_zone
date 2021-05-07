@@ -31,25 +31,25 @@ class PSP_with_current_injection:
         self.cell_modify_functions = cell_modify_functions
         self.bounds = bounds
         if len(cell_modify_functions) > 0:
-            if not 'cell_modify_functions' in self.neuron_param.neuron.keys():
+            if not 'cell_modify_functions' in list(self.neuron_param.neuron.keys()):
                 self.neuron_param.neuron['cell_modify_functions'] = {}
-                print cell_modify_functions
+                print(cell_modify_functions)
             self.neuron_param.neuron['cell_modify_functions'].update(cell_modify_functions)
         
     def optimize_holding_current(self):
         '''finds the current that needs to be injected to hold the somatic potential at target_vm.
         target_vm is defined during initialization of the object.
         bounds: (min_current, max_current) in which the optimizer searches'''
-        print 'starting optimization of holding current. target membrane potential is {} mV'.format(self.target_vm)
+        print('starting optimization of holding current. target membrane potential is {} mV'.format(self.target_vm))
         bounds = self.bounds
         x = minimize_scalar(I.partial(self._objective_fun), 
                             tol = .01, 
                             bounds = bounds, 
                             method = 'Bounded')
         if x.fun < 0.1:
-            print 'solution found'
-            print 'deviation / mV: {}'.format(I.np.sqrt(x.fun))
-            print 'current / mV: {}'.format(I.np.sqrt(x.x))
+            print('solution found')
+            print('deviation / mV: {}'.format(I.np.sqrt(x.fun)))
+            print('current / mV: {}'.format(I.np.sqrt(x.x)))
             self.holding_current = x.x
         else:
             self.plot_current_injection_voltage_trace()        
@@ -62,12 +62,12 @@ class PSP_with_current_injection:
         at timepoint self.optimize_for_timepoint'''
         tVec, vm = self._get_current_dependent_vt(current)
         if max(vm[tVec > self.delay]) > -40: # there may be no spikes
-            print 'careful: there are spikes during the PSP experiment!'
+            print('careful: there are spikes during the PSP experiment!')
             return 10000
         tNew = I.np.arange(0,self.tEnd, 0.025)
         vmNew = I.np.interp(tNew, tVec, vm)
         out = (vmNew[int(self.optimize_for_timepoint / 0.025)] - self.target_vm)**2
-        print vmNew, out
+        print(vmNew, out)
         return out
 
     def _get_current_dependent_vt(self, current):
@@ -98,7 +98,7 @@ class PSP_with_current_injection:
         dummy_param = {'amplitude': self.holding_current, 
                                             'duration': self.duration,
                                             'delay': self.delay}
-        if not 'cell_modify_functions' in neuron_param.neuron.keys():
+        if not 'cell_modify_functions' in list(neuron_param.neuron.keys()):
             neuron_param.neuron['cell_modify_functions'] = {}
         neuron_param.neuron['cell_modify_functions']['soma_current_injection'] = dummy_param
         return I.scp.NTParameterSet(neuron_param)
@@ -119,10 +119,10 @@ class PSP_with_current_injection:
         '''call the run method of the returned object to execute the computation'''
         psp_inh = self.get_psp_simulator(exc_inh='inh', gExRange = gExRange,
                                          mode = mode)
-        print 'len psp_inh', len(psp_inh._delayeds)
+        print('len psp_inh', len(psp_inh._delayeds))
         psp_exc = self.get_psp_simulator(exc_inh='exc', gExRange = gExRange,
                                          mode = mode)
-        print 'len psp_exc', len(psp_exc._delayeds)        
+        print('len psp_exc', len(psp_exc._delayeds))        
         psp_excinh = combine_PSP_objects(psp_exc, psp_inh)
         return psp_excinh
     
