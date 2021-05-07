@@ -13,7 +13,7 @@ try:
     CUPY_ENABLED = True
 except ImportError:
     import numpy as np    
-    print('CuPy could not be imported.')
+    print 'CuPy could not be imported.'
     CUPY_ENABLED = False
 
 import pandas as pd
@@ -49,7 +49,7 @@ def dereference(weakrefobj):
 
 
 class Rm(object):
-    def __init__(self, name, mdb, tmin = None, tmax = None, width = None):
+    def __init__(self, name, mdb, tmin = None, tmax = None, width = None, selected_indices = None):
         self.name = name
         self.mdb = mdb
         self.tmax = tmax
@@ -61,6 +61,7 @@ class Rm(object):
         self.Data = DataView()
         self.Data.setup(self)
         self.DataSplitEvaluation = DataSplitEvaluation(self)
+        self.selected_indices = selected_indices # list/nested list of integer indices for selected simulation trials
         # for remote optimization
         self.results_remote = False # flag, false if we have all results locally
     
@@ -71,7 +72,7 @@ class Rm(object):
     
     def add_strategy(self, strategy, setup = True, view = None):
         name = strategy.name
-        assert(name not in list(self.strategies.keys()))
+        assert(name not in self.strategies.keys())
         self.strategies[name] = strategy
         if view is None:
             view = self.Data
@@ -95,14 +96,14 @@ class Rm(object):
             for solver_name in sorted(strategy.solvers.keys()):
                 solver = strategy.solvers[solver_name]
                 if client is not None:
-                    print('starting remote optimization', strategy_name, solver_name)
-                    workers = list(client.scheduler_info()['workers'].keys())                    
+                    print 'starting remote optimization', strategy_name, solver_name
+                    workers = client.scheduler_info()['workers'].keys()                    
                     if n_workers is not None:
                         workers = workers[:n_workers]                     
                     solver.optimize_all_splits(client, workers = workers)
                     self.results_remote = True
                 else:
-                    print('starting local optimization', strategy_name, solver_name)
+                    print 'starting local optimization', strategy_name, solver_name
                     solver.optimize_all_splits()
     
     def _gather_results(self, client):
@@ -149,7 +150,7 @@ class Strategy(object):
         self.get_y = I.partial(self.get_y_static, self.y, numpy_split = numpy_split)
         self._objective_function = I.partial(self._objective_function_static, self.get_score, self.get_y)
         if setup:
-            for solver in list(self.solvers.values()):
+            for solver in self.solvers.values():
                 solver._setup()            
         return self
     
@@ -179,7 +180,7 @@ class Strategy(object):
         return -1 * sklearn.metrics.roc_auc_score(y, convert_to_numpy(s)) 
     
     def add_solver(self, solver, setup = True):
-        assert solver.name not in list(self.solvers.keys())
+        assert solver.name not in self.solvers.keys()
         self.solvers[solver.name] = solver
         if setup:
             solver.setup(self)
@@ -194,10 +195,9 @@ class Solver(object):
     def _setup(self):
         pass
     
-    import six
     def optimize_all_splits(self, client = None, workers = None):
         out = {}
-        for name, split in six.iteritems(self.strategy.DataSplitEvaluation.splits):
+        for name, split in self.strategy.DataSplitEvaluation.splits.iteritems():
             x0 = self.strategy._get_x0()    
             self.strategy.set_split(split['train'])
             if client:
@@ -255,10 +255,10 @@ class DataSplitEvaluation(object):
         self.scores_keys = []
         
     def add_random_split(self, name, percentage_train = .7, l = None):
-        assert(name not in list(self.splits.keys()))
+        assert(name not in self.splits.keys())
         if l is None:
             n = self.Rm.get_n_trials()
-            l = list(range(n))
+            l = range(n)
         else:
             n = len(l)
         np.random.shuffle(np.array(l))
@@ -270,7 +270,7 @@ class DataSplitEvaluation(object):
                              'subtest1': subtest1, 'subtest2': subtest2}
     
     def add_isi_dependent_random_split(self, name, min_isi = 10, percentage_train = .7):
-        assert(name not in list(self.splits.keys()))
+        assert(name not in self.splits.keys())
         ISI = self.Rm.extract('ISI') * -1
         ISI = ISI.fillna(min_isi+1)
         ISI = ISI.reset_index(drop = True)
@@ -300,11 +300,10 @@ class DataSplitEvaluation(object):
         score_index = []
         x_index = []
         runs_index = []
-        import six # rieke - might be in a bad place
         for k, solver, x in zip(self.optimizer_results_keys, self.solvers, self.optimizer_results):
-            for split_name, xx in six.iteritems(x):
+            for split_name, xx in x.iteritems():
                 split = self.splits[split_name]
-                for subsplit_name, subsplit in six.iteritems(split):
+                for subsplit_name, subsplit in split.iteritems():
                     runs_index.append(k[2])
                     x_index.append(xx.x)
                     success_index.append(xx.success)
@@ -380,6 +379,7 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
         self.tmin = Rm.tmin
         self.tmax = Rm.tmax
         self.width = Rm.width
+        self.selected_indices = Rm.selected_indices
         self.data = {g: self._get_spatiotemporal_input(g) for g in self.get_groups()}
     
     @staticmethod
@@ -389,10 +389,10 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
 
     def get_spatial_binsize(self):
         '''returns spatial binsize'''
-        mdb = self.mdb
+        mdb = self.mdb[0] if type(mdb) == list else self.mdb
         key = self.key
         level = self.get_spatial_bin_level(key)
-        spatial_binsize = list(mdb[key].keys())[0][level] # something like '100to150'
+        spatial_binsize = mdb[key].keys()[0][level] # something like '100to150'
         spatial_binsize = spatial_binsize.split('to')
         spatial_binsize = float(spatial_binsize[1])-float(spatial_binsize[0])
         return spatial_binsize
@@ -406,7 +406,7 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
         level = self.get_spatial_bin_level(key)
         out = []
         for single_mdb in mdb: #rieke
-            for k in list(single_mdb[key].keys()):
+            for k in single_mdb[key].keys():
                 k = list(k)
                 k.pop(level)
                 out.append(tuple(k))
@@ -416,11 +416,12 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
     def get_sorted_keys_by_group(self, group, mdb = None): #rieke
         '''returns keys sorted such that the first key is the closest to the soma'''
         if mdb == None: #rieke bc
-            mdb = self.mdb 
+            mdb = self.mdb
+        mdb = mdb[0] if type(mdb) == list else mdb
         key = self.key       
         group = list(group)
         level = self.get_spatial_bin_level(key)
-        keys = list(mdb[key].keys())
+        keys = mdb[key].keys()
         keys = sorted(keys, key = lambda x: float(x[level].split('to')[0]))
         out = []
         for k in keys:
@@ -442,14 +443,17 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
 #         out = numpy.dstack(out)
         
         outs = []
-        for single_mdb in mdb:
+        for m, single_mdb in enumerate(mdb):
             keys = self.get_sorted_keys_by_group(group, mdb = single_mdb)
-            out = [single_mdb[key][k][:,self.tmax-self.width:self.tmax] for k in keys]
+            if self.selected_indices is not None:
+                out = [single_mdb[key][k][self.selected_indices[m],self.tmax-self.width:self.tmax] for k in keys]
+            else:
+                out = [single_mdb[key][k][:,self.tmax-self.width:self.tmax] for k in keys]
             out = numpy.dstack(out)
             outs.append(out)
             
         outs = numpy.concatenate(outs, axis = 0)
-        print(outs.shape)
+        print outs.shape
         return outs
     
     def get(self):
@@ -462,14 +466,19 @@ class DataExtractor_spiketimes(DataExtractor):
     def setup(self, Rm):
         self.mdb = Rm.mdb
         self.st = None
+        self.selected_indices = Rm.selected_indices
         
     def get(self):
         if type(self.mdb) != list:
             return self.mdb['spike_times']
         else:
             st_list = []
-            for single_mdb in self.mdb:
-                st_list.append(single_mdb['spike_times'])
+            if self.selected_indices is not None:
+                for m, single_mdb in enumerate(self.mdb):
+                    st_list.append(single_mdb['spike_times'].iloc[self.selected_indices[m]])
+            else:
+                for single_mdb in self.mdb:
+                    st_list.append(single_mdb['spike_times'])
             return pd.concat(st_list)
 class DataExtractor_object(DataExtractor):
     def __init__(self, key):
@@ -492,13 +501,18 @@ class DataExtractor_spikeInInterval(DataExtractor):
         if self.tmax is None:
             self.tmax = Rm.tmax
         self.mdb = Rm.mdb
+        self.selected_indices = Rm.selected_indices
+                
         if type(self.mdb) != list:
             st = self.mdb['spike_times']
-            
         else:
             st_list = []
-            for single_mdb in self.mdb: #rieketodo: can I use the DataExtractor_spiketimes here?
-                st_list.append(single_mdb['spike_times'])
+            if self.selected_indices is not None:
+                for m, single_mdb in enumerate(self.mdb):
+                    st_list.append(single_mdb['spike_times'].iloc[self.selected_indices[m]])
+            else:
+                for single_mdb in self.mdb:
+                    st_list.append(single_mdb['spike_times'])
             st = pd.concat(st_list)
         
         self.sii = I.spike_in_interval(st, tmin = self.tmin, tmax = self.tmax)
@@ -513,15 +527,20 @@ class DataExtractor_ISI(DataExtractor):
         self.mdb = Rm.mdb
         if self.t is None:
             self.t = Rm.tmin
-            
+        self.selected_indices = Rm.selected_indices
+
         if type(self.mdb) != list:
             st = self.mdb['spike_times']
         else:
             st_list = []
-            for single_mdb in self.mdb: #rieketodo: can I use the DataExtractor_spiketimes here?
-                st_list.append(single_mdb['spike_times'])
-            st = pd.concat(st_list)
-            
+            if self.selected_indices is not None:
+                for m, single_mdb in enumerate(self.mdb):
+                    st_list.append(single_mdb['spike_times'].iloc[self.selected_indices[m]])
+            else:
+                for single_mdb in self.mdb:
+                    st_list.append(single_mdb['spike_times'])
+            st = pd.concat(st_list)            
+        
         t = self.t
         st[st>t] = numpy.NaN
         self.ISI = st.max(axis=1) - t
@@ -542,10 +561,10 @@ class DataExtractor_daskDataframeColumn(DataExtractor): #rieketodo
         self.mdb = Rm.mdb
         cache = self.mdb.create_sub_mdb('DataExtractor_daskDataframeColumn_cache', raise_ = False)
         complete_key = list(self.key) + [self.column]
-        complete_key = list(map(str, complete_key))
+        complete_key = map(str, complete_key)
         complete_key = tuple(complete_key)
-        print(complete_key)
-        if not complete_key in list(cache.keys()):
+        print complete_key
+        if not complete_key in cache.keys():
             slice_ = self.mdb[self.key][self.column]
             slice_ = self.client.compute(slice_).result()
             cache.setitem(complete_key, slice_, dumper = I.dumper_pandas_to_msgpack)
@@ -675,7 +694,7 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
     def _setup(self):
         self.compute_basis()
         self.groups = sorted(self.base_vectors_arrays_dict.keys())
-        self.len_z, self.len_t, self.len_trials = list(self.base_vectors_arrays_dict.values())[0].shape
+        self.len_z, self.len_t, self.len_trials = self.base_vectors_arrays_dict.values()[0].shape
         self.convert_x = I.partial(self._convert_x_static, self.groups, self.len_z)
         self._get_score = I.partial(self._get_score_static, self.convert_x, self.base_vectors_arrays_dict)
         
@@ -684,8 +703,7 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
         st = self.data['st']
         stSa_dict = self.data['spatiotemporalSa']
         base_vectors_arrays_dict = {}
-        import six # rieke - might be in a bad place
-        for group, stSa in six.iteritems(stSa_dict):
+        for group, stSa in stSa_dict.iteritems():
             len_trials, len_t, len_z = stSa.shape
             base_vector_array = []            
             for z in self.RaisedCosineBasis_spatial.compute(len_z).get():
@@ -711,11 +729,10 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
             out[group] = x_z, x_t
         return out    
     
-    import six
     @staticmethod
     def _get_score_static(convert_x, base_vectors_arrays_dict, x):
         outs = []
-        for group, (x_z, x_t) in six.iteritems(convert_x(x)):
+        for group, (x_z, x_t) in convert_x(x).iteritems():
             array = base_vectors_arrays_dict[group]
             out = np.dot(dereference(x_t), dereference(array)).squeeze()
             out = np.dot(dereference(x_z), dereference(out)).squeeze()
@@ -767,8 +784,7 @@ class Strategy_spatiotemporalRaisedCosine(Strategy):
                 dict_ = self.convert_x(self.normalize(out.x))
             else:
                 dict_ = self.convert_x(out.x)
-            import six # rieke - might be in a bad place
-            for group, (x_z, x_t) in six.iteritems(dict_):
+            for group, (x_z, x_t) in dict_.iteritems():
                 c = self.get_color_by_group(group)
                 self.RaisedCosineBasis_temporal.visualize_x(x_t, ax = ax_t, plot_kwargs = {'c': c})
                 self.RaisedCosineBasis_spatial.visualize_x(x_z, ax = ax_z, plot_kwargs = {'c': c})
@@ -783,7 +799,7 @@ class Strategy_temporalRaisedCosine_spatial_cutoff(Strategy):
     def _setup(self):
         self.compute_basis()
         self.groups = sorted(self.base_vectors_arrays_dict.keys())
-        self.len_z, self.len_t, self.len_trials = list(self.base_vectors_arrays_dict.values())[0].shape
+        self.len_z, self.len_t, self.len_trials = self.base_vectors_arrays_dict.values()[0].shape
         self.convert_x = I.partial(self._convert_x_static, self.groups, self.len_z)
         self._get_score = I.partial(self._get_score_static, self.convert_x, self.base_vectors_arrays_dict)
         
@@ -792,8 +808,7 @@ class Strategy_temporalRaisedCosine_spatial_cutoff(Strategy):
         st = self.data['st']
         stSa_dict = self.data['spatiotemporalSa']
         base_vectors_arrays_dict = {}
-        import six # rieke
-        for group, stSa in six.iteritems(stSa_dict):
+        for group, stSa in stSa_dict.iteritems():
             len_trials, len_t, len_z = stSa.shape
             base_vector_array = []            
             for z in self.RaisedCosineBasis_spatial.compute(len_z).get():
@@ -819,11 +834,10 @@ class Strategy_temporalRaisedCosine_spatial_cutoff(Strategy):
             out[group] = x_z, x_t
         return out    
     
-    import six
     @staticmethod
     def _get_score_static(convert_x, base_vectors_arrays_dict, x):
         outs = []
-        for group, (x_z, x_t) in six.iteritems(convert_x(x)):
+        for group, (x_z, x_t) in convert_x(x).iteritems():
             array = base_vectors_arrays_dict[group]
             out = np.dot(dereference(x_t), dereference(array)).squeeze()
             out = np.dot(dereference(x_z), dereference(out)).squeeze()
@@ -875,8 +889,7 @@ class Strategy_temporalRaisedCosine_spatial_cutoff(Strategy):
                 dict_ = self.convert_x(self.normalize(out.x))
             else:
                 dict_ = self.convert_x(out.x)
-            import six #rieke
-            for group, (x_z, x_t) in six.iteritems(dict_):
+            for group, (x_z, x_t) in dict_.iteritems():
                 c = self.get_color_by_group(group)
                 self.RaisedCosineBasis_temporal.visualize_x(x_t, ax = ax_t, plot_kwargs = {'c': c})
                 self.RaisedCosineBasis_spatial.visualize_x(x_z, ax = ax_z, plot_kwargs = {'c': c})                
