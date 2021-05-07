@@ -25,7 +25,7 @@ def fun():
     import matplotlib.pyplot as plt
     plt.switch_backend('agg')
 
-client.run(fun)
+#client.run(fun)
 
 import test_model_data_base, test_model_data_base.decorators
 import test_simrun2, test_simrun2.decorators
@@ -55,10 +55,10 @@ test_biophysics_fitting.decorators.current_testlevel = 10
 # Valid values are strings, which contain a module name, that can be 
 # imported. Choose '.' to run all available tests within this module
 #######################################
-#run = '.'
+run = '.'
 #run = 'test_model_data_base.analyze.spaciotemporal_binning_test'
 #run = 'test_model_data_base.IO.LoaderDumper.dumpers_real_data_test'
-run = 'test_model_data_base.plotfunctions.manylines_test'
+#run = 'test_model_data_base.plotfunctions.manylines_test'
 #run = 'test_model_data_base.utils_test'
 #run = 'test_model_data_base.analyze.temporal_binning_test'
 #run = 'test_biophysics_fitting.optimizer_test'
@@ -71,6 +71,7 @@ run = 'test_model_data_base.plotfunctions.manylines_test'
 #run = 'test_simrun2.reduced_model.get_kernel_test'
 #run = 'test_model_data_base.sqlite_backend.sqlite_backend_test'#move cluster
 #run = 'test_model_data_base.model_data_base_register_test'
+#run = 'test_simrun2.simrun_test'
 ################################
 # verbosity of testrunner
 ################################
