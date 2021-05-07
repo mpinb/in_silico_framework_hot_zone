@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 import os
-from .model_data_base import ModelDataBase, MdbException
 from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
 from .utils import cache
 from .settings import model_data_base_register_path
@@ -78,5 +77,5 @@ def get_mdb_by_unique_id(unique_id):
     return mdb
         
 
-        
+from .model_data_base import ModelDataBase, MdbException       
     

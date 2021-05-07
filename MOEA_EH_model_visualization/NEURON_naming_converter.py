@@ -32,12 +32,12 @@ def read_hoc_file(hoc_filename):
 					if 'soma' in splitStr:
 						endIndex = max(splitStr.find('}'), splitStr.find('('))
 						oldName = splitStr[:endIndex]
-						if soma_name_map.has_key(oldName):
+						if oldName in soma_name_map:
 							break
 						newName = 'soma'
 						soma_name_map[oldName] = newName
 						soma_name_count += 1
-						print 'old name: %s new name: %s' % (oldName, newName)
+						print('old name: {} new name: {}'.format(oldName, newName))
 						break
 			if 'axon' in line:
 				splitLine = line.strip().split(' ')
@@ -45,12 +45,12 @@ def read_hoc_file(hoc_filename):
 					if 'axon' in splitStr:
 						endIndex = max(splitStr.find('}'), splitStr.find('('))
 						oldName = splitStr[:endIndex]
-						if axon_name_map.has_key(oldName):
+						if oldName in axon_name_map:
 							break
 						newName = 'axon[%d]' % axon_name_count
 						axon_name_map[oldName] = newName
 						axon_name_count += 1
-						print 'old name: %s new name: %s' % (oldName, newName)
+						print('old name: {} new name: {}'.format(oldName, newName))
 						break
 			if 'dend' in line:
 				splitLine = line.strip().split(' ')
@@ -58,12 +58,12 @@ def read_hoc_file(hoc_filename):
 					if 'dend' in splitStr:
 						endIndex = max(splitStr.find('}'), splitStr.find('('))
 						oldName = splitStr[:endIndex]
-						if basal_name_map.has_key(oldName):
+						if oldName in basal_name_map:
 							break
 						newName = 'dend[%d]' % basal_name_count
 						basal_name_map[oldName] = newName
 						basal_name_count += 1
-						print 'old name: %s new name: %s' % (oldName, newName)
+						print('old name: {} new name: {}'.format(oldName, newName))
 						break
 			if 'apical' in line:
 				splitLine = line.strip().split(' ')
@@ -71,12 +71,12 @@ def read_hoc_file(hoc_filename):
 					if 'apical' in splitStr:
 						endIndex = max(splitStr.find('}'), splitStr.find('('))
 						oldName = splitStr[:endIndex]
-						if apical_name_map.has_key(oldName):
+						if oldName in apical_name_map:
 							break
 						newName = 'apic[%d]' % apical_name_count
 						apical_name_map[oldName] = newName
 						apical_name_count += 1
-						print 'old name: %s new name: %s' % (oldName, newName)
+						print('old name: {} new name: {}'.format(oldName, newName))
 						break
 		if line and 'EOF' in line:
 			hoc_file.close()
@@ -211,6 +211,6 @@ if __name__ == '__main__':
 	if len(sys.argv) > 1:
 		hoc_file = sys.argv[1]
 	else:
-		hoc_file = raw_input('Enter .hoc filename:')
+		hoc_file = six.moves.input('Enter .hoc filename:')
 	structureCounts, soma_name_map, axon_name_map, basal_name_map, apical_name_map = read_hoc_file(hoc_file)
 	write_hoc_file(hoc_file, structureCounts, soma_name_map, axon_name_map, basal_name_map, apical_name_map)

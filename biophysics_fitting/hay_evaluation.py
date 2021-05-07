@@ -129,8 +129,8 @@ def test():
     try:
         assert(max(np.abs((y - y_new[y.index].values))) < 0.05)
     except:
-        print y
-        print y_new[y.index].values
+        print(y)
+        print(y_new[y.index].values)
         raise
 
 

@@ -7,7 +7,7 @@ def _set_value(mdb, k, value):
     mdb[k] = value
 
 def _increase_mdb_value(mdb, k, inc, __):
-    if not k in mdb.keys():
+    if not k in list(mdb.keys()):
         mdb[k] = 0
     else:
         mdb[k] = mdb[k] + inc
@@ -50,27 +50,28 @@ class RobustDaskDelayedExecution:
     
     def get_status(self):
         m = self.mdb
-        status = {k[0]: m[k] for k in m.keys() if k[1] == 'status'}
+        status = {k[0]: m[k] for k in list(m.keys()) if k[1] == 'status'}
         return status
 
     def add_delayed_to_mdb(self, d):
         mdb = self.mdb
-        if len(mdb.keys()) == 0:
+        if len(list(mdb.keys())) == 0:
             key = 0
         else:
-            key = max({int(k[0]) for k in mdb.keys()}) + 1
+            key = max({int(k[0]) for k in list(mdb.keys())}) + 1
         key = str(key)
         mdb[key, 'status'] = 'not_started'
         mdb[key, 'obj'] = d
         
     def run_mdb(self, error_started = True):
         ''
+        import six
         mdb = self.mdb
-        status = {k[0]: mdb[k] for k in mdb.keys() if k[1] == 'status'}
-        if 'started' in status.values():
+        status = {k[0]: mdb[k] for k in list(mdb.keys()) if k[1] == 'status'}
+        if 'started' in list(status.values()):
                 if error_started:
                     raise RuntimeError("Some of the simulations are already running!")
                 else:
                     warnings.warn("Some of the simulations are already running!")
-        ds = [_wrapper(mdb, k) for k, v in status.iteritems() if v == 'not_started']
+        ds = [_wrapper(mdb, k) for k, v in six.iteritems(status) if v == 'not_started']
         return ds

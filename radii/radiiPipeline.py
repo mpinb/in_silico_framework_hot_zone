@@ -34,8 +34,8 @@ def _paralellization_helper(radiiObject, amPth, imageFilePath, amOutput, postMea
     # cave: this needs to be moved to a place wherer we are aware of the x/y/z resolution!
     # Here, the default (0.092 / 0.092 / 0.5) is used, but that might change from usecase to usecase.
     
-    orig_temp = map(lambda x: (convert_point(x[0]), x[1]), orig_temp)
-    pm_temp = map(lambda x: (convert_point(x[0]), x[1]), pm_temp)
+    orig_temp = [(convert_point(x[0]), x[1]) for x in orig_temp]
+    pm_temp = [(convert_point(x[0]), x[1]) for x in pm_temp]
    
     radiiDetails["Treshold"] = radiiObject.tresholdPercentage 
     radiiDetails["Inten. orig points"] = orig_temp

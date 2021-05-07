@@ -21,7 +21,7 @@ def disable_locking_BE_CAREFUL(client):
 
 def get_seeds(mdb, max_generations = None):
     '''Returns seeds used for running simulations'''
-    seeds = [k for k in mdb.keys() if convertible_to_int(k)]
+    seeds = [k for k in list(mdb.keys()) if convertible_to_int(k)]
     if max_generations is not None:
         return sorted([s for s in seeds if len(get_generations(mdb[s])) and max(get_generations(mdb[s])) == max_generations])
     else:
@@ -29,7 +29,7 @@ def get_seeds(mdb, max_generations = None):
 
 def get_generations(mdb):
     '''Returns generations stored in mdb'''
-    return [int(k) for k in mdb.keys() if convertible_to_int(k) and int(k) > 0]
+    return [int(k) for k in list(mdb.keys()) if convertible_to_int(k) and int(k) > 0]
 
 def get_max_objective_from_pdf(pdf, objectives):
     return pdf[objectives].max(axis = 1).min()
@@ -63,7 +63,7 @@ def augment_pdf(pdf, mdb_id, type_, morphology, seed, lv, gen,
         if not k in pdf.columns:
             pdf[k] = float('nan')
             pdf[k] = pdf[k].astype(dtype)
-    for k in append.keys():
+    for k in list(append.keys()):
         try:
             len(append[k])
             pdf[k] = [append[k]] * len(pdf)
@@ -100,7 +100,7 @@ def get_model_ddf_from_mdb(m, type_ = 'unspecified', morphology = 'unspecified',
     
 def get_model_ddf_from_encapsulating_mdb(mdbs, type_ = 'unspecified', add_fixed_params = True, objectives = objectives_BAC + objectives_step, return_delayeds = False):
     delayeds = []
-    for morphology in mdbs.keys():
+    for morphology in list(mdbs.keys()):
         m = mdbs[morphology]
         delayeds.extend(get_model_ddf_from_mdb(m, morphology = morphology, return_delayeds = True, add_fixed_params = add_fixed_params,
                                                objectives = objectives))
@@ -235,7 +235,8 @@ def min_max_plot(pdf, ax = None, color_marker_map = None, plot_individual_ticks 
         d = .2
         plt.plot([lv+offset,lv+offset],[s.min(), s.max()], c = color_of_stick)
         if plot_individual_ticks:
-            for i, x in s.iteritems():
+            import six
+            for i, x in six.iteritems(s):
                 if color_marker_map is None:
                     color = 'k'
                     marker = '_'
@@ -243,7 +244,7 @@ def min_max_plot(pdf, ax = None, color_marker_map = None, plot_individual_ticks 
                     color, marker = color_marker_map[i]
                 if marker is not None:
                     ax.scatter(lv, x, c = color, marker = marker, zorder = 10)
-    ax.set_xticks(range(len(pdf.columns)))
+    ax.set_xticks(list(range(len(pdf.columns))))
     _ = ax.set_xticklabels(pdf.columns, rotation=90)
 
 ########
@@ -381,16 +382,16 @@ def get_refractory_period(m, params, soma_or_apical = 'soma', delay = 2000, n_th
     while delay_upper - delay_lower >= accuracy:
         current_delay = (delay_upper + delay_lower ) / 2.
         if verbose:
-            print 'checking for delay ', current_delay
+            print('checking for delay ', current_delay)
         vt, n = _run_helper(delay = current_delay)
         if n >= n_threashold:
             delay_upper = current_delay
             if verbose:
-                print 'reducing upper delay to ', delay_upper
+                print('reducing upper delay to ', delay_upper)
         else:
             delay_lower = current_delay
             if verbose:
-                print 'increasing lower delay to ', delay_lower
+                print('increasing lower delay to ', delay_lower)
     return delay_lower, delay_upper, delay_lower * 0.5 + delay_upper * 0.5
             
     
@@ -434,7 +435,7 @@ class CurrentAnalysis:
         self.segID = segID
         self.seg = [seg for seg in sec][segID]
         if rangeVars is None:
-            self.rangeVars = cell.soma.recordVars.keys()
+            self.rangeVars = list(cell.soma.recordVars.keys())
         else:
             self.rangeVars = rangeVars
         self.colormap = colormap
@@ -562,8 +563,9 @@ def _param_modify_function_put_recording_sites_for_range_var_recording(params):
     params['record_range_vars.distances'] = distances 
     return params
 
+import six
 def return_recorded_range_vars(cell, params = None):
-    return {kk: {k:I.np.array(v) for k, v in range_vars_dict.iteritems()} for kk, range_vars_dict in cell.range_vars_dict.iteritems()}
+    return {kk: {k:I.np.array(v) for k, v in six.iteritems(range_vars_dict)} for kk, range_vars_dict in six.iteritems(cell.range_vars_dict)}
 
 def modify_simulator_to_record_apical_dendrite_conductances(simulator):
     s = simulator
@@ -573,7 +575,7 @@ def modify_simulator_to_record_apical_dendrite_conductances(simulator):
         s.setup.cell_modify_funs.append(['record_range_vars', fun_setup_current_recording])
         keys = [k[0] for k in s.setup.stim_response_measure_funs]
         for k in keys:
-            print k
+            print(k)
             prefix = k.split('.')[0]
             s.setup.stim_response_measure_funs.append([prefix + '.range_vars', return_recorded_range_vars])
     return s
@@ -607,5 +609,6 @@ def interpolate_voltage_trace(voltage_trace_):
     vList_new = [I.np.interp(t_new, t, v) for v in voltage_trace_['vList']] # I.np.interp
     return {'tVec': t_new, 'vList':vList_new}
 
+import six 
 def interpolate_voltage_traces(voltage_traces_):
-    return {k: interpolate_voltage_trace(v) for k, v in voltage_traces_.iteritems()}
+    return {k: interpolate_voltage_trace(v) for k, v in six.iteritems(voltage_traces_)}

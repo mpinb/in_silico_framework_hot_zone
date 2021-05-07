@@ -111,20 +111,20 @@ for point4D in amPoints4D:
 # it is small test to see if the amFileReader is working well enough or not
 # for this we check some sample points from the both am readers function
 # and compare them
-print(amPoints4D[0])
-print(trAmPoints4D[0])
+print((amPoints4D[0]))
+print((trAmPoints4D[0]))
 
-print(amPoints4D[10])
-print(trAmPoints4D[10])
+print((amPoints4D[10]))
+print((trAmPoints4D[10]))
 
-print(amPoints4D[1234])
-print(trAmPoints4D[1234])
-print(amPoints4D[54673])
-print(trAmPoints4D[54673])
-print(amPoints4D[11])
-print(trAmPoints4D[11])
-print(amPoints4D[56])
-print(trAmPoints4D[56])
+print((amPoints4D[1234]))
+print((trAmPoints4D[1234]))
+print((amPoints4D[54673]))
+print((trAmPoints4D[54673]))
+print((amPoints4D[11]))
+print((trAmPoints4D[11]))
+print((amPoints4D[56]))
+print((trAmPoints4D[56]))
 
 # In the below we read the hoc file again this time completely,
 # i.e. without just taking two points from each sections
@@ -137,26 +137,26 @@ for el in hocPointsComplete:
 trAmPoints4DList = trAmPoints4D
 # a small test to see if the previous transofrmation on trAmPoints4DList
 # does not change the 4th coloumn which contains the radii
-print(trAmPoints4DList[0])
-print(amPoints4D[0])
+print((trAmPoints4DList[0]))
+print((amPoints4D[0]))
 
-print(trAmPoints4DList[2])
-print(amPoints4D[2])
+print((trAmPoints4DList[2]))
+print((amPoints4D[2]))
 
-print(trAmPoints4DList[100])
-print(amPoints4D[100])
+print((trAmPoints4DList[100]))
+print((amPoints4D[100]))
 
-print(trAmPoints4DList[10])
-print(amPoints4D[10])
+print((trAmPoints4DList[10]))
+print((amPoints4D[10]))
 
-print(trAmPoints4DList[27685])
-print(amPoints4D[27685])
+print((trAmPoints4DList[27685]))
+print((amPoints4D[27685]))
 
-print(trAmPoints4DList[17892])
-print(amPoints4D[17892])
+print((trAmPoints4DList[17892]))
+print((amPoints4D[17892]))
 
-print(trAmPoints4DList[1293])
-print(amPoints4D[1293])
+print((trAmPoints4DList[1293]))
+print((amPoints4D[1293]))
 
 # In the below we are trying to find the closest points between transformed
 # am points and hoc points
@@ -164,7 +164,7 @@ print("In the process of finding pairs in between hoc file and the transoformed 
 startTime = time.time()
 pairs = radi.addRadii.findPairs(trAmPoints4DList, hocSet)
 endTime = time.time()
-print(endTime - startTime)
+print((endTime - startTime))
 
 
 # Little Test of the function above
@@ -191,17 +191,17 @@ initialAmPointsWithRad2 = radi.spacialGraph.getSpatialGraphPoints(amFile)
 
 
 # Little Test of the reading functions again
-print(initialAmPointsWithRad[0])
-print(initialAmPointsWithRad2[0])
+print((initialAmPointsWithRad[0]))
+print((initialAmPointsWithRad2[0]))
 print("---------")
-print(initialAmPointsWithRad[1])
-print(initialAmPointsWithRad2[1])
+print((initialAmPointsWithRad[1]))
+print((initialAmPointsWithRad2[1]))
 print("---------")
-print(initialAmPointsWithRad[42])
-print(initialAmPointsWithRad2[42])
+print((initialAmPointsWithRad[42]))
+print((initialAmPointsWithRad2[42]))
 print("---------")
-print(initialAmPointsWithRad[len(initialAmPointsWithRad)-1])
-print(initialAmPointsWithRad2[len(initialAmPointsWithRad2)-1])
+print((initialAmPointsWithRad[len(initialAmPointsWithRad)-1]))
+print((initialAmPointsWithRad2[len(initialAmPointsWithRad2)-1]))
 
 startTime = time.time()
 hocWithRad = []
@@ -243,24 +243,24 @@ for pair in pairs:
     newHPoint = []
 
 endTime = time.time()
-print(endTime - startTime)
+print((endTime - startTime))
 
 
 # test between to different hoc file arrays derived from above functions
-print(hocSet[0])
-print(hocWithRad[0])
+print((hocSet[0]))
+print((hocWithRad[0]))
 print("---------")
-print(hocSet[1])
-print(hocWithRad[1])
+print((hocSet[1]))
+print((hocWithRad[1]))
 print("---------")
-print(hocSet[42])
-print(hocWithRad[42])
+print((hocSet[42]))
+print((hocWithRad[42]))
 print("---------")
-print(hocSet[13099])
-print(hocWithRad[13099])
+print((hocSet[13099]))
+print((hocWithRad[13099]))
 print("---------")
-print(hocSet[13100])
-print(hocWithRad[13100])
+print((hocSet[13100]))
+print((hocWithRad[13100]))
 print("---------")
 
 # In the below we are writing the final hoc file with its radii
@@ -268,7 +268,7 @@ print("writing the final result in the output hocFile")
 startTime = time.time()
 tr.write.hocFile(hocFile, hocFileOutput, hocWithRad)
 endTime = time.time()
-print(endTime - startTime)
+print((endTime - startTime))
 
 #These are sample code to write landmark files from different sets
 #print(list(newPoints[3]))

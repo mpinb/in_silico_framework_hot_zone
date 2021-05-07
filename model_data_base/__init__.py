@@ -1,1 +1,1 @@
-from model_data_base import ModelDataBase
+from .model_data_base import ModelDataBase

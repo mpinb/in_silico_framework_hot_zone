@@ -40,10 +40,10 @@ def convolve_matrix_with_kernel(X, kernel):
 #     return lda_values
 
 def data2Convolutions(X_dict, kernel_dict):
-    return {name: convolve_matrix_with_kernel(X_dict[name], kernel_dict[name]) for name in kernel_dict.keys()}
+    return {name: convolve_matrix_with_kernel(X_dict[name], kernel_dict[name]) for name in list(kernel_dict.keys())}
 
 def convolutions2weightedNetInputs(convolutions_dict, combine_fun = sum):
-    return combine_fun([convolutions_dict[name] for name in convolutions_dict.keys()])
+    return combine_fun([convolutions_dict[name] for name in list(convolutions_dict.keys())])
 
 def weightedNetInput2spikingProbabilities(weighted_net_input, nonlinearity, LUT_resolution = 1):
     weighted_net_input = np.round(weighted_net_input/LUT_resolution)*LUT_resolution

@@ -18,7 +18,7 @@ from model_data_base.model_data_base import get_progress_bar_function,\
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format as read_sa
 from model_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format as read_ca
 from model_data_base.analyze.spike_detection import spike_detection
-from model_data_base.analyze.burst_detection import burst_detection
+# from model_data_base.analyze.burst_detection import burst_detection
 from model_data_base.IO.LoaderDumper import dask_to_msgpack
 from model_data_base.IO.LoaderDumper import get_dumper_string_by_dumper_module  
 from model_data_base.utils import mkdtemp
@@ -263,7 +263,7 @@ def get_file(self, suffix):
             return os.path.join(self, l[0])
 
 def generate_param_file_hashes(simresult_path, sim_trail_index, get = dask.multiprocessing.get):
-    print "find unique parameterfiles"
+    print("find unique parameterfiles")
     def fun(x):
         sim_trail_folder = os.path.dirname(x.sim_trail_index)
         identifier = os.path.basename(sim_trail_folder).split('_')[-1]
@@ -326,7 +326,7 @@ def network_param_to_mdbpath(network):
     flag = flag and flag_    
     network['NMODL_mechanisms']['synapses'], flag_ = create_mdb_path_print(network['NMODL_mechanisms']['synapses'])
     flag = flag and flag_    
-    for k in network['network'].keys():
+    for k in list(network['network'].keys()):
         if k == 'network_modify_functions':
             continue
         network['network'][k]['synapses']['connectionFile'], flag_ = create_mdb_path_print(network['network'][k]['synapses']['connectionFile'])
@@ -352,7 +352,7 @@ def parallel_copy_helper(df, transform_fun = None):
 #             param.save(value.to_)
 
 def write_param_files_to_folder(df, folder, path_column, hash_column, transform_fun = None):
-    print "move parameterfiles"
+    print("move parameterfiles")
     df = df.drop_duplicates(subset = hash_column)
     df2 = pd.DataFrame()
     df2['from_'] = df[path_column]
@@ -365,13 +365,13 @@ def write_param_files_to_folder(df, folder, path_column, hash_column, transform_
 ###########################################################################################
 def _build_core(mdb, repartition = None):
     assert(repartition is not None)
-    print '---building data base core---'
+    print('---building data base core---')
 
     print('generate filelist ...')
     #mdb['file_list'] = make_filelist(mdb['simresult_path'], 'vm_all_traces.csv')
     
-    if 'filelist' in mdb.keys():
-        print 'Skip generating filelist, loading from database'
+    if 'filelist' in list(mdb.keys()):
+        print('Skip generating filelist, loading from database')
         filelist = mdb['filelist']
     else:
         try:
@@ -387,15 +387,15 @@ def _build_core(mdb, repartition = None):
     mdb.setitem('voltage_traces', vt, dumper = to_cloudpickle)          
     
     print('generate unambigous indices ...')      
-    if 'sim_trail_index' in mdb.keys():
-        print 'Skip generating unambigous, loading from database'
+    if 'sim_trail_index' in list(mdb.keys()):
+        print('Skip generating unambigous, loading from database')
     else:
         mdb['sim_trail_index'] = mdb['voltage_traces'].index.compute()
 
     print('generate metadata ...')  
     mdb.setitem('metadata', create_metadata(mdb), dumper = pandas_to_msgpack)
     
-    print 'add divisions to voltage traces dataframe'
+    print('add divisions to voltage traces dataframe')
     vt.divisions =  get_voltage_traces_divisions_by_metadata(mdb['metadata'], repartition = repartition)
     mdb.setitem('voltage_traces', vt, dumper = to_cloudpickle)   
 
@@ -405,7 +405,7 @@ def _build_synapse_activation(mdb, repartition = False):
         max_commas = get_max_commas(paths) + 1
         #print max_commas
         print('generate dataframe')
-        path_sti_tuples = zip(paths, list(mdb['sim_trail_index']))
+        path_sti_tuples = list(zip(paths, list(mdb['sim_trail_index'])))
         if repartition and len(paths) > 10000:
             path_sti_tuples = utils.chunkIt(path_sti_tuples, 5000)
             delayeds = [file_reader_fun(zip(*x)[0], zip(*x)[1], max_commas) for x in path_sti_tuples]
@@ -423,18 +423,18 @@ def _build_synapse_activation(mdb, repartition = False):
         
     m = mdb['metadata'].reset_index()
     if 'synapses_file_name' in m.columns:
-        print '---building synapse activation dataframe---'
+        print('---building synapse activation dataframe---')
         paths = list(simresult_path + '/' + m.path + '/' + m.synapses_file_name)
         template('synapse_activation', paths, dask.delayed(read_sa, traverse = False), to_cloudpickle)
     if 'cells_file_name' in m.columns:
-        print '---building cell activation dataframe---'
+        print('---building cell activation dataframe---')
         paths = list(simresult_path + '/' + m.path + '/' + m.cells_file_name)    
         template('cell_activation', paths, dask.delayed(read_ca, traverse = False), to_cloudpickle)    
 
 def _get_rec_site_managers(mdb):
     param_files = glob.glob(os.path.join(mdb['parameterfiles_cell_folder'],'*'))
     param_files = [p for p in param_files if not p.endswith('Loader.pickle')]
-    print len(param_files)
+    print(len(param_files))
     rec_sites = []
     for param_file in param_files:
         neuronParameters = scp.build_parameters(param_file)
@@ -461,28 +461,28 @@ def _get_rec_site_managers(mdb):
 
 def _build_dendritic_voltage_traces(mdb, suffix_dict = None, repartition = None):
     assert(repartition is not None)
-    print '---building dendritic voltage traces dataframes---'
+    print('---building dendritic voltage traces dataframes---')
     
     if suffix_dict is None:
         suffix_dict = _get_rec_site_managers(mdb)
     
     out = load_dendritic_voltage_traces(mdb, suffix_dict, repartition = repartition)
-    if not 'dendritic_recordings' in mdb.keys():
+    if not 'dendritic_recordings' in list(mdb.keys()):
         mdb.create_sub_mdb('dendritic_recordings')
     
     sub_mdb = mdb['dendritic_recordings']
     
-    for recSiteLabel in suffix_dict.keys():
+    for recSiteLabel in list(suffix_dict.keys()):
         sub_mdb.setitem(recSiteLabel, out[recSiteLabel], dumper = to_cloudpickle)
     #mdb.setitem('dendritic_voltage_traces_keys', out.keys(), dumper = to_cloudpickle)
     
 def _build_param_files(mdb, get = None):
-    print '---moving parameter files---'    
+    print('---moving parameter files---')    
     df = pd.concat(generate_param_file_hashes(mdb['simresult_path'], mdb['sim_trail_index']).compute(get = get))
     df.set_index('sim_trail_index', inplace = True)
-    if 'parameterfiles_cell_folder' in mdb.keys():
+    if 'parameterfiles_cell_folder' in list(mdb.keys()):
         del mdb['parameterfiles_cell_folder']
-    if 'parameterfiles_network_folder' in mdb.keys():
+    if 'parameterfiles_network_folder' in list(mdb.keys()):
         del mdb['parameterfiles_network_folder']
     write_param_files_to_folder(df, \
                                 mdb.create_managed_folder('parameterfiles_cell_folder'), \
@@ -523,33 +523,33 @@ def init(mdb, simresult_path,  \
     if rewrite_in_optimized_format:
         assert(client is not None)
         get = client.get
-    get = compatibility.multiprocessing_scheduler if get is None else get
-    with dask.set_options(get = get):
-        #with get_progress_bar_function()(): 
-        mdb['simresult_path'] = simresult_path  
-        if core:
-            _build_core(mdb, repartition = repartition)
-            if rewrite_in_optimized_format:
-                optimize(mdb, select = ['voltage_traces'], repartition = False, get = get, client = client)
-        if parameterfiles: _build_param_files(mdb, get = get)                          
-        if synapse_activation: 
-            _build_synapse_activation(mdb, repartition = repartition)
-            if rewrite_in_optimized_format:
-                optimize(mdb, select = ['cell_activation', 'synapse_activation'], repartition = False, get = get, client = client)
-        if dendritic_voltage_traces: 
-            _build_dendritic_voltage_traces(mdb, repartition = repartition)
-            if rewrite_in_optimized_format:
-                optimize(mdb['dendritic_recordings'], select = mdb['dendritic_recordings'].keys(), repartition = False, get = get, client = client)
-            if dendritic_spike_times:
-                m = mdb.create_sub_mdb('dendritic_spike_times')
-                for kk in mdb['dendritic_recordings'].keys():
-                    vt = mdb['dendritic_recordings'][kk]
-                    st = spike_detection(vt, threshold = dendritic_spike_times_threshold)
-                    m.setitem(kk+'_'+str(dendritic_spike_times_threshold), st, dumper = pandas_to_msgpack)                             
-        if spike_times: 
-            print "---spike times---"
-            vt = mdb['voltage_traces']
-            mdb.setitem('spike_times', spike_detection(vt), dumper = pandas_to_msgpack)                                        
+#     get = compatibility.multiprocessing_scheduler if get is None else get
+#     with dask.set_options(get = get):
+    #with get_progress_bar_function()(): 
+    mdb['simresult_path'] = simresult_path  
+    if core:
+        _build_core(mdb, repartition = repartition)
+        if rewrite_in_optimized_format:
+            optimize(mdb, select = ['voltage_traces'], repartition = False, get = get, client = client) 
+    if parameterfiles: _build_param_files(mdb, get = get)                          
+    if synapse_activation: 
+        _build_synapse_activation(mdb, repartition = repartition)
+        if rewrite_in_optimized_format:
+            optimize(mdb, select = ['cell_activation', 'synapse_activation'], repartition = False, get = get, client = client)
+    if dendritic_voltage_traces: 
+        _build_dendritic_voltage_traces(mdb, repartition = repartition)
+        if rewrite_in_optimized_format:
+            optimize(mdb['dendritic_recordings'], select = list(mdb['dendritic_recordings'].keys()), repartition = False, get = get, client = client) 
+        if dendritic_spike_times:
+            m = mdb.create_sub_mdb('dendritic_spike_times')
+            for kk in list(mdb['dendritic_recordings'].keys()):
+                vt = mdb['dendritic_recordings'][kk]
+                st = spike_detection(vt, threshold = dendritic_spike_times_threshold)
+                m.setitem(kk+'_'+str(dendritic_spike_times_threshold), st, dumper = pandas_to_msgpack)                             
+    if spike_times: 
+        print("---spike times---")
+        vt = mdb['voltage_traces']
+        mdb.setitem('spike_times', spike_detection(vt), dumper = pandas_to_msgpack)                                        
     print('Initialization succesful.') 
         
 def _get_dumper(value):
@@ -586,22 +586,22 @@ def optimize(mdb, dumper = None, select = None, get = None, repartition = True, 
     
     get: scheduler for task execution. If None, compatibility.multiprocessing_scheduler is used.
     '''
-    keys = mdb.keys()
+    keys = list(mdb.keys())
     keys_for_rewrite = select if select is not None else ['synapse_activation', \
                                                           'cell_activation', \
                                                           'voltage_traces', \
                                                           'dendritic_recordings']         
-    for key in mdb.keys():
+    for key in list(mdb.keys()):
         if not key in keys_for_rewrite:
             continue
         else:                    
             value = mdb[key]
             if isinstance(value, ModelDataBase):
-                optimize(value, select = value.keys(), get = get, client = client)
+                optimize(value, select = list(value.keys()), get = get, client = client)
             else:
                 dumper = _get_dumper(value)
-                print 'optimizing {} using dumper {}'.format(str(key), \
-                                             get_dumper_string_by_dumper_module(dumper))
+                print('optimizing {} using dumper {}'.format(str(key), \
+                                             get_dumper_string_by_dumper_module(dumper)))
                 if isinstance(value, dd.DataFrame):
                     mdb.setitem(key, value, dumper = dumper, get = get, repartition = repartition, client = client)
                 else:

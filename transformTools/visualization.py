@@ -20,7 +20,7 @@ def readPoints(pFile):
         lines = amLand.readlines()
         for line in lines:
             matches = re.findall('-?\d+\.\d+', line)
-            point = map(float, matches)
+            point = list(map(float, matches))
             points.append(point)
     return points
 

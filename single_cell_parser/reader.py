@@ -5,7 +5,7 @@ Created on Mar 8, 2012
 '''
 
 import numpy as np
-import scalar_field
+from . import scalar_field
 from model_data_base.mdbopen import mdbopen
 
 class Edge(object):
@@ -34,7 +34,7 @@ def read_hoc_file(fname=''):
         raise IOError('Input file is not a .hoc file!')
     
     with mdbopen(fname, 'r') as neuronFile:
-        print "Reading hoc file", fname
+        print("Reading hoc file", fname)
 #        cell = co.Cell()
 #        simply store list of edges
 #        cell is parsed in CellParser
@@ -229,7 +229,7 @@ def read_synapse_realization(fname):
             synType = splitLine[0]
             sectionID = int(splitLine[1])
             sectionx = float(splitLine[2])
-            if not synapses.has_key(synType):
+            if synType not in synapses:
                 synapses[synType] = [(sectionID, sectionx)]
             else:
                 synapses[synType].append((sectionID, sectionx))
@@ -251,7 +251,7 @@ def read_pruned_synapse_realization(fname):
             sectionID = int(splitLine[1])
             sectionx = float(splitLine[2])
             pruned = int(splitLine[3])
-            if not synapses.has_key(synType):
+            if synType not in synapses:
                 synapses[synType] = [(sectionID, sectionx, pruned)]
             else:
                 synapses[synType].append((sectionID, sectionx, pruned))
@@ -285,7 +285,7 @@ def read_functional_realization_map(fname):
             cellType = splitLine[0]
             cellID = int(splitLine[1])
             synID = int(splitLine[2])
-            if not connections.has_key(cellType):
+            if cellType not in connections:
                 connections[cellType] = [(cellType, cellID, synID)]
             else:
                 connections[cellType].append((cellType, cellID, synID))
@@ -336,7 +336,7 @@ def read_synapse_activation_file(fname):
             for tStr in synTimesStr:
                 if tStr:
                     synTimes.append(float(tStr))
-            if not synapses.has_key(cellType):
+            if cellType not in synapses:
                 synapses[cellType] = [(synID, secID, ptID, synTimes, somaDist)]
             else:
                 synapses[cellType].append((synID, secID, ptID, synTimes, somaDist))
@@ -371,7 +371,7 @@ def read_complete_synapse_activation_file(fname):
             for tStr in synTimesStr:
                 if tStr:
                     synTimes.append(float(tStr))
-            if not synapses.has_key(cellType):
+            if cellType not in synapses:
                 synapses[cellType] = [(synID, somaDist, secID, ptID, structure, synTimes)]
             else:
                 synapses[cellType].append((synID, somaDist, secID, ptID, structure, synTimes))
@@ -403,7 +403,7 @@ def read_spike_times_file(fname):
                 for tStr in spikeTimesStr:
                     if tStr:
                         tmpTimes.append(float(tStr))
-            if not spikeTimes.has_key(trial):
+            if trial not in spikeTimes:
                 spikeTimes[trial] = tuple(tmpTimes)
             else:
                 errstr = 'Error reading spike times file: duplicate trial number (trial %d)' % trial
@@ -444,10 +444,10 @@ def read_synapse_weight_file(fname):
             for gStr in synWeightsStr:
                 if gStr:
                     synWeightList.append(float(gStr))
-            if not synLocations.has_key(cellType):
+            if cellType not in synLocations:
                 synLocations[cellType] = {}
             synLocations[cellType][synID] = (secID, ptID)
-            if not synWeights.has_key(cellType):
+            if cellType not in synWeights:
                 synWeights[cellType] = []
             if len(synWeights[cellType]) < synID + 1:
                 synWeights[cellType].append({})
@@ -490,4 +490,4 @@ if __name__ == '__main__':
     for i in range(1000):
         testAmFname = 'SynapseCount.14678.am'
         read_scalar_field(testAmFname)
-    print 'Done!'
+    print('Done!')

@@ -26,17 +26,17 @@ def get_test_Rm():
     return Rm
 
 class Tests(unittest.TestCase): 
-    def test_statistical_ReducedLdaModel_inference(self):
+    def test_statistical_ReducedLdaModel_inference(self): 
         '''compare model infered from test data to expectancy'''
         Rm = get_test_Rm()
         Rm.plot() # make sure this can be executed
          
-        assert(200 < np.array(Rm.lda_values).mean() < 400)
+        assert(200 < np.array(Rm.lda_values).mean() < 400)##!!
         assert(Rm.lookup_series[0][150] == 0)
         assert(Rm.lookup_series[0][500] == 1)
         assert(0.1 < Rm.lookup_series[0][350] < 0.9)
-        mean1, std1 = Rm.kernel_dict[0].values()[0][:25].mean(), Rm.kernel_dict[0].values()[0][:25].std()
-        mean2, std2 = Rm.kernel_dict[0].values()[0][25:].mean(), Rm.kernel_dict[0].values()[0][25:].std()
+        mean1, std1 = list(Rm.kernel_dict[0].values())[0][:25].mean(), list(Rm.kernel_dict[0].values())[0][:25].std()
+        mean2, std2 = list(Rm.kernel_dict[0].values())[0][25:].mean(), list(Rm.kernel_dict[0].values())[0][25:].std()
         np.testing.assert_array_less(max([std1,std2]) / min([std1,std2]), 3)
         np.testing.assert_array_less(3, abs(mean1-mean2) / max([std1,std2]))
         #import Interface as I
@@ -70,7 +70,7 @@ class Tests(unittest.TestCase):
         res = Rm.apply_static({'test_synapse_activation': X-10000}, model_number = mn)
         assert(res.p_spike.values.mean() == 0)
         res = Rm.apply_static({'test_synapse_activation': X+10000}, model_number = mn)
-        assert(res.p_spike.values.mean() == 1)
+        assert(res.p_spike.values.mean() == 1)##!!
         
     def test_statistical_ReducedLdaModel_caching(self):
         '''compare model infered from test data to expectancy'''

@@ -25,7 +25,7 @@ s13_r = amOutputPath + 's13-r.am'
 debug_s13_r = amOutputPath + 'debug-s13-r.am'
 s13_points = radi.spacialGraph.getSpatialGraphPoints(s13_data)
 
-s13_points = list(map(lambda x: map(lambda y: int(y/0.092), x), s13_points))
+s13_points = list([[int(y/0.092) for y in x] for x in s13_points])
 
 s13_tif = tifDataPath + 'S13_max_z_projection.tif'
 

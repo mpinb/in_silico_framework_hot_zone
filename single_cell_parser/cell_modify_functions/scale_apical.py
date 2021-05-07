@@ -21,5 +21,5 @@ def scale_apical(cell, scale = None):
                 oldDiam = sec.diamList[i]
                 newDiam = scale*oldDiam
                 h.pt3dchange(i, newDiam, sec=sec)
-    print 'Scaled %d apical sections...' % scaleCount
+    print('Scaled {:d} apical sections...'.format(scaleCount))
     return cell

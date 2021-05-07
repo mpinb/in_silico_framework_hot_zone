@@ -1,4 +1,4 @@
-import dask_to_categorized_msgpack
+from . import dask_to_categorized_msgpack
 
 Loader = dask_to_categorized_msgpack.Loader
 check = dask_to_categorized_msgpack.check

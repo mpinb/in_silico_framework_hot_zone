@@ -37,7 +37,7 @@ def scale_apical(cell):
 #                d = sec.diamList[i]
 #                dummy = h.pt3dadd(x, y, z, d, sec=sec)
     
-    print 'Scaled %d apical sections...' % scaleCount
+    print('Scaled {:d} apical sections...'.format(scaleCount))
     
 class defaultValues:
     name = 'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center'

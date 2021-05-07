@@ -21,7 +21,7 @@ def robust_int(x):
 
 def get_max_generation(mdb_run):
     '''returns the index of the next iteration'''
-    keys = [robust_int(x) for x in mdb_run.keys() if robust_int(x) is not None]
+    keys = [robust_int(x) for x in list(mdb_run.keys()) if robust_int(x) is not None]
     if not keys:
         current_key = -1
     else:
@@ -36,11 +36,11 @@ def save_result(mdb_run, features, objectives):
 
 def setup_mdb_run(mdb_setup, run):
     '''mdb_setup contains a sub mdb for each run of the full optimization. This sub mdb is created here'''
-    if not str(run) in mdb_setup.keys():
+    if not str(run) in list(mdb_setup.keys()):
         mdb_setup.create_sub_mdb(str(run))
     mdb_run = mdb_setup[str(run)]
     mdb_run['0'] = ''
-    if not 'checkpoint' in mdb_run.keys():
+    if not 'checkpoint' in list(mdb_run.keys()):
         mdb_run.create_managed_folder('checkpoint')  
     return mdb_run
          
@@ -73,28 +73,30 @@ def get_mymap(mdb_setup, mdb_run, c):
     params = mdb_setup['params'].index
     objective_fun = get_objective_function(mdb_setup)
     def mymap(func, iterable):
-        params_list = map(list, iterable)
+        params_list = list(map(list, iterable))
         params_pd = I.pd.DataFrame(params_list, columns = params)
-        futures = c.map(objective_fun, params_list)
-        try:
-                features_dicts = c.gather(futures)
-        except (I.distributed.client.CancelledError, I.distributed.scheduler.KilledWorker):
-            print 'Futures have been canceled. Waiting for 3 Minutes, then reschedule.'
-            del futures
-            time.sleep(3*60)
-            print 'Rescheduling ...'
-            return mymap(func, iterable)
-        except:
-            I.distributed.wait(futures)
-            for lv, f in enumerate(futures):
-                if not f.status == 'finished':
-                    errstr = 'Problem with future number {}\n'.format(lv)
-                    errstr += 'Exception: {}:{}\n'.format(type(f.exception()), f.exception())
-                    errstr += 'Parameters are: {}\n'.format(dict(params_pd.iloc[lv]))
-                    raise ValueError(errstr)
+#         futures = c.map(objective_fun, params_list)
+#         try:
+#                 features_dicts = c.gather(futures)
+#         except (I.distributed.client.CancelledError, I.distributed.scheduler.KilledWorker):
+#             print('Futures have been canceled. Waiting for 3 Minutes, then reschedule.')
+#             del futures
+#             time.sleep(3*60)
+#             print('Rescheduling ...')
+#             return mymap(func, iterable)
+#         except:
+#             I.distributed.wait(futures)
+#             for lv, f in enumerate(futures):
+#                 if not f.status == 'finished':
+#                     errstr = 'Problem with future number {}\n'.format(lv)
+#                     errstr += 'Exception: {}:{}\n'.format(type(f.exception()), f.exception())
+#                     errstr += 'Parameters are: {}\n'.format(dict(params_pd.iloc[lv]))
+#                     raise ValueError(errstr)
+        features_dicts = map(objective_fun, params_list) # temp rieke
+#         features_dicts = c.gather(futures) #temp rieke
         features_pd = I.pd.DataFrame(features_dicts)
         save_result(mdb_run, params_pd, features_pd)
-        combined_objectives_dict = map(combiner.combine, features_dicts)
+        combined_objectives_dict = list(map(combiner.combine, features_dicts))
         combined_objectives_lists = [[d[n] for n in combiner.setup.names] 
                                      for d in combined_objectives_dict]
         return numpy.array(combined_objectives_lists)
@@ -238,7 +240,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
         logbook = cp["logbook"]
         history = cp["history"]
         random.setstate(cp["rndstate"])
-        print 'continuing optimization from generation {}'.format(start_gen)
+        print('continuing optimization from generation {}'.format(start_gen))
     else:
         # Start a new evolution
         start_gen = 1
@@ -323,7 +325,7 @@ def run(self,
     if pop is None:
         pop = self.toolbox.population(n=offspring_size)
     else:
-        print "initialized with population of size %s" % len(pop)
+        print("initialized with population of size {:s}".format(len(pop)))
         assert (continue_cp == False)
 
     ## commented out by arco
@@ -409,7 +411,7 @@ def start_run(mdb_setup, n, pop = None, client = None, continue_cp = False,
         # if we want to continue a preexisting optimization, no population may be provided
         # also check, whether the optimization really exists
         assert(pop is None)
-        if not str(n) in mdb_setup.keys():
+        if not str(n) in list(mdb_setup.keys()):
             raise ValueError('run {} is not in mdb_setup. Nothing to continue'.format(n))
     if continue_cp == False:
         # if we want to start a new optimization, ckeck that there is not an old optimizatation
@@ -418,13 +420,13 @@ def start_run(mdb_setup, n, pop = None, client = None, continue_cp = False,
             raise ValueError('for n = {}, an optimization is already in mdb_setup. Either choose continue_cp=True or delete the optimization.'.format(n))
         if pop is not None:
             # if population is provided, make sure it fits the number of objectives of the current optimization
-            print("recreating provided population with a number of objectives of {}".format(len_objectives))
+            print(("recreating provided population with a number of objectives of {}".format(len_objectives)))
             pop = get_population_with_different_n_objectives(pop, len_objectives)
         else: 
             # else generate a new population
             pop = opt.toolbox.population(n=offspring_size)    
     
-    print('starting multi objective optimization with {} objectives and {} parameters'.format(len_objectives, len(parameter_df)))    
+    print(('starting multi objective optimization with {} objectives and {} parameters'.format(len_objectives, len(parameter_df))))    
     
     pop = eaAlphaMuPlusLambdaCheckpoint(
         pop,

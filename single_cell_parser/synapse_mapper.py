@@ -53,7 +53,7 @@ class SynapseMapper(object):
         '''
         sections = self.cell.sections
         synDist = self.synDist
-        for synType in synDist.keys():
+        for synType in list(synDist.keys()):
             for syn in synDist[synType]:
                 sectionID, sectionx = syn
 #                find pt ID of point closest to sectionx
@@ -78,7 +78,7 @@ class SynapseMapper(object):
         '''
         sections = self.cell.sections
         synDist = self.synDist
-        for synType in synDist.keys():
+        for synType in list(synDist.keys()):
             for syn in synDist[synType]:
                 sectionID, sectionx, pruned = syn
 #                find pt ID of point closest to sectionx
@@ -150,7 +150,7 @@ class SynapseMapper(object):
         '''
         mesh = self.synDist.mesh
         self._create_voxel_edge_map()
-        for vxIndex in self.voxelEdgeMap.keys():
+        for vxIndex in list(self.voxelEdgeMap.keys()):
             if self.voxelEdgeMap[vxIndex]:
                 nrOfSyn = mesh[vxIndex]
                 if self.isDensity:

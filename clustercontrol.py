@@ -4,9 +4,9 @@ import warnings
 
 def run_command_remotely(server, command, print_command = True, print_output = True):
     command = '''ssh -tt {} << 'ENDSSH' \n {} \n exit \n ENDSSH'''.format(server, command)
-    if print_command: print command
+    if print_command: print(command)
     out = os.popen(command).read()
-    if print_output: print out
+    if print_output: print(out)
 
 def list_all_screens():
     for server in {'katz', 'nernst', 'rall', 'cajal', 'hodgkin', 'golgi'}:
@@ -42,11 +42,11 @@ def start_cluster(servers = 'all', nice = 8, nprocs_update = {}, tmpdir = '/tmp/
     elif servers == 'new': servers = ['rall', 'nernst', 'katz']
     elif servers == 'old': servers = ['cajal', 'golgi', 'hodgkin']
     
-    print 'starting scheduler'
+    print('starting scheduler')
     command = 'source /nas1/Data_arco/.bashrc; source_isf; screen -S scheduler_{suffix} -dm bash -c "source /nas1/Data_arco/.bashrc; source_isf; dask-scheduler --port {port} --bokeh-port {bokeh_port}"'.format(suffix = suffix, port = str(port), bokeh_port = str(port+1))
     run_command_remotely(scheduler, command)
     
-    print 'starting workers'
+    print('starting workers')
     template = 'source /nas1/Data_arco/.bashrc; source_isf; screen -S workers_{suffix} -dm bash -c "source /nas1/Data_arco/.bashrc \n source_isf; nice -n {nice} dask-worker --nthreads 1  --nprocs {nprocs} {ip}:{port} --local-directory {tmpdir} --memory-limit=100e9"'
     for server in servers:
         command = template.format(suffix = suffix, nice = nice, nprocs = n_procs[server], ip = '10.40.130.'+ip_lookup[scheduler], port = port, tmpdir = tmpdir)
@@ -54,7 +54,8 @@ def start_cluster(servers = 'all', nice = 8, nprocs_update = {}, tmpdir = '/tmp/
 
 import cloudpickle
 def cache(function):
-    import cPickle, hashlib
+    from six.moves import cPickle
+    import hashlib
     memo = {}
     def get_key(*args, **kwargs):
         try:
@@ -99,6 +100,6 @@ try:
             #    dask_scheduler.extensions['stealing']._pc.stop()
             #c.run_on_scheduler(switch_of_work_stealing)
         return c
-    print "setting up local multiprocessing framework ... done"
+    print("setting up local multiprocessing framework ... done")
 except ImportError:
     pass        

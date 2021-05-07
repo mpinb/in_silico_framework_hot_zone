@@ -12,9 +12,9 @@ import warnings
 from neuron import h
 import numpy as np
 import math
-import reader
-from cell import PySection, Cell
-import cell_modify_functions
+from . import reader
+from .cell import PySection, Cell
+from . import cell_modify_functions
 
 class CellParser(object):
     '''
@@ -74,10 +74,10 @@ class CellParser(object):
         
         #        add dendritic spines (Rieke)
         try:
-            if 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
+            if 'rieke_spines' in list(parameters.spatialgraph_modify_functions.keys()):
                 self.rieke_spines(parameters)
             else:
-                print "No spines are being added..."
+                print("No spines are being added...")
         except AttributeError:
             pass
         
@@ -95,7 +95,7 @@ class CellParser(object):
                 sec.parent = sr.parent
                 if sec.parent.label == 'Soma':
                     branchRoots.append(sec)
-            if not self.cell.structures.has_key(sec.label):
+            if sec.label not in self.cell.structures:
                 self.cell.structures[sec.label] = [sec]
             else:
                 self.cell.structures[sec.label].append(sec)
@@ -104,7 +104,7 @@ class CellParser(object):
         self.cell.tree = h.SectionList()
         self.cell.tree.wholetree(sec=self.cell.soma)
         for root in branchRoots:
-            if not self.cell.branches.has_key(root.label):
+            if root.label not in self.cell.branches:
                 branch = h.SectionList()
                 branch.subtree(sec=root)
                 self.cell.branches[root.label] = [branch]
@@ -133,7 +133,7 @@ class CellParser(object):
         neuron from the parameter file.
         This is the preferred method for setting up biophysics.
         '''
-        for label in parameters.keys():
+        for label in list(parameters.keys()):
             if label == 'filename':
                 continue
             if label == 'cell_modify_functions':
@@ -143,14 +143,14 @@ class CellParser(object):
             #if not 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
             #    if label == 'SpineHead' or label == 'SpineNeck':
             #        continue
-            print '    Adding membrane properties to %s' % label
+            print('    Adding membrane properties to %s' % label)
             self.insert_membrane_properties(label, parameters[label].properties)
         
 #        spatial discretization
-        print '    Setting up spatial discretization...'
+        print('    Setting up spatial discretization...')
         self.determine_nseg(full=full)
         
-        for label in parameters.keys():
+        for label in list(parameters.keys()):
             if label == 'filename':
                 continue
             if label == 'cell_modify_functions':
@@ -158,41 +158,41 @@ class CellParser(object):
             if label == 'spatialgraph_modify_functions':
                 continue
             try:
-                if not 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
+                if not 'rieke_spines' in list(parameters.spatialgraph_modify_functions.keys()):
                     if label == 'SpineHead' or label == 'SpineNeck':
                         continue
             except AttributeError:
                 pass
-            print '    Adding membrane range mechanisms to %s' % label
+            print('    Adding membrane range mechanisms to %s' % label)
             self.insert_range_mechanisms(label, parameters[label].mechanisms.range)
-            if parameters[label].properties.has_key('ions'):
+            if 'ions' in parameters[label].properties:
                 self._insert_ion_properties(label, parameters[label].properties.ions)
 #            add spines if desired
-            if parameters[label].mechanisms.range.has_key('pas')\
-                and parameters[label].properties.has_key('spines'):
+            if 'pas' in parameters[label].mechanisms.range\
+                and 'spines' in parameters[label].properties:
                 self._add_spines(label, parameters[label].properties.spines)
-            if parameters[label].mechanisms.range.has_key('ar')\
-                and parameters[label].properties.has_key('spines'):
+            if 'ar' in parameters[label].mechanisms.range\
+                and 'spines' in parameters[label].properties:
                 self._add_spines_ar(label, parameters[label].properties.spines)
                 
         self.cell.neuron_param = parameters            
         
     def apply_cell_modify_functions(self, parameters):
-        if 'cell_modify_functions' in parameters.keys():
+        if 'cell_modify_functions' in list(parameters.keys()):
             if self.cell_modify_functions_applied == True:
-                print 'Cell modify functions have already been applied. We '+\
+                print('Cell modify functions have already been applied. We '+\
                 'are now modifying the cell again. Please doublecheck, whether '+\
                 'this is intended. This should not occur, if the cell is setup '+\
                 'up using the recommended way, i.e. by calling '+\
-                'single_cell_parser.create_cell'
-            for funname in parameters.cell_modify_functions.keys():
+                'single_cell_parser.create_cell')
+            for funname in list(parameters.cell_modify_functions.keys()):
                 kwargs = parameters.cell_modify_functions[funname]
-                print 'Applying cell_modify_function {} with parameters {}'.format(funname, str(kwargs))
+                print('Applying cell_modify_function {} with parameters {}'.format(funname, str(kwargs)))
                 fun = cell_modify_functions.get(funname)
                 self.cell = fun(self.cell, **kwargs)
             self.cell_modify_functions_applied = True
         else:
-            print 'No cell_modify_functions to apply'
+            print('No cell_modify_functions to apply')
             
         self.cell.neuron_param = parameters
     
@@ -211,7 +211,7 @@ class CellParser(object):
         '''
         if self.cell is None:
             raise RuntimeError('Trying to insert membrane properties into empty morphology')
-        if label != 'Soma' and not self.cell.structures.has_key(label):
+        if label != 'Soma' and label not in self.cell.structures:
             errstr = 'Trying to insert membrane properties, but %s has not' % label\
                                +' yet been parsed as hoc' 
             raise RuntimeError(errstr)
@@ -221,7 +221,7 @@ class CellParser(object):
             raise RuntimeError(errstr)
         
         propStrings = []
-        for prop in props.keys():
+        for prop in list(props.keys()):
             if prop == 'spines' or prop == 'ions':
                 continue
             s = prop + '=' + str(props[prop])
@@ -239,7 +239,7 @@ class CellParser(object):
         '''
         if self.cell is None:
             raise RuntimeError('Trying to insert membrane properties into empty morphology')
-        if label != 'Soma' and not self.cell.structures.has_key(label):
+        if label != 'Soma' and label not in self.cell.structures:
             errstr = 'Trying to insert membrane properties, but %s has not' % label\
                                +' yet been parsed as hoc' 
             raise RuntimeError(errstr)
@@ -248,13 +248,13 @@ class CellParser(object):
                                +' yet been parsed as hoc' 
             raise RuntimeError(errstr)
         
-        for mechName in mechs.keys():
+        for mechName in list(mechs.keys()):
             mech = mechs[mechName]
-            print '        Inserting mechanism %s with spatial distribution %s' % (mechName, mech.spatial)
+            print('        Inserting mechanism %s with spatial distribution %s' % (mechName, mech.spatial))
             if mech.spatial == 'uniform':
                 ''' spatially uniform distribution'''
                 paramStrings = []
-                for param in mech.keys():
+                for param in list(mech.keys()):
                     if param == 'spatial':
                         continue
                     s = param + '=' + str(mech[param])
@@ -293,7 +293,7 @@ class CellParser(object):
                     sec.insert(mechName)
                     for seg in sec:
                         paramStrings = []
-                        for param in mech.keys():
+                        for param in list(mech.keys()):
                             if param == 'spatial' or param == 'distance' or param == 'slope'\
                             or param == 'offset':
                                 continue
@@ -333,7 +333,7 @@ class CellParser(object):
                     sec.insert(mechName)
                     for seg in sec:
                         paramStrings = []
-                        for param in mech.keys():
+                        for param in list(mech.keys()):
                             if param == 'spatial' or param == 'distance' or param == 'offset'\
                             or param == 'linScale' or param == '_lambda' or param == 'xOffset':
                                 continue
@@ -372,7 +372,7 @@ class CellParser(object):
                     sec.insert(mechName)
                     for seg in sec:
                         paramStrings = []
-                        for param in mech.keys():
+                        for param in list(mech.keys()):
                             if param == 'spatial' or param == 'distance' or param == 'offset'\
                             or param == 'linScale' or param == 'xOffset' or param == 'width':
                                 continue
@@ -403,7 +403,7 @@ class CellParser(object):
                 begin = mech['begin']
                 end = mech['end']
                 outsideScale = mech['outsidescale']
-                if 'outsidescale_sections' in mech.keys():
+                if 'outsidescale_sections' in list(mech.keys()):
                     outsideScale_sections = mech['outsidescale_sections']
                 else:
                     outsideScale_sections = []
@@ -412,13 +412,13 @@ class CellParser(object):
                     sec.insert(mechName)
                     for seg in sec:
                         paramStrings = []
-                        for param in mech.keys():
+                        for param in list(mech.keys()):
                             if param == 'spatial' or param == 'begin' or param == 'end'\
                             or param == 'outsidescale' or param == 'outsidescale_sections':
                                 continue
                             dist = h.distance(seg.x, sec=sec)
                             if secID in outsideScale_sections:
-                                print 'setting section {} to outsidescale'.format(secID)
+                                print('setting section {} to outsidescale'.format(secID))
                                 rangeVarVal = mech[param]*outsideScale
                             elif begin <= dist <= end:
                                 rangeVarVal = mech[param]
@@ -448,7 +448,7 @@ class CellParser(object):
         if mech.spatial == 'uniform':
             ''' spatially uniform distribution'''
             paramStrings = []
-            for param in mech.keys():
+            for param in list(mech.keys()):
                 if param == 'spatial':
                     continue
                 s = param + '=' + str(mech[param])
@@ -477,7 +477,7 @@ class CellParser(object):
         '''
         if self.cell is None:
             raise RuntimeError('Trying to insert membrane properties into empty morphology')
-        if label != 'Soma' and not self.cell.structures.has_key(label):
+        if label != 'Soma' and label not in self.cell.structures:
             errstr = 'Trying to insert membrane properties, but %s has not' % label\
                                +' yet been parsed as hoc' 
             raise RuntimeError(errstr)
@@ -487,7 +487,7 @@ class CellParser(object):
             raise RuntimeError(errstr)
         
         propStrings = []
-        for ion in ionParam.keys():
+        for ion in list(ionParam.keys()):
             s = ion + '=' + str(ionParam[ion])
             propStrings.append(s)
         
@@ -504,7 +504,7 @@ class CellParser(object):
         '''
         if self.cell is None:
             raise RuntimeError('Trying to insert membrane properties into empty morphology')
-        if label != 'Soma' and not self.cell.structures.has_key(label):
+        if label != 'Soma' and label not in self.cell.structures:
             errstr = 'Trying to insert membrane properties, but %s has not' % label\
                                +' yet been parsed as hoc' 
             raise RuntimeError(errstr)
@@ -534,7 +534,7 @@ class CellParser(object):
         '''
         if self.cell is None:
             raise RuntimeError('Trying to insert membrane properties into empty morphology')
-        if label != 'Soma' and not self.cell.structures.has_key(label):
+        if label != 'Soma' and label not in self.cell.structures:
             errstr = 'Trying to insert membrane properties, but %s has not' % label\
                                +' yet been parsed as hoc' 
             raise RuntimeError(errstr)
@@ -558,7 +558,7 @@ class CellParser(object):
     def insert_passive_membrane(self, label):
         if self.cell is None:
             raise RuntimeError('Trying to insert membrane properties into empty morphology')
-        if label != 'Soma' and not self.cell.branches.has_key(label):
+        if label != 'Soma' and label not in self.cell.branches:
             errstr = 'Trying to insert membrane properties, but %s has not' % label\
                                +' yet been parsed as hoc' 
             raise RuntimeError(errstr)
@@ -579,7 +579,7 @@ class CellParser(object):
     def insert_hh_membrane(self, label):
         if self.cell is None:
             raise RuntimeError('Trying to insert membrane properties into empty morphology')
-        if not self.cell.branches.has_key(label):
+        if label not in self.cell.branches:
             errstr = 'Trying to insert membrane properties, but %s has not' % label\
                                +' yet been parsed as hoc' 
             raise RuntimeError(errstr)
@@ -616,7 +616,7 @@ class CellParser(object):
         maxL = 0.0
         avgL = 0.0
         maxLabel = ''
-        for label in self.cell.branches.keys():
+        for label in list(self.cell.branches.keys()):
             if label == 'AIS' or label == 'Myelin' or label == 'Node':
                 for branch in self.cell.branches[label]:
                     for sec in branch:
@@ -650,10 +650,10 @@ class CellParser(object):
 #                    print '\tnr of segments: %d' % sec.nseg
         totalL = avgL
         avgL /= totalNSeg
-        print '    Total number of compartments in model: %d' % totalNSeg
-        print '    Total length of model cell: %.2f' % totalL
-        print '    Average compartment length: %.2f' % avgL
-        print '    Maximum compartment (%s) length: %.2f' % (maxLabel, maxL)
+        print('    Total number of compartments in model: %d' % totalNSeg)
+        print('    Total length of model cell: %.2f' % totalL)
+        print('    Average compartment length: %.2f' % avgL)
+        print('    Maximum compartment (%s) length: %.2f' % (maxLabel, maxL))
 
     def _create_ais(self):
         '''create axon hillock and AIS for proper spike initiation
@@ -685,10 +685,10 @@ class CellParser(object):
         hillTaper = (aisDiam-hillBeginDiam)/(nseg-1) # from 4mu to 1mu
         hillStep = hillLength/(nseg-1)
         
-        print 'Creating AIS:'
-        print '    soma diameter: %.2f' % somaDiam
-        print '    axon hillock diameter: %.2f' % hillBeginDiam
-        print '    initial segment diameter: %.2f' % aisDiam
+        print('Creating AIS:')
+        print('    soma diameter: %.2f' % somaDiam)
+        print('    axon hillock diameter: %.2f' % hillBeginDiam)
+        print('    initial segment diameter: %.2f' % aisDiam)
         
         '''myelin & nodes'''
         myelinSeg = 25 # nr of segments internode section
@@ -800,10 +800,10 @@ class CellParser(object):
 #        hillTaper = (aisDiam-hillBeginDiam)/(hillSeg-1)
 #        hillStep = hillLength/(hillSeg-1)
         
-        print 'Creating AIS:'
-        print '    axon hillock diameter: %.2f' % hillBeginDiam
-        print '    initial segment diameter: %.2f' % aisDiam
-        print '    myelin diameter: %.2f' % myelinDiam
+        print('Creating AIS:')
+        print('    axon hillock diameter: {:.2f}'.format(hillBeginDiam))
+        print('    initial segment diameter: {:.2f}'.format(aisDiam))
+        print('    myelin diameter: {:.2f}'.format(myelinDiam))
         
         zAxis = np.array([0,0,1])
         
@@ -859,10 +859,10 @@ class CellParser(object):
         spineheadLength = parameters.spatialgraph_modify_functions.rieke_spines.spine_morphology.spineheadLength
     
         print("Creating dendritic spines:")
-        print("    spine neck length: {}".format(spineneckLength))
-        print("    spine neck diameter: {}".format(spineneckDiam))
-        print("    spine head length: {}".format(spineheadLength))
-        print("    spine head diameter: {}".format(spineheadDiam))
+        print(("    spine neck length: {}".format(spineneckLength)))
+        print(("    spine neck diameter: {}".format(spineneckDiam)))
+        print(("    spine head length: {}".format(spineheadLength)))
+        print(("    spine head diameter: {}".format(spineheadDiam)))
        
         excitatory = ['L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34', 'L6ccinv', 'L5tt', 'Generic']
 
@@ -929,9 +929,9 @@ if __name__ == '__main__':
     testParser.insert_hh_membrane('Soma')
     testParser.insert_hh_membrane('Dendrite')
     testParser.insert_hh_membrane('ApicalDendrite')
-    for label in testParser.cell.branches.keys():
+    for label in list(testParser.cell.branches.keys()):
         for branch in testParser.cell.branches[label]:
-            print 'Branch: %s' % label
+            print('Branch: {:s}'.format(label))
             for sec in branch:
                 h.psection(sec=sec)
     

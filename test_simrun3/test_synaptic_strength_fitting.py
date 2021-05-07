@@ -1,7 +1,7 @@
 import Interface as I
-import decorators
+from . import decorators
 import unittest
-import context
+from . import context
 
 import simrun3.synaptic_strength_fitting 
 PSPs = simrun3.synaptic_strength_fitting.PSPs

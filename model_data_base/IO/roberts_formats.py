@@ -1,6 +1,8 @@
 import os
 #from six import BytesIO
-from StringIO import StringIO as BytesIO
+#from StringIO import StringIO as BytesIO - commented by Rieke during python 2to3 transition, looks weird so I keep it here for reference in case something breaks
+#import six.StringIO as BytesIO
+import six
 import numpy as np
 import pandas as pd
 from model_data_base.utils import convertible_to_int, split_file_to_buffers, first_line_to_key
@@ -18,7 +20,7 @@ def _process_line_fun(line, n_commas):
 
 def _replace_commas(f, n_commas, header, skiprows = 1):
     '''robert was using mixed delimiters. this normalizes a file.'''
-    f2 = BytesIO()
+    f2 = six.StringIO()
     f.seek(0)
     header = header + ','.join([str(x) for x in range(n_commas-header.count(','))])+'\n'
     f2.write(header)
@@ -82,7 +84,7 @@ def _read_roberts_csv_uneven_length_helper(path, header, sim_trail_index = 'no_s
         df['sim_trail_index'] = sim_trail_index
         return df
      
-    p_sti_tuples = zip(path, sim_trail_index)
+    p_sti_tuples = list(zip(path, sim_trail_index))
 
     df = pd.concat([fun(p, sti) for p, sti in p_sti_tuples])
     if set_index: df.set_index('sim_trail_index', inplace = True)

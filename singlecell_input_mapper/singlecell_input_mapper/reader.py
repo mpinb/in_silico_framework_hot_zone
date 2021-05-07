@@ -5,7 +5,7 @@ Created on Mar 8, 2012
 '''
 
 import numpy as np
-import scalar_field
+from . import scalar_field
 from model_data_base.mdbopen import mdbopen
 
 class Edge(object):
@@ -35,7 +35,7 @@ def read_hoc_file(fname=''):
         raise IOError('Input file is not a .hoc file!')
     
     with mdbopen(fname, 'r') as neuronFile:
-        print "Reading hoc file", fname
+        print("Reading hoc file", fname)
 #        cell = co.Cell()
 #        simply store list of edges
 #        cell is parsed in CellParser
@@ -285,6 +285,7 @@ if __name__ == '__main__':
 #        testAmFname = 'SynapseCount.14678.am'
 #        read_scalar_field(testAmFname)
 #    print 'Done!'
-    testFname = raw_input('Enter filename: ')
+    from six.moves import input
+    testFname = input('Enter filename: ')
 #    spreadsheet = read_celltype_numbers_spreadsheet(testFname)
     spreadsheet = read_connections_spreadsheet(testFname)

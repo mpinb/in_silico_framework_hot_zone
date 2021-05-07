@@ -26,9 +26,9 @@ import sys
 import numpy as np
 import warnings
 import SimpleITK as sitk
-import transformation as tr
-from utils import get_size_of_object
-import utils as u
+from . import transformation as tr
+from .utils import get_size_of_object
+from . import utils as u
 import itertools
 
 
@@ -126,12 +126,13 @@ class ThicknessExtractor:
             data = self.get_all_data_by_point(point)
             all_data[idx] = data
             all_data[idx]["overlaps"] = []
-            print str(idx) + " am_points from " + str(len(sorted_points)) + " from slice " + self.slice_name + " are completed."
+            print(str(idx) + " am_points from " + str(len(sorted_points)) + " from slice " + self.slice_name + " are completed.")
             sys.stdout.write("\033[F")
 
-        all_data = {sort_indices[k]: v for k, v in all_data.iteritems()}
+        import six
+        all_data = {sort_indices[k]: v for k, v in six.iteritems(all_data)}
         self.all_data = all_data
-        print "size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.))
+        print("size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.)))
 
         # if self._3D is False:
             # self.all_overlaps = self.update_all_data_with_overlaps()
@@ -212,7 +213,7 @@ class ThicknessExtractor:
         profile_indices_length = len(ray_indices)
         for i in range(profile_indices_length):
             try:
-                pixel = map(lambda x: (int(x)), ray_indices[i])
+                pixel = [(int(x)) for x in ray_indices[i]]
                 intensity_value = image.GetPixel(pixel)
             except RuntimeError as error:
                 warnings.warn(error)
@@ -324,8 +325,8 @@ class ThicknessExtractor:
         intensity_value = self.image.GetPixel([int(point[0]), int(point[1])])
         intensity_value2 = self.image.GetPixel([int(corrected_point[0]), int(corrected_point[1])])
         assert(intensity_value2 >= intensity_value)
-        print 'original_point: {} / {} corrected_point: {} / {}'.format(point, intensity_value,
-                                                                        corrected_point, intensity_value2)
+        print('original_point: {} / {} corrected_point: {} / {}'.format(point, intensity_value,
+                                                                        corrected_point, intensity_value2))
         return corrected_point
 
     def _tidy_up(self):
@@ -362,7 +363,7 @@ class ThicknessExtractor:
             return [point_1, point_2]
 
     def _filter_all_data_by_point(self, point):
-        return dict(filter(lambda x: x[1]["seed_corrected_point"] == point, self.all_data.items()))
+        return dict([x for x in list(self.all_data.items()) if x[1]["seed_corrected_point"] == point])
 
     def _set_image_file_by_point(self, point):
         z_coordinate_key = int(point[2])
@@ -371,7 +372,7 @@ class ThicknessExtractor:
         self.current_z_coordinate = z_coordinate_key
 
     def _set_image(self, input_path):
-        print 'setting image path to {}'.format(input_path)
+        print('setting image path to {}'.format(input_path))
         self.image = _read_image(input_path)
         self.padded_image = _pad_image(self.image, self._max_seed_correction_radius_in_image_coordinates_in_pixel)
 
@@ -392,7 +393,7 @@ def _check_overlap(contour1, contour2):
 
 
 def _slope(p1, p2):
-    print p1
+    print(p1)
     if p1[0] - p2[0] == 0:
         return np.inf
     return (p1[1] - p2[1]) / (p1[0] - p2[0])

@@ -6,7 +6,7 @@ Created on Apr 28, 2012
 
 #from neuron import h, nrn
 import numpy as np
-import synapse
+from . import synapse
 from collections import Sequence
 import neuron
 nrn = neuron.nrn
@@ -80,7 +80,7 @@ class Cell(object):
         for sec in self.sections:
             sec._re_init_vm_recording()
             sec._re_init_range_var_recording()
-        for synType in self.synapses.keys():
+        for synType in list(self.synapses.keys()):
             for syn in self.synapses[synType]:
                 syn.disconnect_hoc_synapse()
             if replayMode:
@@ -158,7 +158,7 @@ class Cell(object):
         return maxDist
     
     def add_synapse(self, secID, ptID, ptx, preType='Generic', postType='Generic'):
-        if not self.synapses.has_key(preType):
+        if preType not in self.synapses:
             self.synapses[preType] = []
         newSyn = synapse.Synapse(secID, ptID, ptx, preType, postType)
         newSyn.coordinates = np.array(self.sections[secID].pts[ptID])
@@ -170,7 +170,7 @@ class Cell(object):
             return
 #        remove all
         if preType == 'All' or preType == 'all':
-            for synType in self.synapses.keys():
+            for synType in list(self.synapses.keys()):
                 synapses = self.synapses[synType]
                 del synapses[:]
                 del self.synapses[synType]
@@ -182,7 +182,7 @@ class Cell(object):
                 del synapses[:]
                 del self.synapses[preType]
             except KeyError:
-                print 'Synapses of type ' + preType + ' not present on cell'
+                print('Synapses of type ' + preType + ' not present on cell')
             return
 
     def init_time_recording(self):
@@ -322,7 +322,7 @@ class Cell(object):
         dend_labels = []
         soma_distances = []
 
-        for celltype in self.synapses.keys():
+        for celltype in list(self.synapses.keys()):
             for syn in range(len(self.synapses[celltype])):
                 if self.synapses[celltype][syn].is_active():
                     ## get list of active synapses' types and IDs
@@ -349,10 +349,10 @@ class Cell(object):
         ## write synapse activation df
         columns = ['synapse_type', 'synapse_ID', 'soma_distance', 'section_ID', 
                    'section_pt_ID', 'dendrite_label']
-        sa_pd = dict(zip(columns, [syn_types, syn_IDs, soma_distances, sec_IDs, pt_IDs, dend_labels]))
+        sa_pd = dict(list(zip(columns, [syn_types, syn_IDs, soma_distances, sec_IDs, pt_IDs, dend_labels])))
         sa_pd = pd.DataFrame(sa_pd)[columns]
         
-        st_df = pd.DataFrame(columns = range(max_spikes), data = np.asarray(spike_times))
+        st_df = pd.DataFrame(columns = list(range(max_spikes)), data = np.asarray(spike_times))
     
         sa_pd = pd.concat([sa_pd, st_df], axis = 1)
         
@@ -595,22 +595,22 @@ class PySection(nrn.Section):
     
     def _re_init_range_var_recording(self):
         '''resize Vm vectors to 0 to avoid NEURON segfaults'''
-        for key in self.recordVars.keys():
+        for key in list(self.recordVars.keys()):
             for vec in self.recordVars[key]:
                 vec.resize(0)
     
     def _init_range_var_recording(self, var, mech=None):
         if mech is None:
-            if not var in self.recordVars.keys():
+            if not var in list(self.recordVars.keys()):
                 self.recordVars[var] = []
                 for seg in self:
                     vec = h.Vector()
                     hRef = eval('seg._ref_'+var)
-                    print ('seg._ref_'+var)
+                    print('seg._ref_'+var)
                     vec.record(hRef, sec=self)
                     self.recordVars[var].append(vec)
         else:
-            if not var in self.recordVars.keys():
+            if not var in list(self.recordVars.keys()):
                 key = mech+'.'+var
                 self.recordVars[key] = []
                 for seg in self:

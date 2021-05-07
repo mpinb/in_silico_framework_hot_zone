@@ -28,7 +28,7 @@ If you don't use autocommit (default is no autocommit for performance), then
 don't forget to call `mydict.commit()` when done with a transaction.
 
 """
-
+from __future__ import absolute_import
 import sqlite3
 import os
 import sys
@@ -36,6 +36,7 @@ import tempfile
 import random
 import logging
 import traceback
+import six
 
 from threading import Thread
 
@@ -89,7 +90,7 @@ except ImportError:
 try:
     from queue import Queue
 except ImportError:
-    from Queue import Queue
+    from six.moves import queue as Queue
 
 
 logger = logging.getLogger(__name__)
@@ -220,14 +221,17 @@ class SqliteDict(DictClass):
         for key, value in self.conn.select(GET_ITEMS):
             yield key, decode(value)
 
-    def keys(self):
-        return self.iterkeys() if major_version > 2 else list(self.iterkeys())
+    def keys(self): 
+#         return self.iterkeys() if major_version > 2 else list(self.iterkeys())
+        return list(self.iterkeys())
 
     def values(self):
-        return self.itervalues() if major_version > 2 else list(self.itervalues())
+#         return self.itervalues() if major_version > 2 else list(self.itervalues())
+        return list(self.itervalues())
 
     def items(self):
-        return self.iteritems() if major_version > 2 else list(self.iteritems())
+#         return self.iteritems() if major_version > 2 else list(self.iteritems())
+        return list(self.iteritems())
 
     def __contains__(self, key):
         HAS_ITEM = 'SELECT 1 FROM "%s" WHERE key = ?' % self.tablename
@@ -261,7 +265,7 @@ class SqliteDict(DictClass):
             raise RuntimeError('Refusing to update read-only SqliteDict')
 
         try:
-            items = items.items()
+            items = list(items.items())
         except AttributeError:
             pass
         items = [(k, encode(v)) for k, v in items]
@@ -272,7 +276,8 @@ class SqliteDict(DictClass):
             self.update(kwds)
 
     def __iter__(self):
-        return self.iterkeys()
+        import six.iterkeys as iterkeys
+        return iterkeys(self)
 
     def clear(self):
         if self.flag == 'r':

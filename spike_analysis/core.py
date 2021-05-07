@@ -378,7 +378,8 @@ def get_spike_times_from_row(row):
     -------
     list, containint spike times'''
     row = row.dropna()
-    row = [v for i, v in row.iteritems()]
+    import six
+    row = [v for i, v in six.iteritems(row)]
     return row
 
 class SpikeDetectionCreastTrough(object):
@@ -448,9 +449,9 @@ class SpikeDetectionCreastTrough(object):
         else: 
             raise ValueError('lim_creast and lim_trough must be both floats or both be "minimum" or both be "zero"')
         if lim_creast < 0:
-            print "warning: lim_creast is < 0"
+            print("warning: lim_creast is < 0")
         if lim_trough > 0:
-            print "warning: lim_trough is > 0"
+            print("warning: lim_trough is > 0")
         self.lim_creast = lim_creast
         self.lim_trough = lim_trough
         
@@ -488,7 +489,7 @@ class SpikeDetectionCreastTrough(object):
             index = (self.stim_times[0] < t) & (t < self.stim_times[-1])
             t = t[index]
             v = v[index]
-        print str_
+        print(str_)
             
         # get peak and creast amplitude
         _, creasts = get_peaks_above(t, v, 0)
@@ -609,11 +610,12 @@ class SpikeDetectionCreastTrough(object):
         ret = SpikeDetectionCreastTrough.__new__(SpikeDetectionCreastTrough)
         with open(path) as f:
             data = json.load(f)
-        for k, v in data.iteritems():
+        import six
+        for k, v in six.iteritems(data):
             setattr(ret, k, v)
         if init_reader:
             ret.reader = load_reader(data['reader_object'])    
-        if not 'stim_times' in data.keys():
+        if not 'stim_times' in list(data.keys()):
             ret.stim_times = stimulus_interval_filter(ret.reader.get_stim_times(), 
                                      ret.stimulus_period, 
                                      ret.stimulus_period_offset)
@@ -637,7 +639,8 @@ def get_period_label_by_time(periods, t):
     -------
     label: label of period in which t is in. 'undefined' if t is in no defined period'''
     
-    for k, (tmin, tmax) in periods.iteritems():
+    import six
+    for k, (tmin, tmax) in six.iteritems(periods):
         if tmin <= t < tmax:
             return k
     return 'undefined'
@@ -680,8 +683,9 @@ def _sta_apply_helper(spike_times, analysis_function, periods = {}):
     pd.DataFrame, in which the individual dataframes returned by analysis_function are 
     concatenated.
     '''
+    import six
     out = []
-    for name, spike_times in spike_times.iteritems():
+    for name, spike_times in six.iteritems(spike_times):
         df = analysis_function(spike_times)
         df['trial'] = name       
         out.append(df)
@@ -799,7 +803,7 @@ class STAPlugin_bursts(STAPlugin_TEMPLATE):
         if not 0 in event_maxtimes:
             raise ValueError('0 / singlet must be defined! Please check event_maxtimes and event_name.')
         
-        events_in_descending_order = sorted(event_maxtimes.keys(), reverse = True)
+        events_in_descending_order = sorted(list(event_maxtimes.keys()), reverse = True)
         
         row = I.np.array(row)
         out = []
@@ -844,7 +848,8 @@ class STAPlugin_annotate_bursts_in_st(STAPlugin_TEMPLATE):
                                                 self.event_names)
                for i, row in strip_st(st).iterrows()]
         
-        event_names_inverse = {v:k+1 for k,v in self.event_names.iteritems()}
+        import six
+        event_names_inverse = {v:k+1 for k,v in six.iteritems(self.event_names)}
 
         def fun(s):
             l_ = [[e]*event_names_inverse[e] for e in s]
@@ -1044,8 +1049,9 @@ class SpikeTimesAnalysis:
     def get_by_trial(self, key):
         return self._db[key]._by_trial
 
+import six
 def get_interval(interval_dict, t):
-    for i, v in interval_dict.iteritems():
+    for i, v in six.iteritems(interval_dict):
         if (t >= v[0]) and (t < v[1]):
             return i
 
@@ -1086,7 +1092,8 @@ class VisualizeEventAnalysis:
         ax1.set_ylabel('ISI second to third spike')
         ax1.plot([rp,rp],[0,100], c = 'grey')
         ax1.plot([0,100],[rp,rp], c = 'grey')
-        for name, c in colormap.iteritems():
+        import six
+        for name, c in six.iteritems(colormap):
             if c == 'white':
                 continue
             ax1.plot([0,name],[name,0], c = c, linewidth = .5)
@@ -1095,12 +1102,13 @@ class VisualizeEventAnalysis:
         ax1.set_xlim(0, 30)
         ax1.set_ylim(0, 30)
 
-        for name, c in colormap.iteritems():
+        import six
+        for name, c in six.iteritems(colormap):
             if name > 30: continue
             e_filtered = e[(e.ISI_2 < name) & (e.ISI_2 >= name - 10)]
-            print name, len(e_filtered)
+            print(name, len(e_filtered))
             if len(e_filtered) == 0:
-                print 'skipping'
+                print('skipping')
                 continue
             e_filtered.event_time.plot(kind = 'hist', bins = I.np.arange(0,tmax, 1), cumulative = True,
                                        histtype='step', color = c, ax = ax2, normed = False)
@@ -1151,7 +1159,7 @@ class AnalyzeFile:
     def get_ongoing_activity(self, period_prestim = 30000):
         if self.stim_times[0] < period_prestim:
             s = self.stim_times[0]
-            print 'warning! there are no {} s activity pre stimulus. Falling back to {}s'.format(period_prestim / 1000., s / 1000.)
+            print('warning! there are no {} s activity pre stimulus. Falling back to {}s'.format(period_prestim / 1000., s / 1000.))
         else:
             s = period_prestim
         return len([t for t in self.spike_times if (t < self.stim_times[0]) and (t > self.stim_times[0] - s)]) / (s / 1000.)

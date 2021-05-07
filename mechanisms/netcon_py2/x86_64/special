@@ -1,0 +1,13 @@
+#!/bin/sh
+if test "x${NRNHOME}" = "x" ; then
+	NRNHOME="/nas1/Data_arco/prgr/nrn_isf_py2.7_florida"
+fi
+if test "x${NRNBIN}" = "x" ; then
+	NRNBIN="/nas1/Data_arco/prgr/nrn_isf_py2.7_florida/x86_64/bin/"
+fi
+if test "" = "yes" ; then
+	NRNIV="${NRNBIN}nrniv.app/Contents/MacOS/nrniv"
+else
+	NRNIV="${NRNBIN}nrniv"
+fi
+"${NRNIV}" -dll "/nas1/Data_arco/project_src/in_silico_framework/mechanisms/netcon/x86_64/.libs/libnrnmech.so" "$@"

@@ -98,10 +98,11 @@ class RobustDaskDelayedExecution:
         mdb = self.mdb
         keys = _get_keys(mdb)
         status = {k[0]: _get_value(mdb, k) for k in keys if k[1] == 'status'}
-        if 'started' in status.values():
+        if 'started' in list(status.values()):
                 if error_started:
                     raise RuntimeError("Some of the simulations are already running!")
                 else:
                     warnings.warn("Some of the simulations are already running!")
-        ds = [_wrapper(mdb, k) for k, v in status.iteritems() if v == 'not_started']
+        import six #rieke
+        ds = [_wrapper(mdb, k) for k, v in six.iteritems(status) if v == 'not_started']
         return ds

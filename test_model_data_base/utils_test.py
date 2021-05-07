@@ -4,8 +4,10 @@ from . import decorators
 import unittest
 import numpy as np
 from pandas.util.testing import assert_frame_equal
+import distributed
 
-class Tests(unittest.TestCase):
+
+class Tests(unittest.TestCase):        
     def test_pandas_to_array(self):
         '''make sure pandas to array works with dict, series and dataframe'''
         dict_ = {'x_1_y_1': 10, 'x_2_y_1': 15, 'x_3_y_1': 7,'x_1_y_2': 2, 'x_2_y_2': 0, 'x_3_y_2': -1}
@@ -45,5 +47,16 @@ class Tests(unittest.TestCase):
         assert(len(flag) == 1)
         fun(fun)
         assert(len(flag) == 2)
+        
+    def test_myrepartition(self):
+        client = distributed.client_object_duck_typed
+        pdf = pd.DataFrame(np.random.randint(100, size = (1000,3)))
+        ddf = dask.dataframe.from_pandas(pdf, npartitions = 10)
+        pdf2 = myrepartition(ddf, 4).compute(get = client.get)
+        pd.util.testing.assert_frame_equal(pdf, pdf2)
+        ddf.divisions = tuple([None] * (ddf.npartitions + 1))
+        pdf2 = myrepartition(ddf, 4).compute(get = client.get)
+        pd.util.testing.assert_frame_equal(pdf, pdf2)
+
         
         

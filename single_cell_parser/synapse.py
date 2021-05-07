@@ -81,7 +81,7 @@ class Synapse(object):
         if x > maxX:
             x = maxX
         hocSec = targetCell.sections[self.secID]
-        for recepStr in receptors.keys():
+        for recepStr in list(receptors.keys()):
             recep = receptors[recepStr]
             hocStr = 'h.'
             hocStr += recepStr

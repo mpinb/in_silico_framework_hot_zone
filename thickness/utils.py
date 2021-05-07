@@ -1,8 +1,8 @@
 import os
 import re
 from random import randrange
-from definitions import ROOT_DIR
-import transformation as tr
+from .definitions import ROOT_DIR
+from . import transformation as tr
 import cloudpickle as pickle
 import numpy as np
 
@@ -30,7 +30,7 @@ def get_am_paths_from_hx(hx_path, verbose=False):
             if '${SCRIPTDIR}' in l:
                 path = l.strip(' []').split(' ')[1]
                 if verbose:
-                    print path
+                    print(path)
                 out.append(path)
     return out
 
@@ -48,7 +48,7 @@ def make_directories(path):
 
 
 def get_slice_name(am_path, image_file):
-    name = get_am_image_match([am_path], [image_file]).keys()
+    name = list(get_am_image_match([am_path], [image_file]).keys())
     if len(name) == 1:
         return os.path.basename(name[0])
     elif len(name) == 0:

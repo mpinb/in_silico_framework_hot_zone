@@ -12,14 +12,15 @@ Reading: takes 24% of the time, to_cloudpickle needs (4 x better reading speed)
 Writing: takes 170% of the time, to_cloudpickle needs (70% lower writing speed)
 Filesize: takes 14% of the space, to cloudpickle needs (7 x more space efficient)
 '''
-import parent_classes
+from . import parent_classes
 import os, cloudpickle
 from simrun2.reduced_model.get_kernel import ReducedLdaModel
 from model_data_base.model_data_base import ModelDataBase
 from model_data_base.model_data_base_register import get_mdb_by_unique_id
-import pandas_to_msgpack
-import numpy_to_npz
+from . import pandas_to_msgpack
+from . import numpy_to_npz
 import pandas as pd
+import compatibility
 
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''
@@ -32,7 +33,7 @@ class Loader(parent_classes.Loader):
         Rm.st = mdb['st']
         lv = 0
         for d in Rm.lda_value_dicts:
-            for k in d.keys():
+            for k in list(d.keys()):
                 key = 'lda_value_dicts_' + str(lv)
                 d[k] = mdb[key]
                 lv +=1            
@@ -61,7 +62,7 @@ def dump(obj, savedir):
         new_lda_value_dicts = []
         for d in Rm.lda_value_dicts:
             new_lda_value_dicts.append({})
-            for k in d.keys():
+            for k in list(d.keys()):
                 key = 'lda_value_dicts_' + str(lv)
                 mdb.setitem(key, d[k].round(decimals = 2), dumper=numpy_to_npz)
                 new_lda_value_dicts[-1][k] = key
@@ -76,7 +77,7 @@ def dump(obj, savedir):
         Rm.lda_values = lda_values
         Rm.lda_value_dicts = lda_value_dicts  
         Rm.mdb_list = mdb_list
-        with open(os.path.join(savedir, 'Loader.pickle'), 'w') as file_:
-            cloudpickle.dump(Loader(), file_)
-    
+#         with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#             cloudpickle.dump(Loader(), file_)
+        compatibility.cloudpickle_fun(Loader(), os.path.join(savedir, 'Loader.pickle'))
 
