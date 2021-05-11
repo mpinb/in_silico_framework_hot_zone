@@ -422,36 +422,50 @@ def get_cell(s, p, pdf_best_run_selected = None, range_vars = rangeVarsApical + 
 
 
 class CurrentAnalysis:
-    def __init__(self, cell, secID = 'bifurcation', segID = -1, rangeVars = None, colormap = None):
+    def __init__(self, cell_or_dict = None, secID = 'bifurcation', segID = -1, rangeVars = None, colormap = None, tVec = None):
         # set attributes
-        self.cell = cell
-        self.t = cell.tVec
-        if secID == 'bifurcation':
-            sec = project_specific_ipynb_code.hot_zone.get_main_bifurcation_section(cell)
+        if not isinstance(cell_or_dict, dict):
+            self.mode = 'cell'
+            self.cell = cell = cell_or_dict
+            self.t = cell.tVec
+            if secID == 'bifurcation':
+                sec = project_specific_ipynb_code.hot_zone.get_main_bifurcation_section(cell)
+            else:
+                sec = cell.sections[secID]
+            self.sec = sec
+            self.secID = cell.sections.index(sec)
+            self.segID = segID
+            self.seg = [seg for seg in sec][segID]
+            if rangeVars is None:
+                self.rangeVars = cell.soma.recordVars.keys()
+            else:
+                self.rangeVars = rangeVars
         else:
-            sec = cell.sections[secID]
-        self.sec = sec
-        self.secID = cell.sections.index(sec)
-        self.segID = segID
-        self.seg = [seg for seg in sec][segID]
-        if rangeVars is None:
-            self.rangeVars = list(cell.soma.recordVars.keys())
-        else:
+            self.mode = 'dict'
+            self.t = tVec
             self.rangeVars = rangeVars
+            self.cell = cell_or_dict
+            self.sec = None
         self.colormap = colormap
-        
         # compute currents
         self._compute_current_arrays()
 
-    
+    def _get_current_by_rv(self, rv):
+        try:
+            if self.mode == 'dict':
+                return self.cell[rv]
+            elif self.mode == 'cell':
+                return I.np.array(self.sec.recordVars[rv][self.segID])
+            else:
+                raise ValueError()
+        except (KeyError, IndexError):
+            return I.np.array([float('nan')] * len(self.t))
+        
     def _compute_current_arrays(self):
         out_depolarizing = []
         out_hyperpolarizing = []
         for rv in self.rangeVars:
-            try:
-                x = I.np.array(self.sec.recordVars[rv][-1])
-            except IndexError: # if the mechanism is not present in the current segment
-                x = I.np.array([float('nan')] * len(self.cell.tVec))
+            x = self._get_current_by_rv(rv)
             out_depolarizing.append(I.np.where(x>=0, 0, x))
             out_hyperpolarizing.append(I.np.where(x<0, 0, x))
         self.depolarizing_currents = I.np.array(out_depolarizing) * -1
@@ -461,7 +475,10 @@ class CurrentAnalysis:
         self.net_current = self.depolarizing_currents_sum + self.hyperpolarizing_currents_sum
         self.depolarizing_currents_normalized = self.depolarizing_currents / self.depolarizing_currents_sum
         self.hyperpolarizing_currents_normalized = self.hyperpolarizing_currents / self.hyperpolarizing_currents_sum * -1
-        self.voltage_trace = self.sec.recVList[self.segID]
+        if self.mode == 'cell':
+            self.voltage_trace = self.sec.recVList[self.segID]
+        else:
+            self.voltage_trace = None
         
     def plot_areas(self, ax = None, normalized = False, plot_net = False, plot_voltage=False):
         t = self.t
