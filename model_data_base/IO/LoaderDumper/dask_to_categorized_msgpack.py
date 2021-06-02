@@ -30,7 +30,8 @@ import compatibility
 import time
 from model_data_base.utils import chunkIt, myrepartition, mkdtemp
 import distributed
-import pandas_msgpack
+# import pandas_msgpack # do not import this; it will break pickle in loaded dataframes
+from pandas_msgpack import to_msgpack, read_msgpack
 
 ####
 # if you want to use this as template to implement another dask dumper: 
@@ -66,7 +67,7 @@ def get_writer_function(categorize):
         if categorize:
             str_to_category(pdf)
 #         pdf.to_msgpack(path.replace('*', str(number).zfill(digits)), compress = 'blosc') ###
-        pandas_msgpack.to_msgpack(path.replace('*', str(number).zfill(digits)), pdf, compress = 'blosc')
+        to_msgpack(path.replace('*', str(number).zfill(digits)), pdf, compress = 'blosc')
     return ddf_save_chunks
 
 @dask.delayed()
@@ -219,7 +220,7 @@ class Loader(parent_classes.Loader):
             
             
 #         my_reader = lambda x: category_to_str(pd.read_msgpack(x))  ### 
-        my_reader = lambda x: category_to_str(pandas_msgpack.read_msgpack(x))
+        my_reader = lambda x: category_to_str(read_msgpack(x))
         
         if self.divisions:
             if verbose: print('loaded dask dataframe with known divisions')
