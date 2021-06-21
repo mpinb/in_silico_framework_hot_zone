@@ -78,7 +78,6 @@ def read_barrelfield():
     mapping_id_position = [44,13,14,15,16,45,18,19,20,21,46,23,24,25,26,47,30,31,32,33,37,38,39,40]
     mapping_id_position = {x: lv for lv,x in enumerate(mapping_id_position)}
     n_edge_points = 37
-    import six.StringIO
     edge_points = six.StringIO()
     average_barrel_field_path = os.path.join(os.path.dirname(__file__), 'average_barrel_field_L45_border.am')
     with open(average_barrel_field_path) as f:
