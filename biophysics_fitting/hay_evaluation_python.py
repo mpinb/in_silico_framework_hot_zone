@@ -86,7 +86,7 @@ class BAC:
     def check(self, out, voltage_traces):
         # checking for problems in voltage trace
         t,v = voltage_traces['tVec'],voltage_traces['vList'][0]
-        vmax = voltage_traces['vMax']
+        vmax = None # voltage_traces['vMax']
         err = trace_check_err(t,v,stim_onset=self.stim_onset,stim_duration=self.stim_duration,punish=self.punish)
         err_flags = trace_check(t,v,
                 stim_onset=self.stim_onset, 
@@ -197,7 +197,7 @@ class bAP:
     def check(self, out, voltage_traces):
         # checking for problems in voltage trace
         t,v = voltage_traces['tVec'],voltage_traces['vList'][0]
-        vmax = voltage_traces['vMax']
+        vmax = None # voltage_traces['vMax']
         err = trace_check_err(t,v,stim_onset=self.stim_onset,stim_duration=self.stim_duration,punish=self.punish)
         err_flags = trace_check(t,v,
                 stim_onset=self.stim_onset, 

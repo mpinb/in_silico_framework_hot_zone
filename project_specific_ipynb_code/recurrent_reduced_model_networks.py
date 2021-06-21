@@ -964,8 +964,7 @@ def run_recurrent_network(self, SA_mdb = None, SAexc = None, SAinh = None, save_
                          cellIDs = None, con_df = None, syn_df = None, out_mdb = None, force = None, force_jitter = 0, adaptation_current_dict = None):
     '''Apply the reduced model to synaptic input to get a list containing output spike times.
     self: ReducedModel object from project_specific_ipynb_code/reduced_model_output_paper/ReducedModel
-    SAexc, SAinh: numpy arrays containing spatiotemporally binned synaptic inputs (format [somadistance_bin, timebin, cell_index]), 
-                    axis 2 should only be as long as the number of simulated cells as it will be indexed sequentially
+    SAexc, SAinh: numpy arrays containing spatiotemporally binned synaptic inputs (format [somadistance_bin, timebin, cell_index]), future objects of these, or keys (str) in the SA_mdb where these are saved
     save_WNI: boolean
         True saves a dataframe containing WNI values at all timepoints. 
         False saves spike times list only.
