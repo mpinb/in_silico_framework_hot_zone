@@ -1,6 +1,6 @@
 : Dynamics that track inside calcium concentration
 : modified from Destexhe et al. 1994
-: extended by abast to initialize cai with minCai rather than 0
+: extended by abast to initialize cai with minCai rather than 0 inspired by https://gist.github.com/F-A/13efddbd68469c68fab146b939c16f10 by Joram Keijser and Florian Aspart
 
 NEURON	{
 	SUFFIX CaDynamics_E2_v2
