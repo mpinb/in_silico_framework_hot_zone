@@ -1,1 +1,0 @@
-../ProbAMPANMDA2.mod

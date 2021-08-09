@@ -140,6 +140,8 @@ class CellParser(object):
                 continue
             if label == 'spatialgraph_modify_functions':
                 continue
+            if label == 'discretization':
+                continue
             #if not 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
             #    if label == 'SpineHead' or label == 'SpineNeck':
             #        continue
@@ -148,7 +150,12 @@ class CellParser(object):
         
 #        spatial discretization
         print('    Setting up spatial discretization...')
-        self.determine_nseg(full=full)
+        if 'discretization' in parameters:
+            f = parameters['discretization']['f']
+            max_seg_length = parameters['discretization']['max_seg_length']
+            self.determine_nseg(f = f, max_seg_length = max_seg_length, full=full)
+        else:
+            self.determine_nseg(full=full)
         
         for label in list(parameters.keys()):
             if label == 'filename':
@@ -156,6 +163,8 @@ class CellParser(object):
             if label == 'cell_modify_functions':
                 continue
             if label == 'spatialgraph_modify_functions':
+                continue
+            if label == 'discretization':
                 continue
             try:
                 if not 'rieke_spines' in list(parameters.spatialgraph_modify_functions.keys()):
@@ -606,7 +615,7 @@ class CellParser(object):
                         seg.hh.gl = 0.0003
                         seg.hh.el = -54.3
     
-    def determine_nseg(self, f=100.0, full=False):
+    def determine_nseg(self, f=100.0, full=False, max_seg_length = None):
         '''
         determine the number of segments (compartments)
         to be used according to the d-lambda rule
@@ -636,6 +645,10 @@ class CellParser(object):
                         d = sec.diamList[sec.nrOfPts//2]
                         _lambda = 100000*math.sqrt(d/(4*np.pi*f*sec.Ra*sec.cm))
                         nrOfSegments = int(((sec.L/(0.1*_lambda) + 0.5)//2)*2 + 1)
+                        if max_seg_length is not None:
+                            tmpL = sec.L/nrOfSegments
+                            if tmpL > max_seg_length:
+                                nrOfSegments = int(np.ceil(float(sec.L)/float(max_seg_length)))
 #                        nrOfSegments = 1 + 2*int(sec.L/40.0)
 #                        nrOfSegments = int(((sec.L/(0.05*_lambda) + 0.5)//2)*2 + 1)
                         sec.set_segments(nrOfSegments)
@@ -650,6 +663,8 @@ class CellParser(object):
 #                    print '\tnr of segments: %d' % sec.nseg
         totalL = avgL
         avgL /= totalNSeg
+        print('    frequency used for determining discretization: {}'.format(f))
+        print('    maximum segment length: {}'.format(max_seg_length))
         print('    Total number of compartments in model: %d' % totalNSeg)
         print('    Total length of model cell: %.2f' % totalL)
         print('    Average compartment length: %.2f' % avgL)

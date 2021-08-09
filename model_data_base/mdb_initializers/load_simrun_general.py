@@ -511,12 +511,15 @@ def init(mdb, simresult_path,  \
     Note that the database does not contain the actual data, instead it contains links 
     to the original / external data.
     
-    After initialization, it is recomeded to use the optimize method. This converts
-    the data to a high performance binary format and makes unpickling more robust against 
-    version changes of third party libraries. Also, it makes the database self-containing,
-    i.e. you can move it to another machine or subfolder and everything still works.
+    rewrite_in_optimized_format: if True, data is converted to a high performance binary 
+    format and makes unpickling more robust against version changes of third party libraries. 
+    Also, it makes the database self-containing, i.e. you can move it to another machine or 
+    subfolder and everything still works. Deleting the data folder then would (should) not cause 
+    loss of data. If False, the mdb only contains links to the actual simulation data folder 
+    and will not work if the data folder is deleted or moved or transferred to another machine 
+    where the same absolute paths are not valid.
     
-    get: scheduler for task execution. If None, compatibility.multiprocessing_scheduler is used.
+    client: dask distributed Client object.
     '''
     if burst_times:
         raise ValueError('deprecated!')
@@ -563,6 +566,9 @@ def _get_dumper(value):
     
 def optimize(mdb, dumper = None, select = None, get = None, repartition = True, client = None):
     '''
+    DEPRECATED; this step is now already done in a more coherent way by the init function if 
+    rewrite_in_optimized_format is set to True.
+    
     This function speeds up the access to simulation data and makes the database
     self-containing and more robust. It can only be used after initializing the database (do so 
     by using the init method in this module).

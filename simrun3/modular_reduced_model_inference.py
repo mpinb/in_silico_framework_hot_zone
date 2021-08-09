@@ -1,5 +1,9 @@
 '''
 This module implements a framework to 
+
+What should I do if
+ - I run my reduced model but the strategies are not executed remotely?
+     --> make sure, the strategy has a Solver registered
 '''
 
 
@@ -47,7 +51,11 @@ def dereference(weakrefobj):
     https://stackoverflow.com/questions/19621036/acquiring-a-regular-reference-from-a-weakref-proxy-in-python'''
     return weakrefobj.__repr__.__self__
 
-
+def get_n_workers_per_ip(workers, n):
+    '''helper function to get n workers per machine'''
+    s = I.pd.Series(workers)
+    return s.groupby(s.str.split(':').str[1]).apply(lambda x: x[:n]).tolist()
+        
 class Rm(object):
     def __init__(self, name, mdb, tmin = None, tmax = None, width = None, selected_indices = None):
         self.name = name
@@ -97,9 +105,8 @@ class Rm(object):
                 solver = strategy.solvers[solver_name]
                 if client is not None:
                     print 'starting remote optimization', strategy_name, solver_name
-                    workers = client.scheduler_info()['workers'].keys()                    
-                    if n_workers is not None:
-                        workers = workers[:n_workers]                     
+                    workers = client.scheduler_info()['workers'].keys() 
+                    workers = get_n_workers_per_ip(workers, n_workers)  
                     solver.optimize_all_splits(client, workers = workers)
                     self.results_remote = True
                 else:
@@ -462,6 +469,88 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
         the dictionary would be {'EXC': matrix_with_dimensions[trial, time, space], 
                                  'INH': matrix_with_dimensions[trial, time, space]}'''
         return self.data # {g: self.get_spatiotemporal_input(g) for g in self.get_groups()}
+    
+class DataExtractor_categorizedTemporalSynapseActivation(DataExtractor):
+    def __init__(self, key):
+        self.key = key
+        self.data = None
+        
+    def setup(self, Rm):
+        self.mdb = Rm.mdb
+        self.tmin = Rm.tmin
+        self.tmax = Rm.tmax
+        self.width = Rm.width
+        self.selected_indices = Rm.selected_indices
+        self._set_data()
+        
+    def _set_data(self):
+        mdbs = self.mdb
+        if type(mdbs) != list:
+            mdbs = [mdbs]
+        key = self.key
+        keys = mdbs[0][key].keys()
+        out = {}
+        outs = []
+        for k in keys:
+            out[k] = []
+            for m in mdbs:
+                #print set(m[key].keys())
+                #print keys
+                assert(set(m[key].keys()) == set(keys))
+                if self.selected_indices is None:
+                    out[k].append(m[key][k][:, self.tmax-self.width:self.tmax])
+                else:
+                    out[k].append(m[key][k][self.selected_indices, self.tmax-self.width:self.tmax])
+            out[k] = numpy.vstack(out[k])
+        self.data = out
+    
+    def get(self):
+        return self.data
+
+from simrun3.modular_reduced_model_inference import RaisedCosineBasis, numpy, make_weakref, np
+
+class Strategy_categorizedTemporalRaisedCosine(Strategy):
+    '''requires keys: spatiotemporalSa, st, y, ISI'''
+    def __init__(self, name, RaisedCosineBasis_temporal):
+        super(Strategy_categorizedTemporalRaisedCosine, self).__init__(name)
+        self.RaisedCosineBasis_temporal = RaisedCosineBasis_temporal
+
+    def _setup(self):
+        self.compute_basis()
+        self.groups = sorted(self.base_vectors_arrays_dict.keys())
+        self.len_t, self.len_trials = self.base_vectors_arrays_dict.values()[0].shape
+        self._get_score = I.partial(self._get_score_static, self.base_vectors_arrays_dict)
+        
+    def compute_basis(self):
+        '''computes_base_vector_array with shape (spatial, temporal, trials)'''
+        st = self.data['st']
+        stSa_dict = self.data['categorizedTemporalSa']
+        base_vectors_arrays_dict = {}
+
+        for group, tSa in stSa_dict.iteritems():
+            len_trials, len_t = tSa.shape
+            base_vector_rows = []
+            for t in self.RaisedCosineBasis_temporal.compute(len_t).get():
+                base_vector_rows.append(numpy.dot(tSa, t))
+            base_vectors_arrays_dict[group] = make_weakref(np.array(numpy.array(base_vector_rows).astype('f4')))
+        self.base_vectors_arrays_dict = base_vectors_arrays_dict
+        self.keys = sorted(base_vectors_arrays_dict.keys())
+
+    def _get_x0(self):
+        return numpy.random.rand(self.len_t*len(self.groups))*2-1 
+    
+    @staticmethod
+    def _get_score_static(base_vectors_arrays_dict, x):
+        outs = []
+        x_reshaped = x.reshape(len(base_vectors_arrays_dict),-1)
+        keys = sorted(base_vectors_arrays_dict.keys())
+        for lv, group in enumerate(keys):
+            array = base_vectors_arrays_dict[group]
+            x_current = x_reshaped[lv,:]
+            out = np.dot(dereference(x_current), dereference(array)).squeeze()
+            outs.append(out)
+        return np.vstack(outs).sum(axis = 0)
+    
 class DataExtractor_spiketimes(DataExtractor):
     def setup(self, Rm):
         self.mdb = Rm.mdb

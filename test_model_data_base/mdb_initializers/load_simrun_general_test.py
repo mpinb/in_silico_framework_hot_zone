@@ -57,4 +57,12 @@ class Tests(unittest.TestCase):
     def test_voltage_traces_have_float_indices(self):
         e = self.mdb
         self.assertIsInstance(e['voltage_traces'].columns[0], float)
-        self.assertIsInstance(e['voltage_traces'].head().columns[0], float)        
+        self.assertIsInstance(e['voltage_traces'].head().columns[0], float)       
+        
+    @decorators.testlevel(2)       
+    def test_every_entry_in_initialized_mdb_can_be_serialized(self):
+        import cloudpickle
+        e = self.mdb
+        for k in e.keys():
+            v = e[k]
+            cloudpickle.dumps(v) # would raise an error if not picklable

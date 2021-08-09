@@ -422,36 +422,50 @@ def get_cell(s, p, pdf_best_run_selected = None, range_vars = rangeVarsApical + 
 
 
 class CurrentAnalysis:
-    def __init__(self, cell, secID = 'bifurcation', segID = -1, rangeVars = None, colormap = None):
+    def __init__(self, cell_or_dict = None, secID = 'bifurcation', segID = -1, rangeVars = None, colormap = None, tVec = None):
         # set attributes
-        self.cell = cell
-        self.t = cell.tVec
-        if secID == 'bifurcation':
-            sec = project_specific_ipynb_code.hot_zone.get_main_bifurcation_section(cell)
+        if not isinstance(cell_or_dict, dict):
+            self.mode = 'cell'
+            self.cell = cell = cell_or_dict
+            self.t = cell.tVec
+            if secID == 'bifurcation':
+                sec = project_specific_ipynb_code.hot_zone.get_main_bifurcation_section(cell)
+            else:
+                sec = cell.sections[secID]
+            self.sec = sec
+            self.secID = cell.sections.index(sec)
+            self.segID = segID
+            self.seg = [seg for seg in sec][segID]
+            if rangeVars is None:
+                self.rangeVars = cell.soma.recordVars.keys()
+            else:
+                self.rangeVars = rangeVars
         else:
-            sec = cell.sections[secID]
-        self.sec = sec
-        self.secID = cell.sections.index(sec)
-        self.segID = segID
-        self.seg = [seg for seg in sec][segID]
-        if rangeVars is None:
-            self.rangeVars = list(cell.soma.recordVars.keys())
-        else:
+            self.mode = 'dict'
+            self.t = tVec
             self.rangeVars = rangeVars
+            self.cell = cell_or_dict
+            self.sec = None
         self.colormap = colormap
-        
         # compute currents
         self._compute_current_arrays()
 
-    
+    def _get_current_by_rv(self, rv):
+        try:
+            if self.mode == 'dict':
+                return self.cell[rv]
+            elif self.mode == 'cell':
+                return I.np.array(self.sec.recordVars[rv][self.segID])
+            else:
+                raise ValueError()
+        except (KeyError, IndexError):
+            return I.np.array([float('nan')] * len(self.t))
+        
     def _compute_current_arrays(self):
         out_depolarizing = []
         out_hyperpolarizing = []
         for rv in self.rangeVars:
-            try:
-                x = I.np.array(self.sec.recordVars[rv][-1])
-            except IndexError: # if the mechanism is not present in the current segment
-                x = I.np.array([float('nan')] * len(self.cell.tVec))
+            x = self._get_current_by_rv(rv)
             out_depolarizing.append(I.np.where(x>=0, 0, x))
             out_hyperpolarizing.append(I.np.where(x<0, 0, x))
         self.depolarizing_currents = I.np.array(out_depolarizing) * -1
@@ -461,36 +475,45 @@ class CurrentAnalysis:
         self.net_current = self.depolarizing_currents_sum + self.hyperpolarizing_currents_sum
         self.depolarizing_currents_normalized = self.depolarizing_currents / self.depolarizing_currents_sum
         self.hyperpolarizing_currents_normalized = self.hyperpolarizing_currents / self.hyperpolarizing_currents_sum * -1
-        self.voltage_trace = self.sec.recVList[self.segID]
-        
-    def plot_areas(self, ax = None, normalized = False, plot_net = False, plot_voltage=False):
-        t = self.t
-        if ax is None:
-            fig = I.plt.figure(figsize = (10,4), dpi = 200)
-            ax = fig.add_subplot(111)
-        def __helper(currents, plot_label = True):
-            dummy = I.np.cumsum(currents, axis = 0)
-            dummy = I.np.vstack([I.np.zeros(dummy.shape[1]), dummy])
-            for lv, rv in enumerate(self.rangeVars):
-                ax.fill_between(t,dummy[lv,:], dummy[lv+1,:], 
-                                label = rv if plot_label else None,
-                                color = self.colormap[rv],
-                                linewidth = 0)
-        
-        if normalized:
-            __helper(self.depolarizing_currents_normalized)
-            __helper(self.hyperpolarizing_currents_normalized, False)
-            ax.plot(t, self.depolarizing_currents_sum+1, c = 'k')
-            ax.plot(t, self.hyperpolarizing_currents_sum-1, c = 'k')
-
+        if self.mode == 'cell':
+            self.voltage_trace = self.sec.recVList[self.segID]
         else:
-            __helper(self.depolarizing_currents)
-            __helper(self.hyperpolarizing_currents, False)
-        if plot_net:
-            ax.plot(t, self.net_current, 'k', label = 'net current')
-        if plot_voltage:
-            ax2 = ax.twinx()
-            ax2.plot(t, self.voltage_trace, 'k')
+            self.voltage_trace = None
+        
+    def plot_areas(self, ax = None, normalized = False, plot_net = False, plot_voltage=False, t_stim = 295, select_window_relative_to_stim = (0,55)):
+            t = I.np.array(self.t) - t_stim
+            if ax is None:
+                fig = I.plt.figure(figsize = (10,4), dpi = 200)
+                ax = fig.add_subplot(111)
+            def __helper(currents, plot_label = True):
+                dummy = I.np.cumsum(currents, axis = 0)
+                dummy = I.np.vstack([I.np.zeros(dummy.shape[1]), dummy])
+                for lv, rv in enumerate(self.rangeVars):
+                    x,y1,y2 = t,dummy[lv,:],dummy[lv+1,:]
+                    select = (x>=select_window_relative_to_stim[0]) & (x<=select_window_relative_to_stim[1]) 
+                    x,y1,y2 = x[select],y1[select],y2[select]
+                    ax.fill_between(x,y1,y2, 
+                                    label = rv if plot_label else None,
+                                    color = self.colormap[rv],
+                                    linewidth = 0)
+            if normalized:
+                __helper(self.depolarizing_currents_normalized)
+                __helper(self.hyperpolarizing_currents_normalized, False)
+                ax.plot(t, self.depolarizing_currents_sum+1, c = 'k')
+                ax.plot(t, self.hyperpolarizing_currents_sum-1, c = 'k')
+            else:
+                __helper(self.depolarizing_currents)
+                __helper(self.hyperpolarizing_currents, False)
+            if plot_net:
+                ax.plot(t, self.net_current, 'k', label = 'net current')
+            if plot_voltage:
+                ax2 = ax.twinx()
+                select = (t>=select_window_relative_to_stim[0]) & (t<=select_window_relative_to_stim[1]) 
+                x,y = t[select], I.np.array(self.cell.soma.recVList[0])[select]
+                ax2.plot(x,y, 'k')
+                x,y = t[select], I.np.array(self.voltage_trace)[select]
+                ax2.plot(x,y, 'r')
+
             
     def plot_lines(self, ax = None, legend = True):
         if ax is None: 
@@ -534,10 +557,10 @@ def fun_setup_current_recording(cell, params = None):
             seg = [seg for seg in sec][-1]
         segs.append(seg)
     distance = ['Soma', 'AIS'] + list(distance)
-    range_vars = ['NaTa_t.ina','Ca_LVAst.ica','Ca_HVA.ica','Ih.ihcn','Im.ik','SKv3_1.ik','SK_E2.ik']
-    constants = ['NaTa_t.gNaTa_tbar','Ca_LVAst.gCa_LVAstbar','Ca_HVA.gCa_HVAbar','Ih.gIhbar','Im.gImbar','SKv3_1.gSKv3_1bar','SK_E2.gSK_E2bar']
-    range_vars_soma = ['Nap_Et2.ina','K_Pst.ik','K_Tst.ik'] + ['NaTa_t.ina','Ca_LVAst.ica','Ca_HVA.ica','Ih.ihcn','SKv3_1.ik','SK_E2.ik']
-    constants_soma = ['Nap_Et2.gNap_Et2bar','K_Pst.gK_Pstbar','K_Tst.gK_Tstbar'] + ['NaTa_t.gNaTa_tbar','Ca_LVAst.gCa_LVAstbar','Ca_HVA.gCa_HVAbar','Ih.gIhbar','SKv3_1.gSKv3_1bar','SK_E2.gSK_E2bar']
+    range_vars = ['NaTa_t.ina','Ca_LVAst.ica','Ca_HVA.ica','Ih.ihcn','Im.ik','SKv3_1.ik','SK_E2.ik','ik','ina','ica','cai','eca', 'v']
+    constants = ['NaTa_t.gNaTa_tbar','Ca_LVAst.gCa_LVAstbar','Ca_HVA.gCa_HVAbar','Ih.gIhbar','Im.gImbar','SKv3_1.gSKv3_1bar','SK_E2.gSK_E2bar', 'ek','ena']
+    range_vars_soma = ['Nap_Et2.ina','K_Pst.ik','K_Tst.ik'] + ['NaTa_t.ina','Ca_LVAst.ica','Ca_HVA.ica','Ih.ihcn','SKv3_1.ik','SK_E2.ik', 'ik','ina','ica','cai','eca', 'v']
+    constants_soma = ['Nap_Et2.gNap_Et2bar','K_Pst.gK_Pstbar','K_Tst.gK_Tstbar'] + ['NaTa_t.gNaTa_tbar','Ca_LVAst.gCa_LVAstbar','Ca_HVA.gCa_HVAbar','Ih.gIhbar','SKv3_1.gSKv3_1bar','SK_E2.gSK_E2bar', 'ek','ena']
     cell.range_vars_dict = {}
     assert(len(distance) == len(segs))
     for d, seg in zip(distance, segs):

@@ -303,7 +303,7 @@ def flatten(l):
     '''https://stackoverflow.com/a/2158532/5082048'''
     import collections
     for el in l:
-        if isinstance(el, collections.Iterable) and not isinstance(el, six.stringtypes): # not sure about syntax here - rieke
+        if isinstance(el, collections.Iterable) and not isinstance(el, six.string_types): # not sure about syntax here - rieke
             for sub in flatten(el):
                 yield sub
         else:
