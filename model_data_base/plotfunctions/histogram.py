@@ -40,3 +40,27 @@ def histogram(hist_bins,
     
     return fig
     
+def histogram2(hist_bins, color = None, ax = None, label = None, mode = 'step'):
+    
+    '''hist_bins: tuple of the format (bins,hist) where bins needs to be one element longer than hist
+        bins: bin edges; hist: bin values
+    '''
+    if ax is None:
+        ax = I.plt.gca()
+    bins, hist = hist_bins
+
+    # add points, so we always start  at 0
+    x = [bins[0]]
+    y = [0]
+    # create line that goes in rectangular steps
+    for lv in range(len(hist)):
+        x += [bins[lv], bins[lv+1]]
+        y += [hist[lv], hist[lv]]
+    # add points so we always end at 0
+    x += [bins[-1]]
+    y += [0]
+        
+    if mode == 'step':
+        ax.step(x,y, color = color, label = label)
+    elif mode == 'filled':
+        I.plt.fill_between(x,y,[0]*len(x),color=color,label=label,linewidth = 0) 
