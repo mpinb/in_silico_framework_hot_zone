@@ -41,3 +41,9 @@ jobs:
           installer-url: https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
           allow-softlinks: true
           show-channel-urls: true
+      - shell: bash -l {0}
+        run: |
+          conda info
+          conda list
+          conda config --show-sources
+          conda config --show
