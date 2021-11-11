@@ -128,13 +128,15 @@ def highpass_filter(y, sr):
 class ReaderLabView:
     def __init__(self, path, stim_times = None, sampling_rate = 32000, scale = 100, apply_filter = False):
         self.path = path
+        self.stim_times = stim_times   
+        self.sampling_rate = sampling_rate        
         self.scale = scale
+        self.apply_filter = apply_filter
         self.t, self.v = read_labview_junk1_dat_files(path, scale = scale, sampling_rate = sampling_rate)
         if apply_filter:
             self.v = highpass_filter(self.v, sampling_rate)
         if stim_times is None:
             stim_times = []
-        self.stim_times = stim_times
         self.t_start = self.t[0]
         self.t_end = self.t[-1]
         
@@ -146,11 +148,11 @@ class ReaderLabView:
     
     def get_serialize_dict(self):
         return {'path': self.path,
-                'stim_times': stim_times,
-                'sampling_rate': sampling_rate,
-                'scale': scale,
+                'stim_times': self.stim_times,
+                'sampling_rate': self.sampling_rate,
+                'scale': self.scale,
                 'class': 'ReaderLabView',
-                'apply_filter': apply_filter}
+                'apply_filter': self.apply_filter}
 
 def load_reader(dict_):
     class_ = dict_.pop('class')
@@ -507,7 +509,7 @@ class SpikeDetectionCreastTrough(object):
             minimun_zero_bin_sst = bins[I.np.argwhere(((binned_data_sst[4:-1]-binned_data_sst[5:]) < 0)| (binned_data_sst[4:-1] == 0)).min() + 4]
         return minimun_zero_bin_st, minimun_zero_bin_sst * -1
     
-    def get_default_events(self, show_stim_times = True):
+    def get_default_events(self, show_stim_times = True, show_trough_candidates = True):
         '''Returns a list of events to be displayed with the show_events method.
         Creates events for deteced spikes (black line) and spike candidates [dotted black line]
         (i.e. creasts and troughs exceeding the limit but which do not qualify to 
@@ -524,9 +526,10 @@ class SpikeDetectionCreastTrough(object):
         events = [(s, 'k', '--', .5) 
                   for s in self._spike_times_creast 
                   if not s in self.spike_times] # len([ss for ss in self.spike_times if I.np.abs(ss-s) < 1])]
-        events += [(s, 'k', '--', .5) 
-                   for s in self._spike_times_trough 
-                   if not len([ss for ss in self.spike_times if 0 < s-ss < self.max_creast_trough_interval])]
+        if show_trough_candidates:
+            events += [(s, 'k', '--', .5) 
+                       for s in self._spike_times_trough 
+                       if not len([ss for ss in self.spike_times if 0 < s-ss < self.max_creast_trough_interval])]
         # get detected spikes
         events += [(t, 'k', '-', 1) for t in self.spike_times]
         # add stimulus times
@@ -545,6 +548,8 @@ class SpikeDetectionCreastTrough(object):
                      (timepoint, 'color', 'linestyle', linewidth)'''
         if events == 'auto':
             events = self.get_default_events()
+        if events == 'only_creast':
+            events = self.get_default_events(show_trough_candidates=False)
             
         events = sorted(events, key = lambda x:x[0])
     
