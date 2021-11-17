@@ -81,8 +81,8 @@ def setup_locking_server():
     #command = 'redis-server --save "" --appendonly no --port 8885 --protected-mode no &'    
     #print command
     #os.system(command)
-    config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
-    config = [{'config': {'hosts': 'axon01:21811'}, 'type': 'zookeeper'}]
+    #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
+    config = [{'config': {'hosts': 'somalogin02-hs:21811'}, 'type': 'zookeeper'}]
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
     setup_locking_config()
@@ -159,13 +159,14 @@ def setup_dask_workers(management_dir):
     import psutil
     n_cpus = psutil.cpu_count(logical=False)
     sfile, sfile3 = _get_sfile(management_dir)
-    command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9 &'.format(nprocs = n_cpus, sfile = sfile)
-    print command
-    os.system(command)
-    command = '''bash -ci "source ~/.bashrc; source_3; dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9" &'''
-    command = command.format(nprocs = n_cpus, sfile = sfile3)
-    print command
-    os.system(command)
+    for i in range(4):
+        command = 'CUDA_VISIBLE_DEVICES={gpu_index} dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9 &'.format(gpu_index = i, nprocs = 1, sfile = sfile)
+        print command
+        os.system(command)
+        command = '''bash -ci "source ~/.bashrc; source_3; CUDA_VISIBLE_DEVICES={gpu_index} dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9" &'''
+        command = command.format(gpu_index = i, nprocs = 1, sfile = sfile3)
+        print command
+        os.system(command)
     print '-'*50
 
 ##############################################
@@ -183,7 +184,7 @@ def setup_jupyter_notebook():
     #command = 'screen -S jupyterlab -dm bash -c "source ~/.bashrc; source_3; ' +     '''jupyter-lab --ip='*' --no-browser --port=11113"'''
     #command = '''bash -c "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" &'''
     #command = '''(source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113) &'''
-    command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113 --NotebookApp.token='' --NotebookApp.password=''" &'''
+    command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113 --LabApp.token=''" &'''
     #command = "/axon/scratch/abast/anaconda3/bin/jupyter-lab --ip='*' --no-browser --port=11113"
     os.system(command)
 # In[8]:
