@@ -540,20 +540,23 @@ def init(mdb, simresult_path,  \
         if rewrite_in_optimized_format:
             optimize(mdb, select = ['cell_activation', 'synapse_activation'], repartition = False, get = get, client = client)
     if dendritic_voltage_traces: 
-        _build_dendritic_voltage_traces(mdb, repartition = repartition)
-        if rewrite_in_optimized_format:
-            optimize(mdb['dendritic_recordings'], select = list(mdb['dendritic_recordings'].keys()), repartition = False, get = get, client = client) 
-        if dendritic_spike_times:
-            m = mdb.create_sub_mdb('dendritic_spike_times')
-            for kk in list(mdb['dendritic_recordings'].keys()):
-                vt = mdb['dendritic_recordings'][kk]
-                st = spike_detection(vt, threshold = dendritic_spike_times_threshold)
-                m.setitem(kk+'_'+str(dendritic_spike_times_threshold), st, dumper = pandas_to_msgpack)                             
+        add_dendritic_voltage_traces(mdb, rewrite_in_optimized_format, dendritic_spike_times, repartition, dendritic_spike_times_threshold)
     if spike_times: 
         print("---spike times---")
         vt = mdb['voltage_traces']
         mdb.setitem('spike_times', spike_detection(vt), dumper = pandas_to_msgpack)                                        
     print('Initialization succesful.') 
+    
+def add_dendritic_voltage_traces(mdb, rewrite_in_optimized_format = True, dendritic_spike_times = True, repartition = True, dendritic_spike_times_threshold = -30.):
+        _build_dendritic_voltage_traces(mdb, repartition = repartition)
+        if rewrite_in_optimized_format:
+            optimize(mdb['dendritic_recordings'], select = list(mdb['dendritic_recordings'].keys()), repartition = False, get = get, client = client) 
+        if dendritic_spike_times:
+            m = mdb.create_sub_mdb('dendritic_spike_times', raise_ = False)
+            for kk in list(mdb['dendritic_recordings'].keys()):
+                vt = mdb['dendritic_recordings'][kk]
+                st = spike_detection(vt, threshold = dendritic_spike_times_threshold)
+                m.setitem(kk+'_'+str(dendritic_spike_times_threshold), st, dumper = pandas_to_msgpack)
         
 def _get_dumper(value):
     '''tries to automativcally infer the best dumper for each table'''
