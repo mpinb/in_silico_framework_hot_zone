@@ -1,5 +1,6 @@
 name: isf-py27
 channels:
+- https://repo.continuum.io/pkgs/free
 - defaults
 dependencies:
 - anaconda::ca-certificates=2020.10.14=0
