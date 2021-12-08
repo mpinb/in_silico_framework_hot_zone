@@ -28,7 +28,7 @@ jobs:
       uses: conda-incubator/setup-miniconda@v2
       with:
         activate-environment: "isf-py27"
-        environment-file: "envs/env-isf-py27.yml"
+        environment-file: "etc/env-isf-py27.yml"
         python-version: "2.7"
         auto-activate-base: false
         
