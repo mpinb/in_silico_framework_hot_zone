@@ -1,0 +1,38 @@
+# This workflow install 'in silico framework' project dependencies and then run tests.
+
+name: In Silico Framework CI workflow
+
+on:
+  #push:
+  #  branches: [ master ]
+  #pull_request:
+  #  branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+
+  setup-isf-ubuntu:
+  
+    name: Setup ISF Ubuntu Linux
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+    
+    - name: Checkout ISF
+      uses: actions/checkout@v2
+    
+    - name: Set up Python 2.7
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: "isf-py27"
+        environment-file: "etc/env-isf-py27.yml"
+        python-version: "2.7"
+        auto-activate-base: false
+        
+    - name: Review dependencies
+      run: |
+        conda info
+        conda list

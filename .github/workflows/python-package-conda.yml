@@ -3,13 +3,13 @@ name: Python Package using Conda
 on: 
   # Trigger the workflow on push or pull request,
   # from the main and test-workflow branches.
-  push:
-    branches:
-      - main
-      - test-workflow
-  pull_request:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
+  #    - test-workflow
+  #pull_request:
+  #  branches:
+  #    - main
   workflow_dispatch:
 
 jobs:
