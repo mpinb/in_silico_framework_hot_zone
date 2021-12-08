@@ -1,6 +1,6 @@
 name: isf-py27
 channels:
-- 'defaults'
+- defaults
 dependencies:
 - anaconda::ca-certificates=2020.10.14=0
 - anaconda::cython=0.29.14=py27he6710b0_0
