@@ -91,7 +91,7 @@ https://conda.anaconda.org/conda-forge/linux-64/pyparsing-2.2.0-py27_0.tar.bz2
 https://conda.anaconda.org/conda-forge/linux-64/pyqt-5.6.0-py27_2.tar.bz2
 https://conda.anaconda.org/conda-forge/linux-64/pysocks-1.6.6-py27_0.tar.bz2
 https://conda.anaconda.org/conda-forge/linux-64/pytables-3.3.0-np111py27_0.tar.bz2
-https://conda.anaconda.org/anaconda/linux-64/python-2.7.18-h02575d3_0.tar.bz2
+#https://conda.anaconda.org/anaconda/linux-64/python-2.7.18-h02575d3_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/python-blosc-1.5.1-py27_0.tar.bz2
 https://conda.anaconda.org/conda-forge/linux-64/python-dateutil-2.6.1-py27_0.tar.bz2
 https://conda.anaconda.org/conda-forge/linux-64/pytz-2017.2-py27_0.tar.bz2

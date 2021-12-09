@@ -22,7 +22,13 @@ jobs:
     - name: Initial conda setup
       run: |
         conda info
-        conda list        
+        conda list
+
+    - name: Install Python 2.7.18 in conda base environment
+      run: |
+        conda install -c anaconda python=2.7.18=h02575d3_0
+        conda info
+        conda list
         
     - name: Install dependencies
       run: |
