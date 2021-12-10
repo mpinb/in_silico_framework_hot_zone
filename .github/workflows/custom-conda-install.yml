@@ -39,6 +39,8 @@ jobs:
           source ./anaconda2_isf/bin/activate
           which conda
           ## conda-env create --file etc/env-isf-py27.yml
-          conda install  --file etc/isf-py27-spec.txt --name base
+          conda install --file etc/isf-py27-spec.txt --name root
+          conda info
+          conda list
           
           
