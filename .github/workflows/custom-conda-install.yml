@@ -37,15 +37,11 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-
-      # Download conda from Anaconda repo
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          installer-url: https://repo.anaconda.com/archive/Anaconda2-4.2.0-Linux-x86_64.sh
-          allow-softlinks: true
-          show-channel-urls: true
-      - run: |
-          conda info
-          conda list
-          conda config --show-sources
-          conda config --show
+          
+      - name: Install Anaconda2
+        run: |
+          wget https://repo.anaconda.com/archive/Anaconda2-4.2.0-Linux-x86_64.sh
+          ./Anaconda2-4.2.0-Linux-x86_64.sh -b -p ./anaconda2_isf
+          source ./anaconda2_isf/bin/activate
+          which conda          
+          
