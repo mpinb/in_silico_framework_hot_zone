@@ -31,7 +31,6 @@ jobs:
       # Install Anaconda2 and update conda package manager
       - name: Install Anaconda2
         run: |
-          echo $HOME
           wget https://repo.anaconda.com/archive/Anaconda2-4.2.0-Linux-x86_64.sh --quiet
           bash Anaconda2-4.2.0-Linux-x86_64.sh -b -p ./anaconda2_isf
           source ./anaconda2_isf/bin/activate
@@ -41,9 +40,9 @@ jobs:
       # Updating the root environment. Install ISF dependencies (YAML)
       # REF: https://stackoverflow.com/questions/42352841/how-to-update-an-existing-conda-environment-with-a-yml-file
       - name: Install ISF dependencies
-          # https://stackoverflow.com/questions/42352841/how-to-update-an-existing-conda-environment-with-a-yml-file
-          ##conda-env create --name isf-py27 --file etc/env-isf-py27.yml --quiet
-          ##conda install --file etc/isf-py27-spec.txt --name root
+        run: |
+          ## conda-env create --name isf-py27 --file etc/env-isf-py27.yml --quiet
+          ## conda install --file etc/isf-py27-spec.txt --name root
           source ./anaconda2_isf/bin/activate
           conda-env update --file etc/env-isf-py27.yml --prune
           conda info
