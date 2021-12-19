@@ -22,7 +22,6 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
-        working-directory: /home/runner
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -33,8 +32,8 @@ jobs:
       - name: Install Anaconda2
         run: |
           wget https://repo.anaconda.com/archive/Anaconda2-4.2.0-Linux-x86_64.sh --quiet
-          bash Anaconda2-4.2.0-Linux-x86_64.sh -b -p ./anaconda2_isf
-          source ./anaconda2_isf/bin/activate
+          bash Anaconda2-4.2.0-Linux-x86_64.sh -b -p ~/anaconda2_isf
+          source ~/anaconda2_isf/bin/activate
           which conda
           conda update conda
 
