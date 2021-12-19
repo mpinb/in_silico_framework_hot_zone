@@ -26,7 +26,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      # - uses: actions/checkout@v2
 
       # Install Anaconda2 and ISF dependencies (YAML)
       - name: Install Anaconda2
@@ -37,7 +37,7 @@ jobs:
           source ./anaconda2_isf/bin/activate
           which conda
           conda update conda
-          conda-env create --file --quiet etc/env-isf-py27.yml
+          conda-env create --name isf-py27 --file etc/env-isf-py27.yml --quiet
           ##conda install --file etc/isf-py27-spec.txt --name root
           source activate isf-py27
           conda info
