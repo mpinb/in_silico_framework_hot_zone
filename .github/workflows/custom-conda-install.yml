@@ -43,8 +43,9 @@ jobs:
         run: |
           source ~/conda2-isf/bin/activate
           conda info
-          conda-env create --name isf-py27 --file etc/env-isf-py27.yml --quiet
-          ## conda-env update --file etc/env-isf-py27.yml --prune
+          python installer/tqdm_silence_progress.py
+          conda-env create --name isf-py27 --file etc/env-isf-py27.yml
+          ## conda-env update --file etc/env-isf-py27.yml --prune --quiet
           source activate isf-py27
           conda list
           
@@ -62,7 +63,7 @@ jobs:
         run: |
           source ~/conda2-isf/bin/activate
           source activate isf-py27
-          cd installer/pandas_msgpack
-          python setup.py install
+          cd installer
+          python setup_msgpack_linux64.py
           conda list
         
