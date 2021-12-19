@@ -39,13 +39,30 @@ jobs:
 
       # Updating the root environment. Install ISF dependencies (YAML)
       # NOTE: The environment file (yaml) is in the ISF repository 'etc' folder
-      # REF: https://stackoverflow.com/questions/42352841/how-to-update-an-existing-conda-environment-with-a-yml-file
       - name: Install ISF dependencies
         run: |
-          ## conda-env create --name isf-py27 --file etc/env-isf-py27.yml --quiet
           source ~/conda2-isf/bin/activate
-          conda-env update --file etc/env-isf-py27.yml --prune
           conda info
+          conda-env create --name isf-py27 --file etc/env-isf-py27.yml --quiet
+          ## conda-env update --file etc/env-isf-py27.yml --prune
+          source activate isf-py27
           conda list
           
-          
+      # Patch the pandas library to support CategoricalIndex in mspack format
+      - name: Patch pandas library
+        run: |
+          source ~/conda2-isf/bin/activate
+          source activate isf-py27
+          cd installer
+          python patch_pandas_linux64.py
+          conda list
+
+      # Install pandas_msgpack
+      - name: Install pandas_msgpack
+        run: |
+          source ~/conda2-isf/bin/activate
+          source activate isf-py27
+          cd installer
+          python setup_msgpack_linux64.py
+          conda list
+        
