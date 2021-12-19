@@ -28,18 +28,18 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
+      # Install Anaconda2 and ISF dependencies (YAML)
       - name: Install Anaconda2
         run: |
+          echo $HOME
           wget https://repo.anaconda.com/archive/Anaconda2-4.2.0-Linux-x86_64.sh --quiet
           bash Anaconda2-4.2.0-Linux-x86_64.sh -b -p ./anaconda2_isf
           source ./anaconda2_isf/bin/activate
           which conda
-          ## conda-env create --file etc/env-isf-py27.yml
-          conda install --file etc/isf-py27-spec.txt --name root
+          conda update conda
+          conda-env create --file --quiet etc/env-isf-py27.yml
+          ##conda install --file etc/isf-py27-spec.txt --name root
+          source activate isf-py27
           conda info
           conda list
           
