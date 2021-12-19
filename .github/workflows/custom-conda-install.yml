@@ -27,6 +27,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          path: isf
 
       # Install Anaconda2 and update conda package manager
       - name: Install Anaconda2
