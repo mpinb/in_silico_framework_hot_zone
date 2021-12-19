@@ -28,7 +28,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       # - uses: actions/checkout@v2
 
-      # Install Anaconda2 and ISF dependencies (YAML)
+      # Install Anaconda2 and update conda package manager
       - name: Install Anaconda2
         run: |
           echo $HOME
@@ -37,9 +37,15 @@ jobs:
           source ./anaconda2_isf/bin/activate
           which conda
           conda update conda
-          conda-env create --name isf-py27 --file etc/env-isf-py27.yml --quiet
+
+      # Updating the root environment. Install ISF dependencies (YAML)
+      # REF: https://stackoverflow.com/questions/42352841/how-to-update-an-existing-conda-environment-with-a-yml-file
+      - name: Install ISF dependencies
+          # https://stackoverflow.com/questions/42352841/how-to-update-an-existing-conda-environment-with-a-yml-file
+          ##conda-env create --name isf-py27 --file etc/env-isf-py27.yml --quiet
           ##conda install --file etc/isf-py27-spec.txt --name root
-          source activate isf-py27
+          source ./anaconda2_isf/bin/activate
+          conda-env update --file etc/env-isf-py27.yml --prune
           conda info
           conda list
           
