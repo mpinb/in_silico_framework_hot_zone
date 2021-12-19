@@ -48,7 +48,7 @@ jobs:
           source activate isf-py27
           conda list
           
-      # Patch the pandas library to support CategoricalIndex in mspack format
+      # Patch the pandas library to support CategoricalIndex in msgpack format
       - name: Patch pandas library
         run: |
           source ~/conda2-isf/bin/activate
@@ -62,7 +62,7 @@ jobs:
         run: |
           source ~/conda2-isf/bin/activate
           source activate isf-py27
-          cd installer
-          python setup_msgpack_linux64.py
+          cd installer/pandas_msgpack
+          python setup.py install
           conda list
         
