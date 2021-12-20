@@ -50,19 +50,21 @@ jobs:
       # Patch the pandas library to support CategoricalIndex in msgpack format
       - name: Patch pandas library
         run: |
+          echo "Patching pandas library."
           source ~/conda2-isf/bin/activate
           source activate isf-py27
           cd installer
           python patch_pandas_linux64.py
           conda list
 
-      # Install pandas_msgpack
-      - name: Install pandas_msgpack
+      # Install pandas-msgpack
+      - name: Install pandas-msgpack
         run: |
-          git clone https://github.com/abast/pandas-msgpack.git pandas_msgpack
-          git --git-dir=./installer/pandas_msgpack/.git apply ./installer/pandas_msgpack.patch
+          echo "Installing pandas-msgpack"
+          git clone https://github.com/abast/pandas-msgpack.git
+          git -C pandas-msgpack apply ../installer/pandas_msgpack.patch
           source ~/conda2-isf/bin/activate
           source activate isf-py27
-          pip install git+file:///installer/pandas_msgpack/.git
-          conda list
+          cd pandas-msgpack; python setup.py install
+          pip list --format=legacy | grep pandas
         
