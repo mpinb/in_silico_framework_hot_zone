@@ -67,4 +67,23 @@ jobs:
           source activate isf-py27
           cd pandas-msgpack; python setup.py install
           pip list --format=legacy | grep pandas
-        
+
+      # Apply workaround for C compiler prefix conda bug
+      # REF: https://stackoverflow.com/c/ibs/questions/199
+      - name: Compiler prefix workaround
+        run: |
+          echo "Applying compiler prefix bug workaround."
+          cd ~/conda2-isf/envs/isf-py27/bin
+          ln -sf $(which cc) x86_64-conda_cos6-linux-gnu-cc
+
+      # Compile neuron mechanisms
+      - name: Compile neuron mechanisms
+        run: |
+          echo "Compiling neuron mechanisms"
+          source ~/conda2-isf/bin/activate
+          source activate isf-py27
+          pushd .
+          cd mechanisms/channels_py2; nrnivmodl
+          popd
+          cd mechanisms/netcon_py2; nrnivmodl
+          
