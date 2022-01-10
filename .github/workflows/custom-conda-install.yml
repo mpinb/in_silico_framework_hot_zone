@@ -72,7 +72,7 @@ jobs:
       # REF: https://stackoverflow.com/c/ibs/questions/199
       - name: Compiler prefix workaround
         run: |
-          echo "Applying compiler prefix bug workaround."
+          echo "Applying compiler prefix bug workaround"
           cd ~/conda2-isf/envs/isf-py27/bin
           ln -sf $(which cc) x86_64-conda_cos6-linux-gnu-cc
 
