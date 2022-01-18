@@ -61,7 +61,6 @@ jobs:
         run: |
           echo "Installing pandas-msgpack"
           git clone https://github.com/abast/pandas-msgpack.git
-          git -C pandas-msgpack apply ../installer/pandas_msgpack.patch
           source ~/conda2-isf/bin/activate
           source activate isf-py27
           cd pandas-msgpack; python setup.py install
