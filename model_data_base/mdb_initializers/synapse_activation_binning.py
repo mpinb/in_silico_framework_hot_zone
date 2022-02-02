@@ -28,10 +28,12 @@ def prefun(df):
     bs = 50
     df['binned_somadist'] = df.soma_distance.div(bs).map(np.floor).astype(int).map(lambda x: '{}to{}'.format(x*bs, x*bs+bs))    
     return df
-
+ 
 def postfun(s, maxtime = None):
-    defaultvalue = np.zeros(maxtime)
-    s = s.map(lambda x: defaultvalue if x is None else x)
+    default_value_size = s.dropna().iloc[0].shape
+    defaultvalue = np.zeros(default_value_size)
+    s_old = s
+    s = s.map(lambda x: defaultvalue if( isinstance(x, float) and np.isnan(x)) else x)
     return np.vstack(s.values)
 
 def applyfun(pdf, maxtime = None):
