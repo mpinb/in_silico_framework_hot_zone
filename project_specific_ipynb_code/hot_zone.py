@@ -817,7 +817,6 @@ def get_doublet_triplet_times_series(x, return_ = None):
 import sys
 sys.path.append('../project_src/SpikeAnalysis/')
 import spike_analysis.core 
-reload(spike_analysis.core)
 ReaderSmr = spike_analysis.core.ReaderSmr
 SpikeDetectionCreastTrough = spike_analysis.core.SpikeDetectionCreastTrough
 SpikeTimesAnalysis = spike_analysis.core.SpikeTimesAnalysis
@@ -900,7 +899,7 @@ class Plot:
     def __init__(self,mdb):
         self.mdb = mdb
         self.models = [k for k in mdb.keys() if I.utils.convertible_to_int(k[0:4])]
-        print 'found models' , self.models
+        print('found models' , self.models)
         self.select_depth = None
         self.select_value = None
 
@@ -965,9 +964,9 @@ class Plot:
     def get_dist_st(self, key, sample = None, recsite = 'prox', threshold = '-30.0'):
         out = []
         sts = self.get_individual_dataframes(key, 'spike_times', add_model_to_index = False)    
-        if recsite is 'prox':
+        if recsite == 'prox':
             recsite = get_sorted_recsite_names(self.mdb[self.models[0]][key])[0]
-        elif recsite is 'dist':
+        elif recsite == 'dist':
             recsite = get_sorted_recsite_names(self.mdb[self.models[0]][key])[1]
         recsite = recsite + '_' + threshold              
         for model, st in zip(self.models, sts):
