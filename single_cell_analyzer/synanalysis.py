@@ -160,7 +160,7 @@ def compute_syn_distances_2Dprojected(cell, synType, label=None):
 
 def get_dist(x1, x2):
     assert(len(x1) == len(x2))
-    return I.np.sqrt(sum((xx1-xx2)**2 for xx1, xx2 in zip(x1, x2)))
+    return np.sqrt(sum((xx1-xx2)**2 for xx1, xx2 in zip(x1, x2)))
 
 def compute_distance_to_soma(sec, x, cell = None, consider_gap_to_soma = False):
     '''Computes the distance from a point specified by section and sectionx to the soma.
