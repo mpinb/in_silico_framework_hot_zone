@@ -1,5 +1,6 @@
 import Interface as I
 import inspect
+import six
 
 def get_cellnumbers_from_confile(confile):
     con = I.scp.reader.read_functional_realization_map(confile)

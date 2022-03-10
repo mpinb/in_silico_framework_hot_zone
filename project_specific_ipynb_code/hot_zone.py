@@ -785,13 +785,38 @@ def event_rasterplot(st, st_prox = None, rasterplot_fun = I.rasterplot2, **kwarg
         rasterplot_fun(st_prox, c = 'orange', marker = '.',**kwargs)
     rasterplot_fun(st[st_pattern == 'triplet'], c = '#ff0000', **kwargs)
     
+def get_doublet_triplet_times(x):
+    assert(x == sorted(x))
+    out_triplet = []
+    out_doublet = []
+    lv = 0
+    while lv < len(x):
+        if (lv+3-1 < len(x)) and (x[lv+3-1] - x[lv] <= 30):
+            out_triplet.append(x[lv])
+            lv += 2
+        elif (lv+2-1 < len(x)) and (x[lv+2-1] - x[lv] <= 10):
+            out_doublet.append(x[lv])
+            lv += 1
+        lv = lv+1
+    return out_doublet, out_triplet
+
+def get_doublet_triplet_times_series(x, return_ = None):
+    assert(isinstance(x,I.pd.Series))
+    x = list(x.dropna())
+    if return_ == 'doublet':
+        out = get_doublet_triplet_times(x)[0]
+    elif return_ == 'triplet':
+        out = get_doublet_triplet_times(x)[1]
+    else:
+        raise ValueError()
+    return I.pd.Series(out)
+    
 ############################
 # ephys extraction, which I also provided to Mike for his thesis
 ############################
 import sys
 sys.path.append('../project_src/SpikeAnalysis/')
 import spike_analysis.core 
-reload(spike_analysis.core)
 ReaderSmr = spike_analysis.core.ReaderSmr
 SpikeDetectionCreastTrough = spike_analysis.core.SpikeDetectionCreastTrough
 SpikeTimesAnalysis = spike_analysis.core.SpikeTimesAnalysis
@@ -860,3 +885,107 @@ def get_sta(path, offset = 0):
                                                                                period = '1onset')) 
     sta.apply_extractor(spike_analysis.core.STAPlugin_annotate_bursts_in_st(source = 'st_df'))
     return sta
+
+#############################################################################
+# functions to visualize simulation results
+#############################################################################
+def get_sorted_recsite_names(mdb):
+    keys = mdb['dendritic_recordings'].keys()
+    dist = [float(k.split('_')[-1]) for k in keys]
+    return [key for _, key in sorted(zip(dist, keys))]
+
+from model_data_base.mdb_initializers.load_simrun_general import add_dendritic_voltage_traces
+class Plot:
+    def __init__(self,mdb):
+        self.mdb = mdb
+        self.models = [k for k in mdb.keys() if I.utils.convertible_to_int(k[0:4])]
+        print('found models' , self.models)
+        self.select_depth = None
+        self.select_value = None
+
+    def set_selector(self, depth = None, value = None):
+        '''the index is formatted like a path. You can select the [depth] element of the path to be [value]'''
+        self.select_depth = depth
+        self.select_value = value
+        
+    def get_individual_dataframes(self, key, subkey, n = None, value = None, sample = None, add_model_to_index = True):
+        out = []
+        for model in self.models:
+            x = self.mdb[model][key][subkey]
+            try:
+                x = x.compute()
+            except AttributeError:
+                pass
+            if self.select_depth is not None:
+                select = x.index.str.split('/').str[self.select_depth].astype(float)
+                x = x[select == self.select_value]
+            if sample is not None:
+                x = x.iloc[1::sample]
+            if add_model_to_index:
+                x.index = ['/'.join([model, xx]) for xx in x.index]
+            out.append(x)
+        return out
+    
+    def get_st(self, key, sample = None):
+        sts = self.get_individual_dataframes(key, 'spike_times', sample = sample)
+        st = I.pd.concat(sts, axis = 0)      
+        return st
+    
+    def rasterplot(self, key, ax = None, offset = 245, sample = None, raterplot_kwargs = {}):
+        st = self.get_st(key, sample = sample)
+        st = st-offset
+        fig = None
+        if ax is None:
+            fig = I.plt.figure(figsize = (10,6), dpi = 200)
+            ax = fig.add_subplot(111)       
+        dist_st = self.get_dist_st(key, sample = sample)
+        dist_st = dist_st - offset
+        event_rasterplot(st, st_prox = dist_st, ax = ax, **raterplot_kwargs)          
+        # I.rasterplot2(dist_st, ax = ax, c = 'orange', **raterplot_kwargs)
+        for h in I.np.cumsum([len(l) for l in self.get_individual_dataframes(key, 'spike_times', sample = sample)])[:-1]:
+            I.plt.axhline(h, color = 'grey', linewidth = 0.5, linestyle = '--') 
+        return fig, ax 
+
+    # def get_dist_st(self, key, sample = None):
+    #     out = []
+    #     sts = self.get_individual_dataframes(key, 'spike_times', add_model_to_index = False)        
+    #     for model, st in zip(self.models, sts):
+    #         if not 'dendritic_recordings' in self.mdb[model][key].keys():
+    #             self._reinit_mdb(self.mdb[model][key])            
+    #         vt = get_prox_recsite(self.mdb[model][key])
+    #         vt = vt.loc[list(st.index)].compute(get = I.dask.get)    
+    #         st = vt_to_st(vt, -20)
+    #         if sample is not None:
+    #             st = st.iloc[1::sample]              
+    #         out.append(st)
+    #     return I.pd.concat(out, axis = 0)
+    
+
+    def get_dist_st(self, key, sample = None, recsite = 'prox', threshold = '-30.0'):
+        out = []
+        sts = self.get_individual_dataframes(key, 'spike_times', add_model_to_index = False)    
+        if recsite == 'prox':
+            recsite = get_sorted_recsite_names(self.mdb[self.models[0]][key])[0]
+        elif recsite == 'dist':
+            recsite = get_sorted_recsite_names(self.mdb[self.models[0]][key])[1]
+        recsite = recsite + '_' + threshold              
+        for model, st in zip(self.models, sts):
+            if not recsite in self.mdb[model][key]['dendritic_spike_times'].keys():
+                self._reinit_mdb(self.mdb[model][key], dendritic_spike_times_threshold = threshold) 
+            x = self.mdb[model][key]['dendritic_spike_times'][recsite].loc[st.index]
+            if sample is not None:
+                x = x.iloc[1::sample]              
+            out.append(x)
+        return I.pd.concat(out, axis = 0)    
+    
+    def _reinit_mdb(self, mdb, rewrite_in_optimized_format=False, dendritic_spike_times=True, repartition=True, dendritic_spike_times_threshold = '-30.0'):
+        add_dendritic_voltage_traces(mdb, rewrite_in_optimized_format, dendritic_spike_times, repartition, dendritic_spike_times_threshold = float(dendritic_spike_times_threshold))
+        # I.mdb_init_simrun_general.init(mdb, mdb['simresult_path'], client = client, rewrite_in_optimized_format = False)
+        
+    def plot_dendritic_recordings(self, key, ax = None, offset = 245):
+        sts = self.get_individual_dataframes(key, 'spike_times')
+        for model, st in zip(self.models, sts):
+            st = st - offset
+            if not 'dendritic_recordings' in self.mdb[model][key].keys():
+                self._reinit_mdb(self.mdb[model][key])
+            plot_prox_vt(self.mdb[model][key], list(st.index))

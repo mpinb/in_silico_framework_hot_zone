@@ -75,25 +75,25 @@ def get_mymap(mdb_setup, mdb_run, c):
     def mymap(func, iterable):
         params_list = list(map(list, iterable))
         params_pd = I.pd.DataFrame(params_list, columns = params)
-#         futures = c.map(objective_fun, params_list)
-#         try:
-#                 features_dicts = c.gather(futures)
-#         except (I.distributed.client.CancelledError, I.distributed.scheduler.KilledWorker):
-#             print('Futures have been canceled. Waiting for 3 Minutes, then reschedule.')
-#             del futures
-#             time.sleep(3*60)
-#             print('Rescheduling ...')
-#             return mymap(func, iterable)
-#         except:
-#             I.distributed.wait(futures)
-#             for lv, f in enumerate(futures):
-#                 if not f.status == 'finished':
-#                     errstr = 'Problem with future number {}\n'.format(lv)
-#                     errstr += 'Exception: {}:{}\n'.format(type(f.exception()), f.exception())
-#                     errstr += 'Parameters are: {}\n'.format(dict(params_pd.iloc[lv]))
-#                     raise ValueError(errstr)
-        features_dicts = map(objective_fun, params_list) # temp rieke
-#         features_dicts = c.gather(futures) #temp rieke
+        futures = c.map(objective_fun, params_list)
+        try:
+                features_dicts = c.gather(futures)
+        except (I.distributed.client.CancelledError, I.distributed.scheduler.KilledWorker):
+            print('Futures have been canceled. Waiting for 3 Minutes, then reschedule.')
+            del futures
+            time.sleep(3*60)
+            print('Rescheduling ...')
+            return mymap(func, iterable)
+        except:
+            I.distributed.wait(futures)
+            for lv, f in enumerate(futures):
+                if not f.status == 'finished':
+                    errstr = 'Problem with future number {}\n'.format(lv)
+                    errstr += 'Exception: {}:{}\n'.format(type(f.exception()), f.exception())
+                    errstr += 'Parameters are: {}\n'.format(dict(params_pd.iloc[lv]))
+                    raise ValueError(errstr)
+##        features_dicts = map(objective_fun, params_list) # temp rieke
+        features_dicts = c.gather(futures) #temp rieke
         features_pd = I.pd.DataFrame(features_dicts)
         save_result(mdb_run, params_pd, features_pd)
         combined_objectives_dict = list(map(combiner.combine, features_dicts))

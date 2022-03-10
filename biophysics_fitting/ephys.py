@@ -13,7 +13,7 @@ def trace_check(t,v,
     out = {}
     # check that at least minspikenum are present
     out[name+'.check_minspikenum'] = n >= minspikenum
-    print(minspikenum)
+    # print(minspikenum)
     # check that voltage base (mean potential from 0.5 to 0.75 * stim_delay) is maxmimum 
     # returning_to_rest deeper than last reported voltage
     b = voltage_base(t,v,stim_onset)
@@ -47,7 +47,7 @@ def trace_check_err(t,v,stim_onset=None, stim_duration=None, punish = 250):
     v=v[select]
     t=t[select]
     var_fact = 1e-1
-    print('trace variance is ', I.np.var(v), I.np.var(v)*var_fact, stim_onset, stim_duration)
+    # print('trace variance is ', I.np.var(v), I.np.var(v)*var_fact, stim_onset, stim_duration)
     return max(75,punish - I.np.var(v)*var_fact)
 
 def find_crossing(v, thresh):
@@ -138,17 +138,17 @@ def AHP_depth_abs(t,v,thresh=None):
 # Original: Returns 20std if no spike has been detected. Returns 20std if there are less than two 
 # somatic APs. Returns 20*std if peak of Ca spike preceedes second somatic spike. 
 def BAC_caSpike_height_check_1_Ca_AP(t,v,v_dend,thresh=None):
-    print(spike_count(t,v_dend,thresh))
+    #print(spike_count(t,v_dend,thresh))
     return spike_count(t,v_dend,thresh) == 1
 
 def BAC_caSpike_height_check_gt2_Na_spikes(t,v,v_dend,thresh=None):
-    print(spike_count(t,v,thresh))
+    #print(spike_count(t,v,thresh))
     return spike_count(t,v,thresh) >= 2
 
 def BAC_caSpike_height_check_Ca_spikes_after_Na_spike(t,v,v_dend, n = 2,thresh=None):
     t_max_Ca = t[v_dend==max(v_dend)][0]
     t_nth_spike = t[find_crossing(v,thresh)[0][n-1]]
-    print(t_max_Ca, t_nth_spike)
+    #print(t_max_Ca, t_nth_spike)
     return t_max_Ca > t_nth_spike
 
 def BAC_caSpike_height(t,v,v_dend,ca_thresh=-55,tstim=295):
@@ -178,7 +178,7 @@ def BPAPatt(t,v_dend, thresh = '+2mV',stim_onset = None):
     b2 = voltage_base(t,v_dend,stim_onset) # 295 is the delay of the bAP stim
     if thresh == '+2mV':
         thresh = b2 + 2
-        print(thresh)
+        #print(thresh)
     h2 = AP_height(t,v_dend, thresh)
     # added by arco ... it seems like the hay algorithm discards events in the first half of the 
     # initialization period. I here discard events before the stimulus.

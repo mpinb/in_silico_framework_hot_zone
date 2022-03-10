@@ -16,7 +16,7 @@ distributed:
 #     work-stealing: True     # workers should steal tasks from each other
 #     worker-ttl: null        # like '60s'. Time to live for workers.  They must heartbeat faster than this
 
-    worker:
+   worker:
 #     multiprocessing-method: forkserver
 #     use-file-locking: True
 #     connections:            # Maximum concurrent connections for data
@@ -27,15 +27,15 @@ distributed:
 #       interval: 10ms        # Time between statistical profiling queries
 #       cycle: 1000ms         # Time between starting new profile
 
-     # Fractions of worker memory at which we take action to avoid memory blowup
-     # Set any of the lower three values to False to turn off the behavior entirely
+#     # Fractions of worker memory at which we take action to avoid memory blowup
+#     # Set any of the lower three values to False to turn off the behavior entirely
      memory:
-       target: 0.95  # target fraction to stay below
-       spill: False  # fraction at which we spill to disk
+       target: 0.90  # target fraction to stay below
+       spill:  False # fraction at which we spill to disk
        pause: False  # fraction at which we pause worker threads
        terminate: False  # fraction at which we terminate the worker
 
-#   client:
+   client:
 #     heartbeat: 5s  # time between client heartbeats
 
 #   comm:
@@ -44,9 +44,9 @@ distributed:
 #     socket-backlog: 2048
 #     recent-messages-log-length: 0  # number of messages to keep for debugging
 
-#     timeouts:
-#       connect: 10s          # time before connecting fails
-#       tcp: 30s              # time before calling an unresponsive connection dead
+     timeouts:
+       connect: 300s          # time before connecting fails
+       tcp: 300s              # time before calling an unresponsive connection dead
 
 #   # require-encryption: False   # whether to require encryption on non-local comms
 #   #

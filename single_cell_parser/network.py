@@ -14,6 +14,7 @@ from . import writer
 from .synapse_mapper import SynapseMapper
 #import synapse
 from neuron import h
+import six
 
 from . import network_modify_functions
 

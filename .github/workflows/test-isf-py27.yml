@@ -1,0 +1,96 @@
+# Installation of in-silico-framework followed by CI tests.
+name: In-Silico-Framework custom installation and testing
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  # push:
+  #  branches: [ master ]
+  # pull_request:
+  #  branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Install Anaconda2 and update conda package manager
+      - name: Install Anaconda2
+        run: |
+          wget https://repo.anaconda.com/archive/Anaconda2-4.2.0-Linux-x86_64.sh --quiet
+          bash Anaconda2-4.2.0-Linux-x86_64.sh -b -p ~/conda2-isf
+          source ~/conda2-isf/bin/activate
+          conda update conda --yes --quiet
+          conda info
+
+      # Updating the root environment. Install ISF dependencies (YAML)
+      # NOTE: The environment file (yaml) is in the ISF repository 'etc' folder
+      - name: Install ISF dependencies
+        run: |
+          source ~/conda2-isf/bin/activate
+          echo "Installing 'in silico framework' dependencies in silent mode."
+          conda-env create --name isf-py27 --file etc/env-isf-py27.yml --quiet
+          source activate isf-py27
+          conda list
+          
+      # Patch the pandas library to support CategoricalIndex in msgpack format
+      - name: Patch pandas library
+        run: |
+          echo "Patching pandas library."
+          source ~/conda2-isf/bin/activate
+          source activate isf-py27
+          cd installer
+          python patch_pandas_linux64.py
+          conda list
+
+      # Install pandas-msgpack
+      - name: Install pandas-msgpack
+        run: |
+          echo "Installing pandas-msgpack"
+          git clone https://github.com/abast/pandas-msgpack.git
+          source ~/conda2-isf/bin/activate
+          source activate isf-py27
+          cd pandas-msgpack; python setup.py install
+          pip list --format=legacy | grep pandas
+
+      # Apply workaround for C compiler prefix conda bug
+      # REF: https://stackoverflow.com/c/ibs/questions/199
+      - name: Compiler prefix workaround
+        run: |
+          echo "Applying compiler prefix bug workaround"
+          cd ~/conda2-isf/envs/isf-py27/bin
+          ln -sf $(which cc) x86_64-conda_cos6-linux-gnu-cc
+
+      # Compile neuron mechanisms
+      - name: Compile neuron mechanisms
+        run: |
+          echo "Compiling neuron mechanisms"
+          source ~/conda2-isf/bin/activate
+          source activate isf-py27
+          pushd .
+          cd mechanisms/channels_py2; nrnivmodl
+          popd
+          cd mechanisms/netcon_py2; nrnivmodl
+          
+      # Run in-silico-framework tests
+      - name: Test in-silico-framework
+        run: |
+          source ~/conda2-isf/bin/activate
+          source activate isf-py27
+          export PYTHONPATH="$(pwd)"
+          dask-scheduler --port=8786 --bokeh-port=8787 &
+          dask-worker localhost:8786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
+          python run_tests.py
