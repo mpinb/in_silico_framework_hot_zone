@@ -132,21 +132,6 @@ def get_Evaluator(step = False, interpolate_voltage_trace = False):
     e.setup.finalize_funs.append(lambda x: merge(list(x.values())))    
     return e
 
-from multiprocessing import Pool
-import cloudpickle
-def _remote_helper(fun, args):
-        fun_local = cloudpickle.loads(fun)
-        return fun_local(args)
-    
-def run_remotely(fun):
-    fun = cloudpickle.dumps(fun)
-    
-    def newfun(vt):
-        with Pool(1) as pool:
-            out = pool.map(partial(_remote_helper,fun), [vt])
-        return out[0]
-    
-    return newfun
 ##############################################################
 # Combiner
 ##############################################################
