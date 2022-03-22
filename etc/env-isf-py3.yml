@@ -77,7 +77,6 @@ dependencies:
   - future=0.18.2=py38_1
   - get_terminal_size=1.0.0=haa9412d_0
   - gevent=20.9.0=py38h7b6447c_0
-    #  - git=2.11.1=0
   - glib=2.66.1=h92f7085_0
   - glob2=0.7=py_0
   - gmp=6.1.2=h6c8ec71_1
@@ -323,16 +322,22 @@ dependencies:
   - zope.interface=5.1.2=py38h7b6447c_0
   - zstd=1.4.5=h9ceee32_0
   - pip:
+    - argparse==1.4.0
     - blosc==1.10.2
     - bluepyopt==1.9.126
     - chart-studio==1.1.0
     - deap==1.3.1
+    - django==1.8.19
+    - django-tagging==0.5.0
     - efel==3.1.70
     - fasteners==0.16
+    - httplib2==0.20.4
+    - ipyparallel==8.2.0
     - kazoo==2.8.0
     - neo==0.9.0
     - neuron==7.8.2
     - parameters==0.2.1
+    - pebble==4.6.3
     - pillow==8.2.0
     - plotly==4.14.3
     - pypdf2==1.26.0
@@ -340,6 +345,7 @@ dependencies:
     - redis==3.5.3
     - retrying==1.3.3
     - scandir==1.10.0
+    - scoop==0.7.1.1
     - simpleitk==2.0.2
     - sumatra==0.7.4
     - torch==1.8.1

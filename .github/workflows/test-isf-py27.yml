@@ -33,7 +33,7 @@ jobs:
           wget https://repo.anaconda.com/archive/Anaconda2-4.2.0-Linux-x86_64.sh --quiet
           bash Anaconda2-4.2.0-Linux-x86_64.sh -b -p ~/conda2-isf
           source ~/conda2-isf/bin/activate
-          conda update conda --yes --quiet
+          # conda update conda --yes --quiet
           conda info
 
       # Updating the root environment. Install ISF dependencies (YAML)
@@ -46,7 +46,7 @@ jobs:
           source activate isf-py27
           conda list
           
-      # Patch the pandas library to support CategoricalIndex in msgpack format
+      # Patch pandas library to support CategoricalIndex in msgpack format
       - name: Patch pandas library
         run: |
           echo "Patching pandas library."
@@ -57,22 +57,22 @@ jobs:
           conda list
 
       # Install pandas-msgpack
-      - name: Install pandas-msgpack
-        run: |
-          echo "Installing pandas-msgpack"
-          git clone https://github.com/abast/pandas-msgpack.git
-          source ~/conda2-isf/bin/activate
-          source activate isf-py27
-          cd pandas-msgpack; python setup.py install
-          pip list --format=legacy | grep pandas
+      #- name: Install pandas-msgpack
+      #  run: |
+      #    echo "Installing pandas-msgpack"
+      #    git clone https://github.com/abast/pandas-msgpack.git
+      #    source ~/conda2-isf/bin/activate
+      #    source activate isf-py27
+      #    cd pandas-msgpack; python setup.py install
+      #    pip list --format=legacy | grep pandas
 
       # Apply workaround for C compiler prefix conda bug
       # REF: https://stackoverflow.com/c/ibs/questions/199
-      - name: Compiler prefix workaround
-        run: |
-          echo "Applying compiler prefix bug workaround"
-          cd ~/conda2-isf/envs/isf-py27/bin
-          ln -sf $(which cc) x86_64-conda_cos6-linux-gnu-cc
+      #- name: Compiler prefix workaround
+      #  run: |
+      #    echo "Applying compiler prefix bug workaround"
+      #    cd ~/conda2-isf/envs/isf-py27/bin
+      #    ln -sf $(which cc) x86_64-conda_cos6-linux-gnu-cc
 
       # Compile neuron mechanisms
       - name: Compile neuron mechanisms
