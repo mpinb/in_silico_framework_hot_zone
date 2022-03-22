@@ -4,7 +4,10 @@ from torch import nn
 import torch.nn.functional as F
 import torch.nn.utils.prune as prune
 
-def get_cell_info(cellID):
+def get_cell_info(cellID, cis_realisation):
+    neurons_df = I.pd.read_csv(cis_realisation + 'neurons.csv')
+    celltypes_df = I.pd.read_csv(cis_realisation + 'cell_types.csv')
+    
     cellID = int(cellID)
     celltype_id = neurons_df.loc[cellID, 'cell_type']
     celltype = celltypes_df.loc[celltype_id, 'id']
@@ -92,10 +95,11 @@ def get_connection_matrix_from_realisation(cis_realisation):
     return out_df
 
 
-def make_cis_ann_binary(cis_realisation, con = None, weight_min = 0, weight_max = 1, input_size = 28, input_celltype = None, num_classes = 10, rand_seed = 42):
+def make_cis_ann_binary(cis_realisation, device, con = None, input_mask = None, weight_min = 0, weight_max = 1, input_size = 28, input_celltype = None, L5PTs = None, inhs = None, num_classes = 10, rand_seed = 42):
     '''Fully sets up a torch RNN based on a cortex in silico realization folder, where cells that are not connected in CIS have unconnected nodes in the RNN. Other weights are initialised randomly, with inhibitory connections receiving negative weights and excitatory connections receiving positive weights.
         cis_realisation: str, filepath to cortex in silico folder ending in realization_YYYY-MM-DD/
         con: pandas dataframe, optional, shape cells x cells, containing 1 if cells are connected and 0 if not. Skips generating connection matrix if you already have one, as this takes some time.
+        input_mask: torch tensor, optional (will be generated if not supplied, it just takes a long time)
         weight_min, weight_max: float, optional (default min 0, max 1). Initial weights will be sampled with a uniform distribution between weight_min and weight_max. Weights for inhibitory connections will be uniformly sampled between -weight_max and -weight_min.
         input_size: int, optional (default 28 for MNIST dataset)
         input_celltype: str, e.g. 'VPM' or 'VPM_C2'
@@ -104,16 +108,17 @@ def make_cis_ann_binary(cis_realisation, con = None, weight_min = 0, weight_max 
     ## get information about anatomical connectivity from cortex in silico realisation
     assert input_celltype is not None
     if con is None:
+        print('generating connection matrix...')
         con = get_connection_matrix_from_realisation(cis_realisation)
+   
     rnn_nodes = list(con.index)
-    neurons_df = I.pd.read_csv(cis_realisation + 'neurons.csv')
-    celltypes_df = I.pd.read_csv(cis_realisation + 'cell_types.csv')
-    
-    L5PTs = [n for n,c in enumerate(rnn_nodes) if get_cell_info(c)[0] == 'L5tt'] # output layer
-    inhs = [n for n,c in enumerate(rnn_nodes) if get_cell_info(c)[0] in I.inhibitory] # identify inhibitory cells
+    if L5PTs is None:
+        print('reading cell types...')
+        L5PTs = [n for n,c in enumerate(rnn_nodes) if get_cell_info(c, cis_realisation)[0] == 'L5tt'] # output layer
+        inhs = [n for n,c in enumerate(rnn_nodes) if get_cell_info(c, cis_realisation)[0] in I.inhibitory] # identify inhibitory cells
     
     ## set up a basic torch RNN with a fully connected output layer
-    torch.random.seed(rand_seed)
+    torch.manual_seed(rand_seed)
     class RNN(nn.Module):
         def __init__(self, input_size, hidden_size, num_layers, num_classes):
             super(RNN, self).__init__() # initialise the nn.Module
@@ -135,10 +140,10 @@ def make_cis_ann_binary(cis_realisation, con = None, weight_min = 0, weight_max 
             output = self.fc(output)
 
             return output
-
+    print('setting up torch network...')
     model = RNN(input_size, len(rnn_nodes), 1, num_classes)
     print(model)
-    
+    print('modifying hidden layer...')
     ## apply the anatomical information to the torch network
     rnn_layer = model.rnn
     rnn_layer.weight_hh_l0 = torch.nn.init.uniform_(rnn_layer.weight_hh_l0, a=weight_min, b=weight_max) # randomly initialise weights
@@ -150,12 +155,48 @@ def make_cis_ann_binary(cis_realisation, con = None, weight_min = 0, weight_max 
         
     mask = torch.tensor(con.to_numpy())
     prune.custom_from_mask(rnn_layer, 'weight_hh_l0', mask) # remove connections not present in the anatomical model
-    
-    input_mask = get_input_mask(rnn_nodes, cis_realisation, input_celltype, input_node_assignments, input_len = input_size) # give each cell appropriate input
-    input_mask_list = [] 
-    for n in rnn_nodes:
-        input_mask_list.append(input_mask[n])
-    input_mask_tensor = torch.tensor(input_mask_list)
+    print('modifying input layer...')
+    if input_mask is None:
+        input_mask = get_input_mask(rnn_nodes, cis_realisation, input_celltype, input_node_assignments, input_len = input_size) # give each cell appropriate input
+        input_mask_list = [] 
+        for n in rnn_nodes:
+            input_mask_list.append(input_mask[n])
+        input_mask_tensor = torch.tensor(input_mask_list)
+    else:
+        input_mask_tensor = input_mask
     prune.custom_from_mask(rnn_layer, 'weight_ih_l0', input_mask_tensor)
     
+    return model
+
+def make_dummy_ann(input_size = 28, L5PTs = None, num_classes = 10, rnn_nodes = None, device = None):
+    '''Sets up a torch RNN as a foundation for loading an existing trained model's parameters into.
+        input_size: int, optional (default 28 for MNIST dataset)
+        num_classes: int, optional (default 10 for MNIST dataset)'''
+             
+    ## set up a basic torch RNN with a fully connected output layer
+    class RNN(nn.Module):
+        def __init__(self, input_size, hidden_size, num_layers, num_classes):
+            super(RNN, self).__init__() # initialise the nn.Module
+            self.hidden_size = hidden_size
+            self.num_layers = num_layers
+            self.rnn = nn.RNN(input_size, hidden_size, num_layers, nonlinearity = 'relu', batch_first = True)
+            self.fc = nn.Linear(len(L5PTs), num_classes)
+
+
+        def forward(self, x):
+            # set initial hidden state
+            h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).float().to(device)
+            # forward run model
+            output, hidden = self.rnn(x, h0) # output shape (batch_size, seq_length, hidden_size)
+
+            # reshape the output so it fits into the fully connected layer (get the last output from the L5PTs)
+            output = output[:, -1, L5PTs] # shape (sample, timestep, node)
+            # pass it to the linear layer
+            output = self.fc(output)
+
+            return output
+    print('setting up torch network...')
+    model = RNN(input_size, len(rnn_nodes), 1, num_classes)
+    print(model)
+        
     return model
