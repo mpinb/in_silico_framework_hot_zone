@@ -20,7 +20,8 @@ class Simulator_Setup:
         self.stim_setup_funs = []
         self.stim_run_funs = []
         self.stim_response_measure_funs = [] 
-        self.params_modify_funs = []                
+        self.params_modify_funs = []       
+        self.check_funs = []
     
     def check(self):
         if self.cell_param_generator is None:
@@ -29,7 +30,8 @@ class Simulator_Setup:
             raise ValueError('cell_generator must be set')  
         self._check_first_element_of_name_is_the_same(self.stim_setup_funs, self.stim_run_funs)
         self._check_first_element_of_name_is_the_same(self.stim_setup_funs, self.stim_response_measure_funs)
-        
+        for fun in self.check_funs:
+            fun()
         #if not len(self.stim_setup_funs) == len(self.stim_result_extraction_fun):
         #    raise ValueError('run_fun must be set') 
         
@@ -72,7 +74,7 @@ class Simulator_Setup:
         '''returns cell parameters that have been modified by the params_modify_funs.'''
         for name, fun in self.params_modify_funs:
             params = fun(params)
-        return params			
+        return params
 
     def get_cell_params(self, params):
         '''returns cell NTParameterSet structure used for the single_cell_parser.create_cell. 
