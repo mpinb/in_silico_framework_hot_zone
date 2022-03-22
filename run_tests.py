@@ -14,10 +14,11 @@ import matplotlib.pyplot as plt
 import distributed
 import six
 
+# NOTE: consider removing this if else.
 if six.PY2:
     client = distributed.Client('localhost:8786')
 else:
-    client = distributed.Client('localhost:12345')
+    client = distributed.Client('localhost:8786')
 
 def fun():
     import matplotlib
