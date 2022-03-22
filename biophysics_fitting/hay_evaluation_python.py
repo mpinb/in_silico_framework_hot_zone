@@ -65,7 +65,7 @@ class BAC:
         
     def get(self, **voltage_traces):
         import six
-        spikecount = self.BAC_spikecount(voltage_traces)
+        spikecount = self.BAC_spikecount(voltage_traces)['.raw']
         out = {}
         for name,(_,mean,std) in six.iteritems(self.definitions):
             # special case in the original code were in the case of two somatic spikes
@@ -78,7 +78,7 @@ class BAC:
             if all(checks):
                 out_current[''] = out_current['.normalized']
             else:
-                out_current[''] = 20*std
+                out_current[''] = 20. # *std
             out_current = {name + k: v for k,v in six.iteritems(out_current)}
             out.update(out_current)
         return self.check(out, voltage_traces)
@@ -159,7 +159,7 @@ class bAP:
                  stim_onset = 295,
                  stim_duration = 5,
                  bAP_thresh = '+2mV',
-                 punish = 250,
+                 punish = 250.,
                  punish_last_spike_after_deadline = True,
                  punish_minspikenum = 1,
                  punish_returning_to_rest_tolerance = 2.,
@@ -189,7 +189,7 @@ class bAP:
             if all(checks):
                 out_current[''] = out_current['.normalized']
             else:
-                out_current[''] = 20*std
+                out_current[''] = 20 # *std
             out_current = {name + k: v for k,v in six.iteritems(out_current)}
             out.update(out_current)
         return self.check(out, voltage_traces)
