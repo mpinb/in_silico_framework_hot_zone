@@ -4,10 +4,10 @@ name: In-Silico-Framework (Python 3) install and test
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  # push:
-  #  branches: [ master ]
-  # pull_request:
-  #  branches: [ master ]
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -33,7 +33,6 @@ jobs:
           wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh --quiet
           bash Anaconda3-2020.11-Linux-x86_64.sh -b -p ~/conda3-isf
           source ~/conda3-isf/bin/activate
-          #conda update conda --yes --quiet
           conda info
 
       # Updating the root environment. Install ISF dependencies (YAML)
