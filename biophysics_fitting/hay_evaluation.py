@@ -56,6 +56,15 @@ def setup_hay_evaluator(testing = False):
         if testing: 
             test()          
 
+def is_setup():
+    import neuron
+    h = neuron.h
+    try:
+        neuron.h.central_file_name 
+        return True
+    except AttributeError:
+        return False
+    
 objectives_step = ['AI1','AI2','AI3','APh1','APh2','APh3','APw1','APw2','APw3','DI1','DI2',
 'ISIcv1','ISIcv2','ISIcv3','TTFS1','TTFS2','TTFS3','fAHPd1','fAHPd2','fAHPd3',
 'mf1','mf2','mf3','sAHPd1','sAHPd2','sAHPd3','sAHPt1','sAHPt2','sAHPt3']
