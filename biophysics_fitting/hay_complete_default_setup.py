@@ -7,6 +7,7 @@ from __future__ import absolute_import
 
 
 from functools import partial
+from multiprocessing import Pool
 import numpy as np
 import pandas as pd
 
@@ -93,8 +94,21 @@ def get_Simulator(fixed_params, step = False):
 # Evaluator
 ######################################################
 
-def get_Evaluator(step = False):
+def interpolate_vt(voltage_trace_):
+    out = {}
+    for k in voltage_trace_:
+        t = voltage_trace_[k]['tVec']
+        t_new = np.arange(0, max(t), 0.025)
+        vList_new = [np.interp(t_new, t, v) for v in voltage_trace_[k]['vList']] # I.np.interp
+        out[k] = {'tVec': t_new, 'vList': vList_new}
+    return out
+
+def get_Evaluator(step = False, interpolate_voltage_trace = False):
     e = Evaluator()
+    
+    if interpolate_voltage_trace:
+        e.setup.pre_funs.append(interpolate_vt)
+        
     e.setup.evaluate_funs.append(['BAC.hay_measure', 
                                 hay_evaluate_BAC, 
                                 'BAC.hay_features'])
@@ -118,6 +132,21 @@ def get_Evaluator(step = False):
     e.setup.finalize_funs.append(lambda x: merge(list(x.values())))    
     return e
 
+from multiprocessing import Pool
+import cloudpickle
+def _remote_helper(fun, args):
+        fun_local = cloudpickle.loads(fun)
+        return fun_local(args)
+    
+def run_remotely(fun):
+    fun = cloudpickle.dumps(fun)
+    
+    def newfun(vt):
+        with Pool(1) as pool:
+            out = pool.map(partial(_remote_helper,fun), [vt])
+        return out[0]
+    
+    return newfun
 ##############################################################
 # Combiner
 ##############################################################

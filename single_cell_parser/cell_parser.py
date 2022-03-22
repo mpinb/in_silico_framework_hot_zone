@@ -427,7 +427,7 @@ class CellParser(object):
                                 continue
                             dist = h.distance(seg.x, sec=sec)
                             if secID in outsideScale_sections:
-                                print('setting section {} to outsidescale'.format(secID))
+                                # print('setting section {} to outsidescale'.format(secID))
                                 rangeVarVal = mech[param]*outsideScale
                             elif begin <= dist <= end:
                                 rangeVarVal = mech[param]

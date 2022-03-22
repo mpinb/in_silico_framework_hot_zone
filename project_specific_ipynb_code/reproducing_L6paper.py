@@ -10,6 +10,7 @@ import biophysics_fitting.utils
 from biophysics_fitting.hay_evaluation import objectives_BAC, objectives_step
 import simrun3.utils
 import simrun3.synaptic_strength_fitting
+import six
 
 
 ###########################

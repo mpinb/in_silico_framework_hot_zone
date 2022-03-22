@@ -28,6 +28,8 @@ from toolz.dicttoolz import merge
 
 from . import hay_evaluation_python
 from .utils import tVec, vmSoma, vmApical, vmMax
+import numpy as np
+
 
 
 ################################################
@@ -64,12 +66,33 @@ def get_Simulator(fixed_params, step = False, vInit = False):
 ######################################################
 # Evaluator
 ######################################################
+def interpolate_vt(voltage_trace_):
+    out = {}
+    for k in voltage_trace_:
+        t = voltage_trace_[k]['tVec']
+        t_new = np.arange(0, max(t), 0.025)
+        vList_new = [np.interp(t_new, t, v) for v in voltage_trace_[k]['vList']] # I.np.interp
+        out[k] = {'tVec': t_new, 'vList': vList_new}
+    return out
 
-def get_Evaluator(step = False, vInit = False, bAP_kwargs = {}, BAC_kwargs = {}):
+def map_truefalse_to_str(dict_):
+    def _helper(x):
+        if (x is True) or (x is np.True_):
+            return 'True'
+        elif (x is False) or (x is np.False_):
+            return 'False'
+        else:
+            return x
+    return {k: _helper(dict_[k]) for k in dict_}
+    
+def get_Evaluator(step = False, vInit = False, bAP_kwargs = {}, BAC_kwargs = {}, interpolate_voltage_trace = True):
     e = Evaluator()
     bap = hay_evaluation_python.bAP(**bAP_kwargs)
     bac = hay_evaluation_python.BAC(**BAC_kwargs)
-
+    
+    if interpolate_voltage_trace:
+        e.setup.pre_funs.append(interpolate_vt)
+    
     e.setup.evaluate_funs.append(['BAC.hay_measure', 
                                   bac.get,
                                   'BAC.hay_features'])
@@ -82,7 +105,9 @@ def get_Evaluator(step = False, vInit = False, bAP_kwargs = {}, BAC_kwargs = {})
         raise NotImplementedError
     if vInit:
         raise NotImplementedError
-    e.setup.finalize_funs.append(lambda x: merge(list(x.values())))    
+    e.setup.finalize_funs.append(lambda x: merge(list(x.values()))) 
+    e.setup.finalize_funs.append(map_truefalse_to_str)    
+    
     return e
 
 ##############################################################
@@ -90,6 +115,6 @@ def get_Evaluator(step = False, vInit = False, bAP_kwargs = {}, BAC_kwargs = {})
 ##############################################################
 
 def get_Combiner(step = False):
-    return hay_complete_default_setup.getCombiner(step = step)
+    return hay_complete_default_setup.get_Combiner(step = step)
 
 from . import hay_complete_default_setup
