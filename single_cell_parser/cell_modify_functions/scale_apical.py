@@ -1,4 +1,4 @@
-def scale_apical(cell, scale = None):
+def scale_apical(cell, scale = None, compartment = 'ApicalDendrite'):
     '''
     This is the function used to scale the apical dendrite in the following
     optimizations:
