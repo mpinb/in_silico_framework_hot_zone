@@ -13,6 +13,8 @@ def get_model_pdf_from_mdb(mdb):
         if not str(i) in list(mdb.keys()):
             continue
         max_j =  max([int(x) for x in list(mdb[str(i)].keys()) if I.utils.convertible_to_int(x)])
+        if max_j == 0: # all databases contain key '0', which is however empty. If that is the only key: skip
+            continue        
         for j in range(1, max_j + 1):
             out[i].append(augment_pdf(mdb[str(i)][str(j)], i, j))
         out[i] = I.pd.concat(out[i])

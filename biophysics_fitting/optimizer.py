@@ -75,7 +75,7 @@ def get_mymap(mdb_setup, mdb_run, c):
     def mymap(func, iterable):
         params_list = list(map(list, iterable))
         params_pd = I.pd.DataFrame(params_list, columns = params)
-        futures = c.map(objective_fun, params_list)
+        futures = c.map(objective_fun, params_list, pure = False)
         try:
                 features_dicts = c.gather(futures)
         except (I.distributed.client.CancelledError, I.distributed.scheduler.KilledWorker):

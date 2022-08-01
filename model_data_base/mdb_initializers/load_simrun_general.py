@@ -540,14 +540,14 @@ def init(mdb, simresult_path,  \
         if rewrite_in_optimized_format:
             optimize(mdb, select = ['cell_activation', 'synapse_activation'], repartition = False, get = get, client = client)
     if dendritic_voltage_traces: 
-        add_dendritic_voltage_traces(mdb, rewrite_in_optimized_format, dendritic_spike_times, repartition, dendritic_spike_times_threshold)
+        add_dendritic_voltage_traces(mdb, rewrite_in_optimized_format, dendritic_spike_times, repartition, dendritic_spike_times_threshold, get, client)
     if spike_times: 
         print("---spike times---")
         vt = mdb['voltage_traces']
         mdb.setitem('spike_times', spike_detection(vt), dumper = pandas_to_msgpack)                                        
     print('Initialization succesful.') 
     
-def add_dendritic_voltage_traces(mdb, rewrite_in_optimized_format = True, dendritic_spike_times = True, repartition = True, dendritic_spike_times_threshold = -30.):
+def add_dendritic_voltage_traces(mdb, rewrite_in_optimized_format = True, dendritic_spike_times = True, repartition = True, dendritic_spike_times_threshold = -30., get = None, client = None):
         _build_dendritic_voltage_traces(mdb, repartition = repartition)
         if rewrite_in_optimized_format:
             optimize(mdb['dendritic_recordings'], select = list(mdb['dendritic_recordings'].keys()), repartition = False, get = get, client = client) 

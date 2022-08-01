@@ -16,9 +16,9 @@ import six
 
 # NOTE: consider removing this if else.
 if six.PY2:
-    client = distributed.Client('localhost:8786')
+    client = distributed.Client('localhost:28786')
 else:
-    client = distributed.Client('localhost:8786')
+    client = distributed.Client('localhost:38786')
 
 def fun():
     import matplotlib
