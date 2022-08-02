@@ -25,12 +25,12 @@ logger.addHandler(handler)
 
 #The script has a second parameter to launch jupyter
 #using a port number defined by the user via slurm script
-if sys.argv[2] != None and isdigit(sys.argv[2]):
+if isinstance(sys.argv[2], int):
     jupyter_port = sys.argv[2]
 elif six.PY2:
-    jupyter_port = 11112
+    jupyter_port = '11112'
 else:
-    jupyter_port = 11113
+    jupyter_port = '11113'
 
 #NOTE: management dir being passed as a command line
 #argument. If missing a random generated name is used
@@ -76,7 +76,7 @@ def Lock():
 
 def get_process_number():
     with Lock() as lock:
-        p = lock.path+'_sync'.encode('ascii')
+        p = lock.path + b'_sync'
         if not os.path.exists(p):
             with open(p, 'w') as f:
                 pass
@@ -93,7 +93,7 @@ def get_process_number():
 
 def reset_process_number():
     with Lock() as lock:
-        p = lock.path+'_sync'.encode('ascii')
+        p = lock.path + b'_sync'
         with open(p, 'w') as f:
             f.write('')
 
@@ -111,7 +111,7 @@ def setup_locking_server(cluster):
     #command = 'redis-server --save "" --appendonly no --port 8885 --protected-mode no &'    
     #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
     #config = [{'config': {'host': socket.gethostname(), 'port': 8885, 'socket_timeout': 1}, 'type': 'redis'}]
-    config = [{'config': {'hosts': lock_server[cluster]}}, 'type': 'zookeeper'}]
+    config = [{'config': {'hosts': lock_server[cluster]}, 'type': 'zookeeper'}]
     config = [{'config': {'hosts': lock_server[cluster]}, 'type': 'zookeeper'}]
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
