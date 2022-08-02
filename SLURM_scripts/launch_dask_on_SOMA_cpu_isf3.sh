@@ -16,8 +16,8 @@ ulimit -Sn "$(ulimit -Hn)"
 source $HOME/isf-py3
 conda activate isf-py3
 
-# git clone ISF in HOME directory
-ISF_HOME='$HOME/in_silico_framework'
+# clone ISF in the current directory
+ISF_HOME='$(cwd)/in_silico_framework'
 export PYTHONPATH='$ISF_HOME:$PYTHONPATH'
 export LD_LIBRARY_PATH='$CONDA_PREFIX/lib:$LD_LIBRARY_PATH'
 
