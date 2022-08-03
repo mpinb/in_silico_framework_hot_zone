@@ -13,8 +13,8 @@ export SLURM_CPU_BIND=none
 ulimit -Sn "$(ulimit -Hn)"
 
 # activate isf-py3 environment
-source $HOME/conda-py3/bin/activate
-conda activate isf-py3
+source $HOME/conda-py3/bin/activate;
+conda activate 'isf-py3';
 
 # clone ISF in the current directory
 ISF_HOME="$(pwd)/in_silico_framework"
@@ -29,4 +29,4 @@ echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
 port=11113
 ssh -fN -R $port:localhost:$port somalogin02
 
-srun -n1 -N1 -c48 python $ISF_HOME/SLURM_scripts/component_isf.py "$(pwd)/management_dir_$1" $port
+srun -n1 -N1 python $ISF_HOME/SLURM_scripts/component_isf.py "$(pwd)/management_dir_$1" $port

@@ -111,7 +111,7 @@ def setup_locking_server(cluster):
     #command = 'redis-server --save "" --appendonly no --port 8885 --protected-mode no &'    
     #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
     #config = [{'config': {'host': socket.gethostname(), 'port': 8885, 'socket_timeout': 1}, 'type': 'redis'}]
-    config = [{'config': {'hosts': lock_server[cluster]}, 'type': 'zookeeper'}]
+    #config = [{'config': {'hosts': lock_server[cluster]}, 'type': 'zookeeper'}]
     config = [{'config': {'hosts': lock_server[cluster]}, 'type': 'zookeeper'}]
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
@@ -157,11 +157,13 @@ def setup_dask_workers(management_dir):
     sfile, sfile3 = _get_sfile(management_dir)
 
     if six.PY2:
-        command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9'
+        command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9 &'
         command = command.format(nprocs = n_cpus, sfile = sfile)
     else: # assume we are using python3
-        command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9'
+        command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9 &'
+        #command = "dask-worker --nworkers='auto' --memory-limit='auto' --scheduler-file={sfile} &"
         command = command.format(nprocs = n_cpus, sfile = sfile3)
+        #command = command.format(sfile = sfile3)
 
     logger.debug(command)
     os.system(command)
@@ -188,6 +190,7 @@ if process_number == 0:
     setup_locking_server(cluster)
     setup_locking_config()
     setup_dask_scheduler(management_dir)
+    setup_dask_workers(management_dir)
     setup_jupyter_notebook(jupyter_port)
 else:
     setup_locking_config()
