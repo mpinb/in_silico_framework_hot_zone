@@ -112,7 +112,6 @@ def setup_locking_server(cluster):
     #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
     #config = [{'config': {'host': socket.gethostname(), 'port': 8885, 'socket_timeout': 1}, 'type': 'redis'}]
     config = [{'config': {'hosts': lock_server[cluster]}, 'type': 'zookeeper'}]
-    config = [{'config': {'hosts': lock_server[cluster]}, 'type': 'zookeeper'}]
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
 
