@@ -179,7 +179,7 @@ def setup_jupyter_notebook(custom_port):
         command = command.format(port = custom_port)
     else:
         #command = "jupyter-lab --ip='*' --no-browser --port={port} --NotebookApp.token='' --NotebookApp.password=''"
-        command = "jupyter-lab --ip='*' --no-browser --port={port}"
+        command = "jupyter-lab --no-browser --port={port}"
         command = command.format(port = custom_port)
 
     logger.debug(command)
