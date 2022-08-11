@@ -111,10 +111,6 @@ def setup_locking_server(cluster):
     #command = 'redis-server --save "" --appendonly no --port 8885 --protected-mode no &'    
     #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
     #config = [{'config': {'host': socket.gethostname(), 'port': 8885, 'socket_timeout': 1}, 'type': 'redis'}]
-<<<<<<< HEAD
-=======
-    #config = [{'config': {'hosts': lock_server[cluster]}, 'type': 'zookeeper'}]
->>>>>>> 8b783da8ee6352190849df550374ffa5d2400536
     config = [{'config': {'hosts': lock_server[cluster]}, 'type': 'zookeeper'}]
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
