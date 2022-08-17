@@ -28,9 +28,9 @@ logger.addHandler(handler)
 if isinstance(sys.argv[2], int):
     jupyter_port = sys.argv[2]
 elif six.PY2:
-    jupyter_port = '11112'
+    jupyter_port = '11118'
 else:
-    jupyter_port = '11113'
+    jupyter_port = '11119'
 
 #NOTE: management dir being passed as a command line
 #argument. If missing a random generated name is used
@@ -172,7 +172,7 @@ def setup_dask_workers(management_dir):
 # setting up jupyter-notebook
 #############################################
 def setup_jupyter_notebook(custom_port):
-    logger.info('setting up jupyter notebook')
+    logger.info("setting up jupyter notebook ({}) ".format(custom_port))
     check_locking_config() 
 
     if six.PY2:
