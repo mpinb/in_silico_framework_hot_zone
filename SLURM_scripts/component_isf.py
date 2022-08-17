@@ -111,7 +111,6 @@ def setup_locking_server(cluster):
     #command = 'redis-server --save "" --appendonly no --port 8885 --protected-mode no &'    
     #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
     #config = [{'config': {'host': socket.gethostname(), 'port': 8885, 'socket_timeout': 1}, 'type': 'redis'}]
-    #config = [{'config': {'hosts': lock_server[cluster]}, 'type': 'zookeeper'}]
     config = [{'config': {'hosts': lock_server[cluster]}, 'type': 'zookeeper'}]
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
@@ -180,7 +179,7 @@ def setup_jupyter_notebook(custom_port):
         command = command.format(port = custom_port)
     else:
         #command = "jupyter-lab --ip='*' --no-browser --port={port} --NotebookApp.token='' --NotebookApp.password=''"
-        command = "jupyter-lab --ip='*' --no-browser --port={port}"
+        command = "jupyter-lab --no-browser --port={port}"
         command = command.format(port = custom_port)
 
     logger.debug(command)
