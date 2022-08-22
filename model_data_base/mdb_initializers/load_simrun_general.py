@@ -107,7 +107,7 @@ def read_voltage_traces_by_filenames(prefix, fnames, divisions = None, repartiti
         delayeds = [read_voltage_traces_from_file_delayed(prefix, fname) for fname in fnames]  
     if divisions is not None:
         assert(len(divisions) - 1 == len(delayeds))
-    meta = read_voltage_traces_from_file(prefix, fnames[0])
+    meta = read_voltage_traces_from_file(prefix, fnames[0]).head()
     ddf = dd.from_delayed(delayeds, meta = meta, divisions = divisions)
     return ddf
 
