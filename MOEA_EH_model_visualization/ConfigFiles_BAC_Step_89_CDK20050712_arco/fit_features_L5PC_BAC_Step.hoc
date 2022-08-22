@@ -284,6 +284,32 @@ Feature DI2
    }
 }
 
+Feature DI2
+{
+   Type     doublet_ISI
+   Stimulus     StepTwo
+
+   Numerical_Parameters
+   {
+    Mean      6.6250 
+    Std      8.6500 
+    Weight          1
+   }
+}
+
+Feature DI3
+{
+   Type     doublet_ISI
+   Stimulus     StepThree
+
+   Numerical_Parameters
+   {
+    Mean      5.38 
+    Std      0.83 
+    Weight          1
+   }
+}
+
 Feature TTFS1
 {
    Type     time_to_first_spike
