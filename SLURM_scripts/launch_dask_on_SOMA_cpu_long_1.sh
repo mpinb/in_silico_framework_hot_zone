@@ -1,8 +1,8 @@
 #!/bin/bash -l
-#SBATCH -p GPU-long # partition (queue)
+#SBATCH -p CPU-long # partition (queue)
 #SBATCH -N 1 # number of nodes
 #SBATCH -n 48 # number of cores
-#SBATCH --mem 700000 # memory pool for all cores
+#SBATCH --mem 384000 # memory pool for all cores
 #SBATCH -t 5-0:00 # time (D-HH:MM)
 #SBATCH -o out.slurm.%N.%j.slurm # STDOUT
 #SBATCH -e err.slurm.%N.%j.slurm # STDERR

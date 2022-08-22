@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH -p CPU-long # partition (queue)
+#SBATCH -p GPU-long # partition (queue)
 #SBATCH -N 1 # number of nodes
 #SBATCH -n 48 # number of cores
 #SBATCH --mem 300000 # memory pool for all cores
