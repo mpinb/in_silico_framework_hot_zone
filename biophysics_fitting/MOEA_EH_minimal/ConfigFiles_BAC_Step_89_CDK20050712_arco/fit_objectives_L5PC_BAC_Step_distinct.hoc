@@ -175,6 +175,14 @@ Objective Step_pair_three_two
     }
 }
 
+Objective Step_pair_three_three
+{
+    String_Parameters
+    {
+        F1  DI3
+    }
+}
+
 Objective Step_pair_four_one
 {
     String_Parameters
