@@ -5,24 +5,28 @@ import dask.dataframe as dd
 import dask
 import compatibility
 
-def temporal_binning_pd(df, bin_size = 1, min_time = None, max_time = None, normalize = True):
+def temporal_binning_pd(df, bin_size = None, min_time = None, max_time = None, normalize = True, bin_borders = None, rate = False):
     if not isinstance(df, pd.DataFrame):
         raise RuntimeError("Expected pd.DataFrame, got %s" % str(type(df)))
-    
+
+    if bin_borders is  None:
+        if min_time is None: min_time = min(timelist)
+        if max_time is None: max_time = max(timelist)
+        bin_borders = np.arange(min_time, max_time + bin_size, bin_size)
+    else:
+        assert(bin_size is None)
+        assert(min_time is None)
+        assert(max_time is None)
+        
     timelist = time_list_from_pd(df)
     
-    #print timelist
-    
-    if min_time is None: min_time = min(timelist)
-    if max_time is None: max_time = max(timelist)
-
-    t_bins = np.arange(min_time, max_time + bin_size, bin_size)
-    
-    data = np.histogram(timelist, t_bins)[0]
+    data = np.histogram(timelist, bin_borders)[0]
     if normalize: 
         data = data / float(len(df))
+    if rate:
+        data = data / I.np.diff(t_bins)
         
-    return t_bins, data
+    return bin_borders, data
 
 def temporal_binning_dask(ddf, bin_size = 1, min_time = None, max_time = None, normalize = True, client = None):
 
