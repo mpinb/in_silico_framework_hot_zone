@@ -22,12 +22,12 @@ import dask
 from .seed_manager import get_seed
 from .utils import *
 from model_data_base.mdbopen import resolve_mdb_path
-
+from biophysics_fitting.utils import execute_in_child_process
 import socket
     
 def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
                      seed = None, nSweeps = 1000, tStop = 345.0,
-                     tStim = 245.0, scale_apical = scale_apical,
+                     tStim = 245.0, scale_apical = None,
                      cell_generator = None):
     '''
     pre-stimulus ongoing activity
@@ -69,7 +69,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
                     
     uniqueID = 'seed' + str(seed) + '_pid' + str(os.getpid())
     dirName = os.path.join(resolve_mdb_path(dirPrefix), 'results', \
-                           time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
+                           time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID) + '_running')
     if not os.path.exists(dirName):
         os.makedirs(dirName)
     with open(os.path.join(dirName, 'hostname_' + socket.gethostname()), 'w') as f:
@@ -130,8 +130,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
         
         cell.re_init_cell()
         evokedNW.re_init_network()
-
-        print('-------------------------------')
+    print('-------------------------------')
     
     vTraces = np.array(vTraces)
     dendTraces = []
@@ -150,12 +149,16 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
     print('writing simulation parameter files')
     neuronParameters.save(os.path.join(dirName, uniqueID + '_neuron_model.param'))
     evokedUpNWParameters.save(os.path.join(dirName, uniqueID+ '_network_model.param'))
-    return dirName
+    dirName_final = os.path.join(resolve_mdb_path(dirPrefix), 'results', \
+                           time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
+    os.rename(dirName, dirName_final)
+    return dirName_final
     
 def run_new_simulations(cellParamName, evokedUpParamName, dirPrefix = '', \
                                  nSweeps = 1000, nprocs = 40, tStop = 345, silent = True, \
-                                 scale_apical = scale_apical,
-                                 cell_generator = None):
+                                 scale_apical = None,
+                                 cell_generator = None,
+                                 child_process = False):
     '''Generates nSweeps*nprocs synapse activation files and puts them in
     the folder dirPrefix/results/[unique_identifier]. Returns delayed object, which can
     be computed with an arbitrary dask scheduler. For each process, a new
@@ -189,6 +192,9 @@ def run_new_simulations(cellParamName, evokedUpParamName, dirPrefix = '', \
                                          cell_generator = cell_generator)
     if silent:
         myfun = silence_stdout(myfun)
+    
+    if child_process:
+        myfun = execute_in_child_process(myfun)
         
     d = [dask.delayed(myfun)(get_seed()) for i in range(nprocs)]
     return dask.delayed(lambda *args: args)(d) #return single delayed object, that computes everything    
