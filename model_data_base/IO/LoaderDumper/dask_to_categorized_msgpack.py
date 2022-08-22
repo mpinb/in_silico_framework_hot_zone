@@ -180,7 +180,7 @@ def my_dask_writer(ddf, path, optimize_graph = False, categorize = True, client 
         dask_options = dask.context._globals
         dask.config.set(callbacks=set()) #disable progress bars etc. 
         for number in numbers:
-            pdf = ddf.get_partition(number).compute(client = dask.get) #get = compatibility.synchronous_scheduler
+            pdf = ddf.get_partition(number).compute(get = dask.get) #get = compatibility.synchronous_scheduler
             fun(pdf, path, number, ndigits)
         dask.context._globals = dask_options
     
@@ -250,6 +250,7 @@ def dump(obj, savedir, repartition = False, get = None, categorize = True, clien
     meta = obj._meta
     index_name = obj.index.name
     if obj.known_divisions:
+        assert(obj.npartitions + 1 == len(obj.divisions))
         divisions = obj.divisions
     else:
         divisions = None
