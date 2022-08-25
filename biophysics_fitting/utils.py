@@ -158,11 +158,11 @@ class VariableThatDoesNotGetPickled:
     
 def execute_in_child_process_kept_alive(fun):
     pool_storage = VariableThatDoesNotGetPickled(None) # None # multiprocessing.Pool(1) 
-    def _helper(*args):
+    def _helper(*args, **kwargs):
         if pool_storage.stored_item is None:
             with Undemonize():
                 pool_storage.stored_item = multiprocessing.Pool(1)
-        p = cloudpickle.dumps(partial(fun, *args))
+        p = cloudpickle.dumps(partial(fun, *args, **kwargs))
         out = pool_storage.stored_item.map(pool_helper, [p])[0]
         return cloudpickle.loads(out)
     #fun.pool = pool

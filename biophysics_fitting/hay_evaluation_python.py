@@ -42,6 +42,7 @@ class BAC:
                  punish_minspikenum = 2,
                  punish_returning_to_rest_tolerance = 2.,
                  punish_max_prestim_dendrite_depo=-50,
+                 prefix = '',
                  definitions = {'BAC_APheight': ('AP_height', 25.0, 5.0),
                                 'BAC_ISI': ('BAC_ISI', 9.901, 0.8517),
                                 'BAC_ahpdepth': ('AHP_depth_abs', -65.0, 4.0),
@@ -61,7 +62,7 @@ class BAC:
         self.punish_minspikenum = punish_minspikenum
         self.punish_returning_to_rest_tolerance = punish_returning_to_rest_tolerance
         self.punish_max_prestim_dendrite_depo = punish_max_prestim_dendrite_depo
-
+        self.prefix = prefix
         
     def get(self, **voltage_traces):
         import six
@@ -111,6 +112,7 @@ class BAC:
                 out[name] = self.punish
         out['BAC.err'] = err
         out.update(err_flags)
+        out = {self.prefix + k: out[k] for k in out.keys()}
         return out
             
     def BAC_spikecount(self, voltage_traces):

@@ -766,18 +766,18 @@ def unregister_points_on_cell(points, cell):
 # function for creating color coded spike raster plots
 ############################
 
-def get_st_pattern(st):
+def get_st_pattern(st, event_maxtimes):
     import spike_analysis.core
     sta2 = spike_analysis.core.SpikeTimesAnalysis(None)
     sta2._db['st'] = st# sta.get('st_df')
-    sta2.apply_extractor(spike_analysis.core.STAPlugin_annotate_bursts_in_st())
+    sta2.apply_extractor(spike_analysis.core.STAPlugin_annotate_bursts_in_st(event_maxtimes = event_maxtimes))
     return sta2.get('bursts_st')
 
-def event_rasterplot(st, st_prox = None, rasterplot_fun = I.rasterplot2, **kwargs):
+def event_rasterplot(st, st_prox = None, rasterplot_fun = I.rasterplot2,  event_maxtimes = {0: 0, 1: 10, 2: 30}, **kwargs):
     '''like I.rasterplot2, but plots doublets red and triplets cyan'''
     if not 'ax' in kwargs:
         kwargs['ax'] = I.plt.figure(figsize = (8,4), dpi = 200).add_subplot(111)
-    st_pattern = get_st_pattern(st)
+    st_pattern = get_st_pattern(st, event_maxtimes)
     #return st_pattern, st
     rasterplot_fun(st[st_pattern == 'singlet'], c = '#000000',**kwargs)
     rasterplot_fun(st[st_pattern == 'doublet'], c = '#00aaaa',**kwargs)

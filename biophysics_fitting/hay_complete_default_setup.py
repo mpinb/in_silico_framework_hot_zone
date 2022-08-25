@@ -136,7 +136,8 @@ def get_Evaluator(step = False, interpolate_voltage_trace = False):
 # Combiner
 ##############################################################
 
-def get_Combiner(step = False):
+def get_Combiner(step = False, include_DI3 = False):
+    #up to 20220325, DI3 has not been included and was not in the fit_features file. 
     c = Combiner()
     c.setup.append('bAP_somatic_spike', ['bAP_APwidth', 'bAP_APheight', 'bAP_spikecount'])
     c.setup.append('bAP', ['bAP_att2', 'bAP_att3'])
@@ -146,7 +147,10 @@ def get_Combiner(step = False):
     if step: 
         c.setup.append('step_mean_frequency', ['mf1', 'mf2', 'mf3'])
         c.setup.append('step_AI_ISIcv', ['AI1', 'AI2', 'ISIcv1', 'ISIcv2', 'AI3', 'ISIcv3'])
-        c.setup.append('step_doublet_ISI', ['DI1', 'DI2'])
+        if include_DI3:
+            c.setup.append('step_doublet_ISI', ['DI1', 'DI2, DI3'])            
+        else:
+            c.setup.append('step_doublet_ISI', ['DI1', 'DI2'])
         c.setup.append('step_AP_height', ['APh1', 'APh2', 'APh3'])
         c.setup.append('step_time_to_first_spike', ['TTFS1', 'TTFS2', 'TTFS3'])
         c.setup.append('step_AHP_depth', ['fAHPd1', 'fAHPd2', 'fAHPd3', 'sAHPd1', 'sAHPd2', 'sAHPd3'])

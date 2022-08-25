@@ -27,7 +27,7 @@ def read_smr_file(path):
     I.shutil.copy(path, dest_folder)
     path = I.os.path.join(dest_folder, I.os.path.basename(path))
     reader = neo.io.Spike2IO(filename=path)
-    data = reader.read(lazy=False)[0]
+    data = reader.read(lazy=False, signal_group_mode = 'split-all')[0]
     I.shutil.rmtree(dest_folder)
     return data
 
@@ -195,13 +195,18 @@ def get_peaks_above(t, v, lim):
     indices = I.np.argwhere((left_diff >= 0) & (right_diff >= 0) & (values >= lim)).ravel() + 1
     return list(t[indices]), list(v[indices])
 
+def get_upcross(t,v,lim):
+    indices = I.np.argwhere((v[:-1] < lim) & (v[1:] >= lim)).ravel() + 1
+    return t[indices], v[indices]    
 
-def filter_spike_times(spike_times, spike_times_trough, creast_trough_interval = 2):
+def filter_spike_times(spike_times, spike_times_trough, creast_trough_interval = 2, mode = 'latest',
+                       spike_times_amplitude = None, upper_creast_threshold = None, creast_upcross_times = None):
     ''' Filter spike times based on timepoints of detected creasts and troughs. 
     
     Idea: A spike is detected by its trough. Then, it is checked, that there is
     a corresponding creast at maximum 2ms before the trough. All creasts fullfilling
-    this criterion are extracted. The spike time is set to the latest creast. 
+    this criterion are extracted. The spike time is set to the latest creast (if mode = 'latest')
+    or the maximum creast amplitude (if mode = 'creast_max'). 
     
     If a through does not have a corresponding creast, no spike is detected.
     
@@ -213,14 +218,27 @@ def filter_spike_times(spike_times, spike_times_trough, creast_trough_interval =
     Returns
     -------
     filtered_spike_times: list, containing spikes fullfilling the definition above.'''
+    if not mode in ['latest', 'creast_max']:
+        raise ValueError("mode must be 'latest' or 'creast_max'!")
     s = []
+    s_ampl = []
     spike_times = I.np.array(spike_times)
     for x in spike_times_trough:
         aligned_creasts = spike_times[(spike_times >= x-creast_trough_interval) & (spike_times < x)] # [y for y in spike_times if (y < x) and (y >= x-2)]
+        aligned_creast_amplitude = spike_times_amplitude[(spike_times >= x-creast_trough_interval) & (spike_times < x)]
+        # artifact detection to get rid of traces that depolarize far beyond typical AP height
+        if (spike_times_amplitude[(spike_times >= x-creast_trough_interval-5) & (spike_times < x)] > upper_creast_threshold).any():
+            continue
         if len(aligned_creasts) > 0:
-            s.append(aligned_creasts.max()) # before: aligned_creats[0]
-            
-    return s
+            if mode == 'latest':
+                assert(aligned_creasts.max() == aligned_creasts[-1])
+                s.append(aligned_creasts[-1]) # before: aligned_creats[0]
+                s_ampl.append(aligned_creast_amplitude[-1])
+            if mode == 'creast_max':
+                index = I.np.argmax(aligned_creast_amplitude)
+                s_ampl.append(aligned_creast_amplitude[index])
+                s.append(aligned_creasts[index])
+    return I.np.array(s), I.np.array(s_ampl)
 
 def filter_short_ISIs(t, tdelta = 0.):
     '''Filters out any events that occur in an interval shorter than tdelta.
@@ -423,7 +441,9 @@ class SpikeDetectionCreastTrough(object):
                  tdelta = 1., 
                  stimulus_period = 1,
                  stimulus_period_offset = 0,
-                 cellid = '__no_cellid_assigned__'):
+                 upper_creast_threshold = I.np.inf,
+                 cellid = '__no_cellid_assigned__',
+                 spike_time_mode = 'latest'):
         self.reader = reader_object 
         self.stimulus_period = stimulus_period 
         self.stimulus_period_offset = stimulus_period_offset       
@@ -432,10 +452,12 @@ class SpikeDetectionCreastTrough(object):
                                                    stimulus_period_offset)
         self.tdelta = tdelta
         self.cellid = cellid
+        self.upper_creast_threshold = upper_creast_threshold
         self.max_creast_trough_interval = max_creast_trough_interval
         self._lim_creast = lim_creast
         self._lim_trough = lim_trough
         self._set_creast_trough(self._lim_creast, self._lim_trough)
+        self.spike_time_mode = spike_time_mode
         
     def run_analysis(self):
         self._extract_spike_times()
@@ -462,18 +484,24 @@ class SpikeDetectionCreastTrough(object):
         t, v = self.reader.get_voltage_traces()
         lim_creast, lim_trough = self.lim_creast, self.lim_trough
         tdelta = self.tdelta
+        upper_creast_threshold = self.upper_creast_threshold
         # spike times detected by creast        
         a, b = get_peaks_above(t, v, lim_creast) 
-        self._spike_times_creast, self._spike_amplitudes_creast = a, b
-        self._spike_times_creast_filtered = filter_short_ISIs(self._spike_times_creast, tdelta=tdelta)        
+        self._spike_times_creast, self._spike_amplitudes_creast = a, I.np.array(b)
+        #self._spike_times_creast_filtered = filter_short_ISIs(self._spike_times_creast, tdelta=tdelta)        
         # spike times detected by trough         
         a, b = get_peaks_above(t, v * -1, lim_trough * -1)        
         self._spike_times_trough, self._spike_amplitudes_trough = a, b
-        self._spike_times_trough_filtered = filter_short_ISIs(self._spike_times_trough, tdelta=tdelta)
+        #self._spike_times_trough_filtered = filter_short_ISIs(self._spike_times_trough, tdelta=tdelta)
         # spike times detected by creast and trough
-        self.spike_times = filter_spike_times(self._spike_times_creast, self._spike_times_trough,
-                                              creast_trough_interval = self.max_creast_trough_interval)
+        self.spike_times, self.spike_times_amplitude = filter_spike_times(self._spike_times_creast, self._spike_times_trough,
+                                              creast_trough_interval = self.max_creast_trough_interval, 
+                                              spike_times_amplitude = self._spike_amplitudes_creast,
+                                              upper_creast_threshold = upper_creast_threshold,
+                                              mode = self.spike_time_mode)   
+        # remove spike times that cross max_threshold
         self.spike_times = filter_short_ISIs(self.spike_times, tdelta=tdelta)
+        
         self.t_start = self.reader.t_start
         self.t_end = self.reader.t_end
             
@@ -531,7 +559,7 @@ class SpikeDetectionCreastTrough(object):
                        for s in self._spike_times_trough 
                        if not len([ss for ss in self.spike_times if 0 < s-ss < self.max_creast_trough_interval])]
         # get detected spikes
-        events += [(t, 'k', '-', 1) for t in self.spike_times]
+        events += [(t, 'pink', '-', 3) for t in self.spike_times]
         # add stimulus times
         if show_stim_times:
             events += [(t, 'r', '-', 3) for t in self.stim_times]
@@ -544,15 +572,18 @@ class SpikeDetectionCreastTrough(object):
         ----------
         events: 'auto': uses the get_default_events_method. shows detected spikes as black line, spike candidates 
                      as dotted black line, stimulus times as bold red line
+                'only_creast': 
                 list: explicitly define events to show. Needs to be list containing 4-touples in the following format
                      (timepoint, 'color', 'linestyle', linewidth)'''
         if events == 'auto':
             events = self.get_default_events()
         if events == 'only_creast':
             events = self.get_default_events(show_trough_candidates=False)
-            
+        elif isinstance(events, list):
+            pass
+        else:
+            raise ValueError("events must be auto, only_creast, or of type list")
         events = sorted(events, key = lambda x:x[0])
-    
         if savepdf:
             output = PdfFileWriter()
 
@@ -569,9 +600,11 @@ class SpikeDetectionCreastTrough(object):
             I.plt.plot(tt, vv) ###
             I.plt.axhline(self.lim_creast, color = 'grey', linewidth = .5)
             I.plt.axhline(self.lim_trough, color = 'grey', linewidth = .5)
+            I.plt.axhline(self.upper_creast_threshold, color = 'red', linewidth = .5)
+
             for lv, (event_t, c, linestyle, linewidth) in enumerate(events):
                 if offset_time - 15 <= event_t <= offset_time + 15:
-                    I.plt.axvline(event_t, color = c, linewidth = linewidth, linestyle = linestyle)
+                    I.plt.axvline(event_t, color = c, linewidth = linewidth, linestyle = linestyle, alpha = 0.6)
                     n = lv # n is index of last event shown
             n += 1
             I.plt.gca().ticklabel_format(useOffset=False)

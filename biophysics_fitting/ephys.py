@@ -149,7 +149,7 @@ def BAC_caSpike_height_check_Ca_spikes_after_Na_spike(t,v,v_dend, n = 2,thresh=N
     t_max_Ca = t[v_dend==max(v_dend)][0]
     t_nth_spike = t[find_crossing(v,thresh)[0][n-1]]
     #print(t_max_Ca, t_nth_spike)
-    return t_max_Ca > t_nth_spike
+    return t_max_Ca >= t_nth_spike
 
 def BAC_caSpike_height(t,v,v_dend,ca_thresh=-55,tstim=295):
     '''returns heights of Ca spikes after tstim'''
