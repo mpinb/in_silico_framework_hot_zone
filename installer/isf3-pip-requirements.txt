@@ -1,3 +1,4 @@
+pip==20.3.4
 anyio==3.6.1
 argparse==1.4.0
 blosc==1.10.2
