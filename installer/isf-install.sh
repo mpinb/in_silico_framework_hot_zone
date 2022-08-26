@@ -141,11 +141,11 @@ echo "Installing In-Silico-Framework conda dependencies."
 offline_requirements="isf-${target_python}-requirements.txt"
 env_name="isf-${target_python}"
 sed "s|https://.*/|$(pwd)/conda_packages/|" ${conda_requirements} > ${offline_requirements}
-${conda_env_cmd} create --name ${env_name} --file ${offline_requirements} --quiet
+${conda_env_cmd} update  --file ${offline_requirements} --quiet
 
 # STEP 5) Activate python environment and install a recent version of pip
 # NOTE: This version was pre-downloaded using:  python -m pip download pip
-source activate ${env_name}
+# source activate ${env_name}
 # python -m pip install pip-20.3.4-py2.py3-none-any.whl
 
 # STEP 6) Downloading In-Silico-Framework pip dependencies.
