@@ -94,7 +94,7 @@ class Cell(object):
         for sec in self.sections:
             try:
                 sec._init_range_var_recording(var, mech)
-            except NameError:    
+            except (NameError, AttributeError):    
                 ## if mechanism not in segment: continue
                 ## this leaves the duty to take care of missing range vars to 
                 ## all further functions relying on that values. I.e. they should

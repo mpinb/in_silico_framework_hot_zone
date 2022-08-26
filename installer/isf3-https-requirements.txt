@@ -284,14 +284,14 @@ https://repo.anaconda.com/pkgs/main/noarch/jupyter_console-6.2.0-py_0.tar.bz2
 https://repo.anaconda.com/pkgs/main/linux-64/nbconvert-6.0.7-py38_0.tar.bz2
 https://repo.anaconda.com/pkgs/main/noarch/qtconsole-4.7.7-py_0.tar.bz2
 https://repo.anaconda.com/pkgs/main/noarch/sphinx-3.2.1-py_0.tar.bz2
-https://repo.anaconda.com/pkgs/main/linux-64/spyder-kernels-1.9.4-py38_0.tar.bz2
+#https://repo.anaconda.com/pkgs/main/linux-64/spyder-kernels-1.9.4-py38_0.tar.bz2
 https://repo.anaconda.com/pkgs/main/linux-64/anaconda-navigator-1.10.0-py38_0.tar.bz2
 https://repo.anaconda.com/pkgs/main/noarch/anaconda-project-0.8.4-py_0.tar.bz2
 https://repo.anaconda.com/pkgs/main/linux-64/conda-build-3.20.5-py38_1.tar.bz2
 https://repo.anaconda.com/pkgs/main/linux-64/notebook-6.1.4-py38_0.tar.bz2
 https://repo.anaconda.com/pkgs/main/noarch/numpydoc-1.1.0-pyhd3eb1b0_1.tar.bz2
 https://repo.anaconda.com/pkgs/main/noarch/jupyterlab_server-1.2.0-py_0.tar.bz2
-https://repo.anaconda.com/pkgs/main/linux-64/spyder-4.1.5-py38_0.tar.bz2
+#https://repo.anaconda.com/pkgs/main/linux-64/spyder-4.1.5-py38_0.tar.bz2
 https://repo.anaconda.com/pkgs/main/linux-64/widgetsnbextension-3.5.1-py38_0.tar.bz2
 https://repo.anaconda.com/pkgs/main/noarch/ipywidgets-7.5.1-py_1.tar.bz2
 https://repo.anaconda.com/pkgs/main/noarch/jupyterlab-2.2.6-py_0.tar.bz2
