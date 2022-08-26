@@ -5,10 +5,10 @@
 ##        Alternatively installing conda dependencies without dependency checking.
 ## NOTE2: setuptools-scm needs to be installed in advance for the installation to succeed in Python 2.7
 ## pip install setuptools-scm
-# pip==20.3.4
+#pip==20.3.4
 #alabaster==0.7.12
 #Babel==2.9.1
-backports-abc==0.5
+#backports-abc==0.5
 #backports.functools-lru-cache==1.6.4
 #backports.shutil-get-terminal-size==1.0.0
 #backports.ssl-match-hostname==3.5.0.1
@@ -64,7 +64,7 @@ pathlib==1.0.1
 #ptyprocess==0.7.0
 #Pygments==2.5.2
 PyPDF2==1.26.0
-plotly==5.9.0
+#plotly==5.9.0 ##
 pyparsing==2.2.0
 #pyzmq==19.0.2
 quantities==0.12.2
@@ -79,7 +79,7 @@ six==1.12.0
 #Sphinx==1.4.6
 Sumatra==0.7.4
 # tables==3.3.0 (provided via conda package pytables)
-tenacity==8.0.1
+#tenacity==8.0.1 ##
 #terminado==0.8.3
 #testpath==0.4.4
 #tqdm==4.62.3
