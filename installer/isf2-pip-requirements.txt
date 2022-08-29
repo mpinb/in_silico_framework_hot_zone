@@ -64,7 +64,7 @@ pathlib==1.0.1
 #ptyprocess==0.7.0
 #Pygments==2.5.2
 PyPDF2==1.26.0
-#plotly==5.9.0 ##
+plotly==4.14.3
 pyparsing==2.2.0
 #pyzmq==19.0.2
 quantities==0.12.2
@@ -79,7 +79,7 @@ six==1.12.0
 #Sphinx==1.4.6
 Sumatra==0.7.4
 # tables==3.3.0 (provided via conda package pytables)
-#tenacity==8.0.1 ##
+tenacity==7.0.0
 #terminado==0.8.3
 #testpath==0.4.4
 #tqdm==4.62.3
