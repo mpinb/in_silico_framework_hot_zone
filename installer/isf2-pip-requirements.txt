@@ -37,14 +37,13 @@ Jinja2==2.10
 #ipython-genutils==0.2.0
 #ipython==5.10.0
 #jupyter-client==5.3.5
-#jupyter-contrib-core==0.3.3
+jupyter-contrib-core==0.3.3
 jupyter-contrib-nbextensions==0.5.0
 # jupyter-core==4.3.0
-#jupyter_contrib_nbextensions==0.5.0
 #jupyter-core==4.6.0
 #jupyter-highlight-selected-word==0.2.0
 #jupyter-latex-envs==1.4.4
-#jupyter-nbextensions-configurator==0.4.0
+jupyter-nbextensions-configurator==0.4.0
 kazoo==2.8.0
 #lxml==4.6.4
 #mistune==0.8.4
