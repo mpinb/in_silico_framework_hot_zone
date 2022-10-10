@@ -11,7 +11,7 @@
 7. [Test Submit Jobs](#testing)
 8. [Default Ports](#ports)
 9. [Jupyter Extensions](#extensions)
-10.[References](#references)
+10. [References](#references)
 
 ## Requirements
 
@@ -95,17 +95,26 @@ source_3; python -m ipykernel install --name base --user --display-name isf3
 Check if you can submit a job:
 
 ```bash
+source_isf
 sbatch project_src/in_silico_framework/SLURM_scripts/launch_dask_on_SOMA_gpu_interactive_1.sh  session1
 ```
-Look at the corresponding management dir to find the ip address where Jupyter is running:
+**Note:** Currently the launching scripts work only with `in-silico-framework` (Python 2)
+
+Make sure that the job appears with `Running` (R) status in slurm job queue:
+
+```bash
+squeue -u $USER
+```
+
+Look at the corresponding management dir to find the ip address where `jupyter` is running:
 
 ```bash
 cat management_dir_session1/scheduler.json
 ```
-Use putty to open a SOCKS proxy to the login node (somalogin01 or somalogin02)
- - you can do this with the -D option of the ssh command
-    - example: `ssh -D 22222 somalogin02`
- - Open firefox settings, search for proxy and activate SOCKS proxy. IP: 127.0.0.1, port as specified in the ssh command
+Use putty to open a SOCKS-5 proxy to the login node (somalogin01 or somalogin02)
+ - you can do this with the -D option of the `ssh` command
+    - example: `ssh -D 4040 somalogin02`
+ - Open firefox settings, search for proxy and activate SOCKS-5 proxy. IP: 127.0.0.1, PORT: 4040 (or the port number passed to the ssh command)
  - this is explained in more detail in chantals google doc: https://docs.google.com/document/d/1S0IM7HgRsRdGXN_WFeDqPMOL3iDt1Obosuikzzc8YNc/edit#heading=h.dbift17bl1rt
 
 
@@ -121,7 +130,7 @@ We have default ports
 
 ## Extensions
 
-We have a set of default extensions to jupyter notebook
+We have a set of default extensions to `jupyter notebook`
 
 - Codefolding in Editor
 - Collapsible Headings
@@ -133,7 +142,7 @@ We have a set of default extensions to jupyter notebook
 - Nbextensions edit menu item
 - Table of Contents (2)
 
-To install the extensions for jupyter notebook run :
+To install the extensions for `jupyter notebook` enter:
 
 ```bash
 source_isf
