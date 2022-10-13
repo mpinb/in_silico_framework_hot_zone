@@ -41,8 +41,8 @@ jupyter-contrib-core==0.3.3
 jupyter-contrib-nbextensions==0.5.0
 # jupyter-core==4.3.0
 #jupyter-core==4.6.0
-#jupyter-highlight-selected-word==0.2.0
-#jupyter-latex-envs==1.4.4
+jupyter-highlight-selected-word==0.2.0
+jupyter-latex-envs==1.4.4
 jupyter-nbextensions-configurator==0.4.0
 kazoo==2.8.0
 #lxml==4.6.4
