@@ -5,10 +5,10 @@
 ##        Alternatively installing conda dependencies without dependency checking.
 ## NOTE2: setuptools-scm needs to be installed in advance for the installation to succeed in Python 2.7
 ## pip install setuptools-scm
-# pip==20.3.4
+#pip==20.3.4
 #alabaster==0.7.12
 #Babel==2.9.1
-backports-abc==0.5
+#backports-abc==0.5
 #backports.functools-lru-cache==1.6.4
 #backports.shutil-get-terminal-size==1.0.0
 #backports.ssl-match-hostname==3.5.0.1
@@ -37,14 +37,13 @@ Jinja2==2.10
 #ipython-genutils==0.2.0
 #ipython==5.10.0
 #jupyter-client==5.3.5
-#jupyter-contrib-core==0.3.3
+jupyter-contrib-core==0.3.3
 jupyter-contrib-nbextensions==0.5.0
 # jupyter-core==4.3.0
-#jupyter_contrib_nbextensions==0.5.0
 #jupyter-core==4.6.0
-#jupyter-highlight-selected-word==0.2.0
-#jupyter-latex-envs==1.4.4
-#jupyter-nbextensions-configurator==0.4.0
+jupyter-highlight-selected-word==0.2.0
+jupyter-latex-envs==1.4.4
+jupyter-nbextensions-configurator==0.4.0
 kazoo==2.8.0
 #lxml==4.6.4
 #mistune==0.8.4
@@ -52,7 +51,7 @@ monotonic==1.5
 #nbconvert==5.6.1
 neo==0.7.1
 #notebook==5.7.13
-#pandas-msgpack==0.1.4
+pandas-msgpack==0.1.4
 #pandocfilters==1.5.0
 parameters==0.2.1
 #pathlib2==2.3.6
@@ -64,7 +63,7 @@ pathlib==1.0.1
 #ptyprocess==0.7.0
 #Pygments==2.5.2
 PyPDF2==1.26.0
-plotly==5.9.0
+plotly==4.14.3
 pyparsing==2.2.0
 #pyzmq==19.0.2
 quantities==0.12.2
@@ -79,7 +78,7 @@ six==1.12.0
 #Sphinx==1.4.6
 Sumatra==0.7.4
 # tables==3.3.0 (provided via conda package pytables)
-tenacity==8.0.1
+tenacity==7.0.0
 #terminado==0.8.3
 #testpath==0.4.4
 #tqdm==4.62.3

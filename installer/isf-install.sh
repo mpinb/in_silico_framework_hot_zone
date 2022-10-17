@@ -151,7 +151,7 @@ ${conda_env_cmd} update  --file ${offline_requirements} --quiet
 # STEP 6) Downloading In-Silico-Framework pip dependencies.
 if [ ! -z "${pip_requirements}" ] && [ -r "${pip_requirements}" ]; then
     if [ "${download_packages}" == "true" ]; then
-        python -m pip --no-cache-dir install pip==20.3.4
+        #python -m pip --no-cache-dir install pip==20.3.4
         echo "Downloading pip dependencies using '${pip_requirements}'"
         [ -d pip_packages ] || mkdir pip_packages # pip packages download directory
         python -m pip --no-cache-dir download --no-deps -r ${pip_requirements} -d pip_packages
