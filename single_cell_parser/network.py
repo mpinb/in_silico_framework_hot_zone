@@ -522,6 +522,7 @@ class NetworkMapper:
                 for j in range(len(active)):
                     self.cells[preCellType][active[j]].append(spikeTimes[j], spike_source = 'pointcell_PSTH_absolute_number')                    
         elif dist == 'PSTH_poissontrain':
+            print('PSTH_poissontrain is deprecated! Use PSTH_poissontrain_v2 instead!')            
             bins = networkParameters.intervals
             rates = networkParameters.rates
             offset = networkParameters.offset
@@ -533,7 +534,8 @@ class NetworkMapper:
                 errstr = 'Time bins and rates of PSTH_poissontrain for cell type %s have unequal length! ' % preCellType
                 errstr += 'len(bins) = %d - len(rates) = %d' % (len(bins), len(rates))
                 raise RuntimeError(errstr)
-
+            
+            
             for i in range(len(bins)): ##fill all cells bin after bin
                 tBegin, tEnd = bins[i]
                 try:
@@ -545,7 +547,25 @@ class NetworkMapper:
                     #print 'calling compute_spike_train_times with',  'interval', \
                     #interval, 'noise', noise, 'tBegin', tBegin, 'tEnd', tEnd, \
                     #'nSpikes', nSpikes
+                    # self.append(tSpike, spike_source = spike_source)
                     cell.compute_spike_train_times(interval, noise, tBegin, tEnd, nSpikes, spike_source = 'pointcell_PSTH_poissontrain')
+        elif dist == 'PSTH_poissontrain_v2':
+            bins = networkParameters.bins
+            rates = networkParameters.rates
+            offset = networkParameters.offset
+            noise = 1.0
+            start = 0.0
+            stop = -1.0
+            nSpikes = None
+            if len(bins) != len(rates) + 1:
+                errstr = 'Time bins must be one element longer than rates!'
+                errstr += 'len(bins) = %d - len(rates) = %d' % (len(bins), len(rates))
+                raise RuntimeError(errstr)
+
+            for cell in self.cells[preCellType]:
+                spikeTimes = sample_times_from_rates(bins, rates)
+                for spike_time in spikeTimes:
+                    cell.append(spike_time, spike_source = 'PSTH_poissontrain_v2')
         else:
             errstr = 'Unknown spike time distribution: %s' % dist
             raise RuntimeError(errstr)
@@ -1065,3 +1085,26 @@ def functional_connectivity_visualization(functionalMap, cell):
     writer.write_functional_map('L4ss_func_map3.am', L4map)
     writer.write_functional_map('L1_func_map3.am', L1map)
 
+def sample_times_from_rates(bins, rate):
+    cum_bin_width_weighted_with_rate = np.cumsum(np.diff(bins)*rate)
+    cum_bin_width = np.cumsum(np.diff(bins))
+        
+    # generate a poisson spike train, add additional spikes until length is sufficient to fill all bins
+    size = int(np.ceil(cum_bin_width_weighted_with_rate.max()*1.)) + 1
+    inter_spike_intervals = np.random.exponential(1000, size = size) # 1000 corresponds to 1Hz, since time is in ms
+    while sum(inter_spike_intervals) <= max(cum_bin_width_weighted_with_rate):
+        inter_spike_intervals2 = np.random.exponential(1000, size = size) 
+        inter_spike_intervals = np.concatenate([inter_spike_intervals, inter_spike_intervals2])
+    constant_rate_spikes = np.cumsum(inter_spike_intervals)
+
+    # warp time axis such that constant_rate_spikes transform into the time dependent rate
+    spikes = np.interp(constant_rate_spikes, 
+                         [0] + list(cum_bin_width_weighted_with_rate),
+                         [0] + list(cum_bin_width),
+                         right = np.nan,
+                         left = np.nan)
+    
+    # shift bins such that they start when first interval stats
+    spikes = spikes + bins[0]
+    
+    return spikes[~np.isnan(spikes)]
