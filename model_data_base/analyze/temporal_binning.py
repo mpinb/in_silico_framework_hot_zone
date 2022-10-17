@@ -24,7 +24,7 @@ def temporal_binning_pd(df, bin_size = None, min_time = None, max_time = None, n
     if normalize: 
         data = data / float(len(df))
     if rate:
-        data = data / I.np.diff(t_bins)
+        data = data / np.diff(bin_borders)
         
     return bin_borders, data
 
