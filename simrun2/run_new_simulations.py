@@ -93,6 +93,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
         
         startTime = time.time()
         evokedNW = scp.NetworkMapper(cell, synParametersEvoked, neuronParameters.sim)
+        print('*'*500)
         evokedNW.create_saved_network2()
         stopTime = time.time()
         setupdt = stopTime - startTime
@@ -197,4 +198,4 @@ def run_new_simulations(cellParamName, evokedUpParamName, dirPrefix = '', \
         myfun = execute_in_child_process(myfun)
         
     d = [dask.delayed(myfun)(get_seed()) for i in range(nprocs)]
-    return dask.delayed(lambda *args: args)(d) #return single delayed object, that computes everything    
+    return d # dask.delayed(lambda *args: args)(d) #return single delayed object, that computes everything    
