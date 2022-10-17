@@ -82,8 +82,8 @@ def setup_locking_server():
     #print command
     #os.system(command)
     #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
-    config = [{'config': {'hosts': 'somalogin01-hs:33333'}, 'type': 'zookeeper'}]
-    config = [{'type': 'file'}]
+    config = [{'config': {'hosts': 'somalogin02-hs:33333'}, 'type': 'zookeeper'}]
+    #config = [{'type': 'file'}]
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
     setup_locking_config()

@@ -12,5 +12,5 @@
 unset XDG_RUNTIME_DIR
 export SLURM_CPU_BIND=none
 ulimit -Sn "$(ulimit -Hn)"
-srun -n1 -N1 -c48 python $MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1.py $MYBASEDIR/management_dir_$1
+srun -n1 -N1 -c48 python $MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA.py $MYBASEDIR/management_dir_$1
 ##sleep 3000
