@@ -6,6 +6,8 @@ import neuron
 import dask
 import numpy as np
 import pandas as pd
+from biophysics_fitting.utils import execute_in_child_process
+from .utils import *
 
 def convertible_to_int(x):
     try:
@@ -26,22 +28,21 @@ def synapse_activation_df_to_roberts_synapse_activation(sa):
     return synapses
 
 
-@dask.delayed
 def _evoked_activity(mdb, stis, outdir, tStop = None, 
                      neuron_param_modify_functions = [],
                      network_param_modify_functions = [],
-                     synapse_activation_modify_functions = []):
+                     synapse_activation_modify_functions = [],
+                     parameterfiles = None,
+                     neuron_folder = None,
+                     network_folder = None,
+                     sa = None):
     import neuron
     h = neuron.h
     sti_bases = [s[:s.rfind('/')] for s in stis]
     if not len(set(sti_bases)) == 1:
         raise NotImplementedError
     sti_base = sti_bases[0]
-
-    parameterfiles = mdb['parameterfiles']
-    neuron_folder = mdb['parameterfiles_cell_folder']
-    network_folder = mdb['parameterfiles_network_folder']
-    sa = mdb['synapse_activation']
+    sa = sa.content
     sa = sa.loc[stis].compute(get = dask.get)
     sa = {s:g for s,g in sa.groupby(sa.index)}
     
@@ -147,19 +148,47 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
     neuron_param.save(os.path.join(outdir_absolute, uniqueID + '_neuron_model.param'))
     network_param.save(os.path.join(outdir_absolute, uniqueID+ '_network_model.param'))        
         
+class Opaque:
+    
+    def __init__(self, content):
+        self.content = content
+        
 def rerun_mdb(mdb, outdir, tStop = None,
                      neuron_param_modify_functions = [],
                      network_param_modify_functions = [],
-                     synapse_activation_modify_functions = [], stis = None):
+                     synapse_activation_modify_functions = [], 
+                     stis = None,
+                     silent = False, 
+                     child_process = False):
     parameterfiles = mdb['parameterfiles']
+    neuron_folder = mdb['parameterfiles_cell_folder']
+    network_folder = mdb['parameterfiles_network_folder']
+    sa = mdb['synapse_activation'] 
+    # without the opaque object, dask tries to load in the entire dataframe before passing it to _evoked_activity
+    sa = Opaque(sa)
     if stis is not None:
         parameterfiles = parameterfiles.loc[stis]
     sim_trial_index_array = parameterfiles.groupby('path_neuron').apply(lambda x: list(x.index)).values
     delayeds = []
+    
+    myfun = _evoked_activity
+    
+    if silent:
+        myfun = silence_stdout(myfun)
+    
+    if child_process:
+        myfun = execute_in_child_process(myfun)
+    
+    myfun = dask.delayed(myfun)
+    
     for stis in sim_trial_index_array:
-        d = _evoked_activity(mdb, stis, outdir, tStop = tStop,
+        d = myfun(mdb, stis, outdir, tStop = tStop,
                              neuron_param_modify_functions = neuron_param_modify_functions,
                              network_param_modify_functions = network_param_modify_functions,
-                             synapse_activation_modify_functions = synapse_activation_modify_functions)
+                             synapse_activation_modify_functions = synapse_activation_modify_functions,
+                             parameterfiles = parameterfiles,
+                             neuron_folder = neuron_folder,
+                             network_folder = network_folder,
+                             sa = sa)
         delayeds.append(d)
     return delayeds
