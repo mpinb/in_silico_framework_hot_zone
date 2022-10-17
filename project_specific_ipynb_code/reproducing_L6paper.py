@@ -1079,7 +1079,8 @@ def fig2a_anatomical_embedding(mdb,sti,outdir,
     # grab all cells 
     # save them to all_cells/frac_0.005
     if I.os.path.exists(outdir):
-        I.shutil.rmtree(outdir)
+        print('warning! the specified directory already exists!')
+        #I.shutil.rmtree(outdir)
     if cells:
         neup, netp = load_param_files_from_mdb(mdb,sti)
         landmarks_pdf_all = get_fraction_of_all_cells(1)
@@ -1094,8 +1095,8 @@ def fig2a_anatomical_embedding(mdb,sti,outdir,
         # I.os.makedirs(outdir + '/presynaptic_cells' + '/selected')        
         I.shutil.copytree(outdir + '/presynaptic_cells' + '/{}'.format(frac_presynaptic_cells_selected),
                           outdir + '/presynaptic_cells' + '/selected')         
-        if I.os.path.exists(outdir + '/anatomy'):
-            I.shutil.rmtree(outdir + '/anatomy')
+        #if I.os.path.exists(outdir + '/anatomy'):
+        #    I.shutil.rmtree(outdir + '/anatomy')
         I.shutil.copytree(anatomy_folder, outdir + '/anatomy')   
         I.shutil.copy(amira_template_folder + '/Presynaptic_Cells.hx', outdir)
     I.shutil.copy(I.resolve_mdb_path(neup.neuron.filename), outdir + '/anatomy/morphology.hoc')
@@ -1131,7 +1132,8 @@ def fig2b_functional_embedding(mdb,sti,outdir,
     # grab all cells 
     # save them to all_cells/frac_0.005
     if I.os.path.exists(outdir):
-        I.shutil.rmtree(outdir)    
+        print('warning! the specified directory already exists!')
+        # I.shutil.rmtree(outdir)    
     if cells:
         neup, netp = load_param_files_from_mdb(mdb,sti)
         landmarks_pdf_all = get_fraction_of_all_cells(1)
@@ -1152,8 +1154,8 @@ def fig2b_functional_embedding(mdb,sti,outdir,
         # I.os.makedirs(outdir + '/presynaptic_cells' + '/selected')                        
         I.shutil.copytree(outdir + '/presynaptic_cells' + '/{}'.format(frac_presynaptic_cells_selected),
                           outdir + '/presynaptic_cells' + '/selected')   
-        if I.os.path.exists(outdir + '/anatomy'):
-            I.shutil.rmtree(outdir + '/anatomy')
+        #if I.os.path.exists(outdir + '/anatomy'):
+        #    I.shutil.rmtree(outdir + '/anatomy')
         I.shutil.copytree(anatomy_folder, outdir + '/anatomy')   
         I.shutil.copy(amira_template_folder + '/Presynaptic_Cells.hx', outdir)
     I.shutil.copy(I.resolve_mdb_path(neup.neuron.filename), outdir + '/anatomy/morphology.hoc')
