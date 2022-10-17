@@ -37,7 +37,7 @@ def postfun(s, maxtime = None):
     return np.vstack(s.values)
 
 def applyfun(pdf, maxtime = None):
-    return temporal_binning(pdf, min_time = 0, max_time = maxtime, normalize = False)[1]
+    return temporal_binning(pdf, min_time = 0, max_time = maxtime, bin_size = 1, normalize = False)[1]
 
 
 
