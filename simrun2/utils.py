@@ -5,6 +5,8 @@ def load_param_file_if_path_is_provided(pathOrParam):
     if isinstance(pathOrParam, str):
         pathOrParam = resolve_mdb_path(pathOrParam)
         return scp.build_parameters(pathOrParam)
+    elif isinstance(pathOrParam, dict):
+        return scp.NTParameterSet(pathOrParam)
     else:
         return pathOrParam
     
