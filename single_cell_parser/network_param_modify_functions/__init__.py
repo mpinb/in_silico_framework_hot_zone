@@ -25,7 +25,7 @@ def set_stim_onset(n, onset = None):
             x.celltype.pointcell.offset = onset
             
 def change_glutamate_syn_weights(param, g_optimal = None, pop = barrel_cortex.excitatory):
-    for key in list(param.network.keys()):
+    for key in list(param['network'].keys()):
         celltype = key.split('_')[0]
         if celltype in pop: # I.excitatory:
             index = [x for x in g_optimal.index if x in celltype]
@@ -33,13 +33,12 @@ def change_glutamate_syn_weights(param, g_optimal = None, pop = barrel_cortex.ex
             
             if type(g_optimal) == pd.core.series.Series:
                 g = g_optimal[index[0]]
-                param.network[key].synapses.receptors.glutamate_syn.weight = [g,g]
+                param['network'][key]['synapses']['receptors']['glutamate_syn']['weight'] = [g,g]
                 
             elif type(g_optimal) == pd.core.frame.DataFrame:
                 ampa = g_optimal.loc[index[0]]['AMPA']
                 nmda = g_optimal.loc[index[0]]['NMDA']
-                param.network[key].synapses.receptors.glutamate_syn.weight = [ampa,nmda]
-                
+                param['network'][key]['synapses']['receptors']['glutamate_syn']['weight'] = [ampa,nmda]
             else:
                 print('g_optimal is in an unrecognised dataformat')
             
