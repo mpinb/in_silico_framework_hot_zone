@@ -368,17 +368,12 @@ def _build_core(mdb, repartition = None):
     print('---building data base core---')
 
     print('generate filelist ...')
-    #mdb['file_list'] = make_filelist(mdb['simresult_path'], 'vm_all_traces.csv')
     
-    if 'filelist' in list(mdb.keys()):
-        print('Skip generating filelist, loading from database')
-        filelist = mdb['filelist']
-    else:
-        try:
-            filelist = make_filelist(mdb['simresult_path'], 'vm_all_traces.csv')
-        except ValueError:
-            filelist = make_filelist(mdb['simresult_path'], 'vm_all_traces.npz')
-        mdb['filelist'] = filelist
+    try:
+        filelist = make_filelist(mdb['simresult_path'], 'vm_all_traces.csv')
+    except ValueError:
+        filelist = make_filelist(mdb['simresult_path'], 'vm_all_traces.npz')
+    mdb['filelist'] = filelist
 
     print('generate voltage traces dataframe...')  
     #vt = read_voltage_traces_by_filenames(mdb['simresult_path'], mdb['file_list'])
