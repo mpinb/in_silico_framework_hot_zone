@@ -96,7 +96,7 @@ Check if you can submit a job:
 
 ```bash
 source_isf
-sbatch project_src/in_silico_framework/SLURM_scripts/launch_dask_on_SOMA_gpu_interactive_1.sh  session1
+sbatch project_src/in_silico_framework/SLURM_scripts/launch_dask_on_SOMA_cpu_interactive_1.sh  session1
 ```
 **Note:** Currently the launching scripts work only with `in-silico-framework` (Python 2)
 
@@ -154,3 +154,5 @@ jupyter nbextensions_configurator enable --user
 
 --> located at Z:\Share\HowTos\How-to use the AXON cluster.txt
 --> https://docs.google.com/document/d/1S0IM7HgRsRdGXN_WFeDqPMOL3iDt1Obosuikzzc8YNc/edit#heading=h.dbift17bl1rt
+
+--> [Setting up SSH Tunnels and port-forwarding with MobaXTerm](https://blog.mobatek.net/post/ssh-tunnels-and-port-forwarding/)
