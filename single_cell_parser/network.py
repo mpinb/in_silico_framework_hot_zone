@@ -566,6 +566,45 @@ class NetworkMapper:
                 spikeTimes = sample_times_from_rates(bins, rates)
                 for spike_time in spikeTimes:
                     cell.append(spike_time, spike_source = 'PSTH_poissontrain_v2')
+        
+        elif dist == 'poissontrain_modulated':
+            # Generates poisson train activity from a modulated PSTH 
+            # from a mean activity, a modulation, and different cells in the population have different modulation phases. 
+            # The distribution of cells phases is defined as uniform/normal, etc
+            mean_rate = networkParameters.mean_rate
+            M = networkParameters.max_modulation
+            freq = networkParameters.modulation_frequency # Hz
+            bin_size = networkParameters.bin_size
+            phase_distribution = networkParameters.phase_distribution
+            tStop = self.simParam.tStop
+            offset = networkParameters.offset
+        
+            duration = tStop - offset
+            n_bins = math.ceil(duration/bin_size)
+            bins = np.arange(0,duration+bin_size,bin_size)
+            bins = bins + offset
+            bins[0] = 0
+            bins[-1] = tStop
+            
+            cycle_duration = 1000/freq # ms
+            n_cycles = duration/cycle_duration
+            
+            if phase_distribution == 'uniform':
+                phase = random.uniform(0,2*np.pi,len(self.cells[preCellType]))
+            elif phase_distribution == 'normal':
+                mean_phase = networkParameters.mean_phase
+                std_phase = networkParameters.std_phase
+                phase = np.random.normal(mean_phase,std_phase,len(self.cells[preCellType]))
+            else:
+                phase = np.zeros(len(self.cells[preCellType]))
+            
+            for i,cell in enumerate(self.cells[preCellType]):
+                rates = np.full(n_bins,mean_rate)*(1+ M*np.sin(np.linspace(0,2*np.pi*n_cycles,n_bins)+phase[i]))
+                rates[0] = mean_rate
+                spikeTimes = sample_times_from_rates(bins, rates)
+                for spike_time in spikeTimes:
+                    cell.append(spike_time, spike_source = 'poissontrain_modulated')
+        
         else:
             errstr = 'Unknown spike time distribution: %s' % dist
             raise RuntimeError(errstr)
