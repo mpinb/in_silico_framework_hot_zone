@@ -61,6 +61,15 @@ cat << EOF
 EOF
 }
 
+qos_setting() {
+  if [ $1 = "GPU-a100" ]
+    echo "
+    #SBATCH --qos=GPU-a100
+    "
+  fi
+  echo ""
+}
+
 function args_precheck {
   if [ $1 -eq "0" ] ; then
     echo "Warning: no arguments passed. Will launch a job with default parameters and no name."
@@ -87,7 +96,8 @@ mem="300000"
 time="1-0:00"
 tpn="20"
 gres="0"  # unset
-a100=""
+a100=""  # unset
+qos=""  # unset
 
 
 # Parse options
@@ -105,16 +115,19 @@ do
         p) partition=${OPTARG};;  # overwrites i or g flag
         T) tpn=${OPTARG};;
         r) gres=${OPTARG};;
-        A) a100="_"${OPTARG};;  # appendix to start the correct python file
+        A) a100="_"${OPTARG}; qos="GPU-a100";;  # appendix to start the correct python file
         \?) # incorrect option
          echo "Error: Invalid option"
          exit 1;;
         *) break;; # reached the list of file names
     esac
 done
-shift $((OPTIND-1))
 
-if [ $partition = "GPU-interactive" ] && [ $gres -eq "0" ]; then  # set gres to 4 for GPU-interactive jobs
+qosline = qos_setting $a100
+
+shift $((OPTIND-1))  # just good practice
+
+if [ $partition = "GPU-interactive" ] && [ $gres -eq "0" ]; then  # set gres to 4 for GPU-interactive jobs if it wasn't passed in command line
   gres = "4"
 fi
 
@@ -139,7 +152,7 @@ sbatch << EoT
 #SBATCH -o out.slurm.%N.%j.slurm # STDOUT
 #SBATCH -e err.slurm.%N.%j.slurm # STDERR
 ##SBATCH --ntasks-per-node=$tpn
-##SBATCH --gres=gpu:$gres
+##SBATCH --gres=gpu:$gres $qosline
 #module load cuda
 unset XDG_RUNTIME_DIR
 export SLURM_CPU_BIND=none
