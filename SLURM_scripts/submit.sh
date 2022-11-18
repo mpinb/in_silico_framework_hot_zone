@@ -99,7 +99,6 @@ gres="0"  # unset
 a100=""  # unset
 qos=""  # unset
 
-
 # Parse options
 while getopts hN:p:n:m:t:giA:T:r: OPT
 do
