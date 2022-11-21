@@ -63,11 +63,11 @@ EOF
 
 qos_setting() {
   if [ $1 = "GPU-a100" ]
-    echo "
-    #SBATCH --qos=GPU-a100
-    "
+  then
+    echo "\n#SBATCH\n--qos=GPU-a100"
+  else
+    echo 
   fi
-  echo ""
 }
 
 function args_precheck {
@@ -118,7 +118,6 @@ do
         \?) # incorrect option
          echo "Error: Invalid option"
          exit 1;;
-        *) break;; # reached the list of file names
     esac
 done
 
@@ -133,7 +132,7 @@ fi
 # Print out job information
 echo "
 ---------------------------------------------
-Launching job named "$name" on $partition with
+Launching job named \""$name"\" on $partition with
 - $nodes nodes
 - $cores cores 
 - $mem memory
@@ -142,7 +141,8 @@ Launching job named "$name" on $partition with
 
 # create wrapper script to start batch job with given parameters
 sbatch << EoT
-#!/bin/sh 
+#!/bin/sh
+#SBATCH --job-name=$name
 #SBATCH -p $partition # partition (queue)
 #SBATCH -N $nodes # number of nodes
 #SBATCH -n $cores # number of cores
