@@ -110,7 +110,7 @@ do
         m) mem=${OPTARG};;
 	      t) time=${OPTARG};;
 	      g) partition="GPU";;
-	      i) partition=$p"-interactive";;  # append "-interactive"
+	      i) partition=$partition"-interactive";;  # append "-interactive"
         p) partition=${OPTARG};;  # overwrites i or g flag
         T) tpn=${OPTARG};;
         r) gres=${OPTARG};;
