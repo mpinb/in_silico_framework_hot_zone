@@ -49,7 +49,7 @@ function fetch_node_name {
 #   2: The ID of the job (7-number digit)
 #######################################
 function fetch_link {
-    local link="$(cat err.slurm.$1.$2.slurm | grep -Eo http://$1:11113 | head -1)"
+    local link="$(cat err.slurm.$1.$2.slurm | grep -Eo http://$1:11113.* | head -1)"
     echo "${link}"
 }
 
@@ -70,13 +70,14 @@ function fetch_ip {
 # Arguments:
 #   1: The name of the job
 #   2: The name of the node
-#   3: the id of the node
+#   3: the id of the job
 #######################################
 function fetch_jupyter_link {
     local ip="$(fetch_ip $1)"
     local link="$(fetch_link $2 $3)"
-    local link_suffix="$(echo $link | grep -o -P '(?<=:11113).*')"  # grep for anything after the port number
+    local link_suffix="$(echo $link | grep -oP '(?<=:11113)'.* | head -1)"  # grep for anything after the port number
     local jupyter_link="http://$ip:11113$link_suffix"
+    echo $jupyter_link
 }
 
 args_precheck $#;  # check amount of arguments
@@ -95,7 +96,7 @@ else
     Found job name \"$1\" with ID $(fetch_id $1) on $(fetch_node_name $1)
     
     Jupyter lab is running at:
-    $(fetch_jupyter_link $1 $node_name $id)
+    $(fetch_jupyter_link $job_name $node_name $id)
     "
 fi
 exit 0;

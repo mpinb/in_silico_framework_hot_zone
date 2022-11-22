@@ -13,7 +13,7 @@ qos=""  # unset
 
 help() {
   cat <<EOF
-    Usage: $0 {job name} [options]
+    Usage: $0 [options] {job name}
 
     Arguments:
 
@@ -118,6 +118,10 @@ done
 shift $(( OPTIND - 1 ))  # shift the option index to point to the first non-option argument (should be name of the job)
 name=$1
 shift;
+if [ -z "$name" ]
+then
+  echo "Warning: no jobname was passed. Job will start without a name."
+fi
 qosline="$(qos_setting $a100)"
 
 if [ $partition = "GPU-interactive" ] && [ $gres -eq "0" ]; then  # set gres to 4 for GPU-interactive jobs if it wasn't passed in command line
