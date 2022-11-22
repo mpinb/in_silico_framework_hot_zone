@@ -127,6 +127,7 @@ qosline="$(qos_setting $a100)"
 if [ $partition = "GPU-interactive" ] && [ $gres -eq "0" ]; then  # set gres to 4 for GPU-interactive jobs if it wasn't passed in command line
   gres="4"
 fi
+# TODO implement max possible mem or time
 
 # Print out job information
 echo "
@@ -155,6 +156,7 @@ sbatch << EoT
 ##SBATCH --gres=gpu:$gres $qosline
 #module load cuda
 unset XDG_RUNTIME_DIR
+unset DISPLAY
 export SLURM_CPU_BIND=none
 ulimit -Sn "$(ulimit -Hn)"
 srun -n1 -N$nodes -c$cores python $MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA$a100.py $MYBASEDIR/management_dir_$name
