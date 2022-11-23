@@ -7,9 +7,9 @@ cores="48"
 mem="300000"
 time="1-0:00"
 tpn="20"
-gres="0"  # unset
-a100=""  # unset
-qos=""  # unset
+gres="1"  # default
+qosline=""  # not set yet
+cuda=""  # not set yet
 
 help() {
   cat <<EOF
@@ -74,15 +74,6 @@ usage() {
 EOF
 }
 
-qos_setting() {
-  if [ "$1" == "GPU-a100" ]
-  then
-    echo "\n#SBATCH\n--qos=GPU-a100"
-  else
-    echo ""
-  fi
-}
-
 function args_precheck {
   if [ $1 -eq "0" ] ; then
     echo "Warning: no arguments passed. Will launch a job with default parameters and no name."
@@ -109,7 +100,7 @@ do
     p) partition=${OPTARG};;  # overwrites i or g flag
     T) tpn=${OPTARG};;
     r) gres=${OPTARG};;
-    A) a100="_"${OPTARG}; qos="GPU-a100";;  # appendix to start the correct python file
+    A) partition="GPU-a100";;  # appendix to start the correct python file
     \?) # incorrect option
       echo "Error: Invalid option"
       exit 1;;
@@ -122,11 +113,34 @@ if [ -z "$name" ]
 then
   echo "Warning: no jobname was passed. Job will start without a name."
 fi
-qosline="$(qos_setting $a100)"
 
-if [ $partition = "GPU-interactive" ] && [ $gres -eq "0" ]; then  # set gres to 4 for GPU-interactive jobs if it wasn't passed in command line
-  gres="4"
+
+
+################### Cluster logic ###################
+# Here, some extra variables are changed or created to add to the SLURM script depending on your needs
+
+# If working on a GPU parition: load cuda (no matter how GPu partition was requested) with single hashtag, idk why?
+if [ ${partition:0:3} = "GPU" ]; then
+  cuda=$'\n#module load cuda'
 fi
+
+# Set gres to 4 if working on a GPU-interactive partition it if hasn't been set manually, load cuda
+if [ $partition = "GPU-interactive" ] && [ $gres -eq "1" ]; then
+  gres="4"
+  cuda=$'\nmodule load cuda'
+fi
+
+
+
+# Manually set qos line and _A100 python file suffix in case the A100 was requested witht he -p flag instead of the A flag
+if [ $partition = "GPU-a100" ]; then
+  a100="_A100"  # python suffix to start the correct file
+  qosline=$'\n#SBATCH --qos=GPU-a100'
+fi
+
+
+
+
 # TODO implement max possible mem or time
 
 # Print out job information
@@ -142,8 +156,8 @@ Launching job named \""$name"\" on $partition with
 
 # create wrapper script to start batch job with given parameters
 # using EoF or EoT makes it easier to pass multi-line text with argument values
-sbatch << EoT
-#!/bin/sh
+sbatch << EoF
+#!/bin/bash -l
 #SBATCH --job-name=$name
 #SBATCH -p $partition # partition (queue)
 #SBATCH -N $nodes # number of nodes
@@ -153,12 +167,12 @@ sbatch << EoT
 #SBATCH -o out.slurm.%N.%j.slurm # STDOUT
 #SBATCH -e err.slurm.%N.%j.slurm # STDERR
 ##SBATCH --ntasks-per-node=$tpn
-##SBATCH --gres=gpu:$gres $qosline
-#module load cuda
+#SBATCH --gres=gpu:$gres$qosline$cuda
 unset XDG_RUNTIME_DIR
 unset DISPLAY
 export SLURM_CPU_BIND=none
-ulimit -Sn "$(ulimit -Hn)"
-srun -n1 -N$nodes -c$cores python $MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA$a100.py $MYBASEDIR/management_dir_$name
-EoT
+ulimit -Sn "\$(ulimit -Hn)"
+srun -n1 -N$nodes -c$cores python \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA$a100.py \$MYBASEDIR/management_dir_$name
+## sleep 3000
+EoF
 echo "---------------------------------------------"
