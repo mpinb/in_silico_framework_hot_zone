@@ -157,8 +157,7 @@ def setup_dask_scheduler(management_dir):
 def setup_dask_workers(management_dir):
     print '-'*50
     print 'setting up dask-workers'
-    import psutil
-    n_cpus = psutil.cpu_count(logical=False)
+    n_cpus = os.environ['SLURM_CPUS_PER_TASK']
     sfile, sfile3 = _get_sfile(management_dir)
     command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9 --local-directory $JOB_TMPDIR &'.format(nprocs = n_cpus, sfile = sfile)
     print command
