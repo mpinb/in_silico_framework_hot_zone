@@ -15,7 +15,7 @@
 
 ## Requirements
 
-Every student needs to be able to synchronize their repository with https://github.com/abast/in_silico_framework
+Every student needs to be able to synchronize their repository with https://github.com/research-center-caesar/in_silico_framework
 
 
 ## Setup
@@ -65,7 +65,7 @@ Clone `in_silico_framework` to `project_src`:
 
 ```bash
 cd $MYBASEDIR/project_src
-git clone https://github.com/abast/in_silico_framework
+git clone https://github.com/research-center-caesar/in_silico_framework
 ```
 
 Note: you will be asked for the credentials of your user account. 
