@@ -1,28 +1,158 @@
+# HOWTO SETUP IN-SILICO-FRAMEWORK
+
+**Contents**
+
+1. [Requirements](#requirements)
+2. [Bash Profile Setup](#setup)
+3. [Folder Structure](#structure)
+4. [Clone In-Silico-Framework](#repository)
+5. [Install In-Silico-Framework](#install)
+6. [IPython Kernels](#kernels)
+7. [Test Submit Jobs](#testing)
+8. [Default Ports](#ports)
+9. [Jupyter Extensions](#extensions)
+10. [References](#references)
+
+## Requirements
+
+Every student needs to be able to synchronize their repository with https://github.com/research-center-caesar/in_silico_framework
+
+
 ## Setup
- 1. Download and install Anaconda 2.7 https://www.continuum.io/Downloads
- 2. Install neuron such that you can import it as python module. 
-     - Version 7.4 has been tested, newer versions are likely to work. 
-     - Detailed installation instructions can be found here http://www.davison.webfactional.com/notes/installation-neuron-python/ or here https://www.neuron.yale.edu/phpBB/viewtopic.php?t=3489. 
-     - If you use Ubuntu and you have trouble compling neuron, it has been reported that installing the following packages solves the problem: `sudo apt-get install bison flex g++ libxt-dev xorg-dev python-dev libncurses5-dev`
- 3. Add the neuron folder to your PATH environment variable, such that you can run `nrnivmodl` anywhere
- 3. Install the following dependencies:
-    - sumatra, *used for parameterfiles*: `pip install sumatra`
-    - pandas 0.19.2, *data analysis library*: `conda install pandas==0.19.2`
-    - dask 0.16.1, *dynamic task scheduling and "big data" extension of pandas*: `conda install dask==0.16.1` #was 0.14.3
-    - distributed 1.20.1 *allows non-bloccking computations and brings dask to a cluster*: `conda install distributed=1.20.1` #was 1.15.2
-    - seaborn: *statistical data visualization*: `conda install seaborn==0.8.0`
-    - fasterners: *robust file based locking*: `pip install fasteners`
-    - jinja2: *html template engine, required for embedded animations*: `pip install jinja2`
- 3. Run the following commands to install fast compression libraries:
-    - `conda install -c anaconda lz4`
-    - `conda install -c anaconda blosc`
-    - `conda install -c conda-forge python-blosc`
- 4. Clone or pull this repository: `git clone https://github.com/abast/in_silico_framework.git`. 
- 5. Add your in_silico_framework folder to the PYTHONPATH variable
- 6. Unzip the following folder: in_silico_framework/getting_started/barrel_cortex.zip such that the following file exists: `in_silico_framework/getting_started/barrel_cortex/nrCells.csv`
- 6. Open the file model_data_base/simrun2/seed_manager and adjust the variable `path`. This will specify the location where used seeds are saved. Any location where you have write access is suitable.
- 7. Run the test suite: `python run_tests.py`. 
- 
-Due to the statistical nature of the model, some tests might fail from time to time. These tests have the word _statistical_ in their description. If such a test fails, run the testsuite again. If that test fails again, there most likely is an issue. Tests, that do not have a _statistical_ flag in their description may never fail.
+
+Insert this lines into bash_profile, e.g. by using `vim ~/.bashrc`
+Note: adapt the path mybasedir path for your cluster:
+
+```bash
+shopt -s expand_aliases
+export MYBASEDIR="/gpfs/soma_fs/scratch/$USER"
+module load git/2.31
+ulimit -Sn "$(ulimit -Hn)"
+export PYTHONPATH=$MYBASEDIR/project_src/in_silico_framework
+export ISF_HOME=$MYBASEDIR/project_src/in_silico_framework
+alias source_isf='source $MYBASEDIR/anaconda_isf2/bin/activate; export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH; cd $MYBASEDIR'
+alias source_3='source $MYBASEDIR/anaconda_isf3/bin/activate; export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH; cd $MYBASEDIR'
+alias isf='cd $ISF_HOME'
+alias wip='cd $MYBASEDIR/notebooks'
+alias data='cd $MYBASEDIR'
+alias cleanit='cd $MYBASEDIR; rm management_dir* -r; rm *slurm'
+export PATH=$HOME/local/bin:$PATH
+```
+Then run `source $HOME/.bashrc` to activate the new `.bashrc` file 
+
+## Structure
+
+We have a default folder structure, you need to create these folders:
+- MYBASEDIR: typically on scratch
+- MYBASEDIR/notebooks --> the contents should be kept in GitHub
+- MYBASEDIR/results --> this is, where gnerated data goes
+	--> for each notebook, there is (typically) one subfolder that is named exactly as the notebook is named
+	--> notebooks start with the date they are created (YYYYMMDD)
+- MYBASEDIR/prgr (optional), so far contains installers for anaconda, NEURON, ...
+
+To replicate the folder structure run :
+
+```bash
+cd $MYBASEDIR
+mkdir results
+mkdir project_src
+mkdir prgr
+mkdir notebooks
+```
+## Repository
+
+Clone `in_silico_framework` to `project_src`:
+
+```bash
+cd $MYBASEDIR/project_src
+git clone https://github.com/research-center-caesar/in_silico_framework
+```
+
+Note: you will be asked for the credentials of your user account. 
+You will need to use your personal access token (PAT) instead of the password.
+
+## Install
+
+In order to install `in-silico-framework` for both Python 2 and Python 3 run :
+
+```bash
+cd $MYBASEDIR/project_src/in_silico_framework/installer
+./isf-install.sh -d -t py2 -i $MYBASEDIR/anaconda_isf2
+./isf-install.sh -d -t py3 -i $MYBASEDIR/anaconda_isf3
+```
+
+## Kernels
+
+After the installation is completed, proceed to install the IPython Kernels:
+
+```bash
+source_isf; python -m ipykernel install --name root --user --display-name isf2
+source_3; python -m ipykernel install --name base --user --display-name isf3
+```
+
+## Testing
+
+Check if you can submit a job:
+
+```bash
+source_isf
+sbatch project_src/in_silico_framework/SLURM_scripts/launch_dask_on_SOMA_cpu_interactive_1.sh  session1
+```
+**Note:** Currently the launching scripts work only with `in-silico-framework` (Python 2)
+
+Make sure that the job appears with `Running` (R) status in slurm job queue:
+
+```bash
+squeue -u $USER
+```
+
+Look at the corresponding management dir to find the ip address where `jupyter` is running:
+
+```bash
+cat management_dir_session1/scheduler.json
+```
+Use putty to open a SOCKS-5 proxy to the login node (somalogin01 or somalogin02)
+ - you can do this with the -D option of the `ssh` command
+    - example: `ssh -D 4040 somalogin02`
+ - Open firefox settings, search for proxy and activate SOCKS-5 proxy. IP: 127.0.0.1, PORT: 4040 (or the port number passed to the ssh command)
+ - this is explained in more detail in chantals google doc: https://docs.google.com/document/d/1S0IM7HgRsRdGXN_WFeDqPMOL3iDt1Obosuikzzc8YNc/edit#heading=h.dbift17bl1rt
 
 
+## Ports
+
+We have default ports
+- 11112: jupyter notebook
+- 11113: jupyter lab
+- 28787: python 2 scheduler interface
+- 28786: python 2 scheduler
+- 38787: python 3 scheduler interface
+- 38786: python 3 scheduler
+
+## Extensions
+
+We have a set of default extensions to `jupyter notebook`
+
+- Codefolding in Editor
+- Collapsible Headings
+- contrib_nbextensions_help_item
+- Nbextensions_dashboard tab
+- Notify
+- Codefolding
+- Initialization cells
+- Nbextensions edit menu item
+- Table of Contents (2)
+
+To install the extensions for `jupyter notebook` enter:
+
+```bash
+source_isf
+jupyter contrib nbextension install --user
+jupyter nbextensions_configurator enable --user
+```
+
+## References
+
+--> located at Z:\Share\HowTos\How-to use the AXON cluster.txt
+--> https://docs.google.com/document/d/1S0IM7HgRsRdGXN_WFeDqPMOL3iDt1Obosuikzzc8YNc/edit#heading=h.dbift17bl1rt
+
+--> [Setting up SSH Tunnels and port-forwarding with MobaXTerm](https://blog.mobatek.net/post/ssh-tunnels-and-port-forwarding/)
