@@ -83,6 +83,33 @@ function args_precheck {
   fi
 }
 
+#######################################
+# Checks if a job is already running with same name
+# Arguments:
+#   1: The name of the job
+#######################################
+function check_name {
+    local n_matches="$(squeue -u $USER | grep ${1:0:8} | wc -l)"
+    if [ $n_matches -gt 0 ]; then
+      echo "A job with this name is already running. Consider renaming the job and resubmitting."
+      exit 1
+    fi
+    return 0
+}
+
+#######################################
+# Requests the name of the node some job is running on
+#   Show all running jobs of user, grep for jobname (truncated to first 8 chars), 
+#   grep for somegpu or somacpu with three numbers at the end
+#   TODO: add a100 regex
+# Arguments:
+#   1: The ID fo the job
+#######################################
+function fetch_node_name {
+    local node_name="$(squeue -u $USER | grep $1 | grep -Eo soma[cg]pu[0-9]{3})"
+    echo "${node_name}"
+}
+
 args_precheck $# $1;
 
 # Parse options
@@ -109,12 +136,12 @@ done
 shift $(( OPTIND - 1 ))  # shift the option index to point to the first non-option argument (should be name of the job)
 name=$1
 shift;
+
 if [ -z "$name" ]
 then
   echo "Warning: no jobname was passed. Job will start without a name."
 fi
-
-
+check_name $name
 
 ################### Cluster logic ###################
 # Here, some extra variables are changed or created to add to the SLURM script depending on your needs
@@ -131,13 +158,11 @@ if [ $partition = "GPU-interactive" ] && [ $gres -eq "1" ]; then
 fi
 
 
-
 # Manually set qos line and _A100 python file suffix in case the A100 was requested witht he -p flag instead of the A flag
 if [ $partition = "GPU-a100" ]; then
   a100="_A100"  # python suffix to start the correct file
   qosline=$'\n#SBATCH --qos=GPU-a100'
 fi
-
 
 
 
@@ -156,7 +181,8 @@ Launching job named \""$name"\" on $partition with
 
 # create wrapper script to start batch job with given parameters
 # using EoF or EoT makes it easier to pass multi-line text with argument values
-sbatch << EoF
+# This submits the job and catches the output
+output=$(sbatch <<EoF
 #!/bin/bash -l
 #SBATCH --job-name=$name
 #SBATCH -p $partition # partition (queue)
@@ -171,8 +197,11 @@ sbatch << EoF
 unset XDG_RUNTIME_DIR
 unset DISPLAY
 export SLURM_CPU_BIND=none
-ulimit -Sn "\$(ulimit -Hn)"
+ulimit -Sn \"\$\(ulimit -Hn\)\"
 srun -n1 -N$nodes -c$cores python \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA$a100.py \$MYBASEDIR/management_dir_$name
 ## sleep 3000
 EoF
+)
+echo $output
 echo "---------------------------------------------"
+id="$(echo $output | grep -Eo [0-9]{7})"  # grep slurm submit output for ID
