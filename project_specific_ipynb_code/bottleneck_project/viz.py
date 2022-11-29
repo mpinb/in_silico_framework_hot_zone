@@ -1,5 +1,6 @@
 import Interface as I
-from helper_functions import get_neuron_param_file, get_main_bifurcation_section, get_section_distances_df, get_spatial_bin_names
+from helper_functions import get_neuron_param_file, get_section_distances_df, get_spatial_bin_names
+from project_specific_ipynb_code.hot_zone import get_main_bifurcation_section
 
 class WeightPlot():
     def __init__(self, mdb):
