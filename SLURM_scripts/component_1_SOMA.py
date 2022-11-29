@@ -83,7 +83,7 @@ def setup_locking_server():
     #os.system(command)
     #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
     config = [{'config': {'hosts': 'somalogin02-hs:33333'}, 'type': 'zookeeper'}]
-    #config = [{'type': 'file'}]
+    # config = [{'type': 'file'}]  # uncomment this line if zookeeper is not running (i.e., you receive an error similar to 'No handlers could be found for logger "kazoo.client"')
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
     setup_locking_config()
