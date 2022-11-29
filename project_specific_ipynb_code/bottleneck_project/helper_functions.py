@@ -40,8 +40,11 @@ class Model(nn.Module):
         X_ISI_list: a list containing two elements.
            First element is X, i.e. the same as in My_model_bottleneck
            Second element is ISI for each trial
+        X is synaptic input history (80ms): n_trials x n_cell_types x n_spatial_bins x temporal window width
+        ISI_SOMA: n_trials x 1 = time to previous soma spike
+        ISI_DEND: n_trials x 1 = time to previous dendritic spike
         '''
-        X,ISI_SOMA,ISI_DEND = X_ISI_MCM_list
+        X, ISI_SOMA, ISI_DEND = X_ISI_MCM_list
         assert(isinstance(X,torch.Tensor))
         out = self.linear1(X)
         list_ = [out]

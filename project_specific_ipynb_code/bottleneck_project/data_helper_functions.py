@@ -1,6 +1,7 @@
 import Interface as I
 from helper_functions import augment_synapse_activation_df_with_branch_bin, get_synapse_activation_array_weighted
 import torch
+from tqdm import tqdm
 
 def register_databases(ip=""):
     assert ip != "", "Please provide an ip for the distributed Client"
@@ -37,9 +38,11 @@ def load_data_helper_uncached(data_dir, batch):
 load_data_helper = I.utils.cache(load_data_helper_uncached)
 
 def load_data_uncached(batches_dir, batch_range=10):
+    """
+    Loads simulation data from batches_dir
+    """
     out = []
-    for batch in range(batch_range):
-        print(f"Loaded batch {batch}")
+    for batch in tqdm(range(batch_range), desc="Loading batches"):
         out.append(load_data_helper(batches_dir, batch))   # why its not load_data_helper_uncached ???
     
     a1 = torch.cat([o[0] for o in out])#.to(device)

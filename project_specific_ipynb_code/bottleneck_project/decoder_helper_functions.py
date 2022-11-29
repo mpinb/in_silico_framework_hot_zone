@@ -65,27 +65,25 @@ def forward_decoder(self, bottleneck):
         out = self.output_layer(out)
         return out
 
-def get_decoder_info(SA, ISI_SOMA, ISI_DEND, temporal_window_width, AP_SOMA, VT_SOMA, AP_DEND, VT_DEND, model):
-    model_outs = []   # accumilating all the model outs for all the time points starting from 165 --> 245 and end in 225 --> 305 ms in the simulation (60ms duration/ 60*5000 trials = 300,000 dots) 
+def get_decoder_info(SA, ISI_SOMA, ISI_DEND, AP_SOMA, VT_SOMA, AP_DEND, VT_DEND, temporal_window_width, model):
+    """
+    SA: synaptic input array: n_trials x n_cell_types x _n_spatial_bins x n_temporal_bins
+    """
+    model_outs = []
     bottleneck_outs = []
     is_ = []
     soma_isis = []
-    for i in tqdm(range(60)):  # change range to 60 or 20 
-        X_ISI_MCM_list = [SA[:,:,:,i:temporal_window_width+i].flatten().view(len(ISI_SOMA),-1).float(),    # dinuka - ind is not defined before !!! since it has to be the same number of trails accordingly i changed it to the len(ISI_SOMA) = 5000 now 
+    dend_isis = []
+    for i in tqdm(range(60)):  # change range to 60 or 20
+        # Iterate over all 80ms-wide intervals from 0 to 60, such that the total included time windows are 0->80 until 60->140ms
+        X_ISI_MCM_list = [SA[:,:,:,i:temporal_window_width+i].flatten().view(len(ISI_SOMA),-1).float(),
                         ISI_SOMA[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1).float(),
                         ISI_DEND[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1).float() + 100]
         
-        # soma and dend ISI are large
-        #X_ISI_MCM_list = [SA[:,:,:,i:temporal_window_width+i].flatten().view(len(ind),-1).float(),
-        #                              1000*torch.ones(len(SA),1).float(),
-        #                              1000*torch.ones(len(SA),1).float()]
-        
-        
-
-        desired_outputs = [AP_SOMA[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1),
-                        VT_SOMA[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1),
-                        AP_DEND[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1),
-                        VT_DEND[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1)] 
+        # desired_outputs = [AP_SOMA[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1),
+        #                 VT_SOMA[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1),
+        #                 AP_DEND[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1),
+        #                 VT_DEND[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1)] 
         model_out = forward(model, X_ISI_MCM_list)
         model_out = torch.sigmoid(model_out)
         model_out = model_out.cpu().detach().numpy()
@@ -94,12 +92,44 @@ def get_decoder_info(SA, ISI_SOMA, ISI_DEND, temporal_window_width, AP_SOMA, VT_
         bottleneck_outs.append(bottleneck_out)
         is_.extend([i]*len(SA))
         soma_isis.append(X_ISI_MCM_list[1])
+        dend_isis.append(X_ISI_MCM_list[2])
     bottleneck_out = I.np.concatenate(bottleneck_outs)
     model_out = I.np.concatenate(model_outs)
     soma_isi = I.np.concatenate(soma_isis)
+    dend_isi = I.np.concatenate(dend_isis)
     is_ = I.np.array(is_)
 
-    return soma_isi, bottleneck_out, model_out
+    return soma_isi, dend_isi, bottleneck_out, model_out
+
+def get_decoder_info_as_df(SA, ISI_SOMA, ISI_DEND, AP_SOMA, VT_SOMA, AP_DEND, VT_DEND, temporal_window_width, model):
+    model_outs = []
+    bottleneck_outs = []
+    #is_ = []
+    soma_isis = []
+    dend_isis = []
+    for i in tqdm(range(60)):  # change range to 60 or 20
+        # Iterate over all 80ms-wide intervals from 0 to 60, such that the total included time windows are 0->80 until 60->140ms
+        X_ISI_MCM_list = [SA[:,:,:,i:temporal_window_width+i].flatten().view(len(ISI_SOMA),-1).float(),
+                        ISI_SOMA[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1).float(),
+                        ISI_DEND[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1).float() + 100]
+        model_out = forward(model, X_ISI_MCM_list)
+        model_out = torch.sigmoid(model_out)
+        model_out = model_out.cpu().detach().numpy()
+        model_outs.append(model_out)
+        bottleneck_out = forward_bottleneck(model, X_ISI_MCM_list).cpu().detach().numpy()
+        bottleneck_outs.append(bottleneck_out)
+        #is_.extend([i]*len(SA))
+        soma_isis.append(X_ISI_MCM_list[1])
+        dend_isis.append(X_ISI_MCM_list[2])
+    bottleneck_out = I.np.concatenate(bottleneck_outs)
+    model_out = I.np.concatenate(model_outs)
+    soma_isi = I.np.concatenate(soma_isis)
+    dend_isi = I.np.concatenate(dend_isis)
+    #is_ = I.np.array(is_)
+
+    return I.pd.DataFrame.from_dict({"soma_isi": I.np.concatenate(soma_isi), "dend_isi": I.np.concatenate(dend_isi),
+    "model_out": I.np.concatenate(model_out), 
+    "bottleneck_out_0": bottleneck_out[:,0], "bottleneck_out_1": bottleneck_out[:,1], "bottleneck_out_2": bottleneck_out[:,2]})
 
 def cartesian_product(*arrays):
     import numpy
