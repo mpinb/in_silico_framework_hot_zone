@@ -7,7 +7,7 @@ cores="48"
 mem="300000"
 time="1-0:00"
 tpn="20"
-gres="1"  # default
+gres="0"  # default for CPU jobs
 qosline=""  # not set yet
 cuda=""  # not set yet
 
@@ -146,15 +146,17 @@ check_name $name
 ################### Cluster logic ###################
 # Here, some extra variables are changed or created to add to the SLURM script depending on your needs
 
-# If working on a GPU parition: load cuda (no matter how GPu partition was requested) with single hashtag, idk why?
-if [ ${partition:0:3} = "GPU" ]; then
-  cuda=$'\n#module load cuda'
-fi
-
-# Set gres to 4 if working on a GPU-interactive partition it if hasn't been set manually, load cuda
-if [ $partition = "GPU-interactive" ] && [ $gres -eq "1" ]; then
-  gres="4"
+if [ $partition = "GPU-interactive" ]; then
   cuda=$'\nmodule load cuda'
+  if [ $gres -eq "0" ]; then  # Set gres to 4 if working on a GPU-interactive partition it if hasn't been set manually
+    gres="4"
+  fi
+elif [ $partition = "GPU" ] && [ $gres -eq "0" ]; then
+  # If working on a GPU partition: load cuda with single hashtag, idk why?
+  cuda=$'\n#module load cuda'
+  if [ $gres -eq "0" ]; then  # Set gres to 1 if working on a GPU partition it if hasn't been set manually
+    gres="1"
+  fi
 fi
 
 
@@ -205,3 +207,42 @@ EoF
 echo $output
 echo "---------------------------------------------"
 id="$(echo $output | grep -Eo [0-9]{7})"  # grep slurm submit output for ID
+
+
+# ##### Fetching the jupyter link from the err file
+# # continuously monitor cwd until the error file exsists
+# echo "Waiting for err.slurm file to exist"
+# while [ ! $(ls err.slurm.*.$id.slurm 2> /dev/null) ]
+# do
+#   sleep 0.1
+# done
+# # Find name of the requested node
+# node_name="$(fetch_node_name $id)"
+# if [ -z "$node_name" ]; then
+#   echo "No node found for job ID $id. Has it been assigned yet?"
+#   exit 1
+# fi
+# echo "Found err.slurm.$node_name.$id.slurm"
+# echo "Monitoring err.slurm.$node_name.$id.slurm for a Jupyter link..."
+# # Continuously monitor err slurm file, when the grep finds something that looks like
+# # a jupyter link starting with a number (i.e. the IP), stops monitoring (& command) and saves to variable
+# # link="$( (tail -F err.slurm.$node_name.$id.slurm &) | grep -qEo http://[0-9].*:11113.* )"
+# #TODO this doesnt work yet, it just keeps searching and doesnt match the grepe, or the grep doesnt stop the tail -f commmand idk
+# link="$( tail -f -n0 logfile.log & ) | grep http://[0-9].*:11113.* "
+
+# echo $link
+
+# if [ -z "$link" ];  # check if a jupyter link is present in the err log
+# then
+#     echo "No jupyter link found in err.slurm.$node_name.$id.slurm
+#     Check if the compute node is running properly"
+#     exit 1;
+# else
+#     echo "
+#     Found job name \"$1\" with ID $(fetch_id $1) on $(fetch_node_name $1)
+    
+#     Jupyter lab is running at:
+#     $link
+#     "
+# fi
+# exit 0;
