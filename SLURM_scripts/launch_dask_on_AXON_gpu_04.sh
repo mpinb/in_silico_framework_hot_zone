@@ -10,6 +10,7 @@
 #SBATCH --gres=gpu:1
 module load cuda
 unset XDG_RUNTIME_DIR
+unset DISPLAY
 export SLURM_CPU_BIND=none
 ulimit -Sn "$(ulimit -Hn)"
 srun -n4 -N4 -c20 python $MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1.py $MYBASEDIR/management_dir_$1
