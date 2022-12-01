@@ -18,9 +18,6 @@ def register_databases(ip=""):
     mdb = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20220829_hot_zone_on_demand_simulations/mdbs_qr8fqtte_/mdb')
     mdb = mdb['example_in_distribution_simulation_1ms_INH_adapt_inh_v2.6_shift-3_offset_445_280000_trials']
 
-    client = I.distributed.Client(ip+':38786')  # this adress changes depending on which node you're using
-    return client
-
 
 def load_data_helper_uncached(data_dir, batch):
     AP_DEND =  torch.from_numpy(I.np.load(data_dir.join('batch_{}_AP_DEND.npy'.format(batch)))).half()#.to(device)

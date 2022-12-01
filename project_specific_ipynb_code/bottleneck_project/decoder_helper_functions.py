@@ -74,7 +74,8 @@ def get_decoder_info(SA, ISI_SOMA, ISI_DEND, AP_SOMA, VT_SOMA, AP_DEND, VT_DEND,
     is_ = []
     soma_isis = []
     dend_isis = []
-    for i in tqdm(range(60)):  # change range to 60 or 20
+    end_t = 60  # last starting t of sliding time_window
+    for i in tqdm(range(end_t), desc=f"Sliding {temporal_window_width} ms wide time window from 0 to {end_t}"):  # change range to 60 or 20
         # Iterate over all 80ms-wide intervals from 0 to 60, such that the total included time windows are 0->80 until 60->140ms
         X_ISI_MCM_list = [SA[:,:,:,i:temporal_window_width+i].flatten().view(len(ISI_SOMA),-1).float(),
                         ISI_SOMA[:,[temporal_window_width+i]].view(len(ISI_SOMA),-1).float(),
