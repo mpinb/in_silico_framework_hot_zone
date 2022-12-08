@@ -199,7 +199,7 @@ output=$(sbatch <<EoF
 unset XDG_RUNTIME_DIR
 unset DISPLAY
 export SLURM_CPU_BIND=none
-ulimit -Sn \"\$\(ulimit -Hn\)\"
+ulimit -Sn "\$(ulimit -Hn)"
 srun -n1 -N$nodes -c$cores python \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA$a100.py \$MYBASEDIR/management_dir_$name
 ## sleep 3000
 EoF

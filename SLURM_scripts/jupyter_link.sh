@@ -1,5 +1,9 @@
 #!/bin/bash -l
 
+# these variables allow the main shell to exit from subshells, which is used in functions
+trap "exit 1" 10
+PROC="$$"
+
 # Assumes a job has been started with name <name> and its corresponding err, out files and management directory.
 
 #######################################
@@ -9,9 +13,10 @@
 #   1. Amount of arguments
 #######################################
 function args_precheck {
-  if [ $1 -eq "0" ] ; then
-    echo "Warning: no arguments passed. Please pass the name of the job as a parameter."
-    exit 1
+  if [ $1 -eq "0" ] ;
+  then
+    echo "Warning: no arguments passed. Please pass the name of the job as a parameter." >&2  # print error to stderr
+    kill -10 $PROC;
   fi
 }
 
@@ -25,7 +30,15 @@ function args_precheck {
 #######################################
 function fetch_id {
     local id="$(squeue -u $USER | grep ${1:0:8} | grep -Eo [0-9]{7})"
-    echo "${id}"
+    if [ -z "$id" ] ; # check if node is found
+    then
+        echo "No JobID found for job name \"$1\" your SLURM queue.
+Is the job name spelled correctly?" >&2  # print error to stderr
+        kill -10 $PROC;
+    else
+        echo "${id}"
+    fi
+    
 }
 
 #######################################
@@ -37,8 +50,15 @@ function fetch_id {
 #   1: The name of the job
 #######################################
 function fetch_node_name {
-    local id="$(squeue -u $USER | grep ${1:0:8} | grep -Eo soma[cg]pu[0-9]{3})"
-    echo "${id}"
+    local node="$(squeue -u $USER | grep ${1:0:8} | grep -Eo soma[cg]pu[0-9]{3})"
+    if [ -z "$node" ] ; # check if node is found
+    then
+        echo "No node found for job name \"$1\" in your SLURM queue.
+It may still be waiting to be assigned, or the job name may be spelled incorrectly." >&2  # print error to stderr
+        kill -10 $PROC;
+    else
+        echo "${node}"
+    fi
 }
 
 #######################################
@@ -49,9 +69,24 @@ function fetch_node_name {
 #   2: The ID of the job (7-number digit)
 #######################################
 function fetch_link {
-    local link="$(cat err.slurm.$1.$2.slurm | grep -Eo http://$1:11113.* | head -1)"
-    echo "${link}"
+    if [ -f "err.slurm.$1.$2.slurm" ] ; # check if err file exists
+    then
+        local link="$(cat err.slurm.$1.$2.slurm | grep -Eo http://$1:11113.* | head -1)"
+        if [ -z "$link" ]  # check if node is found
+        then
+            echo "No Jupyter link found (yet) in \"err.slurm.$1.$2.slurm\"
+The server has not been started (yet). Check if the job is running correctly." >&2  # print error to stderr
+            kill -10 $PROC;
+        else
+            echo "${link}"
+        fi
+    else
+        echo "File \"err.slurm.$1.$2.slurm\" does not exist (yet).
+Check if the job is running correctly, or wait until the file has been created." >&2  # print error to stderr
+        kill -10 $PROC;
+    fi
 }
+
 
 #######################################
 # Search through the management_dir scheduler.json file for the IP of the node
@@ -60,8 +95,16 @@ function fetch_link {
 #   1: The name of the job
 #######################################
 function fetch_ip {
-    local ip="$(cat management_dir_$1/scheduler.json | grep -Eo tcp://\.*28786 | grep -o -P '(?<=tcp://).*(?=:28786)')"
-    echo "${ip}"
+    if [ ! -f "management_dir_$1/scheduler.json" ] ; # check if management_dir_*/scheduler.json file exists
+    then
+        echo "File management_dir_$1/scheduler.json does not exist(yet).
+Check if the job name is spelled correctly and the job is running.
+If this is the case, wait until the file has been created." >&2  # print error to stderr
+        kill -10 $PROC;
+    else
+        local ip="$(cat management_dir_$1/scheduler.json | grep -Eo tcp://\.*28786 | grep -o -P '(?<=tcp://).*(?=:28786)')"
+        echo "${ip}"
+    fi
 }
 
 #######################################
@@ -75,28 +118,28 @@ function fetch_ip {
 function fetch_jupyter_link {
     local ip="$(fetch_ip $1)"
     local link="$(fetch_link $2 $3)"
-    local link_suffix="$(echo $link | grep -oP '(?<=:11113)'.* | head -1)"  # grep for anything after the port number
-    local jupyter_link="http://$ip:11113$link_suffix"
+    local link_suffix="$(echo $link | grep -oP '(?<=:11113/)'.* | head -1)"  # grep for anything after the port number
+    if [ -z "$link_suffix" ] ;  # no suffix is found: no token, but also no 
+    then
+        echo "
+Warning: No token is set for this Jupyter server.
+VSCode will not be able to connect to this server, and notebooks running on this server can not be shared by link">&2
+    fi
+    local jupyter_link="http://$ip:11113/$link_suffix"
     echo $jupyter_link
 }
 
 args_precheck $#;  # check amount of arguments
-
 job_name="$1"
 id="$(fetch_id $1)"
 node_name="$(fetch_node_name $1)"
 link="$(fetch_link $node_name $id)"
-if [ -z "$link" ]  # check if a jupyter link is present in the err log
-then
-    echo "No jupyter link found in err.slurm.$node_name.$id.slurm
-    Check if the compute node is running properly"
-    exit 1;
-else
-    echo "
-    Found job name \"$1\" with ID $(fetch_id $1) on $(fetch_node_name $1)
-    
-    Jupyter lab is running at:
-    $(fetch_jupyter_link $job_name $node_name $id)
-    "
-fi
+jupyter_link="$(fetch_jupyter_link $job_name $node_name $id)";
+
+echo "
+Found job name \"$1\" with ID $id on $node_name
+
+Jupyter lab is running at:
+$jupyter_link
+"
 exit 0;
