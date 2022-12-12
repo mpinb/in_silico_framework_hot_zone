@@ -165,9 +165,7 @@ if [ $partition = "GPU-a100" ]; then
   fi
 fi
 
-echo $'here\n\n\n'
 if [ ! -z "$tpn" ]; then
-  echo $'made it\n\n\n\n'
   tpn="#SBATCH --ntasks-per-node="$tpn
 fi
 
