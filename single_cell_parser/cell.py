@@ -14,6 +14,7 @@ h = neuron.h
 from itertools import chain
 import single_cell_analyzer as sca
 import pandas as pd
+import json
 
 class Cell(object):
     '''
@@ -50,6 +51,9 @@ class Cell(object):
         TODO: this should be read from parameter file (e_pas)
         self.E = -70.0
         '''
+        # TODO: right now, the cell information (points, connectivity, Vm...) has to be accessed on a section-by-section basis. Why isn't this information availabe as a flat array?
+        # TODO: is it worth it to implement this extraction?
+
         self.hoc_path = None
         self.id = None
         self.soma = None
@@ -64,7 +68,7 @@ class Cell(object):
 #        (e.g., Dendrite, ApicalDendrite, ApicalTuft, Myelin etc..
         self.structures = {}
 #        simply list of all sections
-        self.sections = []
+        self.sections = []  # TODO: what type are these elements?
         self.synapses = {}
 #        TODO: this should be read from parameter file (e_pas)
         self.E = -70.0
@@ -198,121 +202,122 @@ class Cell(object):
         according to their relative timing.
         '''
         raise NotImplementedError('Synapse parameter change does not work correctly with VecStim!')
-#        eventList = self.changeSynParamDict.keys()
-#        eventList.sort()
-#        print 'Cell %s: event at t = %.2f' % (self.id ,eventList[0])
-#        tChange = eventList[0]
-#        newParamDict = self.changeSynParamDict.pop(eventList[0])
-#        synCnt = 0
-#        for synType in newParamDict.keys():
-#            print '\tchanging parameters for synapses of type %s' % synType
-#            for syn in self.synapses[synType]:
-#                synCnt += 1
-#                if not syn.is_active():
-#                    continue
-#                #===============================================================
-#                # re-compute release times in case release probability changes
-#                #===============================================================
-#                preChange = False
-#                for t in syn.preCell.spikeTimes:
-#                    if t >= tChange:
-#                        preChange = True
-#                        break
-#                if preChange:
-#                    changeBin = None
-#                    for i in range(len(syn.releaseSite.spikeTimes)):
-#                        if syn.releaseSite.spikeTimes[i] >= tChange:
-#                            changeBin = i
-#                    if changeBin is not None:
-#                        print '\tdetermine new release times for synapse %d of type %s' % (synCnt-1, synType)
-#                        print '\t\told VecStim: %s' % (syn.releaseSite.spikes)
-#                        del syn.releaseSite.spikeTimes[changeBin:]
-#                        syn.releaseSite.spikes.play()
-#                        syn.releaseSite.spikeVec.resize(0)
-#                        prelNew = newParamDict[synType].synapses.releaseProb
-#                        newSpikes = []
-#                        for t in syn.preCell.spikeTimes:
-#                            if t >= tChange:
-#                                if np.random.rand() < prelNew:
-##                                    syn.releaseSite.append(t)
-#                                    newSpikes.append(t)
-#                                    syn.releaseSite.spikeTimes.append(t)
-#                                    print '\t\tnew release time %.2f' % (t)
-#                        if len(newSpikes):
-#                            print '\t\told NetCon: %s' % (syn.netcons[0])
-#                            print '\t\told NetCon valid: %d' % (syn.netcons[0].valid())
-#                            del syn.netcons[0]
-##                            syn.netcons = []
-#                            print '\t\tcreating new VecStim'
-#                            del syn.releaseSite.spikes
-#                            syn.releaseSite.spikes = h.VecStim()
-#                            print '\t\tupdating SpikeVec:'
-#                            del syn.releaseSite.spikeVec
-#                            syn.releaseSite.spikeVec = h.Vector(newSpikes)
-#                            tRelStr = '\t\t'
-#                            for t in syn.releaseSite.spikeVec:
-#                                tRelStr += str(t)
-#                                tRelStr += ', '
-#                            print tRelStr
-#                            print '\t\tactivating new VecStim %s' % (syn.releaseSite.spikes)
-#                            syn.releaseSite.spikes.play(syn.releaseSite.spikeVec)
-#                            print '\t\tupdated VecStim %s with %d new spike times' % (syn.releaseSite.spikes, len(newSpikes))
-#                            
-#                            newSyn = synapse.Synapse(syn.secID, syn.ptID, syn.x, syn.preCellType, syn.postCellType)
-#                            newSyn.coordinates = np.array(self.sections[syn.secID].pts[syn.ptID])
-#                            newSyn.weight = syn.weight
-#                            newSyn.activate_hoc_syn(syn.releaseSite, syn.preCell, self, newParamDict[synType].synapses.receptors)
-#                            
+        """ Old code
+        eventList = self.changeSynParamDict.keys()
+        eventList.sort()
+        print 'Cell %s: event at t = %.2f' % (self.id ,eventList[0])
+        tChange = eventList[0]
+        newParamDict = self.changeSynParamDict.pop(eventList[0])
+        synCnt = 0
+        for synType in newParamDict.keys():
+           print '\tchanging parameters for synapses of type %s' % synType
+           for syn in self.synapses[synType]:
+               synCnt += 1
+               if not syn.is_active():
+                   continue
+               #===============================================================
+               # re-compute release times in case release probability changes
+               #===============================================================
+               preChange = False
+               for t in syn.preCell.spikeTimes:
+                   if t >= tChange:
+                       preChange = True
+                       break
+               if preChange:
+                   changeBin = None
+                   for i in range(len(syn.releaseSite.spikeTimes)):
+                       if syn.releaseSite.spikeTimes[i] >= tChange:
+                           changeBin = i
+                   if changeBin is not None:
+                       print '\tdetermine new release times for synapse %d of type %s' % (synCnt-1, synType)
+                       print '\t\told VecStim: %s' % (syn.releaseSite.spikes)
+                       del syn.releaseSite.spikeTimes[changeBin:]
+                       syn.releaseSite.spikes.play()
+                       syn.releaseSite.spikeVec.resize(0)
+                       prelNew = newParamDict[synType].synapses.releaseProb
+                       newSpikes = []
+                       for t in syn.preCell.spikeTimes:
+                           if t >= tChange:
+                               if np.random.rand() < prelNew:
+#                                    syn.releaseSite.append(t)
+                                   newSpikes.append(t)
+                                   syn.releaseSite.spikeTimes.append(t)
+                                   print '\t\tnew release time %.2f' % (t)
+                       if len(newSpikes):
+                           print '\t\told NetCon: %s' % (syn.netcons[0])
+                           print '\t\told NetCon valid: %d' % (syn.netcons[0].valid())
+                           del syn.netcons[0]
 #                            syn.netcons = []
-#                            syn.receptors = {}
-#                            forget = syn
-#                            syn = newSyn
-#                            del forget
-#                            #===============================================================
-#                            # update biophysical parameters and NetCon
-#                            #===============================================================
-##                            for recepStr in newParamDict[synType].synapses.receptors.keys():
-##                                recep = newParamDict[synType].synapses.receptors[recepStr]
-##                                hocStr = 'h.'
-##                                hocStr += recepStr
-##                                hocStr += '(x, sec=hocSec)'
-##                                newSyn = eval(hocStr)
-##                                del syn.receptors[recepStr]
-##                                syn.receptors[recepStr] = newSyn
-##                                for paramStr in recep.parameter.keys():
-##                                #===========================================================
-##                                # try treating parameters as NMODL range variables,
-##                                # then as (global) NMODL parameters
-##                                #===========================================================
-##                                    try:
-##                                        valStr = str(recep.parameter[paramStr])
-##                                        cmd = 'syn.receptors[\'' + recepStr + '\'].' + paramStr + '=' + valStr
-###                                        print 'setting %s for synapse of type %s' % (cmd, synType)
-##                                        exec(cmd)
-##                                    except LookupError:
-##                                        cmd = paramStr + '_' + recepStr + '='
-##                                        cmd += str(recep.parameter[paramStr])
-###                                        print 'setting %s for synapse of type %s' % (cmd, synType)
-##                                        h(cmd)
-##                                threshParam = float(recep.threshold)
-##                                delayParam = float(recep.delay)
-##                                newNetcon = h.NetCon(syn.releaseSite.spikes, syn.receptors[recepStr])
-###                                print '\t\told NetCon: %s' % (syn.netcons[0])
-###                                print '\t\told NetCon valid: %d' % (syn.netcons[0].valid())
-###                                del syn.netcons[0]
-###                                syn.netcons = []
-##                                syn.netcons = [newNetcon]
-##                                print '\t\tnew NetCon: %s' % (syn.netcons[0])
-##                                print '\t\tnew NetCon valid: %d' % (syn.netcons[0].valid())
-##                                syn.netcons[0].threshold = threshParam
-##                                syn.netcons[0].delay = delayParam
-##                                if isinstance(recep.weight, Sequence):
-##                                    for i in range(len(recep.weight)):
-##                                        syn.netcons[0].weight[i] = recep.weight[i]
-##                                else:
-##                                    syn.netcons[0].weight[0] = recep.weight
+                           print '\t\tcreating new VecStim'
+                           del syn.releaseSite.spikes
+                           syn.releaseSite.spikes = h.VecStim()
+                           print '\t\tupdating SpikeVec:'
+                           del syn.releaseSite.spikeVec
+                           syn.releaseSite.spikeVec = h.Vector(newSpikes)
+                           tRelStr = '\t\t'
+                           for t in syn.releaseSite.spikeVec:
+                               tRelStr += str(t)
+                               tRelStr += ', '
+                           print tRelStr
+                           print '\t\tactivating new VecStim %s' % (syn.releaseSite.spikes)
+                           syn.releaseSite.spikes.play(syn.releaseSite.spikeVec)
+                           print '\t\tupdated VecStim %s with %d new spike times' % (syn.releaseSite.spikes, len(newSpikes))
+                           
+                           newSyn = synapse.Synapse(syn.secID, syn.ptID, syn.x, syn.preCellType, syn.postCellType)
+                           newSyn.coordinates = np.array(self.sections[syn.secID].pts[syn.ptID])
+                           newSyn.weight = syn.weight
+                           newSyn.activate_hoc_syn(syn.releaseSite, syn.preCell, self, newParamDict[synType].synapses.receptors)
+                           
+                           syn.netcons = []
+                           syn.receptors = {}
+                           forget = syn
+                           syn = newSyn
+                           del forget
+                           #===============================================================
+                           # update biophysical parameters and NetCon
+                           #===============================================================
+#                            for recepStr in newParamDict[synType].synapses.receptors.keys():
+#                                recep = newParamDict[synType].synapses.receptors[recepStr]
+#                                hocStr = 'h.'
+#                                hocStr += recepStr
+#                                hocStr += '(x, sec=hocSec)'
+#                                newSyn = eval(hocStr)
+#                                del syn.receptors[recepStr]
+#                                syn.receptors[recepStr] = newSyn
+#                                for paramStr in recep.parameter.keys():
+#                                #===========================================================
+#                                # try treating parameters as NMODL range variables,
+#                                # then as (global) NMODL parameters
+#                                #===========================================================
+#                                    try:
+#                                        valStr = str(recep.parameter[paramStr])
+#                                        cmd = 'syn.receptors[\'' + recepStr + '\'].' + paramStr + '=' + valStr
+##                                        print 'setting %s for synapse of type %s' % (cmd, synType)
+#                                        exec(cmd)
+#                                    except LookupError:
+#                                        cmd = paramStr + '_' + recepStr + '='
+#                                        cmd += str(recep.parameter[paramStr])
+##                                        print 'setting %s for synapse of type %s' % (cmd, synType)
+#                                        h(cmd)
+#                                threshParam = float(recep.threshold)
+#                                delayParam = float(recep.delay)
+#                                newNetcon = h.NetCon(syn.releaseSite.spikes, syn.receptors[recepStr])
+##                                print '\t\told NetCon: %s' % (syn.netcons[0])
+##                                print '\t\told NetCon valid: %d' % (syn.netcons[0].valid())
+##                                del syn.netcons[0]
+##                                syn.netcons = []
+#                                syn.netcons = [newNetcon]
+#                                print '\t\tnew NetCon: %s' % (syn.netcons[0])
+#                                print '\t\tnew NetCon valid: %d' % (syn.netcons[0].valid())
+#                                syn.netcons[0].threshold = threshParam
+#                                syn.netcons[0].delay = delayParam
+#                                if isinstance(recep.weight, Sequence):
+#                                    for i in range(len(recep.weight)):
+#                                        syn.netcons[0].weight[i] = recep.weight[i]
+#                                else:
+#                                    syn.netcons[0].weight[0] = recep.weight
+    """
 
-    
     def get_synapse_activation_dataframe(self, max_spikes = 20, sim_trial_index = 0): 
         syn_types = []
         syn_IDs = []
@@ -362,6 +367,193 @@ class Cell(object):
 
 
         return sa_pd
+
+    def write_to_vtk(self, out_name="cell", out_dir=".", scalars=None, time=0):
+        """ Writes out Cell object as a .vtk file
+        Given a cell object (self), this method writes out the morphology as a .vtk file. By default, this is done in whatever directory the method is called, but a specific
+        output directory and output name can be specified.
+        Iterates over the sections, extracts point coordinates, diameters, point connectivities and scalar data. Writes these out in legacy vtk format (ascii).
+        Time-dependent scalar data is not supported for .vtk files. A single .vtk file corresponds to the cell at a certain time point, defined by :param time:
+
+        Parameters:
+            - out_name: str: name of the output file
+            - out_dir: str: directory where .vtk fileshould be written to
+            - scalars: array: scalar data to include in the vtk file. Options: ["membrane voltage"]. Default: ["membrane voltage"]  # TODO: include more possibilities
+            - time: int: end time of a simulation, used for writing out time-dependent cell data.
+
+        Returns:
+            - Nothing. Writes out a single .vtk file
+
+        TODO: .vtk files do not support time dependent cell data, so to make a visualisation that varies over time, mutliple .vtk files need to be written out, preferably (but not necessarily) in conjunction with a .vtk.series file.
+        """
+
+        if scalars is None:
+            scalars = ["membrane voltage"]
+        def update_segment_indices_(point_index_, section_, segment_limits_, next_seg_flag_, current_seg_):
+            """
+            Updates various segment info depending on the current segment, segment limits and section.
+
+            Arguments:
+                - point_index: int: index of a point in some segment in some section
+                - section_: Section: Section attribute of a Cell instance.
+                - segment_limits_: ???
+                - next_seg_flag_: bool: flag to check if iteration should go to next section
+                current_seg_: int: Index of current segment. Augments one at a time, resets when jumping to next section.
+            """
+            if i != 0: # Plot lines that join points within the same section
+                if next_seg_flag_:
+                    current_seg_ += 1
+                    next_seg_flag_ = False 
+                if section_.relPts[point_index_-1] < segment_limits_[current_seg_+1] < section_.relPts[point_index_]:
+                    if section_.relPts[point_index_] - segment_limits_[current_seg_+1] > segment_limits_[current_seg_+1] - section_.relPts[point_index_-1]:
+                        current_seg_ += 1
+                    else:
+                        next_seg_flag_ = True
+            else:
+                pass  # 
+            return current_seg_, next_seg_flag_
+
+        def construct_segment_limits_(section_):
+            segs_limits = [0]
+            for j, seg in enumerate(sec):
+                # seg.x is the 1d coordinate between each section. X corresponds to some point where the voltage was measured
+                segs_limits.append(segs_limits[j]+(seg.x-segs_limits[j])*2)
+            return segs_limits
+        
+        def header_(out_name_=out_name):
+            h=f"# vtk DataFile Version 4.0\n{out_name_}\nASCII\nDATASET POLYDATA\n"
+            return h
+
+        def points_str_(points_):
+            p = ""
+            for p_ in points_:
+                line = ""
+                for comp in p_:
+                    line += str(round(comp, 3))
+                    line += " "
+                p += str(line[:-1])
+                p += "\n"
+            return p
+
+        def line_pairs_str_(line_pairs_):
+            """
+            This method adds lines to the vtk mesh pair per pair, such that each line segment is always defined by only two points.
+            This is useful for when you want to specify a varying diameter
+            """
+            n = 0
+            l = ""
+            for p1, p2 in line_pairs_:
+                l += f"2 {p1} {p2}\n"
+                n += 1
+            return l
+        
+        def diameter_str_(diameters_):
+            diameter_string = ""
+            for d in diameters_:
+                diameter_string += str(d)
+                diameter_string += "\n"
+            return diameter_string
+        
+        def scalar_data_str_(scalar_name_):
+            """
+            given the name of
+            """
+            v_string = ""
+            for v in scalar_data[scalar_name_]:
+                v_string += str(v)
+                v_string += "\n"
+            return v_string
+
+        # iterate sections and extract data per section. Add this data to flat lists
+        line_pairs = []
+        points = []
+        diameters = []  # defined per point
+        section_indices = []
+        section_n_points = []
+        scalar_data = {name: [] for name in scalars}
+        for lv, sec in enumerate(self.sections):  
+            scalar_map = {"membrane voltage": sec.recVList
+            }  # dictionary keeping track of which keyword belongs to which attribute of the cell section
+
+            if sec.label in ['Soma', 'AIS', 'Myelin']:
+                continue
+
+            segs_limits = construct_segment_limits_(sec)
+
+            current_seg = 0
+            next_seg_flag = False 
+            n_prev_points = int(np.sum(section_n_points))
+
+            # append first point of the section
+            points.append(sec.pts[0])
+            diameters.append(sec.diamList[0])
+            section_indices.append(lv)
+            for i, pt in enumerate(sec.pts[1:]):  # append consecutive points plus connection
+                points.append(pt)
+                diameters.append(sec.diamList[i])
+                section_indices.append(lv)
+                index = n_prev_points + i
+                line_pairs.append([index, index+1])
+                current_seg, next_seg_flag = update_segment_indices_(i, sec, segs_limits, next_seg_flag, current_seg)
+                for scalar_data_name in scalars:  # write out scalar data
+                    scalar_data[scalar_data_name].append(scalar_map[scalar_data_name][current_seg][time])
+            section_n_points.append(len(sec.pts))
+
+        """ connect sections
+        TODO: this causes paraview to segfault. Perhaps lines can't share a point?
+        for lv, sec in enumerate(cell.sections):
+            if sec.parent is not None:
+                parent_section_index = cell.sections.index(sec.parent)  # index of parent section in section list
+                pt_index_1 = I.np.sum(section_n_points[:parent_section_index + 1]) - 1  # index of last point of the parent section in points list
+                pt_index_2 = I.np.sum(section_n_points[:lv]) # index of first point of the current section in points list
+                diameters.append(sec.parent.diamList[-1])  # diameter of section
+                if pt_index_2 > len(points):
+                    raise ValueError("Index cannot be larger than amount of points")
+                line_pair = [pt_index_1, pt_index_2]
+                if line_pair not in line_pairs and line_pair[::-1] not in line_pairs:
+                    line_pairs.append([pt_index_1, pt_index_2])  # add connection piece between sections
+        """
+        
+        # write out all data to .vtk file
+        with open(out_dir+"/"+out_name+"_{:06d}.vtk".format(time), "w+", encoding="utf-8") as of:
+            of.write(header_(out_name))
+
+            # Points
+            of.write(f"POINTS {len(points)} float\n")
+            of.write(points_str_(points))
+
+            # Line
+            of.write(f"LINES {len(line_pairs)} {3*len(line_pairs)}\n")  # LINES n_cells total_amount_integers
+            # e.g. 2 16 765 means index 765 and 16 define a single line, the leading 2 defines the amount of points that define a line
+            of.write(line_pairs_str_(line_pairs))
+
+            # Diameters
+            of.write(f"POINT_DATA {len(diameters)}\nSCALARS Diameter float 1\nLOOKUP_TABLE default\n")  # SCALARS name_of_data data_type n_components
+            of.write(diameter_str_(diameters))
+
+            # Scalar data (as of now only membrane voltages)
+            for name, data in scalar_data.items():
+                of.write(f"CELL_DATA {len(data)}\nSCALARS Vm float 1\nLOOKUP_TABLE default\n")
+                of.write(scalar_data_str_(name))
+
+    def write_vtk_series(self, time_range, out_name="cell", out_dir="."):
+        """
+        Writes out a vtk.series object, to be loaded in paraview so it knows which files correspond to which timepoints.
+
+        Arguments:
+            - time_range: int: end time of some cell simulation. TODO: ideally, this should not be specified manually
+            - out_name: str: name of output file. default: "cell"
+            - out_dir: str: directory where the output file should be written. By default the directory from where the method was called.
+
+        Returns:
+            - Nothing. Writes out a .vtk.series file
+        """
+
+        dictionary = {"files" : [{ "name" : "{}_{:06d}.vtk".format(out_name, t), "time" : t } for t in range(time_range)]}
+        json_object = json.dumps(dictionary, indent=4)
+
+        with open("/gpfs/soma_fs/scratch/meulemeester/notebooks/viz/"+out_dir+"/"+out_name+".vtk.series", "w+", encoding="utf-8") as of:
+            of.write(json_object)
 
 class PySection(nrn.Section):
     '''
