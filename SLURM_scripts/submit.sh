@@ -6,7 +6,7 @@ partition="GPU"
 cores="48"
 mem="0"
 time="1-0:00"
-tpn="20"
+tpn=""
 gres="4"  # default for GPU jobs
 qosline=""  # not set yet
 cuda=$'\n#module load cuda'  # If working on a GPU partition: load cuda with single hashtag, idk why?
@@ -58,7 +58,7 @@ help() {
 
     -T <val>
       Amount of tasks per node
-      Default: $tpn
+      Default: Not used
 
     -r <val>
       Set value for gres.
@@ -165,6 +165,12 @@ if [ $partition = "GPU-a100" ]; then
   fi
 fi
 
+echo $'here\n\n\n'
+if [ ! -z "$tpn" ]; then
+  echo $'made it\n\n\n\n'
+  tpn="#SBATCH --ntasks-per-node="$tpn
+fi
+
 
 
 # TODO implement max possible mem or time
@@ -193,14 +199,13 @@ output=$(sbatch <<EoF
 #SBATCH -t $time # time (D-HH:MM)
 #SBATCH -o out.slurm.%N.%j.slurm # STDOUT
 #SBATCH -e err.slurm.%N.%j.slurm # STDERR
-##SBATCH --ntasks-per-node=$tpn
 #SBATCH --gres=gpu:$gres$qosline$cuda
+$tpn
 unset XDG_RUNTIME_DIR
 unset DISPLAY
 export SLURM_CPU_BIND=none
 ulimit -Sn "\$(ulimit -Hn)"
 srun -n1 -N$nodes -c$cores python \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA.py \$MYBASEDIR/management_dir_$name
-## sleep 3000
 EoF
 )
 echo $output
