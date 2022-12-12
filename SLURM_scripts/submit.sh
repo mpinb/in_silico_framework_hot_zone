@@ -2,14 +2,14 @@
 
 # Default options
 nodes="1"
-partition="CPU"
+partition="GPU"
 cores="48"
-mem="300000"
+mem="0"
 time="1-0:00"
 tpn="20"
-gres="0"  # default for CPU jobs
+gres="4"  # default for GPU jobs
 qosline=""  # not set yet
-cuda=""  # not set yet
+cuda=$'\n#module load cuda'  # If working on a GPU partition: load cuda with single hashtag, idk why?
 
 help() {
   cat <<EOF
@@ -41,8 +41,8 @@ help() {
       Format: "d-h:m"
       default: $time
 
-    -g
-      Request a GPU partition.
+    -c
+      Request a CPU partition.
 
     -i
       Launch an interactive job.
@@ -113,7 +113,7 @@ function fetch_node_name {
 args_precheck $# $1;
 
 # Parse options
-while getopts hN:p:n:m:t:A:T:r:gi OPT;
+while getopts "hN:n:m:t:cip:T:r:A" OPT;
 do
   case "$OPT" in
     h) usage
@@ -122,9 +122,9 @@ do
     n) cores=${OPTARG};;
     m) mem=${OPTARG};;
     t) time=${OPTARG};;
-    g) partition="GPU";;
+    c) partition="CPU";;
     i) partition=$partition"-interactive";;  # append "-interactive"
-    p) partition=${OPTARG};;  # overwrites i or g flag
+    p) partition=${OPTARG};;  # overwrites i or c flag
     T) tpn=${OPTARG};;
     r) gres=${OPTARG};;
     A) partition="GPU-a100";;  # appendix to start the correct python file
@@ -151,19 +151,18 @@ if [ $partition = "GPU-interactive" ]; then
   if [ $gres -eq "0" ]; then  # Set gres to 4 if working on a GPU-interactive partition it if hasn't been set manually
     gres="4"
   fi
-elif [ $partition = "GPU" ] && [ $gres -eq "0" ]; then
-  # If working on a GPU partition: load cuda with single hashtag, idk why?
-  cuda=$'\n#module load cuda'
-  if [ $gres -eq "0" ]; then  # Set gres to 1 if working on a GPU partition it if hasn't been set manually
-    gres="1"
-  fi
+elif [ ${partition:0:3} == CPU ]; then
+  cuda=$'\nmodule load cuda'
+  gres="0"
 fi
 
-
-# Manually set qos line and _A100 python file suffix in case the A100 was requested witht he -p flag instead of the A flag
+# Manually set qos line and _A100 python file suffix in case the A100 was requested with the -p flag instead of the A flag
 if [ $partition = "GPU-a100" ]; then
   a100="_A100"  # python suffix to start the correct file
   qosline=$'\n#SBATCH --qos=GPU-a100'
+  if [ $cores \> 32 ]; then
+    cores=32
+  fi
 fi
 
 
@@ -200,7 +199,7 @@ unset XDG_RUNTIME_DIR
 unset DISPLAY
 export SLURM_CPU_BIND=none
 ulimit -Sn "\$(ulimit -Hn)"
-srun -n1 -N$nodes -c$cores python \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA$a100.py \$MYBASEDIR/management_dir_$name
+srun -n1 -N$nodes -c$cores python \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA.py \$MYBASEDIR/management_dir_$name
 ## sleep 3000
 EoF
 )
