@@ -5,6 +5,7 @@ nodes="1"
 partition="GPU"
 cores="48"
 mem="0"
+memstr="max"
 time="1-0:00"
 tpn=""
 gres="4"  # default for GPU jobs
@@ -120,7 +121,7 @@ do
         exit;;
     N) nodes=${OPTARG};;
     n) cores=${OPTARG};;
-    m) mem=${OPTARG};;
+    m) mem=${OPTARG};memstr=$mem;;
     t) time=${OPTARG};;
     c) partition="CPU";;
     i) partition=$partition"-interactive";;  # append "-interactive"
@@ -179,7 +180,7 @@ echo "
 Launching job named \""$name"\" on $partition with
 - $nodes nodes
 - $cores cores 
-- $mem MB memory
+- $memstr MB memory
 - gres: $gres
 - for $time
 "
