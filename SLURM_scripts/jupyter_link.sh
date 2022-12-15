@@ -23,13 +23,13 @@ function args_precheck {
 #######################################
 # Request the ID of some job name
 #    Shows all running jobs of user, grep for jobname (truncated to first 8 chars), 
-#    grep for 7 digit Job-ID with regex (-E option), return only regex match (-o option)
+#    grep for 8 digit Job-ID with regex (-E option), return only regex match (-o option)
 #    instead of full line
 # Arguments:
 #   1: The name of the job
 #######################################
 function fetch_id {
-    local id="$(squeue -u $USER | grep ${1:0:9} | grep -Eo [0-9]{7})"
+    local id="$(squeue -u $USER | grep ${1:0:8} | grep -Eo [0-9]{8})"
     if [ -z "$id" ] ; # check if node is found
     then
         echo "No JobID found for job name \"$1\" your SLURM queue.
