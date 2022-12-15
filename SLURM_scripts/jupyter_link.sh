@@ -29,7 +29,7 @@ function args_precheck {
 #   1: The name of the job
 #######################################
 function fetch_id {
-    local id="$(squeue -u $USER | grep ${1:0:8} | grep -Eo [0-9]{7})"
+    local id="$(squeue -u $USER | grep ${1:0:9} | grep -Eo [0-9]{7})"
     if [ -z "$id" ] ; # check if node is found
     then
         echo "No JobID found for job name \"$1\" your SLURM queue.
