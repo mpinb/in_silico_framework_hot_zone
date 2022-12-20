@@ -1,6 +1,13 @@
 # The Visualizer module
 This readme provides some info on how to use the visualizer module
 
+JupyterLab 2.x (which is what isf uses) does not allow to render arbitrary Javascript code. I'm not sure yet what works and what doesn't, but ipywidgets.VBox is not working atm, which is what the method `plot_interactive_3d()` is using. It does work, however, on VSCode. Either JupyterLab must be updated to 3.x, or I need to do a deepdive on which versions I need for:
+- @jupyter-widgets/jupyterlab-manager@x.x.x (1.0.0 should work with JupyterLab 2.x which is what we're running)
+- Plotly
+
+In either case, when using Jupyterlab 2.x, one must install nodejs `source_3; conda install -c conda-forge nodejs` and then jupyterlab manager `source_3; jupyter labextension @jupyter-widgets/jupyterlab-manager@x.x.x` in order to make interactive widgets work. This should not be necessary on JupyterLab 3.x, and is not necessary on VSCode, which renders javascript without too much hassle (tested).
+
+
 ## Usage
 ```python
 from Interface import visualize

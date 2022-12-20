@@ -284,7 +284,7 @@ class CellVisualizer:
             plt.savefig(save)
         return fig
 
-    def plot_interactive_3d(self, downsample_time=10, round_floats=2):
+    def plot_interactive_3d(self, downsample_time=10, round_floats=2, renderer="notebook_connected"):
         """
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
         - Membrane voltage
@@ -299,7 +299,7 @@ class CellVisualizer:
             ipywidgets.VBox object: an interactive render of the cell.
         """
         py.init_notebook_mode()
-        pio.renderers.default = "notebook_connected"
+        pio.renderers.default = renderer
         # Initialize a dataframe. This may seem inefficient, but plotly does this anyways whenever you pass data. 
         # Might as well explicitly do it yourself with more control
         df = self.to_df(t=0, round_floats=round_floats)
