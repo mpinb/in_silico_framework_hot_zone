@@ -2,6 +2,13 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
+from ipywidgets import interactive, VBox, widgets, Layout
+import plotly.offline as py
+import plotly.io as pio
+import plotly.graph_objects as go
+import pandas as pd
+import plotly.express as px
+
 
 class CellVisualizer:
     """
@@ -12,12 +19,15 @@ class CellVisualizer:
         """
         given a Cell object, this class initializes an object that is easier to work with
         """
-        self.scalars = ["membrane voltage"] if scalars is None else scalars
-        self.n_time_points = len(self.scalars[0])
         self.line_pairs = []
-        self.points = []
+        self.points = []  # will be converted to numpy array later on
         self.diameters = []  # defined per point
-        self.scalar_data = {name: [] for name in self.scalars}
+        self.time_points = cell.t
+        self.n_time_points = len(self.time_points)
+        self.membrane_voltage = {t: [] for t in range(self.n_time_points)}  # each key is a time point INDEX. Each value is a list of membrane voltages of the entire neuron for that time point
+        self.section_indices = []
+        self.section_labels = []
+        self.dt = self.time_points[1] - self.time_points[0]
 
         self.__parse_cell(cell)
 
@@ -60,17 +70,13 @@ class CellVisualizer:
             return segs_limits
         
         # iterate sections and extract data per section. Add this data to flat lists
-        section_indices = []
         section_n_points = []
         for lv, sec in enumerate(cell.sections):  
-            scalar_map = {"membrane voltage": sec.recVList
-            }  # dictionary keeping track of which keyword belongs to which attribute of the cell section
 
-            if sec.label in ['Soma', 'AIS', 'Myelin']:
+            if sec.label in ['Soma', 'AIS', 'Myelin']:  # skip these sections
                 continue
 
             segs_limits = __construct_segment_limits(sec)
-
             current_seg = 0
             next_seg_flag = False 
             n_prev_points = int(np.sum(section_n_points))
@@ -78,17 +84,23 @@ class CellVisualizer:
             # append first point of the section
             self.points.append(sec.pts[0])
             self.diameters.append(sec.diamList[0])
-            section_indices.append(lv)
+            self.section_indices.append(lv)
+            self.section_labels.append(sec.label)
+            for t in range(self.n_time_points):
+                    self.membrane_voltage[t].append(sec.recVList[current_seg][t])
+            # append the rest of the section
             for i, pt in enumerate(sec.pts[1:]):  # append consecutive points plus connection
                 self.points.append(pt)
-                self.diameters.append(sec.diamList[i])
-                section_indices.append(lv)
+                self.diameters.append(sec.diamList[i])  # save diameter of this section to instance
+                self.section_indices.append(lv)
+                self.section_labels.append(sec.label)
                 index = n_prev_points + i
                 self.line_pairs.append([index, index+1])
                 current_seg, next_seg_flag = __update_segment_indices_(i, sec, segs_limits, next_seg_flag, current_seg)
-                for scalar_data_name in self.scalars:  # write out scalar data
-                    self.scalar_data[scalar_data_name].append(scalar_map[scalar_data_name][current_seg])
+                for t in range(self.n_time_points):
+                    self.membrane_voltage[t].append(sec.recVList[current_seg][t])
             section_n_points.append(len(sec.pts))
+        self.points = np.array(self.points)
 
         """ connect sections
         TODO: this causes paraview to segfault. Perhaps lines can't share a point?
@@ -104,6 +116,29 @@ class CellVisualizer:
                 if line_pair not in line_pairs and line_pair[::-1] not in line_pairs:
                     line_pairs.append([pt_index_1, pt_index_2])  # add connection piece between sections
         """
+
+
+    def to_df(self, t=0, round_floats=2):
+        """
+        Constructs a dataframe with the following columns and data: ["x", "y", "z", "membrane voltage", "section index", "diameter"].
+        The membrane voltage is the voltage at time t=0 be default.
+
+        Args:
+            - self: Cell
+            - t: int: time at which the membrane voltage should be defined.
+            - round: int: round the membrane voltages to this amount of numbers after the comma
+
+        Returns:
+            df: pandas.DataFrame
+        """
+        x, y, z = self.points.T
+        df = pd.DataFrame.from_dict({
+            "x": np.round(x, round_floats), "y": np.round(y, round_floats), "z": np.round(z, round_floats), 
+            "membrane voltage": np.round(self.membrane_voltage[t], round_floats),
+            "section index": self.section_indices,
+            "diameter": np.round(self.diameters, round_floats),
+            "section label": self.section_labels})
+        return df
 
     def __write_vtk_frame(self, out_name, out_dir, time):
         """
@@ -175,13 +210,21 @@ class CellVisualizer:
                 of.write(f"CELL_DATA {len(data)}\nSCALARS Vm float 1\nLOOKUP_TABLE default\n")
                 of.write(scalar_data_str_(name))
 
+
     def write_vtk_frames(self, out_name, out_dir):
         for t in tqdm(range(self.n_time_points), desc="Writing vtk frames to {}".format(out_dir)):
                 self.__write_vtk_frame(out_name, out_dir, time=t)
 
-    def show_cell_3d(self, azim=-60, dist=10, elev=30, save=''):
+    
+    def show_cell_2d(self, azim=-60, dist=10, elev=30, save=''):
         """
-        Show the current cell in 3D using matplotlib
+        Show a 2D projection of a cell using matplotlib 3D. The projection angle can be specified with the :param azim:, :param dist: and :param elev: parameters.
+
+        Args:
+            - self: Cell: object of type Cell
+            - azim: int or float: Azimuth of the projection in degrees. Default: -60
+            - dist: int or float: distance of the camera to the object. Default: 10
+            - elev: int or float: elevation of the camera above the equatorial plane in degrees. Default: 30
         """
         fig = plt.figure(figsize = (10,10))
         ax = plt.axes(projection='3d')
@@ -203,9 +246,20 @@ class CellVisualizer:
             plt.savefig(save)
         plt.show()
 
-    def show_voltage_cell_3d(self, n_frame, azim=-60, dist=10, elev=30, save=''):
+
+    def show_voltage_cell_2d(self, n_frame, azim=-60, dist=10, elev=30, save=''):
         """
-        Plot the current CellViz object # TODO finish docstring
+        Plot the Cell object with the voltages shown as a colorscale.
+
+        Args:
+            - self: Cell: object of type Cell
+            - n_frame: int: which frame of the simulation to show. The corresponding time point depends on the delta t of the simulation: t = delta_t * n_frame
+            - azim: int or float: Azimuth of the projection in degrees. Default: -60
+            - dist: int or float: distance of the camera to the object. Default: 10
+            - elev: int or float: elevation of the camera above the equatorial plane in degrees. Default: 30
+        
+        Returns:
+            A matplotlib.pyplot.figure object, containing the 3d axes object where the cell was plotted.
         """
         fig = plt.figure(figsize = (10,10))
         ax = plt.axes(projection='3d')
@@ -228,4 +282,55 @@ class CellVisualizer:
         ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, f'get_{a}lim')() for a in 'xyz')])
         if save != '':
             plt.savefig(save)
-        plt.show()
+        return fig
+
+    def plot_interactive_3d(self, downsample_time=10, round_floats=2):
+        """
+        Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
+        - Membrane voltage
+        - Section name and ID
+        - Coordinates
+
+        Args:
+            - downsample_time: int: Must be larger or equal to 1. Downsample the timesteps with this factor such that only n_timesteps//downsample_time are actually plotted out
+            - round: int: round the membrane voltage values
+
+        Returns:
+            ipywidgets.VBox object: an interactive render of the cell.
+        """
+        py.init_notebook_mode()
+        pio.renderers.default = "notebook_connected"
+        # Initialize a dataframe. This may seem inefficient, but plotly does this anyways whenever you pass data. 
+        # Might as well explicitly do it yourself with more control
+        df = self.to_df(t=0, round_floats=round_floats)
+        
+        # Create figure
+        fig = px.scatter_3d(
+            df, x="x", y="y", z="z", 
+            hover_data=["section index", "diameter"], hover_name="section label", 
+            color="membrane voltage", range_color=[-80, 30],
+            size="diameter")
+        fig.update_traces(marker = dict(line = dict(width = 0)))  # remove outline of markers
+        fig.update_layout(coloraxis_colorbar=dict(title="Membrane voltage (mV)"))
+
+        # create FigureWidget from figure
+        f = go.FigureWidget(data=fig.data, layout=fig.layout)
+
+        # update color scale
+        def _update(frame):
+            """
+            Function that gets called whenever the slider gets changed. Requests the membrane voltages at time point :param frame:, corresponding to time point
+            t = frame * delta t
+            """
+            f.update_traces(marker={"color": np.round(self.membrane_voltage[frame*downsample_time], round_floats)})
+            f.layout.title = f"Membrane voltage at time={round(frame*self.dt, 4)} ms"
+            return fig
+
+        # display the FigureWidget and slider with center justification
+        slider = interactive(
+            _update, 
+            frame = widgets.IntSlider(min=0, max=self.n_time_points-1, step=downsample_time, value=0, layout=Layout(width='800px'))
+            )
+        vb = VBox((f, slider))
+        vb.layout.align_items = 'center'
+        return vb
