@@ -114,6 +114,7 @@ load_initialized_cell_and_evokedNW_from_mdb = mdb_init_simrun_general.load_initi
 synapse_activation_binning_dask = mdb_init_synapse_activation_binning.synapse_activation_postprocess_dask
 mdb_init_crossing_over = mdb_init_roberts_simulations = mdb_init_simrun_general
 
+
 from model_data_base.analyze import split_synapse_activation #, color_cellTypeColorMap, excitatory, inhibitory
 from model_data_base.utils import silence_stdout
 from model_data_base.utils import select, pandas_to_array, pooled_std
@@ -160,6 +161,7 @@ except ImportError:
 
 import single_cell_analyzer as sca
 import single_cell_parser as scp
+from visualize.single_cell import CellVisualizer
 
 from simrun2.reduced_model import synapse_activation \
     as rm_synapse_activations
