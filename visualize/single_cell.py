@@ -12,10 +12,10 @@ import plotly.express as px
 
 class CellVisualizer:
     """
-    This class initializes from a cell object and transform the Cell data to something that lends itself easier to plotting.
+    This class initializes from a cell object and extracts relevant Cell data to a format that lends itself easier to plotting.
     It contains useful methods for either plotting a cell, or writing it out to .vtk frames.
     """
-    def __init__(self, cell, scalars=None):
+    def __init__(self, cell):
         """
         given a Cell object, this class initializes an object that is easier to work with
         """
@@ -30,6 +30,7 @@ class CellVisualizer:
         self.dt = self.time_points[1] - self.time_points[0]
 
         self.__parse_cell(cell)
+
 
     def __parse_cell(self, cell):
         """
@@ -118,7 +119,7 @@ class CellVisualizer:
         """
 
 
-    def to_df(self, t=0, round_floats=2):
+    def __to_df(self, t=0, round_floats=2):
         """
         Constructs a dataframe with the following columns and data: ["x", "y", "z", "membrane voltage", "section index", "diameter"].
         The membrane voltage is the voltage at time t=0 be default.
@@ -140,12 +141,13 @@ class CellVisualizer:
             "section label": self.section_labels})
         return df
 
+
     def __write_vtk_frame(self, out_name, out_dir, time):
         """
         Writes out the current cell object 
         """
         def header_(out_name_=out_name):
-            h=f"# vtk DataFile Version 4.0\n{out_name_}\nASCII\nDATASET POLYDATA\n"
+            h="# vtk DataFile Version 4.0\n{}\nASCII\nDATASET POLYDATA\n".format(out_name_)
             return h
 
         def points_str_(points_):
@@ -167,7 +169,7 @@ class CellVisualizer:
             n = 0
             l = ""
             for p1, p2 in line_pairs_:
-                l += f"2 {p1} {p2}\n"
+                l += "2 {} {}\n".format(p1, p2)
                 n += 1
             return l
         
@@ -193,21 +195,21 @@ class CellVisualizer:
             of.write(header_(out_name))
 
             # Points
-            of.write(f"POINTS {len(self.points)} float\n")
+            of.write("POINTS {} float\n".format(len(self.points)))
             of.write(points_str_(self.points))
 
             # Line
-            of.write(f"LINES {len(self.line_pairs)} {3*len(self.line_pairs)}\n")  # LINES n_cells total_amount_integers
+            of.write("LINES {} {}\n".format(len(self.line_pairs), 3*len(self.line_pairs)))  # LINES n_cells total_amount_integers
             # e.g. 2 16 765 means index 765 and 16 define a single line, the leading 2 defines the amount of points that define a line
             of.write(line_pairs_str_(self.line_pairs))
 
             # Diameters
-            of.write(f"POINT_DATA {len(self.diameters)}\nSCALARS Diameter float 1\nLOOKUP_TABLE default\n")  # SCALARS name_of_data data_type n_components
+            of.write("POINT_DATA {}\nSCALARS Diameter float 1\nLOOKUP_TABLE default\n".format(len(self.diameters)))  # SCALARS name_of_data data_type n_components
             of.write(diameter_str_(self.diameters))
 
             # Scalar data (as of now only membrane voltages)
             for name, data in self.scalar_data.items():
-                of.write(f"CELL_DATA {len(data)}\nSCALARS Vm float 1\nLOOKUP_TABLE default\n")
+                of.write("CELL_DATA {}\nSCALARS Vm float 1\nLOOKUP_TABLE default\n".format(len(data)))
                 of.write(scalar_data_str_(name))
 
 
@@ -231,7 +233,7 @@ class CellVisualizer:
         
         for pair in self.line_pairs:
             pt1, pt2 = self.points[pair[0]], self.points[pair[1]]
-            ax.plot3D(*np.array([pt1, pt2]).T, 'grey',lw=self.diameters[pair[0]]*1.5) 
+            ax.plot3D(*np.array([pt1, pt2]).T, 'grey', lw=self.diameters[pair[0]]*1.5) 
 
         ax.set_xticks([])
         ax.set_yticks([])
@@ -284,15 +286,16 @@ class CellVisualizer:
             plt.savefig(save)
         return fig
 
+
     def plot_interactive_3d(self, downsample_time=10, round_floats=2, renderer="notebook_connected"):
         """
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
         - Membrane voltage
-        - Section name and ID
+        - Section name and section ID (not segment ID though)
         - Coordinates
 
         Args:
-            - downsample_time: int: Must be larger or equal to 1. Downsample the timesteps with this factor such that only n_timesteps//downsample_time are actually plotted out
+            - downsample_time: int or float: Must be larger or equal to 1. Downsample the timesteps with this factor such that only n_timesteps//downsample_time are actually plotted out
             - round: int: round the membrane voltage values
 
         Returns:
@@ -302,7 +305,7 @@ class CellVisualizer:
         pio.renderers.default = renderer
         # Initialize a dataframe. This may seem inefficient, but plotly does this anyways whenever you pass data. 
         # Might as well explicitly do it yourself with more control
-        df = self.to_df(t=0, round_floats=round_floats)
+        df = self.__to_df(t=0, round_floats=round_floats)
         
         # Create figure
         fig = px.scatter_3d(
