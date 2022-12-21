@@ -13,7 +13,7 @@ import time
 # In[2]:
 
 management_dir = sys.argv[1]
-print 'using management dir' , management_dir
+print('using management dir {}').format(management_dir)
 
 # In[3]:
 
@@ -56,7 +56,7 @@ def get_process_number():
                 x = int(x)
         with open(p, 'w') as f:
             f.write(str(x + 1))
-        print 'I am process number {}'.format(x)
+        print('I am process number {}').format(x)
     return x
 
 def reset_process_number():
@@ -76,8 +76,8 @@ def get_locking_file_path():
     return os.path.join(management_dir, 'locking_server')
 
 def setup_locking_server():
-    print '-'*50
-    print 'setting up locking server'
+    print('-'*50)
+    print('setting up locking server')
     #command = 'redis-server --save "" --appendonly no --port 8885 --protected-mode no &'    
     #print command
     #os.system(command)
@@ -87,22 +87,22 @@ def setup_locking_server():
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
     setup_locking_config()
-    print '-'*50
+    print('-'*50)
 
 def setup_locking_config():
-    print '-'*50
-    print 'updating locking configuration to use new server'
+    print('-'*50)
+    print('updating locking configuration to use new server')
     while not os.path.exists(get_locking_file_path()):
         time.sleep(1)
     os.environ['ISF_DISTRIBUTED_LOCK_CONFIG'] = get_locking_file_path() 
     check_locking_config()
-    print '-'*50
+    print('-'*50)
 
 def check_locking_config():
     import model_data_base.distributed_lock
-    print 'locking configuration'
-    print model_data_base.distributed_lock.server
-    print model_data_base.distributed_lock.client
+    print('locking configuration')
+    print(model_data_base.distributed_lock.server)
+    print(model_data_base.distributed_lock.client)
     #assert(model_data_base.distributed_lock.server['type'] == 'redis')
     #import socket
     #socket.gethostname()
@@ -136,18 +136,18 @@ def _get_sfile(management_dir):
     return os.path.join(management_dir, 'scheduler.json'), os.path.join(management_dir, 'scheduler3.json')
 
 def setup_dask_scheduler(management_dir):
-    print '-'*50
-    print 'setting up dask-scheduler'
+    print('-'*50)
+    print('setting up dask-scheduler')
     sfile, sfile3 = _get_sfile(management_dir)
     command = 'dask-scheduler --scheduler-file={} --port=28786 --bokeh-port=28787 --interface=ib0 &'
     command = command.format(sfile)
-    print command
+    print(command)
     os.system(command)
     command = '''bash -ci "source ~/.bashrc; source_3; dask-scheduler --scheduler-file={} --port=38786 --interface=ib0 --dashboard-address=:38787" &'''
     command = command.format(sfile3)
-    print command
+    print(command)
     os.system(command)
-    print '-'*50
+    print('-'*50)
 
 # In[7]:
 
@@ -155,35 +155,35 @@ def setup_dask_scheduler(management_dir):
 # setting up dask-worker
 #################################################
 def setup_dask_workers(management_dir):
-    print '-'*50
-    print 'setting up dask-workers'
+    print('-'*50)
+    print('setting up dask-workers')
     n_cpus = os.environ['SLURM_CPUS_PER_TASK']
     sfile, sfile3 = _get_sfile(management_dir)
     command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9 --local-directory $JOB_TMPDIR &'.format(nprocs = n_cpus, sfile = sfile)
-    print command
+    print(command)
     os.system(command)
     command = '''bash -ci "source ~/.bashrc; source_3; dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --local-directory $JOB_TMPDIR --memory-limit=100e9" &'''
     command = command.format(nprocs = n_cpus, sfile = sfile3)
-    print command
+    print(command)
     os.system(command)
-    print '-'*50
+    print('-'*50)
 
 ##############################################
 # setting up jupyter-notebook
 #############################################
 def setup_jupyter_notebook():
-    print '-'*50
-    print 'setting up jupyter notebook'
+    print('-'*50)
+    print('setting up jupyter notebook')
     check_locking_config() 
     command = "cd notebooks; jupyter-notebook --ip='*' --no-browser --port=11112 &"
-    print command
+    print(command)
     os.system(command)    
-    print '-'*50
+    print('-'*50)
     #command = "conda activate /axon/scratch/abast/anaconda3/; jupyter-lab --ip='*' --no-browser --port=11113 &"
     #command = 'screen -S jupyterlab -dm bash -c "source ~/.bashrc; source_3; ' +     '''jupyter-lab --ip='*' --no-browser --port=11113"'''
     #command = '''bash -c "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" &'''
     #command = '''(source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113) &'''
-    command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113 --LabApp.token=''" &'''
+    command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" &'''
     #command = "/axon/scratch/abast/anaconda3/bin/jupyter-lab --ip='*' --no-browser --port=11113"
     os.system(command)
 # In[8]:
