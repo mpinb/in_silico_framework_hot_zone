@@ -12,16 +12,16 @@ import socket
 import time
 # In[2]:
 
-management_dir = sys.argv[1]
-print('using management dir {}').format(management_dir)
+MANAGEMENT_DIR = sys.argv[1]
+print('using management dir {}'.format(MANAGEMENT_DIR))
 
 # In[3]:
 
 #if os.path.exists(management_dir):
 #    shutil.rmtree(management_dir)
-if not os.path.exists(management_dir):
+if not os.path.exists(MANAGEMENT_DIR):
     try:    
-        os.makedirs(management_dir)
+        os.makedirs(MANAGEMENT_DIR)
     except OSError: # if another process was faster creating it
         pass
 
@@ -35,7 +35,7 @@ from contextlib import contextmanager
 @contextmanager
 def Lock():
     # Code to acquire resource, e.g.:
-    lock  = fasteners.InterProcessLock(os.path.join(management_dir, 'lock'))    
+    lock  = fasteners.InterProcessLock(os.path.join(MANAGEMENT_DIR, 'lock'))    
     lock.acquire()
     try:
         yield lock
@@ -59,12 +59,16 @@ def get_process_number():
                 x = int(x)
         with open(p, 'w') as f:
             f.write(str(x + 1))
-        print('I am process number {}').format(x)
+        print('I am process number {}'.format(x))
     return x
 
 def reset_process_number():
     with Lock() as lock:
-        with open(lock.path+'_sync', 'w') as f:
+        p = lock.path  # this is a regular string in Python 2
+        if type(p) == bytes:  # Python 3 returns a byte string as lock.path
+            p = p.decode("utf-8")
+        p += '_sync'
+        with open(p, 'w') as f:
             f.write('')
 
 process_number = get_process_number()
@@ -76,7 +80,7 @@ process_number = get_process_number()
 # setting up locking server
 #################################################
 def get_locking_file_path():
-    return os.path.join(management_dir, 'locking_server')
+    return os.path.join(MANAGEMENT_DIR, 'locking_server')
 
 def setup_locking_server():
     print('-'*50)
@@ -193,10 +197,10 @@ def setup_jupyter_notebook():
 
 if process_number == 0:
     setup_locking_server()
-    setup_dask_scheduler(management_dir)
+    setup_dask_scheduler(MANAGEMENT_DIR)
     # setup_jupyter_notebook()
 setup_locking_config()
-setup_dask_workers(management_dir)
+setup_dask_workers(MANAGEMENT_DIR)
 if process_number == 0:
     setup_jupyter_notebook()
 time.sleep(60*60*24*365)
