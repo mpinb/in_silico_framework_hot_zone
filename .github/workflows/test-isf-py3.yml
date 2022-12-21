@@ -41,7 +41,7 @@ jobs:
         run: |
           source ~/conda3-isf/bin/activate
           echo "Installing 'in silico framework' dependencies."
-          conda-env create --name isf-py3 --file .github/env-isf-py3.yml --quiet
+          conda-env create --name isf-py3 --file ".github/env-isf-py3.yml" --quiet
           source activate isf-py3
           conda list
           
