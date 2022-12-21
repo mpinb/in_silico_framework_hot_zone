@@ -1,4 +1,4 @@
-# HOWTO SETUP IN-SILICO-FRAMEWORK (ISF)
+# The In-Silico-Framework (ISF)
 
 **Contents**
 
