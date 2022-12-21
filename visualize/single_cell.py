@@ -1,13 +1,23 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
-from tqdm import tqdm
+import warnings
+warnings.filterwarnings("default", category=ImportWarning, module=__name__)  # let ImportWarnings show up when importing this module through Interface
+try:
+    from tqdm import tqdm
+    HAS_TQDM = True
+except ImportError:
+    warnings.warn("tqdm not found in the current environment. No progressbars will be displayed", ImportWarning)
+    HAS_TQDM = False
 from ipywidgets import interactive, VBox, widgets, Layout
-import plotly.offline as py
-import plotly.io as pio
-import plotly.graph_objects as go
+try:
+    import plotly.offline as py
+    import plotly.io as pio
+    import plotly.graph_objects as go
+    import plotly.express as px
+except ImportError:
+    warnings.warn("Plotly could not be imported. Interactive visualisations will not work.", ImportWarning)
 import pandas as pd
-import plotly.express as px
 
 
 class CellVisualizer:
@@ -214,7 +224,10 @@ class CellVisualizer:
 
 
     def write_vtk_frames(self, out_name, out_dir):
-        for t in tqdm(range(self.n_time_points), desc="Writing vtk frames to {}".format(out_dir)):
+        progress = range(self.n_time_points)
+        if HAS_TQDM:
+            progress = tqdm(t, desc="Writing vtk frames to {}".format(out_dir))
+        for t in progress:
                 self.__write_vtk_frame(out_name, out_dir, time=t)
 
     
@@ -233,7 +246,8 @@ class CellVisualizer:
         
         for pair in self.line_pairs:
             pt1, pt2 = self.points[pair[0]], self.points[pair[1]]
-            ax.plot3D(*np.array([pt1, pt2]).T, 'grey', lw=self.diameters[pair[0]]*1.5) 
+            x, y = np.array([pt1, pt2]).T  # for compatibility with isf2, extract variables here
+            ax.plot3D(x=x, y=y, c='grey', lw=self.diameters[pair[0]]*1.5) 
 
         ax.set_xticks([])
         ax.set_yticks([])
