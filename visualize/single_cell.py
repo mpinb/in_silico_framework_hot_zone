@@ -243,7 +243,7 @@ class CellVisualizer:
         ax.azim = azim
         ax.dist = dist
         ax.elev = elev
-        ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, f'get_{a}lim')() for a in 'xyz')])
+        ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
         if save != '':
             plt.savefig(save)
         plt.show()
@@ -281,7 +281,7 @@ class CellVisualizer:
         ax.azim = azim
         ax.dist = dist
         ax.elev = elev
-        ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, f'get_{a}lim')() for a in 'xyz')])
+        ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
         if save != '':
             plt.savefig(save)
         return fig
@@ -326,7 +326,7 @@ class CellVisualizer:
             t = frame * delta t
             """
             f.update_traces(marker={"color": np.round(self.membrane_voltage[frame*downsample_time], round_floats)})
-            f.layout.title = f"Membrane voltage at time={round(frame*self.dt, 4)} ms"
+            f.layout.title = "Membrane voltage at time={} ms".format(round(frame*self.dt, 4))
             return fig
 
         # display the FigureWidget and slider with center justification
