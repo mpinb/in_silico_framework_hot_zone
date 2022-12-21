@@ -44,7 +44,10 @@ def Lock():
 
 def get_process_number():
     with Lock() as lock:
-        p = lock.path+'_sync'
+        p = lock.path  # this is a regular string in Python 2
+        if type(p) == bytes:  # Python 3 returns a byte string as lock.path
+            p = p.decode("utf-8")
+        p += '_sync'
         if not os.path.exists(p):
             with open(p, 'w') as f:
                 pass
