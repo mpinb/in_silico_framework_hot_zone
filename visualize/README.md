@@ -30,3 +30,6 @@ cv.plot_interactive_3d(downsample_time=1)
 # write out to .vtk frames for analysis in e.g. ParaView
 cv.write_vtk_frames(out_name="cell", out_dir=".")
 ```
+
+# TODO:
+- Refractor all visualisation methods to this module
