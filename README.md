@@ -1,9 +1,8 @@
+<div align="center">
+
 # The In-Silico-Framework (ISF)
-
-**Contents**
-
-1. [Installation](#installation)
-2. [Usage](#usage)
+<img src="./etc/Figures/output.gif" alt="L5PT triple burst">
+</div>
 
 ## Installation
 
