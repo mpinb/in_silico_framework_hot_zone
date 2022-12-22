@@ -1,8 +1,10 @@
 <div align="center">
 
-# The In-Silico-Framework (ISF)
 <img src="./etc/Figures/output.gif" alt="L5PT triple burst">
-</div>
+
+# The In-Silico-Framework (ISF)
+[![In-Silico-Framework (Python 2.7) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27.yml)
+[![In-Silico-Framework (Python 3.8) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py3.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py3.yml)</div>
 
 ## Installation
 
