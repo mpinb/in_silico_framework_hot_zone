@@ -1,42 +1,42 @@
+<div align="center">
+
+<img src="./etc/Figures/output.gif" alt="L5PT triple burst">
+
 # The In-Silico-Framework (ISF)
-
-**Contents**
-
-1. [Installation](#installation)
-2. [Usage](#usage)
+[![In-Silico-Framework (Python 2.7) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27.yml)
+[![In-Silico-Framework (Python 3.8) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py3.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py3.yml)</div>
 
 ## Installation
 
-Every student needs to be able to synchronize their repository with https://github.com/research-center-caesar/in_silico_framework. Detailed instructions on how to install the repo are given in the [installer directory](./Installer/).
+Every student needs to be able to synchronize their repository with https://github.com/research-center-caesar/in_silico_framework. Detailed instructions on how to install the repo are given in the [installer directory](./installer/).
 
 
 ## Usage
 
 The [Interface module](./Interface.py) provides high-level access to all submodules in the in-silico-framework. It provides acces to:
 - The [NEURON simulator](https://www.neuron.yale.edu/neuron/)
+- Parameter parsing modules for [analysis or experiment setup](./single_cell_parser/)
 - Data management tools via the [Model DataBase (mdb) module](./model_data_base/)
 - Visualisation methods via the [Visualize module](./visualize/)
-- and much more
+- ...
 
 A walkthrough of the capabilities of ISF is presented in the ["Getting Started" notebook](./getting_started/getting_started.ipynb). Core functionalities are repeated below.
 
-<details><summary>Model Database</summary>
-<p>
-
 ### Model DataBase (mdb)
 
+A model database is a directory with additional capabilities. Data in an mdb is pickled and only unpickled upon read request. Access to a modeldatabase is done with the [mdb module](./model_data_base) that navigates enormous folders as if they were nested dictionaries. Some MDB's need to be registered to resolve hashed paths to absolute paths before you can navigate them.
 ```python
 import Interface as I
 I.ModelDataBase # main class of model_data_base
 I.mdb_init_simrun_general.init # default method to initialize a model data base with existing simulation results
 I.mdb_init_simrun_general.optimize # converts the data to speed optimized compressed binary format
+
+# Initialising a MDB in Python
+mdb = I.ModelDataBase('<path to simulation directory>')
+mdb._register_this_database()
+sim_mdb = mdb['mdbs']['<path to specific simulation in directory>']
+sim_mdb._register_this_database()
 ```
-
-</p>
-</details>
-
-<details><summary>Simulating</summary>
-<p>
 	
 ### Simulating
 
@@ -70,6 +70,3 @@ for amp in amplitudes:
 ```
 	
 ![](./etc/Figures/VoltageResponse.png)
-
-</p>
-</details>
