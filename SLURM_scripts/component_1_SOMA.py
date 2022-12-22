@@ -83,7 +83,7 @@ def setup_locking_server():
     #os.system(command)
     #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
     config = [{'config': {'hosts': 'somalogin02-hs:33333'}, 'type': 'zookeeper'}]
-    #config = [{'type': 'file'}]
+    # config = [{'type': 'file'}]  # uncomment this line if zookeeper is not running (i.e., you receive an error similar to 'No handlers could be found for logger "kazoo.client"')
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
     setup_locking_config()
@@ -157,8 +157,7 @@ def setup_dask_scheduler(management_dir):
 def setup_dask_workers(management_dir):
     print '-'*50
     print 'setting up dask-workers'
-    import psutil
-    n_cpus = psutil.cpu_count(logical=False)
+    n_cpus = os.environ['SLURM_CPUS_PER_TASK']
     sfile, sfile3 = _get_sfile(management_dir)
     command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9 --local-directory $JOB_TMPDIR &'.format(nprocs = n_cpus, sfile = sfile)
     print command
