@@ -52,6 +52,7 @@ Defining a cell can be done as such:
 import Interface as I
 parameter_file = I.os.path.join("<filename>.param")
 cell_parameters = I.scp.build_parameters(parameter_file) # this is the main method to load in parameterfiles
+# Use single_cell_parser module to create a cell from parameters
 cell = I.scp.create_cell(cell_parameters.neuron)
 ```
 
