@@ -3,10 +3,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import dask
+import time
 import jinja2
 import IPython
 import glob
 import warnings
+from barrel_cortex import inhibitory
 warnings.filterwarnings("default", category=ImportWarning, module=__name__)  # let ImportWarnings show up when importing this module through Interface
 try:
     from tqdm import tqdm
@@ -27,6 +29,8 @@ import pandas as pd
 
 class CellVisualizer:
     """
+    @TODO: make main dataformat a pandas dataframe
+
     This class initializes from a cell object and extracts relevant Cell data to a format that lends itself easier to plotting.
     It contains useful methods for either plotting a cell morphology, the voltage along its body and its synaptic inputs.
     This can be visualized in static images or as time series (videos, gif, animation, interactive window).
@@ -278,7 +282,9 @@ class CellVisualizer:
         
     
     def __display_animation(files, interval=10, style=False, animID = None, embedded = False):
-        '''creates an IPython animation out of files specified in a globstring or a list of paths.
+        '''
+        @TODO: resolve module not found errors
+        creates an IPython animation out of files specified in a globstring or a list of paths.
 
         animID: unique integer to identify the animation in the javascript environment of IPython
         files: globstring or list of paths
@@ -324,7 +330,7 @@ class CellVisualizer:
     def __match_model_celltype_to_PSTH_celltype(self, celltype):
         if '_' in celltype:
             celltype = celltype.split('_')[0]
-        if celltype in I.inhibitory or celltype == 'INH':
+        if celltype in inhibitory or celltype == 'INH':
             key = 'INT'
         elif celltype in ('L4ss', 'L4py', 'L4sp'):
             key = 'L4ss'
@@ -520,7 +526,7 @@ class CellVisualizer:
             for synapse in self.cell.synapses[population]:
                 for spikeTime in synapse.preCell.spikeTimes:
                     if time_point-self.time_show_syn_activ < spikeTime < time_point+self.time_show_syn_activ:
-                        population_name = __match_model_celltype_to_PSTH_celltype(population)
+                        population_name = self.__match_model_celltype_to_PSTH_celltype(population)
                         synapses[population_name].append([synapse.coordinates[0],
                                                           synapse.coordinates[1],
                                                           synapse.coordinates[2]])
@@ -599,7 +605,7 @@ class CellVisualizer:
         else:
             plt.close()
         
-    def __timeseries_images_cell_voltage_synapses_in_morphology_3d(self, t_start,t_end,t_step,path):
+    def __timeseries_images_cell_voltage_synapses_in_morphology_3d(self, t_start,t_end,t_step,path, client):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)
@@ -645,9 +651,10 @@ class CellVisualizer:
             count += 1
             filename = path+'/{0:0=5d}.png'.format(count)
             out.append(plot_cell_voltage_synapses_in_morphology_3d(
-                        self.sections, voltage, synapses, time_point, self.population_to_color_dict,
-                        self.azim, self.dist, self.elev, self.vmin, self.vmax,
-                        legends=True, save=filename, plot=False))
+                        sections=self.sections, voltage=voltage, synapses=synapses, 
+                        time_points=time_point, save=filename, population_to_color_dict=self.population_to_color_dict,
+                        azim=self.azim, dist=self.dist, elev=self.elev, vmin=self.vmin, vmax=self.vmax,
+                        legends=True, plot=False))
             self.azim += 3
         self.azim = azim_
         futures = client.compute(out)
@@ -656,7 +663,7 @@ class CellVisualizer:
         print('Images generation runtime (s): ' + str(np.around(t2-t1,2)))
         
     def gif_cell_voltage_synapses_in_morphology_3d(self, images_path, name,t_start,t_end,t_step,
-                                                   time_show_syn_activ=2, frame_duration=40):
+                                                   time_show_syn_activ=2, frame_duration=40, client=None):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
@@ -671,13 +678,15 @@ class CellVisualizer:
             - frame_duration: duration of each frame in ms
             t_start, t_end and t_step will define the self.time attribute
         '''
+        if client is None:
+            raise 
         self.time_show_syn_activ = time_show_syn_activ
-        self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(t_start,t_end,t_step,images_path)
+        self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(t_start,t_end,t_step,images_path, client)
         files = [os.path.join(images_path, f) for f in os.listdir(images_path)]
         files.sort()
         self.__create_gif(os.path.join(images_path,name),files,frame_duration)
         
-    def video_cell_voltage_synapses_in_morphology_3d(self, images_path, name,t_start,t_end,t_step,time_show_syn_activ=2):
+    def video_cell_voltage_synapses_in_morphology_3d(self, images_path, name,t_start,t_end,t_step,time_show_syn_activ=2, client=None):
         '''
         @TODO: to be implemented
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
@@ -784,7 +793,7 @@ class CellVisualizer:
         vb.layout.align_items = 'center'
         return vb
 
-@I.dask.delayed
+@dask.delayed
 def plot_cell_voltage_synapses_in_morphology_3d(sections,voltage,synapses, time_point, save, population_to_color_dict,
                                                  azim=0, dist=10, elev=30, vmin=-75, vmax = -30, legends=True):
     '''
