@@ -1,6 +1,6 @@
-from context import *
+from .context import *
 from model_data_base.utils import *
-import decorators
+from . import decorators
 import unittest
 import numpy as np
 from pandas.util.testing import assert_frame_equal

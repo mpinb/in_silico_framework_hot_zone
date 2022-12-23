@@ -1,7 +1,7 @@
 import Interface as I
-import decorators
+from . import decorators
 import unittest
-import context
+from . import context
 
 from biophysics_fitting.parameters import param_selector, param_to_kwargs
 

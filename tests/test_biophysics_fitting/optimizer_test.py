@@ -1,7 +1,7 @@
 import Interface as I
-import decorators
+from . import decorators
 import unittest
-from context import *
+from .context import *
 # import context
 import distributed
 

@@ -1,8 +1,8 @@
-from context import *
+from .context import *
 from model_data_base.model_data_base import ModelDataBase, MdbException
 from  model_data_base import model_data_base_register 
 import model_data_base.IO.LoaderDumper.to_pickle  as to_pickle
-import decorators
+from . import decorators
 import unittest
 import os, shutil
 import numpy as np
