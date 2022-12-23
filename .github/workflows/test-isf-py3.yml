@@ -83,8 +83,8 @@ jobs:
         run: |
           source ~/conda3-isf/bin/activate
           source activate isf-py3
-          cd tests
           export PYTHONPATH="$(pwd)"
+          cd tests
           dask-scheduler --port=38786 --dashboard-address=38787 &
           dask-worker localhost:38786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
           python run_tests.py
