@@ -523,24 +523,7 @@ class CellVisualizer:
         t2 = time.time()
         print('Images generation runtime (s): ' + str(np.around(t2-t1,2)))
         
-    def gif_cell_voltage_synapses_in_morphology_3d(self, images_path, name,t_start,t_end,t_step, client,
-                                                   time_show_syn_activ=2, frame_duration=40):
-        '''
-        Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
-        shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
-        These images are then put together into a gif.
-        Args:
-            - images_path: path where the images for the gif will be generated
-            - name: name of the gif (not path, the gif will be generated in the same path as the images)
-            - t_start: start time point of our time series visualization
-            - t_end: last time point of our time series visualization
-            - t_step: time between the different time points of our visualization
-            - client: dask client for parallelization
-            - time_show_syn_activ: Time in the simulation during which a synapse activation is shown during the visualization
-            - frame_duration: duration of each frame in ms
-            t_start, t_end and t_step will define the self.time attribute
-        '''
-        def create_gif(self, name, files, duration=40):
+    def gif_generation_from_images(out_path, files, duration=40):
             '''
             Creates a gif from a set of images
             Args:
@@ -554,20 +537,45 @@ class CellVisualizer:
                 frames.append(new_frame)
 
             # Save into a GIF file that loops forever   
-            frames[0].save(name, format='GIF',
+            frames[0].save(out_path, format='GIF',
                            append_images=frames[1:],
                            save_all=True,
                            duration=duration, loop=0)
             
+    def gif_cell_voltage_synapses_in_morphology_3d(self,images_path, out_path,t_start,t_end,t_step, client,
+                                                   time_show_syn_activ=2, frame_duration=40):
+        '''
+        Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
+        shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
+        These images are then put together into a gif.
+        Args:
+            - images_path: path where the images for the gif will be generated
+            - out_path: dir where the gif will be generated + name of the gif
+            - t_start: start time point of our time series visualization
+            - t_end: last time point of our time series visualization
+            - t_step: time between the different time points of our visualization
+            - client: dask client for parallelization
+            - time_show_syn_activ: Time in the simulation during which a synapse activation is shown during the visualization
+            - frame_duration: duration of each frame in ms
+            t_start, t_end and t_step will define the self.time attribute
+        '''            
         if client is None:
             raise 
         self.time_show_syn_activ = time_show_syn_activ
         self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(t_start,t_end,t_step,images_path,client)
         files = [os.path.join(images_path, f) for f in os.listdir(images_path)]
         files.sort()
-        create_gif(os.path.join(images_path,name),files,frame_duration)
+        self.gif_generation_from_images(out_path,files,frame_duration)
     
     def video_generation_from_images(images_dir, out_path, fps = 24, images_format = '.png'):
+        '''
+        Creates a video from a set of images
+        Args:
+            - images_dir: path where the images are
+            - out_path: dir where the video will be generated + name of the video
+            - fps: frames per second
+            - images_format
+        '''
         out = subprocess.call(["ffmpeg","-y","-r",str(fps),"-i", images_dir+"/%*"+images_format,"-vcodec","mpeg4", "-qscale","5", "-r", str(fps), out_path])
         if out != 0:
             print('Something went wrong. Make sure:')
@@ -581,7 +589,7 @@ class CellVisualizer:
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a video.
         Args:
-            - images_path: path where the images for the gif will be generated
+            - images_path: path where the images for the video will be generated
             - out_path: dir where the video will be generated + name of the video
             - t_start: start time point of our time series visualization
             - t_end: last time point of our time series visualization
@@ -593,6 +601,33 @@ class CellVisualizer:
         self.time_show_syn_activ = time_show_syn_activ
         self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(t_start,t_end,t_step,images_path,client)
         self.video_generation_from_images(images_path, out_path)
+        
+    def animation_display_from_images(files, interval=10, style=False, animID = None, embedded = False):
+        '''
+        @TODO: resolve module not found errors
+        creates an IPython animation out of files specified in a globstring or a list of paths.
+
+        animID: unique integer to identify the animation in the javascript environment of IPython
+        files: globstring or list of paths
+        interval: time interval between frames
+
+        CAVEAT: the paths need to be relative to the location of the ipynb / html file, since
+        the are resolved in the browser and not by python'''
+        if animID is None:
+            animID = np.random.randint(10000000000000) # needs to be unique within one ipynb
+        env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+        template = env.get_template('animation_template.html')
+
+        if isinstance(files, str):
+            if os.path.isdir(files): # folder provieded --> convert to globstring
+                files = os.path.join(files, '*.png')
+            listFrames = sorted(glob.glob(files))
+        else:
+            listFrames = files
+        if embedded:
+            listFrames = [_load_base64(f) for f in listFrames]
+        htmlSrc = template.render(ID=animID, listFrames=listFrames, interval=interval, style=style)
+        IPython.display.display(IPython.display.HTML(htmlSrc))
         
     def animation_cell_voltage_synapses_in_morphology_3d(self, images_path,t_start,t_end,t_step,client,time_show_syn_activ=2):
         '''
@@ -607,37 +642,10 @@ class CellVisualizer:
             - client: dask client for parallelization
             - time_show_syn_activ: Time in the simulation during which a synapse activation is shown during the visualization
             t_start, t_end and t_step will define the self.time attribute
-        '''
-        def display_animation(files, interval=10, style=False, animID = None, embedded = False):
-            '''
-            @TODO: resolve module not found errors
-            creates an IPython animation out of files specified in a globstring or a list of paths.
-
-            animID: unique integer to identify the animation in the javascript environment of IPython
-            files: globstring or list of paths
-            interval: time interval between frames
-
-            CAVEAT: the paths need to be relative to the location of the ipynb / html file, since
-            the are resolved in the browser and not by python'''
-            if animID is None:
-                animID = np.random.randint(10000000000000) # needs to be unique within one ipynb
-            env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-            template = env.get_template('animation_template.html')
-
-            if isinstance(files, str):
-                if os.path.isdir(files): # folder provieded --> convert to globstring
-                    files = os.path.join(files, '*.png')
-                listFrames = sorted(glob.glob(files))
-            else:
-                listFrames = files
-            if embedded:
-                listFrames = [_load_base64(f) for f in listFrames]
-            htmlSrc = template.render(ID=animID, listFrames=listFrames, interval=interval, style=style)
-            IPython.display.display(IPython.display.HTML(htmlSrc))
-        
+        '''        
         self.time_show_syn_activ = time_show_syn_activ
         self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(t_start,t_end,t_step,images_path,client)
-        display_animation(images_path, 1, embedded=True)
+        self.animation_display_from_images(images_path, 1, embedded=True)
         
     def interactive_cell_voltage_synapses_in_morphology_3d(self,t_start,t_end,t_step,time_show_syn_activ=2, renderer="notebook_connected"):
         ''' 
