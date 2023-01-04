@@ -566,16 +566,23 @@ class CellVisualizer:
         files = [os.path.join(images_path, f) for f in os.listdir(images_path)]
         files.sort()
         create_gif(os.path.join(images_path,name),files,frame_duration)
-        
-    def video_cell_voltage_synapses_in_morphology_3d(self, images_path, name,t_start,t_end,t_step,client,time_show_syn_activ=2):
+    
+    def video_generation_from_images(images_dir, out_path, fps = 24, images_format = '.png'):
+        out = subprocess.call(["ffmpeg","-y","-r",str(fps),"-i", images_dir+"/%*"+images_format,"-vcodec","mpeg4", "-qscale","5", "-r", str(fps), out_path])
+        if out != 0:
+            print('Something went wrong. Make sure:')
+            print(' - the module ffmpeg is loaded, otherwise use the command: module load ffmpeg')
+            print(' - out_dir contains images')
+            print(' - images_format is specified properly')
+            
+    def video_cell_voltage_synapses_in_morphology_3d(self, images_path, out_path ,t_start,t_end,t_step,client,time_show_syn_activ=2):
         '''
-        @TODO: to be implemented
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a video.
         Args:
             - images_path: path where the images for the gif will be generated
-            - name: name of the video (not path, the video will be generated in the same path as the images)
+            - out_path: dir where the video will be generated + name of the video
             - t_start: start time point of our time series visualization
             - t_end: last time point of our time series visualization
             - t_step: time between the different time points of our visualization
@@ -585,7 +592,7 @@ class CellVisualizer:
         '''
         self.time_show_syn_activ = time_show_syn_activ
         self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(t_start,t_end,t_step,images_path,client)
-        print('Function not implemented yet!!')
+        self.video_generation_from_images(images_path, out_path)
         
     def animation_cell_voltage_synapses_in_morphology_3d(self, images_path,t_start,t_end,t_step,client,time_show_syn_activ=2):
         '''
