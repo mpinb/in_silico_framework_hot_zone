@@ -36,7 +36,7 @@ class CellVisualizer:
     """
     def __init__(self, cell):
         """
-        given a Cell object, this class initializes an object that is easier to work with
+        Given a Cell object, this class initializes an object that is easier to work with
         """
         # Colors in which the synaptic input are going to be shown
         self.population_to_color_dict = {'INT': 'black', 'L4ss': 'orange', 'L5st':'cyan', 'L5tt':'lime',
@@ -57,10 +57,13 @@ class CellVisualizer:
         # Cell object
         self.cell = cell
         
-        # Gather the necessary information to plot the cell morphology. This info is always necessary to plot the cell.
-        # morphology: pandas dataframe with points. Each point contains the x, y and z coordinates, a diameter and the section
-        # of the neuron to which that point belongs. Sections are defined as the regions of cell morphology
-        # between 2 branching points / end of a branch.
+        """Gather the necessary information to plot the cell morphology. This info is always necessary to plot the cell.
+        morphology: pandas dataframe with points.
+        Each point contains the x, y and z coordinates, a diameter and the section index
+        of the neuron to which that point belongs.
+        Sections are defined as the regions of cell morphology
+        between 2 branching points / end of a branch.
+        """
         self.line_pairs = []  # initialised below
         self.morphology = self._get_morphology()
         self.points = self.morphology[["x", "y", "z"]]
@@ -69,26 +72,25 @@ class CellVisualizer:
         
         # Time points of the simulation
         self.simulation_times = cell.t
-        
+        # Time points we want to visualize
         self.t_start = self.simulation_times[0]
         self.dt = self.simulation_times[1] - self.t_start
         self.t_step = (len(self.simulation_times)//10) * self.dt
         self.t_end = self.simulation_times[-1] - self.simulation_times[-1] % self.t_step
-        # If simulations have been run, this is list of time points which we'd like to visualize.
         self.times_to_show = np.empty(0)
         self._update_time(self.t_start, self.t_end, self.t_step)  # initialise time range to visualise
         
-        # List contaning the voltage of the cell during a timeseries. Each element corresponds to a time point.
-        # Each element of the list contains n elements, being n the number of sections of the cell morphology.
-        # These elements are also lists of m elements, being m the number of points in each section, and the value of
-        # those lists are the voltage at each point of the cell morphology.
+        """List contaning the voltage of the cell during a timeseries. Each element corresponds to a time point.
+        Each element of the list contains n elements, being n the number of sections of the cell morphology.
+        These elements are also lists of m elements, being m the number of points in each section, and the value of
+        those lists are the voltage at each point of the cell morphology."""
         self.voltage_timeseries = []
         self.voltage_timeseries_all = {t: None for t in self.times_to_show}  # should only be calculated all when interactive viz
         
-        # List containing the synapse activations during a timeseries (Similarly to voltage_timeseries). 
-        # Each element corresponds to a time point. Each element is a dictionary where each key is the type of
-        # input population and the value is the list of active synapses for that type of population. The list contains
-        # the 3d coordinates where each active synapse is located.
+        """List containing the synapse activations during a timeseries (Similarly to voltage_timeseries). 
+        Each element corresponds to a time point. Each element is a dictionary where each key is the type of
+        input population and the value is the list of active synapses for that type of population. The list contains
+        the 3d coordinates where each active synapse is located."""
         self.synapses_timeseries = []
 
     def __repr__(self):
