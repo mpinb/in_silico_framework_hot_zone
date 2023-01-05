@@ -353,10 +353,9 @@ class CellVisualizer:
                 else:  # there were no times previously defined
                     self.voltage_timeseries = []
                     self.synapses_timeseries = []
-            self.times_to_show = new_time
-            
+            self.times_to_show = new_time  
         
-    def _timeseries_images_cell_voltage_synapses_in_morphology_3d(self, t_start, t_end,t_step, path, client):
+    def _timeseries_images_cell_voltage_synapses_in_morphology_3d(self, path, t_start=None, t_end=None, t_step=None, client=None):
         '''
         Creates a list of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)
@@ -455,7 +454,7 @@ class CellVisualizer:
             return v_string
         
         # write out all data to .vtk file
-        with open(out_dir+"/"+out_name+"_{:06d}.vtk".format(time_point), "w+", encoding="utf-8") as of:
+        with open(os.join(out_dir, out_name)+"_{:06d}.vtk".format(time_point), "w+", encoding="utf-8") as of:
             of.write(header_(out_name))
 
             # Points
@@ -478,7 +477,7 @@ class CellVisualizer:
     
     # Public methods
 
-    def show_morphology_3d(self, save='',plot=True):
+    def show_morphology_3d(self, save='', plot=True):
         '''
         Creates a python plot of the cell morphology in 3D
         Args:
@@ -560,7 +559,7 @@ class CellVisualizer:
         if plot:
             plt.show()
     
-    def show_voltage_synapses_in_morphology_3d(self, time_point, time_show_syn_activ=2, legends=True,save='',plot=True):
+    def show_voltage_synapses_in_morphology_3d(self, time_point, time_show_syn_activ=2, legends=True, save='',plot=True):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
         are shown for a particular time point.
@@ -646,7 +645,7 @@ class CellVisualizer:
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(self.t_start, self.t_end, self.t_step, images_path, client)
         display_animation_from_images(images_path, 1, embedded=True)
         
-    def display_interactive_voltage_synapses_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, time_show_syn_activ=2, renderer="notebook_connected"):
+    def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, time_show_syn_activ=2, renderer="notebook_connected"):
         ''' 
         @TODO: add synapse activations!
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
@@ -663,7 +662,6 @@ class CellVisualizer:
         Returns:
             ipywidgets.VBox object: an interactive render of the cell.
         '''
-        self.time_show_syn_activ = time_show_syn_activ
         self._update_time(t_start, t_end, t_step)
         self._calc_all_voltage_timeseries(define_per_point=True)
         
@@ -705,7 +703,7 @@ class CellVisualizer:
         vb.layout.align_items = 'center'
         return vb
                
-    def write_vtk_frames(self, t_start, t_end, t_step, out_name, out_dir):
+    def write_vtk_frames(self, out_name="frame", out_dir=".", t_start=None, t_end=None, t_step=None):
         '''
         Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview
         Args:
