@@ -76,7 +76,7 @@ class CellVisualizer:
         self.t_end = self.simulation_times[-1] - self.simulation_times[-1] % self.t_step
         # If simulations have been run, this is list of time points which we'd like to visualize.
         self.times_to_show = np.empty(0)
-        self._update_time(self.t_start, self.t_end, self.t_step)
+        self._update_time(self.t_start, self.t_end, self.t_step)  # initialise time range to visualise
         
         # List contaning the voltage of the cell during a timeseries. Each element corresponds to a time point.
         # Each element of the list contains n elements, being n the number of sections of the cell morphology.
