@@ -93,15 +93,6 @@ class CellVisualizer:
         the 3d coordinates where each active synapse is located."""
         self.synapses_timeseries = []
 
-    def __repr__(self):
-        """What will be printed out when you print(CellVisualizer)
-
-        Returns:
-            Nothing
-        """
-        print(self)  # just to show that the class is not actually a dataframe
-        print(self.morphology)  # a pandas Dataframe
-
     # "Private" methods (nothing is truly private in Python)
         
     def _get_morphology(self):
@@ -708,6 +699,8 @@ class CellVisualizer:
     def write_vtk_frames(self, out_name="frame", out_dir=".", t_start=None, t_end=None, t_step=None):
         '''
         Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview
+
+        TODO: remove duplicate rows used to connect sections
         Args:
             - t_start: start time point of our time series visualization
             - t_end: last time point of our time series visualization
