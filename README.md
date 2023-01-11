@@ -45,7 +45,9 @@ Running a simulation requires 3 things to be defined
 2. A biophysical description of the neuron morphology, i.e. the ion-channel distribution (parameter file)
 3. Some input (current injection, synaptic input ...)
 
-Creating a neuron to simulate on is done by means of parsing a parameter file (`.param` file) with [Single Cell Parser (scp)](./single_cell_parser/). This parameter file is read in as a nested dictionary that contains the biophysical parameters and the filename of a morphology file (`.hoc` file).
+Usually, launching biophysically detailed simulations is done with the [simrun2](./simrun2/) or [simrun3](./simrun3/) module. These provide **high-level acces** to define parameters and run simulations.
+
+When you would like more direct and **low-level access** to the simulations, you can do so by parsing a parameter file (`.param` file) with [Single Cell Parser (scp)](./single_cell_parser/). This parameter file is read in as a nested dictionary that contains the biophysical parameters and the filename of a morphology file (`.hoc` file).
 
 Defining a cell can be done as such:
 ```python
