@@ -141,15 +141,15 @@ For each stimulus:
 What form do the functions need to have?
 ```python
 def stim_setup_funs(cell, params):
-    # set up some stimulus
+    """ set up some stimulus """
     return cell
     
 def stim_run_fun(cell, params):
-    # run the simulation
+    """ run the simulation """
     return cell
     
 def stim_response_measure_funs(cell, params)
-    # extract voltage traces from the cell
+    """ extract voltage traces from the cell """
     return result
 ```
     
