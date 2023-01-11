@@ -65,6 +65,7 @@ cell object: created from the modified cell_params object by calling the 'cell_g
             single_cell_parser.cell_modify_functions.
 
 What form do the functions need to have?
+```python
 def example_cell_param_template_generator():
     #return a I.scp.NTParameterSet object as template. Ideally, all parameters, that need to be
     #filled in from the pasrameter vector have the value None, because it is tested, that
@@ -81,6 +82,7 @@ def example_cell_param_modify_function(cell_param, params)
 def example_cell_modify_function(cell, params)
     # do something to the cell object depending on params
     return cell
+```
         
 Such functions can be registered to the Simlator object. Each function is registered with a name.
 
@@ -89,22 +91,29 @@ only see a subset of the parameter vector that is provided by the user. This sub
 by the name of the function.
 
 E.g. let's assume, we have the parameters:
+```python
 {'apical_scaling.scale': 2,
  'ephys.soma.gKv': 0.001,
  'ephys.soma.gNav': 0.01
  }
+```
 
 Then, a function that is registered under the name 'apical_scaling' would get the following parameters:
+```python
 {'scale': 2}
+```
 
 The function, that is registered under the name 'ephys' would get the following parameters:
+```python
 {'soma.gKv': 0.001,
  'soma.Nav': 0.01}
+```
  
 Usually, a simulation contains fixed parameters, e.g. the filename of the morphology. Such fixed
 parameters can be defined 
 
 How can pipeline (1) be set up?
+```python
 s = Simulator() # instantiate simulator object
 s.setup # Simualtor_Setup object, that contains all elements defining the pipeline above
 s.setup.cell_param_generator =  example_cell_param_template_generator
@@ -112,6 +121,7 @@ s.setup.cell_generator = cell_generator
 s.setup.params_modify_funs.append('name_of_param_modify_fun', example_cell_param_modify_function)
 s.setup.cell_param_modify_funs.append('name_of_cell_param_modify_fun', example_cell_param_modify_function)
 s.setup.cell_modify_funs.append('name_of_cell_modify_fun', example_cell_modify_function)
+```
 
 The pipeline for (2) is as follows:
 Let s be the Simulator object
@@ -128,6 +138,7 @@ For each stimulus:
     --> stim_response_measure_funs
        
 What form do the functions need to have?
+```python
 def stim_setup_funs(cell, params):
     # set up some stimulus
     return cell
@@ -139,20 +150,25 @@ def stim_run_fun(cell, params):
 def stim_response_measure_funs(cell, params)
     # extract voltage traces from the cell
     return result
+```
     
 How can pipeline (2) be set up?
 The names for stim_setup_funs, stim_run_funs and stim_response_measure_funs need to start
 with the name of the simulus followed by a dot. For each stimulus, each of the three
 functions needs to be defined exatly once, e.g. you could do something like:
 
+```python
 s.setup.stim_setup_funs.append(BAC.stim_setup, examplary_stim_setup_function)
 s.setup.stim_run_funs.append(BAC.run_fun, examplary_stim_run_function)
 s.setup.stim_response_measure_funs.append(BAC.measure_fun, examplary_stim_response_measure_function)
+```
 
 A typical usecase is to use the fixed parameters to specify to soma distance for a 
 voltage trace of the apical dendrite. E.g.
+```python
 {'BAC.measure_fun.recSite': 835,
 'BAC.stim_setup.dist': 835}
+```
 
 You would need to make sure, that your examplary_stim_run_fun reads the parameter 'recSite'
 and sets up the stimulus accordingly.
@@ -164,10 +180,12 @@ def examplary_stim_setup_function(cell, recSite = None):
     return cell
     
 Instead of:
+```python
 def examplary_stim_setup_function(cell, params)
     recSite = params['recSite']
     # set up current injection at soma distance recSite
     return cell
+```
     
 This can be done by using the params_wo_kwargs method in biophysics_fitting.parameters. You would register
 the function as follows:
