@@ -56,13 +56,14 @@ cell_params: nested parameter structure, created from modified parameters and a 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v  
 cell object: created from the modified cell_params object by calling the 'cell_generator'  
-&nbsp;&nbsp;&nbsp;&nbsp;--> apply cell_modify_functions (takes and returns a cell object, can alter it in any way)  
-            Caveat: Try to avoid the usage of cell_modify_functions. While this allows   
-            for any possible modification, it can be difficult to reproduce the result   
-            later, as the cell object is different from what is expected by the cell_param   
-            object. If possible, try to fully specify the cell in the cell_param object. Here,  
-            it is also possible to spcify cell modifying functions, see   
-            single_cell_parser.cell_modify_functions.  
+&nbsp;&nbsp;&nbsp;&nbsp;--> apply cell_modify_functions (takes and returns a cell object, can alter it in any way)
+
+Caveat: Try to avoid the usage of cell_modify_functions. While this allows
+for any possible modification, it can be difficult to reproduce the result
+later, as the cell object is different from what is expected by the cell_param
+object. If possible, try to fully specify the cell in the cell_param object. Here,
+it is also possible to spcify cell modifying functions, see
+single_cell_parser.cell_modify_functions.
 
 What form do the functions need to have?
 ```python
