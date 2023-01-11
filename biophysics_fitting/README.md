@@ -45,13 +45,13 @@ The pipeline for (1) is as follows:
 params: provided by the user: I.pd.Series object (keys: parameter names, values: parameter values)  
 &nbsp;&nbsp;&nbsp;&nbsp;--> apply param_modify_functions (takes and returns a parameter vector, can alter it in any way)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;|---- cell_param template  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|---- cell_param template  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cell_params_generator  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;&nbsp;&nbsp;&nbsp;v  
 cell_params: nested parameter structure, created from modified parameters and a template  
 &nbsp;&nbsp;&nbsp;&nbsp;--> apply cell_param_modify_functions (takes and returns a NTParameterSet object, can alter it in any way)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cell_generator(cell_params)    
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v  
@@ -127,15 +127,15 @@ The pipeline for (2) is as follows:
 Let s be the Simulator object
 
 params: provided by the user: I.pd.Series object
-   |
-   |
+&nbsp;&nbsp;&nbsp;|
+&nbsp;&nbsp;&nbsp;|
   s.setup.get(params): triggers pipeline (1), results in a biophysically set up cell
-   |
-   v
+&nbsp;&nbsp;&nbsp;|
+&nbsp;&nbsp;&nbsp;v
 For each stimulus: 
-    --> stim_setup_funs
-    --> stim_run_funs
-    --> stim_response_measure_funs
+- stim_setup_funs
+- stim_run_funs
+- stim_response_measure_funs
        
 What form do the functions need to have?
 ```python
