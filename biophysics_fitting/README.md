@@ -76,11 +76,11 @@ def example_cell_param_template_generator():
 def cell_generator(cell_param):
     return I.scp.create_cell(cell_params)
     
-def example_cell_param_modify_function(cell_param, params)
+def example_cell_param_modify_function(cell_param, params):
     """ do something to the cell param object depending on params """
     return cell_param
     
-def example_cell_modify_function(cell, params)
+def example_cell_modify_function(cell, params):
     """ do something to the cell object depending on params """
     return cell
 ```
@@ -148,7 +148,7 @@ def stim_run_fun(cell, params):
     """ run the simulation """
     return cell
     
-def stim_response_measure_funs(cell, params)
+def stim_response_measure_funs(cell, params):
     """ extract voltage traces from the cell """
     return result
 ```
@@ -182,7 +182,7 @@ def examplary_stim_setup_function(cell, recSite = None):
     
 Instead of:
 ```python
-def examplary_stim_setup_function(cell, params)
+def examplary_stim_setup_function(cell, params):
     recSite = params['recSite']
     # set up current injection at soma distance recSite
     return cell
