@@ -77,11 +77,11 @@ def cell_generator(cell_param):
     return I.scp.create_cell(cell_params)
     
 def example_cell_param_modify_function(cell_param, params)
-    # do something to the cell param object depending on params
+    """ do something to the cell param object depending on params """
     return cell_param
     
 def example_cell_modify_function(cell, params)
-    # do something to the cell object depending on params
+    """ do something to the cell object depending on params """
     return cell
 ```
         
