@@ -59,7 +59,7 @@ def get_process_number():
                 x = int(x)
         with open(p, 'w') as f:
             f.write(str(x + 1))
-        print('I am process number {}'.format(x))
+        print('I am process number {}').format(x)
     return x
 
 def reset_process_number():
