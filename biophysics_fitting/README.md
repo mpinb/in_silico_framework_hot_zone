@@ -42,27 +42,27 @@ The "program flow" can be split in two parts.
 An examplary specification of such a program flow can be found in the module hay_complete_default_setup.
 
 The pipeline for (1) is as follows:
-params: provided by the user: I.pd.Series object (keys: parameter names, values: parameter values)
-    --> apply param_modify_functions (takes and returns a parameter vector, can alter it in any way)
-          |
-          |     |---- cell_param template
-       cell_params_generator
-          |     |
-          v     v
-cell_params: nested parameter structure, created from modified parameters and a template
-    --> apply cell_param_modify_functions (takes and returns a NTParameterSet object, can alter it in any way)
-          |
-        cell_generator(cell_params)  
-          |
-          v
-cell object: created from the modified cell_params object by calling the 'cell_generator'
-    --> apply cell_modify_functions (takes and returns a cell object, can alter it in any way)
-            Caveat: Try to avoid the usage of cell_modify_functions. While this allows 
-            for any possible modification, it can be difficult to reproduce the result 
-            later, as the cell object is different from what is expected by the cell_param 
-            object. If possible, try to fully specify the cell in the cell_param object. Here,
-            it is also possible to spcify cell modifying functions, see 
-            single_cell_parser.cell_modify_functions.
+params: provided by the user: I.pd.Series object (keys: parameter names, values: parameter values)  
+    --> apply param_modify_functions (takes and returns a parameter vector, can alter it in any way)  
+          |  
+          |     |---- cell_param template  
+       cell_params_generator  
+          |     |  
+          v     v  
+cell_params: nested parameter structure, created from modified parameters and a template  
+    --> apply cell_param_modify_functions (takes and returns a NTParameterSet object, can alter it in any way)  
+          |  
+        cell_generator(cell_params)    
+          |  
+          v  
+cell object: created from the modified cell_params object by calling the 'cell_generator'  
+    --> apply cell_modify_functions (takes and returns a cell object, can alter it in any way)  
+            Caveat: Try to avoid the usage of cell_modify_functions. While this allows   
+            for any possible modification, it can be difficult to reproduce the result   
+            later, as the cell object is different from what is expected by the cell_param   
+            object. If possible, try to fully specify the cell in the cell_param object. Here,  
+            it is also possible to spcify cell modifying functions, see   
+            single_cell_parser.cell_modify_functions.  
 
 What form do the functions need to have?
 ```python
