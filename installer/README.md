@@ -1,4 +1,4 @@
-# HOWTO SETUP IN-SILICO-FRAMEWORK
+# How to setup In-Silico-Framework
 
 **Contents**
 

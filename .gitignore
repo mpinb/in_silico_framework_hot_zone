@@ -81,3 +81,7 @@ venv/
 # Installed dependencies
 installer/conda_packages/*
 installer/pip_packages/*
+installer/conda_packages
+installer/pip_packages
+notebooks/*
+
