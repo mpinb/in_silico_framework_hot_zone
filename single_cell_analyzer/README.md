@@ -1,6 +1,7 @@
 # Single Cell Analyzer
 
-This module provides code to analyze the results of single-cell simulations and its network embeddings.
+This module provides code to analyze the results of single-cell simulations and its network embeddings. They are often used by the [single cell parser](../single_cell_parser/) module.
+> __Warning__: it is not recommended to change these modules, as they are heavily tested. Refactor/adapt at your own risk.
 
 # membrane_potential_analysis
 
@@ -10,7 +11,7 @@ This module provides code to analyze the results of single-cell simulations and 
 
 # currents
 
-- Find time and voltage of max depolarisation (TODO: why is this in "currents"?)
+- Find time and voltage of max depolarisation
 - Compute currents in the soma
 
 # Synapse analysis
