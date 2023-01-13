@@ -14,7 +14,7 @@ try:
 except ImportError:
     warnings.warn("tqdm not found in the current environment. No progressbars will be displayed", ImportWarning)
     HAS_TQDM = False
-from ipywidgets import interactive, VBox, widgets, Layout
+from ipywidgets import interactive, VBox, HBox, widgets, Layout
 try:
     import plotly.offline as py
     import plotly.io as pio
@@ -46,8 +46,8 @@ class CellVisualizer:
         self.elev = 30 # Elevation of the camera above the equatorial plane in degrees.
         
         # Max and min voltages colorcoded in the cell morphology
-        self.vmin = -75 # mV
-        self.vmax = -40 # mV
+        self.vmin = -80 # mV
+        self.vmax = 20 # mV
         
         # Time in the simulation during which a synapse activation is shown during the visualization
         self.time_show_syn_activ = 2 # ms
@@ -186,7 +186,7 @@ class CellVisualizer:
         Args:
          - time_point: time point from which we want to gather the voltage
         '''
-        n_sim_point = int(np.where(np.isclose(self.cell.t, time_point))[0][0]) 
+        n_sim_point = int(np.where(np.isclose(self.cell.t, time_point))[0][0])
         # or n_sim_point = int(time_point/dt_frames), dt_frames = self.cell.t[1]-self.cell.t[0]
         voltage_points = []
         for sec in self.cell.sections:
@@ -216,6 +216,22 @@ class CellVisualizer:
                             next_seg_flag = True     
                 voltage_points.append(sec.recVList[current_seg][n_sim_point])
         return voltage_points
+
+    def _get_soma_voltage_at_timepoint(self, time_point):
+        '''
+        Retrieves the VOLTAGE along the whole cell morphology from cell object at a particular time point.
+        Args:
+         - time_point: time point from which we want to gather the voltage
+        '''
+        n_sim_point = int(np.where(np.isclose(self.cell.t, time_point))[0][0])
+        sec = [sec for sec in self.cell.sections if sec.label == "Soma"][0] 
+        return sec.recVList[0][n_sim_point]
+
+    def _get_soma_voltage_between_timepoints(self, t_start, t_end, t_step):
+        voltages=[]
+        for t_ in np.arange(t_start, t_end+t_step, t_step):
+            voltages.append(self._get_soma_voltage_at_timepoint(t_))
+        return voltages
 
     def _get_timeseries_voltage(self):
         '''
@@ -611,9 +627,10 @@ class CellVisualizer:
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(images_path, self.t_start, self.t_end, self.t_step, client)
         display_animation_from_images(images_path, 1, embedded=True)
         
-    def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, time_show_syn_activ=2, renderer="notebook_connected"):
+    def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, time_show_syn_activ=2, vmin=None, vmax=None, renderer="notebook_connected", color_map='jet', background_color="rgb(180,180,180)"):
         ''' 
         TODO: add synapse activations!
+        TODO: add dendritic and somatic AP as secondary subplot
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
         - Membrane voltage
         - Section ID
@@ -624,12 +641,23 @@ class CellVisualizer:
             - t_step: time between the different time points of our visualization
             - time_show_syn_activ: Time in the simulation during which a synapse activation is shown during the visualization
             - renderer
+            - background_color: just some grey by default.
             t_start, t_end and t_step will define the self.time attribute
         Returns:
             ipywidgets.VBox object: an interactive render of the cell.
         '''
         self._update_time(t_start, t_end, t_step)
         self._get_timeseries_voltage()
+        vmin = vmin if vmin is not None else self.vmin
+        vmax = vmax if vmax is not None else self.vmax
+        transparent="rgba(0, 0, 0, 0)"
+        ax_layout = dict(
+            backgroundcolor=transparent,
+            gridcolor=transparent,
+            showbackground=True,
+            zerolinecolor=transparent,
+            visible=False
+        )
         
         py.init_notebook_mode()
         pio.renderers.default = renderer
@@ -643,10 +671,28 @@ class CellVisualizer:
         fig = px.scatter_3d(
             df, x="x", y="y", z="z", 
             hover_data=["x","y","z","section", "diameter","voltage"],
-            color="voltage", range_color=[-80, 30],
-            size="diameter")
+            color="voltage", range_color=[vmin, vmax],
+            size="diameter", color_continuous_scale=color_map)
         fig.update_traces(marker = dict(line = dict(width = 0)))  # remove outline of markers
-        fig.update_layout(coloraxis_colorbar=dict(title="Neuron morphology and membrane voltage (mV)"))
+        fig.update_layout(scene=dict(
+                                     xaxis = ax_layout,
+                                     yaxis = ax_layout,
+                                     zaxis = ax_layout,
+                                     bgcolor=transparent  # turn off background for just the scene
+                                        ),
+                             plot_bgcolor=background_color,
+                             paper_bgcolor=background_color,
+                             coloraxis_colorbar=dict(title="V_m (mV)")
+                             )
+
+        fig_soma_voltage = px.line(
+            x=np.arange(self.t_start, self.t_end+self.dt, self.dt), y=self._get_soma_voltage_between_timepoints(self.t_start, self.t_end, self.dt),
+            labels={
+                "x": "time (ms)",
+                "y": "Membrane voltage (mV)"},
+                 title="Soma membrane voltage"
+                 )
+        f_trace = go.FigureWidget(fig_soma_voltage.data, fig_soma_voltage.layout)
 
         # create FigureWidget from figure
         f = go.FigureWidget(data=fig.data, layout=fig.layout)
@@ -657,17 +703,25 @@ class CellVisualizer:
             Function that gets called whenever the slider gets changed. Requests the membrane voltages at a certain time point
             """
             round_floats = 2
-            t_idx = np.where(self.times_to_show == self.t_start)[0][0]
+            t_idx = np.where(self.times_to_show == time_point)[0][0]
             f.update_traces(marker={"color": np.round(self.voltage_timeseries[t_idx], round_floats)})
             f.layout.title = "Membrane voltage at time={} ms".format(time_point)
+            f_trace.update_layout(
+                shapes=[dict(
+                    type= 'line',
+                    yref= 'paper', y0= self.vmin, y1=self.vmax,
+                    xref= 'x', x0=time_point, x1=time_point
+                    )
+                    ])
             return fig
 
         # display the FigureWidget and slider with center justification
         slider = interactive(
             _update, 
-            time_point = widgets.IntSlider(min=self.t_start, max=self.t_end, step=self.t_step, value=0, layout=Layout(width='800px'))
+            time_point = widgets.IntSlider(min=self.t_start, max=self.t_end, step=self.t_step, value=0, layout=Layout(width='800px'), background_color=background_color)
             )
-        vb = VBox((f, slider))
+        hb = HBox((f, f_trace))
+        vb = VBox((hb, slider))
         vb.layout.align_items = 'center'
         return vb
                
