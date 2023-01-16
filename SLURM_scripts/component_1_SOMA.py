@@ -13,15 +13,20 @@ import time
 # In[2]:
 
 management_dir = sys.argv[1]
+LAUNCH_JUPYTER_SERVER = True  # by default, if left unspecified
+if len(sys.argv) > 2:
+    # component_1_SOMA.py was called from submit.sh with extra arguments
+    LAUNCH_JUPYTER_SERVER = bool(int(sys.argv[2]))  # only launch when interactive session is started
+    print("La8unching Jupyter server: {}".format(LAUNCH_JUPYTER_SERVER))
 print('using management dir {}').format(management_dir)
 
 # In[3]:
 
 #if os.path.exists(management_dir):
 #    shutil.rmtree(management_dir)
-if not os.path.exists(management_dir):
+if not os.path.exists(MANAGEMENT_DIR):
     try:    
-        os.makedirs(management_dir)
+        os.makedirs(MANAGEMENT_DIR)
     except OSError: # if another process was faster creating it
         pass
 
@@ -35,7 +40,7 @@ from contextlib import contextmanager
 @contextmanager
 def Lock():
     # Code to acquire resource, e.g.:
-    lock  = fasteners.InterProcessLock(os.path.join(management_dir, 'lock'))    
+    lock  = fasteners.InterProcessLock(os.path.join(MANAGEMENT_DIR, 'lock'))    
     lock.acquire()
     try:
         yield lock
@@ -67,7 +72,7 @@ def reset_process_number():
         with open(lock.path+'_sync', 'w') as f:
             f.write('')
 
-process_number = get_process_number()
+PROCESS_NUMBER = get_process_number()
 
 
 # In[5]:
@@ -76,7 +81,7 @@ process_number = get_process_number()
 # setting up locking server
 #################################################
 def get_locking_file_path():
-    return os.path.join(management_dir, 'locking_server')
+    return os.path.join(MANAGEMENT_DIR, 'locking_server')
 
 def setup_locking_server():
     print('-'*50)
@@ -135,10 +140,10 @@ def check_locking_config():
 #################################################
 # setting up dask-scheduler
 #################################################
-def _get_sfile(management_dir):
+def _get_sfile(management_dir=MANAGEMENT_DIR):
     return os.path.join(management_dir, 'scheduler.json'), os.path.join(management_dir, 'scheduler3.json')
 
-def setup_dask_scheduler(management_dir):
+def setup_dask_scheduler(management_dir=MANAGEMENT_DIR):
     print('-'*50)
     print('setting up dask-scheduler')
     sfile, sfile3 = _get_sfile(management_dir)
@@ -157,7 +162,7 @@ def setup_dask_scheduler(management_dir):
 #################################################
 # setting up dask-worker
 #################################################
-def setup_dask_workers(management_dir):
+def setup_dask_workers(management_dir=MANAGEMENT_DIR):
     print('-'*50)
     print('setting up dask-workers')
     n_cpus = os.environ['SLURM_CPUS_PER_TASK']
@@ -191,12 +196,12 @@ def setup_jupyter_notebook():
     os.system(command)
 # In[8]:
 
-if process_number == 0:
+if PROCESS_NUMBER == 0:
     setup_locking_server()
-    setup_dask_scheduler(management_dir)
+    setup_dask_scheduler(MANAGEMENT_DIR)
     # setup_jupyter_notebook()
 setup_locking_config()
-setup_dask_workers(management_dir)
-if process_number == 0:
+setup_dask_workers(MANAGEMENT_DIR)
+if PROCESS_NUMBER == 0 and LAUNCH_JUPYTER_SERVER:
     setup_jupyter_notebook()
 time.sleep(60*60*24*365)
