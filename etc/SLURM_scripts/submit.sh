@@ -157,6 +157,11 @@ elif [ ${partition:0:3} == CPU ]; then
   cuda=$'\nmodule load cuda'
   gres="0"
 fi
+if [[ "$partition" == *"interactive" ]]; then
+  # in case the interactive partition was requested by specifying the partition with -p flag
+  launch_jupyter_server="1"
+fi
+
 
 # Manually set qos line and _A100 python file suffix in case the A100 was requested with the -p flag instead of the A flag
 if [ $partition = "GPU-a100" ]; then
