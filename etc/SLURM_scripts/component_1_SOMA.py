@@ -13,6 +13,11 @@ import time
 # In[2]:
 
 MANAGEMENT_DIR = sys.argv[1]
+LAUNCH_JUPYTER_SERVER = True  # by default, if left unspecified
+if len(sys.argv) > 2:
+    # component_1_SOMA.py was called from submit.sh with extra arguments
+    LAUNCH_JUPYTER_SERVER = bool(int(sys.argv[2]))  # only launch when interactive session is started
+    print("La8unching Jupyter server: {}".format(LAUNCH_JUPYTER_SERVER))
 print('using management dir {}'.format(MANAGEMENT_DIR))
 
 # In[3]:
@@ -71,7 +76,7 @@ def reset_process_number():
         with open(p, 'w') as f:
             f.write('')
 
-process_number = get_process_number()
+PROCESS_NUMBER = get_process_number()
 
 
 # In[5]:
@@ -195,12 +200,12 @@ def setup_jupyter_notebook():
     os.system(command)
 # In[8]:
 
-if process_number == 0:
+if PROCESS_NUMBER == 0:
     setup_locking_server()
     setup_dask_scheduler(MANAGEMENT_DIR)
     # setup_jupyter_notebook()
 setup_locking_config()
 setup_dask_workers(MANAGEMENT_DIR)
-if process_number == 0:
+if PROCESS_NUMBER == 0 and LAUNCH_JUPYTER_SERVER:
     setup_jupyter_notebook()
 time.sleep(60*60*24*365)
