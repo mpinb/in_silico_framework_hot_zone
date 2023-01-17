@@ -77,11 +77,6 @@ getting_started/example_simulation_data/C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2c
 
 # Virtual enviroments
 venv/
-
-# Installed dependencies
-installer/conda_packages/*
-installer/pip_packages/*
 installer/conda_packages
 installer/pip_packages
 notebooks/*
-
