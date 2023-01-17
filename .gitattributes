@@ -1,8 +1,6 @@
-# Jupyter notebook
-
 # For text count
-*.ipynb text
-*.html text
+# *.ipynb text
 
-# To ignore it use below
-# *.ipynb linguist-documentation
+# To ignore files from contribution to language statistics
+*.ipynb linguist-vendored
+*.html linguist-vendored
