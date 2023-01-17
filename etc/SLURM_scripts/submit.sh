@@ -11,6 +11,7 @@ tpn=""
 gres="4"  # default for GPU jobs
 qosline=""  # not set yet
 cuda=$'\n#module load cuda'  # If working on a GPU partition: load cuda with single hashtag, idk why?
+launch_jupyter_server="0"
 
 help() {
   cat <<EOF
@@ -124,7 +125,7 @@ do
     m) mem=${OPTARG};memstr=$mem;;
     t) time=${OPTARG};;
     c) partition="CPU";;
-    i) partition=$partition"-interactive";;  # append "-interactive"
+    i) partition=$partition"-interactive";launch_jupyter_server="1";;  # append "-interactive"
     p) partition=${OPTARG};;  # overwrites i or c flag
     T) tpn=${OPTARG};;
     r) gres=${OPTARG};;
@@ -156,6 +157,11 @@ elif [ ${partition:0:3} == CPU ]; then
   cuda=$'\nmodule load cuda'
   gres="0"
 fi
+if [[ "$partition" == *"interactive" ]]; then
+  # in case the interactive partition was requested by specifying the partition with -p flag
+  launch_jupyter_server="1"
+fi
+
 
 # Manually set qos line and _A100 python file suffix in case the A100 was requested with the -p flag instead of the A flag
 if [ $partition = "GPU-a100" ]; then
@@ -204,7 +210,7 @@ unset XDG_RUNTIME_DIR
 unset DISPLAY
 export SLURM_CPU_BIND=none
 ulimit -Sn "\$(ulimit -Hn)"
-srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA.py \$MYBASEDIR/management_dir_$name
+srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/etc/SLURM_scripts/component_1_SOMA.py \$MYBASEDIR/management_dir_$name $launch_jupyter_server
 EoF
 )
 echo $output
