@@ -12,13 +12,13 @@ import socket
 import time
 # In[2]:
 
-management_dir = sys.argv[1]
+MANAGEMENT_DIR = sys.argv[1]
 LAUNCH_JUPYTER_SERVER = True  # by default, if left unspecified
 if len(sys.argv) > 2:
     # component_1_SOMA.py was called from submit.sh with extra arguments
     LAUNCH_JUPYTER_SERVER = bool(int(sys.argv[2]))  # only launch when interactive session is started
     print("La8unching Jupyter server: {}".format(LAUNCH_JUPYTER_SERVER))
-print('using management dir {}').format(management_dir)
+print('using management dir {}'.format(MANAGEMENT_DIR))
 
 # In[3]:
 
@@ -64,12 +64,16 @@ def get_process_number():
                 x = int(x)
         with open(p, 'w') as f:
             f.write(str(x + 1))
-        print('I am process number {}').format(x)
+        print('I am process number {}'.format(x))
     return x
 
 def reset_process_number():
     with Lock() as lock:
-        with open(lock.path+'_sync', 'w') as f:
+        p = lock.path  # this is a regular string in Python 2
+        if type(p) == bytes:  # Python 3 returns a byte string as lock.path
+            p = p.decode("utf-8")
+        p += '_sync'
+        with open(p, 'w') as f:
             f.write('')
 
 PROCESS_NUMBER = get_process_number()
@@ -140,10 +144,10 @@ def check_locking_config():
 #################################################
 # setting up dask-scheduler
 #################################################
-def _get_sfile(management_dir=MANAGEMENT_DIR):
+def _get_sfile(management_dir):
     return os.path.join(management_dir, 'scheduler.json'), os.path.join(management_dir, 'scheduler3.json')
 
-def setup_dask_scheduler(management_dir=MANAGEMENT_DIR):
+def setup_dask_scheduler(management_dir):
     print('-'*50)
     print('setting up dask-scheduler')
     sfile, sfile3 = _get_sfile(management_dir)
@@ -162,7 +166,7 @@ def setup_dask_scheduler(management_dir=MANAGEMENT_DIR):
 #################################################
 # setting up dask-worker
 #################################################
-def setup_dask_workers(management_dir=MANAGEMENT_DIR):
+def setup_dask_workers(management_dir):
     print('-'*50)
     print('setting up dask-workers')
     n_cpus = os.environ['SLURM_CPUS_PER_TASK']

@@ -183,7 +183,7 @@ if get_versions()['dirty']: warnings.warn('The source folder has uncommited chan
 
 try:
     import distributed
-    import clustercontrol
+    import etc.clustercontrol as clustercontrol
     cluster = clustercontrol.cluster
 except ImportError:
     pass
