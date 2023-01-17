@@ -72,7 +72,6 @@ jobs:
           source ~/conda2-isf/bin/activate
           source activate isf-py27
           export PYTHONPATH="$(pwd)"
-          cd tests
           dask-scheduler --port=28786 --bokeh-port=28787 &
           dask-worker localhost:28786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          python run_tests.py
+          python Tests/run_tests.py
