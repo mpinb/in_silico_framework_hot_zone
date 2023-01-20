@@ -24,7 +24,7 @@ A walkthrough of the capabilities of ISF is presented in the ["Getting Started" 
 
 ### Model DataBase (mdb)
 
-A model database is a directory with additional capabilities. Data in an mdb is pickled and only unpickled upon read request. Access to a modeldatabase is done with the [mdb module](./model_data_base) that navigates enormous folders as if they were nested dictionaries. Some MDB's need to be registered to resolve hashed paths to absolute paths before you can navigate them.
+A model database is on-disk storage that whose syntax is mimicking a dictionary in python. Data in an mdb can be saved with various formats (use I.dumper_ autocomplete). The format needs to be specified while saving the data, but not for loading the data. This allows to change (optimize) the format without the need to update code operating on it. A mdb has been designed to contain and give convenient access to data from large scale simulations, which do not fit in memory. Access to a modeldatabase is done with the [mdb module](./model_data_base). Some MDB's need to be registered to resolve hashed paths to absolute paths before you can navigate them.
 ```python
 import Interface as I
 I.ModelDataBase # main class of model_data_base
