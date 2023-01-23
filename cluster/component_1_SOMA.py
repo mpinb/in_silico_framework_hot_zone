@@ -1,0 +1,211 @@
+
+# coding: utf-8
+
+# In[1]:
+
+import fasteners
+import os
+import shutil
+import sys
+import yaml
+import socket
+import time
+# In[2]:
+
+MANAGEMENT_DIR = sys.argv[1]
+LAUNCH_JUPYTER_SERVER = True  # by default, if left unspecified
+if len(sys.argv) > 2:
+    # component_1_SOMA.py was called from submit.sh with extra arguments
+    LAUNCH_JUPYTER_SERVER = bool(int(sys.argv[2]))  # only launch when interactive session is started
+    print("La8unching Jupyter server: {}".format(LAUNCH_JUPYTER_SERVER))
+print('using management dir {}'.format(MANAGEMENT_DIR))
+
+# In[3]:
+
+#if os.path.exists(management_dir):
+#    shutil.rmtree(management_dir)
+if not os.path.exists(MANAGEMENT_DIR):
+    try:    
+        os.makedirs(MANAGEMENT_DIR)
+    except OSError: # if another process was faster creating it
+        pass
+
+# In[21]:
+
+#################################
+# methods for coordinating jobs
+#################################
+
+from contextlib import contextmanager
+@contextmanager
+def Lock():
+    # Code to acquire resource, e.g.:
+    lock  = fasteners.InterProcessLock(os.path.join(MANAGEMENT_DIR, 'lock'))    
+    lock.acquire()
+    try:
+        yield lock
+    finally:
+        lock.release()
+
+def get_process_number():
+    with Lock() as lock:
+        p = lock.path  # this is a regular string in Python 2
+        if type(p) == bytes:  # Python 3 returns a byte string as lock.path
+            p = p.decode("utf-8")
+        p += '_sync'
+        if not os.path.exists(p):
+            with open(p, 'w') as f:
+                pass
+        with open(p, 'r') as f:
+            x = f.read()
+            if x == '':
+                x = 0
+            else:
+                x = int(x)
+        with open(p, 'w') as f:
+            f.write(str(x + 1))
+        print('I am process number {}'.format(x))
+    return x
+
+def reset_process_number():
+    with Lock() as lock:
+        p = lock.path  # this is a regular string in Python 2
+        if type(p) == bytes:  # Python 3 returns a byte string as lock.path
+            p = p.decode("utf-8")
+        p += '_sync'
+        with open(p, 'w') as f:
+            f.write('')
+
+PROCESS_NUMBER = get_process_number()
+
+
+# In[5]:
+
+#################################################
+# setting up locking server
+#################################################
+def get_locking_file_path():
+    return os.path.join(MANAGEMENT_DIR, 'locking_server')
+
+def setup_locking_server():
+    print('-'*50)
+    print('setting up locking server')
+    #command = 'redis-server --save "" --appendonly no --port 8885 --protected-mode no &'    
+    #print command
+    #os.system(command)
+    #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
+    config = [{'config': {'hosts': 'somalogin02-hs:33333'}, 'type': 'zookeeper'}]
+    # config = [{'type': 'file'}]  # uncomment this line if zookeeper is not running (i.e., you receive an error similar to 'No handlers could be found for logger "kazoo.client"')
+    with open(get_locking_file_path(), 'w') as f:
+        f.write(yaml.dump(config))
+    setup_locking_config()
+    print('-'*50)
+
+def setup_locking_config():
+    print('-'*50)
+    print('updating locking configuration to use new server')
+    while not os.path.exists(get_locking_file_path()):
+        time.sleep(1)
+    os.environ['ISF_DISTRIBUTED_LOCK_CONFIG'] = get_locking_file_path() 
+    check_locking_config()
+    print('-'*50)
+
+def check_locking_config():
+    import model_data_base.distributed_lock
+    print('locking configuration')
+    print(model_data_base.distributed_lock.server)
+    print(model_data_base.distributed_lock.client)
+    #assert(model_data_base.distributed_lock.server['type'] == 'redis')
+    #import socket
+    #socket.gethostname()
+
+    #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
+
+    #print 'old locking configuration'
+    #print model_data_base.distributed_lock.server
+    #print model_data_base.distributed_lock.client
+
+    #import time
+    #while True:
+    #    try:
+    #        model_data_base.distributed_lock.update_config(config)
+    #        break
+    #    except RuntimeError:
+    #        print 'could not connect, retrying in 1 sec'
+    #        time.sleep(1) 
+
+    #print 'updated locking configuration'
+    #print model_data_base.distributed_lock.server
+    #print model_data_base.distributed_lock.client
+
+
+# In[6]:
+
+#################################################
+# setting up dask-scheduler
+#################################################
+def _get_sfile(management_dir):
+    return os.path.join(management_dir, 'scheduler.json'), os.path.join(management_dir, 'scheduler3.json')
+
+def setup_dask_scheduler(management_dir):
+    print('-'*50)
+    print('setting up dask-scheduler')
+    sfile, sfile3 = _get_sfile(management_dir)
+    command = 'dask-scheduler --scheduler-file={} --port=28786 --bokeh-port=28787 --interface=ib0 &'
+    command = command.format(sfile)
+    print(command)
+    os.system(command)
+    command = '''bash -ci "source ~/.bashrc; source_3; dask-scheduler --scheduler-file={} --port=38786 --interface=ib0 --dashboard-address=:38787" &'''
+    command = command.format(sfile3)
+    print(command)
+    os.system(command)
+    print('-'*50)
+
+# In[7]:
+
+#################################################
+# setting up dask-worker
+#################################################
+def setup_dask_workers(management_dir):
+    print('-'*50)
+    print('setting up dask-workers')
+    n_cpus = os.environ['SLURM_CPUS_PER_TASK']
+    sfile, sfile3 = _get_sfile(management_dir)
+    command = 'dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --memory-limit=100e9 --local-directory $JOB_TMPDIR &'.format(nprocs = n_cpus, sfile = sfile)
+    print(command)
+    os.system(command)
+    command = '''bash -ci "source ~/.bashrc; source_3; dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --local-directory $JOB_TMPDIR --memory-limit=100e9" &'''
+    command = command.format(nprocs = n_cpus, sfile = sfile3)
+    print(command)
+    os.system(command)
+    print('-'*50)
+
+##############################################
+# setting up jupyter-notebook
+#############################################
+def setup_jupyter_notebook():
+    print('-'*50)
+    print('setting up jupyter notebook')
+    check_locking_config() 
+    command = "cd notebooks; jupyter-notebook --ip='*' --no-browser --port=11112 &"
+    print(command)
+    os.system(command)    
+    print('-'*50)
+    #command = "conda activate /axon/scratch/abast/anaconda3/; jupyter-lab --ip='*' --no-browser --port=11113 &"
+    #command = 'screen -S jupyterlab -dm bash -c "source ~/.bashrc; source_3; ' +     '''jupyter-lab --ip='*' --no-browser --port=11113"'''
+    #command = '''bash -c "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" &'''
+    #command = '''(source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113) &'''
+    command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" &'''
+    #command = "/axon/scratch/abast/anaconda3/bin/jupyter-lab --ip='*' --no-browser --port=11113"
+    os.system(command)
+# In[8]:
+
+if PROCESS_NUMBER == 0:
+    setup_locking_server()
+    setup_dask_scheduler(MANAGEMENT_DIR)
+    # setup_jupyter_notebook()
+setup_locking_config()
+setup_dask_workers(MANAGEMENT_DIR)
+if PROCESS_NUMBER == 0 and LAUNCH_JUPYTER_SERVER:
+    setup_jupyter_notebook()
+time.sleep(60*60*24*365)
