@@ -584,7 +584,7 @@ class CellVisualizer:
         files.sort()
         write_gif_from_images(out_path,files,frame_duration)
          
-    def write_video_voltage_synapses_in_morphology_3d(self, images_path, out_path, t_start=None, t_end=None, t_step=None, client=None, time_show_syn_activ=2):
+    def write_video_voltage_synapses_in_morphology_3d(self, images_path, out_path, t_start=None, t_end=None, t_step=None, client=None, time_show_syn_activ=2, framerate=12, quality=5, codec='mpeg4'):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
@@ -604,7 +604,7 @@ class CellVisualizer:
         self._update_time(t_start, t_end, t_step)
         self.time_show_syn_activ = time_show_syn_activ
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(images_path, self.t_start, self.t_end, self.t_step, client)
-        write_video_from_images(images_path, out_path)
+        write_video_from_images(images_path, out_path, fps=framerate, quality=quality, codec=codec)
           
     def display_animation_voltage_synapses_in_morphology_3d(self, images_path, t_start=None, t_end=None, t_step=None, client=None, time_show_syn_activ=2):
         '''
