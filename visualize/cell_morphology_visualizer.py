@@ -718,7 +718,7 @@ class CellMorphologyVisualizer:
         # display the FigureWidget and slider with center justification
         slider = interactive(
             _update, 
-            time_point = widgets.IntSlider(min=self.t_start, max=self.t_end, step=self.t_step, value=0, layout=Layout(width='800px'), background_color=background_color)
+            time_point = widgets.FloatSlider(min=self.t_start, max=self.t_end, step=self.t_step, value=0, layout=Layout(width='800px'), background_color=background_color)
             )
         hb = HBox((f, f_trace))
         vb = VBox((hb, slider))
