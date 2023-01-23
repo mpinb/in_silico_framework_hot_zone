@@ -1,9 +1,9 @@
 import inspect
 import dask.dataframe as dd
 import pandas as pd
-from .cell_morphology_visualizer import plt
-from .cell_morphology_visualizer import Figure
-from .cell_morphology_visualizer import Axes
+from . import plt
+from . import Figure
+from . import Axes
 from model_data_base.utils import skit
 
 ## 
