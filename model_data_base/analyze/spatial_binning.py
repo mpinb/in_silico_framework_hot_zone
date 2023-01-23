@@ -1,4 +1,4 @@
-from .spaciotemporal_binning import time_list_from_pd
+from .spatiotemporal_binning import time_list_from_pd
 import pandas as pd
 import numpy as np
 import dask.dataframe as dd

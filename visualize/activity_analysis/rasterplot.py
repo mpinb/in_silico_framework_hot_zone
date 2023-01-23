@@ -1,12 +1,21 @@
-import pandas as pd
-import dask
-import dask.dataframe as dd
-import matplotlib.pyplot as plt
-from ._decorators import *
+""" 
+Author: Unkown
+
+Last updated on: 23/01/2023 by Bjorge Meulemeester
+
+TODO:
+- rasterplot2() dummy plot makes little sense. What's happening there?
+- version supporting parallel?
+"""
+
+# import dask
+# import dask.dataframe as dd
+# from ._figure_array_converter import fig2np
 # from compatibility import multiprocessing_scheduler
-from ..analyze._helper_functions import is_int
-from ._figure_array_converter import fig2np
-from .. utils import convertible_to_int
+from .. import plt
+from .._decorators import *
+from model_data_base.analyze._helper_functions import is_int
+from model_data_base. utils import convertible_to_int
         
 def rasterplot2(st, ax = None, x_offset = 0, c = None, 
                     plot_kwargs = dict(solid_capstyle = 'butt'), y_offset = None, y_plot_length = 1, marker = 'line'):
@@ -19,14 +28,14 @@ def rasterplot2(st, ax = None, x_offset = 0, c = None,
         y = len(st)
     else:
         y = y_offset
-    for i, v in st.iterrows():
+    for _, v in st.iterrows():
         if marker == 'line': # make a line of defined length
             dummy = [([v-x_offset, v-x_offset], [y+y_plot_length/2., y-y_plot_length/2.]) for v in list(v)]
             for d in dummy:
                 ax.plot(d[0], d[1], **plot_kwargs)
         else: # plot with the specified marker
             dummy_x = [vv-x_offset for vv in list(v)]
-            dummy_y = [y for vv in list(v)]
+            dummy_y = [y for vv in list(v)]  # TODO: what the hell does this code do
             ax.plot(dummy_x, dummy_y, marker, **plot_kwargs)
             
         y = y-1
@@ -61,7 +70,7 @@ def rasterplot2_pdf_grouped(pdf, grouplabel, ax = None, xlim = None, x_offset = 
         display.display(fig)
     except (ImportError, UnboundLocalError):
         pass
-    #plt.close()    
+    # plt.close()    
 
 @dask_to_pandas
 @return_figure_or_axis
@@ -89,9 +98,9 @@ def rasterplot(df, colormap = None, fig = None, label = None, groupby_attribute 
     trails_all = []
     ax = fig #before: ax = fig.add_subplot(1,1,1), now managed by decorator  return_figure_or_axis
     
-    #fig.patch.set_alpha(0.0)
-    #axes = plt.axes()
-    #axes.patch.set_alpha(0.0) 
+    # fig.patch.set_alpha(0.0)
+    # axes = plt.axes()
+    # axes.patch.set_alpha(0.0) 
         
     for index, row in df.iterrows():
         row = list(row)
@@ -105,7 +114,7 @@ def rasterplot(df, colormap = None, fig = None, label = None, groupby_attribute 
         ax.plot(times_all, trails_all, 'k|', label = label)
     if tlim:
         ax.set_xlim(tlim)
-    #plt.gca().set_position([0.05, 0.05, 0.95, 0.95])    
+    # plt.gca().set_position([0.05, 0.05, 0.95, 0.95])    
 
     return fig
         

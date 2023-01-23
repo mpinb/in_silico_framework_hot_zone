@@ -90,20 +90,26 @@ source_isf; python -m ipykernel install --name root --user --display-name isf2
 source_3; python -m ipykernel install --name base --user --display-name isf3
 ```
 
-## Testing
+> __Warning__: It is recommended to replace the local dask distributed config with the one provided in the [installer module](../installer/distributed.yaml)
 
-Check if you can submit a job:
+## Cluster
+The [cluster](../cluster/) module provides various modules for cluster control. Two scripts tend to be used a lot, so it is worth adding them as an alias to your ~/.bashrc. You can name these commands however you want.
+```bash
+alias submit="/gpfs/soma_fs/scratch/<username>/project_src/in_silico_framework/cluster/SLURM_scripts/submit.sh"
+alias jupylink="/gpfs/soma_fs/scratch/<username>/project_src/in_silico_framework/cluster/SLURM_scripts/jupyter_link.sh"
+```
+
+Check if you can submit a job by requesting an interactive CPU partition (the `-c` and `-i` flags):
 
 ```bash
-source_isf
-sbatch project_src/in_silico_framework/SLURM_scripts/launch_dask_on_SOMA_cpu_interactive_1.sh  session1
+source_3
+submit -c -i session1
 ```
-**Note:** Currently the launching scripts work only with `in-silico-framework` (Python 2)
 
 Make sure that the job appears with `Running` (R) status in slurm job queue:
 
 ```bash
-squeue -u $USER
+squeue --me
 ```
 
 Look at the corresponding management dir to find the ip address where `jupyter` is running:
@@ -111,12 +117,22 @@ Look at the corresponding management dir to find the ip address where `jupyter` 
 ```bash
 cat management_dir_session1/scheduler.json
 ```
+
+Find the link of the Jupyter server that's running on the interactive node:
+```bash
+jupylink session1
+```
+
+> __Warning__: It takes some time before the cluster has launched the jupyter server. You may need to wait a couple of seconds after submitting a job before this command will return a Jupyter link.
+> __Warning__: Jupyter servers are only launched on interactive sessions.
+
 Use putty to open a SOCKS-5 proxy to the login node (somalogin01 or somalogin02)
  - you can do this with the -D option of the `ssh` command
     - example: `ssh -D 4040 somalogin02`
  - Open firefox settings, search for proxy and activate SOCKS-5 proxy. IP: 127.0.0.1, PORT: 4040 (or the port number passed to the ssh command)
  - this is explained in more detail in chantals google doc: https://docs.google.com/document/d/1S0IM7HgRsRdGXN_WFeDqPMOL3iDt1Obosuikzzc8YNc/edit#heading=h.dbift17bl1rt
 
+You can now use firefox to run notebooks on the cluster by surfing to the link o fthe jupyter server. You may also run these ntoebooks in VSCode, or another IDE of choice.
 
 ## Ports
 

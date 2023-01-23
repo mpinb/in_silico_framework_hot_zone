@@ -1,14 +1,9 @@
-from ._decorators import *
+from .._decorators import *
 
 @dask_to_pandas
 @return_figure_or_axis # has to be before subsequent_calls_per_line
 @subsequent_calls_per_line
-def histogram(hist_bins, 
-                         colormap = None,
-                         fig = None,
-                         label = None,
-                         groupby_attribute = None):
-    
+def histogram(hist_bins, colormap = None, fig = None, label = None, groupby_attribute = None):
     '''expects a tuple of the format (bins,hist)
     
     Supports groups: simply pass a Series of the format.
@@ -22,7 +17,7 @@ def histogram(hist_bins,
         
     bins = hist_bins[0]
     hist = hist_bins[1]
-    #add points, so stepfunction allways starts and ends on the x-axis
+    # add points, so stepfunction allways starts and ends on the x-axis
     x = list(bins) + [bins[-1]]
     y = [0] + list(hist) + [0]
     
@@ -46,7 +41,7 @@ def histogram2(hist_bins, color = None, ax = None, label = None, mode = 'step'):
         bins: bin edges; hist: bin values
     '''
     if ax is None:
-        ax = I.plt.gca()
+        ax = plt.gca()
     bins, hist = hist_bins
 
     # add points, so we always start  at 0
@@ -63,4 +58,4 @@ def histogram2(hist_bins, color = None, ax = None, label = None, mode = 'step'):
     if mode == 'step':
         ax.step(x,y, color = color, label = label)
     elif mode == 'filled':
-        I.plt.fill_between(x,y,[0]*len(x),color=color,label=label,linewidth = 0) 
+        plt.fill_between(x,y,[0]*len(x),color=color,label=label,linewidth = 0) 
