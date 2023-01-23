@@ -210,7 +210,7 @@ unset XDG_RUNTIME_DIR
 unset DISPLAY
 export SLURM_CPU_BIND=none
 ulimit -Sn "\$(ulimit -Hn)"
-srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/etc/SLURM_scripts/component_1_SOMA.py \$MYBASEDIR/management_dir_$name $launch_jupyter_server
+srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/cluster/component_1_SOMA.py \$MYBASEDIR/management_dir_$name $launch_jupyter_server
 EoF
 )
 echo $output
