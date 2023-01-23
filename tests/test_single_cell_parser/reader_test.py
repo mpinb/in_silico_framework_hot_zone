@@ -9,4 +9,9 @@ class Tests(unittest.TestCase):
         '''compare model infered from test data to expectancy'''
         path = os.path.join(this_folder, 'data', '85.hoc')
         #print path
-        read_hoc_file(path)
+        try:
+            read_hoc_file(path)
+            assert(True)
+        except:
+            assert(False)
+        
