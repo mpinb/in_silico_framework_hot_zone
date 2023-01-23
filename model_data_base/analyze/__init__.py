@@ -1,6 +1,6 @@
 import barrel_cortex
 from .spike_detection import spike_detection
-from . import spaciotemporal_binning
+from . import spatiotemporal_binning
 
 excitatory = barrel_cortex.excitatory
 inhibitory = barrel_cortex.inhibitory

@@ -1,6 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import dask
+from .. import plt
+# import dask
 import os
 import glob
 import IPython
@@ -8,7 +8,7 @@ import jinja2
 import functools
 from base64 import b64encode
 import multiprocessing
-from ..utils import chunkIt
+from model_data_base.utils import chunkIt
 
 html_template = 'animation_template.html'
  
@@ -38,7 +38,6 @@ def _load_base64(filename, extension = 'png'):
             data = f.read()
         return 'data:image/{0};base64,{1}'.format(extension,b64encode(data).decode('ascii'))
         
-     
 def display_animation(files, interval=10, style=False, animID = None, embedded = False):
     '''creates an IPython animation out of files specified in a globstring or a list of paths.
      
@@ -64,7 +63,6 @@ def display_animation(files, interval=10, style=False, animID = None, embedded =
     htmlSrc = template.render(ID=animID, listFrames=listFrames, interval=interval, style=style)
      
     IPython.display.display(IPython.display.HTML(htmlSrc))
- 
  
 def find_closest_index(list_, value):
     '''returns index of value within list_, which is closest to the value specified in the arguments'''
@@ -183,7 +181,6 @@ def plot_lines_fun(lines, ax):
         ax.set_title("%.3f" % t)
     return out_lines
  
- 
 #@dask.delayed(traverse = False)
 def _in_parallel_context(paths, lines_objects, xlim = (0,1500), ylim = (-80,0)):
     # some ideas how to speed up figure drawing are taken from here: 
@@ -255,7 +252,6 @@ def cell_to_animation(cell, xlim = None, ylim = None, tstart = 245, tend = 310, 
     paths = parallelMovieMaker(outdir, lines, xlim = xlim, ylim = ylim)
     return paths
          
-
 @functools.wraps(cell_to_animation)
 def cell_to_ipython_animation(*args, **kwargs):
     try:
@@ -266,5 +262,3 @@ def cell_to_ipython_animation(*args, **kwargs):
     paths = cell_to_animation(*args, **kwargs)
     ani = display_animation(paths, embedded = embedded)
     return ani
-
-
