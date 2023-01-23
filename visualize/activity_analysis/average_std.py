@@ -4,18 +4,13 @@ Created on Sep 16, 2016
 @author: arco
 '''
 
-from model_data_base.plotfunctions._decorators import dask_to_pandas, subsequent_calls_per_line, return_figure_or_axis
+from .._decorators import dask_to_pandas, subsequent_calls_per_line, return_figure_or_axis
 
 @dask_to_pandas
 @return_figure_or_axis #has to stand above subsequent_calls_per_line
 @subsequent_calls_per_line
-def average_std(mean, std, 
-                                         colormap = None,
-                                         fig = None,
-                                         label = None,
-                                         groupby_attribute = None,
-                                         mode = 'ms',
-                                         axis = None):
+def average_std(mean, std, colormap = None, fig = None, label = None, groupby_attribute = None,
+                mode = 'ms',axis = None):
 
     t = mean.index.values.astype("float64")
     mean = mean.values.astype("float64")

@@ -1,13 +1,9 @@
-import matplotlib
+from .. import matplotlib
 matplotlib.use('Agg') 
-import matplotlib.pyplot as plt
-import os
-
-
+from .. import plt
 
 excitatory = ['L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34', 'L6ccinv', 'L5tt']
 inhibitory = ['SymLocal1', 'SymLocal2', 'SymLocal3', 'SymLocal4', 'SymLocal5', 'SymLocal6', 'L45Sym', 'L1', 'L45Peak', 'L56Trans', 'L23Trans']
-
 
 def pixels2figure(pixels, t_max = 400, z_max = 1600, vmin=-.005, vmax=.005, fig = None,\
                   xlabel = "t [ms]", ylabel = "soma distance [micrometers]",

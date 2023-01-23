@@ -25,7 +25,7 @@ except ImportError:
 import pandas as pd
 
 
-class CellVisualizer:
+class CellMorphologyVisualizer:
     """
     This class initializes from a cell object and extracts relevant Cell data to a format that lends itself easier to plotting.
     It contains useful methods for either plotting a cell morphology, the voltage along its body and its synaptic inputs.
@@ -131,7 +131,7 @@ class CellVisualizer:
             - Plot: whether the plot should be shown.
         '''
         # Plot morphology with colorcoded voltage
-        cmap=mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(vmin=vmin, vmax=vmax), cmap=plt.get_cmap('jet'))
+        cmap=mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(vmin=self.vmin, vmax=self.vmax), cmap=plt.get_cmap('jet'))
         fig = plt.figure(figsize = (15,15))
         ax = plt.axes(projection='3d')
         sections = np.unique(self.morphology['section'].values)
@@ -139,7 +139,7 @@ class CellVisualizer:
             points = self.morphology.loc[self.morphology['section'] == sec]
             for i in points.index:
                 if i!= points.index[-1]:
-                    color = ((voltage[i]+voltage[i+1])/2 - vmin)/(vmax-vmin)
+                    color = ((voltage[i]+voltage[i+1])/2 - self.vmin)/(self.vmax-self.vmin)
                     linewidth = (points.loc[i]['diameter']+points.loc[i+1]['diameter'])/2*1.5+0.2
                     ax.plot3D([points.loc[i]['x'],points.loc[i+1]['x']],
                               [points.loc[i]['y'],points.loc[i+1]['y']],
@@ -503,7 +503,7 @@ class CellVisualizer:
         voltage = self._get_voltages_at_timepoint(time_point)
         
         # Plot morphology with colorcoded voltage
-        cmap=mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(vmin=vmin, vmax=vmax), cmap=plt.get_cmap('jet'))
+        cmap=mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(vmin=self.vmin, vmax=self.vmax), cmap=plt.get_cmap('jet'))
         fig = plt.figure(figsize = (15,15))
         ax = plt.axes(projection='3d')
         sections = np.unique(self.morphology['section'].values)
@@ -511,7 +511,7 @@ class CellVisualizer:
             points = self.morphology.loc[self.morphology['section'] == sec]
             for i in points.index:
                 if i!= points.index[-1]:
-                    color = ((voltage[i]+voltage[i+1])/2 - vmin)/(vmax-vmin)
+                    color = ((voltage[i]+voltage[i+1])/2 - self.vmin)/(self.vmax-self.vmin)
                     linewidth = (points.loc[i]['diameter']+points.loc[i+1]['diameter'])/2*1.5+0.2
                     ax.plot3D([points.loc[i]['x'],points.loc[i+1]['x']],
                               [points.loc[i]['y'],points.loc[i+1]['y']],
@@ -816,4 +816,3 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, t
     
     plt.savefig(save)#,bbox_inches='tight')
     plt.close()
-

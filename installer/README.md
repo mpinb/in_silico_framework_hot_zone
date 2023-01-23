@@ -90,7 +90,7 @@ source_isf; python -m ipykernel install --name root --user --display-name isf2
 source_3; python -m ipykernel install --name base --user --display-name isf3
 ```
 
-> __Warning__: It is recommended to replace the local dask distributed config with the one provided in the [installer module](../installer/distributed_lock_config_redis_example.yaml)
+> __Warning__: It is recommended to replace the local dask distributed config with the one provided in the [installer module](../installer/distributed.yaml)
 
 ## Cluster
 The [cluster](../cluster/) module provides various modules for cluster control. Two scripts tend to be used a lot, so it is worth adding them as an alias to your ~/.bashrc. You can name these commands however you want.

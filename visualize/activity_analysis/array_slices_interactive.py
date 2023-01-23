@@ -1,11 +1,9 @@
-'''
-
-'''
 import numpy as np
 import pandas as pd
 from ipywidgets import interact  
-import matplotlib.pyplot as plt
+from .. import plt
 from .histogram import histogram
+
 
 def get_slice_by_x_value(array, xmin, xmax, x):
     step = (xmax-xmin) / float(array.shape[1] - 1)
@@ -15,7 +13,7 @@ def get_slice_by_x_value(array, xmin, xmax, x):
     nr = nr[0]
     return array[:, nr]
 
-def rebin_slice(slice_, min_, max_, wished_binsize, scale_last_bin = False):
+def rebin_slice(slice_, min_, max_, wished_binsize, scale_last_bin=False):
     current_binsize = (max_ - min_) / float((len(slice_)))
     if wished_binsize < current_binsize:
         raise ValueError("The current binsize is %s. The wished binsize may not be smaller than this." % str(current_binsize))
@@ -55,7 +53,6 @@ def make_plots(pixelObjects, x, wished_binsize = None, axis = 0, normalize_facto
         out.update({name: (newbins, newslice)})
     return pd.Series(out)
 
-
 def set_everything_up(pixelObjects, axis = 0, normalize_factors = None):
         if axis == 0:
             xmin = pixelObjects.iloc[0].extent[0]
@@ -76,5 +73,3 @@ def set_everything_up(pixelObjects, axis = 0, normalize_factors = None):
             silent = histogram(hist, fig = fig)
             fig.axes[0].set_xlim(xmin, xmax)
             return fig
-        
-        

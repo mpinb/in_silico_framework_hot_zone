@@ -5,4 +5,8 @@ serves as an easy importable module in Interface.
 Created by Borge Meulemeester on 14/12/2022
 """
 
-from .single_cell import CellVisualizer
+from .cell_morphology_visualizer import CellMorphologyVisualizer
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.axes import Axes

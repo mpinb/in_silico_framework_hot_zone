@@ -1,4 +1,4 @@
-from visualize import CellVisualizer
+from visualize import CellMorphologyVisualizer
 import single_cell_parser as scp
 import neuron
 h = neuron.h
@@ -15,7 +15,7 @@ class Tests(unittest.TestCase):
         self.cv = None
 
     def test_init(self):
-        self.cv = CellVisualizer(self.cell)
-        self.assertIsInstance(self.cv, CellVisualizer)
+        self.cv = CellMorphologyVisualizer(self.cell)
+        self.assertIsInstance(self.cv, CellMorphologyVisualizer)
 
     # TODO: add more tests

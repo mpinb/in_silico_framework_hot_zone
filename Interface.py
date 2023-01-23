@@ -81,8 +81,7 @@ from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_r
 from model_data_base.analyze.temporal_binning import universal as temporal_binning
 
 from model_data_base.analyze.spike_detection import spike_detection, spike_in_interval
-from model_data_base.analyze.spaciotemporal_binning import universal as spaciotemporal_binning
-spatiotemporal_binning = spaciotemporal_binning # fix typo :)
+from model_data_base.analyze.spatiotemporal_binning import universal as spatiotemporal_binning
 from model_data_base.analyze.spatial_binning import spatial_binning
 from model_data_base.analyze import split_synapse_activation
 from model_data_base.analyze.analyze_input_mapper_result import compare_to_neuronet
@@ -129,14 +128,14 @@ try: ##to avoid import errors in distributed system because of missing matplotli
     import matplotlib
     import matplotlib.pyplot as plt
     try:
-        from model_data_base.plotfunctions.average_std import average_std as average_std
-        from model_data_base.plotfunctions.histogram import histogram as histogram
-        from model_data_base.plotfunctions.manylines import manylines
-        from model_data_base.plotfunctions.rasterplot import rasterplot, rasterplot2, rasterplot2_pdf_grouped
-        from model_data_base.plotfunctions.cell_to_ipython_animation import cell_to_ipython_animation, cell_to_animation, display_animation
-        from model_data_base.plotfunctions._figure_array_converter import show_pixel_object, PixelObject
+        from visualize.activity_analysis.average_std import average_std as average_std
+        from visualize.activity_analysis.histogram import histogram as histogram
+        from visualize.activity_analysis.manylines import manylines
+        from visualize.activity_analysis.rasterplot import rasterplot, rasterplot2, rasterplot2_pdf_grouped
+        from visualize.activity_analysis.cell_to_ipython_animation import cell_to_ipython_animation, cell_to_animation, display_animation
+        from visualize._figure_array_converter import show_pixel_object, PixelObject
     except ImportError:
-        print("Could not import plotfunctions!")
+        print("Could not import visualize.activity_analysis!")
 except ImportError:
     print("Could not import matplotlib!")
 
@@ -161,7 +160,7 @@ except ImportError:
 
 import single_cell_analyzer as sca
 import single_cell_parser as scp
-from visualize.single_cell import CellVisualizer
+from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
 
 from simrun2.reduced_model import synapse_activation \
     as rm_synapse_activations
@@ -183,7 +182,7 @@ if get_versions()['dirty']: warnings.warn('The source folder has uncommited chan
 
 try:
     import distributed
-    import etc.clustercontrol as clustercontrol
+    from cluster import clustercontrol
     cluster = clustercontrol.cluster
 except ImportError:
     pass

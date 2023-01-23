@@ -1,11 +1,10 @@
 import inspect
 import dask.dataframe as dd
 import pandas as pd
-import matplotlib.pyplot as plt
-from  matplotlib.figure import Figure
-from matplotlib.axes import Axes
-from ..utils import skit
-from functools import wraps
+from .cell_morphology_visualizer import plt
+from .cell_morphology_visualizer import Figure
+from .cell_morphology_visualizer import Axes
+from model_data_base.utils import skit
 
 ## 
 # todo: this is overcomplicated and should be removed
