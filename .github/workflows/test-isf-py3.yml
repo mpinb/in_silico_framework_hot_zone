@@ -76,7 +76,7 @@ jobs:
           pushd .
           cd mechanisms/channels_py3; nrnivmodl
           popd
-          cd mechanisms/ninstalleron_py3; nrnivmodl
+          cd mechanisms/netcon_py3; nrnivmodl
           
       # Run in-silico-framework tests
       - name: Test in-silico-framework
