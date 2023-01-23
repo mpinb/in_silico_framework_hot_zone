@@ -36,12 +36,12 @@ jobs:
           conda info
 
       # Updating the root environment. Install ISF dependencies (YAML)
-      # NOTE: The environment file (yaml) is in the ISF repository 'etc' folder
+      # NOTE: The environment file (yaml) is in the ISF repository 'installer' folder
       - name: Install ISF dependencies
         run: |
           source ~/conda3-isf/bin/activate
           echo "Installing 'in silico framework' dependencies."
-          conda-env create --name isf-py3 --file etc/env-isf-py3.yml --quiet
+          conda-env create --name isf-py3 --file installer/env-isf-py3.yml --quiet
           source activate isf-py3
           conda list
           
@@ -76,7 +76,7 @@ jobs:
           pushd .
           cd mechanisms/channels_py3; nrnivmodl
           popd
-          cd mechanisms/netcon_py3; nrnivmodl
+          cd mechanisms/ninstalleron_py3; nrnivmodl
           
       # Run in-silico-framework tests
       - name: Test in-silico-framework
