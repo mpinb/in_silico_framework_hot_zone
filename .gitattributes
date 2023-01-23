@@ -1,0 +1,6 @@
+# For text count
+# *.ipynb text
+
+# To ignore files from contribution to language statistics
+*.ipynb linguist-vendored
+*.html linguist-vendored

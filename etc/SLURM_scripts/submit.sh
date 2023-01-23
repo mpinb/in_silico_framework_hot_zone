@@ -78,7 +78,7 @@ EOF
 
 function args_precheck {
   if [ $1 -eq "0" ] ; then
-    echo "Warning: no arguments passed. Will launch a job with default parameters and no name."
+    echo "Warning: no arguments passed. Launching a job with default parameters and no name."
   elif [ $2 = "--help" ] || [ $2 = "-h" ] ; then
     help
     exit 0
@@ -93,8 +93,7 @@ function args_precheck {
 function check_name {
     local n_matches="$(squeue -u $USER | grep ${1:0:8} | wc -l)"
     if [ $n_matches -gt 0 ]; then
-      echo "A job with this name is already running. Consider renaming the job and resubmitting."
-      exit 1
+      echo "A job with this name is already running. Requested resources will be appended to job \"$1\""
     fi
     return 0
 }
@@ -215,43 +214,4 @@ EoF
 )
 echo $output
 echo "---------------------------------------------"
-id="$(echo $output | grep -Eo [0-9]{7})"  # grep slurm submit output for ID
-
-
-# ##### Fetching the jupyter link from the err file
-# # continuously monitor cwd until the error file exsists
-# echo "Waiting for err.slurm file to exist"
-# while [ ! $(ls err.slurm.*.$id.slurm 2> /dev/null) ]
-# do
-#   sleep 0.1
-# done
-# # Find name of the requested node
-# node_name="$(fetch_node_name $id)"
-# if [ -z "$node_name" ]; then
-#   echo "No node found for job ID $id. Has it been assigned yet?"
-#   exit 1
-# fi
-# echo "Found err.slurm.$node_name.$id.slurm"
-# echo "Monitoring err.slurm.$node_name.$id.slurm for a Jupyter link..."
-# # Continuously monitor err slurm file, when the grep finds something that looks like
-# # a jupyter link starting with a number (i.e. the IP), stops monitoring (& command) and saves to variable
-# # link="$( (tail -F err.slurm.$node_name.$id.slurm &) | grep -qEo http://[0-9].*:11113.* )"
-# #TODO this doesnt work yet, it just keeps searching and doesnt match the grepe, or the grep doesnt stop the tail -f commmand idk
-# link="$( tail -f -n0 logfile.log & ) | grep http://[0-9].*:11113.* "
-
-# echo $link
-
-# if [ -z "$link" ];  # check if a jupyter link is present in the err log
-# then
-#     echo "No jupyter link found in err.slurm.$node_name.$id.slurm
-#     Check if the compute node is running properly"
-#     exit 1;
-# else
-#     echo "
-#     Found job name \"$1\" with ID $(fetch_id $1) on $(fetch_node_name $1)
-    
-#     Jupyter lab is running at:
-#     $link
-#     "
-# fi
-# exit 0;
+# id="$(echo $output | grep -Eo [0-9]{7})"  # grep slurm submit output for ID
