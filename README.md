@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./.github/Figures/output.gif" alt="L5PT triple burst">
+<img src="./docs/Figures/output.gif" alt="L5PT triple burst">
 
 # The In-Silico-Framework (ISF)
 [![In-Silico-Framework (Python 2.7) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27.yml)
@@ -72,4 +72,4 @@ for amp in amplitudes:
 	I.scp.init_neuron_run(cell_parameters.sim)  # run the simulation
 ```
 	
-![](./.github/Figures/VoltageResponse.png)
+![](./docs/Figures/VoltageResponse.png)
