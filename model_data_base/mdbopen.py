@@ -83,13 +83,68 @@ class mdbopen:
     def __init__(self, path, mode = 'r'):
         self.path = path
         self.mode = mode
+        self.exit_hooks = []
         
     def __enter__(self):
         self.path = resolve_mdb_path(self.path)
-        self.f = open(self.path, self.mode)
+        if '.tar/' in self.path:
+            t = taropen(self.path, self.mode)
+            self.f = t.open()
+            self.exit_hooks.append(t.close)
+        else:
+            self.f = open(self.path, self.mode)
         return self.f
     
     def __exit__(self, *args, **kwargs):
         self.f.close()
+        for h in self.exit_hooks:
+            h()
+
+class taropen:
+    '''context manager to open nested tar hierarchies'''
+    def __init__(self, path, mode = 'r'):
+        if not mode in ['r','b']:
+            raise NotImplementedError()
+        self.path = path
+        self.mode = mode
+        psplit = path.split('/')
+        self.tar_levels = [lv for lv,x in enumerate(psplit) if x.endswith('.tar')]
+        self.open_files = []
         
+    def __enter__(self):
+        # self.path = resolve_mdb_path(self.path)
+        return self.open()
+    
+    def __exit__(self, *args, **kwargs):
+        self.close()
+    
+    def open(self):
+        open_files = self.open_files
+        current_TarFS = None
+        current_level = 0
+        for lv, l in enumerate(tar_levels):
+            path_ = '/'.join(psplit[current_level:l+1])
+            if current_TarFS is None: 
+                tar_fs = TarFS(path_)
+                open_files.append(tar_fs)
+                current_TarFS = tar_fs
+            else:
+                tar_fs = TarFS(current_TarFS.openbin(path_,'r'))
+                open_files.append(tar_fs)
+                current_TarFS = tar_fs
+            current_level = l+1
+        # location of file in last tar archive
+        path_ = '/'.join(psplit[current_level:])
+        if self.mode == 'r':
+            final_file = current_TarFS.open(path_)
+        elif self.mode == 'b':
+            final_file = current_TarFS.openbin(path_)
+        open_files.append(final_file)
+        self.f = final_file
+        return self.f
+
+    def close(self):
+        for f in reversed(open_files):
+            f.close()
+        self.open_files = []
     
