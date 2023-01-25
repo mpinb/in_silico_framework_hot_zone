@@ -1,0 +1,323 @@
+import Interface as I
+import warnings
+def get_binsize(length, binsize_goal = 50):
+    '''given a length of a branch, returns number of binsize and number of bins that results in binning closest to 
+    the binsize goal'''
+    n_bins = length / float(binsize_goal)
+    n_bins_lower = I.np.floor(n_bins)
+    n_bins_lower = I.np.max([n_bins_lower, 1])
+    n_bins_upper = I.np.ceil(n_bins)
+    binsize_lower = length / n_bins_lower
+    binsize_upper = length / n_bins_upper
+    if I.np.abs(binsize_goal - binsize_lower)  < I.np.abs(binsize_goal - binsize_upper):
+        return binsize_lower, int(n_bins_lower)
+    else:
+        return binsize_upper, int(n_bins_upper)
+    
+def get_bin(value, bin_min, bin_max, n_bins, tolerance = 0.1):
+    bin_size = (bin_max - bin_min) / n_bins
+    bins = [bin_min + n * bin_size for n in range(n_bins+1)]
+    bins[0] = bins[0]-tolerance
+    bins[-1] = bins[-1]+tolerance
+    if (I.np.max(value) >= bins[-1]) or (I.np.min(value) <= bins[0]) :
+        raise RuntimeError('value outside of bin_min and bin_max!')
+    return I.np.digitize(value, bins)
+
+def get_neuron_param_file(m):
+    folder = m['parameterfiles_cell_folder']
+    f = [f for f in folder.listdir() if not f.endswith('.pickle')]#+.keys()
+    if not len(f) == 1:
+        warnings.warn('found more than one neuron parameter file in the database. Make sure the database does not contain simulations with more than one morphology!')
+    return folder.join(f[0])
+
+def get_section_distances_df(neuron_param_file, silent = True):
+    neup = I.scp.NTParameterSet(neuron_param_file)
+    if silent:
+        with I.silence_stdout:
+            cell = I.scp.create_cell(neup.neuron)    
+    sections_min_dist = [I.sca.synanalysis.compute_distance_to_soma(sec, 0) for sec in cell.sections]
+    sections_max_dist = [I.sca.synanalysis.compute_distance_to_soma(sec, 1) for sec in cell.sections]
+    binsize = [get_binsize(s_ma-s_mi)[0] if (cell.sections[lv].label != 'Soma') else 'Soma' for lv, (s_mi, s_ma) in enumerate(zip(sections_min_dist, sections_max_dist))]
+    n_bins = [get_binsize(s_ma-s_mi)[1] if (cell.sections[lv].label != 'Soma') else 'Soma' for lv, (s_mi, s_ma) in enumerate(zip(sections_min_dist, sections_max_dist))]
+    bin_borders = [I.np.linspace(s_mi, s_ma, num = n_bins) if not isinstance(n_bins, str) else 'Soma' for s_mi, s_ma, n_bins in 
+                  zip(sections_min_dist, sections_max_dist, n_bins)]
+    section_distances_df = I.pd.DataFrame({'min_': sections_min_dist, 'max_': sections_max_dist, 'n_bins': n_bins, 'binsize': binsize})
+    return section_distances_df
+
+def get_spatial_bin_names(section_distances_df):
+    all_bins = []
+    for index, row in section_distances_df.iterrows():
+        n_bins = row['n_bins']
+        if n_bins == 'Soma':
+            all_bins.append(str(index) + '/' + str(0))
+        else:
+            for n in range(n_bins):
+                all_bins.append(str(index) + '/' + str(n+1))
+    return all_bins
+
+def augment_synapse_activation_df_with_branch_bin(sa_, 
+                                                  section_distances_df = None, 
+                                                  synaptic_weight_dict = None):
+    out = []
+    for secID, df in sa_.groupby('section_ID'):
+        min_ = section_distances_df.loc[secID]['min_']
+        max_ = section_distances_df.loc[secID]['max_']
+        n_bins = section_distances_df.loc[secID]['n_bins']
+        df = df.copy()    
+        if n_bins == 'Soma':
+            df['branch_bin'] = 0
+        else:
+            df['branch_bin'] = get_bin(df.soma_distance, min_, max_, n_bins)
+        out.append(df)
+    sa_faster = I.pd.concat(out).sort_values(['synapse_type', 'synapse_ID']).sort_index()
+    sa_faster['section/branch_bin'] = sa_faster['section_ID'].astype(str) + '/' + sa_faster['branch_bin'].astype('str')
+    sa_faster['celltype'] = sa_faster.synapse_type.str.split('_').str[0]
+    sa_faster['EI'] = sa_faster['celltype'].isin(I.excitatory).replace(True, 'EXC').replace(False, 'INH')
+    if synaptic_weight_dict:
+        sa_faster['syn_weight'] = sa_faster['synapse_type'].map(syn_weights)
+    return sa_faster
+
+@I.dask.delayed
+def save_VT_batch(vt_batch, batch_id, outdir = None, fname_template = 'batch_{}_VT_ALL.npy'):
+    fname = fname_template.format(batch_id) 
+    outpath = I.os.path.join(outdir, fname)
+    I.np.save(outpath, vt_batch)
+    
+@I.dask.delayed
+def save_st_and_ISI(st, batch_id, chunk, min_time, max_time, outdir,suffix = 'SOMA'):
+    current_st = st.loc[chunk]
+    ISI_array = compute_ISI_array(current_st, min_time, max_time)
+    AP_array = compute_AP_array(current_st,min_time, max_time)
+    I.np.save(outdir.join('batch_{}_AP_{}.npy').format(batch_id,suffix), AP_array)
+    I.np.save(outdir.join('batch_{}_ISI_{}.npy').format(batch_id,suffix), ISI_array)
+    
+def compute_ISI_from_st(st, timepoint, fillna = None):
+    '''suggestion: use the temporal window width as fillna'''
+    assert(fillna is not None)
+    st = st.copy()
+    st[st>timepoint] = I.np.NaN                       # set all spike times beyond timepoint to NaN
+    max_spike_time_before_timepoint = st.max(axis=1)
+    ISI = timepoint - max_spike_time_before_timepoint
+    if fillna is not None:
+        ISI = ISI.fillna(fillna)
+    return ISI
+
+def compute_ISI_array(st, min_time, max_time, fillna = 1000):
+    ISI = []
+    for t in range(min_time, max_time):
+        ISI.append(compute_ISI_from_st(st, t, fillna).to_numpy().reshape(-1,1))
+    return I.np.concatenate(ISI, axis = 1)
+
+def compute_AP_array(st, min_time, max_time, fillna = 1000):
+    AP = []
+    for i in range(min_time, max_time):
+        AP.append(I.spike_in_interval(st, i,i +1).to_numpy().reshape(-1,1))
+    return I.np.concatenate(AP, axis = 1)
+
+def load_syn_weights(m, client):
+    folder_ = m['parameterfiles_network_folder']
+    fnames = m['parameterfiles_network_folder'].listdir()
+    fnames.pop(fnames.index('Loader.pickle'))
+    param_df = m['parameterfiles']
+    syn_weights_out = {}
+    
+    @I.dask.delayed
+    def _helper(fname, stis):
+        stis = I.cloudpickle.loads(stis)
+        syn_weights = {}
+        netp = I.scp.build_parameters(folder_.join(fname))
+        for celltype in netp.network:
+            if celltype.split('_')[0] in I.excitatory:
+                syn_weights[celltype] = netp.network[celltype].synapses.receptors.glutamate_syn.weight[0]
+            else:
+                syn_weights[celltype] = netp.network[celltype].synapses.receptors.gaba_syn.weight
+        return {sti: syn_weights for sti in stis}
+    
+    stis_by_netp = {k:list(v.index) for k,v in param_df.groupby('hash_network')}
+    delayeds = []
+    for f in fnames: 
+        d = _helper(f, I.cloudpickle.dumps(stis_by_netp[f]))
+        delayeds.append(d)
+
+    result = client.gather(client.compute(delayeds))
+    
+    syn_weights_out = {}
+    for r in result:
+        syn_weights_out.update(r)
+    
+    return syn_weights_out
+
+def temporal_binning_augmented_sa(sa_augmented, min_time, max_time, bin_size, use_weights = False):
+    activation_times = sa_augmented[[c for c in sa_augmented.columns if I.utils.convertible_to_int(c)]].values
+    if use_weights:
+        weights = (activation_times*0+1)*sa_augmented.syn_weight.values.reshape(-1,1)
+        weights = weights[~I.np.isnan(activation_times)]
+    activation_times = activation_times[~I.np.isnan(activation_times)]
+    bin_borders = I.np.arange(min_time, max_time + bin_size, bin_size)
+    if use_weights:
+        return bin_borders, I.np.histogram(activation_times, bin_borders, weights = weights)[0]  
+    else:
+        return bin_borders, I.np.histogram(activation_times, bin_borders)[0]
+
+def get_synapse_activation_array_weighted(sa_, selected_stis = None, spatial_bin_names = None,
+                                 min_time = 0, max_time = 600, bin_size = 1, 
+                                 use_weights = False):
+    fun = I.partial(temporal_binning_augmented_sa, 
+                    min_time = min_time, 
+                    max_time = max_time, 
+                    bin_size = 1, 
+                    use_weights = use_weights)
+    # sa_augmented = augment_synapse_activation_df_with_branch_bin(sa_, section_distances_df = section_distances_df)
+    synapse_activation_binned = sa_.groupby([sa_.index, 'EI','section/branch_bin']).apply(lambda x: fun(x)[1])
+    synapse_activation_binned_dict = synapse_activation_binned.to_dict()
+    n_time_bins = len(list(synapse_activation_binned_dict.values())[0])
+    level_0_values = selected_stis
+    level_1_values = ['EXC', 'INH']
+    level_2_values = spatial_bin_names
+    array = I.np.zeros((len(level_0_values), len(level_1_values), len(level_2_values), n_time_bins))
+    for i0, l0 in enumerate(level_0_values):
+        for i1, l1 in enumerate(level_1_values):
+            for i2, l2 in enumerate(level_2_values):
+                if not (l0,l1,l2) in synapse_activation_binned_dict.keys():
+                    continue
+                arr = synapse_activation_binned_dict[(l0,l1,l2)]
+                array[i0,i1,i2,:]=arr
+    return array
+
+@I.dask.delayed
+def save_SA_batch(sa_, 
+                         selected_stis, 
+                         batch_id,
+                         outdir = None,
+                         section_distances_df = None,
+                         spatial_bin_names = None,
+                         min_time = 0, 
+                         max_time = 600, 
+                         bin_size = 1,
+                         synaptic_weight_dict = None):
+    syn_weights = None
+    if syn_weights:
+        raise NotImplementedError()
+        fname = 'batch_{}_SYNAPSE_ACTIVATION_WEIGHTED.npy'.format(batch_id) 
+    else: 
+        fname = 'batch_{}_SYNAPSE_ACTIVATION.npy'.format(batch_id) 
+    outpath = I.os.path.join(outdir, fname)
+    sa_ = augment_synapse_activation_df_with_branch_bin(sa_, section_distances_df, syn_weights)
+    array = get_synapse_activation_array_weighted(sa_, selected_stis, spatial_bin_names = spatial_bin_names,
+                                            min_time = min_time, max_time = max_time, bin_size = bin_size,
+                                            use_weights = syn_weights is not None)        
+    I.np.save(outpath, array)
+
+def init(mdb,min_time = None, max_time = None, bin_size = 1, batchsize = 500, client = None, 
+         sti_selection = None, sti_selection_name = None,
+         persist = False,
+         synaptic_weight = False,
+         dend_ap_suffix = '_-30.0'):
+    '''persist: whether the synapse activation dataframe should be loaded into memory 
+                on the dask cluster. Speeds up the process if it fits in memory, otherwise leads to crash'''
+    if sti_selection is not None:
+        assert(sti_selection_name is not None)
+    
+    sa = mdb['synapse_activation']
+    st = mdb['spike_times']
+    if sti_selection:
+        sti_selection = list(sti_selection)
+    else:
+        sti_selection = list(st.index)
+        
+    chunks = I.utils.chunkIt(sti_selection, len(sti_selection)/batchsize)
+    neuron_param_file = get_neuron_param_file(mdb)
+    section_distances_df = get_section_distances_df(neuron_param_file)
+    spatial_bin_names = get_spatial_bin_names(section_distances_df)
+    if sti_selection_name:
+        x = '{}_{}_{}_'.format(min_time, max_time, bin_size) + sti_selection_name
+    else:
+        x = '{}_{}_{}_'.format(min_time, max_time, bin_size) + 'all'
+    outdir = mdb.create_managed_folder(('ANN_batches', x, 'EI__section/branch_bin'), raise_ = False)
+    
+    if persist: 
+        sa = client.persist(sa)
+    
+    if synaptic_weight:
+        synaptic_weight_dict = load_syn_weights(m,client)
+        synaptic_weight_dict = client.persist(synaptic_weight_dict)
+    else:
+        synaptic_weight_dict = None
+        
+    delayeds = []
+    print('Create delayed objects for synapse_activations')
+
+    for batch_id, chunk in enumerate(chunks):
+        selected_indices = chunk
+        d = save_SA_batch(sa.loc[chunk],
+                         chunk, 
+                         batch_id,
+                         outdir = outdir,
+                         section_distances_df = section_distances_df,
+                         spatial_bin_names = spatial_bin_names,
+                         min_time = min_time, 
+                         max_time = max_time, 
+                         bin_size = bin_size,
+                         synaptic_weight_dict = synaptic_weight_dict)
+        delayeds.append(d)
+    
+    print('Create delayed objects for somatic voltage traces')
+    # somatic voltage traces
+    vt = mdb['voltage_traces'].iloc[:,::40].iloc[:,min_time:max_time]
+    for batch_id, chunk in enumerate(chunks):
+        selected_indices = chunk
+        d = save_VT_batch(vt.loc[selected_indices],
+                         batch_id,
+                         outdir = outdir)
+        delayeds.append(d)
+
+    print('Create delayed objects for somatic APs and ISIs')
+    # somatic AP and ISI
+    st = client.scatter(mdb['spike_times'])
+    for batch_id, chunk in enumerate(chunks):
+        d = save_st_and_ISI(st, batch_id, chunk, min_time, max_time, outdir)
+        delayeds.append(d)
+        
+    # dendritic voltage traces
+    print('Create delayed objects for dendritic voltage traces')
+    keys = m['dendritic_recordings'].keys()
+    dist_rec_site = sorted(keys, key = lambda x: float(x.split('_')[-1]))[1]
+    
+    vt_dend = mdb['dendritic_recordings'][dist_rec_site]
+    vt_dend = vt_dend.iloc[:,::40].iloc[:,min_time:max_time]
+    for batch_id, chunk in enumerate(chunks):
+        selected_indices = chunk
+        d = save_VT_batch(vt_dend.loc[selected_indices],
+                         batch_id,
+                         outdir = outdir,
+                         fname_template = 'batch_{}_VT_DEND_ALL.npy')
+        delayeds.append(d)
+    
+    # dend AP and ISI
+    print('Create delayed objects for dendriticAPs and ISIs')
+
+    # somatic AP and ISI
+    st = client.scatter(mdb['dendritic_spike_times'][dist_rec_site + dend_ap_suffix])
+    for batch_id, chunk in enumerate(chunks):
+        d = save_st_and_ISI(st, batch_id, chunk, min_time, max_time, outdir,suffix = 'DEND')
+        delayeds.append(d)
+        
+    return delayeds
+
+def run_delayeds_incrementally(client, delayeds):
+    import time
+    futures = []
+    ncores = sum(client.ncores().values())
+    for ds in I.utils.chunkIt(delayeds, len(delayeds)/ncores):
+        f = client.compute(ds)
+        futures.extend(f)
+        while True:
+            time.sleep(1)
+            futures = [f for f in futures if not f.status == 'finished']
+            for f in futures:
+                if f.status == 'error':
+                    raise RuntimeError()
+            if len(futures) < ncores*2:
+                break
+    I.distributed.wait(futures)
+    return futures
