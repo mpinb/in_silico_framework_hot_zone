@@ -1,158 +1,75 @@
-# HOWTO SETUP IN-SILICO-FRAMEWORK
+<div align="center">
 
-**Contents**
+<img src="./docs/Figures/output.gif" alt="L5PT triple burst">
 
-1. [Requirements](#requirements)
-2. [Bash Profile Setup](#setup)
-3. [Folder Structure](#structure)
-4. [Clone In-Silico-Framework](#repository)
-5. [Install In-Silico-Framework](#install)
-6. [IPython Kernels](#kernels)
-7. [Test Submit Jobs](#testing)
-8. [Default Ports](#ports)
-9. [Jupyter Extensions](#extensions)
-10. [References](#references)
+# The In-Silico-Framework (ISF)
+[![In-Silico-Framework (Python 2.7) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27.yml)
+[![In-Silico-Framework (Python 3.8) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py3.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py3.yml)</div>
 
-## Requirements
+## Installation
 
-Every student needs to be able to synchronize their repository with https://github.com/research-center-caesar/in_silico_framework
+Every student needs to be able to synchronize their repository with https://github.com/research-center-caesar/in_silico_framework. Detailed instructions on how to install the repo are given in the [installer directory](./installer/).
 
 
-## Setup
+## Usage
 
-Insert this lines into bash_profile, e.g. by using `vim ~/.bashrc`
-Note: adapt the path mybasedir path for your cluster:
+The [Interface module](./Interface.py) provides high-level access to all submodules in the in-silico-framework. It provides acces to:
+- The [NEURON simulator](https://www.neuron.yale.edu/neuron/)
+- Parameter parsing modules for [analysis or experiment setup](./single_cell_parser/)
+- Data management tools via the [Model DataBase (mdb) module](./model_data_base/)
+- Visualisation methods via the [Visualize module](./visualize/)
+- ...
 
-```bash
-shopt -s expand_aliases
-export MYBASEDIR="/gpfs/soma_fs/scratch/$USER"
-module load git/2.31
-ulimit -Sn "$(ulimit -Hn)"
-export PYTHONPATH=$MYBASEDIR/project_src/in_silico_framework
-export ISF_HOME=$MYBASEDIR/project_src/in_silico_framework
-alias source_isf='source $MYBASEDIR/anaconda_isf2/bin/activate; export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH; cd $MYBASEDIR'
-alias source_3='source $MYBASEDIR/anaconda_isf3/bin/activate; export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH; cd $MYBASEDIR'
-alias isf='cd $ISF_HOME'
-alias wip='cd $MYBASEDIR/notebooks'
-alias data='cd $MYBASEDIR'
-alias cleanit='cd $MYBASEDIR; rm management_dir* -r; rm *slurm'
-export PATH=$HOME/local/bin:$PATH
+A walkthrough of the capabilities of ISF is presented in the ["Getting Started" notebook](./getting_started/getting_started.ipynb). Core functionalities are repeated below.
+
+### Model DataBase (mdb)
+
+A model database is on-disk storage whose syntax is mimicking a dictionary in python. Data in an mdb can be saved with various formats (use I.dumper_ autocomplete). The format needs to be specified while saving the data, but not for loading the data. This allows to change (optimize) the format without the need to update code operating on it. A mdb has been designed to contain and give convenient access to data from large scale simulations, which do not fit in memory. Access to a modeldatabase is done with the [mdb module](./model_data_base). Some MDB's need to be registered to resolve hashed paths to absolute paths before you can navigate them.
+```python
+import Interface as I
+I.ModelDataBase # main class of model_data_base
+I.mdb_init_simrun_general.init # default method to initialize a model data base with existing simulation results
+I.mdb_init_simrun_general.optimize # converts the data to speed optimized compressed binary format
+
+# Initialising a MDB in Python
+mdb = I.ModelDataBase('<path to simulation directory>')
+mdb._register_this_database()
+sim_mdb = mdb['mdbs']['<path to specific simulation in directory>']
+sim_mdb._register_this_database()
 ```
-Then run `source $HOME/.bashrc` to activate the new `.bashrc` file 
+	
+### Simulating
 
-## Structure
+Running a simulation requires 3 things to be defined
+1. A neuron morphology (hoc-morphology)
+2. A biophysical description of the neuron morphology, i.e. the ion-channel distribution (parameter file)
+3. Some input (current injection, synaptic input ...)
 
-We have a default folder structure, you need to create these folders:
-- MYBASEDIR: typically on scratch
-- MYBASEDIR/notebooks --> the contents should be kept in GitHub
-- MYBASEDIR/results --> this is, where gnerated data goes
-	--> for each notebook, there is (typically) one subfolder that is named exactly as the notebook is named
-	--> notebooks start with the date they are created (YYYYMMDD)
-- MYBASEDIR/prgr (optional), so far contains installers for anaconda, NEURON, ...
+Usually, launching biophysically detailed simulations is done with the [simrun2](./simrun2/) or [simrun3](./simrun3/) module. These provide **high-level acces** to define parameters and run simulations.
 
-To replicate the folder structure run :
+When you would like more direct and **low-level access** to the simulations, you can do so by parsing a parameter file (`.param` file) with [Single Cell Parser (scp)](./single_cell_parser/). This parameter file is read in as a nested dictionary that contains the biophysical parameters and the filename of a morphology file (`.hoc` file).
 
-```bash
-cd $MYBASEDIR
-mkdir results
-mkdir project_src
-mkdir prgr
-mkdir notebooks
-```
-## Repository
-
-Clone `in_silico_framework` to `project_src`:
-
-```bash
-cd $MYBASEDIR/project_src
-git clone https://github.com/research-center-caesar/in_silico_framework
+Defining a cell can be done as such:
+```python
+import Interface as I
+parameter_file = I.os.path.join("<filename>.param")
+cell_parameters = I.scp.build_parameters(parameter_file) # this is the main method to load in parameterfiles
+# Use single_cell_parser module to create a cell from parameters
+cell = I.scp.create_cell(cell_parameters.neuron)
 ```
 
-Note: you will be asked for the credentials of your user account. 
-You will need to use your personal access token (PAT) instead of the password.
-
-## Install
-
-In order to install `in-silico-framework` for both Python 2 and Python 3 run :
-
-```bash
-cd $MYBASEDIR/project_src/in_silico_framework/installer
-./isf-install.sh -d -t py2 -i $MYBASEDIR/anaconda_isf2
-./isf-install.sh -d -t py3 -i $MYBASEDIR/anaconda_isf3
+Running a simulation on the previously defined cell can be done like so:
+```python
+import neuron
+h = neuron.h  # NEURON's python API
+# let's define a pipette at the some
+iclamp = h.IClamp(0.5, sec=cell.soma)
+iclamp.delay = 150 # give the cell 150 ms to reach steady state
+iclamp.dur = 5 # duration: 5ms rectangular pulse
+amplitudes = [0.619, 0.793, 1.507] # amplitudes in nA
+for amp in amplitudes:
+	iclamp.amp = amp  # set the amplitude
+	I.scp.init_neuron_run(cell_parameters.sim)  # run the simulation
 ```
-
-## Kernels
-
-After the installation is completed, proceed to install the IPython Kernels:
-
-```bash
-source_isf; python -m ipykernel install --name root --user --display-name isf2
-source_3; python -m ipykernel install --name base --user --display-name isf3
-```
-
-## Testing
-
-Check if you can submit a job:
-
-```bash
-source_isf
-sbatch project_src/in_silico_framework/SLURM_scripts/launch_dask_on_SOMA_cpu_interactive_1.sh  session1
-```
-**Note:** Currently the launching scripts work only with `in-silico-framework` (Python 2)
-
-Make sure that the job appears with `Running` (R) status in slurm job queue:
-
-```bash
-squeue -u $USER
-```
-
-Look at the corresponding management dir to find the ip address where `jupyter` is running:
-
-```bash
-cat management_dir_session1/scheduler.json
-```
-Use putty to open a SOCKS-5 proxy to the login node (somalogin01 or somalogin02)
- - you can do this with the -D option of the `ssh` command
-    - example: `ssh -D 4040 somalogin02`
- - Open firefox settings, search for proxy and activate SOCKS-5 proxy. IP: 127.0.0.1, PORT: 4040 (or the port number passed to the ssh command)
- - this is explained in more detail in chantals google doc: https://docs.google.com/document/d/1S0IM7HgRsRdGXN_WFeDqPMOL3iDt1Obosuikzzc8YNc/edit#heading=h.dbift17bl1rt
-
-
-## Ports
-
-We have default ports
-- 11112: jupyter notebook
-- 11113: jupyter lab
-- 28787: python 2 scheduler interface
-- 28786: python 2 scheduler
-- 38787: python 3 scheduler interface
-- 38786: python 3 scheduler
-
-## Extensions
-
-We have a set of default extensions to `jupyter notebook`
-
-- Codefolding in Editor
-- Collapsible Headings
-- contrib_nbextensions_help_item
-- Nbextensions_dashboard tab
-- Notify
-- Codefolding
-- Initialization cells
-- Nbextensions edit menu item
-- Table of Contents (2)
-
-To install the extensions for `jupyter notebook` enter:
-
-```bash
-source_isf
-jupyter contrib nbextension install --user
-jupyter nbextensions_configurator enable --user
-```
-
-## References
-
---> located at Z:\Share\HowTos\How-to use the AXON cluster.txt
---> https://docs.google.com/document/d/1S0IM7HgRsRdGXN_WFeDqPMOL3iDt1Obosuikzzc8YNc/edit#heading=h.dbift17bl1rt
-
---> [Setting up SSH Tunnels and port-forwarding with MobaXTerm](https://blog.mobatek.net/post/ssh-tunnels-and-port-forwarding/)
+	
+![](./docs/Figures/VoltageResponse.png)

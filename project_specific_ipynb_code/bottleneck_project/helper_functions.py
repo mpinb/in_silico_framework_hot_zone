@@ -2,14 +2,12 @@ try:
     from IPython import display
 except ImportError:
     pass
-
+import torch
 try:
     import seaborn as sns
 except ImportError:
     print("Could not import seaborn")
 import Interface as I
-import torch
-
 import torch.nn as nn
 import torch.nn.functional as F
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -42,8 +40,11 @@ class Model(nn.Module):
         X_ISI_list: a list containing two elements.
            First element is X, i.e. the same as in My_model_bottleneck
            Second element is ISI for each trial
+        X is synaptic input history (80ms): n_trials x n_cell_types x n_spatial_bins x temporal window width
+        ISI_SOMA: n_trials x 1 = time to previous soma spike
+        ISI_DEND: n_trials x 1 = time to previous dendritic spike
         '''
-        X,ISI_SOMA,ISI_DEND = X_ISI_MCM_list
+        X, ISI_SOMA, ISI_DEND = X_ISI_MCM_list
         assert(isinstance(X,torch.Tensor))
         out = self.linear1(X)
         list_ = [out]
@@ -186,10 +187,31 @@ def get_model_stats(mdb, model, best_epoch=None, bottleneck_node=0):
         model = I.cloudpickle.load(f)
 
     # print('max AUC:', max(AUCs), 'min loss:', min(loss), 'epoch:', epochs[best_epoch]+1)
-
+    print(model.linear1.weight.shape)
     weights = model.linear1.weight[bottleneck_node].data.cpu().detach().numpy().reshape(2,260,80) #- 1 *model.linear1.weight[1].data.cpu().detach().numpy().reshape(2,260,80)
     df = I.pd.DataFrame(losses, columns = ['name', 'epoch', 'batch', 'value'])
     train_loss= df[df.name == 'train_loss'].groupby('epoch').value.mean()
     test_loss = df[df.name == 'test_loss'].groupby('epoch').value.mean()
 
     return epochs, best_epoch, AUCs, train_loss, test_loss, weights
+
+def get_model(mdb, model_name, best_epoch=None):
+    with open(mdb[model_name].join('loss'), 'rb') as f:
+        losses = I.cloudpickle.load(f)
+    epochs = [l[1] for l in losses if l[0] == 'test_sAP_AUROC']
+    AUCs = [l[-1] for l in losses if l[0] == 'test_sAP_AUROC']
+
+    if best_epoch == None:
+        best_epoch =  epochs[I.np.argmax(AUCs)] + 1
+    with open(mdb[model_name].join('model__epoch_{}__batch_199'.format(best_epoch)),'rb') as f:
+        model = I.cloudpickle.load(f)
+    return model
+
+def cartesian_product(*arrays):
+    import numpy
+    la = len(arrays)
+    dtype = numpy.result_type(*arrays)
+    arr = numpy.empty([len(a) for a in arrays] + [la], dtype=dtype)
+    for i, a in enumerate(numpy.ix_(*arrays)):
+        arr[...,i] = a
+    return arr.reshape(-1, la)

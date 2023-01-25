@@ -5,9 +5,9 @@ name: In-Silico-Framework (Python 2.7) install and test
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [ master, refractor ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, refractor ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -36,12 +36,12 @@ jobs:
           conda info
 
       # Updating the root environment. Install ISF dependencies (YAML)
-      # NOTE: The environment file (yaml) is in the ISF repository 'etc' folder
+      # NOTE: The environment file (yaml) is in the ISF repository 'installer' folder
       - name: Install ISF dependencies
         run: |
           source ~/conda2-isf/bin/activate
           echo "Installing 'in silico framework' dependencies in silent mode."
-          conda-env create --name isf-py27 --file etc/env-isf-py27.yml --quiet
+          conda-env create --name isf-py27 --file installer/env-isf-py27.yml --quiet
           source activate isf-py27
           conda list
           
@@ -74,4 +74,4 @@ jobs:
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=28786 --bokeh-port=28787 &
           dask-worker localhost:28786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          python run_tests.py
+          python tests/run_tests.py

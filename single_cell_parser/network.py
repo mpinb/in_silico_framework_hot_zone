@@ -15,6 +15,7 @@ from .synapse_mapper import SynapseMapper
 #import synapse
 from neuron import h
 import six
+import math
 
 from . import network_modify_functions
 
