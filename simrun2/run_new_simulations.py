@@ -28,7 +28,7 @@ import socket
 def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
                      seed = None, nSweeps = 1000, tStop = 345.0,
                      tStim = 245.0, scale_apical = None,
-                     cell_generator = None):
+                     cell_generator = None, tar = False):
     '''
     pre-stimulus ongoing activity
     and evoked activity
@@ -153,13 +153,16 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
     dirName_final = os.path.join(resolve_mdb_path(dirPrefix), 'results', \
                            time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
     os.rename(dirName, dirName_final)
+    if tar:
+        tar_folder(dirName_final+'.running', True) 
     return dirName_final
     
 def run_new_simulations(cellParamName, evokedUpParamName, dirPrefix = '', \
                                  nSweeps = 1000, nprocs = 40, tStop = 345, silent = True, \
                                  scale_apical = None,
                                  cell_generator = None,
-                                 child_process = False):
+                                 child_process = False,
+                                 tar = False):
     '''Generates nSweeps*nprocs synapse activation files and puts them in
     the folder dirPrefix/results/[unique_identifier]. Returns delayed object, which can
     be computed with an arbitrary dask scheduler. For each process, a new
@@ -190,7 +193,8 @@ def run_new_simulations(cellParamName, evokedUpParamName, dirPrefix = '', \
     myfun = lambda seed: _evoked_activity(cellParamName, evokedUpParamName,
                                          dirPrefix = dirPrefix, seed = seed, nSweeps = nSweeps, \
                                          tStop = tStop, scale_apical = scale_apical,
-                                         cell_generator = cell_generator)
+                                         cell_generator = cell_generator,
+                                         tar = tar)
     if silent:
         myfun = silence_stdout(myfun)
     
