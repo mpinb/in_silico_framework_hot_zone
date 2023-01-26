@@ -9,6 +9,7 @@
 ##SBATCH --ntasks-per-node=20
 #SBATCH --gres=gpu:4
 module load cuda
+module load ffmpeg
 unset XDG_RUNTIME_DIR
 unset DISPLAY
 export SLURM_CPU_BIND=none
