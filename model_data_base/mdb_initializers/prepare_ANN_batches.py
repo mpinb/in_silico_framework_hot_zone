@@ -280,7 +280,7 @@ def init(mdb,min_time = None, max_time = None, bin_size = 1, batchsize = 500, cl
         
     # dendritic voltage traces
     print('Create delayed objects for dendritic voltage traces')
-    keys = m['dendritic_recordings'].keys()
+    keys = mdb['dendritic_recordings'].keys()
     dist_rec_site = sorted(keys, key = lambda x: float(x.split('_')[-1]))[1]
     
     vt_dend = mdb['dendritic_recordings'][dist_rec_site]
