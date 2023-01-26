@@ -69,7 +69,7 @@ class CellMorphologyVisualizer:
         self.section_indices = self.morphology["section"]
         
         # Time points of the simulation
-        self.simulation_times = cell.t
+        self.simulation_times = np.array(cell.tVec)
         # Time points we want to visualize
         self.t_start = self.simulation_times[0]
         self.dt = self.simulation_times[1] - self.t_start
@@ -186,8 +186,7 @@ class CellMorphologyVisualizer:
         Args:
          - time_point: time point from which we want to gather the voltage
         '''
-        n_sim_point = int(np.where(np.isclose(self.cell.t, time_point))[0][0])
-        # or n_sim_point = int(time_point/dt_frames), dt_frames = self.cell.t[1]-self.cell.t[0]
+        n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
         voltage_points = []
         for sec in self.cell.sections:
             if sec.label in ['Soma', 'AIS', 'Myelin']:
@@ -223,7 +222,7 @@ class CellMorphologyVisualizer:
         Args:
          - time_point: time point from which we want to gather the voltage
         '''
-        n_sim_point = int(np.where(np.isclose(self.cell.t, time_point))[0][0])
+        n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
         sec = [sec for sec in self.cell.sections if sec.label == "Soma"][0] 
         return sec.recVList[0][n_sim_point]
 
@@ -337,7 +336,7 @@ class CellMorphologyVisualizer:
                     self.synapses_timeseries = []
             self.times_to_show = new_time  
         
-    def _timeseries_images_cell_voltage_synapses_in_morphology_3d(self, path, t_start=None, t_end=None, t_step=None, client=None):
+    def _timeseries_images_cell_voltage_synapses_in_morphology_3d(self, path, t_start=None, t_end=None, t_step=None, neuron_rotation = None, client=None):
         '''
         Creates a list of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)
@@ -379,7 +378,7 @@ class CellMorphologyVisualizer:
                         morphology=self.morphology, voltage=voltage, synapses=synapses, 
                         time_point=time_point, save=filename, population_to_color_dict=self.population_to_color_dict,
                         azim=self.azim, dist=self.dist, elev=self.elev, vmin=self.vmin, vmax=self.vmax, legends=True))
-            self.azim += 3
+            self.azim += neuron_rotation
         self.azim = azim_
         futures = client.compute(out)
         client.gather(futures)
@@ -606,7 +605,8 @@ class CellMorphologyVisualizer:
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(images_path, self.t_start, self.t_end, self.t_step, client)
         write_video_from_images(images_path, out_path, fps=framerate, quality=quality, codec=codec)
           
-    def display_animation_voltage_synapses_in_morphology_3d(self, images_path, t_start=None, t_end=None, t_step=None, client=None, time_show_syn_activ=2):
+    def display_animation_voltage_synapses_in_morphology_3d(self, images_path, t_start=None, t_end=None, t_step=None, 
+                                                            client=None, neuron_rotation = 3, time_show_syn_activ=2):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
@@ -624,7 +624,7 @@ class CellMorphologyVisualizer:
             raise ValueError("Please provide a dask client object for the client argument")
         self._update_time(t_start, t_end, t_step)
         self.time_show_syn_activ = time_show_syn_activ
-        self._timeseries_images_cell_voltage_synapses_in_morphology_3d(images_path, self.t_start, self.t_end, self.t_step, client)
+        self._timeseries_images_cell_voltage_synapses_in_morphology_3d(images_path, self.t_start, self.t_end, self.t_step, neuron_rotation, client)
         display_animation_from_images(images_path, 1, embedded=True)
         
     def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, time_show_syn_activ=2, vmin=None, vmax=None, renderer="notebook_connected", color_map='jet', background_color="rgb(180,180,180)"):
