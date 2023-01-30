@@ -183,7 +183,7 @@ if get_versions()['dirty']: warnings.warn('The source folder has uncommited chan
 
 try:
     import distributed
-    from cluster import clustercontrol
+    from SLURM_scripts import clustercontrol
     cluster = clustercontrol.cluster
 except ImportError:
     pass
