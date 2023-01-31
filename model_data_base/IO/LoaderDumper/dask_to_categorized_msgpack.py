@@ -164,8 +164,7 @@ from model_data_base.utils import chunkIt
 import cloudpickle
 def my_dask_writer(ddf, path, optimize_graph = False, categorize = True, client = None): #get = compatibility.multiprocessing_scheduler,
     ''' Very simple method to store a dask dataframe to a bunch of files.
-    The reason for it's creation is a lot of frustration with the respective 
-    dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
+    There was a lot of frustration with the respective dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
     takes all the ram (512GB!) or takes a very long time to "optimize" / merge the graph.
      
     Update: this issue was addressed here:
@@ -193,9 +192,9 @@ def my_dask_writer(ddf, path, optimize_graph = False, categorize = True, client 
         
         
 
-    delayeds = [save_chunk(ddf_scattered, chunk) for chunk in chunkIt(list(range(ddf.npartitions)), 1000)] #max 5000 tasks writing at the same time
+    delayeds = [save_chunk(ddf_scattered, chunk) for chunk in chunkIt(list(range(ddf.npartitions)), 10000)] #max 5000 tasks writing at the same time
     futures = client.compute(delayeds) #dask.delayed(delayeds).compute(get=get)
-    distributed.wait(futures)
+    client.gather(futures) # throw an error if there was an error
         
         
 ########################################################
@@ -244,7 +243,7 @@ def dump(obj, savedir, repartition = False, get = None, categorize = True, clien
         client = get
     if repartition:
         if obj.npartitions > 10000:
-            obj = myrepartition(obj, 5000)
+            obj = myrepartition(obj, 10000)
     
     my_dask_writer(obj, os.path.join(savedir, fileglob), categorize = categorize, client = client)
     meta = obj._meta

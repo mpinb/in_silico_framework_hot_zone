@@ -1,7 +1,7 @@
 """
 This python file contains multiple useful general methods that can be used throughout the visualisation module.
 
-Author: Bjorge Meulemeester
+Author: Maria Royo, Bjorge Meulemeester, Rieke Fruengel, Arco Bast
 Date: 05/01/2023
 """
 
@@ -11,6 +11,8 @@ import jinja2
 import IPython
 import glob
 import numpy as np
+from base64 import b64encode
+import subprocess
 
 def write_video_from_images(images_dir, out_path, fps=24, match_pattern = r'%d.png', quality=5, codec='mpeg4'):
     '''
@@ -25,8 +27,8 @@ def write_video_from_images(images_dir, out_path, fps=24, match_pattern = r'%d.p
         - match_pattern: the string pattern to match images in the specified directory. E.g. frame00*.png
         - glob: whether to use glob type pattern matching. Possibly unsupported on Windows.
     '''
-    out = os.subprocess.call([
-        "ffmpeg", "-y", "-r", str(fps), "-i", images_dir+"/"+match_pattern, "-vcodec", codec, "-qscale", str(quality), "-r", str(fps), out_path
+    out = subprocess.call([
+        "ffmpeg", "-y", "-r", str(fps), "-i", images_dir+"/"+match_pattern, "-vcodec", codec, "-q:v", str(quality), "-r", str(fps), out_path
         ])
     if out != 0:
         print('Something went wrong. Make sure:')
@@ -54,6 +56,12 @@ def write_gif_from_images(out_path, files, duration=40):
                     save_all=True,
                     duration=duration, loop=0)
 
+def _load_base64(filename, extension = 'png'):
+    #https://github.com/jakevdp/JSAnimation/blob/master/JSAnimation/html_writer.py
+        with open(filename, 'rb') as f:
+            data = f.read()
+        return 'data:image/{0};base64,{1}'.format(extension,b64encode(data).decode('ascii'))
+    
 def display_animation_from_images(files, interval=10, style=False, animID = None, embedded = False):
         '''
         @TODO: resolve module not found errors

@@ -183,7 +183,7 @@ def setup_dask_workers(management_dir):
 ##############################################
 # setting up jupyter-notebook
 #############################################
-def setup_jupyter_notebook():
+def setup_jupyter_notebook(management_dir):
     print('-'*50)
     print('setting up jupyter notebook')
     check_locking_config() 
@@ -197,7 +197,7 @@ def setup_jupyter_notebook():
     #command = '''(source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113) &'''
     command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" &'''
     #command = "/axon/scratch/abast/anaconda3/bin/jupyter-lab --ip='*' --no-browser --port=11113"
-    os.system(command)
+    os.system(command + "> /dev/null 2>{}".format(os.path.join(management_dir,  "jupyter.txt")))
 # In[8]:
 
 if PROCESS_NUMBER == 0:
@@ -207,5 +207,5 @@ if PROCESS_NUMBER == 0:
 setup_locking_config()
 setup_dask_workers(MANAGEMENT_DIR)
 if PROCESS_NUMBER == 0 and LAUNCH_JUPYTER_SERVER:
-    setup_jupyter_notebook()
+    setup_jupyter_notebook(MANAGEMENT_DIR)
 time.sleep(60*60*24*365)

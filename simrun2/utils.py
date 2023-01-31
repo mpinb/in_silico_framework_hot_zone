@@ -46,7 +46,22 @@ class defaultValues:
     cellParamName = '/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/network_embedding/postsynaptic_location/3x3_C2_sampling/C2center/86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param'
     networkName = 'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_active_ex_timing_C2center.param'
     
-
+import tarfile
+import os
+import shutil
+def tar_folder(source_dir, delete_folder = True):
+    parent_folder = os.path.dirname(source_dir)
+    folder_name = os.path.basename(source_dir)
+    source_dir = source_dir.rstrip('/')
+    tar_path = source_dir + '.tar.running'
+    command = 'tar -cf {} -C {} .'.format(tar_path, source_dir)
+    if os.system(command):
+        raise RuntimeError('{} failed!'.format(str(command)))
+    if delete_folder:
+        if os.system('rm -r {}'.format(source_dir)):
+            raise RuntimeError('deleting folder {} failed!'.format(str(source_dir)))
+    os.rename(source_dir + '.tar.running', source_dir + '.tar')
+            
 def chunkIt(seq, num):
     '''splits seq in num lists, which have approximately equal size.
     https://stackoverflow.com/questions/2130016/splitting-a-list-of-arbitrary-size-into-only-roughly-n-equal-parts

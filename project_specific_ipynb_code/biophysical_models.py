@@ -98,9 +98,11 @@ def get_model_ddf_from_mdb(m, type_ = 'unspecified', morphology = 'unspecified',
     else:
         return dask.dataframe.from_delayed(delayeds)
     
-def get_model_ddf_from_encapsulating_mdb(mdbs, type_ = 'unspecified', add_fixed_params = True, objectives = objectives_BAC + objectives_step, return_delayeds = False):
+def get_model_ddf_from_encapsulating_mdb(mdbs, morphologies = None, type_ = 'unspecified', add_fixed_params = True, objectives = objectives_BAC + objectives_step, return_delayeds = False):
     delayeds = []
-    for morphology in list(mdbs.keys()):
+    if morphologies is None:
+        morphologies = list(mdbs.keys())
+    for morphology in morphologies:
         m = mdbs[morphology]
         delayeds.extend(get_model_ddf_from_mdb(m, morphology = morphology, return_delayeds = True, add_fixed_params = add_fixed_params,
                                                objectives = objectives))
