@@ -29,13 +29,13 @@ function fetch_jupyter_link {
     local jupyter_file="management_dir_$1/jupyter.txt"
     if [ ! -f $jupyter_file ] ; # check if err file exists
     then
-        echo "File \"$jupyter_file\" does not exist (yet).\nCheck if the job is running correctly, or wait until the file has been created." >&2  # print error to stderr
+        printf "File \"$jupyter_file\" does not exist (yet).\nCheck if the job is running correctly, or wait until the file has been created.\n" >&2  # print error to stderr
         kill -SIGUSR1 $PROC; exit 1  # kill main shell and exit function
     else
         local link="$(cat $jupyter_file | grep -Eo http://.*:11113/.* | head -1)"
         if [ -z "$link" ]  # check if node is found
         then
-            echo "No Jupyter link found (yet) in \"$jupyter_file\"\nThe server has not been started (yet). Check if the job is running correctly." >&2  # print error to stderr
+            printf "No Jupyter link found (yet) in \"$jupyter_file\"\nThe server has not been started (yet). Check if the job is running correctly.\n" >&2  # print error to stderr
             kill -SIGUSR1 $PROC; exit 1  # kill main shell and exit function
         else
             echo "${link}"
@@ -53,7 +53,7 @@ function fetch_jupyter_link {
 function fetch_ip {
     if [ ! -f "management_dir_$1/scheduler.json" ] ; # check if management_dir_*/scheduler.json file exists
     then
-        echo "File management_dir_$1/scheduler.json does not exist(yet).\nCheck if the job name is spelled correctly and the job is running.\nIf this is the case, wait until the file has been created." >&2  # print error to stderr
+        printf "File management_dir_$1/scheduler.json does not exist(yet).\nCheck if the job name is spelled correctly and the job is running.\nIf this is the case, wait until the file has been created.\n" >&2  # print error to stderr
         kill -SIGUSR1 $PROC; exit 1
     else
         local ip="$(cat management_dir_$1/scheduler.json | grep -Eo tcp://\.*28786 | grep -o -P '(?<=tcp://).*(?=:28786)')"
@@ -73,7 +73,7 @@ function clean_jupyter_link {
     local link_suffix="$(echo $2 | grep -oP '(?<=:11113/)'.* | head -1)"  # grep for anything after the port number
     if [ -z "$link_suffix" ] ;  # no suffix is found: no token, but also no 
     then
-        echo "\nWarning: No token is set for this Jupyter server.\nVSCode will not be able to connect to this server, and notebooks running on this server can not be shared by link">&2
+        printf "\nWarning: No token is set for this Jupyter server.\nVSCode will not be able to connect to this server, and notebooks running on this server can not be shared by link.\n">&2
     fi
     local jupyter_link="http://$1:11113/$link_suffix"
     echo $jupyter_link
