@@ -174,7 +174,7 @@ class CellMorphologyVisualizer:
         ax.dist = self.dist
         ax.elev = self.elev
         ax.roll = self.roll
-        ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, f'get_{a}lim')() for a in 'xyz')])
+        ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
 
         if save != '':
             plt.savefig(save)#,bbox_inches='tight')
@@ -487,7 +487,7 @@ class CellMorphologyVisualizer:
         ax.azim = self.azim
         ax.dist = self.dist
         ax.elev = self.elev
-        ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, f'get_{a}lim')() for a in 'xyz')])
+        ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
 
         if save != '':
             plt.savefig(save)#,bbox_inches='tight')
@@ -538,7 +538,7 @@ class CellMorphologyVisualizer:
         ax.dist = self.dist
         ax.elev = self.elev
         ax.roll = self.roll
-        ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, f'get_{a}lim')() for a in 'xyz')])
+        ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
 
         if save != '':
             plt.savefig(save)#,bbox_inches='tight')
@@ -819,7 +819,7 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, t
     ax.dist = dist
     ax.elev = elev
     ax.roll = roll
-    ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, f'get_{a}lim')() for a in 'xyz')])
+    ax.set_box_aspect([ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
     
     plt.savefig(save)#,bbox_inches='tight')
     plt.close()
