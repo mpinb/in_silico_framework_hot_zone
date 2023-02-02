@@ -120,7 +120,6 @@ class CellMorphologyVisualizer:
         morphology = pd.DataFrame(points, columns=['x','y','z','diameter','section'])
         return morphology
     
-    def _plot_cell_voltage_synapses_in_morphology_3d(self, voltage, synapses, time_point, legends=True, save='', plot=True):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
         are shown for a particular time point.
@@ -559,7 +558,7 @@ class CellMorphologyVisualizer:
         self.time_show_syn_activ = time_show_syn_activ
         voltage = self._get_voltages_at_timepoint(time_point)
         synapses = self._get_synapses_at_timepoint(time_point)
-        self._plot_cell_voltage_synapses_in_morphology_3d(voltage,synapses,time_point,legends=legends,save=save,plot=plot, time_offset = self.time_offset)
+        self._plot_cell_voltage_synapses_in_morphology_3d(voltage,synapses,time_point,legends=legends,save=save,plot=plot)
       
     def write_gif_voltage_synapses_in_morphology_3d(self,images_path, out_path, client=None, t_start=None, t_end=None, t_step=None,
                                                    time_show_syn_activ=2, frame_duration=40):
@@ -759,7 +758,8 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, t
     Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
     are shown for a particular time point.
     Dask delayed function useful for parallelization of images generation. This dask delayed function cannot be part of the
-    visualization class, dask does not allow it. TODO: find for a possible solution.
+    visualization class, dask does not allow it because this class has a cell object as an attribute and dask cannot serialize it,
+    if the cell object wasn't an attribute this function could be a class method. TODO: find for a possible solution.
     Args:
         - morphology: pandas dataframe with points. Each point contains the x, y and z coordinates, a diameter and the section
           of the neuron to which that point belongs. Each section of a neuron is limited by a branching point or the end of 
