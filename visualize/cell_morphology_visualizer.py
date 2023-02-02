@@ -120,6 +120,7 @@ class CellMorphologyVisualizer:
         morphology = pd.DataFrame(points, columns=['x','y','z','diameter','section'])
         return morphology
     
+    def _plot_cell_voltage_synapses_in_morphology_3d(self, voltage, synapses, time_point, legends=True, save='', plot=True):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
         are shown for a particular time point.
