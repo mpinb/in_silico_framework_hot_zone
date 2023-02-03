@@ -25,7 +25,8 @@ def write_video_from_images(images_dir, out_path, fps=24, match_pattern = r'%d.p
         - out_path: dir where the video will be generated + name of the video
         - fps: frames per second
         - match_pattern: the string pattern to match images in the specified directory. E.g. frame00*.png
-        - glob: whether to use glob type pattern matching. Possibly unsupported on Windows.
+        - quality
+        - codec
     '''
     out = subprocess.call([
         "ffmpeg", "-y", "-r", str(fps), "-i", images_dir+"/"+match_pattern, "-vcodec", codec, "-q:v", str(quality), "-r", str(fps), out_path
