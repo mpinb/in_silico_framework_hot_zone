@@ -649,8 +649,8 @@ class CellMorphologyVisualizer:
         self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(images_path, client, voltage_legend, synapse_legend)
         write_video_from_images(images_path, out_path, fps=framerate, quality=quality, codec=codec)
           
-    def display_animation_voltage_synapses_in_morphology_3d(self, images_path, t_start=None, t_end=None, t_step=None, 
-                                                            client=None, neuron_rotation = None, time_show_syn_activ=None, vmin=None, vmax=None,
+    def display_animation_voltage_synapses_in_morphology_3d(self, images_path, client=None, t_start=None, t_end=None, t_step=None, 
+                                                            neuron_rotation = None, time_show_syn_activ=None, vmin=None, vmax=None,
                                                            voltage_legend=True, synapse_legend=True):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
