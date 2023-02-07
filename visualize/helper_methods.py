@@ -14,7 +14,7 @@ import numpy as np
 from base64 import b64encode
 import subprocess
 
-def write_video_from_images(images_dir, out_path, fps=24, match_pattern = r'%d.png', quality=5, codec='mpeg4'):
+def write_video_from_images(images_dir, out_path, fps=24, images_format = '.png', quality=5, codec='mpeg4'):
     '''
     Creates a video from a set of images. Images must be specified as a path to a directory that contains the images.
     Uses glob pattern pmatching by default (allows for using the "*" as a wildcard). Glob is not enabled by default on Windows machines.
@@ -29,7 +29,7 @@ def write_video_from_images(images_dir, out_path, fps=24, match_pattern = r'%d.p
         - codec
     '''
     out = subprocess.call([
-        "ffmpeg", "-y", "-r", str(fps), "-i", images_dir+"/"+match_pattern, "-vcodec", codec, "-q:v", str(quality), "-r", str(fps), out_path
+        "ffmpeg", "-y", "-r", str(fps), "-i", images_dir+"/%*"+images_format, "-vcodec", codec, "-q:v", str(quality), "-r", str(fps), out_path
         ])
     if out != 0:
         print('Something went wrong. Make sure:')
