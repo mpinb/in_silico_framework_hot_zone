@@ -587,7 +587,7 @@ class CellMorphologyVisualizer:
         These images are then put together into a gif.
 
         Args:
-            - images_path: path where the images for the gif will be generated
+            - images_path: dir where the images for the gif will be generated
             - out_path: dir where the gif will be generated + name of the gif
             - t_start: start time point of our time series visualization
             - t_end: last time point of our time series visualization
@@ -610,9 +610,7 @@ class CellMorphologyVisualizer:
         if vmin is not None: self.vmin = vmin 
         if vmax is not None: self.vmax = vmax 
         self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(images_path, client, voltage_legend, synapse_legend)
-        files = [os.path.join(images_path, f) for f in os.listdir(images_path)]
-        files.sort()
-        write_gif_from_images(out_path,files,frame_duration)
+        write_gif_from_images(images_path, out_path, duration=frame_duration)
          
     def write_video_voltage_synapses_in_morphology_3d(self, images_path, out_path, client=None, t_start=None, t_end=None, t_step=None, 
                                                       neuron_rotation = None, time_show_syn_activ=None, vmin=None, vmax=None, 
@@ -622,7 +620,7 @@ class CellMorphologyVisualizer:
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a video.
         Args:
-            - images_path: path where the images for the video will be generated
+            - images_path: dir where the images for the video will be generated
             - out_path: dir where the video will be generated + name of the video
             - t_start: start time point of our time series visualization
             - t_end: last time point of our time series visualization

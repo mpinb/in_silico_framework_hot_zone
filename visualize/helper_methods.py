@@ -31,13 +31,15 @@ def write_video_from_images(images_dir, out_path, fps=24, images_format = '.png'
     out = subprocess.call([
         "ffmpeg", "-y", "-r", str(fps), "-i", images_dir+"/%*"+images_format, "-vcodec", codec, "-q:v", str(quality), "-r", str(fps), out_path
         ])
-    if out != 0:
+    if out == 0:
+        print('Video created successfully!')
+    else:
         print('Something went wrong. Make sure:')
         print(' - the module ffmpeg is loaded, otherwise use the command: module load ffmpeg')
         print(' - out_dir contains images')
         print(' - images_format is specified properly')
     
-def write_gif_from_images(out_path, files, duration=40):
+def write_gif_from_images(images_dir, out_path, images_format = '.png', duration=40):
     '''
     Creates a gif from a set of images, and saves it to :@param out_path:.
 
@@ -46,16 +48,13 @@ def write_gif_from_images(out_path, files, duration=40):
         - Files: list of the images that will be used for the gif generation
         - Duration: duration of each frame in ms
     '''
-    frames = [] # Create the frames
-    for file in files:
-        new_frame = Image.open(file)
-        frames.append(new_frame)
-
+    frames = []
+    for f in os.listdir(images_dir):
+        if f.endswith(images_format):
+            frames.append(Image.open(os.path.join(images_dir,f)))
     # Save into a GIF file that loops forever   
-    frames[0].save(out_path, format='GIF',
-                    append_images=frames[1:],
-                    save_all=True,
-                    duration=duration, loop=0)
+    frames[0].save(out_path, format='GIF', append_images=frames[1:], save_all=True, duration=duration, loop=0)
+    print('Gif created successfully!')
 
 def _load_base64(filename, extension = 'png'):
     #https://github.com/jakevdp/JSAnimation/blob/master/JSAnimation/html_writer.py
