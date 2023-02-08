@@ -32,4 +32,7 @@ ssh -fN -R $port:localhost:$port axon01.bc.rzg.mpg.de
 # If connection fails please add a public key (with no passphrase)
 # to the ~/.ssh/authorized_keys file  (Omar V.M.)
 
+module load ffmpeg
+echo "ffmpeg location: $(which ffmpeg)"
+
 srun -n1 -N1 "$CONDA_PREFIX/bin/python" $ISF_HOME/SLURM_scripts/component_isf.py "$(pwd)/management_dir_$1" $port
