@@ -25,7 +25,7 @@ function printf_with_spinner {
     for i in "${spin[@]}"
     do
         # \r removes previous line
-        # %{$remainder}s adds whitespaces for padding
+        # %*s adds whitespaces for padding: amount of padding is given as an argument
         # \b$i is the spinner icon
         # >&2 writes to stdout
         printf "\r$1%*s\b$i" "$remainder">&2
@@ -113,5 +113,5 @@ width="$(tput cols)"
 printf '\r%*s' $width  # clear previous line
 printf "\rJupyter server for \"$1\" is running at:
 $jupyter_link
-"
+\n"
 exit 0;
