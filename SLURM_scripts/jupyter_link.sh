@@ -5,6 +5,34 @@
 trap "exit 1" SIGUSR1
 PROC=$$
 
+
+#######################################
+# Given a string, continuously prints the string with an 
+# updated spinner icon
+# Arguments:
+#   1. A string
+#######################################
+# Little spinning icon
+spin[0]="-"
+spin[1]="\\"
+spin[2]="|"
+spin[3]="/"
+function printf_with_spinner {
+    local string=$1
+    local width="$(tput cols)"
+    local string_length=${#string}
+    local remainder=$(($width - $string_length - 1))
+    for i in "${spin[@]}"
+    do
+        # \r removes previous line
+        # %{$remainder}s adds whitespaces for padding
+        # \b$i is the spinner icon
+        # >&2 writes to stdout
+        printf "\r$1%*s\b$i" "$remainder">&2
+        sleep 0.1
+    done
+}
+
 #######################################
 # A quick check to see if the input arguments are what you would expect
 #   only checks the amount of arguments for now
@@ -27,20 +55,15 @@ function args_precheck {
 #######################################
 function fetch_jupyter_link {
     local jupyter_file="management_dir_$1/jupyter.txt"
-    if [ ! -f $jupyter_file ] ; # check if err file exists
-    then
-        printf "File \"$jupyter_file\" does not exist (yet).\nCheck if the job is running correctly, or wait until the file has been created.\n" >&2  # print error to stderr
-        kill -SIGUSR1 $PROC; exit 1  # kill main shell and exit function
-    else
+    while ! test -f $jupyter_file; do
+        printf_with_spinner "Waiting for jupyter.txt to be written to management_dir_$1"
+    done
+    local link="$(cat $jupyter_file | grep -Eo http://.*:11113/.* | head -1)"
+    while [ -z "$link" ]; do  # wait until link is written and grep returns a match
+        printf_with_spinner "Waiting for jupyter link to be written out"
         local link="$(cat $jupyter_file | grep -Eo http://.*:11113/.* | head -1)"
-        if [ -z "$link" ]  # check if node is found
-        then
-            printf "No Jupyter link found (yet) in \"$jupyter_file\"\nThe server has not been started (yet). Check if the job is running correctly.\n" >&2  # print error to stderr
-            kill -SIGUSR1 $PROC; exit 1  # kill main shell and exit function
-        else
-            echo "${link}"
-        fi
-    fi
+    done
+    echo "${link}"
 }
 
 
@@ -51,14 +74,14 @@ function fetch_jupyter_link {
 #   1: The name of the job
 #######################################
 function fetch_ip {
-    if [ ! -f "management_dir_$1/scheduler.json" ] ; # check if management_dir_*/scheduler.json file exists
-    then
-        printf "File management_dir_$1/scheduler.json does not exist(yet).\nCheck if the job name is spelled correctly and the job is running.\nIf this is the case, wait until the file has been created.\n" >&2  # print error to stderr
-        kill -SIGUSR1 $PROC; exit 1
-    else
-        local ip="$(cat management_dir_$1/scheduler.json | grep -Eo tcp://\.*28786 | grep -o -P '(?<=tcp://).*(?=:28786)')"
-        echo "${ip}"
-    fi
+    while ! test -d "management_dir_$1"; do
+        printf_with_spinner "Waiting for \"management_dir_$1\" to be written"
+    done
+    while ! test -f "management_dir_$1/scheduler.json"; do
+        printf_with_spinner "Waiting for \"management_dir_$1/sheduler.json\" to be written"
+    done
+    local ip="$(cat management_dir_$1/scheduler.json | grep -Eo tcp://\.*28786 | grep -o -P '(?<=tcp://).*(?=:28786)')"
+    echo "${ip}"
 }
 
 #######################################
@@ -82,12 +105,13 @@ function clean_jupyter_link {
 args_precheck $#;  # check amount of arguments
 job_name="$1"
 jupyter_file="management_dir_$job_name/jupyter.txt"
-ip="$(fetch_ip $job_name)"
-link="$(fetch_jupyter_link $job_name)"
+ip="$(fetch_ip $job_name)";
+link="$(fetch_jupyter_link $job_name)";
 jupyter_link="$(clean_jupyter_link $ip $link)";
 
-echo "
-Jupyter server for \"$1\" is running at:
+width="$(tput cols)"
+printf '\r%*s' $width  # clear previous line
+printf "\rJupyter server for \"$1\" is running at:
 $jupyter_link
 "
 exit 0;
