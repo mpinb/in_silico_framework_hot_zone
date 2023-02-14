@@ -215,7 +215,12 @@ EoF
 echo $output
 echo "---------------------------------------------"
 # id="$(echo $output | grep -Eo [0-9]{7})"  # grep slurm submit output for ID
-# fetch working directory of current script
-__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# also run jupyter_link to fetch the link where the jupyter server is running
-bash ${__dir}/jupyter_link.sh $name
+if [[ "$partition" == *"interactive" ]]; then
+  # fetch working directory of current script
+  __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  # also run jupyter_link to fetch the link where the jupyter server is running
+  bash ${__dir}/jupyter_link.sh $name
+else
+  printf "Batch job: no jupyter server will be launched.\n"
+fi
+

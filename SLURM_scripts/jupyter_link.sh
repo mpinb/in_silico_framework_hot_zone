@@ -56,11 +56,11 @@ function args_precheck {
 function fetch_jupyter_link {
     local jupyter_file="management_dir_$1/jupyter.txt"
     while ! test -f $jupyter_file; do
-        printf_with_spinner "Waiting for jupyter.txt to be written to management_dir_$1"
+        printf_with_spinner "Launching Jupyter server"
     done
     local link="$(cat $jupyter_file | grep -Eo http://.*:11113/.* | head -1)"
     while [ -z "$link" ]; do  # wait until link is written and grep returns a match
-        printf_with_spinner "Waiting for jupyter link to be written out"
+        printf_with_spinner "Launching Jupyter server"
         local link="$(cat $jupyter_file | grep -Eo http://.*:11113/.* | head -1)"
     done
     echo "${link}"
@@ -75,10 +75,10 @@ function fetch_jupyter_link {
 #######################################
 function fetch_ip {
     while ! test -d "management_dir_$1"; do
-        printf_with_spinner "Waiting for \"management_dir_$1\" to be written"
+        printf_with_spinner "Creating \"management_dir_$1\" "
     done
     while ! test -f "management_dir_$1/scheduler.json"; do
-        printf_with_spinner "Waiting for \"management_dir_$1/sheduler.json\" to be written"
+        printf_with_spinner "Creating \"management_dir_$1/sheduler.json\" "
     done
     local ip="$(cat management_dir_$1/scheduler.json | grep -Eo tcp://\.*28786 | grep -o -P '(?<=tcp://).*(?=:28786)')"
     echo "${ip}"
