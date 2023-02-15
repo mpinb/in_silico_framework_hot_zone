@@ -79,7 +79,7 @@ function fetch_ip {
         printf_with_spinner "Creating \"management_dir_$1\" "
     done
     while ! test -f "management_dir_$1/scheduler.json"; do
-        printf_with_spinner "Creating \"management_dir_$1/sheduler.json\" "
+        printf_with_spinner "Creating \"management_dir_$1/scheduler.json\" "
     done
     local ip="$(cat management_dir_$1/scheduler.json | grep -Eo tcp://\.*28786 | grep -o -P '(?<=tcp://).*(?=:28786)')"
     echo "${ip}"
