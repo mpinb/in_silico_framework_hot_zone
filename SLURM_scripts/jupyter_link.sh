@@ -75,7 +75,7 @@ function fetch_jupyter_link {
 #   1: The name of the job
 #######################################
 function fetch_ip {
-    management_dir="$MYBASEDIR//management_dir_$1"
+    management_dir="$MYBASEDIR/management_dir_$1"
     while ! test -d "$management_dir"; do
         printf_with_spinner "Creating \"management_dir_$1\" "
     done
