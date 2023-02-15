@@ -55,7 +55,7 @@ function args_precheck {
 #   1: The name of the job
 #######################################
 function fetch_jupyter_link {
-    local jupyter_file="management_dir_$1/jupyter.txt"
+    local jupyter_file="$MYBASEDIR/management_dir_$1/jupyter.txt"
     while ! test -f $jupyter_file; do
         printf_with_spinner "Launching Jupyter server"
     done
@@ -75,13 +75,14 @@ function fetch_jupyter_link {
 #   1: The name of the job
 #######################################
 function fetch_ip {
-    while ! test -d "management_dir_$1"; do
+    management_dir="$MYBASEDIR//management_dir_$1"
+    while ! test -d "$management_dir"; do
         printf_with_spinner "Creating \"management_dir_$1\" "
     done
-    while ! test -f "management_dir_$1/scheduler.json"; do
+    while ! test -f "$management_dir/scheduler.json"; do
         printf_with_spinner "Creating \"management_dir_$1/scheduler.json\" "
     done
-    local ip="$(cat management_dir_$1/scheduler.json | grep -Eo tcp://\.*28786 | grep -o -P '(?<=tcp://).*(?=:28786)')"
+    local ip="$(cat $management_dir/scheduler.json | grep -Eo tcp://\.*28786 | grep -o -P '(?<=tcp://).*(?=:28786)')"
     echo "${ip}"
 }
 
@@ -105,7 +106,7 @@ function clean_jupyter_link {
 
 args_precheck $#;  # check amount of arguments
 job_name="$1"
-jupyter_file="management_dir_$job_name/jupyter.txt"
+jupyter_file="$MYBASEDIR/management_dir_$job_name/jupyter.txt"
 ip="$(fetch_ip $job_name)";
 link="$(fetch_jupyter_link $job_name)";
 jupyter_link="$(clean_jupyter_link $ip $link)";
