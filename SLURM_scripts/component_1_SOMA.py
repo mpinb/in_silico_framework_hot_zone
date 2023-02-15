@@ -17,7 +17,7 @@ LAUNCH_JUPYTER_SERVER = True  # by default, if left unspecified
 if len(sys.argv) > 2:
     # component_1_SOMA.py was called from submit.sh with extra arguments
     LAUNCH_JUPYTER_SERVER = bool(int(sys.argv[2]))  # only launch when interactive session is started
-    print("La8unching Jupyter server: {}".format(LAUNCH_JUPYTER_SERVER))
+    print("Launching Jupyter server: {}".format(LAUNCH_JUPYTER_SERVER))
 print('using management dir {}'.format(MANAGEMENT_DIR))
 
 # In[3]:

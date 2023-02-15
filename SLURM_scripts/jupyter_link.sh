@@ -25,7 +25,8 @@ function printf_with_spinner {
     for i in "${spin[@]}"
     do
         # \r removes previous line
-        # %*s adds whitespaces for padding: amount of padding is given as an argument
+        # %*s adds whitespaces for padding
+        # amount of padding is given as an argument, hence the * char
         # \b$i is the spinner icon
         # >&2 writes to stdout
         printf "\r$1%*s\b$i" "$remainder">&2
