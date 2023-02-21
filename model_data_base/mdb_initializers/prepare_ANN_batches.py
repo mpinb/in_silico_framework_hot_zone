@@ -208,24 +208,215 @@ def save_SA_batch(sa_,
                                             use_weights = syn_weights is not None)        
     I.np.save(outpath, array)
 
-def init(mdb,min_time = None, max_time = None, bin_size = 1, batchsize = 500, client = None, 
-         sti_selection = None, sti_selection_name = None,
+# code to get the maximum depolarization per ms of a voltage traces dataframe  
+def get_time_groups(vt_pandas):
+        time_groups = []
+        for lv in range(len(vt_pandas.columns)):
+            time_groups.append(lv//40)
+        return time_groups
+
+def get_max_per_ms_on_pandas_dataframe(vt_pandas):
+    time_groups = get_time_groups(vt_pandas)
+    vt_max = vt_pandas.groupby(time_groups, axis = 1).apply(lambda x: x.max(axis = 1))
+    return vt_max
+
+def get_max_depolarization_per_ms(vt_dask):
+    meta_ = {t:'float64' for t in get_time_groups(vt_dask.head())}
+    vt_max_dask = vt_dask.map_partitions(get_max_per_ms_on_pandas_dataframe, meta = meta_)
+    return vt_max_dask
+        
+# initializer class
+class Init:
+    def __init__(self, mdb,
+         mdb_target = None,
+         min_time = None, 
+         max_time = None, 
+         bin_size = 1,
+         batchsize = 500, 
+         client = None,
+         sti_selection = None, 
+         sti_selection_name = None,
          persist = False,
          synaptic_weight = False,
          dend_ap_suffix = '_-30.0'):
+        
+        if sti_selection is not None:
+            assert(sti_selection_name is not None)
+        if mdb_target is None:
+            mdb_target = mdb
+        
+        self.mdb = mdb
+        self.mdb_target = mdb_target
+        self.min_time = min_time
+        self.max_time = max_time
+        self.bin_size = bin_size
+        self.batchsize = batchsize
+        self.client = client
+        self.sti_selection = sti_selection
+        self.sti_selection_name = sti_selection_name
+        self.persist = persist
+        self.dend_ap_suffix = dend_ap_suffix
+        
+        # get selected trials - if none specified, select all
+        if sti_selection is not None:
+            sti_selection = list(sti_selection)
+        else:
+            st = mdb['spike_times']
+            sti_selection = list(st.index)
+
+        self.chunks = I.utils.chunkIt(sti_selection, len(sti_selection)/batchsize)
+        
+        # create directory to save batches
+        if sti_selection_name:
+            x = '{}_{}_{}_'.format(min_time, max_time, bin_size) + sti_selection_name
+        else:
+            x = '{}_{}_{}_'.format(min_time, max_time, bin_size) + 'all'
+        self.outdir = mdb_target.create_managed_folder(('ANN_batches', x, 'EI__section/branch_bin'), raise_ = False)
+        
+        # setup spatial bins
+        self._setup_spatial_bins()
+        
+        self._setup_synaptic_weights()
+    
+    def _setup_spatial_bins(self):
+        self.neuron_param_file = get_neuron_param_file(self.mdb)
+        self.section_distances_df = get_section_distances_df(self.neuron_param_file)
+        self.spatial_bin_names = get_spatial_bin_names(self.section_distances_df)
+        
+    def _setup_synaptic_weights(self):
+        self.synaptic_weight_dict = None
+        # if synaptic_weight:
+        #     synaptic_weight_dict = load_syn_weights(m,self.client)
+        #     synaptic_weight_dict = self.client.persist(synaptic_weight_dict)
+        # else:
+        #     synaptic_weight_dict = None
+        
+    def init_all(self,
+                init_soma_vt = True,
+                init_dend_vt = True,
+                init_soma_AP_ISI = True,
+                init_dend_AP_ISI = True,
+                init_max_soma_vt = True,
+                init_max_dend_vt = True,
+                init_synapse_activation = True,
+                init_synapse_activation_weighted = True
+                ):
+        pass
+    
+    def _get_distal_recording_site(self):
+        keys = self.mdb['dendritic_recordings'].keys()
+        dist_rec_site = sorted(keys, key = lambda x: float(x.split('_')[-1]))[1]
+        return dist_rec_site
+    
+    def _save_vt(self, vt, fname_template = None):
+        delayeds = []
+        for batch_id, chunk in enumerate(self.chunks):
+            selected_indices = chunk
+            d = save_VT_batch(vt.loc[selected_indices],
+                             batch_id,
+                             outdir = self.outdir,
+                             fname_template = fname_template)
+            delayeds.append(d)
+        return delayeds
+            
+    def init_soma_vt(self):
+        vt = self.mdb['voltage_traces'].iloc[:,::40].iloc[:,self.min_time:self.max_time]
+        return self._save_vt(vt, fname_template = 'batch_{}_VT_SOMA.npy')
+        
+    def init_dend_vt(self):        
+        dist_rec_site = self._get_distal_recording_site()
+        vt_dend = self.mdb['dendritic_recordings'][dist_rec_site]
+        vt_dend = vt_dend.iloc[:,::40].iloc[:,self.min_time:self.max_time]
+        return self._save_vt(vt_dend, fname_template = 'batch_{}_VT_DEND.npy')
+
+    def _save_AP_ISI(self, st, suffix = None):
+        delayeds = []
+        st = self.client.scatter(st)
+        for batch_id, chunk in enumerate(self.chunks):
+            d = save_st_and_ISI(st, batch_id, chunk, self.min_time, self.max_time, self.outdir, suffix = suffix)
+            delayeds.append(d)
+        return delayeds
+    
+    def init_soma_AP_ISI(self):
+        st = self.client.scatter(self.mdb['spike_times'])
+        return self._save_AP_ISI(st)
+
+    def init_dend_AP_ISI(self):
+        dist_rec_site = self._get_distal_recording_site()
+        st = self.client.scatter(self.mdb['dendritic_spike_times'][dist_rec_site + self.dend_ap_suffix])
+        return self._save_AP_ISI(st, suffix = 'DEND')
+    
+    def init_max_soma_vt(self):
+        vt = self.mdb['voltage_traces']
+        vt = get_max_depolarization_per_ms(vt)
+        vt = vt.iloc[:,self.min_time:self.max_time]
+        return self._save_vt(vt, fname_template = 'batch_{}_VT_SOMA_MAX.npy')
+    
+    def init_max_dend_vt(self):
+        dist_rec_site = self._get_distal_recording_site()
+        vt_dend = self.mdb['dendritic_recordings'][dist_rec_site]
+        vt_dend = get_max_depolarization_per_ms(vt_dend)
+        vt_dend = vt_dend.iloc[:,self.min_time:self.max_time]
+        return self._save_vt(vt_dend, fname_template = 'batch_{}_VT_DEND_MAX.npy')
+    
+    def init_synapse_activation(self, synaptic_weight = False):
+        sa = self.mdb['synapse_activation']
+        if self.persist: 
+            sa = self.client.persist(sa)
+            
+        delayeds = []
+        print('Create delayed objects for synapse_activations')
+
+        for batch_id, chunk in enumerate(self.chunks):
+            selected_indices = chunk
+            d = save_SA_batch(sa.loc[chunk],
+                             chunk, 
+                             batch_id,
+                             outdir = self.outdir,
+                             section_distances_df = self.section_distances_df,
+                             spatial_bin_names = self.spatial_bin_names,
+                             min_time = self.min_time, 
+                             max_time = self.max_time, 
+                             bin_size = self.bin_size,
+                             synaptic_weight_dict = self.synaptic_weight_dict)
+            delayeds.append(d)
+        return delayeds
+        
+    
+    def init_synapse_activation_weighted(self):
+        delayeds = []
+        return delayeds
+    
+def init(mdb,
+         mdb_target = None,
+         min_time = None, 
+         max_time = None, 
+         bin_size = 1,
+         batchsize = 500, 
+         client = None,
+         sti_selection = None, 
+         sti_selection_name = None,
+         persist = False,
+         synaptic_weight = False,
+         dend_ap_suffix = '_-30.0',
+         ):
     '''persist: whether the synapse activation dataframe should be loaded into memory 
                 on the dask cluster. Speeds up the process if it fits in memory, otherwise leads to crash'''
+    if mdb_target is None:
+        mdb_target = mdb
+        
     if sti_selection is not None:
         assert(sti_selection_name is not None)
     
     sa = mdb['synapse_activation']
     st = mdb['spike_times']
-    if sti_selection:
+    if sti_selection is not None:
         sti_selection = list(sti_selection)
     else:
         sti_selection = list(st.index)
         
     chunks = I.utils.chunkIt(sti_selection, len(sti_selection)/batchsize)
+    
     neuron_param_file = get_neuron_param_file(mdb)
     section_distances_df = get_section_distances_df(neuron_param_file)
     spatial_bin_names = get_spatial_bin_names(section_distances_df)
@@ -233,7 +424,7 @@ def init(mdb,min_time = None, max_time = None, bin_size = 1, batchsize = 500, cl
         x = '{}_{}_{}_'.format(min_time, max_time, bin_size) + sti_selection_name
     else:
         x = '{}_{}_{}_'.format(min_time, max_time, bin_size) + 'all'
-    outdir = mdb.create_managed_folder(('ANN_batches', x, 'EI__section/branch_bin'), raise_ = False)
+    outdir = mdb_target.create_managed_folder(('ANN_batches', x, 'EI__section/branch_bin'), raise_ = False)
     
     if persist: 
         sa = client.persist(sa)
@@ -295,8 +486,6 @@ def init(mdb,min_time = None, max_time = None, bin_size = 1, batchsize = 500, cl
     
     # dend AP and ISI
     print('Create delayed objects for dendriticAPs and ISIs')
-
-    # somatic AP and ISI
     st = client.scatter(mdb['dendritic_spike_times'][dist_rec_site + dend_ap_suffix])
     for batch_id, chunk in enumerate(chunks):
         d = save_st_and_ISI(st, batch_id, chunk, min_time, max_time, outdir,suffix = 'DEND')
