@@ -331,7 +331,7 @@ class Init:
 
     def _save_AP_ISI(self, st, suffix = None):
         delayeds = []
-        st = self.client.scatter(st)
+        # st = self.client.scatter(st)
         for batch_id, chunk in enumerate(self.chunks):
             d = save_st_and_ISI(st, batch_id, chunk, self.min_time, self.max_time, self.outdir, suffix = suffix)
             delayeds.append(d)
