@@ -7,7 +7,7 @@
 #SBATCH -o out.slurm.%N.%j.slurm # STDOUT
 #SBATCH -e err.slurm.%N.%j.slurm # STDERR
 ##SBATCH --ntasks-per-node=20
-##SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:4
 module load cuda
 module load ffmpeg
 unset XDG_RUNTIME_DIR
