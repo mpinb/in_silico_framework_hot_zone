@@ -32,10 +32,13 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
                      neuron_param_modify_functions = [],
                      network_param_modify_functions = [],
                      synapse_activation_modify_functions = [],
+                     additional_network_params = [],
+                     recreate_cell_every_run = None,
                      parameterfiles = None,
                      neuron_folder = None,
                      network_folder = None,
                      sa = None):
+    print('saving to ', outdir)
     import neuron
     h = neuron.h
     sti_bases = [s[:s.rfind('/')] for s in stis]
@@ -43,7 +46,9 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
         raise NotImplementedError
     sti_base = sti_bases[0]
     sa = sa.content
+    print('start loading synapse activations')
     sa = sa.loc[stis].compute(get = dask.get)
+    print('done loading synapse activations')    
     sa = {s:g for s,g in sa.groupby(sa.index)}
     
     outdir_absolute = os.path.join(outdir, sti_base)
@@ -59,6 +64,7 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
     neuron_param = scp.build_parameters(neuron_folder.join(neuron_name))
     network_name = parameterfiles.iloc[0].hash_network
     network_param = scp.build_parameters(network_folder.join(network_name)) 
+    additional_network_params = [scp.build_parameters(p) for p in additional_network_params]
     for fun in network_param_modify_functions:
         network_param = fun(network_param)
     for fun in neuron_param_modify_functions:
@@ -80,7 +86,6 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
         
     for lv, sti in enumerate(stis):
         startTime = time.time()
-        
         sti_number = int(sti[sti.rfind('/')+1:])
         syn_df = sa[sti]
         
@@ -92,7 +97,9 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
         
         evokedNW = scp.NetworkMapper(cell, network_param.network, neuron_param.sim)
         evokedNW.reconnect_saved_synapses(syn)
-                    
+        additional_evokedNWs = [scp.NetworkMapper(cell, p.network, neuron_param.sim) for p in additional_network_params]
+        for additional_evokedNW in additional_evokedNWs:
+            additional_evokedNW.create_saved_network2()
         stopTime = time.time()
         setupdt = stopTime - startTime
         print('Network setup time: {:.2f} s'.format(setupdt))
@@ -128,6 +135,8 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
         
         cell.re_init_cell()
         evokedNW.re_init_network()
+        for additional_evokedNW in additional_evokedNWs:
+            additional_evokedNW.re_init_network()
 
         print('-------------------------------')
     vTraces = np.array(vTraces)
@@ -158,8 +167,20 @@ def rerun_mdb(mdb, outdir, tStop = None,
                      network_param_modify_functions = [],
                      synapse_activation_modify_functions = [], 
                      stis = None,
-                     silent = False, 
+                     silent = False,
+                     additional_network_params = [],
                      child_process = False):
+    '''
+    mdb: model data base initialized with I.mdb_init_simrun_general to be resimulated
+    outdir: location where simulation files are supposed to be stored
+    tStop: end of simulation
+    neuron_param_modify_functions: list of functions which take a neuron param file and may return it changed
+    network_param_modify_functions: list of functions which take a network param file and may return it changed
+    synapse_activation_modify_functions: list of function, which take a synapse activation dataframe and may return it changed
+    stis: sim_trial_indices which are to be resimulated. If None, the whole database is going to be resimulated.
+    silent: suppress output to stdout
+    child_process: run simulation in child process. This can help if dask workers time out during the simulation.
+    recreate_cell_every_run: set to True if you use synapse_activation as cell modify function.'''
     parameterfiles = mdb['parameterfiles']
     neuron_folder = mdb['parameterfiles_cell_folder']
     network_folder = mdb['parameterfiles_network_folder']
@@ -180,7 +201,7 @@ def rerun_mdb(mdb, outdir, tStop = None,
         myfun = execute_in_child_process(myfun)
     
     myfun = dask.delayed(myfun)
-    
+    print('outdir is', outdir)
     for stis in sim_trial_index_array:
         d = myfun(mdb, stis, outdir, tStop = tStop,
                              neuron_param_modify_functions = neuron_param_modify_functions,
@@ -189,6 +210,7 @@ def rerun_mdb(mdb, outdir, tStop = None,
                              parameterfiles = parameterfiles.loc[stis],
                              neuron_folder = neuron_folder,
                              network_folder = network_folder,
-                             sa = sa)
+                             sa = sa,
+                             additional_network_params = additional_network_params)
         delayeds.append(d)
     return delayeds

@@ -223,6 +223,8 @@ template_NMODL_mechanisms = {'VecStim': '/', 'synapses': '/'}
 
 # init
 def match_model_celltype_to_PSTH_celltype(celltype):
+    if celltype in ['0_basal', '1_oblique', '2_trunk', '3_tuft', '3_tuft_distal', '3_tuft_proximal', 'global']:
+        return celltype
     if '_' in celltype:
         celltype = celltype.split('_')[0]
     if celltype in I.inhibitory or celltype == 'INH':
