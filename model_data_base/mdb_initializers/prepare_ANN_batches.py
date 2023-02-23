@@ -45,6 +45,16 @@ def get_section_distances_df(neuron_param_file, silent = True):
     return section_distances_df
 
 def get_spatial_bin_names(section_distances_df):
+    """Given a dataframe describing the distance to soma of all sections, as provided by :@function get_section_distances_df:,
+    this method returns the names for all the spatial bins of the format section_id/bin_id. E.g.: 5/2 denotes the second bin of section 5.
+
+
+    Args:
+        section_distances_df (pd.DataFrame): the dataframe describing distance to soma for all sections, as provided by :@function get_section_distances_df:
+
+    Returns:
+        list: A list containing the bin ids in string format.
+    """
     all_bins = []
     for index, row in section_distances_df.iterrows():
         n_bins = row['n_bins']
@@ -54,6 +64,87 @@ def get_spatial_bin_names(section_distances_df):
             for n in range(n_bins):
                 all_bins.append(str(index) + '/' + str(n+1))
     return all_bins
+
+def get_bin_soma_distances_in_section(section_id, section_distances_df):
+    """Given a section id, this method returns the distance to soma for all bins in this section
+
+    Args:
+        section_id (int): Id of the neuron section
+        section_distances_df (pd.DataFrame): the dataframe describing distance to soma for all sections, as provided by :@function get_section_distances_df:
+
+    Returns:
+        list: A list containing the distance to soma for each bin in a section.
+    """
+    section = section_distances_df.iloc[int(section_id)]
+    soma_d = []
+    for i in range(section["n_bins"]):
+        # centers of the bins
+        soma_d.append(section["min_"] + int(i+0.5)*(section["max_"] - section["min_"])/section["n_bins"])
+    return soma_d
+
+def get_bin_adjacency_map_in_section(cell, section_id, section_distances_df):
+    """Fetches all the sections neighboring the given section id.
+    It then checks which bins are adjacent within these sections.
+    Sections are defined by the neuron simulation, but bins are ad-hoc defined by data preparation for the ANN.
+    Eeach section always has one or more bins.
+
+    
+    Args:
+        section_id (int): index of the neuron section
+        section_distances_df (pd.DataFrame): the dataframe describing distance to soma for all sections, as provided by :@function get_section_distances_df:
+
+
+    Returns:
+        dict: a dictionary with pairs of adjacant bins.
+    """
+    neighboring_bins = {}
+    neighbor_map = cell.get_section_adjacancy_map()
+    for parent in neighbor_map[int(section_id)]["parents"]:
+        # section_id/1 is connected to some parent section, but which bin?
+        distances = get_bin_soma_distances_in_section(parent, section_distances_df)
+        d_of_this_bin = get_bin_soma_distances_in_section(section_id, section_distances_df)[0]
+        diff = [abs(parent_d - d_of_this_bin) for parent_d in distances]
+        closest = I.np.argmin(diff)
+        neighboring_bins["{}/{}".format(section_id, 1)] = "{}/{}".format(parent, closest+1)
+    for child in neighbor_map[int(section_id)]["children"]:
+        # children/1 is connected to some bin of the current section, but which bin?
+        distances = get_bin_soma_distances_in_section(section_id, section_distances_df)
+        d_of_child_bin = get_bin_soma_distances_in_section(child, section_distances_df)[0]
+        diff = [abs(d - d_of_child_bin) for d in distances]
+        closest = I.np.argmin(diff)
+        neighboring_bins["{}/{}".format(child, 1)] = "{}/{}".format(section_id, closest+1)
+    # assure mutuality
+    neighboring_bins_copy = neighboring_bins.copy()
+    for key, val in neighboring_bins_copy.items():
+        neighboring_bins[val] = key
+    return neighboring_bins
+
+def get_neighboring_spatial_bins(cell, section_distances_df, bin_id):
+    """Given a bin id, this method returns all the neighboring bins
+
+    Args:
+        cell (cell): cell object
+        neup (_type_): neuron parameter file
+        bin_id (_type_): BIn id of format: section_id/bin_id
+
+    Returns:
+        list: list of all ids of bins that neighbor the given bin
+    """
+    neighbors = []
+    section_id_, bin_id_ = map(int, bin_id.split('/'))
+    n_bins = section_distances_df.iloc[int(section_id_)]['n_bins']
+    assert 0 < int(bin_id_) <= n_bins, "Bin does not exist. Section {} only has {} bins, but you asked for bin #{}".format(section_id_, n_bins, bin_id_)
+    if 1 < int(bin_id_):
+        # append previous bin
+        neighbors.append('{}/{}'.format(section_id_, int(bin_id_) - 1))
+    if int(bin_id_) < n_bins:
+        # append next bin
+        neighbors.append('{}/{}'.format(section_id_, int(bin_id_) + 1))
+    # check for adjacent sections
+    bin_adj = get_bin_adjacency_map_in_section(cell, section_id_, section_distances_df)
+    if bin_id in bin_adj:
+        neighbors.append(bin_adj[bin_id])
+    return neighbors
 
 def augment_synapse_activation_df_with_branch_bin(sa_, 
                                                   section_distances_df = None, 
