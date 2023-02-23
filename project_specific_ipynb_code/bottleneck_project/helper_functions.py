@@ -1,15 +1,6 @@
-try:
-    from IPython import display
-except ImportError:
-    pass
 import torch
-try:
-    import seaborn as sns
-except ImportError:
-    print("Could not import seaborn")
 import Interface as I
 import torch.nn as nn
-import torch.nn.functional as F
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 class Model(nn.Module):

@@ -118,21 +118,130 @@ class WeightPlot():
         Given the weights of a neural network, this class method makes a visualisation of the neuron, the weights per section,
         and the train and test loss.
 
+        This function is a bit of a mess when it comes to setting up the subplots.
+
         Arguments:
             weight: array of network weights to be visualised. this matrix will be reshapes according to the dimensions:
-                n_celltypes: amount of celltypes
-                n_spatial_bins: amount of spatial bins
-                n_temporal_window_width: width of temporal window
-            celltype: 0 for excitatory, 1 for inhibitory (I think?)
-            AUCs: (array) AUC scores during training
-            train_loss: (array) train losses during training
-            test_loss: (array) test losses of cross-validation during training
+            n_celltypes: amount of celltypes
+            n_spatial_bins: amount of spatial bins
+            n_temporal_window_width: width of temporal window
+            celltype: 0 for excitatory, 1 for inhibitory
             categories: (bool) label the different sections of the neuron
-            i: index of best epoch
+            epoch: index of the epoch to be plotted. If None, plots the best epoch.
             ts: timescale
-        """
 
-        epochs, best_epoch, AUCs, train_loss, test_loss, weights = get_model_stats(mdb=self.model_mdb, model=self.model, bottleneck_node=self.bottleneck_node)
+        Returns:
+            the axes if return_axes=True, else None
+        """
+        def add_cell_to_ax(wp, ax):
+                if not categories:
+                    wp.show_cell(ax, weights = weights.reshape(n_celltypes, n_spatial_bins, temporal_window_width)[celltype]*weight_scaling,
+                        scaling = scaling, t=t)
+                    #axes[0,1].axhline(t)
+
+                else:
+                    wp.show_cell(ax)
+
+                I.sns.despine(ax = ax, left = True, bottom = True)
+                ax.set_aspect('equal')
+                ax.set_xticks([])
+                ax.set_yticks([])
+                return ax
+
+        def add_weights_to_axes(wp, axes):
+            """Sets ups a plot that shows the cell object with weight values spatially resolved, two scatter plots showing the weight values and location labels, and two additional plots showing the AUC scores and training loss.
+
+            Args:
+                wp (WeightPlot): shoudl be self
+                axes: the axes to add the plot to
+            """
+            def get_tick_positions_from_separators(separators):
+                # Find out where the names of the categories should end up
+                tick_positions = []
+                _ = 0
+                for s in separators:
+                    tick_positions.append((s+_)/2)
+                    _ = s
+                return tick_positions
+            
+            ### show weights
+            for lv in range(n_celltypes):
+                ax = axes[lv,1]
+                im = ax.imshow(I.np.transpose(weights1[lv])*weight_scaling, vmin=-scaling, vmax=scaling, 
+                                cmap = 'seismic', interpolation = 'none')
+            gs = ax.get_gridspec()
+            # remove the underlying axes
+            for ax in axes[:, 2]:
+                ax.remove()
+            axbig = fig.add_subplot(gs[:, 2])
+            fig.colorbar(im, cax = axbig) 
+            axbig.yaxis.set_ticks_position('left')
+            separators = wp.spatial_bin_names_df.label.value_counts().sort_index().cumsum()
+            axbig.set_aspect('auto', anchor = 'W')
+            tick_positions = get_tick_positions_from_separators(separators)
+
+            tick_names = ['basal','oblique','trunk','tuft']
+
+            for lv in range(n_celltypes):
+                ax = axes[lv,1]
+                ax.set_xticks(tick_positions)
+                if lv < n_celltypes-1:
+                    ax.set_xticklabels('')
+                else:
+                    ax.set_xticklabels(tick_names)
+
+                for lv in separators:
+                    ax.axvline(lv+0.5, color = 'k', linestyle = '--', linewidth = 1)
+
+                ax.set_yticks([0,20,40,60,80])
+                ax.set_yticklabels([-80,-60,-40,-20,'now'])
+
+            axes[0,1].set_ylabel('EXC\ninput history / ms')
+            axes[1,1].set_ylabel('INH\ninput history / ms') 
+            axes[0,1].set_aspect('equal', anchor ='SE')
+            axes[1,1].set_aspect('equal', anchor ='NE')
+
+            #axes[0,1].set_title('EXC')
+            #axes[1,1].set_title('INH')
+            
+            I.plt.tight_layout()
+            I.sns.despine()
+
+            gs = ax.get_gridspec()
+            # remove the underlying axes
+            for ax in axes[:, 0]:
+                ax.remove()
+            axcell = fig.add_subplot(gs[:, 0])
+
+            add_cell_to_ax(wp, axcell)
+            axes[1,1].get_xticklabels()[0].set_color("grey")
+            axes[1,1].get_xticklabels()[1].set_color("green")
+            axes[1,1].get_xticklabels()[2].set_color("red")
+            axes[1,1].get_xticklabels()[3].set_color("blue")
+
+            return axes
+        
+        def plot_aucs(axes):
+            # plot AUCs
+            ax = axes[0,3]
+            ax.plot(AUCs)
+            ax.set_ylim(0.94,0.98)
+            ax.set_ylabel('AUROC')
+
+            return axes
+
+        def plot_loss(axes):
+            # plot loss
+            ax = axes[1,3]
+            ax.set_ylabel('loss')    
+            ax.plot(train_loss, label = 'train')    
+            ax.plot(test_loss, label = 'test')
+            ax.set_xlabel('epoch')
+            ax.legend()
+
+            return axes
+
+        _, best_epoch, AUCs, train_loss, test_loss, weights = get_model_stats(mdb=self.model_mdb, model=self.model, bottleneck_node=self.bottleneck_node)
 
         epoch = epoch if epoch else best_epoch
 
@@ -145,94 +254,9 @@ class WeightPlot():
         weights1 = weights.reshape(n_celltypes, n_spatial_bins, temporal_window_width)[:,self.sorted_index,:]
         scaling = max(weights1.max(),-weights1.min())
 
-        ### show weights
-        for lv in range(n_celltypes):
-            ax = axes[lv,1]
-            im = ax.imshow(I.np.transpose(weights1[lv])*weight_scaling, vmin=-scaling, vmax=scaling, 
-                            cmap = 'seismic', interpolation = 'none')
-        ### colorbar
-        gs = ax.get_gridspec()
-        # remove the underlying axes
-        for ax in axes[:, 2]:
-            ax.remove()
-        axbig = fig.add_subplot(gs[:, 2])
-        fig.colorbar(im, cax = axbig) 
-        axbig.yaxis.set_ticks_position('left')
-        #fig.colorbar(im, cax = axes[1,0])
-        ### tickss (names and position)
-        separators = self.spatial_bin_names_df.label.value_counts().sort_index().cumsum()
-        axbig.set_aspect('auto', anchor = 'W')
-        tick_posititions = []
-        _ = 0
-        for s in separators:
-            tick_posititions.append((s+_)/2)
-            _ = s
-
-        tick_names = ['basal','oblique','trunk','tuft']
-
-        for lv in range(n_celltypes):
-            ax = axes[lv,1]
-            ax.set_xticks(tick_posititions)
-            if lv < n_celltypes-1:
-                ax.set_xticklabels('')
-            else:
-                ax.set_xticklabels(tick_names)
-
-            for lv in separators:
-                ax.axvline(lv+0.5, color = 'k', linestyle = '--', linewidth = 1)
-
-            ax.set_yticks([0,20,40,60,80])
-            ax.set_yticklabels([-80,-60,-40,-20,'now'])
-
-        axes[0,1].set_ylabel('EXC\ninput history / ms')
-        axes[1,1].set_ylabel('INH\ninput history / ms') 
-        axes[0,1].set_aspect('equal', anchor ='SE')
-        axes[1,1].set_aspect('equal', anchor ='NE')
-
-        #axes[0,1].set_title('EXC')
-        #axes[1,1].set_title('INH')
-        
-        I.plt.tight_layout()
-        I.sns.despine()
-
-        gs = ax.get_gridspec()
-        # remove the underlying axes
-        for ax in axes[:, 0]:
-            ax.remove()
-        axcell = fig.add_subplot(gs[:, 0])
-
-        ax = axcell
-        
-        if not categories:
-            self.show_cell(ax, weights = weights.reshape(n_celltypes, n_spatial_bins, temporal_window_width)[celltype]*weight_scaling,
-                scaling = scaling, t=t)
-            #axes[0,1].axhline(t)
-
-        else:
-            self.show_cell(ax)
-        
-        I.sns.despine(ax = ax, left = True, bottom = True)
-        ax.set_aspect('equal')
-        ax.set_xticks([])
-        ax.set_yticks([])
-        axes[1,1].get_xticklabels()[0].set_color("grey")
-        axes[1,1].get_xticklabels()[1].set_color("green")
-        axes[1,1].get_xticklabels()[2].set_color("red")
-        axes[1,1].get_xticklabels()[3].set_color("blue")
-        
-        # plot AUCs
-        ax = axes[0,3]
-        ax.plot(AUCs)
-        ax.set_ylim(0.94,0.98)
-        ax.set_ylabel('AUROC')
-
-        # plot loss
-        ax = axes[1,3]
-        ax.set_ylabel('loss')    
-        ax.plot(train_loss, label = 'train')    
-        ax.plot(test_loss, label = 'test')
-        ax.set_xlabel('epoch')
-        ax.legend()
+        axes = add_weights_to_axes(self, axes)
+        axes = plot_aucs(axes)
+        axes = plot_loss(axes)
 
         if ts is not None:
             title = 'history: {} ms'.format(-ts[t]-1)
