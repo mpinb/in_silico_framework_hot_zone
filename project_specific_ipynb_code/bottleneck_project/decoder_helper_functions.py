@@ -66,7 +66,7 @@ def forward_decoder(model, bottleneck):
         out = model.output_layer(out)
         return out
 
-def get_decoder_io(SA, ISI_SOMA, ISI_DEND, AP_SOMA, VT_SOMA, AP_DEND, VT_DEND, temporal_window_width, model):
+def get_decoder_info(SA, ISI_SOMA, ISI_DEND, AP_SOMA, VT_SOMA, AP_DEND, VT_DEND, temporal_window_width, model):
     """
     SA: array of synaptic input with dimensions n_trials x n_cell_types x _n_spatial_bins x n_temporal_bins
     ISI_SOMA: time since last somatic spike, defined for each time point. Shape: 1 x n_temporal_bins

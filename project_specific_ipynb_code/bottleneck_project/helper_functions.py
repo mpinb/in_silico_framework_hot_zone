@@ -187,7 +187,6 @@ def get_model_stats(mdb, model, best_epoch=None, bottleneck_node=0):
         model = I.cloudpickle.load(f)
 
     # print('max AUC:', max(AUCs), 'min loss:', min(loss), 'epoch:', epochs[best_epoch]+1)
-    print(model.linear1.weight.shape)
     weights = model.linear1.weight[bottleneck_node].data.cpu().detach().numpy().reshape(2,260,80) #- 1 *model.linear1.weight[1].data.cpu().detach().numpy().reshape(2,260,80)
     df = I.pd.DataFrame(losses, columns = ['name', 'epoch', 'batch', 'value'])
     train_loss= df[df.name == 'train_loss'].groupby('epoch').value.mean()
