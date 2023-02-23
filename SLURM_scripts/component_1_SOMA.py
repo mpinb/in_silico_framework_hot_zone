@@ -203,9 +203,8 @@ def setup_jupyter_notebook(management_dir):
 if PROCESS_NUMBER == 0:
     setup_locking_server()
     setup_dask_scheduler(MANAGEMENT_DIR)
-    # setup_jupyter_notebook()
+    if LAUNCH_JUPYTER_SERVER:
+        setup_jupyter_notebook(MANAGEMENT_DIR)
 setup_locking_config()
-setup_dask_workers(MANAGEMENT_DIR)
-if PROCESS_NUMBER == 0 and LAUNCH_JUPYTER_SERVER:
-    setup_jupyter_notebook(MANAGEMENT_DIR)
+setup_dask_workers(MANAGEMENT_DIR)    
 time.sleep(60*60*24*365)

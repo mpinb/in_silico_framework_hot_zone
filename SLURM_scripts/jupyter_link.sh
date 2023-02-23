@@ -5,6 +5,28 @@
 trap "exit 1" SIGUSR1
 PROC=$$
 
+#######################################
+# Given a string, continuously prints the string with an 
+# updated "..." icon
+# Arguments:
+#   1. A string
+#######################################
+# Little spinning icon
+dot[0]="   "
+dot[1]=".  "
+dot[2]=".. "
+dot[3]="..."
+function printf_with_dots {
+    for i in "${dot[@]}"
+    do
+        # \r removes previous line
+        # \b$i is the ... icon
+        # >&2 writes to stdout
+        printf "\r$1\b$i">&2
+        sleep 0.3
+    done
+}
+
 
 #######################################
 # Given a string, continuously prints the string with an 
@@ -57,13 +79,13 @@ function args_precheck {
 function fetch_jupyter_link {
     local jupyter_file="$MYBASEDIR/management_dir_$1/jupyter.txt"
     while ! test -f $jupyter_file; do
-        printf_with_spinner "Launching Jupyter server"
-    done
+        printf_with_dots "Launching Jupyter server"
+    done;
     local link="$(cat $jupyter_file | grep -Eo http://.*:11113/.* | head -1)"
     while [ -z "$link" ]; do  # wait until link is written and grep returns a match
-        printf_with_spinner "Launching Jupyter server"
+        printf_with_dots "Launching Jupyter server"
         local link="$(cat $jupyter_file | grep -Eo http://.*:11113/.* | head -1)"
-    done
+    done;
     echo "${link}"
 }
 
@@ -77,11 +99,11 @@ function fetch_jupyter_link {
 function fetch_ip {
     management_dir="$MYBASEDIR/management_dir_$1"
     while ! test -d "$management_dir"; do
-        printf_with_spinner "Creating \"management_dir_$1\" "
-    done
+        printf_with_dots "Creating \"management_dir_$1\" "
+    done;
     while ! test -f "$management_dir/scheduler.json"; do
-        printf_with_spinner "Creating \"management_dir_$1/scheduler.json\" "
-    done
+        printf_with_dots "Creating \"management_dir_$1/scheduler.json\" "
+    done;
     local ip="$(cat $management_dir/scheduler.json | grep -Eo tcp://\.*28786 | grep -o -P '(?<=tcp://).*(?=:28786)')"
     echo "${ip}"
 }
