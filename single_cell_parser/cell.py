@@ -78,6 +78,7 @@ class Cell(object):
         self.neuron_sim_param = None
         self.network_param = None
         self.network_sim_param = None
+        self.section_adjacency_map = None
     
     def re_init_cell(self, replayMode=False):
         '''re-initialize for next simulation run'''
@@ -367,6 +368,32 @@ class Cell(object):
 
 
         return sa_pd
+
+    def get_section_adjacancy_map(self):
+        """Generates a map that shows which sections are connected to which sections.
+        Saves this as a class attribute if it's the first time calculatingm otherwise returns
+
+        Args:
+            self (cell): the cell boject
+
+        Returns:
+            dict: a dictionary where each key is the section id, and the value is a list of adjacent section ids
+        """
+        if self.section_adjacency_map is None:
+            # Calculate the adjacency map
+            # put parents in a dict
+            section_adjacency_map = {}
+            for child_section_n, section in enumerate(self.sections):
+                # get parents
+                section_adjacency_map[child_section_n] = {
+                    "parents": section.parent,
+                    "children": []
+                    }
+            # assign children in same dict
+            for child_section_n, parent_section_n in section_adjacency_map.items():
+                section_adjacency_map[parent_section_n]["children"].append(child_section_n)
+            self.section_adjacency_map = section_adjacency_map
+        return self.section_adjacency_map
 
 class PySection(nrn.Section):
     '''

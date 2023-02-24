@@ -49,15 +49,12 @@ class CellMorphologyVisualizer:
         self.elev = 30 # Elevation of the camera above the equatorial plane in degrees.
         self.roll = 0
         self.neuron_rotation = 3 # Rotation degrees of the neuron at each frame during timeseries visualization (in azimuth)
-        # Max and min voltages colorcoded in the cell morphology
-        self.vmin = -80 # mV
-        self.vmax = 20 # mV
         # Image quality
         self.dpi = 72
-        # Time in the simulation during which a synapse activation is shown during the visualization
-        self.time_show_syn_activ = 2 # ms
-        
-        """Gather the necessary information to plot the cell morphology. This info is always necessary to plot the cell.
+
+        """Morphology attributes
+        Gather the necessary information to plot the cell morphology.
+        This info is always necessary to plot the cell.
         morphology: pandas dataframe with points.
         Each point contains the x, y and z coordinates, a diameter and the section index
         of the neuron to which that point belongs.
@@ -65,14 +62,59 @@ class CellMorphologyVisualizer:
         between 2 branching points / end of a branch.
         """
         self.line_pairs = []  # initialised below
-        self.morphology = self.__get_morphology()
+        self.morphology = self.__get_morphology()  # a pandas DataFrame
         self.points = self.morphology[["x", "y", "z"]]
         self.diameters = self.morphology["diameter"]
         self.section_indices = self.morphology["section"]
+
+        """Simulation-related parameters
+        These only get initialised when the cell object contains simulation data"""
+        # Max and min voltages colorcoded in the cell morphology
+        self.vmin = None # mV
+        self.vmax = None # mV
+        # Time points of the simulation
+        self.simulation_times = None
+        # Time offset w.r.t. simulation start. useful if '0 ms' is supposed to refer to stimulus time
+        self.time_offset = None
+        # Time points we want to visualize (values by default)
+        self.t_start = None
+        self.dt = None
+        self.t_step = None
+        self.t_end = None
+        self.times_to_show = None
+        
+        """List contaning the voltage of the cell during a timeseries. Each element corresponds to a time point.
+        Each element of the list contains n elements, being n the number of points of the cell morphology. 
+        Hence, the value of each element is the voltage at each point of the cell morphology."""
+        self.voltage_timeseries = None
+        
+        """List containing the synapse activations during a timeseries (Similarly to voltage_timeseries). 
+        Each element corresponds to a time point. Each element is a dictionary where each key is the type of
+        input population and the value is the list of active synapses for that type of population at that time point. 
+        The list contains the 3d coordinates where each active synapse is located."""
+        self.synapses_timeseries = None
+
+        # Time in the simulation during which a synapse activation is shown during the visualization
+        self.time_show_syn_activ = 2 # ms
+
+        if self.__has_simulation_data():
+            self.__init_simulation_data()
+
+    # "Private" methods
+    def __has_simulation_data(self):
+        return len(self.cell.soma.recVList[0]) > 0
+
+    def __assert_has_simulation_data(self):
+        assert self.__has_simulation_data(), "This cell object has no simulation data, yet you are trying to plot data that is only available after a simulation. You can only plot its morphology, not its membrane voltage or synapses."
+
+    def __init_simulation_data(self):
+        # Max and min voltages colorcoded in the cell morphology
+        self.vmin = -80 # mV
+        self.vmax = 20 # mV
         
         """Time"""
         # Time points of the simulation
-        self.simulation_times = np.array(cell.tVec)
+        self.simulation_times = np.array(self.cell.tVec)
         # Time offset w.r.t. simulation start. useful if '0 ms' is supposed to refer to stimulus time
         self.time_offset = 0
         # Time points we want to visualize (values by default)
@@ -93,9 +135,9 @@ class CellMorphologyVisualizer:
         input population and the value is the list of active synapses for that type of population at that time point. 
         The list contains the 3d coordinates where each active synapse is located."""
         self.synapses_timeseries = []
+        # Time in the simulation during which a synapse activation is shown during the visualization
+        self.time_show_syn_activ = 2  # ms
 
-    # "Private" methods
-        
     def __get_morphology(self):
         '''
         Retrieve cell MORPHOLOGY from cell object.
@@ -512,6 +554,7 @@ class CellMorphologyVisualizer:
             - save: path where the plot will be saved. If it's empty it will not be saved
             - plot: whether the plot should be shown.
         '''
+        self.__assert_has_simulation_data()
         if vmin is not None: self.vmin = vmin 
         if vmax is not None: self.vmax = vmax 
         voltage = self.__get_voltages_at_timepoint(time_point)
@@ -571,6 +614,7 @@ class CellMorphologyVisualizer:
             - Save: path where the plot will be saved. If it's empty it will not be saved
             - Plot: whether the plot should be shown.
         '''
+        self.__assert_has_simulation_data()
         if time_show_syn_activ is not None: self.time_show_syn_activ = time_show_syn_activ 
         if vmin is not None: self.vmin = vmin 
         if vmax is not None: self.vmax = vmax 
@@ -602,6 +646,7 @@ class CellMorphologyVisualizer:
             - synapse_legend: whether the synapse activations legend should appear in the plot
             t_start, t_end and t_step will define the self.time attribute
         '''            
+        self.__assert_has_simulation_data()
         if client is None:
             raise ValueError("Please provide a dask client object for the client argument")
         self.__update_time(t_start, t_end, t_step)
@@ -637,6 +682,7 @@ class CellMorphologyVisualizer:
             - synapse_legend: whether the synapse activations legend should appear in the plot
             t_start, t_end and t_step will define the self.time attribute
         '''
+        self.__assert_has_simulation_data()
         if client is None:
             raise ValueError("Please provide a dask client object for the client argument")
         self.__update_time(t_start, t_end, t_step)
@@ -668,6 +714,7 @@ class CellMorphologyVisualizer:
             - synapse_legend: whether the synapse activations legend should appear in the plot
             t_start, t_end and t_step will define the self.time attribute
         '''        
+        self.__assert_has_simulation_data()
         if client is None:
             raise ValueError("Please provide a dask client object for the client argument")
         self.__update_time(t_start, t_end, t_step)
@@ -678,6 +725,60 @@ class CellMorphologyVisualizer:
         self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(images_path, client, voltage_legend, synapse_legend)
         display_animation_from_images(images_path, 1, embedded=True)
         
+    def display_interactive_morphology_3d(self, background_color="rgb(180,180,180)", highlight_section=None, renderer="notebook_connected"):
+        ''' 
+        Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with NO data overlayed.
+        If you want to overlay scalar data, such as membrane voltage, please use :@function self.display_interactive_voltage_in_morphology_3d:
+
+        Args:
+            - background_color: just some grey by default
+            - renderer
+
+        Returns:
+            ipywidgets.VBox object: an interactive render of the cell.
+        '''
+        transparent="rgba(0, 0, 0, 0)"
+        ax_layout = dict(
+            backgroundcolor=transparent,
+            gridcolor=transparent,
+            showbackground=True,
+            zerolinecolor=transparent,
+            visible=False
+        )
+        
+        py.init_notebook_mode()
+        pio.renderers.default = renderer
+        # Initialize a dataframe. This may seem inefficient, but plotly does this anyways whenever you pass data. 
+        # Might as well explicitly do it yourself with more control
+        df = self.morphology.copy()
+        
+        # Create figure
+        fig = px.scatter_3d(
+            df, x="x", y="y", z="z", 
+            hover_data=["x","y","z","section", "diameter"], size="diameter")
+        fig.update_traces(marker = dict(line = dict(width = 0)))  # remove outline of markers
+        fig.update_layout(scene=dict(
+                                     xaxis = ax_layout,
+                                     yaxis = ax_layout,
+                                     zaxis = ax_layout,
+                                     bgcolor=transparent  # turn off background for just the scene
+                                        ),
+                             plot_bgcolor=background_color,
+                             paper_bgcolor=background_color,
+                             coloraxis_colorbar=dict(title="V_m (mV)")
+                             )
+        if highlight_section:
+            fig.add_traces(
+                px.scatter_3d(df[df['section'] == highlight_section], x="x", y="y", z='z',
+                hover_data=["x","y","z","section", "diameter"], size="diameter")
+                .update_traces(marker = dict(line = dict(width = 0), color='red'))
+                .data
+            )
+
+        # create FigureWidget from figure
+        f = go.FigureWidget(data=fig.data, layout=fig.layout)
+        return f
+     
     def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet', background_color="rgb(180,180,180)", renderer="notebook_connected"):
         ''' 
         TODO: add synapse activations!
