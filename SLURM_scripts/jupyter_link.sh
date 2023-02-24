@@ -5,6 +5,9 @@
 trap "exit 1" SIGUSR1
 PROC=$$
 
+NC='\033[0m' # No Color
+ORANGE='\033[0;33m' # orange color
+
 #######################################
 # Given a string, continuously prints the string with an 
 # updated "..." icon
@@ -17,12 +20,16 @@ dot[1]=".  "
 dot[2]=".. "
 dot[3]="..."
 function printf_with_dots {
+    local string=$1
+    local width="$(tput cols)"
+    local string_length=${#string}
+    local padding=$(($width - $string_length - 4))  # to clean out previous long strings
     for i in "${dot[@]}"
     do
         # \r removes previous line
         # \b$i is the ... icon
         # >&2 writes to stdout
-        printf "\r$1\b$i">&2
+        printf "\r$1\b$i%*s" "$padding">&2
         sleep 0.3
     done
 }
@@ -51,7 +58,7 @@ function printf_with_spinner {
         # amount of padding is given as an argument, hence the * char
         # \b$i is the spinner icon
         # >&2 writes to stdout
-        printf "\r$1%*s\b$i" "$remainder">&2
+        printf "\r$1 %*s\b$i" "$remainder">&2
         sleep 0.1
     done
 }
@@ -76,15 +83,34 @@ function args_precheck {
 # Arguments:
 #   1: The name of the job
 #######################################
-function fetch_jupyter_link {
+function fetch_jupyter_lab_link {
     local jupyter_file="$MYBASEDIR/management_dir_$1/jupyter.txt"
     while ! test -f $jupyter_file; do
-        printf_with_dots "Launching Jupyter server"
+        printf_with_dots "Setting up jupyter lab server "
     done;
     local link="$(cat $jupyter_file | grep -Eo http://.*:11113/.* | head -1)"
     while [ -z "$link" ]; do  # wait until link is written and grep returns a match
-        printf_with_dots "Launching Jupyter server"
+        printf_with_dots "Launching Jupyter Lab server "
         local link="$(cat $jupyter_file | grep -Eo http://.*:11113/.* | head -1)"
+    done;
+    echo "${link}"
+}
+
+#######################################
+# Search through the management_dir jupyter.txt file for the jupyter link (including token if it is configured to use it)
+#   greps for 11112 (the default port for jupyter lab) and outputs the first match.
+# Arguments:
+#   1: The name of the job
+#######################################
+function fetch_jupyter_notebook_link {
+    local jupyter_file="$MYBASEDIR/management_dir_$1/jupyter.txt"
+    while ! test -f $jupyter_file; do
+        printf_with_dots "Setting up Jupyter Notebook server "
+    done;
+    local link="$(cat $jupyter_file | grep -Eo http://.*:11112/.* | head -1)"
+    while [ -z "$link" ]; do  # wait until link is written and grep returns a match
+        printf_with_dots "Launching Jupyter Notebook server "
+        local link="$(cat $jupyter_file | grep -Eo http://.*:11112/.* | head -1)"
     done;
     echo "${link}"
 }
@@ -111,18 +137,19 @@ function fetch_ip {
 #######################################
 # Construct the Jupter server link based on the node IP adress and the jupyter link
 #   Should work whether or not you have a token configured (only tested on token-having links)
-#   Makes sure the link if set up with an IP, and not the node name (useful for e.g. quickly checking dask interface)
+#   Makes sure the link is set up with an IP, and not the node name (useful for e.g. quickly checking dask interface)
 # Arguments:
 #   1: The IP of the job
 #   2: The jupyter link
 #######################################
-function clean_jupyter_link {
-    local link_suffix="$(echo $2 | grep -oP '(?<=:11113/)'.* | head -1)"  # grep for anything after the port number
-    if [ -z "$link_suffix" ] ;  # no suffix is found: no token, but also no 
+function format_jupyter_link {
+    local link_suffix="$(echo $2 | grep -oP '(?<=:1111[23]/)'.* | head -1)"  # grep for anything after the port number
+    local port_number="$(cut -d':' -f3 <<<$2 | cut -c1-5)"  # cut the ip on colo, take third element, take first 4 chars of that
+    if [ -z "$link_suffix" ] ;  # no suffix is found: no token
     then
         printf "\nWarning: No token is set for this Jupyter server.\nVSCode will not be able to connect to this server, and notebooks running on this server can not be shared by link.\n">&2
     fi
-    local jupyter_link="http://$1:11113/$link_suffix"
+    local jupyter_link="http://$1:$port_number/$link_suffix"
     echo $jupyter_link
 }
 
@@ -130,12 +157,17 @@ args_precheck $#;  # check amount of arguments
 job_name="$1"
 jupyter_file="$MYBASEDIR/management_dir_$job_name/jupyter.txt"
 ip="$(fetch_ip $job_name)";
-link="$(fetch_jupyter_link $job_name)";
-jupyter_link="$(clean_jupyter_link $ip $link)";
+notebook_link="$(fetch_jupyter_notebook_link $job_name)";
+jupyter_notebook_link="$(format_jupyter_link $ip $notebook_link)";
+lab_link="$(fetch_jupyter_lab_link $job_name)";
+jupyter_lab_link="$(format_jupyter_link $ip $lab_link)";
 
 width="$(tput cols)"
 printf '\r%*s' $width  # clear previous line
-printf "\rJupyter server for \"$1\" is running at:
-$jupyter_link
+printf "${ORANGE}Jupyter Lab${NC} server for \"$1\" is running at:
+$jupyter_lab_link
+
+${ORANGE}Jupyter notebook${NC} server for \"$1\" is running at:
+$jupyter_notebook_link
 \n"
 exit 0;
