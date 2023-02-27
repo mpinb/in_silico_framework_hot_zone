@@ -430,7 +430,7 @@ class Init:
     
     def init_soma_AP_ISI(self):
         st = self.client.scatter(self.mdb['spike_times'])
-        return self._save_AP_ISI(st)
+        return self._save_AP_ISI(st,suffix = 'SOMA')
 
     def init_dend_AP_ISI(self):
         dist_rec_site = self._get_distal_recording_site()
