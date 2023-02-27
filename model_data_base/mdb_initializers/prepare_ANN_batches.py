@@ -596,7 +596,8 @@ def run_delayeds_incrementally(client, delayeds):
             futures = [f for f in futures if not f.status == 'finished']
             for f in futures:
                 if f.status == 'error':
-                    raise RuntimeError()
+                    f.result()
+                    # raise RuntimeError()
             if len(futures) < ncores*2:
                 break
     I.distributed.wait(futures)
