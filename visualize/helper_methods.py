@@ -31,9 +31,19 @@ def write_video_from_images(images, out_path, fps=24, images_format = '.png', qu
         - codec
         - auto_sort_paths: paths to images sorted
     '''
-    if isinstance(images, str) and os.path.isdir(images):
-        out = subprocess.call(["ffmpeg", "-y", "-r", str(fps), "-i", temp_folder+"/%*"+images_format, 
-                               "-vcodec", codec, "-q:v", str(quality), "-r", str(fps), out_path])
+    
+    if not out_path.endwith('.mp4'):
+        raise ValueError('output path must be the path to an mp4 video!')
+        
+    # make it a list if we want to auto_sort_paths since this is what find_files_and_order_them expects
+    if isinstance(images, str) and os.path.isdir(images) and (auto_sort_paths == True):
+        images = [images]
+        
+    # call ffmpeg directly
+    if isinstance(images, str) and os.path.isdir(images) and (auto_sort_paths == False):
+        out = subprocess.call(["ffmpeg", "-y", "-r", str(fps), "-i", images+"/%*"+images_format, 
+                                       "-vcodec", codec, "-q:v", str(quality), "-r", str(fps), out_path])    
+    #
     elif isinstance(images, list):
         if auto_sort_paths:
             listFrames = find_files_and_order_them(images,images_format)
