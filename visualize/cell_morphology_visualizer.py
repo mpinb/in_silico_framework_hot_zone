@@ -836,7 +836,8 @@ class CellMorphologyVisualizer:
                                         ),
                              plot_bgcolor=background_color,
                              paper_bgcolor=background_color,
-                             coloraxis_colorbar=dict(title="V_m (mV)")
+                             coloraxis_colorbar=dict(title="V_m (mV)"),
+                             margin=dict(l=10, r=10, t=40, b=10)
                              )
 
         fig_soma_voltage = px.line(
