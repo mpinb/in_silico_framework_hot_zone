@@ -79,7 +79,17 @@ def write_gif_from_images(images, out_path, interval=40, images_format = '.png',
         - images_format: .png, .pdf, .jpg...
         - auto_sort_paths: paths to images sorted
     '''
-    if isinstance(images, str) and os.path.isdir(images):
+    if not out_path.endswith('.gif'):
+        raise ValueError('output path must be the path to a gif!')
+    
+    # make it a list if we want to auto_sort_paths since this is what find_files_and_order_them expects
+    if isinstance(images, str) and (auto_sort_paths == True):
+        if not os.path.isdir(images):
+            raise ValueError('images must be a path to a folder or a list of folders or a list of images')
+        images = [images]
+    
+    # call ffmpeg directly
+    if isinstance(images, str) and os.path.isdir(images) and (auto_sort_paths == False):
         frames = []
         for f in os.listdir(images):
             if f.endswith(images_format):
