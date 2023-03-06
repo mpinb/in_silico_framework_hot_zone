@@ -195,6 +195,18 @@ def git_pieces_from_vcs(tag_prefix, root, verbose, run_command=run_command):
     This only gets called if the git-archive 'subst' keywords were *not*
     expanded, and _version.py hasn't already been rewritten with a short
     version string, meaning we're inside a checked out source tree.
+
+    The command finds the most recent tag that is reachable from a commit. If the tag points to the commit, then only the tag is shown.
+    Otherwise, it suffixes the tag name with the number of additional commits on top of the tagged object and the abbreviated object name of the most recent commit.
+    The result is a "human-readable" object name which can also be used to identify the commit to other git commands.
+
+    By default (without --all or --tags) git describe only shows annotated tags.
+    For more information about creating annotated tags see the -a and -s options to git-tag.
+
+    If the given object refers to a blob, it will be described as <commit-ish>:<path>, such that the blob can be found at <path> in the <commit-ish>,
+    which itself describes the first commit in which this blob occurs in a reverse revision walk from HEAD.
+
+    See also https://git-scm.com/docs/git-describe
     """
     if not os.path.exists(os.path.join(root, ".git")):
         if verbose:
@@ -207,8 +219,9 @@ def git_pieces_from_vcs(tag_prefix, root, verbose, run_command=run_command):
     # if there is a tag matching tag_prefix, this yields TAG-NUM-gHEX[-dirty]
     # if there isn't one, this yields HEX[-dirty] (no NUM)
     describe_out = run_command(GITS, ["describe", "--tags", "--dirty",
-                                      "--always", "--long",
-                                      "--match", "%s*" % tag_prefix],
+                                      "--always", "--long", "--all",
+                                      "--match", "%s*" % tag_prefix
+                                      ],
                                cwd=root)
     # --long was added in git-1.5.5
     if describe_out is None:
