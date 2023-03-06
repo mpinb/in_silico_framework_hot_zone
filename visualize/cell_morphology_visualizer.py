@@ -23,6 +23,8 @@ try:
 except ImportError:
     warnings.warn("Plotly could not be imported. Interactive visualisations will not work.", ImportWarning)
 import pandas as pd
+from biophysics_fitting import get_main_bifurcation_section
+from scipy.spatial.transform import Rotation
 
 
 class CellMorphologyVisualizer:
@@ -32,7 +34,7 @@ class CellMorphologyVisualizer:
     This can be visualized in static images or as time series (videos, gif, animation, interactive window).
     Also, the relevant cell information can also be exported to .vtk format for further visualization or interaction.
     """
-    def __init__(self, cell):
+    def __init__(self, cell, align_trunk=True):
         """
         Given a Cell object, this class initializes an object that is easier to work with
         """
@@ -63,6 +65,8 @@ class CellMorphologyVisualizer:
         """
         self.line_pairs = []  # initialised below
         self.morphology = self.__get_morphology()  # a pandas DataFrame
+        if align_trunk:
+            self.__align_trunk_with_z_axis()
         self.points = self.morphology[["x", "y", "z"]]
         self.diameters = self.morphology["diameter"]
         self.section_indices = self.morphology["section"]
@@ -138,6 +142,43 @@ class CellMorphologyVisualizer:
         # Time in the simulation during which a synapse activation is shown during the visualization
         self.time_show_syn_activ = 2  # ms
 
+    def __align_trunk_with_z_axis(self):
+        """
+        Calculates the polar angle between the trunk and z-axis (zenith).
+        Anchors the soma to (0, 0, 0) and aligns the trunk to the z-axis.
+
+        Args:
+        
+        Returns:
+        Nothing
+        """
+
+        assert len(self.morphology) > 0, "No morphology initialised yet"
+        soma = [section for section in self.cell.sections if section.label == "Soma"][0]
+        soma_center = np.mean(soma.pts, axis=0)
+        # the bifurcation sections is the entire section: can be quite large
+        # take last point, i.e. furthest from soma
+        bifurcation = get_main_bifurcation_section(self.cell).pts[-1]
+        soma_bif_vector = bifurcation - soma_center
+        soma_bif_vector /= np.linalg.norm(soma_bif_vector)
+        # angle with z-axis
+        zenith = np.arccos(
+            np.dot([0, 0, 1], soma_bif_vector)
+            )
+        xy_proj = [soma_bif_vector[0], soma_bif_vector[1], 0]
+        xy_proj /= np.linalg.norm(xy_proj)
+        # create vector to rotate about
+        xy_proj_orth = [xy_proj[1], -xy_proj[0], 0]
+        # rotation towards z-axis as rotation vector
+        # as rotation vector: direction is axis to rotate about, norm is angle of rotation
+        rot_vec = [e * zenith for e in xy_proj_orth]
+        rotation = Rotation.from_rotvec(rot_vec)
+
+        # Anchor soma to (0, 0, 0) and rotate trunk to align with z-axis
+        self.morphology[['x', 'y', 'z']] = rotation.apply(
+            [e - soma_center for e in self.morphology[['x', 'y', 'z']].values]
+        )
+
     def __get_morphology(self):
         '''
         Retrieve cell MORPHOLOGY from cell object.
@@ -148,17 +189,13 @@ class CellMorphologyVisualizer:
             if sec.label in ['Soma', 'AIS', 'Myelin']:
                 continue
             # Point that belongs to the previous section (x, y, z and diameter)
-            x = sec.parent.pts[-1][0]
-            y = sec.parent.pts[-1][1]
-            z = sec.parent.pts[-1][2]
+            x, y, z = sec.parent.pts[-1]
             d = sec.parent.diamList[-1]
             points.append([x, y, z, d, sec_n]) 
 
             for i, pt in enumerate(sec.pts):
                 # Points within the same section
-                x = pt[0]
-                y = pt[1]
-                z = pt[2]
+                x, y, z = pt
                 self.line_pairs.append([i, i+1])
                 d = sec.diamList[i]
                 points.append([x, y, z, d, sec_n])
@@ -765,7 +802,8 @@ class CellMorphologyVisualizer:
                                         ),
                              plot_bgcolor=background_color,
                              paper_bgcolor=background_color,
-                             coloraxis_colorbar=dict(title="V_m (mV)")
+                             coloraxis_colorbar=dict(title="V_m (mV)"),
+                             margin=dict(l=10, r=10, t=40, b=10)
                              )
         if highlight_section:
             fig.add_traces(
@@ -977,3 +1015,5 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, t
     
     plt.savefig(save)#,bbox_inches='tight')
     plt.close()
+
+
