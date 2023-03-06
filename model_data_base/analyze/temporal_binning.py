@@ -8,17 +8,19 @@ import compatibility
 def temporal_binning_pd(df, bin_size = None, min_time = None, max_time = None, normalize = True, bin_borders = None, rate = False):
     if not isinstance(df, pd.DataFrame):
         raise RuntimeError("Expected pd.DataFrame, got %s" % str(type(df)))
+    
+    timelist = time_list_from_pd(df)
 
     if bin_borders is  None:
         if min_time is None: min_time = min(timelist)
         if max_time is None: max_time = max(timelist)
+        if bin_size is None: bin_size = 1
         bin_borders = np.arange(min_time, max_time + bin_size, bin_size)
     else:
         assert(bin_size is None)
         assert(min_time is None)
         assert(max_time is None)
         
-    timelist = time_list_from_pd(df)
     
     data = np.histogram(timelist, bin_borders)[0]
     if normalize: 

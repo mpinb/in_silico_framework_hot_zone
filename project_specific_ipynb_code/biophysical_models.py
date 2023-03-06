@@ -494,7 +494,7 @@ class CurrentAnalysis:
                     x,y1,y2 = t,dummy[lv,:],dummy[lv+1,:]
                     select = (x>=select_window_relative_to_stim[0]) & (x<=select_window_relative_to_stim[1]) 
                     x,y1,y2 = x[select],y1[select],y2[select]
-                    ax.fill_between(x,y1,y2, 
+                    ax.fill_between(x,-y1,-y2, 
                                     label = rv if plot_label else None,
                                     color = self.colormap[rv],
                                     linewidth = 0)
@@ -514,7 +514,7 @@ class CurrentAnalysis:
                 x,y = t[select], I.np.array(self.cell.soma.recVList[0])[select]
                 ax2.plot(x,y, 'k')
                 x,y = t[select], I.np.array(self.voltage_trace)[select]
-                ax2.plot(x,y, 'r')
+                ax2.plot(x,y, c = '#f9b233')
 
             
     def plot_lines(self, ax = None, legend = True):

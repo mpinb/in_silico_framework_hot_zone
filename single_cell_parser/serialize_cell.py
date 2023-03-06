@@ -7,9 +7,9 @@ from __future__ import absolute_import
 import numpy as np
 import pandas as pd
 from six import BytesIO
-
 import sumatra
 from model_data_base.utils import silence_stdout
+from model_data_base.mdbopen import mdbopen
 from .cell_parser import CellParser
 
 def convert_hoc_array_to_np_array(hoc_array):
@@ -37,7 +37,7 @@ def cell_to_serializable_object(cell):
         dummy['recordVars'] = convert_dict_of_hoc_arrays_to_dict_of_np_arrays(sec.recordVars)
         dummy['label'] = sec.label
         out['sections'].append(dummy)
-    with open(cell.hoc_path) as f:
+    with mdbopen(cell.hoc_path) as f:
         out['hoc'] = f.read() 
     return out
 
@@ -47,7 +47,7 @@ def restore_cell_from_serializable_object(sc):
     # create hoc file  
     with mkdtemp() as tempdir:
         hoc_file_path = os.path.join(tempdir, 'morphology.hoc') 
-        with open(hoc_file_path, 'w') as hoc_file:
+        with mdbopen(hoc_file_path, 'w') as hoc_file:
             hoc_file.write(sc['hoc'])
         
         ##############################

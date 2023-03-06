@@ -11,7 +11,7 @@ tpn=""
 gres="4"  # default for GPU jobs
 qosline=""  # not set yet
 cuda=$'\n#module load cuda'  # If working on a GPU partition: load cuda with single hashtag, idk why?
-launch_jupyter_server="0"
+interactive="0"
 
 help() {
   cat <<EOF
@@ -98,19 +98,6 @@ function check_name {
     return 0
 }
 
-#######################################
-# Requests the name of the node some job is running on
-#   Show all running jobs of user, grep for jobname (truncated to first 8 chars), 
-#   grep for somegpu or somacpu with three numbers at the end
-#   TODO: add a100 regex
-# Arguments:
-#   1: The ID fo the job
-#######################################
-function fetch_node_name {
-    local node_name="$(squeue -u $USER | grep $1 | grep -Eo soma[cg]pu[0-9]{3})"
-    echo "${node_name}"
-}
-
 args_precheck $# $1;
 
 # Parse options
@@ -124,7 +111,7 @@ do
     m) mem=${OPTARG};memstr=$mem;;
     t) time=${OPTARG};;
     c) partition="CPU";;
-    i) partition=$partition"-interactive";launch_jupyter_server="1";;  # append "-interactive"
+    i) interactive="1";;
     p) partition=${OPTARG};;  # overwrites i or c flag
     T) tpn=${OPTARG};;
     r) gres=${OPTARG};;
@@ -147,24 +134,33 @@ check_name $name
 ################### Cluster logic ###################
 # Here, some extra variables are changed or created to add to the SLURM script depending on your needs
 
-if [ $partition = "GPU-interactive" ]; then
+# Adapt partition name for interactive jobs
+if [ ${#partition} == 3 -a $interactive == "1" ]; then
+  # GPU or CPU interactive session
+  # adapt partition name to have -interactive in it
+  partition=$partition"-interactive"
+fi
+
+# Loading cuda and setting gres depending on GPU/CPU partition
+if [ $interactive == 1 ]; then
+  interactive_string=" interactive"
   cuda=$'\nmodule load cuda'
-  if [ $gres -eq "0" ]; then  # Set gres to 4 if working on a GPU-interactive partition it if hasn't been set manually
-    gres="4"
+  if [[ ${partition:0:3} -ne CPU ]]; then
+    # Either GPU-interactive or A100 interactive
+    # Set gres to 4 if working on a GPU-interactive partition it if hasn't been set manually already
+    if [ $gres -eq 0 ]; then
+      gres="4"
+    fi
+  elif [[ ${partition:0:3} == CPU ]]; then
+    # CPU-interactive job. Different way of loading Cuda, idk why
+    gres="0"
   fi
-elif [ ${partition:0:3} == CPU ]; then
-  cuda=$'\nmodule load cuda'
-  gres="0"
-fi
-if [[ "$partition" == *"interactive" ]]; then
-  # in case the interactive partition was requested by specifying the partition with -p flag
-  launch_jupyter_server="1"
+elif [ $interactive == 0 ]; then
+  interactive_string=""
 fi
 
-
-# Manually set qos line and _A100 python file suffix in case the A100 was requested with the -p flag instead of the A flag
+# Manually set qos line in case the A100 was requested with the -p flag instead of the A flag
 if [ $partition = "GPU-a100" ]; then
-  a100="_A100"  # python suffix to start the correct file
   qosline=$'\n#SBATCH --qos=GPU-a100'
   if [ $cores \> 32 ]; then
     cores=32
@@ -175,14 +171,11 @@ if [ ! -z "$tpn" ]; then
   tpn="#SBATCH --ntasks-per-node="$tpn
 fi
 
-
-
-# TODO implement max possible mem or time
-
-# Print out job information
+################### Print out job info ###################
+width="$(tput cols)"
+printf '%0.s-' $(seq 1 $width)  # fill width with "-" char
 echo "
----------------------------------------------
-Launching job named \""$name"\" on $partition with
+Launching$interactive_string job named \""$name"\" on $partition with
 - $nodes nodes
 - $cores cores 
 - $memstr MB memory
@@ -190,6 +183,7 @@ Launching job named \""$name"\" on $partition with
 - for $time
 "
 
+################### Run SLURM scripts ###################
 # create wrapper script to start batch job with given parameters
 # using EoF or EoT makes it easier to pass multi-line text with argument values
 # This submits the job and catches the output
@@ -209,9 +203,18 @@ unset XDG_RUNTIME_DIR
 unset DISPLAY
 export SLURM_CPU_BIND=none
 ulimit -Sn "\$(ulimit -Hn)"
-srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA.py \$MYBASEDIR/management_dir_$name $launch_jupyter_server
+srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA.py \$MYBASEDIR/management_dir_$name $interactive
 EoF
 )
 echo $output
-echo "---------------------------------------------"
-# id="$(echo $output | grep -Eo [0-9]{7})"  # grep slurm submit output for ID
+printf "Use squeue to check its running status\n"
+printf '%0.s-' $(seq 1 $width)  # fill width with "-" char
+echo ""
+if [ $interactive == "1" ]; then
+  # fetch working directory of current script
+  __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  # also run jupyter_link to fetch the link where the jupyter server is running
+  bash ${__dir}/jupyter_link.sh $name
+else
+  printf "Batch job: no jupyter server will be launched.\n"
+fi

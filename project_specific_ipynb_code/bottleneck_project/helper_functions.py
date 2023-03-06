@@ -1,15 +1,6 @@
-try:
-    from IPython import display
-except ImportError:
-    pass
 import torch
-try:
-    import seaborn as sns
-except ImportError:
-    print("Could not import seaborn")
 import Interface as I
 import torch.nn as nn
-import torch.nn.functional as F
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 class Model(nn.Module):
@@ -187,7 +178,6 @@ def get_model_stats(mdb, model, best_epoch=None, bottleneck_node=0):
         model = I.cloudpickle.load(f)
 
     # print('max AUC:', max(AUCs), 'min loss:', min(loss), 'epoch:', epochs[best_epoch]+1)
-    print(model.linear1.weight.shape)
     weights = model.linear1.weight[bottleneck_node].data.cpu().detach().numpy().reshape(2,260,80) #- 1 *model.linear1.weight[1].data.cpu().detach().numpy().reshape(2,260,80)
     df = I.pd.DataFrame(losses, columns = ['name', 'epoch', 'batch', 'value'])
     train_loss= df[df.name == 'train_loss'].groupby('epoch').value.mean()

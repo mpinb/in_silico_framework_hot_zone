@@ -30,10 +30,12 @@ def prefun(df):
     return df
  
 def postfun(s, maxtime = None):
-    default_value_size = s.dropna().iloc[0].shape
+    # default_value_size = s.dropna().iloc[0].shape
+    default_value_size = (maxtime,)
     defaultvalue = np.zeros(default_value_size)
     s_old = s
-    s = s.map(lambda x: defaultvalue if( isinstance(x, float) and np.isnan(x)) else x)
+    # s = s.map(lambda x: defaultvalue if( isinstance(x, float) and np.isnan(x)) else x)
+    s = s.map(lambda x: defaultvalue if((isinstance(x, float) and np.isnan(x)) or (x is None)) else x)
     return np.vstack(s.values)
 
 def applyfun(pdf, maxtime = None):

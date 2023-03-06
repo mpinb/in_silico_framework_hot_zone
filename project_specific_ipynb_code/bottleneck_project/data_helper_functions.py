@@ -4,7 +4,7 @@ import torch
 from tqdm import tqdm
 
 def register_databases(ip=""):
-    assert ip != "", "Please provide an ip for the distributed Client"
+    assert ip is not "", "Please provide an ip for the distributed Client"
     # init mdb for which batches should be generated
     mdb = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20220829_hot_zone_on_demand_simulations/')
     mdb._register_this_database()

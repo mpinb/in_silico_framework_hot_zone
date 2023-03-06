@@ -17,7 +17,7 @@ LAUNCH_JUPYTER_SERVER = True  # by default, if left unspecified
 if len(sys.argv) > 2:
     # component_1_SOMA.py was called from submit.sh with extra arguments
     LAUNCH_JUPYTER_SERVER = bool(int(sys.argv[2]))  # only launch when interactive session is started
-    print("La8unching Jupyter server: {}".format(LAUNCH_JUPYTER_SERVER))
+    print("Launching Jupyter server: {}".format(LAUNCH_JUPYTER_SERVER))
 print('using management dir {}'.format(MANAGEMENT_DIR))
 
 # In[3]:
@@ -187,25 +187,26 @@ def setup_jupyter_notebook(management_dir):
     print('-'*50)
     print('setting up jupyter notebook')
     check_locking_config() 
-    command = "cd notebooks; jupyter-notebook --ip='*' --no-browser --port=11112 &"
+    command = "cd notebooks; jupyter-notebook --ip='*' --no-browser --port=11112 "
     print(command)
-    os.system(command)    
+    # Redirect both stdout and stderr (&) to file
+    os.system(command + "&>>{} &".format(os.path.join(management_dir,  "jupyter.txt")))    
     print('-'*50)
     #command = "conda activate /axon/scratch/abast/anaconda3/; jupyter-lab --ip='*' --no-browser --port=11113 &"
     #command = 'screen -S jupyterlab -dm bash -c "source ~/.bashrc; source_3; ' +     '''jupyter-lab --ip='*' --no-browser --port=11113"'''
     #command = '''bash -c "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" &'''
     #command = '''(source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113) &'''
-    command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" &'''
+    command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" '''
     #command = "/axon/scratch/abast/anaconda3/bin/jupyter-lab --ip='*' --no-browser --port=11113"
-    os.system(command + "> /dev/null 2>{}".format(os.path.join(management_dir,  "jupyter.txt")))
+    # append output to same file as notebook (ance the >> operator rather than >)
+    os.system(command + "&>>{} &".format(os.path.join(management_dir,  "jupyter.txt")))
 # In[8]:
 
 if PROCESS_NUMBER == 0:
     setup_locking_server()
     setup_dask_scheduler(MANAGEMENT_DIR)
-    # setup_jupyter_notebook()
+    if LAUNCH_JUPYTER_SERVER:
+        setup_jupyter_notebook(MANAGEMENT_DIR)
 setup_locking_config()
-setup_dask_workers(MANAGEMENT_DIR)
-if PROCESS_NUMBER == 0 and LAUNCH_JUPYTER_SERVER:
-    setup_jupyter_notebook(MANAGEMENT_DIR)
+setup_dask_workers(MANAGEMENT_DIR)    
 time.sleep(60*60*24*365)
