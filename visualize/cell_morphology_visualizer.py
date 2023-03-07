@@ -673,6 +673,21 @@ class CellMorphologyVisualizer:
 
     def __get_interactive_plot_with_scalar_data(self, scalar_data_keyword, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet',
                                                 background_color="rgb(180,180,180)", renderer="notebook_connected"):
+        """This is the main function to set up an interactive plot with scalar data overlayed.
+
+        Args:
+            scalar_data_keyword (str, optional): Scalar data to overlay on interactive plot. Defaults to None.
+            t_start (float/int, optional): Starting time of the interactive visualisation. Defaults to None.
+            t_end (float/int, optional): End time of the interactive visualisation. Defaults to None.
+            t_step (float/int, optional): Time step between consecutive time points. Defaults to None.
+            vmin (float, optional): Minimum voltage to show. Defaults to None.
+            vmax (float, optional): Maximum voltage to show. Defaults to None.
+            background_color (str, optional): Background color of plot. Defaults to "rgb(180,180,180)".
+            renderer (str, optional): Type of backend renderer to use for rendering the javascript/HTML VBox. Defaults to "notebook_connected".
+
+        Returns:
+            ipywidgets.VBox object: an interactive render of the cell.
+        """
         if scalar_data_keyword.lower() in ("voltage", "membrane voltage", "vm"):
             self.__calc_voltage_timeseries()
             scalar_data_per_section = np.array([self.__get_voltages_at_timepoint(t) for t in np.arange(self.t_start, self.t_end+self.dt, self.dt)]).T
@@ -680,7 +695,7 @@ class CellMorphologyVisualizer:
             scalar_data_per_time = {t: np.round(self.voltage_timeseries[t_idx], round_floats) for t_idx, t in enumerate(self.times_to_show)}
         
         else:
-            assert scalar_data_keyword.lower() in (e.lower() for e in self.possible_scalars), "Keyword {} is not associated with membrane voltage, and does not appear in the possible ion dynamic keywords: {}".format(self.possible_scalars)
+            assert scalar_data_keyword.lower() in (e.lower() for e in self.possible_scalars), "Keyword {} is not associated with membrane voltage, and does not appear in the possible ion dynamic keywords: {}".format(scalar_data_keyword, self.possible_scalars)
             self.__calc_ion_dynamics_timeseries(ion_keyword=scalar_data_keyword)
             scalar_data_per_section = np.array([self.__get_ion_dynamic_at_timepoint(t, ion_keyword=scalar_data_keyword) for t in np.arange(self.t_start, self.t_end+self.dt, self.dt)]).T
             scalar_data_per_time = {t: self.scalar_data[scalar_data_keyword][t_idx] for t_idx, t in enumerate(self.times_to_show)}
@@ -693,27 +708,31 @@ class CellMorphologyVisualizer:
 
         # Create figure
         fig_cell = self.__get_interactive_cell(background_color=background_color, renderer=renderer)
+        fig_cell.update_traces(name="morphology")
         fig_cell.update_coloraxes(colorscale=color_map)
-        fig_ion_dynamics = px.line(
+        fig_cell.add_traces(
+            go.Scatter3d(x=[0], y=[0], z=[0], name="selection", marker=dict(color='yellow'))
+        )
+        fig_trace = px.line(
             x=np.arange(self.t_start, self.t_end+self.dt, self.dt), y=self.__get_soma_voltage_between_timepoints(self.t_start, self.t_end, self.dt),
             labels={
                 "x": "time (ms)",
-                "y": "Membrane voltage (mV)"},
+                "y": scalar_data_keyword},
                  title="{} at soma".format(scalar_data_keyword)
                  )
-        widget_ion_trace = go.FigureWidget(fig_ion_dynamics.data, fig_ion_dynamics.layout)
+        widget_trace = go.FigureWidget(fig_trace.data, fig_trace.layout)
 
         # create FigureWidget from figure
-        widget_cell = go.FigureWidget(data=fig_cell.data, layout=fig_cell.layout)
+        widget_morphology = go.FigureWidget(data=fig_cell.data, layout=fig_cell.layout)
 
         # update color scale
         def _update(time_point):
             """
             Function that gets called whenever the slider gets changed. Requests the membrane voltages at a certain time point
             """
-            widget_cell.update_traces(marker={"color": ["white" if e is None else e for e in scalar_data_per_time[time_point]]})
-            widget_cell.layout.title = "{} at time={} ms".format(scalar_data_keyword, time_point)
-            widget_ion_trace.update_layout(
+            widget_morphology.update_traces(marker={"color": ["white" if e is None else e for e in scalar_data_per_time[time_point]]}, selector=dict(name="morphology"))
+            widget_morphology.layout.title = "{} at time={} ms".format(scalar_data_keyword, time_point)
+            widget_trace.update_layout(
                 shapes=[dict(
                     type= 'line',
                     yref= 'y domain', y0= 0, y1=1,
@@ -724,18 +743,20 @@ class CellMorphologyVisualizer:
 
         def update_selection_on_click(trace, points, selector):
             point_ind = points.point_inds[-1]
-            widget_ion_trace.data[0]['y'] = scalar_data_per_section[point_ind]
-            widget_ion_trace.layout.title = "{} of point {}, section {}".format(scalar_data_keyword, point_ind, int(sections[point_ind]))
-            return widget_cell
+            for e in ['x', 'y', 'z']:
+                widget_morphology.data[1][e] = [self.morphology.iloc[point_ind][e]]
+            widget_trace.data[0]['y'] = scalar_data_per_section[point_ind]
+            widget_trace.layout.title = "{} of point {}, section {}".format(scalar_data_keyword, point_ind, int(sections[point_ind]))
+            return widget_morphology
         
-        widget_cell.data[0].on_click(update_selection_on_click)
+        widget_morphology.data[0].on_click(update_selection_on_click)
         
         # display the FigureWidget and slider with center justification
         slider = interactive(
             _update, 
             time_point = widgets.FloatSlider(min=self.t_start, max=self.t_end, step=self.t_step, value=0, layout=Layout(width='800px'), background_color=background_color)
             )
-        hb = HBox((widget_cell, widget_ion_trace))
+        hb = HBox((widget_morphology, widget_trace))
         vb = VBox((hb, slider))
         vb.layout.align_items = 'center'
         return vb
@@ -984,7 +1005,7 @@ class CellMorphologyVisualizer:
         display_animation_from_images(images_path, 1, embedded=True)
     
     def display_interactive_morphology_3d(self, data=None, background_color="rgb(180,180,180)", highlight_section=None, renderer="notebook_connected", 
-                                          t_start=None, t_end=None, t_step=None, vmin=None, vmax=None,):
+                                          t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map="jet"):
         """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
 
         Args:
@@ -1005,7 +1026,7 @@ class CellMorphologyVisualizer:
             return self.__display_interactive_morphology_only_3d(background_color=background_color, highlight_section=highlight_section, renderer=renderer)
         else:
             return self.__get_interactive_plot_with_scalar_data(data, t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax, 
-                                                                color_map='jet', background_color=background_color, renderer=renderer)
+                                                                color_map=color_map, background_color=background_color, renderer=renderer)
 
     def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet', background_color="rgb(180,180,180)", renderer="notebook_connected"):
         ''' 
