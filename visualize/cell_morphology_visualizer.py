@@ -87,6 +87,9 @@ class CellMorphologyVisualizer:
         self.t_end = None
         self.times_to_show = None
         
+        self.scalar_data = None
+        self.possible_scalars = {'K_Pst.ik', 'Ih.m', 'Ca_LVAst.ik', 'Nap_Et2.ina', 'SK_E2.ik', 'Nap_Et2.h', 'K_Pst.h', 'Nap_Et2.m', 'NaTa_t.h', 'SK_E2.z', 'Ca_HVA.h', 'Ih.ihcn', 'K_Tst.ik', 'Ca_HVA.m', 'Im.ik', 'NaTa_t.ina', 'NaTa_t.m', 'SKv3_1.m', 'Ca_LVAst.h', 'K_Pst.m', 'SKv3_1.ik', 'Ca_LVAst.m', 'Ca_HVA.ica', 'Ca_LVAst.ica', 'K_Tst.m', 'CaDynamics_E2.cai', 'K_Tst.h', 'cai'}
+
         """List contaning the voltage of the cell during a timeseries. Each element corresponds to a time point.
         Each element of the list contains n elements, being n the number of points of the cell morphology. 
         Hence, the value of each element is the voltage at each point of the cell morphology."""
@@ -146,9 +149,9 @@ class CellMorphologyVisualizer:
         The list contains the 3d coordinates where each active synapse is located."""
         self.synapses_timeseries = []
 
-        self.ion_dynamics_timeseries = []
         # Time in the simulation during which a synapse activation is shown during the visualization
         self.time_show_syn_activ = 2  # ms
+        self.scalar_data={"voltage": self.voltage_timeseries}
 
     def __align_trunk_with_z_axis(self):
         """
@@ -389,6 +392,7 @@ class CellMorphologyVisualizer:
         for time_point in self.times_to_show: # For each frame of the video/animation
             voltage = self.__get_voltages_at_timepoint(time_point)
             self.voltage_timeseries.append(voltage)
+        self.scalar_data["voltage"] = self.voltage_timeseries
         t2 = time.time()
         print('Voltage retrieval runtime (s): ' + str(np.around(t2-t1,2)))
     
@@ -401,13 +405,15 @@ class CellMorphologyVisualizer:
         Returns:
             Nothing. Updates the self.timeseries_voltage attribute
         '''
-        if len(self.ion_dynamics_timeseries)!=0:
+        if ion_keyword in self.scalar_data.keys():
             return  # We have already retrieved the voltage timeseries
+        else:
+            self.scalar_data[ion_keyword] = []
         
         t1 = time.time()
         for time_point in self.times_to_show: # For each frame of the video/animation
             ion_dynamics = self.__get_ion_dynamic_at_timepoint(time_point, ion_keyword)
-            self.ion_dynamics_timeseries.append(ion_dynamics)
+            self.scalar_data[ion_keyword].append(ion_dynamics)
         t2 = time.time()
         print('Ion dynamics retrieval runtime (s): ' + str(np.around(t2-t1,2)))
 
@@ -480,6 +486,7 @@ class CellMorphologyVisualizer:
             # At least one of the time range parameters needs to be updated
             if t_start is not None:
                 assert t_start >= self.simulation_times[0], "Specified t_start is earlier than the simulation time of {} ms".format(self.simulation_times[0])
+                assert t_start <= self.simulation_times[-1], "Specified t_start is later than the simulation end time of {} ms".format(self.simulation_times[-1])
                 self.t_start = t_start  # update start if necessary
             # check if closed interval is possible
             if t_end is not None:
@@ -623,7 +630,7 @@ class CellMorphologyVisualizer:
                 of.write("CELL_DATA {}\nSCALARS Vm float 1\nLOOKUP_TABLE default\n".format(len(self.morphology)))
                 of.write(membrane_voltage_str_(scalar_data))
     
-    def __get_interactive_cell(self, background_color="rgb(180,180,180)", renderer="notebook_connected", df=None):
+    def __get_interactive_cell(self, background_color="rgb(180,180,180)", renderer="notebook_connected"):
         ''' 
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with NO data overlayed.
 
@@ -642,16 +649,14 @@ class CellMorphologyVisualizer:
             zerolinecolor=transparent,
             visible=False
         )
-        df = df if df is not None else self.morphology.copy()
-        # hover_data = df.columns.values if df is not None else ["x", "y", "z", "diameter", "section"]
         
         py.init_notebook_mode()
         pio.renderers.default = renderer
 
         # Create figure
         fig = px.scatter_3d(
-            df, x="x", y="y", z="z", 
-            # hover_data=hover_data,
+            self.morphology, x="x", y="y", z="z",
+            hover_data=["section", "diameter"],
             size="diameter")
         fig.update_traces(marker = dict(line = dict(width = 0)))  # remove outline of markers
         fig.update_layout(scene=dict(
@@ -666,6 +671,101 @@ class CellMorphologyVisualizer:
                              )
         return fig
 
+    def __get_interactive_plot_with_scalar_data(self, scalar_data_keyword, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet',
+                                                background_color="rgb(180,180,180)", renderer="notebook_connected"):
+        if scalar_data_keyword.lower() in ("voltage", "membrane voltage", "vm"):
+            self.__calc_voltage_timeseries()
+            scalar_data_per_section = np.array([self.__get_voltages_at_timepoint(t) for t in np.arange(self.t_start, self.t_end+self.dt, self.dt)]).T
+            round_floats = 2
+            scalar_data_per_time = {t: np.round(self.voltage_timeseries[t_idx], round_floats) for t_idx, t in enumerate(self.times_to_show)}
+        
+        else:
+            assert scalar_data_keyword.lower() in (e.lower() for e in self.possible_scalars), "Keyword {} is not associated with membrane voltage, and does not appear in the possible ion dynamic keywords: {}".format(self.possible_scalars)
+            self.__calc_ion_dynamics_timeseries(ion_keyword=scalar_data_keyword)
+            scalar_data_per_section = np.array([self.__get_ion_dynamic_at_timepoint(t, ion_keyword=scalar_data_keyword) for t in np.arange(self.t_start, self.t_end+self.dt, self.dt)]).T
+            scalar_data_per_time = {t: self.scalar_data[scalar_data_keyword][t_idx] for t_idx, t in enumerate(self.times_to_show)}
+        
+
+        self.__update_times_to_show(t_start, t_end, t_step)
+        if vmin is not None: self.vmin = vmin 
+        if vmax is not None: self.vmax = vmax
+        sections = self.morphology["section"]
+
+        # Create figure
+        fig_cell = self.__get_interactive_cell(background_color=background_color, renderer=renderer)
+        fig_cell.update_coloraxes(colorscale=color_map)
+        fig_ion_dynamics = px.line(
+            x=np.arange(self.t_start, self.t_end+self.dt, self.dt), y=self.__get_soma_voltage_between_timepoints(self.t_start, self.t_end, self.dt),
+            labels={
+                "x": "time (ms)",
+                "y": "Membrane voltage (mV)"},
+                 title="{} at soma".format(scalar_data_keyword)
+                 )
+        widget_ion_trace = go.FigureWidget(fig_ion_dynamics.data, fig_ion_dynamics.layout)
+
+        # create FigureWidget from figure
+        widget_cell = go.FigureWidget(data=fig_cell.data, layout=fig_cell.layout)
+
+        # update color scale
+        def _update(time_point):
+            """
+            Function that gets called whenever the slider gets changed. Requests the membrane voltages at a certain time point
+            """
+            widget_cell.update_traces(marker={"color": ["white" if e is None else e for e in scalar_data_per_time[time_point]]})
+            widget_cell.layout.title = "{} at time={} ms".format(scalar_data_keyword, time_point)
+            widget_ion_trace.update_layout(
+                shapes=[dict(
+                    type= 'line',
+                    yref= 'y domain', y0= 0, y1=1,
+                    xref= 'x', x0=time_point, x1=time_point
+                    )
+                    ])
+            return fig_cell
+
+        def update_selection_on_click(trace, points, selector):
+            point_ind = points.point_inds[-1]
+            widget_ion_trace.data[0]['y'] = scalar_data_per_section[point_ind]
+            widget_ion_trace.layout.title = "{} of point {}, section {}".format(scalar_data_keyword, point_ind, int(sections[point_ind]))
+            return widget_cell
+        
+        widget_cell.data[0].on_click(update_selection_on_click)
+        
+        # display the FigureWidget and slider with center justification
+        slider = interactive(
+            _update, 
+            time_point = widgets.FloatSlider(min=self.t_start, max=self.t_end, step=self.t_step, value=0, layout=Layout(width='800px'), background_color=background_color)
+            )
+        hb = HBox((widget_cell, widget_ion_trace))
+        vb = VBox((hb, slider))
+        vb.layout.align_items = 'center'
+        return vb
+        
+    def __display_interactive_morphology_only_3d(self, background_color="rgb(180,180,180)", highlight_section=None, renderer="notebook_connected"):
+        ''' 
+        Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with NO data overlayed.
+        If you want to overlay scalar data, such as membrane voltage, please use :@function self.display_interactive_voltage_in_morphology_3d:
+
+        Args:
+            - background_color: just some grey by default
+            - renderer
+
+        Returns:
+            ipywidgets.VBox object: an interactive render of the cell.
+        '''
+        df = self.morphology.copy()
+        fig_cell = self.__get_interactive_cell(background_color=background_color, renderer=renderer)
+        if highlight_section:
+            fig_cell.add_traces(
+                px.scatter_3d(df[df['section'] == highlight_section], x="x", y="y", z='z',
+                hover_data=["x","y","z","section", "diameter"], size="diameter")
+                .update_traces(marker = dict(line = dict(width = 0), color='red'))
+                .data
+            )
+
+        # create FigureWidget from figure
+        f = go.FigureWidget(data=fig_cell.data, layout=fig_cell.layout)
+        return f
+    
     # Public methods
 
     def show_morphology_3d(self, save='', plot=True):
@@ -882,33 +982,31 @@ class CellMorphologyVisualizer:
         if vmax is not None: self.vmax = vmax 
         self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(images_path, client, voltage_legend, synapse_legend)
         display_animation_from_images(images_path, 1, embedded=True)
-        
-    def display_interactive_morphology_3d(self, background_color="rgb(180,180,180)", highlight_section=None, renderer="notebook_connected"):
-        ''' 
-        Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with NO data overlayed.
-        If you want to overlay scalar data, such as membrane voltage, please use :@function self.display_interactive_voltage_in_morphology_3d:
+    
+    def display_interactive_morphology_3d(self, data=None, background_color="rgb(180,180,180)", highlight_section=None, renderer="notebook_connected", 
+                                          t_start=None, t_end=None, t_step=None, vmin=None, vmax=None,):
+        """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
 
         Args:
-            - background_color: just some grey by default
-            - renderer
+            data (str, optional): Scalar data to overlay on interactive plot. Defaults to None.
+            background_color (str, optional): Background color of plot. Defaults to "rgb(180,180,180)".
+            highlight_section (int, optional): If no scalar data is provided, this argument can be set to an integer, defining a section to highlight on the interactive plot. Defaults to None.
+            renderer (str, optional): Type of backend renderer to use for rendering the javascript/HTML VBox. Defaults to "notebook_connected".
+            t_start (float/int, optional): Starting time of the interactive visualisation. Defaults to None.
+            t_end (float/int, optional): End time of the interactive visualisation. Defaults to None.
+            t_step (float/int, optional): Time step between consecutive time points. Defaults to None.
+            vmin (float, optional): Minimum voltage to show. Defaults to None.
+            vmax (float, optional): Maximum voltage to show. Defaults to None.
 
         Returns:
             ipywidgets.VBox object: an interactive render of the cell.
-        '''
-        df = self.morphology.copy()
-        fig_cell = self.__get_interactive_cell(background_color="rgb(180,180,180)", renderer="notebook_connected")
-        if highlight_section:
-            fig_cell.add_traces(
-                px.scatter_3d(df[df['section'] == highlight_section], x="x", y="y", z='z',
-                hover_data=["x","y","z","section", "diameter"], size="diameter")
-                .update_traces(marker = dict(line = dict(width = 0), color='red'))
-                .data
-            )
+        """
+        if data is None:
+            return self.__display_interactive_morphology_only_3d(background_color=background_color, highlight_section=highlight_section, renderer=renderer)
+        else:
+            return self.__get_interactive_plot_with_scalar_data(data, t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax, 
+                                                                color_map='jet', background_color=background_color, renderer=renderer)
 
-        # create FigureWidget from figure
-        f = go.FigureWidget(data=fig_cell.data, layout=fig_cell.layout)
-        return f
-     
     def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet', background_color="rgb(180,180,180)", renderer="notebook_connected"):
         ''' 
         TODO: add synapse activations!
@@ -930,60 +1028,7 @@ class CellMorphologyVisualizer:
         Returns:
             ipywidgets.VBox object: an interactive render of the cell.
         '''
-        self.__update_times_to_show(t_start, t_end, t_step)
-        if vmin is not None: self.vmin = vmin 
-        if vmax is not None: self.vmax = vmax 
-        self.__calc_voltage_timeseries()
-        df = self.morphology.copy()
-        t_idx = np.where(self.times_to_show == self.t_start)[0][0]
-        df['voltage'] = self.voltage_timeseries[t_idx]
-        
-        # Create figure
-        fig_cell = self.__get_interactive_cell(background_color="rgb(180,180,180)", renderer="notebook_connected", df=df)
-        fig_cell.update_layout(coloraxis_colorbar=dict(title="V_m (mV)"))
-        fig_soma_voltage = px.line(
-            x=np.arange(self.t_start, self.t_end+self.dt, self.dt), y=self.__get_soma_voltage_between_timepoints(self.t_start, self.t_end, self.dt),
-            labels={
-                "x": "time (ms)",
-                "y": "Membrane voltage (mV)"},
-                 title="Soma membrane voltage"
-                 )
-        widget_soma_trace = go.FigureWidget(fig_soma_voltage.data, fig_soma_voltage.layout)
-
-        # create FigureWidget from figure
-        widget_cell = go.FigureWidget(data=fig_cell.data, layout=fig_cell.layout)
-        widget_cell.update_coloraxes(colorscale=color_map)
-
-        # update color scale
-        def _update(time_point):
-            """
-            Function that gets called whenever the slider gets changed. Requests the membrane voltages at a certain time point
-            """
-            round_floats = 2
-            t_idx = np.where(self.times_to_show == time_point)[0][0]
-            widget_cell.update_traces(
-                marker={"color": np.round(self.voltage_timeseries[t_idx], round_floats)}
-                # ,hoverinfo=["x","y","z","section", "diameter", "voltage"]
-                )
-            widget_cell.layout.title = "Membrane voltage at time={} ms".format(time_point)
-            widget_soma_trace.update_layout(
-                shapes=[dict(
-                    type= 'line',
-                    yref= 'paper', y0= self.vmin, y1=self.vmax,
-                    xref= 'x', x0=time_point, x1=time_point
-                    )
-                    ])
-            return widget_cell
-
-        # display the FigureWidget and slider with center justification
-        slider = interactive(
-            _update, 
-            time_point = widgets.FloatSlider(min=self.t_start, max=self.t_end, step=self.t_step, value=0, layout=Layout(width='800px'), background_color=background_color)
-            )
-        hb = HBox((widget_cell, widget_soma_trace))
-        vb = VBox((hb, slider))
-        vb.layout.align_items = 'center'
-        return vb
+        return self.display_interactive_morphology_3d(data="voltage", t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax, color_map=color_map, background_color=background_color, renderer=renderer)
 
     def display_interactive_ion_dynamics_in_morphology_3d(self, ion_keyword="Ca_HVA.ica", t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet',
     background_color="rgb(180,180,180)", renderer="notebook_connected"):
@@ -1006,53 +1051,8 @@ class CellMorphologyVisualizer:
         Returns:
             ipywidgets.VBox object: an interactive render of the cell.
         '''
-        self.__update_times_to_show(t_start, t_end, t_step)
-        if vmin is not None: self.vmin = vmin 
-        if vmax is not None: self.vmax = vmax 
-        self.__calc_ion_dynamics_timeseries(ion_keyword=ion_keyword)
-        
-        # Create figure
-        fig_cell = self.__get_interactive_cell(background_color=background_color, renderer=renderer)
-        fig_cell.update_coloraxes(colorscale=color_map)
-        fig_soma_voltage = px.line(
-            x=np.arange(self.t_start, self.t_end+self.dt, self.dt), y=self.__get_soma_voltage_between_timepoints(self.t_start, self.t_end, self.dt),
-            labels={
-                "x": "time (ms)",
-                "y": "Membrane voltage (mV)"},
-                 title="Soma membrane voltage"
-                 )
-        f_trace = go.FigureWidget(fig_soma_voltage.data, fig_soma_voltage.layout)
-
-        # create FigureWidget from figure
-        f = go.FigureWidget(data=fig_cell.data, layout=fig_cell.layout)
-
-        # update color scale
-        def _update(time_point):
-            """
-            Function that gets called whenever the slider gets changed. Requests the membrane voltages at a certain time point
-            """
-            round_floats = 2
-            t_idx = np.where(self.times_to_show == time_point)[0][0]
-            f.update_traces(marker={"color": [background_color if e is None else np.round(e, round_floats) for e in self.ion_dynamics_timeseries[t_idx]]})
-            f.layout.title = "{} at time={} ms".format(ion_keyword, time_point)
-            f_trace.update_layout(
-                shapes=[dict(
-                    type= 'line',
-                    yref= 'paper', y0= self.vmin, y1=self.vmax,
-                    xref= 'x', x0=time_point, x1=time_point
-                    )
-                    ])
-            return fig_cell
-
-        # display the FigureWidget and slider with center justification
-        slider = interactive(
-            _update, 
-            time_point = widgets.FloatSlider(min=self.t_start, max=self.t_end, step=self.t_step, value=0, layout=Layout(width='800px'), background_color=background_color)
-            )
-        hb = HBox((f, f_trace))
-        vb = VBox((hb, slider))
-        vb.layout.align_items = 'center'
-        return vb
+        return self.display_interactive_morphology_3d(data=ion_keyword, t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax, color_map=color_map,
+                                                      background_color=background_color, renderer=renderer)
                
     def write_vtk_frames(self, out_name="frame", out_dir=".", t_start=None, t_end=None, t_step=None):
         '''
