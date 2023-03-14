@@ -87,7 +87,7 @@ run = 'test_simrun2.simrun_test'
 
 
 if __name__ == "__main__":
-    testRunner = unittest.TextTestRunner(verbosity = VERBOSITY)
+    testRunner = unittest.TextTestRunner(verbosity = VERBOSITY, buffer = True)
 
     if run == '.':
         tests = unittest.defaultTestLoader.discover(run, pattern = '*_test.py')
