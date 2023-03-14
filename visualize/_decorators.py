@@ -1,9 +1,9 @@
 import inspect
 import dask.dataframe as dd
 import pandas as pd
-from . import plt
-from . import Figure
-from . import Axes
+import matplotlib.pyplot as plt
+Figure = plt.Figure
+Axes = plt.Axes
 from model_data_base.utils import skit
 
 ## 
