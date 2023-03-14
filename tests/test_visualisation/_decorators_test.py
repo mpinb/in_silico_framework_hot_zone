@@ -1,6 +1,6 @@
 import unittest
 from ..context import *
-from model_data_base.plotfunctions._decorators import *
+from visualize._decorators import *
 import pandas as pd
 import pandas.util.testing as pdt
 import dask.dataframe as dd

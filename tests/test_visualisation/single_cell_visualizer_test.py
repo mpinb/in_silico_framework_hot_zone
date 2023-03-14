@@ -1,4 +1,4 @@
-from visualize import CellMorphologyVisualizer
+from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
 import single_cell_parser as scp
 import neuron
 h = neuron.h

@@ -128,11 +128,11 @@ try: ##to avoid import errors in distributed system because of missing matplotli
     import matplotlib
     import matplotlib.pyplot as plt
     try:
-        from visualize.activity_analysis.average_std import average_std as average_std
-        from visualize.activity_analysis.histogram import histogram as histogram
-        from visualize.activity_analysis.manylines import manylines
-        from visualize.activity_analysis.rasterplot import rasterplot, rasterplot2, rasterplot2_pdf_grouped
-        from visualize.activity_analysis.cell_to_ipython_animation import cell_to_ipython_animation, cell_to_animation, display_animation
+        from visualize.average_std import average_std as average_std
+        from visualize.histogram import histogram as histogram
+        from visualize.manylines import manylines
+        from visualize.rasterplot import rasterplot, rasterplot2, rasterplot2_pdf_grouped
+        from visualize.cell_to_ipython_animation import cell_to_ipython_animation, cell_to_animation, display_animation
         from visualize._figure_array_converter import show_pixel_object, PixelObject
     except ImportError as e:
         print("Could not import visualize.activity_analysis!")

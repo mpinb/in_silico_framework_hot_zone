@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
-from ..context import *
-from model_data_base.plotfunctions.cell_to_ipython_animation import *
+from .context import *
+from visualize.cell_to_ipython_animation import *
 
 class Tests(unittest.TestCase):
     def setUp(self):
