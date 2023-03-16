@@ -65,7 +65,7 @@ jobs:
           which python
           git clone https://github.com/abast/pandas-msgpack.git
           # Applying patch to pandas-msgpack (generating files using newer Cython)
-          git -C pandas-msgpack apply ../installer/pandas_msgpack.patch
+          # git -C pandas-msgpack apply ../installer/pandas_msgpack.patch
           source ~/conda3-isf/bin/activate
           source activate isf-py3
           cd pandas-msgpack; python setup.py install
