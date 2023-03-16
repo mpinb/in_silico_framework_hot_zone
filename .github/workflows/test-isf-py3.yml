@@ -63,13 +63,14 @@ jobs:
           echo "Installing pandas-msgpack"
           source ~/conda3-isf/bin/activate
           source activate isf-py3
-          cd installer
           which python
+          cd installer
+          git clone https://github.com/abast/pandas-msgpack.git
+          cd pandas-msgpack
           pwd
           ls
-          git clone https://github.com/abast/pandas-msgpack.git
           # Applying patch to pandas-msgpack (generating files using newer Cython)
-          git -C pandas-msgpack apply pandas_msgpack.patch
+          git -C pandas-msgpack apply ../pandas_msgpack.patch
           cd pandas-msgpack; python setup.py install
           
       # pip list and conda list
