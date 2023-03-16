@@ -48,6 +48,7 @@ jobs:
       # Patch Dask library
       - name: Patch dask library
         run: |
+          which python
           echo "Patching dask library."
           source ~/conda3-isf/bin/activate
           source activate isf-py3
@@ -58,6 +59,7 @@ jobs:
       # Install pandas-msgpack
       - name: Install pandas-msgpack
         run: |
+          which python
           echo "Installing pandas-msgpack"
           git clone https://github.com/abast/pandas-msgpack.git
           # Applying patch to pandas-msgpack (generating files using newer Cython)
@@ -69,12 +71,14 @@ jobs:
       # pip list and conda list
       - name: pip list and conda list
         run: |
+          which python
           pip list --format=freeze
           conda list
 
       # Compile neuron mechanisms
       - name: Compile neuron mechanisms
         run: |
+          which python
           echo "Compiling neuron mechanisms"
           source ~/conda3-isf/bin/activate
           source activate isf-py3
@@ -86,6 +90,7 @@ jobs:
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
+          which python
           source ~/conda3-isf/bin/activate
           source activate isf-py3
           export PYTHONPATH="$(pwd)"
