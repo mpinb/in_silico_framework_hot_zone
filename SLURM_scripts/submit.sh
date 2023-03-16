@@ -149,7 +149,7 @@ fi
 if [ $interactive == 1 ]; then
   interactive_string=" interactive"
   cuda=$'\nmodule load cuda'
-  if [ ${partition:0:3} -ne "CPU" -a $gres -eq 0 ]; then
+  if [ ${partition:0:3} != "CPU" -a $gres -eq 0 ]; then
     # Either GPU-interactive or A100 interactive
     # Set gres to 4 if working on a GPU-interactive partition it if hasn't been set manually already
     gres="4"
