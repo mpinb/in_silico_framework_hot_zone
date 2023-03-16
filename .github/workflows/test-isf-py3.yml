@@ -66,6 +66,7 @@ jobs:
           cd installer
           which python
           pwd
+          ls
           git clone https://github.com/abast/pandas-msgpack.git
           # Applying patch to pandas-msgpack (generating files using newer Cython)
           git -C pandas-msgpack apply pandas_msgpack.patch
