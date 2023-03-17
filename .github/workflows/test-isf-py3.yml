@@ -1,17 +1,14 @@
 # Installation of in-silico-framework followed by CI tests.
 name: In-Silico-Framework (Python 3) install and test
-
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [ master, refractor ]
   pull_request:
-    branches: [ master ]
-
+    branches: [ master, refractor ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -21,12 +18,10 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
       # Install Anaconda3 and update conda package manager
       - name: Install Anaconda3
         run: |
@@ -34,7 +29,6 @@ jobs:
           bash Anaconda3-2020.11-Linux-x86_64.sh -b -p ~/conda3-isf
           source ~/conda3-isf/bin/activate
           conda info
-
       # Updating the root environment. Install ISF dependencies (YAML)
       # NOTE: The environment file (yaml) is in the ISF repository 'installer' folder
       - name: Install ISF dependencies
@@ -51,40 +45,24 @@ jobs:
           echo "Patching dask library."
           source ~/conda3-isf/bin/activate
           source activate isf-py3
-          which python
           cd installer
           python patch_dask_linux64.py
           conda list
-
       # Install pandas-msgpack
       - name: Install pandas-msgpack
         run: |
           echo "Installing pandas-msgpack"
-          source ~/conda3-isf/bin/activate
-          source activate isf-py3
-          which python
           git clone https://github.com/abast/pandas-msgpack.git
           # Applying patch to pandas-msgpack (generating files using newer Cython)
           git -C pandas-msgpack apply ../installer/pandas_msgpack.patch
           source ~/conda3-isf/bin/activate
           source activate isf-py3
           cd pandas-msgpack; python setup.py install
-          
-      # pip list and conda list
-      - name: pip list and conda list
-        run: |
-          source ~/conda3-isf/bin/activate
-          source activate isf-py3
-          which python
-          pip list --format=freeze
-          conda list
-
+          pip list --format=freeze | grep pandas
+          cd ..; rm -r pandas-msgpack
       # Compile neuron mechanisms
       - name: Compile neuron mechanisms
         run: |
-          source ~/conda3-isf/bin/activate
-          source activate isf-py3
-          which python
           echo "Compiling neuron mechanisms"
           source ~/conda3-isf/bin/activate
           source activate isf-py3
@@ -98,7 +76,6 @@ jobs:
         run: |
           source ~/conda3-isf/bin/activate
           source activate isf-py3
-          which python
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=38786 --dashboard-address=38787 &
           dask-worker localhost:38786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
