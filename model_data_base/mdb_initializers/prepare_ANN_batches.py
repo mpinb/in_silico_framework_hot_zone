@@ -149,6 +149,18 @@ def get_neighboring_spatial_bins(cell, section_distances_df, bin_id):
 def augment_synapse_activation_df_with_branch_bin(sa_, 
                                                   section_distances_df = None, 
                                                   synaptic_weight_dict = None):
+    """Given a DataFrame of synaptic activity, this method adds columns giving information on where on the branch this syaptic activity was present.
+    This information is represented in a specific format: section_id/bin_within_section.
+    For this, the sections have to be split up in spatial bins, which is represented in :@param section_distances_df:
+
+    Args:
+        sa_ (pd.DataFrame): The dataframe of synaptic activity
+        section_distances_df (pd.DataFrame, optional): DataFrame representing each section's spatial bins and binsizes. Defaults to None.
+        synaptic_weight_dict (_type_, optional): _description_. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
     out = []
     for secID, df in sa_.groupby('section_ID'):
         min_ = section_distances_df.loc[secID]['min_']
@@ -182,7 +194,62 @@ def save_st_and_ISI(st, batch_id, chunk, min_time, max_time, outdir,suffix = 'SO
     I.np.save(outdir.join('batch_{}_AP_{}.npy').format(batch_id,suffix), AP_array)
     I.np.save(outdir.join('batch_{}_ISI_{}.npy').format(batch_id,suffix), ISI_array)
     
+def spike_times_to_onehot(spike_times, min_time=0, max_time=505, time_step=1):
+    """This method resembles model_database.analyse.spike_detection.spike_in_interval, but more general.
+    Given an array of spike times, this method one-hot encodes them to a list of size (max_time - min_time)//time_step,
+    where each time step, a boolean represents if a spike was found in this time_step.
+    """
+    assert len(I.np.array(spike_times).shape) == 1, "Please provide a 1-dimensional array as spike_times"
+    assert all([s >= 0 for s in spike_times]), "Negative time values found. Are you sure you passed spike times as first argument?"
+    if max(spike_times) > max_time:
+        raise UserWarning("Spike times found larger than max_time. These will not be included in the one-hot encoding")
+    spike_times = [e for e in spike_times if min_time < e < max_time]
+    time_steps = I.np.arange(min_time, max_time, time_step)
+    n_time_steps = len(time_steps)
+    one_hot = [False]*n_time_steps
+    for st in spike_times:
+        one_hot[int(st//time_step)] = True
+    return one_hot
+
+def compute_ISI_from_st_list(st, min_time=0, max_time=505, time_step=1):
+    """Given an array of spike times, this method returns a list of size (:@param max_time: - :@param_min_time:)//:@param time_step:,
+    where each time step gives the amount of time since the last spike in ms.
+    Do not provide a pd.Series or pd.DataFrame here. For that, use :@function model_database.mdb_initialisers.prepare_ANN_batches.compute_ISI_from_st: instead.
+
+    Args:
+        st (array): _description_
+        min_time (int, optional): Min time of time window in ms. Defaults to 0.
+        max_time (int, optional): Max time of time window in ms. Defaults to 505.
+        time_step (int, optional): Timestep in ms. Defaults to 1.
+
+    Returns:
+        _type_: _description_
+    """
+    assert type(st) not in (I.pd.DataFrame, I.pd.Series), "This methods is for arrays or lists. When using a pandas Dataframe or Series, use model_database.mdb_initialisers.prepare_ANN_batches.compute_ISI_from_st instead."
+    assert type(st) in (list, I.np.array), "Please provide a list or array as spike times."
+    st = [e for e in st if min_time <= e <= max_time]
+    ISI = []
+    for timepoint in I.np.arange(min_time, max_time, time_step):
+        st_ = [e for e in st if e < timepoint]
+        if st_:
+            max_spike_time_before_timepoint = max(st_)
+            ISI.append(timepoint - max_spike_time_before_timepoint)
+        else:
+            ISI.append(timepoint)
+    return ISI
+
 def compute_ISI_from_st(st, timepoint, fillna = None):
+    """Given a pandas DataFrame or pandas Series of spike times :@param st: and a timepoint, this method returns
+    the time between :@param timepoint: and the most recent spike in ms.
+
+    Args:
+        st (pd.DataFrame | pd.Series): array of spike times
+        timepoint (float/int): time point to compute last spike time from
+        fillna (int, optional): Fill with NaN until the array has this length. Defaults to None (no NaN filling).
+
+    Returns:
+        float/array: The time between :@param timepoint: and the most recent spike in ms.
+    """
     '''suggestion: use the temporal window width as fillna'''
     assert(fillna is not None)
     st = st.copy()
@@ -193,16 +260,45 @@ def compute_ISI_from_st(st, timepoint, fillna = None):
         ISI = ISI.fillna(fillna)
     return ISI
 
-def compute_ISI_array(st, min_time, max_time, fillna = 1000):
+def compute_ISI_array(st, min_time, max_time, fillna = 1000, step=1):
+    """For each time point inbetween :@param min_time: and :@param max_time: (in steps of :@param step:),
+    this method calculates where each element is the time since the last spike in ms.
+
+    Args:
+        st (array): array of spike times
+        min_time (float/int): minimum time in ms
+        max_time (float/int): maximum time in ms
+        fillna (int, optional): Fill with NaN until the array has this length. Defaults to 1000.
+        step (int/float, optional): Size of timestep in ms. Defaults to 1.
+
+    Returns:
+        array: An array of length (:@param max_time: - :@param min_time:)//:@param step:,
+        where each element has as a value the time since the last spike in ms.
+    """
     ISI = []
-    for t in range(min_time, max_time):
+    for t in I.np.arange(min_time, max_time, step):
         ISI.append(compute_ISI_from_st(st, t, fillna).to_numpy().reshape(-1,1))
     return I.np.concatenate(ISI, axis = 1)
 
-def compute_AP_array(st, min_time, max_time, fillna = 1000):
+def compute_AP_array(st, min_time, max_time, fillna = 1000, step=1):
+    """Given a collection of spike times of a single trial, this method returns an array of length (max_time - min_time)//step,
+    where, on each timestep of size :@param step:, a boolean represents if a spike is found in this interval.
+
+    TODO: what is fillna?
+
+    Args:
+        st (array): Array of spike times
+        min_time (float/int): Min time in ms
+        max_time (float/int): Max time in ms
+        fillna (int, optional, unused): Fill with NaN until the array has this length. Defaults to 1000. Added for congruence to compute_ISI_array?
+        step (int, optional): Size of timesteps to consider. Defaults to 1 ms
+
+    Returns:
+        array: Array where each element is a boolean representing if an AP was present during this timestep.
+    """
     AP = []
-    for i in range(min_time, max_time):
-        AP.append(I.spike_in_interval(st, i,i +1).to_numpy().reshape(-1,1))
+    for t in range(min_time, max_time, step):
+        AP.append(I.spike_in_interval(st, t, t+step).to_numpy().reshape(-1,1))
     return I.np.concatenate(AP, axis = 1)
 
 def load_syn_weights(m, client):
