@@ -12,8 +12,8 @@ TODO:
 # import dask.dataframe as dd
 # from ._figure_array_converter import fig2np
 # from compatibility import multiprocessing_scheduler
-from .. import plt
-from .._decorators import *
+import matplotlib.pyplot as plt
+from ._decorators import *
 from model_data_base.analyze._helper_functions import is_int
 from model_data_base. utils import convertible_to_int
         

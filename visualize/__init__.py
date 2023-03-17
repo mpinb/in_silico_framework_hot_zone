@@ -1,12 +1,18 @@
-"""
-This init file imports all the important classes from this directory. This way, each submodule in this directory can focus on a single task, and this __init__ file then
-serves as an easy importable module in Interface.
+#  
+# from os.path import dirname, basename, isfile
+# import glob
+# modules = glob.glob(dirname(__file__)+"/*.py")
+# print [basename(f)[:-3] for f in modules if isfile(f)]
+# #__all__ = [basename(f)[:-3] for f in modules if isfile(f)]
 
-Created by Borge Meulemeester on 14/12/2022
-"""
+#from average_std import average_std
+#from  histogram import histogram
+#from manylines import manylines
+#from rasterplot import rasterplot
+#from spaciotemporal_heatmap import pixels2figure as spaciotemporal_heatmap
 
-from .cell_morphology_visualizer import CellMorphologyVisualizer
-import matplotlib
-import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
-from matplotlib.axes import Axes
+
+# from os.path import dirname, basename, isfile
+# import glob
+# modules = glob.glob(dirname(__file__)+"/*.py")
+# __all__ = [basename(f)[:-3] for f in modules if isfile(f)]

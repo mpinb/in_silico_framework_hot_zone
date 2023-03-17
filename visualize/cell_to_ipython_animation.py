@@ -1,5 +1,5 @@
 import numpy as np
-from .. import plt
+import matplotlib.pyplot as plt
 # import dask
 import os
 import glob

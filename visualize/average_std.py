@@ -4,7 +4,7 @@ Created on Sep 16, 2016
 @author: arco
 '''
 
-from .._decorators import dask_to_pandas, subsequent_calls_per_line, return_figure_or_axis
+from ._decorators import dask_to_pandas, subsequent_calls_per_line, return_figure_or_axis
 
 @dask_to_pandas
 @return_figure_or_axis #has to stand above subsequent_calls_per_line

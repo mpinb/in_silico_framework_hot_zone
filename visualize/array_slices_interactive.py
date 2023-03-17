@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from ipywidgets import interact  
-from .. import plt
+import matplotlib.pyplot as plt
 from .histogram import histogram
 
 

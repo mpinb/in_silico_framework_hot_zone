@@ -4,14 +4,15 @@ matplotlib.use('agg')
 from ..context import *
 from .. import decorators
 
-from model_data_base.plotfunctions.manylines import *
+from visualize.manylines import *
 import unittest
 import pandas as pd
 import dask.dataframe as dd
-from model_data_base.plotfunctions._figure_array_converter import PixelObject, show_pixel_object
+from visualize._figure_array_converter import PixelObject, show_pixel_object
 
 savefigs = True
 
+import distributed
 client = distributed.client_object_duck_typed
 
 class Tests(unittest.TestCase):
