@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>model_data_base.sqlite_backend.cloudsqlitedict &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -202,7 +201,7 @@
 <div class="viewcode-block" id="SqliteDict"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict">[docs]</a><span class="k">class</span> <span class="nc">SqliteDict</span><span class="p">(</span><span class="n">DictClass</span><span class="p">):</span>
     <span class="n">VALID_FLAGS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tablename</span><span class="o">=</span><span class="s1">&#39;unnamed&#39;</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="SqliteDict.__init__"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tablename</span><span class="o">=</span><span class="s1">&#39;unnamed&#39;</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span>
                  <span class="n">autocommit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">journal_mode</span><span class="o">=</span><span class="s2">&quot;DELETE&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize a thread-safe sqlite-backed dictionary. The dictionary will</span>
@@ -257,7 +256,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">MAKE_TABLE</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="s1">&#39;w&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_new_conn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">SqliteMultithread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">autocommit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">autocommit</span><span class="p">,</span> <span class="n">journal_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journal_mode</span><span class="p">,</span> <span class="n">flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flag</span><span class="p">)</span>
@@ -308,17 +307,17 @@
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">GET_ITEMS</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">key</span><span class="p">,</span> <span class="n">decode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+<div class="viewcode-block" id="SqliteDict.keys"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
 <span class="c1">#         return self.iterkeys() if major_version &gt; 2 else list(self.iterkeys())</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">())</span></div>
 
-    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteDict.values"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="c1">#         return self.itervalues() if major_version &gt; 2 else list(self.itervalues())</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">itervalues</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">itervalues</span><span class="p">())</span></div>
 
-    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteDict.items"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="c1">#         return self.iteritems() if major_version &gt; 2 else list(self.iteritems())</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iteritems</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iteritems</span><span class="p">())</span></div>
 
     <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="n">HAS_ITEM</span> <span class="o">=</span> <span class="s1">&#39;SELECT 1 FROM &quot;</span><span class="si">%s</span><span class="s1">&quot; WHERE key = ?&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">tablename</span>
@@ -347,7 +346,7 @@
         <span class="n">DEL_ITEM</span> <span class="o">=</span> <span class="s1">&#39;DELETE FROM &quot;</span><span class="si">%s</span><span class="s1">&quot; WHERE key = ?&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">tablename</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">DEL_ITEM</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,))</span>
 
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteDict.update"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flag</span> <span class="o">==</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Refusing to update read-only SqliteDict&#39;</span><span class="p">)</span>
 
@@ -360,22 +359,22 @@
         <span class="n">UPDATE_ITEMS</span> <span class="o">=</span> <span class="s1">&#39;REPLACE INTO &quot;</span><span class="si">%s</span><span class="s1">&quot; (key, value) VALUES (?, ?)&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">tablename</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">UPDATE_ITEMS</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">kwds</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwds</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwds</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">import</span> <span class="nn">six.iterkeys</span> <span class="k">as</span> <span class="nn">iterkeys</span>
         <span class="k">return</span> <span class="n">iterkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteDict.clear"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flag</span> <span class="o">==</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Refusing to clear read-only SqliteDict&#39;</span><span class="p">)</span>
 
         <span class="n">CLEAR_ALL</span> <span class="o">=</span> <span class="s1">&#39;DELETE FROM &quot;</span><span class="si">%s</span><span class="s1">&quot;;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">tablename</span>  <span class="c1"># avoid VACUUM, as it gives &quot;OperationalError: database schema has changed&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">CLEAR_ALL</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteDict.commit"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.commit">[docs]</a>    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Persist all data to disk.</span>
 
@@ -383,7 +382,7 @@
 <span class="sd">        not guaranteed persisted (default implication when autocommit=True).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">blocking</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">blocking</span><span class="p">)</span></div>
     <span class="n">sync</span> <span class="o">=</span> <span class="n">commit</span>
 
     <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">do_log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -404,7 +403,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">terminate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteDict.terminate"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.terminate">[docs]</a>    <span class="k">def</span> <span class="nf">terminate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Delete the underlying database file. Use with care.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flag</span> <span class="o">==</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Refusing to terminate read-only SqliteDict&#39;</span><span class="p">)</span>
@@ -419,7 +418,7 @@
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">IOError</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;failed to delete </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;failed to delete </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">))</span></div>
 
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># like close(), but assume globals are gone by now (do not log!)</span>
@@ -446,7 +445,7 @@
 <span class="sd">    in a separate thread (in the same order they arrived).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">autocommit</span><span class="p">,</span> <span class="n">journal_mode</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteMultithread.__init__"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">autocommit</span><span class="p">,</span> <span class="n">journal_mode</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SqliteMultithread</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">autocommit</span> <span class="o">=</span> <span class="n">autocommit</span>
@@ -457,9 +456,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">exception</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;sqlitedict.SqliteMultithread&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flag</span> <span class="o">=</span> <span class="n">flag</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteMultithread.run"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocommit</span><span class="p">:</span>
             <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">isolation_level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_same_thread</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -521,9 +520,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;received: </span><span class="si">%s</span><span class="s1">, send: --no more--&#39;</span><span class="p">,</span> <span class="n">req</span><span class="p">)</span>
         <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">res</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;--no more--&#39;</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;--no more--&#39;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">check_raise_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteMultithread.check_raise_error"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.check_raise_error">[docs]</a>    <span class="k">def</span> <span class="nf">check_raise_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check for and raise exception for any previous sqlite query.</span>
 
@@ -549,9 +548,9 @@
             <span class="c1"># as `pdb&#39;, or simply evaluating the naturally raised traceback, we</span>
             <span class="c1"># retain the original (inner) location of where the exception</span>
             <span class="c1"># occurred.</span>
-            <span class="n">reraise</span><span class="p">(</span><span class="n">e_type</span><span class="p">,</span> <span class="n">e_value</span><span class="p">,</span> <span class="n">e_tb</span><span class="p">)</span>
+            <span class="n">reraise</span><span class="p">(</span><span class="n">e_type</span><span class="p">,</span> <span class="n">e_value</span><span class="p">,</span> <span class="n">e_tb</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteMultithread.execute"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        `execute` calls are non-blocking: just queue up the request and return immediately.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -562,14 +561,14 @@
         <span class="c1"># jython take a severe performance impact for throwing exceptions</span>
         <span class="c1"># so often.</span>
         <span class="n">stack</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_stack</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reqs</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">req</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">or</span> <span class="nb">tuple</span><span class="p">(),</span> <span class="n">res</span><span class="p">,</span> <span class="n">stack</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reqs</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">req</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">or</span> <span class="nb">tuple</span><span class="p">(),</span> <span class="n">res</span><span class="p">,</span> <span class="n">stack</span><span class="p">))</span></div>
 
     <span class="k">def</span> <span class="nf">executemany</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_raise_error</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteMultithread.select"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Unlike sqlite&#39;s native select, this select doesn&#39;t handle iteration efficiently.</span>
 
@@ -584,14 +583,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">check_raise_error</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">rec</span> <span class="o">==</span> <span class="s1">&#39;--no more--&#39;</span><span class="p">:</span>
                 <span class="k">break</span>
-            <span class="k">yield</span> <span class="n">rec</span>
+            <span class="k">yield</span> <span class="n">rec</span></div>
 
-    <span class="k">def</span> <span class="nf">select_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SqliteMultithread.select_one"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select_one">[docs]</a>    <span class="k">def</span> <span class="nf">select_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return only the first row of the SELECT, or None if there are no matching rows.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">arg</span><span class="p">)))</span>
         <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
 
     <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocking</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">blocking</span><span class="p">:</span>

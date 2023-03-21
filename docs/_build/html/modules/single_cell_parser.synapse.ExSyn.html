@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.synapse.ExSyn &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -122,7 +121,61 @@
 <dl class="py class">
 <dt id="single_cell_parser.synapse.ExSyn">
 <em class="property">class </em><code class="sig-prename descclassname">single_cell_parser.synapse.</code><code class="sig-name descname">ExSyn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edgeID</span></em>, <em class="sig-param"><span class="n">edgePtID</span></em>, <em class="sig-param"><span class="n">preCellType</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">postCellType</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse.html#ExSyn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.synapse.ExSyn" title="Permalink to this definition">¶</a></dt>
-<dd><p>simple excitatory synapse for playing around</p>
+<dd><p>Bases: <a class="reference internal" href="single_cell_parser.synapse.Synapse.html#single_cell_parser.synapse.Synapse" title="single_cell_parser.synapse.Synapse"><code class="xref py py-class docutils literal notranslate"><span class="pre">single_cell_parser.synapse.Synapse</span></code></a></p>
+<p>simple excitatory synapse for playing around</p>
+<dl class="py method">
+<dt id="single_cell_parser.synapse.ExSyn.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edgeID</span></em>, <em class="sig-param"><span class="n">edgePtID</span></em>, <em class="sig-param"><span class="n">preCellType</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">postCellType</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse.html#ExSyn.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.synapse.ExSyn.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>ID of attached section in cell.sections
+self.secID = edgeID</p>
+<p>ID of attached point in cell.sections[self.secID].pts
+self.ptID = edgePtID</p>
+<p>relatice coordinate along attached section
+self.x = edgex</p>
+<p>self.preCellType = preCellType
+reference to presynaptic cell (PointCell)
+self.preCell = None</p>
+<p>reference to presynaptic release site (PointCell)
+self.releaseSite = None</p>
+<p>self.postCellType = postCellType</p>
+<p>3D coordinates of synapse location
+self.coordinates = None</p>
+<p>stores hoc mechanisms and NetCons
+self.receptors = {}
+self.netcons = []</p>
+<p>self.weights = None</p>
+<p>self._active = False</p>
+<p>self.pruned = False</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.synapse.ExSyn.__init__" title="single_cell_parser.synapse.ExSyn.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(edgeID, edgePtID[, preCellType, …])</p></td>
+<td><p>ID of attached section in cell.sections self.secID = edgeID</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.synapse.ExSyn.activate_hoc_syn" title="single_cell_parser.synapse.ExSyn.activate_hoc_syn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">activate_hoc_syn</span></code></a>(source, targetCell[, …])</p></td>
+<td><p>setup of all necessary hoc connections.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">disconnect_hoc_synapse</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_active</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="single_cell_parser.synapse.ExSyn.activate_hoc_syn">
+<code class="sig-name descname">activate_hoc_syn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source</span></em>, <em class="sig-param"><span class="n">targetCell</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">10.0</span></em>, <em class="sig-param"><span class="n">delay</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">weight</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse.html#ExSyn.activate_hoc_syn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.synapse.ExSyn.activate_hoc_syn" title="Permalink to this definition">¶</a></dt>
+<dd><p>setup of all necessary hoc connections.
+stores all mechanisms and NetCons for reference counting.</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>

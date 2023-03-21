@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>singlecell_input_mapper.singlecell_input_mapper.network_embedding &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -106,7 +105,7 @@
 <span class="sd">    to multi-compartmental neuron model.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postCell</span><span class="p">,</span> <span class="n">postCellType</span><span class="p">,</span> <span class="n">cellTypeNumbersSpreadsheet</span><span class="p">,</span> <span class="n">connectionsSpreadsheet</span><span class="p">,</span> <span class="n">exPST</span><span class="p">,</span> <span class="n">inhPST</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.html#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postCell</span><span class="p">,</span> <span class="n">postCellType</span><span class="p">,</span> <span class="n">cellTypeNumbersSpreadsheet</span><span class="p">,</span> <span class="n">connectionsSpreadsheet</span><span class="p">,</span> <span class="n">exPST</span><span class="p">,</span> <span class="n">inhPST</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        dictionary holding all presynaptic cells</span>
 <span class="sd">        ordered by cell type</span>
@@ -133,11 +132,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">postCellType</span> <span class="o">=</span> <span class="n">postCellType</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span> <span class="o">=</span> <span class="n">exPST</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inhPST</span> <span class="o">=</span> <span class="n">inhPST</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mapper</span> <span class="o">=</span> <span class="n">SynapseMapper</span><span class="p">(</span><span class="n">postCell</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mapper</span> <span class="o">=</span> <span class="n">SynapseMapper</span><span class="p">(</span><span class="n">postCell</span><span class="p">)</span></div>
 <span class="c1">#        seed = int(time.time())</span>
 <span class="c1">#        self.ranGen = np.random.RandomState(seed)</span>
     
-    <span class="k">def</span> <span class="nf">create_network_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postCellName</span><span class="p">,</span> <span class="n">boutonDensities</span><span class="p">,</span> <span class="n">nrOfSamples</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.create_network_embedding"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.html#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding">[docs]</a>    <span class="k">def</span> <span class="nf">create_network_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postCellName</span><span class="p">,</span> <span class="n">boutonDensities</span><span class="p">,</span> <span class="n">nrOfSamples</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Public interface:</span>
 <span class="sd">        used for creating fixed network connectivity.</span>
@@ -182,9 +181,9 @@
 <span class="c1">#        self._write_output_files(postCellName, connectivityMap, synapseLocations, cellTypeSummaryTable, columnSummaryTable)</span>
         
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Done generating network embedding!&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---------------------------&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---------------------------&#39;</span><span class="p">)</span></div>
     
-    <span class="k">def</span> <span class="nf">create_network_embedding_for_simulations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postCellName</span><span class="p">,</span> <span class="n">boutonDensities</span><span class="p">,</span> <span class="n">nrOfRealizations</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.create_network_embedding_for_simulations"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.html#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_for_simulations">[docs]</a>    <span class="k">def</span> <span class="nf">create_network_embedding_for_simulations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postCellName</span><span class="p">,</span> <span class="n">boutonDensities</span><span class="p">,</span> <span class="n">nrOfRealizations</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Public interface:</span>
 <span class="sd">        used for creating fixed network connectivity for use in Monte Carlo simulations.</span>
@@ -254,7 +253,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_generate_output_files</span><span class="p">(</span><span class="n">postCellName</span><span class="p">,</span> <span class="n">connectivityMap</span><span class="p">,</span> <span class="n">connectedCells</span><span class="p">,</span> <span class="n">connectedCellsPerStructure</span><span class="p">)</span>
             <span class="n">synapseLocations</span><span class="p">,</span> <span class="n">cellSynapseLocations</span><span class="p">,</span> <span class="n">cellTypeSummaryTable</span><span class="p">,</span> <span class="n">columnSummaryTable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_summary_tables</span><span class="p">(</span><span class="n">connectedCells</span><span class="p">,</span> <span class="n">connectedCellsPerStructure</span><span class="p">)</span>
             <span class="n">cellTypeSpecificPopulation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cellTypeSummaryTable</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---------------------------&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---------------------------&#39;</span><span class="p">)</span></div>
         
 <span class="c1">#        print &#39;    Writing output files...&#39;</span>
 <span class="c1">#        populationDistribution = self._compute_parameter_distribution(cellTypeSpecificPopulation)</span>
@@ -262,7 +261,7 @@
 <span class="c1">#        summaryName = outNamePrefix + &#39;_synapses_%d_realizations_summary&#39; % nrOfRealizations</span>
 <span class="c1">#        writer.write_population_connectivity_summary(summaryName, populationDistribution)</span>
     
-    <span class="k">def</span> <span class="nf">create_network_embedding_from_synapse_densities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postCellName</span><span class="p">,</span> <span class="n">synapseDensities</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.create_network_embedding_from_synapse_densities"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.html#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_from_synapse_densities">[docs]</a>    <span class="k">def</span> <span class="nf">create_network_embedding_from_synapse_densities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postCellName</span><span class="p">,</span> <span class="n">synapseDensities</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Public interface:</span>
 <span class="sd">        used for creating fixed network connectivity from pre-computed</span>
@@ -303,7 +302,7 @@
         
         <span class="n">connectivityMap</span><span class="p">,</span> <span class="n">connectedCells</span><span class="p">,</span> <span class="n">connectedCellsPerStructure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_anatomical_connectivity_map</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_generate_output_files</span><span class="p">(</span><span class="n">postCellName</span><span class="p">,</span> <span class="n">connectivityMap</span><span class="p">,</span> <span class="n">connectedCells</span><span class="p">,</span> <span class="n">connectedCellsPerStructure</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---------------------------&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---------------------------&#39;</span><span class="p">)</span></div>
     
     <span class="k">def</span> <span class="nf">_precompute_column_celltype_synapse_densities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boutonDensities</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>

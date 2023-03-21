@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.synapse_mapper &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -111,7 +110,7 @@
 <span class="sd">        to the edge and edgePt ID of all morphology points inside that voxel</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">synDist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">isDensity</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="SynapseMapper.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.synapse_mapper.SynapseMapper.html#single_cell_parser.synapse_mapper.SynapseMapper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">synDist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">isDensity</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        synapses are mapped onto this cell</span>
 <span class="sd">        self.cell = cell</span>
@@ -128,11 +127,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synDist</span> <span class="o">=</span> <span class="n">synDist</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">isDensity</span> <span class="o">=</span> <span class="n">isDensity</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span> <span class="o">=</span> <span class="p">{}</span></div>
 <span class="c1">#        seed = 1234567890</span>
 <span class="c1">#        self.ranGen = np.random.RandomState(seed)</span>
     
-    <span class="k">def</span> <span class="nf">map_synapse_realization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SynapseMapper.map_synapse_realization"><a class="viewcode-back" href="../../modules/single_cell_parser.synapse_mapper.SynapseMapper.html#single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_realization">[docs]</a>    <span class="k">def</span> <span class="nf">map_synapse_realization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        maps previously created synapse realization onto neuron</span>
 <span class="sd">        morphology. self.synDist has to be dict with synapse types as</span>
@@ -154,9 +153,9 @@
                     <span class="k">if</span> <span class="n">tmpdx</span> <span class="o">&lt;</span> <span class="n">mindx</span><span class="p">:</span>
                         <span class="n">mindx</span> <span class="o">=</span> <span class="n">tmpdx</span>
                         <span class="n">closestPtID</span> <span class="o">=</span> <span class="n">i</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">sectionID</span><span class="p">,</span> <span class="n">closestPtID</span><span class="p">,</span> <span class="n">sectionx</span><span class="p">,</span> <span class="n">synType</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">sectionID</span><span class="p">,</span> <span class="n">closestPtID</span><span class="p">,</span> <span class="n">sectionx</span><span class="p">,</span> <span class="n">synType</span><span class="p">)</span></div>
     
-    <span class="k">def</span> <span class="nf">map_pruned_synapse_realization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SynapseMapper.map_pruned_synapse_realization"><a class="viewcode-back" href="../../modules/single_cell_parser.synapse_mapper.SynapseMapper.html#single_cell_parser.synapse_mapper.SynapseMapper.map_pruned_synapse_realization">[docs]</a>    <span class="k">def</span> <span class="nf">map_pruned_synapse_realization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        maps previously created synapse realization onto neuron</span>
 <span class="sd">        morphology. self.synDist has to be dict with synapse types as</span>
@@ -180,9 +179,9 @@
                         <span class="n">mindx</span> <span class="o">=</span> <span class="n">tmpdx</span>
                         <span class="n">closestPtID</span> <span class="o">=</span> <span class="n">i</span>
                 <span class="n">newSyn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">sectionID</span><span class="p">,</span> <span class="n">closestPtID</span><span class="p">,</span> <span class="n">sectionx</span><span class="p">,</span> <span class="n">synType</span><span class="p">)</span>
-                <span class="n">newSyn</span><span class="o">.</span><span class="n">pruned</span> <span class="o">=</span> <span class="n">pruned</span>
+                <span class="n">newSyn</span><span class="o">.</span><span class="n">pruned</span> <span class="o">=</span> <span class="n">pruned</span></div>
     
-    <span class="k">def</span> <span class="nf">map_synapse_model_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synType</span><span class="p">,</span> <span class="n">structLabel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SynapseMapper.map_synapse_model_distribution"><a class="viewcode-back" href="../../modules/single_cell_parser.synapse_mapper.SynapseMapper.html#single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_model_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">map_synapse_model_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synType</span><span class="p">,</span> <span class="n">structLabel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        maps modeled synapse distribution (e.g. normal, uniform, ...)</span>
 <span class="sd">        onto dendritic tree. synapse distribution synDist </span>
@@ -229,9 +228,9 @@
                 <span class="k">if</span> <span class="n">tmpdx</span> <span class="o">&lt;</span> <span class="n">mindx</span><span class="p">:</span>
                     <span class="n">mindx</span> <span class="o">=</span> <span class="n">tmpdx</span>
                     <span class="n">closestPtID</span> <span class="o">=</span> <span class="n">i</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">sectionID</span><span class="p">,</span> <span class="n">closestPtID</span><span class="p">,</span> <span class="n">synx</span><span class="p">,</span> <span class="n">synType</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">sectionID</span><span class="p">,</span> <span class="n">closestPtID</span><span class="p">,</span> <span class="n">synx</span><span class="p">,</span> <span class="n">synType</span><span class="p">)</span></div>
     
-    <span class="k">def</span> <span class="nf">create_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="SynapseMapper.create_synapses"><a class="viewcode-back" href="../../modules/single_cell_parser.synapse_mapper.SynapseMapper.html#single_cell_parser.synapse_mapper.SynapseMapper.create_synapses">[docs]</a>    <span class="k">def</span> <span class="nf">create_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        main function; creates instantiation of synapses</span>
 <span class="sd">        on cell from synapse distribution</span>
@@ -260,7 +259,7 @@
                     <span class="n">edgex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">edgeID</span><span class="p">]</span><span class="o">.</span><span class="n">relPts</span><span class="p">[</span><span class="n">edgePtID</span><span class="p">]</span>
                     <span class="k">if</span> <span class="n">edgex</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">edgex</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Edge x out of range&#39;</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">edgex</span><span class="p">,</span> <span class="n">preType</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">edgex</span><span class="p">,</span> <span class="n">preType</span><span class="p">)</span></div>
     
     <span class="k">def</span> <span class="nf">_create_voxel_edge_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>

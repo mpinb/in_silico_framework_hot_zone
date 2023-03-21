@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.cell &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -110,7 +109,7 @@
 <span class="sd">    and hoc interface</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cell.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.Cell.html#single_cell_parser.cell.Cell.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Constructor:</span>
 <span class="sd">        </span>
@@ -166,9 +165,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">neuron_sim_param</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">network_param</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">network_sim_param</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">section_adjacency_map</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section_adjacency_map</span> <span class="o">=</span> <span class="kc">None</span></div>
     
-    <span class="k">def</span> <span class="nf">re_init_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replayMode</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Cell.re_init_cell"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.Cell.html#single_cell_parser.cell.Cell.re_init_cell">[docs]</a>    <span class="k">def</span> <span class="nf">re_init_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replayMode</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;re-initialize for next simulation run&#39;&#39;&#39;</span>
         <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
             <span class="n">sec</span><span class="o">.</span><span class="n">_re_init_vm_recording</span><span class="p">()</span>
@@ -177,7 +176,7 @@
             <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">synType</span><span class="p">]:</span>
                 <span class="n">syn</span><span class="o">.</span><span class="n">disconnect_hoc_synapse</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">replayMode</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">synType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>                
+                <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">synType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>                </div>
     
     <span class="k">def</span> <span class="nf">record_range_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">mech</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1">#allow specifying mech and var in var. this is closer to the neuron syntax</span>
@@ -194,7 +193,7 @@
                 <span class="c1">## check, if the range var is existent in the respective segment or not                       </span>
                 <span class="k">pass</span>
     
-    <span class="k">def</span> <span class="nf">distance_between_pts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">sec2</span><span class="p">,</span> <span class="n">x2</span><span class="p">):</span>
+<div class="viewcode-block" id="Cell.distance_between_pts"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.Cell.html#single_cell_parser.cell.Cell.distance_between_pts">[docs]</a>    <span class="k">def</span> <span class="nf">distance_between_pts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">sec2</span><span class="p">,</span> <span class="n">x2</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;computes path length between to points given by</span>
 <span class="sd">        location x1 and x2 in sections sec1 and sec2</span>
 <span class="sd">        or by ptID x1 and x2 and section ID sec1 and sec2.</span>
@@ -211,18 +210,18 @@
             <span class="n">x2</span> <span class="o">=</span> <span class="n">sec2</span><span class="o">.</span><span class="n">relPts</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
 <span class="c1">#        set origin</span>
         <span class="n">silent</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec2</span><span class="p">)</span></div>
     
-    <span class="k">def</span> <span class="nf">distance_to_soma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="Cell.distance_to_soma"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.Cell.html#single_cell_parser.cell.Cell.distance_to_soma">[docs]</a>    <span class="k">def</span> <span class="nf">distance_to_soma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;computes path length between soma and point given by</span>
 <span class="sd">        location x in sections sec or by ptID x and section ID sec&#39;&#39;&#39;</span>
 <span class="c1">#        assume the user knows what they&#39;re doing...</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_between_pts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">secID</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_between_pts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">soma</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_between_pts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">soma</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span></div>
     
-    <span class="k">def</span> <span class="nf">max_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<div class="viewcode-block" id="Cell.max_distance"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.Cell.html#single_cell_parser.cell.Cell.max_distance">[docs]</a>    <span class="k">def</span> <span class="nf">max_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;computes maximum path length to soma</span>
 <span class="sd">        of all branches with the same label&#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Soma&#39;</span><span class="p">:</span>
@@ -248,7 +247,7 @@
                         <span class="n">dist</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="n">maxDist</span><span class="p">:</span>
                             <span class="n">maxDist</span> <span class="o">=</span> <span class="n">dist</span>
-        <span class="k">return</span> <span class="n">maxDist</span>
+        <span class="k">return</span> <span class="n">maxDist</span></div>
     
     <span class="k">def</span> <span class="nf">add_synapse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secID</span><span class="p">,</span> <span class="n">ptID</span><span class="p">,</span> <span class="n">ptx</span><span class="p">,</span> <span class="n">preType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">,</span> <span class="n">postType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">preType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="p">:</span>
@@ -282,7 +281,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tVec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tVec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">,</span> <span class="n">sec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>          
     
-    <span class="k">def</span> <span class="nf">change_synapse_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cell.change_synapse_parameters"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.Cell.html#single_cell_parser.cell.Cell.change_synapse_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">change_synapse_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Change parameters of synapses during simulation.</span>
 <span class="sd">        self.changeSynParamDict is dictionary of network parameter sets</span>
@@ -405,7 +404,7 @@
 <span class="sd">#                                        syn.netcons[0].weight[i] = recep.weight[i]</span>
 <span class="sd">#                                else:</span>
 <span class="sd">#                                    syn.netcons[0].weight[0] = recep.weight</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
     <span class="k">def</span> <span class="nf">get_synapse_activation_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_spikes</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">sim_trial_index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span> 
         <span class="n">syn_types</span> <span class="o">=</span> <span class="p">[]</span>
@@ -457,7 +456,7 @@
 
         <span class="k">return</span> <span class="n">sa_pd</span>
 
-    <span class="k">def</span> <span class="nf">get_section_adjacancy_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cell.get_section_adjacancy_map"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.Cell.html#single_cell_parser.cell.Cell.get_section_adjacancy_map">[docs]</a>    <span class="k">def</span> <span class="nf">get_section_adjacancy_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generates a map that shows which sections are connected to which sections.</span>
 <span class="sd">        Saves this as a class attribute if it&#39;s the first time calculatingm otherwise returns</span>
 
@@ -481,7 +480,7 @@
             <span class="k">for</span> <span class="n">child_section_n</span><span class="p">,</span> <span class="n">parent_section_n</span> <span class="ow">in</span> <span class="n">section_adjacency_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">section_adjacency_map</span><span class="p">[</span><span class="n">parent_section_n</span><span class="p">][</span><span class="s2">&quot;children&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child_section_n</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">section_adjacency_map</span> <span class="o">=</span> <span class="n">section_adjacency_map</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_adjacency_map</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_adjacency_map</span></div></div>
 
 <div class="viewcode-block" id="PySection"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.PySection.html#single_cell_parser.cell.PySection">[docs]</a><span class="k">class</span> <span class="nc">PySection</span><span class="p">(</span><span class="n">nrn</span><span class="o">.</span><span class="n">Section</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -489,7 +488,7 @@
 <span class="sd">    and mechanism information/ handling methods</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="PySection.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.PySection.html#single_cell_parser.cell.PySection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        structure</span>
 <span class="sd">        self.label = label</span>
@@ -569,9 +568,9 @@
         <span class="sd">&#39;&#39;&#39;list of neuron Vectors recording voltage in each compartment&#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">recVList</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="sd">&#39;&#39;&#39;dict of range variables recorded&#39;&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">recordVars</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recordVars</span> <span class="o">=</span> <span class="p">{}</span></div>
     
-    <span class="k">def</span> <span class="nf">set_3d_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pts</span><span class="p">,</span> <span class="n">diams</span><span class="p">):</span>
+<div class="viewcode-block" id="PySection.set_3d_geometry"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.PySection.html#single_cell_parser.cell.PySection.set_3d_geometry">[docs]</a>    <span class="k">def</span> <span class="nf">set_3d_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pts</span><span class="p">,</span> <span class="n">diams</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        invokes NEURON 3D geometry setup</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -593,11 +592,11 @@
 <span class="c1">#        self.nseg = self.nrOfPts</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">_compute_bounds</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_relative_pts</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_relative_pts</span><span class="p">()</span></div>
 <span class="c1">#        execute after nr of segments has been determined</span>
 <span class="c1">#        self._init_vm_recording()</span>
     
-    <span class="k">def</span> <span class="nf">set_segments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nrOfSegments</span><span class="p">):</span>
+<div class="viewcode-block" id="PySection.set_segments"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.PySection.html#single_cell_parser.cell.PySection.set_segments">[docs]</a>    <span class="k">def</span> <span class="nf">set_segments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nrOfSegments</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Set spatial discretization. should be used</span>
 <span class="sd">        together with biophysical parameters to produce</span>
@@ -610,7 +609,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_compute_total_area</span><span class="p">()</span>
 <span class="c1">#        TODO: find a way to make this more efficient,</span>
 <span class="c1">#        i.e. allocate memory before running simulation</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_vm_recording</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_vm_recording</span><span class="p">()</span></div>
     
     <span class="k">def</span> <span class="nf">_compute_seg_diameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;fill list of diameters of all segments.</span>
@@ -750,7 +749,7 @@
 <span class="sd">    initialize with list (iterable) of spike times</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spikeTimes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="PointCell.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.PointCell.html#single_cell_parser.cell.PointCell.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spikeTimes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        self.spikeTimes = list(spikeTimes)</span>
 <span class="sd">        self.spikeVec = h.Vector(spikeTimes)</span>
@@ -769,18 +768,18 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">spikes</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">VecStim</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">playing</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synapseList</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spike_source</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spike_source</span> <span class="o">=</span> <span class="p">{}</span></div>
     
     <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">playing</span>
     
-    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PointCell.play"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.PointCell.html#single_cell_parser.cell.PointCell.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Activate point cell&#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spikeVec</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">playing</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">spikes</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spikeVec</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">playing</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playing</span> <span class="o">=</span> <span class="kc">True</span></div>
     
-    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spikeT</span><span class="p">,</span> <span class="n">spike_source</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="PointCell.append"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.PointCell.html#single_cell_parser.cell.PointCell.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spikeT</span><span class="p">,</span> <span class="n">spike_source</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;append additional spike time&#39;&#39;&#39;</span>
         <span class="k">assert</span><span class="p">(</span><span class="n">spike_source</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spikeTimes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spikeT</span><span class="p">)</span>
@@ -788,9 +787,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">spikeVec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spikeT</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spikeVec</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">playing</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spike_source</span><span class="p">[</span><span class="n">spikeT</span><span class="p">]</span> <span class="o">=</span> <span class="n">spike_source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spike_source</span><span class="p">[</span><span class="n">spikeT</span><span class="p">]</span> <span class="o">=</span> <span class="n">spike_source</span></div>
     
-    <span class="k">def</span> <span class="nf">compute_spike_train_times</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">nSpikes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spike_source</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="PointCell.compute_spike_train_times"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.PointCell.html#single_cell_parser.cell.PointCell.compute_spike_train_times">[docs]</a>    <span class="k">def</span> <span class="nf">compute_spike_train_times</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">nSpikes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spike_source</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Activate point cell&#39;&#39;&#39;</span>
         <span class="k">assert</span><span class="p">(</span><span class="n">spike_source</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rand</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">123456</span><span class="p">,</span> <span class="mi">1234567</span><span class="p">))</span>
@@ -826,7 +825,7 @@
                 <span class="k">if</span> <span class="n">tSpike</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">:</span>
                     <span class="k">break</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tSpike</span><span class="p">,</span> <span class="n">spike_source</span> <span class="o">=</span> <span class="n">spike_source</span><span class="p">)</span>
-                <span class="n">lastSpike</span> <span class="o">=</span> <span class="n">tSpike</span>
+                <span class="n">lastSpike</span> <span class="o">=</span> <span class="n">tSpike</span></div>
         
 <span class="c1">#        if self.spikeVec.size() and not self.playing:</span>
 <span class="c1">#            self.spikes.play(self.spikeVec)</span>
@@ -844,7 +843,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">synapseList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">synapse</span><span class="p">)</span>
     
-    <span class="k">def</span> <span class="nf">turn_off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PointCell.turn_off"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.PointCell.html#single_cell_parser.cell.PointCell.turn_off">[docs]</a>    <span class="k">def</span> <span class="nf">turn_off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;M. Hines: Note that one can turn off a VecStim without destroying it</span>
 <span class="sd">        by using VecStim.play() with no args. Turn it back on by</span>
 <span class="sd">        supplying a Vector arg. Or one could resize the Vector to 0.</span>
@@ -852,7 +851,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">playing</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spikes</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spikeTimes</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spikeVec</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spikeVec</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="SpikeTrain"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.SpikeTrain.html#single_cell_parser.cell.SpikeTrain">[docs]</a><span class="k">class</span> <span class="nc">SpikeTrain</span><span class="p">(</span><span class="n">PointCell</span><span class="p">):</span>
@@ -865,14 +864,14 @@
 <span class="sd">    Computation of spike times as in NEURON NetStim.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SpikeTrain.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.SpikeTrain.html#single_cell_parser.cell.SpikeTrain.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">PointCell</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rand</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">123456</span><span class="p">,</span> <span class="mi">1234567</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spikeInterval</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">noiseParam</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">playing</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playing</span> <span class="o">=</span> <span class="kc">False</span></div>
     
     <span class="k">def</span> <span class="nf">set_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spikeInterval</span> <span class="o">=</span> <span class="n">interval</span>
@@ -889,7 +888,7 @@
     <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">playing</span>
     
-    <span class="k">def</span> <span class="nf">compute_spike_times</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nSpikes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SpikeTrain.compute_spike_times"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.SpikeTrain.html#single_cell_parser.cell.SpikeTrain.compute_spike_times">[docs]</a>    <span class="k">def</span> <span class="nf">compute_spike_times</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nSpikes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Activate point cell&#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spikeInterval</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Trying to activate SpikeTrain without mean interval&#39;</span><span class="p">)</span>
@@ -920,7 +919,7 @@
                 <span class="k">if</span> <span class="n">tSpike</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">:</span>
                     <span class="k">break</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tSpike</span><span class="p">)</span>
-                <span class="n">lastSpike</span> <span class="o">=</span> <span class="n">tSpike</span>
+                <span class="n">lastSpike</span> <span class="o">=</span> <span class="n">tSpike</span></div>
         
 <span class="c1">#        if self.spikeVec.size() and not self.playing:</span>
 <span class="c1">#            self.spikes.play(self.spikeVec)</span>
@@ -933,11 +932,11 @@
             <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">noiseParam</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">spikeInterval</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">noiseParam</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">spikeInterval</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">rand</span><span class="o">.</span><span class="n">exponential</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SynParameterChanger"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.SynParameterChanger.html#single_cell_parser.cell.SynParameterChanger">[docs]</a><span class="k">class</span> <span class="nc">SynParameterChanger</span><span class="p">():</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">synParam</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<div class="viewcode-block" id="SynParameterChanger.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.cell.SynParameterChanger.html#single_cell_parser.cell.SynParameterChanger.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">synParam</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synParam</span> <span class="o">=</span> <span class="n">synParam</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tEvent</span> <span class="o">=</span> <span class="n">t</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">changeSynParamDict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tEvent</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synParam</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">changeSynParamDict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tEvent</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synParam</span></div>
     
     <span class="k">def</span> <span class="nf">cvode_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">h</span><span class="o">.</span><span class="n">cvode</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tEvent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">change_synapse_parameters</span><span class="p">)</span></div>

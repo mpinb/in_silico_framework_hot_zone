@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>project_specific_ipynb_code.reduced_model_output_paper &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -231,16 +230,16 @@
     <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:[</span><span class="n">vv</span><span class="o">.</span><span class="n">spikeTimes</span> <span class="k">for</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">network_mapper</span><span class="o">.</span><span class="n">cells</span><span class="p">)}</span></div>
 
 <div class="viewcode-block" id="ReducedModel"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.html#project_specific_ipynb_code.reduced_model_output_paper.ReducedModel">[docs]</a><span class="k">class</span> <span class="nc">ReducedModel</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel_dict</span><span class="p">,</span> <span class="n">LUT</span><span class="p">,</span> <span class="n">ISI_penalty</span><span class="p">,</span> <span class="n">spatial_bin_size</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
+<div class="viewcode-block" id="ReducedModel.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.html#project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel_dict</span><span class="p">,</span> <span class="n">LUT</span><span class="p">,</span> <span class="n">ISI_penalty</span><span class="p">,</span> <span class="n">spatial_bin_size</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kernel_dict</span> <span class="o">=</span> <span class="n">kernel_dict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">LUT</span> <span class="o">=</span> <span class="n">LUT</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ISI_penalty</span> <span class="o">=</span> <span class="n">ISI_penalty</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spatial_bin_size</span> <span class="o">=</span> <span class="n">spatial_bin_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial_bin_size</span> <span class="o">=</span> <span class="n">spatial_bin_size</span></div>
         
     <span class="k">def</span> <span class="nf">get_spatial_bin_by_soma_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soma_dist</span><span class="p">):</span>
         <span class="k">pass</span>
     
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">SAexc</span><span class="p">,</span> <span class="n">SAinh</span><span class="p">,</span> <span class="n">return_WNI</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">tStop</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">WNI_path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ReducedModel.run"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.html#project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">SAexc</span><span class="p">,</span> <span class="n">SAinh</span><span class="p">,</span> <span class="n">return_WNI</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">tStop</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">WNI_path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Apply the reduced model to synaptic input to get a list containing output spike times.</span>
 <span class="sd">        SAexc, SAinh: numpy arrays containing spatiotemporally binned synaptic inputs</span>
 <span class="sd">        return_WNI: False, &#39;EI_balance&#39; or &#39;full_trace&#39;</span>
@@ -333,18 +332,18 @@
                 <span class="n">I</span><span class="o">.</span><span class="n">cloudpickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">wni_values</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">spike_times</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">spike_times</span></div>
+            <span class="k">return</span> <span class="n">spike_times</span></div></div>
         
 
 <div class="viewcode-block" id="PreCell"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.reduced_model_output_paper.PreCell.html#project_specific_ipynb_code.reduced_model_output_paper.PreCell">[docs]</a><span class="k">class</span> <span class="nc">PreCell</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellID</span><span class="p">,</span> <span class="n">celltype</span><span class="p">):</span>
+<div class="viewcode-block" id="PreCell.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.reduced_model_output_paper.PreCell.html#project_specific_ipynb_code.reduced_model_output_paper.PreCell.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellID</span><span class="p">,</span> <span class="n">celltype</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cellID</span> <span class="o">=</span> <span class="n">cellID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">celltype</span> <span class="o">=</span> <span class="n">celltype</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spike_times</span> <span class="o">=</span> <span class="p">[]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spike_times</span> <span class="o">=</span> <span class="p">[]</span></div></div>
 
 <div class="viewcode-block" id="PostCell"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.reduced_model_output_paper.PostCell.html#project_specific_ipynb_code.reduced_model_output_paper.PostCell">[docs]</a><span class="k">class</span> <span class="nc">PostCell</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;A class for postsynaptic cells in reduced model networks.&#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellID</span><span class="p">,</span> <span class="n">celltype</span><span class="p">):</span>
+<div class="viewcode-block" id="PostCell.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.reduced_model_output_paper.PostCell.html#project_specific_ipynb_code.reduced_model_output_paper.PostCell.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellID</span><span class="p">,</span> <span class="n">celltype</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;cellID: int, from cortex in silico embedding</span>
 <span class="sd">        celltype: str, e.g. L5tt_C2</span>
 <span class="sd">        tStop: int&#39;&#39;&#39;</span>
@@ -352,9 +351,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">celltype</span> <span class="o">=</span> <span class="n">celltype</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_EXC_times</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">()</span> <span class="k">for</span> <span class="n">lv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">)]</span><span class="c1"># range(rm.n_spatial_bins)]        </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_INH_times</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">()</span> <span class="k">for</span> <span class="n">lv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">)]</span><span class="c1"># range(rm.n_spatial_bins)]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inh_scale</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inh_scale</span> <span class="o">=</span> <span class="mi">1</span></div>
         
-    <span class="k">def</span> <span class="nf">add_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pre_cell</span><span class="p">,</span> <span class="n">soma_dist</span><span class="p">,</span> <span class="n">excinh</span><span class="p">,</span> <span class="n">spatial_bin_size</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
+<div class="viewcode-block" id="PostCell.add_connection"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.reduced_model_output_paper.PostCell.html#project_specific_ipynb_code.reduced_model_output_paper.PostCell.add_connection">[docs]</a>    <span class="k">def</span> <span class="nf">add_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pre_cell</span><span class="p">,</span> <span class="n">soma_dist</span><span class="p">,</span> <span class="n">excinh</span><span class="p">,</span> <span class="n">spatial_bin_size</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Appends spike times from a presynaptic cell to the correct spatial bin of the postcell input array.</span>
 <span class="sd">            pre_cell: PreCell object with spike times computed</span>
 <span class="sd">            soma_dist: float</span>
@@ -364,7 +363,7 @@
         <span class="k">if</span> <span class="n">excinh</span> <span class="o">==</span> <span class="s1">&#39;exc&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_EXC_times</span><span class="p">[</span><span class="n">spatial_bin</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pre_cell</span><span class="o">.</span><span class="n">spike_times</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">excinh</span> <span class="o">==</span> <span class="s1">&#39;inh&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_INH_times</span><span class="p">[</span><span class="n">spatial_bin</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pre_cell</span><span class="o">.</span><span class="n">spike_times</span><span class="p">)</span>            
+            <span class="bp">self</span><span class="o">.</span><span class="n">_INH_times</span><span class="p">[</span><span class="n">spatial_bin</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pre_cell</span><span class="o">.</span><span class="n">spike_times</span><span class="p">)</span>            </div>
     
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_apply_release_probability_and_merge</span><span class="p">(</span><span class="n">times_array</span><span class="p">,</span> <span class="n">relProb</span><span class="p">):</span>
@@ -421,7 +420,7 @@
     
 <div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.reduced_model_output_paper.Network.html#project_specific_ipynb_code.reduced_model_output_paper.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;A class for creating and simulating an embedded network of reduced model neurons.&#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">presynaptic_cells_dict</span><span class="p">,</span> <span class="n">postsynaptic_cells_list</span><span class="p">,</span> <span class="n">post_cells_dir</span><span class="p">,</span> <span class="n">somadistance_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.reduced_model_output_paper.Network.html#project_specific_ipynb_code.reduced_model_output_paper.Network.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">presynaptic_cells_dict</span><span class="p">,</span> <span class="n">postsynaptic_cells_list</span><span class="p">,</span> <span class="n">post_cells_dir</span><span class="p">,</span> <span class="n">somadistance_dict</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;presynaptic_cells_dict: dict</span>
 <span class="sd">            keys are cellIDs from cortex in silico embedding, values are celltypes in the format celltype_barrel, </span>
 <span class="sd">            created in get_postsynaptic_cells_list_and_presynaptic_cells_dict</span>
@@ -441,7 +440,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_counts</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">presynaptic_cells_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="c1"># counts the number of cells of each celltype, used in _activate_pre_cells</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pre_cells</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span> <span class="c1"># created by _create_pre_syn_cells, stores PreCell objects by celltype</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pre_cells_by_id</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># created by _create_pre_syn_cells, stores PreCell objects by celltype</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">post_cells</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_cells</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span></div>
 
         <span class="c1"># self._read_syncon()</span>
         

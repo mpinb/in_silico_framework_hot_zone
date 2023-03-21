@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>biophysics_fitting.optimizer &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -194,7 +193,7 @@
 
     <span class="sd">&quot;&quot;&quot;Graupner-Brunel Evaluator&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_df</span><span class="p">,</span> <span class="n">n_objectives</span><span class="p">):</span>
+<div class="viewcode-block" id="my_ibea_evaluator.__init__"><a class="viewcode-back" href="../../modules/biophysics_fitting.optimizer.my_ibea_evaluator.html#biophysics_fitting.optimizer.my_ibea_evaluator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_df</span><span class="p">,</span> <span class="n">n_objectives</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Constructor&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">my_ibea_evaluator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">assert</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">parameter_df</span><span class="p">,</span> <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">))</span> <span class="c1"># we rely on the fact that the dataframe has an order</span>
@@ -204,10 +203,10 @@
                        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">parameter_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">param_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">parameter_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">n_objectives</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">n_objectives</span> </div>
 
-    <span class="k">def</span> <span class="nf">evaluate_with_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_values</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">None</span> <span class="c1"># because of serialization issues, evaluate with lists is unused. </span></div>
+<div class="viewcode-block" id="my_ibea_evaluator.evaluate_with_lists"><a class="viewcode-back" href="../../modules/biophysics_fitting.optimizer.my_ibea_evaluator.html#biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_with_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_values</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="c1"># because of serialization issues, evaluate with lists is unused. </span></div></div>
         <span class="c1"># Instead, the mymap function defines, which function is used to evaluate the parameters!!!</span>
 
 

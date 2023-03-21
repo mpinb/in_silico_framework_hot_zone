@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>model_data_base.model_data_base.LoaderWrapper &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -114,7 +113,8 @@
 <dl class="py class">
 <dt id="model_data_base.model_data_base.LoaderWrapper">
 <em class="property">class </em><code class="sig-prename descclassname">model_data_base.model_data_base.</code><code class="sig-name descname">LoaderWrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">relpath</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/model_data_base.html#LoaderWrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.model_data_base.LoaderWrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is a pointer to data, which is stored elsewhere.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a pointer to data, which is stored elsewhere.</p>
 <p>It is used by ModelDataBase, if data is stored in a subfolder of the
 model_data_base.basedir folder. It is not used, if the data is stored directly
 in the sqlite database.</p>
@@ -145,6 +145,24 @@ in the model_data_base</p>
 <ol class="arabic simple" start="5">
 <li><p>the returned object is returned to the user</p></li>
 </ol>
+<dl class="py method">
+<dt id="model_data_base.model_data_base.LoaderWrapper.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">relpath</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/model_data_base.html#LoaderWrapper.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.model_data_base.LoaderWrapper.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.model_data_base.LoaderWrapper.__init__" title="model_data_base.model_data_base.LoaderWrapper.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(relpath)</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

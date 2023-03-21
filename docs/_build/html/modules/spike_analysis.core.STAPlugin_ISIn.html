@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>spike_analysis.core.STAPlugin_ISIn &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -129,7 +128,56 @@
 <dl class="py class">
 <dt id="spike_analysis.core.STAPlugin_ISIn">
 <em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">STAPlugin_ISIn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'ISIn'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'spike_times'</span></em>, <em class="sig-param"><span class="n">max_n</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_ISIn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_ISIn" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Bases: <a class="reference internal" href="spike_analysis.core.STAPlugin_TEMPLATE.html#spike_analysis.core.STAPlugin_TEMPLATE" title="spike_analysis.core.STAPlugin_TEMPLATE"><code class="xref py py-class docutils literal notranslate"><span class="pre">spike_analysis.core.STAPlugin_TEMPLATE</span></code></a></p>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_ISIn.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'ISIn'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'spike_times'</span></em>, <em class="sig-param"><span class="n">max_n</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_ISIn.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_ISIn.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spike_analysis.core.STAPlugin_ISIn.__init__" title="spike_analysis.core.STAPlugin_ISIn.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([name, source, max_n])</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spike_analysis.core.STAPlugin_ISIn.event_analysis_ISIn" title="spike_analysis.core.STAPlugin_ISIn.event_analysis_ISIn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">event_analysis_ISIn</span></code></a>(spike_times[, n])</p></td>
+<td><p>Computes for each spike the inter spike interval (ISI) to the next, second next, nth spike.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_result</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code>(spike_times_analysis)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_ISIn.event_analysis_ISIn">
+<em class="property">static </em><code class="sig-name descname">event_analysis_ISIn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times</span></em>, <em class="sig-param"><span class="n">n</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_ISIn.event_analysis_ISIn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_ISIn.event_analysis_ISIn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes for each spike the inter spike interval (ISI) to the next, second next, nth spike.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spike_times</strong> (<em>list</em><em>, </em><em>containing spike times</em>) – </p></li>
+<li><p><strong>n</strong> (<em>max order of ISIs computed</em><em> (</em><em>e.g. if n = 1</em><em>, </em><em>only the interval to the next spike will be computed.</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>out</strong> – The ISI_{} columns contain the time interval between the current spike (&#64; event time)
+and the nth next spike. np.NaN, if there is no nth next spike.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame, containing the columns ISI_1 to ISI_{n}, and event_time</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 

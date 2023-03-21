@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>project_specific_ipynb_code.reproducing_L6paper.ModelSelection &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -144,7 +143,55 @@
 <dl class="py class">
 <dt id="project_specific_ipynb_code.reproducing_L6paper.ModelSelection">
 <em class="property">class </em><code class="sig-prename descclassname">project_specific_ipynb_code.reproducing_L6paper.</code><code class="sig-name descname">ModelSelection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">l6_config</span></em>, <em class="sig-param"><span class="n">objectives_BAC</span><span class="o">=</span><span class="default_value">['BAC_APheight', 'BAC_ISI', 'BAC_ahpdepth', 'BAC_caSpike_height', 'BAC_caSpike_width', 'BAC_spikecount', 'bAP_APheight', 'bAP_APwidth', 'bAP_att2', 'bAP_att3', 'bAP_spikecount']</span></em>, <em class="sig-param"><span class="n">objectives_step</span><span class="o">=</span><span class="default_value">['AI1', 'AI2', 'AI3', 'APh1', 'APh2', 'APh3', 'APw1', 'APw2', 'APw3', 'DI1', 'DI2', 'ISIcv1', 'ISIcv2', 'ISIcv3', 'TTFS1', 'TTFS2', 'TTFS3', 'fAHPd1', 'fAHPd2', 'fAHPd3', 'mf1', 'mf2', 'mf3', 'sAHPd1', 'sAHPd2', 'sAHPd3', 'sAHPt1', 'sAHPt2', 'sAHPt3']</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/reproducing_L6paper.html#ModelSelection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.reproducing_L6paper.ModelSelection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handles selection of models and allows analyzing them</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Handles selection of models and allows analyzing them</p>
+<dl class="py method">
+<dt id="project_specific_ipynb_code.reproducing_L6paper.ModelSelection.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">l6_config</span></em>, <em class="sig-param"><span class="n">objectives_BAC</span><span class="o">=</span><span class="default_value">['BAC_APheight', 'BAC_ISI', 'BAC_ahpdepth', 'BAC_caSpike_height', 'BAC_caSpike_width', 'BAC_spikecount', 'bAP_APheight', 'bAP_APwidth', 'bAP_att2', 'bAP_att3', 'bAP_spikecount']</span></em>, <em class="sig-param"><span class="n">objectives_step</span><span class="o">=</span><span class="default_value">['AI1', 'AI2', 'AI3', 'APh1', 'APh2', 'APh3', 'APw1', 'APw2', 'APw3', 'DI1', 'DI2', 'ISIcv1', 'ISIcv2', 'ISIcv3', 'TTFS1', 'TTFS2', 'TTFS3', 'fAHPd1', 'fAHPd2', 'fAHPd3', 'mf1', 'mf2', 'mf3', 'sAHPd1', 'sAHPd2', 'sAHPd3', 'sAHPt1', 'sAHPt2', 'sAHPt3']</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/reproducing_L6paper.html#ModelSelection.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.reproducing_L6paper.ModelSelection.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#project_specific_ipynb_code.reproducing_L6paper.ModelSelection.__init__" title="project_specific_ipynb_code.reproducing_L6paper.ModelSelection.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(l6_config[, objectives_BAC, …])</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cell_param</span></code>(modelid[, add_sim_param, …])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cell_with_biophysics</span></code>(modelid)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#project_specific_ipynb_code.reproducing_L6paper.ModelSelection.get_objectives" title="project_specific_ipynb_code.reproducing_L6paper.ModelSelection.get_objectives"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_objectives</span></code></a>(modelid[, group])</p></td>
+<td><p>group: all, BAC or step</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_parameters</span></code>(modelid)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_simulator</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_models</span></code>([BAC_limit, step_limit])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="project_specific_ipynb_code.reproducing_L6paper.ModelSelection.get_objectives">
+<code class="sig-name descname">get_objectives</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">modelid</span></em>, <em class="sig-param"><span class="n">group</span><span class="o">=</span><span class="default_value">'all'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/reproducing_L6paper.html#ModelSelection.get_objectives"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.reproducing_L6paper.ModelSelection.get_objectives" title="Permalink to this definition">¶</a></dt>
+<dd><p>group: all, BAC or step</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="project_specific_ipynb_code.reproducing_L6paper.ModelSelection.six">
+<code class="sig-name descname">six</code><em class="property"> = &lt;module 'six' from '/gpfs/soma_fs/scratch/meulemeester/anaconda_isf3/lib/python3.8/site-packages/six.py'&gt;</em><a class="headerlink" href="#project_specific_ipynb_code.reproducing_L6paper.ModelSelection.six" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>

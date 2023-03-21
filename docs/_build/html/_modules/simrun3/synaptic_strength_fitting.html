@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>simrun3.synaptic_strength_fitting &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -104,7 +103,7 @@
 <span class="c1">###############################</span>
 <div class="viewcode-block" id="PSPs"><a class="viewcode-back" href="../../modules/simrun3.synaptic_strength_fitting.PSPs.html#simrun3.synaptic_strength_fitting.PSPs">[docs]</a><span class="k">class</span> <span class="nc">PSPs</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;main class for calculation of ePSP amplitudes and synaptic strength fitting&#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neuron_param</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">confile</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gExRange</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> 
+<div class="viewcode-block" id="PSPs.__init__"><a class="viewcode-back" href="../../modules/simrun3.synaptic_strength_fitting.PSPs.html#simrun3.synaptic_strength_fitting.PSPs.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neuron_param</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">confile</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gExRange</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> 
                  <span class="n">AMPA_component</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NMDA_component</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vardt</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                  <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;cells&#39;</span><span class="p">,</span> <span class="n">exc_inh</span> <span class="o">=</span> <span class="s1">&#39;exc&#39;</span><span class="p">,</span>
                  <span class="n">tStim</span> <span class="o">=</span> <span class="mi">110</span><span class="p">,</span> <span class="n">tEnd</span> <span class="o">=</span> <span class="mi">150</span><span class="p">):</span>
@@ -136,7 +135,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">network_param</span> <span class="o">=</span> <span class="n">generate_inh_network_param_from_network_embedding</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">confile</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">network_params_by_celltype</span> <span class="o">=</span> <span class="n">split_network_param_in_one_elem_dicts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">network_param</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_computation</span><span class="p">(</span><span class="n">exc_inh</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_computation</span><span class="p">(</span><span class="n">exc_inh</span><span class="p">)</span></div>
         
     <span class="k">def</span> <span class="nf">_setup_computation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_inh</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">exc_inh</span> <span class="o">==</span> <span class="s1">&#39;exc&#39;</span><span class="p">:</span>
@@ -168,7 +167,7 @@
                                      <span class="n">tStim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tStim</span><span class="p">,</span> <span class="n">tEnd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tEnd</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_delayeds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>                
         
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">rerun</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="PSPs.run"><a class="viewcode-back" href="../../modules/simrun3.synaptic_strength_fitting.PSPs.html#simrun3.synaptic_strength_fitting.PSPs.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">rerun</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;start running computation on dask.distributed.Client</span>
 <span class="sd">        client: dask.distributedClient object</span>
 <span class="sd">        </span>
@@ -177,9 +176,9 @@
 <span class="sd">                computation is already running&#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">futures</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">rerun</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">futures</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_delayeds</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">futures</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_delayeds</span><span class="p">)</span></div>
     
-    <span class="k">def</span> <span class="nf">get_voltage_traces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PSPs.get_voltage_traces"><a class="viewcode-back" href="../../modules/simrun3.synaptic_strength_fitting.PSPs.html#simrun3.synaptic_strength_fitting.PSPs.get_voltage_traces">[docs]</a>    <span class="k">def</span> <span class="nf">get_voltage_traces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Returns voltage and timing of all synapse activations.</span>
 <span class="sd">        Fetches results from the cluster.&#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -200,9 +199,9 @@
             <span class="c1">#    warnings.warn(errstr)</span>
                 <span class="c1">#if max &gt; 0:</span>
                 <span class="c1">#    raise RuntimeError(errstr)</span>
-        <span class="k">return</span> <span class="n">out</span>
+        <span class="k">return</span> <span class="n">out</span></div>
     
-    <span class="k">def</span> <span class="nf">get_voltage_and_timing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;dynamic_baseline&#39;</span><span class="p">,</span> <span class="n">merged</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">merge_celltype_kwargs</span> <span class="o">=</span> <span class="p">{}):</span>
+<div class="viewcode-block" id="PSPs.get_voltage_and_timing"><a class="viewcode-back" href="../../modules/simrun3.synaptic_strength_fitting.PSPs.html#simrun3.synaptic_strength_fitting.PSPs.get_voltage_and_timing">[docs]</a>    <span class="k">def</span> <span class="nf">get_voltage_and_timing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;dynamic_baseline&#39;</span><span class="p">,</span> <span class="n">merged</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">merge_celltype_kwargs</span> <span class="o">=</span> <span class="p">{}):</span>
         <span class="sd">&#39;&#39;&#39;calculate maxmimum and timing of the EPSPS</span>
 <span class="sd">        method: dynamic_baseline: a simulation without any synaptic activation is </span>
 <span class="sd">            substracted from a simulation with cell activation. The maximum and </span>
@@ -216,7 +215,7 @@
         <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_voltage_traces</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">merged</span><span class="p">:</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">merge_celltypes</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="o">**</span><span class="n">merge_celltype_kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">get_voltage_and_timing</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">tStim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tStim</span><span class="p">,</span> <span class="n">tEnd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tEnd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">get_voltage_and_timing</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">tStim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tStim</span><span class="p">,</span> <span class="n">tEnd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tEnd</span><span class="p">)</span></div>
         
     <span class="k">def</span> <span class="nf">get_summary_statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;dynamic_baseline&#39;</span><span class="p">,</span>
                                <span class="n">merge_celltype_kwargs</span> <span class="o">=</span> <span class="p">{},</span>

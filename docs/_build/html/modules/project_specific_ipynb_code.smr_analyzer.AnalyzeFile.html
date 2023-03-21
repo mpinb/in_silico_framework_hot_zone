@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>project_specific_ipynb_code.smr_analyzer.AnalyzeFile &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -118,7 +117,85 @@
 <dl class="py class">
 <dt id="project_specific_ipynb_code.smr_analyzer.AnalyzeFile">
 <em class="property">class </em><code class="sig-prename descclassname">project_specific_ipynb_code.smr_analyzer.</code><code class="sig-name descname">AnalyzeFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">lim_creast</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">lim_trough</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">cellid</span><span class="o">=</span><span class="default_value">'__no_cellid_assigned__'</span></em>, <em class="sig-param"><span class="n">periods</span><span class="o">=</span><span class="default_value">{'1onset': 0, 100}</span></em>, <em class="sig-param"><span class="n">analogsignal_id</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stim_times_channel</span><span class="o">=</span><span class="default_value">'5'</span></em>, <em class="sig-param"><span class="n">tdelta</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/smr_analyzer.html#AnalyzeFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.smr_analyzer.AnalyzeFile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="project_specific_ipynb_code.smr_analyzer.AnalyzeFile.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">lim_creast</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">lim_trough</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">cellid</span><span class="o">=</span><span class="default_value">'__no_cellid_assigned__'</span></em>, <em class="sig-param"><span class="n">periods</span><span class="o">=</span><span class="default_value">{'1onset': 0, 100}</span></em>, <em class="sig-param"><span class="n">analogsignal_id</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stim_times_channel</span><span class="o">=</span><span class="default_value">'5'</span></em>, <em class="sig-param"><span class="n">tdelta</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/smr_analyzer.html#AnalyzeFile.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.smr_analyzer.AnalyzeFile.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for automatic analysis of smr files.</p>
+<p>periods: requires ‘1onset’ as key for plot_n_onset function.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#project_specific_ipynb_code.smr_analyzer.AnalyzeFile.__init__" title="project_specific_ipynb_code.smr_analyzer.AnalyzeFile.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(path[, lim_creast, lim_trough, …])</p></td>
+<td><p>Class for automatic analysis of smr files.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">describe</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_creast_and_trough_ampltidues_by_bins</span></code>([mode])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_df</span></code>([groupby, normed])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_n_onset2</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_ongoing_activity</span></code>([period_prestim])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_onset_latency</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_onset_spike_probability</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#project_specific_ipynb_code.smr_analyzer.AnalyzeFile.get_peaks_and_peak_amplitudes" title="project_specific_ipynb_code.smr_analyzer.AnalyzeFile.get_peaks_and_peak_amplitudes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_peaks_and_peak_amplitudes</span></code></a>()</p></td>
+<td><p>returns: times of creasts, creast amplitudes, timepoints of troughs, trough amplitudes.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table</span></code>([groupby])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_PSTH</span></code>([ax])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_all_flat</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_all_stacked</span></code>([text])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_burst_fractions</span></code>([ax])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_n_onset</span></code>([ax])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_onset_latency</span></code>([ax])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_spike_amplitude_histograms</span></code>([ax])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">show_events</span></code>(type_[, savedir, display, close])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="project_specific_ipynb_code.smr_analyzer.AnalyzeFile.get_peaks_and_peak_amplitudes">
+<code class="sig-name descname">get_peaks_and_peak_amplitudes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/smr_analyzer.html#AnalyzeFile.get_peaks_and_peak_amplitudes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.smr_analyzer.AnalyzeFile.get_peaks_and_peak_amplitudes" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns: times of creasts, creast amplitudes, timepoints of troughs, trough amplitudes.
+These are computed in the timespan from first stimulus - 3s till last stimulus + 3s</p>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 

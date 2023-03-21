@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>biophysics_fitting.utils &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -174,13 +173,13 @@
     <span class="sd">&#39;&#39;&#39;A hack to resolve AssertionError: daemonic processes are not allowed to have children</span>
 <span class="sd">    </span>
 <span class="sd">    This might spawn child processes that do not terminate&#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Undemonize.__init__"><a class="viewcode-back" href="../../modules/biophysics_fitting.utils.Undemonize.html#biophysics_fitting.utils.Undemonize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">current_process</span><span class="p">()</span>
         <span class="k">if</span> <span class="s1">&#39;daemon&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">_config</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">daemon_status_set</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">daemon_status_set</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">daemon_status_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;daemon&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">daemon_status_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;daemon&#39;</span><span class="p">)</span></div>
     <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">daemon_status_set</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;daemon&#39;</span><span class="p">]</span>
@@ -239,8 +238,8 @@
     <span class="k">return</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">callable_partial</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="VariableThatDoesNotGetPickled"><a class="viewcode-back" href="../../modules/biophysics_fitting.utils.VariableThatDoesNotGetPickled.html#biophysics_fitting.utils.VariableThatDoesNotGetPickled">[docs]</a><span class="k">class</span> <span class="nc">VariableThatDoesNotGetPickled</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stored_item</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stored_item</span> <span class="o">=</span> <span class="n">stored_item</span>
+<div class="viewcode-block" id="VariableThatDoesNotGetPickled.__init__"><a class="viewcode-back" href="../../modules/biophysics_fitting.utils.VariableThatDoesNotGetPickled.html#biophysics_fitting.utils.VariableThatDoesNotGetPickled.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stored_item</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stored_item</span> <span class="o">=</span> <span class="n">stored_item</span></div>
     <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;stored_item&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span></div>
     

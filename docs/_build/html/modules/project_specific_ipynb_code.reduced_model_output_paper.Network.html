@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>project_specific_ipynb_code.reduced_model_output_paper.Network &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -119,7 +118,37 @@
 <dl class="py class">
 <dt id="project_specific_ipynb_code.reduced_model_output_paper.Network">
 <em class="property">class </em><code class="sig-prename descclassname">project_specific_ipynb_code.reduced_model_output_paper.</code><code class="sig-name descname">Network</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">presynaptic_cells_dict</span></em>, <em class="sig-param"><span class="n">postsynaptic_cells_list</span></em>, <em class="sig-param"><span class="n">post_cells_dir</span></em>, <em class="sig-param"><span class="n">somadistance_dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/reduced_model_output_paper.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.reduced_model_output_paper.Network" title="Permalink to this definition">¶</a></dt>
-<dd><p>A class for creating and simulating an embedded network of reduced model neurons.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for creating and simulating an embedded network of reduced model neurons.</p>
+<dl class="py method">
+<dt id="project_specific_ipynb_code.reduced_model_output_paper.Network.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">presynaptic_cells_dict</span></em>, <em class="sig-param"><span class="n">postsynaptic_cells_list</span></em>, <em class="sig-param"><span class="n">post_cells_dir</span></em>, <em class="sig-param"><span class="n">somadistance_dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/reduced_model_output_paper.html#Network.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.reduced_model_output_paper.Network.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>presynaptic_cells_dict: dict</dt><dd><p>keys are cellIDs from cortex in silico embedding, values are celltypes in the format celltype_barrel,
+created in get_postsynaptic_cells_list_and_presynaptic_cells_dict</p>
+</dd>
+<dt>postsynaptic_cells_list: list</dt><dd><p>containing cellIDs from cortex in silico embedding, basically all the subfolders in the post_cells_dir or a subset
+created in get_postsynaptic_cells_list_and_presynaptic_cells_dict</p>
+</dd>
+<dt>post_cells_dir: str</dt><dd><p>the filepath to the output of the cortex in silico network_realization.py, should end in /post_neurons</p>
+</dd>
+<dt>somadistance_dict: dict, created by get_somadistance_lookup_parallel</dt><dd><p>containing one key for each neuron morphology, storing dataframes with somadistances of all cell sections</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#project_specific_ipynb_code.reduced_model_output_paper.Network.__init__" title="project_specific_ipynb_code.reduced_model_output_paper.Network.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(presynaptic_cells_dict, …)</p></td>
+<td><p>presynaptic_cells_dict: dict</p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

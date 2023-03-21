@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>singlecell_input_mapper.singlecell_input_mapper.synapse_mapper &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -109,7 +108,7 @@
 <span class="sd">        to the edge and edgePt ID of all morphology points inside that voxel</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">synDist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">isDensity</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="SynapseMapper.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.html#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">synDist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">isDensity</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        synapses are mapped onto this cell</span>
 <span class="sd">        self.cell = cell</span>
@@ -126,11 +125,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synDist</span> <span class="o">=</span> <span class="n">synDist</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">isDensity</span> <span class="o">=</span> <span class="n">isDensity</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span> <span class="o">=</span> <span class="p">{}</span></div>
 <span class="c1">#        seed = int(time.time()) + 2342</span>
 <span class="c1">#        self.ranGen = np.random.RandomState(seed)</span>
     
-    <span class="k">def</span> <span class="nf">create_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="SynapseMapper.create_synapses"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.html#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses">[docs]</a>    <span class="k">def</span> <span class="nf">create_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        main function; creates instantiation of synapses</span>
 <span class="sd">        on cell from synapse distribution</span>
@@ -162,7 +161,7 @@
                         <span class="k">if</span> <span class="n">edgex</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">edgex</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
                             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Edge x out of range&#39;</span><span class="p">)</span>
                         <span class="n">newSynapses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">edgex</span><span class="p">,</span> <span class="n">preType</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">newSynapses</span>
+        <span class="k">return</span> <span class="n">newSynapses</span></div>
     
     <span class="k">def</span> <span class="nf">_create_voxel_edge_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -238,7 +237,7 @@
 <span class="sd">    PST densities</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">postCellType</span><span class="p">,</span> <span class="n">connectionSpreadsheet</span><span class="p">,</span> <span class="n">exTypes</span><span class="p">,</span> <span class="n">inhTypes</span><span class="p">,</span> <span class="n">exPST</span><span class="p">,</span> <span class="n">inhPST</span><span class="p">):</span>
+<div class="viewcode-block" id="SynapseDensity.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.html#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">postCellType</span><span class="p">,</span> <span class="n">connectionSpreadsheet</span><span class="p">,</span> <span class="n">exTypes</span><span class="p">,</span> <span class="n">inhTypes</span><span class="p">,</span> <span class="n">exPST</span><span class="p">,</span> <span class="n">inhPST</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        postsynaptic neuron</span>
 <span class="sd">        self.cell = cell</span>
@@ -267,9 +266,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">inhTypes</span> <span class="o">=</span> <span class="n">inhTypes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span> <span class="o">=</span> <span class="n">exPST</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inhPST</span> <span class="o">=</span> <span class="n">inhPST</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span> <span class="o">=</span> <span class="p">{}</span></div>
     
-    <span class="k">def</span> <span class="nf">compute_synapse_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boutonDensity</span><span class="p">,</span> <span class="n">preCellType</span><span class="p">):</span>
+<div class="viewcode-block" id="SynapseDensity.compute_synapse_density"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.html#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_synapse_density">[docs]</a>    <span class="k">def</span> <span class="nf">compute_synapse_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boutonDensity</span><span class="p">,</span> <span class="n">preCellType</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        main interface for computing synapses originating</span>
 <span class="sd">        from presynaptic bouton density of given cell type</span>
@@ -320,9 +319,9 @@
                 <span class="n">keep</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">keep</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">synapseDensity</span>
+        <span class="k">return</span> <span class="n">synapseDensity</span></div>
     
-    <span class="k">def</span> <span class="nf">compute_cell_PST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SynapseDensity.compute_cell_PST"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.html#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_cell_PST">[docs]</a>    <span class="k">def</span> <span class="nf">compute_cell_PST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        called once to compute 3D length/surface area</span>
 <span class="sd">        densities and combine them with length/surface area</span>
@@ -364,7 +363,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">exConstants</span><span class="p">[</span><span class="s1">&#39;BASAL_LENGTH&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellLengthDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">exConstants</span><span class="p">[</span><span class="s1">&#39;BASAL_AREA&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellSurfaceAreaDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">inhConstants</span><span class="p">[</span><span class="s1">&#39;BASAL_LENGTH&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellLengthDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">inhConstants</span><span class="p">[</span><span class="s1">&#39;BASAL_AREA&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellSurfaceAreaDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">inhConstants</span><span class="p">[</span><span class="s1">&#39;BASAL_AREA&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellSurfaceAreaDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span></div>
         
     
     <span class="k">def</span> <span class="nf">_compute_length_surface_area_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lengthDensity</span><span class="p">,</span> <span class="n">surfaceAreaDensity</span><span class="p">,</span> <span class="n">likeAmira</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>

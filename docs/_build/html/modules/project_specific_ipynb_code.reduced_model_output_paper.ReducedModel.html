@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>project_specific_ipynb_code.reduced_model_output_paper.ReducedModel &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -119,7 +118,46 @@
 <dl class="py class">
 <dt id="project_specific_ipynb_code.reduced_model_output_paper.ReducedModel">
 <em class="property">class </em><code class="sig-prename descclassname">project_specific_ipynb_code.reduced_model_output_paper.</code><code class="sig-name descname">ReducedModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kernel_dict</span></em>, <em class="sig-param"><span class="n">LUT</span></em>, <em class="sig-param"><span class="n">ISI_penalty</span></em>, <em class="sig-param"><span class="n">spatial_bin_size</span><span class="o">=</span><span class="default_value">50</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/reduced_model_output_paper.html#ReducedModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.reduced_model_output_paper.ReducedModel" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kernel_dict</span></em>, <em class="sig-param"><span class="n">LUT</span></em>, <em class="sig-param"><span class="n">ISI_penalty</span></em>, <em class="sig-param"><span class="n">spatial_bin_size</span><span class="o">=</span><span class="default_value">50</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/reduced_model_output_paper.html#ReducedModel.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.__init__" title="project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(kernel_dict, LUT, ISI_penalty[, …])</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_spatial_bin_by_soma_dist</span></code>(soma_dist)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.run" title="project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>(SAexc, SAinh[, return_WNI, tStop, WNI_path])</p></td>
+<td><p>Apply the reduced model to synaptic input to get a list containing output spike times. SAexc, SAinh: numpy arrays containing spatiotemporally binned synaptic inputs return_WNI: False, ‘EI_balance’ or ‘full_trace’     full_trace returns a dataframe containing excitatory and inhibitory WNI values at all timepoints along with spike times. EI_balance returns a dictionary containing the mean excitatory, inhibitory and total WNI value for the whole simulation     False returns spike times list only. tStop: int.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">SAexc</span></em>, <em class="sig-param"><span class="n">SAinh</span></em>, <em class="sig-param"><span class="n">return_WNI</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">tStop</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">WNI_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/reduced_model_output_paper.html#ReducedModel.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.reduced_model_output_paper.ReducedModel.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the reduced model to synaptic input to get a list containing output spike times.
+SAexc, SAinh: numpy arrays containing spatiotemporally binned synaptic inputs
+return_WNI: False, ‘EI_balance’ or ‘full_trace’</p>
+<blockquote>
+<div><p>full_trace returns a dataframe containing excitatory and inhibitory WNI values at all timepoints along with spike times.
+EI_balance returns a dictionary containing the mean excitatory, inhibitory and total WNI value for the whole simulation
+False returns spike times list only.</p>
+</div></blockquote>
+<p>tStop: int</p>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 

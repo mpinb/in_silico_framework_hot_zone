@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.sim_control.SimControl &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -121,7 +120,8 @@
 <dl class="py class">
 <dt id="single_cell_parser.sim_control.SimControl">
 <em class="property">class </em><code class="sig-prename descclassname">single_cell_parser.sim_control.</code><code class="sig-name descname">SimControl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sim_time</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">37</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/sim_control.html#SimControl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.sim_control.SimControl" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl>
 <dt>Objects of this class control a current clamp simulation. Example of use:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cell</span> <span class="o">=</span> <span class="n">CellParser</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">SimControl</span><span class="p">(</span><span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="o">.</span><span class="n">get_cell</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">go</span><span class="p">()</span>
@@ -130,6 +130,48 @@
 </div>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="single_cell_parser.sim_control.SimControl.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sim_time</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">37</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/sim_control.html#SimControl.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.sim_control.SimControl.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.sim_control.SimControl.__init__" title="single_cell_parser.sim_control.SimControl.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([cell, sim_time, dt, T])</p></td>
+<td><p>Constructor</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">go</span></code>([simTime])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.sim_control.SimControl.set_IClamp" title="single_cell_parser.sim_control.SimControl.set_IClamp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_IClamp</span></code></a>([delay, amp, dur])</p></td>
+<td><p>Initializes values for current clamp.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_recording</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">show</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="single_cell_parser.sim_control.SimControl.set_IClamp">
+<code class="sig-name descname">set_IClamp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">delay</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">amp</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">dur</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/sim_control.html#SimControl.set_IClamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.sim_control.SimControl.set_IClamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes values for current clamp.</p>
+<p>Default values:</p>
+<blockquote>
+<div><p>delay = 1 [ms]
+amp   = -1 [nA]
+dur   = 3 [ms]</p>
+</div></blockquote>
+</dd></dl>
+
 </dd></dl>
 
 </div>
