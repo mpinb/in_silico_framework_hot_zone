@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -117,34 +118,12 @@
 <dl class="py class">
 <dt id="model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights">
 <em class="property">class </em><code class="sig-prename descclassname">model_data_base.mdb_initializers.somatic_summation_model.</code><code class="sig-name descname">CelltypeSpecificSynapticWeights</code><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#CelltypeSpecificSynapticWeights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>simrun3.somatic_summation_model allows specifying synaptic weights of individual synapses.
+<dd><p>simrun3.somatic_summation_model allows specifying synaptic weights of individual synapses.
 It therefore takes a dictionarry that maps from (celltype, synapseID) to the weight of that synapse.</p>
 <p>In the default case, we assign synaptic weights per celltype, not per individual synapse. This class
 provides a dictionary like interface, that allows to access an individual synapse
 with the tuple (celltype, synapseID) and returns the synaptic weight assigned to the celltype.</p>
 <p>It can be initialized by parsing a netowrk.param file that gets created during simulations.</p>
-<dl class="py method">
-<dt id="model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#CelltypeSpecificSynapticWeights.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights.__init__" title="model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
-<td><p>Initialize self.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_with_network_param</span></code>(n[, …])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 </div>

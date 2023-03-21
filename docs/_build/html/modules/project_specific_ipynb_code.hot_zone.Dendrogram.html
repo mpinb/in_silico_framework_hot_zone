@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>project_specific_ipynb_code.hot_zone.Dendrogram &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -132,59 +133,7 @@
 <dl class="py class">
 <dt id="project_specific_ipynb_code.hot_zone.Dendrogram">
 <em class="property">class </em><code class="sig-prename descclassname">project_specific_ipynb_code.hot_zone.</code><code class="sig-name descname">Dendrogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">colormap_synapses</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/hot_zone.html#Dendrogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.hot_zone.Dendrogram" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="project_specific_ipynb_code.hot_zone.Dendrogram.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">colormap_synapses</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/hot_zone.html#Dendrogram.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.hot_zone.Dendrogram.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#project_specific_ipynb_code.hot_zone.Dendrogram.__init__" title="project_specific_ipynb_code.hot_zone.Dendrogram.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(cell[, title, colormap_synapses])</p></td>
-<td><p>Initialize self.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#project_specific_ipynb_code.hot_zone.Dendrogram.add_synapses" title="project_specific_ipynb_code.hot_zone.Dendrogram.add_synapses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_synapses</span></code></a>(label, synlist[, mode])</p></td>
-<td><p>mode:</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_amount_of_dendrite_in_bin</span></code>(min_, max_[, …])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_db_by_sec</span></code>(sec)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_number_of_synapses_in_bin</span></code>(min_, max_[, …])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_parent_by_name</span></code>(name)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_parent_dist_by_name</span></code>(name)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([fig])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt id="project_specific_ipynb_code.hot_zone.Dendrogram.add_synapses">
-<code class="sig-name descname">add_synapses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span></em>, <em class="sig-param"><span class="n">synlist</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'from_anatomical_synapse_mapper'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/hot_zone.html#Dendrogram.add_synapses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.hot_zone.Dendrogram.add_synapses" title="Permalink to this definition">¶</a></dt>
-<dd><p>mode:</p>
-<dl class="simple">
-<dt>‘from_anatomical_synapse_mapper’: to be used if synlist is generated from landmark as it is done</dt><dd><p>with mikes manually mapped VPM synapses</p>
-</dd>
-<dt>‘id_relative_position’: as in the syn file. Use something like [(syn.secID, syn.x) for syn in cell.synapses[‘VPM_C2’]]</dt><dd><p>to use synapses defined in a single_cell_parser.cell object</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
+<dd></dd></dl>
 
 </div>
 

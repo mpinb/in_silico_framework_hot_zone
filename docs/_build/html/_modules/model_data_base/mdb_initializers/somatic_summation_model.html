@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>model_data_base.mdb_initializers.somatic_summation_model &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -102,8 +103,8 @@
 <span class="sd">    with the tuple (celltype, synapseID) and returns the synaptic weight assigned to the celltype.</span>
 <span class="sd">    </span>
 <span class="sd">    It can be initialized by parsing a netowrk.param file that gets created during simulations.&#39;&#39;&#39;</span>
-<div class="viewcode-block" id="CelltypeSpecificSynapticWeights.__init__"><a class="viewcode-back" href="../../../modules/model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights.html#model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_celltype_to_syn_weight</span> <span class="o">=</span> <span class="p">{}</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_celltype_to_syn_weight</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="nf">init_with_network_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">select_celltypes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">use_default_weight</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_celltype_to_syn_weight</span>
@@ -185,12 +186,12 @@
 
 <span class="kn">import</span> <span class="nn">barrel_cortex</span>
 <div class="viewcode-block" id="DistributedDDFWithSaveMethod"><a class="viewcode-back" href="../../../modules/model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod.html#model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod">[docs]</a><span class="k">class</span> <span class="nc">DistributedDDFWithSaveMethod</span><span class="p">:</span>
-<div class="viewcode-block" id="DistributedDDFWithSaveMethod.__init__"><a class="viewcode-back" href="../../../modules/model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod.html#model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdb</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ddf</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dumper</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">get</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdb</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ddf</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dumper</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">get</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ddf</span> <span class="o">=</span> <span class="n">ddf</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mdb</span> <span class="o">=</span> <span class="n">mdb</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_key</span> <span class="o">=</span> <span class="n">key</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dumper</span> <span class="o">=</span> <span class="n">dumper</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_get</span> <span class="o">=</span> <span class="n">get</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get</span> <span class="o">=</span> <span class="n">get</span>
     
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mdb</span><span class="o">.</span><span class="n">setitem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ddf</span><span class="p">,</span> <span class="n">dumper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dumper</span><span class="p">,</span> <span class="n">get</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">)</span></div>

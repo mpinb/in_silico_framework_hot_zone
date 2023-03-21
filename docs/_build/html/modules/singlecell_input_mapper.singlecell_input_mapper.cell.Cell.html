@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>singlecell_input_mapper.singlecell_input_mapper.cell.Cell &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -116,55 +117,8 @@
 <dl class="py class">
 <dt id="singlecell_input_mapper.singlecell_input_mapper.cell.Cell">
 <em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.cell.</code><code class="sig-name descname">Cell</code><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#Cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Cell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Cell object providing morphological information
+<dd><p>Cell object providing morphological information
 and hoc interface</p>
-<dl class="py method">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.Cell.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#Cell.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constructor:</p>
-<p>self.id = None</p>
-<p>self.soma = None</p>
-<p>structures are all processes with different labels
-(e.g., Dendrite, ApicalDendrite, ApicalTuft, Myelin etc..
-self.structures = {}</p>
-<p>simply list of all sections
-self.sections = []</p>
-<p>bounding box around all processes
-self.boundingBox = None</p>
-<p>self.synapses = {}</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.__init__" title="singlecell_input_mapper.singlecell_input_mapper.cell.Cell.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
-<td><p>Constructor:</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_synapse</span></code>(secID, ptID, ptx[, preType, …])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.distance_to_soma" title="singlecell_input_mapper.singlecell_input_mapper.cell.Cell.distance_to_soma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance_to_soma</span></code></a>(sec, x)</p></td>
-<td><p>path length to soma from location x on section sec</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bounding_box</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_synapses</span></code>([preType])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.Cell.distance_to_soma">
-<code class="sig-name descname">distance_to_soma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sec</span></em>, <em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#Cell.distance_to_soma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.distance_to_soma" title="Permalink to this definition">¶</a></dt>
-<dd><p>path length to soma from location x on section sec</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>

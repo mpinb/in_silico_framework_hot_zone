@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>model_data_base.sqlite_backend.sqlite_backend &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -137,11 +138,11 @@
 
     
 <div class="viewcode-block" id="SQLiteBackend"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.sqlite_backend.SQLiteBackend.html#model_data_base.sqlite_backend.sqlite_backend.SQLiteBackend">[docs]</a><span class="k">class</span> <span class="nc">SQLiteBackend</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<div class="viewcode-block" id="SQLiteBackend.__init__"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.sqlite_backend.SQLiteBackend.html#model_data_base.sqlite_backend.sqlite_backend.SQLiteBackend.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
             <span class="n">sqlitedict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sql</span><span class="p">()</span> <span class="c1"># make sure, sqlite-file exists</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_close_sql</span><span class="p">(</span><span class="n">sqlitedict</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_close_sql</span><span class="p">(</span><span class="n">sqlitedict</span><span class="p">)</span>
         
     <span class="k">def</span> <span class="nf">_get_sql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readonly</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">readonly</span><span class="p">:</span>
@@ -235,10 +236,10 @@
                 <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="InMemoryBackend"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.sqlite_backend.InMemoryBackend.html#model_data_base.sqlite_backend.sqlite_backend.InMemoryBackend">[docs]</a><span class="k">class</span> <span class="nc">InMemoryBackend</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<div class="viewcode-block" id="InMemoryBackend.__init__"><a class="viewcode-back" href="../../../modules/model_data_base.sqlite_backend.sqlite_backend.InMemoryBackend.html#model_data_base.sqlite_backend.sqlite_backend.InMemoryBackend.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">keys</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">keys</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">keys</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
             <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">backend</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">_vectorized_getitem</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">_vectorized_getitem</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
     
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Backend method to retrive item from the database&#39;&#39;&#39;</span>

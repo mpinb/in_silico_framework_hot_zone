@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>project_specific_ipynb_code.smr_analyzer &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -270,7 +271,7 @@
     <span class="k">return</span> <span class="n">row</span></div>
         
 <div class="viewcode-block" id="EventAnalysis"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.smr_analyzer.EventAnalysis.html#project_specific_ipynb_code.smr_analyzer.EventAnalysis">[docs]</a><span class="k">class</span> <span class="nc">EventAnalysis</span><span class="p">:</span>
-<div class="viewcode-block" id="EventAnalysis.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.smr_analyzer.EventAnalysis.html#project_specific_ipynb_code.smr_analyzer.EventAnalysis.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">st</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">st</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">st</span> <span class="o">=</span> <span class="n">st</span>
         <span class="n">st</span><span class="o">.</span><span class="n">cellid</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">strip_st</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
@@ -282,7 +283,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">event_db</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># schema event_type, trial, event_time, event_parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">apply_extractor</span><span class="p">(</span><span class="n">get_n_bursts</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">apply_extractor</span><span class="p">(</span><span class="n">burst_analysis_2</span><span class="p">)</span>        
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         
     <span class="k">def</span> <span class="nf">apply_extractor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_extractor</span><span class="p">):</span>
         <span class="n">extractor_name</span> <span class="o">=</span> <span class="n">event_extractor</span><span class="o">.</span><span class="vm">__name__</span>
@@ -307,8 +308,8 @@
             <span class="k">return</span> <span class="n">i</span></div>
             
 <div class="viewcode-block" id="VisualizeEventAnalysis"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.smr_analyzer.VisualizeEventAnalysis.html#project_specific_ipynb_code.smr_analyzer.VisualizeEventAnalysis">[docs]</a><span class="k">class</span> <span class="nc">VisualizeEventAnalysis</span><span class="p">:</span>
-<div class="viewcode-block" id="VisualizeEventAnalysis.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.smr_analyzer.VisualizeEventAnalysis.html#project_specific_ipynb_code.smr_analyzer.VisualizeEventAnalysis.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ea</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ea</span> <span class="o">=</span> <span class="n">ea</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ea</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ea</span> <span class="o">=</span> <span class="n">ea</span>
     
     <span class="k">def</span> <span class="nf">plot_PSTH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">max_time</span> <span class="o">=</span> <span class="mi">2500</span><span class="p">,</span> <span class="n">bin_size</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ea</span><span class="o">.</span><span class="n">st</span>
@@ -375,7 +376,7 @@
                 <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)()</span></div>
                 
 <div class="viewcode-block" id="AnalyzeFile"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.smr_analyzer.AnalyzeFile.html#project_specific_ipynb_code.smr_analyzer.AnalyzeFile">[docs]</a><span class="k">class</span> <span class="nc">AnalyzeFile</span><span class="p">:</span>
-<div class="viewcode-block" id="AnalyzeFile.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.smr_analyzer.AnalyzeFile.html#project_specific_ipynb_code.smr_analyzer.AnalyzeFile.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> 
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> 
                  <span class="n">lim_creast</span> <span class="o">=</span> <span class="s1">&#39;minimum&#39;</span><span class="p">,</span> 
                  <span class="n">lim_trough</span> <span class="o">=</span> <span class="s1">&#39;minimum&#39;</span><span class="p">,</span> 
                  <span class="n">cellid</span> <span class="o">=</span> <span class="s1">&#39;__no_cellid_assigned__&#39;</span><span class="p">,</span> 
@@ -444,7 +445,7 @@
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ea</span><span class="o">.</span><span class="n">event_db</span><span class="p">[</span><span class="s1">&#39;burst_analysis_2&#39;</span><span class="p">]</span>
         <span class="n">df</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cellid</span>
         <span class="n">df</span><span class="p">[</span><span class="s1">&#39;period&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">get_period_label_by_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">periods</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">event_time</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_df</span> <span class="o">=</span> <span class="n">df</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_df</span> <span class="o">=</span> <span class="n">df</span>
     
     <span class="k">def</span> <span class="nf">get_ongoing_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period_prestim</span> <span class="o">=</span> <span class="mi">30000</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stim_times</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">period_prestim</span><span class="p">:</span>
@@ -546,7 +547,7 @@
         <span class="n">out</span><span class="p">[</span><span class="n">out2</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">out2</span><span class="o">.</span><span class="n">values</span>    
         <span class="k">return</span> <span class="n">out</span>     
     
-<div class="viewcode-block" id="AnalyzeFile.get_peaks_and_peak_amplitudes"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.smr_analyzer.AnalyzeFile.html#project_specific_ipynb_code.smr_analyzer.AnalyzeFile.get_peaks_and_peak_amplitudes">[docs]</a>    <span class="k">def</span> <span class="nf">get_peaks_and_peak_amplitudes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>    
+    <span class="k">def</span> <span class="nf">get_peaks_and_peak_amplitudes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>    
             <span class="sd">&#39;&#39;&#39;returns: times of creasts, creast amplitudes, timepoints of troughs, trough amplitudes.</span>
 <span class="sd">            These are computed in the timespan from first stimulus - 3s till last stimulus + 3s &#39;&#39;&#39;</span>
             <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">stim_times</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">3000</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">stim_times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">3000</span><span class="p">)]</span>        
@@ -555,7 +556,7 @@
             <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
             <span class="n">_st</span><span class="p">,</span> <span class="n">_st_magnitude</span> <span class="o">=</span> <span class="n">get_peaks_above</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
             <span class="n">_stt</span><span class="p">,</span> <span class="n">_stt_magnitude</span> <span class="o">=</span> <span class="n">get_peaks_above</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">_st</span><span class="p">,</span> <span class="n">_st_magnitude</span><span class="p">,</span> <span class="n">_stt</span><span class="p">,</span> <span class="n">_stt_magnitude</span></div>
+            <span class="k">return</span> <span class="n">_st</span><span class="p">,</span> <span class="n">_st_magnitude</span><span class="p">,</span> <span class="n">_stt</span><span class="p">,</span> <span class="n">_stt_magnitude</span>
         
     <span class="k">def</span> <span class="nf">get_creast_and_trough_ampltidues_by_bins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;zero&#39;</span><span class="p">):</span>
         <span class="n">_st</span><span class="p">,</span> <span class="n">_st_magnitude</span><span class="p">,</span> <span class="n">_stt</span><span class="p">,</span> <span class="n">_stt_magnitude</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_peaks_and_peak_amplitudes</span><span class="p">()</span>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>model_data_base.IO.LoaderDumper.dask_to_csv &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -155,10 +156,10 @@
     <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../../../modules/model_data_base.IO.LoaderDumper.dask_to_csv.Loader.html#model_data_base.IO.LoaderDumper.dask_to_csv.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">(</span><span class="n">parent_classes</span><span class="o">.</span><span class="n">Loader</span><span class="p">):</span>
-<div class="viewcode-block" id="Loader.__init__"><a class="viewcode-back" href="../../../../modules/model_data_base.IO.LoaderDumper.dask_to_csv.Loader.html#model_data_base.IO.LoaderDumper.dask_to_csv.Loader.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">index_name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">divisions</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>        
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">index_name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">divisions</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>        
         <span class="bp">self</span><span class="o">.</span><span class="n">index_name</span> <span class="o">=</span> <span class="n">index_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="n">meta</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">divisions</span> <span class="o">=</span> <span class="n">divisions</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">divisions</span> <span class="o">=</span> <span class="n">divisions</span>
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savedir</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>  
         <span class="c1">#if dtypes is not defined (old mdb_versions) set it to None</span>
         <span class="k">try</span><span class="p">:</span>

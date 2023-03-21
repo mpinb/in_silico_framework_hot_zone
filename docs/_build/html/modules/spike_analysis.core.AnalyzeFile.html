@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>spike_analysis.core.AnalyzeFile &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -128,66 +129,7 @@
 <dl class="py class">
 <dt id="spike_analysis.core.AnalyzeFile">
 <em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">AnalyzeFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">lim_creast</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">lim_trough</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">cellid</span><span class="o">=</span><span class="default_value">'__no_cellid_assigned__'</span></em>, <em class="sig-param"><span class="n">periods</span><span class="o">=</span><span class="default_value">{'1onset': 0, 100}</span></em>, <em class="sig-param"><span class="n">analogsignal_id</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stim_times_channel</span><span class="o">=</span><span class="default_value">'5'</span></em>, <em class="sig-param"><span class="n">tdelta</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="spike_analysis.core.AnalyzeFile.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">lim_creast</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">lim_trough</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">cellid</span><span class="o">=</span><span class="default_value">'__no_cellid_assigned__'</span></em>, <em class="sig-param"><span class="n">periods</span><span class="o">=</span><span class="default_value">{'1onset': 0, 100}</span></em>, <em class="sig-param"><span class="n">analogsignal_id</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stim_times_channel</span><span class="o">=</span><span class="default_value">'5'</span></em>, <em class="sig-param"><span class="n">tdelta</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class for automatic analysis of smr files.</p>
-<p>periods: requires ‘1onset’ as key for plot_n_onset function.</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#spike_analysis.core.AnalyzeFile.__init__" title="spike_analysis.core.AnalyzeFile.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(path[, lim_creast, lim_trough, …])</p></td>
-<td><p>Class for automatic analysis of smr files.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">describe</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_df</span></code>([groupby, normed])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_n_onset2</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_ongoing_activity</span></code>([period_prestim])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_onset_latency</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_onset_spike_probability</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table</span></code>([groupby])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_PSTH</span></code>([ax])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_all_flat</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_all_stacked</span></code>([text])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_burst_fractions</span></code>([ax])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_n_onset</span></code>([ax])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_onset_latency</span></code>([ax])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 </div>
 

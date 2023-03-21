@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_analyzer.membrane_potential_analysis.SpikeInit &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -111,54 +112,9 @@
 <dl class="py class">
 <dt id="single_cell_analyzer.membrane_potential_analysis.SpikeInit">
 <em class="property">class </em><code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">SpikeInit</code><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Provides methods for analysis of spike initiation
+<dd><p>Provides methods for analysis of spike initiation
 in in vivo/ in vitro simulations. Can be used to
 obtain features of spike shape, adaptation etc…</p>
-<dl class="py method">
-<dt id="single_cell_analyzer.membrane_potential_analysis.SpikeInit.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.__init__" title="single_cell_analyzer.membrane_potential_analysis.SpikeInit.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
-<td><p>Initialize self.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike" title="single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike"><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_single_spike</span></code></a>(cell, tVec, thresh)</p></td>
-<td><p>for comparison with in vitro spike shape: compute spike height, FWHM (duration), AHP</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_spike_train</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state" title="single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vm_steady_state</span></code></a>(cell, tVec, tStim, dtStim)</p></td>
-<td><p>computes “steady-state” subthreshold voltage from voltage trace during stimulation time window [tStim, tStim+dtStim] this can be used to define voltage spike threshold at current intensities just below AP initiation</p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt id="single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike">
-<em class="property">static </em><code class="sig-name descname">analyze_single_spike</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">tVec</span></em>, <em class="sig-param"><span class="n">thresh</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit.analyze_single_spike"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike" title="Permalink to this definition">¶</a></dt>
-<dd><p>for comparison with in vitro spike shape:
-compute spike height, FWHM (duration), AHP</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state">
-<em class="property">static </em><code class="sig-name descname">vm_steady_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">tVec</span></em>, <em class="sig-param"><span class="n">tStim</span></em>, <em class="sig-param"><span class="n">dtStim</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit.vm_steady_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>computes “steady-state” subthreshold voltage from
-voltage trace during stimulation time window
-[tStim, tStim+dtStim]
-this can be used to define voltage spike threshold
-at current intensities just below AP initiation</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>

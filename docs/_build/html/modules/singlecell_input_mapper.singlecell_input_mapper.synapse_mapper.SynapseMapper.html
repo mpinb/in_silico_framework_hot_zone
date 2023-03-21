@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -113,8 +114,7 @@
 <dl class="py class">
 <dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper">
 <em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.</code><code class="sig-name descname">SynapseMapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">synDist</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">isDensity</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseMapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>SynapseMapper assigns synapses to neuron morphology
+<dd><p>SynapseMapper assigns synapses to neuron morphology
 self.cell is neuron SpatialGraph
 self.synDist is average synapse distribution (3D scalar field)
 self.isDensity: True - synapse distribution interpreted as avg</p>
@@ -129,41 +129,6 @@ synapses per voxel and directly assigned</p>
 to the edge and edgePt ID of all morphology points inside that voxel</p>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">synDist</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">isDensity</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseMapper.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>synapses are mapped onto this cell
-self.cell = cell</p>
-<p>synapse distribution
-self.synDist = synDist</p>
-<p>flag: 1 - distribution is density; 0 - distribution is realization
-self.isDensity = isDensity</p>
-<p>stores edge/voxel correspondence for mapping
-self.voxelEdgeMap = {}</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.__init__" title="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([cell, synDist, isDensity])</p></td>
-<td><p>synapses are mapped onto this cell self.cell = cell</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses" title="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_synapses</span></code></a>([preType])</p></td>
-<td><p>main function; creates instantiation of synapses on cell from synapse distribution</p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses">
-<code class="sig-name descname">create_synapses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preType</span><span class="o">=</span><span class="default_value">'Generic'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseMapper.create_synapses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses" title="Permalink to this definition">¶</a></dt>
-<dd><p>main function; creates instantiation of synapses
-on cell from synapse distribution</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
