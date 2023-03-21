@@ -8,10 +8,9 @@ Welcome to In-Silico Framework (ISF)'s documentation!
 
 .. autosummary::
    :toctree: _autosummary
-   :template: custom-module-template.rst
    :recursive:
 
-   modules/modules
+   ../
 
 Usage
 ==================

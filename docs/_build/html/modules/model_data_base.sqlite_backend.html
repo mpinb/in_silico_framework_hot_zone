@@ -101,28 +101,6 @@ don’t forget to call <cite>mydict.commit()</cite> when done with a transaction
 <em class="property">class </em><code class="sig-prename descclassname">model_data_base.sqlite_backend.cloudsqlitedict.</code><code class="sig-name descname">SqliteDict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tablename</span><span class="o">=</span><span class="default_value">'unnamed'</span></em>, <em class="sig-param"><span class="n">flag</span><span class="o">=</span><span class="default_value">'c'</span></em>, <em class="sig-param"><span class="n">autocommit</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">journal_mode</span><span class="o">=</span><span class="default_value">'DELETE'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">collections.UserDict</span></code></p>
 <dl class="py method">
-<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tablename</span><span class="o">=</span><span class="default_value">'unnamed'</span></em>, <em class="sig-param"><span class="n">flag</span><span class="o">=</span><span class="default_value">'c'</span></em>, <em class="sig-param"><span class="n">autocommit</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">journal_mode</span><span class="o">=</span><span class="default_value">'DELETE'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize a thread-safe sqlite-backed dictionary. The dictionary will
-be a table <cite>tablename</cite> in database file <cite>filename</cite>. A single file (=database)
-may contain multiple tables.</p>
-<p>If no <cite>filename</cite> is given, a random file in temp will be used (and deleted
-from temp once the dict is closed/deleted).</p>
-<p>If you enable <cite>autocommit</cite>, changes will be committed after each operation
-(more inefficient but safer). Otherwise, changes are committed on <cite>self.commit()</cite>,
-<cite>self.clear()</cite> and <cite>self.close()</cite>.</p>
-<p>Set <cite>journal_mode</cite> to ‘OFF’ if you’re experiencing sqlite I/O problems
-or if you need performance and don’t care about crash-consistency.</p>
-<dl class="simple">
-<dt>The <cite>flag</cite> parameter. Exactly one of:</dt><dd><p>‘c’: default mode, open for read/write, creating the db/table if necessary.
-‘w’: open for r/w, but drop <cite>tablename</cite> contents first (start with empty table)
-‘r’: open as read-only
-‘n’: create a new database (erasing any existing tables, not just <cite>tablename</cite>!).</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.clear">
 <code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None.  Remove all items from D.<a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.clear" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -206,24 +184,6 @@ In either case, this is followed by: for k, v in F.items(): D[k] = v</p>
 <p>Wrap sqlite connection in a way that allows concurrent requests from multiple threads.</p>
 <p>This is done by internally queueing the requests and processing them sequentially
 in a separate thread (in the same order they arrived).</p>
-<dl class="py method">
-<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">autocommit</span></em>, <em class="sig-param"><span class="n">journal_mode</span></em>, <em class="sig-param"><span class="n">flag</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>This constructor should always be called with keyword arguments. Arguments are:</p>
-<p><em>group</em> should be None; reserved for future extension when a ThreadGroup
-class is implemented.</p>
-<p><em>target</em> is the callable object to be invoked by the run()
-method. Defaults to None, meaning nothing is called.</p>
-<p><em>name</em> is the thread name. By default, a unique name is constructed of
-the form “Thread-N” where N is a small decimal number.</p>
-<p><em>args</em> is the argument tuple for the target invocation. Defaults to ().</p>
-<p><em>kwargs</em> is a dictionary of keyword arguments for the target
-invocation. Defaults to {}.</p>
-<p>If a subclass overrides the constructor, it must make sure to invoke
-the base class constructor (Thread.__init__()) before doing anything
-else to the thread.</p>
-</dd></dl>
-
 <dl class="py method">
 <dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.check_raise_error">
 <code class="sig-name descname">check_raise_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.check_raise_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.check_raise_error" title="Permalink to this definition">¶</a></dt>
@@ -314,12 +274,6 @@ request is dequeued, and although you can iterate over the result normally
 <em class="property">class </em><code class="sig-prename descclassname">model_data_base.sqlite_backend.sqlite_backend.</code><code class="sig-name descname">InMemoryBackend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">backend</span></em>, <em class="sig-param"><span class="n">keys</span><span class="o">=</span><span class="default_value">'all'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/sqlite_backend.html#InMemoryBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.sqlite_backend.InMemoryBackend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
-<dt id="model_data_base.sqlite_backend.sqlite_backend.InMemoryBackend.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">backend</span></em>, <em class="sig-param"><span class="n">keys</span><span class="o">=</span><span class="default_value">'all'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/sqlite_backend.html#InMemoryBackend.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.sqlite_backend.InMemoryBackend.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt id="model_data_base.sqlite_backend.sqlite_backend.InMemoryBackend.keys">
 <code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/sqlite_backend.html#InMemoryBackend.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.sqlite_backend.InMemoryBackend.keys" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -330,12 +284,6 @@ request is dequeued, and although you can iterate over the result normally
 <dt id="model_data_base.sqlite_backend.sqlite_backend.SQLiteBackend">
 <em class="property">class </em><code class="sig-prename descclassname">model_data_base.sqlite_backend.sqlite_backend.</code><code class="sig-name descname">SQLiteBackend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/sqlite_backend.html#SQLiteBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.sqlite_backend.SQLiteBackend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="model_data_base.sqlite_backend.sqlite_backend.SQLiteBackend.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/sqlite_backend.html#SQLiteBackend.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.sqlite_backend.SQLiteBackend.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
 <dl class="py method">
 <dt id="model_data_base.sqlite_backend.sqlite_backend.SQLiteBackend.keys">
 <code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/sqlite_backend.html#SQLiteBackend.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.sqlite_backend.SQLiteBackend.keys" title="Permalink to this definition">¶</a></dt>
@@ -376,12 +324,6 @@ however it contains an instance of it. In case, some API is missing, simply exte
 <dt id="model_data_base.sqlite_backend.tuplecloudsqlitedict.SqliteDict">
 <em class="property">class </em><code class="sig-prename descclassname">model_data_base.sqlite_backend.tuplecloudsqlitedict.</code><code class="sig-name descname">SqliteDict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">basedir</span></em>, <em class="sig-param"><span class="n">autocommit</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">flag</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/tuplecloudsqlitedict.html#SqliteDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.tuplecloudsqlitedict.SqliteDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="model_data_base.sqlite_backend.tuplecloudsqlitedict.SqliteDict.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">basedir</span></em>, <em class="sig-param"><span class="n">autocommit</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">flag</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/tuplecloudsqlitedict.html#SqliteDict.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.tuplecloudsqlitedict.SqliteDict.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
 <dl class="py method">
 <dt id="model_data_base.sqlite_backend.tuplecloudsqlitedict.SqliteDict.close">
 <code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/tuplecloudsqlitedict.html#SqliteDict.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.tuplecloudsqlitedict.SqliteDict.close" title="Permalink to this definition">¶</a></dt>
