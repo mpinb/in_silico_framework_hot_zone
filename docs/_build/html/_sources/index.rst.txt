@@ -8,9 +8,13 @@ Welcome to In-Silico Framework (ISF)'s documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Modules:
 
    modules/modules
+
+   :caption: Usage:
+
+   Have a look at the :py:mod:`getting_started` module for a variety of methods to get started on using ISF.
 
 Indices and tables
 ==================
