@@ -1,4 +1,4 @@
-simrun2.test\_BAC\_firing
+﻿simrun2.test\_BAC\_firing
 =========================
 
 .. automodule:: simrun2.test_BAC_firing

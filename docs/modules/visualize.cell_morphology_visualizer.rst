@@ -1,4 +1,4 @@
-visualize.cell\_morphology\_visualizer
+﻿visualize.cell\_morphology\_visualizer
 ======================================
 
 .. automodule:: visualize.cell_morphology_visualizer

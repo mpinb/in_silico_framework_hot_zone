@@ -1,4 +1,4 @@
-project\_specific\_ipynb\_code.hot\_zone
+﻿project\_specific\_ipynb\_code.hot\_zone
 ========================================
 
 .. automodule:: project_specific_ipynb_code.hot_zone

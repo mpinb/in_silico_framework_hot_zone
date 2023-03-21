@@ -1,4 +1,4 @@
-single\_cell\_parser.network\_realizations
+﻿single\_cell\_parser.network\_realizations
 ==========================================
 
 .. automodule:: single_cell_parser.network_realizations

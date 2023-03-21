@@ -1,4 +1,4 @@
-single\_cell\_analyzer.synanalysis
+﻿single\_cell\_analyzer.synanalysis
 ==================================
 
 .. automodule:: single_cell_analyzer.synanalysis

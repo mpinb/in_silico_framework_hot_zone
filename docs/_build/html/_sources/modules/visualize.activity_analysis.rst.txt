@@ -1,4 +1,4 @@
-visualize.activity\_analysis
+﻿visualize.activity\_analysis
 ============================
 
 .. automodule:: visualize.activity_analysis

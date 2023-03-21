@@ -1,4 +1,4 @@
-biophysics\_fitting.parameters
+﻿biophysics\_fitting.parameters
 ==============================
 
 .. automodule:: biophysics_fitting.parameters

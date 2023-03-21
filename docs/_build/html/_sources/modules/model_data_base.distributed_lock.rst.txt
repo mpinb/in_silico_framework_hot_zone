@@ -1,4 +1,4 @@
-model\_data\_base.distributed\_lock
+﻿model\_data\_base.distributed\_lock
 ===================================
 
 .. automodule:: model_data_base.distributed_lock

@@ -1,4 +1,4 @@
-simrun3.synaptic\_strength\_fitting
+﻿simrun3.synaptic\_strength\_fitting
 ===================================
 
 .. automodule:: simrun3.synaptic_strength_fitting

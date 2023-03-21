@@ -1,4 +1,4 @@
-single\_cell\_parser.serialize\_cell
+﻿single\_cell\_parser.serialize\_cell
 ====================================
 
 .. automodule:: single_cell_parser.serialize_cell

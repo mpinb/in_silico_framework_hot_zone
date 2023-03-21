@@ -1,4 +1,4 @@
-single\_cell\_parser.network\_param\_modify\_functions
+﻿single\_cell\_parser.network\_param\_modify\_functions
 ======================================================
 
 .. automodule:: single_cell_parser.network_param_modify_functions
