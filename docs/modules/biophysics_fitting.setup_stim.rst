@@ -1,4 +1,4 @@
-biophysics\_fitting.setup\_stim
+﻿biophysics\_fitting.setup\_stim
 ===============================
 
 .. automodule:: biophysics_fitting.setup_stim

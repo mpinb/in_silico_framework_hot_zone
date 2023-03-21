@@ -1,4 +1,4 @@
-single\_cell\_analyzer.membrane\_potential\_analysis
+﻿single\_cell\_analyzer.membrane\_potential\_analysis
 ====================================================
 
 .. automodule:: single_cell_analyzer.membrane_potential_analysis

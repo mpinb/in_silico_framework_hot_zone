@@ -1,4 +1,4 @@
-simrun2.reduced\_model
+﻿simrun2.reduced\_model
 ======================
 
 .. automodule:: simrun2.reduced_model

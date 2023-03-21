@@ -1,4 +1,4 @@
-model\_data\_base.sqlite\_backend
+﻿model\_data\_base.sqlite\_backend
 =================================
 
 .. automodule:: model_data_base.sqlite_backend

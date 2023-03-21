@@ -1,4 +1,4 @@
-visualize.helper\_methods
+﻿visualize.helper\_methods
 =========================
 
 .. automodule:: visualize.helper_methods

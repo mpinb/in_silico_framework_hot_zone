@@ -1,4 +1,4 @@
-tests.test\_spike\_analysis
+﻿tests.test\_spike\_analysis
 ===========================
 
 .. automodule:: tests.test_spike_analysis
