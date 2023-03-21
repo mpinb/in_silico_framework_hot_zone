@@ -36,6 +36,6 @@ autosummary_generate = True  # Turn on sphinx.ext.autosummary
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
-
-def setup(app):
-   app.add_css_file("default.css")  # relative to html_static_path defined above
+html_css_files = [
+    'default.css',  # relative to html_static_path defined above
+]
