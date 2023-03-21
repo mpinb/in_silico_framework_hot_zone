@@ -1,6 +1,33 @@
 simrun2.test\_sustained\_firing
 ===============================
 
-.. currentmodule:: simrun2
+.. automodule:: simrun2.test_sustained_firing
+  
+   
+   
+   
 
-.. automodule:: test_sustained_firing
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      scale_apical
+      soma_injection
+      test_BAC_firing
+      write_sim_results
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

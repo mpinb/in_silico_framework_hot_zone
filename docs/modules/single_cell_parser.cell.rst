@@ -1,6 +1,35 @@
 single\_cell\_parser.cell
 =========================
 
-.. currentmodule:: single_cell_parser
+.. automodule:: single_cell_parser.cell
+  
+   
+   
+   
 
-.. automodule:: cell
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      Cell
+      PointCell
+      PySection
+      SpikeTrain
+      SynParameterChanger
+   
+   
+
+   
+   
+   
+
+
+

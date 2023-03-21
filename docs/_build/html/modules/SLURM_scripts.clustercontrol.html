@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="SLURM_scripts.component_isf" href="SLURM_scripts.component_isf.html" />
-    <link rel="prev" title="SLURM_scripts.save_delayeds_in_folder" href="%3C--%20add%20this%20line/SLURM_scripts.save_delayeds_in_folder.html" /> 
+    <link rel="next" title="SLURM_scripts.clustercontrol.cache" href="SLURM_scripts.clustercontrol.cache.html" />
+    <link rel="prev" title="SLURM_scripts.save_delayeds_in_folder" href="SLURM_scripts.save_delayeds_in_folder.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,10 +43,17 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Interface.html">Interface</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/SLURM_scripts.check_all_done.html">SLURM_scripts.check_all_done</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/SLURM_scripts.convertible_to_int.html">SLURM_scripts.convertible_to_int</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/SLURM_scripts.save_delayeds_in_folder.html">SLURM_scripts.save_delayeds_in_folder</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">SLURM_scripts.clustercontrol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.check_all_done.html">SLURM_scripts.check_all_done</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.convertible_to_int.html">SLURM_scripts.convertible_to_int</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.save_delayeds_in_folder.html">SLURM_scripts.save_delayeds_in_folder</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">SLURM_scripts.clustercontrol</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SLURM_scripts.clustercontrol.cache.html">SLURM_scripts.clustercontrol.cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SLURM_scripts.clustercontrol.cluster.html">SLURM_scripts.clustercontrol.cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SLURM_scripts.clustercontrol.list_all_screens.html">SLURM_scripts.clustercontrol.list_all_screens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SLURM_scripts.clustercontrol.run_command_remotely.html">SLURM_scripts.clustercontrol.run_command_remotely</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SLURM_scripts.clustercontrol.start_cluster.html">SLURM_scripts.clustercontrol.start_cluster</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.component_isf.html">SLURM_scripts.component_isf</a></li>
 </ul>
 </li>
@@ -92,16 +100,44 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="slurm-scripts-clustercontrol">
-<h1>SLURM_scripts.clustercontrol<a class="headerlink" href="#slurm-scripts-clustercontrol" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-SLURM_scripts.clustercontrol">
+<span id="slurm-scripts-clustercontrol"></span><h1>SLURM_scripts.clustercontrol<a class="headerlink" href="#module-SLURM_scripts.clustercontrol" title="Permalink to this headline">¶</a></h1>
+<p>This directory provides methods and configurations to for servers that do not provide SLURM job managing.
+With these methods, it is still possible to set up DASK workers and monitor them, and exectute terminal commands on remote machines from within python.</p>
+<p>Author: unknown</p>
+<p>Last updated: 23/01/2023 by Bjorge Meulemeester</p>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="SLURM_scripts.clustercontrol.cache.html#SLURM_scripts.clustercontrol.cache" title="SLURM_scripts.clustercontrol.cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cache</span></code></a>(function)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SLURM_scripts.clustercontrol.cluster.html#SLURM_scripts.clustercontrol.cluster" title="SLURM_scripts.clustercontrol.cluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cluster</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SLURM_scripts.clustercontrol.list_all_screens.html#SLURM_scripts.clustercontrol.list_all_screens" title="SLURM_scripts.clustercontrol.list_all_screens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_all_screens</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="SLURM_scripts.clustercontrol.run_command_remotely.html#SLURM_scripts.clustercontrol.run_command_remotely" title="SLURM_scripts.clustercontrol.run_command_remotely"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_command_remotely</span></code></a>(server, command[, …])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="SLURM_scripts.clustercontrol.start_cluster.html#SLURM_scripts.clustercontrol.start_cluster" title="SLURM_scripts.clustercontrol.start_cluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_cluster</span></code></a>([servers, nice, …])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="%3C--%20add%20this%20line/SLURM_scripts.save_delayeds_in_folder.html" class="btn btn-neutral float-left" title="SLURM_scripts.save_delayeds_in_folder" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="SLURM_scripts.component_isf.html" class="btn btn-neutral float-right" title="SLURM_scripts.component_isf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="SLURM_scripts.save_delayeds_in_folder.html" class="btn btn-neutral float-left" title="SLURM_scripts.save_delayeds_in_folder" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="SLURM_scripts.clustercontrol.cache.html" class="btn btn-neutral float-right" title="SLURM_scripts.clustercontrol.cache" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

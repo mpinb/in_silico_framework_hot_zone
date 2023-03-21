@@ -13,6 +13,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -102,7 +103,7 @@
 <span class="kn">from</span> <span class="nn">sumatra.parameters</span> <span class="kn">import</span> <span class="n">build_parameters</span>
 <span class="kn">import</span> <span class="nn">neuron</span>
 
-<div class="viewcode-block" id="create_synapse_realization"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.network_realizations.create_synapse_realization">[docs]</a><span class="k">def</span> <span class="nf">create_synapse_realization</span><span class="p">(</span><span class="n">pname</span><span class="p">):</span>
+<div class="viewcode-block" id="create_synapse_realization"><a class="viewcode-back" href="../../modules/single_cell_parser.network_realizations.create_synapse_realization.html#single_cell_parser.network_realizations.create_synapse_realization">[docs]</a><span class="k">def</span> <span class="nf">create_synapse_realization</span><span class="p">(</span><span class="n">pname</span><span class="p">):</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="n">build_parameters</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span>
     <span class="n">cellParam</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">post</span>
     <span class="n">preParam</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">pre</span>
@@ -133,7 +134,7 @@
         <span class="n">writer</span><span class="o">.</span><span class="n">write_cell_synapse_locations</span><span class="p">(</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;.syn&#39;</span><span class="p">,</span> <span class="n">tmpSyns</span><span class="p">,</span> <span class="n">cell</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="create_functional_network"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.network_realizations.create_functional_network">[docs]</a><span class="k">def</span> <span class="nf">create_functional_network</span><span class="p">(</span><span class="n">cellParamName</span><span class="p">,</span> <span class="n">nwParamName</span><span class="p">):</span>
+<div class="viewcode-block" id="create_functional_network"><a class="viewcode-back" href="../../modules/single_cell_parser.network_realizations.create_functional_network.html#single_cell_parser.network_realizations.create_functional_network">[docs]</a><span class="k">def</span> <span class="nf">create_functional_network</span><span class="p">(</span><span class="n">cellParamName</span><span class="p">,</span> <span class="n">nwParamName</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Public interface:</span>
 <span class="sd">    used for creating fixed functional connectivity.</span>

@@ -1,6 +1,32 @@
 biophysics\_fitting.parameters
 ==============================
 
-.. currentmodule:: biophysics_fitting
+.. automodule:: biophysics_fitting.parameters
+  
+   
+   
+   
 
-.. automodule:: parameters
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      param_selector
+      param_to_kwargs
+      set_fixed_params
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

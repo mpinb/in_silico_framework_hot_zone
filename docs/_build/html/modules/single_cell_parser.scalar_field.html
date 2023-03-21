@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="single_cell_parser.serialize_cell" href="single_cell_parser.serialize_cell.html" />
-    <link rel="prev" title="single_cell_parser.reader" href="single_cell_parser.reader.html" /> 
+    <link rel="next" title="single_cell_parser.scalar_field.ScalarField" href="single_cell_parser.scalar_field.ScalarField.html" />
+    <link rel="prev" title="single_cell_parser.reader.Edge" href="single_cell_parser.reader.Edge.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,14 +55,14 @@
 <li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.build_parameters.html">single_cell_parser.build_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.create_cell.html">single_cell_parser.create_cell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.init_neuron_run.html">single_cell_parser.init_neuron_run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.load_NMODL_parameters.html">single_cell_parser.load_NMODL_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.sec_distance_to_soma.html">single_cell_parser.sec_distance_to_soma</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.spines_update_network_paramfile.html">single_cell_parser.spines_update_network_paramfile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.spines_update_synapse_distribution_file.html">single_cell_parser.spines_update_synapse_distribution_file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.Event.html">single_cell_parser.Event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.build_parameters.html">single_cell_parser.build_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.create_cell.html">single_cell_parser.create_cell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.init_neuron_run.html">single_cell_parser.init_neuron_run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.load_NMODL_parameters.html">single_cell_parser.load_NMODL_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sec_distance_to_soma.html">single_cell_parser.sec_distance_to_soma</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_network_paramfile.html">single_cell_parser.spines_update_network_paramfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_synapse_distribution_file.html">single_cell_parser.spines_update_synapse_distribution_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.Event.html">single_cell_parser.Event</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell.html">single_cell_parser.cell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html">single_cell_parser.cell_modify_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_parser.html">single_cell_parser.cell_parser</a></li>
@@ -70,7 +71,10 @@
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_param_modify_functions.html">single_cell_parser.network_param_modify_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_realizations.html">single_cell_parser.network_realizations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.reader.html">single_cell_parser.reader</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.scalar_field</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.scalar_field</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.scalar_field.ScalarField.html">single_cell_parser.scalar_field.ScalarField</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.serialize_cell.html">single_cell_parser.serialize_cell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sim_control.html">single_cell_parser.sim_control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse.html">single_cell_parser.synapse</a></li>
@@ -110,16 +114,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="single-cell-parser-scalar-field">
-<h1>single_cell_parser.scalar_field<a class="headerlink" href="#single-cell-parser-scalar-field" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-single_cell_parser.scalar_field">
+<span id="single-cell-parser-scalar-field"></span><h1>single_cell_parser.scalar_field<a class="headerlink" href="#module-single_cell_parser.scalar_field" title="Permalink to this headline">¶</a></h1>
+<p>Created on Mar 27, 2012</p>
+<p>&#64;author: regger</p>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.scalar_field.ScalarField.html#single_cell_parser.scalar_field.ScalarField" title="single_cell_parser.scalar_field.ScalarField"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarField</span></code></a>([mesh, origin, extent, spacing, …])</p></td>
+<td><p>implements 3D scalar field based on numpy array used for e.g.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="single_cell_parser.reader.html" class="btn btn-neutral float-left" title="single_cell_parser.reader" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="single_cell_parser.serialize_cell.html" class="btn btn-neutral float-right" title="single_cell_parser.serialize_cell" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="single_cell_parser.reader.Edge.html" class="btn btn-neutral float-left" title="single_cell_parser.reader.Edge" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="single_cell_parser.scalar_field.ScalarField.html" class="btn btn-neutral float-right" title="single_cell_parser.scalar_field.ScalarField" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

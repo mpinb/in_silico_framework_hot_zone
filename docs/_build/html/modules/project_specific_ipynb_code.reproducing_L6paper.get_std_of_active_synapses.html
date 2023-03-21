@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>project_specific_ipynb_code.reproducing_L6paper.get_std_of_active_synapses &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="project_specific_ipynb_code.reproducing_L6paper.get_synapse_landmarks_pdf" href="project_specific_ipynb_code.reproducing_L6paper.get_synapse_landmarks_pdf.html" />
+    <link rel="prev" title="project_specific_ipynb_code.reproducing_L6paper.get_mean_number_of_activations" href="project_specific_ipynb_code.reproducing_L6paper.get_mean_number_of_activations.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nbrun.html">nbrun</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.biophysical_models.html">project_specific_ipynb_code.biophysical_models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.hot_zone.html">project_specific_ipynb_code.hot_zone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.html">project_specific_ipynb_code.neurobiological_design_principles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.reduced_model_output_paper.html">project_specific_ipynb_code.reduced_model_output_paper</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.html">project_specific_ipynb_code.reproducing_L6paper</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.combine_bins.html">project_specific_ipynb_code.reproducing_L6paper.combine_bins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.create_whole_bc_embedding.html">project_specific_ipynb_code.reproducing_L6paper.create_whole_bc_embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.fig2C_convert_synfiles_to_mock_sa.html">project_specific_ipynb_code.reproducing_L6paper.fig2C_convert_synfiles_to_mock_sa</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.fig2C_data.html">project_specific_ipynb_code.reproducing_L6paper.fig2C_data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.fig2_grouping_function_EI.html">project_specific_ipynb_code.reproducing_L6paper.fig2_grouping_function_EI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.fig2_grouping_function_TC_IC.html">project_specific_ipynb_code.reproducing_L6paper.fig2_grouping_function_TC_IC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.fig2_grouping_function_celltype.html">project_specific_ipynb_code.reproducing_L6paper.fig2_grouping_function_celltype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.fig2a_anatomical_embedding.html">project_specific_ipynb_code.reproducing_L6paper.fig2a_anatomical_embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.fig2b_functional_embedding.html">project_specific_ipynb_code.reproducing_L6paper.fig2b_functional_embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.fig2x_active_synapses_by_soma_distance.html">project_specific_ipynb_code.reproducing_L6paper.fig2x_active_synapses_by_soma_distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.get_all_L6_simulation_dbs.html">project_specific_ipynb_code.reproducing_L6paper.get_all_L6_simulation_dbs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.get_ax_ids.html">project_specific_ipynb_code.reproducing_L6paper.get_ax_ids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.get_cellNr.html">project_specific_ipynb_code.reproducing_L6paper.get_cellNr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.get_fraction_of_all_bc_cells.html">project_specific_ipynb_code.reproducing_L6paper.get_fraction_of_all_bc_cells</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.get_fraction_of_all_cells.html">project_specific_ipynb_code.reproducing_L6paper.get_fraction_of_all_cells</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.get_fraction_of_all_vpm_cells.html">project_specific_ipynb_code.reproducing_L6paper.get_fraction_of_all_vpm_cells</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.get_fraction_of_landmarkAscii.html">project_specific_ipynb_code.reproducing_L6paper.get_fraction_of_landmarkAscii</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.get_fraction_of_landmarkAscii_dir.html">project_specific_ipynb_code.reproducing_L6paper.get_fraction_of_landmarkAscii_dir</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.get_landmarks_pdf_by_cellNr.html">project_specific_ipynb_code.reproducing_L6paper.get_landmarks_pdf_by_cellNr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.get_mean_number_of_activations.html">project_specific_ipynb_code.reproducing_L6paper.get_mean_number_of_activations</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">project_specific_ipynb_code.reproducing_L6paper.get_std_of_active_synapses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.get_synapse_landmarks_pdf.html">project_specific_ipynb_code.reproducing_L6paper.get_synapse_landmarks_pdf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.linear_interpolation_between_pairs.html">project_specific_ipynb_code.reproducing_L6paper.linear_interpolation_between_pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.plot_fig2C_data.html">project_specific_ipynb_code.reproducing_L6paper.plot_fig2C_data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.save_fractions_of_landmark_pdf.html">project_specific_ipynb_code.reproducing_L6paper.save_fractions_of_landmark_pdf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.save_pdf_to_landmarkfile.html">project_specific_ipynb_code.reproducing_L6paper.save_pdf_to_landmarkfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.select_cells_that_spike_in_interval.html">project_specific_ipynb_code.reproducing_L6paper.select_cells_that_spike_in_interval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.signchange.html">project_specific_ipynb_code.reproducing_L6paper.signchange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.spatial_synapse_activation_data.html">project_specific_ipynb_code.reproducing_L6paper.spatial_synapse_activation_data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.temporal_synapse_activation_data.html">project_specific_ipynb_code.reproducing_L6paper.temporal_synapse_activation_data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.write_embedding_from_pdf.html">project_specific_ipynb_code.reproducing_L6paper.write_embedding_from_pdf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.write_hoc_with_0_soma_diameter.html">project_specific_ipynb_code.reproducing_L6paper.write_hoc_with_0_soma_diameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.write_landmark_file.html">project_specific_ipynb_code.reproducing_L6paper.write_landmark_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.EvokedActivitySimulationSetup.html">project_specific_ipynb_code.reproducing_L6paper.EvokedActivitySimulationSetup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.EvokedActivitySimulationSetupRieke.html">project_specific_ipynb_code.reproducing_L6paper.EvokedActivitySimulationSetupRieke</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.L6config.html">project_specific_ipynb_code.reproducing_L6paper.L6config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.ModelResponses.html">project_specific_ipynb_code.reproducing_L6paper.ModelResponses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.ModelSelection.html">project_specific_ipynb_code.reproducing_L6paper.ModelSelection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.PWfitting.html">project_specific_ipynb_code.reproducing_L6paper.PWfitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.SynapticStrengthFitting.html">project_specific_ipynb_code.reproducing_L6paper.SynapticStrengthFitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.o.html">project_specific_ipynb_code.reproducing_L6paper.o</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.html">project_specific_ipynb_code.smr_analyzer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+          <li class="breadcrumb-item"><a href="project_specific_ipynb_code.reproducing_L6paper.html">project_specific_ipynb_code.reproducing_L6paper</a></li>
+      <li class="breadcrumb-item active">project_specific_ipynb_code.reproducing_L6paper.get_std_of_active_synapses</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/project_specific_ipynb_code.reproducing_L6paper.get_std_of_active_synapses.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="project-specific-ipynb-code-reproducing-l6paper-get-std-of-active-synapses">
+<h1>project_specific_ipynb_code.reproducing_L6paper.get_std_of_active_synapses<a class="headerlink" href="#project-specific-ipynb-code-reproducing-l6paper-get-std-of-active-synapses" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="project_specific_ipynb_code.reproducing_L6paper.get_std_of_active_synapses">
+<code class="sig-prename descclassname">project_specific_ipynb_code.reproducing_L6paper.</code><code class="sig-name descname">get_std_of_active_synapses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/project_specific_ipynb_code/reproducing_L6paper.html#get_std_of_active_synapses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#project_specific_ipynb_code.reproducing_L6paper.get_std_of_active_synapses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="project_specific_ipynb_code.reproducing_L6paper.get_mean_number_of_activations.html" class="btn btn-neutral float-left" title="project_specific_ipynb_code.reproducing_L6paper.get_mean_number_of_activations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="project_specific_ipynb_code.reproducing_L6paper.get_synapse_landmarks_pdf.html" class="btn btn-neutral float-right" title="project_specific_ipynb_code.reproducing_L6paper.get_synapse_landmarks_pdf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

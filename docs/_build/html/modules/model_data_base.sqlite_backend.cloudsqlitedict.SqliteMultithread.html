@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="model_data_base.sqlite_backend.sqlite_backend" href="model_data_base.sqlite_backend.sqlite_backend.html" />
+    <link rel="prev" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict" href="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="model_data_base.html">model_data_base</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.html">model_data_base.IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.analyze.html">model_data_base.analyze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.model_data_base.html">model_data_base.model_data_base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.settings.html">model_data_base.settings</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.html">model_data_base.sqlite_backend.cloudsqlitedict</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.decode.html">model_data_base.sqlite_backend.cloudsqlitedict.decode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.encode.html">model_data_base.sqlite_backend.cloudsqlitedict.encode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.open.html">model_data_base.sqlite_backend.cloudsqlitedict.open</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.reraise.html">model_data_base.sqlite_backend.cloudsqlitedict.reraise</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html">model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.sqlite_backend.sqlite_backend.html">model_data_base.sqlite_backend.sqlite_backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.sqlite_backend.tuplecloudsqlitedict.html">model_data_base.sqlite_backend.tuplecloudsqlitedict</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.utils.html">model_data_base.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="model_data_base.html">model_data_base</a></li>
+          <li class="breadcrumb-item"><a href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a></li>
+          <li class="breadcrumb-item"><a href="model_data_base.sqlite_backend.cloudsqlitedict.html">model_data_base.sqlite_backend.cloudsqlitedict</a></li>
+      <li class="breadcrumb-item active">model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="model-data-base-sqlite-backend-cloudsqlitedict-sqlitemultithread">
+<h1>model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread<a class="headerlink" href="#model-data-base-sqlite-backend-cloudsqlitedict-sqlitemultithread" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread">
+<em class="property">class </em><code class="sig-prename descclassname">model_data_base.sqlite_backend.cloudsqlitedict.</code><code class="sig-name descname">SqliteMultithread</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">autocommit</span></em>, <em class="sig-param"><span class="n">journal_mode</span></em>, <em class="sig-param"><span class="n">flag</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></p>
+<p>Wrap sqlite connection in a way that allows concurrent requests from multiple threads.</p>
+<p>This is done by internally queueing the requests and processing them sequentially
+in a separate thread (in the same order they arrived).</p>
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">autocommit</span></em>, <em class="sig-param"><span class="n">journal_mode</span></em>, <em class="sig-param"><span class="n">flag</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>This constructor should always be called with keyword arguments. Arguments are:</p>
+<p><em>group</em> should be None; reserved for future extension when a ThreadGroup
+class is implemented.</p>
+<p><em>target</em> is the callable object to be invoked by the run()
+method. Defaults to None, meaning nothing is called.</p>
+<p><em>name</em> is the thread name. By default, a unique name is constructed of
+the form “Thread-N” where N is a small decimal number.</p>
+<p><em>args</em> is the argument tuple for the target invocation. Defaults to ().</p>
+<p><em>kwargs</em> is a dictionary of keyword arguments for the target
+invocation. Defaults to {}.</p>
+<p>If a subclass overrides the constructor, it must make sure to invoke
+the base class constructor (Thread.__init__()) before doing anything
+else to the thread.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.__init__" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(filename, autocommit, journal_mode, …)</p></td>
+<td><p>This constructor should always be called with keyword arguments.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.check_raise_error" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.check_raise_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_raise_error</span></code></a>()</p></td>
+<td><p>Check for and raise exception for any previous sqlite query.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code>([force])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">commit</span></code>([blocking])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.execute" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.execute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">execute</span></code></a>(req[, arg, res])</p></td>
+<td><p><cite>execute</cite> calls are non-blocking: just queue up the request and return immediately.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">executemany</span></code>(req, items)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.isAlive" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.isAlive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isAlive</span></code></a>()</p></td>
+<td><p>Return whether the thread is alive.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">isDaemon</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.is_alive" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.is_alive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_alive</span></code></a>()</p></td>
+<td><p>Return whether the thread is alive.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.join" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.join"><code class="xref py py-obj docutils literal notranslate"><span class="pre">join</span></code></a>([timeout])</p></td>
+<td><p>Wait until the thread terminates.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.run" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>()</p></td>
+<td><p>Method representing the thread’s activity.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select</span></code></a>(req[, arg])</p></td>
+<td><p>Unlike sqlite’s native select, this select doesn’t handle iteration efficiently.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select_one" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select_one"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_one</span></code></a>(req[, arg])</p></td>
+<td><p>Return only the first row of the SELECT, or None if there are no matching rows.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setDaemon</span></code>(daemonic)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code>(name)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.start" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start</span></code></a>()</p></td>
+<td><p>Start the thread’s activity.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.daemon" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.daemon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">daemon</span></code></a></p></td>
+<td><p>A boolean value indicating whether this thread is a daemon thread.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.ident" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.ident"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ident</span></code></a></p></td>
+<td><p>Thread identifier of this thread or None if it has not been started.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.name" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
+<td><p>A string used for identification purposes only.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.native_id" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.native_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">native_id</span></code></a></p></td>
+<td><p>Native integral thread ID of this thread, or None if it has not been started.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.check_raise_error">
+<code class="sig-name descname">check_raise_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.check_raise_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.check_raise_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check for and raise exception for any previous sqlite query.</p>
+<p>For the <cite>execute*</cite> family of method calls, such calls are non-blocking and any
+exception raised in the thread cannot be handled by the calling Thread (usually
+MainThread).  This method is called on <cite>close</cite>, and prior to any subsequent
+calls to the <cite>execute*</cite> methods to check for and raise an exception in a
+previous call to the MainThread.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">req</span></em>, <em class="sig-param"><span class="n">arg</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">res</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>execute</cite> calls are non-blocking: just queue up the request and return immediately.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.isAlive">
+<code class="sig-name descname">isAlive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.isAlive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the thread is alive.</p>
+<p>This method is deprecated, use is_alive() instead.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.is_alive">
+<code class="sig-name descname">is_alive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.is_alive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the thread is alive.</p>
+<p>This method returns True just before the run() method starts until just
+after the run() method terminates. The module function enumerate()
+returns a list of all alive threads.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.join">
+<code class="sig-name descname">join</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until the thread terminates.</p>
+<p>This blocks the calling thread until the thread whose join() method is
+called terminates – either normally or through an unhandled exception
+or until the optional timeout occurs.</p>
+<p>When the timeout argument is present and not None, it should be a
+floating point number specifying a timeout for the operation in seconds
+(or fractions thereof). As join() always returns None, you must call
+is_alive() after join() to decide whether a timeout happened – if the
+thread is still alive, the join() call timed out.</p>
+<p>When the timeout argument is not present or None, the operation will
+block until the thread terminates.</p>
+<p>A thread can be join()ed many times.</p>
+<p>join() raises a RuntimeError if an attempt is made to join the current
+thread as that would cause a deadlock. It is also an error to join() a
+thread before it has been started and attempts to do so raises the same
+exception.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select">
+<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">req</span></em>, <em class="sig-param"><span class="n">arg</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unlike sqlite’s native select, this select doesn’t handle iteration efficiently.</p>
+<p>The result of <cite>select</cite> starts filling up with values as soon as the
+request is dequeued, and although you can iterate over the result normally
+(<cite>for res in self.select(): …</cite>), the entire result will be in memory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select_one">
+<code class="sig-name descname">select_one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">req</span></em>, <em class="sig-param"><span class="n">arg</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.select_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return only the first row of the SELECT, or None if there are no matching rows.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the thread’s activity.</p>
+<p>It must be called at most once per thread object. It arranges for the
+object’s run() method to be invoked in a separate thread of control.</p>
+<p>This method will raise a RuntimeError if called more than once on the
+same thread object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.daemon">
+<em class="property">property </em><code class="sig-name descname">daemon</code><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.daemon" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean value indicating whether this thread is a daemon thread.</p>
+<p>This must be set before start() is called, otherwise RuntimeError is
+raised. Its initial value is inherited from the creating thread; the
+main thread is not a daemon thread and therefore all threads created in
+the main thread default to daemon = False.</p>
+<p>The entire Python program exits when only daemon threads are left.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.ident">
+<em class="property">property </em><code class="sig-name descname">ident</code><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.ident" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thread identifier of this thread or None if it has not been started.</p>
+<p>This is a nonzero integer. See the get_ident() function. Thread
+identifiers may be recycled when a thread exits and another thread is
+created. The identifier is available even after the thread has exited.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string used for identification purposes only.</p>
+<p>It has no semantics. Multiple threads may be given the same name. The
+initial name is set by the constructor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.native_id">
+<em class="property">property </em><code class="sig-name descname">native_id</code><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.native_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Native integral thread ID of this thread, or None if it has not been started.</p>
+<p>This is a non-negative integer. See the get_native_id() function.
+This represents the Thread ID as reported by the kernel.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html" class="btn btn-neutral float-left" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.sqlite_backend.sqlite_backend.html" class="btn btn-neutral float-right" title="model_data_base.sqlite_backend.sqlite_backend" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

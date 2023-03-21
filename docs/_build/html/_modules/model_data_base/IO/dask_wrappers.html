@@ -13,6 +13,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -88,7 +89,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 
-<div class="viewcode-block" id="concat_path_elements_to_filelist"><a class="viewcode-back" href="../../../modules/model_data_base.IO.html#model_data_base.IO.dask_wrappers.concat_path_elements_to_filelist">[docs]</a><span class="k">def</span> <span class="nf">concat_path_elements_to_filelist</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="concat_path_elements_to_filelist"><a class="viewcode-back" href="../../../modules/model_data_base.IO.dask_wrappers.concat_path_elements_to_filelist.html#model_data_base.IO.dask_wrappers.concat_path_elements_to_filelist">[docs]</a><span class="k">def</span> <span class="nf">concat_path_elements_to_filelist</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;e.g. </span>
 <span class="sd">    args = [&#39;str&#39;, [1,2,3], pd.Series([1,2,3])]</span>
 <span class="sd">    &gt; [[&#39;str&#39;, &#39;str&#39;, &#39;str&#39;], [1, 2, 3], [1, 2, 3]]</span>
@@ -108,13 +109,13 @@
 <span class="c1">#[&#39;str&#39;, [1,2,3], pd.Series([1,2,3])] --&gt; [(&#39;str&#39;, 1, 1), (&#39;str&#39;, 2, 2), (&#39;str&#39;, 3, 3)]</span>
 <span class="c1">#&#39;0&#39; --&gt; [&#39;0&#39;]</span>
 
-<div class="viewcode-block" id="my_reader"><a class="viewcode-back" href="../../../modules/model_data_base.IO.html#model_data_base.IO.dask_wrappers.my_reader">[docs]</a><span class="k">def</span> <span class="nf">my_reader</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fun</span><span class="p">):</span>
+<div class="viewcode-block" id="my_reader"><a class="viewcode-back" href="../../../modules/model_data_base.IO.dask_wrappers.my_reader.html#model_data_base.IO.dask_wrappers.my_reader">[docs]</a><span class="k">def</span> <span class="nf">my_reader</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fun</span><span class="p">):</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">fun</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span></div>
 
-<div class="viewcode-block" id="read_csvs"><a class="viewcode-back" href="../../../modules/model_data_base.IO.html#model_data_base.IO.dask_wrappers.read_csvs">[docs]</a><span class="k">def</span> <span class="nf">read_csvs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="read_csvs"><a class="viewcode-back" href="../../../modules/model_data_base.IO.dask_wrappers.read_csvs.html#model_data_base.IO.dask_wrappers.read_csvs">[docs]</a><span class="k">def</span> <span class="nf">read_csvs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;The native dask read_csv function only supports globstrings. </span>
 <span class="sd">    Use this function instead, if you want to provide a explicit filelist.&#39;&#39;&#39;</span>
     <span class="n">filelist</span> <span class="o">=</span> <span class="n">concat_path_elements_to_filelist</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="c1">## 3hr of debugging: *args, not args</span>

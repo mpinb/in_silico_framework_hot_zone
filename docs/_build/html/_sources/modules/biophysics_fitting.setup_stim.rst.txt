@@ -1,6 +1,36 @@
 biophysics\_fitting.setup\_stim
 ===============================
 
-.. currentmodule:: biophysics_fitting
+.. automodule:: biophysics_fitting.setup_stim
+  
+   
+   
+   
 
-.. automodule:: setup_stim
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      setup_BAC
+      setup_StepOne
+      setup_StepThree
+      setup_StepTwo
+      setup_apical_epsp_injection
+      setup_bAP
+      setup_soma_step
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

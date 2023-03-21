@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="model_data_base.model_data_base" href="model_data_base.model_data_base.html" />
-    <link rel="prev" title="model_data_base.distributed_lock" href="model_data_base.distributed_lock.html" /> 
+    <link rel="next" title="model_data_base.mdb_initializers.PSPs" href="model_data_base.mdb_initializers.PSPs.html" />
+    <link rel="prev" title="model_data_base.distributed_lock.update_config" href="model_data_base.distributed_lock.update_config.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,7 +52,14 @@
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.html">model_data_base.IO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.analyze.html">model_data_base.analyze</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">model_data_base.mdb_initializers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">model_data_base.mdb_initializers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.html">model_data_base.mdb_initializers.PSPs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.html">model_data_base.mdb_initializers.load_simrun_general</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.html">model_data_base.mdb_initializers.prepare_ANN_batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.somatic_summation_model.html">model_data_base.mdb_initializers.somatic_summation_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.html">model_data_base.mdb_initializers.synapse_activation_binning</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.model_data_base.html">model_data_base.model_data_base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.settings.html">model_data_base.settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a></li>
@@ -95,16 +103,40 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="model-data-base-mdb-initializers">
-<h1>model_data_base.mdb_initializers<a class="headerlink" href="#model-data-base-mdb-initializers" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-model_data_base.mdb_initializers">
+<span id="model-data-base-mdb-initializers"></span><h1>model_data_base.mdb_initializers<a class="headerlink" href="#module-model_data_base.mdb_initializers" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Modules</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.html#module-model_data_base.mdb_initializers.PSPs" title="model_data_base.mdb_initializers.PSPs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.mdb_initializers.PSPs</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.html#module-model_data_base.mdb_initializers.load_simrun_general" title="model_data_base.mdb_initializers.load_simrun_general"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.mdb_initializers.load_simrun_general</span></code></a></p></td>
+<td><p>Use the init function in this module to load simulation data generated with the simrun2 module into a ModelDataBase.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.html#module-model_data_base.mdb_initializers.prepare_ANN_batches" title="model_data_base.mdb_initializers.prepare_ANN_batches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.mdb_initializers.prepare_ANN_batches</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.somatic_summation_model.html#module-model_data_base.mdb_initializers.somatic_summation_model" title="model_data_base.mdb_initializers.somatic_summation_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.mdb_initializers.somatic_summation_model</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.html#module-model_data_base.mdb_initializers.synapse_activation_binning" title="model_data_base.mdb_initializers.synapse_activation_binning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.mdb_initializers.synapse_activation_binning</span></code></a></p></td>
+<td><p>Methods for fast binning of synapse activation dask dataframe.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="model_data_base.distributed_lock.html" class="btn btn-neutral float-left" title="model_data_base.distributed_lock" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="model_data_base.model_data_base.html" class="btn btn-neutral float-right" title="model_data_base.model_data_base" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.distributed_lock.update_config.html" class="btn btn-neutral float-left" title="model_data_base.distributed_lock.update_config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.mdb_initializers.PSPs.html" class="btn btn-neutral float-right" title="model_data_base.mdb_initializers.PSPs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

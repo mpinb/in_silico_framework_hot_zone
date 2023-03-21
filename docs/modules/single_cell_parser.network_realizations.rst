@@ -1,6 +1,31 @@
 single\_cell\_parser.network\_realizations
 ==========================================
 
-.. currentmodule:: single_cell_parser
+.. automodule:: single_cell_parser.network_realizations
+  
+   
+   
+   
 
-.. automodule:: network_realizations
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      create_functional_network
+      create_synapse_realization
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

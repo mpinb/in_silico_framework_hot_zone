@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="simrun2" href="simrun2.html" />
-    <link rel="prev" title="project_specific_ipynb_code.reproducing_L6paper" href="project_specific_ipynb_code.reproducing_L6paper.html" /> 
+    <link rel="next" title="project_specific_ipynb_code.smr_analyzer.burst_analysis_2" href="project_specific_ipynb_code.smr_analyzer.burst_analysis_2.html" />
+    <link rel="prev" title="project_specific_ipynb_code.reproducing_L6paper.o" href="project_specific_ipynb_code.reproducing_L6paper.o.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,7 +56,24 @@
 <li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.html">project_specific_ipynb_code.neurobiological_design_principles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.reduced_model_output_paper.html">project_specific_ipynb_code.reduced_model_output_paper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.html">project_specific_ipynb_code.reproducing_L6paper</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">project_specific_ipynb_code.smr_analyzer</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">project_specific_ipynb_code.smr_analyzer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.burst_analysis_2.html">project_specific_ipynb_code.smr_analyzer.burst_analysis_2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.filter_short_ISIs.html">project_specific_ipynb_code.smr_analyzer.filter_short_ISIs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.filter_spike_times.html">project_specific_ipynb_code.smr_analyzer.filter_spike_times</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_interval.html">project_specific_ipynb_code.smr_analyzer.get_interval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_n_bursts.html">project_specific_ipynb_code.smr_analyzer.get_n_bursts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_peaks_above.html">project_specific_ipynb_code.smr_analyzer.get_peaks_above</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_period_label_by_time.html">project_specific_ipynb_code.smr_analyzer.get_period_label_by_time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_spike_times_from_row.html">project_specific_ipynb_code.smr_analyzer.get_spike_times_from_row</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_st_from_spike_times_and_stim_times.html">project_specific_ipynb_code.smr_analyzer.get_st_from_spike_times_and_stim_times</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.read_smr_file.html">project_specific_ipynb_code.smr_analyzer.read_smr_file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.stimulus_injterval_filter.html">project_specific_ipynb_code.smr_analyzer.stimulus_injterval_filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.strip_st.html">project_specific_ipynb_code.smr_analyzer.strip_st</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.AnalyzeFile.html">project_specific_ipynb_code.smr_analyzer.AnalyzeFile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.EventAnalysis.html">project_specific_ipynb_code.smr_analyzer.EventAnalysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.VisualizeEventAnalysis.html">project_specific_ipynb_code.smr_analyzer.VisualizeEventAnalysis</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
@@ -93,16 +111,79 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="project-specific-ipynb-code-smr-analyzer">
-<h1>project_specific_ipynb_code.smr_analyzer<a class="headerlink" href="#project-specific-ipynb-code-smr-analyzer" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-project_specific_ipynb_code.smr_analyzer">
+<span id="project-specific-ipynb-code-smr-analyzer"></span><h1>project_specific_ipynb_code.smr_analyzer<a class="headerlink" href="#module-project_specific_ipynb_code.smr_analyzer" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.burst_analysis_2.html#project_specific_ipynb_code.smr_analyzer.burst_analysis_2" title="project_specific_ipynb_code.smr_analyzer.burst_analysis_2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">burst_analysis_2</span></code></a>(row)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.filter_short_ISIs.html#project_specific_ipynb_code.smr_analyzer.filter_short_ISIs" title="project_specific_ipynb_code.smr_analyzer.filter_short_ISIs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_short_ISIs</span></code></a>(t[, tdelta])</p></td>
+<td><p>filters out any events that occur in an interval shorter than tdelta</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.filter_spike_times.html#project_specific_ipynb_code.smr_analyzer.filter_spike_times" title="project_specific_ipynb_code.smr_analyzer.filter_spike_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_spike_times</span></code></a>(spike_times, …)</p></td>
+<td><p>expects spike times defined by creast and trough.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_interval.html#project_specific_ipynb_code.smr_analyzer.get_interval" title="project_specific_ipynb_code.smr_analyzer.get_interval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_interval</span></code></a>(interval_dict, t)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_n_bursts.html#project_specific_ipynb_code.smr_analyzer.get_n_bursts" title="project_specific_ipynb_code.smr_analyzer.get_n_bursts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_n_bursts</span></code></a>(spike_times[, n])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_peaks_above.html#project_specific_ipynb_code.smr_analyzer.get_peaks_above" title="project_specific_ipynb_code.smr_analyzer.get_peaks_above"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_peaks_above</span></code></a>(t, v, lim)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_period_label_by_time.html#project_specific_ipynb_code.smr_analyzer.get_period_label_by_time" title="project_specific_ipynb_code.smr_analyzer.get_period_label_by_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_period_label_by_time</span></code></a>(periods, t)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_spike_times_from_row.html#project_specific_ipynb_code.smr_analyzer.get_spike_times_from_row" title="project_specific_ipynb_code.smr_analyzer.get_spike_times_from_row"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_spike_times_from_row</span></code></a>(row)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.get_st_from_spike_times_and_stim_times.html#project_specific_ipynb_code.smr_analyzer.get_st_from_spike_times_and_stim_times" title="project_specific_ipynb_code.smr_analyzer.get_st_from_spike_times_and_stim_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_st_from_spike_times_and_stim_times</span></code></a>(name, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.read_smr_file.html#project_specific_ipynb_code.smr_analyzer.read_smr_file" title="project_specific_ipynb_code.smr_analyzer.read_smr_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_smr_file</span></code></a>(path)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.stimulus_injterval_filter.html#project_specific_ipynb_code.smr_analyzer.stimulus_injterval_filter" title="project_specific_ipynb_code.smr_analyzer.stimulus_injterval_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stimulus_injterval_filter</span></code></a>(intervals)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.strip_st.html#project_specific_ipynb_code.smr_analyzer.strip_st" title="project_specific_ipynb_code.smr_analyzer.strip_st"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strip_st</span></code></a>(st)</p></td>
+<td><p>returns spike times dataframe only containing spike times, without metadata</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.AnalyzeFile.html#project_specific_ipynb_code.smr_analyzer.AnalyzeFile" title="project_specific_ipynb_code.smr_analyzer.AnalyzeFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AnalyzeFile</span></code></a>(path[, lim_creast, lim_trough, …])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.EventAnalysis.html#project_specific_ipynb_code.smr_analyzer.EventAnalysis" title="project_specific_ipynb_code.smr_analyzer.EventAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EventAnalysis</span></code></a>(st)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.VisualizeEventAnalysis.html#project_specific_ipynb_code.smr_analyzer.VisualizeEventAnalysis" title="project_specific_ipynb_code.smr_analyzer.VisualizeEventAnalysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VisualizeEventAnalysis</span></code></a>(ea)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="project_specific_ipynb_code.reproducing_L6paper.html" class="btn btn-neutral float-left" title="project_specific_ipynb_code.reproducing_L6paper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="simrun2.html" class="btn btn-neutral float-right" title="simrun2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="project_specific_ipynb_code.reproducing_L6paper.o.html" class="btn btn-neutral float-left" title="project_specific_ipynb_code.reproducing_L6paper.o" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="project_specific_ipynb_code.smr_analyzer.burst_analysis_2.html" class="btn btn-neutral float-right" title="project_specific_ipynb_code.smr_analyzer.burst_analysis_2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

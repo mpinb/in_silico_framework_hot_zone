@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="single_cell_parser.cell_parser" href="single_cell_parser.cell_parser.html" />
-    <link rel="prev" title="single_cell_parser.cell" href="single_cell_parser.cell.html" /> 
+    <link rel="next" title="single_cell_parser.cell_modify_functions.get" href="single_cell_parser.cell_modify_functions.get.html" />
+    <link rel="prev" title="single_cell_parser.cell.SynParameterChanger" href="single_cell_parser.cell.SynParameterChanger.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,16 +55,26 @@
 <li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.build_parameters.html">single_cell_parser.build_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.create_cell.html">single_cell_parser.create_cell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.init_neuron_run.html">single_cell_parser.init_neuron_run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.load_NMODL_parameters.html">single_cell_parser.load_NMODL_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.sec_distance_to_soma.html">single_cell_parser.sec_distance_to_soma</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.spines_update_network_paramfile.html">single_cell_parser.spines_update_network_paramfile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.spines_update_synapse_distribution_file.html">single_cell_parser.spines_update_synapse_distribution_file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.Event.html">single_cell_parser.Event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.build_parameters.html">single_cell_parser.build_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.create_cell.html">single_cell_parser.create_cell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.init_neuron_run.html">single_cell_parser.init_neuron_run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.load_NMODL_parameters.html">single_cell_parser.load_NMODL_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sec_distance_to_soma.html">single_cell_parser.sec_distance_to_soma</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_network_paramfile.html">single_cell_parser.spines_update_network_paramfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_synapse_distribution_file.html">single_cell_parser.spines_update_synapse_distribution_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.Event.html">single_cell_parser.Event</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell.html">single_cell_parser.cell</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.cell_modify_functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.cell_modify_functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.get.html">single_cell_parser.cell_modify_functions.get</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.BAC_injection.html">single_cell_parser.cell_modify_functions.BAC_injection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.apical_current_injection.html">single_cell_parser.cell_modify_functions.apical_current_injection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.apical_epsp_injection.html">single_cell_parser.cell_modify_functions.apical_epsp_injection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.scale_apical.html">single_cell_parser.cell_modify_functions.scale_apical</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.scale_apical_morph_86.html">single_cell_parser.cell_modify_functions.scale_apical_morph_86</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.soma_current_injection.html">single_cell_parser.cell_modify_functions.soma_current_injection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.synaptic_input.html">single_cell_parser.cell_modify_functions.synaptic_input</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_parser.html">single_cell_parser.cell_parser</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network.html">single_cell_parser.network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_modify_functions.html">single_cell_parser.network_modify_functions</a></li>
@@ -110,16 +121,82 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="single-cell-parser-cell-modify-functions">
-<h1>single_cell_parser.cell_modify_functions<a class="headerlink" href="#single-cell-parser-cell-modify-functions" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-single_cell_parser.cell_modify_functions">
+<span id="single-cell-parser-cell-modify-functions"></span><h1>single_cell_parser.cell_modify_functions<a class="headerlink" href="#module-single_cell_parser.cell_modify_functions" title="Permalink to this headline">¶</a></h1>
+<p>Created on Feb 16, 2019</p>
+<p>&#64;author: abast</p>
+<p>This package is contains  functions, that modify the cell after
+it is initalized.</p>
+<p>Such a function can for example be used to scale the apical dendrite.</p>
+<p>These kind of modifying functions have caused a lot of trouble in the past, as it
+has not been specified in the neuron parameterfile. No record of whether a modification
+had been applied was saved alongside the simulation data.</p>
+<p>Now, the cell parameter file can contain the key “cell_modify_functions” in its
+neuron section. The value corresponding to that key is a dictionary. The keys of that
+dictionary can be names to modules in this package. The values corresponding to these keys
+are the keyword arguments of the respective cell modify function.</p>
+<p>I.e.</p>
+<dl>
+<dt>{‘neuron’: {</dt><dd><p>‘Soma’: { … }
+‘Dendrite’: { … }
+‘filename’: {some hocpath}
+‘cell_modify_functions’: {</p>
+<blockquote>
+<div><p>‘scale_apical’: {‘scale’: 2.1}</p>
+</div></blockquote>
+<p>}}}</p>
+</dd>
+</dl>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.cell_modify_functions.get.html#single_cell_parser.cell_modify_functions.get" title="single_cell_parser.cell_modify_functions.get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code></a>(funname)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Modules</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.cell_modify_functions.BAC_injection.html#module-single_cell_parser.cell_modify_functions.BAC_injection" title="single_cell_parser.cell_modify_functions.BAC_injection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.cell_modify_functions.BAC_injection</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.cell_modify_functions.apical_current_injection.html#module-single_cell_parser.cell_modify_functions.apical_current_injection" title="single_cell_parser.cell_modify_functions.apical_current_injection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.cell_modify_functions.apical_current_injection</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.cell_modify_functions.apical_epsp_injection.html#module-single_cell_parser.cell_modify_functions.apical_epsp_injection" title="single_cell_parser.cell_modify_functions.apical_epsp_injection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.cell_modify_functions.apical_epsp_injection</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.cell_modify_functions.scale_apical.html#module-single_cell_parser.cell_modify_functions.scale_apical" title="single_cell_parser.cell_modify_functions.scale_apical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.cell_modify_functions.scale_apical</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.cell_modify_functions.scale_apical_morph_86.html#module-single_cell_parser.cell_modify_functions.scale_apical_morph_86" title="single_cell_parser.cell_modify_functions.scale_apical_morph_86"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.cell_modify_functions.scale_apical_morph_86</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.cell_modify_functions.soma_current_injection.html#module-single_cell_parser.cell_modify_functions.soma_current_injection" title="single_cell_parser.cell_modify_functions.soma_current_injection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.cell_modify_functions.soma_current_injection</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.cell_modify_functions.synaptic_input.html#module-single_cell_parser.cell_modify_functions.synaptic_input" title="single_cell_parser.cell_modify_functions.synaptic_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.cell_modify_functions.synaptic_input</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="single_cell_parser.cell.html" class="btn btn-neutral float-left" title="single_cell_parser.cell" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="single_cell_parser.cell_parser.html" class="btn btn-neutral float-right" title="single_cell_parser.cell_parser" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="single_cell_parser.cell.SynParameterChanger.html" class="btn btn-neutral float-left" title="single_cell_parser.cell.SynParameterChanger" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="single_cell_parser.cell_modify_functions.get.html" class="btn btn-neutral float-right" title="single_cell_parser.cell_modify_functions.get" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

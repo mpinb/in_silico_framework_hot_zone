@@ -1,6 +1,39 @@
 model\_data\_base.mdbopen
 =========================
 
-.. currentmodule:: model_data_base
+.. automodule:: model_data_base.mdbopen
+  
+   
+   
+   
 
-.. automodule:: mdbopen
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      resolve_mdb_path
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      mdbopen
+      taropen
+   
+   
+
+   
+   
+   
+
+
+

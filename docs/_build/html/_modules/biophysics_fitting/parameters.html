@@ -13,6 +13,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -92,7 +93,7 @@
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<div class="viewcode-block" id="param_to_kwargs"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.parameters.param_to_kwargs">[docs]</a><span class="k">def</span> <span class="nf">param_to_kwargs</span><span class="p">(</span><span class="n">fun</span><span class="p">):</span>
+<div class="viewcode-block" id="param_to_kwargs"><a class="viewcode-back" href="../../modules/biophysics_fitting.parameters.param_to_kwargs.html#biophysics_fitting.parameters.param_to_kwargs">[docs]</a><span class="k">def</span> <span class="nf">param_to_kwargs</span><span class="p">(</span><span class="n">fun</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;returns a function that can be called with params = [some_Series].</span>
 <span class="sd">    The content of Series is added to kwargs&#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="nf">fun2</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -102,7 +103,7 @@
         <span class="k">return</span> <span class="n">fun</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">fun2</span></div>
 
-<div class="viewcode-block" id="param_selector"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.parameters.param_selector">[docs]</a><span class="k">def</span> <span class="nf">param_selector</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<div class="viewcode-block" id="param_selector"><a class="viewcode-back" href="../../modules/biophysics_fitting.parameters.param_selector.html#biophysics_fitting.parameters.param_selector">[docs]</a><span class="k">def</span> <span class="nf">param_selector</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Allows to select from a Series with an Index like a.b.c, a.b.d.</span>
 
 <span class="sd">    params is a series with an index that contains strings seperated by &quot;.&quot;</span>
@@ -134,7 +135,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="set_fixed_params"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.parameters.set_fixed_params">[docs]</a><span class="k">def</span> <span class="nf">set_fixed_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fixed_params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="set_fixed_params"><a class="viewcode-back" href="../../modules/biophysics_fitting.parameters.set_fixed_params.html#biophysics_fitting.parameters.set_fixed_params">[docs]</a><span class="k">def</span> <span class="nf">set_fixed_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">fixed_params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="kn">import</span> <span class="nn">six</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">fixed_params</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>

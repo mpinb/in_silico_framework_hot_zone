@@ -13,6 +13,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -92,13 +93,13 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">reader</span>
 
-<div class="viewcode-block" id="Cell"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.Cell">[docs]</a><span class="k">class</span> <span class="nc">Cell</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Cell"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.Cell.html#singlecell_input_mapper.singlecell_input_mapper.cell.Cell">[docs]</a><span class="k">class</span> <span class="nc">Cell</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Cell object providing morphological information</span>
 <span class="sd">    and hoc interface</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-<div class="viewcode-block" id="Cell.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cell.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.Cell.html#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Constructor:</span>
 <span class="sd">        </span>
@@ -129,7 +130,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">boundingBox</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span> <span class="o">=</span> <span class="p">{}</span></div>
     
-<div class="viewcode-block" id="Cell.distance_to_soma"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.distance_to_soma">[docs]</a>    <span class="k">def</span> <span class="nf">distance_to_soma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="Cell.distance_to_soma"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.Cell.html#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.distance_to_soma">[docs]</a>    <span class="k">def</span> <span class="nf">distance_to_soma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;path length to soma from location x on section sec&#39;&#39;&#39;</span>
         <span class="n">currentSec</span> <span class="o">=</span> <span class="n">sec</span>
         <span class="n">parentSec</span> <span class="o">=</span> <span class="n">currentSec</span><span class="o">.</span><span class="n">parent</span>
@@ -144,7 +145,7 @@
             <span class="n">parentLabel</span> <span class="o">=</span> <span class="n">parentSec</span><span class="o">.</span><span class="n">label</span>
         <span class="k">return</span> <span class="n">dist</span></div>
     
-<div class="viewcode-block" id="Cell.get_bounding_box"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.get_bounding_box">[docs]</a>    <span class="k">def</span> <span class="nf">get_bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">:</span>
             <span class="n">xMin</span><span class="p">,</span> <span class="n">xMax</span><span class="p">,</span> <span class="n">yMin</span><span class="p">,</span> <span class="n">yMax</span><span class="p">,</span> <span class="n">zMin</span><span class="p">,</span> <span class="n">zMax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bounds</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">)):</span>
@@ -162,17 +163,17 @@
                 <span class="k">if</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">zMax</span><span class="p">:</span>
                     <span class="n">zMax</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">boundingBox</span> <span class="o">=</span> <span class="n">xMin</span><span class="p">,</span> <span class="n">xMax</span><span class="p">,</span> <span class="n">yMin</span><span class="p">,</span> <span class="n">yMax</span><span class="p">,</span> <span class="n">zMin</span><span class="p">,</span> <span class="n">zMax</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundingBox</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundingBox</span>
     
-<div class="viewcode-block" id="Cell.add_synapse"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.add_synapse">[docs]</a>    <span class="k">def</span> <span class="nf">add_synapse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secID</span><span class="p">,</span> <span class="n">ptID</span><span class="p">,</span> <span class="n">ptx</span><span class="p">,</span> <span class="n">preType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">,</span> <span class="n">postType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_synapse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secID</span><span class="p">,</span> <span class="n">ptID</span><span class="p">,</span> <span class="n">ptx</span><span class="p">,</span> <span class="n">preType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">,</span> <span class="n">postType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">preType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">preType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">newSyn</span> <span class="o">=</span> <span class="n">Synapse</span><span class="p">(</span><span class="n">secID</span><span class="p">,</span> <span class="n">ptID</span><span class="p">,</span> <span class="n">ptx</span><span class="p">,</span> <span class="n">preType</span><span class="p">,</span> <span class="n">postType</span><span class="p">)</span>
         <span class="n">newSyn</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">secID</span><span class="p">]</span><span class="o">.</span><span class="n">pts</span><span class="p">[</span><span class="n">ptID</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">preType</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newSyn</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">preType</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">preType</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     
-<div class="viewcode-block" id="Cell.remove_synapses"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.remove_synapses">[docs]</a>    <span class="k">def</span> <span class="nf">remove_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preType</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">remove_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preType</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">preType</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 <span class="c1">#        remove all</span>
@@ -190,17 +191,17 @@
                 <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">preType</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Synapses of type &#39;</span> <span class="o">+</span> <span class="n">preType</span> <span class="o">+</span> <span class="s1">&#39; not present on cell&#39;</span><span class="p">)</span>
-            <span class="k">return</span></div></div>
+            <span class="k">return</span></div>
 
 
-<div class="viewcode-block" id="PySection2"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2">[docs]</a><span class="k">class</span> <span class="nc">PySection2</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="PySection2"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.html#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2">[docs]</a><span class="k">class</span> <span class="nc">PySection2</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Modeled after nrn.Section to allow easy interface with</span>
 <span class="sd">    existing methods for cell parsing/synapse mapping</span>
 <span class="sd">    without any NEURON dependencies</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-<div class="viewcode-block" id="PySection2.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="PySection2.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.html#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        structure</span>
 <span class="sd">        self.label = label</span>
@@ -253,7 +254,7 @@
         <span class="sd">&#39;&#39;&#39;length of section&#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="mf">0.0</span></div>
     
-<div class="viewcode-block" id="PySection2.set_3d_geometry"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.set_3d_geometry">[docs]</a>    <span class="k">def</span> <span class="nf">set_3d_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pts</span><span class="p">,</span> <span class="n">diams</span><span class="p">):</span>
+<div class="viewcode-block" id="PySection2.set_3d_geometry"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.html#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.set_3d_geometry">[docs]</a>    <span class="k">def</span> <span class="nf">set_3d_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pts</span><span class="p">,</span> <span class="n">diams</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        invokes NEURON 3D geometry setup</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -313,12 +314,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">length</span></div>
 
 
-<div class="viewcode-block" id="PointCell"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.PointCell">[docs]</a><span class="k">class</span> <span class="nc">PointCell</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="PointCell"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.PointCell.html#singlecell_input_mapper.singlecell_input_mapper.cell.PointCell">[docs]</a><span class="k">class</span> <span class="nc">PointCell</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    simple object for use as cell connecting to synapses</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-<div class="viewcode-block" id="PointCell.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.PointCell.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cellType</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="PointCell.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.PointCell.html#singlecell_input_mapper.singlecell_input_mapper.cell.PointCell.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cellType</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        for use as cell connecting to synapses:</span>
 <span class="sd">        self.synapseList = None</span>
@@ -334,7 +335,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">synapseList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">synapse</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Synapse"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.Synapse">[docs]</a><span class="k">class</span> <span class="nc">Synapse</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Synapse"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.Synapse.html#singlecell_input_mapper.singlecell_input_mapper.cell.Synapse">[docs]</a><span class="k">class</span> <span class="nc">Synapse</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Synapse base class</span>
 <span class="sd">    Contains information about pre- and postsynaptic cell type,</span>
@@ -342,7 +343,7 @@
 <span class="sd">    and xyz-coordinates of synapse location</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-<div class="viewcode-block" id="Synapse.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.Synapse.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">edgex</span><span class="p">,</span> <span class="n">preCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">postCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Synapse.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.Synapse.html#singlecell_input_mapper.singlecell_input_mapper.cell.Synapse.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">edgex</span><span class="p">,</span> <span class="n">preCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">postCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        ID of attached section in cell.sections</span>
 <span class="sd">        self.secID = edgeID</span>
@@ -371,19 +372,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="kc">None</span></div></div>
 
 
-<div class="viewcode-block" id="CellParser"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser">[docs]</a><span class="k">class</span> <span class="nc">CellParser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.html#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser">[docs]</a><span class="k">class</span> <span class="nc">CellParser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    class providing methods for setting up morphology in NEURON hoc object</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">cell</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="CellParser.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hocFilename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser.__init__"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.html#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hocFilename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Constructor</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hoc_fname</span> <span class="o">=</span> <span class="n">hocFilename</span></div>
     
-<div class="viewcode-block" id="CellParser.spatialgraph_to_cell"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.spatialgraph_to_cell">[docs]</a>    <span class="k">def</span> <span class="nf">spatialgraph_to_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser.spatialgraph_to_cell"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.html#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.spatialgraph_to_cell">[docs]</a>    <span class="k">def</span> <span class="nf">spatialgraph_to_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        reads cell morphology from Amira hoc file</span>
 <span class="sd">        and sets up PySections and Cell object</span>
@@ -420,7 +421,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">structures</span><span class="p">[</span><span class="n">sec</span><span class="o">.</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span></div>
         
-<div class="viewcode-block" id="CellParser.get_cell"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.html#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.get_cell">[docs]</a>    <span class="k">def</span> <span class="nf">get_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser.get_cell"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.html#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.get_cell">[docs]</a>    <span class="k">def</span> <span class="nf">get_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns cell if it is set up</span>
 <span class="sd">        &#39;&#39;&#39;</span>

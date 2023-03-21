@@ -1,6 +1,31 @@
 single\_cell\_analyzer.currents
 ===============================
 
-.. currentmodule:: single_cell_analyzer
+.. automodule:: single_cell_analyzer.currents
+  
+   
+   
+   
 
-.. automodule:: currents
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      analyze_voltage_trace
+      compute_soma_currents
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

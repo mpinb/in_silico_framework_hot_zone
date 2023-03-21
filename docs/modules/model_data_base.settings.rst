@@ -1,6 +1,23 @@
 model\_data\_base.settings
 ==========================
 
-.. currentmodule:: model_data_base
+.. automodule:: model_data_base.settings
+  
+   
+   
+   
 
-.. automodule:: settings
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

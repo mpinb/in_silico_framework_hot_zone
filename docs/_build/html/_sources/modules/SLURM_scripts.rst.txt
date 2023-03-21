@@ -12,7 +12,7 @@
    .. rubric:: Functions
 
    .. autosummary::
-      :toctree:                                          <-- add this line
+      :toctree:
    
       check_all_done
       convertible_to_int
@@ -34,7 +34,7 @@
 
 .. autosummary::
    :toctree:
-   :template: custom-module-template.rst                 <-- add this line
+   :template: custom-module-template.rst
    :recursive:
 
    SLURM_scripts.clustercontrol

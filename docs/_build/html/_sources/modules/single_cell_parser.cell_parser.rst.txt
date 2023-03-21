@@ -1,6 +1,31 @@
 single\_cell\_parser.cell\_parser
 =================================
 
-.. currentmodule:: single_cell_parser
+.. automodule:: single_cell_parser.cell_parser
+  
+   
+   
+   
 
-.. automodule:: cell_parser
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      CellParser
+   
+   
+
+   
+   
+   
+
+
+

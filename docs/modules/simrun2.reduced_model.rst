@@ -1,6 +1,34 @@
 simrun2.reduced\_model
 ======================
 
-.. currentmodule:: simrun2
+.. automodule:: simrun2.reduced_model
+  
+   
+   
+   
 
-.. automodule:: reduced_model
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   simrun2.reduced_model.get_kernel
+   simrun2.reduced_model.spiking_output
+   simrun2.reduced_model.synapse_activation
+

@@ -13,6 +13,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -85,7 +86,7 @@
   <h1>Source code for biophysics_fitting</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<div class="viewcode-block" id="connected_to_dend_beyond"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/biophysics_fitting.connected_to_dend_beyond.html#biophysics_fitting.connected_to_dend_beyond">[docs]</a><span class="k">def</span> <span class="nf">connected_to_dend_beyond</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">beyond_dist</span><span class="p">,</span> <span class="n">n_children_required</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="connected_to_dend_beyond"><a class="viewcode-back" href="../modules/biophysics_fitting.connected_to_dend_beyond.html#biophysics_fitting.connected_to_dend_beyond">[docs]</a><span class="k">def</span> <span class="nf">connected_to_dend_beyond</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">beyond_dist</span><span class="p">,</span> <span class="n">n_children_required</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Given a :@class single_cell_parser.cell.Cell: object and section number, </span>
 <span class="sd">    this method returns true if at least two children of the branchpoint reach beyond dist</span>
 
@@ -110,7 +111,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="get_inner_sec_dist_list"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/biophysics_fitting.get_inner_sec_dist_list.html#biophysics_fitting.get_inner_sec_dist_list">[docs]</a><span class="k">def</span> <span class="nf">get_inner_sec_dist_list</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">select</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">,</span> <span class="s1">&#39;Dendrite&#39;</span><span class="p">]):</span>
+<div class="viewcode-block" id="get_inner_sec_dist_list"><a class="viewcode-back" href="../modules/biophysics_fitting.get_inner_sec_dist_list.html#biophysics_fitting.get_inner_sec_dist_list">[docs]</a><span class="k">def</span> <span class="nf">get_inner_sec_dist_list</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">select</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">,</span> <span class="s1">&#39;Dendrite&#39;</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;TODO: wat does this method do? Why take the y-value of the last point in a section and subtract 706?</span>
 
 <span class="sd">    Args:</span>
@@ -129,7 +130,7 @@
     <span class="k">return</span> <span class="n">sec_dist_dict</span></div>
 
 
-<div class="viewcode-block" id="get_branching_depth"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/biophysics_fitting.get_branching_depth.html#biophysics_fitting.get_branching_depth">[docs]</a><span class="k">def</span> <span class="nf">get_branching_depth</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">beyond_dist</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<div class="viewcode-block" id="get_branching_depth"><a class="viewcode-back" href="../modules/biophysics_fitting.get_branching_depth.html#biophysics_fitting.get_branching_depth">[docs]</a><span class="k">def</span> <span class="nf">get_branching_depth</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">beyond_dist</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Given a Cell object and a section number, this method returns the amount of sections that have children</span>
 <span class="sd">    beyond some distance :@param beyond_dist: inbetween the soma and the given section.</span>
 
@@ -149,7 +150,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">depth</span> <span class="o">+</span> <span class="n">get_branching_depth</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">sec</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="get_branching_depth_series"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/biophysics_fitting.get_branching_depth_series.html#biophysics_fitting.get_branching_depth_series">[docs]</a><span class="k">def</span> <span class="nf">get_branching_depth_series</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+<div class="viewcode-block" id="get_branching_depth_series"><a class="viewcode-back" href="../modules/biophysics_fitting.get_branching_depth_series.html#biophysics_fitting.get_branching_depth_series">[docs]</a><span class="k">def</span> <span class="nf">get_branching_depth_series</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Careful: z-depth only accurate for D2-registered cells!</span>
 <span class="sd">    </span>
 <span class="sd">    Args:</span>
@@ -166,7 +167,7 @@
     <span class="n">inner_sections_branching_depth</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">inner_sections_branching_depth</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">inner_sections_branching_depth</span></div>
 
-<div class="viewcode-block" id="get_main_bifurcation_section"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/biophysics_fitting.get_main_bifurcation_section.html#biophysics_fitting.get_main_bifurcation_section">[docs]</a><span class="k">def</span> <span class="nf">get_main_bifurcation_section</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+<div class="viewcode-block" id="get_main_bifurcation_section"><a class="viewcode-back" href="../modules/biophysics_fitting.get_main_bifurcation_section.html#biophysics_fitting.get_main_bifurcation_section">[docs]</a><span class="k">def</span> <span class="nf">get_main_bifurcation_section</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
     <span class="n">sec_dist_list</span> <span class="o">=</span> <span class="n">get_branching_depth_series</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
     <span class="n">sec_dist_list_filtered</span> <span class="o">=</span> <span class="p">[</span><span class="n">sec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">sec_dist_list</span> <span class="k">if</span> <span class="n">sec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
     <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sec_dist_list_filtered</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>

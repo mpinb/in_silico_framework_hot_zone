@@ -1,6 +1,31 @@
 single\_cell\_parser.sim\_control
 =================================
 
-.. currentmodule:: single_cell_parser
+.. automodule:: single_cell_parser.sim_control
+  
+   
+   
+   
 
-.. automodule:: sim_control
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      SimControl
+   
+   
+
+   
+   
+   
+
+
+

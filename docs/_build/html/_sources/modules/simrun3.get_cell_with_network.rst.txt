@@ -1,6 +1,30 @@
 simrun3.get\_cell\_with\_network
 ================================
 
-.. currentmodule:: simrun3
+.. automodule:: simrun3.get_cell_with_network
+  
+   
+   
+   
 
-.. automodule:: get_cell_with_network
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      get_cell_with_network
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

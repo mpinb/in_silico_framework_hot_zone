@@ -12,7 +12,7 @@
    .. rubric:: Functions
 
    .. autosummary::
-      :toctree:                                          <-- add this line
+      :toctree:
    
       defaultdict_defaultdict
       print_module_versions

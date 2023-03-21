@@ -1,6 +1,36 @@
 model\_data\_base.mdb\_initializers
 ===================================
 
-.. currentmodule:: model_data_base
+.. automodule:: model_data_base.mdb_initializers
+  
+   
+   
+   
 
-.. automodule:: mdb_initializers
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   model_data_base.mdb_initializers.PSPs
+   model_data_base.mdb_initializers.load_simrun_general
+   model_data_base.mdb_initializers.prepare_ANN_batches
+   model_data_base.mdb_initializers.somatic_summation_model
+   model_data_base.mdb_initializers.synapse_activation_binning
+

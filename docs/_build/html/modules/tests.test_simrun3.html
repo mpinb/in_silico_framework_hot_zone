@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="tests.test_single_cell_parser" href="tests.test_single_cell_parser.html" />
-    <link rel="prev" title="tests.test_simrun2" href="tests.test_simrun2.html" /> 
+    <link rel="next" title="tests.test_simrun3.context" href="tests.test_simrun3.context.html" />
+    <link rel="prev" title="tests.test_simrun2.simrun_test.Tests" href="tests.test_simrun2.simrun_test.Tests.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -57,13 +58,20 @@
 <li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
 <li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="tests.html">tests</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/tests.setup_current_injection_experiment.html">tests.setup_current_injection_experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.setup_current_injection_experiment.html">tests.setup_current_injection_experiment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.context.html">tests.context</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.decorators.html">tests.decorators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.test_biophysics_fitting.html">tests.test_biophysics_fitting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.test_model_data_base.html">tests.test_model_data_base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.test_simrun2.html">tests.test_simrun2</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">tests.test_simrun3</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">tests.test_simrun3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.test_simrun3.context.html">tests.test_simrun3.context</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.test_simrun3.decorators.html">tests.test_simrun3.decorators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.test_simrun3.robust_dask_delayed_execution.html">tests.test_simrun3.robust_dask_delayed_execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.test_simrun3.somatic_summation_model_test.html">tests.test_simrun3.somatic_summation_model_test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.test_simrun3.synaptic_strength_fitting_test.html">tests.test_simrun3.synaptic_strength_fitting_test</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tests.test_single_cell_parser.html">tests.test_single_cell_parser</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.test_spike_analysis.html">tests.test_spike_analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.test_visualisation.html">tests.test_visualisation</a></li>
@@ -97,16 +105,40 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-test_simrun3">
-<span id="tests-test-simrun3"></span><h1>tests.test_simrun3<a class="headerlink" href="#module-test_simrun3" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-tests.test_simrun3">
+<span id="tests-test-simrun3"></span><h1>tests.test_simrun3<a class="headerlink" href="#module-tests.test_simrun3" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Modules</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="tests.test_simrun3.context.html#module-tests.test_simrun3.context" title="tests.test_simrun3.context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tests.test_simrun3.context</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="tests.test_simrun3.decorators.html#module-tests.test_simrun3.decorators" title="tests.test_simrun3.decorators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tests.test_simrun3.decorators</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="tests.test_simrun3.robust_dask_delayed_execution.html#module-tests.test_simrun3.robust_dask_delayed_execution" title="tests.test_simrun3.robust_dask_delayed_execution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tests.test_simrun3.robust_dask_delayed_execution</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="tests.test_simrun3.somatic_summation_model_test.html#module-tests.test_simrun3.somatic_summation_model_test" title="tests.test_simrun3.somatic_summation_model_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tests.test_simrun3.somatic_summation_model_test</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="tests.test_simrun3.synaptic_strength_fitting_test.html#module-tests.test_simrun3.synaptic_strength_fitting_test" title="tests.test_simrun3.synaptic_strength_fitting_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tests.test_simrun3.synaptic_strength_fitting_test</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="tests.test_simrun2.html" class="btn btn-neutral float-left" title="tests.test_simrun2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="tests.test_single_cell_parser.html" class="btn btn-neutral float-right" title="tests.test_single_cell_parser" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="tests.test_simrun2.simrun_test.Tests.html" class="btn btn-neutral float-left" title="tests.test_simrun2.simrun_test.Tests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tests.test_simrun3.context.html" class="btn btn-neutral float-right" title="tests.test_simrun3.context" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

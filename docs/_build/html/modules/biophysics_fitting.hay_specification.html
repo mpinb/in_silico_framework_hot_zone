@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="biophysics_fitting.model_selection" href="biophysics_fitting.model_selection.html" />
-    <link rel="prev" title="biophysics_fitting.hay_evaluation_python" href="biophysics_fitting.hay_evaluation_python.html" /> 
+    <link rel="next" title="biophysics_fitting.hay_specification.get_feasible_model_objectives" href="biophysics_fitting.hay_specification.get_feasible_model_objectives.html" />
+    <link rel="prev" title="biophysics_fitting.hay_evaluation_python.bAP" href="biophysics_fitting.hay_evaluation_python.bAP.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,11 +45,11 @@
 <li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.connected_to_dend_beyond.html">biophysics_fitting.connected_to_dend_beyond</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_branching_depth.html">biophysics_fitting.get_branching_depth</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_branching_depth_series.html">biophysics_fitting.get_branching_depth_series</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_inner_sec_dist_list.html">biophysics_fitting.get_inner_sec_dist_list</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_main_bifurcation_section.html">biophysics_fitting.get_main_bifurcation_section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.connected_to_dend_beyond.html">biophysics_fitting.connected_to_dend_beyond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_branching_depth.html">biophysics_fitting.get_branching_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_branching_depth_series.html">biophysics_fitting.get_branching_depth_series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_inner_sec_dist_list.html">biophysics_fitting.get_inner_sec_dist_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_main_bifurcation_section.html">biophysics_fitting.get_main_bifurcation_section</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.L5tt_parameter_setup.html">biophysics_fitting.L5tt_parameter_setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.combiner.html">biophysics_fitting.combiner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.ephys.html">biophysics_fitting.ephys</a></li>
@@ -57,7 +58,15 @@
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_complete_default_setup_python.html">biophysics_fitting.hay_complete_default_setup_python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_evaluation.html">biophysics_fitting.hay_evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_evaluation_python.html">biophysics_fitting.hay_evaluation_python</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">biophysics_fitting.hay_specification</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">biophysics_fitting.hay_specification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.hay_specification.get_feasible_model_objectives.html">biophysics_fitting.hay_specification.get_feasible_model_objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.hay_specification.get_feasible_model_params.html">biophysics_fitting.hay_specification.get_feasible_model_params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.hay_specification.get_hay_objective_names.html">biophysics_fitting.hay_specification.get_hay_objective_names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.hay_specification.get_hay_param_names.html">biophysics_fitting.hay_specification.get_hay_param_names</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.hay_specification.get_hay_params_pdf.html">biophysics_fitting.hay_specification.get_hay_params_pdf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.hay_specification.get_hay_problem_description.html">biophysics_fitting.hay_specification.get_hay_problem_description</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.model_selection.html">biophysics_fitting.model_selection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.optimizer.html">biophysics_fitting.optimizer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.parameters.html">biophysics_fitting.parameters</a></li>
@@ -107,16 +116,43 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="biophysics-fitting-hay-specification">
-<h1>biophysics_fitting.hay_specification<a class="headerlink" href="#biophysics-fitting-hay-specification" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-biophysics_fitting.hay_specification">
+<span id="biophysics-fitting-hay-specification"></span><h1>biophysics_fitting.hay_specification<a class="headerlink" href="#module-biophysics_fitting.hay_specification" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="biophysics_fitting.hay_specification.get_feasible_model_objectives.html#biophysics_fitting.hay_specification.get_feasible_model_objectives" title="biophysics_fitting.hay_specification.get_feasible_model_objectives"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_feasible_model_objectives</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="biophysics_fitting.hay_specification.get_feasible_model_params.html#biophysics_fitting.hay_specification.get_feasible_model_params" title="biophysics_fitting.hay_specification.get_feasible_model_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_feasible_model_params</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="biophysics_fitting.hay_specification.get_hay_objective_names.html#biophysics_fitting.hay_specification.get_hay_objective_names" title="biophysics_fitting.hay_specification.get_hay_objective_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hay_objective_names</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="biophysics_fitting.hay_specification.get_hay_param_names.html#biophysics_fitting.hay_specification.get_hay_param_names" title="biophysics_fitting.hay_specification.get_hay_param_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hay_param_names</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="biophysics_fitting.hay_specification.get_hay_params_pdf.html#biophysics_fitting.hay_specification.get_hay_params_pdf" title="biophysics_fitting.hay_specification.get_hay_params_pdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hay_params_pdf</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="biophysics_fitting.hay_specification.get_hay_problem_description.html#biophysics_fitting.hay_specification.get_hay_problem_description" title="biophysics_fitting.hay_specification.get_hay_problem_description"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hay_problem_description</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="biophysics_fitting.hay_evaluation_python.html" class="btn btn-neutral float-left" title="biophysics_fitting.hay_evaluation_python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="biophysics_fitting.model_selection.html" class="btn btn-neutral float-right" title="biophysics_fitting.model_selection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="biophysics_fitting.hay_evaluation_python.bAP.html" class="btn btn-neutral float-left" title="biophysics_fitting.hay_evaluation_python.bAP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="biophysics_fitting.hay_specification.get_feasible_model_objectives.html" class="btn btn-neutral float-right" title="biophysics_fitting.hay_specification.get_feasible_model_objectives" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

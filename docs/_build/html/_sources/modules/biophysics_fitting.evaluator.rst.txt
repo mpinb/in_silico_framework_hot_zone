@@ -1,6 +1,32 @@
 biophysics\_fitting.evaluator
 =============================
 
-.. currentmodule:: biophysics_fitting
+.. automodule:: biophysics_fitting.evaluator
+  
+   
+   
+   
 
-.. automodule:: evaluator
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      Evaluator
+      Evaluator_Setup
+   
+   
+
+   
+   
+   
+
+
+

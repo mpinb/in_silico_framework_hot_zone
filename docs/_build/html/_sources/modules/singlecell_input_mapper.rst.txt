@@ -25,7 +25,7 @@
 
 .. autosummary::
    :toctree:
-   :template: custom-module-template.rst                 <-- add this line
+   :template: custom-module-template.rst
    :recursive:
 
    singlecell_input_mapper.evoked_PSTH_from_spike_times

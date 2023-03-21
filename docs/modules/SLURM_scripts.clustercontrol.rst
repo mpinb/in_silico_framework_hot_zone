@@ -1,6 +1,34 @@
 SLURM\_scripts.clustercontrol
 =============================
 
-.. currentmodule:: SLURM_scripts
+.. automodule:: SLURM_scripts.clustercontrol
+  
+   
+   
+   
 
-.. automodule:: clustercontrol
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      cache
+      cluster
+      list_all_screens
+      run_command_remotely
+      start_cluster
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

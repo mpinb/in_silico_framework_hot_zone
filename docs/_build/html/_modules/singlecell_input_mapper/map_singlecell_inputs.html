@@ -13,6 +13,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -154,7 +155,7 @@
 <span class="n">inhTypes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;SymLocal1&#39;</span><span class="p">,</span><span class="s1">&#39;SymLocal2&#39;</span><span class="p">,</span><span class="s1">&#39;SymLocal3&#39;</span><span class="p">,</span><span class="s1">&#39;SymLocal4&#39;</span><span class="p">,</span><span class="s1">&#39;SymLocal5&#39;</span><span class="p">,</span><span class="s1">&#39;SymLocal6&#39;</span><span class="p">,</span>\
             <span class="s1">&#39;L1&#39;</span><span class="p">,</span><span class="s1">&#39;L23Trans&#39;</span><span class="p">,</span><span class="s1">&#39;L45Sym&#39;</span><span class="p">,</span><span class="s1">&#39;L45Peak&#39;</span><span class="p">,</span><span class="s1">&#39;L56Trans&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="map_singlecell_inputs"><a class="viewcode-back" href="../../modules/singlecell_input_mapper.html#singlecell_input_mapper.map_singlecell_inputs.map_singlecell_inputs">[docs]</a><span class="k">def</span> <span class="nf">map_singlecell_inputs</span><span class="p">(</span><span class="n">cellName</span><span class="p">,</span> <span class="n">cellTypeName</span><span class="p">,</span> <span class="n">nrOfSamples</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
+<div class="viewcode-block" id="map_singlecell_inputs"><a class="viewcode-back" href="../../modules/singlecell_input_mapper.map_singlecell_inputs.map_singlecell_inputs.html#singlecell_input_mapper.map_singlecell_inputs.map_singlecell_inputs">[docs]</a><span class="k">def</span> <span class="nf">map_singlecell_inputs</span><span class="p">(</span><span class="n">cellName</span><span class="p">,</span> <span class="n">cellTypeName</span><span class="p">,</span> <span class="n">nrOfSamples</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">cellTypeName</span> <span class="ow">in</span> <span class="n">exTypes</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">cellTypeName</span> <span class="ow">in</span> <span class="n">inhTypes</span><span class="p">):</span>
         <span class="n">errstr</span> <span class="o">=</span> <span class="s1">&#39;Unknown cell type </span><span class="si">%s</span><span class="s1">!&#39;</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">errstr</span><span class="p">)</span>

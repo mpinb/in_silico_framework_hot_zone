@@ -13,6 +13,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -98,18 +99,18 @@
 <span class="kn">from</span> <span class="nn">model_data_base.mdbopen</span> <span class="kn">import</span> <span class="n">mdbopen</span>
 <span class="kn">from</span> <span class="nn">.cell_parser</span> <span class="kn">import</span> <span class="n">CellParser</span>
 
-<div class="viewcode-block" id="convert_hoc_array_to_np_array"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.serialize_cell.convert_hoc_array_to_np_array">[docs]</a><span class="k">def</span> <span class="nf">convert_hoc_array_to_np_array</span><span class="p">(</span><span class="n">hoc_array</span><span class="p">):</span>
+<div class="viewcode-block" id="convert_hoc_array_to_np_array"><a class="viewcode-back" href="../../modules/single_cell_parser.serialize_cell.convert_hoc_array_to_np_array.html#single_cell_parser.serialize_cell.convert_hoc_array_to_np_array">[docs]</a><span class="k">def</span> <span class="nf">convert_hoc_array_to_np_array</span><span class="p">(</span><span class="n">hoc_array</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;converts hoc array to list of lists&#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">hoc_array</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="convert_dict_of_hoc_arrays_to_dict_of_np_arrays"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.serialize_cell.convert_dict_of_hoc_arrays_to_dict_of_np_arrays">[docs]</a><span class="k">def</span> <span class="nf">convert_dict_of_hoc_arrays_to_dict_of_np_arrays</span><span class="p">(</span><span class="n">hoc_array_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="convert_dict_of_hoc_arrays_to_dict_of_np_arrays"><a class="viewcode-back" href="../../modules/single_cell_parser.serialize_cell.convert_dict_of_hoc_arrays_to_dict_of_np_arrays.html#single_cell_parser.serialize_cell.convert_dict_of_hoc_arrays_to_dict_of_np_arrays">[docs]</a><span class="k">def</span> <span class="nf">convert_dict_of_hoc_arrays_to_dict_of_np_arrays</span><span class="p">(</span><span class="n">hoc_array_dict</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;converts dictionary of hoc arrays to dictionary of list of lists&#39;&#39;&#39;</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">hoc_array_dict</span><span class="p">:</span>
         <span class="n">out</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">=</span><span class="n">convert_hoc_array_to_np_array</span><span class="p">(</span><span class="n">hoc_array_dict</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">out</span></div>
 
-<div class="viewcode-block" id="cell_to_serializable_object"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.serialize_cell.cell_to_serializable_object">[docs]</a><span class="k">def</span> <span class="nf">cell_to_serializable_object</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+<div class="viewcode-block" id="cell_to_serializable_object"><a class="viewcode-back" href="../../modules/single_cell_parser.serialize_cell.cell_to_serializable_object.html#single_cell_parser.serialize_cell.cell_to_serializable_object">[docs]</a><span class="k">def</span> <span class="nf">cell_to_serializable_object</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;takes cell object and returns an object, that contains the saved information</span>
 <span class="sd">    (recorded range vars, voltage) and that can be serialized.&#39;&#39;&#39;</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
@@ -129,7 +130,7 @@
 
 <span class="kn">from</span> <span class="nn">model_data_base.utils</span> <span class="kn">import</span> <span class="n">mkdtemp</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<div class="viewcode-block" id="restore_cell_from_serializable_object"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.serialize_cell.restore_cell_from_serializable_object">[docs]</a><span class="k">def</span> <span class="nf">restore_cell_from_serializable_object</span><span class="p">(</span><span class="n">sc</span><span class="p">):</span>    
+<div class="viewcode-block" id="restore_cell_from_serializable_object"><a class="viewcode-back" href="../../modules/single_cell_parser.serialize_cell.restore_cell_from_serializable_object.html#single_cell_parser.serialize_cell.restore_cell_from_serializable_object">[docs]</a><span class="k">def</span> <span class="nf">restore_cell_from_serializable_object</span><span class="p">(</span><span class="n">sc</span><span class="p">):</span>    
     <span class="c1"># create hoc file  </span>
     <span class="k">with</span> <span class="n">mkdtemp</span><span class="p">()</span> <span class="k">as</span> <span class="n">tempdir</span><span class="p">:</span>
         <span class="n">hoc_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempdir</span><span class="p">,</span> <span class="s1">&#39;morphology.hoc&#39;</span><span class="p">)</span> 
@@ -166,11 +167,11 @@
             <span class="nb">setattr</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">outdict</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">cell</span></div>
 
-<div class="viewcode-block" id="save_cell_to_file"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.serialize_cell.save_cell_to_file">[docs]</a><span class="k">def</span> <span class="nf">save_cell_to_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+<div class="viewcode-block" id="save_cell_to_file"><a class="viewcode-back" href="../../modules/single_cell_parser.serialize_cell.save_cell_to_file.html#single_cell_parser.serialize_cell.save_cell_to_file">[docs]</a><span class="k">def</span> <span class="nf">save_cell_to_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
     <span class="n">sc</span> <span class="o">=</span> <span class="n">cell_to_serializable_object</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">sc</span><span class="p">])</span><span class="o">.</span><span class="n">to_msgpack</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="load_cell_from_file"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.serialize_cell.load_cell_from_file">[docs]</a><span class="k">def</span> <span class="nf">load_cell_from_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="load_cell_from_file"><a class="viewcode-back" href="../../modules/single_cell_parser.serialize_cell.load_cell_from_file.html#single_cell_parser.serialize_cell.load_cell_from_file">[docs]</a><span class="k">def</span> <span class="nf">load_cell_from_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="n">pds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_msgpack</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="n">sc</span> <span class="o">=</span> <span class="n">pds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">restore_cell_from_serializable_object</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span></div>

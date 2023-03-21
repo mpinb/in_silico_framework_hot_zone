@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="nbrun" href="nbrun.html" />
-    <link rel="prev" title="model_data_base.sqlite_backend" href="model_data_base.sqlite_backend.html" /> 
+    <link rel="next" title="model_data_base.utils.cache" href="model_data_base.utils.cache.html" />
+    <link rel="prev" title="model_data_base.sqlite_backend.tuplecloudsqlitedict.SqliteDict" href="model_data_base.sqlite_backend.tuplecloudsqlitedict.SqliteDict.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,7 +56,27 @@
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.model_data_base.html">model_data_base.model_data_base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.settings.html">model_data_base.settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">model_data_base.utils</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">model_data_base.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.cache.html">model_data_base.utils.cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.chunkIt.html">model_data_base.utils.chunkIt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.convertible_to_int.html">model_data_base.utils.convertible_to_int</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.fancy_dict_compare.html">model_data_base.utils.fancy_dict_compare</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.first_line_to_key.html">model_data_base.utils.first_line_to_key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.flatten.html">model_data_base.utils.flatten</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.get_file_or_folder_that_endswith.html">model_data_base.utils.get_file_or_folder_that_endswith</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.get_file_or_folder_that_startswith.html">model_data_base.utils.get_file_or_folder_that_startswith</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.myrepartition.html">model_data_base.utils.myrepartition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.pandas_to_array.html">model_data_base.utils.pandas_to_array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.pooled_std.html">model_data_base.utils.pooled_std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.select.html">model_data_base.utils.select</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.skit.html">model_data_base.utils.skit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.split_file_to_buffers.html">model_data_base.utils.split_file_to_buffers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.unique.html">model_data_base.utils.unique</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.wait_until_key_removed.html">model_data_base.utils.wait_until_key_removed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.DelayedKeyboardInterrupt.html">model_data_base.utils.DelayedKeyboardInterrupt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.utils.mkdtemp.html">model_data_base.utils.mkdtemp</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nbrun.html">nbrun</a></li>
@@ -95,16 +116,88 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="model-data-base-utils">
-<h1>model_data_base.utils<a class="headerlink" href="#model-data-base-utils" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-model_data_base.utils">
+<span id="model-data-base-utils"></span><h1>model_data_base.utils<a class="headerlink" href="#module-model_data_base.utils" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.utils.cache.html#model_data_base.utils.cache" title="model_data_base.utils.cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cache</span></code></a>(function)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.utils.chunkIt.html#model_data_base.utils.chunkIt" title="model_data_base.utils.chunkIt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code></a>(seq, num)</p></td>
+<td><p>splits seq in num lists, which have approximately equal size.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.utils.convertible_to_int.html#model_data_base.utils.convertible_to_int" title="model_data_base.utils.convertible_to_int"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convertible_to_int</span></code></a>(x)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.utils.fancy_dict_compare.html#model_data_base.utils.fancy_dict_compare" title="model_data_base.utils.fancy_dict_compare"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fancy_dict_compare</span></code></a>(dict_1, dict_2[, …])</p></td>
+<td><p>Compare two dictionaries recursively to find non mathcing elements</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.utils.first_line_to_key.html#model_data_base.utils.first_line_to_key" title="model_data_base.utils.first_line_to_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">first_line_to_key</span></code></a>(stringios)</p></td>
+<td><p>takes a list io StringIO objects.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.utils.flatten.html#model_data_base.utils.flatten" title="model_data_base.utils.flatten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flatten</span></code></a>(l)</p></td>
+<td><p><a class="reference external" href="https://stackoverflow.com/a/2158532/5082048">https://stackoverflow.com/a/2158532/5082048</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.utils.get_file_or_folder_that_endswith.html#model_data_base.utils.get_file_or_folder_that_endswith" title="model_data_base.utils.get_file_or_folder_that_endswith"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_file_or_folder_that_endswith</span></code></a>(path, endswith)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.utils.get_file_or_folder_that_startswith.html#model_data_base.utils.get_file_or_folder_that_startswith" title="model_data_base.utils.get_file_or_folder_that_startswith"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_file_or_folder_that_startswith</span></code></a>(path, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.utils.myrepartition.html#model_data_base.utils.myrepartition" title="model_data_base.utils.myrepartition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">myrepartition</span></code></a>(ddf, N)</p></td>
+<td><p>This repartitions without generating more tasks</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.utils.pandas_to_array.html#model_data_base.utils.pandas_to_array" title="model_data_base.utils.pandas_to_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas_to_array</span></code></a>(pdf, x_component_fun, …)</p></td>
+<td><p>this can convert a pandas dataframe, in which information is stored linearly to a 2D presentation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.utils.pooled_std.html#model_data_base.utils.pooled_std" title="model_data_base.utils.pooled_std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooled_std</span></code></a>(m, s, n)</p></td>
+<td><p>calculates the pooled standard deviation out of samples.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.utils.select.html#model_data_base.utils.select" title="model_data_base.utils.select"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select</span></code></a>(df, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.utils.skit.html#model_data_base.utils.skit" title="model_data_base.utils.skit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skit</span></code></a>(*funcs, **kwargs)</p></td>
+<td><p>splits kwargs up to supply different functions with the right subset adapted from <a class="reference external" href="http://stackoverflow.com/a/23430335/5082048">http://stackoverflow.com/a/23430335/5082048</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.utils.split_file_to_buffers.html#model_data_base.utils.split_file_to_buffers" title="model_data_base.utils.split_file_to_buffers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_file_to_buffers</span></code></a>(f[, split_str])</p></td>
+<td><p>reads a file f and splits it, whenever “split_str” is found.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.utils.unique.html#model_data_base.utils.unique" title="model_data_base.utils.unique"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unique</span></code></a>(list_)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.utils.wait_until_key_removed.html#model_data_base.utils.wait_until_key_removed" title="model_data_base.utils.wait_until_key_removed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wait_until_key_removed</span></code></a>(mdb, key[, delay])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.utils.DelayedKeyboardInterrupt.html#model_data_base.utils.DelayedKeyboardInterrupt" title="model_data_base.utils.DelayedKeyboardInterrupt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelayedKeyboardInterrupt</span></code></a>()</p></td>
+<td><p>context manager, that allows to delay a KeyboardInterrupt extended, such that it also works in subthreads.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.utils.mkdtemp.html#model_data_base.utils.mkdtemp" title="model_data_base.utils.mkdtemp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mkdtemp</span></code></a>()</p></td>
+<td><p>context manager creating a temporary folder</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="model_data_base.sqlite_backend.html" class="btn btn-neutral float-left" title="model_data_base.sqlite_backend" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="nbrun.html" class="btn btn-neutral float-right" title="nbrun" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.sqlite_backend.tuplecloudsqlitedict.SqliteDict.html" class="btn btn-neutral float-left" title="model_data_base.sqlite_backend.tuplecloudsqlitedict.SqliteDict" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.utils.cache.html" class="btn btn-neutral float-right" title="model_data_base.utils.cache" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

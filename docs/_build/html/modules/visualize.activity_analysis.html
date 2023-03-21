@@ -13,10 +13,11 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="visualize.cell_morphology_visualizer" href="visualize.cell_morphology_visualizer.html" />
+    <link rel="next" title="visualize.activity_analysis.array_slices_interactive" href="visualize.activity_analysis.array_slices_interactive.html" />
     <link rel="prev" title="visualize" href="visualize.html" /> 
 </head>
 
@@ -58,7 +59,16 @@
 <li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html">tests</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="visualize.html">visualize</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">visualize.activity_analysis</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">visualize.activity_analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="visualize.activity_analysis.array_slices_interactive.html">visualize.activity_analysis.array_slices_interactive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="visualize.activity_analysis.average_std.html">visualize.activity_analysis.average_std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="visualize.activity_analysis.cell_to_ipython_animation.html">visualize.activity_analysis.cell_to_ipython_animation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="visualize.activity_analysis.histogram.html">visualize.activity_analysis.histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="visualize.activity_analysis.manylines.html">visualize.activity_analysis.manylines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="visualize.activity_analysis.rasterplot.html">visualize.activity_analysis.rasterplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="visualize.activity_analysis.spatiotemporal_heatmap.html">visualize.activity_analysis.spatiotemporal_heatmap</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="visualize.cell_morphology_visualizer.html">visualize.cell_morphology_visualizer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="visualize.helper_methods.html">visualize.helper_methods</a></li>
 </ul>
@@ -90,8 +100,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="visualize-activity-analysis">
-<h1>visualize.activity_analysis<a class="headerlink" href="#visualize-activity-analysis" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-visualize.activity_analysis">
+<span id="visualize-activity-analysis"></span><h1>visualize.activity_analysis<a class="headerlink" href="#module-visualize.activity_analysis" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Modules</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="visualize.activity_analysis.array_slices_interactive.html#module-visualize.activity_analysis.array_slices_interactive" title="visualize.activity_analysis.array_slices_interactive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize.activity_analysis.array_slices_interactive</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="visualize.activity_analysis.average_std.html#module-visualize.activity_analysis.average_std" title="visualize.activity_analysis.average_std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize.activity_analysis.average_std</span></code></a></p></td>
+<td><p>Created on Sep 16, 2016</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="visualize.activity_analysis.cell_to_ipython_animation.html#module-visualize.activity_analysis.cell_to_ipython_animation" title="visualize.activity_analysis.cell_to_ipython_animation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize.activity_analysis.cell_to_ipython_animation</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="visualize.activity_analysis.histogram.html#module-visualize.activity_analysis.histogram" title="visualize.activity_analysis.histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize.activity_analysis.histogram</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="visualize.activity_analysis.manylines.html#module-visualize.activity_analysis.manylines" title="visualize.activity_analysis.manylines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize.activity_analysis.manylines</span></code></a></p></td>
+<td><p>date: 15.09.2016</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="visualize.activity_analysis.rasterplot.html#module-visualize.activity_analysis.rasterplot" title="visualize.activity_analysis.rasterplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize.activity_analysis.rasterplot</span></code></a></p></td>
+<td><p>Author: Unkown</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="visualize.activity_analysis.spatiotemporal_heatmap.html#module-visualize.activity_analysis.spatiotemporal_heatmap" title="visualize.activity_analysis.spatiotemporal_heatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize.activity_analysis.spatiotemporal_heatmap</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
@@ -99,7 +139,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="visualize.html" class="btn btn-neutral float-left" title="visualize" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="visualize.cell_morphology_visualizer.html" class="btn btn-neutral float-right" title="visualize.cell_morphology_visualizer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="visualize.activity_analysis.array_slices_interactive.html" class="btn btn-neutral float-right" title="visualize.activity_analysis.array_slices_interactive" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -12,7 +12,7 @@
    .. rubric:: Functions
 
    .. autosummary::
-      :toctree:                                          <-- add this line
+      :toctree:
    
       generate_param_files_with_valid_references
    

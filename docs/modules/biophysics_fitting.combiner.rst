@@ -1,6 +1,32 @@
 biophysics\_fitting.combiner
 ============================
 
-.. currentmodule:: biophysics_fitting
+.. automodule:: biophysics_fitting.combiner
+  
+   
+   
+   
 
-.. automodule:: combiner
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      Combiner
+      Combiner_Setup
+   
+   
+
+   
+   
+   
+
+
+

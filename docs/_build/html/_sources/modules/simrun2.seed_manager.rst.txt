@@ -1,6 +1,30 @@
 simrun2.seed\_manager
 =====================
 
-.. currentmodule:: simrun2
+.. automodule:: simrun2.seed_manager
+  
+   
+   
+   
 
-.. automodule:: seed_manager
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      get_seed
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

@@ -12,7 +12,7 @@
    .. rubric:: Functions
 
    .. autosummary::
-      :toctree:                                          <-- add this line
+      :toctree:
    
       connected_to_dend_beyond
       get_branching_depth
@@ -36,7 +36,7 @@
 
 .. autosummary::
    :toctree:
-   :template: custom-module-template.rst                 <-- add this line
+   :template: custom-module-template.rst
    :recursive:
 
    biophysics_fitting.L5tt_parameter_setup

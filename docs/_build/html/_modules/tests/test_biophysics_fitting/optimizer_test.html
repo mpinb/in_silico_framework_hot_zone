@@ -13,6 +13,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -109,7 +110,7 @@
 
 <span class="kn">from</span> <span class="nn">biophysics_fitting.hay_evaluation</span> <span class="kn">import</span> <span class="n">setup_hay_evaluator</span>
 
-<div class="viewcode-block" id="set_up_mdb"><a class="viewcode-back" href="../../../modules/tests.test_biophysics_fitting.html#tests.test_biophysics_fitting.optimizer_test.set_up_mdb">[docs]</a><span class="k">def</span> <span class="nf">set_up_mdb</span><span class="p">(</span><span class="n">step</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="set_up_mdb"><a class="viewcode-back" href="../../../modules/tests.test_biophysics_fitting.optimizer_test.set_up_mdb.html#tests.test_biophysics_fitting.optimizer_test.set_up_mdb">[docs]</a><span class="k">def</span> <span class="nf">set_up_mdb</span><span class="p">(</span><span class="n">step</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;completely sets up a model data base in a temporary folder for opimization&#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="nf">get_template</span><span class="p">():</span>
         <span class="n">param</span> <span class="o">=</span> <span class="n">L5tt_parameter_setup</span><span class="o">.</span><span class="n">get_L5tt_template</span><span class="p">()</span>
@@ -177,7 +178,7 @@
     
     <span class="k">return</span> <span class="n">mdb</span> </div>
 
-<div class="viewcode-block" id="get_params"><a class="viewcode-back" href="../../../modules/tests.test_biophysics_fitting.html#tests.test_biophysics_fitting.optimizer_test.get_params">[docs]</a><span class="k">def</span> <span class="nf">get_params</span><span class="p">():</span>
+<div class="viewcode-block" id="get_params"><a class="viewcode-back" href="../../../modules/tests.test_biophysics_fitting.optimizer_test.get_params.html#tests.test_biophysics_fitting.optimizer_test.get_params">[docs]</a><span class="k">def</span> <span class="nf">get_params</span><span class="p">():</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ephys.CaDynamics_E2.apic.decay&#39;</span><span class="p">:</span> <span class="mf">21.562782924214414</span><span class="p">,</span>
          <span class="s1">&#39;ephys.CaDynamics_E2.apic.gamma&#39;</span><span class="p">:</span> <span class="mf">0.00050335450968099567</span><span class="p">,</span>
          <span class="s1">&#39;ephys.CaDynamics_E2.axon.decay&#39;</span><span class="p">:</span> <span class="mf">634.68027789684118</span><span class="p">,</span>
@@ -215,7 +216,7 @@
          <span class="s1">&#39;scale_apical.scale&#39;</span><span class="p">:</span> <span class="mf">2.9468848475576652</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">params</span><span class="p">)</span></div>
  
-<div class="viewcode-block" id="get_features"><a class="viewcode-back" href="../../../modules/tests.test_biophysics_fitting.html#tests.test_biophysics_fitting.optimizer_test.get_features">[docs]</a><span class="k">def</span> <span class="nf">get_features</span><span class="p">():</span>
+<div class="viewcode-block" id="get_features"><a class="viewcode-back" href="../../../modules/tests.test_biophysics_fitting.optimizer_test.get_features.html#tests.test_biophysics_fitting.optimizer_test.get_features">[docs]</a><span class="k">def</span> <span class="nf">get_features</span><span class="p">():</span>
     <span class="n">features</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;AI1&#39;</span><span class="p">:</span> <span class="mf">1.44214547254434</span><span class="p">,</span>
  <span class="s1">&#39;AI2&#39;</span><span class="p">:</span> <span class="mf">1.8621624399987309</span><span class="p">,</span>
  <span class="s1">&#39;AI3&#39;</span><span class="p">:</span> <span class="mf">1.2227697700239537</span><span class="p">,</span>
@@ -302,8 +303,8 @@
 <span class="c1">#     return features</span>
 
 
-<div class="viewcode-block" id="Tests"><a class="viewcode-back" href="../../../modules/tests.test_biophysics_fitting.html#tests.test_biophysics_fitting.optimizer_test.Tests">[docs]</a><span class="k">class</span> <span class="nc">Tests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>       
-<div class="viewcode-block" id="Tests.setUp"><a class="viewcode-back" href="../../../modules/tests.test_biophysics_fitting.html#tests.test_biophysics_fitting.optimizer_test.Tests.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tests"><a class="viewcode-back" href="../../../modules/tests.test_biophysics_fitting.optimizer_test.Tests.html#tests.test_biophysics_fitting.optimizer_test.Tests">[docs]</a><span class="k">class</span> <span class="nc">Tests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>       
+<div class="viewcode-block" id="Tests.setUp"><a class="viewcode-back" href="../../../modules/tests.test_biophysics_fitting.optimizer_test.Tests.html#tests.test_biophysics_fitting.optimizer_test.Tests.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
     <span class="nd">@decorators</span><span class="o">.</span><span class="n">testlevel</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>    
@@ -361,7 +362,7 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">features_legacy</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="k">assert</span><span class="p">(</span><span class="n">features_legacy</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">features_new</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
             
-<div class="viewcode-block" id="Tests.test_reproducability"><a class="viewcode-back" href="../../../modules/tests.test_biophysics_fitting.html#tests.test_biophysics_fitting.optimizer_test.Tests.test_reproducability">[docs]</a>    <span class="k">def</span> <span class="nf">test_reproducability</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_reproducability</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         
         <span class="n">setup_hay_evaluator</span><span class="p">()</span> <span class="c1"># this adds a stump cell to the neuron environment,which is</span>
         <span class="c1"># necessary to acces the hay evaluate functions. For the vairalbe time step solver,</span>
@@ -381,7 +382,7 @@
         <span class="n">features_legacy</span> <span class="o">=</span> <span class="n">get_features</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">features_new</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
 <span class="c1">#             assert(features_legacy[k] == features_new[k]) rieke - values are not exactly the same</span>
-            <span class="n">I</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_almost_equal</span><span class="p">(</span><span class="n">features_new</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">features_legacy</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">decimal</span> <span class="o">=</span> <span class="mi">6</span><span class="p">)</span></div></div>
+            <span class="n">I</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_almost_equal</span><span class="p">(</span><span class="n">features_new</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">features_legacy</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">decimal</span> <span class="o">=</span> <span class="mi">6</span><span class="p">)</span></div>
               
 </pre></div>
 

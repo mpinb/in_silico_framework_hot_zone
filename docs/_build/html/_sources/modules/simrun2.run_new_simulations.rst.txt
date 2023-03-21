@@ -1,6 +1,30 @@
 simrun2.run\_new\_simulations
 =============================
 
-.. currentmodule:: simrun2
+.. automodule:: simrun2.run_new_simulations
+  
+   
+   
+   
 
-.. automodule:: run_new_simulations
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      run_new_simulations
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

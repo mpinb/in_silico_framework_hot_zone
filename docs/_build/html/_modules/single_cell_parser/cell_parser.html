@@ -13,6 +13,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -102,14 +103,14 @@
 <span class="kn">from</span> <span class="nn">.cell</span> <span class="kn">import</span> <span class="n">PySection</span><span class="p">,</span> <span class="n">Cell</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">cell_modify_functions</span>
 
-<div class="viewcode-block" id="CellParser"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser">[docs]</a><span class="k">class</span> <span class="nc">CellParser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser"><a class="viewcode-back" href="../../modules/single_cell_parser.cell_parser.CellParser.html#single_cell_parser.cell_parser.CellParser">[docs]</a><span class="k">class</span> <span class="nc">CellParser</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    class providing methods for setting up morphology in NEURON hoc object</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 <span class="c1">#    h = neuron.h</span>
     <span class="n">cell</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="CellParser.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hocFilename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.cell_parser.CellParser.html#single_cell_parser.cell_parser.CellParser.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hocFilename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Constructor</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -124,7 +125,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">membraneParams</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_modify_functions_applied</span> <span class="o">=</span> <span class="kc">False</span></div>
     
-<div class="viewcode-block" id="CellParser.spatialgraph_to_cell"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell">[docs]</a>    <span class="k">def</span> <span class="nf">spatialgraph_to_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">axon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaleFunc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser.spatialgraph_to_cell"><a class="viewcode-back" href="../../modules/single_cell_parser.cell_parser.CellParser.html#single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell">[docs]</a>    <span class="k">def</span> <span class="nf">spatialgraph_to_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">axon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaleFunc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        reads cell morphology from Amira hoc file</span>
 <span class="sd">        and sets up PySections and Cell object</span>
@@ -210,7 +211,7 @@
                           <span class="s1">&#39;specified in the parameters, as described in single_cell_parser.cell_modify_funs&#39;</span><span class="p">)</span>            
             <span class="n">scaleFunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span></div>
                 
-<div class="viewcode-block" id="CellParser.set_up_biophysics"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.set_up_biophysics">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_biophysics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser.set_up_biophysics"><a class="viewcode-back" href="../../modules/single_cell_parser.cell_parser.CellParser.html#single_cell_parser.cell_parser.CellParser.set_up_biophysics">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_biophysics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        default method for initializing membrane properties</span>
 <span class="sd">        (e.g. cm, Rm, spines), linear and non-linear mechanisms</span>
@@ -272,7 +273,7 @@
                 
         <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">neuron_param</span> <span class="o">=</span> <span class="n">parameters</span>            </div>
         
-<div class="viewcode-block" id="CellParser.apply_cell_modify_functions"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.apply_cell_modify_functions">[docs]</a>    <span class="k">def</span> <span class="nf">apply_cell_modify_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">apply_cell_modify_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
         <span class="k">if</span> <span class="s1">&#39;cell_modify_functions&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_modify_functions_applied</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cell modify functions have already been applied. We &#39;</span><span class="o">+</span>\
@@ -289,9 +290,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No cell_modify_functions to apply&#39;</span><span class="p">)</span>
             
-        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">neuron_param</span> <span class="o">=</span> <span class="n">parameters</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">neuron_param</span> <span class="o">=</span> <span class="n">parameters</span>
     
-<div class="viewcode-block" id="CellParser.get_cell"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.get_cell">[docs]</a>    <span class="k">def</span> <span class="nf">get_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser.get_cell"><a class="viewcode-back" href="../../modules/single_cell_parser.cell_parser.CellParser.html#single_cell_parser.cell_parser.CellParser.get_cell">[docs]</a>    <span class="k">def</span> <span class="nf">get_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns cell if it is set up for simulations</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -299,7 +300,7 @@
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Trying to start simulation with empty morphology&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span></div>
     
-<div class="viewcode-block" id="CellParser.insert_membrane_properties"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.insert_membrane_properties">[docs]</a>    <span class="k">def</span> <span class="nf">insert_membrane_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser.insert_membrane_properties"><a class="viewcode-back" href="../../modules/single_cell_parser.cell_parser.CellParser.html#single_cell_parser.cell_parser.CellParser.insert_membrane_properties">[docs]</a>    <span class="k">def</span> <span class="nf">insert_membrane_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        inserts membrane properties into all </span>
 <span class="sd">        structures named as &quot;label&quot;</span>
@@ -326,7 +327,7 @@
             <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">propStrings</span><span class="p">:</span>
                 <span class="n">exec</span><span class="p">(</span><span class="s1">&#39;sec.&#39;</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="CellParser.insert_range_mechanisms"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.insert_range_mechanisms">[docs]</a>    <span class="k">def</span> <span class="nf">insert_range_mechanisms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">mechs</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser.insert_range_mechanisms"><a class="viewcode-back" href="../../modules/single_cell_parser.cell_parser.CellParser.html#single_cell_parser.cell_parser.CellParser.insert_range_mechanisms">[docs]</a>    <span class="k">def</span> <span class="nf">insert_range_mechanisms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">mechs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        inserts range mechanisms into all structures named as &quot;label&quot;</span>
 <span class="sd">        so far, only implements spatially uniform distributions, but easily</span>
@@ -529,7 +530,7 @@
                 <span class="n">errstr</span> <span class="o">=</span> <span class="s1">&#39;Invalid distribution of mechanisms: </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">mech</span><span class="o">.</span><span class="n">spatial</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">errstr</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="CellParser.update_range_mechanisms"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.update_range_mechanisms">[docs]</a>    <span class="k">def</span> <span class="nf">update_range_mechanisms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">updateMechName</span><span class="p">,</span> <span class="n">mechs</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser.update_range_mechanisms"><a class="viewcode-back" href="../../modules/single_cell_parser.cell_parser.CellParser.html#single_cell_parser.cell_parser.CellParser.update_range_mechanisms">[docs]</a>    <span class="k">def</span> <span class="nf">update_range_mechanisms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">updateMechName</span><span class="p">,</span> <span class="n">mechs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        updates range mechanism &#39;updateMechName&#39; in all structures named as &quot;label&quot;.</span>
 <span class="sd">        essentially the same as insert_range_mechanisms, but does not</span>
@@ -650,7 +651,7 @@
                 <span class="n">seg</span><span class="o">.</span><span class="n">g0_ar</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">g0_ar</span><span class="o">*</span><span class="n">F</span>
 <span class="c1">#                seg.c_ar = seg.c_ar*F*F</span>
     
-<div class="viewcode-block" id="CellParser.insert_passive_membrane"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.insert_passive_membrane">[docs]</a>    <span class="k">def</span> <span class="nf">insert_passive_membrane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">insert_passive_membrane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Trying to insert membrane properties into empty morphology&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">label</span> <span class="o">!=</span> <span class="s1">&#39;Soma&#39;</span> <span class="ow">and</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">branches</span><span class="p">:</span>
@@ -669,9 +670,9 @@
                 <span class="n">sec</span><span class="o">.</span><span class="n">cm</span> <span class="o">=</span> <span class="mf">0.75</span>
                 <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">sec</span><span class="p">:</span>
                     <span class="n">seg</span><span class="o">.</span><span class="n">pas</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.00025</span>
-                    <span class="n">seg</span><span class="o">.</span><span class="n">pas</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="o">-</span><span class="mf">60.0</span></div>
+                    <span class="n">seg</span><span class="o">.</span><span class="n">pas</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="o">-</span><span class="mf">60.0</span>
         
-<div class="viewcode-block" id="CellParser.insert_hh_membrane"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.insert_hh_membrane">[docs]</a>    <span class="k">def</span> <span class="nf">insert_hh_membrane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">insert_hh_membrane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Trying to insert membrane properties into empty morphology&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">branches</span><span class="p">:</span>
@@ -699,9 +700,9 @@
                         <span class="n">seg</span><span class="o">.</span><span class="n">hh</span><span class="o">.</span><span class="n">gnabar</span> <span class="o">=</span> <span class="mf">0.003</span>
                         <span class="n">seg</span><span class="o">.</span><span class="n">hh</span><span class="o">.</span><span class="n">gkbar</span> <span class="o">=</span> <span class="mf">0.01</span>
                         <span class="n">seg</span><span class="o">.</span><span class="n">hh</span><span class="o">.</span><span class="n">gl</span> <span class="o">=</span> <span class="mf">0.0003</span>
-                        <span class="n">seg</span><span class="o">.</span><span class="n">hh</span><span class="o">.</span><span class="n">el</span> <span class="o">=</span> <span class="o">-</span><span class="mf">54.3</span></div>
+                        <span class="n">seg</span><span class="o">.</span><span class="n">hh</span><span class="o">.</span><span class="n">el</span> <span class="o">=</span> <span class="o">-</span><span class="mf">54.3</span>
     
-<div class="viewcode-block" id="CellParser.determine_nseg"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.determine_nseg">[docs]</a>    <span class="k">def</span> <span class="nf">determine_nseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">max_seg_length</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CellParser.determine_nseg"><a class="viewcode-back" href="../../modules/single_cell_parser.cell_parser.CellParser.html#single_cell_parser.cell_parser.CellParser.determine_nseg">[docs]</a>    <span class="k">def</span> <span class="nf">determine_nseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">max_seg_length</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        determine the number of segments (compartments)</span>
 <span class="sd">        to be used according to the d-lambda rule</span>
@@ -952,7 +953,7 @@
         <span class="n">hMyelin</span><span class="o">.</span><span class="n">nseg</span> <span class="o">=</span> <span class="n">myelinSeg</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hMyelin</span><span class="p">)</span>
     
-<div class="viewcode-block" id="CellParser.rieke_spines"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.cell_parser.CellParser.rieke_spines">[docs]</a>    <span class="k">def</span> <span class="nf">rieke_spines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">rieke_spines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
         <span class="n">spineneckDiam</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">spatialgraph_modify_functions</span><span class="o">.</span><span class="n">rieke_spines</span><span class="o">.</span><span class="n">spine_morphology</span><span class="o">.</span><span class="n">spineneckDiam</span>
         <span class="n">spineneckLength</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">spatialgraph_modify_functions</span><span class="o">.</span><span class="n">rieke_spines</span><span class="o">.</span><span class="n">spine_morphology</span><span class="o">.</span><span class="n">spineneckLength</span>
         
@@ -1017,7 +1018,7 @@
 
                     <span class="n">hSpineHead</span><span class="o">.</span><span class="n">set_3d_geometry</span><span class="p">(</span><span class="n">points_head</span><span class="p">,</span> <span class="n">diameters_head</span><span class="p">)</span>
                     <span class="n">hSpineHead</span><span class="o">.</span><span class="n">parentx</span> <span class="o">=</span> <span class="mf">1.0</span>
-                    <span class="n">hSpineHead</span><span class="o">.</span><span class="n">parentID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">hSpineNeck</span><span class="p">)</span></div></div>
+                    <span class="n">hSpineHead</span><span class="o">.</span><span class="n">parentID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">hSpineNeck</span><span class="p">)</span></div>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
 <span class="c1">#    fname = raw_input(&#39;Enter hoc filename: &#39;)</span>

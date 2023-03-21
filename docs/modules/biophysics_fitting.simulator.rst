@@ -1,6 +1,39 @@
 biophysics\_fitting.simulator
 =============================
 
-.. currentmodule:: biophysics_fitting
+.. automodule:: biophysics_fitting.simulator
+  
+   
+   
+   
 
-.. automodule:: simulator
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      run_fun
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      Simulator
+      Simulator_Setup
+   
+   
+
+   
+   
+   
+
+
+

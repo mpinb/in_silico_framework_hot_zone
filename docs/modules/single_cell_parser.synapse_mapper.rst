@@ -1,6 +1,31 @@
 single\_cell\_parser.synapse\_mapper
 ====================================
 
-.. currentmodule:: single_cell_parser
+.. automodule:: single_cell_parser.synapse_mapper
+  
+   
+   
+   
 
-.. automodule:: synapse_mapper
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      SynapseMapper
+   
+   
+
+   
+   
+   
+
+
+

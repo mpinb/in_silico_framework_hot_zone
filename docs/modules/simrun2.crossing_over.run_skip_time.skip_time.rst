@@ -1,0 +1,6 @@
+simrun2.crossing\_over.run\_skip\_time.skip\_time
+=================================================
+
+.. currentmodule:: simrun2.crossing_over.run_skip_time
+
+.. autofunction:: skip_time

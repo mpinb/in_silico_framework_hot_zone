@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="spike_analysis" href="spike_analysis.html" />
-    <link rel="prev" title="singlecell_input_mapper.ongoing_network_param_from_template" href="singlecell_input_mapper.ongoing_network_param_from_template.html" /> 
+    <link rel="next" title="singlecell_input_mapper.singlecell_input_mapper.cell" href="singlecell_input_mapper.singlecell_input_mapper.cell.html" />
+    <link rel="prev" title="singlecell_input_mapper.ongoing_network_param_from_template.load_cell_number_file" href="singlecell_input_mapper.ongoing_network_param_from_template.load_cell_number_file.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -59,7 +60,16 @@
 <li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.evoked_network_param_from_template.html">singlecell_input_mapper.evoked_network_param_from_template</a></li>
 <li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.map_singlecell_inputs.html">singlecell_input_mapper.map_singlecell_inputs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.ongoing_network_param_from_template.html">singlecell_input_mapper.ongoing_network_param_from_template</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">singlecell_input_mapper.singlecell_input_mapper</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">singlecell_input_mapper.singlecell_input_mapper</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.cell.html">singlecell_input_mapper.singlecell_input_mapper.cell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet.html">singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.network_embedding.html">singlecell_input_mapper.singlecell_input_mapper.network_embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.reader.html">singlecell_input_mapper.singlecell_input_mapper.reader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.scalar_field.html">singlecell_input_mapper.singlecell_input_mapper.scalar_field</a></li>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.html">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.writer.html">singlecell_input_mapper.singlecell_input_mapper.writer</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
@@ -92,16 +102,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-singlecell_input_mapper">
-<span id="singlecell-input-mapper-singlecell-input-mapper"></span><h1>singlecell_input_mapper.singlecell_input_mapper<a class="headerlink" href="#module-singlecell_input_mapper" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-singlecell_input_mapper.singlecell_input_mapper">
+<span id="singlecell-input-mapper-singlecell-input-mapper"></span><h1>singlecell_input_mapper.singlecell_input_mapper<a class="headerlink" href="#module-singlecell_input_mapper.singlecell_input_mapper" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Modules</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.cell.html#module-singlecell_input_mapper.singlecell_input_mapper.cell" title="singlecell_input_mapper.singlecell_input_mapper.cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.cell</span></code></a></p></td>
+<td><p>Created on Apr 28, 2012</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet.html#module-singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet" title="singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.network_embedding.html#module-singlecell_input_mapper.singlecell_input_mapper.network_embedding" title="singlecell_input_mapper.singlecell_input_mapper.network_embedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.network_embedding</span></code></a></p></td>
+<td><p>Created on Nov 17, 2012</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.reader.html#module-singlecell_input_mapper.singlecell_input_mapper.reader" title="singlecell_input_mapper.singlecell_input_mapper.reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.reader</span></code></a></p></td>
+<td><p>Created on Mar 8, 2012</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.scalar_field.html#module-singlecell_input_mapper.singlecell_input_mapper.scalar_field" title="singlecell_input_mapper.singlecell_input_mapper.scalar_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.scalar_field</span></code></a></p></td>
+<td><p>Created on Mar 27, 2012</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.html#module-singlecell_input_mapper.singlecell_input_mapper.synapse_mapper" title="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper</span></code></a></p></td>
+<td><p>Created on Mar 30, 2012</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.writer.html#module-singlecell_input_mapper.singlecell_input_mapper.writer" title="singlecell_input_mapper.singlecell_input_mapper.writer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.writer</span></code></a></p></td>
+<td><p>Created on Mar 8, 2012</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="singlecell_input_mapper.ongoing_network_param_from_template.html" class="btn btn-neutral float-left" title="singlecell_input_mapper.ongoing_network_param_from_template" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="spike_analysis.html" class="btn btn-neutral float-right" title="spike_analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="singlecell_input_mapper.ongoing_network_param_from_template.load_cell_number_file.html" class="btn btn-neutral float-left" title="singlecell_input_mapper.ongoing_network_param_from_template.load_cell_number_file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="singlecell_input_mapper.singlecell_input_mapper.cell.html" class="btn btn-neutral float-right" title="singlecell_input_mapper.singlecell_input_mapper.cell" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

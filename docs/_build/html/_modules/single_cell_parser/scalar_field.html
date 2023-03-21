@@ -13,6 +13,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -91,7 +92,7 @@
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<div class="viewcode-block" id="ScalarField"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.scalar_field.ScalarField">[docs]</a><span class="k">class</span> <span class="nc">ScalarField</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ScalarField"><a class="viewcode-back" href="../../modules/single_cell_parser.scalar_field.ScalarField.html#single_cell_parser.scalar_field.ScalarField">[docs]</a><span class="k">class</span> <span class="nc">ScalarField</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    implements 3D scalar field based on numpy array</span>
 <span class="sd">    used for e.g. sub-cellular synapse distributions</span>
@@ -105,7 +106,7 @@
     <span class="n">spacing</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">boundingBox</span> <span class="o">=</span> <span class="p">()</span>
     
-<div class="viewcode-block" id="ScalarField.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.scalar_field.ScalarField.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(),</span> <span class="n">extent</span><span class="o">=</span><span class="p">(),</span> <span class="n">spacing</span><span class="o">=</span><span class="p">(),</span> <span class="n">bBox</span><span class="o">=</span><span class="p">()):</span>
+<div class="viewcode-block" id="ScalarField.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.scalar_field.ScalarField.html#single_cell_parser.scalar_field.ScalarField.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(),</span> <span class="n">extent</span><span class="o">=</span><span class="p">(),</span> <span class="n">spacing</span><span class="o">=</span><span class="p">(),</span> <span class="n">bBox</span><span class="o">=</span><span class="p">()):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Constructor</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -122,7 +123,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">resize_mesh</span><span class="p">()</span></div>
     
-<div class="viewcode-block" id="ScalarField.resize_mesh"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.scalar_field.ScalarField.resize_mesh">[docs]</a>    <span class="k">def</span> <span class="nf">resize_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ScalarField.resize_mesh"><a class="viewcode-back" href="../../modules/single_cell_parser.scalar_field.ScalarField.html#single_cell_parser.scalar_field.ScalarField.resize_mesh">[docs]</a>    <span class="k">def</span> <span class="nf">resize_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        resize mesh to bounding box around non-zero voxels</span>
 <span class="sd">        also updates extent and boundingBox</span>
@@ -152,7 +153,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">newMesh</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">newMesh</span></div>
     
-<div class="viewcode-block" id="ScalarField.get_scalar"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.scalar_field.ScalarField.get_scalar">[docs]</a>    <span class="k">def</span> <span class="nf">get_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">):</span>
+<div class="viewcode-block" id="ScalarField.get_scalar"><a class="viewcode-back" href="../../modules/single_cell_parser.scalar_field.ScalarField.html#single_cell_parser.scalar_field.ScalarField.get_scalar">[docs]</a>    <span class="k">def</span> <span class="nf">get_scalar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        does perform range checking; however, if outside</span>
 <span class="sd">        of bounding box, simply returns 0, so use with caution!</span>
@@ -176,7 +177,7 @@
         <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">spacing</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span></div>
     
-<div class="viewcode-block" id="ScalarField.is_in_bounds"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.scalar_field.ScalarField.is_in_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">is_in_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">is_in_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">):</span>
         <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="o">=</span> <span class="n">xyz</span>
         <span class="n">delta</span> <span class="o">=</span> <span class="mf">1.0e-6</span>
         <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">delta</span><span class="p">:</span>
@@ -191,9 +192,9 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
+        <span class="k">return</span> <span class="kc">True</span>
     
-<div class="viewcode-block" id="ScalarField.get_mesh_coordinates"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.scalar_field.ScalarField.get_mesh_coordinates">[docs]</a>    <span class="k">def</span> <span class="nf">get_mesh_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">):</span>
+<div class="viewcode-block" id="ScalarField.get_mesh_coordinates"><a class="viewcode-back" href="../../modules/single_cell_parser.scalar_field.ScalarField.html#single_cell_parser.scalar_field.ScalarField.get_mesh_coordinates">[docs]</a>    <span class="k">def</span> <span class="nf">get_mesh_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        does NOT perform range checking; index may be invalid!</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -203,7 +204,7 @@
         <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">spacing</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span></div>
     
-<div class="viewcode-block" id="ScalarField.get_voxel_bounds"><a class="viewcode-back" href="../../modules/single_cell_parser.html#single_cell_parser.scalar_field.ScalarField.get_voxel_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">get_voxel_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ijk</span><span class="p">):</span>
+<div class="viewcode-block" id="ScalarField.get_voxel_bounds"><a class="viewcode-back" href="../../modules/single_cell_parser.scalar_field.ScalarField.html#single_cell_parser.scalar_field.ScalarField.get_voxel_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">get_voxel_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ijk</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        returns bounding box of voxel given by indices</span>
 <span class="sd">        i,j,k. Does NOT perform bounds checking!</span>

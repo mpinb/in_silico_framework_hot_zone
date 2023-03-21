@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>model_data_base.IO.LoaderDumper package &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>model_data_base.IO.LoaderDumper &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -13,9 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module" href="model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module.html" />
+    <link rel="prev" title="model_data_base.IO" href="model_data_base.IO.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,7 +40,7 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Interface.html">Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
@@ -45,7 +48,45 @@
 <li class="toctree-l1"><a class="reference internal" href="compatibility.html">compatibility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="model_data_base.html">model_data_base</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="model_data_base.IO.html">model_data_base.IO</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.IO.LoaderDumper</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module.html">model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.get_dumper_string_by_savedir.html">model_data_base.IO.LoaderDumper.get_dumper_string_by_savedir</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.load.html">model_data_base.IO.LoaderDumper.load</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.cell.html">model_data_base.IO.LoaderDumper.cell</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.html">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_csv.html">model_data_base.IO.LoaderDumper.dask_to_csv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_msgpack.html">model_data_base.IO.LoaderDumper.dask_to_msgpack</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.genetic_algorithm_generation.html">model_data_base.IO.LoaderDumper.genetic_algorithm_generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.just_create_folder.html">model_data_base.IO.LoaderDumper.just_create_folder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.just_create_mdb.html">model_data_base.IO.LoaderDumper.just_create_mdb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.numpy_to_msgpack.html">model_data_base.IO.LoaderDumper.numpy_to_msgpack</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.numpy_to_npy.html">model_data_base.IO.LoaderDumper.numpy_to_npy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.numpy_to_npz.html">model_data_base.IO.LoaderDumper.numpy_to_npz</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.pandas_to_msgpack.html">model_data_base.IO.LoaderDumper.pandas_to_msgpack</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.pandas_to_pickle.html">model_data_base.IO.LoaderDumper.pandas_to_pickle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.parent_classes.html">model_data_base.IO.LoaderDumper.parent_classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.reduced_lda_model.html">model_data_base.IO.LoaderDumper.reduced_lda_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.settings.html">model_data_base.IO.LoaderDumper.settings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.to_cloudpickle.html">model_data_base.IO.LoaderDumper.to_cloudpickle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.to_msgpack.html">model_data_base.IO.LoaderDumper.to_msgpack</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.to_pickle.html">model_data_base.IO.LoaderDumper.to_pickle</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.IO.dask_wrappers.html">model_data_base.IO.dask_wrappers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.IO.roberts_formats.html">model_data_base.IO.roberts_formats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.analyze.html">model_data_base.analyze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.model_data_base.html">model_data_base.model_data_base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.settings.html">model_data_base.settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.utils.html">model_data_base.utils</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="nbrun.html">nbrun</a></li>
 <li class="toctree-l1"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
@@ -72,7 +113,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">model_data_base.IO.LoaderDumper package</li>
+          <li class="breadcrumb-item"><a href="model_data_base.html">model_data_base</a></li>
+          <li class="breadcrumb-item"><a href="model_data_base.IO.html">model_data_base.IO</a></li>
+      <li class="breadcrumb-item active">model_data_base.IO.LoaderDumper</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/modules/model_data_base.IO.LoaderDumper.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -82,549 +125,98 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="model-data-base-io-loaderdumper-package">
-<h1>model_data_base.IO.LoaderDumper package<a class="headerlink" href="#model-data-base-io-loaderdumper-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.cell">
-<span id="model-data-base-io-loaderdumper-cell-module"></span><h2>model_data_base.IO.LoaderDumper.cell module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.cell" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.cell.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.cell.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/cell.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.cell.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.cell.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/cell.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.cell.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.cell.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.cell.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/cell.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.cell.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks whether obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.cell.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.cell.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/cell.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.cell.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack">
-<span id="model-data-base-io-loaderdumper-dask-to-categorized-msgpack-module"></span><h2>model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack" title="Permalink to this headline">¶</a></h2>
-<dl>
-<dt>This dumper is designed for dataframes with the following properties:</dt><dd><ul class="simple">
-<li><p>index is str</p></li>
-<li><p>str columns have a lot of repetitive values.</p></li>
-</ul>
-<dl class="simple">
-<dt>How will it save the dataframe?</dt><dd><ol class="arabic simple">
-<li><dl class="simple">
-<dt>If the number of partitions is very big (&gt;10000), it will repartition the</dt><dd><p>dataframe to 5000 partitions. Loading such a dataframe is normaly possible
-within 1 second.</p>
-</dd>
-</dl>
-</li>
-<li></li>
-</ol>
-</dd>
-</dl>
-</dd>
-</dl>
-<p>stores an arbitrary dask dataframe to msgpack. Before saving, all str-columns will be converted to categoricals, in
-each respective partition, if the part of unique values in the respective column is &lt;= 20%. The original datatype
-will be restored if the dataframe is loaded. This therefore only serves as optimization to increase loading speed and
-reduce network traffic for suitable dataframes. Suitable dataframes are for example the synapse_activation dataframe.</p>
-<p>Limitations: This is not tested to work well with dataframes that natively contain categoricals</p>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</code><code class="sig-name descname">Loader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">meta</span></em>, <em class="sig-param"><span class="n">index_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">divisions</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</code><code class="sig-name descname">category_to_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pdf</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#category_to_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str" title="Permalink to this definition">¶</a></dt>
-<dd><p>careful: changes pdf!</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em>, <em class="sig-param"><span class="n">repartition</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">get</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">categorize</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</code><code class="sig-name descname">get_writer_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">categorize</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#get_writer_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns function, that stores pandas dataframe</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</code><code class="sig-name descname">my_dask_writer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ddf</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">optimize_graph</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">categorize</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#my_dask_writer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Very simple method to store a dask dataframe to a bunch of files.
-There was a lot of frustration with the respective dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes
-takes all the ram (512GB!) or takes a very long time to “optimize” / merge the graph.</p>
-<p>Update: this issue was addressed here:
-<a class="reference external" href="https://github.com/dask/dask/issues/1888">https://github.com/dask/dask/issues/1888</a></p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</code><code class="sig-name descname">str_to_category</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pdf</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#str_to_category"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category" title="Permalink to this definition">¶</a></dt>
-<dd><p>careful: changes pdf!</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.dask_to_csv">
-<span id="model-data-base-io-loaderdumper-dask-to-csv-module"></span><h2>model_data_base.IO.LoaderDumper.dask_to_csv module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.dask_to_csv" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_csv.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_csv.</code><code class="sig-name descname">Loader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">meta</span></em>, <em class="sig-param"><span class="n">index_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">divisions</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_csv.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_csv.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_csv.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_csv.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_csv.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_csv.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_csv.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_csv.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_csv.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_csv.chunkIt">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_csv.</code><code class="sig-name descname">chunkIt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">seq</span></em>, <em class="sig-param"><span class="n">num</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_csv.html#chunkIt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_csv.chunkIt" title="Permalink to this definition">¶</a></dt>
-<dd><p>makes approx. equal size chunks out of seq</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_csv.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_csv.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em>, <em class="sig-param"><span class="n">repartition</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">get</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_csv.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_csv.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_csv.get_to_csv_function">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_csv.</code><code class="sig-name descname">get_to_csv_function</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_csv.html#get_to_csv_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_csv.get_to_csv_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns function, that stores pandas dataframe</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_csv.my_to_csv">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_csv.</code><code class="sig-name descname">my_to_csv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ddf</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">optimize_graph</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_csv.html#my_to_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_csv.my_to_csv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Very simple method to store a dask dataframe to a bunch of csv files.
-The reason for it’s creation is a lot of frustration with the respective
-dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes
-takes all the ram (512GB!) or takes a very long time to “optimize” / merge the graph.</p>
-<p>Update: this issue was addressed here:
-<a class="reference external" href="https://github.com/dask/dask/issues/1888">https://github.com/dask/dask/issues/1888</a></p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.dask_to_msgpack">
-<span id="model-data-base-io-loaderdumper-dask-to-msgpack-module"></span><h2>model_data_base.IO.LoaderDumper.dask_to_msgpack module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.dask_to_msgpack" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.dask_to_msgpack.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.dask_to_msgpack.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em>, <em class="sig-param"><span class="n">repartition</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">get</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_msgpack.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_msgpack.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.genetic_algorithm_generation">
-<span id="model-data-base-io-loaderdumper-genetic-algorithm-generation-module"></span><h2>model_data_base.IO.LoaderDumper.genetic_algorithm_generation module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.genetic_algorithm_generation" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.genetic_algorithm_generation.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.genetic_algorithm_generation.</code><code class="sig-name descname">Loader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">generation</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">objectives</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/genetic_algorithm_generation.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.genetic_algorithm_generation.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.genetic_algorithm_generation.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/genetic_algorithm_generation.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.genetic_algorithm_generation.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.genetic_algorithm_generation.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.genetic_algorithm_generation.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/genetic_algorithm_generation.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.genetic_algorithm_generation.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.genetic_algorithm_generation.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.genetic_algorithm_generation.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em>, <em class="sig-param"><span class="n">generation</span></em>, <em class="sig-param"><span class="n">parameters</span></em>, <em class="sig-param"><span class="n">objectives</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/genetic_algorithm_generation.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.genetic_algorithm_generation.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.just_create_folder">
-<span id="model-data-base-io-loaderdumper-just-create-folder-module"></span><h2>model_data_base.IO.LoaderDumper.just_create_folder module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.just_create_folder" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.just_create_folder.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.just_create_folder.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.just_create_folder.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.just_create_folder.</code><code class="sig-name descname">ManagedFolder</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#ManagedFolder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.get_file">
-<code class="sig-name descname">get_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">suffix</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#ManagedFolder.get_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.get_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>if folder only contains one file of specified suffix, this file is returned</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.join">
-<code class="sig-name descname">join</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#ManagedFolder.join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.join" title="Permalink to this definition">¶</a></dt>
-<dd><p>Concatenate any number of strings.</p>
-<p>The string whose method is called is inserted in between each given string.
-The result is returned as a new string.</p>
-<p>Example: ‘.’.join([‘ab’, ‘pq’, ‘rs’]) -&gt; ‘ab.pq.rs’</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.listdir">
-<code class="sig-name descname">listdir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#ManagedFolder.listdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.listdir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.just_create_folder.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.just_create_folder.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.just_create_folder.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.just_create_folder.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.just_create_mdb">
-<span id="model-data-base-io-loaderdumper-just-create-mdb-module"></span><h2>model_data_base.IO.LoaderDumper.just_create_mdb module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.just_create_mdb" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.just_create_mdb.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.just_create_mdb.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_mdb.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_mdb.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.just_create_mdb.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_mdb.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_mdb.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.just_create_mdb.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.just_create_mdb.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_mdb.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_mdb.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.just_create_mdb.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.just_create_mdb.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_mdb.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_mdb.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.numpy_to_msgpack">
-<span id="model-data-base-io-loaderdumper-numpy-to-msgpack-module"></span><h2>model_data_base.IO.LoaderDumper.numpy_to_msgpack module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.numpy_to_msgpack" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_msgpack.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.numpy_to_msgpack.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_msgpack.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_msgpack.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_msgpack.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_msgpack.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_msgpack.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_msgpack.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.numpy_to_msgpack.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_msgpack.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_msgpack.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_msgpack.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.numpy_to_msgpack.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_msgpack.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_msgpack.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.numpy_to_npy">
-<span id="model-data-base-io-loaderdumper-numpy-to-npy-module"></span><h2>model_data_base.IO.LoaderDumper.numpy_to_npy module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.numpy_to_npy" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_npy.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.numpy_to_npy.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_npy.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_npy.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_npy.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_npy.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_npy.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_npy.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.numpy_to_npy.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_npy.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_npy.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_npy.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.numpy_to_npy.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_npy.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_npy.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.numpy_to_npz">
-<span id="model-data-base-io-loaderdumper-numpy-to-npz-module"></span><h2>model_data_base.IO.LoaderDumper.numpy_to_npz module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.numpy_to_npz" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_npz.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.numpy_to_npz.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_npz.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_npz.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_npz.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_npz.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_npz.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_npz.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.numpy_to_npz.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_npz.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_npz.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.numpy_to_npz.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.numpy_to_npz.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/numpy_to_npz.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.numpy_to_npz.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.pandas_to_msgpack">
-<span id="model-data-base-io-loaderdumper-pandas-to-msgpack-module"></span><h2>model_data_base.IO.LoaderDumper.pandas_to_msgpack module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.pandas_to_msgpack" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.pandas_to_msgpack.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.pandas_to_msgpack.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/pandas_to_msgpack.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.pandas_to_msgpack.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.pandas_to_msgpack.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/pandas_to_msgpack.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.pandas_to_msgpack.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.pandas_to_msgpack.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.pandas_to_msgpack.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/pandas_to_msgpack.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.pandas_to_msgpack.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.pandas_to_msgpack.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.pandas_to_msgpack.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/pandas_to_msgpack.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.pandas_to_msgpack.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.pandas_to_pickle">
-<span id="model-data-base-io-loaderdumper-pandas-to-pickle-module"></span><h2>model_data_base.IO.LoaderDumper.pandas_to_pickle module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.pandas_to_pickle" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.pandas_to_pickle.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.pandas_to_pickle.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/pandas_to_pickle.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.pandas_to_pickle.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.pandas_to_pickle.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/pandas_to_pickle.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.pandas_to_pickle.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.pandas_to_pickle.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.pandas_to_pickle.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/pandas_to_pickle.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.pandas_to_pickle.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.pandas_to_pickle.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.pandas_to_pickle.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/pandas_to_pickle.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.pandas_to_pickle.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.parent_classes">
-<span id="model-data-base-io-loaderdumper-parent-classes-module"></span><h2>model_data_base.IO.LoaderDumper.parent_classes module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.parent_classes" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.parent_classes.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.parent_classes.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/parent_classes.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.parent_classes.Loader.repair">
-<code class="sig-name descname">repair</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/parent_classes.html#Loader.repair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader.repair" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.reduced_lda_model">
-<span id="model-data-base-io-loaderdumper-reduced-lda-model-module"></span><h2>model_data_base.IO.LoaderDumper.reduced_lda_model module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.reduced_lda_model" title="Permalink to this headline">¶</a></h2>
-<p>format for reduced models.
-spike times and lda values are kept with an accuracy of .01.
-The index of the spike times is reset, i.e. the sim_trial_index is not kept.
-The attribute <cite>mdb_list</cite>, which contains instances of ModelDataBase, is replaced
-by a list of strings that only contain the unique_id of each database. This prevents
-unpickling errors in case the ModelDataBase has been removed.</p>
-<p>Older versions of reduced models, that do not have the attribute <cite>st</cite> will be stored with
-an empty dataframe (Rm.st = pd.DataFrame) to be compliant with the new version</p>
-<p>Reading: takes 24% of the time, to_cloudpickle needs (4 x better reading speed)
-Writing: takes 170% of the time, to_cloudpickle needs (70% lower writing speed)
-Filesize: takes 14% of the space, to cloudpickle needs (7 x more space efficient)</p>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.reduced_lda_model.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.reduced_lda_model.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/reduced_lda_model.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.reduced_lda_model.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.reduced_lda_model.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/reduced_lda_model.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.reduced_lda_model.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.reduced_lda_model.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.reduced_lda_model.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/reduced_lda_model.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.reduced_lda_model.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.reduced_lda_model.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.reduced_lda_model.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/reduced_lda_model.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.reduced_lda_model.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.settings">
-<span id="model-data-base-io-loaderdumper-settings-module"></span><h2>model_data_base.IO.LoaderDumper.settings module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.settings" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.to_cloudpickle">
-<span id="model-data-base-io-loaderdumper-to-cloudpickle-module"></span><h2>model_data_base.IO.LoaderDumper.to_cloudpickle module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.to_cloudpickle" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.to_cloudpickle.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.to_cloudpickle.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_cloudpickle.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_cloudpickle.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.to_cloudpickle.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_cloudpickle.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_cloudpickle.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.to_cloudpickle.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.to_cloudpickle.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_cloudpickle.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_cloudpickle.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.to_cloudpickle.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.to_cloudpickle.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_cloudpickle.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_cloudpickle.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.to_msgpack">
-<span id="model-data-base-io-loaderdumper-to-msgpack-module"></span><h2>model_data_base.IO.LoaderDumper.to_msgpack module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.to_msgpack" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.to_msgpack.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.to_msgpack.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_msgpack.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_msgpack.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.to_msgpack.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_msgpack.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_msgpack.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.to_msgpack.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.to_msgpack.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_msgpack.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_msgpack.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.to_msgpack.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.to_msgpack.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_msgpack.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_msgpack.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper.to_pickle">
-<span id="model-data-base-io-loaderdumper-to-pickle-module"></span><h2>model_data_base.IO.LoaderDumper.to_pickle module<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper.to_pickle" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="model_data_base.IO.LoaderDumper.to_pickle.Loader">
-<em class="property">class </em><code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.to_pickle.</code><code class="sig-name descname">Loader</code><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_pickle.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_pickle.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model_data_base.IO.LoaderDumper.parent_classes.Loader" title="model_data_base.IO.LoaderDumper.parent_classes.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes.Loader</span></code></a></p>
-<dl class="py method">
-<dt id="model_data_base.IO.LoaderDumper.to_pickle.Loader.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_pickle.html#Loader.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_pickle.Loader.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.to_pickle.check">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.to_pickle.</code><code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_pickle.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_pickle.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.to_pickle.dump">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.to_pickle.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/to_pickle.html#dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.to_pickle.dump" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.LoaderDumper">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.</code><code class="sig-name descname">get_dumper_string_by_dumper_module</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dumper_module</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper.html#get_dumper_string_by_dumper_module"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.get_dumper_string_by_savedir">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.</code><code class="sig-name descname">get_dumper_string_by_savedir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper.html#get_dumper_string_by_savedir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.get_dumper_string_by_savedir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.LoaderDumper.load">
-<code class="sig-prename descclassname">model_data_base.IO.LoaderDumper.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savedir</span></em>, <em class="sig-param"><span class="n">load_data</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Standard interface to load data, that was saved to savedir
-with an arbitrary dumper</p>
-</dd></dl>
-
-</div>
+  <div class="section" id="module-model_data_base.IO.LoaderDumper">
+<span id="model-data-base-io-loaderdumper"></span><h1>model_data_base.IO.LoaderDumper<a class="headerlink" href="#module-model_data_base.IO.LoaderDumper" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module.html#model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module" title="model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dumper_string_by_dumper_module</span></code></a>(dumper_module)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.get_dumper_string_by_savedir.html#model_data_base.IO.LoaderDumper.get_dumper_string_by_savedir" title="model_data_base.IO.LoaderDumper.get_dumper_string_by_savedir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dumper_string_by_savedir</span></code></a>(savedir)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.load.html#model_data_base.IO.LoaderDumper.load" title="model_data_base.IO.LoaderDumper.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(savedir[, load_data])</p></td>
+<td><p>Standard interface to load data, that was saved to savedir with an arbitrary dumper</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Modules</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.cell.html#module-model_data_base.IO.LoaderDumper.cell" title="model_data_base.IO.LoaderDumper.cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.cell</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.html#module-model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack</span></code></a></p></td>
+<td><p>This dumper is designed for dataframes with the following properties:</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_csv.html#module-model_data_base.IO.LoaderDumper.dask_to_csv" title="model_data_base.IO.LoaderDumper.dask_to_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_csv</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_msgpack.html#module-model_data_base.IO.LoaderDumper.dask_to_msgpack" title="model_data_base.IO.LoaderDumper.dask_to_msgpack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_msgpack</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.genetic_algorithm_generation.html#module-model_data_base.IO.LoaderDumper.genetic_algorithm_generation" title="model_data_base.IO.LoaderDumper.genetic_algorithm_generation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.genetic_algorithm_generation</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.just_create_folder.html#module-model_data_base.IO.LoaderDumper.just_create_folder" title="model_data_base.IO.LoaderDumper.just_create_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.just_create_folder</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.just_create_mdb.html#module-model_data_base.IO.LoaderDumper.just_create_mdb" title="model_data_base.IO.LoaderDumper.just_create_mdb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.just_create_mdb</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.numpy_to_msgpack.html#module-model_data_base.IO.LoaderDumper.numpy_to_msgpack" title="model_data_base.IO.LoaderDumper.numpy_to_msgpack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.numpy_to_msgpack</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.numpy_to_npy.html#module-model_data_base.IO.LoaderDumper.numpy_to_npy" title="model_data_base.IO.LoaderDumper.numpy_to_npy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.numpy_to_npy</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.numpy_to_npz.html#module-model_data_base.IO.LoaderDumper.numpy_to_npz" title="model_data_base.IO.LoaderDumper.numpy_to_npz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.numpy_to_npz</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.pandas_to_msgpack.html#module-model_data_base.IO.LoaderDumper.pandas_to_msgpack" title="model_data_base.IO.LoaderDumper.pandas_to_msgpack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.pandas_to_msgpack</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.pandas_to_pickle.html#module-model_data_base.IO.LoaderDumper.pandas_to_pickle" title="model_data_base.IO.LoaderDumper.pandas_to_pickle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.pandas_to_pickle</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.parent_classes.html#module-model_data_base.IO.LoaderDumper.parent_classes" title="model_data_base.IO.LoaderDumper.parent_classes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.parent_classes</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.reduced_lda_model.html#module-model_data_base.IO.LoaderDumper.reduced_lda_model" title="model_data_base.IO.LoaderDumper.reduced_lda_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.reduced_lda_model</span></code></a></p></td>
+<td><p>format for reduced models.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.settings.html#module-model_data_base.IO.LoaderDumper.settings" title="model_data_base.IO.LoaderDumper.settings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.settings</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.to_cloudpickle.html#module-model_data_base.IO.LoaderDumper.to_cloudpickle" title="model_data_base.IO.LoaderDumper.to_cloudpickle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.to_cloudpickle</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.to_msgpack.html#module-model_data_base.IO.LoaderDumper.to_msgpack" title="model_data_base.IO.LoaderDumper.to_msgpack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.to_msgpack</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.to_pickle.html#module-model_data_base.IO.LoaderDumper.to_pickle" title="model_data_base.IO.LoaderDumper.to_pickle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.IO.LoaderDumper.to_pickle</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="model_data_base.IO.html" class="btn btn-neutral float-left" title="model_data_base.IO" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module.html" class="btn btn-neutral float-right" title="model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

@@ -1,6 +1,30 @@
 simrun2.generate\_synapse\_activations
 ======================================
 
-.. currentmodule:: simrun2
+.. automodule:: simrun2.generate_synapse_activations
+  
+   
+   
+   
 
-.. automodule:: generate_synapse_activations
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      generate_synapse_activations
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

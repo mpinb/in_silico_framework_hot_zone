@@ -25,7 +25,7 @@
 
 .. autosummary::
    :toctree:
-   :template: custom-module-template.rst                 <-- add this line
+   :template: custom-module-template.rst
    :recursive:
 
    simrun3.PSP_with_cell_modification

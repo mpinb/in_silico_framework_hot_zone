@@ -1,6 +1,31 @@
 simrun3.robust\_dask\_delayed\_execution
 ========================================
 
-.. currentmodule:: simrun3
+.. automodule:: simrun3.robust_dask_delayed_execution
+  
+   
+   
+   
 
-.. automodule:: robust_dask_delayed_execution
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      RobustDaskDelayedExecution
+   
+   
+
+   
+   
+   
+
+
+

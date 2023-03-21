@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread" href="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.html" />
+    <link rel="prev" title="model_data_base.sqlite_backend.cloudsqlitedict.reraise" href="model_data_base.sqlite_backend.cloudsqlitedict.reraise.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="model_data_base.html">model_data_base</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.html">model_data_base.IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.analyze.html">model_data_base.analyze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.model_data_base.html">model_data_base.model_data_base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.settings.html">model_data_base.settings</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.html">model_data_base.sqlite_backend.cloudsqlitedict</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.decode.html">model_data_base.sqlite_backend.cloudsqlitedict.decode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.encode.html">model_data_base.sqlite_backend.cloudsqlitedict.encode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.open.html">model_data_base.sqlite_backend.cloudsqlitedict.open</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.reraise.html">model_data_base.sqlite_backend.cloudsqlitedict.reraise</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.html">model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.sqlite_backend.sqlite_backend.html">model_data_base.sqlite_backend.sqlite_backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.sqlite_backend.tuplecloudsqlitedict.html">model_data_base.sqlite_backend.tuplecloudsqlitedict</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.utils.html">model_data_base.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="model_data_base.html">model_data_base</a></li>
+          <li class="breadcrumb-item"><a href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a></li>
+          <li class="breadcrumb-item"><a href="model_data_base.sqlite_backend.cloudsqlitedict.html">model_data_base.sqlite_backend.cloudsqlitedict</a></li>
+      <li class="breadcrumb-item active">model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="model-data-base-sqlite-backend-cloudsqlitedict-sqlitedict">
+<h1>model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict<a class="headerlink" href="#model-data-base-sqlite-backend-cloudsqlitedict-sqlitedict" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict">
+<em class="property">class </em><code class="sig-prename descclassname">model_data_base.sqlite_backend.cloudsqlitedict.</code><code class="sig-name descname">SqliteDict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tablename</span><span class="o">=</span><span class="default_value">'unnamed'</span></em>, <em class="sig-param"><span class="n">flag</span><span class="o">=</span><span class="default_value">'c'</span></em>, <em class="sig-param"><span class="n">autocommit</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">journal_mode</span><span class="o">=</span><span class="default_value">'DELETE'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">collections.UserDict</span></code></p>
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tablename</span><span class="o">=</span><span class="default_value">'unnamed'</span></em>, <em class="sig-param"><span class="n">flag</span><span class="o">=</span><span class="default_value">'c'</span></em>, <em class="sig-param"><span class="n">autocommit</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">journal_mode</span><span class="o">=</span><span class="default_value">'DELETE'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a thread-safe sqlite-backed dictionary. The dictionary will
+be a table <cite>tablename</cite> in database file <cite>filename</cite>. A single file (=database)
+may contain multiple tables.</p>
+<p>If no <cite>filename</cite> is given, a random file in temp will be used (and deleted
+from temp once the dict is closed/deleted).</p>
+<p>If you enable <cite>autocommit</cite>, changes will be committed after each operation
+(more inefficient but safer). Otherwise, changes are committed on <cite>self.commit()</cite>,
+<cite>self.clear()</cite> and <cite>self.close()</cite>.</p>
+<p>Set <cite>journal_mode</cite> to ‘OFF’ if you’re experiencing sqlite I/O problems
+or if you need performance and don’t care about crash-consistency.</p>
+<dl class="simple">
+<dt>The <cite>flag</cite> parameter. Exactly one of:</dt><dd><p>‘c’: default mode, open for read/write, creating the db/table if necessary.
+‘w’: open for r/w, but drop <cite>tablename</cite> contents first (start with empty table)
+‘r’: open as read-only
+‘n’: create a new database (erasing any existing tables, not just <cite>tablename</cite>!).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.__init__" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([filename, tablename, flag, …])</p></td>
+<td><p>Initialize a thread-safe sqlite-backed dictionary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.clear" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code>([do_log, force])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.commit" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.commit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">commit</span></code></a>([blocking])</p></td>
+<td><p>Persist all data to disk.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fromkeys</span></code>(iterable[, value])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.get" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code></a>(k[,d])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.items" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.items"><code class="xref py py-obj docutils literal notranslate"><span class="pre">items</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">iteritems</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterkeys</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">itervalues</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.keys" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.pop" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code></a>(k[,d])</p></td>
+<td><p>If key is not found, d is returned if given, otherwise KeyError is raised.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.popitem" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.popitem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">popitem</span></code></a>()</p></td>
+<td><p>as a 2-tuple; but raise KeyError if D is empty.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.setdefault" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.setdefault"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setdefault</span></code></a>(k[,d])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.sync" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.sync"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sync</span></code></a>([blocking])</p></td>
+<td><p>Persist all data to disk.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.terminate" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.terminate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">terminate</span></code></a>()</p></td>
+<td><p>Delete the underlying database file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.update" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>([E, ]**F)</p></td>
+<td><p>If E present and has a .keys() method, does:     for k in E: D[k] = E[k] If E present and lacks .keys() method, does:     for (k, v) in E: D[k] = v In either case, this is followed by: for k, v in F.items(): D[k] = v</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.values" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">values</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">VALID_FLAGS</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.clear">
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None.  Remove all items from D.<a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.commit">
+<code class="sig-name descname">commit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">blocking</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Persist all data to disk.</p>
+<p>When <cite>blocking</cite> is False, the commit command is queued, but the data is
+not guaranteed persisted (default implication when autocommit=True).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">k</em><span class="optional">[</span>, <em class="sig-param">d</em><span class="optional">]</span><span class="sig-paren">)</span> &#x2192; D[k] if k in D, else d.  d defaults to None.<a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.items">
+<code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a set-like object providing a view on D’s items<a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.keys">
+<code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a set-like object providing a view on D’s keys<a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.pop">
+<code class="sig-name descname">pop</code><span class="sig-paren">(</span><em class="sig-param">k</em><span class="optional">[</span>, <em class="sig-param">d</em><span class="optional">]</span><span class="sig-paren">)</span> &#x2192; v, remove specified key and return the corresponding value.<a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>If key is not found, d is returned if given, otherwise KeyError is raised.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.popitem">
+<code class="sig-name descname">popitem</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; (k, v), remove and return some (key, value) pair<a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.popitem" title="Permalink to this definition">¶</a></dt>
+<dd><p>as a 2-tuple; but raise KeyError if D is empty.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.setdefault">
+<code class="sig-name descname">setdefault</code><span class="sig-paren">(</span><em class="sig-param">k</em><span class="optional">[</span>, <em class="sig-param">d</em><span class="optional">]</span><span class="sig-paren">)</span> &#x2192; D.get(k,d), also set D[k]=d if k not in D<a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.setdefault" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.sync">
+<code class="sig-name descname">sync</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">blocking</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Persist all data to disk.</p>
+<p>When <cite>blocking</cite> is False, the commit command is queued, but the data is
+not guaranteed persisted (default implication when autocommit=True).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.terminate">
+<code class="sig-name descname">terminate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.terminate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.terminate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the underlying database file. Use with care.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param">E</em>, <span class="optional">]</span><em class="sig-param">**F</em><span class="sig-paren">)</span> &#x2192; None.  Update D from mapping/iterable E and F.<a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>If E present and has a .keys() method, does:     for k in E: D[k] = E[k]
+If E present and lacks .keys() method, does:     for (k, v) in E: D[k] = v
+In either case, this is followed by: for k, v in F.items(): D[k] = v</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.values">
+<code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; an object providing a view on D’s values<a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="model_data_base.sqlite_backend.cloudsqlitedict.reraise.html" class="btn btn-neutral float-left" title="model_data_base.sqlite_backend.cloudsqlitedict.reraise" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.html" class="btn btn-neutral float-right" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

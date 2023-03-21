@@ -1,6 +1,34 @@
 model\_data\_base.IO
 ====================
 
-.. currentmodule:: model_data_base
+.. automodule:: model_data_base.IO
+  
+   
+   
+   
 
-.. automodule:: IO
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   model_data_base.IO.LoaderDumper
+   model_data_base.IO.dask_wrappers
+   model_data_base.IO.roberts_formats
+

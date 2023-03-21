@@ -1,6 +1,30 @@
 tests.decorators
 ================
 
-.. currentmodule:: tests
+.. automodule:: tests.decorators
+  
+   
+   
+   
 
-.. automodule:: decorators
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      testlevel
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

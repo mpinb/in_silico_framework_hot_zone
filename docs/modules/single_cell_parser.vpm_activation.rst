@@ -1,6 +1,38 @@
 single\_cell\_parser.vpm\_activation
 ====================================
 
-.. currentmodule:: single_cell_parser
+.. automodule:: single_cell_parser.vpm_activation
+  
+   
+   
+   .. rubric:: Module Attributes
 
-.. automodule:: vpm_activation
+   .. autosummary::
+      :toctree:
+   
+      vpmActiveFrac
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      main
+      run_sim
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

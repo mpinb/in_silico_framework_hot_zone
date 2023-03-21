@@ -1,6 +1,33 @@
 tests.test\_spike\_analysis
 ===========================
 
-.. currentmodule:: tests
+.. automodule:: tests.test_spike_analysis
+  
+   
+   
+   
 
-.. automodule:: test_spike_analysis
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   tests.test_spike_analysis.context
+   tests.test_spike_analysis.core_test
+

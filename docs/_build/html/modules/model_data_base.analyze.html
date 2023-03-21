@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="model_data_base.distributed_lock" href="model_data_base.distributed_lock.html" />
-    <link rel="prev" title="model_data_base.IO" href="model_data_base.IO.html" /> 
+    <link rel="next" title="model_data_base.analyze.split_synapse_activation" href="model_data_base.analyze.split_synapse_activation.html" />
+    <link rel="prev" title="model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format" href="model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,7 +50,17 @@
 <li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="model_data_base.html">model_data_base</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.html">model_data_base.IO</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">model_data_base.analyze</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">model_data_base.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.analyze.split_synapse_activation.html">model_data_base.analyze.split_synapse_activation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.analyze.LDA.html">model_data_base.analyze.LDA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.analyze.analyze_input_mapper_result.html">model_data_base.analyze.analyze_input_mapper_result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.analyze.burst_detection.html">model_data_base.analyze.burst_detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.analyze.spatial_binning.html">model_data_base.analyze.spatial_binning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.analyze.spatiotemporal_binning.html">model_data_base.analyze.spatiotemporal_binning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.analyze.spike_detection.html">model_data_base.analyze.spike_detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.analyze.temporal_binning.html">model_data_base.analyze.temporal_binning</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.model_data_base.html">model_data_base.model_data_base</a></li>
@@ -95,16 +106,58 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="model-data-base-analyze">
-<h1>model_data_base.analyze<a class="headerlink" href="#model-data-base-analyze" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-model_data_base.analyze">
+<span id="model-data-base-analyze"></span><h1>model_data_base.analyze<a class="headerlink" href="#module-model_data_base.analyze" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.analyze.split_synapse_activation.html#model_data_base.analyze.split_synapse_activation" title="model_data_base.analyze.split_synapse_activation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_synapse_activation</span></code></a>(sa[, selfcheck, …])</p></td>
+<td><p>Splits synapse activation in EXC and INH component.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Modules</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.analyze.LDA.html#module-model_data_base.analyze.LDA" title="model_data_base.analyze.LDA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.analyze.LDA</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.analyze.analyze_input_mapper_result.html#module-model_data_base.analyze.analyze_input_mapper_result" title="model_data_base.analyze.analyze_input_mapper_result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.analyze.analyze_input_mapper_result</span></code></a></p></td>
+<td><p>This module contains methods to compare the result of the SingleCellInputMapper to the neuronet population.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.analyze.burst_detection.html#module-model_data_base.analyze.burst_detection" title="model_data_base.analyze.burst_detection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.analyze.burst_detection</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.analyze.spatial_binning.html#module-model_data_base.analyze.spatial_binning" title="model_data_base.analyze.spatial_binning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.analyze.spatial_binning</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.analyze.spatiotemporal_binning.html#module-model_data_base.analyze.spatiotemporal_binning" title="model_data_base.analyze.spatiotemporal_binning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.analyze.spatiotemporal_binning</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.analyze.spike_detection.html#module-model_data_base.analyze.spike_detection" title="model_data_base.analyze.spike_detection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.analyze.spike_detection</span></code></a>(ddf)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.analyze.temporal_binning.html#module-model_data_base.analyze.temporal_binning" title="model_data_base.analyze.temporal_binning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_data_base.analyze.temporal_binning</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="model_data_base.IO.html" class="btn btn-neutral float-left" title="model_data_base.IO" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="model_data_base.distributed_lock.html" class="btn btn-neutral float-right" title="model_data_base.distributed_lock" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format.html" class="btn btn-neutral float-left" title="model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.analyze.split_synapse_activation.html" class="btn btn-neutral float-right" title="model_data_base.analyze.split_synapse_activation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

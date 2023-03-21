@@ -1,6 +1,34 @@
 tests.test\_visualisation
 =========================
 
-.. currentmodule:: tests
+.. automodule:: tests.test_visualisation
+  
+   
+   
+   
 
-.. automodule:: test_visualisation
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   tests.test_visualisation.context
+   tests.test_visualisation.decorators
+   tests.test_visualisation.single_cell_visualizer_test
+

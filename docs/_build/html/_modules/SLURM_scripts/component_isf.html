@@ -13,6 +13,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -150,7 +151,7 @@
 <span class="c1">#################################</span>
 
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
-<div class="viewcode-block" id="Lock"><a class="viewcode-back" href="../../modules/SLURM_scripts.html#SLURM_scripts.component_isf.Lock">[docs]</a><span class="nd">@contextmanager</span>
+<div class="viewcode-block" id="Lock"><a class="viewcode-back" href="../../modules/SLURM_scripts.component_isf.Lock.html#SLURM_scripts.component_isf.Lock">[docs]</a><span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">Lock</span><span class="p">():</span>
     <span class="c1"># Code to acquire resource, e.g.:</span>
     <span class="n">lock</span>  <span class="o">=</span> <span class="n">fasteners</span><span class="o">.</span><span class="n">InterProcessLock</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">management_dir</span><span class="p">,</span> <span class="s1">&#39;lock&#39;</span><span class="p">))</span>    
@@ -160,7 +161,7 @@
     <span class="k">finally</span><span class="p">:</span>
         <span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="get_process_number"><a class="viewcode-back" href="../../modules/SLURM_scripts.html#SLURM_scripts.component_isf.get_process_number">[docs]</a><span class="k">def</span> <span class="nf">get_process_number</span><span class="p">():</span>
+<div class="viewcode-block" id="get_process_number"><a class="viewcode-back" href="../../modules/SLURM_scripts.component_isf.get_process_number.html#SLURM_scripts.component_isf.get_process_number">[docs]</a><span class="k">def</span> <span class="nf">get_process_number</span><span class="p">():</span>
     <span class="k">with</span> <span class="n">Lock</span><span class="p">()</span> <span class="k">as</span> <span class="n">lock</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">lock</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="sa">b</span><span class="s1">&#39;_sync&#39;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
@@ -177,7 +178,7 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;I am process number </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">x</span></div>
 
-<div class="viewcode-block" id="reset_process_number"><a class="viewcode-back" href="../../modules/SLURM_scripts.html#SLURM_scripts.component_isf.reset_process_number">[docs]</a><span class="k">def</span> <span class="nf">reset_process_number</span><span class="p">():</span>
+<div class="viewcode-block" id="reset_process_number"><a class="viewcode-back" href="../../modules/SLURM_scripts.component_isf.reset_process_number.html#SLURM_scripts.component_isf.reset_process_number">[docs]</a><span class="k">def</span> <span class="nf">reset_process_number</span><span class="p">():</span>
     <span class="k">with</span> <span class="n">Lock</span><span class="p">()</span> <span class="k">as</span> <span class="n">lock</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">lock</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="sa">b</span><span class="s1">&#39;_sync&#39;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -189,10 +190,10 @@
 <span class="c1">#################################################</span>
 <span class="c1"># setting up locking server</span>
 <span class="c1">#################################################</span>
-<div class="viewcode-block" id="get_locking_file_path"><a class="viewcode-back" href="../../modules/SLURM_scripts.html#SLURM_scripts.component_isf.get_locking_file_path">[docs]</a><span class="k">def</span> <span class="nf">get_locking_file_path</span><span class="p">():</span>
+<div class="viewcode-block" id="get_locking_file_path"><a class="viewcode-back" href="../../modules/SLURM_scripts.component_isf.get_locking_file_path.html#SLURM_scripts.component_isf.get_locking_file_path">[docs]</a><span class="k">def</span> <span class="nf">get_locking_file_path</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">management_dir</span><span class="p">,</span> <span class="s1">&#39;locking_server&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="setup_locking_server"><a class="viewcode-back" href="../../modules/SLURM_scripts.html#SLURM_scripts.component_isf.setup_locking_server">[docs]</a><span class="k">def</span> <span class="nf">setup_locking_server</span><span class="p">(</span><span class="n">cluster</span><span class="p">):</span>
+<div class="viewcode-block" id="setup_locking_server"><a class="viewcode-back" href="../../modules/SLURM_scripts.component_isf.setup_locking_server.html#SLURM_scripts.component_isf.setup_locking_server">[docs]</a><span class="k">def</span> <span class="nf">setup_locking_server</span><span class="p">(</span><span class="n">cluster</span><span class="p">):</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;setting up locking server&#39;</span><span class="p">)</span>
     <span class="c1">#command = &#39;redis-server --save &quot;&quot; --appendonly no --port 8885 --protected-mode no &amp;&#39;    </span>
     <span class="c1">#config = [dict(type = &#39;redis&#39;, config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]</span>
@@ -201,14 +202,14 @@
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">get_locking_file_path</span><span class="p">(),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">config</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="setup_locking_config"><a class="viewcode-back" href="../../modules/SLURM_scripts.html#SLURM_scripts.component_isf.setup_locking_config">[docs]</a><span class="k">def</span> <span class="nf">setup_locking_config</span><span class="p">():</span>
+<div class="viewcode-block" id="setup_locking_config"><a class="viewcode-back" href="../../modules/SLURM_scripts.component_isf.setup_locking_config.html#SLURM_scripts.component_isf.setup_locking_config">[docs]</a><span class="k">def</span> <span class="nf">setup_locking_config</span><span class="p">():</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;updating locking configuration to use new server&#39;</span><span class="p">)</span>
     <span class="k">while</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">get_locking_file_path</span><span class="p">()):</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;ISF_DISTRIBUTED_LOCK_CONFIG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_locking_file_path</span><span class="p">()</span> 
     <span class="n">check_locking_config</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="check_locking_config"><a class="viewcode-back" href="../../modules/SLURM_scripts.html#SLURM_scripts.component_isf.check_locking_config">[docs]</a><span class="k">def</span> <span class="nf">check_locking_config</span><span class="p">():</span>
+<div class="viewcode-block" id="check_locking_config"><a class="viewcode-back" href="../../modules/SLURM_scripts.component_isf.check_locking_config.html#SLURM_scripts.component_isf.check_locking_config">[docs]</a><span class="k">def</span> <span class="nf">check_locking_config</span><span class="p">():</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;locking configuration&#39;</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;distributed lock server: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mdb_dist_lock</span><span class="o">.</span><span class="n">server</span><span class="p">))</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;distributed lock client: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mdb_dist_lock</span><span class="o">.</span><span class="n">client</span><span class="p">))</span></div>
@@ -219,7 +220,7 @@
 <span class="k">def</span> <span class="nf">_get_sfile</span><span class="p">(</span><span class="n">management_dir</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">management_dir</span><span class="p">,</span> <span class="s1">&#39;scheduler.json&#39;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">management_dir</span><span class="p">,</span> <span class="s1">&#39;scheduler3.json&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="setup_dask_scheduler"><a class="viewcode-back" href="../../modules/SLURM_scripts.html#SLURM_scripts.component_isf.setup_dask_scheduler">[docs]</a><span class="k">def</span> <span class="nf">setup_dask_scheduler</span><span class="p">(</span><span class="n">management_dir</span><span class="p">):</span>
+<div class="viewcode-block" id="setup_dask_scheduler"><a class="viewcode-back" href="../../modules/SLURM_scripts.component_isf.setup_dask_scheduler.html#SLURM_scripts.component_isf.setup_dask_scheduler">[docs]</a><span class="k">def</span> <span class="nf">setup_dask_scheduler</span><span class="p">(</span><span class="n">management_dir</span><span class="p">):</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;setting up dask-scheduler&#39;</span><span class="p">)</span>
     <span class="n">sfile</span><span class="p">,</span> <span class="n">sfile3</span> <span class="o">=</span> <span class="n">_get_sfile</span><span class="p">(</span><span class="n">management_dir</span><span class="p">)</span>
 
@@ -236,7 +237,7 @@
 <span class="c1">#################################################</span>
 <span class="c1"># setting up dask-workers</span>
 <span class="c1">#################################################</span>
-<div class="viewcode-block" id="setup_dask_workers"><a class="viewcode-back" href="../../modules/SLURM_scripts.html#SLURM_scripts.component_isf.setup_dask_workers">[docs]</a><span class="k">def</span> <span class="nf">setup_dask_workers</span><span class="p">(</span><span class="n">management_dir</span><span class="p">):</span>
+<div class="viewcode-block" id="setup_dask_workers"><a class="viewcode-back" href="../../modules/SLURM_scripts.component_isf.setup_dask_workers.html#SLURM_scripts.component_isf.setup_dask_workers">[docs]</a><span class="k">def</span> <span class="nf">setup_dask_workers</span><span class="p">(</span><span class="n">management_dir</span><span class="p">):</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;setting up dask-workers&#39;</span><span class="p">)</span>
     <span class="n">n_cpus</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># maybe one less</span>
     <span class="n">sfile</span><span class="p">,</span> <span class="n">sfile3</span> <span class="o">=</span> <span class="n">_get_sfile</span><span class="p">(</span><span class="n">management_dir</span><span class="p">)</span>
@@ -256,7 +257,7 @@
 <span class="c1">##############################################</span>
 <span class="c1"># setting up jupyter-notebook</span>
 <span class="c1">#############################################</span>
-<div class="viewcode-block" id="setup_jupyter_notebook"><a class="viewcode-back" href="../../modules/SLURM_scripts.html#SLURM_scripts.component_isf.setup_jupyter_notebook">[docs]</a><span class="k">def</span> <span class="nf">setup_jupyter_notebook</span><span class="p">(</span><span class="n">custom_port</span><span class="p">):</span>
+<div class="viewcode-block" id="setup_jupyter_notebook"><a class="viewcode-back" href="../../modules/SLURM_scripts.component_isf.setup_jupyter_notebook.html#SLURM_scripts.component_isf.setup_jupyter_notebook">[docs]</a><span class="k">def</span> <span class="nf">setup_jupyter_notebook</span><span class="p">(</span><span class="n">custom_port</span><span class="p">):</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;setting up jupyter notebook (</span><span class="si">{}</span><span class="s2">) &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">custom_port</span><span class="p">))</span>
     <span class="n">check_locking_config</span><span class="p">()</span> 
 

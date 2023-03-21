@@ -1,6 +1,30 @@
 singlecell\_input\_mapper.map\_singlecell\_inputs
 =================================================
 
-.. currentmodule:: singlecell_input_mapper
+.. automodule:: singlecell_input_mapper.map_singlecell_inputs
+  
+   
+   
+   
 
-.. automodule:: map_singlecell_inputs
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      map_singlecell_inputs
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

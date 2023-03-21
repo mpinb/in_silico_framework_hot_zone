@@ -1,6 +1,32 @@
 single\_cell\_parser.synapse
 ============================
 
-.. currentmodule:: single_cell_parser
+.. automodule:: single_cell_parser.synapse
+  
+   
+   
+   
 
-.. automodule:: synapse
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      ExSyn
+      Synapse
+   
+   
+
+   
+   
+   
+
+
+

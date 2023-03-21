@@ -1,6 +1,31 @@
 biophysics\_fitting.model\_selection
 ====================================
 
-.. currentmodule:: biophysics_fitting
+.. automodule:: biophysics_fitting.model_selection
+  
+   
+   
+   
 
-.. automodule:: model_selection
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      get_model_pdf_from_mdb
+      get_pdf_selected
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

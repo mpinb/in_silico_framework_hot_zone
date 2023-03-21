@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="nbrun.dict_to_code" href="%3C--%20add%20this%20line/nbrun.dict_to_code.html" />
-    <link rel="prev" title="model_data_base.utils" href="model_data_base.utils.html" /> 
+    <link rel="next" title="nbrun.dict_to_code" href="nbrun.dict_to_code.html" />
+    <link rel="prev" title="model_data_base.utils.mkdtemp" href="model_data_base.utils.mkdtemp.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,8 +50,8 @@
 <li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model_data_base.html">model_data_base</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">nbrun</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/nbrun.dict_to_code.html">nbrun.dict_to_code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/nbrun.run_notebook.html">nbrun.run_notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbrun.dict_to_code.html">nbrun.dict_to_code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbrun.run_notebook.html">nbrun.run_notebook</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
@@ -102,10 +103,10 @@ execute the other notebooks.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="%3C--%20add%20this%20line/nbrun.dict_to_code.html#nbrun.dict_to_code" title="nbrun.dict_to_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_to_code</span></code></a>(mapping)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="nbrun.dict_to_code.html#nbrun.dict_to_code" title="nbrun.dict_to_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_to_code</span></code></a>(mapping)</p></td>
 <td><p>Convert input dict <cite>mapping</cite> to a string containing python code.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="%3C--%20add%20this%20line/nbrun.run_notebook.html#nbrun.run_notebook" title="nbrun.run_notebook"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_notebook</span></code></a>(notebook_name[, nb_suffix, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="nbrun.run_notebook.html#nbrun.run_notebook" title="nbrun.run_notebook"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_notebook</span></code></a>(notebook_name[, nb_suffix, …])</p></td>
 <td><p>Runs a notebook and saves the output in a new notebook. Executes a notebook, optionally passing “arguments” in a way roughly similar to passing arguments to a function. Notebook arguments are passed in a dictionary (<cite>nb_kwargs</cite>) which is converted to a string containing python code, then inserted in the notebook as a code cell. The code contains only assignments of variables which can be used to control the execution of a suitably written notebook. When calling a notebook, you need to know which arguments (variables) to pass. Differently from functions, no check on the input arguments is performed. The “notebook signature” is only informally declared in a conventional markdown cell at the beginning of the notebook. :param notebook_name: name of the notebook to be executed. :type notebook_name: string :param nb_suffix: suffix to append to the file name of the executed                   notebook. :type nb_suffix: string :param nb_kwargs: If not None, this dict is converted to a                   string of python assignments with keys representing variables                   names and values variables content. This string is inserted as                   code-cell in the notebook to be executed. :type nb_kwargs: dict or None :param insert_pos: position of insertion of the code-cell containing                    the input arguments. Default is 1 (i.e. second cell). With this                    default, the input notebook can define, in the first cell, default                    values of input arguments (used when the notebook is executed                    with no arguments or through the Notebook GUI). :type insert_pos: int :param timeout: timeout in seconds after which the execution is aborted. :type timeout: int :param execute_kwargs: additional arguments passed to                        <cite>ExecutePreprocessor</cite>. :type execute_kwargs: dict :param out_path: folder where to save the output notebook. :type out_path: string.</p></td>
 </tr>
 </tbody>
@@ -116,8 +117,8 @@ execute the other notebooks.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="model_data_base.utils.html" class="btn btn-neutral float-left" title="model_data_base.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="%3C--%20add%20this%20line/nbrun.dict_to_code.html" class="btn btn-neutral float-right" title="nbrun.dict_to_code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.utils.mkdtemp.html" class="btn btn-neutral float-left" title="model_data_base.utils.mkdtemp" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nbrun.dict_to_code.html" class="btn btn-neutral float-right" title="nbrun.dict_to_code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

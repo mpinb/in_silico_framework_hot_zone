@@ -1,6 +1,23 @@
 tests.context
 =============
 
-.. currentmodule:: tests
+.. automodule:: tests.context
+  
+   
+   
+   
 
-.. automodule:: context
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="single_cell_analyzer.synanalysis" href="single_cell_analyzer.synanalysis.html" />
-    <link rel="prev" title="single_cell_analyzer.currents" href="single_cell_analyzer.currents.html" /> 
+    <link rel="next" title="single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times" href="single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times.html" />
+    <link rel="prev" title="single_cell_analyzer.currents.compute_soma_currents" href="single_cell_analyzer.currents.compute_soma_currents.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,7 +55,21 @@
 <li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.currents.html">single_cell_analyzer.currents</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_analyzer.membrane_potential_analysis</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_analyzer.membrane_potential_analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times.html">single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.compute_mean_psp_amplitude.html">single_cell_analyzer.membrane_potential_analysis.compute_mean_psp_amplitude</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude.html">single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.compute_vm_histogram.html">single_cell_analyzer.membrane_potential_analysis.compute_vm_histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.compute_vm_std_windows.html">single_cell_analyzer.membrane_potential_analysis.compute_vm_std_windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.simple_spike_detection.html">single_cell_analyzer.membrane_potential_analysis.simple_spike_detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.test_spike_detection_respects_threshold.html">single_cell_analyzer.membrane_potential_analysis.test_spike_detection_respects_threshold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.vm_mean.html">single_cell_analyzer.membrane_potential_analysis.vm_mean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.vm_std.html">single_cell_analyzer.membrane_potential_analysis.vm_std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.RecordingSite.html">single_cell_analyzer.membrane_potential_analysis.RecordingSite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.html">single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.SpikeInit.html">single_cell_analyzer.membrane_potential_analysis.SpikeInit</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.synanalysis.html">single_cell_analyzer.synanalysis</a></li>
 </ul>
 </li>
@@ -90,16 +105,72 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="single-cell-analyzer-membrane-potential-analysis">
-<h1>single_cell_analyzer.membrane_potential_analysis<a class="headerlink" href="#single-cell-analyzer-membrane-potential-analysis" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-single_cell_analyzer.membrane_potential_analysis">
+<span id="single-cell-analyzer-membrane-potential-analysis"></span><h1>single_cell_analyzer.membrane_potential_analysis<a class="headerlink" href="#module-single_cell_analyzer.membrane_potential_analysis" title="Permalink to this headline">¶</a></h1>
+<p>Created on Nov 3, 2012</p>
+<p>&#64;author: regger</p>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times.html#single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times" title="single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSTH_from_spike_times</span></code></a>(spikeTimeVectors[, …])</p></td>
+<td><p>Calculate PSTH from vectors of spike times with optional bin size and time window [tBegin, tEnd].</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.compute_mean_psp_amplitude.html#single_cell_analyzer.membrane_potential_analysis.compute_mean_psp_amplitude" title="single_cell_analyzer.membrane_potential_analysis.compute_mean_psp_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_mean_psp_amplitude</span></code></a>(vTraces, tStim, dt)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude.html#single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude" title="single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_uPSP_amplitude</span></code></a>(t, v, tSyn[, isEPSP])</p></td>
+<td><p>simple method for determining amplitude of unitary PSP starting at time tSyn: Determine baseline as median Vm during 10ms preceding the PSP In case of IPSPs set isEPSP=False</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.compute_vm_histogram.html#single_cell_analyzer.membrane_potential_analysis.compute_vm_histogram" title="single_cell_analyzer.membrane_potential_analysis.compute_vm_histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_vm_histogram</span></code></a>(vTraces)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.compute_vm_std_windows.html#single_cell_analyzer.membrane_potential_analysis.compute_vm_std_windows" title="single_cell_analyzer.membrane_potential_analysis.compute_vm_std_windows"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_vm_std_windows</span></code></a>(vStd, tStim, dt)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.simple_spike_detection.html#single_cell_analyzer.membrane_potential_analysis.simple_spike_detection" title="single_cell_analyzer.membrane_potential_analysis.simple_spike_detection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simple_spike_detection</span></code></a>(t, v[, tBegin, tEnd, …])</p></td>
+<td><p>Simple spike detection method.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.test_spike_detection_respects_threshold.html#single_cell_analyzer.membrane_potential_analysis.test_spike_detection_respects_threshold" title="single_cell_analyzer.membrane_potential_analysis.test_spike_detection_respects_threshold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_spike_detection_respects_threshold</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.vm_mean.html#single_cell_analyzer.membrane_potential_analysis.vm_mean" title="single_cell_analyzer.membrane_potential_analysis.vm_mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vm_mean</span></code></a>(vVec, tVec, tStim, dtStim)</p></td>
+<td><p>computes mean subthreshold voltage from voltage trace during stimulation time window [tStim, tStim+dtStim]</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.vm_std.html#single_cell_analyzer.membrane_potential_analysis.vm_std" title="single_cell_analyzer.membrane_potential_analysis.vm_std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vm_std</span></code></a>(vVec, tVec, tStim, dtStim)</p></td>
+<td><p>computes standard deviation of subthreshold voltage from voltage trace during stimulation time window [tStim, tStim+dtStim]</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.RecordingSite.html#single_cell_analyzer.membrane_potential_analysis.RecordingSite" title="single_cell_analyzer.membrane_potential_analysis.RecordingSite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RecordingSite</span></code></a>(secID, segID, label)</p></td>
+<td><p>light-weight container holding information about recording site: section and segment ID of attached cell, identifier label, and list of recorded voltage vectors</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager" title="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RecordingSiteManager</span></code></a>(landmarkFilename, cell)</p></td>
+<td><p>simple class providing methods to handle recording sites defined by Amira LandmarkSet</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.SpikeInit.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit" title="single_cell_analyzer.membrane_potential_analysis.SpikeInit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpikeInit</span></code></a>()</p></td>
+<td><p>Provides methods for analysis of spike initiation in in vivo/ in vitro simulations.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="single_cell_analyzer.currents.html" class="btn btn-neutral float-left" title="single_cell_analyzer.currents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="single_cell_analyzer.synanalysis.html" class="btn btn-neutral float-right" title="single_cell_analyzer.synanalysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="single_cell_analyzer.currents.compute_soma_currents.html" class="btn btn-neutral float-left" title="single_cell_analyzer.currents.compute_soma_currents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times.html" class="btn btn-neutral float-right" title="single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

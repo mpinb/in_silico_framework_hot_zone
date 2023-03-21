@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="biophysics_fitting.optimizer" href="biophysics_fitting.optimizer.html" />
-    <link rel="prev" title="biophysics_fitting.hay_specification" href="biophysics_fitting.hay_specification.html" /> 
+    <link rel="next" title="biophysics_fitting.model_selection.get_model_pdf_from_mdb" href="biophysics_fitting.model_selection.get_model_pdf_from_mdb.html" />
+    <link rel="prev" title="biophysics_fitting.hay_specification.get_hay_problem_description" href="biophysics_fitting.hay_specification.get_hay_problem_description.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,11 +45,11 @@
 <li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.connected_to_dend_beyond.html">biophysics_fitting.connected_to_dend_beyond</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_branching_depth.html">biophysics_fitting.get_branching_depth</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_branching_depth_series.html">biophysics_fitting.get_branching_depth_series</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_inner_sec_dist_list.html">biophysics_fitting.get_inner_sec_dist_list</a></li>
-<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_main_bifurcation_section.html">biophysics_fitting.get_main_bifurcation_section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.connected_to_dend_beyond.html">biophysics_fitting.connected_to_dend_beyond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_branching_depth.html">biophysics_fitting.get_branching_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_branching_depth_series.html">biophysics_fitting.get_branching_depth_series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_inner_sec_dist_list.html">biophysics_fitting.get_inner_sec_dist_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_main_bifurcation_section.html">biophysics_fitting.get_main_bifurcation_section</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.L5tt_parameter_setup.html">biophysics_fitting.L5tt_parameter_setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.combiner.html">biophysics_fitting.combiner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.ephys.html">biophysics_fitting.ephys</a></li>
@@ -58,7 +59,11 @@
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_evaluation.html">biophysics_fitting.hay_evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_evaluation_python.html">biophysics_fitting.hay_evaluation_python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_specification.html">biophysics_fitting.hay_specification</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">biophysics_fitting.model_selection</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">biophysics_fitting.model_selection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.model_selection.get_model_pdf_from_mdb.html">biophysics_fitting.model_selection.get_model_pdf_from_mdb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.model_selection.get_pdf_selected.html">biophysics_fitting.model_selection.get_pdf_selected</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.optimizer.html">biophysics_fitting.optimizer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.parameters.html">biophysics_fitting.parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.setup_stim.html">biophysics_fitting.setup_stim</a></li>
@@ -107,16 +112,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="biophysics-fitting-model-selection">
-<h1>biophysics_fitting.model_selection<a class="headerlink" href="#biophysics-fitting-model-selection" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-biophysics_fitting.model_selection">
+<span id="biophysics-fitting-model-selection"></span><h1>biophysics_fitting.model_selection<a class="headerlink" href="#module-biophysics_fitting.model_selection" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="biophysics_fitting.model_selection.get_model_pdf_from_mdb.html#biophysics_fitting.model_selection.get_model_pdf_from_mdb" title="biophysics_fitting.model_selection.get_model_pdf_from_mdb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_model_pdf_from_mdb</span></code></a>(mdb)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="biophysics_fitting.model_selection.get_pdf_selected.html#biophysics_fitting.model_selection.get_pdf_selected" title="biophysics_fitting.model_selection.get_pdf_selected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_pdf_selected</span></code></a>(pdf[, BAC_limit, …])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="biophysics_fitting.hay_specification.html" class="btn btn-neutral float-left" title="biophysics_fitting.hay_specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="biophysics_fitting.optimizer.html" class="btn btn-neutral float-right" title="biophysics_fitting.optimizer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="biophysics_fitting.hay_specification.get_hay_problem_description.html" class="btn btn-neutral float-left" title="biophysics_fitting.hay_specification.get_hay_problem_description" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="biophysics_fitting.model_selection.get_model_pdf_from_mdb.html" class="btn btn-neutral float-right" title="biophysics_fitting.model_selection.get_model_pdf_from_mdb" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

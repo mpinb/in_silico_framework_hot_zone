@@ -1,6 +1,38 @@
 single\_cell\_analyzer.synanalysis
 ==================================
 
-.. currentmodule:: single_cell_analyzer
+.. automodule:: single_cell_analyzer.synanalysis
+  
+   
+   
+   
 
-.. automodule:: synanalysis
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      compute_distance_to_soma
+      compute_syn_distance
+      compute_syn_distances
+      compute_syn_distances_2Dprojected
+      compute_synapse_distances_times
+      get_dist
+      synapse_activation_times
+      synapse_distances
+      synapse_distances_2D
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

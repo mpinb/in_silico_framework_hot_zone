@@ -1,6 +1,31 @@
 single\_cell\_parser.scalar\_field
 ==================================
 
-.. currentmodule:: single_cell_parser
+.. automodule:: single_cell_parser.scalar_field
+  
+   
+   
+   
 
-.. automodule:: scalar_field
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      ScalarField
+   
+   
+
+   
+   
+   
+
+
+

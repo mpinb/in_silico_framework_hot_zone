@@ -1,6 +1,30 @@
 simrun2.parameters\_to\_cell
 ============================
 
-.. currentmodule:: simrun2
+.. automodule:: simrun2.parameters_to_cell
+  
+   
+   
+   
 
-.. automodule:: parameters_to_cell
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      parameters_to_cell
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

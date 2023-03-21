@@ -13,6 +13,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -101,7 +102,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="n">h</span> <span class="o">=</span> <span class="n">neuron</span><span class="o">.</span><span class="n">h</span>
 
-<div class="viewcode-block" id="test_BAC_firing"><a class="viewcode-back" href="../../modules/simrun2.html#simrun2.test_BAC_firing.test_BAC_firing">[docs]</a><span class="k">def</span> <span class="nf">test_BAC_firing</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="test_BAC_firing"><a class="viewcode-back" href="../../modules/simrun2.test_BAC_firing.test_BAC_firing.html#simrun2.test_BAC_firing.test_BAC_firing">[docs]</a><span class="k">def</span> <span class="nf">test_BAC_firing</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="n">neuronParameters</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="n">scp</span><span class="o">.</span><span class="n">load_NMODL_parameters</span><span class="p">(</span><span class="n">neuronParameters</span><span class="p">)</span>
     <span class="n">cellParam</span> <span class="o">=</span> <span class="n">neuronParameters</span><span class="o">.</span><span class="n">neuron</span>
@@ -279,7 +280,7 @@
 <span class="c1">#        plt.legend()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="soma_injection"><a class="viewcode-back" href="../../modules/simrun2.html#simrun2.test_BAC_firing.soma_injection">[docs]</a><span class="k">def</span> <span class="nf">soma_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">apicalSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">simParam</span><span class="p">,</span> <span class="n">saveVisualization</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="soma_injection"><a class="viewcode-back" href="../../modules/simrun2.test_BAC_firing.soma_injection.html#simrun2.test_BAC_firing.soma_injection">[docs]</a><span class="k">def</span> <span class="nf">soma_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">apicalSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">simParam</span><span class="p">,</span> <span class="n">saveVisualization</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;selected apical section:&#39;</span><span class="p">)</span>
 <span class="c1">#    h.psection(sec=apicalSec)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">apicalSec</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
@@ -324,7 +325,7 @@
     
     <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">vmSoma</span><span class="p">,</span> <span class="n">vmApical</span></div>
 
-<div class="viewcode-block" id="apical_injection"><a class="viewcode-back" href="../../modules/simrun2.html#simrun2.test_BAC_firing.apical_injection">[docs]</a><span class="k">def</span> <span class="nf">apical_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">apicalBifurcationSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">tauRise</span><span class="p">,</span> <span class="n">tauDecay</span><span class="p">,</span> <span class="n">simParam</span><span class="p">,</span> <span class="n">saveVisualization</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="apical_injection"><a class="viewcode-back" href="../../modules/simrun2.test_BAC_firing.apical_injection.html#simrun2.test_BAC_firing.apical_injection">[docs]</a><span class="k">def</span> <span class="nf">apical_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">apicalBifurcationSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">tauRise</span><span class="p">,</span> <span class="n">tauDecay</span><span class="p">,</span> <span class="n">simParam</span><span class="p">,</span> <span class="n">saveVisualization</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;selected apical section:&#39;</span><span class="p">)</span>
 <span class="c1">#    h.psection(sec=apicalBifurcationSec)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">apicalBifurcationSec</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
@@ -370,7 +371,7 @@
     
     <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">vmSoma</span><span class="p">,</span> <span class="n">vmApical</span></div>
 
-<div class="viewcode-block" id="soma_apical_injection"><a class="viewcode-back" href="../../modules/simrun2.html#simrun2.test_BAC_firing.soma_apical_injection">[docs]</a><span class="k">def</span> <span class="nf">soma_apical_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">somaAmplitude</span><span class="p">,</span> <span class="n">somaDelay</span><span class="p">,</span> <span class="n">somaDuration</span><span class="p">,</span> <span class="n">apicalBifurcationSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">apicalAmplitude</span><span class="p">,</span>\
+<div class="viewcode-block" id="soma_apical_injection"><a class="viewcode-back" href="../../modules/simrun2.test_BAC_firing.soma_apical_injection.html#simrun2.test_BAC_firing.soma_apical_injection">[docs]</a><span class="k">def</span> <span class="nf">soma_apical_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">somaAmplitude</span><span class="p">,</span> <span class="n">somaDelay</span><span class="p">,</span> <span class="n">somaDuration</span><span class="p">,</span> <span class="n">apicalBifurcationSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">apicalAmplitude</span><span class="p">,</span>\
                           <span class="n">apicalDelayDt</span><span class="p">,</span> <span class="n">apicalTauRise</span><span class="p">,</span> <span class="n">apicalTauDecay</span><span class="p">,</span> <span class="n">simParam</span><span class="p">,</span> <span class="n">saveVisualization</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;selected apical section:&#39;</span><span class="p">)</span>
 <span class="c1">#    h.psection(sec=apicalBifurcationSec)</span>
@@ -423,7 +424,7 @@
     
     <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">vmSoma</span><span class="p">,</span> <span class="n">vmApical</span></div>
 
-<div class="viewcode-block" id="get_apical_section_at_distance"><a class="viewcode-back" href="../../modules/simrun2.html#simrun2.test_BAC_firing.get_apical_section_at_distance">[docs]</a><span class="k">def</span> <span class="nf">get_apical_section_at_distance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+<div class="viewcode-block" id="get_apical_section_at_distance"><a class="viewcode-back" href="../../modules/simrun2.test_BAC_firing.get_apical_section_at_distance.html#simrun2.test_BAC_firing.get_apical_section_at_distance">[docs]</a><span class="k">def</span> <span class="nf">get_apical_section_at_distance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;determine interior apical dendrite section (i.e. no ending section)</span>
 <span class="sd">    closest to given distance&#39;&#39;&#39;</span>
     <span class="n">closestSec</span> <span class="o">=</span> <span class="kc">None</span>
@@ -439,7 +440,7 @@
                     <span class="n">closestSec</span> <span class="o">=</span> <span class="n">sec</span>
     <span class="k">return</span> <span class="n">closestSec</span></div>
 
-<div class="viewcode-block" id="scale_apical"><a class="viewcode-back" href="../../modules/simrun2.html#simrun2.test_BAC_firing.scale_apical">[docs]</a><span class="k">def</span> <span class="nf">scale_apical</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+<div class="viewcode-block" id="scale_apical"><a class="viewcode-back" href="../../modules/simrun2.test_BAC_firing.scale_apical.html#simrun2.test_BAC_firing.scale_apical">[docs]</a><span class="k">def</span> <span class="nf">scale_apical</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    scale apical diameters depending on</span>
 <span class="sd">    distance to soma; therefore only possible</span>
@@ -468,7 +469,7 @@
     
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scaled </span><span class="si">{:d}</span><span class="s1"> apical sections...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">scaleCount</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="write_sim_results"><a class="viewcode-back" href="../../modules/simrun2.html#simrun2.test_BAC_firing.write_sim_results">[docs]</a><span class="k">def</span> <span class="nf">write_sim_results</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<div class="viewcode-block" id="write_sim_results"><a class="viewcode-back" href="../../modules/simrun2.test_BAC_firing.write_sim_results.html#simrun2.test_BAC_firing.write_sim_results">[docs]</a><span class="k">def</span> <span class="nf">write_sim_results</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outputFile</span><span class="p">:</span>
         <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;# simulation results</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;# t</span><span class="se">\t</span><span class="s1">vsoma&#39;</span>

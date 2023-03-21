@@ -1,6 +1,31 @@
 visualize.cell\_morphology\_visualizer
 ======================================
 
-.. currentmodule:: visualize
+.. automodule:: visualize.cell_morphology_visualizer
+  
+   
+   
+   
 
-.. automodule:: cell_morphology_visualizer
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      CellMorphologyVisualizer
+   
+   
+
+   
+   
+   
+
+
+

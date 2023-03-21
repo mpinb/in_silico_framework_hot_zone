@@ -13,11 +13,12 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="project_specific_ipynb_code.reduced_model_output_paper" href="project_specific_ipynb_code.reduced_model_output_paper.html" />
-    <link rel="prev" title="project_specific_ipynb_code.hot_zone" href="project_specific_ipynb_code.hot_zone.html" /> 
+    <link rel="next" title="project_specific_ipynb_code.neurobiological_design_principles.get_cell_info" href="project_specific_ipynb_code.neurobiological_design_principles.get_cell_info.html" />
+    <link rel="prev" title="project_specific_ipynb_code.hot_zone.subcellular_compartmemnts.get_section_description_df" href="project_specific_ipynb_code.hot_zone.subcellular_compartmemnts.get_section_description_df.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,7 +53,14 @@
 <li class="toctree-l1 current"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.biophysical_models.html">project_specific_ipynb_code.biophysical_models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.hot_zone.html">project_specific_ipynb_code.hot_zone</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">project_specific_ipynb_code.neurobiological_design_principles</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">project_specific_ipynb_code.neurobiological_design_principles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.get_cell_info.html">project_specific_ipynb_code.neurobiological_design_principles.get_cell_info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.get_connection_matrix_from_realisation.html">project_specific_ipynb_code.neurobiological_design_principles.get_connection_matrix_from_realisation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.get_input_mask.html">project_specific_ipynb_code.neurobiological_design_principles.get_input_mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.make_cis_ann_binary.html">project_specific_ipynb_code.neurobiological_design_principles.make_cis_ann_binary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.make_dummy_ann.html">project_specific_ipynb_code.neurobiological_design_principles.make_dummy_ann</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.reduced_model_output_paper.html">project_specific_ipynb_code.reduced_model_output_paper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.html">project_specific_ipynb_code.reproducing_L6paper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.html">project_specific_ipynb_code.smr_analyzer</a></li>
@@ -93,16 +101,40 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="project-specific-ipynb-code-neurobiological-design-principles">
-<h1>project_specific_ipynb_code.neurobiological_design_principles<a class="headerlink" href="#project-specific-ipynb-code-neurobiological-design-principles" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-project_specific_ipynb_code.neurobiological_design_principles">
+<span id="project-specific-ipynb-code-neurobiological-design-principles"></span><h1>project_specific_ipynb_code.neurobiological_design_principles<a class="headerlink" href="#module-project_specific_ipynb_code.neurobiological_design_principles" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.get_cell_info.html#project_specific_ipynb_code.neurobiological_design_principles.get_cell_info" title="project_specific_ipynb_code.neurobiological_design_principles.get_cell_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cell_info</span></code></a>(cellID, cis_realisation)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.get_connection_matrix_from_realisation.html#project_specific_ipynb_code.neurobiological_design_principles.get_connection_matrix_from_realisation" title="project_specific_ipynb_code.neurobiological_design_principles.get_connection_matrix_from_realisation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_connection_matrix_from_realisation</span></code></a>(…)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.get_input_mask.html#project_specific_ipynb_code.neurobiological_design_principles.get_input_mask" title="project_specific_ipynb_code.neurobiological_design_principles.get_input_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_input_mask</span></code></a>(rnn_nodes, cis_realisation, …)</p></td>
+<td><p>This function determines which nodes should receive which input connections.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.make_cis_ann_binary.html#project_specific_ipynb_code.neurobiological_design_principles.make_cis_ann_binary" title="project_specific_ipynb_code.neurobiological_design_principles.make_cis_ann_binary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_cis_ann_binary</span></code></a>(cis_realisation, device)</p></td>
+<td><p>Fully sets up a torch RNN based on a cortex in silico realization folder, where cells that are not connected in CIS have unconnected nodes in the RNN.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.make_dummy_ann.html#project_specific_ipynb_code.neurobiological_design_principles.make_dummy_ann" title="project_specific_ipynb_code.neurobiological_design_principles.make_dummy_ann"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_dummy_ann</span></code></a>([input_size, L5PTs, …])</p></td>
+<td><p>Sets up a torch RNN as a foundation for loading an existing trained model’s parameters into.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="project_specific_ipynb_code.hot_zone.html" class="btn btn-neutral float-left" title="project_specific_ipynb_code.hot_zone" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="project_specific_ipynb_code.reduced_model_output_paper.html" class="btn btn-neutral float-right" title="project_specific_ipynb_code.reduced_model_output_paper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="project_specific_ipynb_code.hot_zone.subcellular_compartmemnts.get_section_description_df.html" class="btn btn-neutral float-left" title="project_specific_ipynb_code.hot_zone.subcellular_compartmemnts.get_section_description_df" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="project_specific_ipynb_code.neurobiological_design_principles.get_cell_info.html" class="btn btn-neutral float-right" title="project_specific_ipynb_code.neurobiological_design_principles.get_cell_info" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
