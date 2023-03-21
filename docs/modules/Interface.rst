@@ -1,32 +1,7 @@
-﻿Interface
-=========
+Interface module
+================
 
 .. automodule:: Interface
-  
-   
-   
-   
-
-   
-   
-   .. rubric:: Functions
-
-   .. autosummary::
-      :toctree:
-   
-      defaultdict_defaultdict
-      print_module_versions
-      svg2emf
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
+   :members:
+   :undoc-members:
+   :show-inheritance:

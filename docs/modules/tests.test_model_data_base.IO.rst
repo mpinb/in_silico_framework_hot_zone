@@ -1,34 +1,37 @@
-tests.test\_model\_data\_base.IO
-================================
+tests.test\_model\_data\_base.IO package
+========================================
 
-.. automodule:: tests.test_model_data_base.IO
-  
-   
-   
-   
+Subpackages
+-----------
 
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
-.. rubric:: Modules
-
-.. autosummary::
-   :toctree:
-   :template: custom-module-template.rst
-   :recursive:
+.. toctree::
+   :maxdepth: 4
 
    tests.test_model_data_base.IO.LoaderDumper
-   tests.test_model_data_base.IO.dask_wrappers_test
-   tests.test_model_data_base.IO.roberts_formats_test
 
+Submodules
+----------
+
+tests.test\_model\_data\_base.IO.dask\_wrappers\_test module
+------------------------------------------------------------
+
+.. automodule:: tests.test_model_data_base.IO.dask_wrappers_test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.test\_model\_data\_base.IO.roberts\_formats\_test module
+--------------------------------------------------------------
+
+.. automodule:: tests.test_model_data_base.IO.roberts_formats_test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: tests.test_model_data_base.IO
+   :members:
+   :undoc-members:
+   :show-inheritance:
