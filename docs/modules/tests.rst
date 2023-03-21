@@ -1,43 +1,12 @@
-﻿tests
-=====
+tests package
+=============
 
-.. automodule:: tests
-  
-   
-   
-   
+Subpackages
+-----------
 
-   
-   
-   .. rubric:: Functions
+.. toctree::
+   :maxdepth: 4
 
-   .. autosummary::
-      :toctree:
-   
-      setup_current_injection_experiment
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
-.. rubric:: Modules
-
-.. autosummary::
-   :toctree:
-   :template: custom-module-template.rst
-   :recursive:
-
-   tests.context
-   tests.decorators
-   tests.run_tests
    tests.test_biophysics_fitting
    tests.test_model_data_base
    tests.test_simrun2
@@ -46,3 +15,37 @@
    tests.test_spike_analysis
    tests.test_visualisation
 
+Submodules
+----------
+
+tests.context module
+--------------------
+
+.. automodule:: tests.context
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.decorators module
+-----------------------
+
+.. automodule:: tests.decorators
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.run\_tests module
+-----------------------
+
+.. automodule:: tests.run_tests
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: tests
+   :members:
+   :undoc-members:
+   :show-inheritance:

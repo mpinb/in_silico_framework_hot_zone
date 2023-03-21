@@ -1,31 +1,7 @@
-﻿nbrun
-=====
+nbrun module
+============
 
 .. automodule:: nbrun
-  
-   
-   
-   
-
-   
-   
-   .. rubric:: Functions
-
-   .. autosummary::
-      :toctree:
-   
-      dict_to_code
-      run_notebook
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
+   :members:
+   :undoc-members:
+   :show-inheritance:
