@@ -7,7 +7,7 @@ Welcome to In-Silico Framework (ISF)'s documentation!
 =====================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
    :caption: Contents:
 
 .. rubric:: Modules
