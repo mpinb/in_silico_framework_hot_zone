@@ -25,15 +25,14 @@ extensions = [
     'sphinx.ext.napoleon'  # for NumPy and Google Doc style docstrings
     ]
 
-# autosummary_generate=True
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-# Sort members by type
-autodoc_member_order = 'groupwise'
+
+autodoc_member_order = 'groupwise'  # Sort members by type
 autosummary_generate = True  # Turn on sphinx.ext.autosummary
 
 def setup(app):
-   app.add_css_file("PATH_TO_YOUR_CSS_FILE.css")
+   app.add_css_file("_static/default.css")
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
