@@ -1,3 +1,6 @@
+in_silico_framework
+===================
+
 .. toctree::
    :maxdepth: 4
 
@@ -5,11 +8,11 @@
    SLURM_scripts
    barrel_cortex
    biophysics_fitting
-   .. compatibility
+   compatibility
    getting_started
    mechanisms
    model_data_base
-   .. nbrun
+   nbrun
    project_specific_ipynb_code
    simrun2
    simrun3
@@ -17,5 +20,5 @@
    single_cell_parser
    singlecell_input_mapper
    spike_analysis
-   .. tests
+   tests
    visualize
