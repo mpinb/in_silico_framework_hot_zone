@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="single_cell_parser.cell" href="single_cell_parser.cell.html" />
-    <link rel="prev" title="single_cell_analyzer.synanalysis" href="single_cell_analyzer.synanalysis.html" /> 
+    <link rel="next" title="single_cell_parser.Event" href="single_cell_parser.Event.html" />
+    <link rel="prev" title="single_cell_analyzer" href="single_cell_analyzer.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -56,21 +56,14 @@
 <li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">single_cell_parser</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell.html">single_cell_parser.cell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html">single_cell_parser.cell_modify_functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_parser.html">single_cell_parser.cell_parser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network.html">single_cell_parser.network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_modify_functions.html">single_cell_parser.network_modify_functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_param_modify_functions.html">single_cell_parser.network_param_modify_functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_realizations.html">single_cell_parser.network_realizations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.reader.html">single_cell_parser.reader</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.scalar_field.html">single_cell_parser.scalar_field</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.serialize_cell.html">single_cell_parser.serialize_cell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sim_control.html">single_cell_parser.sim_control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse.html">single_cell_parser.synapse</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse_mapper.html">single_cell_parser.synapse_mapper</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.vpm_activation.html">single_cell_parser.vpm_activation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.writer.html">single_cell_parser.writer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.Event.html">single_cell_parser.Event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.build_parameters.html">single_cell_parser.build_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.create_cell.html">single_cell_parser.create_cell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.init_neuron_run.html">single_cell_parser.init_neuron_run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.load_NMODL_parameters.html">single_cell_parser.load_NMODL_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sec_distance_to_soma.html">single_cell_parser.sec_distance_to_soma</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_network_paramfile.html">single_cell_parser.spines_update_network_paramfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_synapse_distribution_file.html">single_cell_parser.spines_update_synapse_distribution_file</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
@@ -103,41 +96,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="module-single_cell_parser">
-<span id="single-cell-parser"></span><h1>single_cell_parser<a class="headerlink" href="#module-single_cell_parser" title="Permalink to this headline">¶</a></h1>
-<p>cell parser and synapse mapper
+  <div class="section" id="single-cell-parser">
+<h1>single_cell_parser<a class="headerlink" href="#single-cell-parser" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Description</p>
+<span class="target" id="module-single_cell_parser"></span><p>cell parser and synapse mapper
 for single cell simulations
 with NeuroNet subcellular synapse distributions</p>
-<p class="rubric">Functions</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_parameters</span></code>(filename[, …])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_cell</span></code>(parameters[, scaleFunc, …])</p></td>
-<td><p>default way of creating NEURON cell models; includes spatial discretization and inserts biophysical mechanisms according to parameter file</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_neuron_run</span></code>(simparam[, vardt])</p></td>
-<td><p>Default NEURON run with inital parameters according to parameter file.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_NMODL_parameters</span></code>(parameters)</p></td>
-<td><p>automatically loads NMODL mechanisms from paths in parameter file</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sec_distance_to_soma</span></code>(currentSec)</p></td>
-<td><p>compute path length from sec(x=0) to soma</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_network_paramfile</span></code>(…)</p></td>
-<td><p>update the network.param file to point to the new synapse distribution file</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_synapse_distribution_file</span></code>(…)</p></td>
-<td><p>Update the .syn file to correctly point to spine heads as excitatory synapse locations.</p></td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Classes</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -145,62 +109,38 @@ with NeuroNet subcellular synapse distributions</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Event</span></code>(func)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.Event.html#single_cell_parser.Event" title="single_cell_parser.Event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Event</span></code></a>(func)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Modules</p>
+<p class="rubric">Functions</p>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.cell.html#module-single_cell_parser.cell" title="single_cell_parser.cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.cell</span></code></a></p></td>
-<td><p>Created on Apr 28, 2012</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.cell_modify_functions.html#module-single_cell_parser.cell_modify_functions" title="single_cell_parser.cell_modify_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.cell_modify_functions</span></code></a></p></td>
-<td><p>Created on Feb 16, 2019</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.cell_parser.html#module-single_cell_parser.cell_parser" title="single_cell_parser.cell_parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.cell_parser</span></code></a></p></td>
-<td><p>Created on Mar 8, 2012</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.network.html#module-single_cell_parser.network" title="single_cell_parser.network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.network</span></code></a></p></td>
-<td><p>Created on Nov 17, 2012</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.network_modify_functions.html#module-single_cell_parser.network_modify_functions" title="single_cell_parser.network_modify_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.network_modify_functions</span></code></a></p></td>
-<td><p>Created on Feb 16, 2019</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.network_param_modify_functions.html#module-single_cell_parser.network_param_modify_functions" title="single_cell_parser.network_param_modify_functions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.network_param_modify_functions</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.build_parameters.html#single_cell_parser.build_parameters" title="single_cell_parser.build_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_parameters</span></code></a>(filename[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.network_realizations.html#module-single_cell_parser.network_realizations" title="single_cell_parser.network_realizations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.network_realizations</span></code></a></p></td>
-<td><p>Created on Feb 1, 2013</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.create_cell.html#single_cell_parser.create_cell" title="single_cell_parser.create_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_cell</span></code></a>(parameters[, scaleFunc, …])</p></td>
+<td><p>default way of creating NEURON cell models; includes spatial discretization and inserts biophysical mechanisms according to parameter file</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.reader.html#module-single_cell_parser.reader" title="single_cell_parser.reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.reader</span></code></a></p></td>
-<td><p>Created on Mar 8, 2012</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.init_neuron_run.html#single_cell_parser.init_neuron_run" title="single_cell_parser.init_neuron_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_neuron_run</span></code></a>(simparam[, vardt])</p></td>
+<td><p>Default NEURON run with inital parameters according to parameter file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.scalar_field.html#module-single_cell_parser.scalar_field" title="single_cell_parser.scalar_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.scalar_field</span></code></a></p></td>
-<td><p>Created on Mar 27, 2012</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.load_NMODL_parameters.html#single_cell_parser.load_NMODL_parameters" title="single_cell_parser.load_NMODL_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_NMODL_parameters</span></code></a>(parameters)</p></td>
+<td><p>automatically loads NMODL mechanisms from paths in parameter file</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.serialize_cell.html#module-single_cell_parser.serialize_cell" title="single_cell_parser.serialize_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.serialize_cell</span></code></a></p></td>
-<td><p>Created 2016/2017</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.sec_distance_to_soma.html#single_cell_parser.sec_distance_to_soma" title="single_cell_parser.sec_distance_to_soma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sec_distance_to_soma</span></code></a>(currentSec)</p></td>
+<td><p>compute path length from sec(x=0) to soma</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.sim_control.html#module-single_cell_parser.sim_control" title="single_cell_parser.sim_control"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.sim_control</span></code></a></p></td>
-<td><p>Created on Mar 19, 2012</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.spines_update_network_paramfile.html#single_cell_parser.spines_update_network_paramfile" title="single_cell_parser.spines_update_network_paramfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_network_paramfile</span></code></a>(…)</p></td>
+<td><p>update the network.param file to point to the new synapse distribution file</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.synapse.html#module-single_cell_parser.synapse" title="single_cell_parser.synapse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.synapse</span></code></a></p></td>
-<td><p>Created on Mar 30, 2012</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.synapse_mapper.html#module-single_cell_parser.synapse_mapper" title="single_cell_parser.synapse_mapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.synapse_mapper</span></code></a></p></td>
-<td><p>Created on Mar 30, 2012</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.vpm_activation.html#module-single_cell_parser.vpm_activation" title="single_cell_parser.vpm_activation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.vpm_activation</span></code></a></p></td>
-<td><p>Created on Apr 21, 2012</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.writer.html#module-single_cell_parser.writer" title="single_cell_parser.writer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_parser.writer</span></code></a></p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.spines_update_synapse_distribution_file.html#single_cell_parser.spines_update_synapse_distribution_file" title="single_cell_parser.spines_update_synapse_distribution_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_synapse_distribution_file</span></code></a>(…)</p></td>
+<td><p>Update the .syn file to correctly point to spine heads as excitatory synapse locations.</p></td>
 </tr>
 </tbody>
 </table>
@@ -210,8 +150,8 @@ with NeuroNet subcellular synapse distributions</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="single_cell_analyzer.synanalysis.html" class="btn btn-neutral float-left" title="single_cell_analyzer.synanalysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="single_cell_parser.cell.html" class="btn btn-neutral float-right" title="single_cell_parser.cell" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="single_cell_analyzer.html" class="btn btn-neutral float-left" title="single_cell_analyzer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="single_cell_parser.Event.html" class="btn btn-neutral float-right" title="single_cell_parser.Event" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

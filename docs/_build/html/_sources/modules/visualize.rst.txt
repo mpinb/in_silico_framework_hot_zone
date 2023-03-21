@@ -1,33 +1,11 @@
 ﻿visualize
 =========
 
+.. rubric:: Description
+
 .. automodule:: visualize
 
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
+.. currentmodule:: visualize
 
 
-
-.. rubric:: Modules
-
-.. autosummary::
-   :toctree:
-   :recursive:
-
-   visualize.activity_analysis
-   visualize.cell_morphology_visualizer
-   visualize.helper_methods
 

@@ -1,43 +1,24 @@
 ﻿SLURM\_scripts
 ==============
 
+.. rubric:: Description
+
 .. automodule:: SLURM_scripts
 
-   
-   
-   
-
-   
-   
-   .. rubric:: Functions
-
-   .. autosummary::
-   
-      check_all_done
-      convertible_to_int
-      save_delayeds_in_folder
-   
-   
-
-   
-   
-   
-
-   
-   
-   
+.. currentmodule:: SLURM_scripts
 
 
 
-.. rubric:: Modules
+
+.. rubric:: Functions
 
 .. autosummary::
-   :toctree:
-   :recursive:
-
-   SLURM_scripts.clustercontrol
-   SLURM_scripts.component_1
-   SLURM_scripts.component_1_SOMA
-   SLURM_scripts.component_1_special
-   SLURM_scripts.component_isf
+    :toctree: .
+    
+    check_all_done
+    
+    convertible_to_int
+    
+    save_delayeds_in_folder
+    
 

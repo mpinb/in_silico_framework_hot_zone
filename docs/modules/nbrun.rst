@@ -1,30 +1,22 @@
 ﻿nbrun
 =====
 
+.. rubric:: Description
+
 .. automodule:: nbrun
 
-   
-   
-   
-
-   
-   
-   .. rubric:: Functions
-
-   .. autosummary::
-   
-      dict_to_code
-      run_notebook
-   
-   
-
-   
-   
-   
-
-   
-   
-   
+.. currentmodule:: nbrun
 
 
+
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: .
+    
+    dict_to_code
+    
+    run_notebook
+    
 

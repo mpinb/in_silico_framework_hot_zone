@@ -1,31 +1,24 @@
 ﻿Interface
 =========
 
+.. rubric:: Description
+
 .. automodule:: Interface
 
-   
-   
-   
-
-   
-   
-   .. rubric:: Functions
-
-   .. autosummary::
-   
-      defaultdict_defaultdict
-      print_module_versions
-      svg2emf
-   
-   
-
-   
-   
-   
-
-   
-   
-   
+.. currentmodule:: Interface
 
 
+
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: .
+    
+    defaultdict_defaultdict
+    
+    print_module_versions
+    
+    svg2emf
+    
 
