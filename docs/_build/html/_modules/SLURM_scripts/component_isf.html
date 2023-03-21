@@ -253,16 +253,16 @@
 
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
     <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">command</span><span class="p">)</span></div>
-
-<span class="k">if</span> <span class="n">process_number</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="n">setup_locking_server</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
-    <span class="n">setup_locking_config</span><span class="p">()</span>
-    <span class="n">setup_dask_scheduler</span><span class="p">(</span><span class="n">management_dir</span><span class="p">)</span>
-    <span class="n">setup_dask_workers</span><span class="p">(</span><span class="n">management_dir</span><span class="p">)</span>
-    <span class="n">setup_jupyter_notebook</span><span class="p">(</span><span class="n">jupyter_port</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">setup_locking_config</span><span class="p">()</span>
-    <span class="n">setup_dask_workers</span><span class="p">(</span><span class="n">management_dir</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">process_number</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">setup_locking_server</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+        <span class="n">setup_locking_config</span><span class="p">()</span>
+        <span class="n">setup_dask_scheduler</span><span class="p">(</span><span class="n">management_dir</span><span class="p">)</span>
+        <span class="n">setup_dask_workers</span><span class="p">(</span><span class="n">management_dir</span><span class="p">)</span>
+        <span class="n">setup_jupyter_notebook</span><span class="p">(</span><span class="n">jupyter_port</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">setup_locking_config</span><span class="p">()</span>
+        <span class="n">setup_dask_workers</span><span class="p">(</span><span class="n">management_dir</span><span class="p">)</span>
 </pre></div>
 
            </div>
