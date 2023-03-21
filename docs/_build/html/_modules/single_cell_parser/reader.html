@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -80,7 +77,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">scalar_field</span>
 <span class="kn">from</span> <span class="nn">model_data_base.mdbopen</span> <span class="kn">import</span> <span class="n">mdbopen</span>
 
-<div class="viewcode-block" id="Edge"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.Edge">[docs]</a><span class="k">class</span> <span class="nc">Edge</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Edge"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.Edge">[docs]</a><span class="k">class</span> <span class="nc">Edge</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Edge object contains list of points,</span>
 <span class="sd">    diameter at each point, label,</span>
@@ -88,7 +85,7 @@
 <span class="sd">    Used during reading of hoc files</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-<div class="viewcode-block" id="Edge.is_valid"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.Edge.is_valid">[docs]</a>    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Edge.is_valid"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.Edge.is_valid">[docs]</a>    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -101,7 +98,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">True</span></div></div>
     
-<div class="viewcode-block" id="read_hoc_file"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.read_hoc_file">[docs]</a><span class="k">def</span> <span class="nf">read_hoc_file</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="read_hoc_file"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.read_hoc_file">[docs]</a><span class="k">def</span> <span class="nf">read_hoc_file</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.hoc&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.HOC&#39;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;Input file is not a .hoc file!&#39;</span><span class="p">)</span>
     
@@ -236,7 +233,7 @@
         
         <span class="k">return</span> <span class="n">cell</span></div>
     
-<div class="viewcode-block" id="read_scalar_field"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.read_scalar_field">[docs]</a><span class="k">def</span> <span class="nf">read_scalar_field</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="read_scalar_field"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.read_scalar_field">[docs]</a><span class="k">def</span> <span class="nf">read_scalar_field</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.am&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.AM&#39;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;Input file is not an Amira Mesh file!&#39;</span><span class="p">)</span>
     
@@ -287,7 +284,7 @@
         
         <span class="k">return</span> <span class="n">scalar_field</span><span class="o">.</span><span class="n">ScalarField</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="n">extent</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="read_synapse_realization"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.read_synapse_realization">[docs]</a><span class="k">def</span> <span class="nf">read_synapse_realization</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="read_synapse_realization"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.read_synapse_realization">[docs]</a><span class="k">def</span> <span class="nf">read_synapse_realization</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.syn&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.SYN&#39;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;Input file is not a synapse realization file!&#39;</span><span class="p">)</span>
     
@@ -308,7 +305,7 @@
     
     <span class="k">return</span> <span class="n">synapses</span></div>
 
-<div class="viewcode-block" id="read_pruned_synapse_realization"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.read_pruned_synapse_realization">[docs]</a><span class="k">def</span> <span class="nf">read_pruned_synapse_realization</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="read_pruned_synapse_realization"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.read_pruned_synapse_realization">[docs]</a><span class="k">def</span> <span class="nf">read_pruned_synapse_realization</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.syn&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.SYN&#39;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;Input file is not a synapse realization file!&#39;</span><span class="p">)</span>
     
@@ -330,7 +327,7 @@
     
     <span class="k">return</span> <span class="n">synapses</span></div>
 
-<div class="viewcode-block" id="read_functional_realization_map"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.read_functional_realization_map">[docs]</a><span class="k">def</span> <span class="nf">read_functional_realization_map</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="read_functional_realization_map"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.read_functional_realization_map">[docs]</a><span class="k">def</span> <span class="nf">read_functional_realization_map</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    reads list of all functional connections</span>
 <span class="sd">    coded by tuples (cell type, presynaptic cell index, synapse index).</span>
@@ -363,7 +360,7 @@
                 <span class="n">connections</span><span class="p">[</span><span class="n">cellType</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">cellType</span><span class="p">,</span> <span class="n">cellID</span><span class="p">,</span> <span class="n">synID</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">connections</span><span class="p">,</span> <span class="n">anatomicalID</span></div>
 
-<div class="viewcode-block" id="read_synapse_activation_file"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.read_synapse_activation_file">[docs]</a><span class="k">def</span> <span class="nf">read_synapse_activation_file</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="read_synapse_activation_file"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.read_synapse_activation_file">[docs]</a><span class="k">def</span> <span class="nf">read_synapse_activation_file</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    reads list of all functional synapses and their activation times.</span>
 <span class="sd">    Input: file of format:</span>
@@ -415,7 +412,7 @@
             <span class="n">lineCnt</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">synapses</span></div>
 
-<div class="viewcode-block" id="read_complete_synapse_activation_file"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.read_complete_synapse_activation_file">[docs]</a><span class="k">def</span> <span class="nf">read_complete_synapse_activation_file</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="read_complete_synapse_activation_file"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.read_complete_synapse_activation_file">[docs]</a><span class="k">def</span> <span class="nf">read_complete_synapse_activation_file</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    reads list of all functional synapses and their activation times.</span>
 <span class="sd">    Input: file of format:</span>
@@ -450,7 +447,7 @@
     
     <span class="k">return</span> <span class="n">synapses</span></div>
 
-<div class="viewcode-block" id="read_spike_times_file"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.read_spike_times_file">[docs]</a><span class="k">def</span> <span class="nf">read_spike_times_file</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="read_spike_times_file"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.read_spike_times_file">[docs]</a><span class="k">def</span> <span class="nf">read_spike_times_file</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    reads list of all trials and spike times within these trials.</span>
 <span class="sd">    Input: file of format:</span>
@@ -483,7 +480,7 @@
     
     <span class="k">return</span> <span class="n">spikeTimes</span></div>
 
-<div class="viewcode-block" id="read_synapse_weight_file"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.read_synapse_weight_file">[docs]</a><span class="k">def</span> <span class="nf">read_synapse_weight_file</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="read_synapse_weight_file"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.read_synapse_weight_file">[docs]</a><span class="k">def</span> <span class="nf">read_synapse_weight_file</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    reads list of all anatomical synapses and their maximum conductance values.</span>
 <span class="sd">    Input: file of format:</span>
@@ -527,7 +524,7 @@
             <span class="n">lineCnt</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">synWeights</span><span class="p">,</span> <span class="n">synLocations</span></div>
 
-<div class="viewcode-block" id="read_landmark_file"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.reader.read_landmark_file">[docs]</a><span class="k">def</span> <span class="nf">read_landmark_file</span><span class="p">(</span><span class="n">landmarkFilename</span><span class="p">):</span>
+<div class="viewcode-block" id="read_landmark_file"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.reader.read_landmark_file">[docs]</a><span class="k">def</span> <span class="nf">read_landmark_file</span><span class="p">(</span><span class="n">landmarkFilename</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    returns list of (x,y,z) points</span>
 <span class="sd">    &#39;&#39;&#39;</span>

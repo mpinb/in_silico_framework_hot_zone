@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -83,10 +80,10 @@
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">minimize_scalar</span>
 <span class="kn">from</span> <span class="nn">simrun3.synaptic_strength_fitting</span> <span class="kn">import</span> <span class="n">PSPs</span>
 
-<div class="viewcode-block" id="PSP_with_current_injection"><a class="viewcode-back" href="../../simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection">[docs]</a><span class="k">class</span> <span class="nc">PSP_with_current_injection</span><span class="p">:</span>
+<div class="viewcode-block" id="PSP_with_current_injection"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection">[docs]</a><span class="k">class</span> <span class="nc">PSP_with_current_injection</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;allows to simulate EPSPs and IPSPs, where the soma resting potential is set to a</span>
 <span class="sd">    defined potential by the injection of a constant current.&#39;&#39;&#39;</span>
-<div class="viewcode-block" id="PSP_with_current_injection.__init__"><a class="viewcode-back" href="../../simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neuron_param</span><span class="p">,</span> <span class="n">confile</span><span class="p">,</span> 
+<div class="viewcode-block" id="PSP_with_current_injection.__init__"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neuron_param</span><span class="p">,</span> <span class="n">confile</span><span class="p">,</span> 
                  <span class="n">target_vm</span> <span class="o">=</span> <span class="o">-</span><span class="mi">70</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">duration</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> 
                  <span class="n">optimize_for_timepoint</span> <span class="o">=</span> <span class="mi">150</span><span class="p">,</span> <span class="n">tEnd</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
                  <span class="n">cell_modify_functions</span> <span class="o">=</span> <span class="p">{},</span>
@@ -107,7 +104,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="n">cell_modify_functions</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">neuron_param</span><span class="o">.</span><span class="n">neuron</span><span class="p">[</span><span class="s1">&#39;cell_modify_functions&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cell_modify_functions</span><span class="p">)</span></div>
         
-<div class="viewcode-block" id="PSP_with_current_injection.optimize_holding_current"><a class="viewcode-back" href="../../simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.optimize_holding_current">[docs]</a>    <span class="k">def</span> <span class="nf">optimize_holding_current</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PSP_with_current_injection.optimize_holding_current"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.optimize_holding_current">[docs]</a>    <span class="k">def</span> <span class="nf">optimize_holding_current</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;finds the current that needs to be injected to hold the somatic potential at target_vm.</span>
 <span class="sd">        target_vm is defined during initialization of the object.</span>
 <span class="sd">        bounds: (min_current, max_current) in which the optimizer searches&#39;&#39;&#39;</span>
@@ -150,7 +147,7 @@
         <span class="n">I</span><span class="o">.</span><span class="n">scp</span><span class="o">.</span><span class="n">init_neuron_run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neuron_param</span><span class="o">.</span><span class="n">sim</span><span class="p">,</span> <span class="n">vardt</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">I</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">tVec</span><span class="p">),</span> <span class="n">I</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     
-<div class="viewcode-block" id="PSP_with_current_injection.plot_current_injection_voltage_trace"><a class="viewcode-back" href="../../simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.plot_current_injection_voltage_trace">[docs]</a>    <span class="k">def</span> <span class="nf">plot_current_injection_voltage_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PSP_with_current_injection.plot_current_injection_voltage_trace"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.plot_current_injection_voltage_trace">[docs]</a>    <span class="k">def</span> <span class="nf">plot_current_injection_voltage_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;visualizes current_injection voltage trace&#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">holding_current</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">optimize_holding_current</span><span class="p">()</span>            
@@ -159,7 +156,7 @@
         <span class="n">I</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tVec</span><span class="p">,</span> <span class="n">vt</span><span class="p">)</span> 
         <span class="n">I</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">I</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">())</span>       </div>
         
-<div class="viewcode-block" id="PSP_with_current_injection.get_neuron_param_with_current_injection"><a class="viewcode-back" href="../../simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_neuron_param_with_current_injection">[docs]</a>    <span class="k">def</span> <span class="nf">get_neuron_param_with_current_injection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PSP_with_current_injection.get_neuron_param_with_current_injection"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_neuron_param_with_current_injection">[docs]</a>    <span class="k">def</span> <span class="nf">get_neuron_param_with_current_injection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;returns neuron_param, where a current injection is set up such that </span>
 <span class="sd">        the potential self.target_vm is reached at the timepoint self.optimize_for_timepoint&#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">holding_current</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -174,7 +171,7 @@
         <span class="n">neuron_param</span><span class="o">.</span><span class="n">neuron</span><span class="p">[</span><span class="s1">&#39;cell_modify_functions&#39;</span><span class="p">][</span><span class="s1">&#39;soma_current_injection&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dummy_param</span>
         <span class="k">return</span> <span class="n">I</span><span class="o">.</span><span class="n">scp</span><span class="o">.</span><span class="n">NTParameterSet</span><span class="p">(</span><span class="n">neuron_param</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="PSP_with_current_injection.get_psp_simulator"><a class="viewcode-back" href="../../simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_psp_simulator">[docs]</a>    <span class="k">def</span> <span class="nf">get_psp_simulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gExRange</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">exc_inh</span> <span class="o">=</span> <span class="s1">&#39;exc&#39;</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;synapses&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="PSP_with_current_injection.get_psp_simulator"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_psp_simulator">[docs]</a>    <span class="k">def</span> <span class="nf">get_psp_simulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gExRange</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">exc_inh</span> <span class="o">=</span> <span class="s1">&#39;exc&#39;</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;synapses&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;returns simrun3.synaptic_strength_fitting.PSPs method, which is set up to simulate</span>
 <span class="sd">        individual synapse PSPs &#39;&#39;&#39;</span>
         <span class="n">psp</span> <span class="o">=</span> <span class="n">PSPs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_neuron_param_with_current_injection</span><span class="p">(),</span> 
@@ -186,7 +183,7 @@
                    <span class="n">tStim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimize_for_timepoint</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">psp</span></div>
     
-<div class="viewcode-block" id="PSP_with_current_injection.get_psp_simulator_exc_and_inh_combined"><a class="viewcode-back" href="../../simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_psp_simulator_exc_and_inh_combined">[docs]</a>    <span class="k">def</span> <span class="nf">get_psp_simulator_exc_and_inh_combined</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gExRange</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;synapses&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="PSP_with_current_injection.get_psp_simulator_exc_and_inh_combined"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_psp_simulator_exc_and_inh_combined">[docs]</a>    <span class="k">def</span> <span class="nf">get_psp_simulator_exc_and_inh_combined</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gExRange</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;synapses&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;call the run method of the returned object to execute the computation&#39;&#39;&#39;</span>
         <span class="n">psp_inh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_psp_simulator</span><span class="p">(</span><span class="n">exc_inh</span><span class="o">=</span><span class="s1">&#39;inh&#39;</span><span class="p">,</span> <span class="n">gExRange</span> <span class="o">=</span> <span class="n">gExRange</span><span class="p">,</span>
                                          <span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span><span class="p">)</span>
@@ -197,12 +194,12 @@
         <span class="n">psp_excinh</span> <span class="o">=</span> <span class="n">combine_PSP_objects</span><span class="p">(</span><span class="n">psp_exc</span><span class="p">,</span> <span class="n">psp_inh</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">psp_excinh</span></div>
     
-<div class="viewcode-block" id="PSP_with_current_injection.get"><a class="viewcode-back" href="../../simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PSP_with_current_injection.get"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;returns final PSP object&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_psp_simulator_exc_and_inh_combined</span><span class="p">()</span></div></div>
     
     
-<div class="viewcode-block" id="combine_PSP_objects"><a class="viewcode-back" href="../../simrun3.html#simrun3.PSP_with_cell_modification.combine_PSP_objects">[docs]</a><span class="k">def</span> <span class="nf">combine_PSP_objects</span><span class="p">(</span><span class="n">PSPexc</span><span class="p">,</span> <span class="n">PSPinh</span><span class="p">):</span>
+<div class="viewcode-block" id="combine_PSP_objects"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.PSP_with_cell_modification.combine_PSP_objects">[docs]</a><span class="k">def</span> <span class="nf">combine_PSP_objects</span><span class="p">(</span><span class="n">PSPexc</span><span class="p">,</span> <span class="n">PSPinh</span><span class="p">):</span>
     <span class="k">assert</span><span class="p">(</span><span class="n">PSPexc</span><span class="o">.</span><span class="n">neuron_param</span> <span class="o">==</span> <span class="n">PSPinh</span><span class="o">.</span><span class="n">neuron_param</span><span class="p">)</span>
     <span class="k">assert</span><span class="p">(</span><span class="n">PSPexc</span><span class="o">.</span><span class="n">confile</span> <span class="o">==</span> <span class="n">PSPinh</span><span class="o">.</span><span class="n">confile</span><span class="p">)</span>
     <span class="k">assert</span><span class="p">(</span><span class="n">PSPexc</span><span class="o">.</span><span class="n">gExRange</span> <span class="o">==</span> <span class="n">PSPinh</span><span class="o">.</span><span class="n">gExRange</span><span class="p">)</span>

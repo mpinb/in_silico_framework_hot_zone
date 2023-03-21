@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -76,14 +73,14 @@
 <span class="sd">@author: abast</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
-<div class="viewcode-block" id="Evaluator_Setup"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator_Setup">[docs]</a><span class="k">class</span> <span class="nc">Evaluator_Setup</span><span class="p">:</span>
-<div class="viewcode-block" id="Evaluator_Setup.__init__"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator_Setup.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Evaluator_Setup"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator_Setup">[docs]</a><span class="k">class</span> <span class="nc">Evaluator_Setup</span><span class="p">:</span>
+<div class="viewcode-block" id="Evaluator_Setup.__init__"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator_Setup.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pre_funs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_funs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">finalize_funs</span> <span class="o">=</span> <span class="p">[]</span></div></div>
 
-<div class="viewcode-block" id="Evaluator"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator">[docs]</a><span class="k">class</span> <span class="nc">Evaluator</span><span class="p">:</span>
-<div class="viewcode-block" id="Evaluator.__init__"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Evaluator"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator">[docs]</a><span class="k">class</span> <span class="nc">Evaluator</span><span class="p">:</span>
+<div class="viewcode-block" id="Evaluator.__init__"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;This  class can be used to extract features from (usually) voltagetraces</span>
 <span class="sd">        of different stimuli. The voltage traces are (usually) computed with a Simulator </span>
 <span class="sd">        object by calling its run method.</span>
@@ -129,7 +126,7 @@
         <span class="c1">#self.objectives = objectives</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setup</span> <span class="o">=</span> <span class="n">Evaluator_Setup</span><span class="p">()</span></div>
         
-<div class="viewcode-block" id="Evaluator.evaluate"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features_dict</span><span class="p">):</span>
+<div class="viewcode-block" id="Evaluator.evaluate"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features_dict</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Extracts features from a simulation result computed by Simulator.run()</span>
 <span class="sd">        </span>
 <span class="sd">        Details, how to set up the Evaluator are in the docstring of</span>

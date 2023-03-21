@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>model_data_base.mdb_initializers package &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">model_data_base.mdb_initializers package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-model_data_base.mdb_initializers.PSPs">model_data_base.mdb_initializers.PSPs module</a></li>
+<li><a class="reference internal" href="#module-model_data_base.mdb_initializers.load_simrun_general">model_data_base.mdb_initializers.load_simrun_general module</a></li>
+<li><a class="reference internal" href="#module-model_data_base.mdb_initializers.prepare_ANN_batches">model_data_base.mdb_initializers.prepare_ANN_batches module</a></li>
+<li><a class="reference internal" href="#module-model_data_base.mdb_initializers.somatic_summation_model">model_data_base.mdb_initializers.somatic_summation_model module</a></li>
+<li><a class="reference internal" href="#module-model_data_base.mdb_initializers.synapse_activation_binning">model_data_base.mdb_initializers.synapse_activation_binning module</a></li>
+<li><a class="reference internal" href="#module-model_data_base.mdb_initializers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">model_data_base.mdb_initializers package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/model_data_base.mdb_initializers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="model-data-base-mdb-initializers-package">
+<h1>model_data_base.mdb_initializers package<a class="headerlink" href="#model-data-base-mdb-initializers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-model_data_base.mdb_initializers.PSPs">
+<span id="model-data-base-mdb-initializers-psps-module"></span><h2>model_data_base.mdb_initializers.PSPs module<a class="headerlink" href="#module-model_data_base.mdb_initializers.PSPs" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.PSPs.</code><code class="sig-name descname">get_PSP_determinants_from_mdb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/PSPs.html#get_PSP_determinants_from_mdb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the combinations of neuron_parameters and network embeddings for which
+PSPs need to be computed for somatic summation model</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.PSPs.get_confile_form_network_param">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.PSPs.</code><code class="sig-name descname">get_confile_form_network_param</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/PSPs.html#get_confile_form_network_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.PSPs.get_confile_form_network_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.PSPs.get_parameterfiles_df_with_confile_and_neuron_param_path">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.PSPs.</code><code class="sig-name descname">get_parameterfiles_df_with_confile_and_neuron_param_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/PSPs.html#get_parameterfiles_df_with_confile_and_neuron_param_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.PSPs.get_parameterfiles_df_with_confile_and_neuron_param_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.PSPs.init">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.PSPs.</code><code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description_key</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">PSPClass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">PSPClass_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/PSPs.html#init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.PSPs.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>This calculates PSPs for a model_data_base, that has been initialized with
+I.mdb_init_simrun_general. It determines all network embeddings (confile) and neuron models (neuron_param)
+present in the database and initializes the PSPs computation accordingly.</p>
+<p>The PSPs are calculated using PSPClass. This can e.g. be a class defined in simrun3.PSP_with_modification.
+This class will be initialized as follows for all neuron_param and confile:
+psp_class_instance = PSPClass(neuron_param, confile, <a href="#id1"><span class="problematic" id="id2">**</span></a>PSPClass_kwargs)</p>
+<p>PSPClass needs to provide a get method, that returns a PSPs object, as defined in simrun3.synaptic_strength_fitting.
+The PSPs object will be executed and saved to mdb under the following location:
+mdb[‘PSPs’][‘description_key’, PSPClass.__name__, ‘neuron_param_path’, ‘confile_path’]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-model_data_base.mdb_initializers.load_simrun_general">
+<span id="model-data-base-mdb-initializers-load-simrun-general-module"></span><h2>model_data_base.mdb_initializers.load_simrun_general module<a class="headerlink" href="#module-model_data_base.mdb_initializers.load_simrun_general" title="Permalink to this headline">¶</a></h2>
+<p>Use the init function in this module to load simulation data generated
+with the simrun2 module into a ModelDataBase.</p>
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_spike_times">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">add_dendritic_spike_times</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">dendritic_spike_times_threshold</span><span class="o">=</span><span class="default_value">- 30.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#add_dendritic_spike_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.add_dendritic_spike_times" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_voltage_traces">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">add_dendritic_voltage_traces</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">rewrite_in_optimized_format</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">dendritic_spike_times</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">repartition</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">dendritic_spike_times_threshold</span><span class="o">=</span><span class="default_value">- 30.0</span></em>, <em class="sig-param"><span class="n">get</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#add_dendritic_voltage_traces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.add_dendritic_voltage_traces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.cell_param_to_mdbpath">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">cell_param_to_mdbpath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">neuron</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#cell_param_to_mdbpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.cell_param_to_mdbpath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.create_mdb_path_print">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">create_mdb_path_print</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">replace_dict</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#create_mdb_path_print"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.create_mdb_path_print" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.create_metadata">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">create_metadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#create_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.create_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates metadata out of a pd.Series containing the sim_trail_indices</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.generate_param_file_hashes">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">generate_param_file_hashes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">simresult_path</span></em>, <em class="sig-param"><span class="n">sim_trail_index</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#generate_param_file_hashes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.generate_param_file_hashes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.get_file">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">get_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">suffix</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#get_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.get_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>if folder only contains one file of specified suffix, this file is returned</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.get_max_commas">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">get_max_commas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">paths</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#get_max_commas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.get_max_commas" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.get_voltage_traces_divisions_by_metadata">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">get_voltage_traces_divisions_by_metadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metadata</span></em>, <em class="sig-param"><span class="n">repartition</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#get_voltage_traces_divisions_by_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.get_voltage_traces_divisions_by_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.init">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">simresult_path</span></em>, <em class="sig-param"><span class="n">core</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">voltage_traces</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">synapse_activation</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">dendritic_voltage_traces</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">parameterfiles</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">spike_times</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">burst_times</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">repartition</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">get</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rewrite_in_optimized_format</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">dendritic_spike_times</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">dendritic_spike_times_threshold</span><span class="o">=</span><span class="default_value">- 30.0</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_chunks</span><span class="o">=</span><span class="default_value">5000</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use this function to load simulation data generated with the simrun2 module
+into a ModelDataBase.</p>
+<p>After initialization, you can access the data from the model_data_base in the following manner:
+mdb[‘synapse_activation’], mdb[‘cell_activation’], mdb[‘voltage_traces’], mdb[‘spike_times’], …
+Use mdb.keys() to view all available data.</p>
+<p>Note that the database does not contain the actual data, instead it contains links
+to the original / external data.</p>
+<p>rewrite_in_optimized_format: if True, data is converted to a high performance binary
+format and makes unpickling more robust against version changes of third party libraries.
+Also, it makes the database self-containing, i.e. you can move it to another machine or
+subfolder and everything still works. Deleting the data folder then would (should) not cause
+loss of data. If False, the mdb only contains links to the actual simulation data folder
+and will not work if the data folder is deleted or moved or transferred to another machine
+where the same absolute paths are not valid.</p>
+<p>client: dask distributed Client object.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">load_dendritic_voltage_traces</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">suffix_key_dict</span></em>, <em class="sig-param"><span class="n">repartition</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#load_dendritic_voltage_traces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces_helper">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">load_dendritic_voltage_traces_helper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">suffix</span></em>, <em class="sig-param"><span class="n">divisions</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">repartition</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#load_dendritic_voltage_traces_helper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces_helper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.load_initialized_cell_and_evokedNW_from_mdb">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">load_initialized_cell_and_evokedNW_from_mdb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">sti</span></em>, <em class="sig-param"><span class="n">allPoints</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">reconnect_synapses</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#load_initialized_cell_and_evokedNW_from_mdb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.load_initialized_cell_and_evokedNW_from_mdb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.load_param_files_from_mdb">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">load_param_files_from_mdb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">sti</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#load_param_files_from_mdb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.load_param_files_from_mdb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.make_filelist">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">make_filelist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directory</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="o">=</span><span class="default_value">'vm_all_traces.csv'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#make_filelist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.make_filelist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.network_param_to_mdbpath">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">network_param_to_mdbpath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#network_param_to_mdbpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.network_param_to_mdbpath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.optimize">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">optimize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">dumper</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">select</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">get</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">repartition</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.optimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED; this step is now already done in a more coherent way by the init function if
+rewrite_in_optimized_format is set to True.</p>
+<p>This function speeds up the access to simulation data and makes the database
+self-containing and more robust. It can only be used after initializing the database (do so
+by using the init method in this module).</p>
+<p>After calling init, the database contains references to the external
+folder in which the simulation results are stored. The references
+point to csv files, which is a slow format. The reference itself is stored
+using pickle in this database. If you update an underlying library (dask, pandas, numpy),
+it is not assured that you can stil unpickle the data.</p>
+<p>This function deals with these drawbacks. It will save the data in subfolders of the
+specified model_data_base dircetory using an optimized format, which is much faster than csv
+(it categorizes the data and saves each partition using the pandas msgpack extension,
+using blosc compression).
+It also repartitions dataframes such that they contain 5000 partitions at maximum.
+The references to the data is then saved using pickle, but in a way that we only depend
+on the public api of third party libraries but not their internal structure.</p>
+<p>select: If None, all data will be converted. You can specify a list of items that
+should be optimized, if only a subset should be optimized.</p>
+<p>get: scheduler for task execution. If None, compatibility.multiprocessing_scheduler is used.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_by_filenames">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">read_voltage_traces_by_filenames</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prefix</span></em>, <em class="sig-param"><span class="n">fnames</span></em>, <em class="sig-param"><span class="n">divisions</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">repartition</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#read_voltage_traces_by_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_by_filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>takes list of filenames pointing to voltage trace files,
+returns dask dataframe</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_csv">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">read_voltage_traces_from_csv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prefix</span></em>, <em class="sig-param"><span class="n">fname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#read_voltage_traces_from_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads a single voltage traces file as it is generated by the simrun package.
+Returns a pandas.DataFrame</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_file">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">read_voltage_traces_from_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prefix</span></em>, <em class="sig-param"><span class="n">fname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#read_voltage_traces_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads a single voltage traces file as it is generated by the simrun package.
+Returns a pandas.DataFrame</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_npz">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">read_voltage_traces_from_npz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prefix</span></em>, <em class="sig-param"><span class="n">fname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#read_voltage_traces_from_npz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_npz" title="Permalink to this definition">¶</a></dt>
+<dd><p>this is the same as read_voltage_traces_from_file, but it reads npz files, not csv</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.load_simrun_general.write_param_files_to_folder">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.load_simrun_general.</code><code class="sig-name descname">write_param_files_to_folder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">path_column</span></em>, <em class="sig-param"><span class="n">hash_column</span></em>, <em class="sig-param"><span class="n">transform_fun</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/load_simrun_general.html#write_param_files_to_folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.load_simrun_general.write_param_files_to_folder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-model_data_base.mdb_initializers.prepare_ANN_batches">
+<span id="model-data-base-mdb-initializers-prepare-ann-batches-module"></span><h2>model_data_base.mdb_initializers.prepare_ANN_batches module<a class="headerlink" href="#module-model_data_base.mdb_initializers.prepare_ANN_batches" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.Init">
+<em class="property">class </em><code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">Init</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">mdb_target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_time</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_time</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bin_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">batchsize</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sti_selection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sti_selection_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">persist</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">synaptic_weight</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">dend_ap_suffix</span><span class="o">=</span><span class="default_value">'_-30.0'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#Init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.Init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.Init.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">mdb_target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_time</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_time</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bin_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">batchsize</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sti_selection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sti_selection_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">persist</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">synaptic_weight</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">dend_ap_suffix</span><span class="o">=</span><span class="default_value">'_-30.0'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#Init.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.Init.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_all">
+<code class="sig-name descname">init_all</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">init_soma_vt</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">init_dend_vt</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">init_soma_AP_ISI</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">init_dend_AP_ISI</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">init_max_soma_vt</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">init_max_dend_vt</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">init_synapse_activation</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">init_synapse_activation_weighted</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#Init.init_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_dend_AP_ISI">
+<code class="sig-name descname">init_dend_AP_ISI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#Init.init_dend_AP_ISI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_dend_AP_ISI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_dend_vt">
+<code class="sig-name descname">init_dend_vt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#Init.init_dend_vt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_dend_vt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_max_dend_vt">
+<code class="sig-name descname">init_max_dend_vt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#Init.init_max_dend_vt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_max_dend_vt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_max_soma_vt">
+<code class="sig-name descname">init_max_soma_vt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#Init.init_max_soma_vt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_max_soma_vt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_soma_AP_ISI">
+<code class="sig-name descname">init_soma_AP_ISI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#Init.init_soma_AP_ISI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_soma_AP_ISI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_soma_vt">
+<code class="sig-name descname">init_soma_vt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#Init.init_soma_vt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_soma_vt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_synapse_activation">
+<code class="sig-name descname">init_synapse_activation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">synaptic_weight</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#Init.init_synapse_activation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_synapse_activation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_synapse_activation_weighted">
+<code class="sig-name descname">init_synapse_activation_weighted</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#Init.init_synapse_activation_weighted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.Init.init_synapse_activation_weighted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.augment_synapse_activation_df_with_branch_bin">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">augment_synapse_activation_df_with_branch_bin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sa_</span></em>, <em class="sig-param"><span class="n">section_distances_df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">synaptic_weight_dict</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#augment_synapse_activation_df_with_branch_bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.augment_synapse_activation_df_with_branch_bin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.compute_AP_array">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">compute_AP_array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">st</span></em>, <em class="sig-param"><span class="n">min_time</span></em>, <em class="sig-param"><span class="n">max_time</span></em>, <em class="sig-param"><span class="n">fillna</span><span class="o">=</span><span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#compute_AP_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.compute_AP_array" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_array">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">compute_ISI_array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">st</span></em>, <em class="sig-param"><span class="n">min_time</span></em>, <em class="sig-param"><span class="n">max_time</span></em>, <em class="sig-param"><span class="n">fillna</span><span class="o">=</span><span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#compute_ISI_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_array" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_from_st">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">compute_ISI_from_st</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">st</span></em>, <em class="sig-param"><span class="n">timepoint</span></em>, <em class="sig-param"><span class="n">fillna</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#compute_ISI_from_st"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_from_st" title="Permalink to this definition">¶</a></dt>
+<dd><p>suggestion: use the temporal window width as fillna</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_bin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">bin_min</span></em>, <em class="sig-param"><span class="n">bin_max</span></em>, <em class="sig-param"><span class="n">n_bins</span></em>, <em class="sig-param"><span class="n">tolerance</span><span class="o">=</span><span class="default_value">0.1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_bin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_adjacency_map_in_section">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_bin_adjacency_map_in_section</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">section_id</span></em>, <em class="sig-param"><span class="n">section_distances_df</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_bin_adjacency_map_in_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_adjacency_map_in_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches all the sections neighboring the given section id.
+It then checks which bins are adjacent within these sections.
+Sections are defined by the neuron simulation, but bins are ad-hoc defined by data preparation for the ANN.
+Eeach section always has one or more bins.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section_id</strong> (<em>int</em>) – index of the neuron section</p></li>
+<li><p><strong>section_distances_df</strong> (<em>pd.DataFrame</em>) – the dataframe describing distance to soma for all sections, as provided by :&#64;function get_section_distances_df:</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with pairs of adjacant bins.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_soma_distances_in_section">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_bin_soma_distances_in_section</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_id</span></em>, <em class="sig-param"><span class="n">section_distances_df</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_bin_soma_distances_in_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_soma_distances_in_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a section id, this method returns the distance to soma for all bins in this section</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section_id</strong> (<em>int</em>) – Id of the neuron section</p></li>
+<li><p><strong>section_distances_df</strong> (<em>pd.DataFrame</em>) – the dataframe describing distance to soma for all sections, as provided by :&#64;function get_section_distances_df:</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list containing the distance to soma for each bin in a section.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_binsize">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_binsize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">length</span></em>, <em class="sig-param"><span class="n">binsize_goal</span><span class="o">=</span><span class="default_value">50</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_binsize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_binsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>given a length of a branch, returns number of binsize and number of bins that results in binning closest to
+the binsize goal</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_max_depolarization_per_ms">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_max_depolarization_per_ms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vt_dask</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_max_depolarization_per_ms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_max_depolarization_per_ms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_max_per_ms_on_pandas_dataframe">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_max_per_ms_on_pandas_dataframe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vt_pandas</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_max_per_ms_on_pandas_dataframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_max_per_ms_on_pandas_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_neighboring_spatial_bins">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_neighboring_spatial_bins</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">section_distances_df</span></em>, <em class="sig-param"><span class="n">bin_id</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_neighboring_spatial_bins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_neighboring_spatial_bins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a bin id, this method returns all the neighboring bins</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>cell</em>) – cell object</p></li>
+<li><p><strong>neup</strong> (<em>_type_</em>) – neuron parameter file</p></li>
+<li><p><strong>bin_id</strong> (<em>_type_</em>) – BIn id of format: section_id/bin_id</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of all ids of bins that neighbor the given bin</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_neuron_param_file">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_neuron_param_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_neuron_param_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_neuron_param_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_section_distances_df">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_section_distances_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">neuron_param_file</span></em>, <em class="sig-param"><span class="n">silent</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_section_distances_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_section_distances_df" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_spatial_bin_names">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_spatial_bin_names</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_distances_df</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_spatial_bin_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_spatial_bin_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a dataframe describing the distance to soma of all sections, as provided by :&#64;function get_section_distances_df:,
+this method returns the names for all the spatial bins of the format section_id/bin_id. E.g.: 5/2 denotes the second bin of section 5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>section_distances_df</strong> (<em>pd.DataFrame</em>) – the dataframe describing distance to soma for all sections, as provided by :&#64;function get_section_distances_df:</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list containing the bin ids in string format.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_synapse_activation_array_weighted">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_synapse_activation_array_weighted</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sa_</span></em>, <em class="sig-param"><span class="n">selected_stis</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">spatial_bin_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_time</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_time</span><span class="o">=</span><span class="default_value">600</span></em>, <em class="sig-param"><span class="n">bin_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">use_weights</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_synapse_activation_array_weighted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_synapse_activation_array_weighted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.get_time_groups">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">get_time_groups</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vt_pandas</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_time_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_time_groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.init">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">mdb_target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_time</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_time</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bin_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">batchsize</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sti_selection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sti_selection_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">persist</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">synaptic_weight</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">dend_ap_suffix</span><span class="o">=</span><span class="default_value">'_-30.0'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>persist: whether the synapse activation dataframe should be loaded into memory
+on the dask cluster. Speeds up the process if it fits in memory, otherwise leads to crash</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.load_syn_weights">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">load_syn_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m</span></em>, <em class="sig-param"><span class="n">client</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#load_syn_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.load_syn_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.run_delayeds_incrementally">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">run_delayeds_incrementally</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">client</span></em>, <em class="sig-param"><span class="n">delayeds</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#run_delayeds_incrementally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.run_delayeds_incrementally" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.prepare_ANN_batches.temporal_binning_augmented_sa">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.prepare_ANN_batches.</code><code class="sig-name descname">temporal_binning_augmented_sa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sa_augmented</span></em>, <em class="sig-param"><span class="n">min_time</span></em>, <em class="sig-param"><span class="n">max_time</span></em>, <em class="sig-param"><span class="n">bin_size</span></em>, <em class="sig-param"><span class="n">use_weights</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#temporal_binning_augmented_sa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.temporal_binning_augmented_sa" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-model_data_base.mdb_initializers.somatic_summation_model">
+<span id="model-data-base-mdb-initializers-somatic-summation-model-module"></span><h2>model_data_base.mdb_initializers.somatic_summation_model module<a class="headerlink" href="#module-model_data_base.mdb_initializers.somatic_summation_model" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights">
+<em class="property">class </em><code class="sig-prename descclassname">model_data_base.mdb_initializers.somatic_summation_model.</code><code class="sig-name descname">CelltypeSpecificSynapticWeights</code><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#CelltypeSpecificSynapticWeights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>simrun3.somatic_summation_model allows specifying synaptic weights of individual synapses.
+It therefore takes a dictionarry that maps from (celltype, synapseID) to the weight of that synapse.</p>
+<p>In the default case, we assign synaptic weights per celltype, not per individual synapse. This class
+provides a dictionary like interface, that allows to access an individual synapse
+with the tuple (celltype, synapseID) and returns the synaptic weight assigned to the celltype.</p>
+<p>It can be initialized by parsing a netowrk.param file that gets created during simulations.</p>
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#CelltypeSpecificSynapticWeights.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights.init_with_network_param">
+<code class="sig-name descname">init_with_network_param</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">select_celltypes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_default_weight</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#CelltypeSpecificSynapticWeights.init_with_network_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.CelltypeSpecificSynapticWeights.init_with_network_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod">
+<em class="property">class </em><code class="sig-prename descclassname">model_data_base.mdb_initializers.somatic_summation_model.</code><code class="sig-name descname">DistributedDDFWithSaveMethod</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">key</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ddf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dumper</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">get</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#DistributedDDFWithSaveMethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">key</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ddf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dumper</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">get</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#DistributedDDFWithSaveMethod.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#DistributedDDFWithSaveMethod.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.somatic_summation_model.get_mdb_loader_dict">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.somatic_summation_model.</code><code class="sig-name descname">get_mdb_loader_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">descriptor</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">PSPClass_name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#get_mdb_loader_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.get_mdb_loader_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.somatic_summation_model.init">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.somatic_summation_model.</code><code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em>, <em class="sig-param"><span class="n">description_key</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">PSPClass_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">client</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">block_till_saved</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">persistent_df</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">individual_weights</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">select_celltypes</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.somatic_summation_model.sa_to_vt_bypassing_lock">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.somatic_summation_model.</code><code class="sig-name descname">sa_to_vt_bypassing_lock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb_loader_dict</span></em>, <em class="sig-param"><span class="n">descriptor</span></em>, <em class="sig-param"><span class="n">classname</span></em>, <em class="sig-param"><span class="n">sa</span></em>, <em class="sig-param"><span class="n">individual_weights</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">select_celltypes</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#sa_to_vt_bypassing_lock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.sa_to_vt_bypassing_lock" title="Permalink to this definition">¶</a></dt>
+<dd><p>simulates the somatic summation model for given synapse activation.
+The synapse activation dataframe sa may contain several simtrails.
+The PSPs matching the anatomical location are automatically loaded. For this,
+it is necessary that the model data base has been initialized with
+model_data_base.mdb_initializers.PSPs.init</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-model_data_base.mdb_initializers.synapse_activation_binning">
+<span id="model-data-base-mdb-initializers-synapse-activation-binning-module"></span><h2>model_data_base.mdb_initializers.synapse_activation_binning module<a class="headerlink" href="#module-model_data_base.mdb_initializers.synapse_activation_binning" title="Permalink to this headline">¶</a></h2>
+<p>Methods for fast binning of synapse activation dask dataframe.</p>
+<p>Exemplary use:</p>
+<blockquote>
+<div><p>groupby  = [‘EI’]
+values = synapse_activation_postprocess_dask(mdb[‘synapse_activation’], groupby = groupby, prefun = prefun, applyfun = applyfun, postfun = postfun)
+values = values.compute(get = c.get)
+print ‘save’
+save_groupby(mdb, values, groupby)</p>
+</div></blockquote>
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.synapse_activation_binning.applyfun">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.synapse_activation_binning.</code><code class="sig-name descname">applyfun</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pdf</span></em>, <em class="sig-param"><span class="n">maxtime</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#applyfun"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.applyfun" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.synapse_activation_binning.init">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.synapse_activation_binning.</code><code class="sig-name descname">init</code><span class="sig-paren">(</span><em class="sig-param">mdb</em>, <em class="sig-param">groupby=''</em>, <em class="sig-param">get=None</em>, <em class="sig-param">prefun=&lt;function prefun&gt;</em>, <em class="sig-param">applyfun=&lt;function applyfun&gt;</em>, <em class="sig-param">postfun=&lt;function postfun&gt;</em>, <em class="sig-param">maxtime=400</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Binning synapse activations.</p>
+<dl>
+<dt>mdb: ModelDataBase object, which is already initalized, such that</dt><dd><p>the key mdb[‘synapse_activation’] exists.</p>
+</dd>
+<dt>groupby: (default: ‘’): species for which subgroups the bins should be</dt><dd><dl class="simple">
+<dt>calculated. Available values include:</dt><dd><p>‘celltype’,
+‘presynaptic_column’,
+‘proximal’, (soma distance &lt; 500 ym)
+‘EI’ (Lumping the EXC / INH celltypes together)
+‘binned_somadist’, 50 micron bins on soma distance</p>
+</dd>
+</dl>
+<p>It can also be any column in the specified dataframe.
+Can be a list, if “sub-subgroups” should be calculated.</p>
+</dd>
+</dl>
+<p>get: allows to specify a dask scheduler for the computation</p>
+<dl class="simple">
+<dt>Not implemented yet:</dt><dd><p>(prefun: function to apply on each partition before binning)
+(applyfun: actual binning function)
+(postfun: function to merge results together for one partition)</p>
+</dd>
+</dl>
+<p>returns: None. The binned synapse activation data will be stored in mdb.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.synapse_activation_binning.postfun">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.synapse_activation_binning.</code><code class="sig-name descname">postfun</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="n">maxtime</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#postfun"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.postfun" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.synapse_activation_binning.prefun">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.synapse_activation_binning.</code><code class="sig-name descname">prefun</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#prefun"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.prefun" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.synapse_activation_binning.</code><code class="sig-name descname">synapse_activation_postprocess_dask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ddf</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#synapse_activation_postprocess_dask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates bins of synapse activation dask dataframe per trail.
+#Todo: make this method out of core</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ddf</strong> – synapse activation dask dataframe</p>
+</dd>
+</dl>
+<dl>
+<dt>kwargs:</dt><dd><dl>
+<dt>groupby: (default: ‘’): species for which subgroups the bins should be</dt><dd><dl class="simple">
+<dt>calculated. Available values include:</dt><dd><p>‘celltype’,
+‘presynaptic_column’,
+‘proximal’, (soma distance &lt; 500 ym)
+‘EI’ (Lumping the EXC / INH celltypes together)
+‘binned_somadist’ synapse counts for all 50 microns</p>
+</dd>
+</dl>
+<p>It can also be any column in the specified dataframe.
+Can be a list, if “sub-subgroups” should be calculated.</p>
+</dd>
+<dt>mdb: if specified, the result will be computed immediately and</dt><dd><p>saved in the database immediately.</p>
+</dd>
+<dt>get: only has an effect if ‘mdb’ kwarg is provided. In this case,</dt><dd><p>it allows to specify a dask scheduler for the computation</p>
+</dd>
+</dl>
+<p>(prefun: function to apply on each partition before binning)
+(applyfun: actual binning function)
+(postfun: function to merge results together for one partition)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>dask.delayed object. If computed, this will return a dictionary
+containing numpy arrays. rows: sim trails, columns: bins</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.synapse_activation_binning.</code><code class="sig-name descname">synapse_activation_postprocess_pandas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pdf</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">prefun</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">applyfun</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">postfun</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#synapse_activation_postprocess_pandas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas" title="Permalink to this definition">¶</a></dt>
+<dd><p>see docstring of synapse_activation_postprocess_dask</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.mdb_initializers.synapse_activation_binning.tree_reduction">
+<code class="sig-prename descclassname">model_data_base.mdb_initializers.synapse_activation_binning.</code><code class="sig-name descname">tree_reduction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">delayeds</span></em>, <em class="sig-param"><span class="n">aggregate_fun</span></em>, <em class="sig-param"><span class="n">length</span><span class="o">=</span><span class="default_value">7</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#tree_reduction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.tree_reduction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-model_data_base.mdb_initializers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-model_data_base.mdb_initializers" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

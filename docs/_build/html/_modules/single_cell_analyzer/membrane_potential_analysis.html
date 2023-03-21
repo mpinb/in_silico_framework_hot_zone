@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -78,7 +75,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">model_data_base.mdbopen</span> <span class="kn">import</span> <span class="n">mdbopen</span>
 
-<div class="viewcode-block" id="vm_mean"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.vm_mean">[docs]</a><span class="k">def</span> <span class="nf">vm_mean</span><span class="p">(</span><span class="n">vVec</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dtStim</span><span class="p">):</span>
+<div class="viewcode-block" id="vm_mean"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.vm_mean">[docs]</a><span class="k">def</span> <span class="nf">vm_mean</span><span class="p">(</span><span class="n">vVec</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dtStim</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    computes mean subthreshold voltage from</span>
 <span class="sd">    voltage trace during stimulation time window</span>
@@ -97,7 +94,7 @@
     <span class="n">vss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">v_</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vss</span></div>
 
-<div class="viewcode-block" id="vm_std"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.vm_std">[docs]</a><span class="k">def</span> <span class="nf">vm_std</span><span class="p">(</span><span class="n">vVec</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dtStim</span><span class="p">):</span>
+<div class="viewcode-block" id="vm_std"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.vm_std">[docs]</a><span class="k">def</span> <span class="nf">vm_std</span><span class="p">(</span><span class="n">vVec</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dtStim</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    computes standard deviation of subthreshold voltage from</span>
 <span class="sd">    voltage trace during stimulation time window</span>
@@ -116,7 +113,7 @@
     <span class="n">vss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">v_</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vss</span></div>
 
-<div class="viewcode-block" id="compute_mean_psp_amplitude"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_mean_psp_amplitude">[docs]</a><span class="k">def</span> <span class="nf">compute_mean_psp_amplitude</span><span class="p">(</span><span class="n">vTraces</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_mean_psp_amplitude"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_mean_psp_amplitude">[docs]</a><span class="k">def</span> <span class="nf">compute_mean_psp_amplitude</span><span class="p">(</span><span class="n">vTraces</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
     <span class="n">width</span> <span class="o">=</span> <span class="mf">35.0</span>
     <span class="n">t</span> <span class="o">=</span> <span class="mf">15.0</span>
     <span class="n">amplitudes</span> <span class="o">=</span> <span class="p">[]</span>
@@ -126,7 +123,7 @@
         <span class="n">amplitudes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">trace</span><span class="p">[</span><span class="n">begin</span><span class="p">:</span><span class="n">end</span><span class="p">]))</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">t</span><span class="p">],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">amplitudes</span><span class="p">)]</span></div>
 
-<div class="viewcode-block" id="compute_vm_std_windows"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_vm_std_windows">[docs]</a><span class="k">def</span> <span class="nf">compute_vm_std_windows</span><span class="p">(</span><span class="n">vStd</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_vm_std_windows"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_vm_std_windows">[docs]</a><span class="k">def</span> <span class="nf">compute_vm_std_windows</span><span class="p">(</span><span class="n">vStd</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
     <span class="n">width</span> <span class="o">=</span> <span class="mf">35.0</span>
     <span class="n">windows</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">]</span>
     <span class="n">avgStds</span> <span class="o">=</span> <span class="p">[]</span>
@@ -136,7 +133,7 @@
         <span class="n">avgStds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">vStd</span><span class="p">[</span><span class="n">begin</span><span class="p">:</span><span class="n">end</span><span class="p">]))</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">windows</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">avgStds</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="compute_vm_histogram"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_vm_histogram">[docs]</a><span class="k">def</span> <span class="nf">compute_vm_histogram</span><span class="p">(</span><span class="n">vTraces</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_vm_histogram"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_vm_histogram">[docs]</a><span class="k">def</span> <span class="nf">compute_vm_histogram</span><span class="p">(</span><span class="n">vTraces</span><span class="p">):</span>
     <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">80.0</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="mf">2.0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">21</span><span class="p">)])</span>
     <span class="n">vPoints</span> <span class="o">=</span> <span class="n">vTraces</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">hist</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">vPoints</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">)</span>
@@ -144,7 +141,7 @@
     <span class="n">hist</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">norm</span><span class="o">*</span><span class="n">hist</span>
     <span class="k">return</span> <span class="n">hist</span><span class="p">,</span> <span class="n">bins</span></div>
 
-<div class="viewcode-block" id="compute_uPSP_amplitude"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude">[docs]</a><span class="k">def</span> <span class="nf">compute_uPSP_amplitude</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tSyn</span><span class="p">,</span> <span class="n">isEPSP</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_uPSP_amplitude"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude">[docs]</a><span class="k">def</span> <span class="nf">compute_uPSP_amplitude</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tSyn</span><span class="p">,</span> <span class="n">isEPSP</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    simple method for determining amplitude of</span>
 <span class="sd">    unitary PSP starting at time tSyn:</span>
@@ -171,7 +168,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">endBin</span><span class="p">:])</span> <span class="o">-</span> <span class="n">baseline</span></div>
 
-<div class="viewcode-block" id="simple_spike_detection"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.simple_spike_detection">[docs]</a><span class="k">def</span> <span class="nf">simple_spike_detection</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tBegin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tEnd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;regular&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="simple_spike_detection"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.simple_spike_detection">[docs]</a><span class="k">def</span> <span class="nf">simple_spike_detection</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tBegin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tEnd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;regular&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Simple spike detection method. Identify</span>
 <span class="sd">    spike times within optional window [tBegin, tEnd]</span>
@@ -211,11 +208,11 @@
     
     <span class="k">return</span> <span class="n">tSpike</span></div>
 
-<div class="viewcode-block" id="test_spike_detection_respects_threshold"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.test_spike_detection_respects_threshold">[docs]</a><span class="k">def</span> <span class="nf">test_spike_detection_respects_threshold</span><span class="p">():</span>
+<div class="viewcode-block" id="test_spike_detection_respects_threshold"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.test_spike_detection_respects_threshold">[docs]</a><span class="k">def</span> <span class="nf">test_spike_detection_respects_threshold</span><span class="p">():</span>
     <span class="k">assert</span><span class="p">(</span><span class="n">spike_detection</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="p">[</span><span class="mi">5</span><span class="p">])</span>
     <span class="k">assert</span><span class="p">(</span><span class="n">spike_detection</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span></div>
     
-<div class="viewcode-block" id="PSTH_from_spike_times"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times">[docs]</a><span class="k">def</span> <span class="nf">PSTH_from_spike_times</span><span class="p">(</span><span class="n">spikeTimeVectors</span><span class="p">,</span> <span class="n">binSize</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">tBegin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tEnd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aligned</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PSTH_from_spike_times"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times">[docs]</a><span class="k">def</span> <span class="nf">PSTH_from_spike_times</span><span class="p">(</span><span class="n">spikeTimeVectors</span><span class="p">,</span> <span class="n">binSize</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">tBegin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tEnd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aligned</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate PSTH from vectors of spike times</span>
 <span class="sd">    with optional bin size and time window [tBegin, tEnd].</span>
@@ -250,7 +247,7 @@
     
     <span class="k">return</span> <span class="n">hist</span><span class="p">,</span> <span class="n">bins</span></div>
 
-<div class="viewcode-block" id="RecordingSiteManager"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager">[docs]</a><span class="k">class</span> <span class="nc">RecordingSiteManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="RecordingSiteManager"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager">[docs]</a><span class="k">class</span> <span class="nc">RecordingSiteManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    simple class providing methods to handle recording</span>
 <span class="sd">    sites defined by Amira LandmarkSet</span>
@@ -258,7 +255,7 @@
     <span class="n">recordingSites</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">cell</span> <span class="o">=</span> <span class="kc">None</span>
     
-<div class="viewcode-block" id="RecordingSiteManager.__init__"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">landmarkFilename</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+<div class="viewcode-block" id="RecordingSiteManager.__init__"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">landmarkFilename</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
         <span class="n">landmarks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_landmark_file</span><span class="p">(</span><span class="n">landmarkFilename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">recordingSites</span> <span class="o">=</span> <span class="p">[]</span>
@@ -267,7 +264,7 @@
             <span class="n">newRecSite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_up_recording_site</span><span class="p">(</span><span class="n">landmark</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">landmarkFilename</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">recordingSites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newRecSite</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="RecordingSiteManager.set_up_recording_site"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_recording_site</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="RecordingSiteManager.set_up_recording_site"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_recording_site</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        determine section/segment on cell corresponding</span>
 <span class="sd">        to recording site location and create new</span>
@@ -328,7 +325,7 @@
         <span class="n">newRecSite</span> <span class="o">=</span> <span class="n">RecordingSite</span><span class="p">(</span><span class="n">minSecID</span><span class="p">,</span> <span class="n">minSegID</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">newRecSite</span></div>
     
-<div class="viewcode-block" id="RecordingSiteManager.update_recordings"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings">[docs]</a>    <span class="k">def</span> <span class="nf">update_recordings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RecordingSiteManager.update_recordings"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings">[docs]</a>    <span class="k">def</span> <span class="nf">update_recordings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        copy recorded voltages at recording sites</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -365,7 +362,7 @@
         
         <span class="k">return</span> <span class="n">landmarks</span></div>
 
-<div class="viewcode-block" id="RecordingSite"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSite">[docs]</a><span class="k">class</span> <span class="nc">RecordingSite</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="RecordingSite"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSite">[docs]</a><span class="k">class</span> <span class="nc">RecordingSite</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    light-weight container holding information</span>
 <span class="sd">    about recording site:</span>
@@ -377,24 +374,24 @@
     <span class="n">label</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">vRecordings</span> <span class="o">=</span> <span class="kc">None</span>
     
-<div class="viewcode-block" id="RecordingSite.__init__"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSite.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secID</span><span class="p">,</span> <span class="n">segID</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<div class="viewcode-block" id="RecordingSite.__init__"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSite.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secID</span><span class="p">,</span> <span class="n">segID</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secID</span> <span class="o">=</span> <span class="n">secID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">segID</span> <span class="o">=</span> <span class="n">segID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vRecordings</span> <span class="o">=</span> <span class="p">[]</span></div></div>
 
-<div class="viewcode-block" id="SpikeInit"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit">[docs]</a><span class="k">class</span> <span class="nc">SpikeInit</span><span class="p">:</span>
+<div class="viewcode-block" id="SpikeInit"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit">[docs]</a><span class="k">class</span> <span class="nc">SpikeInit</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Provides methods for analysis of spike initiation</span>
 <span class="sd">    in in vivo/ in vitro simulations. Can be used to</span>
 <span class="sd">    obtain features of spike shape, adaptation etc...</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-<div class="viewcode-block" id="SpikeInit.__init__"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SpikeInit.__init__"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="c1">#        TODO: implement</span>
         <span class="k">pass</span></div>
     
-<div class="viewcode-block" id="SpikeInit.vm_steady_state"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SpikeInit.vm_steady_state"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">vm_steady_state</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dtStim</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        computes &quot;steady-state&quot; subthreshold voltage from</span>
@@ -419,7 +416,7 @@
         <span class="n">vss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">v_</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">vss</span></div>
     
-<div class="viewcode-block" id="SpikeInit.analyze_single_spike"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SpikeInit.analyze_single_spike"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">analyze_single_spike</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">thresh</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        for comparison with in vitro spike shape:</span>
@@ -443,7 +440,7 @@
         <span class="n">ahp</span> <span class="o">=</span> <span class="n">thresh</span> <span class="o">-</span> <span class="n">vMin</span>
         <span class="k">return</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">ahp</span></div>
     
-<div class="viewcode-block" id="SpikeInit.analyze_spike_train"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_spike_train">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SpikeInit.analyze_spike_train"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_spike_train">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">analyze_spike_train</span><span class="p">():</span>
         <span class="k">pass</span></div></div>
 </pre></div>

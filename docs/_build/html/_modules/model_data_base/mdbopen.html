@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -75,7 +72,7 @@
 <span class="kn">from</span> <span class="nn">.model_data_base_register</span> <span class="kn">import</span> <span class="n">get_mdb_by_unique_id</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">cache</span>
 
-<div class="viewcode-block" id="resolve_mdb_path"><a class="viewcode-back" href="../../model_data_base.html#model_data_base.mdbopen.resolve_mdb_path">[docs]</a><span class="k">def</span> <span class="nf">resolve_mdb_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="resolve_mdb_path"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.mdbopen.resolve_mdb_path">[docs]</a><span class="k">def</span> <span class="nf">resolve_mdb_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="c1"># This has the purpose to map projects, that robert has run on the CIN cluster, to local paths</span>
     <span class="k">if</span> <span class="s1">&#39;/gpfs01/bethge/home/regger/data/&#39;</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;found CIN cluster prefix&#39;</span><span class="p">)</span>
@@ -150,8 +147,8 @@
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;mdb://&#39;</span><span class="p">,</span> <span class="n">mdb</span><span class="o">.</span><span class="n">get_id</span><span class="p">(),</span> <span class="n">key</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mdb</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
 
 
-<div class="viewcode-block" id="mdbopen"><a class="viewcode-back" href="../../model_data_base.html#model_data_base.mdbopen.mdbopen">[docs]</a><span class="k">class</span> <span class="nc">mdbopen</span><span class="p">:</span>
-<div class="viewcode-block" id="mdbopen.__init__"><a class="viewcode-back" href="../../model_data_base.html#model_data_base.mdbopen.mdbopen.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="mdbopen"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.mdbopen.mdbopen">[docs]</a><span class="k">class</span> <span class="nc">mdbopen</span><span class="p">:</span>
+<div class="viewcode-block" id="mdbopen.__init__"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.mdbopen.mdbopen.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exit_hooks</span> <span class="o">=</span> <span class="p">[]</span></div>
@@ -171,9 +168,9 @@
         <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_hooks</span><span class="p">:</span>
             <span class="n">h</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="taropen"><a class="viewcode-back" href="../../model_data_base.html#model_data_base.mdbopen.taropen">[docs]</a><span class="k">class</span> <span class="nc">taropen</span><span class="p">:</span>
+<div class="viewcode-block" id="taropen"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.mdbopen.taropen">[docs]</a><span class="k">class</span> <span class="nc">taropen</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;context manager to open nested tar hierarchies&#39;&#39;&#39;</span>
-<div class="viewcode-block" id="taropen.__init__"><a class="viewcode-back" href="../../model_data_base.html#model_data_base.mdbopen.taropen.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="taropen.__init__"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.mdbopen.taropen.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
@@ -189,7 +186,7 @@
     <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     
-<div class="viewcode-block" id="taropen.open"><a class="viewcode-back" href="../../model_data_base.html#model_data_base.mdbopen.taropen.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="taropen.open"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.mdbopen.taropen.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">open_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_files</span>
         <span class="n">current_TarFS</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">current_level</span> <span class="o">=</span> <span class="mi">0</span>
@@ -214,7 +211,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">final_file</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span></div>
 
-<div class="viewcode-block" id="taropen.close"><a class="viewcode-back" href="../../model_data_base.html#model_data_base.mdbopen.taropen.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="taropen.close"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.mdbopen.taropen.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">open_files</span><span class="p">):</span>
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">open_files</span> <span class="o">=</span> <span class="p">[]</span></div></div>

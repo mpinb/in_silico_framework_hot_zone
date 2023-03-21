@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -79,15 +76,15 @@
 <span class="kn">from</span> <span class="nn">single_cell_parser.serialize_cell</span> <span class="kn">import</span> <span class="n">save_cell_to_file</span>
 <span class="kn">from</span> <span class="nn">single_cell_parser.serialize_cell</span> <span class="kn">import</span> <span class="n">load_cell_from_file</span>
 
-<div class="viewcode-block" id="check"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.cell.check">[docs]</a><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<div class="viewcode-block" id="check"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.cell.check">[docs]</a><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;checks whether obj can be saved with this dumper&#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Cell</span><span class="p">)</span> <span class="c1">#basically everything can be saved with pickle</span></div>
 
-<div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.cell.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">(</span><span class="n">parent_classes</span><span class="o">.</span><span class="n">Loader</span><span class="p">):</span>
-<div class="viewcode-block" id="Loader.get"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.cell.Loader.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savedir</span><span class="p">):</span>
+<div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.cell.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">(</span><span class="n">parent_classes</span><span class="o">.</span><span class="n">Loader</span><span class="p">):</span>
+<div class="viewcode-block" id="Loader.get"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.cell.Loader.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savedir</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">load_cell_from_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">savedir</span><span class="p">,</span> <span class="s1">&#39;cell&#39;</span><span class="p">))</span></div></div>
     
-<div class="viewcode-block" id="dump"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.cell.dump">[docs]</a><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">savedir</span><span class="p">):</span>
+<div class="viewcode-block" id="dump"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.cell.dump">[docs]</a><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">savedir</span><span class="p">):</span>
     <span class="n">save_cell_to_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">savedir</span><span class="p">,</span> <span class="s1">&#39;cell&#39;</span><span class="p">),</span> <span class="n">obj</span><span class="p">)</span>
 
 <span class="c1">#     with open(os.path.join(savedir, &#39;Loader.pickle&#39;), &#39;wb&#39;) as file_:</span>

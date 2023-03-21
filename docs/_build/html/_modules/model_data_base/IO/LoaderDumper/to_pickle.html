@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -74,17 +71,17 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">parent_classes</span>
 <span class="kn">import</span> <span class="nn">compatibility</span>
 
-<div class="viewcode-block" id="check"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.to_pickle.check">[docs]</a><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<div class="viewcode-block" id="check"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.to_pickle.check">[docs]</a><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;checks wherther obj can be saved with this dumper&#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="kc">True</span> <span class="c1">#basically everything can be saved with pickle</span></div>
 
-<div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.to_pickle.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">(</span><span class="n">parent_classes</span><span class="o">.</span><span class="n">Loader</span><span class="p">):</span>
-<div class="viewcode-block" id="Loader.get"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.to_pickle.Loader.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savedir</span><span class="p">):</span>
+<div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.to_pickle.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">(</span><span class="n">parent_classes</span><span class="o">.</span><span class="n">Loader</span><span class="p">):</span>
+<div class="viewcode-block" id="Loader.get"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.to_pickle.Loader.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savedir</span><span class="p">):</span>
 <span class="c1">#         with open(os.path.join(savedir, &#39;to_pickle_dump&#39;), &#39;rb&#39;) as file_:</span>
 <span class="c1">#             return cPickle.load(file_)</span>
         <span class="k">return</span> <span class="n">compatibility</span><span class="o">.</span><span class="n">unpickle_fun</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">savedir</span><span class="p">,</span> <span class="s1">&#39;to_pickle_dump&#39;</span><span class="p">))</span></div></div>
     
-<div class="viewcode-block" id="dump"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.to_pickle.dump">[docs]</a><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="dump"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.to_pickle.dump">[docs]</a><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
     <span class="n">compatibility</span><span class="o">.</span><span class="n">pickle_fun</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;to_pickle_dump&#39;</span><span class="p">))</span>
     <span class="n">compatibility</span><span class="o">.</span><span class="n">pickle_fun</span><span class="p">(</span><span class="n">Loader</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;Loader.pickle&#39;</span><span class="p">))</span></div>
 <span class="c1">#     with open(os.path.join(path, &#39;to_pickle_dump&#39;), &#39;wb&#39;) as file_:</span>

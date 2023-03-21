@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -74,7 +71,7 @@
 <span class="kn">import</span> <span class="nn">dask</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">filter_by_time</span><span class="p">,</span> <span class="n">merge_synapse_activation</span><span class="p">,</span> <span class="n">_convertible_to_int</span>
 
-<div class="viewcode-block" id="skip_time"><a class="viewcode-back" href="../../../simrun2.crossing_over.html#simrun2.crossing_over.run_skip_time.skip_time">[docs]</a><span class="k">def</span> <span class="nf">skip_time</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">t_skip_start</span><span class="p">,</span> <span class="n">t_skip_end</span><span class="p">):</span>
+<div class="viewcode-block" id="skip_time"><a class="viewcode-back" href="../../../source/simrun2.crossing_over.html#simrun2.crossing_over.run_skip_time.skip_time">[docs]</a><span class="k">def</span> <span class="nf">skip_time</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">t_skip_start</span><span class="p">,</span> <span class="n">t_skip_end</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;accepts a synapse activation pandas data frame. Returns a dataframe, where</span>
 <span class="sd">    synapse activation in the specified interval is skipped.&#39;&#39;&#39;</span>
     <span class="n">df_pre_skip</span> <span class="o">=</span> <span class="n">filter_by_time</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">t_skip_start</span><span class="p">)</span>
@@ -94,12 +91,12 @@
     <span class="n">write_pandas_synapse_activation_to_roberts_format</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">path</span>
 
-<div class="viewcode-block" id="skip_time_and_save"><a class="viewcode-back" href="../../../simrun2.crossing_over.html#simrun2.crossing_over.run_skip_time.skip_time_and_save">[docs]</a><span class="k">def</span> <span class="nf">skip_time_and_save</span><span class="p">(</span><span class="n">df_db</span><span class="p">,</span> <span class="n">sim_trail_index</span><span class="p">,</span> <span class="n">t_skip_start</span><span class="p">,</span> <span class="n">t_skip_end</span><span class="p">,</span> <span class="n">dirPrefix</span><span class="p">):</span>
+<div class="viewcode-block" id="skip_time_and_save"><a class="viewcode-back" href="../../../source/simrun2.crossing_over.html#simrun2.crossing_over.run_skip_time.skip_time_and_save">[docs]</a><span class="k">def</span> <span class="nf">skip_time_and_save</span><span class="p">(</span><span class="n">df_db</span><span class="p">,</span> <span class="n">sim_trail_index</span><span class="p">,</span> <span class="n">t_skip_start</span><span class="p">,</span> <span class="n">t_skip_end</span><span class="p">,</span> <span class="n">dirPrefix</span><span class="p">):</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">df_db</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sim_trail_index</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">get</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">skip_time</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">t_skip_start</span><span class="p">,</span> <span class="n">t_skip_end</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_save_synapse_activation_to_folder</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sim_trail_index</span><span class="p">,</span> <span class="n">dirPrefix</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="skip_time_and_save_parallel"><a class="viewcode-back" href="../../../simrun2.crossing_over.html#simrun2.crossing_over.run_skip_time.skip_time_and_save_parallel">[docs]</a><span class="k">def</span> <span class="nf">skip_time_and_save_parallel</span><span class="p">(</span><span class="n">synapse_activation_db</span><span class="p">,</span> <span class="n">sim_trail_index_list</span><span class="p">,</span> <span class="n">t_skip_start</span><span class="p">,</span> <span class="n">t_skip_end</span><span class="p">,</span> <span class="n">dirPrefix</span><span class="p">):</span>
+<div class="viewcode-block" id="skip_time_and_save_parallel"><a class="viewcode-back" href="../../../source/simrun2.crossing_over.html#simrun2.crossing_over.run_skip_time.skip_time_and_save_parallel">[docs]</a><span class="k">def</span> <span class="nf">skip_time_and_save_parallel</span><span class="p">(</span><span class="n">synapse_activation_db</span><span class="p">,</span> <span class="n">sim_trail_index_list</span><span class="p">,</span> <span class="n">t_skip_start</span><span class="p">,</span> <span class="n">t_skip_end</span><span class="p">,</span> <span class="n">dirPrefix</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;returns delayed object which on computation generates synapse activation files</span>
 <span class="sd">    with skipped time interval&#39;&#39;&#39;</span>
     <span class="n">myfun</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">sim_trail_index</span><span class="p">:</span> <span class="n">skip_time_and_save</span><span class="p">(</span><span class="n">synapse_activation_db</span><span class="p">,</span> <span class="n">sim_trail_index</span><span class="p">,</span> \

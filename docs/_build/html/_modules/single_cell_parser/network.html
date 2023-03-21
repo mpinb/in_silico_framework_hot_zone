@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -91,14 +88,14 @@
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">network_modify_functions</span>
 
-<div class="viewcode-block" id="NetworkMapper"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.NetworkMapper">[docs]</a><span class="k">class</span> <span class="nc">NetworkMapper</span><span class="p">:</span>
+<div class="viewcode-block" id="NetworkMapper"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.NetworkMapper">[docs]</a><span class="k">class</span> <span class="nc">NetworkMapper</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Handles connectivity of presynaptic populations</span>
 <span class="sd">    to multi-compartmental neuron model.</span>
 <span class="sd">    Also handles activity of presynaptic populations.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-<div class="viewcode-block" id="NetworkMapper.__init__"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.NetworkMapper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postCell</span><span class="p">,</span> <span class="n">nwParam</span><span class="p">,</span> <span class="n">simParam</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.__init__"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.NetworkMapper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postCell</span><span class="p">,</span> <span class="n">nwParam</span><span class="p">,</span> <span class="n">simParam</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        dictionary holding all presynaptic cells</span>
 <span class="sd">        ordered by cell type</span>
@@ -123,7 +120,7 @@
         <span class="n">postCell</span><span class="o">.</span><span class="n">network_param</span> <span class="o">=</span> <span class="n">nwParam</span>
         <span class="n">postCell</span><span class="o">.</span><span class="n">network_sim_param</span> <span class="o">=</span> <span class="n">simParam</span></div>
     
-<div class="viewcode-block" id="NetworkMapper.create_network"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.NetworkMapper.create_network">[docs]</a>    <span class="k">def</span> <span class="nf">create_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synWeightName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.create_network"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.NetworkMapper.create_network">[docs]</a>    <span class="k">def</span> <span class="nf">create_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synWeightName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Public interface</span>
 <span class="sd">        Only call this function, it automatically</span>
@@ -145,7 +142,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;network complete!&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;***************************&#39;</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="NetworkMapper.create_saved_network"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.NetworkMapper.create_saved_network">[docs]</a>    <span class="k">def</span> <span class="nf">create_saved_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synWeightName</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.create_saved_network"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.NetworkMapper.create_saved_network">[docs]</a>    <span class="k">def</span> <span class="nf">create_saved_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synWeightName</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Public interface</span>
 <span class="sd">        Used for re-creating network from anatomical</span>
@@ -166,7 +163,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;network complete!&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;***************************&#39;</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="NetworkMapper.create_saved_network2"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.NetworkMapper.create_saved_network2">[docs]</a>    <span class="k">def</span> <span class="nf">create_saved_network2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synWeightName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">full_network</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.create_saved_network2"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.NetworkMapper.create_saved_network2">[docs]</a>    <span class="k">def</span> <span class="nf">create_saved_network2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synWeightName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">full_network</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Public interface</span>
 <span class="sd">        Used for re-creating network from anatomical</span>
@@ -202,7 +199,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;applying&#39;</span><span class="p">,</span> <span class="n">funname</span><span class="p">,</span> <span class="s1">&#39;with parameters&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
                 <span class="n">fun</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">postCell</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
     
-<div class="viewcode-block" id="NetworkMapper.reconnect_saved_synapses"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.NetworkMapper.reconnect_saved_synapses">[docs]</a>    <span class="k">def</span> <span class="nf">reconnect_saved_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synInfoName</span><span class="p">,</span> <span class="n">synWeightName</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.reconnect_saved_synapses"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.NetworkMapper.reconnect_saved_synapses">[docs]</a>    <span class="k">def</span> <span class="nf">reconnect_saved_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synInfoName</span><span class="p">,</span> <span class="n">synWeightName</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Public interface</span>
 <span class="sd">        used for setting up saved synapse</span>
@@ -262,7 +259,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;network complete!&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;***************************&#39;</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="NetworkMapper.reconnect_network"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.NetworkMapper.reconnect_network">[docs]</a>    <span class="k">def</span> <span class="nf">reconnect_network</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.reconnect_network"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.NetworkMapper.reconnect_network">[docs]</a>    <span class="k">def</span> <span class="nf">reconnect_network</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Public interface</span>
 <span class="sd">        used for re-configuring functional connectivity</span>
@@ -277,7 +274,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;network complete!&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;***************************&#39;</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="NetworkMapper.create_functional_realization"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.NetworkMapper.create_functional_realization">[docs]</a>    <span class="k">def</span> <span class="nf">create_functional_realization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.create_functional_realization"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.NetworkMapper.create_functional_realization">[docs]</a>    <span class="k">def</span> <span class="nf">create_functional_realization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Public interface:</span>
 <span class="sd">        used for creating fixed functional connectivity.</span>
@@ -311,7 +308,7 @@
         <span class="n">allParam</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">name</span> <span class="o">+=</span> <span class="s1">&#39;_functional_map_</span><span class="si">%s</span><span class="s1">_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">id1</span><span class="p">,</span> <span class="n">id2</span><span class="p">)</span>
         <span class="n">allParam</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">paramName</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="NetworkMapper.re_init_network"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.NetworkMapper.re_init_network">[docs]</a>    <span class="k">def</span> <span class="nf">re_init_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replayMode</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkMapper.re_init_network"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.NetworkMapper.re_init_network">[docs]</a>    <span class="k">def</span> <span class="nf">re_init_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replayMode</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">synType</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="n">synType</span><span class="p">]:</span>
                 <span class="n">cell</span><span class="o">.</span><span class="n">turn_off</span><span class="p">()</span>
@@ -1025,7 +1022,7 @@
                 <span class="n">syn</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">recepStr</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">receptor</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span></div>
         
 
-<div class="viewcode-block" id="activate_functional_synapse"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.activate_functional_synapse">[docs]</a><span class="k">def</span> <span class="nf">activate_functional_synapse</span><span class="p">(</span><span class="n">syn</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">preSynCell</span><span class="p">,</span> <span class="n">synParameters</span><span class="p">,</span> <span class="n">tChange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">synParametersChange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">forceSynapseActivation</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">releaseTimes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="activate_functional_synapse"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.activate_functional_synapse">[docs]</a><span class="k">def</span> <span class="nf">activate_functional_synapse</span><span class="p">(</span><span class="n">syn</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">preSynCell</span><span class="p">,</span> <span class="n">synParameters</span><span class="p">,</span> <span class="n">tChange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">synParametersChange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">forceSynapseActivation</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">releaseTimes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Default method to activate single synapse.</span>
 <span class="sd">    Currently, this implementation expects all presynaptic spike</span>
 <span class="sd">    times to be pre-computed; can thus not be used in recurrent</span>
@@ -1137,7 +1134,7 @@
 <span class="c1">#             paramStr = &#39;syn.receptors[\&#39;&#39; + recepStr + &#39;\&#39;].setRNG(syn.hocRNG)&#39;</span>
 <span class="c1">#             exec(paramStr)</span>
 
-<div class="viewcode-block" id="functional_connectivity_visualization"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.functional_connectivity_visualization">[docs]</a><span class="k">def</span> <span class="nf">functional_connectivity_visualization</span><span class="p">(</span><span class="n">functionalMap</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+<div class="viewcode-block" id="functional_connectivity_visualization"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.functional_connectivity_visualization">[docs]</a><span class="k">def</span> <span class="nf">functional_connectivity_visualization</span><span class="p">(</span><span class="n">functionalMap</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
     <span class="n">nrL4ssCells</span> <span class="o">=</span> <span class="mi">3168</span>
     <span class="n">nrL1Cells</span> <span class="o">=</span> <span class="mi">104</span>
     
@@ -1197,7 +1194,7 @@
     <span class="n">writer</span><span class="o">.</span><span class="n">write_functional_map</span><span class="p">(</span><span class="s1">&#39;L4ss_func_map3.am&#39;</span><span class="p">,</span> <span class="n">L4map</span><span class="p">)</span>
     <span class="n">writer</span><span class="o">.</span><span class="n">write_functional_map</span><span class="p">(</span><span class="s1">&#39;L1_func_map3.am&#39;</span><span class="p">,</span> <span class="n">L1map</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="sample_times_from_rates"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.network.sample_times_from_rates">[docs]</a><span class="k">def</span> <span class="nf">sample_times_from_rates</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">rate</span><span class="p">):</span>
+<div class="viewcode-block" id="sample_times_from_rates"><a class="viewcode-back" href="../../source/single_cell_parser.html#single_cell_parser.network.sample_times_from_rates">[docs]</a><span class="k">def</span> <span class="nf">sample_times_from_rates</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">rate</span><span class="p">):</span>
     <span class="n">cum_bin_width_weighted_with_rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">bins</span><span class="p">)</span><span class="o">*</span><span class="n">rate</span><span class="p">)</span>
     <span class="n">cum_bin_width</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">bins</span><span class="p">))</span>
         

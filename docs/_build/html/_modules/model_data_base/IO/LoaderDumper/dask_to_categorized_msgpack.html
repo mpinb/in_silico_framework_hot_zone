@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -112,7 +109,7 @@
 <span class="c1">############################</span>
 <span class="c1"># custom methods to categorize and entcategorize a dataframe:</span>
 <span class="c1">############################</span>
-<div class="viewcode-block" id="str_to_category"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category">[docs]</a><span class="k">def</span> <span class="nf">str_to_category</span><span class="p">(</span><span class="n">pdf</span><span class="p">):</span>
+<div class="viewcode-block" id="str_to_category"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category">[docs]</a><span class="k">def</span> <span class="nf">str_to_category</span><span class="p">(</span><span class="n">pdf</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;careful: changes pdf!&#39;&#39;&#39;</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pdf</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">pdf</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">:</span>
@@ -122,7 +119,7 @@
         <span class="n">pdf</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">pdf</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">pdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">index_name</span></div>
 
-<div class="viewcode-block" id="category_to_str"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str">[docs]</a><span class="k">def</span> <span class="nf">category_to_str</span><span class="p">(</span><span class="n">pdf</span><span class="p">):</span>
+<div class="viewcode-block" id="category_to_str"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str">[docs]</a><span class="k">def</span> <span class="nf">category_to_str</span><span class="p">(</span><span class="n">pdf</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;careful: changes pdf!&#39;&#39;&#39;</span>  
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pdf</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="n">pdf</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdf</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;object&#39;</span><span class="p">)</span><span class="c1">#map(str)#astype(&#39;object&#39;)</span>
@@ -133,7 +130,7 @@
 <span class="c1"># custom to_csv method, because the one of dask does eat all the memory</span>
 <span class="c1"># this method has to the aim to be as simple as possible</span>
 <span class="c1">#####################################################</span>
-<div class="viewcode-block" id="get_writer_function"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function">[docs]</a><span class="k">def</span> <span class="nf">get_writer_function</span><span class="p">(</span><span class="n">categorize</span><span class="p">):</span>
+<div class="viewcode-block" id="get_writer_function"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function">[docs]</a><span class="k">def</span> <span class="nf">get_writer_function</span><span class="p">(</span><span class="n">categorize</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;returns function, that stores pandas dataframe&#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="nf">ddf_save_chunks</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">number</span><span class="p">,</span> <span class="n">digits</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">categorize</span><span class="p">:</span>
@@ -234,7 +231,7 @@
 <span class="c1">######################################################</span>
 <span class="kn">from</span> <span class="nn">model_data_base.utils</span> <span class="kn">import</span> <span class="n">chunkIt</span>
 <span class="kn">import</span> <span class="nn">cloudpickle</span>
-<div class="viewcode-block" id="my_dask_writer"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer">[docs]</a><span class="k">def</span> <span class="nf">my_dask_writer</span><span class="p">(</span><span class="n">ddf</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">optimize_graph</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">categorize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">client</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span> <span class="c1">#get = compatibility.multiprocessing_scheduler,</span>
+<div class="viewcode-block" id="my_dask_writer"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer">[docs]</a><span class="k">def</span> <span class="nf">my_dask_writer</span><span class="p">(</span><span class="n">ddf</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">optimize_graph</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">categorize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">client</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span> <span class="c1">#get = compatibility.multiprocessing_scheduler,</span>
     <span class="sd">&#39;&#39;&#39; Very simple method to store a dask dataframe to a bunch of files.</span>
 <span class="sd">    There was a lot of frustration with the respective dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes </span>
 <span class="sd">    takes all the ram (512GB!) or takes a very long time to &quot;optimize&quot; / merge the graph.</span>
@@ -273,16 +270,16 @@
 <span class="c1"># actual dumper</span>
 <span class="c1">########################################################    </span>
 <span class="n">fileglob</span> <span class="o">=</span> <span class="s1">&#39;dask_to_msgpack.*.csv&#39;</span> <span class="c1">###</span>
-<div class="viewcode-block" id="check"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check">[docs]</a><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<div class="viewcode-block" id="check"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check">[docs]</a><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;checks wherther obj can be saved with this dumper&#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="c1"># and (obj.index.dtype == &#39;object&#39;)</span></div>
 
-<div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">(</span><span class="n">parent_classes</span><span class="o">.</span><span class="n">Loader</span><span class="p">):</span>
-<div class="viewcode-block" id="Loader.__init__"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">index_name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">divisions</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>        
+<div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">(</span><span class="n">parent_classes</span><span class="o">.</span><span class="n">Loader</span><span class="p">):</span>
+<div class="viewcode-block" id="Loader.__init__"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">index_name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">divisions</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>        
         <span class="bp">self</span><span class="o">.</span><span class="n">index_name</span> <span class="o">=</span> <span class="n">index_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="n">meta</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">divisions</span> <span class="o">=</span> <span class="n">divisions</span></div>
-<div class="viewcode-block" id="Loader.get"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savedir</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>  
+<div class="viewcode-block" id="Loader.get"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savedir</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>  
         <span class="c1">#if dtypes is not defined (old mdb_versions) set it to None</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dtypes</span>
@@ -309,7 +306,7 @@
         <span class="k">return</span> <span class="n">ddf</span></div></div>
     
         
-<div class="viewcode-block" id="dump"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.dump">[docs]</a><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">savedir</span><span class="p">,</span> <span class="n">repartition</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">get</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">categorize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">client</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="dump"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.dump">[docs]</a><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">savedir</span><span class="p">,</span> <span class="n">repartition</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">get</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">categorize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">client</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">get</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="n">client</span> <span class="o">=</span> <span class="n">get</span>

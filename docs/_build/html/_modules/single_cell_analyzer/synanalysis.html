@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -79,7 +76,7 @@
 <span class="kn">import</span> <span class="nn">single_cell_parser</span> <span class="k">as</span> <span class="nn">scp</span>
 <span class="kn">from</span> <span class="nn">model_data_base.mdbopen</span> <span class="kn">import</span> <span class="n">mdbopen</span>
 
-<div class="viewcode-block" id="compute_synapse_distances_times"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.synanalysis.compute_synapse_distances_times">[docs]</a><span class="k">def</span> <span class="nf">compute_synapse_distances_times</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">synTypes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_synapse_distances_times"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.synanalysis.compute_synapse_distances_times">[docs]</a><span class="k">def</span> <span class="nf">compute_synapse_distances_times</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">synTypes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">synDistances</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">synTimes</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">activeSyns</span> <span class="o">=</span> <span class="p">{}</span>
@@ -103,14 +100,14 @@
     
     <span class="n">scp</span><span class="o">.</span><span class="n">write_synapse_activation_file</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">synTypes</span><span class="p">,</span> <span class="n">synDistances</span><span class="p">,</span> <span class="n">synTimes</span><span class="p">,</span> <span class="n">activeSyns</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="synapse_activation_times"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.synanalysis.synapse_activation_times">[docs]</a><span class="k">def</span> <span class="nf">synapse_activation_times</span><span class="p">(</span><span class="n">tVec</span><span class="p">,</span> <span class="n">cntVec</span><span class="p">):</span>
+<div class="viewcode-block" id="synapse_activation_times"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.synanalysis.synapse_activation_times">[docs]</a><span class="k">def</span> <span class="nf">synapse_activation_times</span><span class="p">(</span><span class="n">tVec</span><span class="p">,</span> <span class="n">cntVec</span><span class="p">):</span>
     <span class="n">synTVec</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cntVec</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">cntVec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">cntVec</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
             <span class="n">synTVec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tVec</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">synTVec</span></div>
 
-<div class="viewcode-block" id="synapse_distances"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.synanalysis.synapse_distances">[docs]</a><span class="k">def</span> <span class="nf">synapse_distances</span><span class="p">(</span><span class="n">pname</span><span class="p">):</span>
+<div class="viewcode-block" id="synapse_distances"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.synanalysis.synapse_distances">[docs]</a><span class="k">def</span> <span class="nf">synapse_distances</span><span class="p">(</span><span class="n">pname</span><span class="p">):</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span>
     <span class="n">cellParam</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">post</span>
     <span class="n">preParam</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">pre</span>
@@ -136,7 +133,7 @@
             <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dist</span><span class="p">:</span>
                 <span class="n">distFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="synapse_distances_2D"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.synanalysis.synapse_distances_2D">[docs]</a><span class="k">def</span> <span class="nf">synapse_distances_2D</span><span class="p">(</span><span class="n">pname</span><span class="p">):</span>
+<div class="viewcode-block" id="synapse_distances_2D"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.synanalysis.synapse_distances_2D">[docs]</a><span class="k">def</span> <span class="nf">synapse_distances_2D</span><span class="p">(</span><span class="n">pname</span><span class="p">):</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">pname</span><span class="p">)</span>
     <span class="n">cellParam</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">post</span>
     <span class="n">preParam</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">pre</span>
@@ -202,7 +199,7 @@
 <span class="c1">#     return np.array(distances)</span>
 
 
-<div class="viewcode-block" id="compute_syn_distances_2Dprojected"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.synanalysis.compute_syn_distances_2Dprojected">[docs]</a><span class="k">def</span> <span class="nf">compute_syn_distances_2Dprojected</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">synType</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_syn_distances_2Dprojected"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.synanalysis.compute_syn_distances_2Dprojected">[docs]</a><span class="k">def</span> <span class="nf">compute_syn_distances_2Dprojected</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">synType</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    computes distances of all synapses on dendrite w.r.t. soma</span>
 <span class="sd">    projected on 2D plane as seen during 2-photon spine imaging</span>
@@ -229,11 +226,11 @@
         <span class="n">distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="get_dist"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.synanalysis.get_dist">[docs]</a><span class="k">def</span> <span class="nf">get_dist</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">):</span>
+<div class="viewcode-block" id="get_dist"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.synanalysis.get_dist">[docs]</a><span class="k">def</span> <span class="nf">get_dist</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">):</span>
     <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">((</span><span class="n">xx1</span><span class="o">-</span><span class="n">xx2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">xx1</span><span class="p">,</span> <span class="n">xx2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)))</span></div>
 
-<div class="viewcode-block" id="compute_distance_to_soma"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.synanalysis.compute_distance_to_soma">[docs]</a><span class="k">def</span> <span class="nf">compute_distance_to_soma</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cell</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">consider_gap_to_soma</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_distance_to_soma"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.synanalysis.compute_distance_to_soma">[docs]</a><span class="k">def</span> <span class="nf">compute_distance_to_soma</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">cell</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">consider_gap_to_soma</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Computes the distance from a point specified by section and sectionx to the soma.</span>
 
 <span class="sd">    sec: section of cell, either a PySection object or an int</span>
@@ -266,12 +263,12 @@
             <span class="n">dist</span> <span class="o">+=</span> <span class="n">get_dist</span><span class="p">(</span><span class="n">currentSec</span><span class="o">.</span><span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parentSec</span><span class="o">.</span><span class="n">pts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">dist</span></div>
 
-<div class="viewcode-block" id="compute_syn_distance"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.synanalysis.compute_syn_distance">[docs]</a><span class="k">def</span> <span class="nf">compute_syn_distance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">syn</span><span class="p">,</span> <span class="n">consider_gap_to_soma</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span> <span class="c1">## same as Robert&#39;s method but can get one synapse at a time</span>
+<div class="viewcode-block" id="compute_syn_distance"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.synanalysis.compute_syn_distance">[docs]</a><span class="k">def</span> <span class="nf">compute_syn_distance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">syn</span><span class="p">,</span> <span class="n">consider_gap_to_soma</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span> <span class="c1">## same as Robert&#39;s method but can get one synapse at a time</span>
     <span class="n">currentSec</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">syn</span><span class="o">.</span><span class="n">secID</span><span class="p">]</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">syn</span><span class="o">.</span><span class="n">x</span>
     <span class="k">return</span> <span class="n">compute_distance_to_soma</span><span class="p">(</span><span class="n">currentSec</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">consider_gap_to_soma</span> <span class="o">=</span> <span class="n">consider_gap_to_soma</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="compute_syn_distances"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.synanalysis.compute_syn_distances">[docs]</a><span class="k">def</span> <span class="nf">compute_syn_distances</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">synType</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">consider_gap_to_soma</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span> <span class="c1">## updated to use new method for getting somadistance of one synapse at a time</span>
+<div class="viewcode-block" id="compute_syn_distances"><a class="viewcode-back" href="../../source/single_cell_analyzer.html#single_cell_analyzer.synanalysis.compute_syn_distances">[docs]</a><span class="k">def</span> <span class="nf">compute_syn_distances</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">synType</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">consider_gap_to_soma</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span> <span class="c1">## updated to use new method for getting somadistance of one synapse at a time</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">     computes distances of all synapses on dendrite w.r.t. soma</span>
 <span class="sd">    </span>

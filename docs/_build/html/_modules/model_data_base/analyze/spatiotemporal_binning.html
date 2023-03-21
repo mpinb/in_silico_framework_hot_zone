@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -79,7 +76,7 @@
 <span class="kn">from</span> <span class="nn">._helper_functions</span> <span class="kn">import</span> <span class="n">time_list_from_pd</span><span class="p">,</span> <span class="n">pd_to_array</span><span class="p">,</span> <span class="n">map_return_to_series</span>
 
 
-<div class="viewcode-block" id="universal_pd"><a class="viewcode-back" href="../../../model_data_base.analyze.html#model_data_base.analyze.spatiotemporal_binning.universal_pd">[docs]</a><span class="k">def</span> <span class="nf">universal_pd</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">distance_column</span><span class="p">,</span> <span class="n">spacial_distance_bins</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">min_time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> \
+<div class="viewcode-block" id="universal_pd"><a class="viewcode-back" href="../../../source/model_data_base.analyze.html#model_data_base.analyze.spatiotemporal_binning.universal_pd">[docs]</a><span class="k">def</span> <span class="nf">universal_pd</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">distance_column</span><span class="p">,</span> <span class="n">spacial_distance_bins</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">min_time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> \
               <span class="n">max_time</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">time_distance_bins</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>  
     <span class="sd">&#39;&#39;&#39;speed-optimized binning code for 2d-binning of pandas.DataFrame.&#39;&#39;&#39;</span>    
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
@@ -100,7 +97,7 @@
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="universal"><a class="viewcode-back" href="../../../model_data_base.analyze.html#model_data_base.analyze.spatiotemporal_binning.universal">[docs]</a><span class="k">def</span> <span class="nf">universal</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">distance_column</span><span class="p">,</span> <span class="n">spacial_distance_bins</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">min_time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> \
+<div class="viewcode-block" id="universal"><a class="viewcode-back" href="../../../source/model_data_base.analyze.html#model_data_base.analyze.spatiotemporal_binning.universal">[docs]</a><span class="k">def</span> <span class="nf">universal</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">distance_column</span><span class="p">,</span> <span class="n">spacial_distance_bins</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">min_time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> \
               <span class="n">max_time</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">time_distance_bins</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    kwargs: </span>

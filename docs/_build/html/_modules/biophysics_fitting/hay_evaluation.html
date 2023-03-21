@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -88,7 +85,7 @@
 
 <span class="n">neuron_basedir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;MOEA_EH_minimal&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="setup_hay_evaluator"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.setup_hay_evaluator">[docs]</a><span class="k">def</span> <span class="nf">setup_hay_evaluator</span><span class="p">(</span><span class="n">testing</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="setup_hay_evaluator"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.setup_hay_evaluator">[docs]</a><span class="k">def</span> <span class="nf">setup_hay_evaluator</span><span class="p">(</span><span class="n">testing</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    this adds a stump cell to the neuron environment,which is</span>
 <span class="sd">    necessary to acces the hay evaluate functions. For the vairalbe time step solver,</span>
@@ -128,7 +125,7 @@
         <span class="k">if</span> <span class="n">testing</span><span class="p">:</span> 
             <span class="n">test</span><span class="p">()</span>          </div>
 
-<div class="viewcode-block" id="is_setup"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.is_setup">[docs]</a><span class="k">def</span> <span class="nf">is_setup</span><span class="p">():</span>
+<div class="viewcode-block" id="is_setup"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.is_setup">[docs]</a><span class="k">def</span> <span class="nf">is_setup</span><span class="p">():</span>
     <span class="kn">import</span> <span class="nn">neuron</span>
     <span class="n">h</span> <span class="o">=</span> <span class="n">neuron</span><span class="o">.</span><span class="n">h</span>
     <span class="k">try</span><span class="p">:</span>
@@ -148,7 +145,7 @@
 <span class="c1"># used to test reproducibility</span>
 <span class="c1">##############################################</span>
 
-<div class="viewcode-block" id="get_feasible_model_params"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.get_feasible_model_params">[docs]</a><span class="k">def</span> <span class="nf">get_feasible_model_params</span><span class="p">():</span>
+<div class="viewcode-block" id="get_feasible_model_params"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.get_feasible_model_params">[docs]</a><span class="k">def</span> <span class="nf">get_feasible_model_params</span><span class="p">():</span>
     <span class="k">raise</span>
     <span class="n">pdf</span> <span class="o">=</span> <span class="n">get_hay_params_pdf</span><span class="p">()</span>
     <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.971849</span><span class="p">,</span>   <span class="mf">0.000363</span><span class="p">,</span>   <span class="mf">0.008663</span><span class="p">,</span>   <span class="mf">0.099860</span><span class="p">,</span>   <span class="mf">0.073318</span><span class="p">,</span>   <span class="mf">0.359781</span><span class="p">,</span>   <span class="mf">0.000530</span><span class="p">,</span>   
@@ -159,7 +156,7 @@
     <span class="n">pdf</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
     <span class="k">return</span> <span class="n">pdf</span></div>
 
-<div class="viewcode-block" id="get_feasible_model_objectives"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.get_feasible_model_objectives">[docs]</a><span class="k">def</span> <span class="nf">get_feasible_model_objectives</span><span class="p">():</span>
+<div class="viewcode-block" id="get_feasible_model_objectives"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.get_feasible_model_objectives">[docs]</a><span class="k">def</span> <span class="nf">get_feasible_model_objectives</span><span class="p">():</span>
     <span class="k">raise</span>
     <span class="n">pdf</span> <span class="o">=</span> <span class="n">get_hay_problem_description</span><span class="p">()</span>
     <span class="n">index</span> <span class="o">=</span> <span class="n">get_hay_objective_names</span><span class="p">()</span>
@@ -173,7 +170,7 @@
     <span class="n">pdf</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
     <span class="k">return</span> <span class="n">pdf</span></div>
 
-<div class="viewcode-block" id="hay_objective_function"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_objective_function">[docs]</a><span class="k">def</span> <span class="nf">hay_objective_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="hay_objective_function"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_objective_function">[docs]</a><span class="k">def</span> <span class="nf">hay_objective_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;evaluates L5tt cell Nr. 86 using the channel densities defined in x.</span>
 <span class="sd">    x: numpy array of length 32 specifying the free parameters</span>
 <span class="sd">    returns: np.array of length 5 representing the 5 objectives&#39;&#39;&#39;</span>
@@ -195,7 +192,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="mi">1000</span><span class="p">]</span><span class="o">*</span><span class="mi">5</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pass_fitness_vec</span><span class="p">()),</span> <span class="n">index</span> <span class="o">=</span> <span class="n">get_hay_objective_names</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="test"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+<div class="viewcode-block" id="test"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
     <span class="sd">&#39;&#39;&#39;compare the result of the optimization of the hay evaluator with a precomputed result&#39;&#39;&#39;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing this only works, if you uncomment the following line in MOEA_gui_for_objective_calculation.hoc: &quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;// CreateNeuron(cell,&quot;GAcell_v3&quot;) remove comment &quot;)&#39;</span><span class="p">)</span>
@@ -220,13 +217,13 @@
 <span class="c1">########################################</span>
 
 
-<div class="viewcode-block" id="get_cur_stim"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.get_cur_stim">[docs]</a><span class="k">def</span> <span class="nf">get_cur_stim</span><span class="p">(</span><span class="n">stim</span><span class="p">):</span> 
+<div class="viewcode-block" id="get_cur_stim"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.get_cur_stim">[docs]</a><span class="k">def</span> <span class="nf">get_cur_stim</span><span class="p">(</span><span class="n">stim</span><span class="p">):</span> 
     <span class="n">setup_hay_evaluator</span><span class="p">()</span> 
     <span class="n">sol</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">mc</span><span class="o">.</span><span class="n">get_sol</span><span class="p">()</span> 
     <span class="n">stim_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sol</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">sol</span><span class="o">.</span><span class="n">o</span><span class="p">(</span><span class="n">cur_stim</span><span class="p">)</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span><span class="o">.</span><span class="n">s</span><span class="p">:</span> <span class="n">cur_stim</span> <span class="k">for</span> <span class="n">cur_stim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">stim_count</span><span class="p">)}[</span><span class="n">stim</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="hay_evaluate"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate</span><span class="p">(</span><span class="n">cur_stim</span><span class="p">,</span> <span class="n">tvec</span><span class="p">,</span> <span class="n">vList</span><span class="p">):</span>
+<div class="viewcode-block" id="hay_evaluate"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate</span><span class="p">(</span><span class="n">cur_stim</span><span class="p">,</span> <span class="n">tvec</span><span class="p">,</span> <span class="n">vList</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;note: I had the problem with python segfaulting as soon as this function got executed.</span>
 <span class="sd">    In that case, make sure, the mechanisms are correctly compiled and loaded.</span>
 <span class="sd">    You can load the mechanisms by importing the mechanisms module.&#39;&#39;&#39;</span>
@@ -306,23 +303,23 @@
 <span class="c1">#                                            stim_vec,</span>
 <span class="c1">#                                            minspikenum)</span>
 
-<div class="viewcode-block" id="hay_evaluate_bAP"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate_bAP">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate_bAP</span><span class="p">(</span><span class="n">tVec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vList</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="hay_evaluate_bAP"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate_bAP">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate_bAP</span><span class="p">(</span><span class="n">tVec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vList</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="n">cur_stim</span> <span class="o">=</span> <span class="n">get_cur_stim</span><span class="p">(</span><span class="s1">&#39;bAP&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">hay_evaluate</span><span class="p">(</span><span class="n">cur_stim</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">vList</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="hay_evaluate_BAC"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate_BAC">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate_BAC</span><span class="p">(</span><span class="n">tVec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vList</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="hay_evaluate_BAC"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate_BAC">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate_BAC</span><span class="p">(</span><span class="n">tVec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vList</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="n">cur_stim</span> <span class="o">=</span> <span class="n">get_cur_stim</span><span class="p">(</span><span class="s1">&#39;BAC&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">hay_evaluate</span><span class="p">(</span><span class="n">cur_stim</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">vList</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="hay_evaluate_StepOne"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate_StepOne">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate_StepOne</span><span class="p">(</span><span class="n">tVec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vList</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="hay_evaluate_StepOne"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate_StepOne">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate_StepOne</span><span class="p">(</span><span class="n">tVec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vList</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="n">cur_stim</span> <span class="o">=</span> <span class="n">get_cur_stim</span><span class="p">(</span><span class="s1">&#39;StepOne&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">hay_evaluate</span><span class="p">(</span><span class="n">cur_stim</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">vList</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="hay_evaluate_StepTwo"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate_StepTwo">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate_StepTwo</span><span class="p">(</span><span class="n">tVec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vList</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="hay_evaluate_StepTwo"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate_StepTwo">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate_StepTwo</span><span class="p">(</span><span class="n">tVec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vList</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="n">cur_stim</span> <span class="o">=</span> <span class="n">get_cur_stim</span><span class="p">(</span><span class="s1">&#39;StepTwo&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">hay_evaluate</span><span class="p">(</span><span class="n">cur_stim</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">vList</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="hay_evaluate_StepThree"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate_StepThree">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate_StepThree</span><span class="p">(</span><span class="n">tVec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vList</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="hay_evaluate_StepThree"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.hay_evaluation.hay_evaluate_StepThree">[docs]</a><span class="k">def</span> <span class="nf">hay_evaluate_StepThree</span><span class="p">(</span><span class="n">tVec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vList</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="n">cur_stim</span> <span class="o">=</span> <span class="n">get_cur_stim</span><span class="p">(</span><span class="s1">&#39;StepThree&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">hay_evaluate</span><span class="p">(</span><span class="n">cur_stim</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">vList</span><span class="p">)</span></div>
 

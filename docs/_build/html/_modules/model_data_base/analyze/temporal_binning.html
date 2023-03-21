@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -77,7 +74,7 @@
 <span class="kn">import</span> <span class="nn">dask</span>
 <span class="kn">import</span> <span class="nn">compatibility</span>
 
-<div class="viewcode-block" id="temporal_binning_pd"><a class="viewcode-back" href="../../../model_data_base.analyze.html#model_data_base.analyze.temporal_binning.temporal_binning_pd">[docs]</a><span class="k">def</span> <span class="nf">temporal_binning_pd</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bin_size</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">bin_borders</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rate</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="temporal_binning_pd"><a class="viewcode-back" href="../../../source/model_data_base.analyze.html#model_data_base.analyze.temporal_binning.temporal_binning_pd">[docs]</a><span class="k">def</span> <span class="nf">temporal_binning_pd</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bin_size</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">bin_borders</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rate</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Expected pd.DataFrame, got </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
     
@@ -102,7 +99,7 @@
         
     <span class="k">return</span> <span class="n">bin_borders</span><span class="p">,</span> <span class="n">data</span></div>
 
-<div class="viewcode-block" id="temporal_binning_dask"><a class="viewcode-back" href="../../../model_data_base.analyze.html#model_data_base.analyze.temporal_binning.temporal_binning_dask">[docs]</a><span class="k">def</span> <span class="nf">temporal_binning_dask</span><span class="p">(</span><span class="n">ddf</span><span class="p">,</span> <span class="n">bin_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">min_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">client</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="temporal_binning_dask"><a class="viewcode-back" href="../../../source/model_data_base.analyze.html#model_data_base.analyze.temporal_binning.temporal_binning_dask">[docs]</a><span class="k">def</span> <span class="nf">temporal_binning_dask</span><span class="p">(</span><span class="n">ddf</span><span class="p">,</span> <span class="n">bin_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">min_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">client</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">ddf</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Expected dask.dataframe.Dataframe, got </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ddf</span><span class="p">)))</span>
@@ -123,7 +120,7 @@
         <span class="n">out</span> <span class="o">=</span> <span class="n">out</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ddf</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">t_bins</span><span class="p">,</span> <span class="n">out</span></div>
 
-<div class="viewcode-block" id="universal"><a class="viewcode-back" href="../../../model_data_base.analyze.html#model_data_base.analyze.temporal_binning.universal">[docs]</a><span class="k">def</span> <span class="nf">universal</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="universal"><a class="viewcode-back" href="../../../source/model_data_base.analyze.html#model_data_base.analyze.temporal_binning.universal">[docs]</a><span class="k">def</span> <span class="nf">universal</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Binning of a pandas Dataframe, that contains timevalues in columns,</span>
 <span class="sd">    whose name can be converted to int, like the usual spike_times dataframe.</span>

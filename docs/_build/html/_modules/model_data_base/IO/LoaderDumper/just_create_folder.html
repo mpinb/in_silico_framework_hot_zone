@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -75,7 +72,7 @@
 <span class="kn">import</span> <span class="nn">compatibility</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">parent_classes</span>
 
-<div class="viewcode-block" id="check"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.check">[docs]</a><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<div class="viewcode-block" id="check"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.check">[docs]</a><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;checks wherther obj can be saved with this dumper&#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span> <span class="c1">#isinstance(obj, np) #basically everything can be saved with pickle</span></div>
 
@@ -96,14 +93,14 @@
 <span class="c1">#     def __reduce__(self):</span>
 <span class="c1">#         return self.__class__, (str(self), self.mdb)</span>
 
-<div class="viewcode-block" id="ManagedFolder"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder">[docs]</a><span class="k">class</span> <span class="nc">ManagedFolder</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
-<div class="viewcode-block" id="ManagedFolder.join"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="ManagedFolder"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder">[docs]</a><span class="k">class</span> <span class="nc">ManagedFolder</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="ManagedFolder.join"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">ManagedFolder</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">))</span></div>
     
-<div class="viewcode-block" id="ManagedFolder.listdir"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.listdir">[docs]</a>    <span class="k">def</span> <span class="nf">listdir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ManagedFolder.listdir"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.listdir">[docs]</a>    <span class="k">def</span> <span class="nf">listdir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="o">==</span> <span class="s1">&#39;Loader.pickle&#39;</span><span class="p">]</span></div>
     
-<div class="viewcode-block" id="ManagedFolder.get_file"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.get_file">[docs]</a>    <span class="k">def</span> <span class="nf">get_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suffix</span><span class="p">):</span>
+<div class="viewcode-block" id="ManagedFolder.get_file"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.get_file">[docs]</a>    <span class="k">def</span> <span class="nf">get_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suffix</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;if folder only contains one file of specified suffix, this file is returned&#39;&#39;&#39;</span>
         <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">)]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -114,12 +111,12 @@
             <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div></div>
 
 
-<div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">(</span><span class="n">parent_classes</span><span class="o">.</span><span class="n">Loader</span><span class="p">):</span>
-<div class="viewcode-block" id="Loader.get"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.Loader.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savedir</span><span class="p">):</span>
+<div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">(</span><span class="n">parent_classes</span><span class="o">.</span><span class="n">Loader</span><span class="p">):</span>
+<div class="viewcode-block" id="Loader.get"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.Loader.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savedir</span><span class="p">):</span>
         <span class="c1">#return savedir</span>
         <span class="k">return</span> <span class="n">ManagedFolder</span><span class="p">(</span><span class="n">savedir</span><span class="p">)</span></div></div>
     
-<div class="viewcode-block" id="dump"><a class="viewcode-back" href="../../../../model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.dump">[docs]</a><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">savedir</span><span class="p">):</span>
+<div class="viewcode-block" id="dump"><a class="viewcode-back" href="../../../../source/model_data_base.IO.LoaderDumper.html#model_data_base.IO.LoaderDumper.just_create_folder.dump">[docs]</a><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">savedir</span><span class="p">):</span>
 <span class="c1">#     with open(os.path.join(savedir, &#39;Loader.pickle&#39;), &#39;wb&#39;) as file_:</span>
 <span class="c1">#         cloudpickle.dump(Loader(), file_)</span>
     <span class="n">compatibility</span><span class="o">.</span><span class="n">cloudpickle_fun</span><span class="p">(</span><span class="n">Loader</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">savedir</span><span class="p">,</span> <span class="s1">&#39;Loader.pickle&#39;</span><span class="p">))</span></div>

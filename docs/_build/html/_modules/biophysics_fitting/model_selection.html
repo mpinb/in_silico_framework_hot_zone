@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -73,7 +70,7 @@
 <span></span><span class="kn">import</span> <span class="nn">Interface</span> <span class="k">as</span> <span class="nn">I</span>
 <span class="kn">from</span> <span class="nn">.hay_evaluation</span> <span class="kn">import</span> <span class="n">objectives_BAC</span><span class="p">,</span> <span class="n">objectives_step</span>
 
-<div class="viewcode-block" id="get_model_pdf_from_mdb"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.model_selection.get_model_pdf_from_mdb">[docs]</a><span class="k">def</span> <span class="nf">get_model_pdf_from_mdb</span><span class="p">(</span><span class="n">mdb</span><span class="p">):</span>
+<div class="viewcode-block" id="get_model_pdf_from_mdb"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.model_selection.get_model_pdf_from_mdb">[docs]</a><span class="k">def</span> <span class="nf">get_model_pdf_from_mdb</span><span class="p">(</span><span class="n">mdb</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">augment_pdf</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
         <span class="n">pdf</span><span class="p">[</span><span class="s1">&#39;model_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">mdb</span><span class="o">.</span><span class="n">get_id</span><span class="p">(),</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)])</span>
         <span class="n">pdf</span><span class="p">[</span><span class="s1">&#39;model_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdf</span><span class="p">[</span><span class="s1">&#39;model_id&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pdf</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">)</span>
@@ -92,7 +89,7 @@
         <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="get_pdf_selected"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.model_selection.get_pdf_selected">[docs]</a><span class="k">def</span> <span class="nf">get_pdf_selected</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="n">BAC_limit</span> <span class="o">=</span> <span class="mf">3.5</span><span class="p">,</span> <span class="n">step_limit</span> <span class="o">=</span> <span class="mf">4.5</span><span class="p">,</span>
+<div class="viewcode-block" id="get_pdf_selected"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.model_selection.get_pdf_selected">[docs]</a><span class="k">def</span> <span class="nf">get_pdf_selected</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="n">BAC_limit</span> <span class="o">=</span> <span class="mf">3.5</span><span class="p">,</span> <span class="n">step_limit</span> <span class="o">=</span> <span class="mf">4.5</span><span class="p">,</span>
                      <span class="n">objectives_BAC</span> <span class="o">=</span> <span class="n">objectives_BAC</span><span class="p">,</span>
                      <span class="n">objectives_step</span> <span class="o">=</span> <span class="n">objectives_step</span><span class="p">):</span>
     

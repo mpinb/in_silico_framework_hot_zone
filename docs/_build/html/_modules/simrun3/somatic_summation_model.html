@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -73,7 +70,7 @@
 <span class="kn">from</span> <span class="nn">model_data_base.utils</span> <span class="kn">import</span> <span class="n">convertible_to_int</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 
-<div class="viewcode-block" id="roll_rows_independently"><a class="viewcode-back" href="../../simrun3.html#simrun3.somatic_summation_model.roll_rows_independently">[docs]</a><span class="k">def</span> <span class="nf">roll_rows_independently</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+<div class="viewcode-block" id="roll_rows_independently"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.somatic_summation_model.roll_rows_independently">[docs]</a><span class="k">def</span> <span class="nf">roll_rows_independently</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;https://stackoverflow.com/questions/20360675/roll-rows-of-a-matrix-independently%5D&#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
@@ -99,8 +96,8 @@
 <span class="c1">#    n = a.shape[1]</span>
 <span class="c1">#    return viewW(a_ext,(1,n))[np.arange(len(r)), (n-r)%n,0]</span>
 
-<div class="viewcode-block" id="ParseVT"><a class="viewcode-back" href="../../simrun3.html#simrun3.somatic_summation_model.ParseVT">[docs]</a><span class="k">class</span> <span class="nc">ParseVT</span><span class="p">:</span>
-<div class="viewcode-block" id="ParseVT.__init__"><a class="viewcode-back" href="../../simrun3.html#simrun3.somatic_summation_model.ParseVT.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psp</span><span class="p">,</span> <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.025</span><span class="p">,</span> <span class="n">tStop</span> <span class="o">=</span> <span class="mi">300</span><span class="p">):</span>
+<div class="viewcode-block" id="ParseVT"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.somatic_summation_model.ParseVT">[docs]</a><span class="k">class</span> <span class="nc">ParseVT</span><span class="p">:</span>
+<div class="viewcode-block" id="ParseVT.__init__"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.somatic_summation_model.ParseVT.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psp</span><span class="p">,</span> <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.025</span><span class="p">,</span> <span class="n">tStop</span> <span class="o">=</span> <span class="mi">300</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">psp</span> <span class="o">=</span> <span class="n">psp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tStop</span> <span class="o">=</span> <span class="n">tStop</span> <span class="c1"># tStop: end of simulated voltage traces</span>
@@ -137,7 +134,7 @@
     <span class="k">def</span> <span class="nf">_get_num_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vt_array_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
         
-<div class="viewcode-block" id="ParseVT.get_vt_by_synapses"><a class="viewcode-back" href="../../simrun3.html#simrun3.somatic_summation_model.ParseVT.get_vt_by_synapses">[docs]</a>    <span class="k">def</span> <span class="nf">get_vt_by_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+<div class="viewcode-block" id="ParseVT.get_vt_by_synapses"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.somatic_summation_model.ParseVT.get_vt_by_synapses">[docs]</a>    <span class="k">def</span> <span class="nf">get_vt_by_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_num_index</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt_array</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="p">:]</span></div>
     
@@ -169,7 +166,7 @@
         <span class="c1">#offsets = (I.np.array(offsets) / dt).astype(&#39;i8&#39;)</span>
         <span class="k">return</span> <span class="n">synapses</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">offsets</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>   
     
-<div class="viewcode-block" id="ParseVT.parse_sa"><a class="viewcode-back" href="../../simrun3.html#simrun3.somatic_summation_model.ParseVT.parse_sa">[docs]</a>    <span class="k">def</span> <span class="nf">parse_sa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sa</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ParseVT.parse_sa"><a class="viewcode-back" href="../../source/simrun3.html#simrun3.somatic_summation_model.ParseVT.parse_sa">[docs]</a>    <span class="k">def</span> <span class="nf">parse_sa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sa</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">synapses</span><span class="p">,</span> <span class="n">offsets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_offsets_and_indices_from_sa</span><span class="p">(</span><span class="n">sa</span><span class="p">)</span>
         <span class="n">array</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_vt_by_synapses</span><span class="p">(</span><span class="n">synapses</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

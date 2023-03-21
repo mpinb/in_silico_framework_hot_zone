@@ -39,11 +39,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">in_silico_framework</a></li>
-</ul>
-
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
         </div>
       </div>
     </nav>
@@ -109,23 +106,23 @@
     <span class="n">_set_value</span><span class="p">(</span><span class="n">mdb</span><span class="p">,</span> <span class="p">(</span><span class="n">key_first_item</span><span class="p">,</span><span class="s1">&#39;status&#39;</span><span class="p">),</span> <span class="s1">&#39;finished&#39;</span><span class="p">)</span>
     <span class="n">l</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
     
-<div class="viewcode-block" id="RobustDaskDelayedExecution"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution">[docs]</a><span class="k">class</span> <span class="nc">RobustDaskDelayedExecution</span><span class="p">:</span>
+<div class="viewcode-block" id="RobustDaskDelayedExecution"><a class="viewcode-back" href="../../../source/tests.test_simrun3.html#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution">[docs]</a><span class="k">class</span> <span class="nc">RobustDaskDelayedExecution</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;This class utilizes the model data base to store delayed objects. It offers methods </span>
 <span class="sd">    to run them exactly once. The return value is not saved. Common usecase: Long runing, </span>
 <span class="sd">    data generating simulations are aborted (timeout on cluster, some error, ...) </span>
 <span class="sd">    and you want to complete the remaining tasks.&#39;&#39;&#39;</span>
-<div class="viewcode-block" id="RobustDaskDelayedExecution.__init__"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdb</span><span class="p">):</span>
+<div class="viewcode-block" id="RobustDaskDelayedExecution.__init__"><a class="viewcode-back" href="../../../source/tests.test_simrun3.html#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdb</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mdb</span> <span class="o">=</span> <span class="n">mdb</span></div>
         
     <span class="k">def</span> <span class="nf">_check_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
     
-<div class="viewcode-block" id="RobustDaskDelayedExecution.get_status"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RobustDaskDelayedExecution.get_status"><a class="viewcode-back" href="../../../source/tests.test_simrun3.html#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdb</span>
         <span class="n">status</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">m</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">if</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;status&#39;</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="RobustDaskDelayedExecution.add_delayed_to_mdb"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.add_delayed_to_mdb">[docs]</a>    <span class="k">def</span> <span class="nf">add_delayed_to_mdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<div class="viewcode-block" id="RobustDaskDelayedExecution.add_delayed_to_mdb"><a class="viewcode-back" href="../../../source/tests.test_simrun3.html#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.add_delayed_to_mdb">[docs]</a>    <span class="k">def</span> <span class="nf">add_delayed_to_mdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="n">mdb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdb</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mdb</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">key</span> <span class="o">=</span> <span class="mi">0</span>
@@ -135,7 +132,7 @@
         <span class="n">mdb</span><span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;not_started&#39;</span>
         <span class="n">mdb</span><span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="s1">&#39;obj&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span></div>
         
-<div class="viewcode-block" id="RobustDaskDelayedExecution.run_mdb"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.run_mdb">[docs]</a>    <span class="k">def</span> <span class="nf">run_mdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error_started</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="RobustDaskDelayedExecution.run_mdb"><a class="viewcode-back" href="../../../source/tests.test_simrun3.html#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.run_mdb">[docs]</a>    <span class="k">def</span> <span class="nf">run_mdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error_started</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="s1">&#39;&#39;</span>
         <span class="kn">import</span> <span class="nn">six</span>
         <span class="n">mdb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdb</span>
