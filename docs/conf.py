@@ -23,7 +23,9 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
-    'sphinx.ext.inheritance_diagram']
+    'sphinx.ext.inheritance_diagram',
+    'sphinx.ext.napoleon'  # for NumPy and Google Doc style docstrings
+    ]
 
 # autosummary_generate=True
 templates_path = ['_templates']
