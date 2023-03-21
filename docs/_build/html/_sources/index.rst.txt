@@ -10,7 +10,27 @@ Welcome to In-Silico Framework (ISF)'s documentation!
    :maxdepth: 2
    :caption: Contents:
 
+.. rubric:: Modules
 
+.. autosummary::
+   :toctree: generated
+
+   barrel_cortex
+   biophysics_fitting
+   dendrite_thickness
+   getting_started
+   installer
+   mechanisms
+   model_database
+   project_specific_ipynb_code
+   simrun2
+   simrun3
+   single_cell_analyzer
+   single_cell_parser
+   singlecell_input_mapper
+   SLURM_scripts
+   spike_analysis
+   visualize
 
 Indices and tables
 ==================

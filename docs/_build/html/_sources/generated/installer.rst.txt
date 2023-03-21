@@ -1,0 +1,23 @@
+﻿installer
+=========
+
+.. automodule:: installer
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
