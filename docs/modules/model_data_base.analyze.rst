@@ -1,4 +1,4 @@
-﻿model\_data\_base.analyze
+model\_data\_base.analyze
 =========================
 
 .. automodule:: model_data_base.analyze

@@ -1,4 +1,4 @@
-﻿biophysics\_fitting.utils
+biophysics\_fitting.utils
 =========================
 
 .. automodule:: biophysics_fitting.utils

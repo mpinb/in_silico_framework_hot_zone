@@ -1,4 +1,4 @@
-﻿simrun3.get\_cell\_with\_network
+simrun3.get\_cell\_with\_network
 ================================
 
 .. automodule:: simrun3.get_cell_with_network

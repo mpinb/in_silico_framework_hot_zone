@@ -1,4 +1,4 @@
-﻿simrun2.generate\_synapse\_activations
+simrun2.generate\_synapse\_activations
 ======================================
 
 .. automodule:: simrun2.generate_synapse_activations

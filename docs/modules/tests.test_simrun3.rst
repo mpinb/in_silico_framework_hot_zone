@@ -1,4 +1,4 @@
-﻿tests.test\_simrun3
+tests.test\_simrun3
 ===================
 
 .. automodule:: tests.test_simrun3

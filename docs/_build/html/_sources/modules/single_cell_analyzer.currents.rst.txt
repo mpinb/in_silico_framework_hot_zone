@@ -1,4 +1,4 @@
-﻿single\_cell\_analyzer.currents
+single\_cell\_analyzer.currents
 ===============================
 
 .. automodule:: single_cell_analyzer.currents

@@ -1,4 +1,4 @@
-﻿biophysics\_fitting.simulator
+biophysics\_fitting.simulator
 =============================
 
 .. automodule:: biophysics_fitting.simulator

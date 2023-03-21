@@ -1,4 +1,4 @@
-﻿tests.test\_model\_data\_base
+tests.test\_model\_data\_base
 =============================
 
 .. automodule:: tests.test_model_data_base

@@ -1,4 +1,4 @@
-﻿tests.decorators
+tests.decorators
 ================
 
 .. automodule:: tests.decorators

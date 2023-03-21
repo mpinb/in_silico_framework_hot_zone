@@ -1,4 +1,4 @@
-﻿single\_cell\_parser.writer
+single\_cell\_parser.writer
 ===========================
 
 .. automodule:: single_cell_parser.writer

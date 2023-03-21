@@ -1,4 +1,4 @@
-﻿tests.context
+tests.context
 =============
 
 .. automodule:: tests.context

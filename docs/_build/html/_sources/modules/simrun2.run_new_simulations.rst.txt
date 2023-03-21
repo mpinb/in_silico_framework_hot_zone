@@ -1,4 +1,4 @@
-﻿simrun2.run\_new\_simulations
+simrun2.run\_new\_simulations
 =============================
 
 .. automodule:: simrun2.run_new_simulations

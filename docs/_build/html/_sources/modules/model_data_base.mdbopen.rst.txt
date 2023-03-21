@@ -1,4 +1,4 @@
-﻿model\_data\_base.mdbopen
+model\_data\_base.mdbopen
 =========================
 
 .. automodule:: model_data_base.mdbopen

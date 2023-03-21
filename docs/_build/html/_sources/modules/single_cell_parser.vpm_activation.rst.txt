@@ -1,4 +1,4 @@
-﻿single\_cell\_parser.vpm\_activation
+single\_cell\_parser.vpm\_activation
 ====================================
 
 .. automodule:: single_cell_parser.vpm_activation

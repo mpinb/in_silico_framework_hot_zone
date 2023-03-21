@@ -1,4 +1,4 @@
-﻿simrun2.crossing\_over
+simrun2.crossing\_over
 ======================
 
 .. automodule:: simrun2.crossing_over

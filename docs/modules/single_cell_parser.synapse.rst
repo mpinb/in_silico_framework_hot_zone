@@ -1,4 +1,4 @@
-﻿single\_cell\_parser.synapse
+single\_cell\_parser.synapse
 ============================
 
 .. automodule:: single_cell_parser.synapse

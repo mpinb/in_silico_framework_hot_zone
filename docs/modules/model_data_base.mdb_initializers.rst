@@ -1,4 +1,4 @@
-﻿model\_data\_base.mdb\_initializers
+model\_data\_base.mdb\_initializers
 ===================================
 
 .. automodule:: model_data_base.mdb_initializers

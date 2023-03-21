@@ -1,4 +1,4 @@
-﻿simrun2.test\_passive\_properties
+simrun2.test\_passive\_properties
 =================================
 
 .. automodule:: simrun2.test_passive_properties
