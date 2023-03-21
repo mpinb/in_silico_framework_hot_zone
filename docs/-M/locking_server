@@ -1,3 +1,0 @@
-- config:
-    hosts: somalogin01-hs:33333
-  type: zookeeper

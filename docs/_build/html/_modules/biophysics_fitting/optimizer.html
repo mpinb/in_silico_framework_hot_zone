@@ -82,13 +82,13 @@
 <span class="kn">from</span> <span class="nn">bluepyopt.deapext</span> <span class="kn">import</span> <span class="n">algorithms</span>
 <span class="kn">from</span> <span class="nn">bluepyopt.deapext.optimisations</span> <span class="kn">import</span> <span class="n">WSListIndividual</span>
 <span class="kn">import</span> <span class="nn">Interface</span> <span class="k">as</span> <span class="nn">I</span>
-<div class="viewcode-block" id="robust_int"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.robust_int">[docs]</a><span class="k">def</span> <span class="nf">robust_int</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="robust_int"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.robust_int">[docs]</a><span class="k">def</span> <span class="nf">robust_int</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span> 
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="get_max_generation"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.get_max_generation">[docs]</a><span class="k">def</span> <span class="nf">get_max_generation</span><span class="p">(</span><span class="n">mdb_run</span><span class="p">):</span>
+<div class="viewcode-block" id="get_max_generation"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.get_max_generation">[docs]</a><span class="k">def</span> <span class="nf">get_max_generation</span><span class="p">(</span><span class="n">mdb_run</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;returns the index of the next iteration&#39;&#39;&#39;</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">robust_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">mdb_run</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">if</span> <span class="n">robust_int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">keys</span><span class="p">:</span>
@@ -97,13 +97,13 @@
         <span class="n">current_key</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">current_key</span></div>
 
-<div class="viewcode-block" id="save_result"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.save_result">[docs]</a><span class="k">def</span> <span class="nf">save_result</span><span class="p">(</span><span class="n">mdb_run</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">objectives</span><span class="p">):</span>
+<div class="viewcode-block" id="save_result"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.save_result">[docs]</a><span class="k">def</span> <span class="nf">save_result</span><span class="p">(</span><span class="n">mdb_run</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">objectives</span><span class="p">):</span>
     <span class="n">current_key</span> <span class="o">=</span> <span class="n">get_max_generation</span><span class="p">(</span><span class="n">mdb_run</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">mdb_run</span><span class="o">.</span><span class="n">setitem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">current_key</span><span class="p">),</span> 
                     <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">objectives</span><span class="p">,</span> <span class="n">features</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">),</span> 
                     <span class="n">dumper</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">dumper_pandas_to_msgpack</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="setup_mdb_run"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.setup_mdb_run">[docs]</a><span class="k">def</span> <span class="nf">setup_mdb_run</span><span class="p">(</span><span class="n">mdb_setup</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
+<div class="viewcode-block" id="setup_mdb_run"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.setup_mdb_run">[docs]</a><span class="k">def</span> <span class="nf">setup_mdb_run</span><span class="p">(</span><span class="n">mdb_setup</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;mdb_setup contains a sub mdb for each run of the full optimization. This sub mdb is created here&#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">run</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">mdb_setup</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
         <span class="n">mdb_setup</span><span class="o">.</span><span class="n">create_sub_mdb</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">run</span><span class="p">))</span>
@@ -113,7 +113,7 @@
         <span class="n">mdb_run</span><span class="o">.</span><span class="n">create_managed_folder</span><span class="p">(</span><span class="s1">&#39;checkpoint&#39;</span><span class="p">)</span>  
     <span class="k">return</span> <span class="n">mdb_run</span></div>
          
-<div class="viewcode-block" id="get_objective_function"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.get_objective_function">[docs]</a><span class="k">def</span> <span class="nf">get_objective_function</span><span class="p">(</span><span class="n">mdb_setup</span><span class="p">):</span>
+<div class="viewcode-block" id="get_objective_function"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.get_objective_function">[docs]</a><span class="k">def</span> <span class="nf">get_objective_function</span><span class="p">(</span><span class="n">mdb_setup</span><span class="p">):</span>
     <span class="n">parameter_df</span> <span class="o">=</span> <span class="n">mdb_setup</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
     <span class="n">Simulator</span> <span class="o">=</span> <span class="n">mdb_setup</span><span class="p">[</span><span class="s1">&#39;get_Simulator&#39;</span><span class="p">](</span><span class="n">mdb_setup</span><span class="p">)</span>
     <span class="n">Evaluator</span> <span class="o">=</span> <span class="n">mdb_setup</span><span class="p">[</span><span class="s1">&#39;get_Evaluator&#39;</span><span class="p">](</span><span class="n">mdb_setup</span><span class="p">)</span>
@@ -127,7 +127,7 @@
         <span class="k">return</span> <span class="n">e</span>
     <span class="k">return</span> <span class="n">objective_function</span></div>
     
-<div class="viewcode-block" id="get_mymap"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.get_mymap">[docs]</a><span class="k">def</span> <span class="nf">get_mymap</span><span class="p">(</span><span class="n">mdb_setup</span><span class="p">,</span> <span class="n">mdb_run</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+<div class="viewcode-block" id="get_mymap"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.get_mymap">[docs]</a><span class="k">def</span> <span class="nf">get_mymap</span><span class="p">(</span><span class="n">mdb_setup</span><span class="p">,</span> <span class="n">mdb_run</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
     <span class="c1"># CAVE! get_mymap is doing more, than just to return a map function.</span>
     <span class="c1"># - the map function ignores the first argument. </span>
     <span class="c1">#   The first argument (i.e. the function to be mapped on the iterable) is ignored.</span>
@@ -171,11 +171,11 @@
         <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">combined_objectives_lists</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">mymap</span></div>
 
-<div class="viewcode-block" id="my_ibea_evaluator"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.my_ibea_evaluator">[docs]</a><span class="k">class</span> <span class="nc">my_ibea_evaluator</span><span class="p">(</span><span class="n">bpop</span><span class="o">.</span><span class="n">evaluators</span><span class="o">.</span><span class="n">Evaluator</span><span class="p">):</span>
+<div class="viewcode-block" id="my_ibea_evaluator"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.my_ibea_evaluator">[docs]</a><span class="k">class</span> <span class="nc">my_ibea_evaluator</span><span class="p">(</span><span class="n">bpop</span><span class="o">.</span><span class="n">evaluators</span><span class="o">.</span><span class="n">Evaluator</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;Graupner-Brunel Evaluator&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="my_ibea_evaluator.__init__"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.my_ibea_evaluator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_df</span><span class="p">,</span> <span class="n">n_objectives</span><span class="p">):</span>
+<div class="viewcode-block" id="my_ibea_evaluator.__init__"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.my_ibea_evaluator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_df</span><span class="p">,</span> <span class="n">n_objectives</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Constructor&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">my_ibea_evaluator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="k">assert</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">parameter_df</span><span class="p">,</span> <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">))</span> <span class="c1"># we rely on the fact that the dataframe has an order</span>
@@ -187,7 +187,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">param_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">parameter_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">n_objectives</span> </div>
 
-<div class="viewcode-block" id="my_ibea_evaluator.evaluate_with_lists"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_with_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_values</span><span class="p">):</span>
+<div class="viewcode-block" id="my_ibea_evaluator.evaluate_with_lists"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_with_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_values</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">None</span> <span class="c1"># because of serialization issues, evaluate with lists is unused. </span></div></div>
         <span class="c1"># Instead, the mymap function defines, which function is used to evaluate the parameters!!!</span>
 
@@ -265,7 +265,7 @@
     <span class="k">return</span> <span class="n">deap</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">varAnd</span><span class="p">(</span><span class="n">parents</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">,</span> <span class="n">cxpb</span><span class="p">,</span> <span class="n">mutpb</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="eaAlphaMuPlusLambdaCheckpoint"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.eaAlphaMuPlusLambdaCheckpoint">[docs]</a><span class="k">def</span> <span class="nf">eaAlphaMuPlusLambdaCheckpoint</span><span class="p">(</span>
+<div class="viewcode-block" id="eaAlphaMuPlusLambdaCheckpoint"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.eaAlphaMuPlusLambdaCheckpoint">[docs]</a><span class="k">def</span> <span class="nf">eaAlphaMuPlusLambdaCheckpoint</span><span class="p">(</span>
         <span class="n">population</span><span class="p">,</span>
         <span class="n">toolbox</span><span class="p">,</span>
         <span class="n">mu</span><span class="p">,</span>
@@ -372,7 +372,7 @@
 <span class="c1"># end taken from bluepyopt</span>
 <span class="c1">#####################################################</span>
 
-<div class="viewcode-block" id="run"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.run">[docs]</a><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="run"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.run">[docs]</a><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">max_ngen</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
             <span class="n">offspring_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">continue_cp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -422,7 +422,7 @@
 
     <span class="k">return</span> <span class="n">pop</span></div>
 
-<div class="viewcode-block" id="get_population_with_different_n_objectives"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.get_population_with_different_n_objectives">[docs]</a><span class="k">def</span> <span class="nf">get_population_with_different_n_objectives</span><span class="p">(</span><span class="n">old_pop</span><span class="p">,</span> <span class="n">n_objectives</span><span class="p">):</span>
+<div class="viewcode-block" id="get_population_with_different_n_objectives"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.get_population_with_different_n_objectives">[docs]</a><span class="k">def</span> <span class="nf">get_population_with_different_n_objectives</span><span class="p">(</span><span class="n">old_pop</span><span class="p">,</span> <span class="n">n_objectives</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;function to adapt the number of objectives of individuals&#39;&#39;&#39;</span>
     <span class="n">pop</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">old_pop</span><span class="p">:</span>
@@ -430,7 +430,7 @@
         <span class="n">pop</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pop</span></div>
 	
-<div class="viewcode-block" id="start_run"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.optimizer.start_run">[docs]</a><span class="k">def</span> <span class="nf">start_run</span><span class="p">(</span><span class="n">mdb_setup</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">pop</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">client</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">continue_cp</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<div class="viewcode-block" id="start_run"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.optimizer.start_run">[docs]</a><span class="k">def</span> <span class="nf">start_run</span><span class="p">(</span><span class="n">mdb_setup</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">pop</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">client</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">continue_cp</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
               <span class="n">offspring_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">max_ngen</span> <span class="o">=</span> <span class="mi">600</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;function to start an optimization run as specified in mdb_setup. The following attributes need</span>
 <span class="sd">    to be defined in mdb_setup:</span>

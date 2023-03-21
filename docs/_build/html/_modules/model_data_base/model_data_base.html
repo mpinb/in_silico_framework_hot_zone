@@ -112,7 +112,7 @@
 <span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">import</span> <span class="nn">unicodedata</span>
 
-<div class="viewcode-block" id="slugify"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.slugify">[docs]</a><span class="k">def</span> <span class="nf">slugify</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="slugify"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.slugify">[docs]</a><span class="k">def</span> <span class="nf">slugify</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalizes string, converts to lowercase, removes non-alpha characters,</span>
 <span class="sd">    and converts spaces to hyphens.</span>
@@ -129,7 +129,7 @@
         <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">value</span></div>
     
-<div class="viewcode-block" id="LoaderWrapper"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.LoaderWrapper">[docs]</a><span class="k">class</span> <span class="nc">LoaderWrapper</span><span class="p">:</span>
+<div class="viewcode-block" id="LoaderWrapper"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.LoaderWrapper">[docs]</a><span class="k">class</span> <span class="nc">LoaderWrapper</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;This is a pointer to data, which is stored elsewhere.</span>
 <span class="sd">    </span>
 <span class="sd">    It is used by ModelDataBase, if data is stored in a subfolder of the </span>
@@ -154,10 +154,10 @@
 <span class="sd">        absolute path to the folder.</span>
 <span class="sd">    5. the returned object is returned to the user</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-<div class="viewcode-block" id="LoaderWrapper.__init__"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.LoaderWrapper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relpath</span><span class="p">):</span>
+<div class="viewcode-block" id="LoaderWrapper.__init__"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.LoaderWrapper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relpath</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">relpath</span> <span class="o">=</span> <span class="n">relpath</span></div></div>
         
-<div class="viewcode-block" id="FunctionWrapper"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.FunctionWrapper">[docs]</a><span class="k">class</span> <span class="nc">FunctionWrapper</span><span class="p">:</span>
+<div class="viewcode-block" id="FunctionWrapper"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.FunctionWrapper">[docs]</a><span class="k">class</span> <span class="nc">FunctionWrapper</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;This class wraps arouand an object that cannot be saved directly (e.g. </span>
 <span class="sd">    using pickle) but needs an initialization function instead.</span>
 <span class="sd">    </span>
@@ -166,10 +166,10 @@
 <span class="sd">        you want to save    </span>
 <span class="sd">    2. create an instance of this class and pass your function</span>
 <span class="sd">    3. save it in the database with wathever dumper you want&#39;&#39;&#39;</span>
-<div class="viewcode-block" id="FunctionWrapper.__init__"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.FunctionWrapper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fun</span><span class="p">):</span>
+<div class="viewcode-block" id="FunctionWrapper.__init__"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.FunctionWrapper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fun</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">fun</span></div></div>
                 
-<div class="viewcode-block" id="MdbException"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.MdbException">[docs]</a><span class="k">class</span> <span class="nc">MdbException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="MdbException"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.MdbException">[docs]</a><span class="k">class</span> <span class="nc">MdbException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Typical mdb errors&#39;&#39;&#39;</span>
     <span class="k">pass</span>        </div>
 
@@ -196,12 +196,12 @@
                                <span class="o">+</span> <span class="s2">&quot;Cannot create the directories specified in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">working_dir</span><span class="p">)</span>
 
 <span class="c1">###methods to hide dask progress bar based on settings:</span>
-<div class="viewcode-block" id="empty_context_manager"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.empty_context_manager">[docs]</a><span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
+<div class="viewcode-block" id="empty_context_manager"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.empty_context_manager">[docs]</a><span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
 <span class="k">def</span> <span class="nf">empty_context_manager</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;does nothing. is meant to replace ProgressBar, if no output is needed&#39;&#39;&#39;</span>
     <span class="k">yield</span></div>
 
-<div class="viewcode-block" id="get_progress_bar_function"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.get_progress_bar_function">[docs]</a><span class="k">def</span> <span class="nf">get_progress_bar_function</span><span class="p">():</span>
+<div class="viewcode-block" id="get_progress_bar_function"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.get_progress_bar_function">[docs]</a><span class="k">def</span> <span class="nf">get_progress_bar_function</span><span class="p">():</span>
     <span class="n">PB</span> <span class="o">=</span> <span class="n">empty_context_manager</span>    
 <span class="c1">#     if settings.show_computation_progress:</span>
 <span class="c1">#         PB = dask.diagnostics.ProgressBar</span>
@@ -209,8 +209,8 @@
 <span class="c1">#         PB = empty_context_manager</span>
     <span class="k">return</span> <span class="n">PB</span>           </div>
 
-<div class="viewcode-block" id="SQLMetadataAccessor"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.SQLMetadataAccessor">[docs]</a><span class="k">class</span> <span class="nc">SQLMetadataAccessor</span><span class="p">():</span>
-<div class="viewcode-block" id="SQLMetadataAccessor.__init__"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.SQLMetadataAccessor.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sql_backend</span><span class="p">):</span>
+<div class="viewcode-block" id="SQLMetadataAccessor"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.SQLMetadataAccessor">[docs]</a><span class="k">class</span> <span class="nc">SQLMetadataAccessor</span><span class="p">():</span>
+<div class="viewcode-block" id="SQLMetadataAccessor.__init__"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.SQLMetadataAccessor.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sql_backend</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sql_backend</span> <span class="o">=</span> <span class="n">sql_backend</span></div>
         
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
@@ -219,11 +219,11 @@
             <span class="n">out</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sql_backend</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">out</span>
     
-<div class="viewcode-block" id="SQLMetadataAccessor.keys"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.SQLMetadataAccessor.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SQLMetadataAccessor.keys"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.SQLMetadataAccessor.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sql_backend</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div></div>
 
-<div class="viewcode-block" id="ModelDataBase"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase">[docs]</a><span class="k">class</span> <span class="nc">ModelDataBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<div class="viewcode-block" id="ModelDataBase.__init__"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basedir</span><span class="p">,</span> <span class="n">forceload</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">readonly</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">nocreate</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> 
+<div class="viewcode-block" id="ModelDataBase"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase">[docs]</a><span class="k">class</span> <span class="nc">ModelDataBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.__init__"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basedir</span><span class="p">,</span> <span class="n">forceload</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">readonly</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">nocreate</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> 
                  <span class="n">forcecreate</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Class responsible for storing information, meant to be used as an interface to simulation </span>
@@ -295,7 +295,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unique_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_set_unique_id</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ModelDataBase.in_memory"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.in_memory">[docs]</a>    <span class="k">def</span> <span class="nf">in_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">recursive</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.in_memory"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.in_memory">[docs]</a>    <span class="k">def</span> <span class="nf">in_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">recursive</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Load all data required for accessing data in memory. This can be helpful, if locking </span>
 <span class="sd">        is taking much time, but would not be required. If in_memory has been called, no changes to </span>
 <span class="sd">        the database are possible&#39;&#39;&#39;</span>
@@ -331,14 +331,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_unique_id</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">time</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()),</span> <span class="n">random_string</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_db</span><span class="p">()</span>      
         
-<div class="viewcode-block" id="ModelDataBase.get_id"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.get_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.get_id"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.get_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unique_id</span> </div>
         
-<div class="viewcode-block" id="ModelDataBase.registerDumper"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.registerDumper">[docs]</a>    <span class="k">def</span> <span class="nf">registerDumper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dumperModule</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.registerDumper"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.registerDumper">[docs]</a>    <span class="k">def</span> <span class="nf">registerDumper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dumperModule</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;caveat: make sure to provide the MODULE, not the class&#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_registeredDumpers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dumperModule</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="ModelDataBase.read_db"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.read_db">[docs]</a>    <span class="k">def</span> <span class="nf">read_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.read_db"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.read_db">[docs]</a>    <span class="k">def</span> <span class="nf">read_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;sets the state of the database according to dbcore.pickle&#39;&#39;&#39;</span> 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basedir</span><span class="p">,</span> <span class="s1">&#39;dbcore.pickle&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -346,7 +346,7 @@
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">out</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>            </div>
             
-<div class="viewcode-block" id="ModelDataBase.save_db"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.save_db">[docs]</a>    <span class="k">def</span> <span class="nf">save_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.save_db"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.save_db">[docs]</a>    <span class="k">def</span> <span class="nf">save_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;saves the data which defines the state of this database to dbcore.pickle&#39;&#39;&#39;</span>
         <span class="c1">## things that define the state of this mdb and should be saved</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;_registeredDumpers&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registeredDumpers</span><span class="p">,</span> \
@@ -355,11 +355,11 @@
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basedir</span><span class="p">,</span> <span class="s1">&#39;dbcore.pickle&#39;</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
         
-<div class="viewcode-block" id="ModelDataBase.itemexists"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.itemexists">[docs]</a>    <span class="k">def</span> <span class="nf">itemexists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.itemexists"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.itemexists">[docs]</a>    <span class="k">def</span> <span class="nf">itemexists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Checks, if item is already in the database&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
                 
-<div class="viewcode-block" id="ModelDataBase.get_mkdtemp"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.get_mkdtemp">[docs]</a>    <span class="k">def</span> <span class="nf">get_mkdtemp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">suffix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.get_mkdtemp"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.get_mkdtemp">[docs]</a>    <span class="k">def</span> <span class="nf">get_mkdtemp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">suffix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;creates a directory in the model_data_base directory and </span>
 <span class="sd">        returns the path&#39;&#39;&#39;</span>
         <span class="n">absolute_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="n">suffix</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">,</span> <span class="nb">dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basedir</span><span class="p">)</span> 
@@ -367,7 +367,7 @@
         <span class="n">relative_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">absolute_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basedir</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">absolute_path</span><span class="p">,</span> <span class="n">relative_path</span></div>
 
-<div class="viewcode-block" id="ModelDataBase.create_managed_folder"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.create_managed_folder">[docs]</a>    <span class="k">def</span> <span class="nf">create_managed_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">raise_</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.create_managed_folder"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.create_managed_folder">[docs]</a>    <span class="k">def</span> <span class="nf">create_managed_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">raise_</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;creates a folder in the mdb directory and saves the path in &#39;key&#39;.</span>
 <span class="sd">        You can delete the folder using del mdb[key]&#39;&#39;&#39;</span>
         <span class="c1">#todo: make sure that existing key will not be overwritten</span>
@@ -378,14 +378,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">setitem</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dumper</span> <span class="o">=</span> <span class="n">just_create_folder</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
         
-<div class="viewcode-block" id="ModelDataBase.get_managed_folder"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.get_managed_folder">[docs]</a>    <span class="k">def</span> <span class="nf">get_managed_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.get_managed_folder"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.get_managed_folder">[docs]</a>    <span class="k">def</span> <span class="nf">get_managed_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;deprecated!</span>
 <span class="sd">        </span>
 <span class="sd">        Use create_managed_folder instead&#39;&#39;&#39;</span>   
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Get_managed_folder is deprecated.  Use create_managed_folder instead.&quot;</span><span class="p">)</span> 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_managed_folder</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="ModelDataBase.create_sub_mdb"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.create_sub_mdb">[docs]</a>    <span class="k">def</span> <span class="nf">create_sub_mdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">register</span> <span class="o">=</span> <span class="s1">&#39;as_parent&#39;</span><span class="p">,</span> <span class="n">raise_</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.create_sub_mdb"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.create_sub_mdb">[docs]</a>    <span class="k">def</span> <span class="nf">create_sub_mdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">register</span> <span class="o">=</span> <span class="s1">&#39;as_parent&#39;</span><span class="p">,</span> <span class="n">raise_</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;creates a ModelDataBase within a ModelDataBase. Example:</span>
 <span class="sd">        mdb.create_sub_mdb(&#39;my_sub_database&#39;)</span>
 <span class="sd">        mdb[&#39;my_sub_database&#39;][&#39;sme_key&#39;] = [&#39;some_value&#39;]</span>
@@ -400,7 +400,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">setitem</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dumper</span> <span class="o">=</span> <span class="n">just_create_mdb</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
     
-<div class="viewcode-block" id="ModelDataBase.get_sub_mdb"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.get_sub_mdb">[docs]</a>    <span class="k">def</span> <span class="nf">get_sub_mdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span> <span class="n">register</span> <span class="o">=</span> <span class="s1">&#39;as_parent&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.get_sub_mdb"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.get_sub_mdb">[docs]</a>    <span class="k">def</span> <span class="nf">get_sub_mdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span> <span class="n">register</span> <span class="o">=</span> <span class="s1">&#39;as_parent&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;deprecated!</span>
 <span class="sd">        </span>
 <span class="sd">        Use create_sub_mdb instead&#39;&#39;&#39;</span>
@@ -489,7 +489,7 @@
                 <span class="n">old_folder</span> <span class="o">=</span> <span class="n">dummy</span><span class="o">.</span><span class="n">relpath</span>
         <span class="k">return</span> <span class="n">old_folder</span>
     
-<div class="viewcode-block" id="ModelDataBase.check_if_key_exists"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.check_if_key_exists">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_key_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.check_if_key_exists"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.check_if_key_exists">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_key_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span> 
             <span class="n">key</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">key</span><span class="p">])</span>        
             
@@ -525,7 +525,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_sql_backend</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">LoaderWrapper</span><span class="p">(</span><span class="n">basedir_relative</span><span class="p">)</span>
             
     
-<div class="viewcode-block" id="ModelDataBase.setitem"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.setitem">[docs]</a>    <span class="k">def</span> <span class="nf">setitem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.setitem"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.setitem">[docs]</a>    <span class="k">def</span> <span class="nf">setitem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Allows to set items. Compared to the mdb[&#39;some_keys&#39;] = my_item syntax,</span>
 <span class="sd">        this method allows more control over how the item is stored in the database.</span>
 <span class="sd">        </span>
@@ -700,7 +700,7 @@
         
         <span class="bp">self</span><span class="o">.</span><span class="n">_sql_metadata_backend</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span>
         
-<div class="viewcode-block" id="ModelDataBase.change_dumper"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.change_dumper">[docs]</a>    <span class="k">def</span> <span class="nf">change_dumper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">new_dumper</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.change_dumper"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.change_dumper">[docs]</a>    <span class="k">def</span> <span class="nf">change_dumper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">new_dumper</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">VC</span><span class="o">.</span><span class="n">get_git_version</span><span class="p">()[</span><span class="s1">&#39;dirty&#39;</span><span class="p">]:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;The database source folder has uncommitted changes!&#39;</span><span class="p">)</span>
                     
@@ -716,7 +716,7 @@
         <span class="c1">#update metadata</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_write_metadata_for_new_dumper</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">new_dumper</span><span class="p">)</span></div>
         
-<div class="viewcode-block" id="ModelDataBase.maybe_calculate"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.maybe_calculate">[docs]</a>    <span class="k">def</span> <span class="nf">maybe_calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">fun</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.maybe_calculate"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.maybe_calculate">[docs]</a>    <span class="k">def</span> <span class="nf">maybe_calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">fun</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;This function returns the corresponding value of key,</span>
 <span class="sd">        if it is already in the database. If it is not in the database,</span>
 <span class="sd">        it calculates the value by calling fun, adds this value to the</span>
@@ -754,11 +754,11 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">setitem</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">ret</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">ret</span>    </div>
         
-<div class="viewcode-block" id="ModelDataBase.keys"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.keys"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;returns the keys of the database&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sql_backend</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="c1">###</span></div>
     
-<div class="viewcode-block" id="ModelDataBase.get_readonly"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.ModelDataBase.get_readonly">[docs]</a>    <span class="k">def</span> <span class="nf">get_readonly</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBase.get_readonly"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.ModelDataBase.get_readonly">[docs]</a>    <span class="k">def</span> <span class="nf">get_readonly</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;returns a new ModelDataBase, which is readonly.</span>
 <span class="sd">        </span>
 <span class="sd">        Usecase: If you want to use the database for distributed computations, which only require</span>
@@ -775,8 +775,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basedir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">forceload</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">readonly</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">{})</span></div>
     
-<div class="viewcode-block" id="RegisteredFolder"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.RegisteredFolder">[docs]</a><span class="k">class</span> <span class="nc">RegisteredFolder</span><span class="p">(</span><span class="n">ModelDataBase</span><span class="p">):</span>
-<div class="viewcode-block" id="RegisteredFolder.__init__"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base.RegisteredFolder.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="RegisteredFolder"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.RegisteredFolder">[docs]</a><span class="k">class</span> <span class="nc">RegisteredFolder</span><span class="p">(</span><span class="n">ModelDataBase</span><span class="p">):</span>
+<div class="viewcode-block" id="RegisteredFolder.__init__"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base.RegisteredFolder.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="n">ModelDataBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">forcecreate</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setitem</span><span class="p">(</span><span class="s1">&#39;self&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dumper</span> <span class="o">=</span> <span class="n">just_create_folder</span><span class="p">)</span>
         <span class="n">dumper</span> <span class="o">=</span> <span class="n">just_create_folder</span>

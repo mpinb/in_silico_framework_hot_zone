@@ -84,7 +84,7 @@
 <span class="kn">from</span> <span class="nn">nbconvert.preprocessors</span> <span class="kn">import</span> <span class="n">ExecutePreprocessor</span>
 
 
-<div class="viewcode-block" id="dict_to_code"><a class="viewcode-back" href="../source/nbrun.html#nbrun.dict_to_code">[docs]</a><span class="k">def</span> <span class="nf">dict_to_code</span><span class="p">(</span><span class="n">mapping</span><span class="p">):</span>
+<div class="viewcode-block" id="dict_to_code"><a class="viewcode-back" href="../modules/nbrun.html#nbrun.dict_to_code">[docs]</a><span class="k">def</span> <span class="nf">dict_to_code</span><span class="p">(</span><span class="n">mapping</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convert input dict `mapping` to a string containing python code.</span>
 <span class="sd">    Each key is the name of a variable and each value is</span>
 <span class="sd">    the variable content. Each variable assignment is separated by</span>
@@ -102,7 +102,7 @@
              <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
     <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="run_notebook"><a class="viewcode-back" href="../source/nbrun.html#nbrun.run_notebook">[docs]</a><span class="k">def</span> <span class="nf">run_notebook</span><span class="p">(</span><span class="n">notebook_name</span><span class="p">,</span> <span class="n">nb_suffix</span><span class="o">=</span><span class="s1">&#39;-out&#39;</span><span class="p">,</span> <span class="n">out_path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">nb_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="run_notebook"><a class="viewcode-back" href="../modules/nbrun.html#nbrun.run_notebook">[docs]</a><span class="k">def</span> <span class="nf">run_notebook</span><span class="p">(</span><span class="n">notebook_name</span><span class="p">,</span> <span class="n">nb_suffix</span><span class="o">=</span><span class="s1">&#39;-out&#39;</span><span class="p">,</span> <span class="n">out_path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">nb_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">insert_pos</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">execute_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Runs a notebook and saves the output in a new notebook.</span>
 <span class="sd">    Executes a notebook, optionally passing &quot;arguments&quot; in a way roughly</span>

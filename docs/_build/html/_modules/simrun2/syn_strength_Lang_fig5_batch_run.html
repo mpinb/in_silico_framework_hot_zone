@@ -77,7 +77,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<div class="viewcode-block" id="create_summary"><a class="viewcode-back" href="../../source/simrun2.html#simrun2.syn_strength_Lang_fig5_batch_run.create_summary">[docs]</a><span class="k">def</span> <span class="nf">create_summary</span><span class="p">(</span><span class="n">dirName</span><span class="p">,</span> <span class="n">cellTypeName</span><span class="p">,</span> <span class="n">detectionThreshold</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">makeplots</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="create_summary"><a class="viewcode-back" href="../../modules/simrun2.html#simrun2.syn_strength_Lang_fig5_batch_run.create_summary">[docs]</a><span class="k">def</span> <span class="nf">create_summary</span><span class="p">(</span><span class="n">dirName</span><span class="p">,</span> <span class="n">cellTypeName</span><span class="p">,</span> <span class="n">detectionThreshold</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">makeplots</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="n">fnames</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">cellTypeNames</span> <span class="o">=</span> <span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span>
     <span class="n">scan_directory</span><span class="p">(</span><span class="n">dirName</span><span class="p">,</span> <span class="n">fnames</span><span class="p">,</span> <span class="n">cellTypeNames</span><span class="p">)</span>
@@ -212,7 +212,7 @@
 <span class="c1">#            line += &#39;\n&#39;</span>
 <span class="c1">#            outFile.write(line)</span>
 
-<div class="viewcode-block" id="scan_directory"><a class="viewcode-back" href="../../source/simrun2.html#simrun2.syn_strength_Lang_fig5_batch_run.scan_directory">[docs]</a><span class="k">def</span> <span class="nf">scan_directory</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">fnames</span><span class="p">,</span> <span class="n">cellTypeNames</span><span class="p">):</span>
+<div class="viewcode-block" id="scan_directory"><a class="viewcode-back" href="../../modules/simrun2.html#simrun2.syn_strength_Lang_fig5_batch_run.scan_directory">[docs]</a><span class="k">def</span> <span class="nf">scan_directory</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">fnames</span><span class="p">,</span> <span class="n">cellTypeNames</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
             <span class="n">scan_directory</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fnames</span><span class="p">,</span> <span class="n">cellTypeNames</span><span class="p">)</span>
@@ -224,7 +224,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">continue</span></div>
 
-<div class="viewcode-block" id="load_data"><a class="viewcode-back" href="../../source/simrun2.html#simrun2.syn_strength_Lang_fig5_batch_run.load_data">[docs]</a><span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="load_data"><a class="viewcode-back" href="../../modules/simrun2.html#simrun2.syn_strength_Lang_fig5_batch_run.load_data">[docs]</a><span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">synID</span><span class="p">,</span> <span class="n">somaV</span><span class="p">,</span> <span class="n">somaT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
@@ -235,7 +235,7 @@
     <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">somaV</span><span class="p">],</span> <span class="p">[</span><span class="n">somaT</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="create_plots"><a class="viewcode-back" href="../../source/simrun2.html#simrun2.syn_strength_Lang_fig5_batch_run.create_plots">[docs]</a><span class="k">def</span> <span class="nf">create_plots</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="create_plots"><a class="viewcode-back" href="../../modules/simrun2.html#simrun2.syn_strength_Lang_fig5_batch_run.create_plots">[docs]</a><span class="k">def</span> <span class="nf">create_plots</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="n">somaV</span><span class="p">,</span> <span class="n">somaT</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="n">somaV</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">somaV</span><span class="p">)</span>
     <span class="n">somaT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">somaT</span><span class="p">)</span>

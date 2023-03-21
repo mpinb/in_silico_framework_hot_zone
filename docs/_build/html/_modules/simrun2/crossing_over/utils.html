@@ -70,7 +70,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<div class="viewcode-block" id="generate_output_path"><a class="viewcode-back" href="../../../source/simrun2.crossing_over.html#simrun2.crossing_over.utils.generate_output_path">[docs]</a><span class="k">def</span> <span class="nf">generate_output_path</span><span class="p">(</span><span class="n">tuple_</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="generate_output_path"><a class="viewcode-back" href="../../../modules/simrun2.crossing_over.html#simrun2.crossing_over.utils.generate_output_path">[docs]</a><span class="k">def</span> <span class="nf">generate_output_path</span><span class="p">(</span><span class="n">tuple_</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
     <span class="n">t0</span> <span class="o">=</span> <span class="n">tuple_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">t1</span> <span class="o">=</span> <span class="n">tuple_</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">t0</span><span class="p">)))</span>
@@ -95,7 +95,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
     
-<div class="viewcode-block" id="filter_by_time"><a class="viewcode-back" href="../../../source/simrun2.crossing_over.html#simrun2.crossing_over.utils.filter_by_time">[docs]</a><span class="k">def</span> <span class="nf">filter_by_time</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="n">filterfun</span><span class="p">):</span>
+<div class="viewcode-block" id="filter_by_time"><a class="viewcode-back" href="../../../modules/simrun2.crossing_over.html#simrun2.crossing_over.utils.filter_by_time">[docs]</a><span class="k">def</span> <span class="nf">filter_by_time</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="n">filterfun</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;takes a standard synapse activation file returns a new dataframe</span>
 <span class="sd">    of the same format containing only the activations, for which filterfun returns True</span>
 <span class="sd">    </span>
@@ -137,7 +137,7 @@
     <span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">ret</span><span class="p">[</span><span class="n">order</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="merge_synapse_activation"><a class="viewcode-back" href="../../../source/simrun2.crossing_over.html#simrun2.crossing_over.utils.merge_synapse_activation">[docs]</a><span class="k">def</span> <span class="nf">merge_synapse_activation</span><span class="p">(</span><span class="n">pdf1</span><span class="p">,</span> <span class="n">pdf2</span><span class="p">):</span>
+<div class="viewcode-block" id="merge_synapse_activation"><a class="viewcode-back" href="../../../modules/simrun2.crossing_over.html#simrun2.crossing_over.utils.merge_synapse_activation">[docs]</a><span class="k">def</span> <span class="nf">merge_synapse_activation</span><span class="p">(</span><span class="n">pdf1</span><span class="p">,</span> <span class="n">pdf2</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;merges two synapse activation data tables&#39;&#39;&#39;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">pdf1</span> <span class="o">=</span> <span class="n">pdf1</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;sim_trail_index&#39;</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>

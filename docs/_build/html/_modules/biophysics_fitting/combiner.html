@@ -73,17 +73,17 @@
 <span class="sd">@author: abast</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
-<div class="viewcode-block" id="Combiner_Setup"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.combiner.Combiner_Setup">[docs]</a><span class="k">class</span> <span class="nc">Combiner_Setup</span><span class="p">:</span>
-<div class="viewcode-block" id="Combiner_Setup.__init__"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.combiner.Combiner_Setup.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Combiner_Setup"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.combiner.Combiner_Setup">[docs]</a><span class="k">class</span> <span class="nc">Combiner_Setup</span><span class="p">:</span>
+<div class="viewcode-block" id="Combiner_Setup.__init__"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.combiner.Combiner_Setup.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">combinations</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">combinefun</span> <span class="o">=</span> <span class="kc">None</span></div>
         
-<div class="viewcode-block" id="Combiner_Setup.append"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.combiner.Combiner_Setup.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">combination</span><span class="p">):</span>
+<div class="viewcode-block" id="Combiner_Setup.append"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.combiner.Combiner_Setup.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">combination</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">combinations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">combination</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div></div>
         
-<div class="viewcode-block" id="Combiner"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.combiner.Combiner">[docs]</a><span class="k">class</span> <span class="nc">Combiner</span><span class="p">:</span>
+<div class="viewcode-block" id="Combiner"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.combiner.Combiner">[docs]</a><span class="k">class</span> <span class="nc">Combiner</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;This  class can be used to combine features (usually) computed by an Evaluator object.</span>
 <span class="sd">    </span>
 <span class="sd">    For a Simulator object s and a Evaluator object e and a Combiner object c, the typical usecase is:</span>
@@ -111,10 +111,10 @@
 <span class="sd">    combined_features</span>
 <span class="sd">    &gt; {&#39;combination1&#39;: 2, &#39;combination2&#39;: 4}</span>
 <span class="sd">    &#39;&#39;&#39;</span>    
-<div class="viewcode-block" id="Combiner.__init__"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.combiner.Combiner.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Combiner.__init__"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.combiner.Combiner.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setup</span> <span class="o">=</span> <span class="n">Combiner_Setup</span><span class="p">()</span></div>
         
-<div class="viewcode-block" id="Combiner.combine"><a class="viewcode-back" href="../../source/biophysics_fitting.html#biophysics_fitting.combiner.Combiner.combine">[docs]</a>    <span class="k">def</span> <span class="nf">combine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">):</span>
+<div class="viewcode-block" id="Combiner.combine"><a class="viewcode-back" href="../../modules/biophysics_fitting.html#biophysics_fitting.combiner.Combiner.combine">[docs]</a>    <span class="k">def</span> <span class="nf">combine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Combines features that are computed by an Evaluator class.</span>
 <span class="sd">        </span>
 <span class="sd">        Details, how to set up the Combiner are in the docstring of</span>

@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spike_analysis package &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">spike_analysis package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-spike_analysis.core">spike_analysis.core module</a></li>
+<li><a class="reference internal" href="#module-spike_analysis">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">spike_analysis package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/spike_analysis.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="spike-analysis-package">
+<h1>spike_analysis package<a class="headerlink" href="#spike-analysis-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-spike_analysis.core">
+<span id="spike-analysis-core-module"></span><h2>spike_analysis.core module<a class="headerlink" href="#module-spike_analysis.core" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="spike_analysis.core.AnalyzeFile">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">AnalyzeFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">lim_creast</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">lim_trough</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">cellid</span><span class="o">=</span><span class="default_value">'__no_cellid_assigned__'</span></em>, <em class="sig-param"><span class="n">periods</span><span class="o">=</span><span class="default_value">{'1onset': 0, 100}</span></em>, <em class="sig-param"><span class="n">analogsignal_id</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stim_times_channel</span><span class="o">=</span><span class="default_value">'5'</span></em>, <em class="sig-param"><span class="n">tdelta</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">lim_creast</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">lim_trough</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">cellid</span><span class="o">=</span><span class="default_value">'__no_cellid_assigned__'</span></em>, <em class="sig-param"><span class="n">periods</span><span class="o">=</span><span class="default_value">{'1onset': 0, 100}</span></em>, <em class="sig-param"><span class="n">analogsignal_id</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stim_times_channel</span><span class="o">=</span><span class="default_value">'5'</span></em>, <em class="sig-param"><span class="n">tdelta</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for automatic analysis of smr files.</p>
+<p>periods: requires ‘1onset’ as key for plot_n_onset function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.describe">
+<code class="sig-name descname">describe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.describe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.get_df">
+<code class="sig-name descname">get_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">['period']</span></em>, <em class="sig-param"><span class="n">normed</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.get_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.get_df" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.get_n_onset2">
+<code class="sig-name descname">get_n_onset2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.get_n_onset2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.get_n_onset2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.get_ongoing_activity">
+<code class="sig-name descname">get_ongoing_activity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">period_prestim</span><span class="o">=</span><span class="default_value">30000</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.get_ongoing_activity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.get_ongoing_activity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.get_onset_latency">
+<code class="sig-name descname">get_onset_latency</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.get_onset_latency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.get_onset_latency" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.get_onset_spike_probability">
+<code class="sig-name descname">get_onset_spike_probability</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.get_onset_spike_probability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.get_onset_spike_probability" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.get_table">
+<code class="sig-name descname">get_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">['period']</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.get_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.get_table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.plot_PSTH">
+<code class="sig-name descname">plot_PSTH</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.plot_PSTH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.plot_PSTH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.plot_all_flat">
+<code class="sig-name descname">plot_all_flat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.plot_all_flat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.plot_all_flat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.plot_all_stacked">
+<code class="sig-name descname">plot_all_stacked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.plot_all_stacked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.plot_all_stacked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.plot_burst_fractions">
+<code class="sig-name descname">plot_burst_fractions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.plot_burst_fractions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.plot_burst_fractions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.plot_n_onset">
+<code class="sig-name descname">plot_n_onset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.plot_n_onset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.plot_n_onset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.AnalyzeFile.plot_onset_latency">
+<code class="sig-name descname">plot_onset_latency</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#AnalyzeFile.plot_onset_latency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.AnalyzeFile.plot_onset_latency" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.ReaderDummy">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">ReaderDummy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">stim_times</span><span class="o">=</span><span class="default_value">[0]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderDummy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderDummy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Not a reader. You provide the data.</p>
+<dl class="py method">
+<dt id="spike_analysis.core.ReaderDummy.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">stim_times</span><span class="o">=</span><span class="default_value">[0]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderDummy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderDummy.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.ReaderDummy.get_stim_times">
+<code class="sig-name descname">get_stim_times</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderDummy.get_stim_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderDummy.get_stim_times" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.ReaderDummy.get_voltage_traces">
+<code class="sig-name descname">get_voltage_traces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderDummy.get_voltage_traces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderDummy.get_voltage_traces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.ReaderLabView">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">ReaderLabView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">stim_times</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sampling_rate</span><span class="o">=</span><span class="default_value">32000</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">apply_filter</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderLabView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderLabView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="spike_analysis.core.ReaderLabView.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">stim_times</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sampling_rate</span><span class="o">=</span><span class="default_value">32000</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">apply_filter</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderLabView.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderLabView.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.ReaderLabView.get_serialize_dict">
+<code class="sig-name descname">get_serialize_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderLabView.get_serialize_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderLabView.get_serialize_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.ReaderLabView.get_stim_times">
+<code class="sig-name descname">get_stim_times</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderLabView.get_stim_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderLabView.get_stim_times" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.ReaderLabView.get_voltage_traces">
+<code class="sig-name descname">get_voltage_traces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderLabView.get_voltage_traces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderLabView.get_voltage_traces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.ReaderSmr">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">ReaderSmr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">analogsignal_id</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stim_times_channel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_rel_time</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_rel_time</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderSmr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderSmr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Reader for smr-files, which allows accessing stimulus times and voltage tracces</p>
+<dl class="py method">
+<dt id="spike_analysis.core.ReaderSmr.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">analogsignal_id</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">stim_times_channel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_rel_time</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_rel_time</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderSmr.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderSmr.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.ReaderSmr.get_serialize_dict">
+<code class="sig-name descname">get_serialize_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderSmr.get_serialize_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderSmr.get_serialize_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.ReaderSmr.get_stim_times">
+<code class="sig-name descname">get_stim_times</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderSmr.get_stim_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderSmr.get_stim_times" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.ReaderSmr.get_voltage_traces">
+<code class="sig-name descname">get_voltage_traces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#ReaderSmr.get_voltage_traces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.ReaderSmr.get_voltage_traces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.STAPlugin_ISIn">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">STAPlugin_ISIn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'ISIn'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'spike_times'</span></em>, <em class="sig-param"><span class="n">max_n</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_ISIn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_ISIn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spike_analysis.core.STAPlugin_TEMPLATE" title="spike_analysis.core.STAPlugin_TEMPLATE"><code class="xref py py-class docutils literal notranslate"><span class="pre">spike_analysis.core.STAPlugin_TEMPLATE</span></code></a></p>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_ISIn.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'ISIn'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'spike_times'</span></em>, <em class="sig-param"><span class="n">max_n</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_ISIn.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_ISIn.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_ISIn.event_analysis_ISIn">
+<em class="property">static </em><code class="sig-name descname">event_analysis_ISIn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times</span></em>, <em class="sig-param"><span class="n">n</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_ISIn.event_analysis_ISIn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_ISIn.event_analysis_ISIn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes for each spike the inter spike interval (ISI) to the next, second next, nth spike.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spike_times</strong> (<em>list</em><em>, </em><em>containing spike times</em>) – </p></li>
+<li><p><strong>n</strong> (<em>max order of ISIs computed</em><em> (</em><em>e.g. if n = 1</em><em>, </em><em>only the interval to the next spike will be computed.</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>out</strong> – The ISI_{} columns contain the time interval between the current spike (&#64; event time)
+and the nth next spike. np.NaN, if there is no nth next spike.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame, containing the columns ISI_1 to ISI_{n}, and event_time</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_ISIn.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times_analysis</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_ISIn.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_ISIn.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.STAPlugin_TEMPLATE">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">STAPlugin_TEMPLATE</code><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_TEMPLATE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_TEMPLATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_TEMPLATE.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_TEMPLATE.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_TEMPLATE.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_TEMPLATE.get_result">
+<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_TEMPLATE.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_TEMPLATE.get_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_TEMPLATE.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_TEMPLATE.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_TEMPLATE.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.STAPlugin_annotate_bursts_in_st">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">STAPlugin_annotate_bursts_in_st</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'bursts_st'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'st'</span></em>, <em class="sig-param"><span class="n">event_maxtimes</span><span class="o">=</span><span class="default_value">{0: 0, 1: 10, 2: 30}</span></em>, <em class="sig-param"><span class="n">event_names</span><span class="o">=</span><span class="default_value">{0: 'singlet', 1: 'doublet', 2: 'triplet'}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_annotate_bursts_in_st"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_annotate_bursts_in_st" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spike_analysis.core.STAPlugin_TEMPLATE" title="spike_analysis.core.STAPlugin_TEMPLATE"><code class="xref py py-class docutils literal notranslate"><span class="pre">spike_analysis.core.STAPlugin_TEMPLATE</span></code></a></p>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_annotate_bursts_in_st.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'bursts_st'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'st'</span></em>, <em class="sig-param"><span class="n">event_maxtimes</span><span class="o">=</span><span class="default_value">{0: 0, 1: 10, 2: 30}</span></em>, <em class="sig-param"><span class="n">event_names</span><span class="o">=</span><span class="default_value">{0: 'singlet', 1: 'doublet', 2: 'triplet'}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_annotate_bursts_in_st.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_annotate_bursts_in_st.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_annotate_bursts_in_st.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times_analysis</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_annotate_bursts_in_st.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_annotate_bursts_in_st.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.STAPlugin_bursts">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">STAPlugin_bursts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'bursts'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'spike_times'</span></em>, <em class="sig-param"><span class="n">event_maxtimes</span><span class="o">=</span><span class="default_value">{0: 0, 1: 10, 2: 30}</span></em>, <em class="sig-param"><span class="n">event_names</span><span class="o">=</span><span class="default_value">{0: 'singlet', 1: 'doublet', 2: 'triplet'}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_bursts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_bursts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spike_analysis.core.STAPlugin_TEMPLATE" title="spike_analysis.core.STAPlugin_TEMPLATE"><code class="xref py py-class docutils literal notranslate"><span class="pre">spike_analysis.core.STAPlugin_TEMPLATE</span></code></a></p>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_bursts.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'bursts'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'spike_times'</span></em>, <em class="sig-param"><span class="n">event_maxtimes</span><span class="o">=</span><span class="default_value">{0: 0, 1: 10, 2: 30}</span></em>, <em class="sig-param"><span class="n">event_names</span><span class="o">=</span><span class="default_value">{0: 'singlet', 1: 'doublet', 2: 'triplet'}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_bursts.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_bursts.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_bursts.event_analysis_bursts">
+<em class="property">static </em><code class="sig-name descname">event_analysis_bursts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">row</span></em>, <em class="sig-param"><span class="n">event_maxtimes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">event_names</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_bursts.event_analysis_bursts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_bursts.event_analysis_bursts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detects high frequency events (doublet, triplet, …) that occur within a timewindow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>row</strong> (<em>list-like</em><em>, </em><em>containing spike times</em>) – </p></li>
+<li><p><strong>event_maxtimes</strong> (<em>dictionary</em><em>, </em><em>keys indicate event type</em><em> (</em><em>0 mean singlet</em><em>, </em><em>1 mean doublet</em><em>, </em><em>2 means triplet</em><em>, </em><em>..</em><em>)</em><em>,</em>) – values indicate max duration of such an event.</p></li>
+<li><p><strong>event_name</strong> (<em>dictionary</em><em>, </em><em>names of the events</em><em> (</em><em>0: 'singlet'</em><em>, </em><em>1:'doublet'</em><em>, </em><em>2:'triplet'</em><em>)</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>out</strong> – event_time: timepoint of first_spike belonging to event
+event_class: class of event as defined in event_name
+ISI_{n}: Interval from first spike of event to nth spike to event</p>
+<p>An event is allways classified as the one with the highest number of spikes possible,
+e.g. [1,5,9] could be classified as doublet + singlet, but it will be a triplet.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame, one row is one event. Columns are:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_bursts.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times_analysis</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_bursts.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_bursts.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">STAPlugin_extract_column_in_filtered_dataframe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">select</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_extract_column_in_filtered_dataframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spike_analysis.core.STAPlugin_TEMPLATE" title="spike_analysis.core.STAPlugin_TEMPLATE"><code class="xref py py-class docutils literal notranslate"><span class="pre">spike_analysis.core.STAPlugin_TEMPLATE</span></code></a></p>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">select</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_extract_column_in_filtered_dataframe.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times_analysis</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_extract_column_in_filtered_dataframe.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.STAPlugin_ongoing">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">STAPlugin_ongoing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'ongoing_activity'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'spike_times'</span></em>, <em class="sig-param"><span class="n">ongoing_sample_length</span><span class="o">=</span><span class="default_value">90000</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'frequency'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_ongoing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_ongoing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spike_analysis.core.STAPlugin_TEMPLATE" title="spike_analysis.core.STAPlugin_TEMPLATE"><code class="xref py py-class docutils literal notranslate"><span class="pre">spike_analysis.core.STAPlugin_TEMPLATE</span></code></a></p>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_ongoing.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'ongoing_activity'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'spike_times'</span></em>, <em class="sig-param"><span class="n">ongoing_sample_length</span><span class="o">=</span><span class="default_value">90000</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'frequency'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_ongoing.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_ongoing.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_ongoing.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times_analysis</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_ongoing.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_ongoing.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.STAPlugin_quantification_in_period">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">STAPlugin_quantification_in_period</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'frequency_in_period'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'st_df'</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_end</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'frequency'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_quantification_in_period"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_quantification_in_period" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spike_analysis.core.STAPlugin_TEMPLATE" title="spike_analysis.core.STAPlugin_TEMPLATE"><code class="xref py py-class docutils literal notranslate"><span class="pre">spike_analysis.core.STAPlugin_TEMPLATE</span></code></a></p>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_quantification_in_period.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'frequency_in_period'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'st_df'</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_end</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'frequency'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_quantification_in_period.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_quantification_in_period.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_quantification_in_period.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times_analysis</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_quantification_in_period.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_quantification_in_period.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.STAPlugin_response_latency_in_period">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">STAPlugin_response_latency_in_period</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'frequency_in_period'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'st_df'</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_end</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_response_latency_in_period"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_response_latency_in_period" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spike_analysis.core.STAPlugin_TEMPLATE" title="spike_analysis.core.STAPlugin_TEMPLATE"><code class="xref py py-class docutils literal notranslate"><span class="pre">spike_analysis.core.STAPlugin_TEMPLATE</span></code></a></p>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_response_latency_in_period.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'frequency_in_period'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'st_df'</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_end</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_response_latency_in_period.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_response_latency_in_period.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_response_latency_in_period.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times_analysis</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_response_latency_in_period.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_response_latency_in_period.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.STAPlugin_response_probability_in_period">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">STAPlugin_response_probability_in_period</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'frequency_in_period'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'st_df'</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_end</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_response_probability_in_period"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_response_probability_in_period" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spike_analysis.core.STAPlugin_TEMPLATE" title="spike_analysis.core.STAPlugin_TEMPLATE"><code class="xref py py-class docutils literal notranslate"><span class="pre">spike_analysis.core.STAPlugin_TEMPLATE</span></code></a></p>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_response_probability_in_period.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'frequency_in_period'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'st_df'</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">t_end</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_response_probability_in_period.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_response_probability_in_period.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_response_probability_in_period.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times_analysis</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_response_probability_in_period.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_response_probability_in_period.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.STAPlugin_spike_times_dataframe">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">STAPlugin_spike_times_dataframe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'spike_times_dataframe'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'spike_times'</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'spike_times'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_spike_times_dataframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_spike_times_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spike_analysis.core.STAPlugin_TEMPLATE" title="spike_analysis.core.STAPlugin_TEMPLATE"><code class="xref py py-class docutils literal notranslate"><span class="pre">spike_analysis.core.STAPlugin_TEMPLATE</span></code></a></p>
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_spike_times_dataframe.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'spike_times_dataframe'</span></em>, <em class="sig-param"><span class="n">source</span><span class="o">=</span><span class="default_value">'spike_times'</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'spike_times'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_spike_times_dataframe.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_spike_times_dataframe.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.STAPlugin_spike_times_dataframe.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times_analysis</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#STAPlugin_spike_times_dataframe.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.STAPlugin_spike_times_dataframe.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">SpikeDetectionCreastTrough</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reader_object</span></em>, <em class="sig-param"><span class="n">lim_creast</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">lim_trough</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">max_creast_trough_interval</span><span class="o">=</span><span class="default_value">2.0</span></em>, <em class="sig-param"><span class="n">tdelta</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">stimulus_period</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">stimulus_period_offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">upper_creast_threshold</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">cellid</span><span class="o">=</span><span class="default_value">'__no_cellid_assigned__'</span></em>, <em class="sig-param"><span class="n">spike_time_mode</span><span class="o">=</span><span class="default_value">'latest'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Detects spikes by creast and trough amplitude.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reader_object</strong> (<em>object with get_voltage_traces and get_stim_times method</em><em>, </em><em>e.g. SmrReader</em>) – </p></li>
+<li><p><strong>lim_creast</strong> (<em>float</em><em> or </em><em>str</em><em>, </em><em>threashold above which a creast of a spike is detected</em>) – as such. Needs to be float or “minimum”, or “zero”. If “minimum” or “zero” is choosen,
+the threashold will be set based on the histogram of all creasts. If “minimum” is
+choosen, lim_creast will be set to the first minimum in the histogram above or equal to 0.4mV.
+If “zero” is choosen, lim_creast will be set to the first empty bin.</p></li>
+<li><p><strong>lim_trough</strong> (<em>float</em><em> or </em><em>str</em><em>, </em><em>as lim_creast. If float is specified</em><em>, </em><em>you probably</em>) – want to use a negative value. lim creast and lim_trough need to be both floats, both
+“zero” or both “minimum”.</p></li>
+<li><p><strong>max_creast_trough_interval</strong> (<em>float. Maximum interval between creast and trough such that</em>) – a spike is recognized.</p></li>
+<li><p><strong>tdelta</strong> (<em>float</em><em>, </em><em>minimum interval between spikes</em>) – </p></li>
+<li><p><strong>stimulus_period</strong> (<em>int</em><em>, </em><em>number of stimuli applied per trial. E.g.</em><em>, </em><em>for paired pulse stimuli</em><em>,</em>) – it should be 2.</p></li>
+<li><p><strong>stimulus_period_offset</strong> (<em>int</em><em>, </em><em>number of stimulus that initiates first trial.</em>) – </p></li>
+<li><p><strong>cellid</strong> (<em>str</em><em>, </em><em>name to be used in spike times dataframe</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.lim_creast">
+<code class="sig-name descname">lim_creast</code><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.lim_creast" title="Permalink to this definition">¶</a></dt>
+<dd><p>be the numeric value used”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>lim_creast used for spike detection (if “minimum” or “zero” was defined, this will</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.lim_trough">
+<code class="sig-name descname">lim_trough</code><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.lim_trough" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>as above</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.st">
+<code class="sig-name descname">st</code><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.st" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>spike times dataframe, one row per trial</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.spike_times">
+<code class="sig-name descname">spike_times</code><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.spike_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>the minimal ISI is above tdelta.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>all extracted spike times, fullfilling creast and trough criterion, filtered such that</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough._spike_times_creast">
+<code class="sig-name descname">_spike_times_creast</code><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough._spike_times_creast" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>spike times fullfilling creast criterion</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough._spike_times_trough">
+<code class="sig-name descname">_spike_times_trough</code><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough._spike_times_trough" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>spike times fullfilling trough criterien</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reader_object</span></em>, <em class="sig-param"><span class="n">lim_creast</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">lim_trough</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">max_creast_trough_interval</span><span class="o">=</span><span class="default_value">2.0</span></em>, <em class="sig-param"><span class="n">tdelta</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">stimulus_period</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">stimulus_period_offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">upper_creast_threshold</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">cellid</span><span class="o">=</span><span class="default_value">'__no_cellid_assigned__'</span></em>, <em class="sig-param"><span class="n">spike_time_mode</span><span class="o">=</span><span class="default_value">'latest'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.get_creast_and_trough_ampltidues_by_bins">
+<code class="sig-name descname">get_creast_and_trough_ampltidues_by_bins</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'zero'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.get_creast_and_trough_ampltidues_by_bins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.get_creast_and_trough_ampltidues_by_bins" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.get_default_events">
+<code class="sig-name descname">get_default_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">show_stim_times</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show_trough_candidates</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.get_default_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.get_default_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of events to be displayed with the show_events method.
+Creates events for deteced spikes (black line) and spike candidates [dotted black line]
+(i.e. creasts and troughs exceeding the limit but which do not qualify to
+be a spike)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>show_spike_times</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>events</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list, containing 4-tuples of the format (time, color, linestyle, linewidth)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.get_serialize_dict">
+<code class="sig-name descname">get_serialize_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.get_serialize_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.get_serialize_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.load">
+<em class="property">static </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">init_reader</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.plot_creast_trough_histogram">
+<code class="sig-name descname">plot_creast_trough_histogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.plot_creast_trough_histogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.plot_creast_trough_histogram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.run_analysis">
+<code class="sig-name descname">run_analysis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.run_analysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.run_analysis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeDetectionCreastTrough.show_events">
+<code class="sig-name descname">show_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">events</span><span class="o">=</span><span class="default_value">'auto'</span></em>, <em class="sig-param"><span class="n">savepdf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">showfig</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">- 5, 5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.show_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.show_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows voltage trace, threasholds and events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>events</strong> (<em>'auto': uses the get_default_events_method. shows detected spikes as black line</em><em>, </em><em>spike candidates</em>) – <p>as dotted black line, stimulus times as bold red line
+‘only_creast’:
+list: explicitly define events to show. Needs to be list containing 4-touples in the following format</p>
+<blockquote>
+<div><p>(timepoint, ‘color’, ‘linestyle’, linewidth)</p>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.SpikeTimesAnalysis">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">SpikeTimesAnalysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times_object</span></em>, <em class="sig-param"><span class="n">default_event_analysis</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">periods</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeTimesAnalysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeTimesAnalysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for applying event_analysis routines on a spike times dataframe.</p>
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeTimesAnalysis.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times_object</span></em>, <em class="sig-param"><span class="n">default_event_analysis</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">periods</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeTimesAnalysis.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeTimesAnalysis.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeTimesAnalysis.apply_extractor">
+<code class="sig-name descname">apply_extractor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sta_plugin</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeTimesAnalysis.apply_extractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeTimesAnalysis.apply_extractor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeTimesAnalysis.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeTimesAnalysis.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeTimesAnalysis.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.SpikeTimesAnalysis.get_by_trial">
+<code class="sig-name descname">get_by_trial</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeTimesAnalysis.get_by_trial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeTimesAnalysis.get_by_trial" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="spike_analysis.core.VisualizeEventAnalysis">
+<em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">VisualizeEventAnalysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ea</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#VisualizeEventAnalysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.VisualizeEventAnalysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="spike_analysis.core.VisualizeEventAnalysis.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ea</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#VisualizeEventAnalysis.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.VisualizeEventAnalysis.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.VisualizeEventAnalysis.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#VisualizeEventAnalysis.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.VisualizeEventAnalysis.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.VisualizeEventAnalysis.plot_ISI1_vs_ISI2">
+<code class="sig-name descname">plot_ISI1_vs_ISI2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">interval_dict</span></em>, <em class="sig-param"><span class="n">rp</span><span class="o">=</span><span class="default_value">2.5</span></em>, <em class="sig-param"><span class="n">color_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">ax1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ax2</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#VisualizeEventAnalysis.plot_ISI1_vs_ISI2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.VisualizeEventAnalysis.plot_ISI1_vs_ISI2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="spike_analysis.core.VisualizeEventAnalysis.plot_PSTH">
+<code class="sig-name descname">plot_PSTH</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">min_time</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_time</span><span class="o">=</span><span class="default_value">2500</span></em>, <em class="sig-param"><span class="n">bin_size</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#VisualizeEventAnalysis.plot_PSTH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.VisualizeEventAnalysis.plot_PSTH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.filter_short_ISIs">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">filter_short_ISIs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">tdelta</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#filter_short_ISIs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.filter_short_ISIs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters out any events that occur in an interval shorter than tdelta.</p>
+<p class="rubric">Example</p>
+<p>filter_short_ISIs([1,2,3,4,5], tdelta = 1.5)
+&gt; [1, 3, 5]
+filter_short_ISIs([1,2,3,4,5], tdelta = 2)
+&gt; [1, 3, 5]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>list</em><em>, </em><em>containing timepoints of events</em>) – </p></li>
+<li><p><strong>tdelta</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>minimal interval between events</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>out_t</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list, containing filtered spike times</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.filter_spike_times">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">filter_spike_times</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times</span></em>, <em class="sig-param"><span class="n">spike_times_trough</span></em>, <em class="sig-param"><span class="n">creast_trough_interval</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'latest'</span></em>, <em class="sig-param"><span class="n">spike_times_amplitude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">upper_creast_threshold</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">creast_upcross_times</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#filter_spike_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.filter_spike_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter spike times based on timepoints of detected creasts and troughs.</p>
+<p>Idea: A spike is detected by its trough. Then, it is checked, that there is
+a corresponding creast at maximum 2ms before the trough. All creasts fullfilling
+this criterion are extracted. The spike time is set to the latest creast (if mode = ‘latest’)
+or the maximum creast amplitude (if mode = ‘creast_max’).</p>
+<p>If a through does not have a corresponding creast, no spike is detected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spike_times</strong> (<em>list</em><em>, </em><em>containing spike times defined by the creast of the waveform</em>) – </p></li>
+<li><p><strong>spike_times_trough</strong> – </p></li>
+<li><p><strong>list</strong> – </p></li>
+<li><p><strong>spike times defined by the trough of the waveform</strong> (<em>containing</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>filtered_spike_times</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list, containing spikes fullfilling the definition above.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.get_interval">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">get_interval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">interval_dict</span></em>, <em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#get_interval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.get_interval" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.get_peaks_above">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">get_peaks_above</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">lim</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#get_peaks_above"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.get_peaks_above" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute timepoints of maxima above a threashold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>list</em><em>, </em><em>containing timepoints</em>) – </p></li>
+<li><p><strong>v</strong> (<em>list</em><em>, </em><em>containing recorded voltage</em>) – </p></li>
+<li><p><strong>lim</strong> (<em>float</em><em>, </em><em>threashold</em><em>, </em><em>above which</em><em> (</em><em>&gt;=</em><em>) </em><em>maxima are detected.</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>max_t</strong> (<em>list, containing timepoints of maxima</em>)</p></li>
+<li><p><strong>max_v</strong> (<em>list, containing voltage at timepoints of maxima</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.get_period_label_by_time">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">get_period_label_by_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">periods</span></em>, <em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#get_period_label_by_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.get_period_label_by_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classifies timepoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>periods</strong> (<em>dict</em><em>, </em><em>containing period label as key and</em><em> (</em><em>period_start</em><em>, </em><em>period_end</em><em>) </em><em>as value</em>) – </p></li>
+<li><p><strong>t</strong> (<em>float</em><em>, </em><em>timepoint to classify</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>label</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>label of period in which t is in. ‘undefined’ if t is in no defined period</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.get_spike_times_from_row">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">get_spike_times_from_row</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">row</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#get_spike_times_from_row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.get_spike_times_from_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list containing all elements in row, that are not NaN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>row</strong> (<em>pandas.Series</em><em>, </em><em>containing spike times</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list, containint spike times</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.get_st_from_spike_times_and_stim_times">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">get_st_from_spike_times_and_stim_times</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spike_times</span></em>, <em class="sig-param"><span class="n">stim_times</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'spike_times'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#get_st_from_spike_times_and_stim_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.get_st_from_spike_times_and_stim_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes spike times dataframe based on list of spike times and stimulus times.</p>
+<p>Assumes that stimulus times have a constant interstimulus interval!
+Ignores spikes before the first stimulus and after the last stimulus + interstimulus interval.</p>
+<p>Special cases:
+If only one stimulus is defined, spike times after that stimulus are returned
+If no stimulus is defined, spike times are returned unchanged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spike_times</strong> (<em>list of spike times</em>) – </p></li>
+<li><p><strong>stim_times</strong> (<em>list of stimulus times</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Pandas dataframe. Its format is as follows</strong> (<em>One row is one trial. The columns contain the spike times</em>)</p></li>
+<li><p><em>and are named in ascending order (0,1,2, …).</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.get_upcross">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">get_upcross</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">lim</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#get_upcross"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.get_upcross" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.highpass_filter">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">highpass_filter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">sr</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#highpass_filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.highpass_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://dsp.stackexchange.com/questions/41184/high-pass-filter-in-python-scipy">https://dsp.stackexchange.com/questions/41184/high-pass-filter-in-python-scipy</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.load_reader">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">load_reader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dict_</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#load_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.load_reader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.read_labview_junk1_dat_files">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">read_labview_junk1_dat_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">sampling_rate</span><span class="o">=</span><span class="default_value">32000</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#read_labview_junk1_dat_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.read_labview_junk1_dat_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.read_smr_file">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">read_smr_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#read_smr_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.read_smr_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read spike2 file.</p>
+<p>To avoid changing the spike2 file at all costs, the file is first copied to the temp folder,
+read from there. Then, the copy is deleted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>absolute path to smr file</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>data</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>neo.core.block.Block object, containing the content of the smr file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.stimulus_interval_filter">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">stimulus_interval_filter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stim_times</span></em>, <em class="sig-param"><span class="n">period_length</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#stimulus_interval_filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.stimulus_interval_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters periodic stimuli such that only the first stimulus of each
+period is retained.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stim_times</strong> (<em>list</em><em>, </em><em>containing stimulus times</em>) – </p></li>
+<li><p><strong>period_length</strong> (<em>number of stimuli forming one period</em><em>, </em><em>default: 1</em>) – E.g. if you have stimuli at 10,20,40,50,70,80, period_length should be 2</p></li>
+<li><p><strong>offset</strong> (<em>number of the stimulus in each period to be extracted.</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>stim_times</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list, containing filtered stimulus times</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>stimulus_interval_filter([1,2,3,4])
+&gt; [1,2,3,4]</p>
+<blockquote>
+<div><p>stimulus_interval_filter([1,2,3,4], period=2)</p>
+</div></blockquote>
+<p>&gt; [1,3]</p>
+<blockquote>
+<div><p>stimulus_interval_filter([1,2,3,4], period=2, offset = 1)</p>
+</div></blockquote>
+<p>&gt; [2,4]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="spike_analysis.core.strip_st">
+<code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">strip_st</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">st</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#strip_st"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.strip_st" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns spike times dataframe only containing spike times, without metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>st</strong> (<em>pandas.DataFrame containing spike times as generated by get_st_from_spike_times_and_stim_times</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>pandas.DataFrame, in which all columns, that cannot be converted to integer, are filtered out,</em></p></li>
+<li><p><em>i.e. the DataFrame contains only spike times and no metadata.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-spike_analysis">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-spike_analysis" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

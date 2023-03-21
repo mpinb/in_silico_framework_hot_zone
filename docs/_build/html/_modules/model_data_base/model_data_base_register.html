@@ -73,8 +73,8 @@
 <span class="kn">from</span> <span class="nn">.settings</span> <span class="kn">import</span> <span class="n">model_data_base_register_path</span>
 <span class="n">_foldername</span> <span class="o">=</span> <span class="s1">&#39;.model_data_base_register.db&#39;</span>
 
-<div class="viewcode-block" id="ModelDataBaseRegister"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base_register.ModelDataBaseRegister">[docs]</a><span class="k">class</span> <span class="nc">ModelDataBaseRegister</span><span class="p">():</span>
-<div class="viewcode-block" id="ModelDataBaseRegister.__init__"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base_register.ModelDataBaseRegister.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basedir</span><span class="p">,</span> <span class="n">search_mdbs</span> <span class="o">=</span> <span class="s2">&quot;on_first_init&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBaseRegister"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base_register.ModelDataBaseRegister">[docs]</a><span class="k">class</span> <span class="nc">ModelDataBaseRegister</span><span class="p">():</span>
+<div class="viewcode-block" id="ModelDataBaseRegister.__init__"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base_register.ModelDataBaseRegister.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basedir</span><span class="p">,</span> <span class="n">search_mdbs</span> <span class="o">=</span> <span class="s2">&quot;on_first_init&quot;</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">basedir</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">_foldername</span><span class="p">):</span>
             <span class="n">basedir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basedir</span><span class="p">,</span> <span class="n">_foldername</span><span class="p">)</span>
         <span class="k">assert</span><span class="p">(</span><span class="n">basedir</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">_foldername</span><span class="p">))</span>
@@ -89,7 +89,7 @@
         <span class="k">elif</span> <span class="n">search_mdbs</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">search_mdbs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basedir</span><span class="p">))</span></div>
     
-<div class="viewcode-block" id="ModelDataBaseRegister.search_mdbs"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base_register.ModelDataBaseRegister.search_mdbs">[docs]</a>    <span class="k">def</span> <span class="nf">search_mdbs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBaseRegister.search_mdbs"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base_register.ModelDataBaseRegister.search_mdbs">[docs]</a>    <span class="k">def</span> <span class="nf">search_mdbs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">dir_</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">directory</span><span class="p">)]:</span>
             <span class="k">if</span> <span class="n">dir_</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">_foldername</span><span class="p">):</span>
                 <span class="k">continue</span>
@@ -105,7 +105,7 @@
         
         <span class="c1">#print self.mdb.keys()</span>
     
-<div class="viewcode-block" id="ModelDataBaseRegister.add_mdb"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base_register.ModelDataBaseRegister.add_mdb">[docs]</a>    <span class="k">def</span> <span class="nf">add_mdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdb</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelDataBaseRegister.add_mdb"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base_register.ModelDataBaseRegister.add_mdb">[docs]</a>    <span class="k">def</span> <span class="nf">add_mdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdb</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mdb</span><span class="p">[</span><span class="n">mdb</span><span class="o">.</span><span class="n">_unique_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">mdb</span><span class="o">.</span><span class="n">basedir</span><span class="p">)</span></div></div>
 
 <span class="nd">@cache</span>        
@@ -128,7 +128,7 @@
 <span class="c1">#         if dir_ == &#39;/&#39;:</span>
 <span class="c1">#             raise MdbException(&quot;Did not find a ModelDataBaseRegister.&quot;)</span>
         
-<div class="viewcode-block" id="register_mdb"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base_register.register_mdb">[docs]</a><span class="k">def</span> <span class="nf">register_mdb</span><span class="p">(</span><span class="n">mdb</span><span class="p">):</span>
+<div class="viewcode-block" id="register_mdb"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base_register.register_mdb">[docs]</a><span class="k">def</span> <span class="nf">register_mdb</span><span class="p">(</span><span class="n">mdb</span><span class="p">):</span>
     <span class="n">mdbr</span> <span class="o">=</span> <span class="n">_get_mdb_register</span><span class="p">()</span>
     <span class="n">mdbr</span><span class="o">.</span><span class="n">add_mdb</span><span class="p">(</span><span class="n">mdb</span><span class="p">)</span></div>
     
@@ -138,7 +138,7 @@
 <span class="c1">#     mdbr = _get_mdb_register(parentdir_or_mdb)</span>
 <span class="c1">#     return ModelDataBase(mdbr.mdb[unique_id])</span>
 
-<div class="viewcode-block" id="get_mdb_by_unique_id"><a class="viewcode-back" href="../../source/model_data_base.html#model_data_base.model_data_base_register.get_mdb_by_unique_id">[docs]</a><span class="k">def</span> <span class="nf">get_mdb_by_unique_id</span><span class="p">(</span><span class="n">unique_id</span><span class="p">):</span>
+<div class="viewcode-block" id="get_mdb_by_unique_id"><a class="viewcode-back" href="../../modules/model_data_base.html#model_data_base.model_data_base_register.get_mdb_by_unique_id">[docs]</a><span class="k">def</span> <span class="nf">get_mdb_by_unique_id</span><span class="p">(</span><span class="n">unique_id</span><span class="p">):</span>
     <span class="n">mdb_path</span> <span class="o">=</span> <span class="n">_get_mdb_register</span><span class="p">()</span><span class="o">.</span><span class="n">mdb</span><span class="p">[</span><span class="n">unique_id</span><span class="p">]</span>
     <span class="n">mdb</span> <span class="o">=</span> <span class="n">ModelDataBase</span><span class="p">(</span><span class="n">mdb_path</span><span class="p">,</span> <span class="n">nocreate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">mdb</span><span class="o">.</span><span class="n">get_id</span><span class="p">()</span> <span class="o">==</span> <span class="n">unique_id</span>

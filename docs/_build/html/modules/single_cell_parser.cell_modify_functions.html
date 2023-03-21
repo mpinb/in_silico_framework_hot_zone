@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>single_cell_parser.cell_modify_functions package &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">single_cell_parser.cell_modify_functions package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-single_cell_parser.cell_modify_functions.BAC_injection">single_cell_parser.cell_modify_functions.BAC_injection module</a></li>
+<li><a class="reference internal" href="#module-single_cell_parser.cell_modify_functions.apical_current_injection">single_cell_parser.cell_modify_functions.apical_current_injection module</a></li>
+<li><a class="reference internal" href="#module-single_cell_parser.cell_modify_functions.apical_epsp_injection">single_cell_parser.cell_modify_functions.apical_epsp_injection module</a></li>
+<li><a class="reference internal" href="#module-single_cell_parser.cell_modify_functions.scale_apical">single_cell_parser.cell_modify_functions.scale_apical module</a></li>
+<li><a class="reference internal" href="#module-single_cell_parser.cell_modify_functions.scale_apical_morph_86">single_cell_parser.cell_modify_functions.scale_apical_morph_86 module</a></li>
+<li><a class="reference internal" href="#module-single_cell_parser.cell_modify_functions.soma_current_injection">single_cell_parser.cell_modify_functions.soma_current_injection module</a></li>
+<li><a class="reference internal" href="#module-single_cell_parser.cell_modify_functions.synaptic_input">single_cell_parser.cell_modify_functions.synaptic_input module</a></li>
+<li><a class="reference internal" href="#module-single_cell_parser.cell_modify_functions">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">single_cell_parser.cell_modify_functions package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/single_cell_parser.cell_modify_functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="single-cell-parser-cell-modify-functions-package">
+<h1>single_cell_parser.cell_modify_functions package<a class="headerlink" href="#single-cell-parser-cell-modify-functions-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-single_cell_parser.cell_modify_functions.BAC_injection">
+<span id="single-cell-parser-cell-modify-functions-bac-injection-module"></span><h2>single_cell_parser.cell_modify_functions.BAC_injection module<a class="headerlink" href="#module-single_cell_parser.cell_modify_functions.BAC_injection" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="single_cell_parser.cell_modify_functions.BAC_injection.BAC_injection">
+<code class="sig-prename descclassname">single_cell_parser.cell_modify_functions.BAC_injection.</code><code class="sig-name descname">BAC_injection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">dist</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_modify_functions/BAC_injection.html#BAC_injection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_modify_functions.BAC_injection.BAC_injection" title="Permalink to this definition">¶</a></dt>
+<dd><p>This injects the BAC stimulus as defined in Hay et. al. 2011 at a specified distance.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-single_cell_parser.cell_modify_functions.apical_current_injection">
+<span id="single-cell-parser-cell-modify-functions-apical-current-injection-module"></span><h2>single_cell_parser.cell_modify_functions.apical_current_injection module<a class="headerlink" href="#module-single_cell_parser.cell_modify_functions.apical_current_injection" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="single_cell_parser.cell_modify_functions.apical_current_injection.apical_current_injection">
+<code class="sig-prename descclassname">single_cell_parser.cell_modify_functions.apical_current_injection.</code><code class="sig-name descname">apical_current_injection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">amplitude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">delay</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">duration</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dist</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_modify_functions/apical_current_injection.html#apical_current_injection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_modify_functions.apical_current_injection.apical_current_injection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-single_cell_parser.cell_modify_functions.apical_epsp_injection">
+<span id="single-cell-parser-cell-modify-functions-apical-epsp-injection-module"></span><h2>single_cell_parser.cell_modify_functions.apical_epsp_injection module<a class="headerlink" href="#module-single_cell_parser.cell_modify_functions.apical_epsp_injection" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="single_cell_parser.cell_modify_functions.apical_epsp_injection.apical_epsp_injection">
+<code class="sig-prename descclassname">single_cell_parser.cell_modify_functions.apical_epsp_injection.</code><code class="sig-name descname">apical_epsp_injection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">dist</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">amplitude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">delay</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rise</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">decay</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_modify_functions/apical_epsp_injection.html#apical_epsp_injection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_modify_functions.apical_epsp_injection.apical_epsp_injection" title="Permalink to this definition">¶</a></dt>
+<dd><p>This injects epsp shaped current at a certain distance from the soma.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-single_cell_parser.cell_modify_functions.scale_apical">
+<span id="single-cell-parser-cell-modify-functions-scale-apical-module"></span><h2>single_cell_parser.cell_modify_functions.scale_apical module<a class="headerlink" href="#module-single_cell_parser.cell_modify_functions.scale_apical" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="single_cell_parser.cell_modify_functions.scale_apical.scale_apical">
+<code class="sig-prename descclassname">single_cell_parser.cell_modify_functions.scale_apical.</code><code class="sig-name descname">scale_apical</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">compartment</span><span class="o">=</span><span class="default_value">'ApicalDendrite'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_modify_functions/scale_apical.html#scale_apical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_modify_functions.scale_apical.scale_apical" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the function used to scale the apical dendrite in the following
+optimizations:</p>
+<p>20190117_fitting_CDK_morphologies_Kv3_1_slope_variable_dend_scale.ipynb
+20190125_fitting_CDK_morphologies_Kv3_1_slope_variable_dend_scale_step.ipynb</p>
+<p>scale apical diameters depending on
+distance to soma; therefore only possible
+after creating complete cell</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-single_cell_parser.cell_modify_functions.scale_apical_morph_86">
+<span id="single-cell-parser-cell-modify-functions-scale-apical-morph-86-module"></span><h2>single_cell_parser.cell_modify_functions.scale_apical_morph_86 module<a class="headerlink" href="#module-single_cell_parser.cell_modify_functions.scale_apical_morph_86" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="single_cell_parser.cell_modify_functions.scale_apical_morph_86.scale_apical_morph_86">
+<code class="sig-prename descclassname">single_cell_parser.cell_modify_functions.scale_apical_morph_86.</code><code class="sig-name descname">scale_apical_morph_86</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_modify_functions/scale_apical_morph_86.html#scale_apical_morph_86"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_modify_functions.scale_apical_morph_86.scale_apical_morph_86" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the method, robert has used for scaling the apical dendrite of CDK morphology 86</p>
+<p>scale apical diameters depending on
+distance to soma; therefore only possible
+after creating complete cell</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-single_cell_parser.cell_modify_functions.soma_current_injection">
+<span id="single-cell-parser-cell-modify-functions-soma-current-injection-module"></span><h2>single_cell_parser.cell_modify_functions.soma_current_injection module<a class="headerlink" href="#module-single_cell_parser.cell_modify_functions.soma_current_injection" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="single_cell_parser.cell_modify_functions.soma_current_injection.soma_current_injection">
+<code class="sig-prename descclassname">single_cell_parser.cell_modify_functions.soma_current_injection.</code><code class="sig-name descname">soma_current_injection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">amplitude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">delay</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">duration</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_modify_functions/soma_current_injection.html#soma_current_injection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_modify_functions.soma_current_injection.soma_current_injection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-single_cell_parser.cell_modify_functions.synaptic_input">
+<span id="single-cell-parser-cell-modify-functions-synaptic-input-module"></span><h2>single_cell_parser.cell_modify_functions.synaptic_input module<a class="headerlink" href="#module-single_cell_parser.cell_modify_functions.synaptic_input" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input">
+<code class="sig-prename descclassname">single_cell_parser.cell_modify_functions.synaptic_input.</code><code class="sig-name descname">synaptic_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">network_param</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">synapse_activation_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tStop</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_modify_functions/synaptic_input.html#synaptic_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-single_cell_parser.cell_modify_functions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-single_cell_parser.cell_modify_functions" title="Permalink to this headline">¶</a></h2>
+<p>Created on Feb 16, 2019</p>
+<p>&#64;author: abast</p>
+<p>This package is contains  functions, that modify the cell after
+it is initalized.</p>
+<p>Such a function can for example be used to scale the apical dendrite.</p>
+<p>These kind of modifying functions have caused a lot of trouble in the past, as it
+has not been specified in the neuron parameterfile. No record of whether a modification
+had been applied was saved alongside the simulation data.</p>
+<p>Now, the cell parameter file can contain the key “cell_modify_functions” in its
+neuron section. The value corresponding to that key is a dictionary. The keys of that
+dictionary can be names to modules in this package. The values corresponding to these keys
+are the keyword arguments of the respective cell modify function.</p>
+<p>I.e.</p>
+<dl>
+<dt>{‘neuron’: {</dt><dd><p>‘Soma’: { … }
+‘Dendrite’: { … }
+‘filename’: {some hocpath}
+‘cell_modify_functions’: {</p>
+<blockquote>
+<div><p>‘scale_apical’: {‘scale’: 2.1}</p>
+</div></blockquote>
+<p>}}}</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt id="single_cell_parser.cell_modify_functions.get">
+<code class="sig-prename descclassname">single_cell_parser.cell_modify_functions.</code><code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">funname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_modify_functions.html#get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_modify_functions.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

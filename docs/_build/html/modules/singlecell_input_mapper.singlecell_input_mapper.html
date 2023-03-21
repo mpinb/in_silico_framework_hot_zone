@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>singlecell_input_mapper.singlecell_input_mapper package &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">singlecell_input_mapper.singlecell_input_mapper package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-singlecell_input_mapper.singlecell_input_mapper.cell">singlecell_input_mapper.singlecell_input_mapper.cell module</a></li>
+<li><a class="reference internal" href="#module-singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet">singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet module</a></li>
+<li><a class="reference internal" href="#module-singlecell_input_mapper.singlecell_input_mapper.network_embedding">singlecell_input_mapper.singlecell_input_mapper.network_embedding module</a></li>
+<li><a class="reference internal" href="#module-singlecell_input_mapper.singlecell_input_mapper.reader">singlecell_input_mapper.singlecell_input_mapper.reader module</a></li>
+<li><a class="reference internal" href="#module-singlecell_input_mapper.singlecell_input_mapper.scalar_field">singlecell_input_mapper.singlecell_input_mapper.scalar_field module</a></li>
+<li><a class="reference internal" href="#module-singlecell_input_mapper.singlecell_input_mapper.synapse_mapper">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper module</a></li>
+<li><a class="reference internal" href="#module-singlecell_input_mapper.singlecell_input_mapper.writer">singlecell_input_mapper.singlecell_input_mapper.writer module</a></li>
+<li><a class="reference internal" href="#module-singlecell_input_mapper.singlecell_input_mapper">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">singlecell_input_mapper.singlecell_input_mapper package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/singlecell_input_mapper.singlecell_input_mapper.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="singlecell-input-mapper-singlecell-input-mapper-package">
+<h1>singlecell_input_mapper.singlecell_input_mapper package<a class="headerlink" href="#singlecell-input-mapper-singlecell-input-mapper-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-singlecell_input_mapper.singlecell_input_mapper.cell">
+<span id="singlecell-input-mapper-singlecell-input-mapper-cell-module"></span><h2>singlecell_input_mapper.singlecell_input_mapper.cell module<a class="headerlink" href="#module-singlecell_input_mapper.singlecell_input_mapper.cell" title="Permalink to this headline">¶</a></h2>
+<p>Created on Apr 28, 2012</p>
+<p>&#64;author: regger</p>
+<dl class="py class">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.Cell">
+<em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.cell.</code><code class="sig-name descname">Cell</code><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#Cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Cell object providing morphological information
+and hoc interface</p>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.Cell.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#Cell.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor:</p>
+<p>self.id = None</p>
+<p>self.soma = None</p>
+<p>structures are all processes with different labels
+(e.g., Dendrite, ApicalDendrite, ApicalTuft, Myelin etc..
+self.structures = {}</p>
+<p>simply list of all sections
+self.sections = []</p>
+<p>bounding box around all processes
+self.boundingBox = None</p>
+<p>self.synapses = {}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.Cell.add_synapse">
+<code class="sig-name descname">add_synapse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">secID</span></em>, <em class="sig-param"><span class="n">ptID</span></em>, <em class="sig-param"><span class="n">ptx</span></em>, <em class="sig-param"><span class="n">preType</span><span class="o">=</span><span class="default_value">'Generic'</span></em>, <em class="sig-param"><span class="n">postType</span><span class="o">=</span><span class="default_value">'Generic'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#Cell.add_synapse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.add_synapse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.Cell.distance_to_soma">
+<code class="sig-name descname">distance_to_soma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sec</span></em>, <em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#Cell.distance_to_soma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.distance_to_soma" title="Permalink to this definition">¶</a></dt>
+<dd><p>path length to soma from location x on section sec</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.Cell.get_bounding_box">
+<code class="sig-name descname">get_bounding_box</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#Cell.get_bounding_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.get_bounding_box" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.Cell.remove_synapses">
+<code class="sig-name descname">remove_synapses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preType</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#Cell.remove_synapses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Cell.remove_synapses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser">
+<em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.cell.</code><code class="sig-name descname">CellParser</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hocFilename</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#CellParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class providing methods for setting up morphology in NEURON hoc object</p>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hocFilename</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#CellParser.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.get_cell">
+<code class="sig-name descname">get_cell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#CellParser.get_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.get_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns cell if it is set up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.spatialgraph_to_cell">
+<code class="sig-name descname">spatialgraph_to_cell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#CellParser.spatialgraph_to_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.spatialgraph_to_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads cell morphology from Amira hoc file
+and sets up PySections and Cell object
+optional: takes function object scaleFunc as argument
+for scaling dendritic diameters.
+scaleFunc takes cell object as argument</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.cell">
+<code class="sig-name descname">cell</code><em class="property"> = None</em><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.cell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PointCell">
+<em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.cell.</code><code class="sig-name descname">PointCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cellType</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#PointCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PointCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>simple object for use as cell connecting to synapses</p>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PointCell.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cellType</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#PointCell.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PointCell.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>for use as cell connecting to synapses:
+self.synapseList = None</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2">
+<em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.cell.</code><code class="sig-name descname">PySection2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#PySection2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Modeled after nrn.Section to allow easy interface with
+existing methods for cell parsing/synapse mapping
+without any NEURON dependencies</p>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#PySection2.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>structure
+self.label = label</p>
+<p>reference to parent section
+self.parent = None</p>
+<p>connection point at parent section
+self.parentx = 1.0</p>
+<p>bounding box around 3D coordinates
+self.bounds = ()</p>
+<p>number of traced 3D coordinates
+self.nrOfPts = 0</p>
+<p>list of traced 3D coordinates
+self.pts = []</p>
+<p>list of relative position of 3D points along section
+self.relPts = []</p>
+<p>list of diameters at traced 3D coordinates
+self.diamList = []</p>
+<p>length of section
+self.L = 0.0</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.set_3d_geometry">
+<code class="sig-name descname">set_3d_geometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pts</span></em>, <em class="sig-param"><span class="n">diams</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#PySection2.set_3d_geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.set_3d_geometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>invokes NEURON 3D geometry setup</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.bounds">
+<code class="sig-name descname">bounds</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of traced 3D coordinates</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.diamList">
+<code class="sig-name descname">diamList</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.diamList" title="Permalink to this definition">¶</a></dt>
+<dd><p>length of section</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.label">
+<code class="sig-name descname">label</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>reference to parent section</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.nrOfPts">
+<code class="sig-name descname">nrOfPts</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.nrOfPts" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of traced 3D coordinates</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.parent">
+<code class="sig-name descname">parent</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>connection point at parent section</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.parentx">
+<code class="sig-name descname">parentx</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.parentx" title="Permalink to this definition">¶</a></dt>
+<dd><p>bounding box around 3D coordinates</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.pts">
+<code class="sig-name descname">pts</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.pts" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of relative position of 3D points along section</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.relPts">
+<code class="sig-name descname">relPts</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.relPts" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of diameters at traced 3D coordinates</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.Synapse">
+<em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.cell.</code><code class="sig-name descname">Synapse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edgeID</span></em>, <em class="sig-param"><span class="n">edgePtID</span></em>, <em class="sig-param"><span class="n">edgex</span></em>, <em class="sig-param"><span class="n">preCellType</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">postCellType</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#Synapse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Synapse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Synapse base class
+Contains information about pre- and postsynaptic cell type,
+branch ID of postsynaptic cell, branch pt ID,
+and xyz-coordinates of synapse location</p>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.Synapse.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edgeID</span></em>, <em class="sig-param"><span class="n">edgePtID</span></em>, <em class="sig-param"><span class="n">edgex</span></em>, <em class="sig-param"><span class="n">preCellType</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">postCellType</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#Synapse.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.Synapse.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>ID of attached section in cell.sections
+self.secID = edgeID</p>
+<p>ID of attached point in cell.sections[self.secID].pts
+self.ptID = edgePtID</p>
+<p>relatice coordinate along attached section
+self.x = edgex</p>
+<p>self.preCellType = preCellType
+reference to presynaptic cell (PointCell)
+self.preCell = None</p>
+<p>self.postCellType = postCellType</p>
+<p>3D coordinates of synapse location
+self.coordinates = None</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet">
+<span id="singlecell-input-mapper-singlecell-input-mapper-generate-nr-of-cells-spreadsheet-module"></span><h2>singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet module<a class="headerlink" href="#module-singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet.con_file_to_NumberOfConnectedCells_sheet">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet.</code><code class="sig-name descname">con_file_to_NumberOfConnectedCells_sheet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">con_file</span></em>, <em class="sig-param"><span class="n">write_output</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/generate_nr_of_cells_spreadsheet.html#con_file_to_NumberOfConnectedCells_sheet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet.con_file_to_NumberOfConnectedCells_sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>con_file: path to .con file genereate by SingleCellInputMapper</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-singlecell_input_mapper.singlecell_input_mapper.network_embedding">
+<span id="singlecell-input-mapper-singlecell-input-mapper-network-embedding-module"></span><h2>singlecell_input_mapper.singlecell_input_mapper.network_embedding module<a class="headerlink" href="#module-singlecell_input_mapper.singlecell_input_mapper.network_embedding" title="Permalink to this headline">¶</a></h2>
+<p>Created on Nov 17, 2012</p>
+<p>&#64;author: regger</p>
+<dl class="py class">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper">
+<em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.network_embedding.</code><code class="sig-name descname">NetworkMapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">postCell</span></em>, <em class="sig-param"><span class="n">postCellType</span></em>, <em class="sig-param"><span class="n">cellTypeNumbersSpreadsheet</span></em>, <em class="sig-param"><span class="n">connectionsSpreadsheet</span></em>, <em class="sig-param"><span class="n">exPST</span></em>, <em class="sig-param"><span class="n">inhPST</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Handles connectivity of presynaptic populations
+to multi-compartmental neuron model.</p>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">postCell</span></em>, <em class="sig-param"><span class="n">postCellType</span></em>, <em class="sig-param"><span class="n">cellTypeNumbersSpreadsheet</span></em>, <em class="sig-param"><span class="n">connectionsSpreadsheet</span></em>, <em class="sig-param"><span class="n">exPST</span></em>, <em class="sig-param"><span class="n">inhPST</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>dictionary holding all presynaptic cells
+ordered by cell type
+self.cells = {}</p>
+<p>dictionary holding indices of
+all active presynaptic cells
+ordered by cell type
+self.connected_cells = {}</p>
+<p>reference to postsynaptic (multi-compartment) cell model
+self.postCell = postCell</p>
+<p>postsynaptic cell type
+self.postCellType = postCellType</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding">
+<code class="sig-name descname">create_network_embedding</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">postCellName</span></em>, <em class="sig-param"><span class="n">boutonDensities</span></em>, <em class="sig-param"><span class="n">nrOfSamples</span><span class="o">=</span><span class="default_value">50</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper.create_network_embedding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Public interface:
+used for creating fixed network connectivity.</p>
+<p>Give this network realization a (somewhat) unique name!!!!
+then save it at the same location as the anatomical realization
+IMPORTANT: assumes path names to anatomical realization files
+work from the working directory! so should be correct relative, or
+preferably absolute paths.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_for_simulations">
+<code class="sig-name descname">create_network_embedding_for_simulations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">postCellName</span></em>, <em class="sig-param"><span class="n">boutonDensities</span></em>, <em class="sig-param"><span class="n">nrOfRealizations</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper.create_network_embedding_for_simulations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_for_simulations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Public interface:
+used for creating fixed network connectivity for use in Monte Carlo simulations.
+Same principle as above method, but creates fixed number of network realizations
+to allow investigating effects of anatomical variability on neuron responses.
+Give this network realization a (somewhat) unique name!!!!
+then save it at the same location as the anatomical realization
+IMPORTANT: assumes path names to anatomical realization files
+work from the working directory! so should be correct relative, or
+preferably absolute paths.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_from_synapse_densities">
+<code class="sig-name descname">create_network_embedding_from_synapse_densities</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">postCellName</span></em>, <em class="sig-param"><span class="n">synapseDensities</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper.create_network_embedding_from_synapse_densities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_from_synapse_densities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Public interface:
+used for creating fixed network connectivity from pre-computed
+synapse densities. Good for testing…</p>
+<p>Give this network realization a (somewhat) unique name!!!!
+then save it at the same location as the anatomical realization
+IMPORTANT: assumes path names to anatomical realization files
+work from the working directory! so should be correct relative, or
+preferably absolute paths.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-singlecell_input_mapper.singlecell_input_mapper.reader">
+<span id="singlecell-input-mapper-singlecell-input-mapper-reader-module"></span><h2>singlecell_input_mapper.singlecell_input_mapper.reader module<a class="headerlink" href="#module-singlecell_input_mapper.singlecell_input_mapper.reader" title="Permalink to this headline">¶</a></h2>
+<p>Created on Mar 8, 2012</p>
+<p>&#64;author: regger</p>
+<dl class="py class">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.reader.Edge">
+<em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.reader.</code><code class="sig-name descname">Edge</code><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/reader.html#Edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.reader.Edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Edge object contains list of points,
+diameter at each point, label,
+string hocLabel, parentID
+Used during reading of hoc files</p>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.reader.Edge.is_valid">
+<code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/reader.html#Edge.is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.reader.Edge.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.reader.read_celltype_numbers_spreadsheet">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.reader.</code><code class="sig-name descname">read_celltype_numbers_spreadsheet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/reader.html#read_celltype_numbers_spreadsheet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.reader.read_celltype_numbers_spreadsheet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.reader.read_connections_spreadsheet">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.reader.</code><code class="sig-name descname">read_connections_spreadsheet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/reader.html#read_connections_spreadsheet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.reader.read_connections_spreadsheet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.reader.</code><code class="sig-name descname">read_hoc_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/reader.html#read_hoc_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.reader.read_hoc_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.reader.</code><code class="sig-name descname">read_scalar_field</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/reader.html#read_scalar_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.reader.read_scalar_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-singlecell_input_mapper.singlecell_input_mapper.scalar_field">
+<span id="singlecell-input-mapper-singlecell-input-mapper-scalar-field-module"></span><h2>singlecell_input_mapper.singlecell_input_mapper.scalar_field module<a class="headerlink" href="#module-singlecell_input_mapper.singlecell_input_mapper.scalar_field" title="Permalink to this headline">¶</a></h2>
+<p>Created on Mar 27, 2012</p>
+<p>&#64;author: regger</p>
+<dl class="py class">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField">
+<em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.scalar_field.</code><code class="sig-name descname">ScalarField</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mesh</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">origin</span><span class="o">=</span><span class="default_value">()</span></em>, <em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">()</span></em>, <em class="sig-param"><span class="n">spacing</span><span class="o">=</span><span class="default_value">()</span></em>, <em class="sig-param"><span class="n">bBox</span><span class="o">=</span><span class="default_value">()</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/scalar_field.html#ScalarField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>implements 3D scalar field based on numpy array
+used for e.g. sub-cellular synapse distributions
+modeled after vtkImageData; i.e. regular mesh
+with extent[6], spacing[3], and boundingBox[xMin, xMax, … , zMax]</p>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mesh</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">origin</span><span class="o">=</span><span class="default_value">()</span></em>, <em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">()</span></em>, <em class="sig-param"><span class="n">spacing</span><span class="o">=</span><span class="default_value">()</span></em>, <em class="sig-param"><span class="n">bBox</span><span class="o">=</span><span class="default_value">()</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/scalar_field.html#ScalarField.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.get_mesh_coordinates">
+<code class="sig-name descname">get_mesh_coordinates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xyz</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/scalar_field.html#ScalarField.get_mesh_coordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.get_mesh_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>does NOT perform range checking; index may be invalid!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.get_scalar">
+<code class="sig-name descname">get_scalar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xyz</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/scalar_field.html#ScalarField.get_scalar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.get_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>does perform range checking; however, if outside
+of bounding box, simply returns 0, so use with caution!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.get_voxel_bounds">
+<code class="sig-name descname">get_voxel_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ijk</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/scalar_field.html#ScalarField.get_voxel_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.get_voxel_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns bounding box of voxel given by indices
+i,j,k. Does NOT perform bounds checking!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.get_voxel_center">
+<code class="sig-name descname">get_voxel_center</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ijk</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/scalar_field.html#ScalarField.get_voxel_center"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.get_voxel_center" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns 3D center of voxel given by indices
+i,j,k. Does NOT perform bounds checking!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.is_in_bounds">
+<code class="sig-name descname">is_in_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xyz</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/scalar_field.html#ScalarField.is_in_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.is_in_bounds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.resize_mesh">
+<code class="sig-name descname">resize_mesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/scalar_field.html#ScalarField.resize_mesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.resize_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>resize mesh to bounding box around non-zero voxels
+also updates extent and boundingBox</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.boundingBox">
+<code class="sig-name descname">boundingBox</code><em class="property"> = ()</em><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.boundingBox" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.extent">
+<code class="sig-name descname">extent</code><em class="property"> = ()</em><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.extent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.mesh">
+<code class="sig-name descname">mesh</code><em class="property"> = None</em><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.mesh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.origin">
+<code class="sig-name descname">origin</code><em class="property"> = ()</em><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.origin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.spacing">
+<code class="sig-name descname">spacing</code><em class="property"> = ()</em><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.scalar_field.ScalarField.spacing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-singlecell_input_mapper.singlecell_input_mapper.synapse_mapper">
+<span id="singlecell-input-mapper-singlecell-input-mapper-synapse-mapper-module"></span><h2>singlecell_input_mapper.singlecell_input_mapper.synapse_mapper module<a class="headerlink" href="#module-singlecell_input_mapper.singlecell_input_mapper.synapse_mapper" title="Permalink to this headline">¶</a></h2>
+<p>Created on Mar 30, 2012</p>
+<p>&#64;author: regger</p>
+<dl class="py class">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity">
+<em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.</code><code class="sig-name descname">SynapseDensity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">postCellType</span></em>, <em class="sig-param"><span class="n">connectionSpreadsheet</span></em>, <em class="sig-param"><span class="n">exTypes</span></em>, <em class="sig-param"><span class="n">inhTypes</span></em>, <em class="sig-param"><span class="n">exPST</span></em>, <em class="sig-param"><span class="n">inhPST</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseDensity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Synapse density computation for one postsynaptic neuron
+and arbitrary presynaptic bouton and other postsynaptic
+PST densities</p>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">postCellType</span></em>, <em class="sig-param"><span class="n">connectionSpreadsheet</span></em>, <em class="sig-param"><span class="n">exTypes</span></em>, <em class="sig-param"><span class="n">inhTypes</span></em>, <em class="sig-param"><span class="n">exPST</span></em>, <em class="sig-param"><span class="n">inhPST</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseDensity.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>postsynaptic neuron
+self.cell = cell</p>
+<p>spreadsheet containing length/surface area PST densities
+self.connectionSpreadsheet = connectionSpreadsheet</p>
+<p>defined excitatory cell types
+self.exTypes = exTypes</p>
+<p>defined inhibitory cell types
+self.inhTypes = inhTypes</p>
+<p>normalization PST for connections with
+presynaptic excitatory cell types
+self.exPST = exPST</p>
+<p>normalization PST for connections with
+presynaptic inhibitory cell types
+self.inhPST = inhPST</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_cell_PST">
+<code class="sig-name descname">compute_cell_PST</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseDensity.compute_cell_PST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_cell_PST" title="Permalink to this definition">¶</a></dt>
+<dd><p>called once to compute 3D length/surface area
+densities and combine them with length/surface area
+PST densities to yield connection-specific 3D PST
+density of the postsynaptic neuron</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_synapse_density">
+<code class="sig-name descname">compute_synapse_density</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">boutonDensity</span></em>, <em class="sig-param"><span class="n">preCellType</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseDensity.compute_synapse_density"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_synapse_density" title="Permalink to this definition">¶</a></dt>
+<dd><p>main interface for computing synapses originating
+from presynaptic bouton density of given cell type
+If bouton density and cell PST don’t overlap
+or synapse density == 0 everywhere, return None</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper">
+<em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.</code><code class="sig-name descname">SynapseMapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">synDist</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">isDensity</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseMapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>SynapseMapper assigns synapses to neuron morphology
+self.cell is neuron SpatialGraph
+self.synDist is average synapse distribution (3D scalar field)
+self.isDensity: True - synapse distribution interpreted as avg</p>
+<blockquote>
+<div><p>density; actual number of synapses assigned is drawn from a
+Poisson distribution
+False - synapse distribution interpreted as actual number of
+synapses per voxel and directly assigned</p>
+</div></blockquote>
+<dl class="simple">
+<dt>self.voxelEdgeMap: dictionary mapping synapse distribution mesh</dt><dd><p>coordinates on list with pairs of indices that correspond
+to the edge and edgePt ID of all morphology points inside that voxel</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">synDist</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">isDensity</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseMapper.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>synapses are mapped onto this cell
+self.cell = cell</p>
+<p>synapse distribution
+self.synDist = synDist</p>
+<p>flag: 1 - distribution is density; 0 - distribution is realization
+self.isDensity = isDensity</p>
+<p>stores edge/voxel correspondence for mapping
+self.voxelEdgeMap = {}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses">
+<code class="sig-name descname">create_synapses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preType</span><span class="o">=</span><span class="default_value">'Generic'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseMapper.create_synapses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses" title="Permalink to this definition">¶</a></dt>
+<dd><p>main function; creates instantiation of synapses
+on cell from synapse distribution</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-singlecell_input_mapper.singlecell_input_mapper.writer">
+<span id="singlecell-input-mapper-singlecell-input-mapper-writer-module"></span><h2>singlecell_input_mapper.singlecell_input_mapper.writer module<a class="headerlink" href="#module-singlecell_input_mapper.singlecell_input_mapper.writer" title="Permalink to this headline">¶</a></h2>
+<p>Created on Mar 8, 2012</p>
+<p>&#64;author: regger</p>
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.writer.write_anatomical_realization_map">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.writer.</code><code class="sig-name descname">write_anatomical_realization_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">functionalMap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">anatomicalID</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/writer.html#write_anatomical_realization_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_anatomical_realization_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>writes list of all functional connections
+coded by tuples (cell type, presynaptic cell index, synapse index).
+Only valid for anatomical synapse realization given by anatomicalID</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.writer.write_cell_synapse_locations">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.writer.</code><code class="sig-name descname">write_cell_synapse_locations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">synapses</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cellID</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/writer.html#write_cell_synapse_locations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_cell_synapse_locations" title="Permalink to this definition">¶</a></dt>
+<dd><p>writes list of all synapses with the locations
+coded by section ID and section x of cell with ID ‘cellID’</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.writer.write_landmark_file">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.writer.</code><code class="sig-name descname">write_landmark_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">landmarkList</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/writer.html#write_landmark_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_landmark_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>write Amira landmark file
+landmarkList has to be iterable of tuples,
+each of which holds 3 float coordinates</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.writer.write_population_and_sample_connectivity_summary">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.writer.</code><code class="sig-name descname">write_population_and_sample_connectivity_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">populationDistribution</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cellTypeSummaryData</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columnSummaryData</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/writer.html#write_population_and_sample_connectivity_summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_population_and_sample_connectivity_summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.writer.write_population_connectivity_summary">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.writer.</code><code class="sig-name descname">write_population_connectivity_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">populationDistribution</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/writer.html#write_population_connectivity_summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_population_connectivity_summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.writer.write_sample_connectivity_summary">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.writer.</code><code class="sig-name descname">write_sample_connectivity_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cellTypeSummaryData</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columnSummaryData</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/writer.html#write_sample_connectivity_summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_sample_connectivity_summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.writer.write_scalar_field">
+<code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.writer.</code><code class="sig-name descname">write_scalar_field</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scalarField</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/writer.html#write_scalar_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_scalar_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-singlecell_input_mapper.singlecell_input_mapper">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-singlecell_input_mapper.singlecell_input_mapper" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
