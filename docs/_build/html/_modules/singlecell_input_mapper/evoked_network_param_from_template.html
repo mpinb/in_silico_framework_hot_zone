@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>singlecell_input_mapper.evoked_network_param_from_template &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">singlecell_input_mapper.evoked_network_param_from_template</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for singlecell_input_mapper.evoked_network_param_from_template</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">single_cell_parser</span> <span class="k">as</span> <span class="nn">scp</span>
+<span class="kn">import</span> <span class="nn">getting_started</span>
+<span class="kn">from</span> <span class="nn">model_data_base.mdbopen</span> <span class="kn">import</span> <span class="n">mdbopen</span>
+
+<span class="c1">#evokedPrefix = &#39;/nas1/Data_regger/AXON_SAGA/Axon4/PassiveTouch/L5tt/evoked_activity/&#39;</span>
+<span class="c1">#evokedPrefix = &#39;/home/abast/test/neurosim_getting_started/getting_started_files/functional_constraints/evoked_activity/PW_SuW_RF_CDK/&#39;</span>
+<span class="n">evokedPrefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">getting_started</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;functional_constraints/evoked_activity/PW_SuW_RF_CDK/&#39;</span><span class="p">)</span>
+<span class="c1">#L2EvokedName = evokedPrefix + &#39;L2_3x3_PSTH_template_0-50_10ms.param&#39;</span>
+<span class="c1">#L34EvokedName = evokedPrefix + &#39;L34_3x3_PSTH_template_0-20_1ms_20-50_10ms.param&#39;</span>
+<span class="c1">#L4pyEvokedName = evokedPrefix + &#39;L4py_3x3_PSTH_template_0-50_10ms.param&#39;</span>
+<span class="c1">#L4spEvokedName = evokedPrefix + &#39;L4sp_3x3_PSTH_template_0-20_1ms_20-50_10ms.param&#39;</span>
+<span class="c1">#L4ssEvokedName = evokedPrefix + &#39;L4ss_3x3_PSTH_template_0-20_1ms_20-50_10ms.param&#39;</span>
+<span class="c1">#L5stEvokedName = evokedPrefix + &#39;L5st_3x3_PSTH_template_0-50_10ms.param&#39;</span>
+<span class="c1">#L5ttEvokedName = evokedPrefix + &#39;L5tt_3x3_PSTH_template_0-20_1ms_20-50_10ms.param&#39;</span>
+<span class="c1">#L6ccEvokedName = evokedPrefix + &#39;L6cc_3x3_PSTH_template_0-20_1ms_20-50_10ms.param&#39;</span>
+<span class="c1">#L6ccinvEvokedName = evokedPrefix + &#39;L6ccinv_3x3_PSTH_template_0-50_10ms.param&#39;</span>
+<span class="c1">#L6ctEvokedName = evokedPrefix + &#39;L6ct_3x3_PSTH_template_0-50_10ms.param&#39;</span>
+<span class="c1">#VPMEvokedName = evokedPrefix + &#39;VPM_3x3_PSTH_template.param&#39;</span>
+<span class="c1">#L1EvokedName = evokedPrefix + &#39;L1_3x3_PSTH_template_all_0-50_10ms.param&#39;</span>
+<span class="c1">#L2EvokedName = evokedPrefix + &#39;L2_3x3_PSTH.param&#39;</span>
+<span class="c1">#L34EvokedName = evokedPrefix + &#39;L34_3x3_PSTH.param&#39;</span>
+<span class="c1">#L4pyEvokedName = evokedPrefix + &#39;L4py_3x3_PSTH.param&#39;</span>
+<span class="c1">#L4spEvokedName = evokedPrefix + &#39;L4sp_3x3_PSTH.param&#39;</span>
+<span class="c1">#L4ssEvokedName = evokedPrefix + &#39;L4ss_3x3_PSTH.param&#39;</span>
+<span class="c1">#L5stEvokedName = evokedPrefix + &#39;L5st_3x3_PSTH.param&#39;</span>
+<span class="c1">#L5ttEvokedName = evokedPrefix + &#39;L5tt_3x3_PSTH.param&#39;</span>
+<span class="c1">#L6ccEvokedName = evokedPrefix + &#39;L6cc_3x3_PSTH.param&#39;</span>
+<span class="c1">#L6ccinvEvokedName = evokedPrefix + &#39;L6ccinv_3x3_PSTH.param&#39;</span>
+<span class="c1">#L6ctEvokedName = evokedPrefix + &#39;L6ct_3x3_PSTH.param&#39;</span>
+<span class="c1">#===============================================================================</span>
+<span class="c1"># Used for model run1:</span>
+<span class="c1">#===============================================================================</span>
+<span class="n">L2EvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L2_3x3_PSTH_UpState.param&#39;</span>
+<span class="n">L34EvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L34_3x3_PSTH_UpState.param&#39;</span>
+<span class="n">L4pyEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L4py_3x3_PSTH_UpState.param&#39;</span>
+<span class="n">L4spEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L4sp_3x3_PSTH_UpState.param&#39;</span>
+<span class="n">L4ssEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L4ss_3x3_PSTH_UpState.param&#39;</span>
+<span class="n">L5stEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L5st_3x3_PSTH_UpState.param&#39;</span>
+<span class="n">L5ttEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L5tt_3x3_PSTH_UpState.param&#39;</span>
+<span class="n">L6ccEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L6cc_3x3_PSTH_UpState.param&#39;</span>
+<span class="c1">#L6ccEvokedName = evokedPrefix + &#39;L6cc_3x3_PSTH_UpState_other_active_timing.param&#39;</span>
+<span class="n">L6ccinvEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L6ccinv_3x3_PSTH_UpState.param&#39;</span>
+<span class="n">L6ctEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L6ct_3x3_PSTH_UpState.param&#39;</span>
+<span class="n">VPMEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;VPM_3x3_PSTH.param&#39;</span>
+<span class="c1">#===============================================================================</span>
+<span class="c1"># END Used for model run1</span>
+<span class="c1">#===============================================================================</span>
+<span class="c1">#L1EvokedName = evokedPrefix + &#39;L1_3x3_PSTH_template_all_0-50_10ms.param&#39;</span>
+<span class="c1">#L23TransEvokedName = evokedPrefix + &#39;L23Trans_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#L45PeakEvokedName = evokedPrefix + &#39;L45Peak_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#L45SymEvokedName = evokedPrefix + &#39;L45Sym_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#L56TransEvokedName = evokedPrefix + &#39;L56Trans_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#SymLocal1EvokedName = evokedPrefix + &#39;SymLocal1_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#SymLocal2EvokedName = evokedPrefix + &#39;SymLocal2_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#SymLocal3EvokedName = evokedPrefix + &#39;SymLocal3_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#SymLocal4EvokedName = evokedPrefix + &#39;SymLocal4_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#SymLocal5EvokedName = evokedPrefix + &#39;SymLocal5_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#SymLocal6EvokedName = evokedPrefix + &#39;SymLocal6_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#L23TransEvokedName = evokedPrefix + &#39;L23Trans_3x3_PSTH_template_PW_SuW_0.5_PW_SuW_L6cc_timing-1ms.param&#39;</span>
+<span class="c1">#L45PeakEvokedName = evokedPrefix + &#39;L45Peak_3x3_PSTH_template_PW_SuW_0.5_PW_SuW_L6cc_timing-1ms.param&#39;</span>
+<span class="c1">#L45SymEvokedName = evokedPrefix + &#39;L45Sym_3x3_PSTH_template_PW_SuW_0.5_PW_SuW_L6cc_timing-1ms.param&#39;</span>
+<span class="c1">#L56TransEvokedName = evokedPrefix + &#39;L56Trans_3x3_PSTH_template_PW_SuW_0.5_PW_SuW_L6cc_timing-1ms.param&#39;</span>
+<span class="c1">#SymLocal1EvokedName = evokedPrefix + &#39;SymLocal1_3x3_PSTH_template_PW_SuW_0.5_PW_SuW_L6cc_timing-1ms.param&#39;</span>
+<span class="c1">#SymLocal2EvokedName = evokedPrefix + &#39;SymLocal2_3x3_PSTH_template_PW_SuW_0.5_PW_SuW_L6cc_timing-1ms.param&#39;</span>
+<span class="c1">#SymLocal3EvokedName = evokedPrefix + &#39;SymLocal3_3x3_PSTH_template_PW_SuW_0.5_PW_SuW_L6cc_timing-1ms.param&#39;</span>
+<span class="c1">#SymLocal4EvokedName = evokedPrefix + &#39;SymLocal4_3x3_PSTH_template_PW_SuW_0.5_PW_SuW_L6cc_timing-1ms.param&#39;</span>
+<span class="c1">#SymLocal5EvokedName = evokedPrefix + &#39;SymLocal5_3x3_PSTH_template_PW_SuW_0.5_PW_SuW_L6cc_timing-1ms.param&#39;</span>
+<span class="c1">#SymLocal6EvokedName = evokedPrefix + &#39;SymLocal6_3x3_PSTH_template_PW_SuW_0.5_PW_SuW_L6cc_timing-1ms.param&#39;</span>
+<span class="c1">#===============================================================================</span>
+<span class="c1"># Used for model run1:</span>
+<span class="c1">#===============================================================================</span>
+<span class="n">L1EvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L1_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="n">L23TransEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L23Trans_PSTH_active_timing_normalized_PW_1.0_SuW_0.5.param&#39;</span>
+<span class="n">L45PeakEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L45Peak_PSTH_active_timing_normalized_PW_1.0_SuW_0.5.param&#39;</span>
+<span class="n">L45SymEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L45Sym_PSTH_active_timing_normalized_PW_1.0_SuW_0.5.param&#39;</span>
+<span class="n">L56TransEvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;L56Trans_PSTH_active_timing_normalized_PW_1.0_SuW_0.5.param&#39;</span>
+<span class="n">SymLocal1EvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;SymLocal1_PSTH_active_timing_normalized_PW_1.0_SuW_0.5.param&#39;</span>
+<span class="n">SymLocal2EvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;SymLocal2_PSTH_active_timing_normalized_PW_1.0_SuW_0.5.param&#39;</span>
+<span class="n">SymLocal3EvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;SymLocal3_PSTH_active_timing_normalized_PW_1.0_SuW_0.5.param&#39;</span>
+<span class="n">SymLocal4EvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;SymLocal4_PSTH_active_timing_normalized_PW_1.0_SuW_0.5.param&#39;</span>
+<span class="n">SymLocal5EvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;SymLocal5_PSTH_active_timing_normalized_PW_1.0_SuW_0.5.param&#39;</span>
+<span class="n">SymLocal6EvokedName</span> <span class="o">=</span> <span class="n">evokedPrefix</span> <span class="o">+</span> <span class="s1">&#39;SymLocal6_PSTH_active_timing_normalized_PW_1.0_SuW_0.5.param&#39;</span>
+<span class="c1">#===============================================================================</span>
+<span class="c1"># END Used for model run1</span>
+<span class="c1">#===============================================================================</span>
+<span class="c1">#===============================================================================</span>
+<span class="c1"># Used for model INH response control:</span>
+<span class="c1">#===============================================================================</span>
+<span class="c1">#L1EvokedName = evokedPrefix + &#39;L1_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#L23TransEvokedName = evokedPrefix + &#39;L23Trans_PSTH_active_timing_normalized_PW_2.0_SuW_1.0_V2.param&#39;</span>
+<span class="c1">#L45PeakEvokedName = evokedPrefix + &#39;L45Peak_PSTH_active_timing_normalized_PW_2.0_SuW_1.0_V2.param&#39;</span>
+<span class="c1">#L45SymEvokedName = evokedPrefix + &#39;L45Sym_PSTH_active_timing_normalized_PW_2.0_SuW_1.0_V2.param&#39;</span>
+<span class="c1">#L56TransEvokedName = evokedPrefix + &#39;L56Trans_PSTH_active_timing_normalized_PW_2.0_SuW_1.0_V2.param&#39;</span>
+<span class="c1">#SymLocal1EvokedName = evokedPrefix + &#39;SymLocal1_PSTH_active_timing_normalized_PW_2.0_SuW_1.0_V2.param&#39;</span>
+<span class="c1">#SymLocal2EvokedName = evokedPrefix + &#39;SymLocal2_PSTH_active_timing_normalized_PW_2.0_SuW_1.0_V2.param&#39;</span>
+<span class="c1">#SymLocal3EvokedName = evokedPrefix + &#39;SymLocal3_PSTH_active_timing_normalized_PW_2.0_SuW_1.0_V2.param&#39;</span>
+<span class="c1">#SymLocal4EvokedName = evokedPrefix + &#39;SymLocal4_PSTH_active_timing_normalized_PW_2.0_SuW_1.0_V2.param&#39;</span>
+<span class="c1">#SymLocal5EvokedName = evokedPrefix + &#39;SymLocal5_PSTH_active_timing_normalized_PW_2.0_SuW_1.0_V2.param&#39;</span>
+<span class="c1">#SymLocal6EvokedName = evokedPrefix + &#39;SymLocal6_PSTH_active_timing_normalized_PW_2.0_SuW_1.0_V2.param&#39;</span>
+<span class="c1">#L23TransEvokedName = evokedPrefix + &#39;L23Trans_PSTH_active_timing_normalized_PW_0.5_SuW_0.25_V2.param&#39;</span>
+<span class="c1">#L45PeakEvokedName = evokedPrefix + &#39;L45Peak_PSTH_active_timing_normalized_PW_0.5_SuW_0.25_V2.param&#39;</span>
+<span class="c1">#L45SymEvokedName = evokedPrefix + &#39;L45Sym_PSTH_active_timing_normalized_PW_0.5_SuW_0.25_V2.param&#39;</span>
+<span class="c1">#L56TransEvokedName = evokedPrefix + &#39;L56Trans_PSTH_active_timing_normalized_PW_0.5_SuW_0.25_V2.param&#39;</span>
+<span class="c1">#SymLocal1EvokedName = evokedPrefix + &#39;SymLocal1_PSTH_active_timing_normalized_PW_0.5_SuW_0.25_V2.param&#39;</span>
+<span class="c1">#SymLocal2EvokedName = evokedPrefix + &#39;SymLocal2_PSTH_active_timing_normalized_PW_0.5_SuW_0.25_V2.param&#39;</span>
+<span class="c1">#SymLocal3EvokedName = evokedPrefix + &#39;SymLocal3_PSTH_active_timing_normalized_PW_0.5_SuW_0.25_V2.param&#39;</span>
+<span class="c1">#SymLocal4EvokedName = evokedPrefix + &#39;SymLocal4_PSTH_active_timing_normalized_PW_0.5_SuW_0.25_V2.param&#39;</span>
+<span class="c1">#SymLocal5EvokedName = evokedPrefix + &#39;SymLocal5_PSTH_active_timing_normalized_PW_0.5_SuW_0.25_V2.param&#39;</span>
+<span class="c1">#SymLocal6EvokedName = evokedPrefix + &#39;SymLocal6_PSTH_active_timing_normalized_PW_0.5_SuW_0.25_V2.param&#39;</span>
+<span class="c1">#===============================================================================</span>
+<span class="c1"># END Used for model INH response control</span>
+<span class="c1">#===============================================================================</span>
+<span class="c1">#L1EvokedName = evokedPrefix + &#39;L1_3x3_PSTH_template_PW_0-50_10ms.param&#39;</span>
+<span class="c1">#L23TransEvokedName = evokedPrefix + &#39;L23Trans_PSTH_active_timing_normalized_PW_0.67_SuW_0.57.param&#39;</span>
+<span class="c1">#L45PeakEvokedName = evokedPrefix + &#39;L45Peak_PSTH_active_timing_normalized_PW_0.67_SuW_0.57.param&#39;</span>
+<span class="c1">#L45SymEvokedName = evokedPrefix + &#39;L45Sym_PSTH_active_timing_normalized_PW_0.67_SuW_0.57.param&#39;</span>
+<span class="c1">#L56TransEvokedName = evokedPrefix + &#39;L56Trans_PSTH_active_timing_normalized_PW_0.67_SuW_0.57.param&#39;</span>
+<span class="c1">#SymLocal1EvokedName = evokedPrefix + &#39;SymLocal1_PSTH_active_timing_normalized_PW_0.67_SuW_0.57.param&#39;</span>
+<span class="c1">#SymLocal2EvokedName = evokedPrefix + &#39;SymLocal2_PSTH_active_timing_normalized_PW_0.67_SuW_0.57.param&#39;</span>
+<span class="c1">#SymLocal3EvokedName = evokedPrefix + &#39;SymLocal3_PSTH_active_timing_normalized_PW_0.67_SuW_0.57.param&#39;</span>
+<span class="c1">#SymLocal4EvokedName = evokedPrefix + &#39;SymLocal4_PSTH_active_timing_normalized_PW_0.67_SuW_0.57.param&#39;</span>
+<span class="c1">#SymLocal5EvokedName = evokedPrefix + &#39;SymLocal5_PSTH_active_timing_normalized_PW_0.67_SuW_0.57.param&#39;</span>
+<span class="c1">#SymLocal6EvokedName = evokedPrefix + &#39;SymLocal6_PSTH_active_timing_normalized_PW_0.67_SuW_0.57.param&#39;</span>
+<span class="c1">#L23TransEvokedName = evokedPrefix + &#39;L23Trans_PSTH_active_timing_normalized_PW_2.0_SuW_1.0.param&#39;</span>
+<span class="c1">#L45PeakEvokedName = evokedPrefix + &#39;L45Peak_PSTH_active_timing_normalized_PW_2.0_SuW_1.0.param&#39;</span>
+<span class="c1">#L45SymEvokedName = evokedPrefix + &#39;L45Sym_PSTH_active_timing_normalized_PW_2.0_SuW_1.0.param&#39;</span>
+<span class="c1">#L56TransEvokedName = evokedPrefix + &#39;L56Trans_PSTH_active_timing_normalized_PW_2.0_SuW_1.0.param&#39;</span>
+<span class="c1">#SymLocal1EvokedName = evokedPrefix + &#39;SymLocal1_PSTH_active_timing_normalized_PW_2.0_SuW_1.0.param&#39;</span>
+<span class="c1">#SymLocal2EvokedName = evokedPrefix + &#39;SymLocal2_PSTH_active_timing_normalized_PW_2.0_SuW_1.0.param&#39;</span>
+<span class="c1">#SymLocal3EvokedName = evokedPrefix + &#39;SymLocal3_PSTH_active_timing_normalized_PW_2.0_SuW_1.0.param&#39;</span>
+<span class="c1">#SymLocal4EvokedName = evokedPrefix + &#39;SymLocal4_PSTH_active_timing_normalized_PW_2.0_SuW_1.0.param&#39;</span>
+<span class="c1">#SymLocal5EvokedName = evokedPrefix + &#39;SymLocal5_PSTH_active_timing_normalized_PW_2.0_SuW_1.0.param&#39;</span>
+<span class="c1">#SymLocal6EvokedName = evokedPrefix + &#39;SymLocal6_PSTH_active_timing_normalized_PW_2.0_SuW_1.0.param&#39;</span>
+<span class="n">L2EvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L2EvokedName</span><span class="p">)</span>
+<span class="n">L34EvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L34EvokedName</span><span class="p">)</span>
+<span class="n">L4pyEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L4pyEvokedName</span><span class="p">)</span>
+<span class="n">L4spEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L4spEvokedName</span><span class="p">)</span>
+<span class="n">L4ssEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L4ssEvokedName</span><span class="p">)</span>
+<span class="n">L5stEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L5stEvokedName</span><span class="p">)</span>
+<span class="n">L5ttEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L5ttEvokedName</span><span class="p">)</span>
+<span class="n">L6ccEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L6ccEvokedName</span><span class="p">)</span>
+<span class="n">L6ccinvEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L6ccinvEvokedName</span><span class="p">)</span>
+<span class="n">L6ctEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L6ctEvokedName</span><span class="p">)</span>
+<span class="n">VPMEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">VPMEvokedName</span><span class="p">)</span>
+<span class="n">L1EvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L1EvokedName</span><span class="p">)</span>
+<span class="n">L23TransEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L23TransEvokedName</span><span class="p">)</span>
+<span class="n">L45PeakEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L45PeakEvokedName</span><span class="p">)</span>
+<span class="n">L45SymEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L45SymEvokedName</span><span class="p">)</span>
+<span class="n">L56TransEvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">L56TransEvokedName</span><span class="p">)</span>
+<span class="n">SymLocal1EvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">SymLocal1EvokedName</span><span class="p">)</span>
+<span class="n">SymLocal2EvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">SymLocal2EvokedName</span><span class="p">)</span>
+<span class="n">SymLocal3EvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">SymLocal3EvokedName</span><span class="p">)</span>
+<span class="n">SymLocal4EvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">SymLocal4EvokedName</span><span class="p">)</span>
+<span class="n">SymLocal5EvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">SymLocal5EvokedName</span><span class="p">)</span>
+<span class="n">SymLocal6EvokedParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">SymLocal6EvokedName</span><span class="p">)</span>
+<span class="c1">#evokedTemplates = {&#39;L5tt&#39;: L5ttEvokedParam,\</span>
+                    <span class="c1">#&#39;L6cc&#39;: L6ccEvokedParam,\</span>
+                    <span class="c1">#&#39;VPM&#39;: VPMEvokedParam}</span>
+<span class="c1">#evokedTemplates = {&#39;L6cc&#39;: L6ccEvokedParam,\</span>
+                    <span class="c1">#&#39;VPM&#39;: VPMEvokedParam}</span>
+<span class="c1">#evokedTemplates = {&#39;VPM&#39;: VPMEvokedParam}</span>
+<span class="c1"># control:</span>
+<span class="n">evokedTemplates</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;L2&#39;</span><span class="p">:</span> <span class="n">L2EvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L34&#39;</span><span class="p">:</span> <span class="n">L34EvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L4py&#39;</span><span class="p">:</span> <span class="n">L4pyEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L4sp&#39;</span><span class="p">:</span> <span class="n">L4spEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L4ss&#39;</span><span class="p">:</span> <span class="n">L4ssEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L5st&#39;</span><span class="p">:</span> <span class="n">L5stEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L5tt&#39;</span><span class="p">:</span> <span class="n">L5ttEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L6cc&#39;</span><span class="p">:</span> <span class="n">L6ccEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L6ccinv&#39;</span><span class="p">:</span> <span class="n">L6ccinvEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L6ct&#39;</span><span class="p">:</span> <span class="n">L6ctEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;VPM&#39;</span><span class="p">:</span> <span class="n">VPMEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L1&#39;</span><span class="p">:</span> <span class="n">L1EvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L23Trans&#39;</span><span class="p">:</span> <span class="n">L23TransEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L45Peak&#39;</span><span class="p">:</span> <span class="n">L45PeakEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L45Sym&#39;</span><span class="p">:</span> <span class="n">L45SymEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;L56Trans&#39;</span><span class="p">:</span> <span class="n">L56TransEvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;SymLocal1&#39;</span><span class="p">:</span> <span class="n">SymLocal1EvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;SymLocal2&#39;</span><span class="p">:</span> <span class="n">SymLocal2EvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;SymLocal3&#39;</span><span class="p">:</span> <span class="n">SymLocal3EvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;SymLocal4&#39;</span><span class="p">:</span> <span class="n">SymLocal4EvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;SymLocal5&#39;</span><span class="p">:</span> <span class="n">SymLocal5EvokedParam</span><span class="p">,</span>\
+                    <span class="s1">&#39;SymLocal6&#39;</span><span class="p">:</span> <span class="n">SymLocal6EvokedParam</span><span class="p">,</span>\
+                    <span class="p">}</span>
+<span class="c1"># L6cc inactivated:</span>
+<span class="c1">#evokedTemplates = {&#39;L2&#39;: L2EvokedParam,\</span>
+<span class="c1">#                    &#39;L34&#39;: L34EvokedParam,\</span>
+<span class="c1">#                    &#39;L4py&#39;: L4pyEvokedParam,\</span>
+<span class="c1">#                    &#39;L4sp&#39;: L4spEvokedParam,\</span>
+<span class="c1">#                    &#39;L4ss&#39;: L4ssEvokedParam,\</span>
+<span class="c1">#                    &#39;L5st&#39;: L5stEvokedParam,\</span>
+<span class="c1">#                    &#39;L5tt&#39;: L5ttEvokedParam,\</span>
+<span class="c1">#                    &#39;L6ccinv&#39;: L6ccinvEvokedParam,\</span>
+<span class="c1">#                    &#39;L6ct&#39;: L6ctEvokedParam,\</span>
+<span class="c1">#                    &#39;VPM&#39;: VPMEvokedParam,\</span>
+<span class="c1">#                    &#39;L1&#39;: L1EvokedParam,\</span>
+<span class="c1">#                    &#39;L23Trans&#39;: L23TransEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Peak&#39;: L45PeakEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Sym&#39;: L45SymEvokedParam,\</span>
+<span class="c1">#                    &#39;L56Trans&#39;: L56TransEvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal1&#39;: SymLocal1EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal2&#39;: SymLocal2EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal3&#39;: SymLocal3EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal4&#39;: SymLocal4EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal5&#39;: SymLocal5EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal6&#39;: SymLocal6EvokedParam,\</span>
+<span class="c1">#                    }</span>
+<span class="c1"># L5tt inactivated:</span>
+<span class="c1">#evokedTemplates = {&#39;L2&#39;: L2EvokedParam,\</span>
+<span class="c1">#                    &#39;L34&#39;: L34EvokedParam,\</span>
+<span class="c1">#                    &#39;L4py&#39;: L4pyEvokedParam,\</span>
+<span class="c1">#                    &#39;L4sp&#39;: L4spEvokedParam,\</span>
+<span class="c1">#                    &#39;L4ss&#39;: L4ssEvokedParam,\</span>
+<span class="c1">#                    &#39;L5st&#39;: L5stEvokedParam,\</span>
+<span class="c1">#                    &#39;L6cc&#39;: L6ccEvokedParam,\</span>
+<span class="c1">#                    &#39;L6ccinv&#39;: L6ccinvEvokedParam,\</span>
+<span class="c1">#                    &#39;L6ct&#39;: L6ctEvokedParam,\</span>
+<span class="c1">#                    &#39;VPM&#39;: VPMEvokedParam,\</span>
+<span class="c1">#                    &#39;L1&#39;: L1EvokedParam,\</span>
+<span class="c1">#                    &#39;L23Trans&#39;: L23TransEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Peak&#39;: L45PeakEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Sym&#39;: L45SymEvokedParam,\</span>
+<span class="c1">#                    &#39;L56Trans&#39;: L56TransEvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal1&#39;: SymLocal1EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal2&#39;: SymLocal2EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal3&#39;: SymLocal3EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal4&#39;: SymLocal4EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal5&#39;: SymLocal5EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal6&#39;: SymLocal6EvokedParam,\</span>
+<span class="c1">#                    }</span>
+<span class="c1"># L4ss inactivated:</span>
+<span class="c1">#evokedTemplates = {&#39;L2&#39;: L2EvokedParam,\</span>
+<span class="c1">#                    &#39;L34&#39;: L34EvokedParam,\</span>
+<span class="c1">#                    &#39;L4py&#39;: L4pyEvokedParam,\</span>
+<span class="c1">#                    &#39;L4sp&#39;: L4spEvokedParam,\</span>
+<span class="c1">#                    &#39;L5st&#39;: L5stEvokedParam,\</span>
+<span class="c1">#                    &#39;L5tt&#39;: L5ttEvokedParam,\</span>
+<span class="c1">#                    &#39;L6cc&#39;: L6ccEvokedParam,\</span>
+<span class="c1">#                    &#39;L6ccinv&#39;: L6ccinvEvokedParam,\</span>
+<span class="c1">#                    &#39;L6ct&#39;: L6ctEvokedParam,\</span>
+<span class="c1">#                    &#39;VPM&#39;: VPMEvokedParam,\</span>
+<span class="c1">#                    &#39;L1&#39;: L1EvokedParam,\</span>
+<span class="c1">#                    &#39;L23Trans&#39;: L23TransEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Peak&#39;: L45PeakEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Sym&#39;: L45SymEvokedParam,\</span>
+<span class="c1">#                    &#39;L56Trans&#39;: L56TransEvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal1&#39;: SymLocal1EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal2&#39;: SymLocal2EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal3&#39;: SymLocal3EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal4&#39;: SymLocal4EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal5&#39;: SymLocal5EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal6&#39;: SymLocal6EvokedParam,\</span>
+<span class="c1">#                    }</span>
+<span class="c1"># L3py/L4sp inactivated:</span>
+<span class="c1">#evokedTemplates = {&#39;L2&#39;: L2EvokedParam,\</span>
+<span class="c1">#                    &#39;L4py&#39;: L4pyEvokedParam,\</span>
+<span class="c1">#                    &#39;L4ss&#39;: L4ssEvokedParam,\</span>
+<span class="c1">#                    &#39;L5st&#39;: L5stEvokedParam,\</span>
+<span class="c1">#                    &#39;L5tt&#39;: L5ttEvokedParam,\</span>
+<span class="c1">#                    &#39;L6cc&#39;: L6ccEvokedParam,\</span>
+<span class="c1">#                    &#39;L6ccinv&#39;: L6ccinvEvokedParam,\</span>
+<span class="c1">#                    &#39;L6ct&#39;: L6ctEvokedParam,\</span>
+<span class="c1">#                    &#39;VPM&#39;: VPMEvokedParam,\</span>
+<span class="c1">#                    &#39;L1&#39;: L1EvokedParam,\</span>
+<span class="c1">#                    &#39;L23Trans&#39;: L23TransEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Peak&#39;: L45PeakEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Sym&#39;: L45SymEvokedParam,\</span>
+<span class="c1">#                    &#39;L56Trans&#39;: L56TransEvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal1&#39;: SymLocal1EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal2&#39;: SymLocal2EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal3&#39;: SymLocal3EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal4&#39;: SymLocal4EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal5&#39;: SymLocal5EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal6&#39;: SymLocal6EvokedParam,\</span>
+<span class="c1">#                    }</span>
+<span class="c1">## VPM inactivated:</span>
+<span class="c1">#evokedTemplates = {&#39;L2&#39;: L2EvokedParam,\</span>
+<span class="c1">#                    &#39;L34&#39;: L34EvokedParam,\</span>
+<span class="c1">#                    &#39;L4py&#39;: L4pyEvokedParam,\</span>
+<span class="c1">#                    &#39;L4sp&#39;: L4spEvokedParam,\</span>
+<span class="c1">#                    &#39;L4ss&#39;: L4ssEvokedParam,\</span>
+<span class="c1">#                    &#39;L5st&#39;: L5stEvokedParam,\</span>
+<span class="c1">#                    &#39;L5tt&#39;: L5ttEvokedParam,\</span>
+<span class="c1">#                    &#39;L6cc&#39;: L6ccEvokedParam,\</span>
+<span class="c1">#                    &#39;L6ccinv&#39;: L6ccinvEvokedParam,\</span>
+<span class="c1">#                    &#39;L6ct&#39;: L6ctEvokedParam,\</span>
+<span class="c1">#                    &#39;L1&#39;: L1EvokedParam,\</span>
+<span class="c1">#                    &#39;L23Trans&#39;: L23TransEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Peak&#39;: L45PeakEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Sym&#39;: L45SymEvokedParam,\</span>
+<span class="c1">#                    &#39;L56Trans&#39;: L56TransEvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal1&#39;: SymLocal1EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal2&#39;: SymLocal2EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal3&#39;: SymLocal3EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal4&#39;: SymLocal4EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal5&#39;: SymLocal5EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal6&#39;: SymLocal6EvokedParam,\</span>
+<span class="c1">#                    }</span>
+<span class="c1"># EXC types evoked generic</span>
+<span class="c1">#evokedTemplates = {&#39;L1&#39;: L1EvokedParam,\</span>
+<span class="c1">#                    &#39;L23Trans&#39;: L23TransEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Peak&#39;: L45PeakEvokedParam,\</span>
+<span class="c1">#                    &#39;L45Sym&#39;: L45SymEvokedParam,\</span>
+<span class="c1">#                    &#39;L56Trans&#39;: L56TransEvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal1&#39;: SymLocal1EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal2&#39;: SymLocal2EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal3&#39;: SymLocal3EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal4&#39;: SymLocal4EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal5&#39;: SymLocal5EvokedParam,\</span>
+<span class="c1">#                    &#39;SymLocal6&#39;: SymLocal6EvokedParam,\</span>
+<span class="c1">#                    }</span>
+<span class="c1"># EXC/INH types evoked generic</span>
+<span class="c1">#evokedTemplates = {}</span>
+
+<span class="c1"># anatomical PC + surround columns (3x3)</span>
+<span class="c1"># ranging from (potentially) 1-9, starting at row-1, arc-1,</span>
+<span class="c1"># then increasing by arc and then by row up to row+1, arc+1</span>
+<span class="c1"># e.g. for C2: B1=1, B2=2, B3=3, C1=4, C2=5, C3=6, D1=7, D2=8, D3=9</span>
+<span class="n">surroundColumns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;A1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Alpha&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;A2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A1&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;A3&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A2&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;A4&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A3&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">},</span>\
+                   <span class="s1">&#39;Alpha&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Alpha&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;Beta&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;B1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Alpha&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Beta&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;B2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A1&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;B3&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A2&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;C4&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;B4&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;A3&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;C4&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">},</span>\
+                   <span class="s1">&#39;Beta&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Alpha&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Beta&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;Gamma&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;C1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Beta&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;B1&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Gamma&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;C2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;B1&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;C3&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;B2&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;C4&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;D4&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;C4&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;B3&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;B4&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;C4&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;D4&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">},</span>\
+                   <span class="s1">&#39;Gamma&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Beta&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Gamma&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;Delta&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;D1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Gamma&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Delta&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;E1&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;E2&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;D2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;C1&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;E1&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;E2&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;E3&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;D3&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;C2&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;C4&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;D4&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;E2&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;E3&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;E4&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;D4&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;C3&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;C4&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;D4&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;E3&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;E4&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">},</span>\
+                   <span class="s1">&#39;Delta&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Gamma&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Delta&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;E1&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">},</span>\
+                   <span class="s1">&#39;E1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Delta&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;E1&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;E2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>\
+                   <span class="s1">&#39;E2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;D1&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;E1&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;E2&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;E3&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>\
+                   <span class="s1">&#39;E3&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;D2&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;D4&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;E2&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;E3&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;E4&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>\
+                   <span class="s1">&#39;E4&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;D3&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;D4&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;E3&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;E4&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}}</span>
+<span class="c1"># correspondence between anatomical column</span>
+<span class="c1"># and whisker PSTH relative to PW whisker</span>
+<span class="c1"># (e.g, C2 whisker deflection in B1</span>
+<span class="c1"># looks like D3 whisker deflection in C2)</span>
+<span class="n">surroundPSTHLookup</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;D3&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span>\
+                        <span class="mi">6</span><span class="p">:</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="s1">&#39;B1&#39;</span><span class="p">}</span>
+
+<span class="n">deflectionOffset</span> <span class="o">=</span> <span class="mf">245.0</span> <span class="c1">#ms; to allow same analysis as CDK JPhys 2007</span>
+<span class="c1">#deflectionOffset = 345.0 #ms; model2 needs more time to get to steady state</span>
+
+<span class="c1"># write cluster parameter file yes/no</span>
+<span class="n">clusterParameters</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="create_network_parameter"><a class="viewcode-back" href="../../modules/singlecell_input_mapper.evoked_network_param_from_template.create_network_parameter.html#singlecell_input_mapper.evoked_network_param_from_template.create_network_parameter">[docs]</a><span class="k">def</span> <span class="nf">create_network_parameter</span><span class="p">(</span><span class="n">templateParamName</span><span class="p">,</span> <span class="n">cellNumberFileName</span><span class="p">,</span> 
+                             <span class="n">synFileName</span><span class="p">,</span> <span class="n">conFileName</span><span class="p">,</span> <span class="n">whisker</span><span class="p">,</span> <span class="n">outFileName</span><span class="p">,</span> <span class="n">write_all_celltypes</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*************&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;creating network parameter file from template </span><span class="si">{:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">templateParamName</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*************&#39;</span><span class="p">)</span>
+    
+    <span class="n">templateParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">templateParamName</span><span class="p">)</span>
+    <span class="n">cellTypeColumnNumbers</span> <span class="o">=</span> <span class="n">load_cell_number_file</span><span class="p">(</span><span class="n">cellNumberFileName</span><span class="p">)</span>
+    
+    <span class="n">nwParam</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">NTParameterSet</span><span class="p">({</span><span class="s1">&#39;info&#39;</span><span class="p">:</span> <span class="n">templateParam</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="s1">&#39;NMODL_mechanisms&#39;</span><span class="p">:</span> <span class="n">templateParam</span><span class="o">.</span><span class="n">NMODL_mechanisms</span><span class="p">})</span>
+<span class="c1">#    nwParam.info = templateParam.info</span>
+<span class="c1">#    nwParam.NMODL_mechanisms = templateParam.NMODL_mechanisms</span>
+    <span class="n">nwParam</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="p">{}</span>
+    
+    <span class="k">if</span> <span class="n">clusterParameters</span><span class="p">:</span>
+        <span class="n">clusterBasePath</span> <span class="o">=</span> <span class="s1">&#39;/gpfs01/bethge/home/regger&#39;</span>
+        <span class="n">nwParamCluster</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">NTParameterSet</span><span class="p">({</span><span class="s1">&#39;info&#39;</span><span class="p">:</span> <span class="n">templateParam</span><span class="o">.</span><span class="n">info</span><span class="p">})</span>
+        <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">NMODL_mechanisms</span> <span class="o">=</span> <span class="n">templateParam</span><span class="o">.</span><span class="n">NMODL_mechanisms</span><span class="o">.</span><span class="n">tree_copy</span><span class="p">()</span>
+        <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">synFileNameIndex</span> <span class="o">=</span> <span class="n">synFileName</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;L5tt&#39;</span><span class="p">)</span>
+        <span class="n">synFileNameCluster</span> <span class="o">=</span> <span class="n">clusterBasePath</span> <span class="o">+</span> <span class="s1">&#39;/data/&#39;</span> <span class="o">+</span> <span class="n">synFileName</span><span class="p">[</span><span class="n">synFileNameIndex</span><span class="p">:]</span>
+        <span class="n">conFileNameCluster</span> <span class="o">=</span> <span class="n">synFileNameCluster</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.con&#39;</span>
+        <span class="k">for</span> <span class="n">mech</span> <span class="ow">in</span> <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">NMODL_mechanisms</span><span class="p">:</span>
+            <span class="n">mechPath</span> <span class="o">=</span> <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">NMODL_mechanisms</span><span class="p">[</span><span class="n">mech</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s1">&#39;/nas1/Data_regger&#39;</span> <span class="ow">in</span> <span class="n">mechPath</span><span class="p">:</span>
+                <span class="n">mechPathIndex</span> <span class="o">=</span> <span class="n">mechPath</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;L5tt&#39;</span><span class="p">)</span>
+                <span class="n">newMechPath</span> <span class="o">=</span> <span class="n">clusterBasePath</span> <span class="o">+</span> <span class="s1">&#39;/data/&#39;</span> <span class="o">+</span> <span class="n">mechPath</span><span class="p">[</span><span class="n">mechPathIndex</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="s1">&#39;/home/regger&#39;</span> <span class="ow">in</span> <span class="n">mechPath</span><span class="p">:</span>
+                <span class="n">newMechPath</span> <span class="o">=</span> <span class="n">clusterBasePath</span> <span class="o">+</span> <span class="n">mechPath</span><span class="p">[</span><span class="mi">12</span><span class="p">:]</span>
+            <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">NMODL_mechanisms</span><span class="p">[</span><span class="n">mech</span><span class="p">]</span> <span class="o">=</span> <span class="n">newMechPath</span>
+    
+<span class="c1">#    for cellType in cellTypeColumnNumbers.keys():</span>
+    <span class="k">for</span> <span class="n">cellType</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">templateParam</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="n">cellTypeParameters</span> <span class="o">=</span> <span class="n">templateParam</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellType</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">cellTypeColumnNumbers</span><span class="p">[</span><span class="n">cellType</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">numberOfCells</span> <span class="o">=</span> <span class="n">cellTypeColumnNumbers</span><span class="p">[</span><span class="n">cellType</span><span class="p">][</span><span class="n">column</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">numberOfCells</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">write_all_celltypes</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">cellTypeName</span> <span class="o">=</span> <span class="n">cellType</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">column</span>
+            <span class="n">nwParam</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span> <span class="o">=</span> <span class="n">cellTypeParameters</span><span class="o">.</span><span class="n">tree_copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">clusterParameters</span><span class="p">:</span>
+                <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span> <span class="o">=</span> <span class="n">cellTypeParameters</span><span class="o">.</span><span class="n">tree_copy</span><span class="p">()</span>
+            <span class="n">PSTH</span> <span class="o">=</span> <span class="n">whisker_evoked_PSTH</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">whisker</span><span class="p">,</span> <span class="n">cellType</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">PSTH</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">interval</span> <span class="o">=</span> <span class="n">nwParam</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;interval&#39;</span><span class="p">)</span>
+                <span class="n">nwParam</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">celltype</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;spiketrain&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;interval&#39;</span><span class="p">:</span> <span class="n">interval</span><span class="p">}}</span>
+                <span class="n">nwParam</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">celltype</span><span class="p">[</span><span class="s1">&#39;pointcell&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PSTH</span>
+                <span class="n">nwParam</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">celltype</span><span class="p">[</span><span class="s1">&#39;pointcell&#39;</span><span class="p">][</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">deflectionOffset</span>
+                <span class="k">if</span> <span class="n">clusterParameters</span><span class="p">:</span>
+                    <span class="n">interval</span> <span class="o">=</span> <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;interval&#39;</span><span class="p">)</span>
+                    <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">celltype</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;spiketrain&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;interval&#39;</span><span class="p">:</span> <span class="n">interval</span><span class="p">}}</span>
+                    <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">celltype</span><span class="p">[</span><span class="s1">&#39;pointcell&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PSTH</span>
+                    <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">celltype</span><span class="p">[</span><span class="s1">&#39;pointcell&#39;</span><span class="p">][</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">deflectionOffset</span>
+            <span class="n">nwParam</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">cellNr</span> <span class="o">=</span> <span class="n">numberOfCells</span>
+            <span class="n">nwParam</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">synapses</span><span class="o">.</span><span class="n">distributionFile</span> <span class="o">=</span> <span class="n">synFileName</span>
+            <span class="n">nwParam</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">synapses</span><span class="o">.</span><span class="n">connectionFile</span> <span class="o">=</span> <span class="n">conFileName</span>
+            <span class="k">if</span> <span class="n">clusterParameters</span><span class="p">:</span>
+                <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">cellNr</span> <span class="o">=</span> <span class="n">numberOfCells</span>
+                <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">synapses</span><span class="o">.</span><span class="n">distributionFile</span> <span class="o">=</span> <span class="n">synFileNameCluster</span>
+                <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">network</span><span class="p">[</span><span class="n">cellTypeName</span><span class="p">]</span><span class="o">.</span><span class="n">synapses</span><span class="o">.</span><span class="n">connectionFile</span> <span class="o">=</span> <span class="n">conFileNameCluster</span>
+    
+    <span class="n">nwParam</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outFileName</span><span class="p">)</span>
+    <span class="n">clusterOutFileName</span> <span class="o">=</span> <span class="n">outFileName</span><span class="p">[:</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_cluster.param&#39;</span>
+    <span class="k">if</span> <span class="n">clusterParameters</span><span class="p">:</span>
+        <span class="n">nwParamCluster</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">clusterOutFileName</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="whisker_evoked_PSTH"><a class="viewcode-back" href="../../modules/singlecell_input_mapper.evoked_network_param_from_template.whisker_evoked_PSTH.html#singlecell_input_mapper.evoked_network_param_from_template.whisker_evoked_PSTH">[docs]</a><span class="k">def</span> <span class="nf">whisker_evoked_PSTH</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">deflectedWhisker</span><span class="p">,</span> <span class="n">cellType</span><span class="p">):</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">surroundColumns</span><span class="p">[</span><span class="n">deflectedWhisker</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">evokedTypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">evokedTemplates</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns</span> <span class="ow">or</span> <span class="n">cellType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">evokedTypes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">evokedTemplate</span> <span class="o">=</span> <span class="n">evokedTemplates</span><span class="p">[</span><span class="n">cellType</span><span class="p">]</span>
+    <span class="n">PSTHwhisker</span> <span class="o">=</span> <span class="n">surroundPSTHLookup</span><span class="p">[</span><span class="n">surroundColumns</span><span class="p">[</span><span class="n">deflectedWhisker</span><span class="p">][</span><span class="n">column</span><span class="p">]]</span>
+    <span class="n">PSTHstr</span> <span class="o">=</span> <span class="n">cellType</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">PSTHwhisker</span>
+    <span class="n">PSTH</span> <span class="o">=</span> <span class="n">evokedTemplate</span><span class="p">[</span><span class="n">PSTHstr</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">PSTH</span></div>
+
+<div class="viewcode-block" id="load_cell_number_file"><a class="viewcode-back" href="../../modules/singlecell_input_mapper.evoked_network_param_from_template.load_cell_number_file.html#singlecell_input_mapper.evoked_network_param_from_template.load_cell_number_file">[docs]</a><span class="k">def</span> <span class="nf">load_cell_number_file</span><span class="p">(</span><span class="n">cellNumberFileName</span><span class="p">):</span>
+    <span class="n">cellTypeColumnNumbers</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="n">mdbopen</span><span class="p">(</span><span class="n">cellNumberFileName</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cellNumberFile</span><span class="p">:</span>
+        <span class="n">lineCnt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">cellNumberFile</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">lineCnt</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">lineCnt</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">splitLine</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">column</span> <span class="o">=</span> <span class="n">splitLine</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">cellType</span> <span class="o">=</span> <span class="n">splitLine</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">numberOfCells</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">splitLine</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">cellType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cellTypeColumnNumbers</span><span class="p">:</span>
+                <span class="n">cellTypeColumnNumbers</span><span class="p">[</span><span class="n">cellType</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">cellTypeColumnNumbers</span><span class="p">[</span><span class="n">cellType</span><span class="p">][</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">numberOfCells</span>
+    
+    <span class="k">return</span> <span class="n">cellTypeColumnNumbers</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="c1">#    if len(sys.argv) == 7:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="n">templateParamName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">cellNumberFileName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">synFileName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="c1">#        conFileName = sys.argv[4]</span>
+        <span class="n">conFileName</span> <span class="o">=</span> <span class="n">synFileName</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.con&#39;</span>
+        <span class="n">whisker</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">outFileName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+        <span class="n">create_network_parameter</span><span class="p">(</span><span class="n">templateParamName</span><span class="p">,</span> <span class="n">cellNumberFileName</span><span class="p">,</span> <span class="n">synFileName</span><span class="p">,</span> <span class="n">conFileName</span><span class="p">,</span> <span class="n">whisker</span><span class="p">,</span> <span class="n">outFileName</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+<span class="c1">#        print &#39;parameters: [templateParamName] [cellNumberFileName] [synFileName] [conFileName] [deflected whisker] [outFileName]&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;parameters: [ongoingTemplateParamName] [cellNumberFileName] [synFileName (absolute path)] [deflected whisker] [outFileName]&#39;</span><span class="p">)</span>
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
