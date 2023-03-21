@@ -6,14 +6,10 @@
 Welcome to In-Silico Framework (ISF)'s documentation!
 =====================================================
 
-.. toctree::
-   :maxdepth: 4
-   :caption: Contents:
-
-.. rubric:: Modules
-
 .. autosummary::
-   :toctree: generated
+   :toctree: _autosummary
+   :template: custom-module-template.rst
+   :recursive:
 
    modules/modules
 
