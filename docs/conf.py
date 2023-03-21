@@ -31,11 +31,11 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 autodoc_member_order = 'groupwise'  # Sort members by type
 autosummary_generate = True  # Turn on sphinx.ext.autosummary
 
-def setup(app):
-   app.add_css_file("./_static/default.css")
-
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+
+def setup(app):
+   app.add_css_file("default.css")  # relative to html_static_path defined above
