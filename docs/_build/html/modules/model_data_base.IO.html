@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>model_data_base.IO package &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>model_data_base.IO &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -14,10 +13,11 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="model_data_base.analyze" href="model_data_base.analyze.html" />
+    <link rel="prev" title="model_data_base" href="model_data_base.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -39,18 +39,37 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">model_data_base.IO package</a><ul>
-<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-model_data_base.IO.dask_wrappers">model_data_base.IO.dask_wrappers module</a></li>
-<li><a class="reference internal" href="#module-model_data_base.IO.roberts_formats">model_data_base.IO.roberts_formats module</a></li>
-<li><a class="reference internal" href="#module-model_data_base.IO">Module contents</a></li>
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="model_data_base.html">model_data_base</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">model_data_base.IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.analyze.html">model_data_base.analyze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.model_data_base.html">model_data_base.model_data_base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.settings.html">model_data_base.settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.utils.html">model_data_base.utils</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -65,7 +84,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">model_data_base.IO package</li>
+          <li class="breadcrumb-item"><a href="model_data_base.html">model_data_base</a></li>
+      <li class="breadcrumb-item active">model_data_base.IO</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/modules/model_data_base.IO.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -75,123 +95,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="model-data-base-io-package">
-<h1>model_data_base.IO package<a class="headerlink" href="#model-data-base-io-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html">model_data_base.IO.LoaderDumper package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.cell">model_data_base.IO.LoaderDumper.cell module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.dask_to_csv">model_data_base.IO.LoaderDumper.dask_to_csv module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.dask_to_msgpack">model_data_base.IO.LoaderDumper.dask_to_msgpack module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.genetic_algorithm_generation">model_data_base.IO.LoaderDumper.genetic_algorithm_generation module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.just_create_folder">model_data_base.IO.LoaderDumper.just_create_folder module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.just_create_mdb">model_data_base.IO.LoaderDumper.just_create_mdb module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.numpy_to_msgpack">model_data_base.IO.LoaderDumper.numpy_to_msgpack module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.numpy_to_npy">model_data_base.IO.LoaderDumper.numpy_to_npy module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.numpy_to_npz">model_data_base.IO.LoaderDumper.numpy_to_npz module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.pandas_to_msgpack">model_data_base.IO.LoaderDumper.pandas_to_msgpack module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.pandas_to_pickle">model_data_base.IO.LoaderDumper.pandas_to_pickle module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.parent_classes">model_data_base.IO.LoaderDumper.parent_classes module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.reduced_lda_model">model_data_base.IO.LoaderDumper.reduced_lda_model module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.settings">model_data_base.IO.LoaderDumper.settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.to_cloudpickle">model_data_base.IO.LoaderDumper.to_cloudpickle module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.to_msgpack">model_data_base.IO.LoaderDumper.to_msgpack module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.to_pickle">model_data_base.IO.LoaderDumper.to_pickle module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-model_data_base.IO.dask_wrappers">
-<span id="model-data-base-io-dask-wrappers-module"></span><h2>model_data_base.IO.dask_wrappers module<a class="headerlink" href="#module-model_data_base.IO.dask_wrappers" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt id="model_data_base.IO.dask_wrappers.concat_path_elements_to_filelist">
-<code class="sig-prename descclassname">model_data_base.IO.dask_wrappers.</code><code class="sig-name descname">concat_path_elements_to_filelist</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/dask_wrappers.html#concat_path_elements_to_filelist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.dask_wrappers.concat_path_elements_to_filelist" title="Permalink to this definition">¶</a></dt>
-<dd><p>e.g.
-args = [‘str’, [1,2,3], pd.Series([1,2,3])]
-&gt; [[‘str’, ‘str’, ‘str’], [1, 2, 3], [1, 2, 3]]</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.dask_wrappers.my_reader">
-<code class="sig-prename descclassname">model_data_base.IO.dask_wrappers.</code><code class="sig-name descname">my_reader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">fun</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/dask_wrappers.html#my_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.dask_wrappers.my_reader" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.dask_wrappers.read_csvs">
-<code class="sig-prename descclassname">model_data_base.IO.dask_wrappers.</code><code class="sig-name descname">read_csvs</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/dask_wrappers.html#read_csvs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.dask_wrappers.read_csvs" title="Permalink to this definition">¶</a></dt>
-<dd><p>The native dask read_csv function only supports globstrings.
-Use this function instead, if you want to provide a explicit filelist.</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO.roberts_formats">
-<span id="model-data-base-io-roberts-formats-module"></span><h2>model_data_base.IO.roberts_formats module<a class="headerlink" href="#module-model_data_base.IO.roberts_formats" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt id="model_data_base.IO.roberts_formats.read_InputMapper_summary">
-<code class="sig-prename descclassname">model_data_base.IO.roberts_formats.</code><code class="sig-name descname">read_InputMapper_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pathOrBuffer</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">'\t'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/roberts_formats.html#read_InputMapper_summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_InputMapper_summary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Expects the path to a summary csv file of the Single Cell Mapper,
-returns the tables as pandas tables</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.roberts_formats.read_csv_uneven_length">
-<code class="sig-prename descclassname">model_data_base.IO.roberts_formats.</code><code class="sig-name descname">read_csv_uneven_length</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">n_commas</span></em>, <em class="sig-param"><span class="n">header</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">skiprows</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/roberts_formats.html#read_csv_uneven_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_csv_uneven_length" title="Permalink to this definition">¶</a></dt>
-<dd><p>general function to read in a csv file with varying length data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> – path to file</p></li>
-<li><p><strong>n_commas</strong> – maximum length of fields</p></li>
-</ul>
-</dd>
-</dl>
-<dl>
-<dt>kwargs:</dt><dd><p>header: you can provide an alternative header
-skiprows: skip rows at the beginning of the file (e.g. one to skip the</p>
-<blockquote>
-<div><p>header if you specified one manually)</p>
-</div></blockquote>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format">
-<code class="sig-prename descclassname">model_data_base.IO.roberts_formats.</code><code class="sig-name descname">read_pandas_cell_activation_from_roberts_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">sim_trail_index</span><span class="o">=</span><span class="default_value">'no_sim_trail_assigned'</span></em>, <em class="sig-param"><span class="n">max_commas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">set_index</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/roberts_formats.html#read_pandas_cell_activation_from_roberts_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format" title="Permalink to this definition">¶</a></dt>
-<dd><p>reads cell activation file from simulation and converts it to pandas table</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format">
-<code class="sig-prename descclassname">model_data_base.IO.roberts_formats.</code><code class="sig-name descname">read_pandas_synapse_activation_from_roberts_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">sim_trail_index</span><span class="o">=</span><span class="default_value">'no_sim_trail_assigned'</span></em>, <em class="sig-param"><span class="n">max_commas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">set_index</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/roberts_formats.html#read_pandas_synapse_activation_from_roberts_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format" title="Permalink to this definition">¶</a></dt>
-<dd><p>reads synapse activation file from simulation and converts it to pandas table</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format">
-<code class="sig-prename descclassname">model_data_base.IO.roberts_formats.</code><code class="sig-name descname">write_pandas_synapse_activation_to_roberts_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">syn_activation</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/roberts_formats.html#write_pandas_synapse_activation_to_roberts_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format" title="Permalink to this definition">¶</a></dt>
-<dd><p>save pandas df in a format, which can be understood by the simulator</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-model_data_base.IO">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-model_data_base.IO" title="Permalink to this headline">¶</a></h2>
-</div>
+  <div class="section" id="model-data-base-io">
+<h1>model_data_base.IO<a class="headerlink" href="#model-data-base-io" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="model_data_base.html" class="btn btn-neutral float-left" title="model_data_base" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.analyze.html" class="btn btn-neutral float-right" title="model_data_base.analyze" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

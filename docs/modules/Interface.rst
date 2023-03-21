@@ -1,7 +1,32 @@
-Interface module
-================
+﻿Interface
+=========
 
 .. automodule:: Interface
-   :members:
-   :undoc-members:
-   :show-inheritance:
+  
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:                                          <-- add this line
+   
+      defaultdict_defaultdict
+      print_module_versions
+      svg2emf
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

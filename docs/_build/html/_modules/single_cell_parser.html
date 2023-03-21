@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -14,7 +13,6 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -39,8 +37,27 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/visualize.html">visualize</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -110,7 +127,7 @@
 <span class="c1">#------------------------------------------------------------------------------ </span>
 <span class="c1"># commonly used functions required for running single neuron simulations</span>
 <span class="c1">#------------------------------------------------------------------------------ </span>
-<div class="viewcode-block" id="build_parameters"><a class="viewcode-back" href="../modules/single_cell_parser.html#single_cell_parser.build_parameters">[docs]</a><span class="k">def</span> <span class="nf">build_parameters</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fast_but_security_risk</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="build_parameters"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/single_cell_parser.build_parameters.html#single_cell_parser.build_parameters">[docs]</a><span class="k">def</span> <span class="nf">build_parameters</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fast_but_security_risk</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">model_data_base.mdbopen</span> <span class="kn">import</span> <span class="n">resolve_mdb_path</span>
     <span class="n">filename</span> <span class="o">=</span> <span class="n">resolve_mdb_path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         
@@ -126,7 +143,7 @@
         
     
 
-<div class="viewcode-block" id="load_NMODL_parameters"><a class="viewcode-back" href="../modules/single_cell_parser.html#single_cell_parser.load_NMODL_parameters">[docs]</a><span class="k">def</span> <span class="nf">load_NMODL_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">):</span>
+<div class="viewcode-block" id="load_NMODL_parameters"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/single_cell_parser.load_NMODL_parameters.html#single_cell_parser.load_NMODL_parameters">[docs]</a><span class="k">def</span> <span class="nf">load_NMODL_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    automatically loads NMODL mechanisms from paths in parameter file</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -142,7 +159,7 @@
     <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="create_cell"><a class="viewcode-back" href="../modules/single_cell_parser.html#single_cell_parser.create_cell">[docs]</a><span class="k">def</span> <span class="nf">create_cell</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">scaleFunc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allPoints</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">setUpBiophysics</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>\
+<div class="viewcode-block" id="create_cell"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/single_cell_parser.create_cell.html#single_cell_parser.create_cell">[docs]</a><span class="k">def</span> <span class="nf">create_cell</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">scaleFunc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allPoints</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">setUpBiophysics</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>\
                 <span class="n">silent</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    default way of creating NEURON cell models;</span>
@@ -176,7 +193,7 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">neuronParam</span> <span class="o">=</span> <span class="n">parameters</span>
     <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">cell</span></div>
 
-<div class="viewcode-block" id="init_neuron_run"><a class="viewcode-back" href="../modules/single_cell_parser.html#single_cell_parser.init_neuron_run">[docs]</a><span class="k">def</span> <span class="nf">init_neuron_run</span><span class="p">(</span><span class="n">simparam</span><span class="p">,</span> <span class="n">vardt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">events</span><span class="p">):</span>
+<div class="viewcode-block" id="init_neuron_run"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/single_cell_parser.init_neuron_run.html#single_cell_parser.init_neuron_run">[docs]</a><span class="k">def</span> <span class="nf">init_neuron_run</span><span class="p">(</span><span class="n">simparam</span><span class="p">,</span> <span class="n">vardt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">events</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Default NEURON run with inital parameters</span>
 <span class="sd">    according to parameter file.</span>
@@ -219,7 +236,7 @@
 <span class="c1">#    neuron.h.finitialize(simparam.Vinit)</span>
     <span class="n">neuron</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">simparam</span><span class="o">.</span><span class="n">tStop</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="sec_distance_to_soma"><a class="viewcode-back" href="../modules/single_cell_parser.html#single_cell_parser.sec_distance_to_soma">[docs]</a><span class="k">def</span> <span class="nf">sec_distance_to_soma</span><span class="p">(</span><span class="n">currentSec</span><span class="p">):</span>
+<div class="viewcode-block" id="sec_distance_to_soma"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/single_cell_parser.sec_distance_to_soma.html#single_cell_parser.sec_distance_to_soma">[docs]</a><span class="k">def</span> <span class="nf">sec_distance_to_soma</span><span class="p">(</span><span class="n">currentSec</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;compute path length from sec(x=0) to soma&#39;&#39;&#39;</span>
     <span class="n">parentSec</span> <span class="o">=</span> <span class="n">currentSec</span><span class="o">.</span><span class="n">parent</span>
     <span class="n">dist</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -231,12 +248,12 @@
         <span class="n">parentLabel</span> <span class="o">=</span> <span class="n">parentSec</span><span class="o">.</span><span class="n">label</span>
     <span class="k">return</span> <span class="n">dist</span></div>
 
-<div class="viewcode-block" id="Event"><a class="viewcode-back" href="../modules/single_cell_parser.html#single_cell_parser.Event">[docs]</a><span class="k">class</span> <span class="nc">Event</span><span class="p">():</span>
+<div class="viewcode-block" id="Event"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/single_cell_parser.Event.html#single_cell_parser.Event">[docs]</a><span class="k">class</span> <span class="nc">Event</span><span class="p">():</span>
 <div class="viewcode-block" id="Event.__init__"><a class="viewcode-back" href="../modules/single_cell_parser.html#single_cell_parser.Event.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">func</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fih</span> <span class="o">=</span> <span class="n">neuron</span><span class="o">.</span><span class="n">h</span><span class="o">.</span><span class="n">FInitializeHandler</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">)</span></div></div>
            
-<div class="viewcode-block" id="spines_update_synapse_distribution_file"><a class="viewcode-back" href="../modules/single_cell_parser.html#single_cell_parser.spines_update_synapse_distribution_file">[docs]</a><span class="k">def</span> <span class="nf">spines_update_synapse_distribution_file</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">synapse_distribution_file</span><span class="p">,</span> <span class="n">new_synapse_distribution_file</span><span class="p">):</span>
+<div class="viewcode-block" id="spines_update_synapse_distribution_file"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/single_cell_parser.spines_update_synapse_distribution_file.html#single_cell_parser.spines_update_synapse_distribution_file">[docs]</a><span class="k">def</span> <span class="nf">spines_update_synapse_distribution_file</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">synapse_distribution_file</span><span class="p">,</span> <span class="n">new_synapse_distribution_file</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Update the .syn file to correctly point to spine heads as excitatory synapse locations. Spines must already exist, so call after create_cell, using the same .syn file that was used to create the cell. new_synfile will be created if it does not already exist.&#39;&#39;&#39;</span>
     <span class="c1">## update the .syn file</span>
     <span class="n">spine_heads</span> <span class="o">=</span> <span class="p">[]</span>
@@ -267,7 +284,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Success: .syn file updated&quot;</span><span class="p">)</span></div>
         
     
-<div class="viewcode-block" id="spines_update_network_paramfile"><a class="viewcode-back" href="../modules/single_cell_parser.html#single_cell_parser.spines_update_network_paramfile">[docs]</a><span class="k">def</span> <span class="nf">spines_update_network_paramfile</span><span class="p">(</span><span class="n">new_synapse_distribution_file</span><span class="p">,</span> <span class="n">network_paramfile</span><span class="p">,</span> <span class="n">new_network_paramfile</span><span class="p">):</span>
+<div class="viewcode-block" id="spines_update_network_paramfile"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/single_cell_parser.spines_update_network_paramfile.html#single_cell_parser.spines_update_network_paramfile">[docs]</a><span class="k">def</span> <span class="nf">spines_update_network_paramfile</span><span class="p">(</span><span class="n">new_synapse_distribution_file</span><span class="p">,</span> <span class="n">network_paramfile</span><span class="p">,</span> <span class="n">new_network_paramfile</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;update the network.param file to point to the new synapse distribution file&#39;&#39;&#39;</span>
     <span class="n">network_param</span> <span class="o">=</span> <span class="n">build_parameters</span><span class="p">(</span><span class="n">network_paramfile</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">network_param</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>

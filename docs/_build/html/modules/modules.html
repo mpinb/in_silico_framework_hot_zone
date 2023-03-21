@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>in_silico_framework &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -14,7 +13,6 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -39,8 +37,27 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -55,7 +72,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="breadcrumb-item active">in_silico_framework</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/modules/modules.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -65,359 +82,212 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="toctree-wrapper compound">
+  <div class="section" id="in-silico-framework">
+<h1>in_silico_framework<a class="headerlink" href="#in-silico-framework" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Interface.html">Interface module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.html#module-SLURM_scripts.clustercontrol">SLURM_scripts.clustercontrol module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.html#slurm-scripts-component-1-module">SLURM_scripts.component_1 module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.html#slurm-scripts-component-1-soma-module">SLURM_scripts.component_1_SOMA module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.html#slurm-scripts-component-1-special-module">SLURM_scripts.component_1_special module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.html#module-SLURM_scripts.component_isf">SLURM_scripts.component_isf module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.html#module-SLURM_scripts">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Interface.html">Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/Interface.defaultdict_defaultdict.html">Interface.defaultdict_defaultdict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/Interface.print_module_versions.html">Interface.print_module_versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/Interface.svg2emf.html">Interface.svg2emf</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="barrel_cortex.html#module-barrel_cortex">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/SLURM_scripts.check_all_done.html">SLURM_scripts.check_all_done</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/SLURM_scripts.convertible_to_int.html">SLURM_scripts.convertible_to_int</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/SLURM_scripts.save_delayeds_in_folder.html">SLURM_scripts.save_delayeds_in_folder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.clustercontrol.html">SLURM_scripts.clustercontrol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.component_isf.html">SLURM_scripts.component_isf</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.L5tt_parameter_setup">biophysics_fitting.L5tt_parameter_setup module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.combiner">biophysics_fitting.combiner module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.ephys">biophysics_fitting.ephys module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.evaluator">biophysics_fitting.evaluator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.hay_complete_default_setup">biophysics_fitting.hay_complete_default_setup module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.hay_complete_default_setup_python">biophysics_fitting.hay_complete_default_setup_python module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.hay_evaluation">biophysics_fitting.hay_evaluation module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.hay_evaluation_python">biophysics_fitting.hay_evaluation_python module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.hay_specification">biophysics_fitting.hay_specification module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.model_selection">biophysics_fitting.model_selection module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.optimizer">biophysics_fitting.optimizer module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.parameters">biophysics_fitting.parameters module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.setup_stim">biophysics_fitting.setup_stim module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.simulator">biophysics_fitting.simulator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting.utils">biophysics_fitting.utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html#module-biophysics_fitting">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.calculate_point_distance.html">barrel_cortex.calculate_point_distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.construct_pt3add.html">barrel_cortex.construct_pt3add</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.convertible_to_float.html">barrel_cortex.convertible_to_float</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.correct_hoc_depth.html">barrel_cortex.correct_hoc_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.create_3x3.html">barrel_cortex.create_3x3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.create_9x9.html">barrel_cortex.create_9x9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.create_SuC.html">barrel_cortex.create_SuC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.extract_pt3add.html">barrel_cortex.extract_pt3add</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.get_3x3_C2_soma_centroids.html">barrel_cortex.get_3x3_C2_soma_centroids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.get_EPSP_measurement.html">barrel_cortex.get_EPSP_measurement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.get_cell_object_from_hoc.html">barrel_cortex.get_cell_object_from_hoc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.get_distance_below_L45_barrel_surface.html">barrel_cortex.get_distance_below_L45_barrel_surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.get_distance_below_L45_surface.html">barrel_cortex.get_distance_below_L45_surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.get_distance_from_plane.html">barrel_cortex.get_distance_from_plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.get_soma_centroid.html">barrel_cortex.get_soma_centroid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.get_z_coordinate_necessary_to_put_point_in_specified_depth.html">barrel_cortex.get_z_coordinate_necessary_to_put_point_in_specified_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.move_hoc_absolute.html">barrel_cortex.move_hoc_absolute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.move_hoc_to_hoc.html">barrel_cortex.move_hoc_to_hoc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.move_hoc_xyz.html">barrel_cortex.move_hoc_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.norm.html">barrel_cortex.norm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.test_correct_hoc_depth.html">barrel_cortex.test_correct_hoc_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.test_get_distance_below_L45_barrel_surface.html">barrel_cortex.test_get_distance_below_L45_barrel_surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.test_get_distance_below_L45_surface.html">barrel_cortex.test_get_distance_below_L45_surface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.test_move_hoc_absolute.html">barrel_cortex.test_move_hoc_absolute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.test_move_hoc_to_hoc.html">barrel_cortex.test_move_hoc_to_hoc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.test_move_hoc_xyz.html">barrel_cortex.test_move_hoc_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.test_pt3add.html">barrel_cortex.test_pt3add</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.test_transform_point.html">barrel_cortex.test_transform_point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/barrel_cortex.transform_point.html">barrel_cortex.transform_point</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="compatibility.html">compatibility module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#module-getting_started">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.connected_to_dend_beyond.html">biophysics_fitting.connected_to_dend_beyond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_branching_depth.html">biophysics_fitting.get_branching_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_branching_depth_series.html">biophysics_fitting.get_branching_depth_series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_inner_sec_dist_list.html">biophysics_fitting.get_inner_sec_dist_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/biophysics_fitting.get_main_bifurcation_section.html">biophysics_fitting.get_main_bifurcation_section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.L5tt_parameter_setup.html">biophysics_fitting.L5tt_parameter_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.combiner.html">biophysics_fitting.combiner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.ephys.html">biophysics_fitting.ephys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.evaluator.html">biophysics_fitting.evaluator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_complete_default_setup.html">biophysics_fitting.hay_complete_default_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_complete_default_setup_python.html">biophysics_fitting.hay_complete_default_setup_python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_evaluation.html">biophysics_fitting.hay_evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_evaluation_python.html">biophysics_fitting.hay_evaluation_python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_specification.html">biophysics_fitting.hay_specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.model_selection.html">biophysics_fitting.model_selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.optimizer.html">biophysics_fitting.optimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.parameters.html">biophysics_fitting.parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.parameters.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.parameters.html#sub-packages">Sub-Packages</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="mechanisms.html#module-mechanisms">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.setup_stim.html">biophysics_fitting.setup_stim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.simulator.html">biophysics_fitting.simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.utils.html">biophysics_fitting.utils</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="model_data_base.html">model_data_base package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="model_data_base.IO.html">model_data_base.IO package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.html#subpackages">Subpackages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.html#module-model_data_base.IO.dask_wrappers">model_data_base.IO.dask_wrappers module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.html#module-model_data_base.IO.roberts_formats">model_data_base.IO.roberts_formats module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.html#module-model_data_base.IO">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">compatibility</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/compatibility.cloudpickle_fun.html">compatibility.cloudpickle_fun</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/compatibility.pickle_fun.html">compatibility.pickle_fun</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/compatibility.uncloudpickle_fun.html">compatibility.uncloudpickle_fun</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/compatibility.unpickle_fun.html">compatibility.unpickle_fun</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="model_data_base.analyze.html">model_data_base.analyze package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.analyze.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.analyze.html#module-model_data_base.analyze.LDA">model_data_base.analyze.LDA module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.analyze.html#module-model_data_base.analyze.analyze_input_mapper_result">model_data_base.analyze.analyze_input_mapper_result module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.analyze.html#module-model_data_base.analyze.burst_detection">model_data_base.analyze.burst_detection module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.analyze.html#module-model_data_base.analyze.spatial_binning">model_data_base.analyze.spatial_binning module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.analyze.html#module-model_data_base.analyze.spatiotemporal_binning">model_data_base.analyze.spatiotemporal_binning module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.analyze.html#module-model_data_base.analyze.spike_detection">model_data_base.analyze.spike_detection module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.analyze.html#module-model_data_base.analyze.temporal_binning">model_data_base.analyze.temporal_binning module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.analyze.html#model-data-base-analyze-voltage-binning-module">model_data_base.analyze.voltage_binning module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.analyze.html#module-model_data_base.analyze">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/getting_started.generate_param_files_with_valid_references.html">getting_started.generate_param_files_with_valid_references</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.html#module-model_data_base.mdb_initializers.PSPs">model_data_base.mdb_initializers.PSPs module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.html#module-model_data_base.mdb_initializers.load_simrun_general">model_data_base.mdb_initializers.load_simrun_general module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.html#module-model_data_base.mdb_initializers.prepare_ANN_batches">model_data_base.mdb_initializers.prepare_ANN_batches module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.html#module-model_data_base.mdb_initializers.somatic_summation_model">model_data_base.mdb_initializers.somatic_summation_model module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.html#module-model_data_base.mdb_initializers.synapse_activation_binning">model_data_base.mdb_initializers.synapse_activation_binning module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.html#module-model_data_base.mdb_initializers">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_data_base.html">model_data_base</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.html">model_data_base.IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.analyze.html">model_data_base.analyze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.model_data_base.html">model_data_base.model_data_base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.settings.html">model_data_base.settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.utils.html">model_data_base.utils</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.html#module-model_data_base.sqlite_backend.cloudsqlitedict">model_data_base.sqlite_backend.cloudsqlitedict module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.html#module-model_data_base.sqlite_backend.sqlite_backend">model_data_base.sqlite_backend.sqlite_backend module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.html#model-data-base-sqlite-backend-sqlite-remote-backend-client-module">model_data_base.sqlite_backend.sqlite_remote_backend_client module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.html#model-data-base-sqlite-backend-sqlite-remote-backend-server-module">model_data_base.sqlite_backend.sqlite_remote_backend_server module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.html#module-model_data_base.sqlite_backend.tuplecloudsqlitedict">model_data_base.sqlite_backend.tuplecloudsqlitedict module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.html#module-model_data_base.sqlite_backend">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nbrun.html">nbrun</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/nbrun.dict_to_code.html">nbrun.dict_to_code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/nbrun.run_notebook.html">nbrun.run_notebook</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.biophysical_models.html">project_specific_ipynb_code.biophysical_models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.hot_zone.html">project_specific_ipynb_code.hot_zone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.neurobiological_design_principles.html">project_specific_ipynb_code.neurobiological_design_principles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.reduced_model_output_paper.html">project_specific_ipynb_code.reduced_model_output_paper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.reproducing_L6paper.html">project_specific_ipynb_code.reproducing_L6paper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.smr_analyzer.html">project_specific_ipynb_code.smr_analyzer</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.html#module-model_data_base.distributed_lock">model_data_base.distributed_lock module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.html#module-model_data_base.mdbopen">model_data_base.mdbopen module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.html#module-model_data_base.model_data_base">model_data_base.model_data_base module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.html#module-model_data_base.model_data_base_register">model_data_base.model_data_base_register module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.html#module-model_data_base.settings">model_data_base.settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.html#module-model_data_base.utils">model_data_base.utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.html#module-model_data_base">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.crossing_over.html">simrun2.crossing_over</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.generate_synapse_activations.html">simrun2.generate_synapse_activations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.parameters_to_cell.html">simrun2.parameters_to_cell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.reduced_model.html">simrun2.reduced_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.rerun_mdb.html">simrun2.rerun_mdb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.run_existing_synapse_activations.html">simrun2.run_existing_synapse_activations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.run_new_simulations.html">simrun2.run_new_simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.seed_manager.html">simrun2.seed_manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.sim_trail_to_cell_object.html">simrun2.sim_trail_to_cell_object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.syn_strength_Lang_fig5_batch_run.html">simrun2.syn_strength_Lang_fig5_batch_run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.syn_strength_simrun.html">simrun2.syn_strength_simrun</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.test_BAC_firing.html">simrun2.test_BAC_firing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.test_passive_properties.html">simrun2.test_passive_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.test_sustained_firing.html">simrun2.test_sustained_firing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.utils.html">simrun2.utils</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="nbrun.html">nbrun module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="project_specific_ipynb_code.hot_zone.html">project_specific_ipynb_code.hot_zone package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="project_specific_ipynb_code.hot_zone.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="project_specific_ipynb_code.hot_zone.html#project-specific-ipynb-code-hot-zone-on-demand-simulations-module">project_specific_ipynb_code.hot_zone.on_demand_simulations module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="project_specific_ipynb_code.hot_zone.html#module-project_specific_ipynb_code.hot_zone.subcellular_compartmemnts">project_specific_ipynb_code.hot_zone.subcellular_compartmemnts module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="project_specific_ipynb_code.hot_zone.html#module-project_specific_ipynb_code.hot_zone">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.PSP_with_cell_modification.html">simrun3.PSP_with_cell_modification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.get_cell_with_network.html">simrun3.get_cell_with_network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.robust_dask_delayed_execution.html">simrun3.robust_dask_delayed_execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.somatic_summation_model.html">simrun3.somatic_summation_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.synaptic_strength_fitting.html">simrun3.synaptic_strength_fitting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.utils.html">simrun3.utils</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.currents.html">single_cell_analyzer.currents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.html">single_cell_analyzer.membrane_potential_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.synanalysis.html">single_cell_analyzer.synanalysis</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html#module-project_specific_ipynb_code.biophysical_models">project_specific_ipynb_code.biophysical_models module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html#module-project_specific_ipynb_code.neurobiological_design_principles">project_specific_ipynb_code.neurobiological_design_principles module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html#project-specific-ipynb-code-recurrent-reduced-model-networks-module">project_specific_ipynb_code.recurrent_reduced_model_networks module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html#module-project_specific_ipynb_code.reduced_model_output_paper">project_specific_ipynb_code.reduced_model_output_paper module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html#module-project_specific_ipynb_code.reproducing_L6paper">project_specific_ipynb_code.reproducing_L6paper module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html#module-project_specific_ipynb_code.smr_analyzer">project_specific_ipynb_code.smr_analyzer module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html#module-project_specific_ipynb_code">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.build_parameters.html">single_cell_parser.build_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.create_cell.html">single_cell_parser.create_cell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.init_neuron_run.html">single_cell_parser.init_neuron_run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.load_NMODL_parameters.html">single_cell_parser.load_NMODL_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.sec_distance_to_soma.html">single_cell_parser.sec_distance_to_soma</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.spines_update_network_paramfile.html">single_cell_parser.spines_update_network_paramfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.spines_update_synapse_distribution_file.html">single_cell_parser.spines_update_synapse_distribution_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/single_cell_parser.Event.html">single_cell_parser.Event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell.html">single_cell_parser.cell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html">single_cell_parser.cell_modify_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_parser.html">single_cell_parser.cell_parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network.html">single_cell_parser.network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_modify_functions.html">single_cell_parser.network_modify_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_param_modify_functions.html">single_cell_parser.network_param_modify_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_realizations.html">single_cell_parser.network_realizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.reader.html">single_cell_parser.reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.scalar_field.html">single_cell_parser.scalar_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.serialize_cell.html">single_cell_parser.serialize_cell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sim_control.html">single_cell_parser.sim_control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse.html">single_cell_parser.synapse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse_mapper.html">single_cell_parser.synapse_mapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.vpm_activation.html">single_cell_parser.vpm_activation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.writer.html">single_cell_parser.writer</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2 package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="simrun2.crossing_over.html">simrun2.crossing_over package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.crossing_over.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.crossing_over.html#module-simrun2.crossing_over.crossing_over_simple_interface">simrun2.crossing_over.crossing_over_simple_interface module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.crossing_over.html#module-simrun2.crossing_over.run_skip_time">simrun2.crossing_over.run_skip_time module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.crossing_over.html#module-simrun2.crossing_over.utils">simrun2.crossing_over.utils module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.crossing_over.html#module-simrun2.crossing_over">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.html">singlecell_input_mapper.evoked_PSTH_from_spike_times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.evoked_network_param_from_template.html">singlecell_input_mapper.evoked_network_param_from_template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.map_singlecell_inputs.html">singlecell_input_mapper.map_singlecell_inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.ongoing_network_param_from_template.html">singlecell_input_mapper.ongoing_network_param_from_template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html">singlecell_input_mapper.singlecell_input_mapper</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="simrun2.reduced_model.html">simrun2.reduced_model package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.html#module-simrun2.reduced_model.get_kernel">simrun2.reduced_model.get_kernel module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.html#module-simrun2.reduced_model.spiking_output">simrun2.reduced_model.spiking_output module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.html#module-simrun2.reduced_model.synapse_activation">simrun2.reduced_model.synapse_activation module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.html#module-simrun2.reduced_model">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spike_analysis.core.html">spike_analysis.core</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/tests.setup_current_injection_experiment.html">tests.setup_current_injection_experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.context.html">tests.context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.decorators.html">tests.decorators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.test_biophysics_fitting.html">tests.test_biophysics_fitting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.test_model_data_base.html">tests.test_model_data_base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.test_simrun2.html">tests.test_simrun2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.test_simrun3.html">tests.test_simrun3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.test_single_cell_parser.html">tests.test_single_cell_parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.test_spike_analysis.html">tests.test_spike_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.test_visualisation.html">tests.test_visualisation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.generate_synapse_activations">simrun2.generate_synapse_activations module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.parameters_to_cell">simrun2.parameters_to_cell module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.rerun_mdb">simrun2.rerun_mdb module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.run_existing_synapse_activations">simrun2.run_existing_synapse_activations module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.run_new_simulations">simrun2.run_new_simulations module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.seed_manager">simrun2.seed_manager module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.sim_trail_to_cell_object">simrun2.sim_trail_to_cell_object module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.syn_strength_Lang_fig5_batch_run">simrun2.syn_strength_Lang_fig5_batch_run module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.syn_strength_simrun">simrun2.syn_strength_simrun module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.test_BAC_firing">simrun2.test_BAC_firing module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.test_passive_properties">simrun2.test_passive_properties module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.test_sustained_firing">simrun2.test_sustained_firing module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2.utils">simrun2.utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun2.html#module-simrun2">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3 package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="simrun3.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun3.html#module-simrun3.PSP_with_cell_modification">simrun3.PSP_with_cell_modification module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun3.html#module-simrun3.get_cell_with_network">simrun3.get_cell_with_network module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun3.html#simrun3-modular-reduced-model-inference-module">simrun3.modular_reduced_model_inference module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun3.html#module-simrun3.robust_dask_delayed_execution">simrun3.robust_dask_delayed_execution module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun3.html#simrun3-simulation-flow-module">simrun3.simulation_flow module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun3.html#module-simrun3.somatic_summation_model">simrun3.somatic_summation_model module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun3.html#module-simrun3.synaptic_strength_fitting">simrun3.synaptic_strength_fitting module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun3.html#module-simrun3.utils">simrun3.utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simrun3.html#module-simrun3">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.html#module-single_cell_analyzer.currents">single_cell_analyzer.currents module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.html#module-single_cell_analyzer.membrane_potential_analysis">single_cell_analyzer.membrane_potential_analysis module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.html#module-single_cell_analyzer.synanalysis">single_cell_analyzer.synanalysis module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.html#module-single_cell_analyzer">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="single_cell_parser.html">single_cell_parser package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html">single_cell_parser.cell_modify_functions package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html#module-single_cell_parser.cell_modify_functions.BAC_injection">single_cell_parser.cell_modify_functions.BAC_injection module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html#module-single_cell_parser.cell_modify_functions.apical_current_injection">single_cell_parser.cell_modify_functions.apical_current_injection module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html#module-single_cell_parser.cell_modify_functions.apical_epsp_injection">single_cell_parser.cell_modify_functions.apical_epsp_injection module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html#module-single_cell_parser.cell_modify_functions.scale_apical">single_cell_parser.cell_modify_functions.scale_apical module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html#module-single_cell_parser.cell_modify_functions.scale_apical_morph_86">single_cell_parser.cell_modify_functions.scale_apical_morph_86 module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html#module-single_cell_parser.cell_modify_functions.soma_current_injection">single_cell_parser.cell_modify_functions.soma_current_injection module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html#module-single_cell_parser.cell_modify_functions.synaptic_input">single_cell_parser.cell_modify_functions.synaptic_input module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html#module-single_cell_parser.cell_modify_functions">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.network_modify_functions.html">single_cell_parser.network_modify_functions package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.network_modify_functions.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.network_modify_functions.html#module-single_cell_parser.network_modify_functions.silence_synapses_by_somadist">single_cell_parser.network_modify_functions.silence_synapses_by_somadist module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.network_modify_functions.html#module-single_cell_parser.network_modify_functions.silence_synapses_by_somadist_and_spike_source">single_cell_parser.network_modify_functions.silence_synapses_by_somadist_and_spike_source module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.network_modify_functions.html#module-single_cell_parser.network_modify_functions">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.network_param_modify_functions.html">single_cell_parser.network_param_modify_functions package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.network_param_modify_functions.html#module-single_cell_parser.network_param_modify_functions">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="visualize.activity_analysis.html">visualize.activity_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualize.cell_morphology_visualizer.html">visualize.cell_morphology_visualizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualize.helper_methods.html">visualize.helper_methods</a></li>
 </ul>
 </li>
 </ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.cell">single_cell_parser.cell module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.cell_parser">single_cell_parser.cell_parser module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.network">single_cell_parser.network module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.network_realizations">single_cell_parser.network_realizations module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.reader">single_cell_parser.reader module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.scalar_field">single_cell_parser.scalar_field module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.serialize_cell">single_cell_parser.serialize_cell module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.sim_control">single_cell_parser.sim_control module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.synapse">single_cell_parser.synapse module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.synapse_mapper">single_cell_parser.synapse_mapper module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.vpm_activation">single_cell_parser.vpm_activation module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser.writer">single_cell_parser.writer module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html#module-single_cell_parser">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html">singlecell_input_mapper.singlecell_input_mapper package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html#module-singlecell_input_mapper.singlecell_input_mapper.cell">singlecell_input_mapper.singlecell_input_mapper.cell module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html#module-singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet">singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html#module-singlecell_input_mapper.singlecell_input_mapper.network_embedding">singlecell_input_mapper.singlecell_input_mapper.network_embedding module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html#module-singlecell_input_mapper.singlecell_input_mapper.reader">singlecell_input_mapper.singlecell_input_mapper.reader module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html#module-singlecell_input_mapper.singlecell_input_mapper.scalar_field">singlecell_input_mapper.singlecell_input_mapper.scalar_field module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html#module-singlecell_input_mapper.singlecell_input_mapper.synapse_mapper">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html#module-singlecell_input_mapper.singlecell_input_mapper.writer">singlecell_input_mapper.singlecell_input_mapper.writer module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html#module-singlecell_input_mapper.singlecell_input_mapper">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.html#module-singlecell_input_mapper.evoked_PSTH_from_spike_times">singlecell_input_mapper.evoked_PSTH_from_spike_times module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.html#module-singlecell_input_mapper.evoked_network_param_from_template">singlecell_input_mapper.evoked_network_param_from_template module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.html#module-singlecell_input_mapper.map_singlecell_inputs">singlecell_input_mapper.map_singlecell_inputs module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.html#module-singlecell_input_mapper.ongoing_network_param_from_template">singlecell_input_mapper.ongoing_network_param_from_template module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.html#module-singlecell_input_mapper">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="spike_analysis.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="spike_analysis.html#module-spike_analysis.core">spike_analysis.core module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="spike_analysis.html#module-spike_analysis">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html">tests package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tests.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tests.test_biophysics_fitting.html">tests.test_biophysics_fitting package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_biophysics_fitting.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_biophysics_fitting.html#module-tests.test_biophysics_fitting.context">tests.test_biophysics_fitting.context module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_biophysics_fitting.html#module-tests.test_biophysics_fitting.decorators">tests.test_biophysics_fitting.decorators module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_biophysics_fitting.html#module-tests.test_biophysics_fitting.optimizer_test">tests.test_biophysics_fitting.optimizer_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_biophysics_fitting.html#module-tests.test_biophysics_fitting.parameters_test">tests.test_biophysics_fitting.parameters_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_biophysics_fitting.html#module-tests.test_biophysics_fitting">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tests.test_model_data_base.html">tests.test_model_data_base package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_model_data_base.html#subpackages">Subpackages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_model_data_base.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_model_data_base.html#tests-test-model-data-base-context-module">tests.test_model_data_base.context module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_model_data_base.html#module-tests.test_model_data_base.dask_test">tests.test_model_data_base.dask_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_model_data_base.html#module-tests.test_model_data_base.decorators">tests.test_model_data_base.decorators module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_model_data_base.html#tests-test-model-data-base-model-data-base-register-test-module">tests.test_model_data_base.model_data_base_register_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_model_data_base.html#tests-test-model-data-base-model-data-base-test-module">tests.test_model_data_base.model_data_base_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_model_data_base.html#tests-test-model-data-base-utils-test-module">tests.test_model_data_base.utils_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_model_data_base.html#module-tests.test_model_data_base">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tests.test_simrun2.html">tests.test_simrun2 package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun2.html#subpackages">Subpackages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun2.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun2.html#module-tests.test_simrun2.context">tests.test_simrun2.context module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun2.html#module-tests.test_simrun2.decorators">tests.test_simrun2.decorators module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun2.html#module-tests.test_simrun2.simrun_test">tests.test_simrun2.simrun_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun2.html#module-tests.test_simrun2">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tests.test_simrun3.html">tests.test_simrun3 package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun3.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun3.html#module-tests.test_simrun3.context">tests.test_simrun3.context module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun3.html#module-tests.test_simrun3.decorators">tests.test_simrun3.decorators module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun3.html#module-tests.test_simrun3.robust_dask_delayed_execution">tests.test_simrun3.robust_dask_delayed_execution module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun3.html#module-tests.test_simrun3.somatic_summation_model_test">tests.test_simrun3.somatic_summation_model_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun3.html#module-tests.test_simrun3.synaptic_strength_fitting_test">tests.test_simrun3.synaptic_strength_fitting_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun3.html#module-tests.test_simrun3">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tests.test_single_cell_parser.html">tests.test_single_cell_parser package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_single_cell_parser.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_single_cell_parser.html#module-tests.test_single_cell_parser.context">tests.test_single_cell_parser.context module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_single_cell_parser.html#module-tests.test_single_cell_parser.decorators">tests.test_single_cell_parser.decorators module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_single_cell_parser.html#module-tests.test_single_cell_parser.init_test">tests.test_single_cell_parser.init_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_single_cell_parser.html#module-tests.test_single_cell_parser.reader_test">tests.test_single_cell_parser.reader_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_single_cell_parser.html#tests-test-single-cell-parser-serialize-cell-test-module">tests.test_single_cell_parser.serialize_cell_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_single_cell_parser.html#module-tests.test_single_cell_parser">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tests.test_spike_analysis.html">tests.test_spike_analysis package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_spike_analysis.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_spike_analysis.html#module-tests.test_spike_analysis.context">tests.test_spike_analysis.context module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_spike_analysis.html#module-tests.test_spike_analysis.core_test">tests.test_spike_analysis.core_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_spike_analysis.html#module-tests.test_spike_analysis">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tests.test_visualisation.html">tests.test_visualisation package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_visualisation.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_visualisation.html#module-tests.test_visualisation.context">tests.test_visualisation.context module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_visualisation.html#module-tests.test_visualisation.decorators">tests.test_visualisation.decorators module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_visualisation.html#module-tests.test_visualisation.single_cell_visualizer_test">tests.test_visualisation.single_cell_visualizer_test module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_visualisation.html#module-tests.test_visualisation">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="tests.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.context">tests.context module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.decorators">tests.decorators module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tests.html#tests-run-tests-module">tests.run_tests module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="visualize.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="visualize.activity_analysis.html">visualize.activity_analysis package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="visualize.activity_analysis.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="visualize.activity_analysis.html#module-visualize.activity_analysis.array_slices_interactive">visualize.activity_analysis.array_slices_interactive module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="visualize.activity_analysis.html#module-visualize.activity_analysis.average_std">visualize.activity_analysis.average_std module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="visualize.activity_analysis.html#module-visualize.activity_analysis.cell_to_ipython_animation">visualize.activity_analysis.cell_to_ipython_animation module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="visualize.activity_analysis.html#module-visualize.activity_analysis.histogram">visualize.activity_analysis.histogram module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="visualize.activity_analysis.html#module-visualize.activity_analysis.manylines">visualize.activity_analysis.manylines module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="visualize.activity_analysis.html#module-visualize.activity_analysis.rasterplot">visualize.activity_analysis.rasterplot module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="visualize.activity_analysis.html#module-visualize.activity_analysis.spatiotemporal_heatmap">visualize.activity_analysis.spatiotemporal_heatmap module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="visualize.activity_analysis.html#module-visualize.activity_analysis">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="visualize.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualize.html#module-visualize.cell_morphology_visualizer">visualize.cell_morphology_visualizer module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualize.html#module-visualize.helper_methods">visualize.helper_methods module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualize.html#module-visualize">Module contents</a></li>
-</ul>
-</li>
-</ul>
+</div>
 </div>
 
 

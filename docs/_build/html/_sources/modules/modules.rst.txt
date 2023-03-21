@@ -1,3 +1,6 @@
+in_silico_framework
+===================
+
 .. toctree::
    :maxdepth: 4
 

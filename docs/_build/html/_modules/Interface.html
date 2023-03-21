@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Interface &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -14,7 +13,6 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -39,8 +37,27 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/visualize.html">visualize</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -267,13 +284,13 @@
 
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 
-<div class="viewcode-block" id="svg2emf"><a class="viewcode-back" href="../modules/Interface.html#Interface.svg2emf">[docs]</a><span class="k">def</span> <span class="nf">svg2emf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">path_to_inkscape</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/inkscape&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="svg2emf"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/Interface.svg2emf.html#Interface.svg2emf">[docs]</a><span class="k">def</span> <span class="nf">svg2emf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">path_to_inkscape</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/inkscape&quot;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;converts svg to emf, which can be imported in word using inkscape. &#39;&#39;&#39;</span>
     <span class="n">command</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;env -i&#39;</span><span class="p">,</span> <span class="n">path_to_inkscape</span><span class="p">,</span> <span class="s2">&quot;--file&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span>  <span class="s2">&quot;--export-emf&quot;</span><span class="p">,</span>  <span class="n">filename</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;.emf&quot;</span><span class="p">])</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">command</span><span class="p">))</span></div>
 
 <span class="kn">from</span> <span class="nn">model_data_base._module_versions</span> <span class="kn">import</span> <span class="n">version_cached</span>
-<div class="viewcode-block" id="print_module_versions"><a class="viewcode-back" href="../modules/Interface.html#Interface.print_module_versions">[docs]</a><span class="k">def</span> <span class="nf">print_module_versions</span><span class="p">():</span>
+<div class="viewcode-block" id="print_module_versions"><a class="viewcode-back" href="../modules/%3C--%20add%20this%20line/Interface.print_module_versions.html#Interface.print_module_versions">[docs]</a><span class="k">def</span> <span class="nf">print_module_versions</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loaded modules with __version__ attribute are:&quot;</span><span class="p">)</span>
     <span class="n">module_versions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">version_cached</span><span class="o">.</span><span class="n">get_module_versions</span><span class="p">()[</span><span class="n">x</span><span class="p">])</span>\
                        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">version_cached</span><span class="o">.</span><span class="n">get_module_versions</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span>

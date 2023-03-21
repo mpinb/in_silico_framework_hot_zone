@@ -1,10 +1,23 @@
-mechanisms package
-==================
-
-Module contents
----------------
+﻿mechanisms
+==========
 
 .. automodule:: mechanisms
-   :members:
-   :undoc-members:
-   :show-inheritance:
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

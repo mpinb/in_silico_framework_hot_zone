@@ -22,8 +22,6 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
-    'sphinx.ext.doctest',
-    'sphinx.ext.inheritance_diagram',
     'sphinx.ext.napoleon'  # for NumPy and Google Doc style docstrings
     ]
 

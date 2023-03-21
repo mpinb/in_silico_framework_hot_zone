@@ -1,37 +1,34 @@
-single\_cell\_analyzer package
-==============================
-
-Submodules
-----------
-
-single\_cell\_analyzer.currents module
---------------------------------------
-
-.. automodule:: single_cell_analyzer.currents
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-single\_cell\_analyzer.membrane\_potential\_analysis module
------------------------------------------------------------
-
-.. automodule:: single_cell_analyzer.membrane_potential_analysis
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-single\_cell\_analyzer.synanalysis module
------------------------------------------
-
-.. automodule:: single_cell_analyzer.synanalysis
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
+﻿single\_cell\_analyzer
+======================
 
 .. automodule:: single_cell_analyzer
-   :members:
-   :undoc-members:
-   :show-inheritance:
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 <-- add this line
+   :recursive:
+
+   single_cell_analyzer.currents
+   single_cell_analyzer.membrane_potential_analysis
+   single_cell_analyzer.synanalysis
+

@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nbrun module &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>nbrun &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -14,10 +13,11 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="nbrun.dict_to_code" href="%3C--%20add%20this%20line/nbrun.dict_to_code.html" />
+    <link rel="prev" title="model_data_base.utils" href="model_data_base.utils.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -39,11 +39,31 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">nbrun module</a></li>
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">nbrun</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/nbrun.dict_to_code.html">nbrun.dict_to_code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="%3C--%20add%20this%20line/nbrun.run_notebook.html">nbrun.run_notebook</a></li>
 </ul>
-</div>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -58,7 +78,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">nbrun module</li>
+      <li class="breadcrumb-item active">nbrun</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/modules/nbrun.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -69,75 +89,36 @@
            <div itemprop="articleBody">
              
   <div class="section" id="module-nbrun">
-<span id="nbrun-module"></span><h1>nbrun module<a class="headerlink" href="#module-nbrun" title="Permalink to this headline">¶</a></h1>
+<span id="nbrun"></span><h1>nbrun<a class="headerlink" href="#module-nbrun" title="Permalink to this headline">¶</a></h1>
 <p>nbrun - Run an Jupyter/IPython notebook, optionally passing arguments.
 USAGE
 —–
 Copy this file in the folder containing the master notebook used to
 execute the other notebooks.</p>
-<dl class="py function">
-<dt id="nbrun.dict_to_code">
-<code class="sig-prename descclassname">nbrun.</code><code class="sig-name descname">dict_to_code</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mapping</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbrun.html#dict_to_code"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nbrun.dict_to_code" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert input dict <cite>mapping</cite> to a string containing python code.
-Each key is the name of a variable and each value is
-the variable content. Each variable assignment is separated by
-a newline.
-Keys must be strings, and cannot start with a number (i.e. must be
-valid python identifiers). Values must be objects with a string
-representation (the result of repr(obj)) which is valid python code for
-re-creating the object.
-For examples, numbers, strings or list/tuple/dict
-of numbers and strings are allowed.
-:returns: A string containing the python code.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="nbrun.run_notebook">
-<code class="sig-prename descclassname">nbrun.</code><code class="sig-name descname">run_notebook</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">notebook_name</span></em>, <em class="sig-param"><span class="n">nb_suffix</span><span class="o">=</span><span class="default_value">'-out'</span></em>, <em class="sig-param"><span class="n">out_path</span><span class="o">=</span><span class="default_value">'.'</span></em>, <em class="sig-param"><span class="n">nb_kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">insert_pos</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">3600</span></em>, <em class="sig-param"><span class="n">execute_kwargs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbrun.html#run_notebook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nbrun.run_notebook" title="Permalink to this definition">¶</a></dt>
-<dd><p>Runs a notebook and saves the output in a new notebook.
-Executes a notebook, optionally passing “arguments” in a way roughly
-similar to passing arguments to a function.
-Notebook arguments are passed in a dictionary (<cite>nb_kwargs</cite>) which is
-converted to a string containing python code, then inserted in the notebook
-as a code cell. The code contains only assignments of variables which
-can be used to control the execution of a suitably written notebook. When
-calling a notebook, you need to know which arguments (variables) to pass.
-Differently from functions, no check on the input arguments is performed.
-The “notebook signature” is only informally declared in a conventional
-markdown cell at the beginning of the notebook.
-:param notebook_name: name of the notebook to be executed.
-:type notebook_name: string
-:param nb_suffix: suffix to append to the file name of the executed</p>
-<blockquote>
-<div><p>notebook.</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>nb_kwargs</strong> (<em>dict</em><em> or </em><em>None</em>) – If not None, this dict is converted to a
-string of python assignments with keys representing variables
-names and values variables content. This string is inserted as
-code-cell in the notebook to be executed.</p></li>
-<li><p><strong>insert_pos</strong> (<em>int</em>) – position of insertion of the code-cell containing
-the input arguments. Default is 1 (i.e. second cell). With this
-default, the input notebook can define, in the first cell, default
-values of input arguments (used when the notebook is executed
-with no arguments or through the Notebook GUI).</p></li>
-<li><p><strong>timeout</strong> (<em>int</em>) – timeout in seconds after which the execution is aborted.</p></li>
-<li><p><strong>execute_kwargs</strong> (<em>dict</em>) – additional arguments passed to
-<cite>ExecutePreprocessor</cite>.</p></li>
-<li><p><strong>out_path</strong> (<em>string</em>) – folder where to save the output notebook.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="%3C--%20add%20this%20line/nbrun.dict_to_code.html#nbrun.dict_to_code" title="nbrun.dict_to_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict_to_code</span></code></a>(mapping)</p></td>
+<td><p>Convert input dict <cite>mapping</cite> to a string containing python code.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="%3C--%20add%20this%20line/nbrun.run_notebook.html#nbrun.run_notebook" title="nbrun.run_notebook"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_notebook</span></code></a>(notebook_name[, nb_suffix, …])</p></td>
+<td><p>Runs a notebook and saves the output in a new notebook. Executes a notebook, optionally passing “arguments” in a way roughly similar to passing arguments to a function. Notebook arguments are passed in a dictionary (<cite>nb_kwargs</cite>) which is converted to a string containing python code, then inserted in the notebook as a code cell. The code contains only assignments of variables which can be used to control the execution of a suitably written notebook. When calling a notebook, you need to know which arguments (variables) to pass. Differently from functions, no check on the input arguments is performed. The “notebook signature” is only informally declared in a conventional markdown cell at the beginning of the notebook. :param notebook_name: name of the notebook to be executed. :type notebook_name: string :param nb_suffix: suffix to append to the file name of the executed                   notebook. :type nb_suffix: string :param nb_kwargs: If not None, this dict is converted to a                   string of python assignments with keys representing variables                   names and values variables content. This string is inserted as                   code-cell in the notebook to be executed. :type nb_kwargs: dict or None :param insert_pos: position of insertion of the code-cell containing                    the input arguments. Default is 1 (i.e. second cell). With this                    default, the input notebook can define, in the first cell, default                    values of input arguments (used when the notebook is executed                    with no arguments or through the Notebook GUI). :type insert_pos: int :param timeout: timeout in seconds after which the execution is aborted. :type timeout: int :param execute_kwargs: additional arguments passed to                        <cite>ExecutePreprocessor</cite>. :type execute_kwargs: dict :param out_path: folder where to save the output notebook. :type out_path: string.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="model_data_base.utils.html" class="btn btn-neutral float-left" title="model_data_base.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="%3C--%20add%20this%20line/nbrun.dict_to_code.html" class="btn btn-neutral float-right" title="nbrun.dict_to_code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

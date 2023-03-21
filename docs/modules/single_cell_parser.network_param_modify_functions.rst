@@ -1,10 +1,6 @@
-single\_cell\_parser.network\_param\_modify\_functions package
-==============================================================
+single\_cell\_parser.network\_param\_modify\_functions
+======================================================
 
-Module contents
----------------
+.. currentmodule:: single_cell_parser
 
-.. automodule:: single_cell_parser.network_param_modify_functions
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. automodule:: network_param_modify_functions

@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>single_cell_analyzer package &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>single_cell_analyzer &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -14,10 +13,11 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="single_cell_analyzer.currents" href="single_cell_analyzer.currents.html" />
+    <link rel="prev" title="simrun3.utils" href="simrun3.utils.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -39,18 +39,32 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">single_cell_analyzer package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-single_cell_analyzer.currents">single_cell_analyzer.currents module</a></li>
-<li><a class="reference internal" href="#module-single_cell_analyzer.membrane_potential_analysis">single_cell_analyzer.membrane_potential_analysis module</a></li>
-<li><a class="reference internal" href="#module-single_cell_analyzer.synanalysis">single_cell_analyzer.synanalysis module</a></li>
-<li><a class="reference internal" href="#module-single_cell_analyzer">Module contents</a></li>
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">single_cell_analyzer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.currents.html">single_cell_analyzer.currents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.html">single_cell_analyzer.membrane_potential_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.synanalysis.html">single_cell_analyzer.synanalysis</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -65,7 +79,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">single_cell_analyzer package</li>
+      <li class="breadcrumb-item active">single_cell_analyzer</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/modules/single_cell_analyzer.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -75,293 +89,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="single-cell-analyzer-package">
-<h1>single_cell_analyzer package<a class="headerlink" href="#single-cell-analyzer-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-single_cell_analyzer.currents">
-<span id="single-cell-analyzer-currents-module"></span><h2>single_cell_analyzer.currents module<a class="headerlink" href="#module-single_cell_analyzer.currents" title="Permalink to this headline">¶</a></h2>
-<p>Created on Nov 6, 2012</p>
-<p>&#64;author: regger</p>
-<dl class="py function">
-<dt id="single_cell_analyzer.currents.analyze_voltage_trace">
-<code class="sig-prename descclassname">single_cell_analyzer.currents.</code><code class="sig-name descname">analyze_voltage_trace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vTrace</span></em>, <em class="sig-param"><span class="n">tTrace</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/currents.html#analyze_voltage_trace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.currents.analyze_voltage_trace" title="Permalink to this definition">¶</a></dt>
-<dd><p>takes neuron Vectors and finds time and
-amplitude of max depolarization</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.currents.compute_soma_currents">
-<code class="sig-prename descclassname">single_cell_analyzer.currents.</code><code class="sig-name descname">compute_soma_currents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">currents</span></em>, <em class="sig-param"><span class="n">tVec</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/currents.html#compute_soma_currents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.currents.compute_soma_currents" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO: this needs to be automated… i.e., should be such that
-section, or better, segment is passed as an argument and all
-ionic/axial/capacitive currents are automatically calculated
-=&gt; add automatic recording of all ionic (and synaptic?) currents
-and conductances to PySection/Synapse classes</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-single_cell_analyzer.membrane_potential_analysis">
-<span id="single-cell-analyzer-membrane-potential-analysis-module"></span><h2>single_cell_analyzer.membrane_potential_analysis module<a class="headerlink" href="#module-single_cell_analyzer.membrane_potential_analysis" title="Permalink to this headline">¶</a></h2>
-<p>Created on Nov 3, 2012</p>
-<p>&#64;author: regger</p>
-<dl class="py class">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSite">
-<em class="property">class </em><code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">RecordingSite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">secID</span></em>, <em class="sig-param"><span class="n">segID</span></em>, <em class="sig-param"><span class="n">label</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSite" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>light-weight container holding information
-about recording site:
-section and segment ID of attached cell,
-identifier label, and list of recorded voltage vectors</p>
-<dl class="py method">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSite.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">secID</span></em>, <em class="sig-param"><span class="n">segID</span></em>, <em class="sig-param"><span class="n">label</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSite.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSite.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSite.label">
-<code class="sig-name descname">label</code><em class="property"> = None</em><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSite.label" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSite.secID">
-<code class="sig-name descname">secID</code><em class="property"> = None</em><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSite.secID" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSite.segID">
-<code class="sig-name descname">segID</code><em class="property"> = None</em><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSite.segID" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSite.vRecordings">
-<code class="sig-name descname">vRecordings</code><em class="property"> = None</em><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSite.vRecordings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager">
-<em class="property">class </em><code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">RecordingSiteManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">landmarkFilename</span></em>, <em class="sig-param"><span class="n">cell</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSiteManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>simple class providing methods to handle recording
-sites defined by Amira LandmarkSet</p>
-<dl class="py method">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">landmarkFilename</span></em>, <em class="sig-param"><span class="n">cell</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSiteManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site">
-<code class="sig-name descname">set_up_recording_site</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">location</span></em>, <em class="sig-param"><span class="n">ID</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSiteManager.set_up_recording_site"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site" title="Permalink to this definition">¶</a></dt>
-<dd><p>determine section/segment on cell corresponding
-to recording site location and create new
-RecordingSite</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings">
-<code class="sig-name descname">update_recordings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSiteManager.update_recordings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings" title="Permalink to this definition">¶</a></dt>
-<dd><p>copy recorded voltages at recording sites</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.cell">
-<code class="sig-name descname">cell</code><em class="property"> = None</em><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.cell" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.recordingSites">
-<code class="sig-name descname">recordingSites</code><em class="property"> = None</em><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.recordingSites" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="single_cell_analyzer.membrane_potential_analysis.SpikeInit">
-<em class="property">class </em><code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">SpikeInit</code><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Provides methods for analysis of spike initiation
-in in vivo/ in vitro simulations. Can be used to
-obtain features of spike shape, adaptation etc…</p>
-<dl class="py method">
-<dt id="single_cell_analyzer.membrane_potential_analysis.SpikeInit.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike">
-<em class="property">static </em><code class="sig-name descname">analyze_single_spike</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">tVec</span></em>, <em class="sig-param"><span class="n">thresh</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit.analyze_single_spike"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike" title="Permalink to this definition">¶</a></dt>
-<dd><p>for comparison with in vitro spike shape:
-compute spike height, FWHM (duration), AHP</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_spike_train">
-<em class="property">static </em><code class="sig-name descname">analyze_spike_train</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit.analyze_spike_train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_spike_train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state">
-<em class="property">static </em><code class="sig-name descname">vm_steady_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">tVec</span></em>, <em class="sig-param"><span class="n">tStim</span></em>, <em class="sig-param"><span class="n">dtStim</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit.vm_steady_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>computes “steady-state” subthreshold voltage from
-voltage trace during stimulation time window
-[tStim, tStim+dtStim]
-this can be used to define voltage spike threshold
-at current intensities just below AP initiation</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times">
-<code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">PSTH_from_spike_times</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spikeTimeVectors</span></em>, <em class="sig-param"><span class="n">binSize</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">tBegin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tEnd</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">aligned</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#PSTH_from_spike_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate PSTH from vectors of spike times
-with optional bin size and time window [tBegin, tEnd].
-If aligned=True, then the bins are aligned to
-integer multiples of the bin size.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.membrane_potential_analysis.compute_mean_psp_amplitude">
-<code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">compute_mean_psp_amplitude</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vTraces</span></em>, <em class="sig-param"><span class="n">tStim</span></em>, <em class="sig-param"><span class="n">dt</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#compute_mean_psp_amplitude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.compute_mean_psp_amplitude" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude">
-<code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">compute_uPSP_amplitude</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">tSyn</span></em>, <em class="sig-param"><span class="n">isEPSP</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#compute_uPSP_amplitude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude" title="Permalink to this definition">¶</a></dt>
-<dd><p>simple method for determining amplitude of
-unitary PSP starting at time tSyn:
-Determine baseline as median Vm during 10ms
-preceding the PSP
-In case of IPSPs set isEPSP=False</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.membrane_potential_analysis.compute_vm_histogram">
-<code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">compute_vm_histogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vTraces</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#compute_vm_histogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.compute_vm_histogram" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.membrane_potential_analysis.compute_vm_std_windows">
-<code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">compute_vm_std_windows</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vStd</span></em>, <em class="sig-param"><span class="n">tStim</span></em>, <em class="sig-param"><span class="n">dt</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#compute_vm_std_windows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.compute_vm_std_windows" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.membrane_potential_analysis.simple_spike_detection">
-<code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">simple_spike_detection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">tBegin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tEnd</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'regular'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#simple_spike_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.simple_spike_detection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simple spike detection method. Identify
-spike times within optional window [tBegin, tEnd]
-by determining threshold crossing times from below
-supported modes:
-regular: absolute threshold crossing
-differential: threshold crossing of dv/dt</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.membrane_potential_analysis.test_spike_detection_respects_threshold">
-<code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">test_spike_detection_respects_threshold</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#test_spike_detection_respects_threshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.test_spike_detection_respects_threshold" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.membrane_potential_analysis.vm_mean">
-<code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">vm_mean</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vVec</span></em>, <em class="sig-param"><span class="n">tVec</span></em>, <em class="sig-param"><span class="n">tStim</span></em>, <em class="sig-param"><span class="n">dtStim</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#vm_mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.vm_mean" title="Permalink to this definition">¶</a></dt>
-<dd><p>computes mean subthreshold voltage from
-voltage trace during stimulation time window
-[tStim, tStim+dtStim]</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.membrane_potential_analysis.vm_std">
-<code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">vm_std</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vVec</span></em>, <em class="sig-param"><span class="n">tVec</span></em>, <em class="sig-param"><span class="n">tStim</span></em>, <em class="sig-param"><span class="n">dtStim</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#vm_std"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.vm_std" title="Permalink to this definition">¶</a></dt>
-<dd><p>computes standard deviation of subthreshold voltage from
-voltage trace during stimulation time window
-[tStim, tStim+dtStim]</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-single_cell_analyzer.synanalysis">
-<span id="single-cell-analyzer-synanalysis-module"></span><h2>single_cell_analyzer.synanalysis module<a class="headerlink" href="#module-single_cell_analyzer.synanalysis" title="Permalink to this headline">¶</a></h2>
-<p>Created on Apr 2, 2012</p>
-<p>&#64;author: regger</p>
-<dl class="py function">
-<dt id="single_cell_analyzer.synanalysis.compute_distance_to_soma">
-<code class="sig-prename descclassname">single_cell_analyzer.synanalysis.</code><code class="sig-name descname">compute_distance_to_soma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sec</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">consider_gap_to_soma</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#compute_distance_to_soma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.compute_distance_to_soma" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the distance from a point specified by section and sectionx to the soma.</p>
-<p>sec: section of cell, either a PySection object or an int
-x: float, relative point on section, from 0 to 1
-cell: single_cell_parser Cell object, optional (only required if sec is given as an int)
-consider_gap_to_soma: boolean, optional. Accounts for the fact that dendrites don’t actually touch the soma.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.synanalysis.compute_syn_distance">
-<code class="sig-prename descclassname">single_cell_analyzer.synanalysis.</code><code class="sig-name descname">compute_syn_distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">syn</span></em>, <em class="sig-param"><span class="n">consider_gap_to_soma</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#compute_syn_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.compute_syn_distance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.synanalysis.compute_syn_distances">
-<code class="sig-prename descclassname">single_cell_analyzer.synanalysis.</code><code class="sig-name descname">compute_syn_distances</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">synType</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">consider_gap_to_soma</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#compute_syn_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.compute_syn_distances" title="Permalink to this definition">¶</a></dt>
-<dd><p>computes distances of all synapses on dendrite w.r.t. soma</p>
-<p>cell is cell object with attached synapses
-presynaptic cell type given by synType (string)
-optional: dendrite type given by label (string)</p>
-<p>returns 1D numpy array of distances to soma</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.synanalysis.compute_syn_distances_2Dprojected">
-<code class="sig-prename descclassname">single_cell_analyzer.synanalysis.</code><code class="sig-name descname">compute_syn_distances_2Dprojected</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">synType</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#compute_syn_distances_2Dprojected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.compute_syn_distances_2Dprojected" title="Permalink to this definition">¶</a></dt>
-<dd><p>computes distances of all synapses on dendrite w.r.t. soma
-projected on 2D plane as seen during 2-photon spine imaging</p>
-<p>cell is cell object with attached synapses
-presynaptic cell type given by synType (string)
-optional: dendrite type given by label (string)</p>
-<p>returns 1D numpy array of distances to soma</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.synanalysis.compute_synapse_distances_times">
-<code class="sig-prename descclassname">single_cell_analyzer.synanalysis.</code><code class="sig-name descname">compute_synapse_distances_times</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">t</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">synTypes</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#compute_synapse_distances_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.compute_synapse_distances_times" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.synanalysis.get_dist">
-<code class="sig-prename descclassname">single_cell_analyzer.synanalysis.</code><code class="sig-name descname">get_dist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x1</span></em>, <em class="sig-param"><span class="n">x2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#get_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.get_dist" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.synanalysis.synapse_activation_times">
-<code class="sig-prename descclassname">single_cell_analyzer.synanalysis.</code><code class="sig-name descname">synapse_activation_times</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tVec</span></em>, <em class="sig-param"><span class="n">cntVec</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#synapse_activation_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.synapse_activation_times" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.synanalysis.synapse_distances">
-<code class="sig-prename descclassname">single_cell_analyzer.synanalysis.</code><code class="sig-name descname">synapse_distances</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#synapse_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.synapse_distances" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="single_cell_analyzer.synanalysis.synapse_distances_2D">
-<code class="sig-prename descclassname">single_cell_analyzer.synanalysis.</code><code class="sig-name descname">synapse_distances_2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#synapse_distances_2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.synapse_distances_2D" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-single_cell_analyzer">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-single_cell_analyzer" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="module-single_cell_analyzer">
+<span id="single-cell-analyzer"></span><h1>single_cell_analyzer<a class="headerlink" href="#module-single_cell_analyzer" title="Permalink to this headline">¶</a></h1>
 <p>library for analysis of simulation data
 (voltage traces, spike shapes, currents etc…)
 and anatomical data (synapse distances etc…)</p>
-</div>
+<p class="rubric">Modules</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_analyzer.currents</span></code></p></td>
+<td><p>Created on Nov 6, 2012</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_analyzer.membrane_potential_analysis</span></code></p></td>
+<td><p>Created on Nov 3, 2012</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_cell_analyzer.synanalysis</span></code></p></td>
+<td><p>Created on Apr 2, 2012</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="simrun3.utils.html" class="btn btn-neutral float-left" title="simrun3.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="single_cell_analyzer.currents.html" class="btn btn-neutral float-right" title="single_cell_analyzer.currents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

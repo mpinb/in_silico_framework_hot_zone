@@ -1,10 +1,30 @@
-getting\_started package
-========================
-
-Module contents
----------------
+﻿getting\_started
+================
 
 .. automodule:: getting_started
-   :members:
-   :undoc-members:
-   :show-inheritance:
+  
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:                                          <-- add this line
+   
+      generate_param_files_with_valid_references
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
