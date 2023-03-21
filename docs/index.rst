@@ -7,24 +7,17 @@ Welcome to In-Silico Framework (ISF)'s documentation!
 =====================================================
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Modules:
-   Interface
-   SLURM_scripts
-   barrel_cortex
-   biophysics_fitting
-   getting_started
-   mechanisms
-   model_data_base
-   project_specific_ipynb_code
-   simrun2
-   simrun3
-   single_cell_analyzer
-   single_cell_parser
-   singlecell_input_mapper
-   spike_analysis
-   visualize
-   :caption: Usage:
+   :maxdepth: 2
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree: modules
+
+   modules/modules
+
+Usage
+==================
+
    Have a look at the :py:mod:`getting_started` module for a variety of methods to get started on using ISF.
 
 Indices and tables
