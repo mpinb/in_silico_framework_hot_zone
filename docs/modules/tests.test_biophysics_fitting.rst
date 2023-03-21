@@ -1,34 +1,45 @@
-tests.test\_biophysics\_fitting
-===============================
+tests.test\_biophysics\_fitting package
+=======================================
+
+Submodules
+----------
+
+tests.test\_biophysics\_fitting.context module
+----------------------------------------------
+
+.. automodule:: tests.test_biophysics_fitting.context
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.test\_biophysics\_fitting.decorators module
+-------------------------------------------------
+
+.. automodule:: tests.test_biophysics_fitting.decorators
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.test\_biophysics\_fitting.optimizer\_test module
+------------------------------------------------------
+
+.. automodule:: tests.test_biophysics_fitting.optimizer_test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.test\_biophysics\_fitting.parameters\_test module
+-------------------------------------------------------
+
+.. automodule:: tests.test_biophysics_fitting.parameters_test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
 
 .. automodule:: tests.test_biophysics_fitting
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
-.. rubric:: Modules
-
-.. autosummary::
-   :toctree:
-   :recursive:
-
-   tests.test_biophysics_fitting.context
-   tests.test_biophysics_fitting.decorators
-   tests.test_biophysics_fitting.optimizer_test
-   tests.test_biophysics_fitting.parameters_test
-
+   :members:
+   :undoc-members:
+   :show-inheritance:

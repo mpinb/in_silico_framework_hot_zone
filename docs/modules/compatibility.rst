@@ -1,32 +1,7 @@
-﻿compatibility
-=============
+compatibility module
+====================
 
 .. automodule:: compatibility
-
-   
-   
-   
-
-   
-   
-   .. rubric:: Functions
-
-   .. autosummary::
-   
-      cloudpickle_fun
-      pickle_fun
-      uncloudpickle_fun
-      unpickle_fun
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
+   :members:
+   :undoc-members:
+   :show-inheritance:

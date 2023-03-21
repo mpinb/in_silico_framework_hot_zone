@@ -1,33 +1,37 @@
-model\_data\_base.IO
-====================
+model\_data\_base.IO package
+============================
 
-.. automodule:: model_data_base.IO
+Subpackages
+-----------
 
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
-.. rubric:: Modules
-
-.. autosummary::
-   :toctree:
-   :recursive:
+.. toctree::
+   :maxdepth: 4
 
    model_data_base.IO.LoaderDumper
-   model_data_base.IO.dask_wrappers
-   model_data_base.IO.roberts_formats
 
+Submodules
+----------
+
+model\_data\_base.IO.dask\_wrappers module
+------------------------------------------
+
+.. automodule:: model_data_base.IO.dask_wrappers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+model\_data\_base.IO.roberts\_formats module
+--------------------------------------------
+
+.. automodule:: model_data_base.IO.roberts_formats
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: model_data_base.IO
+   :members:
+   :undoc-members:
+   :show-inheritance:
