@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tests.test_single_cell_parser.init_test &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -95,7 +94,7 @@
 
 
 <div class="viewcode-block" id="Tests"><a class="viewcode-back" href="../../../modules/tests.test_single_cell_parser.init_test.Tests.html#tests.test_single_cell_parser.init_test.Tests">[docs]</a><span class="k">class</span> <span class="nc">Tests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span> 
-    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tests.setUp"><a class="viewcode-back" href="../../../modules/tests.test_single_cell_parser.init_test.Tests.html#tests.test_single_cell_parser.init_test.Tests.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_param</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">getting_started</span><span class="o">.</span><span class="n">getting_started_dir</span><span class="p">,</span> \
                             <span class="s1">&#39;biophysical_constraints&#39;</span><span class="p">,</span> \
                             <span class="s1">&#39;86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param&#39;</span><span class="p">)</span>
@@ -104,7 +103,7 @@
                             <span class="s1">&#39;network.param&#39;</span><span class="p">)</span>
         
         <span class="k">assert</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_param</span><span class="p">))</span>
-        <span class="k">assert</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">network_param</span><span class="p">))</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">network_param</span><span class="p">))</span></div>
     
     <span class="k">def</span> <span class="nf">test_fast_and_slow_mode_of_build_parameters_gives_same_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">bp</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span>

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>biophysics_fitting.combiner &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -93,10 +92,10 @@
 <span class="sd">&#39;&#39;&#39;</span>
 
 <div class="viewcode-block" id="Combiner_Setup"><a class="viewcode-back" href="../../modules/biophysics_fitting.combiner.Combiner_Setup.html#biophysics_fitting.combiner.Combiner_Setup">[docs]</a><span class="k">class</span> <span class="nc">Combiner_Setup</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Combiner_Setup.__init__"><a class="viewcode-back" href="../../modules/biophysics_fitting.combiner.Combiner_Setup.html#biophysics_fitting.combiner.Combiner_Setup.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">combinations</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">combinefun</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">combinefun</span> <span class="o">=</span> <span class="kc">None</span></div>
         
     <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">combination</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">combinations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">combination</span><span class="p">)</span>
@@ -130,10 +129,10 @@
 <span class="sd">    combined_features</span>
 <span class="sd">    &gt; {&#39;combination1&#39;: 2, &#39;combination2&#39;: 4}</span>
 <span class="sd">    &#39;&#39;&#39;</span>    
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setup</span> <span class="o">=</span> <span class="n">Combiner_Setup</span><span class="p">()</span>
+<div class="viewcode-block" id="Combiner.__init__"><a class="viewcode-back" href="../../modules/biophysics_fitting.combiner.Combiner.html#biophysics_fitting.combiner.Combiner.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup</span> <span class="o">=</span> <span class="n">Combiner_Setup</span><span class="p">()</span></div>
         
-    <span class="k">def</span> <span class="nf">combine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">):</span>
+<div class="viewcode-block" id="Combiner.combine"><a class="viewcode-back" href="../../modules/biophysics_fitting.combiner.Combiner.html#biophysics_fitting.combiner.Combiner.combine">[docs]</a>    <span class="k">def</span> <span class="nf">combine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Combines features that are computed by an Evaluator class.</span>
 <span class="sd">        </span>
 <span class="sd">        Details, how to set up the Combiner are in the docstring of</span>
@@ -143,7 +142,7 @@
         <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">combinations</span><span class="p">):</span>
             <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="n">features</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">c</span><span class="p">]</span>
             <span class="n">out</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">combinefun</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">out</span></div>
+        <span class="k">return</span> <span class="n">out</span></div></div>
 </pre></div>
 
            </div>

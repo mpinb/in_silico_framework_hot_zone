@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>spike_analysis.core &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -120,7 +119,7 @@
 
 <div class="viewcode-block" id="ReaderSmr"><a class="viewcode-back" href="../../modules/spike_analysis.core.ReaderSmr.html#spike_analysis.core.ReaderSmr">[docs]</a><span class="k">class</span> <span class="nc">ReaderSmr</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;Reader for smr-files, which allows accessing stimulus times and voltage tracces&#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">analogsignal_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stim_times_channel</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+<div class="viewcode-block" id="ReaderSmr.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.ReaderSmr.html#spike_analysis.core.ReaderSmr.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">analogsignal_id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stim_times_channel</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
                  <span class="n">min_rel_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_rel_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analogsignal_id</span> <span class="o">=</span> <span class="n">analogsignal_id</span>
@@ -150,7 +149,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&gt;</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stim_times</span><span class="p">)</span> <span class="o">-</span> <span class="n">min_rel_time</span><span class="p">]</span>            
         
         <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
             
         <span class="c1">#todo min_time, max_time</span>
                         
@@ -171,14 +170,14 @@
     
 <div class="viewcode-block" id="ReaderDummy"><a class="viewcode-back" href="../../modules/spike_analysis.core.ReaderDummy.html#spike_analysis.core.ReaderDummy">[docs]</a><span class="k">class</span> <span class="nc">ReaderDummy</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;Not a reader. You provide the data.&#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">stim_times</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+<div class="viewcode-block" id="ReaderDummy.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.ReaderDummy.html#spike_analysis.core.ReaderDummy.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">stim_times</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
         
         <span class="c1"># voltage traces</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">v</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stim_times</span> <span class="o">=</span> <span class="n">stim_times</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">)</span></div>
         
     <span class="k">def</span> <span class="nf">get_voltage_traces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span>
@@ -213,7 +212,7 @@
     <span class="k">return</span> <span class="n">filtered_audio</span></div>
 
 <div class="viewcode-block" id="ReaderLabView"><a class="viewcode-back" href="../../modules/spike_analysis.core.ReaderLabView.html#spike_analysis.core.ReaderLabView">[docs]</a><span class="k">class</span> <span class="nc">ReaderLabView</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">stim_times</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">32000</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apply_filter</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ReaderLabView.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.ReaderLabView.html#spike_analysis.core.ReaderLabView.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">stim_times</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">32000</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">apply_filter</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stim_times</span> <span class="o">=</span> <span class="n">stim_times</span>   
         <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">sampling_rate</span>        
@@ -225,7 +224,7 @@
         <span class="k">if</span> <span class="n">stim_times</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">stim_times</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
         
     <span class="k">def</span> <span class="nf">get_stim_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stim_times</span><span class="p">)</span>
@@ -521,7 +520,7 @@
 <span class="sd">        the minimal ISI is above tdelta.</span>
 <span class="sd">    _spike_times_creast: spike times fullfilling creast criterion</span>
 <span class="sd">    _spike_times_trough: spike times fullfilling trough criterien&#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reader_object</span><span class="p">,</span> 
+<div class="viewcode-block" id="SpikeDetectionCreastTrough.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.SpikeDetectionCreastTrough.html#spike_analysis.core.SpikeDetectionCreastTrough.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reader_object</span><span class="p">,</span> 
                  <span class="n">lim_creast</span> <span class="o">=</span> <span class="s1">&#39;minimum&#39;</span><span class="p">,</span> 
                  <span class="n">lim_trough</span> <span class="o">=</span> <span class="s1">&#39;minimum&#39;</span><span class="p">,</span> 
                  <span class="n">max_creast_trough_interval</span> <span class="o">=</span> <span class="mf">2.</span><span class="p">,</span>
@@ -544,7 +543,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_lim_creast</span> <span class="o">=</span> <span class="n">lim_creast</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lim_trough</span> <span class="o">=</span> <span class="n">lim_trough</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_creast_trough</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lim_creast</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lim_trough</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spike_time_mode</span> <span class="o">=</span> <span class="n">spike_time_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spike_time_mode</span> <span class="o">=</span> <span class="n">spike_time_mode</span></div>
         
     <span class="k">def</span> <span class="nf">run_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_extract_spike_times</span><span class="p">()</span>
@@ -624,7 +623,7 @@
             <span class="n">minimun_zero_bin_sst</span> <span class="o">=</span> <span class="n">bins</span><span class="p">[</span><span class="n">I</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(((</span><span class="n">binned_data_sst</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">binned_data_sst</span><span class="p">[</span><span class="mi">5</span><span class="p">:])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">|</span> <span class="p">(</span><span class="n">binned_data_sst</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">minimun_zero_bin_st</span><span class="p">,</span> <span class="n">minimun_zero_bin_sst</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
     
-    <span class="k">def</span> <span class="nf">get_default_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_stim_times</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">show_trough_candidates</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="SpikeDetectionCreastTrough.get_default_events"><a class="viewcode-back" href="../../modules/spike_analysis.core.SpikeDetectionCreastTrough.html#spike_analysis.core.SpikeDetectionCreastTrough.get_default_events">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_stim_times</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">show_trough_candidates</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Returns a list of events to be displayed with the show_events method.</span>
 <span class="sd">        Creates events for deteced spikes (black line) and spike candidates [dotted black line]</span>
 <span class="sd">        (i.e. creasts and troughs exceeding the limit but which do not qualify to </span>
@@ -650,9 +649,9 @@
         <span class="c1"># add stimulus times</span>
         <span class="k">if</span> <span class="n">show_stim_times</span><span class="p">:</span>
             <span class="n">events</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">t</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stim_times</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">events</span>
+        <span class="k">return</span> <span class="n">events</span></div>
     
-    <span class="k">def</span> <span class="nf">show_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">savepdf</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">showfig</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ylim</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)):</span>
+<div class="viewcode-block" id="SpikeDetectionCreastTrough.show_events"><a class="viewcode-back" href="../../modules/spike_analysis.core.SpikeDetectionCreastTrough.html#spike_analysis.core.SpikeDetectionCreastTrough.show_events">[docs]</a>    <span class="k">def</span> <span class="nf">show_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">savepdf</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">showfig</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ylim</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)):</span>
         <span class="sd">&#39;&#39;&#39;Shows voltage trace, threasholds and events.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
@@ -708,7 +707,7 @@
             <span class="n">I</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>    
         <span class="k">if</span> <span class="n">savepdf</span><span class="p">:</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">savepdf</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outputStream</span><span class="p">:</span>
-                <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outputStream</span><span class="p">)</span>
+                <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outputStream</span><span class="p">)</span></div>
                 
     <span class="k">def</span> <span class="nf">get_serialize_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>    
         <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;reader_object&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">get_serialize_dict</span><span class="p">(),</span>
@@ -829,8 +828,8 @@
     <span class="k">return</span> <span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="p">,</span> <span class="n">period</span>
     
 <div class="viewcode-block" id="STAPlugin_TEMPLATE"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_TEMPLATE.html#spike_analysis.core.STAPlugin_TEMPLATE">[docs]</a><span class="k">class</span> <span class="nc">STAPlugin_TEMPLATE</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="kc">None</span>
+<div class="viewcode-block" id="STAPlugin_TEMPLATE.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_TEMPLATE.html#spike_analysis.core.STAPlugin_TEMPLATE.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="kc">None</span></div>
         
     <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -842,19 +841,19 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
     
 <div class="viewcode-block" id="STAPlugin_ISIn"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_ISIn.html#spike_analysis.core.STAPlugin_ISIn">[docs]</a><span class="k">class</span> <span class="nc">STAPlugin_ISIn</span><span class="p">(</span><span class="n">STAPlugin_TEMPLATE</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ISIn&#39;</span><span class="p">,</span> 
+<div class="viewcode-block" id="STAPlugin_ISIn.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_ISIn.html#spike_analysis.core.STAPlugin_ISIn.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ISIn&#39;</span><span class="p">,</span> 
                  <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;spike_times&#39;</span><span class="p">,</span>
                  <span class="n">max_n</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_n</span> <span class="o">=</span> <span class="n">max_n</span>
-        <span class="n">STAPlugin_TEMPLATE</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">STAPlugin_TEMPLATE</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
         
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike_times_analysis</span><span class="p">):</span>
         <span class="n">times</span> <span class="o">=</span> <span class="n">spike_times_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_analysis_ISIn</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_n</span><span class="p">)</span>
                 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="STAPlugin_ISIn.event_analysis_ISIn"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_ISIn.html#spike_analysis.core.STAPlugin_ISIn.event_analysis_ISIn">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">event_analysis_ISIn</span><span class="p">(</span><span class="n">spike_times</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Computes for each spike the inter spike interval (ISI) to the next, second next, nth spike.</span>
 <span class="sd">        </span>
@@ -882,10 +881,10 @@
                 <span class="n">ISIs</span><span class="p">[</span><span class="s1">&#39;ISI_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nn</span><span class="p">)]</span> <span class="o">=</span> <span class="n">spike_times</span><span class="p">[</span><span class="n">lv</span><span class="o">+</span><span class="n">nn</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span>
             <span class="n">ISIs</span><span class="p">[</span><span class="s1">&#39;event_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span>
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ISIs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div></div>
 
 <div class="viewcode-block" id="STAPlugin_bursts"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_bursts.html#spike_analysis.core.STAPlugin_bursts">[docs]</a><span class="k">class</span> <span class="nc">STAPlugin_bursts</span><span class="p">(</span><span class="n">STAPlugin_TEMPLATE</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+<div class="viewcode-block" id="STAPlugin_bursts.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_bursts.html#spike_analysis.core.STAPlugin_bursts.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                  <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;bursts&#39;</span><span class="p">,</span> 
                  <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;spike_times&#39;</span><span class="p">,</span>
                  <span class="n">event_maxtimes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span> 
@@ -894,13 +893,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">event_maxtimes</span> <span class="o">=</span> <span class="n">event_maxtimes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_names</span> <span class="o">=</span> <span class="n">event_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_names</span> <span class="o">=</span> <span class="n">event_names</span></div>
         
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike_times_analysis</span><span class="p">):</span>
         <span class="n">times</span> <span class="o">=</span> <span class="n">spike_times_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_analysis_bursts</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_maxtimes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_names</span><span class="p">)</span>
                 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="STAPlugin_bursts.event_analysis_bursts"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_bursts.html#spike_analysis.core.STAPlugin_bursts.event_analysis_bursts">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">event_analysis_bursts</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> 
                               <span class="n">event_maxtimes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
                               <span class="n">event_names</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
@@ -951,10 +950,10 @@
             
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out_dict</span><span class="p">)</span>
             <span class="n">lv</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">n</span>
-        <span class="k">return</span> <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">I</span><span class="o">.</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div></div>
     
 <div class="viewcode-block" id="STAPlugin_annotate_bursts_in_st"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_annotate_bursts_in_st.html#spike_analysis.core.STAPlugin_annotate_bursts_in_st">[docs]</a><span class="k">class</span> <span class="nc">STAPlugin_annotate_bursts_in_st</span><span class="p">(</span><span class="n">STAPlugin_TEMPLATE</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+<div class="viewcode-block" id="STAPlugin_annotate_bursts_in_st.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_annotate_bursts_in_st.html#spike_analysis.core.STAPlugin_annotate_bursts_in_st.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                  <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;bursts_st&#39;</span><span class="p">,</span> 
                  <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;st&#39;</span><span class="p">,</span>
                  <span class="n">event_maxtimes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span> 
@@ -962,7 +961,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">event_maxtimes</span> <span class="o">=</span> <span class="n">event_maxtimes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_names</span> <span class="o">=</span> <span class="n">event_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_names</span> <span class="o">=</span> <span class="n">event_names</span></div>
         
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike_times_analysis</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">spike_times_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
@@ -986,7 +985,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="n">df</span></div>
                 
 <div class="viewcode-block" id="STAPlugin_ongoing"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_ongoing.html#spike_analysis.core.STAPlugin_ongoing">[docs]</a><span class="k">class</span> <span class="nc">STAPlugin_ongoing</span><span class="p">(</span><span class="n">STAPlugin_TEMPLATE</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+<div class="viewcode-block" id="STAPlugin_ongoing.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_ongoing.html#spike_analysis.core.STAPlugin_ongoing.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                  <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ongoing_activity&#39;</span><span class="p">,</span> 
                  <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;spike_times&#39;</span><span class="p">,</span>
                  <span class="n">ongoing_sample_length</span> <span class="o">=</span> <span class="mi">90000</span><span class="p">,</span>
@@ -997,7 +996,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ongoing_sample_length</span> <span class="o">=</span> <span class="n">ongoing_sample_length</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span></div>
 
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike_times_analysis</span><span class="p">):</span>
         <span class="n">spike_times</span> <span class="o">=</span> <span class="n">spike_times_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
@@ -1017,7 +1016,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="n">n_spikes</span></div>
         
 <div class="viewcode-block" id="STAPlugin_quantification_in_period"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_quantification_in_period.html#spike_analysis.core.STAPlugin_quantification_in_period">[docs]</a><span class="k">class</span> <span class="nc">STAPlugin_quantification_in_period</span><span class="p">(</span><span class="n">STAPlugin_TEMPLATE</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="STAPlugin_quantification_in_period.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_quantification_in_period.html#spike_analysis.core.STAPlugin_quantification_in_period.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;frequency_in_period&#39;</span><span class="p">,</span>
                  <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;st_df&#39;</span><span class="p">,</span>
                  <span class="n">period</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1029,7 +1028,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">_sta_input_checker</span><span class="p">(</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="p">,</span> <span class="n">period</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">_sta_input_checker</span><span class="p">(</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="p">,</span> <span class="n">period</span><span class="p">)</span></div>
         
         
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike_times_analysis</span><span class="p">):</span>
@@ -1052,7 +1051,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_trial</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="STAPlugin_extract_column_in_filtered_dataframe"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe.html#spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe">[docs]</a><span class="k">class</span> <span class="nc">STAPlugin_extract_column_in_filtered_dataframe</span><span class="p">(</span><span class="n">STAPlugin_TEMPLATE</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="STAPlugin_extract_column_in_filtered_dataframe.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe.html#spike_analysis.core.STAPlugin_extract_column_in_filtered_dataframe.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">column_name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">source</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1061,7 +1060,7 @@
         <span class="k">if</span> <span class="kc">None</span> <span class="ow">in</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;name and column and source must be defined!&quot;</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">select</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">select</span></div>
         
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike_times_analysis</span><span class="p">):</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">spike_times_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
@@ -1070,11 +1069,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="n">column</span></div>
 
 <div class="viewcode-block" id="STAPlugin_spike_times_dataframe"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_spike_times_dataframe.html#spike_analysis.core.STAPlugin_spike_times_dataframe">[docs]</a><span class="k">class</span> <span class="nc">STAPlugin_spike_times_dataframe</span><span class="p">(</span><span class="n">STAPlugin_TEMPLATE</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;spike_times_dataframe&#39;</span><span class="p">,</span> <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;spike_times&#39;</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;spike_times&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="STAPlugin_spike_times_dataframe.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_spike_times_dataframe.html#spike_analysis.core.STAPlugin_spike_times_dataframe.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;spike_times_dataframe&#39;</span><span class="p">,</span> <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;spike_times&#39;</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;spike_times&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span></div>
     
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike_times_analysis</span><span class="p">):</span>
         <span class="n">spike_times</span> <span class="o">=</span> <span class="n">spike_times_analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
@@ -1082,7 +1081,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="n">get_st_from_spike_times_and_stim_times</span><span class="p">(</span><span class="n">spike_times</span><span class="p">,</span> <span class="n">stim_times</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span></div>
         
 <div class="viewcode-block" id="STAPlugin_response_probability_in_period"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_response_probability_in_period.html#spike_analysis.core.STAPlugin_response_probability_in_period">[docs]</a><span class="k">class</span> <span class="nc">STAPlugin_response_probability_in_period</span><span class="p">(</span><span class="n">STAPlugin_TEMPLATE</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="STAPlugin_response_probability_in_period.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_response_probability_in_period.html#spike_analysis.core.STAPlugin_response_probability_in_period.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;frequency_in_period&#39;</span><span class="p">,</span>
                  <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;st_df&#39;</span><span class="p">,</span>
                  <span class="n">period</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1090,7 +1089,7 @@
                  <span class="n">t_end</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">_sta_input_checker</span><span class="p">(</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="p">,</span> <span class="n">period</span><span class="p">)</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">_sta_input_checker</span><span class="p">(</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="p">,</span> <span class="n">period</span><span class="p">)</span>  </div>
 
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike_times_analysis</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">:</span>
@@ -1102,7 +1101,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_result</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_by_trial</span><span class="p">)</span>   </div>
 
 <div class="viewcode-block" id="STAPlugin_response_latency_in_period"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_response_latency_in_period.html#spike_analysis.core.STAPlugin_response_latency_in_period">[docs]</a><span class="k">class</span> <span class="nc">STAPlugin_response_latency_in_period</span><span class="p">(</span><span class="n">STAPlugin_TEMPLATE</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="STAPlugin_response_latency_in_period.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.STAPlugin_response_latency_in_period.html#spike_analysis.core.STAPlugin_response_latency_in_period.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;frequency_in_period&#39;</span><span class="p">,</span>
                  <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;st_df&#39;</span><span class="p">,</span>
                  <span class="n">period</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1110,7 +1109,7 @@
                  <span class="n">t_end</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">_sta_input_checker</span><span class="p">(</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="p">,</span> <span class="n">period</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">_sta_input_checker</span><span class="p">(</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="p">,</span> <span class="n">period</span><span class="p">)</span></div>
     
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_helper</span><span class="p">(</span><span class="n">l_</span><span class="p">):</span>
@@ -1143,7 +1142,7 @@
     
 <div class="viewcode-block" id="SpikeTimesAnalysis"><a class="viewcode-back" href="../../modules/spike_analysis.core.SpikeTimesAnalysis.html#spike_analysis.core.SpikeTimesAnalysis">[docs]</a><span class="k">class</span> <span class="nc">SpikeTimesAnalysis</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;Class for applying event_analysis routines on a spike times dataframe.&#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike_times_object</span><span class="p">,</span> 
+<div class="viewcode-block" id="SpikeTimesAnalysis.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.SpikeTimesAnalysis.html#spike_analysis.core.SpikeTimesAnalysis.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spike_times_object</span><span class="p">,</span> 
                  <span class="n">default_event_analysis</span> <span class="o">=</span> <span class="p">[],</span>
                  <span class="n">periods</span> <span class="o">=</span> <span class="p">{}):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">periods</span> <span class="o">=</span> <span class="n">periods</span>        
@@ -1159,7 +1158,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="p">[</span><span class="s1">&#39;spike_times&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">spike_times_object</span><span class="o">.</span><span class="n">spike_times</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="p">[</span><span class="s1">&#39;stim_times&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">spike_times_object</span><span class="o">.</span><span class="n">stim_times</span>        
         <span class="k">for</span> <span class="n">ea</span> <span class="ow">in</span> <span class="n">default_event_analysis</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">apply_extractor</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_extractor</span><span class="p">(</span><span class="n">ea</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">apply_extractor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sta_plugin</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">sta_plugin</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1181,8 +1180,8 @@
             <span class="k">return</span> <span class="n">i</span></div>
 
 <div class="viewcode-block" id="VisualizeEventAnalysis"><a class="viewcode-back" href="../../modules/spike_analysis.core.VisualizeEventAnalysis.html#spike_analysis.core.VisualizeEventAnalysis">[docs]</a><span class="k">class</span> <span class="nc">VisualizeEventAnalysis</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ea</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ea</span> <span class="o">=</span> <span class="n">ea</span>
+<div class="viewcode-block" id="VisualizeEventAnalysis.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.VisualizeEventAnalysis.html#spike_analysis.core.VisualizeEventAnalysis.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ea</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ea</span> <span class="o">=</span> <span class="n">ea</span></div>
 
     <span class="k">def</span> <span class="nf">plot_PSTH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_time</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">max_time</span> <span class="o">=</span> <span class="mi">2500</span><span class="p">,</span> <span class="n">bin_size</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ea</span><span class="o">.</span><span class="n">st</span>
@@ -1252,7 +1251,7 @@
 <span class="c1">############################</span>
 
 <div class="viewcode-block" id="AnalyzeFile"><a class="viewcode-back" href="../../modules/spike_analysis.core.AnalyzeFile.html#spike_analysis.core.AnalyzeFile">[docs]</a><span class="k">class</span> <span class="nc">AnalyzeFile</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> 
+<div class="viewcode-block" id="AnalyzeFile.__init__"><a class="viewcode-back" href="../../modules/spike_analysis.core.AnalyzeFile.html#spike_analysis.core.AnalyzeFile.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> 
                  <span class="n">lim_creast</span> <span class="o">=</span> <span class="s1">&#39;minimum&#39;</span><span class="p">,</span> 
                  <span class="n">lim_trough</span> <span class="o">=</span> <span class="s1">&#39;minimum&#39;</span><span class="p">,</span> 
                  <span class="n">cellid</span> <span class="o">=</span> <span class="s1">&#39;__no_cellid_assigned__&#39;</span><span class="p">,</span> 
@@ -1279,7 +1278,7 @@
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ea</span><span class="o">.</span><span class="n">event_db</span><span class="p">[</span><span class="s1">&#39;burst_analysis_2&#39;</span><span class="p">]</span>
         <span class="n">df</span><span class="p">[</span><span class="s1">&#39;experiment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cellid</span>
         <span class="n">df</span><span class="p">[</span><span class="s1">&#39;period&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">get_period_label_by_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">periods</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">event_time</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_df</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_df</span> <span class="o">=</span> <span class="n">df</span></div>
     
     <span class="k">def</span> <span class="nf">get_ongoing_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period_prestim</span> <span class="o">=</span> <span class="mi">30000</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stim_times</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">period_prestim</span><span class="p">:</span>

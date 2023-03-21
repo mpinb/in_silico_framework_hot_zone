@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>simrun2.reduced_model.get_kernel.ReducedLdaModel &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -129,7 +128,71 @@
 <dl class="py class">
 <dt id="simrun2.reduced_model.get_kernel.ReducedLdaModel">
 <em class="property">class </em><code class="sig-prename descclassname">simrun2.reduced_model.get_kernel.</code><code class="sig-name descname">ReducedLdaModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keys_to_synapse_activation_data</span></em>, <em class="sig-param"><span class="n">synapse_activation_window_width</span><span class="o">=</span><span class="default_value">80</span></em>, <em class="sig-param"><span class="n">synapse_activation_window_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">synapse_activation_window_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">output_window_min</span><span class="o">=</span><span class="default_value">255</span></em>, <em class="sig-param"><span class="n">output_window_max</span><span class="o">=</span><span class="default_value">265</span></em>, <em class="sig-param"><span class="n">refractory_period</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">normalize_group_size</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">test_size</span><span class="o">=</span><span class="default_value">0.4</span></em>, <em class="sig-param"><span class="n">verbosity</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">lookup_series_stepsize</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">cache</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">aggfun</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/reduced_model/get_kernel.html#ReducedLdaModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.reduced_model.get_kernel.ReducedLdaModel" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="simrun2.reduced_model.get_kernel.ReducedLdaModel.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keys_to_synapse_activation_data</span></em>, <em class="sig-param"><span class="n">synapse_activation_window_width</span><span class="o">=</span><span class="default_value">80</span></em>, <em class="sig-param"><span class="n">synapse_activation_window_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">synapse_activation_window_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">output_window_min</span><span class="o">=</span><span class="default_value">255</span></em>, <em class="sig-param"><span class="n">output_window_max</span><span class="o">=</span><span class="default_value">265</span></em>, <em class="sig-param"><span class="n">refractory_period</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">normalize_group_size</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">test_size</span><span class="o">=</span><span class="default_value">0.4</span></em>, <em class="sig-param"><span class="n">verbosity</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">lookup_series_stepsize</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">cache</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">aggfun</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/reduced_model/get_kernel.html#ReducedLdaModel.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.reduced_model.get_kernel.ReducedLdaModel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun2.reduced_model.get_kernel.ReducedLdaModel.__init__" title="simrun2.reduced_model.get_kernel.ReducedLdaModel.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(keys_to_synapse_activation_data[, …])</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_rolling</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_rolling_param</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_static</span></code>(data[, model_number])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_static_param</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code>(mdb_list[, clfs])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lookup_series_for_different_refractory_period</span></code>(…)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#simrun2.reduced_model.get_kernel.ReducedLdaModel.get_minimodel_rolling" title="simrun2.reduced_model.get_kernel.ReducedLdaModel.get_minimodel_rolling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_minimodel_rolling</span></code></a>([refractory_period, …])</p></td>
+<td><p>returns partial, which can be called with keywords mdb or data_dict.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun2.reduced_model.get_kernel.ReducedLdaModel.get_minimodel_static" title="simrun2.reduced_model.get_kernel.ReducedLdaModel.get_minimodel_static"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_minimodel_static</span></code></a>([model_number])</p></td>
+<td><p>returns partial, which can be called with keywords mdb or data_dict.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>([return_fig, min_items])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="simrun2.reduced_model.get_kernel.ReducedLdaModel.get_minimodel_rolling">
+<code class="sig-name descname">get_minimodel_rolling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">refractory_period</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">model_number</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/reduced_model/get_kernel.html#ReducedLdaModel.get_minimodel_rolling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.reduced_model.get_kernel.ReducedLdaModel.get_minimodel_rolling" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns partial, which can be called with keywords mdb or data_dict.</p>
+<p>The partial is constructed such that it can be serialized fast, allowing
+efficient multiprocessing. This is the recommended way of sending a reduced
+model through a network connection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="simrun2.reduced_model.get_kernel.ReducedLdaModel.get_minimodel_static">
+<code class="sig-name descname">get_minimodel_static</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_number</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/reduced_model/get_kernel.html#ReducedLdaModel.get_minimodel_static"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.reduced_model.get_kernel.ReducedLdaModel.get_minimodel_static" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns partial, which can be called with keywords mdb or data_dict.</p>
+<p>The partial is constructed such that it can be serialized fast, allowing
+efficient multiprocessing. This is the recommended way of sending a reduced
+model through a network connection.</p>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 

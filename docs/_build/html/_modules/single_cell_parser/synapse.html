@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.synapse &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -104,7 +103,7 @@
 <span class="sd">    Biophysical mechanisms are specified in subclasses</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">edgex</span><span class="p">,</span> <span class="n">preCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">postCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Synapse.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.synapse.Synapse.html#single_cell_parser.synapse.Synapse.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">edgex</span><span class="p">,</span> <span class="n">preCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">postCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        ID of attached section in cell.sections</span>
 <span class="sd">        self.secID = edgeID</span>
@@ -149,12 +148,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">netcons</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pruned</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pruned</span> <span class="o">=</span> <span class="kc">False</span></div>
     
     <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active</span>
     
-    <span class="k">def</span> <span class="nf">activate_hoc_syn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">preCell</span><span class="p">,</span> <span class="n">targetCell</span><span class="p">,</span> <span class="n">receptors</span><span class="p">):</span>
+<div class="viewcode-block" id="Synapse.activate_hoc_syn"><a class="viewcode-back" href="../../modules/single_cell_parser.synapse.Synapse.html#single_cell_parser.synapse.Synapse.activate_hoc_syn">[docs]</a>    <span class="k">def</span> <span class="nf">activate_hoc_syn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">preCell</span><span class="p">,</span> <span class="n">targetCell</span><span class="p">,</span> <span class="n">receptors</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;setup of all necessary hoc connections.</span>
 <span class="sd">        stores all mechanisms and NetCons for reference counting.&#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">releaseSite</span> <span class="o">=</span> <span class="n">source</span>
@@ -186,7 +185,7 @@
                     <span class="n">newNetcon</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">recepStr</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">receptors</span><span class="p">[</span><span class="n">recepStr</span><span class="p">]</span> <span class="o">=</span> <span class="n">newSyn</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">netcons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newNetcon</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="kc">True</span></div>
     
     <span class="k">def</span> <span class="nf">disconnect_hoc_synapse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">releaseSite</span><span class="p">:</span>
@@ -202,17 +201,17 @@
 <span class="sd">    simple excitatory synapse for playing around</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">preCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">postCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
-        <span class="n">Synapse</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">preCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">postCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ExSyn.__init__"><a class="viewcode-back" href="../../modules/single_cell_parser.synapse.ExSyn.html#single_cell_parser.synapse.ExSyn.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">preCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">postCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="n">Synapse</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">preCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">postCellType</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
     
-    <span class="k">def</span> <span class="nf">activate_hoc_syn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">targetCell</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<div class="viewcode-block" id="ExSyn.activate_hoc_syn"><a class="viewcode-back" href="../../modules/single_cell_parser.synapse.ExSyn.html#single_cell_parser.synapse.ExSyn.activate_hoc_syn">[docs]</a>    <span class="k">def</span> <span class="nf">activate_hoc_syn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">targetCell</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">targetCell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">secID</span><span class="p">]</span><span class="o">.</span><span class="n">relPts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ptID</span><span class="p">]</span>
         <span class="n">hocSec</span> <span class="o">=</span> <span class="n">targetCell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">secID</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">syn</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ExpSyn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">hocSec</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">syn</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="mf">1.7</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">syn</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">netcon</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">NetCon</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">syn</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="kc">True</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="kc">True</span></div></div>
 
 
 </pre></div>

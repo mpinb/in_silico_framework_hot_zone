@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.cell_parser.CellParser &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -121,7 +120,130 @@
 <dl class="py class">
 <dt id="single_cell_parser.cell_parser.CellParser">
 <em class="property">class </em><code class="sig-prename descclassname">single_cell_parser.cell_parser.</code><code class="sig-name descname">CellParser</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hocFilename</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>class providing methods for setting up morphology in NEURON hoc object</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class providing methods for setting up morphology in NEURON hoc object</p>
+<dl class="py method">
+<dt id="single_cell_parser.cell_parser.CellParser.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hocFilename</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.__init__" title="single_cell_parser.cell_parser.CellParser.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([hocFilename])</p></td>
+<td><p>Constructor</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_cell_modify_functions</span></code>(parameters)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.determine_nseg" title="single_cell_parser.cell_parser.CellParser.determine_nseg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">determine_nseg</span></code></a>([f, full, max_seg_length])</p></td>
+<td><p>determine the number of segments (compartments) to be used according to the d-lambda rule optionally set frequency, default f=100.0 Hz</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.get_cell" title="single_cell_parser.cell_parser.CellParser.get_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cell</span></code></a>()</p></td>
+<td><p>returns cell if it is set up for simulations</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert_hh_membrane</span></code>(label)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.insert_membrane_properties" title="single_cell_parser.cell_parser.CellParser.insert_membrane_properties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert_membrane_properties</span></code></a>(label, props)</p></td>
+<td><p>inserts membrane properties into all structures named as “label”</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert_passive_membrane</span></code>(label)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.insert_range_mechanisms" title="single_cell_parser.cell_parser.CellParser.insert_range_mechanisms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert_range_mechanisms</span></code></a>(label, mechs)</p></td>
+<td><p>inserts range mechanisms into all structures named as “label” so far, only implements spatially uniform distributions, but easily extendable to other functional forms (e.g., piece-wise constant, linear etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">rieke_spines</span></code>(parameters)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.set_up_biophysics" title="single_cell_parser.cell_parser.CellParser.set_up_biophysics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_up_biophysics</span></code></a>(parameters[, full])</p></td>
+<td><p>default method for initializing membrane properties (e.g.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell" title="single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spatialgraph_to_cell</span></code></a>(parameters[, axon, …])</p></td>
+<td><p>reads cell morphology from Amira hoc file and sets up PySections and Cell object optional: takes function object scaleFunc as argument for scaling dendritic diameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.update_range_mechanisms" title="single_cell_parser.cell_parser.CellParser.update_range_mechanisms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_range_mechanisms</span></code></a>(label, …)</p></td>
+<td><p>updates range mechanism ‘updateMechName’ in all structures named as “label”.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="single_cell_parser.cell_parser.CellParser.determine_nseg">
+<code class="sig-name descname">determine_nseg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">100.0</span></em>, <em class="sig-param"><span class="n">full</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">max_seg_length</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.determine_nseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.determine_nseg" title="Permalink to this definition">¶</a></dt>
+<dd><p>determine the number of segments (compartments)
+to be used according to the d-lambda rule
+optionally set frequency, default f=100.0 Hz</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="single_cell_parser.cell_parser.CellParser.get_cell">
+<code class="sig-name descname">get_cell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.get_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.get_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns cell if it is set up for simulations</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="single_cell_parser.cell_parser.CellParser.insert_membrane_properties">
+<code class="sig-name descname">insert_membrane_properties</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span></em>, <em class="sig-param"><span class="n">props</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.insert_membrane_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.insert_membrane_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts membrane properties into all
+structures named as “label”</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="single_cell_parser.cell_parser.CellParser.insert_range_mechanisms">
+<code class="sig-name descname">insert_range_mechanisms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span></em>, <em class="sig-param"><span class="n">mechs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.insert_range_mechanisms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.insert_range_mechanisms" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts range mechanisms into all structures named as “label”
+so far, only implements spatially uniform distributions, but easily
+extendable to other functional forms (e.g., piece-wise constant, linear etc.)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="single_cell_parser.cell_parser.CellParser.set_up_biophysics">
+<code class="sig-name descname">set_up_biophysics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em>, <em class="sig-param"><span class="n">full</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.set_up_biophysics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.set_up_biophysics" title="Permalink to this definition">¶</a></dt>
+<dd><p>default method for initializing membrane properties
+(e.g. cm, Rm, spines), linear and non-linear mechanisms
+and determine the compartment sizes for the simulations.
+parameters should be the parameters of the postsynaptic
+neuron from the parameter file.
+This is the preferred method for setting up biophysics.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell">
+<code class="sig-name descname">spatialgraph_to_cell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em>, <em class="sig-param"><span class="n">axon</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">scaleFunc</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.spatialgraph_to_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads cell morphology from Amira hoc file
+and sets up PySections and Cell object
+optional: takes function object scaleFunc as argument
+for scaling dendritic diameters.
+scaleFunc takes cell object as argument</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="single_cell_parser.cell_parser.CellParser.update_range_mechanisms">
+<code class="sig-name descname">update_range_mechanisms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span></em>, <em class="sig-param"><span class="n">updateMechName</span></em>, <em class="sig-param"><span class="n">mechs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.update_range_mechanisms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.update_range_mechanisms" title="Permalink to this definition">¶</a></dt>
+<dd><p>updates range mechanism ‘updateMechName’ in all structures named as “label”.
+essentially the same as insert_range_mechanisms, but does not
+insert mechanism; instead assumes they’re already present.
+used during parameter variations; e.g. for optimization of neuron models.</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>

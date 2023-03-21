@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -112,8 +111,62 @@
 <dl class="py class">
 <dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager">
 <em class="property">class </em><code class="sig-prename descclassname">single_cell_analyzer.membrane_potential_analysis.</code><code class="sig-name descname">RecordingSiteManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">landmarkFilename</span></em>, <em class="sig-param"><span class="n">cell</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSiteManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>simple class providing methods to handle recording
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>simple class providing methods to handle recording
 sites defined by Amira LandmarkSet</p>
+<dl class="py method">
+<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">landmarkFilename</span></em>, <em class="sig-param"><span class="n">cell</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSiteManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.__init__" title="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(landmarkFilename, cell)</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site" title="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_up_recording_site</span></code></a>(location, ID, filename)</p></td>
+<td><p>determine section/segment on cell corresponding to recording site location and create new RecordingSite</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings" title="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_recordings</span></code></a>()</p></td>
+<td><p>copy recorded voltages at recording sites</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">recordingSites</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site">
+<code class="sig-name descname">set_up_recording_site</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">location</span></em>, <em class="sig-param"><span class="n">ID</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSiteManager.set_up_recording_site"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site" title="Permalink to this definition">¶</a></dt>
+<dd><p>determine section/segment on cell corresponding
+to recording site location and create new
+RecordingSite</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings">
+<code class="sig-name descname">update_recordings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSiteManager.update_recordings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings" title="Permalink to this definition">¶</a></dt>
+<dd><p>copy recorded voltages at recording sites</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>

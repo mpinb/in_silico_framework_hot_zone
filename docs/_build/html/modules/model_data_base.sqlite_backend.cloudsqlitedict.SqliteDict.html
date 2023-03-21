@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -117,7 +116,180 @@
 <dl class="py class">
 <dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict">
 <em class="property">class </em><code class="sig-prename descclassname">model_data_base.sqlite_backend.cloudsqlitedict.</code><code class="sig-name descname">SqliteDict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tablename</span><span class="o">=</span><span class="default_value">'unnamed'</span></em>, <em class="sig-param"><span class="n">flag</span><span class="o">=</span><span class="default_value">'c'</span></em>, <em class="sig-param"><span class="n">autocommit</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">journal_mode</span><span class="o">=</span><span class="default_value">'DELETE'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">collections.UserDict</span></code></p>
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tablename</span><span class="o">=</span><span class="default_value">'unnamed'</span></em>, <em class="sig-param"><span class="n">flag</span><span class="o">=</span><span class="default_value">'c'</span></em>, <em class="sig-param"><span class="n">autocommit</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">journal_mode</span><span class="o">=</span><span class="default_value">'DELETE'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a thread-safe sqlite-backed dictionary. The dictionary will
+be a table <cite>tablename</cite> in database file <cite>filename</cite>. A single file (=database)
+may contain multiple tables.</p>
+<p>If no <cite>filename</cite> is given, a random file in temp will be used (and deleted
+from temp once the dict is closed/deleted).</p>
+<p>If you enable <cite>autocommit</cite>, changes will be committed after each operation
+(more inefficient but safer). Otherwise, changes are committed on <cite>self.commit()</cite>,
+<cite>self.clear()</cite> and <cite>self.close()</cite>.</p>
+<p>Set <cite>journal_mode</cite> to ‘OFF’ if you’re experiencing sqlite I/O problems
+or if you need performance and don’t care about crash-consistency.</p>
+<dl class="simple">
+<dt>The <cite>flag</cite> parameter. Exactly one of:</dt><dd><p>‘c’: default mode, open for read/write, creating the db/table if necessary.
+‘w’: open for r/w, but drop <cite>tablename</cite> contents first (start with empty table)
+‘r’: open as read-only
+‘n’: create a new database (erasing any existing tables, not just <cite>tablename</cite>!).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.__init__" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([filename, tablename, flag, …])</p></td>
+<td><p>Initialize a thread-safe sqlite-backed dictionary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.clear" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code>([do_log, force])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.commit" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.commit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">commit</span></code></a>([blocking])</p></td>
+<td><p>Persist all data to disk.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fromkeys</span></code>(iterable[, value])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.get" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code></a>(k[,d])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.items" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.items"><code class="xref py py-obj docutils literal notranslate"><span class="pre">items</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">iteritems</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterkeys</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">itervalues</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.keys" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.pop" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code></a>(k[,d])</p></td>
+<td><p>If key is not found, d is returned if given, otherwise KeyError is raised.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.popitem" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.popitem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">popitem</span></code></a>()</p></td>
+<td><p>as a 2-tuple; but raise KeyError if D is empty.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.setdefault" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.setdefault"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setdefault</span></code></a>(k[,d])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.sync" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.sync"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sync</span></code></a>([blocking])</p></td>
+<td><p>Persist all data to disk.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.terminate" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.terminate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">terminate</span></code></a>()</p></td>
+<td><p>Delete the underlying database file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.update" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>([E, ]**F)</p></td>
+<td><p>If E present and has a .keys() method, does:     for k in E: D[k] = E[k] If E present and lacks .keys() method, does:     for (k, v) in E: D[k] = v In either case, this is followed by: for k, v in F.items(): D[k] = v</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.values" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">values</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">VALID_FLAGS</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.clear">
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None.  Remove all items from D.<a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.clear" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.commit">
+<code class="sig-name descname">commit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">blocking</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Persist all data to disk.</p>
+<p>When <cite>blocking</cite> is False, the commit command is queued, but the data is
+not guaranteed persisted (default implication when autocommit=True).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">k</em><span class="optional">[</span>, <em class="sig-param">d</em><span class="optional">]</span><span class="sig-paren">)</span> &#x2192; D[k] if k in D, else d.  d defaults to None.<a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.items">
+<code class="sig-name descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a set-like object providing a view on D’s items<a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.keys">
+<code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a set-like object providing a view on D’s keys<a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.pop">
+<code class="sig-name descname">pop</code><span class="sig-paren">(</span><em class="sig-param">k</em><span class="optional">[</span>, <em class="sig-param">d</em><span class="optional">]</span><span class="sig-paren">)</span> &#x2192; v, remove specified key and return the corresponding value.<a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>If key is not found, d is returned if given, otherwise KeyError is raised.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.popitem">
+<code class="sig-name descname">popitem</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; (k, v), remove and return some (key, value) pair<a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.popitem" title="Permalink to this definition">¶</a></dt>
+<dd><p>as a 2-tuple; but raise KeyError if D is empty.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.setdefault">
+<code class="sig-name descname">setdefault</code><span class="sig-paren">(</span><em class="sig-param">k</em><span class="optional">[</span>, <em class="sig-param">d</em><span class="optional">]</span><span class="sig-paren">)</span> &#x2192; D.get(k,d), also set D[k]=d if k not in D<a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.setdefault" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.sync">
+<code class="sig-name descname">sync</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">blocking</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Persist all data to disk.</p>
+<p>When <cite>blocking</cite> is False, the commit command is queued, but the data is
+not guaranteed persisted (default implication when autocommit=True).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.terminate">
+<code class="sig-name descname">terminate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.terminate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.terminate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the underlying database file. Use with care.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param">E</em>, <span class="optional">]</span><em class="sig-param">**F</em><span class="sig-paren">)</span> &#x2192; None.  Update D from mapping/iterable E and F.<a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>If E present and has a .keys() method, does:     for k in E: D[k] = E[k]
+If E present and lacks .keys() method, does:     for (k, v) in E: D[k] = v
+In either case, this is followed by: for k, v in F.items(): D[k] = v</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.values">
+<code class="sig-name descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; an object providing a view on D’s values<a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteDict.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
 
 </div>
 

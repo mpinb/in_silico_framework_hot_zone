@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>singlecell_input_mapper.singlecell_input_mapper.cell.CellParser &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -117,7 +116,60 @@
 <dl class="py class">
 <dt id="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser">
 <em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.cell.</code><code class="sig-name descname">CellParser</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hocFilename</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#CellParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>class providing methods for setting up morphology in NEURON hoc object</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class providing methods for setting up morphology in NEURON hoc object</p>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hocFilename</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#CellParser.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.__init__" title="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([hocFilename])</p></td>
+<td><p>Constructor</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.get_cell" title="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.get_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cell</span></code></a>()</p></td>
+<td><p>returns cell if it is set up</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.spatialgraph_to_cell" title="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.spatialgraph_to_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spatialgraph_to_cell</span></code></a>()</p></td>
+<td><p>reads cell morphology from Amira hoc file and sets up PySections and Cell object optional: takes function object scaleFunc as argument for scaling dendritic diameters.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.get_cell">
+<code class="sig-name descname">get_cell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#CellParser.get_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.get_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns cell if it is set up</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.spatialgraph_to_cell">
+<code class="sig-name descname">spatialgraph_to_cell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#CellParser.spatialgraph_to_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.CellParser.spatialgraph_to_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads cell morphology from Amira hoc file
+and sets up PySections and Cell object
+optional: takes function object scaleFunc as argument
+for scaling dendritic diameters.
+scaleFunc takes cell object as argument</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>

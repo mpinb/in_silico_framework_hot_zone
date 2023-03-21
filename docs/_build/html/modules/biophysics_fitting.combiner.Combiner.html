@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>biophysics_fitting.combiner.Combiner &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -119,7 +118,8 @@
 <dl class="py class">
 <dt id="biophysics_fitting.combiner.Combiner">
 <em class="property">class </em><code class="sig-prename descclassname">biophysics_fitting.combiner.</code><code class="sig-name descname">Combiner</code><a class="reference internal" href="../_modules/biophysics_fitting/combiner.html#Combiner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.combiner.Combiner" title="Permalink to this definition">¶</a></dt>
-<dd><p>This  class can be used to combine features (usually) computed by an Evaluator object.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This  class can be used to combine features (usually) computed by an Evaluator object.</p>
 <p>For a Simulator object s and a Evaluator object e and a Combiner object c, the typical usecase is:
 voltage_traces_dict = s.run(params)
 features = e.evaluate(voltage_traces_dict)
@@ -140,6 +140,35 @@ c.setup.combinefun = max</p>
 <p>combined_features = c.combine(features)
 combined_features
 &gt; {‘combination1’: 2, ‘combination2’: 4}</p>
+<dl class="py method">
+<dt id="biophysics_fitting.combiner.Combiner.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/combiner.html#Combiner.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.combiner.Combiner.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.combiner.Combiner.__init__" title="biophysics_fitting.combiner.Combiner.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.combiner.Combiner.combine" title="biophysics_fitting.combiner.Combiner.combine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">combine</span></code></a>(features)</p></td>
+<td><p>Combines features that are computed by an Evaluator class.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="biophysics_fitting.combiner.Combiner.combine">
+<code class="sig-name descname">combine</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/combiner.html#Combiner.combine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.combiner.Combiner.combine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines features that are computed by an Evaluator class.</p>
+<p>Details, how to set up the Combiner are in the docstring of
+the Combiner class.</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>

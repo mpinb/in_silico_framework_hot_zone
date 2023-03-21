@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>biophysics_fitting.optimizer.my_ibea_evaluator &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -128,7 +127,66 @@
 <dl class="py class">
 <dt id="biophysics_fitting.optimizer.my_ibea_evaluator">
 <em class="property">class </em><code class="sig-prename descclassname">biophysics_fitting.optimizer.</code><code class="sig-name descname">my_ibea_evaluator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameter_df</span></em>, <em class="sig-param"><span class="n">n_objectives</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#my_ibea_evaluator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.optimizer.my_ibea_evaluator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Graupner-Brunel Evaluator</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">bluepyopt.evaluators.Evaluator</span></code></p>
+<p>Graupner-Brunel Evaluator</p>
+<dl class="py method">
+<dt id="biophysics_fitting.optimizer.my_ibea_evaluator.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameter_df</span></em>, <em class="sig-param"><span class="n">n_objectives</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#my_ibea_evaluator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.optimizer.my_ibea_evaluator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.my_ibea_evaluator.__init__" title="biophysics_fitting.optimizer.my_ibea_evaluator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(parameter_df, n_objectives)</p></td>
+<td><p>Constructor</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_dicts" title="biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_dicts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_with_dicts</span></code></a>(param_dict)</p></td>
+<td><p>Evaluate parameter a parameter set (abstract).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists" title="biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_with_lists</span></code></a>(param_values)</p></td>
+<td><p>Evaluate parameter a parameter set (abstract).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt id="biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_dicts">
+<em class="property">abstract </em><code class="sig-name descname">evaluate_with_dicts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">param_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_dicts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate parameter a parameter set (abstract).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>params</strong> (<em>dict with values Parameters</em><em>, </em><em>and keys parameter names</em>) – The parameter values to be evaluated.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dict of Objective with values calculated by the Evaluator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>objectives (dict with values Parameters, and keys objective names)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists">
+<code class="sig-name descname">evaluate_with_lists</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">param_values</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#my_ibea_evaluator.evaluate_with_lists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate parameter a parameter set (abstract).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>params</strong> (<em>list of Parameters</em>) – The parameter values to be evaluated.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of Objectives with values calculated by the Evaluator.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>objectives (list of Objectives)</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>model_data_base.mdb_initializers.prepare_ANN_batches &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -405,7 +404,7 @@
         
 <span class="c1"># initializer class</span>
 <div class="viewcode-block" id="Init"><a class="viewcode-back" href="../../../modules/model_data_base.mdb_initializers.prepare_ANN_batches.Init.html#model_data_base.mdb_initializers.prepare_ANN_batches.Init">[docs]</a><span class="k">class</span> <span class="nc">Init</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdb</span><span class="p">,</span>
+<div class="viewcode-block" id="Init.__init__"><a class="viewcode-back" href="../../../modules/model_data_base.mdb_initializers.prepare_ANN_batches.Init.html#model_data_base.mdb_initializers.prepare_ANN_batches.Init.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdb</span><span class="p">,</span>
          <span class="n">mdb_target</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
          <span class="n">min_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
          <span class="n">max_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
@@ -454,7 +453,7 @@
         <span class="c1"># setup spatial bins</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_spatial_bins</span><span class="p">()</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_synaptic_weights</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_synaptic_weights</span><span class="p">()</span></div>
     
     <span class="k">def</span> <span class="nf">_setup_spatial_bins</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">neuron_param_file</span> <span class="o">=</span> <span class="n">get_neuron_param_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdb</span><span class="p">)</span>
