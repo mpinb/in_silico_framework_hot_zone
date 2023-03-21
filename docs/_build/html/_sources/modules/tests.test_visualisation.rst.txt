@@ -1,4 +1,4 @@
-﻿tests.test\_visualisation
+tests.test\_visualisation
 =========================
 
 .. automodule:: tests.test_visualisation

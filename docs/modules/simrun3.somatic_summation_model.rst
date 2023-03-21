@@ -1,4 +1,4 @@
-﻿simrun3.somatic\_summation\_model
+simrun3.somatic\_summation\_model
 =================================
 
 .. automodule:: simrun3.somatic_summation_model

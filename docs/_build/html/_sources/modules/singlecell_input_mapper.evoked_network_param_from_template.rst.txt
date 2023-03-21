@@ -1,4 +1,4 @@
-﻿singlecell\_input\_mapper.evoked\_network\_param\_from\_template
+singlecell\_input\_mapper.evoked\_network\_param\_from\_template
 ================================================================
 
 .. automodule:: singlecell_input_mapper.evoked_network_param_from_template

@@ -1,4 +1,4 @@
-﻿simrun2.utils
+simrun2.utils
 =============
 
 .. automodule:: simrun2.utils

@@ -1,4 +1,4 @@
-﻿simrun2.rerun\_mdb
+simrun2.rerun\_mdb
 ==================
 
 .. automodule:: simrun2.rerun_mdb

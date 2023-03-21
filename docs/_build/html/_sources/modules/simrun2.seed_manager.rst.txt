@@ -1,4 +1,4 @@
-﻿simrun2.seed\_manager
+simrun2.seed\_manager
 =====================
 
 .. automodule:: simrun2.seed_manager

@@ -1,4 +1,4 @@
-﻿simrun2.test\_sustained\_firing
+simrun2.test\_sustained\_firing
 ===============================
 
 .. automodule:: simrun2.test_sustained_firing

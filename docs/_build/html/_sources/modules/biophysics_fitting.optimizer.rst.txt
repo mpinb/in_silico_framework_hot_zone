@@ -1,4 +1,4 @@
-﻿biophysics\_fitting.optimizer
+biophysics\_fitting.optimizer
 =============================
 
 .. automodule:: biophysics_fitting.optimizer

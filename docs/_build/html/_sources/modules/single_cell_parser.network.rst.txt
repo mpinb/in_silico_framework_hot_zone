@@ -1,4 +1,4 @@
-﻿single\_cell\_parser.network
+single\_cell\_parser.network
 ============================
 
 .. automodule:: single_cell_parser.network
