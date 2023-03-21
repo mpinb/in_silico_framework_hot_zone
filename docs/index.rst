@@ -10,7 +10,7 @@ Welcome to In-Silico Framework (ISF)'s documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   modules
+   modules/modules
 
 Indices and tables
 ==================

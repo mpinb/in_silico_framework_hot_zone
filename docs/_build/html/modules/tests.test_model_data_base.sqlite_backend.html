@@ -17,7 +17,9 @@
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tests.test_simrun2 package" href="tests.test_simrun2.html" />
+    <link rel="prev" title="tests.test_model_data_base.plotfunctions package" href="tests.test_model_data_base.plotfunctions.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -39,17 +41,48 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">tests.test_model_data_base.sqlite_backend package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#tests-test-model-data-base-sqlite-backend-sqlite-backend-test-module">tests.test_model_data_base.sqlite_backend.sqlite_backend_test module</a></li>
-<li><a class="reference internal" href="#tests-test-model-data-base-sqlite-backend-tuplecloudsqlitedict-test-module">tests.test_model_data_base.sqlite_backend.tuplecloudsqlitedict_test module</a></li>
-<li><a class="reference internal" href="#module-tests.test_model_data_base.sqlite_backend">Module contents</a></li>
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">in_silico_framework</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Interface.html">Interface module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="barrel_cortex.html">barrel_cortex package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compatibility.html">compatibility module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html">getting_started package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mechanisms.html">mechanisms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.html">model_data_base package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbrun.html">nbrun module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.html">simrun2 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.html">simrun3 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html">single_cell_parser package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spike_analysis.html">spike_analysis package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tests.html">tests package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="tests.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="tests.test_biophysics_fitting.html">tests.test_biophysics_fitting package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="tests.test_model_data_base.html">tests.test_model_data_base package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun2.html">tests.test_simrun2 package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun3.html">tests.test_simrun3 package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.test_single_cell_parser.html">tests.test_single_cell_parser package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.test_spike_analysis.html">tests.test_spike_analysis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.test_visualisation.html">tests.test_visualisation package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#module-tests.context">tests.context module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#module-tests.decorators">tests.decorators module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests-run-tests-module">tests.run_tests module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#module-tests">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="visualize.html">visualize package</a></li>
 </ul>
 </li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -64,6 +97,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">in_silico_framework</a></li>
+          <li class="breadcrumb-item"><a href="tests.html">tests package</a></li>
+          <li class="breadcrumb-item"><a href="tests.test_model_data_base.html">tests.test_model_data_base package</a></li>
       <li class="breadcrumb-item active">tests.test_model_data_base.sqlite_backend package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/modules/tests.test_model_data_base.sqlite_backend.rst.txt" rel="nofollow"> View page source</a>
@@ -93,7 +129,10 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tests.test_model_data_base.plotfunctions.html" class="btn btn-neutral float-left" title="tests.test_model_data_base.plotfunctions package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tests.test_simrun2.html" class="btn btn-neutral float-right" title="tests.test_simrun2 package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
