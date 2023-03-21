@@ -2,7 +2,7 @@
 ==============================
 
 .. automodule:: project_specific_ipynb_code
-  
+
    
    
    
@@ -25,7 +25,6 @@
 
 .. autosummary::
    :toctree:
-   :template: custom-module-template.rst
    :recursive:
 
    project_specific_ipynb_code.biophysical_models

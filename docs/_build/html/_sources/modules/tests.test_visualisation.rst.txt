@@ -2,7 +2,7 @@ tests.test\_visualisation
 =========================
 
 .. automodule:: tests.test_visualisation
-  
+
    
    
    
@@ -25,7 +25,6 @@ tests.test\_visualisation
 
 .. autosummary::
    :toctree:
-   :template: custom-module-template.rst
    :recursive:
 
    tests.test_visualisation.context

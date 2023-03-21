@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>model_data_base.mdb_initializers.load_simrun_general &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_spike_times" href="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_spike_times.html" />
-    <link rel="prev" title="model_data_base.mdb_initializers.PSPs.init" href="model_data_base.mdb_initializers.PSPs.init.html" /> 
+    <link rel="next" title="model_data_base.mdb_initializers.prepare_ANN_batches" href="model_data_base.mdb_initializers.prepare_ANN_batches.html" />
+    <link rel="prev" title="model_data_base.mdb_initializers.PSPs" href="model_data_base.mdb_initializers.PSPs.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,31 +55,7 @@
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.html">model_data_base.mdb_initializers.PSPs</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.mdb_initializers.load_simrun_general</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_spike_times.html">model_data_base.mdb_initializers.load_simrun_general.add_dendritic_spike_times</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_voltage_traces.html">model_data_base.mdb_initializers.load_simrun_general.add_dendritic_voltage_traces</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.cell_param_to_mdbpath.html">model_data_base.mdb_initializers.load_simrun_general.cell_param_to_mdbpath</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.create_mdb_path_print.html">model_data_base.mdb_initializers.load_simrun_general.create_mdb_path_print</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.create_metadata.html">model_data_base.mdb_initializers.load_simrun_general.create_metadata</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.generate_param_file_hashes.html">model_data_base.mdb_initializers.load_simrun_general.generate_param_file_hashes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.get_file.html">model_data_base.mdb_initializers.load_simrun_general.get_file</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.get_max_commas.html">model_data_base.mdb_initializers.load_simrun_general.get_max_commas</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.get_voltage_traces_divisions_by_metadata.html">model_data_base.mdb_initializers.load_simrun_general.get_voltage_traces_divisions_by_metadata</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.init.html">model_data_base.mdb_initializers.load_simrun_general.init</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces.html">model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces_helper.html">model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces_helper</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.load_initialized_cell_and_evokedNW_from_mdb.html">model_data_base.mdb_initializers.load_simrun_general.load_initialized_cell_and_evokedNW_from_mdb</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.load_param_files_from_mdb.html">model_data_base.mdb_initializers.load_simrun_general.load_param_files_from_mdb</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.make_filelist.html">model_data_base.mdb_initializers.load_simrun_general.make_filelist</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.network_param_to_mdbpath.html">model_data_base.mdb_initializers.load_simrun_general.network_param_to_mdbpath</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.optimize.html">model_data_base.mdb_initializers.load_simrun_general.optimize</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_by_filenames.html">model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_by_filenames</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_csv.html">model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_csv</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_file.html">model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_file</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_npz.html">model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_npz</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.write_param_files_to_folder.html">model_data_base.mdb_initializers.load_simrun_general.write_param_files_to_folder</a></li>
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.mdb_initializers.load_simrun_general</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.html">model_data_base.mdb_initializers.prepare_ANN_batches</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.somatic_summation_model.html">model_data_base.mdb_initializers.somatic_summation_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.html">model_data_base.mdb_initializers.synapse_activation_binning</a></li>
@@ -139,70 +116,70 @@ with the simrun2 module into a ModelDataBase.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_spike_times.html#model_data_base.mdb_initializers.load_simrun_general.add_dendritic_spike_times" title="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_spike_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_dendritic_spike_times</span></code></a>(mdb[, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_dendritic_spike_times</span></code>(mdb[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_voltage_traces.html#model_data_base.mdb_initializers.load_simrun_general.add_dendritic_voltage_traces" title="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_voltage_traces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_dendritic_voltage_traces</span></code></a>(mdb[, …])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_dendritic_voltage_traces</span></code>(mdb[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.cell_param_to_mdbpath.html#model_data_base.mdb_initializers.load_simrun_general.cell_param_to_mdbpath" title="model_data_base.mdb_initializers.load_simrun_general.cell_param_to_mdbpath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_param_to_mdbpath</span></code></a>(neuron)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_param_to_mdbpath</span></code>(neuron)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.create_mdb_path_print.html#model_data_base.mdb_initializers.load_simrun_general.create_mdb_path_print" title="model_data_base.mdb_initializers.load_simrun_general.create_mdb_path_print"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_mdb_path_print</span></code></a>(path[, replace_dict])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_mdb_path_print</span></code>(path[, replace_dict])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.create_metadata.html#model_data_base.mdb_initializers.load_simrun_general.create_metadata" title="model_data_base.mdb_initializers.load_simrun_general.create_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_metadata</span></code></a>(mdb)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_metadata</span></code>(mdb)</p></td>
 <td><p>Generates metadata out of a pd.Series containing the sim_trail_indices</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.generate_param_file_hashes.html#model_data_base.mdb_initializers.load_simrun_general.generate_param_file_hashes" title="model_data_base.mdb_initializers.load_simrun_general.generate_param_file_hashes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_param_file_hashes</span></code></a>(simresult_path, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_param_file_hashes</span></code>(simresult_path, …)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.get_file.html#model_data_base.mdb_initializers.load_simrun_general.get_file" title="model_data_base.mdb_initializers.load_simrun_general.get_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_file</span></code></a>(self, suffix)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_file</span></code>(self, suffix)</p></td>
 <td><p>if folder only contains one file of specified suffix, this file is returned</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.get_max_commas.html#model_data_base.mdb_initializers.load_simrun_general.get_max_commas" title="model_data_base.mdb_initializers.load_simrun_general.get_max_commas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_max_commas</span></code></a>(paths)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_max_commas</span></code>(paths)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.get_voltage_traces_divisions_by_metadata.html#model_data_base.mdb_initializers.load_simrun_general.get_voltage_traces_divisions_by_metadata" title="model_data_base.mdb_initializers.load_simrun_general.get_voltage_traces_divisions_by_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_voltage_traces_divisions_by_metadata</span></code></a>(…)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_voltage_traces_divisions_by_metadata</span></code>(…)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.init.html#model_data_base.mdb_initializers.load_simrun_general.init" title="model_data_base.mdb_initializers.load_simrun_general.init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code></a>(mdb, simresult_path[, core, …])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code>(mdb, simresult_path[, core, …])</p></td>
 <td><p>Use this function to load simulation data generated with the simrun2 module into a ModelDataBase.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces.html#model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces" title="model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dendritic_voltage_traces</span></code></a>(mdb, …[, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dendritic_voltage_traces</span></code>(mdb, …[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces_helper.html#model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces_helper" title="model_data_base.mdb_initializers.load_simrun_general.load_dendritic_voltage_traces_helper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dendritic_voltage_traces_helper</span></code></a>(mdb, suffix)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dendritic_voltage_traces_helper</span></code>(mdb, suffix)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.load_initialized_cell_and_evokedNW_from_mdb.html#model_data_base.mdb_initializers.load_simrun_general.load_initialized_cell_and_evokedNW_from_mdb" title="model_data_base.mdb_initializers.load_simrun_general.load_initialized_cell_and_evokedNW_from_mdb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_initialized_cell_and_evokedNW_from_mdb</span></code></a>(…)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_initialized_cell_and_evokedNW_from_mdb</span></code>(…)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.load_param_files_from_mdb.html#model_data_base.mdb_initializers.load_simrun_general.load_param_files_from_mdb" title="model_data_base.mdb_initializers.load_simrun_general.load_param_files_from_mdb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_param_files_from_mdb</span></code></a>(mdb, sti)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_param_files_from_mdb</span></code>(mdb, sti)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.make_filelist.html#model_data_base.mdb_initializers.load_simrun_general.make_filelist" title="model_data_base.mdb_initializers.load_simrun_general.make_filelist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_filelist</span></code></a>(directory[, suffix])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_filelist</span></code>(directory[, suffix])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.network_param_to_mdbpath.html#model_data_base.mdb_initializers.load_simrun_general.network_param_to_mdbpath" title="model_data_base.mdb_initializers.load_simrun_general.network_param_to_mdbpath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">network_param_to_mdbpath</span></code></a>(network)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">network_param_to_mdbpath</span></code>(network)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.optimize.html#model_data_base.mdb_initializers.load_simrun_general.optimize" title="model_data_base.mdb_initializers.load_simrun_general.optimize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimize</span></code></a>(mdb[, dumper, select, get, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">optimize</span></code>(mdb[, dumper, select, get, …])</p></td>
 <td><p>DEPRECATED; this step is now already done in a more coherent way by the init function if rewrite_in_optimized_format is set to True.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_by_filenames.html#model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_by_filenames" title="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_by_filenames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_voltage_traces_by_filenames</span></code></a>(prefix, fnames)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_voltage_traces_by_filenames</span></code>(prefix, fnames)</p></td>
 <td><p>takes list of filenames pointing to voltage trace files, returns dask dataframe</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_csv.html#model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_csv" title="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_voltage_traces_from_csv</span></code></a>(prefix, fname)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_voltage_traces_from_csv</span></code>(prefix, fname)</p></td>
 <td><p>reads a single voltage traces file as it is generated by the simrun package.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_file.html#model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_file" title="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_voltage_traces_from_file</span></code></a>(prefix, fname)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_voltage_traces_from_file</span></code>(prefix, fname)</p></td>
 <td><p>reads a single voltage traces file as it is generated by the simrun package.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_npz.html#model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_npz" title="model_data_base.mdb_initializers.load_simrun_general.read_voltage_traces_from_npz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_voltage_traces_from_npz</span></code></a>(prefix, fname)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_voltage_traces_from_npz</span></code>(prefix, fname)</p></td>
 <td><p>this is the same as read_voltage_traces_from_file, but it reads npz files, not csv</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.write_param_files_to_folder.html#model_data_base.mdb_initializers.load_simrun_general.write_param_files_to_folder" title="model_data_base.mdb_initializers.load_simrun_general.write_param_files_to_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_param_files_to_folder</span></code></a>(df, folder, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_param_files_to_folder</span></code>(df, folder, …)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -213,8 +190,8 @@ with the simrun2 module into a ModelDataBase.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="model_data_base.mdb_initializers.PSPs.init.html" class="btn btn-neutral float-left" title="model_data_base.mdb_initializers.PSPs.init" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_spike_times.html" class="btn btn-neutral float-right" title="model_data_base.mdb_initializers.load_simrun_general.add_dendritic_spike_times" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.mdb_initializers.PSPs.html" class="btn btn-neutral float-left" title="model_data_base.mdb_initializers.PSPs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.mdb_initializers.prepare_ANN_batches.html" class="btn btn-neutral float-right" title="model_data_base.mdb_initializers.prepare_ANN_batches" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

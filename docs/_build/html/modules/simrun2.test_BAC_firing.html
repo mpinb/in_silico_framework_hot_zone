@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>simrun2.test_BAC_firing &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="simrun2.test_BAC_firing.apical_injection" href="simrun2.test_BAC_firing.apical_injection.html" />
-    <link rel="prev" title="simrun2.syn_strength_simrun.write_syn_information" href="simrun2.syn_strength_simrun.write_syn_information.html" /> 
+    <link rel="next" title="simrun2.test_passive_properties" href="simrun2.test_passive_properties.html" />
+    <link rel="prev" title="simrun2.syn_strength_simrun" href="simrun2.syn_strength_simrun.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -63,16 +64,7 @@
 <li class="toctree-l2"><a class="reference internal" href="simrun2.sim_trail_to_cell_object.html">simrun2.sim_trail_to_cell_object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun2.syn_strength_Lang_fig5_batch_run.html">simrun2.syn_strength_Lang_fig5_batch_run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun2.syn_strength_simrun.html">simrun2.syn_strength_simrun</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">simrun2.test_BAC_firing</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="simrun2.test_BAC_firing.apical_injection.html">simrun2.test_BAC_firing.apical_injection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun2.test_BAC_firing.get_apical_section_at_distance.html">simrun2.test_BAC_firing.get_apical_section_at_distance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun2.test_BAC_firing.scale_apical.html">simrun2.test_BAC_firing.scale_apical</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun2.test_BAC_firing.soma_apical_injection.html">simrun2.test_BAC_firing.soma_apical_injection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun2.test_BAC_firing.soma_injection.html">simrun2.test_BAC_firing.soma_injection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun2.test_BAC_firing.test_BAC_firing.html">simrun2.test_BAC_firing.test_BAC_firing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun2.test_BAC_firing.write_sim_results.html">simrun2.test_BAC_firing.write_sim_results</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">simrun2.test_BAC_firing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun2.test_passive_properties.html">simrun2.test_passive_properties</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun2.test_sustained_firing.html">simrun2.test_sustained_firing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun2.utils.html">simrun2.utils</a></li>
@@ -124,25 +116,25 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.test_BAC_firing.apical_injection.html#simrun2.test_BAC_firing.apical_injection" title="simrun2.test_BAC_firing.apical_injection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apical_injection</span></code></a>(cell, apicalBifurcationSec, …)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">apical_injection</span></code>(cell, apicalBifurcationSec, …)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun2.test_BAC_firing.get_apical_section_at_distance.html#simrun2.test_BAC_firing.get_apical_section_at_distance" title="simrun2.test_BAC_firing.get_apical_section_at_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_apical_section_at_distance</span></code></a>(cell, distance)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_apical_section_at_distance</span></code>(cell, distance)</p></td>
 <td><p>determine interior apical dendrite section (i.e.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.test_BAC_firing.scale_apical.html#simrun2.test_BAC_firing.scale_apical" title="simrun2.test_BAC_firing.scale_apical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_apical</span></code></a>(cell)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_apical</span></code>(cell)</p></td>
 <td><p>scale apical diameters depending on distance to soma; therefore only possible after creating complete cell</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun2.test_BAC_firing.soma_apical_injection.html#simrun2.test_BAC_firing.soma_apical_injection" title="simrun2.test_BAC_firing.soma_apical_injection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">soma_apical_injection</span></code></a>(cell, somaAmplitude, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">soma_apical_injection</span></code>(cell, somaAmplitude, …)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.test_BAC_firing.soma_injection.html#simrun2.test_BAC_firing.soma_injection" title="simrun2.test_BAC_firing.soma_injection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">soma_injection</span></code></a>(cell, amplitude, delay, …)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">soma_injection</span></code>(cell, amplitude, delay, …)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun2.test_BAC_firing.test_BAC_firing.html#simrun2.test_BAC_firing.test_BAC_firing" title="simrun2.test_BAC_firing.test_BAC_firing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_BAC_firing</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_BAC_firing</span></code>(fname)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.test_BAC_firing.write_sim_results.html#simrun2.test_BAC_firing.write_sim_results" title="simrun2.test_BAC_firing.write_sim_results"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sim_results</span></code></a>(fname, t, v)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sim_results</span></code>(fname, t, v)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -153,8 +145,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="simrun2.syn_strength_simrun.write_syn_information.html" class="btn btn-neutral float-left" title="simrun2.syn_strength_simrun.write_syn_information" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="simrun2.test_BAC_firing.apical_injection.html" class="btn btn-neutral float-right" title="simrun2.test_BAC_firing.apical_injection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="simrun2.syn_strength_simrun.html" class="btn btn-neutral float-left" title="simrun2.syn_strength_simrun" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="simrun2.test_passive_properties.html" class="btn btn-neutral float-right" title="simrun2.test_passive_properties" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

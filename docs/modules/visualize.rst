@@ -1,37 +1,33 @@
-visualize package
-=================
-
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   visualize.activity_analysis
-
-Submodules
-----------
-
-visualize.cell\_morphology\_visualizer module
----------------------------------------------
-
-.. automodule:: visualize.cell_morphology_visualizer
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-visualize.helper\_methods module
---------------------------------
-
-.. automodule:: visualize.helper_methods
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
+﻿visualize
+=========
 
 .. automodule:: visualize
-   :members:
-   :undoc-members:
-   :show-inheritance:
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   visualize.activity_analysis
+   visualize.cell_morphology_visualizer
+   visualize.helper_methods
+

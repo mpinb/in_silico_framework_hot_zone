@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>simrun2.reduced_model.get_kernel &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,7 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="simrun2.reduced_model.get_kernel.compare_lists_by_none_values" href="simrun2.reduced_model.get_kernel.compare_lists_by_none_values.html" />
+    <link rel="next" title="simrun2.reduced_model.spiking_output" href="simrun2.reduced_model.spiking_output.html" />
     <link rel="prev" title="simrun2.reduced_model" href="simrun2.reduced_model.html" /> 
 </head>
 
@@ -56,20 +57,7 @@
 <li class="toctree-l2"><a class="reference internal" href="simrun2.generate_synapse_activations.html">simrun2.generate_synapse_activations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun2.parameters_to_cell.html">simrun2.parameters_to_cell</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="simrun2.reduced_model.html">simrun2.reduced_model</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">simrun2.reduced_model.get_kernel</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.get_kernel.compare_lists_by_none_values.html">simrun2.reduced_model.get_kernel.compare_lists_by_none_values</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.get_kernel.concatenate_return_boundaries.html">simrun2.reduced_model.get_kernel.concatenate_return_boundaries</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.get_kernel.get_kernel_C2_grid.html">simrun2.reduced_model.get_kernel.get_kernel_C2_grid</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.get_kernel.get_lookup_series_from_lda_values_spike_data.html">simrun2.reduced_model.get_kernel.get_lookup_series_from_lda_values_spike_data</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.get_kernel.get_plt_axis.html">simrun2.reduced_model.get_kernel.get_plt_axis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.get_kernel.interpolate_lookup_series.html">simrun2.reduced_model.get_kernel.interpolate_lookup_series</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.get_kernel.plot_LUT.html">simrun2.reduced_model.get_kernel.plot_LUT</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.get_kernel.plot_kernel_dict.html">simrun2.reduced_model.get_kernel.plot_kernel_dict</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.get_kernel.spike_in_interval.html">simrun2.reduced_model.get_kernel.spike_in_interval</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.get_kernel.ReducedLdaModel.html">simrun2.reduced_model.get_kernel.ReducedLdaModel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.get_kernel.ReducedLdaModelResult.html">simrun2.reduced_model.get_kernel.ReducedLdaModelResult</a></li>
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">simrun2.reduced_model.get_kernel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="simrun2.reduced_model.spiking_output.html">simrun2.reduced_model.spiking_output</a></li>
 <li class="toctree-l3"><a class="reference internal" href="simrun2.reduced_model.synapse_activation.html">simrun2.reduced_model.synapse_activation</a></li>
 </ul>
@@ -131,31 +119,31 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.reduced_model.get_kernel.compare_lists_by_none_values.html#simrun2.reduced_model.get_kernel.compare_lists_by_none_values" title="simrun2.reduced_model.get_kernel.compare_lists_by_none_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_lists_by_none_values</span></code></a>(l1, l2)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_lists_by_none_values</span></code>(l1, l2)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun2.reduced_model.get_kernel.concatenate_return_boundaries.html#simrun2.reduced_model.get_kernel.concatenate_return_boundaries" title="simrun2.reduced_model.get_kernel.concatenate_return_boundaries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concatenate_return_boundaries</span></code></a>(values[, axis])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">concatenate_return_boundaries</span></code>(values[, axis])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.reduced_model.get_kernel.get_kernel_C2_grid.html#simrun2.reduced_model.get_kernel.get_kernel_C2_grid" title="simrun2.reduced_model.get_kernel.get_kernel_C2_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_kernel_C2_grid</span></code></a>([…])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_kernel_C2_grid</span></code>([…])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun2.reduced_model.get_kernel.get_lookup_series_from_lda_values_spike_data.html#simrun2.reduced_model.get_kernel.get_lookup_series_from_lda_values_spike_data" title="simrun2.reduced_model.get_kernel.get_lookup_series_from_lda_values_spike_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lookup_series_from_lda_values_spike_data</span></code></a>(…)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lookup_series_from_lda_values_spike_data</span></code>(…)</p></td>
 <td><p>lda_values: one-dimensional array containing lda_values of trail spike: one-dimensional array containing True / False mask: one-dimensional array containing True / False. If True: the respective trail will be ignored.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.reduced_model.get_kernel.get_plt_axis.html#simrun2.reduced_model.get_kernel.get_plt_axis" title="simrun2.reduced_model.get_kernel.get_plt_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_plt_axis</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_plt_axis</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun2.reduced_model.get_kernel.interpolate_lookup_series.html#simrun2.reduced_model.get_kernel.interpolate_lookup_series" title="simrun2.reduced_model.get_kernel.interpolate_lookup_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate_lookup_series</span></code></a>(lookup_series)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate_lookup_series</span></code>(lookup_series)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.reduced_model.get_kernel.plot_LUT.html#simrun2.reduced_model.get_kernel.plot_LUT" title="simrun2.reduced_model.get_kernel.plot_LUT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_LUT</span></code></a>(lookup_series[, lda_values, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_LUT</span></code>(lookup_series[, lda_values, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun2.reduced_model.get_kernel.plot_kernel_dict.html#simrun2.reduced_model.get_kernel.plot_kernel_dict" title="simrun2.reduced_model.get_kernel.plot_kernel_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_kernel_dict</span></code></a>(kernel_dict[, ax])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_kernel_dict</span></code>(kernel_dict[, ax])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.reduced_model.get_kernel.spike_in_interval.html#simrun2.reduced_model.get_kernel.spike_in_interval" title="simrun2.reduced_model.get_kernel.spike_in_interval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spike_in_interval</span></code></a>(st, tmin, tmax)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">spike_in_interval</span></code>(st, tmin, tmax)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -167,10 +155,10 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.reduced_model.get_kernel.ReducedLdaModel.html#simrun2.reduced_model.get_kernel.ReducedLdaModel" title="simrun2.reduced_model.get_kernel.ReducedLdaModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReducedLdaModel</span></code></a>(keys_to_synapse_activation_data)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReducedLdaModel</span></code>(keys_to_synapse_activation_data)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun2.reduced_model.get_kernel.ReducedLdaModelResult.html#simrun2.reduced_model.get_kernel.ReducedLdaModelResult" title="simrun2.reduced_model.get_kernel.ReducedLdaModelResult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReducedLdaModelResult</span></code></a>(RM, lda_dict, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReducedLdaModelResult</span></code>(RM, lda_dict, …)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -182,7 +170,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="simrun2.reduced_model.html" class="btn btn-neutral float-left" title="simrun2.reduced_model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="simrun2.reduced_model.get_kernel.compare_lists_by_none_values.html" class="btn btn-neutral float-right" title="simrun2.reduced_model.get_kernel.compare_lists_by_none_values" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="simrun2.reduced_model.spiking_output.html" class="btn btn-neutral float-right" title="simrun2.reduced_model.spiking_output" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

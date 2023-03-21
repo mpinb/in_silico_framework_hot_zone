@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>singlecell_input_mapper.evoked_PSTH_from_spike_times &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,7 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters.html" />
+    <link rel="next" title="singlecell_input_mapper.evoked_network_param_from_template" href="singlecell_input_mapper.evoked_network_param_from_template.html" />
     <link rel="prev" title="singlecell_input_mapper" href="singlecell_input_mapper.html" /> 
 </head>
 
@@ -56,14 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">singlecell_input_mapper.evoked_PSTH_from_spike_times</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters.html">singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.create_evoked_PSTH.html">singlecell_input_mapper.evoked_PSTH_from_spike_times.create_evoked_PSTH</a></li>
-<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.load_cluster_trials.html">singlecell_input_mapper.evoked_PSTH_from_spike_times.load_cluster_trials</a></li>
-<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.load_spike_times.html">singlecell_input_mapper.evoked_PSTH_from_spike_times.load_spike_times</a></li>
-<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.scan_directory.html">singlecell_input_mapper.evoked_PSTH_from_spike_times.scan_directory</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">singlecell_input_mapper.evoked_PSTH_from_spike_times</a></li>
 <li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.evoked_network_param_from_template.html">singlecell_input_mapper.evoked_network_param_from_template</a></li>
 <li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.map_singlecell_inputs.html">singlecell_input_mapper.map_singlecell_inputs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.ongoing_network_param_from_template.html">singlecell_input_mapper.ongoing_network_param_from_template</a></li>
@@ -109,19 +103,19 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters.html#singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters" title="singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_average_celltype_PSTH_from_clusters</span></code></a>(…)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_average_celltype_PSTH_from_clusters</span></code>(…)</p></td>
 <td><p>loads cluster files from CDK recordings and automatically determines avg ongoing activity and evoked PSTH for cell type</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.create_evoked_PSTH.html#singlecell_input_mapper.evoked_PSTH_from_spike_times.create_evoked_PSTH" title="singlecell_input_mapper.evoked_PSTH_from_spike_times.create_evoked_PSTH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_evoked_PSTH</span></code></a>(spikeTimesName, cellType, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_evoked_PSTH</span></code>(spikeTimesName, cellType, …)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.load_cluster_trials.html#singlecell_input_mapper.evoked_PSTH_from_spike_times.load_cluster_trials" title="singlecell_input_mapper.evoked_PSTH_from_spike_times.load_cluster_trials"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_cluster_trials</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_cluster_trials</span></code>(fname)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.load_spike_times.html#singlecell_input_mapper.evoked_PSTH_from_spike_times.load_spike_times" title="singlecell_input_mapper.evoked_PSTH_from_spike_times.load_spike_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_spike_times</span></code></a>(spikeTimesName)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_spike_times</span></code>(spikeTimesName)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.scan_directory.html#singlecell_input_mapper.evoked_PSTH_from_spike_times.scan_directory" title="singlecell_input_mapper.evoked_PSTH_from_spike_times.scan_directory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scan_directory</span></code></a>(path, fnames, suffix)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scan_directory</span></code>(path, fnames, suffix)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -133,7 +127,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="singlecell_input_mapper.html" class="btn btn-neutral float-left" title="singlecell_input_mapper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters.html" class="btn btn-neutral float-right" title="singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="singlecell_input_mapper.evoked_network_param_from_template.html" class="btn btn-neutral float-right" title="singlecell_input_mapper.evoked_network_param_from_template" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

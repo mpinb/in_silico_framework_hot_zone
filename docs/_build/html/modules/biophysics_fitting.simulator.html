@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>biophysics_fitting.simulator &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="biophysics_fitting.simulator.run_fun" href="biophysics_fitting.simulator.run_fun.html" />
-    <link rel="prev" title="biophysics_fitting.setup_stim.setup_soma_step" href="biophysics_fitting.setup_stim.setup_soma_step.html" /> 
+    <link rel="next" title="biophysics_fitting.utils" href="biophysics_fitting.utils.html" />
+    <link rel="prev" title="biophysics_fitting.setup_stim" href="biophysics_fitting.setup_stim.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,11 +46,6 @@
 <li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.connected_to_dend_beyond.html">biophysics_fitting.connected_to_dend_beyond</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_branching_depth.html">biophysics_fitting.get_branching_depth</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_branching_depth_series.html">biophysics_fitting.get_branching_depth_series</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_inner_sec_dist_list.html">biophysics_fitting.get_inner_sec_dist_list</a></li>
-<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_main_bifurcation_section.html">biophysics_fitting.get_main_bifurcation_section</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.L5tt_parameter_setup.html">biophysics_fitting.L5tt_parameter_setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.combiner.html">biophysics_fitting.combiner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.ephys.html">biophysics_fitting.ephys</a></li>
@@ -63,12 +59,7 @@
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.optimizer.html">biophysics_fitting.optimizer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.parameters.html">biophysics_fitting.parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.setup_stim.html">biophysics_fitting.setup_stim</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">biophysics_fitting.simulator</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.simulator.run_fun.html">biophysics_fitting.simulator.run_fun</a></li>
-<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.simulator.Simulator.html">biophysics_fitting.simulator.Simulator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.simulator.Simulator_Setup.html">biophysics_fitting.simulator.Simulator_Setup</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">biophysics_fitting.simulator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.utils.html">biophysics_fitting.utils</a></li>
 </ul>
 </li>
@@ -125,7 +116,7 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="biophysics_fitting.simulator.run_fun.html#biophysics_fitting.simulator.run_fun" title="biophysics_fitting.simulator.run_fun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_fun</span></code></a>(cell[, T, Vinit, dt, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_fun</span></code>(cell[, T, Vinit, dt, …])</p></td>
 <td><p>Default function to run a simulation</p></td>
 </tr>
 </tbody>
@@ -137,10 +128,10 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="biophysics_fitting.simulator.Simulator.html#biophysics_fitting.simulator.Simulator" title="biophysics_fitting.simulator.Simulator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Simulator</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Simulator</span></code>()</p></td>
 <td><p>This class can be used to transform a parameter vector into simulated voltage traces.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="biophysics_fitting.simulator.Simulator_Setup.html#biophysics_fitting.simulator.Simulator_Setup" title="biophysics_fitting.simulator.Simulator_Setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Simulator_Setup</span></code></a>()</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Simulator_Setup</span></code>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -151,8 +142,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="biophysics_fitting.setup_stim.setup_soma_step.html" class="btn btn-neutral float-left" title="biophysics_fitting.setup_stim.setup_soma_step" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="biophysics_fitting.simulator.run_fun.html" class="btn btn-neutral float-right" title="biophysics_fitting.simulator.run_fun" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="biophysics_fitting.setup_stim.html" class="btn btn-neutral float-left" title="biophysics_fitting.setup_stim" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="biophysics_fitting.utils.html" class="btn btn-neutral float-right" title="biophysics_fitting.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

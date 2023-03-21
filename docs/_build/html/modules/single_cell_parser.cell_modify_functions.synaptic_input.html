@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.cell_modify_functions.synaptic_input &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input" href="single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input.html" />
-    <link rel="prev" title="single_cell_parser.cell_modify_functions.soma_current_injection.soma_current_injection" href="single_cell_parser.cell_modify_functions.soma_current_injection.soma_current_injection.html" /> 
+    <link rel="next" title="single_cell_parser.cell_parser" href="single_cell_parser.cell_parser.html" />
+    <link rel="prev" title="single_cell_parser.cell_modify_functions.soma_current_injection" href="single_cell_parser.cell_modify_functions.soma_current_injection.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,27 +56,15 @@
 <li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.build_parameters.html">single_cell_parser.build_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.create_cell.html">single_cell_parser.create_cell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.init_neuron_run.html">single_cell_parser.init_neuron_run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.load_NMODL_parameters.html">single_cell_parser.load_NMODL_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sec_distance_to_soma.html">single_cell_parser.sec_distance_to_soma</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_network_paramfile.html">single_cell_parser.spines_update_network_paramfile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_synapse_distribution_file.html">single_cell_parser.spines_update_synapse_distribution_file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.Event.html">single_cell_parser.Event</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell.html">single_cell_parser.cell</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html">single_cell_parser.cell_modify_functions</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.get.html">single_cell_parser.cell_modify_functions.get</a></li>
 <li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.BAC_injection.html">single_cell_parser.cell_modify_functions.BAC_injection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.apical_current_injection.html">single_cell_parser.cell_modify_functions.apical_current_injection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.apical_epsp_injection.html">single_cell_parser.cell_modify_functions.apical_epsp_injection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.scale_apical.html">single_cell_parser.cell_modify_functions.scale_apical</a></li>
 <li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.scale_apical_morph_86.html">single_cell_parser.cell_modify_functions.scale_apical_morph_86</a></li>
 <li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.soma_current_injection.html">single_cell_parser.cell_modify_functions.soma_current_injection</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">single_cell_parser.cell_modify_functions.synaptic_input</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input.html">single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input</a></li>
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">single_cell_parser.cell_modify_functions.synaptic_input</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_parser.html">single_cell_parser.cell_parser</a></li>
@@ -134,7 +123,7 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input.html#single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input" title="single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synaptic_input</span></code></a>(cell[, network_param, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">synaptic_input</span></code>(cell[, network_param, …])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -145,8 +134,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="single_cell_parser.cell_modify_functions.soma_current_injection.soma_current_injection.html" class="btn btn-neutral float-left" title="single_cell_parser.cell_modify_functions.soma_current_injection.soma_current_injection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input.html" class="btn btn-neutral float-right" title="single_cell_parser.cell_modify_functions.synaptic_input.synaptic_input" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="single_cell_parser.cell_modify_functions.soma_current_injection.html" class="btn btn-neutral float-left" title="single_cell_parser.cell_modify_functions.soma_current_injection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="single_cell_parser.cell_parser.html" class="btn btn-neutral float-right" title="single_cell_parser.cell_parser" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.reader &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="single_cell_parser.reader.read_complete_synapse_activation_file" href="single_cell_parser.reader.read_complete_synapse_activation_file.html" />
-    <link rel="prev" title="single_cell_parser.network_realizations.create_synapse_realization" href="single_cell_parser.network_realizations.create_synapse_realization.html" /> 
+    <link rel="next" title="single_cell_parser.scalar_field" href="single_cell_parser.scalar_field.html" />
+    <link rel="prev" title="single_cell_parser.network_realizations" href="single_cell_parser.network_realizations.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,14 +56,6 @@
 <li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.build_parameters.html">single_cell_parser.build_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.create_cell.html">single_cell_parser.create_cell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.init_neuron_run.html">single_cell_parser.init_neuron_run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.load_NMODL_parameters.html">single_cell_parser.load_NMODL_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sec_distance_to_soma.html">single_cell_parser.sec_distance_to_soma</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_network_paramfile.html">single_cell_parser.spines_update_network_paramfile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_synapse_distribution_file.html">single_cell_parser.spines_update_synapse_distribution_file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.Event.html">single_cell_parser.Event</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell.html">single_cell_parser.cell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html">single_cell_parser.cell_modify_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_parser.html">single_cell_parser.cell_parser</a></li>
@@ -70,20 +63,7 @@
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_modify_functions.html">single_cell_parser.network_modify_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_param_modify_functions.html">single_cell_parser.network_param_modify_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_realizations.html">single_cell_parser.network_realizations</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.reader</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.reader.read_complete_synapse_activation_file.html">single_cell_parser.reader.read_complete_synapse_activation_file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.reader.read_functional_realization_map.html">single_cell_parser.reader.read_functional_realization_map</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.reader.read_hoc_file.html">single_cell_parser.reader.read_hoc_file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.reader.read_landmark_file.html">single_cell_parser.reader.read_landmark_file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.reader.read_pruned_synapse_realization.html">single_cell_parser.reader.read_pruned_synapse_realization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.reader.read_scalar_field.html">single_cell_parser.reader.read_scalar_field</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.reader.read_spike_times_file.html">single_cell_parser.reader.read_spike_times_file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.reader.read_synapse_activation_file.html">single_cell_parser.reader.read_synapse_activation_file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.reader.read_synapse_realization.html">single_cell_parser.reader.read_synapse_realization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.reader.read_synapse_weight_file.html">single_cell_parser.reader.read_synapse_weight_file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.reader.Edge.html">single_cell_parser.reader.Edge</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.reader</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.scalar_field.html">single_cell_parser.scalar_field</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.serialize_cell.html">single_cell_parser.serialize_cell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sim_control.html">single_cell_parser.sim_control</a></li>
@@ -135,34 +115,34 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.reader.read_complete_synapse_activation_file.html#single_cell_parser.reader.read_complete_synapse_activation_file" title="single_cell_parser.reader.read_complete_synapse_activation_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_complete_synapse_activation_file</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_complete_synapse_activation_file</span></code>(fname)</p></td>
 <td><p>reads list of all functional synapses and their activation times. Input: file of format:     synapse typetsynapse IDtsoma distancetsection IDtsection pt IDtdendrite labeltactivation times returns: dictionary with cell types as keys and list of synapse locations and activation times, coded as tuples: (synapse ID, soma distance, section ID, point ID, structure label, [t1, t2, … , tn]).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.reader.read_functional_realization_map.html#single_cell_parser.reader.read_functional_realization_map" title="single_cell_parser.reader.read_functional_realization_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_functional_realization_map</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_functional_realization_map</span></code>(fname)</p></td>
 <td><p>reads list of all functional connections coded by tuples (cell type, presynaptic cell index, synapse index).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.reader.read_hoc_file.html#single_cell_parser.reader.read_hoc_file" title="single_cell_parser.reader.read_hoc_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_hoc_file</span></code></a>([fname])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_hoc_file</span></code>([fname])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.reader.read_landmark_file.html#single_cell_parser.reader.read_landmark_file" title="single_cell_parser.reader.read_landmark_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_landmark_file</span></code></a>(landmarkFilename)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_landmark_file</span></code>(landmarkFilename)</p></td>
 <td><p>returns list of (x,y,z) points</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.reader.read_pruned_synapse_realization.html#single_cell_parser.reader.read_pruned_synapse_realization" title="single_cell_parser.reader.read_pruned_synapse_realization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pruned_synapse_realization</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pruned_synapse_realization</span></code>(fname)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.reader.read_scalar_field.html#single_cell_parser.reader.read_scalar_field" title="single_cell_parser.reader.read_scalar_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_scalar_field</span></code></a>([fname])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_scalar_field</span></code>([fname])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.reader.read_spike_times_file.html#single_cell_parser.reader.read_spike_times_file" title="single_cell_parser.reader.read_spike_times_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_spike_times_file</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_spike_times_file</span></code>(fname)</p></td>
 <td><p>reads list of all trials and spike times within these trials. Input: file of format:     trial nr.tactivation times (comma-separated list or empty) :returns: dictionary with trial numbers as keys (integers), and tuples of spike times           in each trial as values.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.reader.read_synapse_activation_file.html#single_cell_parser.reader.read_synapse_activation_file" title="single_cell_parser.reader.read_synapse_activation_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_activation_file</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_activation_file</span></code>(fname)</p></td>
 <td><p>reads list of all functional synapses and their activation times. Input: file of format:     synapse typetsynapse IDtsoma distancetsection IDtsection pt IDtdendrite labeltactivation times returns: dictionary with cell types as keys and list of synapse locations and activation times, coded as tuples: (synapse ID, section ID, section pt ID, [t1, t2, … , tn]).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.reader.read_synapse_realization.html#single_cell_parser.reader.read_synapse_realization" title="single_cell_parser.reader.read_synapse_realization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_realization</span></code></a>(fname)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_realization</span></code>(fname)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.reader.read_synapse_weight_file.html#single_cell_parser.reader.read_synapse_weight_file" title="single_cell_parser.reader.read_synapse_weight_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_weight_file</span></code></a>(fname)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_weight_file</span></code>(fname)</p></td>
 <td><p>reads list of all anatomical synapses and their maximum conductance values. Input: file of format:     synapse type  synapse ID      section IDtsection pt IDtreceptor type (string)tconductance values Returns: two (!!!) dictionaries with cell types as keys, ordered the same as the anatomical synapses:     1st with section ID and pt ID, 2nd with synaptic weights, coded as dictionaries     (keys=receptor strings) containing weights: (gmax_0, gmax_1, … , gmax_n).</p></td>
 </tr>
 </tbody>
@@ -174,7 +154,7 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.reader.Edge.html#single_cell_parser.reader.Edge" title="single_cell_parser.reader.Edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code>()</p></td>
 <td><p>Edge object contains list of points, diameter at each point, label, string hocLabel, parentID Used during reading of hoc files</p></td>
 </tr>
 </tbody>
@@ -185,8 +165,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="single_cell_parser.network_realizations.create_synapse_realization.html" class="btn btn-neutral float-left" title="single_cell_parser.network_realizations.create_synapse_realization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="single_cell_parser.reader.read_complete_synapse_activation_file.html" class="btn btn-neutral float-right" title="single_cell_parser.reader.read_complete_synapse_activation_file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="single_cell_parser.network_realizations.html" class="btn btn-neutral float-left" title="single_cell_parser.network_realizations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="single_cell_parser.scalar_field.html" class="btn btn-neutral float-right" title="single_cell_parser.scalar_field" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

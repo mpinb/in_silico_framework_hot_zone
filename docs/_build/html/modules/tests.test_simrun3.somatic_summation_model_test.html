@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tests.test_simrun3.somatic_summation_model_test &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="tests.test_simrun3.somatic_summation_model_test.get_fake_synapse_activation_dataframe" href="tests.test_simrun3.somatic_summation_model_test.get_fake_synapse_activation_dataframe.html" />
-    <link rel="prev" title="tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution" href="tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.html" /> 
+    <link rel="next" title="tests.test_simrun3.synaptic_strength_fitting_test" href="tests.test_simrun3.synaptic_strength_fitting_test.html" />
+    <link rel="prev" title="tests.test_simrun3.robust_dask_delayed_execution" href="tests.test_simrun3.robust_dask_delayed_execution.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,7 +59,6 @@
 <li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
 <li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="tests.html">tests</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="tests.setup_current_injection_experiment.html">tests.setup_current_injection_experiment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.context.html">tests.context</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.decorators.html">tests.decorators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.test_biophysics_fitting.html">tests.test_biophysics_fitting</a></li>
@@ -68,12 +68,7 @@
 <li class="toctree-l3"><a class="reference internal" href="tests.test_simrun3.context.html">tests.test_simrun3.context</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.test_simrun3.decorators.html">tests.test_simrun3.decorators</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.test_simrun3.robust_dask_delayed_execution.html">tests.test_simrun3.robust_dask_delayed_execution</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">tests.test_simrun3.somatic_summation_model_test</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun3.somatic_summation_model_test.get_fake_synapse_activation_dataframe.html">tests.test_simrun3.somatic_summation_model_test.get_fake_synapse_activation_dataframe</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun3.somatic_summation_model_test.FakePSP.html">tests.test_simrun3.somatic_summation_model_test.FakePSP</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tests.test_simrun3.somatic_summation_model_test.Tests.html">tests.test_simrun3.somatic_summation_model_test.Tests</a></li>
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">tests.test_simrun3.somatic_summation_model_test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.test_simrun3.synaptic_strength_fitting_test.html">tests.test_simrun3.synaptic_strength_fitting_test</a></li>
 </ul>
 </li>
@@ -120,7 +115,7 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="tests.test_simrun3.somatic_summation_model_test.get_fake_synapse_activation_dataframe.html#tests.test_simrun3.somatic_summation_model_test.get_fake_synapse_activation_dataframe" title="tests.test_simrun3.somatic_summation_model_test.get_fake_synapse_activation_dataframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_fake_synapse_activation_dataframe</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_fake_synapse_activation_dataframe</span></code>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -132,10 +127,10 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="tests.test_simrun3.somatic_summation_model_test.FakePSP.html#tests.test_simrun3.somatic_summation_model_test.FakePSP" title="tests.test_simrun3.somatic_summation_model_test.FakePSP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FakePSP</span></code></a>([tEnd, tStim])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">FakePSP</span></code>([tEnd, tStim])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="tests.test_simrun3.somatic_summation_model_test.Tests.html#tests.test_simrun3.somatic_summation_model_test.Tests" title="tests.test_simrun3.somatic_summation_model_test.Tests"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tests</span></code></a>([methodName])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tests</span></code>([methodName])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -146,8 +141,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.html" class="btn btn-neutral float-left" title="tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="tests.test_simrun3.somatic_summation_model_test.get_fake_synapse_activation_dataframe.html" class="btn btn-neutral float-right" title="tests.test_simrun3.somatic_summation_model_test.get_fake_synapse_activation_dataframe" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="tests.test_simrun3.robust_dask_delayed_execution.html" class="btn btn-neutral float-left" title="tests.test_simrun3.robust_dask_delayed_execution" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tests.test_simrun3.synaptic_strength_fitting_test.html" class="btn btn-neutral float-right" title="tests.test_simrun3.synaptic_strength_fitting_test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

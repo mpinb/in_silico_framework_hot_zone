@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>visualize.helper_methods &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,8 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="visualize.helper_methods.display_animation_from_images" href="visualize.helper_methods.display_animation_from_images.html" />
-    <link rel="prev" title="visualize.cell_morphology_visualizer.CellMorphologyVisualizer" href="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.html" /> 
+    <link rel="prev" title="visualize.cell_morphology_visualizer" href="visualize.cell_morphology_visualizer.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -61,13 +61,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="visualize.html">visualize</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="visualize.activity_analysis.html">visualize.activity_analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="visualize.cell_morphology_visualizer.html">visualize.cell_morphology_visualizer</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">visualize.helper_methods</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="visualize.helper_methods.display_animation_from_images.html">visualize.helper_methods.display_animation_from_images</a></li>
-<li class="toctree-l3"><a class="reference internal" href="visualize.helper_methods.find_files_and_order_them.html">visualize.helper_methods.find_files_and_order_them</a></li>
-<li class="toctree-l3"><a class="reference internal" href="visualize.helper_methods.write_gif_from_images.html">visualize.helper_methods.write_gif_from_images</a></li>
-<li class="toctree-l3"><a class="reference internal" href="visualize.helper_methods.write_video_from_images.html">visualize.helper_methods.write_video_from_images</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">visualize.helper_methods</a></li>
 </ul>
 </li>
 </ul>
@@ -109,16 +103,16 @@ Date: 05/01/2023</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="visualize.helper_methods.display_animation_from_images.html#visualize.helper_methods.display_animation_from_images" title="visualize.helper_methods.display_animation_from_images"><code class="xref py py-obj docutils literal notranslate"><span class="pre">display_animation_from_images</span></code></a>(files[, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">display_animation_from_images</span></code>(files[, …])</p></td>
 <td><p>Creates an IPython animation out of files specified in a globstring or a list of paths.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="visualize.helper_methods.find_files_and_order_them.html#visualize.helper_methods.find_files_and_order_them" title="visualize.helper_methods.find_files_and_order_them"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_files_and_order_them</span></code></a>(files[, files_format])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_files_and_order_them</span></code>(files[, files_format])</p></td>
 <td><p>Args: - files: can be:     - list of files (path + file name)     - directory where different files are     - list of directories where files are - files_format: format of the files to get Returns: List of the files contained in the files argument. These files are in order, and takes into account if the name of the file is a number (1 would go before 10 even if the number of the file is not 0-padded). If the files param was a list of directories, the files are in order within each directory but the directories order is maintained. Example: if files is a list of directories:     [dir_a,  dir_b, dir_c] containing the following files:      dir_a | dir_b | dir_c        100 | world |     C         10 |    30 |     B          2 |     5 |     A          1 | hello |    70       file |   200 |     9 the result would be: 1, 2, 10, 100, file, 5, 30, 200, hello, world, 9, 70, A, B, C.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="visualize.helper_methods.write_gif_from_images.html#visualize.helper_methods.write_gif_from_images" title="visualize.helper_methods.write_gif_from_images"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_gif_from_images</span></code></a>(images, out_path[, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_gif_from_images</span></code>(images, out_path[, …])</p></td>
 <td><p>Creates a gif from a set of images, and saves it to :&#64;param out_path:.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="visualize.helper_methods.write_video_from_images.html#visualize.helper_methods.write_video_from_images" title="visualize.helper_methods.write_video_from_images"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_video_from_images</span></code></a>(images, out_path[, …])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_video_from_images</span></code>(images, out_path[, …])</p></td>
 <td><p>Creates a video from a set of images.</p></td>
 </tr>
 </tbody>
@@ -129,8 +123,7 @@ Date: 05/01/2023</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.html" class="btn btn-neutral float-left" title="visualize.cell_morphology_visualizer.CellMorphologyVisualizer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="visualize.helper_methods.display_animation_from_images.html" class="btn btn-neutral float-right" title="visualize.helper_methods.display_animation_from_images" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="visualize.cell_morphology_visualizer.html" class="btn btn-neutral float-left" title="visualize.cell_morphology_visualizer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

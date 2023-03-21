@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.serialize_cell &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="single_cell_parser.serialize_cell.cell_to_serializable_object" href="single_cell_parser.serialize_cell.cell_to_serializable_object.html" />
-    <link rel="prev" title="single_cell_parser.scalar_field.ScalarField" href="single_cell_parser.scalar_field.ScalarField.html" /> 
+    <link rel="next" title="single_cell_parser.sim_control" href="single_cell_parser.sim_control.html" />
+    <link rel="prev" title="single_cell_parser.scalar_field" href="single_cell_parser.scalar_field.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,14 +56,6 @@
 <li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.build_parameters.html">single_cell_parser.build_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.create_cell.html">single_cell_parser.create_cell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.init_neuron_run.html">single_cell_parser.init_neuron_run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.load_NMODL_parameters.html">single_cell_parser.load_NMODL_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sec_distance_to_soma.html">single_cell_parser.sec_distance_to_soma</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_network_paramfile.html">single_cell_parser.spines_update_network_paramfile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_synapse_distribution_file.html">single_cell_parser.spines_update_synapse_distribution_file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.Event.html">single_cell_parser.Event</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell.html">single_cell_parser.cell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html">single_cell_parser.cell_modify_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_parser.html">single_cell_parser.cell_parser</a></li>
@@ -72,15 +65,7 @@
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_realizations.html">single_cell_parser.network_realizations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.reader.html">single_cell_parser.reader</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.scalar_field.html">single_cell_parser.scalar_field</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.serialize_cell</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.serialize_cell.cell_to_serializable_object.html">single_cell_parser.serialize_cell.cell_to_serializable_object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.serialize_cell.convert_dict_of_hoc_arrays_to_dict_of_np_arrays.html">single_cell_parser.serialize_cell.convert_dict_of_hoc_arrays_to_dict_of_np_arrays</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.serialize_cell.convert_hoc_array_to_np_array.html">single_cell_parser.serialize_cell.convert_hoc_array_to_np_array</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.serialize_cell.load_cell_from_file.html">single_cell_parser.serialize_cell.load_cell_from_file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.serialize_cell.restore_cell_from_serializable_object.html">single_cell_parser.serialize_cell.restore_cell_from_serializable_object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.serialize_cell.save_cell_to_file.html">single_cell_parser.serialize_cell.save_cell_to_file</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.serialize_cell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sim_control.html">single_cell_parser.sim_control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse.html">single_cell_parser.synapse</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse_mapper.html">single_cell_parser.synapse_mapper</a></li>
@@ -130,22 +115,22 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.serialize_cell.cell_to_serializable_object.html#single_cell_parser.serialize_cell.cell_to_serializable_object" title="single_cell_parser.serialize_cell.cell_to_serializable_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_to_serializable_object</span></code></a>(cell)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_to_serializable_object</span></code>(cell)</p></td>
 <td><p>takes cell object and returns an object, that contains the saved information (recorded range vars, voltage) and that can be serialized.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.serialize_cell.convert_dict_of_hoc_arrays_to_dict_of_np_arrays.html#single_cell_parser.serialize_cell.convert_dict_of_hoc_arrays_to_dict_of_np_arrays" title="single_cell_parser.serialize_cell.convert_dict_of_hoc_arrays_to_dict_of_np_arrays"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_dict_of_hoc_arrays_to_dict_of_np_arrays</span></code></a>(…)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_dict_of_hoc_arrays_to_dict_of_np_arrays</span></code>(…)</p></td>
 <td><p>converts dictionary of hoc arrays to dictionary of list of lists</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.serialize_cell.convert_hoc_array_to_np_array.html#single_cell_parser.serialize_cell.convert_hoc_array_to_np_array" title="single_cell_parser.serialize_cell.convert_hoc_array_to_np_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_hoc_array_to_np_array</span></code></a>(hoc_array)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_hoc_array_to_np_array</span></code>(hoc_array)</p></td>
 <td><p>converts hoc array to list of lists</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.serialize_cell.load_cell_from_file.html#single_cell_parser.serialize_cell.load_cell_from_file" title="single_cell_parser.serialize_cell.load_cell_from_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_cell_from_file</span></code></a>(path)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_cell_from_file</span></code>(path)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.serialize_cell.restore_cell_from_serializable_object.html#single_cell_parser.serialize_cell.restore_cell_from_serializable_object" title="single_cell_parser.serialize_cell.restore_cell_from_serializable_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restore_cell_from_serializable_object</span></code></a>(sc)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">restore_cell_from_serializable_object</span></code>(sc)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.serialize_cell.save_cell_to_file.html#single_cell_parser.serialize_cell.save_cell_to_file" title="single_cell_parser.serialize_cell.save_cell_to_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_cell_to_file</span></code></a>(path, cell)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_cell_to_file</span></code>(path, cell)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -156,8 +141,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="single_cell_parser.scalar_field.ScalarField.html" class="btn btn-neutral float-left" title="single_cell_parser.scalar_field.ScalarField" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="single_cell_parser.serialize_cell.cell_to_serializable_object.html" class="btn btn-neutral float-right" title="single_cell_parser.serialize_cell.cell_to_serializable_object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="single_cell_parser.scalar_field.html" class="btn btn-neutral float-left" title="single_cell_parser.scalar_field" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="single_cell_parser.sim_control.html" class="btn btn-neutral float-right" title="single_cell_parser.sim_control" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>simrun3.synaptic_strength_fitting &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="simrun3.synaptic_strength_fitting.analyze_voltage_trace" href="simrun3.synaptic_strength_fitting.analyze_voltage_trace.html" />
-    <link rel="prev" title="simrun3.somatic_summation_model.ParseVT" href="simrun3.somatic_summation_model.ParseVT.html" /> 
+    <link rel="next" title="simrun3.utils" href="simrun3.utils.html" />
+    <link rel="prev" title="simrun3.somatic_summation_model" href="simrun3.somatic_summation_model.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -57,27 +58,7 @@
 <li class="toctree-l2"><a class="reference internal" href="simrun3.get_cell_with_network.html">simrun3.get_cell_with_network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun3.robust_dask_delayed_execution.html">simrun3.robust_dask_delayed_execution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun3.somatic_summation_model.html">simrun3.somatic_summation_model</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">simrun3.synaptic_strength_fitting</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.analyze_voltage_trace.html">simrun3.synaptic_strength_fitting.analyze_voltage_trace</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.calculate_optimal_g.html">simrun3.synaptic_strength_fitting.calculate_optimal_g</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.ePSP_summary_statistics.html">simrun3.synaptic_strength_fitting.ePSP_summary_statistics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding.html">simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.generate_inh_network_param_from_network_embedding.html">simrun3.synaptic_strength_fitting.generate_inh_network_param_from_network_embedding</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.get_optimal_g.html">simrun3.synaptic_strength_fitting.get_optimal_g</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.get_summary_statistics.html">simrun3.synaptic_strength_fitting.get_summary_statistics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.get_tMax_vMax.html">simrun3.synaptic_strength_fitting.get_tMax_vMax</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.get_tMax_vMax_baseline.html">simrun3.synaptic_strength_fitting.get_tMax_vMax_baseline</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.get_voltage_and_timing.html">simrun3.synaptic_strength_fitting.get_voltage_and_timing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.linear_fit.html">simrun3.synaptic_strength_fitting.linear_fit</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.linear_fit_pdf.html">simrun3.synaptic_strength_fitting.linear_fit_pdf</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.merge_celltypes.html">simrun3.synaptic_strength_fitting.merge_celltypes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.run_ex_synapse.html">simrun3.synaptic_strength_fitting.run_ex_synapse</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.run_ex_synapses.html">simrun3.synaptic_strength_fitting.run_ex_synapses</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.set_ex_synapse_weight.html">simrun3.synaptic_strength_fitting.set_ex_synapse_weight</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.set_inh_synapse_weight.html">simrun3.synaptic_strength_fitting.set_inh_synapse_weight</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simrun3.synaptic_strength_fitting.PSPs.html">simrun3.synaptic_strength_fitting.PSPs</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">simrun3.synaptic_strength_fitting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun3.utils.html">simrun3.utils</a></li>
 </ul>
 </li>
@@ -127,55 +108,55 @@ Third: functions to analyze PSPs</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.analyze_voltage_trace.html#simrun3.synaptic_strength_fitting.analyze_voltage_trace" title="simrun3.synaptic_strength_fitting.analyze_voltage_trace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_voltage_trace</span></code></a>(vTrace, tTrace)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_voltage_trace</span></code>(vTrace, tTrace)</p></td>
 <td><p>takes neuron Vectors and finds time and amplitude of max voltage deflection (pos and negative direction)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.calculate_optimal_g.html#simrun3.synaptic_strength_fitting.calculate_optimal_g" title="simrun3.synaptic_strength_fitting.calculate_optimal_g"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_optimal_g</span></code></a>(pdf)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_optimal_g</span></code>(pdf)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.ePSP_summary_statistics.html#simrun3.synaptic_strength_fitting.ePSP_summary_statistics" title="simrun3.synaptic_strength_fitting.ePSP_summary_statistics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ePSP_summary_statistics</span></code></a>(vt[, threashold, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ePSP_summary_statistics</span></code>(vt[, threashold, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding.html#simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding" title="simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_ex_network_param_from_network_embedding</span></code></a>(confile)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_ex_network_param_from_network_embedding</span></code>(confile)</p></td>
 <td><p>returns a network parameter file that can be used to activate all presynaptic conected cells as specified in confile:</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.generate_inh_network_param_from_network_embedding.html#simrun3.synaptic_strength_fitting.generate_inh_network_param_from_network_embedding" title="simrun3.synaptic_strength_fitting.generate_inh_network_param_from_network_embedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_inh_network_param_from_network_embedding</span></code></a>(confile)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_inh_network_param_from_network_embedding</span></code>(confile)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.get_optimal_g.html#simrun3.synaptic_strength_fitting.get_optimal_g" title="simrun3.synaptic_strength_fitting.get_optimal_g"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_optimal_g</span></code></a>(self, measured_data[, method, …])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_optimal_g</span></code>(self, measured_data[, method, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.get_summary_statistics.html#simrun3.synaptic_strength_fitting.get_summary_statistics" title="simrun3.synaptic_strength_fitting.get_summary_statistics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_summary_statistics</span></code></a>(self[, method, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_summary_statistics</span></code>(self[, method, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.get_tMax_vMax.html#simrun3.synaptic_strength_fitting.get_tMax_vMax" title="simrun3.synaptic_strength_fitting.get_tMax_vMax"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tMax_vMax</span></code></a>(t, v[, tStim, tEnd])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tMax_vMax</span></code>(t, v[, tStim, tEnd])</p></td>
 <td><p>This method calculates the ePSP amplitude by subtracting the voltage directly before the epsp, which is supposed to be at 160ms, from the voltagetrace.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.get_tMax_vMax_baseline.html#simrun3.synaptic_strength_fitting.get_tMax_vMax_baseline" title="simrun3.synaptic_strength_fitting.get_tMax_vMax_baseline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tMax_vMax_baseline</span></code></a>(t_baseline, …[, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tMax_vMax_baseline</span></code>(t_baseline, …[, …])</p></td>
 <td><p>this method calculates the ePSP amplitude by subtracting a voltage trace without any synapse activation from a voltage trace with synapse activation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.get_voltage_and_timing.html#simrun3.synaptic_strength_fitting.get_voltage_and_timing" title="simrun3.synaptic_strength_fitting.get_voltage_and_timing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_voltage_and_timing</span></code></a>(vt[, method, tStim, tEnd])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_voltage_and_timing</span></code>(vt[, method, tStim, tEnd])</p></td>
 <td><p>calculate maxmimum and timing of the EPSPS vt: voltage traces, as returned by PSP.get_voltage_traces() method: dynamic_baseline: a simulation without any synaptic activation is     substracted from a simulation with cell activation. The maximum and     timepoint of maximum is returned method: constant_baseline: the voltage at t = 110ms (= directly before     synapse activation) is considered as baseline and substracted     from all voltages at all timepoints. The maximum and timepoint of the maximum after t = 110ms is     returned.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.linear_fit.html#simrun3.synaptic_strength_fitting.linear_fit" title="simrun3.synaptic_strength_fitting.linear_fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_fit</span></code></a>(gAMPANMDA, epsp)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_fit</span></code>(gAMPANMDA, epsp)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.linear_fit_pdf.html#simrun3.synaptic_strength_fitting.linear_fit_pdf" title="simrun3.synaptic_strength_fitting.linear_fit_pdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_fit_pdf</span></code></a>(pdf)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_fit_pdf</span></code>(pdf)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.merge_celltypes.html#simrun3.synaptic_strength_fitting.merge_celltypes" title="simrun3.synaptic_strength_fitting.merge_celltypes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_celltypes</span></code></a>(vt[, detection_strings, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_celltypes</span></code>(vt[, detection_strings, …])</p></td>
 <td><p>concatenates voltagetraces of celltypes</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.run_ex_synapse.html#simrun3.synaptic_strength_fitting.run_ex_synapse" title="simrun3.synaptic_strength_fitting.run_ex_synapse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_ex_synapse</span></code></a>(cell_nw_generator, …[, …])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_ex_synapse</span></code>(cell_nw_generator, …[, …])</p></td>
 <td><p>core function, that actually activates a single synapse and runs the simulation. cell_nw_generator: simrun3.get_cell_with_network.get_cell_with_network neuron_param: single_cell_parser.NTParameterSet specifying biophysical properties network_param: single_cell_parser.NTParameterSet specifying network properties celltype: presynaptic celltype preSynCellID: number of presynaptic cell that should be activated. None: No cell will be activated. gEx: conductance of AMPA and NMDA component vardt: whether variable stepsize solver should be used synapse_ids: if None, all synapses assigned to the presynaptic cell get activated. if a list of integers, only synapses with the specified indices get acivated.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.run_ex_synapses.html#simrun3.synaptic_strength_fitting.run_ex_synapses" title="simrun3.synaptic_strength_fitting.run_ex_synapses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_ex_synapses</span></code></a>(neuron_param, network_param, …)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_ex_synapses</span></code>(neuron_param, network_param, …)</p></td>
 <td><p>method to consecutively calculate all EPSPs of all presynaptic cells of one celltype.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.set_ex_synapse_weight.html#simrun3.synaptic_strength_fitting.set_ex_synapse_weight" title="simrun3.synaptic_strength_fitting.set_ex_synapse_weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_ex_synapse_weight</span></code></a>(syn, weight)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_ex_synapse_weight</span></code>(syn, weight)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.set_inh_synapse_weight.html#simrun3.synaptic_strength_fitting.set_inh_synapse_weight" title="simrun3.synaptic_strength_fitting.set_inh_synapse_weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_inh_synapse_weight</span></code></a>(syn, weight)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_inh_synapse_weight</span></code>(syn, weight)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -187,7 +168,7 @@ Third: functions to analyze PSPs</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="simrun3.synaptic_strength_fitting.PSPs.html#simrun3.synaptic_strength_fitting.PSPs" title="simrun3.synaptic_strength_fitting.PSPs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSPs</span></code></a>([neuron_param, confile, gExRange, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSPs</span></code>([neuron_param, confile, gExRange, …])</p></td>
 <td><p>main class for calculation of ePSP amplitudes and synaptic strength fitting</p></td>
 </tr>
 </tbody>
@@ -198,8 +179,8 @@ Third: functions to analyze PSPs</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="simrun3.somatic_summation_model.ParseVT.html" class="btn btn-neutral float-left" title="simrun3.somatic_summation_model.ParseVT" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="simrun3.synaptic_strength_fitting.analyze_voltage_trace.html" class="btn btn-neutral float-right" title="simrun3.synaptic_strength_fitting.analyze_voltage_trace" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="simrun3.somatic_summation_model.html" class="btn btn-neutral float-left" title="simrun3.somatic_summation_model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="simrun3.utils.html" class="btn btn-neutral float-right" title="simrun3.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

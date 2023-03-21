@@ -2,7 +2,7 @@ tests.test\_biophysics\_fitting
 ===============================
 
 .. automodule:: tests.test_biophysics_fitting
-  
+
    
    
    
@@ -25,7 +25,6 @@ tests.test\_biophysics\_fitting
 
 .. autosummary::
    :toctree:
-   :template: custom-module-template.rst
    :recursive:
 
    tests.test_biophysics_fitting.context

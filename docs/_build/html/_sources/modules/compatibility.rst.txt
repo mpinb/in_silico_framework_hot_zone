@@ -2,7 +2,7 @@
 =============
 
 .. automodule:: compatibility
-  
+
    
    
    
@@ -12,7 +12,6 @@
    .. rubric:: Functions
 
    .. autosummary::
-      :toctree:
    
       cloudpickle_fun
       pickle_fun

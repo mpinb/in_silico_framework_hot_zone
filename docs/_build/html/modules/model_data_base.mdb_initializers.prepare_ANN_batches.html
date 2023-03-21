@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>model_data_base.mdb_initializers.prepare_ANN_batches &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="model_data_base.mdb_initializers.prepare_ANN_batches.augment_synapse_activation_df_with_branch_bin" href="model_data_base.mdb_initializers.prepare_ANN_batches.augment_synapse_activation_df_with_branch_bin.html" />
-    <link rel="prev" title="model_data_base.mdb_initializers.load_simrun_general.write_param_files_to_folder" href="model_data_base.mdb_initializers.load_simrun_general.write_param_files_to_folder.html" /> 
+    <link rel="next" title="model_data_base.mdb_initializers.somatic_summation_model" href="model_data_base.mdb_initializers.somatic_summation_model.html" />
+    <link rel="prev" title="model_data_base.mdb_initializers.load_simrun_general" href="model_data_base.mdb_initializers.load_simrun_general.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,30 +56,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.html">model_data_base.mdb_initializers.PSPs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.html">model_data_base.mdb_initializers.load_simrun_general</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.mdb_initializers.prepare_ANN_batches</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.augment_synapse_activation_df_with_branch_bin.html">model_data_base.mdb_initializers.prepare_ANN_batches.augment_synapse_activation_df_with_branch_bin</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.compute_AP_array.html">model_data_base.mdb_initializers.prepare_ANN_batches.compute_AP_array</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_array.html">model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_array</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_from_st.html">model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_from_st</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_bin</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_adjacency_map_in_section.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_adjacency_map_in_section</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_soma_distances_in_section.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_soma_distances_in_section</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_binsize.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_binsize</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_max_depolarization_per_ms.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_max_depolarization_per_ms</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_max_per_ms_on_pandas_dataframe.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_max_per_ms_on_pandas_dataframe</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_neighboring_spatial_bins.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_neighboring_spatial_bins</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_neuron_param_file.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_neuron_param_file</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_section_distances_df.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_section_distances_df</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_spatial_bin_names.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_spatial_bin_names</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_synapse_activation_array_weighted.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_synapse_activation_array_weighted</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_time_groups.html">model_data_base.mdb_initializers.prepare_ANN_batches.get_time_groups</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.init.html">model_data_base.mdb_initializers.prepare_ANN_batches.init</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.load_syn_weights.html">model_data_base.mdb_initializers.prepare_ANN_batches.load_syn_weights</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.run_delayeds_incrementally.html">model_data_base.mdb_initializers.prepare_ANN_batches.run_delayeds_incrementally</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.temporal_binning_augmented_sa.html">model_data_base.mdb_initializers.prepare_ANN_batches.temporal_binning_augmented_sa</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.Init.html">model_data_base.mdb_initializers.prepare_ANN_batches.Init</a></li>
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.mdb_initializers.prepare_ANN_batches</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.somatic_summation_model.html">model_data_base.mdb_initializers.somatic_summation_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.html">model_data_base.mdb_initializers.synapse_activation_binning</a></li>
 </ul>
@@ -136,64 +114,64 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.augment_synapse_activation_df_with_branch_bin.html#model_data_base.mdb_initializers.prepare_ANN_batches.augment_synapse_activation_df_with_branch_bin" title="model_data_base.mdb_initializers.prepare_ANN_batches.augment_synapse_activation_df_with_branch_bin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">augment_synapse_activation_df_with_branch_bin</span></code></a>(sa_)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">augment_synapse_activation_df_with_branch_bin</span></code>(sa_)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.compute_AP_array.html#model_data_base.mdb_initializers.prepare_ANN_batches.compute_AP_array" title="model_data_base.mdb_initializers.prepare_ANN_batches.compute_AP_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_AP_array</span></code></a>(st, min_time, max_time[, …])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_AP_array</span></code>(st, min_time, max_time[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_array.html#model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_array" title="model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_ISI_array</span></code></a>(st, min_time, max_time[, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_ISI_array</span></code>(st, min_time, max_time[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_from_st.html#model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_from_st" title="model_data_base.mdb_initializers.prepare_ANN_batches.compute_ISI_from_st"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_ISI_from_st</span></code></a>(st, timepoint[, fillna])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_ISI_from_st</span></code>(st, timepoint[, fillna])</p></td>
 <td><p>suggestion: use the temporal window width as fillna</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_bin" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bin</span></code></a>(value, bin_min, bin_max, n_bins[, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bin</span></code>(value, bin_min, bin_max, n_bins[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_adjacency_map_in_section.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_adjacency_map_in_section" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_adjacency_map_in_section"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bin_adjacency_map_in_section</span></code></a>(cell, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bin_adjacency_map_in_section</span></code>(cell, …)</p></td>
 <td><p>Fetches all the sections neighboring the given section id.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_soma_distances_in_section.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_soma_distances_in_section" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_soma_distances_in_section"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bin_soma_distances_in_section</span></code></a>(…)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bin_soma_distances_in_section</span></code>(…)</p></td>
 <td><p>Given a section id, this method returns the distance to soma for all bins in this section</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_binsize.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_binsize" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_binsize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_binsize</span></code></a>(length[, binsize_goal])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_binsize</span></code>(length[, binsize_goal])</p></td>
 <td><p>given a length of a branch, returns number of binsize and number of bins that results in binning closest to the binsize goal</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_max_depolarization_per_ms.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_max_depolarization_per_ms" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_max_depolarization_per_ms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_max_depolarization_per_ms</span></code></a>(vt_dask)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_max_depolarization_per_ms</span></code>(vt_dask)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_max_per_ms_on_pandas_dataframe.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_max_per_ms_on_pandas_dataframe" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_max_per_ms_on_pandas_dataframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_max_per_ms_on_pandas_dataframe</span></code></a>(vt_pandas)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_max_per_ms_on_pandas_dataframe</span></code>(vt_pandas)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_neighboring_spatial_bins.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_neighboring_spatial_bins" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_neighboring_spatial_bins"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_neighboring_spatial_bins</span></code></a>(cell, …)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_neighboring_spatial_bins</span></code>(cell, …)</p></td>
 <td><p>Given a bin id, this method returns all the neighboring bins</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_neuron_param_file.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_neuron_param_file" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_neuron_param_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_neuron_param_file</span></code></a>(m)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_neuron_param_file</span></code>(m)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_section_distances_df.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_section_distances_df" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_section_distances_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_section_distances_df</span></code></a>(neuron_param_file)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_section_distances_df</span></code>(neuron_param_file)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_spatial_bin_names.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_spatial_bin_names" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_spatial_bin_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_spatial_bin_names</span></code></a>(section_distances_df)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_spatial_bin_names</span></code>(section_distances_df)</p></td>
 <td><p>Given a dataframe describing the distance to soma of all sections, as provided by :&#64;function get_section_distances_df:, this method returns the names for all the spatial bins of the format section_id/bin_id.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_synapse_activation_array_weighted.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_synapse_activation_array_weighted" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_synapse_activation_array_weighted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_synapse_activation_array_weighted</span></code></a>(sa_[, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_synapse_activation_array_weighted</span></code>(sa_[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.get_time_groups.html#model_data_base.mdb_initializers.prepare_ANN_batches.get_time_groups" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_time_groups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_time_groups</span></code></a>(vt_pandas)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_time_groups</span></code>(vt_pandas)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.init.html#model_data_base.mdb_initializers.prepare_ANN_batches.init" title="model_data_base.mdb_initializers.prepare_ANN_batches.init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code></a>(mdb[, mdb_target, min_time, max_time, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code>(mdb[, mdb_target, min_time, max_time, …])</p></td>
 <td><p>persist: whether the synapse activation dataframe should be loaded into memory on the dask cluster.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.load_syn_weights.html#model_data_base.mdb_initializers.prepare_ANN_batches.load_syn_weights" title="model_data_base.mdb_initializers.prepare_ANN_batches.load_syn_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_syn_weights</span></code></a>(m, client)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_syn_weights</span></code>(m, client)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.run_delayeds_incrementally.html#model_data_base.mdb_initializers.prepare_ANN_batches.run_delayeds_incrementally" title="model_data_base.mdb_initializers.prepare_ANN_batches.run_delayeds_incrementally"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_delayeds_incrementally</span></code></a>(client, delayeds)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_delayeds_incrementally</span></code>(client, delayeds)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.temporal_binning_augmented_sa.html#model_data_base.mdb_initializers.prepare_ANN_batches.temporal_binning_augmented_sa" title="model_data_base.mdb_initializers.prepare_ANN_batches.temporal_binning_augmented_sa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_binning_augmented_sa</span></code></a>(sa_augmented, …)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_binning_augmented_sa</span></code>(sa_augmented, …)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -205,7 +183,7 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.Init.html#model_data_base.mdb_initializers.prepare_ANN_batches.Init" title="model_data_base.mdb_initializers.prepare_ANN_batches.Init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Init</span></code></a>(mdb[, mdb_target, min_time, max_time, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Init</span></code>(mdb[, mdb_target, min_time, max_time, …])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -216,8 +194,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="model_data_base.mdb_initializers.load_simrun_general.write_param_files_to_folder.html" class="btn btn-neutral float-left" title="model_data_base.mdb_initializers.load_simrun_general.write_param_files_to_folder" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="model_data_base.mdb_initializers.prepare_ANN_batches.augment_synapse_activation_df_with_branch_bin.html" class="btn btn-neutral float-right" title="model_data_base.mdb_initializers.prepare_ANN_batches.augment_synapse_activation_df_with_branch_bin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.mdb_initializers.load_simrun_general.html" class="btn btn-neutral float-left" title="model_data_base.mdb_initializers.load_simrun_general" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.mdb_initializers.somatic_summation_model.html" class="btn btn-neutral float-right" title="model_data_base.mdb_initializers.somatic_summation_model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

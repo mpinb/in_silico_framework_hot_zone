@@ -2,7 +2,7 @@ tests.test\_simrun2.reduced\_model
 ==================================
 
 .. automodule:: tests.test_simrun2.reduced_model
-  
+
    
    
    
@@ -25,7 +25,6 @@ tests.test\_simrun2.reduced\_model
 
 .. autosummary::
    :toctree:
-   :template: custom-module-template.rst
    :recursive:
 
    tests.test_simrun2.reduced_model.get_kernel_test

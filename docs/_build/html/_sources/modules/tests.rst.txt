@@ -2,7 +2,7 @@
 =====
 
 .. automodule:: tests
-  
+
    
    
    
@@ -12,7 +12,6 @@
    .. rubric:: Functions
 
    .. autosummary::
-      :toctree:
    
       setup_current_injection_experiment
    
@@ -32,7 +31,6 @@
 
 .. autosummary::
    :toctree:
-   :template: custom-module-template.rst
    :recursive:
 
    tests.context

@@ -2,7 +2,7 @@ single\_cell\_parser.cell\_modify\_functions
 ============================================
 
 .. automodule:: single_cell_parser.cell_modify_functions
-  
+
    
    
    
@@ -12,7 +12,6 @@ single\_cell\_parser.cell\_modify\_functions
    .. rubric:: Functions
 
    .. autosummary::
-      :toctree:
    
       get
    
@@ -32,7 +31,6 @@ single\_cell\_parser.cell\_modify\_functions
 
 .. autosummary::
    :toctree:
-   :template: custom-module-template.rst
    :recursive:
 
    single_cell_parser.cell_modify_functions.BAC_injection

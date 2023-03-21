@@ -2,7 +2,7 @@
 ==============
 
 .. automodule:: barrel_cortex
-  
+
    
    
    
@@ -12,7 +12,6 @@
    .. rubric:: Functions
 
    .. autosummary::
-      :toctree:
    
       calculate_point_distance
       construct_pt3add

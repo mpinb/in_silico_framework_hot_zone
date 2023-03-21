@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.writer &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/PATH_TO_YOUR_CSS_FILE.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="single_cell_parser.writer.generate_landmark_template" href="single_cell_parser.writer.generate_landmark_template.html" />
-    <link rel="prev" title="single_cell_parser.vpm_activation.run_sim" href="single_cell_parser.vpm_activation.run_sim.html" /> 
+    <link rel="next" title="singlecell_input_mapper" href="singlecell_input_mapper.html" />
+    <link rel="prev" title="single_cell_parser.vpm_activation" href="single_cell_parser.vpm_activation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,14 +56,6 @@
 <li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.build_parameters.html">single_cell_parser.build_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.create_cell.html">single_cell_parser.create_cell</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.init_neuron_run.html">single_cell_parser.init_neuron_run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.load_NMODL_parameters.html">single_cell_parser.load_NMODL_parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sec_distance_to_soma.html">single_cell_parser.sec_distance_to_soma</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_network_paramfile.html">single_cell_parser.spines_update_network_paramfile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_synapse_distribution_file.html">single_cell_parser.spines_update_synapse_distribution_file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.Event.html">single_cell_parser.Event</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell.html">single_cell_parser.cell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html">single_cell_parser.cell_modify_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_parser.html">single_cell_parser.cell_parser</a></li>
@@ -77,25 +70,7 @@
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse.html">single_cell_parser.synapse</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse_mapper.html">single_cell_parser.synapse_mapper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.vpm_activation.html">single_cell_parser.vpm_activation</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.writer</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.generate_landmark_template.html">single_cell_parser.writer.generate_landmark_template</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.value_to_color.html">single_cell_parser.writer.value_to_color</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_PSTH.html">single_cell_parser.writer.write_PSTH</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_all_traces.html">single_cell_parser.writer.write_all_traces</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_cell_simulation.html">single_cell_parser.writer.write_cell_simulation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_cell_synapse_locations.html">single_cell_parser.writer.write_cell_synapse_locations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_functional_map.html">single_cell_parser.writer.write_functional_map</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_functional_realization_map.html">single_cell_parser.writer.write_functional_realization_map</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_landmark_file.html">single_cell_parser.writer.write_landmark_file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_landmarks_colorcoded_to_folder.html">single_cell_parser.writer.write_landmarks_colorcoded_to_folder</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_presynaptic_spike_times.html">single_cell_parser.writer.write_presynaptic_spike_times</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_pruned_synapse_locations.html">single_cell_parser.writer.write_pruned_synapse_locations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_sim_results.html">single_cell_parser.writer.write_sim_results</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_spike_times_file.html">single_cell_parser.writer.write_spike_times_file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_synapse_activation_file.html">single_cell_parser.writer.write_synapse_activation_file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.writer.write_synapse_weight_file.html">single_cell_parser.writer.write_synapse_weight_file</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.writer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
@@ -138,52 +113,52 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.writer.generate_landmark_template.html#single_cell_parser.writer.generate_landmark_template" title="single_cell_parser.writer.generate_landmark_template"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_landmark_template</span></code></a>(landmark_name, c, …)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_landmark_template</span></code>(landmark_name, c, …)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.writer.value_to_color.html#single_cell_parser.writer.value_to_color" title="single_cell_parser.writer.value_to_color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">value_to_color</span></code></a>(v[, vmin, vmax])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">value_to_color</span></code>(v[, vmin, vmax])</p></td>
 <td><p><a class="reference external" href="https://stackoverflow.com/questions/15140072/how-to-map-number-to-color-using-matplotlibs-colormap">https://stackoverflow.com/questions/15140072/how-to-map-number-to-color-using-matplotlibs-colormap</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.writer.write_PSTH.html#single_cell_parser.writer.write_PSTH" title="single_cell_parser.writer.write_PSTH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_PSTH</span></code></a>([fname, PSTH, bins])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_PSTH</span></code>([fname, PSTH, bins])</p></td>
 <td><p>Write PSTH and time bins of PSTH, where bins contain left and right end of each bin, i.e. len(bins) = len(PSTH) + 1.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.writer.write_all_traces.html#single_cell_parser.writer.write_all_traces" title="single_cell_parser.writer.write_all_traces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_all_traces</span></code></a>(fname, t, vTraces)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_all_traces</span></code>(fname, t, vTraces)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.writer.write_cell_simulation.html#single_cell_parser.writer.write_cell_simulation" title="single_cell_parser.writer.write_cell_simulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cell_simulation</span></code></a>([fname, cell, traces, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cell_simulation</span></code>([fname, cell, traces, …])</p></td>
 <td><p>write Amira SpatialGraph files corresponding to time steps of entire simulation run.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.writer.write_cell_synapse_locations.html#single_cell_parser.writer.write_cell_synapse_locations" title="single_cell_parser.writer.write_cell_synapse_locations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cell_synapse_locations</span></code></a>([fname, …])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cell_synapse_locations</span></code>([fname, …])</p></td>
 <td><p>writes list of all synapses with the locations coded by section ID and section x of cell with ID ‘cellID’</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.writer.write_functional_map.html#single_cell_parser.writer.write_functional_map" title="single_cell_parser.writer.write_functional_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_functional_map</span></code></a>(fname, functionalMap)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_functional_map</span></code>(fname, functionalMap)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.writer.write_functional_realization_map.html#single_cell_parser.writer.write_functional_realization_map" title="single_cell_parser.writer.write_functional_realization_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_functional_realization_map</span></code></a>([fname, …])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_functional_realization_map</span></code>([fname, …])</p></td>
 <td><p>writes list of all functional connections coded by tuples (cell type, presynaptic cell index, synapse index).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.writer.write_landmark_file.html#single_cell_parser.writer.write_landmark_file" title="single_cell_parser.writer.write_landmark_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_landmark_file</span></code></a>([fname, landmarkList])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_landmark_file</span></code>([fname, landmarkList])</p></td>
 <td><p>write Amira landmark file landmarkList has to be iterable of tuples, each of which holds 3 float coordinates</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.writer.write_landmarks_colorcoded_to_folder.html#single_cell_parser.writer.write_landmarks_colorcoded_to_folder" title="single_cell_parser.writer.write_landmarks_colorcoded_to_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_landmarks_colorcoded_to_folder</span></code></a>(…[, …])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_landmarks_colorcoded_to_folder</span></code>(…[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.writer.write_presynaptic_spike_times.html#single_cell_parser.writer.write_presynaptic_spike_times" title="single_cell_parser.writer.write_presynaptic_spike_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_presynaptic_spike_times</span></code></a>([fname, cells])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_presynaptic_spike_times</span></code>([fname, cells])</p></td>
 <td><p>Write cell type, PC and spike times of all connected presynaptic point cells</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.writer.write_pruned_synapse_locations.html#single_cell_parser.writer.write_pruned_synapse_locations" title="single_cell_parser.writer.write_pruned_synapse_locations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pruned_synapse_locations</span></code></a>([fname, …])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pruned_synapse_locations</span></code>([fname, …])</p></td>
 <td><p>writes list of all synapses with the locations coded by section ID and section x of cell with ID ‘cellID’ and a pruned flag (1 or 0)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.writer.write_sim_results.html#single_cell_parser.writer.write_sim_results" title="single_cell_parser.writer.write_sim_results"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sim_results</span></code></a>(fname, t, v)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sim_results</span></code>(fname, t, v)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.writer.write_spike_times_file.html#single_cell_parser.writer.write_spike_times_file" title="single_cell_parser.writer.write_spike_times_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_spike_times_file</span></code></a>([fname, spikeTimes])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_spike_times_file</span></code>([fname, spikeTimes])</p></td>
 <td><p>Write file containing trial numbers and all spike times in each trial (may be empty).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.writer.write_synapse_activation_file.html#single_cell_parser.writer.write_synapse_activation_file" title="single_cell_parser.writer.write_synapse_activation_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_synapse_activation_file</span></code></a>([fname, cell, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_synapse_activation_file</span></code>([fname, cell, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.writer.write_synapse_weight_file.html#single_cell_parser.writer.write_synapse_weight_file" title="single_cell_parser.writer.write_synapse_weight_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_synapse_weight_file</span></code></a>([fname, cell])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_synapse_weight_file</span></code>([fname, cell])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -194,8 +169,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="single_cell_parser.vpm_activation.run_sim.html" class="btn btn-neutral float-left" title="single_cell_parser.vpm_activation.run_sim" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="single_cell_parser.writer.generate_landmark_template.html" class="btn btn-neutral float-right" title="single_cell_parser.writer.generate_landmark_template" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="single_cell_parser.vpm_activation.html" class="btn btn-neutral float-left" title="single_cell_parser.vpm_activation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="singlecell_input_mapper.html" class="btn btn-neutral float-right" title="singlecell_input_mapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
