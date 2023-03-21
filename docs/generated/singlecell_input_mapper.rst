@@ -1,4 +1,4 @@
-﻿singlecell\_input\_mapper
+singlecell\_input\_mapper
 =========================
 
 .. automodule:: singlecell_input_mapper

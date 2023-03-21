@@ -1,4 +1,4 @@
-﻿spike\_analysis
+spike\_analysis
 ===============
 
 .. automodule:: spike_analysis

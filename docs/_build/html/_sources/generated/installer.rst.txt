@@ -1,4 +1,4 @@
-﻿installer
+installer
 =========
 
 .. automodule:: installer

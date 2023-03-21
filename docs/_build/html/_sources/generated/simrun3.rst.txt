@@ -1,4 +1,4 @@
-﻿simrun3
+simrun3
 =======
 
 .. automodule:: simrun3

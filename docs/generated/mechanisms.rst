@@ -1,4 +1,4 @@
-﻿mechanisms
+mechanisms
 ==========
 
 .. automodule:: mechanisms

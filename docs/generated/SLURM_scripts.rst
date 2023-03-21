@@ -1,4 +1,4 @@
-﻿SLURM\_scripts
+SLURM\_scripts
 ==============
 
 .. automodule:: SLURM_scripts

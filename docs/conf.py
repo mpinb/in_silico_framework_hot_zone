@@ -23,10 +23,9 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
-    'sphinx.ext.inheritance_diagram'
-#    'sphinx_rtd_theme',
-]
-autosummary_generate=True
+    'sphinx.ext.inheritance_diagram']
+
+# autosummary_generate=True
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 

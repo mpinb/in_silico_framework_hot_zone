@@ -1,4 +1,4 @@
-﻿getting\_started
+getting\_started
 ================
 
 .. automodule:: getting_started

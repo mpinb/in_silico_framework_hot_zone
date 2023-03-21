@@ -1,4 +1,4 @@
-﻿barrel\_cortex
+barrel\_cortex
 ==============
 
 .. automodule:: barrel_cortex
