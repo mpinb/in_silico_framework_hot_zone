@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>model_data_base.mdbopen &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -166,10 +167,10 @@
 
 
 <div class="viewcode-block" id="mdbopen"><a class="viewcode-back" href="../../modules/model_data_base.mdbopen.mdbopen.html#model_data_base.mdbopen.mdbopen">[docs]</a><span class="k">class</span> <span class="nc">mdbopen</span><span class="p">:</span>
-<div class="viewcode-block" id="mdbopen.__init__"><a class="viewcode-back" href="../../modules/model_data_base.mdbopen.mdbopen.html#model_data_base.mdbopen.mdbopen.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">exit_hooks</span> <span class="o">=</span> <span class="p">[]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exit_hooks</span> <span class="o">=</span> <span class="p">[]</span>
         
     <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">resolve_mdb_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
@@ -188,14 +189,14 @@
 
 <div class="viewcode-block" id="taropen"><a class="viewcode-back" href="../../modules/model_data_base.mdbopen.taropen.html#model_data_base.mdbopen.taropen">[docs]</a><span class="k">class</span> <span class="nc">taropen</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;context manager to open nested tar hierarchies&#39;&#39;&#39;</span>
-<div class="viewcode-block" id="taropen.__init__"><a class="viewcode-back" href="../../modules/model_data_base.mdbopen.taropen.html#model_data_base.mdbopen.taropen.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
         <span class="n">psplit</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tar_levels</span> <span class="o">=</span> <span class="p">[</span><span class="n">lv</span> <span class="k">for</span> <span class="n">lv</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">psplit</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.tar&#39;</span><span class="p">)]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">open_files</span> <span class="o">=</span> <span class="p">[]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">open_files</span> <span class="o">=</span> <span class="p">[]</span>
         
     <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># self.path = resolve_mdb_path(self.path)</span>

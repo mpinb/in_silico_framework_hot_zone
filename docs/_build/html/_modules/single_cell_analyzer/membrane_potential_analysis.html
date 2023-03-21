@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_analyzer.membrane_potential_analysis &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -273,16 +274,16 @@
     <span class="n">recordingSites</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">cell</span> <span class="o">=</span> <span class="kc">None</span>
     
-<div class="viewcode-block" id="RecordingSiteManager.__init__"><a class="viewcode-back" href="../../modules/single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">landmarkFilename</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">landmarkFilename</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
         <span class="n">landmarks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_landmark_file</span><span class="p">(</span><span class="n">landmarkFilename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">recordingSites</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">landmarks</span><span class="p">)):</span>
             <span class="n">landmark</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">landmarks</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="n">newRecSite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_up_recording_site</span><span class="p">(</span><span class="n">landmark</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">landmarkFilename</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">recordingSites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newRecSite</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recordingSites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newRecSite</span><span class="p">)</span>
     
-<div class="viewcode-block" id="RecordingSiteManager.set_up_recording_site"><a class="viewcode-back" href="../../modules/single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_recording_site</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_up_recording_site</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        determine section/segment on cell corresponding</span>
 <span class="sd">        to recording site location and create new</span>
@@ -341,9 +342,9 @@
         <span class="n">tmpIndex</span> <span class="o">=</span> <span class="n">splitName</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;.landmarkAscii&#39;</span><span class="p">)</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">splitName</span><span class="p">[:</span><span class="n">tmpIndex</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_ID_</span><span class="si">%03d</span><span class="s1">_sec_</span><span class="si">%03d</span><span class="s1">_seg_</span><span class="si">%03d</span><span class="s1">_x_</span><span class="si">%.3f</span><span class="s1">_somaDist_</span><span class="si">%.1f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ID</span><span class="p">,</span> <span class="n">minSecID</span><span class="p">,</span> <span class="n">minSegID</span><span class="p">,</span> <span class="n">minSegx</span><span class="p">,</span> <span class="n">somaDist</span><span class="p">)</span>
         <span class="n">newRecSite</span> <span class="o">=</span> <span class="n">RecordingSite</span><span class="p">(</span><span class="n">minSecID</span><span class="p">,</span> <span class="n">minSegID</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">newRecSite</span></div>
+        <span class="k">return</span> <span class="n">newRecSite</span>
     
-<div class="viewcode-block" id="RecordingSiteManager.update_recordings"><a class="viewcode-back" href="../../modules/single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings">[docs]</a>    <span class="k">def</span> <span class="nf">update_recordings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update_recordings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        copy recorded voltages at recording sites</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -351,7 +352,7 @@
             <span class="n">secID</span> <span class="o">=</span> <span class="n">recordingSite</span><span class="o">.</span><span class="n">secID</span>
             <span class="n">segID</span> <span class="o">=</span> <span class="n">recordingSite</span><span class="o">.</span><span class="n">segID</span>
             <span class="n">vTrace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">secID</span><span class="p">]</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="n">segID</span><span class="p">])</span>
-            <span class="n">recordingSite</span><span class="o">.</span><span class="n">vRecordings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vTrace</span><span class="p">)</span></div>
+            <span class="n">recordingSite</span><span class="o">.</span><span class="n">vRecordings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vTrace</span><span class="p">)</span>
     
     <span class="k">def</span> <span class="nf">_read_landmark_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">landmarkFilename</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -392,11 +393,11 @@
     <span class="n">label</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">vRecordings</span> <span class="o">=</span> <span class="kc">None</span>
     
-<div class="viewcode-block" id="RecordingSite.__init__"><a class="viewcode-back" href="../../modules/single_cell_analyzer.membrane_potential_analysis.RecordingSite.html#single_cell_analyzer.membrane_potential_analysis.RecordingSite.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secID</span><span class="p">,</span> <span class="n">segID</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secID</span><span class="p">,</span> <span class="n">segID</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secID</span> <span class="o">=</span> <span class="n">secID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">segID</span> <span class="o">=</span> <span class="n">segID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vRecordings</span> <span class="o">=</span> <span class="p">[]</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vRecordings</span> <span class="o">=</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="SpikeInit"><a class="viewcode-back" href="../../modules/single_cell_analyzer.membrane_potential_analysis.SpikeInit.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit">[docs]</a><span class="k">class</span> <span class="nc">SpikeInit</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -405,11 +406,11 @@
 <span class="sd">    obtain features of spike shape, adaptation etc...</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
-<div class="viewcode-block" id="SpikeInit.__init__"><a class="viewcode-back" href="../../modules/single_cell_analyzer.membrane_potential_analysis.SpikeInit.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="c1">#        TODO: implement</span>
-        <span class="k">pass</span></div>
+        <span class="k">pass</span>
     
-<div class="viewcode-block" id="SpikeInit.vm_steady_state"><a class="viewcode-back" href="../../modules/single_cell_analyzer.membrane_potential_analysis.SpikeInit.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">vm_steady_state</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dtStim</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        computes &quot;steady-state&quot; subthreshold voltage from</span>
@@ -432,9 +433,9 @@
 <span class="c1">#        current injection, not for synaptic input;</span>
 <span class="c1">#        therefore, use median of this trace as approximation</span>
         <span class="n">vss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">v_</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">vss</span></div>
+        <span class="k">return</span> <span class="n">vss</span>
     
-<div class="viewcode-block" id="SpikeInit.analyze_single_spike"><a class="viewcode-back" href="../../modules/single_cell_analyzer.membrane_potential_analysis.SpikeInit.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">analyze_single_spike</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">thresh</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        for comparison with in vitro spike shape:</span>
@@ -456,7 +457,7 @@
         <span class="n">width</span> <span class="o">=</span> <span class="n">tEnd</span> <span class="o">-</span> <span class="n">tBegin</span>
         <span class="n">vMin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">iEnd</span><span class="p">:])</span>
         <span class="n">ahp</span> <span class="o">=</span> <span class="n">thresh</span> <span class="o">-</span> <span class="n">vMin</span>
-        <span class="k">return</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">ahp</span></div>
+        <span class="k">return</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">ahp</span>
     
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">analyze_spike_train</span><span class="p">():</span>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>spike_analysis.core.SpikeDetectionCreastTrough &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -128,8 +129,7 @@
 <dl class="py class">
 <dt id="spike_analysis.core.SpikeDetectionCreastTrough">
 <em class="property">class </em><code class="sig-prename descclassname">spike_analysis.core.</code><code class="sig-name descname">SpikeDetectionCreastTrough</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reader_object</span></em>, <em class="sig-param"><span class="n">lim_creast</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">lim_trough</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">max_creast_trough_interval</span><span class="o">=</span><span class="default_value">2.0</span></em>, <em class="sig-param"><span class="n">tdelta</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">stimulus_period</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">stimulus_period_offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">upper_creast_threshold</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">cellid</span><span class="o">=</span><span class="default_value">'__no_cellid_assigned__'</span></em>, <em class="sig-param"><span class="n">spike_time_mode</span><span class="o">=</span><span class="default_value">'latest'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Detects spikes by creast and trough amplitude.</p>
+<dd><p>Detects spikes by creast and trough amplitude.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -206,85 +206,6 @@ If “zero” is choosen, lim_creast will be set to the first empty bin.</p></li
 <dd><dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>spike times fullfilling trough criterien</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="spike_analysis.core.SpikeDetectionCreastTrough.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reader_object</span></em>, <em class="sig-param"><span class="n">lim_creast</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">lim_trough</span><span class="o">=</span><span class="default_value">'minimum'</span></em>, <em class="sig-param"><span class="n">max_creast_trough_interval</span><span class="o">=</span><span class="default_value">2.0</span></em>, <em class="sig-param"><span class="n">tdelta</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">stimulus_period</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">stimulus_period_offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">upper_creast_threshold</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">cellid</span><span class="o">=</span><span class="default_value">'__no_cellid_assigned__'</span></em>, <em class="sig-param"><span class="n">spike_time_mode</span><span class="o">=</span><span class="default_value">'latest'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough.__init__" title="spike_analysis.core.SpikeDetectionCreastTrough.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(reader_object[, lim_creast, …])</p></td>
-<td><p>Initialize self.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_creast_and_trough_ampltidues_by_bins</span></code>([mode])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough.get_default_events" title="spike_analysis.core.SpikeDetectionCreastTrough.get_default_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_default_events</span></code></a>([show_stim_times, …])</p></td>
-<td><p>Returns a list of events to be displayed with the show_events method.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_serialize_dict</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code>(path[, init_reader])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_creast_trough_histogram</span></code>([ax])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_analysis</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code>(path)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough.show_events" title="spike_analysis.core.SpikeDetectionCreastTrough.show_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">show_events</span></code></a>([events, savepdf, showfig, ylim])</p></td>
-<td><p>Shows voltage trace, threasholds and events.</p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt id="spike_analysis.core.SpikeDetectionCreastTrough.get_default_events">
-<code class="sig-name descname">get_default_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">show_stim_times</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show_trough_candidates</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.get_default_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.get_default_events" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of events to be displayed with the show_events method.
-Creates events for deteced spikes (black line) and spike candidates [dotted black line]
-(i.e. creasts and troughs exceeding the limit but which do not qualify to
-be a spike)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>show_spike_times</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>events</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list, containing 4-tuples of the format (time, color, linestyle, linewidth)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="spike_analysis.core.SpikeDetectionCreastTrough.show_events">
-<code class="sig-name descname">show_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">events</span><span class="o">=</span><span class="default_value">'auto'</span></em>, <em class="sig-param"><span class="n">savepdf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">showfig</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">- 5, 5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.show_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.show_events" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shows voltage trace, threasholds and events.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>events</strong> (<em>'auto': uses the get_default_events_method. shows detected spikes as black line</em><em>, </em><em>spike candidates</em>) – <p>as dotted black line, stimulus times as bold red line
-‘only_creast’:
-list: explicitly define events to show. Needs to be list containing 4-touples in the following format</p>
-<blockquote>
-<div><p>(timepoint, ‘color’, ‘linestyle’, linewidth)</p>
-</div></blockquote>
-</p>
 </dd>
 </dl>
 </dd></dl>

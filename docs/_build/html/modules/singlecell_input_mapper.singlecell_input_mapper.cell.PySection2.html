@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>singlecell_input_mapper.singlecell_input_mapper.cell.PySection2 &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -116,102 +117,9 @@
 <dl class="py class">
 <dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2">
 <em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.cell.</code><code class="sig-name descname">PySection2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#PySection2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Modeled after nrn.Section to allow easy interface with
+<dd><p>Modeled after nrn.Section to allow easy interface with
 existing methods for cell parsing/synapse mapping
 without any NEURON dependencies</p>
-<dl class="py method">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#PySection2.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>structure
-self.label = label</p>
-<p>reference to parent section
-self.parent = None</p>
-<p>connection point at parent section
-self.parentx = 1.0</p>
-<p>bounding box around 3D coordinates
-self.bounds = ()</p>
-<p>number of traced 3D coordinates
-self.nrOfPts = 0</p>
-<p>list of traced 3D coordinates
-self.pts = []</p>
-<p>list of relative position of 3D points along section
-self.relPts = []</p>
-<p>list of diameters at traced 3D coordinates
-self.diamList = []</p>
-<p>length of section
-self.L = 0.0</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.__init__" title="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([name, cell, label])</p></td>
-<td><p>structure self.label = label</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.set_3d_geometry" title="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.set_3d_geometry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_3d_geometry</span></code></a>(pts, diams)</p></td>
-<td><p>invokes NEURON 3D geometry setup</p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.set_3d_geometry">
-<code class="sig-name descname">set_3d_geometry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pts</span></em>, <em class="sig-param"><span class="n">diams</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/cell.html#PySection2.set_3d_geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.set_3d_geometry" title="Permalink to this definition">¶</a></dt>
-<dd><p>invokes NEURON 3D geometry setup</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.bounds">
-<code class="sig-name descname">bounds</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.bounds" title="Permalink to this definition">¶</a></dt>
-<dd><p>number of traced 3D coordinates</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.diamList">
-<code class="sig-name descname">diamList</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.diamList" title="Permalink to this definition">¶</a></dt>
-<dd><p>length of section</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.label">
-<code class="sig-name descname">label</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.label" title="Permalink to this definition">¶</a></dt>
-<dd><p>reference to parent section</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.nrOfPts">
-<code class="sig-name descname">nrOfPts</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.nrOfPts" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of traced 3D coordinates</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.parent">
-<code class="sig-name descname">parent</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.parent" title="Permalink to this definition">¶</a></dt>
-<dd><p>connection point at parent section</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.parentx">
-<code class="sig-name descname">parentx</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.parentx" title="Permalink to this definition">¶</a></dt>
-<dd><p>bounding box around 3D coordinates</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.pts">
-<code class="sig-name descname">pts</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.pts" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of relative position of 3D points along section</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.relPts">
-<code class="sig-name descname">relPts</code><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.cell.PySection2.relPts" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of diameters at traced 3D coordinates</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>

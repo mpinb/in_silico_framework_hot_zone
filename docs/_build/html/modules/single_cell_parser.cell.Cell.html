@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.cell.Cell &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -124,139 +125,8 @@
 <dl class="py class">
 <dt id="single_cell_parser.cell.Cell">
 <em class="property">class </em><code class="sig-prename descclassname">single_cell_parser.cell.</code><code class="sig-name descname">Cell</code><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell.Cell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Cell object providing morphological information
+<dd><p>Cell object providing morphological information
 and hoc interface</p>
-<dl class="py method">
-<dt id="single_cell_parser.cell.Cell.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constructor:</p>
-<p>self.id = None</p>
-<p>self.soma = None</p>
-<p>TODO: implement trees in python to avoid
-NEURON section stack problems that may occur
-during use of SectionLists
-tree and branches are set up by CellParser
-self.tree = None</p>
-<p>branches are all processes attached to soma
-self.branches = {}</p>
-<p>structures are all processes with different labels
-(e.g., Dendrite, ApicalDendrite, ApicalTuft, Myelin etc..
-self.structures = {}</p>
-<p>simply list of all sections
-self.sections = []</p>
-<p>self.synapses = {}</p>
-<p>TODO: this should be read from parameter file (e_pas)
-self.E = -70.0</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.cell.Cell.__init__" title="single_cell_parser.cell.Cell.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
-<td><p>Constructor:</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_synapse</span></code>(secID, ptID, ptx[, preType, …])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.cell.Cell.change_synapse_parameters" title="single_cell_parser.cell.Cell.change_synapse_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">change_synapse_parameters</span></code></a>()</p></td>
-<td><p>Change parameters of synapses during simulation.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.cell.Cell.distance_between_pts" title="single_cell_parser.cell.Cell.distance_between_pts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance_between_pts</span></code></a>(sec1, x1, sec2, x2)</p></td>
-<td><p>computes path length between to points given by location x1 and x2 in sections sec1 and sec2 or by ptID x1 and x2 and section ID sec1 and sec2.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.cell.Cell.distance_to_soma" title="single_cell_parser.cell.Cell.distance_to_soma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance_to_soma</span></code></a>(sec, x)</p></td>
-<td><p>computes path length between soma and point given by location x in sections sec or by ptID x and section ID sec</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.cell.Cell.get_section_adjacancy_map" title="single_cell_parser.cell.Cell.get_section_adjacancy_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_section_adjacancy_map</span></code></a>()</p></td>
-<td><p>Generates a map that shows which sections are connected to which sections.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_synapse_activation_dataframe</span></code>([…])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_time_recording</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.cell.Cell.max_distance" title="single_cell_parser.cell.Cell.max_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_distance</span></code></a>(label)</p></td>
-<td><p>computes maximum path length to soma of all branches with the same label</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.cell.Cell.re_init_cell" title="single_cell_parser.cell.Cell.re_init_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">re_init_cell</span></code></a>([replayMode])</p></td>
-<td><p>re-initialize for next simulation run</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">record_range_var</span></code>(var[, mech])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_synapses</span></code>([preType])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt id="single_cell_parser.cell.Cell.change_synapse_parameters">
-<code class="sig-name descname">change_synapse_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.change_synapse_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.change_synapse_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Change parameters of synapses during simulation.
-self.changeSynParamDict is dictionary of network parameter sets
-with keys corresponding to event times.
-This allows automatic update of parameter sets
-according to their relative timing.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_parser.cell.Cell.distance_between_pts">
-<code class="sig-name descname">distance_between_pts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sec1</span></em>, <em class="sig-param"><span class="n">x1</span></em>, <em class="sig-param"><span class="n">sec2</span></em>, <em class="sig-param"><span class="n">x2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.distance_between_pts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.distance_between_pts" title="Permalink to this definition">¶</a></dt>
-<dd><p>computes path length between to points given by
-location x1 and x2 in sections sec1 and sec2
-or by ptID x1 and x2 and section ID sec1 and sec2.
-for now, use built-in NEURON method distance.
-This should probably be changed at some point in the future
-into something like a look-up table of pair-wise distances,
-because repeated computations for 1000s of synapses are going
-to be very expensive… also, only approximate, since NEURON
-computes distances between centers of segments</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_parser.cell.Cell.distance_to_soma">
-<code class="sig-name descname">distance_to_soma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sec</span></em>, <em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.distance_to_soma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.distance_to_soma" title="Permalink to this definition">¶</a></dt>
-<dd><p>computes path length between soma and point given by
-location x in sections sec or by ptID x and section ID sec</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_parser.cell.Cell.get_section_adjacancy_map">
-<code class="sig-name descname">get_section_adjacancy_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.get_section_adjacancy_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.get_section_adjacancy_map" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a map that shows which sections are connected to which sections.
-Saves this as a class attribute if it’s the first time calculatingm otherwise returns</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>self</strong> (<em>cell</em>) – the cell boject</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a dictionary where each key is the section id, and the value is a list of adjacent section ids</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_parser.cell.Cell.max_distance">
-<code class="sig-name descname">max_distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.max_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.max_distance" title="Permalink to this definition">¶</a></dt>
-<dd><p>computes maximum path length to soma
-of all branches with the same label</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_parser.cell.Cell.re_init_cell">
-<code class="sig-name descname">re_init_cell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">replayMode</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.re_init_cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.re_init_cell" title="Permalink to this definition">¶</a></dt>
-<dd><p>re-initialize for next simulation run</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>

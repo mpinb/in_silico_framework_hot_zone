@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -113,65 +114,9 @@
 <dl class="py class">
 <dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity">
 <em class="property">class </em><code class="sig-prename descclassname">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.</code><code class="sig-name descname">SynapseDensity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">postCellType</span></em>, <em class="sig-param"><span class="n">connectionSpreadsheet</span></em>, <em class="sig-param"><span class="n">exTypes</span></em>, <em class="sig-param"><span class="n">inhTypes</span></em>, <em class="sig-param"><span class="n">exPST</span></em>, <em class="sig-param"><span class="n">inhPST</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseDensity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Synapse density computation for one postsynaptic neuron
+<dd><p>Synapse density computation for one postsynaptic neuron
 and arbitrary presynaptic bouton and other postsynaptic
 PST densities</p>
-<dl class="py method">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em>, <em class="sig-param"><span class="n">postCellType</span></em>, <em class="sig-param"><span class="n">connectionSpreadsheet</span></em>, <em class="sig-param"><span class="n">exTypes</span></em>, <em class="sig-param"><span class="n">inhTypes</span></em>, <em class="sig-param"><span class="n">exPST</span></em>, <em class="sig-param"><span class="n">inhPST</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseDensity.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>postsynaptic neuron
-self.cell = cell</p>
-<p>spreadsheet containing length/surface area PST densities
-self.connectionSpreadsheet = connectionSpreadsheet</p>
-<p>defined excitatory cell types
-self.exTypes = exTypes</p>
-<p>defined inhibitory cell types
-self.inhTypes = inhTypes</p>
-<p>normalization PST for connections with
-presynaptic excitatory cell types
-self.exPST = exPST</p>
-<p>normalization PST for connections with
-presynaptic inhibitory cell types
-self.inhPST = inhPST</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.__init__" title="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(cell, postCellType, …)</p></td>
-<td><p>postsynaptic neuron self.cell = cell</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_cell_PST" title="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_cell_PST"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_cell_PST</span></code></a>()</p></td>
-<td><p>called once to compute 3D length/surface area densities and combine them with length/surface area PST densities to yield connection-specific 3D PST density of the postsynaptic neuron</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_synapse_density" title="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_synapse_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_synapse_density</span></code></a>(boutonDensity, …)</p></td>
-<td><p>main interface for computing synapses originating from presynaptic bouton density of given cell type If bouton density and cell PST don’t overlap or synapse density == 0 everywhere, return None</p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_cell_PST">
-<code class="sig-name descname">compute_cell_PST</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseDensity.compute_cell_PST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_cell_PST" title="Permalink to this definition">¶</a></dt>
-<dd><p>called once to compute 3D length/surface area
-densities and combine them with length/surface area
-PST densities to yield connection-specific 3D PST
-density of the postsynaptic neuron</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_synapse_density">
-<code class="sig-name descname">compute_synapse_density</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">boutonDensity</span></em>, <em class="sig-param"><span class="n">preCellType</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseDensity.compute_synapse_density"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_synapse_density" title="Permalink to this definition">¶</a></dt>
-<dd><p>main interface for computing synapses originating
-from presynaptic bouton density of given cell type
-If bouton density and cell PST don’t overlap
-or synapse density == 0 everywhere, return None</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>

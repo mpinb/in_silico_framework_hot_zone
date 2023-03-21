@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>biophysics_fitting.simulator.Simulator_Setup &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -119,85 +120,7 @@
 <dl class="py class">
 <dt id="biophysics_fitting.simulator.Simulator_Setup">
 <em class="property">class </em><code class="sig-prename descclassname">biophysics_fitting.simulator.</code><code class="sig-name descname">Simulator_Setup</code><a class="reference internal" href="../_modules/biophysics_fitting/simulator.html#Simulator_Setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.simulator.Simulator_Setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="biophysics_fitting.simulator.Simulator_Setup.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/simulator.html#Simulator_Setup.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.simulator.Simulator_Setup.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.simulator.Simulator_Setup.__init__" title="biophysics_fitting.simulator.Simulator_Setup.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
-<td><p>Initialize self.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.simulator.Simulator_Setup.get" title="biophysics_fitting.simulator.Simulator_Setup.get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code></a>(params)</p></td>
-<td><p>Returns a cell with set up biophysics and params.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.simulator.Simulator_Setup.get_cell_params" title="biophysics_fitting.simulator.Simulator_Setup.get_cell_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cell_params</span></code></a>(params)</p></td>
-<td><p>returns cell NTParameterSet structure used for the single_cell_parser.create_cell.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.simulator.Simulator_Setup.get_cell_params_with_default_sim_prams" title="biophysics_fitting.simulator.Simulator_Setup.get_cell_params_with_default_sim_prams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cell_params_with_default_sim_prams</span></code></a>(params)</p></td>
-<td><p>returns complete neuron parameter object that can be used for further simulations i.e. with the simrun module or with roberts scripts.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.simulator.Simulator_Setup.get_params" title="biophysics_fitting.simulator.Simulator_Setup.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>(params)</p></td>
-<td><p>returns cell parameters that have been modified by the params_modify_funs.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_stim_response_measure_fun</span></code>(stim)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_stim_run_fun_by_stim</span></code>(stim)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_stim_setup_fun_by_stim</span></code>(stim)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_stims</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt id="biophysics_fitting.simulator.Simulator_Setup.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/simulator.html#Simulator_Setup.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.simulator.Simulator_Setup.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a cell with set up biophysics and params. This is the main interface.</p>
-<p>Details, how to set up the Simulator are in the docstring of
-the Simulator class.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="biophysics_fitting.simulator.Simulator_Setup.get_cell_params">
-<code class="sig-name descname">get_cell_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/simulator.html#Simulator_Setup.get_cell_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.simulator.Simulator_Setup.get_cell_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns cell NTParameterSet structure used for the single_cell_parser.create_cell.
-This is helpful for inspecting, what parameters have effectively been used for the simulation.</p>
-<p>Details, how to set up the Simulator are in the docstring of
-the Simulator class.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="biophysics_fitting.simulator.Simulator_Setup.get_cell_params_with_default_sim_prams">
-<code class="sig-name descname">get_cell_params_with_default_sim_prams</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em>, <em class="sig-param"><span class="n">recordingSites</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">tStart</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">tStop</span><span class="o">=</span><span class="default_value">295</span></em>, <em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">0.025</span></em>, <em class="sig-param"><span class="n">Vinit</span><span class="o">=</span><span class="default_value">- 75.0</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">34.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/simulator.html#Simulator_Setup.get_cell_params_with_default_sim_prams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.simulator.Simulator_Setup.get_cell_params_with_default_sim_prams" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns complete neuron parameter object that can be used for further simulations
-i.e. with the simrun module or with roberts scripts.</p>
-<p>Details, how to set up the Simulator are in the docstring of
-the Simulator class.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="biophysics_fitting.simulator.Simulator_Setup.get_params">
-<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/simulator.html#Simulator_Setup.get_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.simulator.Simulator_Setup.get_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns cell parameters that have been modified by the params_modify_funs.</p>
-</dd></dl>
-
-</dd></dl>
+<dd></dd></dl>
 
 </div>
 

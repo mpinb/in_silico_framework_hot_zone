@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -115,38 +116,10 @@
 <dl class="py class">
 <dt id="tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution">
 <em class="property">class </em><code class="sig-prename descclassname">tests.test_simrun3.robust_dask_delayed_execution.</code><code class="sig-name descname">RobustDaskDelayedExecution</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tests/test_simrun3/robust_dask_delayed_execution.html#RobustDaskDelayedExecution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>This class utilizes the model data base to store delayed objects. It offers methods
+<dd><p>This class utilizes the model data base to store delayed objects. It offers methods
 to run them exactly once. The return value is not saved. Common usecase: Long runing,
 data generating simulations are aborted (timeout on cluster, some error, …)
 and you want to complete the remaining tasks.</p>
-<dl class="py method">
-<dt id="tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mdb</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tests/test_simrun3/robust_dask_delayed_execution.html#RobustDaskDelayedExecution.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.__init__" title="tests.test_simrun3.robust_dask_delayed_execution.RobustDaskDelayedExecution.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(mdb)</p></td>
-<td><p>Initialize self.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_delayed_to_mdb</span></code>(d)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_status</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_mdb</span></code>([error_started])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 </div>

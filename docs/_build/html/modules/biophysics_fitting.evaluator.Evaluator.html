@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>biophysics_fitting.evaluator.Evaluator &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -118,81 +119,7 @@
 <dl class="py class">
 <dt id="biophysics_fitting.evaluator.Evaluator">
 <em class="property">class </em><code class="sig-prename descclassname">biophysics_fitting.evaluator.</code><code class="sig-name descname">Evaluator</code><a class="reference internal" href="../_modules/biophysics_fitting/evaluator.html#Evaluator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.evaluator.Evaluator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="biophysics_fitting.evaluator.Evaluator.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/evaluator.html#Evaluator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.evaluator.Evaluator.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>This  class can be used to extract features from (usually) voltagetraces
-of different stimuli. The voltage traces are (usually) computed with a Simulator
-object by calling its run method.</p>
-<p>In an optimization the features returned by Evaluator.evaluate are saved together
-with to corresponding parameter values.</p>
-<p>Note: Combining features to reduce the number of objectives should be done with the Combiner object.</p>
-<p>For a Simulator object s and a Evaluator object e, the typical usecase is:
-voltage_traces_dict = s.run(params)
-features = e.evaluate(voltage_traces_dict)</p>
-<p>The “program flow” in the Evaluator can be split in two parts:
-(1) for each key in the voltage_traces_dict:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>—&gt; apply evaluate_fun, that is registered with a name that matches the key.</dt><dd><p>Extracts features from the voltage trace.</p>
-</dd>
-</dl>
-</div></blockquote>
-<ol class="arabic simple" start="2">
-<li><dl class="simple">
-<dt>perform arbitrary operations on the resulting dictionary</dt><dd><p>(e.g. merge it from a nested to a flat dictionary or compute more complex features
-by combineing features from different stimuli)</p>
-</dd>
-</dl>
-</li>
-</ol>
-<p>How can the Evaluator be set up?
-An example, how the Evaluator object can be set up can be found in hay_complete_default_setup.</p>
-<p>e = Evaluator()
-e.setup.evaluate_funs.append([in_name, evaluate_fun, out_name]) # corresponds to step (1)
-e.setup.finalize_funs.append(finalize_fun) # corresponds to step (2)</p>
-<p>What form do the functions need to have?
-def examplary_evaluate_fun(<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs):</p>
-<blockquote>
-<div><p># kwargs are keys and values of voltage_traces_dict[in_name]
-# extract features from kwargs
-return out_dict # keys are names of features, values are features</p>
-</div></blockquote>
-<dl class="simple">
-<dt>def finalize_fun(<a href="#id3"><span class="problematic" id="id4">dict_</span></a>):</dt><dd><p># <a href="#id5"><span class="problematic" id="id6">dict_</span></a> is a dictionary with out_name of the evaluate_funs as keys.
-# and the returned dictionary out_dict as values,
-# i.e. out_dict is a nested dictionary.
-# <a href="#id7"><span class="problematic" id="id8">dict_</span></a> can now be arbitrarily modified, e.g. flattened.
-return modified_dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.evaluator.Evaluator.__init__" title="biophysics_fitting.evaluator.Evaluator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
-<td><p>This  class can be used to extract features from (usually) voltagetraces of different stimuli.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.evaluator.Evaluator.evaluate" title="biophysics_fitting.evaluator.Evaluator.evaluate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate</span></code></a>(features_dict)</p></td>
-<td><p>Extracts features from a simulation result computed by Simulator.run()</p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt id="biophysics_fitting.evaluator.Evaluator.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features_dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/evaluator.html#Evaluator.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biophysics_fitting.evaluator.Evaluator.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts features from a simulation result computed by Simulator.run()</p>
-<p>Details, how to set up the Evaluator are in the docstring of
-the Evaluator class.</p>
-</dd></dl>
-
-</dd></dl>
+<dd></dd></dl>
 
 </div>
 

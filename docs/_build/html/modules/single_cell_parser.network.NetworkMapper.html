@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>single_cell_parser.network.NetworkMapper &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -123,121 +124,9 @@
 <dl class="py class">
 <dt id="single_cell_parser.network.NetworkMapper">
 <em class="property">class </em><code class="sig-prename descclassname">single_cell_parser.network.</code><code class="sig-name descname">NetworkMapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">postCell</span></em>, <em class="sig-param"><span class="n">nwParam</span></em>, <em class="sig-param"><span class="n">simParam</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/network.html#NetworkMapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.network.NetworkMapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Handles connectivity of presynaptic populations
+<dd><p>Handles connectivity of presynaptic populations
 to multi-compartmental neuron model.
 Also handles activity of presynaptic populations.</p>
-<dl class="py method">
-<dt id="single_cell_parser.network.NetworkMapper.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">postCell</span></em>, <em class="sig-param"><span class="n">nwParam</span></em>, <em class="sig-param"><span class="n">simParam</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/network.html#NetworkMapper.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.network.NetworkMapper.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>dictionary holding all presynaptic cells
-ordered by cell type
-self.cells = {}</p>
-<p>dictionary holding indices of
-all active presynaptic cells
-ordered by cell type
-self.connected_cells = {}</p>
-<p>reference to postsynaptic (multi-compartment) cell model
-self.postCell = postCell</p>
-<p>network parameter set (i.e., parameters.network.pre)
-self.nwParam = nwParam</p>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.network.NetworkMapper.__init__" title="single_cell_parser.network.NetworkMapper.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(postCell, nwParam[, simParam])</p></td>
-<td><p>dictionary holding all presynaptic cells ordered by cell type self.cells = {}</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.network.NetworkMapper.create_functional_realization" title="single_cell_parser.network.NetworkMapper.create_functional_realization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_functional_realization</span></code></a>()</p></td>
-<td><p>Public interface: used for creating fixed functional connectivity.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.network.NetworkMapper.create_network" title="single_cell_parser.network.NetworkMapper.create_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_network</span></code></a>([synWeightName, change])</p></td>
-<td><p>Public interface Only call this function, it automatically takes care of setting up the network correctly.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.network.NetworkMapper.create_saved_network" title="single_cell_parser.network.NetworkMapper.create_saved_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_saved_network</span></code></a>([synWeightName])</p></td>
-<td><p>Public interface Used for re-creating network from anatomical and functional connection files</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.network.NetworkMapper.create_saved_network2" title="single_cell_parser.network.NetworkMapper.create_saved_network2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_saved_network2</span></code></a>([synWeightName, …])</p></td>
-<td><p>Public interface Used for re-creating network from anatomical location and connection files.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">re_init_network</span></code>([replayMode])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.network.NetworkMapper.reconnect_network" title="single_cell_parser.network.NetworkMapper.reconnect_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reconnect_network</span></code></a>()</p></td>
-<td><p>Public interface used for re-configuring functional connectivity</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.network.NetworkMapper.reconnect_saved_synapses" title="single_cell_parser.network.NetworkMapper.reconnect_saved_synapses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reconnect_saved_synapses</span></code></a>(synInfoName[, …])</p></td>
-<td><p>Public interface used for setting up saved synapse locations and activation times</p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt id="single_cell_parser.network.NetworkMapper.create_functional_realization">
-<code class="sig-name descname">create_functional_realization</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/network.html#NetworkMapper.create_functional_realization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.network.NetworkMapper.create_functional_realization" title="Permalink to this definition">¶</a></dt>
-<dd><p>Public interface:
-used for creating fixed functional connectivity.</p>
-<p>Give this functional realization a (somewhat) unique name!!!!
-then save it at the same location as the anatomical realization,
-and create a network parameter file with the anatomical and
-corresponding functional realizations already in it
-IMPORTANT: assumes path names to anatomical realization files
-work from the working directory! so should be correct relative, or
-preferably absolute paths.
-Saves parameter file in working directory.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_parser.network.NetworkMapper.create_network">
-<code class="sig-name descname">create_network</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">synWeightName</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">change</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/network.html#NetworkMapper.create_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.network.NetworkMapper.create_network" title="Permalink to this definition">¶</a></dt>
-<dd><p>Public interface
-Only call this function, it automatically
-takes care of setting up the network correctly.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_parser.network.NetworkMapper.create_saved_network">
-<code class="sig-name descname">create_saved_network</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">synWeightName</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/network.html#NetworkMapper.create_saved_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.network.NetworkMapper.create_saved_network" title="Permalink to this definition">¶</a></dt>
-<dd><p>Public interface
-Used for re-creating network from anatomical
-and functional connection files</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_parser.network.NetworkMapper.create_saved_network2">
-<code class="sig-name descname">create_saved_network2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">synWeightName</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">full_network</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/network.html#NetworkMapper.create_saved_network2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.network.NetworkMapper.create_saved_network2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Public interface
-Used for re-creating network from anatomical
-location and connection files.
-This is the better, up-to-date version where
-point cells and spike trains can be integrated
-into the same presynaptic cell</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_parser.network.NetworkMapper.reconnect_network">
-<code class="sig-name descname">reconnect_network</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/network.html#NetworkMapper.reconnect_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.network.NetworkMapper.reconnect_network" title="Permalink to this definition">¶</a></dt>
-<dd><p>Public interface
-used for re-configuring functional connectivity</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="single_cell_parser.network.NetworkMapper.reconnect_saved_synapses">
-<code class="sig-name descname">reconnect_saved_synapses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">synInfoName</span></em>, <em class="sig-param"><span class="n">synWeightName</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/network.html#NetworkMapper.reconnect_saved_synapses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#single_cell_parser.network.NetworkMapper.reconnect_saved_synapses" title="Permalink to this definition">¶</a></dt>
-<dd><p>Public interface
-used for setting up saved synapse
-locations and activation times</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="single_cell_parser.network.NetworkMapper.six">
-<code class="sig-name descname">six</code><em class="property"> = &lt;module 'six' from '/gpfs/soma_fs/scratch/meulemeester/anaconda_isf3/lib/python3.8/site-packages/six.py'&gt;</em><a class="headerlink" href="#single_cell_parser.network.NetworkMapper.six" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </div>

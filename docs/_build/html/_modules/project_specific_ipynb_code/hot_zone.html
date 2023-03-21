@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>project_specific_ipynb_code.hot_zone &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -201,7 +202,7 @@
     <span class="k">return</span> <span class="n">out</span></div>
 
 <div class="viewcode-block" id="Dendrogram"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.Dendrogram.html#project_specific_ipynb_code.hot_zone.Dendrogram">[docs]</a><span class="k">class</span> <span class="nc">Dendrogram</span><span class="p">:</span>
-<div class="viewcode-block" id="Dendrogram.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.Dendrogram.html#project_specific_ipynb_code.hot_zone.Dendrogram.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">colormap_synapses</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">colormap_synapses</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="c1"># cell object needs to implement the following functionality:</span>
         <span class="c1">#     cell.soma</span>
         <span class="c1">#     section.children()</span>
@@ -217,7 +218,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_cell_to_dendrogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_soma_to_dendrogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_initial_x</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_main_bifurcation_section</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_main_bifurcation_section</span><span class="p">()</span>
     
     <span class="k">def</span> <span class="nf">_add_synapse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;synapses&#39;</span> <span class="ow">in</span> <span class="n">l</span><span class="p">:</span>
@@ -226,7 +227,7 @@
             <span class="n">l</span><span class="p">[</span><span class="s1">&#39;synapses&#39;</span><span class="p">][</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">l</span><span class="p">[</span><span class="s1">&#39;synapses&#39;</span><span class="p">][</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         
-<div class="viewcode-block" id="Dendrogram.add_synapses"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.Dendrogram.html#project_specific_ipynb_code.hot_zone.Dendrogram.add_synapses">[docs]</a>    <span class="k">def</span> <span class="nf">add_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">synlist</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;from_anatomical_synapse_mapper&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">synlist</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;from_anatomical_synapse_mapper&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;mode:</span>
 <span class="sd">        </span>
 <span class="sd">        &#39;from_anatomical_synapse_mapper&#39;: to be used if synlist is generated from landmark as it is done</span>
@@ -255,7 +256,7 @@
                 <span class="n">sec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">sec_lv</span><span class="p">]</span>
                 <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_db_by_sec</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="n">sec</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="n">l</span><span class="p">[</span><span class="s1">&#39;x_offset&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">l</span><span class="p">[</span><span class="s1">&#39;x_dist_start&#39;</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_add_synapse</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>   </div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add_synapse</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>   
                            
     <span class="k">def</span> <span class="nf">_cell_to_dendrogram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basesec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">basename</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">x_dist_base</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">basename</span><span class="p">:</span>
@@ -445,18 +446,18 @@
 <span class="c1">#######################################</span>
 <div class="viewcode-block" id="Synapse"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.Synapse.html#project_specific_ipynb_code.hot_zone.Synapse">[docs]</a><span class="k">class</span> <span class="nc">Synapse</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;mock synapse class that allows to use scp.writer.write_cell_synapse_locations&#39;&#39;&#39;</span>
-<div class="viewcode-block" id="Synapse.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.Synapse.html#project_specific_ipynb_code.hot_zone.Synapse.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preCellType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">secID</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preCellType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">secID</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">secID</span> <span class="o">=</span> <span class="n">secID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">preCellType</span> <span class="o">=</span> <span class="n">preCellType</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preCellType</span> <span class="o">=</span> <span class="n">preCellType</span></div>
 
        
 <div class="viewcode-block" id="ExportSynapses"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.ExportSynapses.html#project_specific_ipynb_code.hot_zone.ExportSynapses">[docs]</a><span class="k">class</span> <span class="nc">ExportSynapses</span><span class="p">:</span>
-<div class="viewcode-block" id="ExportSynapses.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.ExportSynapses.html#project_specific_ipynb_code.hot_zone.ExportSynapses.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dendrogram</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dendrogram</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">dendrogram</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">functionalMap</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_create_synapses</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_synapses</span><span class="p">()</span>
         
     <span class="k">def</span> <span class="nf">_create_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span>
@@ -476,10 +477,10 @@
             <span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">secID</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span> <span class="o">=</span> <span class="n">out</span>
 
-<div class="viewcode-block" id="ExportSynapses.get_filtered_synapses_dict"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.ExportSynapses.html#project_specific_ipynb_code.hot_zone.ExportSynapses.get_filtered_synapses_dict">[docs]</a>    <span class="k">def</span> <span class="nf">get_filtered_synapses_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synapse_types</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_filtered_synapses_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synapse_types</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;returns self.synapses, but filtered, such that it only contains synapse types </span>
 <span class="sd">        that are an element of synapse_types&#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">synapse_types</span><span class="p">}</span></div>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">synapse_types</span><span class="p">}</span>
         
     <span class="k">def</span> <span class="nf">create_functional_map_with_one_cell_per_synapse_from_cell_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synapse_types</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">synapse_types</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -568,9 +569,9 @@
 
 
 <div class="viewcode-block" id="MapSynapsesByProfile"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.MapSynapsesByProfile.html#project_specific_ipynb_code.hot_zone.MapSynapsesByProfile">[docs]</a><span class="k">class</span> <span class="nc">MapSynapsesByProfile</span><span class="p">:</span>
-<div class="viewcode-block" id="MapSynapsesByProfile.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.MapSynapsesByProfile.html#project_specific_ipynb_code.hot_zone.MapSynapsesByProfile.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dendrogram</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dendrogram</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">dendrogram</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="p">{}</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="p">{}</span>
     
     <span class="k">def</span> <span class="nf">_get_sections_and_lengths_in_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_</span><span class="p">,</span> <span class="n">max_</span><span class="p">,</span> <span class="n">select</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dendrite&#39;</span><span class="p">,</span> <span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">]):</span>
         <span class="sd">&#39;&#39;&#39;returns sections that can be found in a somadistance between min_ and max_.</span>
@@ -663,9 +664,9 @@
 <span class="sd">    </span>
 <span class="sd">    Allows adding connections by the + operator.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-<div class="viewcode-block" id="NetworkEmbedding.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.NetworkEmbedding.html#project_specific_ipynb_code.hot_zone.NetworkEmbedding.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synapses</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">functionalMap</span> <span class="o">=</span> <span class="p">{}</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">functionalMap</span> <span class="o">=</span> <span class="p">{}</span>
     
     <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synpath</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">conpath</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">synpath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -742,7 +743,7 @@
 <span class="c1">#####################################</span>
 
 <div class="viewcode-block" id="CellLoader"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.CellLoader.html#project_specific_ipynb_code.hot_zone.CellLoader">[docs]</a><span class="k">class</span> <span class="nc">CellLoader</span><span class="p">():</span>
-<div class="viewcode-block" id="CellLoader.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.CellLoader.html#project_specific_ipynb_code.hot_zone.CellLoader.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># see here for preprocessing of the cells: 20190909_VPM_contact_analysis_for_mike_review.ipynb</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">identifiers</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="s1">&#39;WR54_Cell2_L5ST&#39;</span><span class="p">,</span>
@@ -759,7 +760,7 @@
             <span class="s1">&#39;landmark&#39;</span><span class="p">:</span> <span class="s1">&#39;_Combination.landmarkAscii&#39;</span><span class="p">,</span>
             <span class="s1">&#39;landmark_aligned&#39;</span><span class="p">:</span> <span class="s1">&#39;_Combination_aligned.landmarkAscii&#39;</span><span class="p">,</span>
             <span class="s1">&#39;landmark_D2&#39;</span><span class="p">:</span> <span class="s1">&#39;_Combination_aligned_D2.landmarkAscii&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;landmark_D2_top_bottom&#39;</span><span class="p">:</span> <span class="s1">&#39;_Combination_aligned_D2_added_top_and_bottom_point.landmarkAscii&#39;</span><span class="p">}</span></div>
+            <span class="s1">&#39;landmark_D2_top_bottom&#39;</span><span class="p">:</span> <span class="s1">&#39;_Combination_aligned_D2_added_top_and_bottom_point.landmarkAscii&#39;</span><span class="p">}</span>
         
     <span class="k">def</span> <span class="nf">get_cell_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_</span><span class="p">,</span> <span class="n">suffix</span><span class="p">):</span>
         <span class="n">hocpath</span> <span class="o">=</span> <span class="n">mdb_cells</span><span class="p">[</span><span class="s1">&#39;Data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">id_</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffixes</span><span class="p">[</span><span class="n">suffix</span><span class="p">])</span>
@@ -982,17 +983,17 @@
 
 <span class="kn">from</span> <span class="nn">model_data_base.mdb_initializers.load_simrun_general</span> <span class="kn">import</span> <span class="n">add_dendritic_voltage_traces</span>
 <div class="viewcode-block" id="Plot"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.Plot.html#project_specific_ipynb_code.hot_zone.Plot">[docs]</a><span class="k">class</span> <span class="nc">Plot</span><span class="p">:</span>
-<div class="viewcode-block" id="Plot.__init__"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.Plot.html#project_specific_ipynb_code.hot_zone.Plot.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mdb</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mdb</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mdb</span> <span class="o">=</span> <span class="n">mdb</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">models</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">mdb</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">I</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">convertible_to_int</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])]</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;found models&#39;</span> <span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">select_depth</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">select_value</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">select_value</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="Plot.set_selector"><a class="viewcode-back" href="../../modules/project_specific_ipynb_code.hot_zone.Plot.html#project_specific_ipynb_code.hot_zone.Plot.set_selector">[docs]</a>    <span class="k">def</span> <span class="nf">set_selector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_selector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;the index is formatted like a path. You can select the [depth] element of the path to be [value]&#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">select_depth</span> <span class="o">=</span> <span class="n">depth</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">select_value</span> <span class="o">=</span> <span class="n">value</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">select_value</span> <span class="o">=</span> <span class="n">value</span>
         
     <span class="k">def</span> <span class="nf">get_individual_dataframes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">subkey</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sample</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">add_model_to_index</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
