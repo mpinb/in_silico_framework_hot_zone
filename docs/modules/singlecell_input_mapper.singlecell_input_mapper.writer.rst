@@ -2,7 +2,7 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.writer
 ==========================================================
 
 .. automodule:: singlecell_input_mapper.singlecell_input_mapper.writer
-
+  
    
    
    
@@ -12,6 +12,7 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.writer
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       write_anatomical_realization_map
       write_cell_synapse_locations

@@ -2,7 +2,7 @@ visualize.helper\_methods
 =========================
 
 .. automodule:: visualize.helper_methods
-
+  
    
    
    
@@ -12,6 +12,7 @@ visualize.helper\_methods
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       display_animation_from_images
       find_files_and_order_them

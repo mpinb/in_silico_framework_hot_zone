@@ -2,7 +2,7 @@ single\_cell\_parser.writer
 ===========================
 
 .. automodule:: single_cell_parser.writer
-
+  
    
    
    
@@ -12,6 +12,7 @@ single\_cell\_parser.writer
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       generate_landmark_template
       value_to_color

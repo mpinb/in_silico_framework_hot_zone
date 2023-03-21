@@ -2,7 +2,7 @@ model\_data\_base.IO.LoaderDumper.numpy\_to\_npy
 ================================================
 
 .. automodule:: model_data_base.IO.LoaderDumper.numpy_to_npy
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.IO.LoaderDumper.numpy\_to\_npy
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       check
       dump
@@ -23,6 +24,8 @@ model\_data\_base.IO.LoaderDumper.numpy\_to\_npy
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Loader
    

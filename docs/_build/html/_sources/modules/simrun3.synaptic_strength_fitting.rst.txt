@@ -2,7 +2,7 @@ simrun3.synaptic\_strength\_fitting
 ===================================
 
 .. automodule:: simrun3.synaptic_strength_fitting
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun3.synaptic\_strength\_fitting
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       analyze_voltage_trace
       calculate_optimal_g
@@ -38,6 +39,8 @@ simrun3.synaptic\_strength\_fitting
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       PSPs
    

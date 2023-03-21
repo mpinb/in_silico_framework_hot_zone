@@ -2,7 +2,7 @@ project\_specific\_ipynb\_code.reproducing\_L6paper
 ===================================================
 
 .. automodule:: project_specific_ipynb_code.reproducing_L6paper
-
+  
    
    
    
@@ -12,6 +12,7 @@ project\_specific\_ipynb\_code.reproducing\_L6paper
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       combine_bins
       create_whole_bc_embedding
@@ -54,6 +55,8 @@ project\_specific\_ipynb\_code.reproducing\_L6paper
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       EvokedActivitySimulationSetup
       EvokedActivitySimulationSetupRieke

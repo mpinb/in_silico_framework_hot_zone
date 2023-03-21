@@ -2,7 +2,7 @@ tests.test\_simrun2.simrun\_test
 ================================
 
 .. automodule:: tests.test_simrun2.simrun_test
-
+  
    
    
    
@@ -16,6 +16,8 @@ tests.test\_simrun2.simrun\_test
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Tests
    

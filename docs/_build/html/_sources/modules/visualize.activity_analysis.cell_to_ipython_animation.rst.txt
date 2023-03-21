@@ -2,7 +2,7 @@ visualize.activity\_analysis.cell\_to\_ipython\_animation
 =========================================================
 
 .. automodule:: visualize.activity_analysis.cell_to_ipython_animation
-
+  
    
    
    
@@ -12,6 +12,7 @@ visualize.activity\_analysis.cell\_to\_ipython\_animation
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       cell_to_animation
       cell_to_ipython_animation

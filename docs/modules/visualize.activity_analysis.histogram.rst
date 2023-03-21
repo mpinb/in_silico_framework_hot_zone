@@ -2,7 +2,7 @@ visualize.activity\_analysis.histogram
 ======================================
 
 .. automodule:: visualize.activity_analysis.histogram
-
+  
    
    
    
@@ -12,6 +12,7 @@ visualize.activity\_analysis.histogram
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       histogram2
    

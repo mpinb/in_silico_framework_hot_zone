@@ -2,7 +2,7 @@ simrun2.run\_new\_simulations
 =============================
 
 .. automodule:: simrun2.run_new_simulations
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun2.run\_new\_simulations
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       run_new_simulations
    

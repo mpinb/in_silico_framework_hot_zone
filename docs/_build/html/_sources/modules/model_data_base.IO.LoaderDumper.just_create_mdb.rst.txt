@@ -2,7 +2,7 @@ model\_data\_base.IO.LoaderDumper.just\_create\_mdb
 ===================================================
 
 .. automodule:: model_data_base.IO.LoaderDumper.just_create_mdb
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.IO.LoaderDumper.just\_create\_mdb
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       check
       dump
@@ -23,6 +24,8 @@ model\_data\_base.IO.LoaderDumper.just\_create\_mdb
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Loader
    

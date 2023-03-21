@@ -2,7 +2,7 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.scalar\_field
 =================================================================
 
 .. automodule:: singlecell_input_mapper.singlecell_input_mapper.scalar_field
-
+  
    
    
    
@@ -16,6 +16,8 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.scalar\_field
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       ScalarField
    

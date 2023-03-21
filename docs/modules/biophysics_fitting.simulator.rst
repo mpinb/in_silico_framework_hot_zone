@@ -2,7 +2,7 @@ biophysics\_fitting.simulator
 =============================
 
 .. automodule:: biophysics_fitting.simulator
-
+  
    
    
    
@@ -12,6 +12,7 @@ biophysics\_fitting.simulator
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       run_fun
    
@@ -22,6 +23,8 @@ biophysics\_fitting.simulator
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Simulator
       Simulator_Setup

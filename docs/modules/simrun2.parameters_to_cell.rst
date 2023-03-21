@@ -2,7 +2,7 @@ simrun2.parameters\_to\_cell
 ============================
 
 .. automodule:: simrun2.parameters_to_cell
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun2.parameters\_to\_cell
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       parameters_to_cell
    

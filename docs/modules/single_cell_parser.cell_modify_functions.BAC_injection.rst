@@ -2,7 +2,7 @@ single\_cell\_parser.cell\_modify\_functions.BAC\_injection
 ===========================================================
 
 .. automodule:: single_cell_parser.cell_modify_functions.BAC_injection
-
+  
    
    
    
@@ -12,6 +12,7 @@ single\_cell\_parser.cell\_modify\_functions.BAC\_injection
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       BAC_injection
    

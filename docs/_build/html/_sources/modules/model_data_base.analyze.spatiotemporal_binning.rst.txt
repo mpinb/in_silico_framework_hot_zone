@@ -2,7 +2,7 @@ model\_data\_base.analyze.spatiotemporal\_binning
 =================================================
 
 .. automodule:: model_data_base.analyze.spatiotemporal_binning
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.analyze.spatiotemporal\_binning
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       universal
       universal_pd

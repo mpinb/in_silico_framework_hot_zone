@@ -2,7 +2,7 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.generate\_nr\_of\_cells\_spr
 ========================================================================================
 
 .. automodule:: singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet
-
+  
    
    
    
@@ -12,6 +12,7 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.generate\_nr\_of\_cells\_spr
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       con_file_to_NumberOfConnectedCells_sheet
    

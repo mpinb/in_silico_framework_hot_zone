@@ -2,7 +2,7 @@ biophysics\_fitting.ephys
 =========================
 
 .. automodule:: biophysics_fitting.ephys
-
+  
    
    
    
@@ -12,6 +12,7 @@ biophysics\_fitting.ephys
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       AHP_depth_abs
       AHP_depth_abs_check_2AP

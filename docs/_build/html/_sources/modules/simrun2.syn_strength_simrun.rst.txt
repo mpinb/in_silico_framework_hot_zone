@@ -2,7 +2,7 @@ simrun2.syn\_strength\_simrun
 =============================
 
 .. automodule:: simrun2.syn_strength_simrun
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun2.syn\_strength\_simrun
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       scale_apical
       unitary_connections

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>singlecell_input_mapper.singlecell_input_mapper.synapse_mapper &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for singlecell_input_mapper.singlecell_input_mapper.synapse_mapper</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Mar 30, 2012</span>
+
+<span class="sd">@author: regger</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.scalar_field</span> <span class="kn">import</span> <span class="n">ScalarField</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<div class="viewcode-block" id="SynapseMapper"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.html#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper">[docs]</a><span class="k">class</span> <span class="nc">SynapseMapper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    SynapseMapper assigns synapses to neuron morphology</span>
+<span class="sd">    self.cell is neuron SpatialGraph</span>
+<span class="sd">    self.synDist is average synapse distribution (3D scalar field)</span>
+<span class="sd">    self.isDensity: True - synapse distribution interpreted as avg</span>
+<span class="sd">        density; actual number of synapses assigned is drawn from a </span>
+<span class="sd">        Poisson distribution</span>
+<span class="sd">        False - synapse distribution interpreted as actual number of</span>
+<span class="sd">        synapses per voxel and directly assigned</span>
+<span class="sd">    self.voxelEdgeMap: dictionary mapping synapse distribution mesh</span>
+<span class="sd">        coordinates on list with pairs of indices that correspond</span>
+<span class="sd">        to the edge and edgePt ID of all morphology points inside that voxel</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">synDist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">isDensity</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        synapses are mapped onto this cell</span>
+<span class="sd">        self.cell = cell</span>
+<span class="sd">        </span>
+<span class="sd">        synapse distribution</span>
+<span class="sd">        self.synDist = synDist</span>
+<span class="sd">        </span>
+<span class="sd">        flag: 1 - distribution is density; 0 - distribution is realization</span>
+<span class="sd">        self.isDensity = isDensity</span>
+<span class="sd">        </span>
+<span class="sd">        stores edge/voxel correspondence for mapping</span>
+<span class="sd">        self.voxelEdgeMap = {}</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">synDist</span> <span class="o">=</span> <span class="n">synDist</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isDensity</span> <span class="o">=</span> <span class="n">isDensity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="c1">#        seed = int(time.time()) + 2342</span>
+<span class="c1">#        self.ranGen = np.random.RandomState(seed)</span>
+    
+    <span class="k">def</span> <span class="nf">create_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        main function; creates instantiation of synapses</span>
+<span class="sd">        on cell from synapse distribution</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">newSynapses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_voxel_edge_map</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">mesh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synDist</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+            <span class="n">meshIndices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">nonzero</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">vxIndex</span> <span class="ow">in</span> <span class="n">meshIndices</span><span class="p">:</span>
+                <span class="n">vxIndex</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">vxIndex</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span><span class="p">[</span><span class="n">structure</span><span class="p">][</span><span class="n">vxIndex</span><span class="p">]:</span>
+                    <span class="n">nrOfSyn</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">[</span><span class="n">vxIndex</span><span class="p">]</span>
+                    <span class="n">nrOfSyn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">nrOfSyn</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">nrOfSyn</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="sd">&#39;&#39;&#39;choose points at random by shuffling</span>
+<span class="sd">                    all points within the current voxel&#39;&#39;&#39;</span>
+                    <span class="n">candEdges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span><span class="p">[</span><span class="n">structure</span><span class="p">][</span><span class="n">vxIndex</span><span class="p">]</span>
+                    <span class="n">candidatePts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">candEdges</span><span class="p">))</span>
+    <span class="c1">#                fix for situation where nrOfSyn &gt; len(candidatePts):</span>
+                    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidatePts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">nrOfSyn</span><span class="p">:</span>
+                        <span class="n">candidatePts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candEdges</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">candEdges</span><span class="p">))])</span>
+                    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrOfSyn</span><span class="p">):</span>
+                        <span class="n">edgeID</span> <span class="o">=</span> <span class="n">candidatePts</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">edgePtID</span> <span class="o">=</span> <span class="n">candidatePts</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="n">edgex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">edgeID</span><span class="p">]</span><span class="o">.</span><span class="n">relPts</span><span class="p">[</span><span class="n">edgePtID</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">edgex</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">edgex</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Edge x out of range&#39;</span><span class="p">)</span>
+                        <span class="n">newSynapses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">edgex</span><span class="p">,</span> <span class="n">preType</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">newSynapses</span>
+    
+    <span class="k">def</span> <span class="nf">_create_voxel_edge_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fills dictionary voxelEdgeMap with indices of voxels</span>
+<span class="sd">        and list of pts within that voxel</span>
+<span class="sd">        Only needs to be called once at the beginning</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">voxelEdgeMap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span>
+        <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+<span class="c1">#            use cell.sections, not cell.structures</span>
+<span class="c1">#            this makes synapse placement later easier</span>
+<span class="c1">#            because we have the cell.sections ID</span>
+            <span class="n">sections</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span>
+            <span class="n">synDist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synDist</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span>
+            <span class="n">voxelEdgeMap</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">synDist</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">synDist</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">synDist</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">synDist</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">synDist</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="n">synDist</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                        <span class="n">ijk</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span>
+                        <span class="n">voxelEdgeMap</span><span class="p">[</span><span class="n">structure</span><span class="p">][</span><span class="n">ijk</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="n">voxelBBox</span> <span class="o">=</span> <span class="n">synDist</span><span class="o">.</span><span class="n">get_voxel_bounds</span><span class="p">(</span><span class="n">ijk</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sections</span><span class="p">)):</span>
+                            <span class="sd">&#39;&#39;&#39;only check section points if section bounding box</span>
+<span class="sd">                            overlaps with voxel bounding box&#39;&#39;&#39;</span>
+                            <span class="n">sec</span> <span class="o">=</span> <span class="n">sections</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="o">!=</span> <span class="n">structure</span><span class="p">:</span>
+                                <span class="k">continue</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_intersect_bboxes</span><span class="p">(</span><span class="n">voxelBBox</span><span class="p">,</span> <span class="n">sec</span><span class="o">.</span><span class="n">bounds</span><span class="p">):</span>
+                                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">nrOfPts</span><span class="p">):</span>
+                                    <span class="n">pt</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">pts</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pt_in_box</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">voxelBBox</span><span class="p">):</span>
+                                        <span class="n">voxelEdgeMap</span><span class="p">[</span><span class="n">structure</span><span class="p">][</span><span class="n">ijk</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">l</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
+        
+    <span class="k">def</span> <span class="nf">_intersect_bboxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox1</span><span class="p">,</span> <span class="n">bbox2</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        check if two bounding boxes overlap</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">intersect</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">intersect</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">return</span> <span class="kc">True</span>
+        
+    <span class="k">def</span> <span class="nf">_pt_in_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">box</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">box</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">box</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">box</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">box</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">box</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">box</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">_compute_path_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;path length to soma from location x on section sec&#39;&#39;&#39;</span>
+        <span class="n">currentSec</span> <span class="o">=</span> <span class="n">sec</span>
+        <span class="n">parentSec</span> <span class="o">=</span> <span class="n">currentSec</span><span class="o">.</span><span class="n">parent</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="n">currentSec</span><span class="o">.</span><span class="n">L</span>
+        <span class="n">parentLabel</span> <span class="o">=</span> <span class="n">parentSec</span><span class="o">.</span><span class="n">label</span>
+        <span class="k">while</span> <span class="n">parentLabel</span> <span class="o">!=</span> <span class="s1">&#39;Soma&#39;</span><span class="p">:</span>
+            <span class="n">dist</span> <span class="o">+=</span> <span class="n">parentSec</span><span class="o">.</span><span class="n">L</span>
+            <span class="n">currentSec</span> <span class="o">=</span> <span class="n">parentSec</span>
+            <span class="n">parentSec</span> <span class="o">=</span> <span class="n">currentSec</span><span class="o">.</span><span class="n">parent</span>
+            <span class="n">parentLabel</span> <span class="o">=</span> <span class="n">parentSec</span><span class="o">.</span><span class="n">label</span>
+        <span class="k">return</span> <span class="n">dist</span></div>
+
+<div class="viewcode-block" id="SynapseDensity"><a class="viewcode-back" href="../../../modules/singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.html#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity">[docs]</a><span class="k">class</span> <span class="nc">SynapseDensity</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Synapse density computation for one postsynaptic neuron</span>
+<span class="sd">    and arbitrary presynaptic bouton and other postsynaptic</span>
+<span class="sd">    PST densities</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">postCellType</span><span class="p">,</span> <span class="n">connectionSpreadsheet</span><span class="p">,</span> <span class="n">exTypes</span><span class="p">,</span> <span class="n">inhTypes</span><span class="p">,</span> <span class="n">exPST</span><span class="p">,</span> <span class="n">inhPST</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        postsynaptic neuron</span>
+<span class="sd">        self.cell = cell</span>
+<span class="sd">        </span>
+<span class="sd">        spreadsheet containing length/surface area PST densities</span>
+<span class="sd">        self.connectionSpreadsheet = connectionSpreadsheet</span>
+<span class="sd">        </span>
+<span class="sd">        defined excitatory cell types</span>
+<span class="sd">        self.exTypes = exTypes</span>
+<span class="sd">        </span>
+<span class="sd">        defined inhibitory cell types</span>
+<span class="sd">        self.inhTypes = inhTypes</span>
+<span class="sd">        </span>
+<span class="sd">        normalization PST for connections with</span>
+<span class="sd">        presynaptic excitatory cell types</span>
+<span class="sd">        self.exPST = exPST</span>
+<span class="sd">        </span>
+<span class="sd">        normalization PST for connections with</span>
+<span class="sd">        presynaptic inhibitory cell types</span>
+<span class="sd">        self.inhPST = inhPST</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">postCellType</span> <span class="o">=</span> <span class="n">postCellType</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connectionSpreadsheet</span> <span class="o">=</span> <span class="n">connectionSpreadsheet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exTypes</span> <span class="o">=</span> <span class="n">exTypes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inhTypes</span> <span class="o">=</span> <span class="n">inhTypes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span> <span class="o">=</span> <span class="n">exPST</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inhPST</span> <span class="o">=</span> <span class="n">inhPST</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span> <span class="o">=</span> <span class="p">{}</span>
+    
+    <span class="k">def</span> <span class="nf">compute_synapse_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boutonDensity</span><span class="p">,</span> <span class="n">preCellType</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        main interface for computing synapses originating</span>
+<span class="sd">        from presynaptic bouton density of given cell type</span>
+<span class="sd">        If bouton density and cell PST don&#39;t overlap</span>
+<span class="sd">        or synapse density == 0 everywhere, return None</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_cell_PST</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">preCellType</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exTypes</span><span class="p">:</span>
+            <span class="n">normPSTDensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span>
+            <span class="n">cellPSTDensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">preCellType</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inhTypes</span><span class="p">:</span>
+            <span class="n">normPSTDensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inhPST</span>
+            <span class="n">cellPSTDensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">errstr</span> <span class="o">=</span> <span class="s1">&#39;Invalid presynaptic cell type: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">preCellType</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">errstr</span><span class="p">)</span>
+        
+        <span class="n">synapseDensity</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">cellPSTDensity</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">cellMeshShape</span> <span class="o">=</span> <span class="n">cellPSTDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">cellOrigin</span> <span class="o">=</span> <span class="n">cellPSTDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">origin</span>
+            <span class="n">cellExtent</span> <span class="o">=</span> <span class="n">cellPSTDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">extent</span>
+            <span class="n">cellSpacing</span> <span class="o">=</span> <span class="n">cellPSTDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">spacing</span>
+            <span class="n">cellBoundingBox</span> <span class="o">=</span> <span class="n">cellPSTDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">boundingBox</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_intersect_bboxes</span><span class="p">(</span><span class="n">boutonDensity</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">,</span> <span class="n">cellBoundingBox</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            
+            <span class="n">synapseMesh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">cellMeshShape</span><span class="p">)</span>
+            <span class="n">synapseDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span> <span class="o">=</span> <span class="n">ScalarField</span><span class="p">(</span><span class="n">synapseMesh</span><span class="p">,</span> <span class="n">cellOrigin</span><span class="p">,</span> <span class="n">cellExtent</span><span class="p">,</span> <span class="n">cellSpacing</span><span class="p">,</span> <span class="n">cellBoundingBox</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">synapseDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">synapseDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">synapseDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">synapseDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">synapseDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="n">synapseDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                        <span class="n">ijk</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span>
+                        <span class="n">voxelCenter</span> <span class="o">=</span> <span class="n">synapseDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">get_voxel_center</span><span class="p">(</span><span class="n">ijk</span><span class="p">)</span>
+                        <span class="n">boutons</span> <span class="o">=</span> <span class="n">boutonDensity</span><span class="o">.</span><span class="n">get_scalar</span><span class="p">(</span><span class="n">voxelCenter</span><span class="p">)</span>
+                        <span class="n">normPST</span> <span class="o">=</span> <span class="n">normPSTDensity</span><span class="o">.</span><span class="n">get_scalar</span><span class="p">(</span><span class="n">voxelCenter</span><span class="p">)</span>
+                        <span class="n">cellPST</span> <span class="o">=</span> <span class="n">cellPSTDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span><span class="p">[</span><span class="n">ijk</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">boutons</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">normPST</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">normPST</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                            <span class="n">synapseDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span><span class="p">[</span><span class="n">ijk</span><span class="p">]</span> <span class="o">=</span> <span class="n">boutons</span><span class="o">*</span><span class="n">cellPST</span><span class="o">/</span><span class="n">normPST</span>
+        
+        <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">synapseDensity</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">keep</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">synapseDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">nonzero</span><span class="p">():</span>
+                <span class="n">keep</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">keep</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">synapseDensity</span>
+    
+    <span class="k">def</span> <span class="nf">compute_cell_PST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        called once to compute 3D length/surface area</span>
+<span class="sd">        densities and combine them with length/surface area</span>
+<span class="sd">        PST densities to yield connection-specific 3D PST</span>
+<span class="sd">        density of the postsynaptic neuron</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cellMesh</span><span class="p">,</span> <span class="n">cellOrigin</span><span class="p">,</span> <span class="n">cellExtent</span><span class="p">,</span> <span class="n">cellSpacing</span><span class="p">,</span> <span class="n">cellBoundingBox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_cell_density_grid</span><span class="p">()</span>
+        <span class="n">cellLengthDensities</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">cellSurfaceAreaDensities</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">cellLengthDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span> <span class="o">=</span> <span class="n">ScalarField</span><span class="p">(</span><span class="n">cellMesh</span><span class="p">,</span> <span class="n">cellOrigin</span><span class="p">,</span> <span class="n">cellExtent</span><span class="p">,</span> <span class="n">cellSpacing</span><span class="p">,</span> <span class="n">cellBoundingBox</span><span class="p">)</span>
+            <span class="n">cellSurfaceAreaDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span> <span class="o">=</span> <span class="n">ScalarField</span><span class="p">(</span><span class="n">cellMesh</span><span class="p">,</span> <span class="n">cellOrigin</span><span class="p">,</span> <span class="n">cellExtent</span><span class="p">,</span> <span class="n">cellSpacing</span><span class="p">,</span> <span class="n">cellBoundingBox</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_compute_length_surface_area_density</span><span class="p">(</span><span class="n">cellLengthDensities</span><span class="p">,</span> <span class="n">cellSurfaceAreaDensities</span><span class="p">,</span> <span class="n">likeAmira</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1">#=======================================================================</span>
+        <span class="c1"># for testing only:</span>
+        <span class="c1">#=======================================================================</span>
+<span class="c1">#        self.cellPST = cellLengthDensities</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">structures</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span> <span class="o">=</span> <span class="n">ScalarField</span><span class="p">(</span><span class="n">cellMesh</span><span class="p">,</span> <span class="n">cellOrigin</span><span class="p">,</span> <span class="n">cellExtent</span><span class="p">,</span> <span class="n">cellSpacing</span><span class="p">,</span> <span class="n">cellBoundingBox</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span> <span class="o">=</span> <span class="n">ScalarField</span><span class="p">(</span><span class="n">cellMesh</span><span class="p">,</span> <span class="n">cellOrigin</span><span class="p">,</span> <span class="n">cellExtent</span><span class="p">,</span> <span class="n">cellSpacing</span><span class="p">,</span> <span class="n">cellBoundingBox</span><span class="p">)</span>
+            <span class="n">exConstants</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connectionSpreadsheet</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">postCellType</span><span class="p">]</span>
+            <span class="n">inhConstants</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connectionSpreadsheet</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">postCellType</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">structure</span> <span class="o">==</span> <span class="s1">&#39;Soma&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">exConstants</span><span class="p">[</span><span class="s1">&#39;SOMA_LENGTH&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellLengthDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">exConstants</span><span class="p">[</span><span class="s1">&#39;SOMA_AREA&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellSurfaceAreaDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">inhConstants</span><span class="p">[</span><span class="s1">&#39;SOMA_LENGTH&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellLengthDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">inhConstants</span><span class="p">[</span><span class="s1">&#39;SOMA_AREA&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellSurfaceAreaDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+            <span class="k">if</span> <span class="n">structure</span> <span class="o">==</span> <span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">exConstants</span><span class="p">[</span><span class="s1">&#39;APICAL_LENGTH&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellLengthDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">exConstants</span><span class="p">[</span><span class="s1">&#39;APICAL_AREA&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellSurfaceAreaDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">inhConstants</span><span class="p">[</span><span class="s1">&#39;APICAL_LENGTH&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellLengthDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">inhConstants</span><span class="p">[</span><span class="s1">&#39;APICAL_AREA&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellSurfaceAreaDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+            <span class="k">if</span> <span class="n">structure</span> <span class="o">==</span> <span class="s1">&#39;Dendrite&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">exConstants</span><span class="p">[</span><span class="s1">&#39;BASAL_LENGTH&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellLengthDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;EXC&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">exConstants</span><span class="p">[</span><span class="s1">&#39;BASAL_AREA&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellSurfaceAreaDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">inhConstants</span><span class="p">[</span><span class="s1">&#39;BASAL_LENGTH&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellLengthDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cellPST</span><span class="p">[</span><span class="s1">&#39;INH&#39;</span><span class="p">][</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span> <span class="o">+=</span> <span class="n">inhConstants</span><span class="p">[</span><span class="s1">&#39;BASAL_AREA&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cellSurfaceAreaDensities</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span>
+        
+    
+    <span class="k">def</span> <span class="nf">_compute_length_surface_area_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lengthDensity</span><span class="p">,</span> <span class="n">surfaceAreaDensity</span><span class="p">,</span> <span class="n">likeAmira</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Implementation of clipping of line segments</span>
+<span class="sd">        by 3D voxels given by lengthDensity[structure]</span>
+<span class="sd">        (using Liang-Barsky line clipping algorithm,</span>
+<span class="sd">        http://en.wikipedia.org/wiki/Liang%E2%80%93Barsky_algorithm).</span>
+<span class="sd">        Make use of the fact that end points of</span>
+<span class="sd">        individual sections are beginning points of</span>
+<span class="sd">        connected sections and represented in each</span>
+<span class="sd">        section separately -&gt; sections can be treated</span>
+<span class="sd">        independently of another</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---------------------------&#39;</span><span class="p">)</span>
+        <span class="n">totalLength</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">structure</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">lengthDensity</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing 3D length/surface area density of structures with label </span><span class="si">{:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">structure</span><span class="p">))</span>
+            <span class="n">density1</span> <span class="o">=</span> <span class="n">lengthDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span>
+            <span class="n">density2</span> <span class="o">=</span> <span class="n">surfaceAreaDensity</span><span class="p">[</span><span class="n">structure</span><span class="p">]</span>
+            <span class="c1">#===================================================================</span>
+            <span class="c1"># Two steps:</span>
+            <span class="c1"># 1. Compute length between all pairs of points that are located</span>
+            <span class="c1"># in the same grid cell (vast majority)</span>
+            <span class="c1"># 2. Use Liang-Barsky for clipping line segments between remaining</span>
+            <span class="c1"># points that are not located within same grid cell</span>
+            <span class="c1">#===================================================================</span>
+            <span class="n">clipSegments</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">clipSegmentsRadius</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">structures</span><span class="p">[</span><span class="n">structure</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">nrOfPts</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">pt1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">pts</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="n">pt2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">pts</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">likeAmira</span><span class="p">:</span>
+                        <span class="n">r1</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">diamList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="mf">0.5</span>
+                        <span class="n">r2</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">diamList</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mf">0.5</span>
+<span class="c1">#                    Amira Bug: uses diameter instead of radius</span>
+<span class="c1">#                    (doesn&#39;t matter for end result, but it&#39;s affecting</span>
+<span class="c1">#                    the INH PST density -&gt; need to be consistent...)</span>
+                    <span class="k">if</span> <span class="n">likeAmira</span><span class="p">:</span>
+                        <span class="n">r1</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">diamList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="n">r2</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">diamList</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">gridCell1</span> <span class="o">=</span> <span class="n">density1</span><span class="o">.</span><span class="n">get_mesh_coordinates</span><span class="p">(</span><span class="n">pt1</span><span class="p">)</span>
+                    <span class="n">gridCell2</span> <span class="o">=</span> <span class="n">density1</span><span class="o">.</span><span class="n">get_mesh_coordinates</span><span class="p">(</span><span class="n">pt2</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">gridCell1</span> <span class="o">==</span> <span class="n">gridCell2</span><span class="p">:</span>
+                        <span class="n">diff</span> <span class="o">=</span> <span class="n">pt2</span> <span class="o">-</span> <span class="n">pt1</span>
+                        <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span><span class="n">diff</span><span class="p">))</span>
+                        <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_truncated_cone_area</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+                        <span class="n">density1</span><span class="o">.</span><span class="n">mesh</span><span class="p">[</span><span class="n">gridCell1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">length</span>
+                        <span class="n">density2</span><span class="o">.</span><span class="n">mesh</span><span class="p">[</span><span class="n">gridCell1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">area</span>
+                        <span class="n">totalLength</span> <span class="o">+=</span> <span class="n">length</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">clipSegments</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt2</span><span class="p">))</span>
+                        <span class="n">clipSegmentsRadius</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">r1</span><span class="p">,</span><span class="n">r2</span><span class="p">))</span>
+<span class="c1">#            dims = density1.extent[1]+1, density1.extent[3]+1, density1.extent[5]+1</span>
+<span class="c1">#            nrOfVoxels = dims[0]*dims[1]*dims[2]</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c1">#            print &#39;Checking %dx%dx%d = %d voxels...&#39; % (dims[0],dims[1],dims[2],nrOfVoxels)</span>
+            <span class="n">nrOfSegments</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">clipSegments</span><span class="p">)</span>
+<span class="c1">#            print &#39;Clipping %d segments...&#39; % (nrOfSegments)</span>
+<span class="c1">#            for segment in clipSegments:</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">clipSegments</span><span class="p">)):</span>
+                <span class="n">segment</span> <span class="o">=</span> <span class="n">clipSegments</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                <span class="n">segmentRadius</span> <span class="o">=</span> <span class="n">clipSegmentsRadius</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1"> of </span><span class="si">{:d}</span><span class="s1"> done...</span><span class="se">\r</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">count</span><span class="p">,</span><span class="n">nrOfSegments</span><span class="p">))</span><span class="c1">#, end=&#39; &#39;)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">density1</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">density1</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">density1</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">density1</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">density1</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="n">density1</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+<span class="c1">#                            print &#39;%d of %d done...\r&#39; % (count,nrOfVoxels),</span>
+<span class="c1">#                            sys.stdout.flush()</span>
+<span class="c1">#                            count += 1</span>
+                            <span class="n">ijk</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span>
+                            <span class="n">voxelBounds</span> <span class="o">=</span> <span class="n">density1</span><span class="o">.</span><span class="n">get_voxel_bounds</span><span class="p">(</span><span class="n">ijk</span><span class="p">)</span>
+                            <span class="n">pt1</span> <span class="o">=</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="n">pt2</span> <span class="o">=</span> <span class="n">segment</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                            <span class="n">dx_</span> <span class="o">=</span> <span class="n">pt2</span> <span class="o">-</span> <span class="n">pt1</span>
+                            
+                            <span class="n">dx</span> <span class="o">=</span> <span class="n">dx_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="n">dy</span> <span class="o">=</span> <span class="n">dx_</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                            <span class="n">dz</span> <span class="o">=</span> <span class="n">dx_</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                            <span class="n">p1</span> <span class="o">=</span> <span class="o">-</span><span class="n">dx</span>
+                            <span class="n">p2</span> <span class="o">=</span> <span class="n">dx</span>
+                            <span class="n">p3</span> <span class="o">=</span> <span class="o">-</span><span class="n">dy</span>
+                            <span class="n">p4</span> <span class="o">=</span> <span class="n">dy</span>
+                            <span class="n">p5</span> <span class="o">=</span> <span class="o">-</span><span class="n">dz</span>
+                            <span class="n">p6</span> <span class="o">=</span> <span class="n">dz</span>
+                            <span class="n">q1</span> <span class="o">=</span> <span class="n">pt1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">voxelBounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="n">q2</span> <span class="o">=</span> <span class="n">voxelBounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pt1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="n">q3</span> <span class="o">=</span> <span class="n">pt1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">voxelBounds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                            <span class="n">q4</span> <span class="o">=</span> <span class="n">voxelBounds</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">pt1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                            <span class="n">q5</span> <span class="o">=</span> <span class="n">pt1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">voxelBounds</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                            <span class="n">q6</span> <span class="o">=</span> <span class="n">voxelBounds</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">-</span> <span class="n">pt1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                            
+                            <span class="n">u1</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="n">u2</span> <span class="o">=</span> <span class="mi">1</span>
+                            <span class="n">pq1</span> <span class="o">=</span> <span class="p">[</span><span class="n">p1</span><span class="p">,</span><span class="n">q1</span><span class="p">]</span>
+                            <span class="n">pq2</span> <span class="o">=</span> <span class="p">[</span><span class="n">p2</span><span class="p">,</span><span class="n">q2</span><span class="p">]</span>
+                            <span class="n">pq3</span> <span class="o">=</span> <span class="p">[</span><span class="n">p3</span><span class="p">,</span><span class="n">q3</span><span class="p">]</span>
+                            <span class="n">pq4</span> <span class="o">=</span> <span class="p">[</span><span class="n">p4</span><span class="p">,</span><span class="n">q4</span><span class="p">]</span>
+                            <span class="n">pq5</span> <span class="o">=</span> <span class="p">[</span><span class="n">p5</span><span class="p">,</span><span class="n">q5</span><span class="p">]</span>
+                            <span class="n">pq6</span> <span class="o">=</span> <span class="p">[</span><span class="n">p6</span><span class="p">,</span><span class="n">q6</span><span class="p">]</span>
+                            <span class="n">u1u2</span> <span class="o">=</span> <span class="p">[</span><span class="n">u1</span><span class="p">,</span><span class="n">u2</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_u</span><span class="p">(</span><span class="n">pq1</span><span class="p">,</span> <span class="n">u1u2</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_u</span><span class="p">(</span><span class="n">pq2</span><span class="p">,</span> <span class="n">u1u2</span><span class="p">)</span>\
+                                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_u</span><span class="p">(</span><span class="n">pq3</span><span class="p">,</span> <span class="n">u1u2</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_u</span><span class="p">(</span><span class="n">pq4</span><span class="p">,</span> <span class="n">u1u2</span><span class="p">)</span>\
+                                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_u</span><span class="p">(</span><span class="n">pq5</span><span class="p">,</span> <span class="n">u1u2</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip_u</span><span class="p">(</span><span class="n">pq6</span><span class="p">,</span> <span class="n">u1u2</span><span class="p">):</span>
+                                <span class="n">u1</span> <span class="o">=</span> <span class="n">u1u2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="n">u2</span> <span class="o">=</span> <span class="n">u1u2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">continue</span>
+                            
+                            <span class="k">if</span> <span class="n">u2</span> <span class="o">&lt;</span> <span class="n">u1</span><span class="p">:</span>
+                                <span class="k">continue</span>
+                            
+                            <span class="n">clipPt1</span> <span class="o">=</span> <span class="n">pt1</span> <span class="o">+</span> <span class="n">u1</span><span class="o">*</span><span class="n">dx_</span>
+                            <span class="n">clipPt2</span> <span class="o">=</span> <span class="n">pt1</span> <span class="o">+</span> <span class="n">u2</span><span class="o">*</span><span class="n">dx_</span>
+<span class="c1">#                            diff = clipPt2 - clipPt1</span>
+                            <span class="n">diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">u2</span> <span class="o">-</span> <span class="n">u1</span><span class="p">)</span><span class="o">*</span><span class="n">dx_</span>
+                            <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span><span class="n">diff</span><span class="p">))</span>
+                            <span class="n">r1</span> <span class="o">=</span> <span class="n">segmentRadius</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="n">r2</span> <span class="o">=</span> <span class="n">segmentRadius</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                            <span class="n">r1Interpolated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolate_radius</span><span class="p">(</span><span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">clipPt1</span><span class="p">)</span>
+                            <span class="n">r2Interpolated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolate_radius</span><span class="p">(</span><span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">clipPt2</span><span class="p">)</span>
+                            <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_truncated_cone_area</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">r1Interpolated</span><span class="p">,</span> <span class="n">r2Interpolated</span><span class="p">)</span>
+                            <span class="n">density1</span><span class="o">.</span><span class="n">mesh</span><span class="p">[</span><span class="n">ijk</span><span class="p">]</span> <span class="o">+=</span> <span class="n">length</span>
+                            <span class="n">density2</span><span class="o">.</span><span class="n">mesh</span><span class="p">[</span><span class="n">ijk</span><span class="p">]</span> <span class="o">+=</span> <span class="n">area</span>
+                            <span class="n">totalLength</span> <span class="o">+=</span> <span class="n">length</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total clipped length = </span><span class="si">{:f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">totalLength</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---------------------------&#39;</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">_clip_u</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pq</span><span class="p">,</span> <span class="n">u1u2</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Liang-Barsky clipping</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">pq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">pq</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">u1</span> <span class="o">=</span> <span class="n">u1u2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">u2</span> <span class="o">=</span> <span class="n">u1u2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">q</span><span class="o">/</span><span class="n">p</span>
+            <span class="k">if</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="n">u2</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">elif</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="n">u1</span><span class="p">:</span>
+                <span class="n">u1</span> <span class="o">=</span> <span class="n">tmp</span>
+        <span class="k">elif</span> <span class="n">p</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">q</span><span class="o">/</span><span class="n">p</span>
+            <span class="k">if</span> <span class="n">tmp</span> <span class="o">&lt;</span> <span class="n">u1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">elif</span> <span class="n">tmp</span> <span class="o">&lt;</span> <span class="n">u2</span><span class="p">:</span>
+                <span class="n">u2</span> <span class="o">=</span> <span class="n">tmp</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_zero</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="ow">and</span> <span class="n">q</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">u1u2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">u1</span>
+        <span class="n">u1u2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u2</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    
+    <span class="k">def</span> <span class="nf">_get_truncated_cone_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">radius1</span><span class="p">,</span> <span class="n">radius2</span><span class="p">):</span>
+        <span class="n">deltaR</span> <span class="o">=</span> <span class="n">radius2</span> <span class="o">-</span> <span class="n">radius1</span>
+        <span class="n">slantedHeight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">height</span><span class="o">*</span><span class="n">height</span> <span class="o">+</span> <span class="n">deltaR</span><span class="o">*</span><span class="n">deltaR</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">radius1</span> <span class="o">+</span> <span class="n">radius2</span><span class="p">)</span><span class="o">*</span><span class="n">slantedHeight</span>
+    
+    <span class="k">def</span> <span class="nf">_interpolate_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">radius0</span><span class="p">,</span> <span class="n">radius1</span><span class="p">,</span> <span class="n">targetPt</span><span class="p">):</span>
+        <span class="n">totalLength</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="o">-</span><span class="n">p0</span><span class="p">))</span>
+        <span class="k">if</span> <span class="o">-</span><span class="mf">1e-4</span> <span class="o">&lt;</span> <span class="n">totalLength</span> <span class="o">&lt;</span> <span class="mf">1e-4</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">radius0</span> <span class="o">+</span> <span class="n">radius1</span><span class="p">)</span>
+        <span class="n">p0TargetLength</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">targetPt</span><span class="o">-</span><span class="n">p0</span><span class="p">,</span><span class="n">targetPt</span><span class="o">-</span><span class="n">p0</span><span class="p">))</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">p0TargetLength</span><span class="o">/</span><span class="n">totalLength</span>
+        <span class="k">return</span> <span class="n">alpha</span><span class="o">*</span><span class="n">radius1</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">alpha</span><span class="p">)</span><span class="o">*</span><span class="n">radius0</span>
+    
+    <span class="k">def</span> <span class="nf">_compute_cell_density_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cellBounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">get_bounding_box</span><span class="p">()</span>
+<span class="c1">#        print &#39;Cell bounding box:&#39;</span>
+<span class="c1">#        print cellBounds</span>
+        <span class="n">iMin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">iMax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">jMin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">jMax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">kMin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+        <span class="n">kMax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">ijk</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span>
+                    <span class="n">voxelBounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">get_voxel_bounds</span><span class="p">(</span><span class="n">ijk</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_intersect_bboxes</span><span class="p">(</span><span class="n">cellBounds</span><span class="p">,</span> <span class="n">voxelBounds</span><span class="p">):</span>
+                        <span class="k">continue</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">iMin</span><span class="p">:</span>
+                        <span class="n">iMin</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">iMax</span><span class="p">:</span>
+                        <span class="n">iMax</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="k">if</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">jMin</span><span class="p">:</span>
+                        <span class="n">jMin</span> <span class="o">=</span> <span class="n">j</span>
+                    <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">jMax</span><span class="p">:</span>
+                        <span class="n">jMax</span> <span class="o">=</span> <span class="n">j</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">kMin</span><span class="p">:</span>
+                        <span class="n">kMin</span> <span class="o">=</span> <span class="n">k</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">kMax</span><span class="p">:</span>
+                        <span class="n">kMax</span> <span class="o">=</span> <span class="n">k</span>
+        
+        <span class="n">cellExtent</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">iMax</span><span class="o">-</span><span class="n">iMin</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">jMax</span><span class="o">-</span><span class="n">jMin</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">kMax</span><span class="o">-</span><span class="n">kMin</span>
+        <span class="n">cellDims</span> <span class="o">=</span> <span class="n">cellExtent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">cellExtent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">cellExtent</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">spacing</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">spacing</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">spacing</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">cellSpacing</span> <span class="o">=</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span>
+        <span class="n">xMin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">iMin</span><span class="o">*</span><span class="n">dx</span>
+        <span class="n">yMin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">jMin</span><span class="o">*</span><span class="n">dy</span>
+        <span class="n">zMin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">kMin</span><span class="o">*</span><span class="n">dz</span>
+        <span class="n">xMax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">iMax</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span>
+        <span class="n">yMax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">jMax</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dy</span>
+        <span class="n">zMax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exPST</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">kMax</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dz</span>
+        <span class="n">cellOrigin</span> <span class="o">=</span> <span class="n">xMin</span><span class="p">,</span> <span class="n">yMin</span><span class="p">,</span> <span class="n">zMin</span>
+        <span class="n">cellBoundingBox</span> <span class="o">=</span> <span class="n">xMin</span><span class="p">,</span> <span class="n">xMax</span><span class="p">,</span> <span class="n">yMin</span><span class="p">,</span> <span class="n">yMax</span><span class="p">,</span> <span class="n">zMin</span><span class="p">,</span> <span class="n">zMax</span>
+        <span class="n">cellMesh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">cellDims</span><span class="p">)</span>
+<span class="c1">#        print &#39;Cell structures grid&#39;</span>
+<span class="c1">#        print &#39;Origin:&#39;</span>
+<span class="c1">#        print cellOrigin</span>
+<span class="c1">#        print &#39;Bounding box:&#39;</span>
+<span class="c1">#        print cellBoundingBox</span>
+<span class="c1">#        print &#39;Extent:&#39;</span>
+<span class="c1">#        print cellExtent</span>
+<span class="c1">#        print &#39;Dims:&#39;</span>
+<span class="c1">#        print cellDims</span>
+        
+        <span class="k">return</span> <span class="n">cellMesh</span><span class="p">,</span> <span class="n">cellOrigin</span><span class="p">,</span> <span class="n">cellExtent</span><span class="p">,</span> <span class="n">cellSpacing</span><span class="p">,</span> <span class="n">cellBoundingBox</span>
+    
+    <span class="k">def</span> <span class="nf">_is_zero</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-10</span>
+        <span class="k">return</span> <span class="n">number</span> <span class="o">&lt;</span> <span class="n">eps</span> <span class="ow">and</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="o">-</span><span class="n">eps</span>
+        
+    <span class="k">def</span> <span class="nf">_intersect_bboxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox1</span><span class="p">,</span> <span class="n">bbox2</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        check if two bounding boxes overlap</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">intersect</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">intersect</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">return</span> <span class="kc">True</span></div>
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

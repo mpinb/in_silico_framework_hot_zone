@@ -2,7 +2,7 @@ simrun2.test\_BAC\_firing
 =========================
 
 .. automodule:: simrun2.test_BAC_firing
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun2.test\_BAC\_firing
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       apical_injection
       get_apical_section_at_distance

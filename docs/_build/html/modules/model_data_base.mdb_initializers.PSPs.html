@@ -18,7 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="model_data_base.mdb_initializers.load_simrun_general" href="model_data_base.mdb_initializers.load_simrun_general.html" />
+    <link rel="next" title="model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb" href="model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb.html" />
     <link rel="prev" title="model_data_base.mdb_initializers" href="model_data_base.mdb_initializers.html" /> 
 </head>
 
@@ -54,7 +54,13 @@
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.analyze.html">model_data_base.analyze</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.mdb_initializers.PSPs</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.mdb_initializers.PSPs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb.html">model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.get_confile_form_network_param.html">model_data_base.mdb_initializers.PSPs.get_confile_form_network_param</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.get_parameterfiles_df_with_confile_and_neuron_param_path.html">model_data_base.mdb_initializers.PSPs.get_parameterfiles_df_with_confile_and_neuron_param_path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.init.html">model_data_base.mdb_initializers.PSPs.init</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.html">model_data_base.mdb_initializers.load_simrun_general</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.html">model_data_base.mdb_initializers.prepare_ANN_batches</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.somatic_summation_model.html">model_data_base.mdb_initializers.somatic_summation_model</a></li>
@@ -114,16 +120,16 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_PSP_determinants_from_mdb</span></code>(mdb)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb.html#model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb" title="model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_PSP_determinants_from_mdb</span></code></a>(mdb)</p></td>
 <td><p>returns the combinations of neuron_parameters and network embeddings for which PSPs need to be computed for somatic summation model</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_confile_form_network_param</span></code>(n)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.get_confile_form_network_param.html#model_data_base.mdb_initializers.PSPs.get_confile_form_network_param" title="model_data_base.mdb_initializers.PSPs.get_confile_form_network_param"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_confile_form_network_param</span></code></a>(n)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_parameterfiles_df_with_confile_and_neuron_param_path</span></code>(mdb)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.get_parameterfiles_df_with_confile_and_neuron_param_path.html#model_data_base.mdb_initializers.PSPs.get_parameterfiles_df_with_confile_and_neuron_param_path" title="model_data_base.mdb_initializers.PSPs.get_parameterfiles_df_with_confile_and_neuron_param_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_parameterfiles_df_with_confile_and_neuron_param_path</span></code></a>(mdb)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code>(mdb[, client, description_key, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.init.html#model_data_base.mdb_initializers.PSPs.init" title="model_data_base.mdb_initializers.PSPs.init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code></a>(mdb[, client, description_key, …])</p></td>
 <td><p>This calculates PSPs for a model_data_base, that has been initialized with I.mdb_init_simrun_general.</p></td>
 </tr>
 </tbody>
@@ -135,7 +141,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="model_data_base.mdb_initializers.html" class="btn btn-neutral float-left" title="model_data_base.mdb_initializers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="model_data_base.mdb_initializers.load_simrun_general.html" class="btn btn-neutral float-right" title="model_data_base.mdb_initializers.load_simrun_general" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb.html" class="btn btn-neutral float-right" title="model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

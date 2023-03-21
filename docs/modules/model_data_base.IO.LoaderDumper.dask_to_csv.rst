@@ -2,7 +2,7 @@ model\_data\_base.IO.LoaderDumper.dask\_to\_csv
 ===============================================
 
 .. automodule:: model_data_base.IO.LoaderDumper.dask_to_csv
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.IO.LoaderDumper.dask\_to\_csv
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       check
       chunkIt
@@ -26,6 +27,8 @@ model\_data\_base.IO.LoaderDumper.dask\_to\_csv
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Loader
    

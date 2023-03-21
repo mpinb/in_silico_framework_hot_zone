@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="model_data_base.analyze" href="model_data_base.analyze.html" />
-    <link rel="prev" title="model_data_base.IO.dask_wrappers" href="model_data_base.IO.dask_wrappers.html" /> 
+    <link rel="next" title="model_data_base.IO.roberts_formats.read_InputMapper_summary" href="model_data_base.IO.roberts_formats.read_InputMapper_summary.html" />
+    <link rel="prev" title="model_data_base.IO.dask_wrappers.read_csvs" href="model_data_base.IO.dask_wrappers.read_csvs.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -53,7 +53,14 @@
 <li class="toctree-l2 current"><a class="reference internal" href="model_data_base.IO.html">model_data_base.IO</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html">model_data_base.IO.LoaderDumper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.IO.dask_wrappers.html">model_data_base.IO.dask_wrappers</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.IO.roberts_formats</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.IO.roberts_formats</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.roberts_formats.read_InputMapper_summary.html">model_data_base.IO.roberts_formats.read_InputMapper_summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.roberts_formats.read_csv_uneven_length.html">model_data_base.IO.roberts_formats.read_csv_uneven_length</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format.html">model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format.html">model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format.html">model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.analyze.html">model_data_base.analyze</a></li>
@@ -112,19 +119,19 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_InputMapper_summary</span></code>(pathOrBuffer[, sep])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.roberts_formats.read_InputMapper_summary.html#model_data_base.IO.roberts_formats.read_InputMapper_summary" title="model_data_base.IO.roberts_formats.read_InputMapper_summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_InputMapper_summary</span></code></a>(pathOrBuffer[, sep])</p></td>
 <td><p>Expects the path to a summary csv file of the Single Cell Mapper, returns the tables as pandas tables</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_csv_uneven_length</span></code>(path, n_commas[, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.roberts_formats.read_csv_uneven_length.html#model_data_base.IO.roberts_formats.read_csv_uneven_length" title="model_data_base.IO.roberts_formats.read_csv_uneven_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_csv_uneven_length</span></code></a>(path, n_commas[, …])</p></td>
 <td><p>general function to read in a csv file with varying length data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pandas_cell_activation_from_roberts_format</span></code>(path)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format.html#model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format" title="model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pandas_cell_activation_from_roberts_format</span></code></a>(path)</p></td>
 <td><p>reads cell activation file from simulation and converts it to pandas table</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pandas_synapse_activation_from_roberts_format</span></code>(path)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format.html#model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format" title="model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pandas_synapse_activation_from_roberts_format</span></code></a>(path)</p></td>
 <td><p>reads synapse activation file from simulation and converts it to pandas table</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pandas_synapse_activation_to_roberts_format</span></code>(…)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format.html#model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format" title="model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pandas_synapse_activation_to_roberts_format</span></code></a>(…)</p></td>
 <td><p>save pandas df in a format, which can be understood by the simulator</p></td>
 </tr>
 </tbody>
@@ -135,8 +142,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="model_data_base.IO.dask_wrappers.html" class="btn btn-neutral float-left" title="model_data_base.IO.dask_wrappers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="model_data_base.analyze.html" class="btn btn-neutral float-right" title="model_data_base.analyze" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.IO.dask_wrappers.read_csvs.html" class="btn btn-neutral float-left" title="model_data_base.IO.dask_wrappers.read_csvs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.IO.roberts_formats.read_InputMapper_summary.html" class="btn btn-neutral float-right" title="model_data_base.IO.roberts_formats.read_InputMapper_summary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

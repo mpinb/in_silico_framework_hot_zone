@@ -2,7 +2,7 @@ project\_specific\_ipynb\_code.biophysical\_models
 ==================================================
 
 .. automodule:: project_specific_ipynb_code.biophysical_models
-
+  
    
    
    
@@ -12,6 +12,7 @@ project\_specific\_ipynb\_code.biophysical\_models
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       augment_model_id
       augment_pdf
@@ -49,6 +50,8 @@ project\_specific\_ipynb\_code.biophysical\_models
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       CurrentAnalysis
    

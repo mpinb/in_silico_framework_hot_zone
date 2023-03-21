@@ -2,7 +2,7 @@ simrun2.reduced\_model.get\_kernel
 ==================================
 
 .. automodule:: simrun2.reduced_model.get_kernel
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun2.reduced\_model.get\_kernel
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       compare_lists_by_none_values
       concatenate_return_boundaries
@@ -30,6 +31,8 @@ simrun2.reduced\_model.get\_kernel
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       ReducedLdaModel
       ReducedLdaModelResult

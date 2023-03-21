@@ -2,7 +2,7 @@ simrun2.crossing\_over
 ======================
 
 .. automodule:: simrun2.crossing_over
-
+  
    
    
    
@@ -25,6 +25,7 @@ simrun2.crossing\_over
 
 .. autosummary::
    :toctree:
+   :template: custom-module-template.rst
    :recursive:
 
    simrun2.crossing_over.crossing_over_simple_interface

@@ -2,7 +2,7 @@ model\_data\_base.mdbopen
 =========================
 
 .. automodule:: model_data_base.mdbopen
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.mdbopen
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       resolve_mdb_path
    
@@ -22,6 +23,8 @@ model\_data\_base.mdbopen
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       mdbopen
       taropen

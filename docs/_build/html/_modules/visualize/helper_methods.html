@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>visualize.helper_methods &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">visualize.helper_methods</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for visualize.helper_methods</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This python file contains multiple useful general methods that can be used for visualisation.</span>
+
+<span class="sd">Author: Maria Royo, Bjorge Meulemeester, Rieke Fruengel, Arco Bast</span>
+<span class="sd">Date: 05/01/2023</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">jinja2</span>
+<span class="kn">import</span> <span class="nn">IPython</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">model_data_base.utils</span> <span class="kn">import</span> <span class="n">mkdtemp</span>
+
+<div class="viewcode-block" id="write_video_from_images"><a class="viewcode-back" href="../../modules/visualize.helper_methods.write_video_from_images.html#visualize.helper_methods.write_video_from_images">[docs]</a><span class="k">def</span> <span class="nf">write_video_from_images</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">images_format</span> <span class="o">=</span> <span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="s1">&#39;mpeg4&#39;</span><span class="p">,</span> <span class="n">auto_sort_paths</span><span class="o">=</span><span class="kc">True</span> <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Creates a video from a set of images. Images must be specified as a list of images, a directory with images or a list of directories with images.</span>
+<span class="sd">    Uses glob pattern pmatching if a directory of images is specified (allows for using the &quot;*&quot; as a wildcard). Glob is not enabled by default on Windows machines.</span>
+<span class="sd">    If running this command on windows, please set the :@param glob: argument to False and specify a non-glob type match pattern.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        - images: list of images, a directory with images or a list of directories with images</span>
+<span class="sd">        - out_path: dir where the video will be generated + name of the video</span>
+<span class="sd">        - fps: frames per second</span>
+<span class="sd">        - images_format: .png, .pdf, .jpg...</span>
+<span class="sd">        - quality</span>
+<span class="sd">        - codec</span>
+<span class="sd">        - auto_sort_paths: paths to images sorted</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">out_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.mp4&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;output path must be the path to an mp4 video!&#39;</span><span class="p">)</span>
+        
+    <span class="c1"># make it a list if we want to auto_sort_paths since this is what find_files_and_order_them expects</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">auto_sort_paths</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">images</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;images must be a path to a folder or a list of folders or a list of images&#39;</span><span class="p">)</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">images</span><span class="p">]</span>
+        
+    <span class="c1"># call ffmpeg directly</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">images</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">auto_sort_paths</span> <span class="o">==</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s2">&quot;ffmpeg&quot;</span><span class="p">,</span> <span class="s2">&quot;-y&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">fps</span><span class="p">),</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">images</span><span class="o">+</span><span class="s2">&quot;/%*&quot;</span><span class="o">+</span><span class="n">images_format</span><span class="p">,</span> 
+                                       <span class="s2">&quot;-vcodec&quot;</span><span class="p">,</span> <span class="n">codec</span><span class="p">,</span> <span class="s2">&quot;-q:v&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">quality</span><span class="p">),</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">fps</span><span class="p">),</span> <span class="n">out_path</span><span class="p">])</span>    
+    <span class="c1">#</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">auto_sort_paths</span><span class="p">:</span>
+            <span class="n">listFrames</span> <span class="o">=</span> <span class="n">find_files_and_order_them</span><span class="p">(</span><span class="n">images</span><span class="p">,</span><span class="n">images_format</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">listFrames</span> <span class="o">=</span> <span class="n">images</span>
+        <span class="k">with</span> <span class="n">mkdtemp</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_folder</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">listFrames</span><span class="p">):</span>
+                <span class="n">new_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">+</span><span class="n">images_format</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_folder</span><span class="p">,</span> <span class="n">new_name</span><span class="p">))</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s2">&quot;ffmpeg&quot;</span><span class="p">,</span> <span class="s2">&quot;-y&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">fps</span><span class="p">),</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">temp_folder</span><span class="o">+</span><span class="s2">&quot;/%*&quot;</span><span class="o">+</span><span class="n">images_format</span><span class="p">,</span> 
+                                   <span class="s2">&quot;-vcodec&quot;</span><span class="p">,</span> <span class="n">codec</span><span class="p">,</span> <span class="s2">&quot;-q:v&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">quality</span><span class="p">),</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">fps</span><span class="p">),</span> <span class="n">out_path</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;images must be a list of images, a directory with images or a list of directories with images&quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">out</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Video created successfully!&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Something went wrong. Make sure:&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; - the module ffmpeg is loaded, otherwise use the command: module load ffmpeg&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; - the param images is a list of images, a directory with images or a list of directories with images&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; - images_format is specified properly&#39;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="write_gif_from_images"><a class="viewcode-back" href="../../modules/visualize.helper_methods.write_gif_from_images.html#visualize.helper_methods.write_gif_from_images">[docs]</a><span class="k">def</span> <span class="nf">write_gif_from_images</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">images_format</span> <span class="o">=</span> <span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="n">auto_sort_paths</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Creates a gif from a set of images, and saves it to :@param out_path:.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        - images: list of images, a directory with images or a list of directories with images</span>
+<span class="sd">        - out_path: dir where the video will be generated + name of the gif</span>
+<span class="sd">        - interval: time interval between frames (ms)</span>
+<span class="sd">        - images_format: .png, .pdf, .jpg...</span>
+<span class="sd">        - auto_sort_paths: paths to images sorted</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">out_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.gif&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;output path must be the path to a gif!&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># make it a list if we want to auto_sort_paths since this is what find_files_and_order_them expects</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">auto_sort_paths</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">images</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;images must be a path to a folder or a list of folders or a list of images&#39;</span><span class="p">)</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">images</span><span class="p">]</span>
+    
+    <span class="c1"># call ffmpeg directly</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">images</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">auto_sort_paths</span> <span class="o">==</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">images</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">images_format</span><span class="p">):</span>
+                <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">images</span><span class="p">,</span><span class="n">f</span><span class="p">)))</span>
+        <span class="c1"># Save into a GIF file that loops forever   </span>
+        <span class="n">frames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;GIF&#39;</span><span class="p">,</span> <span class="n">append_images</span><span class="o">=</span><span class="n">frames</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">save_all</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">auto_sort_paths</span><span class="p">:</span>
+            <span class="n">listFrames</span> <span class="o">=</span> <span class="n">find_files_and_order_them</span><span class="p">(</span><span class="n">images</span><span class="p">,</span><span class="n">images_format</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">listFrames</span> <span class="o">=</span> <span class="n">images</span>
+        <span class="k">with</span> <span class="n">mkdtemp</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_folder</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">listFrames</span><span class="p">):</span>
+                <span class="n">new_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">+</span><span class="n">images_format</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_folder</span><span class="p">,</span> <span class="n">new_name</span><span class="p">))</span>
+                <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">temp_folder</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">images_format</span><span class="p">):</span>
+                        <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">images_dir</span><span class="p">,</span><span class="n">f</span><span class="p">)))</span>
+                <span class="c1"># Save into a GIF file that loops forever   </span>
+                <span class="n">frames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;GIF&#39;</span><span class="p">,</span> <span class="n">append_images</span><span class="o">=</span><span class="n">frames</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">save_all</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;images must be a list of images, a directory with images or a list of directories with images&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gif created successfully!&#39;</span><span class="p">)</span></div>
+
+<span class="k">def</span> <span class="nf">_load_base64</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="s1">&#39;png&#39;</span><span class="p">):</span>
+    <span class="c1">#https://github.com/jakevdp/JSAnimation/blob/master/JSAnimation/html_writer.py</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="s1">&#39;data:image/</span><span class="si">{0}</span><span class="s1">;base64,</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extension</span><span class="p">,</span><span class="n">b64encode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">))</span>
+    
+<div class="viewcode-block" id="display_animation_from_images"><a class="viewcode-back" href="../../modules/visualize.helper_methods.display_animation_from_images.html#visualize.helper_methods.display_animation_from_images">[docs]</a><span class="k">def</span> <span class="nf">display_animation_from_images</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">animID</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">embedded</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Creates an IPython animation out of files specified in a globstring or a list of paths.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    - files: list of images, a directory with images or a list of directories with images</span>
+<span class="sd">    - interval: time interval between frames</span>
+<span class="sd">    - style ?</span>
+<span class="sd">    - animID: unique integer to identify the animation in the javascript environment of IPython</span>
+<span class="sd">    - embedded ?</span>
+
+<span class="sd">    CAVEAT: the paths need to be relative to the location of the ipynb / html file, since</span>
+<span class="sd">    the are resolved in the browser and not by python&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">animID</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">animID</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10000000000000</span><span class="p">)</span> <span class="c1"># needs to be unique within one ipynb</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">loader</span><span class="o">=</span><span class="n">jinja2</span><span class="o">.</span><span class="n">FileSystemLoader</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;animation_template.html&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">files</span><span class="p">):</span> <span class="c1"># folder provieded --&gt; convert to globstring</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="s1">&#39;*.png&#39;</span><span class="p">)</span>
+        <span class="n">listFrames</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">listFrames</span> <span class="o">=</span> <span class="n">files</span>
+    <span class="k">if</span> <span class="n">embedded</span><span class="p">:</span>
+        <span class="n">listFrames</span> <span class="o">=</span> <span class="p">[</span><span class="n">_load_base64</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">listFrames</span><span class="p">]</span>
+    <span class="n">htmlSrc</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="n">animID</span><span class="p">,</span> <span class="n">listFrames</span><span class="o">=</span><span class="n">listFrames</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">)</span>
+    <span class="n">IPython</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">IPython</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">htmlSrc</span><span class="p">))</span></div>
+      
+<div class="viewcode-block" id="find_files_and_order_them"><a class="viewcode-back" href="../../modules/visualize.helper_methods.find_files_and_order_them.html#visualize.helper_methods.find_files_and_order_them">[docs]</a><span class="k">def</span> <span class="nf">find_files_and_order_them</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">files_format</span><span class="o">=</span><span class="s1">&#39;.png&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Args:</span>
+<span class="sd">    - files: can be:</span>
+<span class="sd">        - list of files (path + file name)</span>
+<span class="sd">        - directory where different files are</span>
+<span class="sd">        - list of directories where files are</span>
+<span class="sd">    - files_format: format of the files to get</span>
+<span class="sd">    Returns:</span>
+<span class="sd">    List of the files contained in the files argument. These files are in order, and takes into account</span>
+<span class="sd">    if the name of the file is a number (1 would go before 10 even if the number of the file is not 0-padded). </span>
+<span class="sd">    If the files param was a list of directories, the files are in order within each directory but the</span>
+<span class="sd">    directories order is maintained.</span>
+<span class="sd">    Example:</span>
+<span class="sd">    if files is a list of directories:</span>
+<span class="sd">        [dir_a,  dir_b, dir_c] containing the following files:</span>
+<span class="sd">         dir_a | dir_b | dir_c</span>
+<span class="sd">           100 | world |     C</span>
+<span class="sd">            10 |    30 |     B</span>
+<span class="sd">             2 |     5 |     A</span>
+<span class="sd">             1 | hello |    70</span>
+<span class="sd">          file |   200 |     9</span>
+<span class="sd">    the result would be:</span>
+<span class="sd">    1, 2, 10, 100, file, 5, 30, 200, hello, world, 9, 70, A, B, C        </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">files</span><span class="p">):</span> <span class="c1"># folder provided --&gt; convert to globstring</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="o">+</span><span class="n">files_format</span><span class="p">)</span>
+        <span class="n">listFiles</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">files</span><span class="p">))</span> <span class="c1"># list of files</span>
+        <span class="n">files_no_number_name</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># files whose name does not starts with a number</span>
+        <span class="n">files_number_name</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># files whose name starts with a number</span>
+        <span class="n">numbers</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># list of numbers in the files names to be ordered</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">listFiles</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">file_name</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+                <span class="n">files_number_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                <span class="n">numbers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">files_no_number_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">idxs_in_order</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">numbers</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="n">files_number_name_in_order</span> <span class="o">=</span> <span class="p">[</span><span class="n">files_number_name</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idxs_in_order</span><span class="p">]</span>
+        <span class="n">listFiles</span> <span class="o">=</span> <span class="n">files_number_name_in_order</span> <span class="o">+</span> <span class="n">files_no_number_name</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">listFiles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">listFiles</span> <span class="o">+=</span> <span class="n">find_files_and_order_them</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span><span class="n">files_format</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">listFiles</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

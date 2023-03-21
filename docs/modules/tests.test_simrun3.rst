@@ -2,7 +2,7 @@ tests.test\_simrun3
 ===================
 
 .. automodule:: tests.test_simrun3
-
+  
    
    
    
@@ -25,6 +25,7 @@ tests.test\_simrun3
 
 .. autosummary::
    :toctree:
+   :template: custom-module-template.rst
    :recursive:
 
    tests.test_simrun3.context

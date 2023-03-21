@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="simrun2.reduced_model.synapse_activation" href="simrun2.reduced_model.synapse_activation.html" />
-    <link rel="prev" title="simrun2.reduced_model.get_kernel" href="simrun2.reduced_model.get_kernel.html" /> 
+    <link rel="next" title="simrun2.reduced_model.spiking_output.apply_reduced_model" href="simrun2.reduced_model.spiking_output.apply_reduced_model.html" />
+    <link rel="prev" title="simrun2.reduced_model.get_kernel.ReducedLdaModelResult" href="simrun2.reduced_model.get_kernel.ReducedLdaModelResult.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,7 +58,19 @@
 <li class="toctree-l2"><a class="reference internal" href="simrun2.parameters_to_cell.html">simrun2.parameters_to_cell</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="simrun2.reduced_model.html">simrun2.reduced_model</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="simrun2.reduced_model.get_kernel.html">simrun2.reduced_model.get_kernel</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">simrun2.reduced_model.spiking_output</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">simrun2.reduced_model.spiking_output</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.spiking_output.apply_reduced_model.html">simrun2.reduced_model.spiking_output.apply_reduced_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.spiking_output.calculateFractionAbleToSpike.html">simrun2.reduced_model.spiking_output.calculateFractionAbleToSpike</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.spiking_output.calculatePSTH.html">simrun2.reduced_model.spiking_output.calculatePSTH</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.spiking_output.convolutions2weightedNetInputs.html">simrun2.reduced_model.spiking_output.convolutions2weightedNetInputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.spiking_output.convolve_matrix_with_kernel.html">simrun2.reduced_model.spiking_output.convolve_matrix_with_kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.spiking_output.correct_PSTH_by_refractory_period.html">simrun2.reduced_model.spiking_output.correct_PSTH_by_refractory_period</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.spiking_output.data2Convolutions.html">simrun2.reduced_model.spiking_output.data2Convolutions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.spiking_output.get_reduced_model.html">simrun2.reduced_model.spiking_output.get_reduced_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.spiking_output.spikingProbabilities2rawPSTH.html">simrun2.reduced_model.spiking_output.spikingProbabilities2rawPSTH</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simrun2.reduced_model.spiking_output.weightedNetInput2spikingProbabilities.html">simrun2.reduced_model.spiking_output.weightedNetInput2spikingProbabilities</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="simrun2.reduced_model.synapse_activation.html">simrun2.reduced_model.synapse_activation</a></li>
 </ul>
 </li>
@@ -119,34 +131,34 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_reduced_model</span></code>(X_dict[, kernel_dict, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.reduced_model.spiking_output.apply_reduced_model.html#simrun2.reduced_model.spiking_output.apply_reduced_model" title="simrun2.reduced_model.spiking_output.apply_reduced_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_reduced_model</span></code></a>(X_dict[, kernel_dict, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculateFractionAbleToSpike</span></code>(rawPSTH, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="simrun2.reduced_model.spiking_output.calculateFractionAbleToSpike.html#simrun2.reduced_model.spiking_output.calculateFractionAbleToSpike" title="simrun2.reduced_model.spiking_output.calculateFractionAbleToSpike"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculateFractionAbleToSpike</span></code></a>(rawPSTH, …)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculatePSTH</span></code>(rawPSTH, able_to_spike)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.reduced_model.spiking_output.calculatePSTH.html#simrun2.reduced_model.spiking_output.calculatePSTH" title="simrun2.reduced_model.spiking_output.calculatePSTH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculatePSTH</span></code></a>(rawPSTH, able_to_spike)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">convolutions2weightedNetInputs</span></code>(convolutions_dict)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="simrun2.reduced_model.spiking_output.convolutions2weightedNetInputs.html#simrun2.reduced_model.spiking_output.convolutions2weightedNetInputs" title="simrun2.reduced_model.spiking_output.convolutions2weightedNetInputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convolutions2weightedNetInputs</span></code></a>(convolutions_dict)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">convolve_matrix_with_kernel</span></code>(X, kernel)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.reduced_model.spiking_output.convolve_matrix_with_kernel.html#simrun2.reduced_model.spiking_output.convolve_matrix_with_kernel" title="simrun2.reduced_model.spiking_output.convolve_matrix_with_kernel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convolve_matrix_with_kernel</span></code></a>(X, kernel)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">correct_PSTH_by_refractory_period</span></code>(PSTH, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="simrun2.reduced_model.spiking_output.correct_PSTH_by_refractory_period.html#simrun2.reduced_model.spiking_output.correct_PSTH_by_refractory_period" title="simrun2.reduced_model.spiking_output.correct_PSTH_by_refractory_period"><code class="xref py py-obj docutils literal notranslate"><span class="pre">correct_PSTH_by_refractory_period</span></code></a>(PSTH, …)</p></td>
 <td><p><a href="#id1"><span class="problematic" id="id2">return_</span></a> = ‘only_PSTH’ or  ‘PSTH_and_abletospike’</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">data2Convolutions</span></code>(X_dict, kernel_dict)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.reduced_model.spiking_output.data2Convolutions.html#simrun2.reduced_model.spiking_output.data2Convolutions" title="simrun2.reduced_model.spiking_output.data2Convolutions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data2Convolutions</span></code></a>(X_dict, kernel_dict)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reduced_model</span></code>(kernel_dict, …[, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="simrun2.reduced_model.spiking_output.get_reduced_model.html#simrun2.reduced_model.spiking_output.get_reduced_model" title="simrun2.reduced_model.spiking_output.get_reduced_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_reduced_model</span></code></a>(kernel_dict, …[, …])</p></td>
 <td><p>returns a function which you can feed with data and which will return evaluation results of the reduced model.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">spikingProbabilities2rawPSTH</span></code>(…)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.reduced_model.spiking_output.spikingProbabilities2rawPSTH.html#simrun2.reduced_model.spiking_output.spikingProbabilities2rawPSTH" title="simrun2.reduced_model.spiking_output.spikingProbabilities2rawPSTH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spikingProbabilities2rawPSTH</span></code></a>(…)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">weightedNetInput2spikingProbabilities</span></code>(…[, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="simrun2.reduced_model.spiking_output.weightedNetInput2spikingProbabilities.html#simrun2.reduced_model.spiking_output.weightedNetInput2spikingProbabilities" title="simrun2.reduced_model.spiking_output.weightedNetInput2spikingProbabilities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">weightedNetInput2spikingProbabilities</span></code></a>(…[, …])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -157,8 +169,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="simrun2.reduced_model.get_kernel.html" class="btn btn-neutral float-left" title="simrun2.reduced_model.get_kernel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="simrun2.reduced_model.synapse_activation.html" class="btn btn-neutral float-right" title="simrun2.reduced_model.synapse_activation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="simrun2.reduced_model.get_kernel.ReducedLdaModelResult.html" class="btn btn-neutral float-left" title="simrun2.reduced_model.get_kernel.ReducedLdaModelResult" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="simrun2.reduced_model.spiking_output.apply_reduced_model.html" class="btn btn-neutral float-right" title="simrun2.reduced_model.spiking_output.apply_reduced_model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

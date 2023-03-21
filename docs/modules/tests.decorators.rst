@@ -2,7 +2,7 @@ tests.decorators
 ================
 
 .. automodule:: tests.decorators
-
+  
    
    
    
@@ -12,6 +12,7 @@ tests.decorators
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       testlevel
    

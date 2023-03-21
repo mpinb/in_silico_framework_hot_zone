@@ -2,7 +2,7 @@ simrun2.rerun\_mdb
 ==================
 
 .. automodule:: simrun2.rerun_mdb
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun2.rerun\_mdb
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       convertible_to_int
       rerun_mdb
@@ -24,6 +25,8 @@ simrun2.rerun\_mdb
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Opaque
    

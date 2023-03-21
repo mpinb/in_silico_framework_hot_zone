@@ -2,7 +2,7 @@ project\_specific\_ipynb\_code.hot\_zone
 ========================================
 
 .. automodule:: project_specific_ipynb_code.hot_zone
-
+  
    
    
    
@@ -12,6 +12,7 @@ project\_specific\_ipynb\_code.hot\_zone
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       connected_to_dend_beyond
       distance_between_points
@@ -43,6 +44,8 @@ project\_specific\_ipynb\_code.hot\_zone
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       CellLoader
       Dendrogram
@@ -64,6 +67,7 @@ project\_specific\_ipynb\_code.hot\_zone
 
 .. autosummary::
    :toctree:
+   :template: custom-module-template.rst
    :recursive:
 
    project_specific_ipynb_code.hot_zone.on_demand_simulations

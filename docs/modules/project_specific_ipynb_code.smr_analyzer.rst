@@ -2,7 +2,7 @@ project\_specific\_ipynb\_code.smr\_analyzer
 ============================================
 
 .. automodule:: project_specific_ipynb_code.smr_analyzer
-
+  
    
    
    
@@ -12,6 +12,7 @@ project\_specific\_ipynb\_code.smr\_analyzer
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       burst_analysis_2
       filter_short_ISIs
@@ -33,6 +34,8 @@ project\_specific\_ipynb\_code.smr\_analyzer
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       AnalyzeFile
       EventAnalysis

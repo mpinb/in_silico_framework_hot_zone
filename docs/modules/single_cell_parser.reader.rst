@@ -2,7 +2,7 @@ single\_cell\_parser.reader
 ===========================
 
 .. automodule:: single_cell_parser.reader
-
+  
    
    
    
@@ -12,6 +12,7 @@ single\_cell\_parser.reader
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       read_complete_synapse_activation_file
       read_functional_realization_map
@@ -31,6 +32,8 @@ single\_cell\_parser.reader
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Edge
    

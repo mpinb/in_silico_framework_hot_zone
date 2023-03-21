@@ -2,7 +2,7 @@ project\_specific\_ipynb\_code.neurobiological\_design\_principles
 ==================================================================
 
 .. automodule:: project_specific_ipynb_code.neurobiological_design_principles
-
+  
    
    
    
@@ -12,6 +12,7 @@ project\_specific\_ipynb\_code.neurobiological\_design\_principles
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       get_cell_info
       get_connection_matrix_from_realisation

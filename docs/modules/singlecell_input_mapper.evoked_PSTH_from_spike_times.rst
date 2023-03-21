@@ -2,7 +2,7 @@ singlecell\_input\_mapper.evoked\_PSTH\_from\_spike\_times
 ==========================================================
 
 .. automodule:: singlecell_input_mapper.evoked_PSTH_from_spike_times
-
+  
    
    
    
@@ -12,6 +12,7 @@ singlecell\_input\_mapper.evoked\_PSTH\_from\_spike\_times
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       create_average_celltype_PSTH_from_clusters
       create_evoked_PSTH

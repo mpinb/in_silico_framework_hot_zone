@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="single_cell_parser.synapse_mapper" href="single_cell_parser.synapse_mapper.html" />
-    <link rel="prev" title="single_cell_parser.sim_control" href="single_cell_parser.sim_control.html" /> 
+    <link rel="next" title="single_cell_parser.synapse.ExSyn" href="single_cell_parser.synapse.ExSyn.html" />
+    <link rel="prev" title="single_cell_parser.sim_control.SimControl" href="single_cell_parser.sim_control.SimControl.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -56,6 +56,14 @@
 <li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.build_parameters.html">single_cell_parser.build_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.create_cell.html">single_cell_parser.create_cell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.init_neuron_run.html">single_cell_parser.init_neuron_run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.load_NMODL_parameters.html">single_cell_parser.load_NMODL_parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sec_distance_to_soma.html">single_cell_parser.sec_distance_to_soma</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_network_paramfile.html">single_cell_parser.spines_update_network_paramfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.spines_update_synapse_distribution_file.html">single_cell_parser.spines_update_synapse_distribution_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.Event.html">single_cell_parser.Event</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell.html">single_cell_parser.cell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html">single_cell_parser.cell_modify_functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_parser.html">single_cell_parser.cell_parser</a></li>
@@ -67,7 +75,11 @@
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.scalar_field.html">single_cell_parser.scalar_field</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.serialize_cell.html">single_cell_parser.serialize_cell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sim_control.html">single_cell_parser.sim_control</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.synapse</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">single_cell_parser.synapse</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.synapse.ExSyn.html">single_cell_parser.synapse.ExSyn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.synapse.Synapse.html">single_cell_parser.synapse.Synapse</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse_mapper.html">single_cell_parser.synapse_mapper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.vpm_activation.html">single_cell_parser.vpm_activation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="single_cell_parser.writer.html">single_cell_parser.writer</a></li>
@@ -115,10 +127,10 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExSyn</span></code>(edgeID, edgePtID[, preCellType, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="single_cell_parser.synapse.ExSyn.html#single_cell_parser.synapse.ExSyn" title="single_cell_parser.synapse.ExSyn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExSyn</span></code></a>(edgeID, edgePtID[, preCellType, …])</p></td>
 <td><p>simple excitatory synapse for playing around</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Synapse</span></code>(edgeID, edgePtID, edgex[, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="single_cell_parser.synapse.Synapse.html#single_cell_parser.synapse.Synapse" title="single_cell_parser.synapse.Synapse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Synapse</span></code></a>(edgeID, edgePtID, edgex[, …])</p></td>
 <td><p>Synapse base class Contains information about pre- and postsynaptic cell type, branch ID of postsynaptic cell, branch pt ID, and xyz-coordinates of synapse location Biophysical mechanisms are specified in subclasses</p></td>
 </tr>
 </tbody>
@@ -129,8 +141,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="single_cell_parser.sim_control.html" class="btn btn-neutral float-left" title="single_cell_parser.sim_control" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="single_cell_parser.synapse_mapper.html" class="btn btn-neutral float-right" title="single_cell_parser.synapse_mapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="single_cell_parser.sim_control.SimControl.html" class="btn btn-neutral float-left" title="single_cell_parser.sim_control.SimControl" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="single_cell_parser.synapse.ExSyn.html" class="btn btn-neutral float-right" title="single_cell_parser.synapse.ExSyn" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

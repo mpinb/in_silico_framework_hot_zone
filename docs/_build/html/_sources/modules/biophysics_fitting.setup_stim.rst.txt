@@ -2,7 +2,7 @@ biophysics\_fitting.setup\_stim
 ===============================
 
 .. automodule:: biophysics_fitting.setup_stim
-
+  
    
    
    
@@ -12,6 +12,7 @@ biophysics\_fitting.setup\_stim
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       setup_BAC
       setup_StepOne

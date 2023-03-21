@@ -2,7 +2,7 @@ model\_data\_base.sqlite\_backend.sqlite\_backend
 =================================================
 
 .. automodule:: model_data_base.sqlite_backend.sqlite_backend
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.sqlite\_backend.sqlite\_backend
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       aquire_read_lock
       aquire_write_lock
@@ -24,6 +25,8 @@ model\_data\_base.sqlite\_backend.sqlite\_backend
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       InMemoryBackend
       SQLiteBackend

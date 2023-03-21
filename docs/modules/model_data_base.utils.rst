@@ -2,7 +2,7 @@ model\_data\_base.utils
 =======================
 
 .. automodule:: model_data_base.utils
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.utils
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       cache
       chunkIt
@@ -37,6 +38,8 @@ model\_data\_base.utils
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       DelayedKeyboardInterrupt
       mkdtemp

@@ -2,7 +2,7 @@ simrun2.reduced\_model.spiking\_output
 ======================================
 
 .. automodule:: simrun2.reduced_model.spiking_output
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun2.reduced\_model.spiking\_output
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       apply_reduced_model
       calculateFractionAbleToSpike

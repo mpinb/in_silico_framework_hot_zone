@@ -2,7 +2,7 @@ model\_data\_base.IO.LoaderDumper.to\_pickle
 ============================================
 
 .. automodule:: model_data_base.IO.LoaderDumper.to_pickle
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.IO.LoaderDumper.to\_pickle
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       check
       dump
@@ -23,6 +24,8 @@ model\_data\_base.IO.LoaderDumper.to\_pickle
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Loader
    

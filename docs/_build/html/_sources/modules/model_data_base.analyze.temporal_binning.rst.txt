@@ -2,7 +2,7 @@ model\_data\_base.analyze.temporal\_binning
 ===========================================
 
 .. automodule:: model_data_base.analyze.temporal_binning
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.analyze.temporal\_binning
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       temporal_binning_dask
       temporal_binning_pd

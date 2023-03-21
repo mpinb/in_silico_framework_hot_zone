@@ -2,7 +2,7 @@ single\_cell\_parser.cell\_parser
 =================================
 
 .. automodule:: single_cell_parser.cell_parser
-
+  
    
    
    
@@ -16,6 +16,8 @@ single\_cell\_parser.cell\_parser
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       CellParser
    

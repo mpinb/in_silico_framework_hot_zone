@@ -2,7 +2,7 @@ simrun2.crossing\_over.run\_skip\_time
 ======================================
 
 .. automodule:: simrun2.crossing_over.run_skip_time
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun2.crossing\_over.run\_skip\_time
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       skip_time
       skip_time_and_save

@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="biophysics_fitting.simulator" href="biophysics_fitting.simulator.html" />
-    <link rel="prev" title="biophysics_fitting.parameters" href="biophysics_fitting.parameters.html" /> 
+    <link rel="next" title="biophysics_fitting.setup_stim.setup_BAC" href="biophysics_fitting.setup_stim.setup_BAC.html" />
+    <link rel="prev" title="biophysics_fitting.parameters.set_fixed_params" href="biophysics_fitting.parameters.set_fixed_params.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,6 +46,11 @@
 <li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.connected_to_dend_beyond.html">biophysics_fitting.connected_to_dend_beyond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_branching_depth.html">biophysics_fitting.get_branching_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_branching_depth_series.html">biophysics_fitting.get_branching_depth_series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_inner_sec_dist_list.html">biophysics_fitting.get_inner_sec_dist_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.get_main_bifurcation_section.html">biophysics_fitting.get_main_bifurcation_section</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.L5tt_parameter_setup.html">biophysics_fitting.L5tt_parameter_setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.combiner.html">biophysics_fitting.combiner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.ephys.html">biophysics_fitting.ephys</a></li>
@@ -58,7 +63,16 @@
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.model_selection.html">biophysics_fitting.model_selection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.optimizer.html">biophysics_fitting.optimizer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.parameters.html">biophysics_fitting.parameters</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">biophysics_fitting.setup_stim</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">biophysics_fitting.setup_stim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.setup_stim.setup_BAC.html">biophysics_fitting.setup_stim.setup_BAC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.setup_stim.setup_StepOne.html">biophysics_fitting.setup_stim.setup_StepOne</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.setup_stim.setup_StepThree.html">biophysics_fitting.setup_stim.setup_StepThree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.setup_stim.setup_StepTwo.html">biophysics_fitting.setup_stim.setup_StepTwo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.setup_stim.setup_apical_epsp_injection.html">biophysics_fitting.setup_stim.setup_apical_epsp_injection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.setup_stim.setup_bAP.html">biophysics_fitting.setup_stim.setup_bAP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="biophysics_fitting.setup_stim.setup_soma_step.html">biophysics_fitting.setup_stim.setup_soma_step</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.simulator.html">biophysics_fitting.simulator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.utils.html">biophysics_fitting.utils</a></li>
 </ul>
@@ -113,25 +127,25 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_BAC</span></code>(cell[, dist, delay])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="biophysics_fitting.setup_stim.setup_BAC.html#biophysics_fitting.setup_stim.setup_BAC" title="biophysics_fitting.setup_stim.setup_BAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_BAC</span></code></a>(cell[, dist, delay])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_StepOne</span></code>(cell[, delay])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="biophysics_fitting.setup_stim.setup_StepOne.html#biophysics_fitting.setup_stim.setup_StepOne" title="biophysics_fitting.setup_stim.setup_StepOne"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_StepOne</span></code></a>(cell[, delay])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_StepThree</span></code>(cell[, delay])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="biophysics_fitting.setup_stim.setup_StepThree.html#biophysics_fitting.setup_stim.setup_StepThree" title="biophysics_fitting.setup_stim.setup_StepThree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_StepThree</span></code></a>(cell[, delay])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_StepTwo</span></code>(cell[, delay])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="biophysics_fitting.setup_stim.setup_StepTwo.html#biophysics_fitting.setup_stim.setup_StepTwo" title="biophysics_fitting.setup_stim.setup_StepTwo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_StepTwo</span></code></a>(cell[, delay])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_apical_epsp_injection</span></code>(cell[, dist, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="biophysics_fitting.setup_stim.setup_apical_epsp_injection.html#biophysics_fitting.setup_stim.setup_apical_epsp_injection" title="biophysics_fitting.setup_stim.setup_apical_epsp_injection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_apical_epsp_injection</span></code></a>(cell[, dist, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_bAP</span></code>(cell[, delay])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="biophysics_fitting.setup_stim.setup_bAP.html#biophysics_fitting.setup_stim.setup_bAP" title="biophysics_fitting.setup_stim.setup_bAP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_bAP</span></code></a>(cell[, delay])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_soma_step</span></code>(cell[, amplitude, delay, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="biophysics_fitting.setup_stim.setup_soma_step.html#biophysics_fitting.setup_stim.setup_soma_step" title="biophysics_fitting.setup_stim.setup_soma_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_soma_step</span></code></a>(cell[, amplitude, delay, …])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -142,8 +156,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="biophysics_fitting.parameters.html" class="btn btn-neutral float-left" title="biophysics_fitting.parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="biophysics_fitting.simulator.html" class="btn btn-neutral float-right" title="biophysics_fitting.simulator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="biophysics_fitting.parameters.set_fixed_params.html" class="btn btn-neutral float-left" title="biophysics_fitting.parameters.set_fixed_params" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="biophysics_fitting.setup_stim.setup_BAC.html" class="btn btn-neutral float-right" title="biophysics_fitting.setup_stim.setup_BAC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>simrun2.syn_strength_simrun &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">simrun2.syn_strength_simrun</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for simrun2.syn_strength_simrun</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Aug 06, 2012</span>
+
+<span class="sd">@author: robert</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">neuron</span>
+<span class="kn">import</span> <span class="nn">single_cell_parser</span> <span class="k">as</span> <span class="nn">scp</span>
+<span class="kn">import</span> <span class="nn">single_cell_analyzer</span> <span class="k">as</span> <span class="nn">sca</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;agg&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">single_cell_parser.network</span> <span class="kn">import</span> <span class="n">activate_functional_synapse</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">neuron</span><span class="o">.</span><span class="n">h</span>
+
+<div class="viewcode-block" id="unitary_connections"><a class="viewcode-back" href="../../modules/simrun2.syn_strength_simrun.unitary_connections.html#simrun2.syn_strength_simrun.unitary_connections">[docs]</a><span class="k">def</span> <span class="nf">unitary_connections</span><span class="p">(</span><span class="n">modelName</span><span class="p">,</span> <span class="n">networkName</span><span class="p">,</span> <span class="n">scale_apical</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">dirPrefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cell_generator</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;modelName, networkName: either paths to parametrfiles or sumatra.NTParameterSet objects&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">modelName</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">neuronParameters</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">modelName</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">neuronParameters</span> <span class="o">=</span> <span class="n">modelName</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">networkName</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">nwParameters</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">networkName</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">nwParameters</span> <span class="o">=</span> <span class="n">networkName</span>
+
+    <span class="c1">## loading mechanisms is now handeld by the mechanism module</span>
+    <span class="c1">#scp.load_NMODL_parameters(nwParameters)</span>
+    <span class="c1">#scp.load_NMODL_parameters(neuronParameters)</span>
+    <span class="n">cellParam</span> <span class="o">=</span> <span class="n">neuronParameters</span><span class="o">.</span><span class="n">neuron</span>
+    <span class="n">preParam</span> <span class="o">=</span> <span class="n">nwParameters</span><span class="o">.</span><span class="n">network</span>
+    
+    <span class="k">if</span> <span class="n">cell_generator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cell</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">create_cell</span><span class="p">(</span><span class="n">cellParam</span><span class="p">,</span> <span class="n">scaleFunc</span><span class="o">=</span><span class="n">scale_apical</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cell is generated by cell_generator. cell_param is ignored!&quot;</span><span class="p">)</span>
+        <span class="n">cell</span> <span class="o">=</span> <span class="n">cell_generator</span><span class="p">()</span>
+    <span class="n">nwMap</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">NetworkMapper</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">preParam</span><span class="p">)</span>
+    <span class="c1">##nwMap.create_saved_network()</span>
+    <span class="n">nwMap</span><span class="o">.</span><span class="n">create_saved_network2</span><span class="p">()</span>
+    <span class="n">nwMap</span><span class="o">.</span><span class="n">re_init_network</span><span class="p">()</span>
+<span class="c1">#    for synType in cell.synapses.keys():</span>
+<span class="c1">#        for syn in cell.synapses[synType]:</span>
+<span class="c1">#            syn.releaseSite.turn_off()</span>
+      
+    <span class="n">cellTypePrefix</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nwMap</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">totalNrCells</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">cellType</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">nwMap</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="n">totalNrCells</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nwMap</span><span class="o">.</span><span class="n">connected_cells</span><span class="p">[</span><span class="n">cellType</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">cellType</span><span class="p">]:</span>
+            <span class="n">syn</span><span class="o">.</span><span class="n">disconnect_hoc_synapse</span><span class="p">()</span>
+
+<span class="c1">##            syn.releaseSite.turn_off()</span>
+    
+    <span class="n">uniqueID</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+    <span class="n">dirName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirPrefix</span><span class="p">,</span> <span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="s1">&#39;unitary_connections&#39;</span><span class="p">,</span> <span class="n">cellTypePrefix</span> <span class="o">+</span> <span class="s1">&#39;_3x3/&#39;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M&#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirName</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirName</span><span class="p">)</span>
+    
+    <span class="n">tStop</span> <span class="o">=</span> <span class="mf">150.0</span>
+    <span class="n">tOffset</span> <span class="o">=</span> <span class="mf">100.0</span>
+    <span class="n">neuronParameters</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">tStop</span> <span class="o">=</span> <span class="n">tStop</span>
+    <span class="n">tTraces</span><span class="p">,</span> <span class="n">vTraces</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">cellType</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">nwMap</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="n">typeNrCells</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nwMap</span><span class="o">.</span><span class="n">connected_cells</span><span class="p">[</span><span class="n">cellType</span><span class="p">])</span>
+        <span class="n">spikeTime</span> <span class="o">=</span> <span class="n">preParam</span><span class="p">[</span><span class="n">cellType</span><span class="p">]</span><span class="o">.</span><span class="n">spikeT</span>
+        <span class="n">recepName</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">preParam</span><span class="p">[</span><span class="n">cellType</span><span class="p">]</span><span class="o">.</span><span class="n">synapses</span><span class="o">.</span><span class="n">receptors</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">nmdaAmpaRatio</span> <span class="o">=</span> <span class="n">preParam</span><span class="p">[</span><span class="n">cellType</span><span class="p">]</span><span class="o">.</span><span class="n">synapses</span><span class="o">.</span><span class="n">receptors</span><span class="p">[</span><span class="n">recepName</span><span class="p">]</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">gExRange</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]</span> <span class="c1"># np.arange(1.6, 2.2, 0.2)</span>
+    <span class="c1">#    gExRange = [1.0]</span>
+
+        <span class="k">for</span> <span class="n">gEx</span> <span class="ow">in</span> <span class="n">gExRange</span><span class="p">:</span>
+            <span class="n">gAMPA</span> <span class="o">=</span> <span class="n">gEx</span>
+            <span class="n">gNMDA</span> <span class="o">=</span> <span class="n">nmdaAmpaRatio</span><span class="o">*</span><span class="n">gAMPA</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-------------------------------&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing synapses:&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gAMPA = </span><span class="si">{:.2f}</span><span class="s1"> nS&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gAMPA</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gNMDA = </span><span class="si">{:.2f}</span><span class="s1"> nS&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gNMDA</span><span class="p">))</span>
+            
+            <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">cellType</span><span class="p">]:</span>
+                <span class="c1">##if syn.is_active():</span>
+                <span class="c1">##    syn.netcons[0].weight[0] = gAMPA</span>
+                <span class="c1">##    syn.netcons[0].weight[1] = gNMDA                </span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Setting synapse weight&#39;</span><span class="p">)</span>
+                <span class="n">syn</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;glutamate_syn&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">gAMPA</span><span class="p">,</span> <span class="n">gNMDA</span><span class="p">]}</span>
+            
+            <span class="n">synParameters</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">NTParameterSet</span><span class="p">({</span><span class="s1">&#39;receptors&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;glutamate_syn&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;delay&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                                            <span class="s1">&#39;parameter&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;decayampa&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;decaynmda&#39;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">},</span>
+                                            <span class="s1">&#39;threshold&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                                            <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">gAMPA</span><span class="p">,</span> <span class="n">gNMDA</span><span class="p">]}}})</span>            
+            <span class="n">somaT</span><span class="p">,</span> <span class="n">somaV</span><span class="p">,</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;testing </span><span class="si">{:d}</span><span class="s1"> </span><span class="si">{:s}</span><span class="s1"> cells&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">typeNrCells</span><span class="p">,</span> <span class="n">cellType</span><span class="p">))</span>
+            <span class="n">cellID</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">preSynCellID</span> <span class="ow">in</span> <span class="n">nwMap</span><span class="o">.</span><span class="n">connected_cells</span><span class="p">[</span><span class="n">cellType</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;testing cell </span><span class="si">%d</span><span class="s1">  (</span><span class="si">{:d}</span><span class="s1"> of </span><span class="si">{:d}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">preSynCellID</span><span class="p">,</span> <span class="n">cellID</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">typeNrCells</span><span class="p">))</span>
+                <span class="n">preSynCell</span> <span class="o">=</span> <span class="n">nwMap</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="n">cellType</span><span class="p">][</span><span class="n">preSynCellID</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">preSynCell</span><span class="o">.</span><span class="n">synapseList</span><span class="p">:</span>
+                    <span class="n">activate_functional_synapse</span><span class="p">(</span><span class="n">syn</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">preSynCell</span><span class="p">,</span> <span class="n">synParameters</span><span class="p">,</span> <span class="n">releaseTimes</span> <span class="o">=</span> <span class="p">[</span><span class="n">tOffset</span><span class="o">+</span><span class="n">spikeTime</span><span class="p">])</span> 
+                    <span class="n">syn</span>              
+                    <span class="c1">#syn.releaseSite.append(tOffset+spikeTime)</span>
+                    <span class="c1">#syn.releaseSite.play()</span>
+                    
+                <span class="n">tVec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+                <span class="n">tVec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+                <span class="n">scp</span><span class="o">.</span><span class="n">init_neuron_run</span><span class="p">(</span><span class="n">neuronParameters</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
+                
+                <span class="n">vmSoma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tVec</span><span class="p">)</span>
+                <span class="n">tTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                <span class="n">vTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vmSoma</span><span class="p">)</span>
+                <span class="n">baseline</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">vmSoma</span><span class="p">[</span><span class="mi">4360</span><span class="p">:</span><span class="mi">4400</span><span class="p">])</span> <span class="c1"># 1ms pre-stim</span>
+                <span class="n">vmSoma</span> <span class="o">-=</span> <span class="n">baseline</span>
+                <span class="n">tMax</span><span class="p">,</span> <span class="n">vMax</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">analyze_voltage_trace</span><span class="p">(</span><span class="n">vmSoma</span><span class="p">[</span><span class="mi">4400</span><span class="p">:],</span> <span class="n">t</span><span class="p">[</span><span class="mi">4400</span><span class="p">:])</span>
+                <span class="k">if</span> <span class="n">vMax</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">somaT</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tMax</span><span class="p">)</span>
+                    <span class="n">somaV</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vMax</span><span class="p">)</span>
+                
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;v max = </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vMax</span><span class="p">))</span>
+                    
+                <span class="n">traceFName</span> <span class="o">=</span> <span class="n">dirName</span> <span class="o">+</span> <span class="s1">&#39;/AMPA_gmax_</span><span class="si">%.2f</span><span class="s1">_NMDA_gmax_</span><span class="si">%.2f</span><span class="s1">_celltype_</span><span class="si">%s</span><span class="s1">_presyn_cell_</span><span class="si">%d</span><span class="s1">_vm.csv&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gAMPA</span><span class="p">,</span> <span class="n">gNMDA</span><span class="p">,</span> <span class="n">cellType</span><span class="p">,</span> <span class="n">cellID</span><span class="p">)</span>
+                <span class="n">write_sim_results</span><span class="p">(</span><span class="n">traceFName</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">vmSoma</span><span class="p">)</span>
+                
+                <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">preSynCell</span><span class="o">.</span><span class="n">synapseList</span><span class="p">:</span>
+                    <span class="n">syn</span><span class="o">.</span><span class="n">disconnect_hoc_synapse</span><span class="p">()</span>
+                <span class="c1">##   syn.releaseSite.turn_off()</span>
+                <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+                    <span class="n">sec</span><span class="o">.</span><span class="n">_re_init_vm_recording</span><span class="p">()</span>
+                    <span class="n">sec</span><span class="o">.</span><span class="n">_re_init_range_var_recording</span><span class="p">()</span>
+                <span class="n">cellID</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-------------------------------&#39;</span><span class="p">)</span>
+            <span class="n">summaryFilename</span> <span class="o">=</span> <span class="n">dirName</span> <span class="o">+</span> <span class="s1">&#39;/AMPA_gmax_</span><span class="si">%.2f</span><span class="s1">_NMDA_gmax_</span><span class="si">%.2f</span><span class="s1">_celltype_</span><span class="si">%s</span><span class="s1">_vmax.csv&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gAMPA</span><span class="p">,</span> <span class="n">gNMDA</span><span class="p">,</span> <span class="n">cellType</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">summaryFilename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outputFile</span><span class="p">:</span>
+                    <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;# </span><span class="si">%s</span><span class="s1"> cell ID</span><span class="se">\t</span><span class="s1">V max soma</span><span class="se">\t</span><span class="s1">tmax soma</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">cellType</span>
+                    <span class="n">outputFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">somaT</span><span class="p">)):</span>
+                        <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">somaV</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="nb">str</span><span class="p">(</span><span class="n">somaT</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+                        <span class="n">line</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                        <span class="n">outputFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            
+            <span class="n">nwMap</span><span class="o">.</span><span class="n">re_init_network</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+                <span class="n">sec</span><span class="o">.</span><span class="n">_re_init_vm_recording</span><span class="p">()</span>
+                <span class="n">sec</span><span class="o">.</span><span class="n">_re_init_range_var_recording</span><span class="p">()</span>
+    
+    <span class="n">cell</span><span class="o">.</span><span class="n">re_init_cell</span><span class="p">()</span>
+    <span class="n">nwMap</span><span class="o">.</span><span class="n">re_init_network</span><span class="p">()</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tTraces</span><span class="p">)):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tTraces</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">vTraces</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    
+    <span class="n">neuronParameters</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">dirName</span><span class="o">+</span><span class="s1">&#39;/neuron_model.param&#39;</span><span class="p">)</span>
+    <span class="n">nwParameters</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">dirName</span><span class="o">+</span><span class="s1">&#39;/network_model.param&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="unitary_connections_inhibitory"><a class="viewcode-back" href="../../modules/simrun2.syn_strength_simrun.unitary_connections_inhibitory.html#simrun2.syn_strength_simrun.unitary_connections_inhibitory">[docs]</a><span class="k">def</span> <span class="nf">unitary_connections_inhibitory</span><span class="p">(</span><span class="n">modelName</span><span class="p">,</span> <span class="n">networkName</span><span class="p">):</span>
+    <span class="n">neuronParameters</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">modelName</span><span class="p">)</span>
+    <span class="n">nwParameters</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">networkName</span><span class="p">)</span>
+    <span class="n">scp</span><span class="o">.</span><span class="n">load_NMODL_parameters</span><span class="p">(</span><span class="n">nwParameters</span><span class="p">)</span>
+    <span class="n">scp</span><span class="o">.</span><span class="n">load_NMODL_parameters</span><span class="p">(</span><span class="n">neuronParameters</span><span class="p">)</span>
+    <span class="n">cellParam</span> <span class="o">=</span> <span class="n">neuronParameters</span><span class="o">.</span><span class="n">neuron</span>
+    <span class="n">preParam</span> <span class="o">=</span> <span class="n">nwParameters</span><span class="o">.</span><span class="n">network</span>
+    
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">create_cell</span><span class="p">(</span><span class="n">cellParam</span><span class="p">,</span> <span class="n">scaleFunc</span><span class="o">=</span><span class="n">dendriteScalingUniform</span><span class="p">)</span>
+    <span class="n">nwMap</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">NetworkMapper</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">preParam</span><span class="p">)</span>
+    <span class="n">nwMap</span><span class="o">.</span><span class="n">create_saved_network</span><span class="p">()</span>
+    <span class="n">nwMap</span><span class="o">.</span><span class="n">re_init_network</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">synType</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">synapses</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">synType</span><span class="p">]:</span>
+            <span class="n">syn</span><span class="o">.</span><span class="n">releaseSite</span><span class="o">.</span><span class="n">turn_off</span><span class="p">()</span>
+    
+    <span class="n">cellType</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nwMap</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">totalNrCells</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nwMap</span><span class="o">.</span><span class="n">connected_cells</span><span class="p">[</span><span class="n">cellType</span><span class="p">])</span>
+    
+    <span class="n">uniqueID</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+    <span class="n">dirName</span> <span class="o">=</span> <span class="s1">&#39;results/unitary_connections_inhibitory/&#39;</span>
+    <span class="n">dirName</span> <span class="o">+=</span> <span class="n">cellType</span>
+    <span class="n">dirName</span> <span class="o">+=</span> <span class="s1">&#39;/&#39;</span>
+    <span class="n">dirName</span> <span class="o">+=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirName</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirName</span><span class="p">)</span>
+    
+    <span class="n">tStop</span> <span class="o">=</span> <span class="mf">100.0</span>
+    <span class="n">neuronParameters</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">tStop</span> <span class="o">=</span> <span class="n">tStop</span>
+<span class="c1">#    gInhRange = [0.8+i*0.4 for i in range(3)]</span>
+    <span class="n">gInhRange</span> <span class="o">=</span> <span class="p">[</span><span class="mf">30.0</span><span class="p">]</span>
+    <span class="n">tTraces</span><span class="p">,</span> <span class="n">vTraces</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">gTraces</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">gGABA</span> <span class="ow">in</span> <span class="n">gInhRange</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-------------------------------&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing synapses:&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;gAMPA = </span><span class="si">{:.2f}</span><span class="s1"> nS&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gGABA</span><span class="p">))</span>
+        
+        <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">synapses</span><span class="p">[</span><span class="n">cellType</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">syn</span><span class="o">.</span><span class="n">is_active</span><span class="p">():</span>
+                <span class="n">syn</span><span class="o">.</span><span class="n">netcons</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">gGABA</span>
+        
+        <span class="n">somaT</span><span class="p">,</span> <span class="n">somaV</span><span class="p">,</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;testing </span><span class="si">{:d}</span><span class="s1"> </span><span class="si">{:s}</span><span class="s1"> cells&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">totalNrCells</span><span class="p">,</span> <span class="n">cellType</span><span class="p">))</span>
+        <span class="n">cellID</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">preSynCellID</span> <span class="ow">in</span> <span class="n">nwMap</span><span class="o">.</span><span class="n">connected_cells</span><span class="p">[</span><span class="n">cellType</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;testing cell </span><span class="si">{:d}</span><span class="s1">  (</span><span class="si">{:d}</span><span class="s1"> of </span><span class="si">{:d}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">preSynCellID</span><span class="p">,</span> <span class="n">cellID</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">totalNrCells</span><span class="p">))</span>
+            <span class="c1"># depolarize so we can see the IPSP...</span>
+            <span class="n">currClamp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+            <span class="n">currClamp</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">currClamp</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="n">currClamp</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="mf">100.0</span>
+            <span class="n">preSynCell</span> <span class="o">=</span> <span class="n">nwMap</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="n">cellType</span><span class="p">][</span><span class="n">preSynCellID</span><span class="p">]</span>
+<span class="c1">#            doesn&#39;t work anymore since we introduced release sites at synapses</span>
+<span class="c1">#            preSynCell.append(10.0)</span>
+<span class="c1">#            preSynCell.play()</span>
+<span class="c1">#            this works now:</span>
+<span class="c1">#            gVecs = []</span>
+            <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">preSynCell</span><span class="o">.</span><span class="n">synapseList</span><span class="p">:</span>
+                <span class="n">syn</span><span class="o">.</span><span class="n">releaseSite</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">50.0</span><span class="p">)</span>
+                <span class="n">syn</span><span class="o">.</span><span class="n">releaseSite</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+<span class="c1">#                gVec = h.Vector()</span>
+<span class="c1">#                gVec.record(syn.receptors[&#39;gaba_syn&#39;]._ref_ggaba)</span>
+<span class="c1">#                gVecs.append(gVec)</span>
+            <span class="n">tVec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+            <span class="n">tVec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+            <span class="n">scp</span><span class="o">.</span><span class="n">init_neuron_run</span><span class="p">(</span><span class="n">neuronParameters</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
+            
+            <span class="n">vmSoma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tVec</span><span class="p">)</span>
+            <span class="n">tTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">vTraces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vmSoma</span><span class="p">)</span>
+            <span class="n">baseline</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">vmSoma</span><span class="p">[</span><span class="mi">200</span><span class="p">:</span><span class="mi">400</span><span class="p">])</span>
+<span class="c1">#            vmSoma -= baseline</span>
+            <span class="n">tMax</span><span class="p">,</span> <span class="n">vMax</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">analyze_voltage_trace</span><span class="p">(</span><span class="n">vmSoma</span><span class="p">[</span><span class="mi">400</span><span class="p">:],</span> <span class="n">t</span><span class="p">[</span><span class="mi">400</span><span class="p">:])</span>
+            <span class="k">if</span> <span class="n">vMax</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">somaT</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tMax</span><span class="p">)</span>
+                <span class="n">somaV</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vMax</span><span class="p">)</span>
+<span class="c1">#            for gVec in gVecs:</span>
+<span class="c1">#                gTraces.append(np.array(gVec))</span>
+<span class="c1">#                gVec.resize(0)</span>
+            
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;v max = </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vMax</span><span class="p">))</span>
+            
+            <span class="n">traceFName</span> <span class="o">=</span> <span class="n">dirName</span> <span class="o">+</span> <span class="s1">&#39;/GABA_gmax_</span><span class="si">%.2f</span><span class="s1">_presyn_cell_</span><span class="si">%d</span><span class="s1">_vm.csv&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gGABA</span><span class="p">,</span> <span class="n">cellID</span><span class="p">)</span>
+            <span class="n">write_sim_results</span><span class="p">(</span><span class="n">traceFName</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">vmSoma</span><span class="p">)</span>
+            
+<span class="c1">#            doesn&#39;t work anymore since we introduced release sites at synapses</span>
+<span class="c1">#            preSynCell.turn_off()</span>
+<span class="c1">#            this works now:</span>
+            <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">preSynCell</span><span class="o">.</span><span class="n">synapseList</span><span class="p">:</span>
+                <span class="n">syn</span><span class="o">.</span><span class="n">releaseSite</span><span class="o">.</span><span class="n">turn_off</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+                <span class="n">sec</span><span class="o">.</span><span class="n">_re_init_vm_recording</span><span class="p">()</span>
+                <span class="n">sec</span><span class="o">.</span><span class="n">_re_init_range_var_recording</span><span class="p">()</span>
+            <span class="n">cellID</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-------------------------------&#39;</span><span class="p">)</span>
+<span class="c1">#        summaryFilename = dirName + &#39;/AMPA_gmax_%.2f_NMDA_gmax_%.2f_vmax.csv&#39; % (gAMPA, gNMDA)</span>
+<span class="c1">#        with open(summaryFilename, &#39;w&#39;) as outputFile:</span>
+<span class="c1">#                header = &#39;# %s cell ID\tV max soma\ttmax soma\n&#39; % cellType</span>
+<span class="c1">#                outputFile.write(header)</span>
+<span class="c1">#                for i in range(len(somaT)):</span>
+<span class="c1">#                    line = &#39;\t&#39;.join((str(i+1), str(somaV[i]), str(somaT[i])))</span>
+<span class="c1">#                    line += &#39;\n&#39;</span>
+<span class="c1">#                    outputFile.write(line)</span>
+        
+        <span class="n">nwMap</span><span class="o">.</span><span class="n">re_init_network</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+            <span class="n">sec</span><span class="o">.</span><span class="n">_re_init_vm_recording</span><span class="p">()</span>
+            <span class="n">sec</span><span class="o">.</span><span class="n">_re_init_range_var_recording</span><span class="p">()</span>
+    
+    <span class="n">cell</span><span class="o">.</span><span class="n">re_init_cell</span><span class="p">()</span>
+    <span class="n">nwMap</span><span class="o">.</span><span class="n">re_init_network</span><span class="p">()</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tTraces</span><span class="p">)):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tTraces</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">vTraces</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="c1">#    plt.figure(2)</span>
+<span class="c1">#    for i in range(len(gTraces)):</span>
+<span class="c1">#        plt.plot(tTraces[0], gTraces[i]+i, &#39;k&#39;)</span>
+<span class="c1">#    plt.show()</span>
+    
+    <span class="n">neuronParameters</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">dirName</span><span class="o">+</span><span class="s1">&#39;/neuron_model.param&#39;</span><span class="p">)</span>
+    <span class="n">nwParameters</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">dirName</span><span class="o">+</span><span class="s1">&#39;/network_model.param&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="write_syn_information"><a class="viewcode-back" href="../../modules/simrun2.syn_strength_simrun.write_syn_information.html#simrun2.syn_strength_simrun.write_syn_information">[docs]</a><span class="k">def</span> <span class="nf">write_syn_information</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">synapses</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">synType</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">synapses</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="n">activeSyns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">synapses</span><span class="p">[</span><span class="n">synType</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">syn</span><span class="o">.</span><span class="n">is_active</span><span class="p">():</span>
+                <span class="n">activeSyns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">syn</span><span class="o">.</span><span class="n">coordinates</span><span class="p">)</span>
+        <span class="n">synTypeName</span> <span class="o">=</span> <span class="n">fname</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">synType</span>
+        <span class="n">scp</span><span class="o">.</span><span class="n">write_landmark_file</span><span class="p">(</span><span class="n">synTypeName</span><span class="p">,</span> <span class="n">activeSyns</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="write_sim_results"><a class="viewcode-back" href="../../modules/simrun2.syn_strength_simrun.write_sim_results.html#simrun2.syn_strength_simrun.write_sim_results">[docs]</a><span class="k">def</span> <span class="nf">write_sim_results</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outputFile</span><span class="p">:</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;# simulation results</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;# t</span><span class="se">\t</span><span class="s1">vsoma&#39;</span>
+        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="n">outputFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">line</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span>
+            <span class="n">line</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">line</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">outputFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="scale_apical"><a class="viewcode-back" href="../../modules/simrun2.syn_strength_simrun.scale_apical.html#simrun2.syn_strength_simrun.scale_apical">[docs]</a><span class="k">def</span> <span class="nf">scale_apical</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    scale apical diameters depending on</span>
+<span class="sd">    distance to soma; therefore only possible</span>
+<span class="sd">    after creating complete cell</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">dendScale</span> <span class="o">=</span> <span class="mf">2.5</span>
+    <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">:</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">distance_to_soma</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="mf">1000.0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">dummy</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">pt3dclear</span><span class="p">(</span><span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">nrOfPts</span><span class="p">):</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">pts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">sec</span><span class="o">.</span><span class="n">diamList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">diamList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">dendScale</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">diamList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">dummy</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">pt3dadd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">modelName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">nwName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">unitary_connections</span><span class="p">(</span><span class="n">modelName</span><span class="p">,</span> <span class="n">nwName</span><span class="p">)</span>
+<span class="c1">#    unitary_connections_inhibitory(modelName, nwName)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

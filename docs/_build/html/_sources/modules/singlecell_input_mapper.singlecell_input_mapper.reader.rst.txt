@@ -2,7 +2,7 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.reader
 ==========================================================
 
 .. automodule:: singlecell_input_mapper.singlecell_input_mapper.reader
-
+  
    
    
    
@@ -12,6 +12,7 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.reader
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       read_celltype_numbers_spreadsheet
       read_connections_spreadsheet
@@ -25,6 +26,8 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.reader
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Edge
    

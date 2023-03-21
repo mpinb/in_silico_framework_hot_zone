@@ -2,7 +2,7 @@ biophysics\_fitting.L5tt\_parameter\_setup
 ==========================================
 
 .. automodule:: biophysics_fitting.L5tt_parameter_setup
-
+  
    
    
    
@@ -12,6 +12,7 @@ biophysics\_fitting.L5tt\_parameter\_setup
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       get_L5tt_template
       hay_param_to_scp_neuron_param

@@ -2,7 +2,7 @@ single\_cell\_analyzer.synanalysis
 ==================================
 
 .. automodule:: single_cell_analyzer.synanalysis
-
+  
    
    
    
@@ -12,6 +12,7 @@ single\_cell\_analyzer.synanalysis
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       compute_distance_to_soma
       compute_syn_distance

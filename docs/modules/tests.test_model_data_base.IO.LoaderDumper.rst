@@ -2,7 +2,7 @@ tests.test\_model\_data\_base.IO.LoaderDumper
 =============================================
 
 .. automodule:: tests.test_model_data_base.IO.LoaderDumper
-
+  
    
    
    
@@ -25,6 +25,7 @@ tests.test\_model\_data\_base.IO.LoaderDumper
 
 .. autosummary::
    :toctree:
+   :template: custom-module-template.rst
    :recursive:
 
    tests.test_model_data_base.IO.LoaderDumper.dumpers_real_data_test

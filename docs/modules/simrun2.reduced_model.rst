@@ -2,7 +2,7 @@ simrun2.reduced\_model
 ======================
 
 .. automodule:: simrun2.reduced_model
-
+  
    
    
    
@@ -25,6 +25,7 @@ simrun2.reduced\_model
 
 .. autosummary::
    :toctree:
+   :template: custom-module-template.rst
    :recursive:
 
    simrun2.reduced_model.get_kernel

@@ -2,7 +2,7 @@ model\_data\_base.mdb\_initializers.prepare\_ANN\_batches
 =========================================================
 
 .. automodule:: model_data_base.mdb_initializers.prepare_ANN_batches
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.mdb\_initializers.prepare\_ANN\_batches
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       augment_synapse_activation_df_with_branch_bin
       compute_AP_array
@@ -41,6 +42,8 @@ model\_data\_base.mdb\_initializers.prepare\_ANN\_batches
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Init
    

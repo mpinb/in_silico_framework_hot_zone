@@ -2,7 +2,7 @@ biophysics\_fitting.hay\_specification
 ======================================
 
 .. automodule:: biophysics_fitting.hay_specification
-
+  
    
    
    
@@ -12,6 +12,7 @@ biophysics\_fitting.hay\_specification
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       get_feasible_model_objectives
       get_feasible_model_params

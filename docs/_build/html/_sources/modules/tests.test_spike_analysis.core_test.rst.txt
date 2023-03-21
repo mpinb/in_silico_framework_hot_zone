@@ -2,7 +2,7 @@ tests.test\_spike\_analysis.core\_test
 ======================================
 
 .. automodule:: tests.test_spike_analysis.core_test
-
+  
    
    
    
@@ -16,6 +16,8 @@ tests.test\_spike\_analysis.core\_test
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Tests
    

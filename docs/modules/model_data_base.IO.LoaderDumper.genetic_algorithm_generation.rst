@@ -2,7 +2,7 @@ model\_data\_base.IO.LoaderDumper.genetic\_algorithm\_generation
 ================================================================
 
 .. automodule:: model_data_base.IO.LoaderDumper.genetic_algorithm_generation
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.IO.LoaderDumper.genetic\_algorithm\_generation
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       check
       dump
@@ -23,6 +24,8 @@ model\_data\_base.IO.LoaderDumper.genetic\_algorithm\_generation
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Loader
    

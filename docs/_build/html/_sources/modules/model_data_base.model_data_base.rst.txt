@@ -2,7 +2,7 @@ model\_data\_base.model\_data\_base
 ===================================
 
 .. automodule:: model_data_base.model_data_base
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.model\_data\_base
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       empty_context_manager
       get_progress_bar_function
@@ -24,6 +25,8 @@ model\_data\_base.model\_data\_base
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       FunctionWrapper
       LoaderWrapper
@@ -38,6 +41,7 @@ model\_data\_base.model\_data\_base
    .. rubric:: Exceptions
 
    .. autosummary::
+      :toctree:
    
       MdbException
    

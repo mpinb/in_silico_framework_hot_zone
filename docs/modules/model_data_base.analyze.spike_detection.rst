@@ -1,6 +1,23 @@
 model\_data\_base.analyze.spike\_detection
 ==========================================
 
-.. currentmodule:: model_data_base.analyze
+.. automodule:: model_data_base.analyze.spike_detection
+  
+   
+   
+   
 
-.. autofunction:: spike_detection
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

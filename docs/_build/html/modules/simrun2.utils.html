@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="simrun3" href="simrun3.html" />
-    <link rel="prev" title="simrun2.test_sustained_firing" href="simrun2.test_sustained_firing.html" /> 
+    <link rel="next" title="simrun2.utils.chunkIt" href="simrun2.utils.chunkIt.html" />
+    <link rel="prev" title="simrun2.test_sustained_firing.write_sim_results" href="simrun2.test_sustained_firing.write_sim_results.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -67,7 +67,15 @@
 <li class="toctree-l2"><a class="reference internal" href="simrun2.test_BAC_firing.html">simrun2.test_BAC_firing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun2.test_passive_properties.html">simrun2.test_passive_properties</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun2.test_sustained_firing.html">simrun2.test_sustained_firing</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">simrun2.utils</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">simrun2.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simrun2.utils.chunkIt.html">simrun2.utils.chunkIt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simrun2.utils.load_param_file_if_path_is_provided.html">simrun2.utils.load_param_file_if_path_is_provided</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simrun2.utils.scale_apical.html">simrun2.utils.scale_apical</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simrun2.utils.silence_stdout.html">simrun2.utils.silence_stdout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simrun2.utils.tar_folder.html">simrun2.utils.tar_folder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simrun2.utils.defaultValues.html">simrun2.utils.defaultValues</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
@@ -113,19 +121,19 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code>(seq, num)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.utils.chunkIt.html#simrun2.utils.chunkIt" title="simrun2.utils.chunkIt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code></a>(seq, num)</p></td>
 <td><p>splits seq in num lists, which have approximately equal size.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_param_file_if_path_is_provided</span></code>(pathOrParam)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="simrun2.utils.load_param_file_if_path_is_provided.html#simrun2.utils.load_param_file_if_path_is_provided" title="simrun2.utils.load_param_file_if_path_is_provided"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_param_file_if_path_is_provided</span></code></a>(pathOrParam)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_apical</span></code>(cell)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.utils.scale_apical.html#simrun2.utils.scale_apical" title="simrun2.utils.scale_apical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_apical</span></code></a>(cell)</p></td>
 <td><p>scale apical diameters depending on distance to soma; therefore only possible after creating complete cell</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">silence_stdout</span></code>(fun)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="simrun2.utils.silence_stdout.html#simrun2.utils.silence_stdout" title="simrun2.utils.silence_stdout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">silence_stdout</span></code></a>(fun)</p></td>
 <td><p>robustly silences a function and restores stdout afterwars</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tar_folder</span></code>(source_dir[, delete_folder])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.utils.tar_folder.html#simrun2.utils.tar_folder" title="simrun2.utils.tar_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tar_folder</span></code></a>(source_dir[, delete_folder])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -137,7 +145,7 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">defaultValues</span></code>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="simrun2.utils.defaultValues.html#simrun2.utils.defaultValues" title="simrun2.utils.defaultValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">defaultValues</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -148,8 +156,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="simrun2.test_sustained_firing.html" class="btn btn-neutral float-left" title="simrun2.test_sustained_firing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="simrun3.html" class="btn btn-neutral float-right" title="simrun3" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="simrun2.test_sustained_firing.write_sim_results.html" class="btn btn-neutral float-left" title="simrun2.test_sustained_firing.write_sim_results" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="simrun2.utils.chunkIt.html" class="btn btn-neutral float-right" title="simrun2.utils.chunkIt" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

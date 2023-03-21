@@ -2,7 +2,7 @@ biophysics\_fitting.utils
 =========================
 
 .. automodule:: biophysics_fitting.utils
-
+  
    
    
    
@@ -12,6 +12,7 @@ biophysics\_fitting.utils
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       connected_to_structure_beyond
       execute_in_child_process
@@ -33,6 +34,8 @@ biophysics\_fitting.utils
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Undemonize
       VariableThatDoesNotGetPickled

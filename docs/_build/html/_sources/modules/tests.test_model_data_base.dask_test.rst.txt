@@ -2,7 +2,7 @@ tests.test\_model\_data\_base.dask\_test
 ========================================
 
 .. automodule:: tests.test_model_data_base.dask_test
-
+  
    
    
    
@@ -12,6 +12,7 @@ tests.test\_model\_data\_base.dask\_test
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       get_ddf
       get_pdf
@@ -23,6 +24,8 @@ tests.test\_model\_data\_base.dask\_test
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Test
    

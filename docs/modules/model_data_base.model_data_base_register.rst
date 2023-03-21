@@ -2,7 +2,7 @@ model\_data\_base.model\_data\_base\_register
 =============================================
 
 .. automodule:: model_data_base.model_data_base_register
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.model\_data\_base\_register
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       get_mdb_by_unique_id
       register_mdb
@@ -23,6 +24,8 @@ model\_data\_base.model\_data\_base\_register
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       ModelDataBaseRegister
    

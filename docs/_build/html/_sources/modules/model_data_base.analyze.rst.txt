@@ -2,7 +2,7 @@ model\_data\_base.analyze
 =========================
 
 .. automodule:: model_data_base.analyze
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.analyze
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       split_synapse_activation
    
@@ -31,6 +32,7 @@ model\_data\_base.analyze
 
 .. autosummary::
    :toctree:
+   :template: custom-module-template.rst
    :recursive:
 
    model_data_base.analyze.LDA

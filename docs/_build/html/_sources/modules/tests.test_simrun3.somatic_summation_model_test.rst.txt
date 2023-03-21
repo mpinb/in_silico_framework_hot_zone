@@ -2,7 +2,7 @@ tests.test\_simrun3.somatic\_summation\_model\_test
 ===================================================
 
 .. automodule:: tests.test_simrun3.somatic_summation_model_test
-
+  
    
    
    
@@ -12,6 +12,7 @@ tests.test\_simrun3.somatic\_summation\_model\_test
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       get_fake_synapse_activation_dataframe
    
@@ -22,6 +23,8 @@ tests.test\_simrun3.somatic\_summation\_model\_test
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       FakePSP
       Tests

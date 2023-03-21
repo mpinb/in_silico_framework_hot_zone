@@ -2,7 +2,7 @@ singlecell\_input\_mapper.singlecell\_input\_mapper
 ===================================================
 
 .. automodule:: singlecell_input_mapper.singlecell_input_mapper
-
+  
    
    
    
@@ -25,6 +25,7 @@ singlecell\_input\_mapper.singlecell\_input\_mapper
 
 .. autosummary::
    :toctree:
+   :template: custom-module-template.rst
    :recursive:
 
    singlecell_input_mapper.singlecell_input_mapper.cell

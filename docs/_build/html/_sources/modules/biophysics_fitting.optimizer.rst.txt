@@ -2,7 +2,7 @@ biophysics\_fitting.optimizer
 =============================
 
 .. automodule:: biophysics_fitting.optimizer
-
+  
    
    
    
@@ -12,6 +12,7 @@ biophysics\_fitting.optimizer
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       eaAlphaMuPlusLambdaCheckpoint
       get_max_generation
@@ -31,6 +32,8 @@ biophysics\_fitting.optimizer
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       my_ibea_evaluator
    

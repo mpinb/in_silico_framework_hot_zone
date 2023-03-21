@@ -18,7 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="model_data_base.sqlite_backend.sqlite_backend" href="model_data_base.sqlite_backend.sqlite_backend.html" />
+    <link rel="next" title="model_data_base.sqlite_backend.cloudsqlitedict.decode" href="model_data_base.sqlite_backend.cloudsqlitedict.decode.html" />
     <link rel="prev" title="model_data_base.sqlite_backend" href="model_data_base.sqlite_backend.html" /> 
 </head>
 
@@ -57,7 +57,15 @@
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.model_data_base.html">model_data_base.model_data_base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.settings.html">model_data_base.settings</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.sqlite_backend.cloudsqlitedict</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.sqlite_backend.cloudsqlitedict</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.decode.html">model_data_base.sqlite_backend.cloudsqlitedict.decode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.encode.html">model_data_base.sqlite_backend.cloudsqlitedict.encode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.open.html">model_data_base.sqlite_backend.cloudsqlitedict.open</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.reraise.html">model_data_base.sqlite_backend.cloudsqlitedict.reraise</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html">model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.html">model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.sqlite_backend.sqlite_backend.html">model_data_base.sqlite_backend.sqlite_backend</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.sqlite_backend.tuplecloudsqlitedict.html">model_data_base.sqlite_backend.tuplecloudsqlitedict</a></li>
 </ul>
@@ -124,16 +132,16 @@ don’t forget to call <cite>mydict.commit()</cite> when done with a transaction
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">decode</span></code>(obj)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.decode.html#model_data_base.sqlite_backend.cloudsqlitedict.decode" title="model_data_base.sqlite_backend.cloudsqlitedict.decode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decode</span></code></a>(obj)</p></td>
 <td><p>Deserialize objects retrieved from SQLite.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">encode</span></code>(obj)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.encode.html#model_data_base.sqlite_backend.cloudsqlitedict.encode" title="model_data_base.sqlite_backend.cloudsqlitedict.encode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">encode</span></code></a>(obj)</p></td>
 <td><p>Serialize an object using pickle to a binary format accepted by SQLite.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">open</span></code>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.open.html#model_data_base.sqlite_backend.cloudsqlitedict.open" title="model_data_base.sqlite_backend.cloudsqlitedict.open"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open</span></code></a>(*args, **kwargs)</p></td>
 <td><p>See documentation of the SqliteDict class.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">reraise</span></code>(tp, value[, tb])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.reraise.html#model_data_base.sqlite_backend.cloudsqlitedict.reraise" title="model_data_base.sqlite_backend.cloudsqlitedict.reraise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reraise</span></code></a>(tp, value[, tb])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -145,10 +153,10 @@ don’t forget to call <cite>mydict.commit()</cite> when done with a transaction
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SqliteDict</span></code>([filename, tablename, flag, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteDict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SqliteDict</span></code></a>([filename, tablename, flag, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SqliteMultithread</span></code>(filename, autocommit, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.html#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SqliteMultithread</span></code></a>(filename, autocommit, …)</p></td>
 <td><p>Wrap sqlite connection in a way that allows concurrent requests from multiple threads.</p></td>
 </tr>
 </tbody>
@@ -160,7 +168,7 @@ don’t forget to call <cite>mydict.commit()</cite> when done with a transaction
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="model_data_base.sqlite_backend.html" class="btn btn-neutral float-left" title="model_data_base.sqlite_backend" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="model_data_base.sqlite_backend.sqlite_backend.html" class="btn btn-neutral float-right" title="model_data_base.sqlite_backend.sqlite_backend" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.sqlite_backend.cloudsqlitedict.decode.html" class="btn btn-neutral float-right" title="model_data_base.sqlite_backend.cloudsqlitedict.decode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

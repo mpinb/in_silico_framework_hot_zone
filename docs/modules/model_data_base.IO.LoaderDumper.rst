@@ -2,7 +2,7 @@ model\_data\_base.IO.LoaderDumper
 =================================
 
 .. automodule:: model_data_base.IO.LoaderDumper
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.IO.LoaderDumper
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       get_dumper_string_by_dumper_module
       get_dumper_string_by_savedir
@@ -33,6 +34,7 @@ model\_data\_base.IO.LoaderDumper
 
 .. autosummary::
    :toctree:
+   :template: custom-module-template.rst
    :recursive:
 
    model_data_base.IO.LoaderDumper.cell

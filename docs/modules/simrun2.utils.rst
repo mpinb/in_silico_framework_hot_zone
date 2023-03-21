@@ -2,7 +2,7 @@ simrun2.utils
 =============
 
 .. automodule:: simrun2.utils
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun2.utils
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       chunkIt
       load_param_file_if_path_is_provided
@@ -26,6 +27,8 @@ simrun2.utils
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       defaultValues
    

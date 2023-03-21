@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>single_cell_analyzer.currents &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/Interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/nbrun.html">nbrun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">single_cell_analyzer.currents</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for single_cell_analyzer.currents</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Nov 6, 2012</span>
+
+<span class="sd">@author: regger</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">neuron</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">neuron</span><span class="o">.</span><span class="n">h</span>
+
+<span class="c1">#    TODO: this needs to be automated... i.e., should be such that</span>
+<span class="c1">#    section, or better, segment is passed as an argument and all</span>
+<span class="c1">#    ionic/axial/capacitive currents are automatically calculated</span>
+<span class="c1">#    =&gt; add automatic recording of all ionic (and synaptic?) currents</span>
+<span class="c1">#    and conductances to PySection/Synapse classes</span>
+
+<div class="viewcode-block" id="compute_soma_currents"><a class="viewcode-back" href="../../modules/single_cell_analyzer.currents.compute_soma_currents.html#single_cell_analyzer.currents.compute_soma_currents">[docs]</a><span class="k">def</span> <span class="nf">compute_soma_currents</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">currents</span><span class="p">,</span> <span class="n">tVec</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    TODO: this needs to be automated... i.e., should be such that   </span>
+<span class="sd">    section, or better, segment is passed as an argument and all    </span>
+<span class="sd">    ionic/axial/capacitive currents are automatically calculated    </span>
+<span class="sd">    =&gt; add automatic recording of all ionic (and synaptic?) currents</span>
+<span class="sd">    and conductances to PySection/Synapse classes                   </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1">#===========================================================================</span>
+    <span class="c1"># units of axial currents: muS*mV = nA = 10^3 pA</span>
+    <span class="c1"># units of ionic currents: mA/cm^2 = 10^-8 mA/mum^2 = 10^-2 nA/mum^2 = 10 pA/mum^2</span>
+    <span class="c1"># units of capacitive current: muF/cm^2*mV/ms = 10^-8 muA/mum^2 = 0.01 pA/mum^2</span>
+    <span class="c1">#===========================================================================</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tVec</span><span class="p">)</span>
+    <span class="n">iPas</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">currents</span><span class="p">[</span><span class="s1">&#39;ipas&#39;</span><span class="p">])</span><span class="o">*</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">area</span>
+    <span class="n">iNa</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">currents</span><span class="p">[</span><span class="s1">&#39;ina&#39;</span><span class="p">])</span><span class="o">*</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">area</span>
+    <span class="n">iKd</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">currents</span><span class="p">[</span><span class="s1">&#39;ikd&#39;</span><span class="p">])</span><span class="o">*</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">area</span>
+    <span class="n">vSoma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">dendCurrs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">iDendTotal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">dendLabels</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">,</span> <span class="s1">&#39;Dendrite&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">dendLabels</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">dend</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">branches</span><span class="p">[</span><span class="n">label</span><span class="p">]:</span>
+<span class="c1">#            loop through all, otherwise section</span>
+<span class="c1">#            is not popped from NEURON section stack!!!</span>
+<span class="c1">#            better ideas???</span>
+            <span class="n">secCnt</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">dend</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">secCnt</span><span class="p">:</span>
+                    <span class="n">vDend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">ri</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ri</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">segx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
+                    <span class="n">dendCurrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1000</span><span class="o">/</span><span class="n">ri</span><span class="o">*</span><span class="p">(</span><span class="n">vDend</span><span class="o">-</span><span class="n">vSoma</span><span class="p">))</span>
+                    <span class="n">iDendTotal</span> <span class="o">+=</span> <span class="n">dendCurrs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="c1">#                only interested in branch root section,</span>
+<span class="c1">#                therefore jump into outer loop</span>
+<span class="c1">#                break</span>
+                <span class="n">secCnt</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="n">vAx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">structures</span><span class="p">[</span><span class="s1">&#39;AIS&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">riAx</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">ri</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">structures</span><span class="p">[</span><span class="s1">&#39;AIS&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">segx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sec</span><span class="o">=</span><span class="n">cell</span><span class="o">.</span><span class="n">structures</span><span class="p">[</span><span class="s1">&#39;AIS&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">iAx</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">/</span><span class="n">riAx</span><span class="o">*</span><span class="p">(</span><span class="n">vAx</span><span class="o">-</span><span class="n">vSoma</span><span class="p">)</span>
+    
+    <span class="n">dV</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">vSoma</span><span class="p">)</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">iCap_</span> <span class="o">=</span> <span class="mf">0.01</span><span class="o">*</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">cm</span><span class="o">*</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">area</span><span class="o">*</span><span class="n">dV</span><span class="o">/</span><span class="n">dt</span>
+<span class="c1">#    repeat last element of iCap for alignment with t axis</span>
+    <span class="n">iCap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iCap_</span><span class="p">,</span> <span class="n">iCap_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="n">currents</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">currents</span><span class="p">[</span><span class="s1">&#39;iax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iAx</span>
+    <span class="n">currents</span><span class="p">[</span><span class="s1">&#39;idend&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iDendTotal</span>
+    <span class="n">currents</span><span class="p">[</span><span class="s1">&#39;ipas&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iPas</span>
+    <span class="n">currents</span><span class="p">[</span><span class="s1">&#39;ina&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iNa</span>
+    <span class="n">currents</span><span class="p">[</span><span class="s1">&#39;ikd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iKd</span>
+    <span class="n">currents</span><span class="p">[</span><span class="s1">&#39;icap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iCap</span>
+    
+    <span class="k">return</span> <span class="n">currents</span></div>
+
+<div class="viewcode-block" id="analyze_voltage_trace"><a class="viewcode-back" href="../../modules/single_cell_analyzer.currents.analyze_voltage_trace.html#single_cell_analyzer.currents.analyze_voltage_trace">[docs]</a><span class="k">def</span> <span class="nf">analyze_voltage_trace</span><span class="p">(</span><span class="n">vTrace</span><span class="p">,</span> <span class="n">tTrace</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    takes neuron Vectors and finds time and</span>
+<span class="sd">    amplitude of max depolarization</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vTrace</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tTrace</span><span class="p">)</span>
+    <span class="n">maxV</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">maxT</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">maxT</span><span class="p">,</span> <span class="n">maxV</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

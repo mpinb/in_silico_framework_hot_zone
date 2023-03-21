@@ -2,7 +2,7 @@ simrun3.somatic\_summation\_model
 =================================
 
 .. automodule:: simrun3.somatic_summation_model
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun3.somatic\_summation\_model
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       roll_rows_independently
    
@@ -22,6 +23,8 @@ simrun3.somatic\_summation\_model
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       ParseVT
    

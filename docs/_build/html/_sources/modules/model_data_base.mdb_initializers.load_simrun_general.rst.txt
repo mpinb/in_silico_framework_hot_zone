@@ -2,7 +2,7 @@ model\_data\_base.mdb\_initializers.load\_simrun\_general
 =========================================================
 
 .. automodule:: model_data_base.mdb_initializers.load_simrun_general
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.mdb\_initializers.load\_simrun\_general
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       add_dendritic_spike_times
       add_dendritic_voltage_traces

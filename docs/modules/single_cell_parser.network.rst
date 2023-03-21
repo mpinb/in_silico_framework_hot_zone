@@ -2,7 +2,7 @@ single\_cell\_parser.network
 ============================
 
 .. automodule:: single_cell_parser.network
-
+  
    
    
    
@@ -12,6 +12,7 @@ single\_cell\_parser.network
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       activate_functional_synapse
       functional_connectivity_visualization
@@ -24,6 +25,8 @@ single\_cell\_parser.network
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       NetworkMapper
    

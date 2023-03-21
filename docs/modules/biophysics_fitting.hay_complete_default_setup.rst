@@ -2,7 +2,7 @@ biophysics\_fitting.hay\_complete\_default\_setup
 =================================================
 
 .. automodule:: biophysics_fitting.hay_complete_default_setup
-
+  
    
    
    
@@ -12,6 +12,7 @@ biophysics\_fitting.hay\_complete\_default\_setup
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       get_Combiner
       get_Evaluator

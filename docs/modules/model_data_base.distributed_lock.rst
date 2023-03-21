@@ -2,7 +2,7 @@ model\_data\_base.distributed\_lock
 ===================================
 
 .. automodule:: model_data_base.distributed_lock
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.distributed\_lock
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       get_client
       get_lock

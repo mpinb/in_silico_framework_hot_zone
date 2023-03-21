@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="model_data_base.settings" href="model_data_base.settings.html" />
-    <link rel="prev" title="model_data_base.mdb_initializers.synapse_activation_binning" href="model_data_base.mdb_initializers.synapse_activation_binning.html" /> 
+    <link rel="next" title="model_data_base.model_data_base.empty_context_manager" href="model_data_base.model_data_base.empty_context_manager.html" />
+    <link rel="prev" title="model_data_base.mdb_initializers.synapse_activation_binning.tree_reduction" href="model_data_base.mdb_initializers.synapse_activation_binning.tree_reduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,7 +54,18 @@
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.analyze.html">model_data_base.analyze</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">model_data_base.model_data_base</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">model_data_base.model_data_base</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.model_data_base.empty_context_manager.html">model_data_base.model_data_base.empty_context_manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.model_data_base.get_progress_bar_function.html">model_data_base.model_data_base.get_progress_bar_function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.model_data_base.slugify.html">model_data_base.model_data_base.slugify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.model_data_base.FunctionWrapper.html">model_data_base.model_data_base.FunctionWrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.model_data_base.LoaderWrapper.html">model_data_base.model_data_base.LoaderWrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.model_data_base.ModelDataBase.html">model_data_base.model_data_base.ModelDataBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.model_data_base.RegisteredFolder.html">model_data_base.model_data_base.RegisteredFolder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.model_data_base.SQLMetadataAccessor.html">model_data_base.model_data_base.SQLMetadataAccessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.model_data_base.MdbException.html">model_data_base.model_data_base.MdbException</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.settings.html">model_data_base.settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.utils.html">model_data_base.utils</a></li>
@@ -108,13 +119,13 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">empty_context_manager</span></code>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.model_data_base.empty_context_manager.html#model_data_base.model_data_base.empty_context_manager" title="model_data_base.model_data_base.empty_context_manager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">empty_context_manager</span></code></a>(*args, **kwargs)</p></td>
 <td><p>does nothing.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_progress_bar_function</span></code>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.model_data_base.get_progress_bar_function.html#model_data_base.model_data_base.get_progress_bar_function" title="model_data_base.model_data_base.get_progress_bar_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_progress_bar_function</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">slugify</span></code>(value)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.model_data_base.slugify.html#model_data_base.model_data_base.slugify" title="model_data_base.model_data_base.slugify"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slugify</span></code></a>(value)</p></td>
 <td><p>Normalizes string, converts to lowercase, removes non-alpha characters, and converts spaces to hyphens.</p></td>
 </tr>
 </tbody>
@@ -126,19 +137,19 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">FunctionWrapper</span></code>(fun)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.model_data_base.FunctionWrapper.html#model_data_base.model_data_base.FunctionWrapper" title="model_data_base.model_data_base.FunctionWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FunctionWrapper</span></code></a>(fun)</p></td>
 <td><p>This class wraps arouand an object that cannot be saved directly (e.g.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LoaderWrapper</span></code>(relpath)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.model_data_base.LoaderWrapper.html#model_data_base.model_data_base.LoaderWrapper" title="model_data_base.model_data_base.LoaderWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LoaderWrapper</span></code></a>(relpath)</p></td>
 <td><p>This is a pointer to data, which is stored elsewhere.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelDataBase</span></code>(basedir[, forceload, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.model_data_base.ModelDataBase.html#model_data_base.model_data_base.ModelDataBase" title="model_data_base.model_data_base.ModelDataBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelDataBase</span></code></a>(basedir[, forceload, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegisteredFolder</span></code>(path)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.model_data_base.RegisteredFolder.html#model_data_base.model_data_base.RegisteredFolder" title="model_data_base.model_data_base.RegisteredFolder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RegisteredFolder</span></code></a>(path)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SQLMetadataAccessor</span></code>(sql_backend)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.model_data_base.SQLMetadataAccessor.html#model_data_base.model_data_base.SQLMetadataAccessor" title="model_data_base.model_data_base.SQLMetadataAccessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SQLMetadataAccessor</span></code></a>(sql_backend)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -150,7 +161,7 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">MdbException</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.model_data_base.MdbException.html#model_data_base.model_data_base.MdbException" title="model_data_base.model_data_base.MdbException"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MdbException</span></code></a></p></td>
 <td><p>Typical mdb errors</p></td>
 </tr>
 </tbody>
@@ -161,8 +172,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="model_data_base.mdb_initializers.synapse_activation_binning.html" class="btn btn-neutral float-left" title="model_data_base.mdb_initializers.synapse_activation_binning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="model_data_base.settings.html" class="btn btn-neutral float-right" title="model_data_base.settings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.mdb_initializers.synapse_activation_binning.tree_reduction.html" class="btn btn-neutral float-left" title="model_data_base.mdb_initializers.synapse_activation_binning.tree_reduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.model_data_base.empty_context_manager.html" class="btn btn-neutral float-right" title="model_data_base.model_data_base.empty_context_manager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

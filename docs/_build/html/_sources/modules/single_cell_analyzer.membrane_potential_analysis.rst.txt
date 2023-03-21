@@ -2,7 +2,7 @@ single\_cell\_analyzer.membrane\_potential\_analysis
 ====================================================
 
 .. automodule:: single_cell_analyzer.membrane_potential_analysis
-
+  
    
    
    
@@ -12,6 +12,7 @@ single\_cell\_analyzer.membrane\_potential\_analysis
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       PSTH_from_spike_times
       compute_mean_psp_amplitude
@@ -30,6 +31,8 @@ single\_cell\_analyzer.membrane\_potential\_analysis
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       RecordingSite
       RecordingSiteManager

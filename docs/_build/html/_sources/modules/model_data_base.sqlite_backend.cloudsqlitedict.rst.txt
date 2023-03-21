@@ -2,7 +2,7 @@ model\_data\_base.sqlite\_backend.cloudsqlitedict
 =================================================
 
 .. automodule:: model_data_base.sqlite_backend.cloudsqlitedict
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.sqlite\_backend.cloudsqlitedict
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       decode
       encode
@@ -25,6 +26,8 @@ model\_data\_base.sqlite\_backend.cloudsqlitedict
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       SqliteDict
       SqliteMultithread

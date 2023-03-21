@@ -2,7 +2,7 @@ biophysics\_fitting.hay\_evaluation
 ===================================
 
 .. automodule:: biophysics_fitting.hay_evaluation
-
+  
    
    
    
@@ -12,6 +12,7 @@ biophysics\_fitting.hay\_evaluation
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       get_cur_stim
       get_feasible_model_objectives

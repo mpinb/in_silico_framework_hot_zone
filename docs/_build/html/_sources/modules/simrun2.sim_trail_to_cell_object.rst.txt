@@ -2,7 +2,7 @@ simrun2.sim\_trail\_to\_cell\_object
 ====================================
 
 .. automodule:: simrun2.sim_trail_to_cell_object
-
+  
    
    
    
@@ -12,6 +12,7 @@ simrun2.sim\_trail\_to\_cell\_object
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       simtrail_to_cell_object
       trail_to_cell_object

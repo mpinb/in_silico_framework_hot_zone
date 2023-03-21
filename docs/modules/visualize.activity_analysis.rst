@@ -2,7 +2,7 @@ visualize.activity\_analysis
 ============================
 
 .. automodule:: visualize.activity_analysis
-
+  
    
    
    
@@ -25,6 +25,7 @@ visualize.activity\_analysis
 
 .. autosummary::
    :toctree:
+   :template: custom-module-template.rst
    :recursive:
 
    visualize.activity_analysis.array_slices_interactive

@@ -2,7 +2,7 @@ SLURM\_scripts.component\_isf
 =============================
 
 .. automodule:: SLURM_scripts.component_isf
-
+  
    
    
    
@@ -12,6 +12,7 @@ SLURM\_scripts.component\_isf
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       Lock
       check_locking_config

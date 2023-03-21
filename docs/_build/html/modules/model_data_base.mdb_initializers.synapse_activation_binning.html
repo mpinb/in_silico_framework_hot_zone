@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="model_data_base.model_data_base" href="model_data_base.model_data_base.html" />
-    <link rel="prev" title="model_data_base.mdb_initializers.somatic_summation_model" href="model_data_base.mdb_initializers.somatic_summation_model.html" /> 
+    <link rel="next" title="model_data_base.mdb_initializers.synapse_activation_binning.applyfun" href="model_data_base.mdb_initializers.synapse_activation_binning.applyfun.html" />
+    <link rel="prev" title="model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod" href="model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,7 +58,16 @@
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.html">model_data_base.mdb_initializers.load_simrun_general</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.html">model_data_base.mdb_initializers.prepare_ANN_batches</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.somatic_summation_model.html">model_data_base.mdb_initializers.somatic_summation_model</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.mdb_initializers.synapse_activation_binning</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">model_data_base.mdb_initializers.synapse_activation_binning</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.applyfun.html">model_data_base.mdb_initializers.synapse_activation_binning.applyfun</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.init.html">model_data_base.mdb_initializers.synapse_activation_binning.init</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.postfun.html">model_data_base.mdb_initializers.synapse_activation_binning.postfun</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.prefun.html">model_data_base.mdb_initializers.synapse_activation_binning.prefun</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask.html">model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas.html">model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.tree_reduction.html">model_data_base.mdb_initializers.synapse_activation_binning.tree_reduction</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.model_data_base.html">model_data_base.model_data_base</a></li>
@@ -123,25 +132,25 @@ save_groupby(mdb, values, groupby)</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">applyfun</span></code>(pdf[, maxtime])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.applyfun.html#model_data_base.mdb_initializers.synapse_activation_binning.applyfun" title="model_data_base.mdb_initializers.synapse_activation_binning.applyfun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">applyfun</span></code></a>(pdf[, maxtime])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code>(mdb[, groupby, get, prefun, applyfun, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.init.html#model_data_base.mdb_initializers.synapse_activation_binning.init" title="model_data_base.mdb_initializers.synapse_activation_binning.init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code></a>(mdb[, groupby, get, prefun, applyfun, …])</p></td>
 <td><p>Binning synapse activations.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">postfun</span></code>(s[, maxtime])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.postfun.html#model_data_base.mdb_initializers.synapse_activation_binning.postfun" title="model_data_base.mdb_initializers.synapse_activation_binning.postfun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">postfun</span></code></a>(s[, maxtime])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">prefun</span></code>(df)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.prefun.html#model_data_base.mdb_initializers.synapse_activation_binning.prefun" title="model_data_base.mdb_initializers.synapse_activation_binning.prefun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prefun</span></code></a>(df)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">synapse_activation_postprocess_dask</span></code>(ddf, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask.html#model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask" title="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synapse_activation_postprocess_dask</span></code></a>(ddf, …)</p></td>
 <td><p>Calculates bins of synapse activation dask dataframe per trail.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">synapse_activation_postprocess_pandas</span></code>(pdf[, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas.html#model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas" title="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synapse_activation_postprocess_pandas</span></code></a>(pdf[, …])</p></td>
 <td><p>see docstring of synapse_activation_postprocess_dask</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tree_reduction</span></code>(delayeds, aggregate_fun[, length])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.tree_reduction.html#model_data_base.mdb_initializers.synapse_activation_binning.tree_reduction" title="model_data_base.mdb_initializers.synapse_activation_binning.tree_reduction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tree_reduction</span></code></a>(delayeds, aggregate_fun[, length])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -152,8 +161,8 @@ save_groupby(mdb, values, groupby)</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="model_data_base.mdb_initializers.somatic_summation_model.html" class="btn btn-neutral float-left" title="model_data_base.mdb_initializers.somatic_summation_model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="model_data_base.model_data_base.html" class="btn btn-neutral float-right" title="model_data_base.model_data_base" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod.html" class="btn btn-neutral float-left" title="model_data_base.mdb_initializers.somatic_summation_model.DistributedDDFWithSaveMethod" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.mdb_initializers.synapse_activation_binning.applyfun.html" class="btn btn-neutral float-right" title="model_data_base.mdb_initializers.synapse_activation_binning.applyfun" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

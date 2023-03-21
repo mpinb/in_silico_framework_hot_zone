@@ -2,7 +2,7 @@ SLURM\_scripts.clustercontrol
 =============================
 
 .. automodule:: SLURM_scripts.clustercontrol
-
+  
    
    
    
@@ -12,6 +12,7 @@ SLURM\_scripts.clustercontrol
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       cache
       cluster

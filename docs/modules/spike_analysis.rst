@@ -1,11 +1,32 @@
 ﻿spike\_analysis
 ===============
 
-.. rubric:: Description
-
 .. automodule:: spike_analysis
+  
+   
+   
+   
 
-.. currentmodule:: spike_analysis
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
 
 
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   spike_analysis.core
 

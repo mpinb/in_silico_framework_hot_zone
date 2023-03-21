@@ -2,7 +2,7 @@ spike\_analysis.core
 ====================
 
 .. automodule:: spike_analysis.core
-
+  
    
    
    
@@ -12,6 +12,7 @@ spike\_analysis.core
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       filter_short_ISIs
       filter_spike_times
@@ -35,6 +36,8 @@ spike\_analysis.core
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       AnalyzeFile
       ReaderDummy

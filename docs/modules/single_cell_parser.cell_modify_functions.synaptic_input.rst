@@ -2,7 +2,7 @@ single\_cell\_parser.cell\_modify\_functions.synaptic\_input
 ============================================================
 
 .. automodule:: single_cell_parser.cell_modify_functions.synaptic_input
-
+  
    
    
    
@@ -12,6 +12,7 @@ single\_cell\_parser.cell\_modify\_functions.synaptic\_input
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       synaptic_input
    

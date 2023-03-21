@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="model_data_base.IO.LoaderDumper.dask_to_csv" href="model_data_base.IO.LoaderDumper.dask_to_csv.html" />
-    <link rel="prev" title="model_data_base.IO.LoaderDumper.cell" href="model_data_base.IO.LoaderDumper.cell.html" /> 
+    <link rel="next" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str" href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str.html" />
+    <link rel="prev" title="model_data_base.IO.LoaderDumper.cell.Loader" href="model_data_base.IO.LoaderDumper.cell.Loader.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,6 +52,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="model_data_base.html">model_data_base</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="model_data_base.IO.html">model_data_base.IO</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html">model_data_base.IO.LoaderDumper</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module.html">model_data_base.IO.LoaderDumper.get_dumper_string_by_dumper_module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.get_dumper_string_by_savedir.html">model_data_base.IO.LoaderDumper.get_dumper_string_by_savedir</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.load.html">model_data_base.IO.LoaderDumper.load</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.cell.html">model_data_base.IO.LoaderDumper.cell</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_csv.html">model_data_base.IO.LoaderDumper.dask_to_csv</a></li>
@@ -157,22 +160,22 @@ reduce network traffic for suitable dataframes. Suitable dataframes are for exam
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">category_to_str</span></code>(pdf)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str"><code class="xref py py-obj docutils literal notranslate"><span class="pre">category_to_str</span></code></a>(pdf)</p></td>
 <td><p>careful: changes pdf!</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check</span></code>(obj)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check</span></code></a>(obj)</p></td>
 <td><p>checks wherther obj can be saved with this dumper</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump</span></code>(obj, savedir[, repartition, get, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.dump.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.dump" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.dump"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump</span></code></a>(obj, savedir[, repartition, get, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_writer_function</span></code>(categorize)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_writer_function</span></code></a>(categorize)</p></td>
 <td><p>returns function, that stores pandas dataframe</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">my_dask_writer</span></code>(ddf, path[, optimize_graph, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">my_dask_writer</span></code></a>(ddf, path[, optimize_graph, …])</p></td>
 <td><p>Very simple method to store a dask dataframe to a bunch of files.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str_to_category</span></code>(pdf)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str_to_category</span></code></a>(pdf)</p></td>
 <td><p>careful: changes pdf!</p></td>
 </tr>
 </tbody>
@@ -184,7 +187,7 @@ reduce network traffic for suitable dataframes. Suitable dataframes are for exam
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Loader</span></code>(meta[, index_name, divisions])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader.html#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.Loader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Loader</span></code></a>(meta[, index_name, divisions])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -195,8 +198,8 @@ reduce network traffic for suitable dataframes. Suitable dataframes are for exam
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="model_data_base.IO.LoaderDumper.cell.html" class="btn btn-neutral float-left" title="model_data_base.IO.LoaderDumper.cell" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="model_data_base.IO.LoaderDumper.dask_to_csv.html" class="btn btn-neutral float-right" title="model_data_base.IO.LoaderDumper.dask_to_csv" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="model_data_base.IO.LoaderDumper.cell.Loader.html" class="btn btn-neutral float-left" title="model_data_base.IO.LoaderDumper.cell.Loader" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str.html" class="btn btn-neutral float-right" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -2,7 +2,7 @@ model\_data\_base.IO.LoaderDumper.dask\_to\_categorized\_msgpack
 ================================================================
 
 .. automodule:: model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.IO.LoaderDumper.dask\_to\_categorized\_msgpack
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       category_to_str
       check
@@ -27,6 +28,8 @@ model\_data\_base.IO.LoaderDumper.dask\_to\_categorized\_msgpack
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       Loader
    

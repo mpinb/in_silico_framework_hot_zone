@@ -2,7 +2,7 @@ model\_data\_base.mdb\_initializers.somatic\_summation\_model
 =============================================================
 
 .. automodule:: model_data_base.mdb_initializers.somatic_summation_model
-
+  
    
    
    
@@ -12,6 +12,7 @@ model\_data\_base.mdb\_initializers.somatic\_summation\_model
    .. rubric:: Functions
 
    .. autosummary::
+      :toctree:
    
       get_mdb_loader_dict
       init
@@ -24,6 +25,8 @@ model\_data\_base.mdb\_initializers.somatic\_summation\_model
    .. rubric:: Classes
 
    .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
    
       CelltypeSpecificSynapticWeights
       DistributedDDFWithSaveMethod
