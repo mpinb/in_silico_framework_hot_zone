@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SLURM_scripts.clustercontrol &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for SLURM_scripts.clustercontrol</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This directory provides methods and configurations to for servers that do not provide SLURM job managing.</span>
+<span class="sd">With these methods, it is still possible to set up DASK workers and monitor them, and exectute terminal commands on remote machines from within python.</span>
+
+<span class="sd">Author: unknown</span>
+
+<span class="sd">Last updated: 23/01/2023 by Bjorge Meulemeester</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">distutils.version</span> <span class="kn">import</span> <span class="n">LooseVersion</span><span class="p">,</span> <span class="n">StrictVersion</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<div class="viewcode-block" id="run_command_remotely"><a class="viewcode-back" href="../../SLURM_scripts.html#SLURM_scripts.clustercontrol.run_command_remotely">[docs]</a><span class="k">def</span> <span class="nf">run_command_remotely</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">print_command</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">print_output</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;ssh -tt </span><span class="si">{}</span><span class="s1"> &lt;&lt; &#39;ENDSSH&#39; </span><span class="se">\n</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="se">\n</span><span class="s1"> exit </span><span class="se">\n</span><span class="s1"> ENDSSH&#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">print_command</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">command</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">print_output</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="list_all_screens"><a class="viewcode-back" href="../../SLURM_scripts.html#SLURM_scripts.clustercontrol.list_all_screens">[docs]</a><span class="k">def</span> <span class="nf">list_all_screens</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;katz&#39;</span><span class="p">,</span> <span class="s1">&#39;nernst&#39;</span><span class="p">,</span> <span class="s1">&#39;rall&#39;</span><span class="p">,</span> <span class="s1">&#39;cajal&#39;</span><span class="p">,</span> <span class="s1">&#39;hodgkin&#39;</span><span class="p">,</span> <span class="s1">&#39;golgi&#39;</span><span class="p">}:</span>
+        <span class="n">run_command_remotely</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="s1">&#39;screen -ls&#39;</span><span class="p">,</span> <span class="n">print_command</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>    </div>
+        
+<span class="c1"># def start_cluster(servers = &#39;all&#39;, nice = 8, nprocs_update = {}, tmpdir = &#39;/tmp/abast&#39;, scheduler = &#39;rall&#39;, suffix = &#39;&#39;):</span>
+<span class="c1">#     ip_lookup = {&#39;katz&#39;: &#39;22&#39;, &#39;nernst&#39;: &#39;21&#39;, &#39;rall&#39;: &#39;20&#39;, &#39;cajal&#39;: &#39;26&#39;, &#39;golgi&#39;: &#39;23&#39;, &#39;hodgkin&#39;: &#39;25&#39;, &#39;spock&#39;: &#39;12&#39;, &#39;riker&#39;: &#39;13&#39;}</span>
+<span class="c1">#     </span>
+<span class="c1">#     n_procs = {&#39;katz&#39;: 40, &#39;nernst&#39;: 35, &#39;rall&#39;: 40, &#39;cajal&#39;: 24, &#39;golgi&#39;: 24, &#39;hodgkin&#39;: 24, &#39;spock&#39;: 4, &#39;riker&#39;: 4}</span>
+<span class="c1">#     n_procs.update(nprocs_update)</span>
+<span class="c1">#     </span>
+<span class="c1">#     if servers == &#39;all&#39;: servers = n_procs.keys()</span>
+<span class="c1">#     elif servers == &#39;new&#39;: servers = [&#39;rall&#39;, &#39;nernst&#39;, &#39;katz&#39;]</span>
+<span class="c1">#     elif servers == &#39;old&#39;: servers = [&#39;cajal&#39;, &#39;golgi&#39;, &#39;hodgkin&#39;]</span>
+<span class="c1">#     </span>
+<span class="c1">#     print &#39;starting scheduler&#39;</span>
+<span class="c1">#     command = &#39;source_isf; screen -S scheduler_{suffix} -dm bash -c &quot;dask-scheduler&quot;&#39;.format(suffix = suffix)</span>
+<span class="c1">#     run_command_remotely(scheduler, command)</span>
+<span class="c1">#     </span>
+<span class="c1">#     print &#39;starting workers&#39;</span>
+<span class="c1">#     template = &#39;source_isf; screen -S workers_{suffix} -dm bash -c &quot;nice -n {nice} dask-worker --nthreads 1  --nprocs {nprocs} {ip}:8786 --local-directory {tmpdir} --memory-limit=100e9&quot;&#39;</span>
+<span class="c1">#     for server in servers:</span>
+<span class="c1">#         command = template.format(suffix = suffix, nice = nice, nprocs = n_procs[server], ip = &#39;10.40.130.&#39;+ip_lookup[scheduler], tmpdir = tmpdir)</span>
+<span class="c1">#         run_command_remotely(server, command)</span>
+        
+<div class="viewcode-block" id="start_cluster"><a class="viewcode-back" href="../../SLURM_scripts.html#SLURM_scripts.clustercontrol.start_cluster">[docs]</a><span class="k">def</span> <span class="nf">start_cluster</span><span class="p">(</span><span class="n">servers</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">nice</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="n">nprocs_update</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">tmpdir</span> <span class="o">=</span> <span class="s1">&#39;/tmp/abast&#39;</span><span class="p">,</span> <span class="n">scheduler</span> <span class="o">=</span> <span class="s1">&#39;rall&#39;</span><span class="p">,</span> <span class="n">suffix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="mi">8786</span><span class="p">):</span>
+    <span class="n">ip_lookup</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;katz&#39;</span><span class="p">:</span> <span class="s1">&#39;22&#39;</span><span class="p">,</span> <span class="s1">&#39;nernst&#39;</span><span class="p">:</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;rall&#39;</span><span class="p">:</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span> <span class="s1">&#39;cajal&#39;</span><span class="p">:</span> <span class="s1">&#39;26&#39;</span><span class="p">,</span> <span class="s1">&#39;ibs3005&#39;</span><span class="p">:</span> <span class="s1">&#39;27&#39;</span><span class="p">,</span> <span class="s1">&#39;golgi&#39;</span><span class="p">:</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;hodgkin&#39;</span><span class="p">:</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span> <span class="s1">&#39;spock&#39;</span><span class="p">:</span> <span class="s1">&#39;12&#39;</span><span class="p">,</span> <span class="s1">&#39;riker&#39;</span><span class="p">:</span> <span class="s1">&#39;13&#39;</span><span class="p">}</span>
+    
+    <span class="n">n_procs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;katz&#39;</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="s1">&#39;nernst&#39;</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span> <span class="s1">&#39;rall&#39;</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="s1">&#39;cajal&#39;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s1">&#39;golgi&#39;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s1">&#39;hodgkin&#39;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s1">&#39;spock&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;riker&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;ibs3005&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
+    <span class="n">n_procs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">nprocs_update</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">servers</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span> <span class="n">servers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;rall&#39;</span><span class="p">,</span> <span class="s1">&#39;nernst&#39;</span><span class="p">,</span> <span class="s1">&#39;katz&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;rall&#39;</span><span class="p">,</span> <span class="s1">&#39;nernst&#39;</span><span class="p">,</span> <span class="s1">&#39;katz&#39;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">servers</span> <span class="o">==</span> <span class="s1">&#39;new&#39;</span><span class="p">:</span> <span class="n">servers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;rall&#39;</span><span class="p">,</span> <span class="s1">&#39;nernst&#39;</span><span class="p">,</span> <span class="s1">&#39;katz&#39;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">servers</span> <span class="o">==</span> <span class="s1">&#39;old&#39;</span><span class="p">:</span> <span class="n">servers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cajal&#39;</span><span class="p">,</span> <span class="s1">&#39;golgi&#39;</span><span class="p">,</span> <span class="s1">&#39;hodgkin&#39;</span><span class="p">]</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;starting scheduler&#39;</span><span class="p">)</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;source /nas1/Data_arco/.bashrc; source_isf; screen -S scheduler_</span><span class="si">{suffix}</span><span class="s1"> -dm bash -c &quot;source /nas1/Data_arco/.bashrc; source_isf; dask-scheduler --port </span><span class="si">{port}</span><span class="s1"> --bokeh-port </span><span class="si">{bokeh_port}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">suffix</span> <span class="o">=</span> <span class="n">suffix</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">),</span> <span class="n">bokeh_port</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">run_command_remotely</span><span class="p">(</span><span class="n">scheduler</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;starting workers&#39;</span><span class="p">)</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;source /nas1/Data_arco/.bashrc; source_isf; screen -S workers_</span><span class="si">{suffix}</span><span class="s1"> -dm bash -c &quot;source /nas1/Data_arco/.bashrc </span><span class="se">\n</span><span class="s1"> source_isf; nice -n </span><span class="si">{nice}</span><span class="s1"> dask-worker --nthreads 1  --nprocs </span><span class="si">{nprocs}</span><span class="s1"> </span><span class="si">{ip}</span><span class="s1">:</span><span class="si">{port}</span><span class="s1"> --local-directory </span><span class="si">{tmpdir}</span><span class="s1"> --memory-limit=100e9&quot;&#39;</span>
+    <span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="n">servers</span><span class="p">:</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">suffix</span> <span class="o">=</span> <span class="n">suffix</span><span class="p">,</span> <span class="n">nice</span> <span class="o">=</span> <span class="n">nice</span><span class="p">,</span> <span class="n">nprocs</span> <span class="o">=</span> <span class="n">n_procs</span><span class="p">[</span><span class="n">server</span><span class="p">],</span> <span class="n">ip</span> <span class="o">=</span> <span class="s1">&#39;10.40.130.&#39;</span><span class="o">+</span><span class="n">ip_lookup</span><span class="p">[</span><span class="n">scheduler</span><span class="p">],</span> <span class="n">port</span> <span class="o">=</span> <span class="n">port</span><span class="p">,</span> <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">tmpdir</span><span class="p">)</span>
+        <span class="n">run_command_remotely</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span></div>
+
+<span class="kn">import</span> <span class="nn">cloudpickle</span>
+<div class="viewcode-block" id="cache"><a class="viewcode-back" href="../../SLURM_scripts.html#SLURM_scripts.clustercontrol.cache">[docs]</a><span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="n">function</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">six.moves</span> <span class="kn">import</span> <span class="n">cPickle</span>
+    <span class="kn">import</span> <span class="nn">hashlib</span>
+    <span class="n">memo</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">cPickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">]))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="nb">hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">]))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">hash</span>
+    
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">get_key</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">memo</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">memo</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rv</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">memo</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">rv</span>
+            <span class="k">return</span> <span class="n">rv</span>
+    <span class="k">return</span> <span class="n">wrapper</span></div>
+        
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">distributed</span>
+<div class="viewcode-block" id="cluster"><a class="viewcode-back" href="../../SLURM_scripts.html#SLURM_scripts.clustercontrol.cluster">[docs]</a>    <span class="nd">@cache</span>
+    <span class="k">def</span> <span class="nf">cluster</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">distributed</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># import matplotlib to avoid error with missing Qt backend</span>
+        <span class="k">def</span> <span class="nf">fun</span><span class="p">():</span>
+            <span class="kn">import</span> <span class="nn">matplotlib</span>
+            <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fun</span><span class="p">)</span>
+        
+        <span class="c1"># switch off work stealing, otherwise, simulations may run twice</span>
+        <span class="c1"># update: work stealing is now transactional, see </span>
+        <span class="c1"># https://github.com/dask/distributed/commit/efb7f1ab3c14d6b2ca15dcd04ca1c2b226cc7cbb</span>
+        <span class="c1"># Until this commit is provided through the conda channels, we switch work stealing off completely        </span>
+        <span class="k">if</span> <span class="n">LooseVersion</span><span class="p">(</span><span class="n">distributed</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">LooseVersion</span><span class="p">(</span><span class="s1">&#39;1.20.0&#39;</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Your version of distributed seems to be &lt; &#39;1.20.0&#39;. Work stealing is &quot;</span> <span class="o">+</span> 
+                          <span class="s2">&quot;therefore not transactional. This means, that simulations might run &quot;</span> <span class="o">+</span> 
+                          <span class="s2">&quot;more than once in an unpredictable manner. To ensure that &quot;</span> <span class="o">+</span> \
+                          <span class="s2">&quot;simulations do not run twice, work stealing is switched of now. &quot;</span> <span class="o">+</span> \
+                          <span class="s2">&quot;However, this will have a negative impact on work balancing on the scheduler. &quot;</span> <span class="o">+</span> \
+                          <span class="s2">&quot;Please update distributed to a version &gt;= 1.20.0.&quot;</span><span class="p">)</span>
+            <span class="c1">#def switch_of_work_stealing(dask_scheduler=None):</span>
+            <span class="c1">#    dask_scheduler.extensions[&#39;stealing&#39;]._pc.stop()</span>
+            <span class="c1">#c.run_on_scheduler(switch_of_work_stealing)</span>
+        <span class="k">return</span> <span class="n">c</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;setting up local multiprocessing framework ... done&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>        
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../SLURM_scripts.html">SLURM_scripts</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

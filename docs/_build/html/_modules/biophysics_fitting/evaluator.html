@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>biophysics_fitting.evaluator &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for biophysics_fitting.evaluator</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Nov 08, 2018</span>
+
+<span class="sd">@author: abast</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="Evaluator_Setup"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator_Setup">[docs]</a><span class="k">class</span> <span class="nc">Evaluator_Setup</span><span class="p">:</span>
+<div class="viewcode-block" id="Evaluator_Setup.__init__"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator_Setup.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pre_funs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_funs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">finalize_funs</span> <span class="o">=</span> <span class="p">[]</span></div></div>
+
+<div class="viewcode-block" id="Evaluator"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator">[docs]</a><span class="k">class</span> <span class="nc">Evaluator</span><span class="p">:</span>
+<div class="viewcode-block" id="Evaluator.__init__"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;This  class can be used to extract features from (usually) voltagetraces</span>
+<span class="sd">        of different stimuli. The voltage traces are (usually) computed with a Simulator </span>
+<span class="sd">        object by calling its run method.</span>
+<span class="sd">        </span>
+<span class="sd">        In an optimization the features returned by Evaluator.evaluate are saved together</span>
+<span class="sd">        with to corresponding parameter values.</span>
+
+<span class="sd">        Note: Combining features to reduce the number of objectives should be done with the Combiner object.        </span>
+<span class="sd">        </span>
+<span class="sd">        For a Simulator object s and a Evaluator object e, the typical usecase is:</span>
+<span class="sd">        voltage_traces_dict = s.run(params)</span>
+<span class="sd">        features = e.evaluate(voltage_traces_dict)</span>
+<span class="sd">                </span>
+<span class="sd">        The &quot;program flow&quot; in the Evaluator can be split in two parts:</span>
+<span class="sd">        (1) for each key in the voltage_traces_dict: </span>
+<span class="sd">            ---&gt; apply evaluate_fun, that is registered with a name that matches the key.</span>
+<span class="sd">                    Extracts features from the voltage trace.</span>
+<span class="sd">        (2) perform arbitrary operations on the resulting dictionary </span>
+<span class="sd">                (e.g. merge it from a nested to a flat dictionary or compute more complex features</span>
+<span class="sd">                by combineing features from different stimuli)</span>
+<span class="sd">                </span>
+<span class="sd">        </span>
+<span class="sd">        How can the Evaluator be set up?</span>
+<span class="sd">        An example, how the Evaluator object can be set up can be found in hay_complete_default_setup.</span>
+<span class="sd">        </span>
+<span class="sd">        e = Evaluator()</span>
+<span class="sd">        e.setup.evaluate_funs.append([in_name, evaluate_fun, out_name]) # corresponds to step (1)</span>
+<span class="sd">        e.setup.finalize_funs.append(finalize_fun) # corresponds to step (2)</span>
+<span class="sd">        </span>
+<span class="sd">        What form do the functions need to have?</span>
+<span class="sd">        def examplary_evaluate_fun(**kwargs):</span>
+<span class="sd">            # kwargs are keys and values of voltage_traces_dict[in_name]</span>
+<span class="sd">            # extract features from kwargs</span>
+<span class="sd">            return out_dict # keys are names of features, values are features</span>
+
+<span class="sd">        def finalize_fun(dict_):</span>
+<span class="sd">            # dict_ is a dictionary with out_name of the evaluate_funs as keys.</span>
+<span class="sd">            # and the returned dictionary out_dict as values, </span>
+<span class="sd">            # i.e. out_dict is a nested dictionary.</span>
+<span class="sd">            # dict_ can now be arbitrarily modified, e.g. flattened.</span>
+<span class="sd">            return modified_dict</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1">#self.objectives = objectives</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup</span> <span class="o">=</span> <span class="n">Evaluator_Setup</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="Evaluator.evaluate"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.evaluator.Evaluator.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features_dict</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Extracts features from a simulation result computed by Simulator.run()</span>
+<span class="sd">        </span>
+<span class="sd">        Details, how to set up the Evaluator are in the docstring of</span>
+<span class="sd">        the Evaluator class.&#39;&#39;&#39;</span>        
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">fun</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">pre_funs</span><span class="p">:</span>
+            <span class="n">features_dict</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="n">features_dict</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">in_name</span><span class="p">,</span> <span class="n">fun</span><span class="p">,</span> <span class="n">out_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">evaluate_funs</span><span class="p">:</span>
+            <span class="n">ret</span><span class="p">[</span><span class="n">out_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="o">**</span><span class="n">features_dict</span><span class="p">[</span><span class="n">in_name</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">fun</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">finalize_funs</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../biophysics_fitting.html">biophysics_fitting</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

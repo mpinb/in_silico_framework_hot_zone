@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nbrun &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nbrun</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2015 Antonino Ingargiola</span>
+<span class="c1"># License: MIT</span>
+<span class="c1"># https://github.com/tritemio/nbrun/blob/master/nbrun.py</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">nbrun - Run an Jupyter/IPython notebook, optionally passing arguments.</span>
+<span class="sd">USAGE</span>
+<span class="sd">-----</span>
+<span class="sd">Copy this file in the folder containing the master notebook used to</span>
+<span class="sd">execute the other notebooks.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">FileLink</span>
+<span class="kn">import</span> <span class="nn">nbformat</span>
+<span class="kn">from</span> <span class="nn">nbconvert.preprocessors</span> <span class="kn">import</span> <span class="n">ExecutePreprocessor</span>
+
+
+<div class="viewcode-block" id="dict_to_code"><a class="viewcode-back" href="../nbrun.html#nbrun.dict_to_code">[docs]</a><span class="k">def</span> <span class="nf">dict_to_code</span><span class="p">(</span><span class="n">mapping</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert input dict `mapping` to a string containing python code.</span>
+<span class="sd">    Each key is the name of a variable and each value is</span>
+<span class="sd">    the variable content. Each variable assignment is separated by</span>
+<span class="sd">    a newline.</span>
+<span class="sd">    Keys must be strings, and cannot start with a number (i.e. must be</span>
+<span class="sd">    valid python identifiers). Values must be objects with a string</span>
+<span class="sd">    representation (the result of repr(obj)) which is valid python code for</span>
+<span class="sd">    re-creating the object.</span>
+<span class="sd">    For examples, numbers, strings or list/tuple/dict</span>
+<span class="sd">    of numbers and strings are allowed.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        A string containing the python code.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="run_notebook"><a class="viewcode-back" href="../nbrun.html#nbrun.run_notebook">[docs]</a><span class="k">def</span> <span class="nf">run_notebook</span><span class="p">(</span><span class="n">notebook_name</span><span class="p">,</span> <span class="n">nb_suffix</span><span class="o">=</span><span class="s1">&#39;-out&#39;</span><span class="p">,</span> <span class="n">out_path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">nb_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">insert_pos</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3600</span><span class="p">,</span> <span class="n">execute_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Runs a notebook and saves the output in a new notebook.</span>
+<span class="sd">    Executes a notebook, optionally passing &quot;arguments&quot; in a way roughly</span>
+<span class="sd">    similar to passing arguments to a function.</span>
+<span class="sd">    Notebook arguments are passed in a dictionary (`nb_kwargs`) which is</span>
+<span class="sd">    converted to a string containing python code, then inserted in the notebook</span>
+<span class="sd">    as a code cell. The code contains only assignments of variables which</span>
+<span class="sd">    can be used to control the execution of a suitably written notebook. When</span>
+<span class="sd">    calling a notebook, you need to know which arguments (variables) to pass.</span>
+<span class="sd">    Differently from functions, no check on the input arguments is performed.</span>
+<span class="sd">    The &quot;notebook signature&quot; is only informally declared in a conventional</span>
+<span class="sd">    markdown cell at the beginning of the notebook.</span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        notebook_name (string): name of the notebook to be executed.</span>
+<span class="sd">        nb_suffix (string): suffix to append to the file name of the executed</span>
+<span class="sd">            notebook.</span>
+<span class="sd">        nb_kwargs (dict or None): If not None, this dict is converted to a</span>
+<span class="sd">            string of python assignments with keys representing variables</span>
+<span class="sd">            names and values variables content. This string is inserted as</span>
+<span class="sd">            code-cell in the notebook to be executed.</span>
+<span class="sd">        insert_pos (int): position of insertion of the code-cell containing</span>
+<span class="sd">            the input arguments. Default is 1 (i.e. second cell). With this</span>
+<span class="sd">            default, the input notebook can define, in the first cell, default</span>
+<span class="sd">            values of input arguments (used when the notebook is executed</span>
+<span class="sd">            with no arguments or through the Notebook GUI).</span>
+<span class="sd">        timeout (int): timeout in seconds after which the execution is aborted.</span>
+<span class="sd">        execute_kwargs (dict): additional arguments passed to</span>
+<span class="sd">            `ExecutePreprocessor`.</span>
+<span class="sd">        out_path (string): folder where to save the output notebook.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">timestamp_cell</span> <span class="o">=</span> <span class="s2">&quot;**Executed:** </span><span class="si">%s</span><span class="se">\n\n</span><span class="s2">**Duration:** </span><span class="si">%d</span><span class="s2"> seconds.&quot;</span>
+    <span class="k">if</span> <span class="n">nb_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;# Cell inserted during automated execution.&#39;</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">dict_to_code</span><span class="p">(</span><span class="n">nb_kwargs</span><span class="p">)</span>
+        <span class="n">code_cell</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">header</span><span class="p">,</span> <span class="n">code</span><span class="p">))</span>
+
+    <span class="n">nb_name_input</span> <span class="o">=</span> <span class="n">notebook_name</span> <span class="o">+</span> <span class="s1">&#39;.ipynb&#39;</span>
+    <span class="n">nb_name_output</span> <span class="o">=</span> <span class="n">notebook_name</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.ipynb&#39;</span> <span class="o">%</span> <span class="n">nb_suffix</span>
+    <span class="n">nb_name_output</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="n">nb_name_output</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">FileLink</span><span class="p">(</span><span class="n">nb_name_input</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">execute_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">execute_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ep</span> <span class="o">=</span> <span class="n">ExecutePreprocessor</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="o">**</span><span class="n">execute_kwargs</span><span class="p">)</span>
+    <span class="n">nb</span> <span class="o">=</span> <span class="n">nbformat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">nb_name_input</span><span class="p">,</span> <span class="n">as_version</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nb_kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">nb</span><span class="p">[</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nbformat</span><span class="o">.</span><span class="n">v4</span><span class="o">.</span><span class="n">new_code_cell</span><span class="p">(</span><span class="n">code_cell</span><span class="p">))</span>
+
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Execute the notebook</span>
+        <span class="n">ep</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;./&#39;</span><span class="p">}})</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c1"># Execution failed, print a message then raise.</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Error executing the notebook &quot;</span><span class="si">%s</span><span class="s1">&quot;.</span><span class="se">\n\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">notebook_name</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39;See notebook &quot;</span><span class="si">%s</span><span class="s1">&quot; for the traceback.&#39;</span> <span class="o">%</span> <span class="n">nb_name_output</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># On successful execution, add timestamping cell</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+        <span class="n">timestamp_cell</span> <span class="o">=</span> <span class="n">timestamp_cell</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">(</span><span class="n">start_time</span><span class="p">),</span> <span class="n">duration</span><span class="p">)</span>
+        <span class="n">nb</span><span class="p">[</span><span class="s1">&#39;cells&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nbformat</span><span class="o">.</span><span class="n">v4</span><span class="o">.</span><span class="n">new_markdown_cell</span><span class="p">(</span><span class="n">timestamp_cell</span><span class="p">))</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Save the notebook even when it raises an error</span>
+        <span class="n">nbformat</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="n">nb_name_output</span><span class="p">)</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">FileLink</span><span class="p">(</span><span class="n">nb_name_output</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">in_silico_framework</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>biophysics_fitting.utils &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for biophysics_fitting.utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Nov 01, 2018</span>
+
+<span class="sd">@author: abast</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="c1">####################################</span>
+<span class="c1"># selection of sections</span>
+<span class="c1">####################################</span>
+<div class="viewcode-block" id="connected_to_structure_beyond"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.connected_to_structure_beyond">[docs]</a><span class="k">def</span> <span class="nf">connected_to_structure_beyond</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">beyond_dist</span><span class="p">,</span> <span class="n">struct_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dendrite&#39;</span><span class="p">,</span> <span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">distance_to_soma</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">beyond_dist</span> <span class="ow">and</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="n">struct_list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">connected_to_dend_beyond</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">beyond_dist</span><span class="p">)</span> 
+                        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">sec</span><span class="o">.</span><span class="n">children</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="n">struct_list</span><span class="p">))</span></div>
+        
+<span class="n">connected_to_dend_beyond</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">connected_to_structure_beyond</span><span class="p">,</span> <span class="n">struct_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dendrite&#39;</span><span class="p">,</span> <span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="get_inner_sec_dist_list"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.get_inner_sec_dist_list">[docs]</a><span class="k">def</span> <span class="nf">get_inner_sec_dist_list</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">beyond_dist</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">beyond_struct</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">]):</span>
+    <span class="sd">&#39;&#39;&#39;returns sections, that are connected to compartments with labels in beyond_struct that have a minimum soma distance of</span>
+<span class="sd">    beyond_dist. This is useful to get sections of the apical trunk filtering out oblique dendrites.&#39;&#39;&#39;</span>
+    <span class="n">sec_dist_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">cell</span><span class="o">.</span><span class="n">distance_to_soma</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">):</span> <span class="n">sec</span> 
+                 <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sections</span>
+                 <span class="k">if</span> <span class="n">connected_to_structure_beyond</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">beyond_dist</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">])</span>
+                <span class="p">}</span>
+    <span class="k">return</span> <span class="n">sec_dist_dict</span></div>
+    
+<div class="viewcode-block" id="get_inner_section_at_distance"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.get_inner_section_at_distance">[docs]</a><span class="k">def</span> <span class="nf">get_inner_section_at_distance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">beyond_dist</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">beyond_struct</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">]):</span>
+    <span class="sd">&#39;&#39;&#39;Returns the section and relative position of that section, such that the soma distance (along the dendrite) is dist.</span>
+<span class="sd">    Also, it is assured, that the section returned has children that have a soma distance beyond beyond_dist of the label in</span>
+<span class="sd">    beyond_struct&#39;&#39;&#39;</span>
+    <span class="kn">import</span> <span class="nn">six</span>
+    <span class="n">sec_dist_dict</span> <span class="o">=</span> <span class="n">get_inner_sec_dist_list</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">beyond_dist</span><span class="p">,</span> <span class="n">beyond_struct</span><span class="p">)</span>
+    <span class="n">dummy</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span> <span class="o">-</span> <span class="n">dist</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">sec_dist_dict</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">dist</span><span class="p">}</span>
+    <span class="n">closest_sec</span> <span class="o">=</span> <span class="n">dummy</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">dummy</span><span class="p">)]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">dist</span> <span class="o">-</span> <span class="n">cell</span><span class="o">.</span><span class="n">distance_to_soma</span><span class="p">(</span><span class="n">closest_sec</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span> <span class="o">/</span> <span class="n">closest_sec</span><span class="o">.</span><span class="n">L</span>
+    <span class="k">return</span> <span class="n">closest_sec</span><span class="p">,</span> <span class="n">x</span></div>
+
+<span class="c1">#####################################</span>
+<span class="c1"># read out Vm at section</span>
+<span class="c1">#######################################</span>
+
+<div class="viewcode-block" id="tVec"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.tVec">[docs]</a><span class="k">def</span> <span class="nf">tVec</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">tVec</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="vmSoma"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.vmSoma">[docs]</a><span class="k">def</span> <span class="nf">vmSoma</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="vmMax"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.vmMax">[docs]</a><span class="k">def</span> <span class="nf">vmMax</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">recVList</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<span class="k">def</span> <span class="nf">_get_apical_sec_and_i_at_distance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">dist</span><span class="p">):</span>
+    <span class="n">sec</span><span class="p">,</span> <span class="n">target_x</span> <span class="o">=</span> <span class="n">get_inner_section_at_distance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+    <span class="c1"># roberts code to get closest segment</span>
+    <span class="n">mindx</span>  <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">segx</span><span class="p">)):</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">segx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">target_x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dx</span> <span class="o">&lt;</span> <span class="n">mindx</span><span class="p">:</span>
+            <span class="n">mindx</span> <span class="o">=</span> <span class="n">dx</span>
+            <span class="n">minSeg</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">sec</span><span class="p">,</span> <span class="n">mindx</span><span class="p">,</span> <span class="n">minSeg</span>
+
+<div class="viewcode-block" id="vmApical"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.vmApical">[docs]</a><span class="k">def</span> <span class="nf">vmApical</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">dist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">sec</span><span class="p">,</span> <span class="n">mindx</span><span class="p">,</span> <span class="n">minSeg</span> <span class="o">=</span> <span class="n">_get_apical_sec_and_i_at_distance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="n">minSeg</span><span class="p">])</span>  </div>
+
+<div class="viewcode-block" id="vmApical_position"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.vmApical_position">[docs]</a><span class="k">def</span> <span class="nf">vmApical_position</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">sec</span><span class="p">,</span> <span class="n">mindx</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="n">_get_apical_sec_and_i_at_distance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+    <span class="n">target_x</span> <span class="o">=</span> <span class="p">[</span><span class="n">seg</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">sec</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">relPts</span><span class="p">)</span> <span class="o">-</span> <span class="n">target_x</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">sec</span><span class="o">.</span><span class="n">pts</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+<span class="c1">#########################################</span>
+<span class="c1"># multiprocessing stuff that allows to evaluate code in a separate python / NEURON environment</span>
+<span class="c1">#########################################</span>
+
+<span class="kn">import</span> <span class="nn">multiprocessing.process</span>
+<span class="kn">import</span> <span class="nn">cloudpickle</span>
+
+<div class="viewcode-block" id="Undemonize"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.Undemonize">[docs]</a><span class="k">class</span> <span class="nc">Undemonize</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;A hack to resolve AssertionError: daemonic processes are not allowed to have children</span>
+<span class="sd">    </span>
+<span class="sd">    This might spawn child processes that do not terminate&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="Undemonize.__init__"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.Undemonize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">current_process</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;daemon&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">_config</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">daemon_status_set</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">daemon_status_set</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">daemon_status_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;daemon&#39;</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">daemon_status_set</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;daemon&#39;</span><span class="p">]</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">daemon_status_set</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;daemon&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">daemon_status_value</span></div>
+<span class="kn">import</span> <span class="nn">cloudpickle</span>
+
+<div class="viewcode-block" id="run_cloudpickled_remotely"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.run_cloudpickled_remotely">[docs]</a><span class="k">def</span> <span class="nf">run_cloudpickled_remotely</span><span class="p">(</span><span class="n">queue</span><span class="p">):</span>
+    <span class="n">fun</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+    <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">fun</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="execute_in_child_process"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.execute_in_child_process">[docs]</a><span class="k">def</span> <span class="nf">execute_in_child_process</span><span class="p">(</span><span class="n">fun</span><span class="p">):</span>
+    <span class="n">fun_cp</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">fun</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">queue</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+        <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">fun_cp</span><span class="p">)</span>
+        <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">run_cloudpickled_remotely</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">queue</span><span class="p">,))</span>
+        <span class="k">with</span> <span class="n">Undemonize</span><span class="p">():</span>    
+            <span class="n">p</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">out</span>
+    <span class="k">return</span> <span class="n">fun</span></div>
+
+<span class="c1"># def run_cloudpickled_remotely3(queue_to_child, queue_from_child):</span>
+<span class="c1">#     fun = cloudpickle.loads(queue_to_child.get())</span>
+<span class="c1">#     while True:</span>
+<span class="c1">#         print(&#39;asd0&#39;)</span>
+<span class="c1">#         args = cloudpickle.loads(queue_to_child.get())</span>
+<span class="c1">#         print(&#39;asd1&#39;)</span>
+<span class="c1">#         queue_form_child.put(cloudpickle.dumps(fun(*args)))</span>
+<span class="c1">#         print(&#39;asd3&#39;)</span>
+<span class="c1">#         </span>
+<span class="c1"># def execute_in_child_process_kept_alive(fun):</span>
+<span class="c1">#     queue_to_child = multiprocessing.Queue()</span>
+<span class="c1">#     queue_from_child = multiprocessing.Queue()</span>
+<span class="c1">#     queue_to_child.put(cloudpickle.dumps(fun))</span>
+<span class="c1">#     p = multiprocessing.Process(target=test.run_cloudpickled_remotely3, </span>
+<span class="c1">#                                 args=(queue_to_child,queue_from_child))</span>
+<span class="c1">#     with Undemonize():    </span>
+<span class="c1">#         p.start()    </span>
+<span class="c1">#     def fun(*args):</span>
+<span class="c1">#         queue_to_child.put(cloudpickle.dumps(args))</span>
+<span class="c1">#         out = cloudpickle.loads(queue_to_child.get())</span>
+<span class="c1">#         return out</span>
+<span class="c1">#     fun.process = p</span>
+<span class="c1">#     return fun</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<div class="viewcode-block" id="pool_helper"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.pool_helper">[docs]</a><span class="k">def</span> <span class="nf">pool_helper</span><span class="p">(</span><span class="n">callable_partial</span><span class="p">):</span>
+    <span class="n">callable_partial</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">callable_partial</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">callable_partial</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="VariableThatDoesNotGetPickled"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.VariableThatDoesNotGetPickled">[docs]</a><span class="k">class</span> <span class="nc">VariableThatDoesNotGetPickled</span><span class="p">:</span>
+<div class="viewcode-block" id="VariableThatDoesNotGetPickled.__init__"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.VariableThatDoesNotGetPickled.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stored_item</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stored_item</span> <span class="o">=</span> <span class="n">stored_item</span></div>
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;stored_item&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span></div>
+    
+<div class="viewcode-block" id="execute_in_child_process_kept_alive"><a class="viewcode-back" href="../../biophysics_fitting.html#biophysics_fitting.utils.execute_in_child_process_kept_alive">[docs]</a><span class="k">def</span> <span class="nf">execute_in_child_process_kept_alive</span><span class="p">(</span><span class="n">fun</span><span class="p">):</span>
+    <span class="n">pool_storage</span> <span class="o">=</span> <span class="n">VariableThatDoesNotGetPickled</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span> <span class="c1"># None # multiprocessing.Pool(1) </span>
+    <span class="k">def</span> <span class="nf">_helper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pool_storage</span><span class="o">.</span><span class="n">stored_item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">Undemonize</span><span class="p">():</span>
+                <span class="n">pool_storage</span><span class="o">.</span><span class="n">stored_item</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">pool_storage</span><span class="o">.</span><span class="n">stored_item</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">pool_helper</span><span class="p">,</span> <span class="p">[</span><span class="n">p</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">cloudpickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+    <span class="c1">#fun.pool = pool</span>
+    <span class="k">return</span> <span class="n">_helper</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../biophysics_fitting.html">biophysics_fitting</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

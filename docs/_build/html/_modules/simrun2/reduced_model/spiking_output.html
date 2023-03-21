@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>simrun2.reduced_model.spiking_output &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for simrun2.reduced_model.spiking_output</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<div class="viewcode-block" id="convolve_matrix_with_kernel"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.spiking_output.convolve_matrix_with_kernel">[docs]</a><span class="k">def</span> <span class="nf">convolve_matrix_with_kernel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">kernel</span><span class="p">):</span>
+    <span class="n">l_kern</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span>
+    <span class="n">l_xrow</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">l_xcol</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1">#X = np.c_[np.zeros((l_xrow,l_kern - 1)), X]</span>
+    <span class="c1">#np.testing.assert_array_equal(X.shape, [l_xrow, l_xcol + l_kern - 1])</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">l_xrow</span><span class="p">,</span><span class="n">l_kern</span><span class="p">)),</span> <span class="n">X</span><span class="p">]</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_equal</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">[</span><span class="n">l_xrow</span><span class="p">,</span> <span class="n">l_xcol</span> <span class="o">+</span> <span class="n">l_kern</span><span class="p">])</span>    
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span><span class="n">t</span><span class="p">:</span><span class="n">t</span><span class="o">+</span><span class="n">l_kern</span><span class="p">],</span> <span class="n">kernel</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">l_xcol</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span></div>
+
+<span class="c1">#def rolling_window(a, window):</span>
+<span class="c1">#    &#39;&#39;&#39;http://www.rigtorp.se/2011/01/01/rolling-statistics-numpy.html&#39;&#39;&#39;</span>
+<span class="c1">#    shape = a.shape[:-1] + (a.shape[-1] - window + 1, window)</span>
+<span class="c1">#    strides = a.strides + (a.strides[-1],)</span>
+<span class="c1">#    return np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)</span>
+<span class="c1">#    </span>
+<span class="c1">#def convolve_matrix_with_kernel(X, kernel):</span>
+<span class="c1">#    l_kern = len(kernel)</span>
+<span class="c1">#    l_xrow = X.shape[0]</span>
+<span class="c1">#    l_xcol = X.shape[1]</span>
+<span class="c1">#    X = np.c_[np.zeros((l_xrow,l_kern)), X]</span>
+<span class="c1">#    np.testing.assert_array_equal(X.shape, [l_xrow, l_xcol + l_kern])    </span>
+<span class="c1">#    X = rolling_window(X, len(kernel))</span>
+<span class="c1">#    return np.dot(X, kernel)</span>
+
+<span class="c1"># def synaptic_input_to_lda_values(X, t, start = 0, n = 1000):</span>
+<span class="c1">#     #calculate lda values of selected trails (start, n) at selected timepoint (t)</span>
+<span class="c1">#     EXC = np.c_[np.zeros((n,l)), X[:,:300]]</span>
+<span class="c1">#     INH = np.c_[np.zeros((n,l)), X[:,300:]]</span>
+<span class="c1">#     EXC = EXC[:,180+t+l:265+t+l]</span>
+<span class="c1">#     INH = INH[:,180+t+l:265+t+l]</span>
+<span class="c1">#     #calculate PSTH from lda_values</span>
+<span class="c1">#     lda_values = np.dot(np.concatenate([EXC, INH], axis = 1), coef_)</span>
+<span class="c1">#     return lda_values</span>
+
+<div class="viewcode-block" id="data2Convolutions"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.spiking_output.data2Convolutions">[docs]</a><span class="k">def</span> <span class="nf">data2Convolutions</span><span class="p">(</span><span class="n">X_dict</span><span class="p">,</span> <span class="n">kernel_dict</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">convolve_matrix_with_kernel</span><span class="p">(</span><span class="n">X_dict</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">kernel_dict</span><span class="p">[</span><span class="n">name</span><span class="p">])</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kernel_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())}</span></div>
+
+<div class="viewcode-block" id="convolutions2weightedNetInputs"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.spiking_output.convolutions2weightedNetInputs">[docs]</a><span class="k">def</span> <span class="nf">convolutions2weightedNetInputs</span><span class="p">(</span><span class="n">convolutions_dict</span><span class="p">,</span> <span class="n">combine_fun</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">combine_fun</span><span class="p">([</span><span class="n">convolutions_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">convolutions_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())])</span></div>
+
+<div class="viewcode-block" id="weightedNetInput2spikingProbabilities"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.spiking_output.weightedNetInput2spikingProbabilities">[docs]</a><span class="k">def</span> <span class="nf">weightedNetInput2spikingProbabilities</span><span class="p">(</span><span class="n">weighted_net_input</span><span class="p">,</span> <span class="n">nonlinearity</span><span class="p">,</span> <span class="n">LUT_resolution</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">weighted_net_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">weighted_net_input</span><span class="o">/</span><span class="n">LUT_resolution</span><span class="p">)</span><span class="o">*</span><span class="n">LUT_resolution</span>
+    <span class="n">weighted_net_input</span><span class="p">[</span><span class="n">weighted_net_input</span> <span class="o">&lt;</span> <span class="n">nonlinearity</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()]</span> <span class="o">=</span> <span class="n">nonlinearity</span><span class="p">[</span><span class="n">nonlinearity</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()]</span>
+    <span class="n">weighted_net_input</span><span class="p">[</span><span class="n">weighted_net_input</span> <span class="o">&gt;</span> <span class="n">nonlinearity</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span> <span class="o">=</span> <span class="n">nonlinearity</span><span class="p">[</span><span class="n">nonlinearity</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span>    
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nonlinearity</span><span class="p">[</span><span class="n">weighted_net_input</span><span class="p">[:,</span><span class="n">n</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">weighted_net_input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="spikingProbabilities2rawPSTH"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.spiking_output.spikingProbabilities2rawPSTH">[docs]</a><span class="k">def</span> <span class="nf">spikingProbabilities2rawPSTH</span><span class="p">(</span><span class="n">spiking_probabilities</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">spiking_probabilities</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="calculateFractionAbleToSpike"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.spiking_output.calculateFractionAbleToSpike">[docs]</a><span class="k">def</span> <span class="nf">calculateFractionAbleToSpike</span><span class="p">(</span><span class="n">rawPSTH</span><span class="p">,</span> <span class="n">refractory_period</span><span class="p">):</span>
+    <span class="n">able_to_spike</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">n_deactivated</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>    
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">rawPSTH</span><span class="p">:</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">able_to_spike</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">e</span> <span class="c1"># amount of trails that would spike right now</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_deactivated</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">refractory_period</span><span class="p">:</span>
+                <span class="n">activated</span> <span class="o">=</span> <span class="n">n_deactivated</span><span class="p">[</span><span class="o">-</span><span class="n">refractory_period</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">activated</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">n_deactivated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>                
+            <span class="n">able_to_spike</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">able_to_spike</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">diff</span> <span class="o">+</span> <span class="n">activated</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">able_to_spike</span></div>
+
+<div class="viewcode-block" id="correct_PSTH_by_refractory_period"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.spiking_output.correct_PSTH_by_refractory_period">[docs]</a><span class="k">def</span> <span class="nf">correct_PSTH_by_refractory_period</span><span class="p">(</span><span class="n">PSTH</span><span class="p">,</span> <span class="n">refractory_period</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;return_ = &#39;only_PSTH&#39; or  &#39;PSTH_and_abletospike&#39; &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">refractory_period</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">PSTH</span><span class="p">))</span>
+    <span class="n">able_to_spike</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">n_deactivated</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>  
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">PSTH</span><span class="p">:</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">able_to_spike</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">e</span> <span class="c1"># amount of trails that would spike right now</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_deactivated</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">refractory_period</span><span class="p">:</span>
+                <span class="n">activated</span> <span class="o">=</span> <span class="n">n_deactivated</span><span class="p">[</span><span class="o">-</span><span class="n">refractory_period</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">activated</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">n_deactivated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>                
+            <span class="n">able_to_spike</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">able_to_spike</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">diff</span> <span class="o">+</span> <span class="n">activated</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">able_to_spike</span></div>
+
+<div class="viewcode-block" id="calculatePSTH"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.spiking_output.calculatePSTH">[docs]</a><span class="k">def</span> <span class="nf">calculatePSTH</span><span class="p">(</span><span class="n">rawPSTH</span><span class="p">,</span> <span class="n">able_to_spike</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">a</span><span class="o">*</span><span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rawPSTH</span><span class="p">,</span> <span class="n">able_to_spike</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="apply_reduced_model"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.spiking_output.apply_reduced_model">[docs]</a><span class="k">def</span> <span class="nf">apply_reduced_model</span><span class="p">(</span><span class="n">X_dict</span><span class="p">,</span> <span class="n">kernel_dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">nonlinearity_LUT</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">refractory_period</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">combine_fun</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">LUT_resolution</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">convolutions_dict</span> <span class="o">=</span> <span class="n">data2Convolutions</span><span class="p">(</span><span class="n">X_dict</span><span class="p">,</span> <span class="n">kernel_dict</span><span class="p">)</span>
+    <span class="n">weighted_net_input</span> <span class="o">=</span> <span class="n">convolutions2weightedNetInputs</span><span class="p">(</span><span class="n">convolutions_dict</span><span class="p">,</span> <span class="n">combine_fun</span><span class="p">)</span>
+    <span class="n">nonlinearity</span> <span class="o">=</span> <span class="n">nonlinearity_LUT</span><span class="p">[</span><span class="n">refractory_period</span><span class="p">]</span>
+    <span class="n">spiking_probabilities</span> <span class="o">=</span> <span class="n">weightedNetInput2spikingProbabilities</span><span class="p">(</span><span class="n">weighted_net_input</span><span class="p">,</span> <span class="n">nonlinearity</span><span class="p">,</span> <span class="n">LUT_resolution</span><span class="p">)</span>
+    <span class="n">rawPSTH</span> <span class="o">=</span> <span class="n">spikingProbabilities2rawPSTH</span><span class="p">(</span><span class="n">spiking_probabilities</span><span class="p">)</span>
+    <span class="n">able_to_spike</span> <span class="o">=</span> <span class="n">correct_PSTH_by_refractory_period</span><span class="p">(</span><span class="n">rawPSTH</span><span class="p">,</span> <span class="n">refractory_period</span><span class="p">)</span>
+    <span class="n">PSTH</span> <span class="o">=</span> <span class="n">calculatePSTH</span><span class="p">(</span><span class="n">rawPSTH</span><span class="p">,</span> <span class="n">able_to_spike</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;convolutions_dict&#39;</span><span class="p">:</span> <span class="n">convolutions_dict</span><span class="p">,</span> <span class="s1">&#39;weighted_net_input&#39;</span><span class="p">:</span> <span class="n">weighted_net_input</span><span class="p">,</span> \
+           <span class="s1">&#39;spiking_probabilities&#39;</span><span class="p">:</span> <span class="n">spiking_probabilities</span><span class="p">,</span> <span class="s1">&#39;rawPSTH&#39;</span><span class="p">:</span> <span class="n">rawPSTH</span><span class="p">,</span> \
+           <span class="s1">&#39;able_to_spike&#39;</span><span class="p">:</span> <span class="n">able_to_spike</span><span class="p">,</span> <span class="s1">&#39;PSTH&#39;</span><span class="p">:</span> <span class="n">PSTH</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="get_reduced_model"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.spiking_output.get_reduced_model">[docs]</a><span class="k">def</span> <span class="nf">get_reduced_model</span><span class="p">(</span><span class="n">kernel_dict</span><span class="p">,</span> <span class="n">nonlinearity_LUT</span><span class="p">,</span> <span class="n">refractory_period</span><span class="p">,</span> <span class="n">combine_fun</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">LUT_resolution</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;returns a function which you can feed with data and which will return evaluation results of the reduced model.</span>
+<span class="sd">    </span>
+<span class="sd">    kernel_dict: dictionary of kernels, e.g. if you have a seperated kernel for EXC and INH input, </span>
+<span class="sd">        you could use {&#39;EXC&#39;: [0,0,1], &#39;INH&#39;: [0,1,1]}</span>
+<span class="sd">    </span>
+<span class="sd">    nonlinearity_LUT: dictionary, that contains values of nonlinearity. Keys are refractory periods. E.g.</span>
+<span class="sd">        you could have a dict like this: {0: pd.Series([0,0,.1,.2,.4,.3,.1,0,0]), 10: pd.Series([[0,0,.1,.2,.4,.8,1,1,1]])}.</span>
+<span class="sd">    </span>
+<span class="sd">    combine_fun: function to combine convolutions of a single trail together. Default:  sum</span>
+<span class="sd">    </span>
+<span class="sd">    LUT_resolution: reolution of the nonlinearity_LUT. E.g. in case LUT_resolution == 1, the pd.Series objects </span>
+<span class="sd">        in the nonlinearity_LUT are expect to have keys for [...,0,1,2,3, ...], in case of LUT_resolution == 2,</span>
+<span class="sd">        the pd.Series objects in the nonlinearity_LUT are expect to have keys for [...,0,2,4,6, ...]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">apply_reduced_model</span><span class="p">,</span> <span class="n">kernel_dict</span> <span class="o">=</span> <span class="n">kernel_dict</span><span class="p">,</span> <span class="n">nonlinearity_LUT</span> <span class="o">=</span> <span class="n">nonlinearity_LUT</span><span class="p">,</span> \
+                   <span class="n">refractory_period</span> <span class="o">=</span> <span class="n">refractory_period</span><span class="p">,</span> <span class="n">combine_fun</span> <span class="o">=</span> <span class="n">combine_fun</span><span class="p">,</span> <span class="n">LUT_resolution</span> <span class="o">=</span> <span class="n">LUT_resolution</span><span class="p">)</span></div>
+
+<span class="c1"># tests</span>
+<span class="n">INH</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">EXC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">kernel_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;EXC&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;INH&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]}</span>
+<span class="n">nonlinearity_LUT</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">1</span><span class="p">})}</span>
+<span class="n">rm</span> <span class="o">=</span> <span class="n">get_reduced_model</span><span class="p">(</span><span class="n">kernel_dict</span><span class="p">,</span> <span class="n">nonlinearity_LUT</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">rm</span><span class="p">({</span><span class="s1">&#39;EXC&#39;</span><span class="p">:</span> <span class="n">EXC</span><span class="p">,</span> <span class="s1">&#39;INH&#39;</span><span class="p">:</span> <span class="n">INH</span><span class="p">})</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;convolutions_dict&#39;</span><span class="p">][</span><span class="s1">&#39;EXC&#39;</span><span class="p">],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;convolutions_dict&#39;</span><span class="p">][</span><span class="s1">&#39;INH&#39;</span><span class="p">],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;weighted_net_input&#39;</span><span class="p">],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;spiking_probabilities&#39;</span><span class="p">],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;rawPSTH&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">in_silico_framework</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

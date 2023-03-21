@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tests.test_simrun3.somatic_summation_model_test &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for tests.test_simrun3.somatic_summation_model_test</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">decorators</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">context</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">Interface</span> <span class="kn">import</span> <span class="n">defaultdict_defaultdict</span>
+<span class="kn">from</span> <span class="nn">simrun3.somatic_summation_model</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="FakePSP"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.somatic_summation_model_test.FakePSP">[docs]</a><span class="k">class</span> <span class="nc">FakePSP</span><span class="p">:</span>
+<div class="viewcode-block" id="FakePSP.__init__"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.somatic_summation_model_test.FakePSP.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tEnd</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">tStim</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tEnd</span> <span class="o">=</span> <span class="n">tEnd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tStim</span> <span class="o">=</span> <span class="n">tStim</span></div>
+<div class="viewcode-block" id="FakePSP.get_voltage_traces"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.somatic_summation_model_test.FakePSP.get_voltage_traces">[docs]</a>    <span class="k">def</span> <span class="nf">get_voltage_traces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">defaultdict_defaultdict</span><span class="p">()</span>
+        <span class="n">converter</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;Generic1&#39;</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">converter</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;Generic1&#39;</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">converter</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;Generic1&#39;</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+                                           <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+                                           <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;Generic1&#39;</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                                          <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                                          <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;Generic2&#39;</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">converter</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;Generic2&#39;</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">converter</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;Generic2&#39;</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+                                          <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+                                          <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;Generic2&#39;</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mf">1.</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                                          <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                                          <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>        
+        
+        
+        <span class="k">return</span> <span class="n">out</span>
+        <span class="k">pass</span></div></div>
+    
+<span class="k">def</span> <span class="nf">_get_pvt</span><span class="p">(</span><span class="n">tEnd</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">tStim</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dt</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tStop</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
+    <span class="n">psp</span> <span class="o">=</span> <span class="n">FakePSP</span><span class="p">(</span><span class="n">tEnd</span><span class="p">,</span> <span class="n">tStim</span><span class="p">)</span>
+    <span class="n">pvt</span> <span class="o">=</span> <span class="n">ParseVT</span><span class="p">(</span><span class="n">psp</span><span class="p">,</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span><span class="p">,</span> <span class="n">tStop</span> <span class="o">=</span> <span class="n">tStop</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pvt</span>
+
+<div class="viewcode-block" id="get_fake_synapse_activation_dataframe"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.somatic_summation_model_test.get_fake_synapse_activation_dataframe">[docs]</a><span class="k">def</span> <span class="nf">get_fake_synapse_activation_dataframe</span><span class="p">():</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sim_trial_index_1&#39;</span><span class="p">,</span> <span class="s1">&#39;sim_trial_index_1&#39;</span><span class="p">]</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;synapse_type&#39;</span><span class="p">,</span> <span class="s1">&#39;synapse_ID&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;Generic1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">],</span>
+             <span class="p">[</span><span class="s1">&#39;Generic2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">index</span><span class="p">)</span>  </div>
+
+<div class="viewcode-block" id="Tests"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.somatic_summation_model_test.Tests">[docs]</a><span class="k">class</span> <span class="nc">Tests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>       
+<div class="viewcode-block" id="Tests.setUp"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.somatic_summation_model_test.Tests.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@decorators</span><span class="o">.</span><span class="n">testlevel</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>    
+    <span class="k">def</span> <span class="nf">test_roll_rows_independently</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]])</span>    
+        <span class="n">A_rolled</span> <span class="o">=</span> <span class="n">roll_rows_independently</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span> 
+        <span class="n">A_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_equal</span><span class="p">(</span><span class="n">A_rolled</span><span class="p">,</span> <span class="n">A_expected</span><span class="p">)</span>    
+
+<div class="viewcode-block" id="Tests.test_compute_vt_array"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.somatic_summation_model_test.Tests.test_compute_vt_array">[docs]</a>    <span class="k">def</span> <span class="nf">test_compute_vt_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pvt</span> <span class="o">=</span> <span class="n">_get_pvt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">pvt</span><span class="o">.</span><span class="n">vt_array</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+        <span class="n">pvt</span> <span class="o">=</span> <span class="n">_get_pvt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">pvt</span><span class="o">.</span><span class="n">vt_array</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+        <span class="n">pvt</span> <span class="o">=</span> <span class="n">_get_pvt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">pvt</span><span class="o">.</span><span class="n">vt_array</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+        <span class="n">vt_array_index_expected</span> <span class="o">=</span> <span class="p">{(</span><span class="s1">&#39;Generic1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="mi">0</span><span class="p">,</span>
+         <span class="p">(</span><span class="s1">&#39;Generic1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span>
+         <span class="p">(</span><span class="s1">&#39;Generic1&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="mi">2</span><span class="p">,</span>
+         <span class="p">(</span><span class="s1">&#39;Generic2&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="mi">3</span><span class="p">,</span>
+         <span class="p">(</span><span class="s1">&#39;Generic2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="mi">4</span><span class="p">,</span>
+         <span class="p">(</span><span class="s1">&#39;Generic2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="mi">5</span><span class="p">}</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">pvt</span><span class="o">.</span><span class="n">vt_array_index</span> <span class="o">==</span> <span class="n">vt_array_index_expected</span><span class="p">)</span>
+        <span class="n">pvt</span> <span class="o">=</span> <span class="n">_get_pvt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">vt_array_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.3</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.3</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">]])</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_almost_equal</span><span class="p">(</span><span class="n">pvt</span><span class="o">.</span><span class="n">vt_array</span><span class="p">,</span> <span class="n">vt_array_expected</span><span class="p">)</span>
+        <span class="n">pvt</span> <span class="o">=</span> <span class="n">_get_pvt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">vt_array_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span> <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.3</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.3</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">]])</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_almost_equal</span><span class="p">(</span><span class="n">pvt</span><span class="o">.</span><span class="n">vt_array</span><span class="p">,</span> <span class="n">vt_array_expected</span><span class="p">)</span>
+        <span class="n">pvt</span> <span class="o">=</span> <span class="n">_get_pvt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_almost_equal</span><span class="p">(</span><span class="n">pvt</span><span class="o">.</span><span class="n">vt_array</span><span class="p">,</span> <span class="n">vt_array_expected</span><span class="p">)</span>
+        <span class="n">pvt</span> <span class="o">=</span> <span class="n">_get_pvt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">vt_array_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.3</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">],</span>
+               <span class="p">[</span> <span class="mf">0.3</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">]])</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_almost_equal</span><span class="p">(</span><span class="n">pvt</span><span class="o">.</span><span class="n">vt_array</span><span class="p">,</span> <span class="n">vt_array_expected</span><span class="p">)</span> </div>
+         
+<div class="viewcode-block" id="Tests.test_get_offsets_and_indices_from_sa"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.somatic_summation_model_test.Tests.test_get_offsets_and_indices_from_sa">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_offsets_and_indices_from_sa</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sa</span> <span class="o">=</span> <span class="n">get_fake_synapse_activation_dataframe</span><span class="p">()</span>
+        <span class="n">pvt</span> <span class="o">=</span> <span class="n">_get_pvt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">synapses</span><span class="p">,</span> <span class="n">offsets</span> <span class="o">=</span> <span class="n">pvt</span><span class="o">.</span><span class="n">_get_offsets_and_indices_from_sa</span><span class="p">(</span><span class="n">sa</span><span class="p">)</span>
+        <span class="n">synapses_expected</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Generic1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">&#39;Generic2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">&#39;Generic1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">&#39;Generic2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">&#39;Generic2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="n">offsets_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">synapses</span> <span class="o">==</span> <span class="n">synapses_expected</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_almost_equal</span><span class="p">(</span><span class="n">offsets</span><span class="p">,</span> <span class="n">offsets_expected</span><span class="p">)</span> </div>
+        
+<div class="viewcode-block" id="Tests.test_parse_sa_without_weights"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.somatic_summation_model_test.Tests.test_parse_sa_without_weights">[docs]</a>    <span class="k">def</span> <span class="nf">test_parse_sa_without_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pvt</span> <span class="o">=</span> <span class="n">_get_pvt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">t</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">pvt</span><span class="o">.</span><span class="n">parse_sa</span><span class="p">(</span><span class="n">get_fake_synapse_activation_dataframe</span><span class="p">())</span>
+        <span class="n">t_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">6</span><span class="p">,</span>  <span class="mi">7</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span>
+                <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">29</span><span class="p">])</span>
+        <span class="n">v_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>
+                 <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>
+                 <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">])</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_almost_equal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">t_expected</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_almost_equal</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v_expected</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Tests.test_parse_sa_with_weights"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.somatic_summation_model_test.Tests.test_parse_sa_with_weights">[docs]</a>    <span class="k">def</span> <span class="nf">test_parse_sa_with_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pvt</span> <span class="o">=</span> <span class="n">_get_pvt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">t</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">pvt</span><span class="o">.</span><span class="n">parse_sa</span><span class="p">(</span><span class="n">get_fake_synapse_activation_dataframe</span><span class="p">(),</span>  <span class="n">weights</span> <span class="o">=</span> <span class="p">{(</span><span class="s1">&#39;Generic1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Generic2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="mi">2</span><span class="p">})</span>
+        <span class="n">t_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">6</span><span class="p">,</span>  <span class="mi">7</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span>
+                <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">29</span><span class="p">])</span>
+        <span class="n">v_expected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">0.3</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.4</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.3</span><span class="p">,</span>
+             <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.4</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>
+             <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.4</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">,</span>  <span class="mf">0.</span> <span class="p">])</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_almost_equal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">t_expected</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_almost_equal</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v_expected</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">in_silico_framework</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../tests.html">tests</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

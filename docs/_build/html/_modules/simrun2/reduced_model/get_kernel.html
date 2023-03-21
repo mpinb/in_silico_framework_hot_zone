@@ -1,0 +1,528 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>simrun2.reduced_model.get_kernel &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for simrun2.reduced_model.get_kernel</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">dask</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">model_data_base</span> <span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">mdb_utils</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="c1">#############################################</span>
+<span class="c1"># general methods</span>
+<span class="c1">##############################################</span>
+<div class="viewcode-block" id="concatenate_return_boundaries"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.concatenate_return_boundaries">[docs]</a><span class="k">def</span> <span class="nf">concatenate_return_boundaries</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span><span class="p">)</span>
+    <span class="n">upper_bounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">])</span>
+    <span class="n">lower_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">upper_bounds</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">boundaries</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">lower_bounds</span><span class="p">,</span> <span class="n">upper_bounds</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">boundaries</span></div>
+
+<div class="viewcode-block" id="spike_in_interval"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.spike_in_interval">[docs]</a><span class="k">def</span> <span class="nf">spike_in_interval</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">st</span><span class="o">&gt;=</span><span class="n">tmin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">st</span><span class="o">&lt;</span><span class="n">tmax</span><span class="p">))</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>   </div>
+
+<div class="viewcode-block" id="compare_lists_by_none_values"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.compare_lists_by_none_values">[docs]</a><span class="k">def</span> <span class="nf">compare_lists_by_none_values</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+<span class="c1">##################################################</span>
+<span class="c1"># methods for selecting synapse activation data out of a model_data_base instance</span>
+<span class="c1"># and to convert it to a format suitable for scipy.linear_discriminant_analysis</span>
+<span class="c1">#####################################################</span>
+<span class="k">def</span> <span class="nf">_kernel_preprocess_data</span><span class="p">(</span><span class="n">mdb_list</span><span class="p">,</span> <span class="n">keys_to_synapse_activation_data</span><span class="p">,</span> \
+                            <span class="n">synapse_acivation_window_min</span><span class="p">,</span> <span class="n">synapse_activation_window_max</span><span class="p">,</span> \
+                            <span class="n">output_window_min</span><span class="p">,</span> <span class="n">output_window_max</span><span class="p">,</span> <span class="n">aggfun</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;takes a dictionary containing synapse activation data. This data is then</span>
+<span class="sd">    concatenated to one large matrix, which can be used for the lda estimator.</span>
+<span class="sd">    </span>
+<span class="sd">    data_dict has to have the following format:</span>
+<span class="sd">        key: ModelDataBase - instance</span>
+<span class="sd">        value: tuple containing keys to the synapse activation date</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">     - the large matrix</span>
+<span class="sd">     - spike_times</span>
+<span class="sd">     - a dictionary with the same keys as data_dict. Values are the respective columns</span>
+<span class="sd">       in which this data can be found in the large matrix&#39;&#39;&#39;</span>
+
+    <span class="n">ys</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Xs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">spike_before</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sts</span> <span class="o">=</span> <span class="p">[]</span>    
+    <span class="k">for</span> <span class="n">mdb</span> <span class="ow">in</span> <span class="n">mdb_list</span><span class="p">:</span>
+        <span class="c1"># get spike times for current mdb</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">mdb</span><span class="p">[</span><span class="s1">&#39;spike_times&#39;</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">spike_in_interval</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">output_window_min</span><span class="p">,</span> <span class="n">output_window_max</span><span class="p">))</span>
+        <span class="c1"># get values for current mdb</span>
+        <span class="n">mdb_values</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">mdb</span><span class="p">[</span><span class="n">k</span><span class="p">][:,</span> <span class="n">synapse_acivation_window_min</span><span class="p">:</span><span class="n">synapse_activation_window_max</span><span class="p">]</span>\
+                      <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys_to_synapse_activation_data</span><span class="p">}</span>
+        
+        <span class="k">if</span> <span class="n">aggfun</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="n">keys_to_synapse_activation_data</span>
+            <span class="n">mdb_values_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">mdb_values</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">keys</span><span class="p">,</span> <span class="n">mdb_values_list</span> <span class="o">=</span> <span class="n">aggfun</span><span class="p">(</span><span class="n">mdb_values</span><span class="p">)</span>
+        
+        <span class="n">X</span><span class="p">,</span> <span class="n">boundaries</span> <span class="o">=</span> <span class="n">concatenate_return_boundaries</span><span class="p">(</span><span class="n">mdb_values_list</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+  
+        <span class="n">ys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">Xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">sts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+    
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">Xs</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">sts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">))),</span> <span class="n">y</span><span class="p">,</span> <span class="n">st</span>
+
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="k">def</span> <span class="nf">_kernel_dict_from_clfs</span><span class="p">(</span><span class="n">clfs</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;splits result of lda estimator based on boundaries&#39;&#39;&#39;</span>  
+    <span class="n">kernel_dict</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">clfs</span><span class="p">[</span><span class="s1">&#39;classifier_&#39;</span><span class="p">]:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">boundaries</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">kernel_dict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> 
+    <span class="k">return</span> <span class="n">kernel_dict</span>
+
+<span class="c1">#################################</span>
+<span class="c1"># methods specific for the task of building a reduced model</span>
+<span class="c1">#################################</span>
+
+<div class="viewcode-block" id="interpolate_lookup_series"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.interpolate_lookup_series">[docs]</a><span class="k">def</span> <span class="nf">interpolate_lookup_series</span><span class="p">(</span><span class="n">lookup_series</span><span class="p">):</span>
+    <span class="n">stepsize</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">lookup_series</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">lookup_series</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="c1">#print &#39;lookup_series:&#39;, diff, len(lookup_series)</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">lookup_series</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">diff</span><span class="p">),</span> \
+                                                   <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">lookup_series</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">diff</span><span class="p">),</span> \
+                                                   <span class="n">stepsize</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="n">index</span> <span class="o">=</span> <span class="n">index</span><span class="p">)</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">s</span><span class="p">[</span><span class="n">lookup_series</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">lookup_series</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;linear&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_lookup_series_from_lda_values_spike_data"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.get_lookup_series_from_lda_values_spike_data">[docs]</a><span class="k">def</span> <span class="nf">get_lookup_series_from_lda_values_spike_data</span><span class="p">(</span><span class="n">lda_values</span><span class="p">,</span> <span class="n">spike</span><span class="p">,</span> <span class="n">spike_before</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>\
+                                                 <span class="n">lookup_series_stepsize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    </span>
+<span class="sd">    lda_values: one-dimensional array containing lda_values of trail</span>
+<span class="sd">    spike: one-dimensional array containing True / False</span>
+<span class="sd">    mask: one-dimensional array containing True / False.</span>
+<span class="sd">        If True: the respective trail will be ignored.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">pdf2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">lda_values</span> <span class="o">=</span> <span class="n">lda_values</span><span class="p">,</span> <span class="n">spike</span> <span class="o">=</span> <span class="n">spike</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">spike_before</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pdf</span> <span class="o">=</span> <span class="n">pdf2</span><span class="p">[</span><span class="o">~</span><span class="n">spike_before</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pdf</span> <span class="o">=</span> <span class="n">pdf2</span>
+    <span class="n">groupby_</span> <span class="o">=</span> <span class="p">(</span><span class="n">pdf</span><span class="o">.</span><span class="n">lda_values</span><span class="o">/</span><span class="n">lookup_series_stepsize</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">groupby_</span> <span class="o">=</span> <span class="n">groupby_</span><span class="o">*</span><span class="n">lookup_series_stepsize</span>
+    <span class="n">lookup_series</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">groupby_</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">spike</span><span class="p">])</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">interpolate_lookup_series</span><span class="p">(</span><span class="n">lookup_series</span><span class="p">)</span></div>
+
+<span class="c1">##############################</span>
+<span class="c1"># visualize reduced model</span>
+<span class="c1">##############################</span>
+<div class="viewcode-block" id="get_plt_axis"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.get_plt_axis">[docs]</a><span class="k">def</span> <span class="nf">get_plt_axis</span><span class="p">():</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">dpi</span> <span class="o">=</span> <span class="mi">300</span><span class="p">)</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span> 
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
+
+<div class="viewcode-block" id="plot_kernel_dict"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.plot_kernel_dict">[docs]</a><span class="k">def</span> <span class="nf">plot_kernel_dict</span><span class="p">(</span><span class="n">kernel_dict</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>  
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">get_plt_axis</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;kernel shape&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;# time bin&#39;</span><span class="p">)</span>      
+    <span class="c1"># plot kernel</span>
+    <span class="kn">import</span> <span class="nn">six</span>
+    <span class="k">for</span> <span class="n">lv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">kernel_dict</span><span class="p">)):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">kernel_dict</span><span class="p">[</span><span class="n">lv</span><span class="p">]</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_prop_cycle</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">lv</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">k</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="plot_LUT"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.plot_LUT">[docs]</a><span class="k">def</span> <span class="nf">plot_LUT</span><span class="p">(</span><span class="n">lookup_series</span><span class="p">,</span> <span class="n">lda_values</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">min_items</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">get_plt_axis</span><span class="p">()</span>    
+    <span class="c1"># plot data distribution and probability curve </span>
+    <span class="k">for</span> <span class="n">lv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lookup_series</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">lda_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">binned_lda_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">lda_values</span><span class="p">[</span><span class="n">lv</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">.</span>\
+                                    <span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+            <span class="n">binned_lda_values</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">secondary_y</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;g&#39;</span><span class="p">)</span>        
+        <span class="n">ls</span> <span class="o">=</span> <span class="n">lookup_series</span><span class="p">[</span><span class="n">lv</span><span class="p">]</span>
+        <span class="n">ls</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;lightblue&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">min_items</span><span class="p">:</span> 
+            <span class="n">max_</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">binned_lda_values</span><span class="p">[</span><span class="n">binned_lda_values</span> <span class="o">&gt;</span> <span class="n">min_items</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+            <span class="n">min_</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">binned_lda_values</span><span class="p">[</span><span class="n">binned_lda_values</span> <span class="o">&gt;</span> <span class="n">min_items</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+            
+            <span class="n">ls</span> <span class="o">=</span> <span class="n">ls</span><span class="p">[(</span><span class="n">ls</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">max_</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ls</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="n">min_</span><span class="p">)]</span>
+        <span class="n">ls</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;p_spike&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;# datapoints&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;lda_value&#39;</span><span class="p">)</span></div>
+<span class="c1">##################################</span>
+<span class="c1"># classes managing all the steps necessary to build a reduced model</span>
+<span class="c1">##################################</span>
+
+<div class="viewcode-block" id="ReducedLdaModelResult"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModelResult">[docs]</a><span class="k">class</span> <span class="nc">ReducedLdaModelResult</span><span class="p">():</span>
+<div class="viewcode-block" id="ReducedLdaModelResult.__init__"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModelResult.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">RM</span><span class="p">,</span> <span class="n">lda_dict</span><span class="p">,</span> <span class="n">lda_values</span><span class="p">,</span> <span class="n">p_spike</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RM</span> <span class="o">=</span> <span class="n">RM</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lda_dict</span> <span class="o">=</span> <span class="n">lda_dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lda_values</span> <span class="o">=</span> <span class="n">lda_values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_spike</span> <span class="o">=</span> <span class="n">p_spike</span></div></div>
+
+<div class="viewcode-block" id="ReducedLdaModel"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModel">[docs]</a><span class="k">class</span> <span class="nc">ReducedLdaModel</span><span class="p">():</span>
+<div class="viewcode-block" id="ReducedLdaModel.__init__"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModel.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> \
+                <span class="n">keys_to_synapse_activation_data</span><span class="p">,</span> \
+                <span class="n">synapse_activation_window_width</span> <span class="o">=</span> <span class="mi">80</span><span class="p">,</span> \
+                <span class="n">synapse_activation_window_min</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> \
+                <span class="n">synapse_activation_window_max</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>\
+                <span class="n">output_window_min</span> <span class="o">=</span> <span class="mi">255</span><span class="p">,</span> <span class="n">output_window_max</span> <span class="o">=</span> <span class="mi">265</span><span class="p">,</span> <span class="n">refractory_period</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>\
+                <span class="n">normalize_group_size</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">verbosity</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> \
+                <span class="n">lookup_series_stepsize</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">cache</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">aggfun</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        
+        <span class="n">dummy</span> <span class="o">=</span> <span class="p">[</span><span class="n">synapse_activation_window_min</span><span class="p">,</span> <span class="n">synapse_activation_window_max</span><span class="p">,</span> <span class="n">synapse_activation_window_width</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">compare_lists_by_none_values</span><span class="p">(</span><span class="n">dummy</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]):</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">synapse_activation_window_width</span> <span class="o">==</span> <span class="n">synapse_activation_window_max</span> <span class="o">-</span> <span class="n">synapse_activation_window_min</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">compare_lists_by_none_values</span><span class="p">(</span><span class="n">dummy</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">]):</span>
+            <span class="n">synapse_activation_window_max</span> <span class="o">=</span> <span class="n">output_window_max</span>
+            <span class="n">synapse_activation_window_min</span> <span class="o">=</span> <span class="n">synapse_activation_window_max</span> <span class="o">-</span> <span class="n">synapse_activation_window_width</span>
+        <span class="k">elif</span> <span class="n">compare_lists_by_none_values</span><span class="p">(</span><span class="n">dummy</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">]):</span>
+            <span class="n">synapse_activation_window_max</span> <span class="o">=</span> <span class="n">synapse_activation_window_min</span> <span class="o">+</span> <span class="n">synapse_activation_window_width</span>
+        <span class="k">elif</span> <span class="n">compare_lists_by_none_values</span><span class="p">(</span><span class="n">dummy</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">]):</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;synapse_activation_window not sufficiently defined.&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">keys_to_synapse_activation_data</span> <span class="o">=</span> <span class="n">keys_to_synapse_activation_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">synapse_activation_window_min</span> <span class="o">=</span> <span class="n">synapse_activation_window_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">synapse_activation_window_max</span> <span class="o">=</span> <span class="n">synapse_activation_window_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_window_min</span> <span class="o">=</span> <span class="n">output_window_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_window_max</span> <span class="o">=</span> <span class="n">output_window_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refractory_period</span> <span class="o">=</span> <span class="n">refractory_period</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normalize_group_size</span> <span class="o">=</span> <span class="n">normalize_group_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="n">test_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="n">verbosity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lookup_series_stepsize</span> <span class="o">=</span> <span class="n">lookup_series_stepsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aggfun</span> <span class="o">=</span> <span class="n">aggfun</span>
+        
+        <span class="k">if</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_rolling</span> <span class="o">=</span> <span class="n">mdb_utils</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_rolling</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_static</span> <span class="o">=</span> <span class="n">mdb_utils</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_static</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="ReducedLdaModel.fit"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModel.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdb_list</span><span class="p">,</span> <span class="n">clfs</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>    
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdb_list</span> <span class="o">=</span> <span class="n">mdb_list</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">st</span> <span class="o">=</span> <span class="n">_kernel_preprocess_data</span><span class="p">(</span><span class="n">mdb_list</span><span class="p">,</span> \
+                                <span class="bp">self</span><span class="o">.</span><span class="n">keys_to_synapse_activation_data</span><span class="p">,</span> \
+                                <span class="bp">self</span><span class="o">.</span><span class="n">synapse_activation_window_min</span><span class="p">,</span> \
+                                <span class="bp">self</span><span class="o">.</span><span class="n">synapse_activation_window_max</span><span class="p">,</span> \
+                                <span class="bp">self</span><span class="o">.</span><span class="n">output_window_min</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_window_max</span><span class="p">,</span> \
+                                <span class="n">aggfun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggfun</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">st</span> <span class="o">=</span> <span class="n">st</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spike_before</span> <span class="o">=</span>  <span class="n">spike_in_interval</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> \
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">output_window_min</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">refractory_period</span><span class="p">,</span> \
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">output_window_min</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        
+        <span class="kn">import</span> <span class="nn">Interface</span> <span class="k">as</span> <span class="nn">I</span>
+        <span class="k">if</span> <span class="n">clfs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clfs</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">lda_prediction_rates</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">spike_before</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">spike_before</span><span class="p">],</span> \
+                                           <span class="n">verbosity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbosity</span><span class="p">,</span> <span class="n">return_</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span> \
+                                           <span class="n">normalize_group_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_group_size</span><span class="p">,</span> \
+                                           <span class="n">test_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">clfs</span> <span class="o">=</span> <span class="n">clfs</span>
+        
+        <span class="c1"># added to keep the normalization that was present at the timepoint of development</span>
+        <span class="k">for</span> <span class="n">lv</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clfs</span><span class="p">[</span><span class="s1">&#39;classifier_&#39;</span><span class="p">]):</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="mf">7.260991424242837</span> <span class="o">/</span> <span class="n">I</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]]))</span> 
+            <span class="n">x</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="n">x</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">norm</span> <span class="c1"># normalization factor, as length of vector changes between python versions</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_dict</span> <span class="o">=</span> <span class="n">_kernel_dict_from_clfs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clfs</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">)</span>
+        <span class="c1">## todo: kernel_dicts</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">lda_value_dicts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lookup_series</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lda_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">kernel_dict</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel_dict</span><span class="p">:</span>
+            <span class="n">lda_values_dict</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">boundaries</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">boundaries</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">lda_values_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">kernel_dict</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="n">lda_values</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lda_values_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="n">lookup_series</span> <span class="o">=</span> <span class="n">get_lookup_series_from_lda_values_spike_data</span><span class="p">(</span><span class="n">lda_values</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> \
+                                         <span class="n">lookup_series_stepsize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_series_stepsize</span><span class="p">,</span> \
+                                         <span class="n">spike_before</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spike_before</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lookup_series</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lookup_series</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lda_value_dicts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lda_values_dict</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lda_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lda_values</span><span class="p">)</span></div>
+            
+<div class="viewcode-block" id="ReducedLdaModel.get_lookup_series_for_different_refractory_period"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModel.get_lookup_series_for_different_refractory_period">[docs]</a>    <span class="k">def</span> <span class="nf">get_lookup_series_for_different_refractory_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refractory_period</span><span class="p">):</span>
+        <span class="n">spike_before</span> <span class="o">=</span>  <span class="n">spike_in_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">st</span><span class="p">,</span>\
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">output_window_min</span> <span class="o">-</span> <span class="n">refractory_period</span><span class="p">,</span> \
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">output_window_min</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">lv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_dict</span><span class="p">)):</span>
+            <span class="n">dummy</span> <span class="o">=</span> <span class="n">get_lookup_series_from_lda_values_spike_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lda_values</span><span class="p">[</span><span class="n">lv</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> 
+                                                                 <span class="n">lookup_series_stepsize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_series_stepsize</span><span class="p">,</span> 
+                                                                 <span class="n">spike_before</span> <span class="o">=</span> <span class="n">spike_before</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dummy</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+        
+<div class="viewcode-block" id="ReducedLdaModel.plot"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModel.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_fig</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">min_items</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">fig1</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">get_plt_axis</span><span class="p">()</span>
+        <span class="n">plot_kernel_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_dict</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+        <span class="n">fig2</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">get_plt_axis</span><span class="p">()</span>
+        <span class="n">plot_LUT</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lookup_series</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lda_values</span><span class="p">,</span> <span class="n">min_items</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;probability of spike in interval &#39;</span>\
+                      <span class="o">+</span> <span class="s1">&#39;[</span><span class="si">{output_window_min}</span><span class="s1">:</span><span class="si">{output_window_max}</span><span class="s1">] depending on lda_value, refractory_period = </span><span class="si">{ref}</span><span class="s1">&#39;</span>
+                      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_window_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_window_min</span><span class="p">,</span> \
+                              <span class="n">output_window_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_window_max</span><span class="p">,</span> \
+                              <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">refractory_period</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;lda_value&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_fig</span><span class="p">:</span> <span class="k">return</span> <span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span></div>
+    
+<div class="viewcode-block" id="ReducedLdaModel.get_minimodel_static"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModel.get_minimodel_static">[docs]</a>    <span class="k">def</span> <span class="nf">get_minimodel_static</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;returns partial, which can be called with keywords mdb or data_dict.</span>
+<span class="sd">        </span>
+<span class="sd">        The partial is constructed such that it can be serialized fast, allowing</span>
+<span class="sd">        efficient multiprocessing. This is the recommended way of sending a reduced</span>
+<span class="sd">        model through a network connection.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">_apply_static_helper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_series</span><span class="p">[</span><span class="n">model_number</span><span class="p">],</span> \
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">synapse_activation_window_min</span><span class="p">,</span> \
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">synapse_activation_window_max</span><span class="p">,</span> \
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">kernel_dict</span><span class="p">[</span><span class="n">model_number</span><span class="p">])</span></div>
+        
+<div class="viewcode-block" id="ReducedLdaModel.apply_static"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModel.apply_static">[docs]</a>    <span class="k">def</span> <span class="nf">apply_static</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">model_number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">rm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_minimodel_static</span><span class="p">(</span><span class="n">model_number</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rm</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="ReducedLdaModel.get_minimodel_rolling"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModel.get_minimodel_rolling">[docs]</a>    <span class="k">def</span> <span class="nf">get_minimodel_rolling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refractory_period</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">model_number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;returns partial, which can be called with keywords mdb or data_dict.</span>
+<span class="sd">        </span>
+<span class="sd">        The partial is constructed such that it can be serialized fast, allowing</span>
+<span class="sd">        efficient multiprocessing. This is the recommended way of sending a reduced</span>
+<span class="sd">        model through a network connection.&#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">spiking_output</span>
+        <span class="c1"># nonlinearity_LUT has a different format in the spiking output format:</span>
+        <span class="c1"># the key should be the refractory period, the value a single pd.Series object</span>
+        <span class="c1"># containing the LUT</span>
+        <span class="n">nonlinearity_LUT</span> <span class="o">=</span> <span class="p">{</span><span class="n">refractory_period</span><span class="p">:</span> \
+                            <span class="bp">self</span><span class="o">.</span><span class="n">get_lookup_series_for_different_refractory_period</span><span class="p">(</span><span class="n">refractory_period</span><span class="p">)[</span><span class="n">model_number</span><span class="p">]}</span>
+        <span class="n">rm</span> <span class="o">=</span> <span class="n">spiking_output</span><span class="o">.</span><span class="n">get_reduced_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel_dict</span><span class="p">[</span><span class="n">model_number</span><span class="p">],</span> \
+                                         <span class="n">nonlinearity_LUT</span><span class="p">,</span> \
+                                         <span class="n">refractory_period</span><span class="p">,</span> \
+                                         <span class="n">combine_fun</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">,</span> \
+                                         <span class="n">LUT_resolution</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">rm</span></div>
+    
+<div class="viewcode-block" id="ReducedLdaModel.apply_rolling"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModel.apply_rolling">[docs]</a>    <span class="k">def</span> <span class="nf">apply_rolling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span> </div>
+    
+<div class="viewcode-block" id="ReducedLdaModel.apply_static_param"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModel.apply_static_param">[docs]</a>    <span class="k">def</span> <span class="nf">apply_static_param</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="ReducedLdaModel.apply_rolling_param"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.ReducedLdaModel.apply_rolling_param">[docs]</a>    <span class="k">def</span> <span class="nf">apply_rolling_param</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div></div>
+    
+<span class="k">def</span> <span class="nf">_apply_static_helper</span><span class="p">(</span><span class="n">lookup_series</span><span class="p">,</span> <span class="n">min_index</span><span class="p">,</span> <span class="n">max_index</span><span class="p">,</span> <span class="n">kernel_dict</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;optimized to require minimal datatransfer to allow efficient multiprocessing&#39;&#39;&#39;</span>
+    <span class="c1"># preparing data</span>
+    <span class="n">lda_value_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">][:,</span> <span class="n">min_index</span><span class="p">:</span><span class="n">max_index</span><span class="p">],</span> \
+                          <span class="n">kernel_dict</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kernel_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())}</span>
+    <span class="n">lda_values</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lda_value_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">lda_values</span><span class="o">.</span><span class="n">round</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">lookup_series</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;lda values leave range of training data by more than 30%!&quot;</span><span class="p">)</span>
+        <span class="n">indices</span><span class="p">[</span><span class="n">indices</span><span class="o">&gt;</span><span class="nb">max</span><span class="p">(</span><span class="n">lookup_series</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">lookup_series</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">lookup_series</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;lda values leave range of training data by more than 30%!&quot;</span><span class="p">)</span>        
+        <span class="n">indices</span><span class="p">[</span><span class="n">indices</span><span class="o">&lt;</span><span class="nb">min</span><span class="p">(</span><span class="n">lookup_series</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lookup_series</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">p_spike</span> <span class="o">=</span> <span class="n">lookup_series</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">ReducedLdaModelResult</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">lda_value_dict</span><span class="p">,</span> <span class="n">lda_values</span><span class="p">,</span> <span class="n">p_spike</span><span class="p">)</span>
+<span class="c1">###################################</span>
+<span class="c1"># methods to get special kernels</span>
+<span class="c1">###################################            </span>
+<div class="viewcode-block" id="get_kernel_C2_grid"><a class="viewcode-back" href="../../../simrun2.reduced_model.html#simrun2.reduced_model.get_kernel.get_kernel_C2_grid">[docs]</a><span class="k">def</span> <span class="nf">get_kernel_C2_grid</span><span class="p">(</span><span class="n">keys_to_synapse_activation_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;synapse_activation&#39;</span><span class="p">,</span> <span class="s1">&#39;binned_t1&#39;</span><span class="p">,</span> <span class="s1">&#39;EI&#39;</span><span class="p">,</span> <span class="s1">&#39;proximal&#39;</span><span class="p">,</span><span class="s1">&#39;EXC&#39;</span><span class="p">,</span> <span class="s1">&#39;prox&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;synapse_activation&#39;</span><span class="p">,</span> <span class="s1">&#39;binned_t1&#39;</span><span class="p">,</span> <span class="s1">&#39;EI&#39;</span><span class="p">,</span> <span class="s1">&#39;proximal&#39;</span><span class="p">,</span><span class="s1">&#39;INH&#39;</span><span class="p">,</span> <span class="s1">&#39;prox&#39;</span><span class="p">)],</span> \
+                <span class="n">synapse_activation_window_width</span> <span class="o">=</span> <span class="mi">80</span><span class="p">,</span> \
+                <span class="n">synapse_activation_window_min</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> \
+                <span class="n">synapse_activation_window_max</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>\
+                <span class="n">output_window_min</span> <span class="o">=</span> <span class="mi">255</span><span class="p">,</span> <span class="n">output_window_max</span> <span class="o">=</span> <span class="mi">265</span><span class="p">,</span> <span class="n">refractory_period</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>\
+                <span class="n">normalize_group_size</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">verbosity</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> \
+                <span class="n">lookup_series_stepsize</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">cache</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">mdbs</span> <span class="o">=</span> <span class="s1">&#39;mdbs_inhrobert&#39;</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">Interface</span> <span class="k">as</span> <span class="nn">I</span>
+    <span class="sd">&#39;&#39;&#39;returns : clfs, lookup_series, pdf&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">spike_in_interval</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">st</span><span class="o">&gt;=</span><span class="n">tmin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">st</span><span class="o">&lt;</span><span class="n">tmax</span><span class="p">))</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>    
+    
+    <span class="k">def</span> <span class="nf">get_mdbs_inhrobert</span><span class="p">():</span>    
+        <span class="n">basedir</span> <span class="o">=</span> <span class="s1">&#39;/nas1/Data_arco/results/20170222_SuW_stimulus_in_C2_grid/&#39;</span>
+        <span class="n">stim</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">]</span>
+        <span class="n">mdbs</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="p">:</span> <span class="n">I</span><span class="o">.</span><span class="n">ModelDataBase</span><span class="p">(</span><span class="n">I</span><span class="o">.</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basedir</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="s1">&#39;mdb&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">stim</span><span class="p">}</span>
+        <span class="n">mdbs</span><span class="p">[</span><span class="s1">&#39;C2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">ModelDataBase</span><span class="p">(</span><span class="s1">&#39;/nas1/Data_arco/results/20170214_use_cell_grid_with_soma_at_constant_depth_below_layer_4_to_evaluate_location_dependency_of_evoked_responses/mdb/&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mdbs</span>
+    
+    <span class="k">def</span> <span class="nf">get_mdbs_inh24</span><span class="p">():</span>    
+        <span class="n">basedir</span> <span class="o">=</span> <span class="s1">&#39;/nas1/Data_arco/results/20170509_grid_with_tuned_INH_v2/mdbs/</span><span class="si">{stim}</span><span class="s1">&#39;</span>
+        <span class="n">stim</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;D3&#39;</span><span class="p">]</span>    
+        <span class="n">mdbs</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="p">:</span> <span class="n">I</span><span class="o">.</span><span class="n">ModelDataBase</span><span class="p">(</span><span class="n">basedir</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">stim</span> <span class="o">=</span> <span class="n">s</span><span class="p">))</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">stim</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">mdbs</span>
+    
+    <span class="k">if</span> <span class="n">mdbs</span> <span class="o">==</span> <span class="s1">&#39;mdbs_inhrobert&#39;</span><span class="p">:</span>
+        <span class="n">mdbs</span> <span class="o">=</span> <span class="n">get_mdbs_inhrobert</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">mdbs</span> <span class="o">==</span> <span class="s1">&#39;mdbs_inh24&#39;</span><span class="p">:</span>
+        <span class="n">mdbs</span> <span class="o">=</span> <span class="n">get_mdbs_inh24</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">pass</span> <span class="c1"># mdbs needs to be a dictionary</span>
+
+    <span class="c1">#extract training values</span>
+    <span class="n">rm</span> <span class="o">=</span> <span class="n">ReducedLdaModel</span><span class="p">(</span><span class="n">keys_to_synapse_activation_data</span><span class="p">,</span> \
+                <span class="n">synapse_activation_window_width</span><span class="p">,</span> \
+                <span class="n">synapse_activation_window_min</span><span class="p">,</span> \
+                <span class="n">synapse_activation_window_max</span><span class="p">,</span>\
+                <span class="n">output_window_min</span><span class="p">,</span> <span class="n">output_window_max</span><span class="p">,</span> <span class="n">refractory_period</span><span class="p">,</span>\
+                <span class="n">normalize_group_size</span><span class="p">,</span> <span class="n">test_size</span><span class="p">,</span> <span class="n">verbosity</span><span class="p">,</span> \
+                <span class="n">lookup_series_stepsize</span><span class="p">,</span> <span class="n">cache</span><span class="p">)</span>
+    
+    <span class="n">rm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mdbs</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="k">return</span> <span class="n">rm</span></div>
+
+<span class="n">get_kernel_C2_grid_cached</span> <span class="o">=</span> <span class="n">mdb_utils</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="n">get_kernel_C2_grid</span><span class="p">)</span>
+
+<span class="c1"># def C2_grid_10ms_to_20ms_poststim():</span>
+<span class="c1">#     &#39;&#39;&#39;returns : clfs, lookup_series, pdf&#39;&#39;&#39;</span>
+<span class="c1">#     warnings.warn(DeprecationWarning(&quot;Deprecated: Use get_kernel_C2_grid instead&quot;))</span>
+<span class="c1">#     return get_kernel_C2_grid(output_window_min = 255, output_window_max = 265)</span>
+    
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">in_silico_framework</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

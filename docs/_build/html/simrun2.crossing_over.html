@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>simrun2.crossing_over package &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="simrun2.reduced_model package" href="simrun2.reduced_model.html" />
+    <link rel="prev" title="simrun2 package" href="simrun2.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="simrun2-crossing-over-package">
+<h1>simrun2.crossing_over package<a class="headerlink" href="#simrun2-crossing-over-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-simrun2.crossing_over.crossing_over_simple_interface">
+<span id="simrun2-crossing-over-crossing-over-simple-interface-module"></span><h2>simrun2.crossing_over.crossing_over_simple_interface module<a class="headerlink" href="#module-simrun2.crossing_over.crossing_over_simple_interface" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="simrun2.crossing_over.crossing_over_simple_interface.crossing_over">
+<code class="sig-prename descclassname">simrun2.crossing_over.crossing_over_simple_interface.</code><code class="sig-name descname">crossing_over</code><span class="sig-paren">(</span><em class="sig-param">mdb</em>, <em class="sig-param">sim_trails</em>, <em class="sig-param">time</em>, <em class="sig-param">cellParamName</em>, <em class="sig-param">evokedUpParamName</em>, <em class="sig-param">dirPrefix=''</em>, <em class="sig-param">nSweeps=1000</em>, <em class="sig-param">tStop=345</em>, <em class="sig-param">silent=True</em>, <em class="sig-param">scale_apical=&lt;function scale_apical&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simrun2/crossing_over/crossing_over_simple_interface.html#crossing_over"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.crossing_over.crossing_over_simple_interface.crossing_over" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="simrun2.crossing_over.crossing_over_simple_interface.crossing_over_helper">
+<code class="sig-prename descclassname">simrun2.crossing_over.crossing_over_simple_interface.</code><code class="sig-name descname">crossing_over_helper</code><span class="sig-paren">(</span><em class="sig-param">pdf</em>, <em class="sig-param">time</em>, <em class="sig-param">cellParamName</em>, <em class="sig-param">evokedUpParamName</em>, <em class="sig-param">dirPrefix=''</em>, <em class="sig-param">nSweeps=1000</em>, <em class="sig-param">tStop=345</em>, <em class="sig-param">silent=True</em>, <em class="sig-param">scale_apical=&lt;function scale_apical&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simrun2/crossing_over/crossing_over_simple_interface.html#crossing_over_helper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.crossing_over.crossing_over_simple_interface.crossing_over_helper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="simrun2.crossing_over.crossing_over_simple_interface.scale_apical">
+<code class="sig-prename descclassname">simrun2.crossing_over.crossing_over_simple_interface.</code><code class="sig-name descname">scale_apical</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cell</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simrun2/crossing_over/crossing_over_simple_interface.html#scale_apical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.crossing_over.crossing_over_simple_interface.scale_apical" title="Permalink to this definition">¶</a></dt>
+<dd><p>scale apical diameters depending on
+distance to soma; therefore only possible
+after creating complete cell</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-simrun2.crossing_over.run_skip_time">
+<span id="simrun2-crossing-over-run-skip-time-module"></span><h2>simrun2.crossing_over.run_skip_time module<a class="headerlink" href="#module-simrun2.crossing_over.run_skip_time" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="simrun2.crossing_over.run_skip_time.skip_time">
+<code class="sig-prename descclassname">simrun2.crossing_over.run_skip_time.</code><code class="sig-name descname">skip_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">t_skip_start</span></em>, <em class="sig-param"><span class="n">t_skip_end</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simrun2/crossing_over/run_skip_time.html#skip_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.crossing_over.run_skip_time.skip_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>accepts a synapse activation pandas data frame. Returns a dataframe, where
+synapse activation in the specified interval is skipped.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="simrun2.crossing_over.run_skip_time.skip_time_and_save">
+<code class="sig-prename descclassname">simrun2.crossing_over.run_skip_time.</code><code class="sig-name descname">skip_time_and_save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df_db</span></em>, <em class="sig-param"><span class="n">sim_trail_index</span></em>, <em class="sig-param"><span class="n">t_skip_start</span></em>, <em class="sig-param"><span class="n">t_skip_end</span></em>, <em class="sig-param"><span class="n">dirPrefix</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simrun2/crossing_over/run_skip_time.html#skip_time_and_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.crossing_over.run_skip_time.skip_time_and_save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="simrun2.crossing_over.run_skip_time.skip_time_and_save_parallel">
+<code class="sig-prename descclassname">simrun2.crossing_over.run_skip_time.</code><code class="sig-name descname">skip_time_and_save_parallel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">synapse_activation_db</span></em>, <em class="sig-param"><span class="n">sim_trail_index_list</span></em>, <em class="sig-param"><span class="n">t_skip_start</span></em>, <em class="sig-param"><span class="n">t_skip_end</span></em>, <em class="sig-param"><span class="n">dirPrefix</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simrun2/crossing_over/run_skip_time.html#skip_time_and_save_parallel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.crossing_over.run_skip_time.skip_time_and_save_parallel" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns delayed object which on computation generates synapse activation files
+with skipped time interval</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-simrun2.crossing_over.utils">
+<span id="simrun2-crossing-over-utils-module"></span><h2>simrun2.crossing_over.utils module<a class="headerlink" href="#module-simrun2.crossing_over.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="simrun2.crossing_over.utils.filter_by_time">
+<code class="sig-prename descclassname">simrun2.crossing_over.utils.</code><code class="sig-name descname">filter_by_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pdf</span></em>, <em class="sig-param"><span class="n">filterfun</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simrun2/crossing_over/utils.html#filter_by_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.crossing_over.utils.filter_by_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>takes a standard synapse activation file returns a new dataframe
+of the same format containing only the activations, for which filterfun returns True</p>
+<p>filterfun:
+function that gets called with every timepoint a synapse gets activated. If it returns True,
+the activation will be kept, if it returns False, it will be omitted.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="simrun2.crossing_over.utils.generate_output_path">
+<code class="sig-prename descclassname">simrun2.crossing_over.utils.</code><code class="sig-name descname">generate_output_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tuple_</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simrun2/crossing_over/utils.html#generate_output_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.crossing_over.utils.generate_output_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="simrun2.crossing_over.utils.merge_synapse_activation">
+<code class="sig-prename descclassname">simrun2.crossing_over.utils.</code><code class="sig-name descname">merge_synapse_activation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pdf1</span></em>, <em class="sig-param"><span class="n">pdf2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simrun2/crossing_over/utils.html#merge_synapse_activation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simrun2.crossing_over.utils.merge_synapse_activation" title="Permalink to this definition">¶</a></dt>
+<dd><p>merges two synapse activation data tables</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-simrun2.crossing_over">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-simrun2.crossing_over" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">in_silico_framework</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Interface.html">Interface module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="barrel_cortex.html">barrel_cortex package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compatibility.html">compatibility module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html">getting_started package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mechanisms.html">mechanisms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.html">model_data_base package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbrun.html">nbrun module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="simrun2.html">simrun2 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.html">simrun3 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html">single_cell_parser package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spike_analysis.html">spike_analysis package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualize.html">visualize package</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">in_silico_framework</a><ul>
+  <li><a href="simrun2.html">simrun2 package</a><ul>
+      <li>Previous: <a href="simrun2.html" title="previous chapter">simrun2 package</a></li>
+      <li>Next: <a href="simrun2.reduced_model.html" title="next chapter">simrun2.reduced_model package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/simrun2.crossing_over.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

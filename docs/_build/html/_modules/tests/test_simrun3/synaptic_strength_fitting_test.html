@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tests.test_simrun3.synaptic_strength_fitting_test &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for tests.test_simrun3.synaptic_strength_fitting_test</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">Interface</span> <span class="k">as</span> <span class="nn">I</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">decorators</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">context</span>
+
+<span class="kn">import</span> <span class="nn">simrun3.synaptic_strength_fitting</span> 
+<span class="n">PSPs</span> <span class="o">=</span> <span class="n">simrun3</span><span class="o">.</span><span class="n">synaptic_strength_fitting</span><span class="o">.</span><span class="n">PSPs</span>
+
+<span class="c1"># class FakeFuture():</span>
+<span class="c1">#     def __init__(self, f):</span>
+<span class="c1">#         self.f = f</span>
+<span class="c1">#     def result(self):</span>
+<span class="c1">#         return self.f</span>
+<span class="c1">#     </span>
+<span class="c1"># class FakeClient():</span>
+<span class="c1">#     def compute(self, *args, **kwargs):</span>
+<span class="c1">#         res = I.dask.compute(*args, get = I.dask.get)</span>
+<span class="c1">#         return [FakeFuture(r) for r in res]</span>
+    
+<div class="viewcode-block" id="Tests"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.synaptic_strength_fitting_test.Tests">[docs]</a><span class="k">class</span> <span class="nc">Tests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>       
+<div class="viewcode-block" id="Tests.setUp"><a class="viewcode-back" href="../../../tests.test_simrun3.html#tests.test_simrun3.synaptic_strength_fitting_test.Tests.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@decorators</span><span class="o">.</span><span class="n">testlevel</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>    
+    <span class="k">def</span> <span class="nf">test_VPM_synaptic_strength_is_between_1_75_and_1_85</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">PSPs</span> <span class="o">=</span> <span class="n">simrun3</span><span class="o">.</span><span class="n">synaptic_strength_fitting</span><span class="o">.</span><span class="n">PSPs</span>
+        <span class="n">confile</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2_synapses_20150202-1834_4335.con&#39;</span><span class="p">)</span>
+        <span class="n">neuron_param</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;neuron_model.param&#39;</span><span class="p">)</span>
+        <span class="n">neuron_param</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">neuron_param</span><span class="p">)</span>
+        <span class="n">neuron_param</span><span class="o">.</span><span class="n">neuron</span><span class="p">[</span><span class="s1">&#39;cell_modify_functions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">scp</span><span class="o">.</span><span class="n">NTParameterSet</span><span class="p">({</span><span class="s1">&#39;scale_apical_morph_86&#39;</span><span class="p">:</span> <span class="p">{}})</span>
+        <span class="n">psps</span> <span class="o">=</span> <span class="n">PSPs</span><span class="p">(</span><span class="n">confile</span><span class="o">=</span><span class="n">confile</span><span class="p">,</span> <span class="n">neuron_param</span><span class="o">=</span><span class="n">neuron_param</span><span class="p">)</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="p">[</span><span class="n">lv</span> <span class="k">for</span> <span class="n">lv</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">psps</span><span class="o">.</span><span class="n">_keys</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;VPM_C2&#39;</span><span class="p">]</span>
+        <span class="n">psps</span><span class="o">.</span><span class="n">_delayeds</span> <span class="o">=</span> <span class="p">[</span><span class="n">psps</span><span class="o">.</span><span class="n">_delayeds</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indexes</span><span class="p">]</span>
+        <span class="n">psps</span><span class="o">.</span><span class="n">_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">psps</span><span class="o">.</span><span class="n">_keys</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indexes</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">distributed</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="s1">&#39;localhost:8786&#39;</span><span class="p">)</span> <span class="c1"># c = FakeClient()</span>
+        <span class="n">psps</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">optimal_g_pdf</span> <span class="o">=</span> <span class="n">psps</span><span class="o">.</span><span class="n">get_optimal_g</span><span class="p">(</span><span class="n">I</span><span class="o">.</span><span class="n">barrel_cortex</span><span class="o">.</span><span class="n">get_EPSP_measurement</span><span class="p">())</span>
+        <span class="n">gVPM</span> <span class="o">=</span> <span class="n">optimal_g_pdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;VPM_C2&#39;</span><span class="p">][</span><span class="s1">&#39;optimal g&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertGreaterEqual</span><span class="p">(</span><span class="n">gVPM</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertGreaterEqual</span><span class="p">(</span><span class="mf">1.85</span><span class="p">,</span> <span class="n">gVPM</span><span class="p">)</span>        </div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">in_silico_framework</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../tests.html">tests</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

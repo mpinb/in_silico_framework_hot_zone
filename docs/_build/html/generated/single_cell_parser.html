@@ -14,6 +14,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="singlecell_input_mapper" href="singlecell_input_mapper.html" />
@@ -46,25 +47,25 @@ with NeuroNet subcellular synapse distributions</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_parameters</span></code>(filename[, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../single_cell_parser.html#single_cell_parser.build_parameters" title="single_cell_parser.build_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_parameters</span></code></a>(filename[, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_cell</span></code>(parameters[, scaleFunc, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../single_cell_parser.html#single_cell_parser.create_cell" title="single_cell_parser.create_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_cell</span></code></a>(parameters[, scaleFunc, …])</p></td>
 <td><p>default way of creating NEURON cell models; includes spatial discretization and inserts biophysical mechanisms according to parameter file</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_neuron_run</span></code>(simparam[, vardt])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../single_cell_parser.html#single_cell_parser.init_neuron_run" title="single_cell_parser.init_neuron_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_neuron_run</span></code></a>(simparam[, vardt])</p></td>
 <td><p>Default NEURON run with inital parameters according to parameter file.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_NMODL_parameters</span></code>(parameters)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../single_cell_parser.html#single_cell_parser.load_NMODL_parameters" title="single_cell_parser.load_NMODL_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_NMODL_parameters</span></code></a>(parameters)</p></td>
 <td><p>automatically loads NMODL mechanisms from paths in parameter file</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sec_distance_to_soma</span></code>(currentSec)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../single_cell_parser.html#single_cell_parser.sec_distance_to_soma" title="single_cell_parser.sec_distance_to_soma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sec_distance_to_soma</span></code></a>(currentSec)</p></td>
 <td><p>compute path length from sec(x=0) to soma</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_network_paramfile</span></code>(…)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../single_cell_parser.html#single_cell_parser.spines_update_network_paramfile" title="single_cell_parser.spines_update_network_paramfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_network_paramfile</span></code></a>(…)</p></td>
 <td><p>update the network.param file to point to the new synapse distribution file</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_synapse_distribution_file</span></code>(…)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../single_cell_parser.html#single_cell_parser.spines_update_synapse_distribution_file" title="single_cell_parser.spines_update_synapse_distribution_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_synapse_distribution_file</span></code></a>(…)</p></td>
 <td><p>Update the .syn file to correctly point to spine heads as excitatory synapse locations.</p></td>
 </tr>
 </tbody>
@@ -76,7 +77,7 @@ with NeuroNet subcellular synapse distributions</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Event</span></code>(func)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../single_cell_parser.html#single_cell_parser.Event" title="single_cell_parser.Event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Event</span></code></a>(func)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -100,14 +101,16 @@ with NeuroNet subcellular synapse distributions</p>
 
 
 <h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">in_silico_framework</a></li>
+</ul>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
 <li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dendrite_thickness.html">dendrite_thickness</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installer.html">installer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mechanisms.html">mechanisms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model_data_base.html">model_data_base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>

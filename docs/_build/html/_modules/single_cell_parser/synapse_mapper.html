@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>single_cell_parser.synapse_mapper &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for single_cell_parser.synapse_mapper</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Mar 30, 2012</span>
+
+<span class="sd">@author: regger</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1">#import reader</span>
+<span class="c1">#import writer</span>
+<span class="c1">#import cell_parser</span>
+
+<div class="viewcode-block" id="SynapseMapper"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.synapse_mapper.SynapseMapper">[docs]</a><span class="k">class</span> <span class="nc">SynapseMapper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    SynapseMapper assigns synapses to neuron morphology</span>
+<span class="sd">    self.cell is neuron SpatialGraph</span>
+<span class="sd">    self.synDist is average synapse distribution (3D scalar field)</span>
+<span class="sd">    self.isDensity: True - synapse distribution interpreted as avg</span>
+<span class="sd">        density; actual number of synapses assigned is drawn from a </span>
+<span class="sd">        Poisson distribution</span>
+<span class="sd">        False - synapse distribution interpreted as actual number of</span>
+<span class="sd">        synapses per voxel and directly assigned</span>
+<span class="sd">    self.voxelEdgeMap: dictionary mapping synapse distribution mesh</span>
+<span class="sd">        coordinates on list with pairs of indices that correspond</span>
+<span class="sd">        to the edge and edgePt ID of all morphology points inside that voxel</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="SynapseMapper.__init__"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.synapse_mapper.SynapseMapper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">synDist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">isDensity</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        synapses are mapped onto this cell</span>
+<span class="sd">        self.cell = cell</span>
+<span class="sd">        </span>
+<span class="sd">        synapse distribution</span>
+<span class="sd">        self.synDist = synDist</span>
+<span class="sd">        </span>
+<span class="sd">        flag: 1 - distribution is density; 0 - distribution is realization</span>
+<span class="sd">        self.isDensity = isDensity</span>
+<span class="sd">        </span>
+<span class="sd">        stores edge/voxel correspondence for mapping</span>
+<span class="sd">        self.voxelEdgeMap = {}</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">synDist</span> <span class="o">=</span> <span class="n">synDist</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isDensity</span> <span class="o">=</span> <span class="n">isDensity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span> <span class="o">=</span> <span class="p">{}</span></div>
+<span class="c1">#        seed = 1234567890</span>
+<span class="c1">#        self.ranGen = np.random.RandomState(seed)</span>
+    
+<div class="viewcode-block" id="SynapseMapper.map_synapse_realization"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_realization">[docs]</a>    <span class="k">def</span> <span class="nf">map_synapse_realization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        maps previously created synapse realization onto neuron</span>
+<span class="sd">        morphology. self.synDist has to be dict with synapse types as</span>
+<span class="sd">        keywords and list of tuples (sectionID, sectionx) coding</span>
+<span class="sd">        the synapse location on the specific sections.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">sections</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span>
+        <span class="n">synDist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synDist</span>
+        <span class="k">for</span> <span class="n">synType</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">synDist</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">synDist</span><span class="p">[</span><span class="n">synType</span><span class="p">]:</span>
+                <span class="n">sectionID</span><span class="p">,</span> <span class="n">sectionx</span> <span class="o">=</span> <span class="n">syn</span>
+<span class="c1">#                find pt ID of point closest to sectionx</span>
+<span class="c1">#                better do it approximately than rely on</span>
+<span class="c1">#                exact match of floating point numbers...</span>
+                <span class="n">closestPtID</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">mindx</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sectionx</span> <span class="o">-</span> <span class="n">sections</span><span class="p">[</span><span class="n">sectionID</span><span class="p">]</span><span class="o">.</span><span class="n">relPts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">sections</span><span class="p">[</span><span class="n">sectionID</span><span class="p">]</span><span class="o">.</span><span class="n">nrOfPts</span><span class="p">):</span>
+                    <span class="n">tmpdx</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sectionx</span> <span class="o">-</span> <span class="n">sections</span><span class="p">[</span><span class="n">sectionID</span><span class="p">]</span><span class="o">.</span><span class="n">relPts</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">tmpdx</span> <span class="o">&lt;</span> <span class="n">mindx</span><span class="p">:</span>
+                        <span class="n">mindx</span> <span class="o">=</span> <span class="n">tmpdx</span>
+                        <span class="n">closestPtID</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">sectionID</span><span class="p">,</span> <span class="n">closestPtID</span><span class="p">,</span> <span class="n">sectionx</span><span class="p">,</span> <span class="n">synType</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="SynapseMapper.map_pruned_synapse_realization"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.synapse_mapper.SynapseMapper.map_pruned_synapse_realization">[docs]</a>    <span class="k">def</span> <span class="nf">map_pruned_synapse_realization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        maps previously created synapse realization onto neuron</span>
+<span class="sd">        morphology. self.synDist has to be dict with synapse types as</span>
+<span class="sd">        keywords and list of tuples (sectionID, sectionx, pruned) coding</span>
+<span class="sd">        the synapse location on the specific sections and anatomical pruning</span>
+<span class="sd">        status of these synapses.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">sections</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span>
+        <span class="n">synDist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synDist</span>
+        <span class="k">for</span> <span class="n">synType</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">synDist</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">synDist</span><span class="p">[</span><span class="n">synType</span><span class="p">]:</span>
+                <span class="n">sectionID</span><span class="p">,</span> <span class="n">sectionx</span><span class="p">,</span> <span class="n">pruned</span> <span class="o">=</span> <span class="n">syn</span>
+<span class="c1">#                find pt ID of point closest to sectionx</span>
+<span class="c1">#                better do it approximately than rely on</span>
+<span class="c1">#                exact match of floating point numbers...</span>
+                <span class="n">closestPtID</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">mindx</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sectionx</span> <span class="o">-</span> <span class="n">sections</span><span class="p">[</span><span class="n">sectionID</span><span class="p">]</span><span class="o">.</span><span class="n">relPts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">sections</span><span class="p">[</span><span class="n">sectionID</span><span class="p">]</span><span class="o">.</span><span class="n">nrOfPts</span><span class="p">):</span>
+                    <span class="n">tmpdx</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sectionx</span> <span class="o">-</span> <span class="n">sections</span><span class="p">[</span><span class="n">sectionID</span><span class="p">]</span><span class="o">.</span><span class="n">relPts</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">tmpdx</span> <span class="o">&lt;</span> <span class="n">mindx</span><span class="p">:</span>
+                        <span class="n">mindx</span> <span class="o">=</span> <span class="n">tmpdx</span>
+                        <span class="n">closestPtID</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">newSyn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">sectionID</span><span class="p">,</span> <span class="n">closestPtID</span><span class="p">,</span> <span class="n">sectionx</span><span class="p">,</span> <span class="n">synType</span><span class="p">)</span>
+                <span class="n">newSyn</span><span class="o">.</span><span class="n">pruned</span> <span class="o">=</span> <span class="n">pruned</span></div>
+    
+<div class="viewcode-block" id="SynapseMapper.map_synapse_model_distribution"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_model_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">map_synapse_model_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synType</span><span class="p">,</span> <span class="n">structLabel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        maps modeled synapse distribution (e.g. normal, uniform, ...)</span>
+<span class="sd">        onto dendritic tree. synapse distribution synDist </span>
+<span class="sd">        has to be iterable of distances of synapses; should be radial</span>
+<span class="sd">        only, i.e. dendritic branches are selected randomly.</span>
+<span class="sd">        substructure may be indicated by structLabel.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+<span class="c1">#        for numerical comparison</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-6</span>
+        <span class="n">secIDs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">structLabel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">)):</span>
+                <span class="n">sec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="n">structLabel</span><span class="p">:</span>
+                    <span class="n">secIDs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">)):</span>
+                <span class="n">sec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Dendrite&#39;</span> <span class="ow">or</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">:</span>
+                    <span class="n">secIDs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        
+<span class="c1">#        not very elegant/efficient, but ok for now...</span>
+        <span class="k">for</span> <span class="n">synD</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">synDist</span><span class="p">:</span>
+            <span class="n">candidateSections</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ID</span> <span class="ow">in</span> <span class="n">secIDs</span><span class="p">:</span>
+                <span class="n">sec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">ID</span><span class="p">]</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_path_length</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">dist</span><span class="o">+</span><span class="n">eps</span> <span class="o">&lt;=</span> <span class="n">synD</span> <span class="o">&lt;=</span> <span class="n">dist</span><span class="o">+</span><span class="n">sec</span><span class="o">.</span><span class="n">L</span><span class="o">-</span><span class="n">eps</span><span class="p">:</span>
+                    <span class="n">candidateSections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ID</span><span class="p">)</span>
+<span class="c1">#            select section</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">candidateSections</span><span class="p">))</span>
+            <span class="n">sectionID</span> <span class="o">=</span> <span class="n">candidateSections</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+<span class="c1">#            select point along section</span>
+            <span class="n">sec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">sectionID</span><span class="p">]</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_path_length</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">synx</span> <span class="o">=</span> <span class="p">(</span><span class="n">synD</span> <span class="o">-</span> <span class="n">dist</span><span class="p">)</span><span class="o">/</span><span class="n">sec</span><span class="o">.</span><span class="n">L</span>
+            <span class="k">if</span> <span class="n">synx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">errstr</span> <span class="o">=</span> <span class="s1">&#39;SynapseMapper: synx &lt; 0 - this should not happen!&#39;</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">errstr</span><span class="p">)</span>
+            <span class="n">closestPtID</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">mindx</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">synx</span> <span class="o">-</span> <span class="n">sec</span><span class="o">.</span><span class="n">relPts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">sec</span><span class="o">.</span><span class="n">nrOfPts</span><span class="p">):</span>
+                <span class="n">tmpdx</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">synx</span> <span class="o">-</span> <span class="n">sec</span><span class="o">.</span><span class="n">relPts</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">tmpdx</span> <span class="o">&lt;</span> <span class="n">mindx</span><span class="p">:</span>
+                    <span class="n">mindx</span> <span class="o">=</span> <span class="n">tmpdx</span>
+                    <span class="n">closestPtID</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">sectionID</span><span class="p">,</span> <span class="n">closestPtID</span><span class="p">,</span> <span class="n">synx</span><span class="p">,</span> <span class="n">synType</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="SynapseMapper.create_synapses"><a class="viewcode-back" href="../../single_cell_parser.html#single_cell_parser.synapse_mapper.SynapseMapper.create_synapses">[docs]</a>    <span class="k">def</span> <span class="nf">create_synapses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preType</span><span class="o">=</span><span class="s1">&#39;Generic&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        main function; creates instantiation of synapses</span>
+<span class="sd">        on cell from synapse distribution</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synDist</span><span class="o">.</span><span class="n">mesh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_voxel_edge_map</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">vxIndex</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span><span class="p">[</span><span class="n">vxIndex</span><span class="p">]:</span>
+                <span class="n">nrOfSyn</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">[</span><span class="n">vxIndex</span><span class="p">]</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isDensity</span><span class="p">:</span>
+                    <span class="n">nrOfSyn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">nrOfSyn</span><span class="p">)</span>
+<span class="c1">#                    nrOfSyn = self.ranGen.poisson(nrOfSyn)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">nrOfSyn</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">nrOfSyn</span><span class="p">))</span>
+                <span class="sd">&#39;&#39;&#39;choose points at random by shuffling</span>
+<span class="sd">                all points within the current voxel&#39;&#39;&#39;</span>
+                <span class="n">candEdges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span><span class="p">[</span><span class="n">vxIndex</span><span class="p">]</span>
+                <span class="n">candidatePts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">candEdges</span><span class="p">))</span>
+<span class="c1">#                fix for situation where nrOfSyn &gt; len(candidatePts)!</span>
+                <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidatePts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">nrOfSyn</span><span class="p">:</span>
+                    <span class="n">candidatePts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candEdges</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">candEdges</span><span class="p">))])</span>
+<span class="c1">#                    print &#39;added another point where nSyn &gt; nPts&#39;</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrOfSyn</span><span class="p">):</span>
+                    <span class="n">edgeID</span> <span class="o">=</span> <span class="n">candidatePts</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">edgePtID</span> <span class="o">=</span> <span class="n">candidatePts</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">edgex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">edgeID</span><span class="p">]</span><span class="o">.</span><span class="n">relPts</span><span class="p">[</span><span class="n">edgePtID</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">edgex</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">edgex</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Edge x out of range&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">add_synapse</span><span class="p">(</span><span class="n">edgeID</span><span class="p">,</span> <span class="n">edgePtID</span><span class="p">,</span> <span class="n">edgex</span><span class="p">,</span> <span class="n">preType</span><span class="p">)</span></div>
+    
+    <span class="k">def</span> <span class="nf">_create_voxel_edge_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fills dictionary voxelEdgeMap with indices of voxels</span>
+<span class="sd">        and list of pts within that voxel</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">sections</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span>
+        <span class="n">synDist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synDist</span>
+        <span class="n">voxelEdgeMap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">voxelEdgeMap</span>
+        
+        <span class="n">noSynStructures</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Soma&#39;</span><span class="p">,</span> <span class="s1">&#39;Axon&#39;</span><span class="p">,</span> <span class="s1">&#39;AIS&#39;</span><span class="p">,</span> <span class="s1">&#39;Myelin&#39;</span><span class="p">,</span> <span class="s1">&#39;Node&#39;</span><span class="p">]</span>
+        
+        <span class="sd">&#39;&#39;&#39;array with all non-zero voxel indices&#39;&#39;&#39;</span>
+        <span class="n">synVoxels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">synDist</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">nonzero</span><span class="p">())</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+        <span class="sd">&#39;&#39;&#39;loop over all non-zero voxels&#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">vxIndex</span> <span class="ow">in</span> <span class="n">synVoxels</span><span class="p">:</span>
+            <span class="n">vxIndexT</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">vxIndex</span><span class="p">)</span>
+            <span class="n">voxelEdgeMap</span><span class="p">[</span><span class="n">vxIndexT</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">voxelBBox</span> <span class="o">=</span> <span class="n">synDist</span><span class="o">.</span><span class="n">get_voxel_bounds</span><span class="p">(</span><span class="n">vxIndex</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sections</span><span class="p">)):</span>
+                <span class="sd">&#39;&#39;&#39;only check section points if section bounding box</span>
+<span class="sd">                overlaps with voxel bounding box&#39;&#39;&#39;</span>
+                <span class="n">sec</span> <span class="o">=</span> <span class="n">sections</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="c1">#                if sec.label == &#39;Axon&#39; or sec.label == &#39;Soma&#39;:</span>
+                <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="ow">in</span> <span class="n">noSynStructures</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_intersect_bboxes</span><span class="p">(</span><span class="n">voxelBBox</span><span class="p">,</span> <span class="n">sec</span><span class="o">.</span><span class="n">bounds</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">nrOfPts</span><span class="p">):</span>
+                        <span class="n">pt</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">pts</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pt_in_box</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">voxelBBox</span><span class="p">):</span>
+                            <span class="n">voxelEdgeMap</span><span class="p">[</span><span class="n">vxIndexT</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
+        
+    <span class="k">def</span> <span class="nf">_intersect_bboxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox1</span><span class="p">,</span> <span class="n">bbox2</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        check if two bounding boxes overlap</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">intersect</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">bbox2</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">intersect</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">intersect</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">return</span> <span class="kc">True</span>
+        
+    <span class="k">def</span> <span class="nf">_pt_in_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">box</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">box</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">box</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">box</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">box</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">box</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">box</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">_compute_path_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;path length to soma from location x on section sec&#39;&#39;&#39;</span>
+        <span class="n">currentSec</span> <span class="o">=</span> <span class="n">sec</span>
+        <span class="n">parentSec</span> <span class="o">=</span> <span class="n">currentSec</span><span class="o">.</span><span class="n">parent</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="n">currentSec</span><span class="o">.</span><span class="n">L</span>
+        <span class="n">parentLabel</span> <span class="o">=</span> <span class="n">parentSec</span><span class="o">.</span><span class="n">label</span>
+        <span class="k">while</span> <span class="n">parentLabel</span> <span class="o">!=</span> <span class="s1">&#39;Soma&#39;</span><span class="p">:</span>
+            <span class="n">dist</span> <span class="o">+=</span> <span class="n">parentSec</span><span class="o">.</span><span class="n">L</span>
+            <span class="n">currentSec</span> <span class="o">=</span> <span class="n">parentSec</span>
+            <span class="n">parentSec</span> <span class="o">=</span> <span class="n">currentSec</span><span class="o">.</span><span class="n">parent</span>
+            <span class="n">parentLabel</span> <span class="o">=</span> <span class="n">parentSec</span><span class="o">.</span><span class="n">label</span>
+        <span class="k">return</span> <span class="n">dist</span></div>
+
+<span class="c1">#def map_synapses(cellFName, synapseFName):</span>
+<span class="c1">#    synDist = reader.read_scalar_field(synapseFName)</span>
+<span class="c1">#    </span>
+<span class="c1">#    parser = cell_parser.CellParser(cellFName)</span>
+<span class="c1">#    parser.spatialgraph_to_cell()</span>
+<span class="c1">#    synMapper = SynapseMapper(parser.cell, synDist)</span>
+<span class="c1">#    synMapper.create_synapses()</span>
+<span class="c1">#    </span>
+<span class="c1">#    return parser.cell</span>
+
+<span class="c1">#def main():</span>
+<span class="c1">#    cellName = &#39;93_CDK080806_marcel_3x3_registered_zZeroBarrel.hoc.am-14678.hoc&#39;</span>
+<span class="c1">#    synapseFName = &#39;SynapseCount.14678.am&#39;</span>
+<span class="c1">#    </span>
+<span class="c1">#    synDist = reader.read_scalar_field(synapseFName)</span>
+<span class="c1">#    synMapper = SynapseMapper()</span>
+<span class="c1">#    for i in range(100):</span>
+<span class="c1">#        print &#39;Creating synapse instance %s&#39; % i</span>
+<span class="c1">#        testParser = cell_parser.CellParser(cellName)</span>
+<span class="c1">#        testParser.spatialgraph_to_cell()</span>
+<span class="c1">#        synMapper.cell = testParser.get_cell()</span>
+<span class="c1">#        synMapper.synDist = synDist</span>
+<span class="c1">#        synMapper.create_synapses()</span>
+<span class="c1">#        print &#39;Writing synapse instance %s&#39; % i</span>
+<span class="c1">#        listOfSynapses = [s.coordinates for s in testParser.cell.synapses[&#39;Generic&#39;]]</span>
+<span class="c1">#        landmarkFName = &#39;random_test_refactor/SynapseInstance_&#39;+str(i)</span>
+<span class="c1">#        writer.write_landmark_file(landmarkFName, listOfSynapses)</span>
+<span class="c1">#    </span>
+<span class="c1">#def profile():</span>
+<span class="c1">##    import cProfile</span>
+<span class="c1">#    for i in range(10):</span>
+<span class="c1">#        print &#39;Creating instance %s&#39; % i</span>
+<span class="c1">#        cellName = &#39;93_CDK080806_marcel_3x3_registered_zZeroBarrel.hoc.am-14678.hoc&#39;</span>
+<span class="c1">#        synapseFName = &#39;SynapseCount.14678.am&#39;</span>
+<span class="c1">#        </span>
+<span class="c1">#        synDist = reader.read_scalar_field(synapseFName)</span>
+<span class="c1">#        </span>
+<span class="c1">#        testParser = cell_parser.CellParser(cellName)</span>
+<span class="c1">#        testParser.spatialgraph_to_cell()</span>
+<span class="c1">#        synMapper = SynapseMapper(testParser.cell, synDist)</span>
+<span class="c1">#        synMapper.create_synapses()</span>
+<span class="c1">##        cProfile.runctx(&#39;synMapper.create_synapses()&#39;, globals(), locals())</span>
+<span class="c1">#    </span>
+<span class="c1">#if __name__ == &#39;__main__&#39;:</span>
+<span class="c1">#    main()</span>
+<span class="c1">##    profile()</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../single_cell_parser.html">single_cell_parser</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

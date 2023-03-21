@@ -1,0 +1,497 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>single_cell_analyzer.membrane_potential_analysis &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for single_cell_analyzer.membrane_potential_analysis</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Nov 3, 2012</span>
+
+<span class="sd">@author: regger</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">model_data_base.mdbopen</span> <span class="kn">import</span> <span class="n">mdbopen</span>
+
+<div class="viewcode-block" id="vm_mean"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.vm_mean">[docs]</a><span class="k">def</span> <span class="nf">vm_mean</span><span class="p">(</span><span class="n">vVec</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dtStim</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    computes mean subthreshold voltage from</span>
+<span class="sd">    voltage trace during stimulation time window</span>
+<span class="sd">    [tStim, tStim+dtStim]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tVec</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vVec</span><span class="p">)</span>
+    <span class="n">tEnd</span> <span class="o">=</span> <span class="n">tStim</span> <span class="o">+</span> <span class="n">dtStim</span>
+    <span class="n">iBegin</span><span class="p">,</span> <span class="n">iEnd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tStim</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tStim</span><span class="p">:</span>
+            <span class="n">iBegin</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tEnd</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tEnd</span><span class="p">:</span>
+            <span class="n">iEnd</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">v_</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">iBegin</span><span class="p">:</span><span class="n">iEnd</span><span class="p">]</span>
+    <span class="n">vss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">v_</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vss</span></div>
+
+<div class="viewcode-block" id="vm_std"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.vm_std">[docs]</a><span class="k">def</span> <span class="nf">vm_std</span><span class="p">(</span><span class="n">vVec</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dtStim</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    computes standard deviation of subthreshold voltage from</span>
+<span class="sd">    voltage trace during stimulation time window</span>
+<span class="sd">    [tStim, tStim+dtStim]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tVec</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vVec</span><span class="p">)</span>
+    <span class="n">tEnd</span> <span class="o">=</span> <span class="n">tStim</span> <span class="o">+</span> <span class="n">dtStim</span>
+    <span class="n">iBegin</span><span class="p">,</span> <span class="n">iEnd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tStim</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tStim</span><span class="p">:</span>
+            <span class="n">iBegin</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tEnd</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tEnd</span><span class="p">:</span>
+            <span class="n">iEnd</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">v_</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">iBegin</span><span class="p">:</span><span class="n">iEnd</span><span class="p">]</span>
+    <span class="n">vss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">v_</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vss</span></div>
+
+<div class="viewcode-block" id="compute_mean_psp_amplitude"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_mean_psp_amplitude">[docs]</a><span class="k">def</span> <span class="nf">compute_mean_psp_amplitude</span><span class="p">(</span><span class="n">vTraces</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="mf">35.0</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="mf">15.0</span>
+    <span class="n">amplitudes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">trace</span> <span class="ow">in</span> <span class="n">vTraces</span><span class="p">:</span>
+        <span class="n">begin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tStim</span><span class="o">+</span><span class="n">t</span><span class="p">)</span><span class="o">/</span><span class="n">dt</span><span class="o">+</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tStim</span><span class="o">+</span><span class="n">t</span><span class="o">+</span><span class="n">width</span><span class="p">)</span><span class="o">/</span><span class="n">dt</span><span class="o">+</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">amplitudes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">trace</span><span class="p">[</span><span class="n">begin</span><span class="p">:</span><span class="n">end</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">t</span><span class="p">],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">amplitudes</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="compute_vm_std_windows"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_vm_std_windows">[docs]</a><span class="k">def</span> <span class="nf">compute_vm_std_windows</span><span class="p">(</span><span class="n">vStd</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="mf">35.0</span>
+    <span class="n">windows</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">]</span>
+    <span class="n">avgStds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">:</span>
+        <span class="n">begin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tStim</span><span class="o">+</span><span class="n">t</span><span class="p">)</span><span class="o">/</span><span class="n">dt</span><span class="o">+</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tStim</span><span class="o">+</span><span class="n">t</span><span class="o">+</span><span class="n">width</span><span class="p">)</span><span class="o">/</span><span class="n">dt</span><span class="o">+</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">avgStds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">vStd</span><span class="p">[</span><span class="n">begin</span><span class="p">:</span><span class="n">end</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">windows</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">avgStds</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="compute_vm_histogram"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_vm_histogram">[docs]</a><span class="k">def</span> <span class="nf">compute_vm_histogram</span><span class="p">(</span><span class="n">vTraces</span><span class="p">):</span>
+    <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">80.0</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="mf">2.0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">21</span><span class="p">)])</span>
+    <span class="n">vPoints</span> <span class="o">=</span> <span class="n">vTraces</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">hist</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">vPoints</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">)</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+    <span class="n">hist</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">norm</span><span class="o">*</span><span class="n">hist</span>
+    <span class="k">return</span> <span class="n">hist</span><span class="p">,</span> <span class="n">bins</span></div>
+
+<div class="viewcode-block" id="compute_uPSP_amplitude"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude">[docs]</a><span class="k">def</span> <span class="nf">compute_uPSP_amplitude</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tSyn</span><span class="p">,</span> <span class="n">isEPSP</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    simple method for determining amplitude of</span>
+<span class="sd">    unitary PSP starting at time tSyn:</span>
+<span class="sd">    Determine baseline as median Vm during 10ms</span>
+<span class="sd">    preceding the PSP</span>
+<span class="sd">    In case of IPSPs set isEPSP=False</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+        <span class="n">errstr</span> <span class="o">=</span> <span class="s1">&#39;Time vector and membrane potential vector do not match&#39;</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">errstr</span><span class="p">)</span>
+    <span class="n">beginBin</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">endBin</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">t</span><span class="p">[</span><span class="n">endBin</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tSyn</span><span class="p">:</span>
+        <span class="n">endBin</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">t</span><span class="p">[</span><span class="n">beginBin</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tSyn</span> <span class="o">-</span> <span class="mf">10.0</span><span class="p">:</span>
+        <span class="n">beginBin</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">endBin</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="n">beginBin</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">beginBin</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">beginBin</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">baseline</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">beginBin</span><span class="p">:</span><span class="n">endBin</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">isEPSP</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">endBin</span><span class="p">:])</span> <span class="o">-</span> <span class="n">baseline</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">endBin</span><span class="p">:])</span> <span class="o">-</span> <span class="n">baseline</span></div>
+
+<div class="viewcode-block" id="simple_spike_detection"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.simple_spike_detection">[docs]</a><span class="k">def</span> <span class="nf">simple_spike_detection</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">tBegin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tEnd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;regular&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Simple spike detection method. Identify</span>
+<span class="sd">    spike times within optional window [tBegin, tEnd]</span>
+<span class="sd">    by determining threshold crossing times from below</span>
+<span class="sd">    supported modes:</span>
+<span class="sd">    regular: absolute threshold crossing</span>
+<span class="sd">    differential: threshold crossing of dv/dt</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+        <span class="n">errstr</span> <span class="o">=</span> <span class="s1">&#39;Dimensions of time vector and membrane potential vector not matching&#39;</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">errstr</span><span class="p">)</span>
+    
+    <span class="n">tSpike</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">beginIndex</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">endIndex</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tBegin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tBegin</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tBegin</span><span class="p">:</span>
+                <span class="n">beginIndex</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="k">break</span>
+    <span class="k">if</span> <span class="n">tEnd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tEnd</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tEnd</span><span class="p">:</span>
+                <span class="n">endIndex</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="k">break</span>
+    
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;regular&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">beginIndex</span><span class="p">,</span><span class="n">endIndex</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">threshold</span> <span class="ow">and</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
+                <span class="n">tSpike</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;slope&#39;</span><span class="p">:</span>
+        <span class="n">dvdt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">beginIndex</span><span class="p">,</span><span class="n">endIndex</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">dvdt</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">threshold</span> <span class="ow">and</span> <span class="n">dvdt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
+                <span class="n">tSpike</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">tSpike</span></div>
+
+<div class="viewcode-block" id="test_spike_detection_respects_threshold"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.test_spike_detection_respects_threshold">[docs]</a><span class="k">def</span> <span class="nf">test_spike_detection_respects_threshold</span><span class="p">():</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">spike_detection</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">spike_detection</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span></div>
+    
+<div class="viewcode-block" id="PSTH_from_spike_times"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times">[docs]</a><span class="k">def</span> <span class="nf">PSTH_from_spike_times</span><span class="p">(</span><span class="n">spikeTimeVectors</span><span class="p">,</span> <span class="n">binSize</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">tBegin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tEnd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aligned</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate PSTH from vectors of spike times</span>
+<span class="sd">    with optional bin size and time window [tBegin, tEnd].</span>
+<span class="sd">    If aligned=True, then the bins are aligned to</span>
+<span class="sd">    integer multiples of the bin size.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spikeTimeVectors</span><span class="p">)</span>
+    <span class="n">allSpikeTimes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">spikeTimeVec</span> <span class="ow">in</span> <span class="n">spikeTimeVectors</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">spikeTime</span> <span class="ow">in</span> <span class="n">spikeTimeVec</span><span class="p">:</span>
+            <span class="n">allSpikeTimes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spikeTime</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">tBegin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">tBegin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">allSpikeTimes</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tEnd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">tEnd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">allSpikeTimes</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">aligned</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tBegin</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">tBegin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tBegin</span><span class="o">/</span><span class="n">binSize</span><span class="p">)</span><span class="o">*</span><span class="n">binSize</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tBegin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tBegin</span><span class="o">/</span><span class="n">binSize</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">binSize</span>
+        <span class="n">tEnd</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">tEnd</span><span class="o">/</span><span class="n">binSize</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="n">binSize</span>
+    
+<span class="c1">#    print &#39;binSize = %.2f&#39; % binSize</span>
+<span class="c1">#    print &#39;tBegin = %.2f&#39; % tBegin</span>
+<span class="c1">#    print &#39;tEnd = %.2f&#39; % tEnd</span>
+    
+    <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">tBegin</span><span class="p">,</span> <span class="n">tEnd</span><span class="p">,</span> <span class="n">binSize</span><span class="p">)</span>
+    <span class="n">hist</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">allSpikeTimes</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">norm</span><span class="p">:</span>
+        <span class="n">hist</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">norm</span><span class="o">*</span><span class="n">hist</span>
+    
+    <span class="k">return</span> <span class="n">hist</span><span class="p">,</span> <span class="n">bins</span></div>
+
+<div class="viewcode-block" id="RecordingSiteManager"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager">[docs]</a><span class="k">class</span> <span class="nc">RecordingSiteManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    simple class providing methods to handle recording</span>
+<span class="sd">    sites defined by Amira LandmarkSet</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">recordingSites</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="kc">None</span>
+    
+<div class="viewcode-block" id="RecordingSiteManager.__init__"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">landmarkFilename</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+        <span class="n">landmarks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_landmark_file</span><span class="p">(</span><span class="n">landmarkFilename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recordingSites</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">landmarks</span><span class="p">)):</span>
+            <span class="n">landmark</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">landmarks</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">newRecSite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_up_recording_site</span><span class="p">(</span><span class="n">landmark</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">landmarkFilename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recordingSites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newRecSite</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="RecordingSiteManager.set_up_recording_site"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site">[docs]</a>    <span class="k">def</span> <span class="nf">set_up_recording_site</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        determine section/segment on cell corresponding</span>
+<span class="sd">        to recording site location and create new</span>
+<span class="sd">        RecordingSite</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># inaccurate version</span>
+<span class="c1">#        minDist = 1e9</span>
+<span class="c1">#        minSecID = None</span>
+<span class="c1">#        minSegID = None</span>
+<span class="c1">#        for i in range(len(self.cell.sections)):</span>
+<span class="c1">#            sec = self.cell.sections[i]</span>
+<span class="c1">#            for j in range(len(sec.segPts)):</span>
+<span class="c1">#                pt = sec.segPts[j]</span>
+<span class="c1">#                dist = np.sqrt(np.dot(pt-location, pt-location))</span>
+<span class="c1">#                if(dist &lt; minDist):</span>
+<span class="c1">#                    minDist = dist</span>
+<span class="c1">#                    minSecID = i</span>
+<span class="c1">#                    minSegID = j</span>
+<span class="c1">#        </span>
+<span class="c1">#        sec = self.cell.sections[minSecID]</span>
+<span class="c1">#        somaDist = self.cell.distance_to_soma(sec, sec.relPts[minSegID])</span>
+<span class="c1">#        splitName = filename.split(&#39;/&#39;)[-1]</span>
+<span class="c1">#        tmpIndex = splitName.find(&#39;.landmarkAscii&#39;)</span>
+<span class="c1">#        label = splitName[:tmpIndex] + &#39;_ID_%03d_sec_%03d_seg_%03d_somaDist_%.1f&#39; % (ID, minSecID, minSegID, somaDist)</span>
+<span class="c1">#        newRecSite = RecordingSite(minSecID, minSegID, label)</span>
+<span class="c1">#        return newRecSite</span>
+        
+        <span class="c1"># precise version</span>
+        <span class="n">minDist</span> <span class="o">=</span> <span class="mf">1e9</span>
+        <span class="n">minSecID</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">minSegID</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">minx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">minSegx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">)):</span>
+            <span class="n">sec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">pts</span><span class="p">)):</span>
+                <span class="n">pt</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">pts</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">ptx</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">relPts</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pt</span><span class="o">-</span><span class="n">location</span><span class="p">,</span> <span class="n">pt</span><span class="o">-</span><span class="n">location</span><span class="p">))</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">dist</span> <span class="o">&lt;</span> <span class="n">minDist</span><span class="p">):</span>
+                    <span class="n">minDist</span> <span class="o">=</span> <span class="n">dist</span>
+                    <span class="n">minSecID</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="n">minx</span> <span class="o">=</span> <span class="n">ptx</span>
+        <span class="n">mindx</span> <span class="o">=</span> <span class="mf">1.0e9</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">minSecID</span><span class="p">]</span><span class="o">.</span><span class="n">segx</span><span class="p">)):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">minSecID</span><span class="p">]</span><span class="o">.</span><span class="n">segx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">dx</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">minx</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dx</span> <span class="o">&lt;</span> <span class="n">mindx</span><span class="p">:</span>
+                <span class="n">mindx</span> <span class="o">=</span> <span class="n">dx</span>
+                <span class="n">minSegx</span> <span class="o">=</span> <span class="n">x</span>
+                <span class="n">minSegID</span> <span class="o">=</span> <span class="n">i</span>
+        
+        <span class="n">sec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">minSecID</span><span class="p">]</span>
+        <span class="n">somaDist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">distance_to_soma</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">minSegx</span><span class="p">)</span>
+        <span class="n">splitName</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">tmpIndex</span> <span class="o">=</span> <span class="n">splitName</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;.landmarkAscii&#39;</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">splitName</span><span class="p">[:</span><span class="n">tmpIndex</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_ID_</span><span class="si">%03d</span><span class="s1">_sec_</span><span class="si">%03d</span><span class="s1">_seg_</span><span class="si">%03d</span><span class="s1">_x_</span><span class="si">%.3f</span><span class="s1">_somaDist_</span><span class="si">%.1f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ID</span><span class="p">,</span> <span class="n">minSecID</span><span class="p">,</span> <span class="n">minSegID</span><span class="p">,</span> <span class="n">minSegx</span><span class="p">,</span> <span class="n">somaDist</span><span class="p">)</span>
+        <span class="n">newRecSite</span> <span class="o">=</span> <span class="n">RecordingSite</span><span class="p">(</span><span class="n">minSecID</span><span class="p">,</span> <span class="n">minSegID</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">newRecSite</span></div>
+    
+<div class="viewcode-block" id="RecordingSiteManager.update_recordings"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings">[docs]</a>    <span class="k">def</span> <span class="nf">update_recordings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        copy recorded voltages at recording sites</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">recordingSite</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">recordingSites</span><span class="p">:</span>
+            <span class="n">secID</span> <span class="o">=</span> <span class="n">recordingSite</span><span class="o">.</span><span class="n">secID</span>
+            <span class="n">segID</span> <span class="o">=</span> <span class="n">recordingSite</span><span class="o">.</span><span class="n">segID</span>
+            <span class="n">vTrace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">secID</span><span class="p">]</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="n">segID</span><span class="p">])</span>
+            <span class="n">recordingSite</span><span class="o">.</span><span class="n">vRecordings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vTrace</span><span class="p">)</span></div>
+    
+    <span class="k">def</span> <span class="nf">_read_landmark_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">landmarkFilename</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        returns list of (x,y,z) points</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">landmarkFilename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.landmarkAscii&#39;</span><span class="p">):</span>
+            <span class="n">errstr</span> <span class="o">=</span> <span class="s1">&#39;Wrong input format: has to be landmarkAscii format. Path: </span><span class="si">{p}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">landmarkFilename</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">errstr</span><span class="p">)</span>
+        
+        <span class="n">landmarks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">with</span> <span class="n">mdbopen</span><span class="p">(</span><span class="n">landmarkFilename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">landmarkFile</span><span class="p">:</span>
+            <span class="n">readPoints</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">landmarkFile</span><span class="p">:</span>
+                <span class="n">stripLine</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">stripLine</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">stripLine</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;@1&#39;</span><span class="p">:</span>
+                    <span class="n">readPoints</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">readPoints</span><span class="p">:</span>
+                    <span class="n">splitLine</span> <span class="o">=</span> <span class="n">stripLine</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">splitLine</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">splitLine</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">splitLine</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                    <span class="n">landmarks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="n">landmarks</span></div>
+
+<div class="viewcode-block" id="RecordingSite"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSite">[docs]</a><span class="k">class</span> <span class="nc">RecordingSite</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    light-weight container holding information</span>
+<span class="sd">    about recording site:</span>
+<span class="sd">    section and segment ID of attached cell,</span>
+<span class="sd">    identifier label, and list of recorded voltage vectors</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">secID</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">segID</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">vRecordings</span> <span class="o">=</span> <span class="kc">None</span>
+    
+<div class="viewcode-block" id="RecordingSite.__init__"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.RecordingSite.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secID</span><span class="p">,</span> <span class="n">segID</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">secID</span> <span class="o">=</span> <span class="n">secID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segID</span> <span class="o">=</span> <span class="n">segID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vRecordings</span> <span class="o">=</span> <span class="p">[]</span></div></div>
+
+<div class="viewcode-block" id="SpikeInit"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit">[docs]</a><span class="k">class</span> <span class="nc">SpikeInit</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Provides methods for analysis of spike initiation</span>
+<span class="sd">    in in vivo/ in vitro simulations. Can be used to</span>
+<span class="sd">    obtain features of spike shape, adaptation etc...</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+<div class="viewcode-block" id="SpikeInit.__init__"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="c1">#        TODO: implement</span>
+        <span class="k">pass</span></div>
+    
+<div class="viewcode-block" id="SpikeInit.vm_steady_state"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">vm_steady_state</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">tStim</span><span class="p">,</span> <span class="n">dtStim</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        computes &quot;steady-state&quot; subthreshold voltage from</span>
+<span class="sd">        voltage trace during stimulation time window</span>
+<span class="sd">        [tStim, tStim+dtStim]</span>
+<span class="sd">        this can be used to define voltage spike threshold</span>
+<span class="sd">        at current intensities just below AP initiation</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tVec</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">tEnd</span> <span class="o">=</span> <span class="n">tStim</span> <span class="o">+</span> <span class="n">dtStim</span>
+        <span class="n">iBegin</span><span class="p">,</span> <span class="n">iEnd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tStim</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tStim</span><span class="p">:</span>
+                <span class="n">iBegin</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tEnd</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tEnd</span><span class="p">:</span>
+                <span class="n">iEnd</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">v_</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">iBegin</span><span class="p">:</span><span class="n">iEnd</span><span class="p">]</span>
+<span class="c1">#        steady-state can only be determined for constant</span>
+<span class="c1">#        current injection, not for synaptic input;</span>
+<span class="c1">#        therefore, use median of this trace as approximation</span>
+        <span class="n">vss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">v_</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vss</span></div>
+    
+<div class="viewcode-block" id="SpikeInit.analyze_single_spike"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">analyze_single_spike</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">tVec</span><span class="p">,</span> <span class="n">thresh</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        for comparison with in vitro spike shape:</span>
+<span class="sd">        compute spike height, FWHM (duration), AHP</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tVec</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">vMax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">vMax</span> <span class="o">-</span> <span class="n">thresh</span>
+        <span class="n">halfMax</span> <span class="o">=</span> <span class="n">vMax</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">height</span>
+        <span class="n">tBegin</span><span class="p">,</span> <span class="n">tEnd</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
+        <span class="n">iEnd</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">halfMax</span> <span class="ow">and</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">halfMax</span><span class="p">:</span>
+                <span class="n">tBegin</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">halfMax</span> <span class="ow">and</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">halfMax</span><span class="p">:</span>
+                <span class="n">tEnd</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">iEnd</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">tEnd</span> <span class="o">-</span> <span class="n">tBegin</span>
+        <span class="n">vMin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">iEnd</span><span class="p">:])</span>
+        <span class="n">ahp</span> <span class="o">=</span> <span class="n">thresh</span> <span class="o">-</span> <span class="n">vMin</span>
+        <span class="k">return</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">ahp</span></div>
+    
+<div class="viewcode-block" id="SpikeInit.analyze_spike_train"><a class="viewcode-back" href="../../single_cell_analyzer.html#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_spike_train">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">analyze_spike_train</span><span class="p">():</span>
+        <span class="k">pass</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

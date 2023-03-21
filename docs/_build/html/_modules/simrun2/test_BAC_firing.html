@@ -1,0 +1,523 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>simrun2.test_BAC_firing &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for simrun2.test_BAC_firing</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Jan 28, 2013</span>
+
+<span class="sd">passive properties L2 neuron model</span>
+
+<span class="sd">@author: robert</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">neuron</span>
+<span class="kn">import</span> <span class="nn">single_cell_parser</span> <span class="k">as</span> <span class="nn">scp</span>
+<span class="kn">import</span> <span class="nn">single_cell_analyzer</span> <span class="k">as</span> <span class="nn">sca</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">neuron</span><span class="o">.</span><span class="n">h</span>
+
+<div class="viewcode-block" id="test_BAC_firing"><a class="viewcode-back" href="../../simrun2.html#simrun2.test_BAC_firing.test_BAC_firing">[docs]</a><span class="k">def</span> <span class="nf">test_BAC_firing</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+    <span class="n">neuronParameters</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">build_parameters</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="n">scp</span><span class="o">.</span><span class="n">load_NMODL_parameters</span><span class="p">(</span><span class="n">neuronParameters</span><span class="p">)</span>
+    <span class="n">cellParam</span> <span class="o">=</span> <span class="n">neuronParameters</span><span class="o">.</span><span class="n">neuron</span>
+    
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">scp</span><span class="o">.</span><span class="n">create_cell</span><span class="p">(</span><span class="n">cellParam</span><span class="p">)</span>
+<span class="c1">#    cell = scp.create_cell(cellParam, scaleFunc=scale_apical, allPoints=True)</span>
+<span class="c1">#    cell = scp.create_cell(cellParam, scaleFunc=scale_apical)</span>
+<span class="c1">#    cell = scp.create_cell(cellParam)</span>
+    
+<span class="c1">#    h.psection(sec=cell.soma)</span>
+<span class="c1">#    for branchSectionList in cell.branches[&#39;ApicalDendrite&#39;]:</span>
+<span class="c1">#        for sec in branchSectionList:</span>
+<span class="c1">#            dist0 = cell.distance_to_soma(sec, 0.0)</span>
+<span class="c1">#            dist05 = cell.distance_to_soma(sec, 0.5)</span>
+<span class="c1">#            dist1 = cell.distance_to_soma(sec, 1.0)</span>
+<span class="c1">#            print &#39;distance 0.0 = %.2f&#39; % dist0</span>
+<span class="c1">#            print &#39;distance 0.5 = %.2f&#39; % dist05</span>
+<span class="c1">#            print &#39;distance 1.0 = %.2f&#39; % dist1</span>
+<span class="c1">#            h.psection(sec=sec)</span>
+<span class="c1">#            for seg in sec:</span>
+<span class="c1">#                print &#39;x = %.2f&#39; % seg.x</span>
+<span class="c1">#                print &#39;Ih gbar = %.8f&#39; % seg.Ih.gIhbar</span>
+<span class="c1">#                print &#39;should be = %.8f&#39; % (0.0002*(-0.8696 + 2.0870*np.exp(3.6161*cell.distance_to_soma(sec, seg.x)/1576.55286112)))</span>
+<span class="c1">#    for branchSectionList in cell.branches[&#39;Dendrite&#39;]:</span>
+<span class="c1">#        for sec in branchSectionList:</span>
+<span class="c1">#            dist0 = cell.distance_to_soma(sec, 0.0)</span>
+<span class="c1">#            dist05 = cell.distance_to_soma(sec, 0.5)</span>
+<span class="c1">#            dist1 = cell.distance_to_soma(sec, 1.0)</span>
+<span class="c1">#            print &#39;distance 0.0 = %.2f&#39; % dist0</span>
+<span class="c1">#            print &#39;distance 0.5 = %.2f&#39; % dist05</span>
+<span class="c1">#            print &#39;distance 1.0 = %.2f&#39; % dist1</span>
+<span class="c1">#            h.psection(sec=sec)</span>
+<span class="c1">#            for seg in sec:</span>
+<span class="c1">#                print &#39;x = %.2f&#39; % seg.x</span>
+<span class="c1">#                print &#39;Ih gbar = %.8f&#39; % seg.Ih.gIhbar</span>
+<span class="c1">#    for branchSectionList in cell.branches[&#39;AIS&#39;]:</span>
+<span class="c1">#        for sec in branchSectionList:</span>
+<span class="c1">#            dist0 = cell.distance_to_soma(sec, 0.0)</span>
+<span class="c1">#            dist05 = cell.distance_to_soma(sec, 0.5)</span>
+<span class="c1">#            dist1 = cell.distance_to_soma(sec, 1.0)</span>
+<span class="c1">#            print &#39;distance 0.0 = %.2f&#39; % dist0</span>
+<span class="c1">#            print &#39;distance 0.5 = %.2f&#39; % dist05</span>
+<span class="c1">#            print &#39;distance 1.0 = %.2f&#39; % dist1</span>
+<span class="c1">#            h.psection(sec=sec)</span>
+    
+    <span class="n">totalArea</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">somaArea</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">apicalArea</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">basalArea</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">axonArea</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+        <span class="n">totalArea</span> <span class="o">+=</span> <span class="n">sec</span><span class="o">.</span><span class="n">area</span>
+        <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Soma&#39;</span><span class="p">:</span>
+            <span class="n">somaArea</span> <span class="o">+=</span> <span class="n">sec</span><span class="o">.</span><span class="n">area</span>
+        <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">sec</span><span class="p">:</span>
+                <span class="n">apicalArea</span> <span class="o">+=</span> <span class="n">h</span><span class="o">.</span><span class="n">area</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
+<span class="c1">#            apicalArea += sec.area</span>
+        <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Dendrite&#39;</span><span class="p">:</span>
+            <span class="n">basalArea</span> <span class="o">+=</span> <span class="n">sec</span><span class="o">.</span><span class="n">area</span>
+        <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;AIS&#39;</span> <span class="ow">or</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;Myelin&#39;</span><span class="p">:</span>
+            <span class="n">axonArea</span> <span class="o">+=</span> <span class="n">sec</span><span class="o">.</span><span class="n">area</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;total area = </span><span class="si">{:.2f}</span><span class="s1"> micron^2&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">totalArea</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;soma area = </span><span class="si">{:.2f}</span><span class="s1"> micron^2&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">somaArea</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;apical area = </span><span class="si">{:.2f}</span><span class="s1"> micron^2&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">apicalArea</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;basal area = </span><span class="si">{:.2f}</span><span class="s1"> micron^2&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">basalArea</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;axon area = </span><span class="si">{:.2f}</span><span class="s1"> micron^2&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">axonArea</span><span class="p">))</span>
+    
+    <span class="n">tStop</span> <span class="o">=</span> <span class="mf">600.0</span>
+    <span class="n">neuronParameters</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">tStop</span> <span class="o">=</span> <span class="n">tStop</span>
+<span class="c1">#    neuronParameters.sim.dt = 0.005</span>
+    <span class="n">tIStart</span> <span class="o">=</span> <span class="mf">295.0</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="mf">5.0</span>
+    <span class="n">apicalDt</span> <span class="o">=</span> <span class="mf">5.0</span>
+    <span class="n">iAmpSoma</span> <span class="o">=</span> <span class="mf">1.9</span>
+    <span class="n">iAmpApical</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">apicalTauRise</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">apicalTauDecay</span> <span class="o">=</span> <span class="mf">5.0</span>
+<span class="c1">#    apicalBifurcationDistance = 620.0 # Hay et al. cell1</span>
+<span class="c1">#    apicalBifurcationDistance = 450.0 # cell ID 87</span>
+    <span class="n">apicalBifurcationDistance</span> <span class="o">=</span> <span class="mf">800.0</span> <span class="c1"># cell ID 86</span>
+    <span class="n">apicalInjectionDistance</span> <span class="o">=</span> <span class="mf">620.0</span> <span class="c1"># cell ID 86</span>
+<span class="c1">#    apicalBifurcationDistance = 1100.0 # cell ID 86</span>
+<span class="c1">#    apicalInjectionDistance = 1015.0 # cell ID 86</span>
+<span class="c1">#    apicalBifurcationDistance = 903.0 # cell ID 93</span>
+<span class="c1">#    apicalInjectionDistance = 772.0 # cell ID 93</span>
+    <span class="n">apicalBifurcationSec</span> <span class="o">=</span> <span class="n">get_apical_section_at_distance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">apicalBifurcationDistance</span><span class="p">)</span>
+    
+<span class="c1">#    somaDistances = []</span>
+<span class="c1">#    diameters = []</span>
+<span class="c1">#    Ihbar = []</span>
+<span class="c1">#    CaHVAbar = []</span>
+<span class="c1">#    CaLVAbar = []</span>
+<span class="c1">#    gPas = []</span>
+<span class="c1">#    for sec in cell.sections:</span>
+<span class="c1">#        if sec.label == &#39;ApicalDendrite&#39; or sec.label == &#39;Soma&#39; or sec.label == &#39;Dendrite&#39;:</span>
+<span class="c1">#            for seg in sec:</span>
+<span class="c1">#                dist = cell.distance_to_soma(sec, seg.x)</span>
+<span class="c1">#                diam = seg.diam</span>
+<span class="c1">#                somaDistances.append(dist)</span>
+<span class="c1">#                diameters.append(diam)</span>
+<span class="c1">#                Ihbar.append(seg.Ih.gIhbar)</span>
+<span class="c1">##                CaHVAbar.append(seg.Ca_HVA.gCa_HVAbar)</span>
+<span class="c1">##                CaLVAbar.append(seg.Ca_LVAst.gCa_LVAstbar)</span>
+<span class="c1">#                gPas.append(seg.pas.g)</span>
+    
+<span class="c1">#    plt.figure(1)</span>
+<span class="c1">#    plt.plot(somaDistances, diameters, &#39;ko&#39;, label=&#39;diameter&#39;)</span>
+<span class="c1">#    plt.legend()</span>
+<span class="c1">#    plt.figure(2)</span>
+<span class="c1">#    plt.plot(somaDistances, Ihbar, &#39;ko&#39;, label=&#39;Ih_bar&#39;)</span>
+<span class="c1">#    plt.legend()</span>
+<span class="c1">##    plt.figure(3)</span>
+<span class="c1">##    plt.plot(somaDistances, CaHVAbar, &#39;ro&#39;, label=&#39;CaHVA_bar&#39;)</span>
+<span class="c1">##    plt.legend()</span>
+<span class="c1">##    plt.figure(4)</span>
+<span class="c1">##    plt.plot(somaDistances, CaLVAbar, &#39;bo&#39;, label=&#39;CaLVA_bar&#39;)</span>
+<span class="c1">##    plt.legend()</span>
+<span class="c1">#    plt.figure(5)</span>
+<span class="c1">#    plt.plot(somaDistances, gPas, &#39;bo&#39;, label=&#39;gPas&#39;)</span>
+<span class="c1">#    plt.legend()</span>
+<span class="c1">#    plt.show()</span>
+    
+<span class="c1">#    h.psection(sec=apicalBifurcationSec)</span>
+<span class="c1">#    for seg in apicalBifurcationSec:</span>
+<span class="c1">#        print &#39;x: %.2f&#39; % seg.x</span>
+<span class="c1">#        print &#39;gCa_LVAstbar: &#39;,</span>
+<span class="c1">#        print seg.Ca_LVAst.gCa_LVAstbar</span>
+<span class="c1">#        print &#39;gCa_HVAbar: &#39;,</span>
+<span class="c1">#        print seg.Ca_HVA.gCa_HVAbar</span>
+<span class="c1">#        print &#39;gIhbar: &#39;,</span>
+<span class="c1">#        print seg.Ih.gIhbar</span>
+    <span class="n">visualize</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">t1</span><span class="p">,</span> <span class="n">vmSoma1</span><span class="p">,</span> <span class="n">vmApical1</span> <span class="o">=</span> <span class="n">soma_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">iAmpSoma</span><span class="p">,</span> <span class="n">tIStart</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">apicalBifurcationSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">neuronParameters</span><span class="o">.</span><span class="n">sim</span><span class="p">,</span> <span class="n">visualize</span><span class="p">)</span>
+    <span class="n">t2</span><span class="p">,</span> <span class="n">vmSoma2</span><span class="p">,</span> <span class="n">vmApical2</span> <span class="o">=</span> <span class="n">apical_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">apicalBifurcationSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">iAmpApical</span><span class="p">,</span> <span class="n">tIStart</span><span class="p">,</span> <span class="n">apicalTauRise</span><span class="p">,</span> <span class="n">apicalTauDecay</span><span class="p">,</span> <span class="n">neuronParameters</span><span class="o">.</span><span class="n">sim</span><span class="p">,</span> <span class="n">visualize</span><span class="p">)</span>
+    <span class="n">t3</span><span class="p">,</span> <span class="n">vmSoma3</span><span class="p">,</span> <span class="n">vmApical3</span> <span class="o">=</span> <span class="n">soma_apical_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">iAmpSoma</span><span class="p">,</span> <span class="n">tIStart</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">apicalBifurcationSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">iAmpApical</span><span class="p">,</span> <span class="n">apicalDt</span><span class="p">,</span> <span class="n">apicalTauRise</span><span class="p">,</span> <span class="n">apicalTauDecay</span><span class="p">,</span> <span class="n">neuronParameters</span><span class="o">.</span><span class="n">sim</span><span class="p">,</span> <span class="n">visualize</span><span class="p">)</span>
+<span class="c1">#    #iAmpApical2 = 2.5</span>
+<span class="c1">#    #t4, vmSoma4, vmApical4 = apical_injection(cell, apicalBifurcationSec, iAmpApical2, tIStart, apicalTauRise, apicalTauDecay, neuronParameters.sim)</span>
+    
+<span class="c1">#    for i in range(len(t1)):</span>
+<span class="c1">#        print t1[i],</span>
+<span class="c1">#        print &#39;\t&#39;,</span>
+<span class="c1">#        print vmSoma1[i]</span>
+    
+    <span class="n">showPlots</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">showPlots</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">vmSoma1</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">vmApical1</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;apical&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time [ms]&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Vm [mV]&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;soma current injection amp=</span><span class="si">%.2f</span><span class="s1"> nA&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">iAmpSoma</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">vmSoma2</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">vmApical2</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;apical&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time [ms]&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Vm [mV]&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;apical current injection amp=</span><span class="si">%.2f</span><span class="s1"> nA&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">iAmpApical</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t3</span><span class="p">,</span> <span class="n">vmSoma3</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;soma&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t3</span><span class="p">,</span> <span class="n">vmApical3</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;apical&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time [ms]&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Vm [mV]&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;soma + apical current injection amp=</span><span class="si">%.2f</span><span class="s1">/</span><span class="si">%.2f</span><span class="s1"> nA&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">iAmpSoma</span><span class="p">,</span> <span class="n">iAmpApical</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="c1">#        plt.figure(4)</span>
+<span class="c1">#        plt.plot(t4, vmSoma4, &#39;k&#39;, label=&#39;soma&#39;)</span>
+<span class="c1">#        plt.plot(t4, vmApical4, &#39;r&#39;, label=&#39;apical&#39;)</span>
+<span class="c1">#        plt.xlabel(&#39;time [ms]&#39;)</span>
+<span class="c1">#        plt.ylabel(&#39;Vm [mV]&#39;)</span>
+<span class="c1">#        plt.title(&#39;apical current injection amp=%.2f nA&#39; % (iAmpApical2))</span>
+<span class="c1">#        plt.legend()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="soma_injection"><a class="viewcode-back" href="../../simrun2.html#simrun2.test_BAC_firing.soma_injection">[docs]</a><span class="k">def</span> <span class="nf">soma_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">apicalSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">simParam</span><span class="p">,</span> <span class="n">saveVisualization</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;selected apical section:&#39;</span><span class="p">)</span>
+<span class="c1">#    h.psection(sec=apicalSec)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">apicalSec</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+    <span class="n">somaDist</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">distance_to_soma</span><span class="p">(</span><span class="n">apicalSec</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">apicalx</span> <span class="o">=</span> <span class="p">(</span><span class="n">apicalInjectionDistance</span> <span class="o">-</span> <span class="n">somaDist</span><span class="p">)</span><span class="o">/</span><span class="n">apicalSec</span><span class="o">.</span><span class="n">L</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;distance to soma: </span><span class="si">{:.2f}</span><span class="s1"> micron&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">somaDist</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;apicalInjectionDistance: </span><span class="si">{:.2f}</span><span class="s1"> micron&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">apicalInjectionDistance</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;apicalx: </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">apicalx</span><span class="p">))</span>
+    
+    <span class="n">iclamp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="p">)</span>
+    <span class="n">iclamp</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
+    <span class="n">iclamp</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="n">duration</span>
+    <span class="n">iclamp</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="n">amplitude</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;soma current injection: </span><span class="si">{:.2f}</span><span class="s1"> nA&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amplitude</span><span class="p">))</span>
+    <span class="n">tVec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+    <span class="n">tVec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">scp</span><span class="o">.</span><span class="n">init_neuron_run</span><span class="p">(</span><span class="n">simParam</span><span class="p">,</span> <span class="n">vardt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">stopTime</span> <span class="o">-</span> <span class="n">startTime</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;NEURON runtime: </span><span class="si">{:.2f}</span><span class="s1"> s&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+    
+    <span class="n">vmSoma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">minSeg</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">mindx</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">apicalSec</span><span class="o">.</span><span class="n">segx</span><span class="p">)):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">apicalSec</span><span class="o">.</span><span class="n">segx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">apicalx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dx</span> <span class="o">&lt;</span> <span class="n">mindx</span><span class="p">:</span>
+            <span class="n">mindx</span> <span class="o">=</span> <span class="n">dx</span>
+            <span class="n">minSeg</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">vmApical</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">apicalSec</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="n">minSeg</span><span class="p">])</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tVec</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">saveVisualization</span><span class="p">:</span>
+        <span class="n">visFName</span> <span class="o">=</span> <span class="s1">&#39;visualization/soma_injection_86/&#39;</span>
+        <span class="n">visFName</span> <span class="o">+=</span> <span class="s1">&#39;soma_current_injection_amp_</span><span class="si">%.1f</span><span class="s1">nA_dur_</span><span class="si">%.0f</span><span class="s1">ms&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">amplitude</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
+        <span class="n">scp</span><span class="o">.</span><span class="n">write_cell_simulation</span><span class="p">(</span><span class="n">visFName</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Vm&#39;</span><span class="p">],</span> <span class="n">t</span><span class="p">,</span> <span class="n">allPoints</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">cell</span><span class="o">.</span><span class="n">re_init_cell</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">vmSoma</span><span class="p">,</span> <span class="n">vmApical</span></div>
+
+<div class="viewcode-block" id="apical_injection"><a class="viewcode-back" href="../../simrun2.html#simrun2.test_BAC_firing.apical_injection">[docs]</a><span class="k">def</span> <span class="nf">apical_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">apicalBifurcationSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">tauRise</span><span class="p">,</span> <span class="n">tauDecay</span><span class="p">,</span> <span class="n">simParam</span><span class="p">,</span> <span class="n">saveVisualization</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;selected apical section:&#39;</span><span class="p">)</span>
+<span class="c1">#    h.psection(sec=apicalBifurcationSec)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">apicalBifurcationSec</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+    <span class="n">somaDist</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">distance_to_soma</span><span class="p">(</span><span class="n">apicalBifurcationSec</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">apicalx</span> <span class="o">=</span> <span class="p">(</span><span class="n">apicalInjectionDistance</span> <span class="o">-</span> <span class="n">somaDist</span><span class="p">)</span><span class="o">/</span><span class="n">apicalBifurcationSec</span><span class="o">.</span><span class="n">L</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;distance to soma: </span><span class="si">{:.2f}</span><span class="s1"> micron&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">somaDist</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;apicalInjectionDistance: </span><span class="si">{:.2f}</span><span class="s1"> micron&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">apicalInjectionDistance</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;apicalx: </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">apicalx</span><span class="p">))</span>
+    
+    <span class="n">iclamp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">epsp</span><span class="p">(</span><span class="n">apicalx</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">apicalBifurcationSec</span><span class="p">)</span>
+    <span class="n">iclamp</span><span class="o">.</span><span class="n">onset</span> <span class="o">=</span> <span class="n">delay</span>
+    <span class="n">iclamp</span><span class="o">.</span><span class="n">imax</span> <span class="o">=</span> <span class="n">amplitude</span>
+    <span class="n">iclamp</span><span class="o">.</span><span class="n">tau0</span> <span class="o">=</span> <span class="n">tauRise</span>
+    <span class="n">iclamp</span><span class="o">.</span><span class="n">tau1</span> <span class="o">=</span> <span class="n">tauDecay</span>
+        
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;apical current injection: </span><span class="si">{:.2f}</span><span class="s1"> nA&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amplitude</span><span class="p">))</span>
+    <span class="n">tVec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+    <span class="n">tVec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">scp</span><span class="o">.</span><span class="n">init_neuron_run</span><span class="p">(</span><span class="n">simParam</span><span class="p">,</span> <span class="n">vardt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">stopTime</span> <span class="o">-</span> <span class="n">startTime</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;NEURON runtime: </span><span class="si">{:.2f}</span><span class="s1"> s&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+    
+    <span class="n">vmSoma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">minSeg</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">mindx</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">apicalBifurcationSec</span><span class="o">.</span><span class="n">segx</span><span class="p">)):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">apicalBifurcationSec</span><span class="o">.</span><span class="n">segx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">apicalx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dx</span> <span class="o">&lt;</span> <span class="n">mindx</span><span class="p">:</span>
+            <span class="n">mindx</span> <span class="o">=</span> <span class="n">dx</span>
+            <span class="n">minSeg</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">vmApical</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">apicalBifurcationSec</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="n">minSeg</span><span class="p">])</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tVec</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">saveVisualization</span><span class="p">:</span>
+        <span class="n">visFName</span> <span class="o">=</span> <span class="s1">&#39;visualization/apical_injection_86/&#39;</span>
+        <span class="n">visFName</span> <span class="o">+=</span> <span class="s1">&#39;apical_current_injection_amp_</span><span class="si">%.1f</span><span class="s1">nA&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>
+        <span class="n">scp</span><span class="o">.</span><span class="n">write_cell_simulation</span><span class="p">(</span><span class="n">visFName</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Vm&#39;</span><span class="p">],</span> <span class="n">t</span><span class="p">,</span> <span class="n">allPoints</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">cell</span><span class="o">.</span><span class="n">re_init_cell</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">vmSoma</span><span class="p">,</span> <span class="n">vmApical</span></div>
+
+<div class="viewcode-block" id="soma_apical_injection"><a class="viewcode-back" href="../../simrun2.html#simrun2.test_BAC_firing.soma_apical_injection">[docs]</a><span class="k">def</span> <span class="nf">soma_apical_injection</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">somaAmplitude</span><span class="p">,</span> <span class="n">somaDelay</span><span class="p">,</span> <span class="n">somaDuration</span><span class="p">,</span> <span class="n">apicalBifurcationSec</span><span class="p">,</span> <span class="n">apicalInjectionDistance</span><span class="p">,</span> <span class="n">apicalAmplitude</span><span class="p">,</span>\
+                          <span class="n">apicalDelayDt</span><span class="p">,</span> <span class="n">apicalTauRise</span><span class="p">,</span> <span class="n">apicalTauDecay</span><span class="p">,</span> <span class="n">simParam</span><span class="p">,</span> <span class="n">saveVisualization</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;selected apical section:&#39;</span><span class="p">)</span>
+<span class="c1">#    h.psection(sec=apicalBifurcationSec)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">apicalBifurcationSec</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+    <span class="n">somaDist</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">distance_to_soma</span><span class="p">(</span><span class="n">apicalBifurcationSec</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">apicalx</span> <span class="o">=</span> <span class="p">(</span><span class="n">apicalInjectionDistance</span> <span class="o">-</span> <span class="n">somaDist</span><span class="p">)</span><span class="o">/</span><span class="n">apicalBifurcationSec</span><span class="o">.</span><span class="n">L</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;distance to soma: </span><span class="si">{:.2f}</span><span class="s1"> micron&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">somaDist</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;apicalInjectionDistance: </span><span class="si">{:.2f}</span><span class="s1"> micron&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">apicalInjectionDistance</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;apicalx: </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">apicalx</span><span class="p">))</span>
+    
+    <span class="n">iclamp</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">IClamp</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="p">)</span>
+    <span class="n">iclamp</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">somaDelay</span>
+    <span class="n">iclamp</span><span class="o">.</span><span class="n">dur</span> <span class="o">=</span> <span class="n">somaDuration</span>
+    <span class="n">iclamp</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="n">somaAmplitude</span>
+    
+    <span class="n">iclamp2</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">epsp</span><span class="p">(</span><span class="n">apicalx</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">apicalBifurcationSec</span><span class="p">)</span>
+    <span class="n">iclamp2</span><span class="o">.</span><span class="n">onset</span> <span class="o">=</span> <span class="n">somaDelay</span> <span class="o">+</span> <span class="n">apicalDelayDt</span>
+    <span class="n">iclamp2</span><span class="o">.</span><span class="n">imax</span> <span class="o">=</span> <span class="n">apicalAmplitude</span>
+    <span class="n">iclamp2</span><span class="o">.</span><span class="n">tau0</span> <span class="o">=</span> <span class="n">apicalTauRise</span>
+    <span class="n">iclamp2</span><span class="o">.</span><span class="n">tau1</span> <span class="o">=</span> <span class="n">apicalTauDecay</span>
+        
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;soma current injection: </span><span class="si">{:.2f}</span><span class="s1"> nA&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">somaAmplitude</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;apical current injection: </span><span class="si">{:.2f}</span><span class="s1"> nA&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">apicalAmplitude</span><span class="p">))</span>
+    <span class="n">tVec</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">Vector</span><span class="p">()</span>
+    <span class="n">tVec</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">_ref_t</span><span class="p">)</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">scp</span><span class="o">.</span><span class="n">init_neuron_run</span><span class="p">(</span><span class="n">simParam</span><span class="p">,</span> <span class="n">vardt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">stopTime</span> <span class="o">-</span> <span class="n">startTime</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;NEURON runtime: </span><span class="si">{:.2f}</span><span class="s1"> s&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+    
+    <span class="n">vmSoma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">soma</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">minSeg</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">mindx</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">apicalBifurcationSec</span><span class="o">.</span><span class="n">segx</span><span class="p">)):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">apicalBifurcationSec</span><span class="o">.</span><span class="n">segx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">apicalx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dx</span> <span class="o">&lt;</span> <span class="n">mindx</span><span class="p">:</span>
+            <span class="n">mindx</span> <span class="o">=</span> <span class="n">dx</span>
+            <span class="n">minSeg</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">vmApical</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">apicalBifurcationSec</span><span class="o">.</span><span class="n">recVList</span><span class="p">[</span><span class="n">minSeg</span><span class="p">])</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tVec</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">saveVisualization</span><span class="p">:</span>
+        <span class="n">visFName</span> <span class="o">=</span> <span class="s1">&#39;visualization/soma_apical_injection_86/&#39;</span>
+        <span class="n">visFName</span> <span class="o">+=</span> <span class="s1">&#39;soma_apical_current_injection_soma_amp_</span><span class="si">%.1f</span><span class="s1">nA_dur_</span><span class="si">%.0f</span><span class="s1">ms_apical_amp_</span><span class="si">%.1f</span><span class="s1">nA_dt_</span><span class="si">%.0f</span><span class="s1">ms&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">somaAmplitude</span><span class="p">,</span> <span class="n">somaDuration</span><span class="p">,</span> <span class="n">apicalAmplitude</span><span class="p">,</span> <span class="n">apicalDelayDt</span><span class="p">)</span>
+        <span class="n">scp</span><span class="o">.</span><span class="n">write_cell_simulation</span><span class="p">(</span><span class="n">visFName</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Vm&#39;</span><span class="p">],</span> <span class="n">t</span><span class="p">,</span> <span class="n">allPoints</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">cell</span><span class="o">.</span><span class="n">re_init_cell</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">vmSoma</span><span class="p">,</span> <span class="n">vmApical</span></div>
+
+<div class="viewcode-block" id="get_apical_section_at_distance"><a class="viewcode-back" href="../../simrun2.html#simrun2.test_BAC_firing.get_apical_section_at_distance">[docs]</a><span class="k">def</span> <span class="nf">get_apical_section_at_distance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;determine interior apical dendrite section (i.e. no ending section)</span>
+<span class="sd">    closest to given distance&#39;&#39;&#39;</span>
+    <span class="n">closestSec</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">minDist</span> <span class="o">=</span> <span class="mf">1e9</span>
+    <span class="k">for</span> <span class="n">branchSectionList</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">branches</span><span class="p">[</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">branchSectionList</span><span class="p">:</span>
+            <span class="n">secRef</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">SectionRef</span><span class="p">(</span><span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">secRef</span><span class="o">.</span><span class="n">nchild</span><span class="p">():</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">distance_to_soma</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dist</span> <span class="o">-</span> <span class="n">distance</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">minDist</span><span class="p">:</span>
+                    <span class="n">minDist</span> <span class="o">=</span> <span class="n">dist</span>
+                    <span class="n">closestSec</span> <span class="o">=</span> <span class="n">sec</span>
+    <span class="k">return</span> <span class="n">closestSec</span></div>
+
+<div class="viewcode-block" id="scale_apical"><a class="viewcode-back" href="../../simrun2.html#simrun2.test_BAC_firing.scale_apical">[docs]</a><span class="k">def</span> <span class="nf">scale_apical</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    scale apical diameters depending on</span>
+<span class="sd">    distance to soma; therefore only possible</span>
+<span class="sd">    after creating complete cell</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">dendScale</span> <span class="o">=</span> <span class="mf">2.5</span>
+    <span class="n">scaleCount</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sections</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">:</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">distance_to_soma</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="mf">1000.0</span><span class="p">:</span>
+                <span class="k">continue</span>
+<span class="c1">#            for cell 86:</span>
+            <span class="k">if</span> <span class="n">scaleCount</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">scaleCount</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c1">#            dummy = h.pt3dclear(sec=sec)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">nrOfPts</span><span class="p">):</span>
+                <span class="n">oldDiam</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">diamList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">newDiam</span> <span class="o">=</span> <span class="n">dendScale</span><span class="o">*</span><span class="n">oldDiam</span>
+                <span class="n">h</span><span class="o">.</span><span class="n">pt3dchange</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">newDiam</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
+<span class="c1">#                x, y, z = sec.pts[i]</span>
+<span class="c1">#                sec.diamList[i] = sec.diamList[i]*dendScale</span>
+<span class="c1">#                d = sec.diamList[i]</span>
+<span class="c1">#                dummy = h.pt3dadd(x, y, z, d, sec=sec)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scaled </span><span class="si">{:d}</span><span class="s1"> apical sections...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">scaleCount</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="write_sim_results"><a class="viewcode-back" href="../../simrun2.html#simrun2.test_BAC_firing.write_sim_results">[docs]</a><span class="k">def</span> <span class="nf">write_sim_results</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outputFile</span><span class="p">:</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;# simulation results</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;# t</span><span class="se">\t</span><span class="s1">vsoma&#39;</span>
+        <span class="n">header</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="n">outputFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">line</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span>
+            <span class="n">line</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">line</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">outputFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="c1">#    anomalous_rectifier()</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">test_BAC_firing</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">in_silico_framework</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

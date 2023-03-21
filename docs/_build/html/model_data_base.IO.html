@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>model_data_base.IO package &#8212; In-Silico Framework (ISF) 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="model_data_base.IO.LoaderDumper package" href="model_data_base.IO.LoaderDumper.html" />
+    <link rel="prev" title="model_data_base package" href="model_data_base.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="model-data-base-io-package">
+<h1>model_data_base.IO package<a class="headerlink" href="#model-data-base-io-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html">model_data_base.IO.LoaderDumper package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.cell">model_data_base.IO.LoaderDumper.cell module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.dask_to_csv">model_data_base.IO.LoaderDumper.dask_to_csv module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.dask_to_msgpack">model_data_base.IO.LoaderDumper.dask_to_msgpack module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.genetic_algorithm_generation">model_data_base.IO.LoaderDumper.genetic_algorithm_generation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.just_create_folder">model_data_base.IO.LoaderDumper.just_create_folder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.just_create_mdb">model_data_base.IO.LoaderDumper.just_create_mdb module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.numpy_to_msgpack">model_data_base.IO.LoaderDumper.numpy_to_msgpack module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.numpy_to_npy">model_data_base.IO.LoaderDumper.numpy_to_npy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.numpy_to_npz">model_data_base.IO.LoaderDumper.numpy_to_npz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.pandas_to_msgpack">model_data_base.IO.LoaderDumper.pandas_to_msgpack module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.pandas_to_pickle">model_data_base.IO.LoaderDumper.pandas_to_pickle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.parent_classes">model_data_base.IO.LoaderDumper.parent_classes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.reduced_lda_model">model_data_base.IO.LoaderDumper.reduced_lda_model module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.settings">model_data_base.IO.LoaderDumper.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.to_cloudpickle">model_data_base.IO.LoaderDumper.to_cloudpickle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.to_msgpack">model_data_base.IO.LoaderDumper.to_msgpack module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper.to_pickle">model_data_base.IO.LoaderDumper.to_pickle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html#module-model_data_base.IO.LoaderDumper">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-model_data_base.IO.dask_wrappers">
+<span id="model-data-base-io-dask-wrappers-module"></span><h2>model_data_base.IO.dask_wrappers module<a class="headerlink" href="#module-model_data_base.IO.dask_wrappers" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="model_data_base.IO.dask_wrappers.concat_path_elements_to_filelist">
+<code class="sig-prename descclassname">model_data_base.IO.dask_wrappers.</code><code class="sig-name descname">concat_path_elements_to_filelist</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model_data_base/IO/dask_wrappers.html#concat_path_elements_to_filelist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.dask_wrappers.concat_path_elements_to_filelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>e.g.
+args = [‘str’, [1,2,3], pd.Series([1,2,3])]
+&gt; [[‘str’, ‘str’, ‘str’], [1, 2, 3], [1, 2, 3]]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.IO.dask_wrappers.my_reader">
+<code class="sig-prename descclassname">model_data_base.IO.dask_wrappers.</code><code class="sig-name descname">my_reader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">fun</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model_data_base/IO/dask_wrappers.html#my_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.dask_wrappers.my_reader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.IO.dask_wrappers.read_csvs">
+<code class="sig-prename descclassname">model_data_base.IO.dask_wrappers.</code><code class="sig-name descname">read_csvs</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model_data_base/IO/dask_wrappers.html#read_csvs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.dask_wrappers.read_csvs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The native dask read_csv function only supports globstrings.
+Use this function instead, if you want to provide a explicit filelist.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-model_data_base.IO.roberts_formats">
+<span id="model-data-base-io-roberts-formats-module"></span><h2>model_data_base.IO.roberts_formats module<a class="headerlink" href="#module-model_data_base.IO.roberts_formats" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="model_data_base.IO.roberts_formats.read_InputMapper_summary">
+<code class="sig-prename descclassname">model_data_base.IO.roberts_formats.</code><code class="sig-name descname">read_InputMapper_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pathOrBuffer</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">'\t'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model_data_base/IO/roberts_formats.html#read_InputMapper_summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_InputMapper_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expects the path to a summary csv file of the Single Cell Mapper,
+returns the tables as pandas tables</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.IO.roberts_formats.read_csv_uneven_length">
+<code class="sig-prename descclassname">model_data_base.IO.roberts_formats.</code><code class="sig-name descname">read_csv_uneven_length</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">n_commas</span></em>, <em class="sig-param"><span class="n">header</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">skiprows</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model_data_base/IO/roberts_formats.html#read_csv_uneven_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_csv_uneven_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>general function to read in a csv file with varying length data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – path to file</p></li>
+<li><p><strong>n_commas</strong> – maximum length of fields</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>kwargs:</dt><dd><p>header: you can provide an alternative header
+skiprows: skip rows at the beginning of the file (e.g. one to skip the</p>
+<blockquote>
+<div><p>header if you specified one manually)</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format">
+<code class="sig-prename descclassname">model_data_base.IO.roberts_formats.</code><code class="sig-name descname">read_pandas_cell_activation_from_roberts_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">sim_trail_index</span><span class="o">=</span><span class="default_value">'no_sim_trail_assigned'</span></em>, <em class="sig-param"><span class="n">max_commas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">set_index</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model_data_base/IO/roberts_formats.html#read_pandas_cell_activation_from_roberts_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads cell activation file from simulation and converts it to pandas table</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format">
+<code class="sig-prename descclassname">model_data_base.IO.roberts_formats.</code><code class="sig-name descname">read_pandas_synapse_activation_from_roberts_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">sim_trail_index</span><span class="o">=</span><span class="default_value">'no_sim_trail_assigned'</span></em>, <em class="sig-param"><span class="n">max_commas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">set_index</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model_data_base/IO/roberts_formats.html#read_pandas_synapse_activation_from_roberts_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads synapse activation file from simulation and converts it to pandas table</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format">
+<code class="sig-prename descclassname">model_data_base.IO.roberts_formats.</code><code class="sig-name descname">write_pandas_synapse_activation_to_roberts_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">syn_activation</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model_data_base/IO/roberts_formats.html#write_pandas_synapse_activation_to_roberts_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>save pandas df in a format, which can be understood by the simulator</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-model_data_base.IO">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-model_data_base.IO" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">In-Silico Framework (ISF)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">in_silico_framework</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Interface.html">Interface module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="barrel_cortex.html">barrel_cortex package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compatibility.html">compatibility module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html">getting_started package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mechanisms.html">mechanisms package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="model_data_base.html">model_data_base package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbrun.html">nbrun module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_specific_ipynb_code.html">project_specific_ipynb_code package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.html">simrun2 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.html">simrun3 package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.html">single_cell_parser package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spike_analysis.html">spike_analysis package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualize.html">visualize package</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/dendrite_thickness.html">dendrite_thickness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/installer.html">installer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/mechanisms.html">mechanisms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/single_cell_analyzer.html">single_cell_analyzer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/single_cell_parser.html">single_cell_parser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">in_silico_framework</a><ul>
+  <li><a href="model_data_base.html">model_data_base package</a><ul>
+      <li>Previous: <a href="model_data_base.html" title="previous chapter">model_data_base package</a></li>
+      <li>Next: <a href="model_data_base.IO.LoaderDumper.html" title="next chapter">model_data_base.IO.LoaderDumper package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/model_data_base.IO.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
