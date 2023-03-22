@@ -3,18 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>visualize.activity_analysis.spatiotemporal_heatmap &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <title>visualize.activity_analysis.spatiotemporal_heatmap &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -31,6 +30,9 @@
           <a href="../../../index.html" class="icon icon-home">
             In-Silico Framework (ISF)
           </a>
+              <div class="version">
+                0.0.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -40,24 +42,16 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/Interface.html">Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/SLURM_scripts.html">SLURM_scripts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/barrel_cortex.html">barrel_cortex</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/biophysics_fitting.html">biophysics_fitting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/compatibility.html">compatibility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/getting_started.html">getting_started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/mechanisms.html">mechanisms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/model_data_base.html">model_data_base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/nbrun.html">nbrun</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/simrun2.html">simrun2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/simrun3.html">simrun3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/single_cell_parser.html">single_cell_parser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/spike_analysis.html">spike_analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/tests.html">tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/visualize.html">visualize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/visualize.html">visualize</a></li>
 </ul>
 
         </div>
@@ -92,11 +86,11 @@
 <span class="n">excitatory</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;L6cc&#39;</span><span class="p">,</span> <span class="s1">&#39;L2&#39;</span><span class="p">,</span> <span class="s1">&#39;VPM&#39;</span><span class="p">,</span> <span class="s1">&#39;L4py&#39;</span><span class="p">,</span> <span class="s1">&#39;L4ss&#39;</span><span class="p">,</span> <span class="s1">&#39;L4sp&#39;</span><span class="p">,</span> <span class="s1">&#39;L5st&#39;</span><span class="p">,</span> <span class="s1">&#39;L6ct&#39;</span><span class="p">,</span> <span class="s1">&#39;L34&#39;</span><span class="p">,</span> <span class="s1">&#39;L6ccinv&#39;</span><span class="p">,</span> <span class="s1">&#39;L5tt&#39;</span><span class="p">]</span>
 <span class="n">inhibitory</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SymLocal1&#39;</span><span class="p">,</span> <span class="s1">&#39;SymLocal2&#39;</span><span class="p">,</span> <span class="s1">&#39;SymLocal3&#39;</span><span class="p">,</span> <span class="s1">&#39;SymLocal4&#39;</span><span class="p">,</span> <span class="s1">&#39;SymLocal5&#39;</span><span class="p">,</span> <span class="s1">&#39;SymLocal6&#39;</span><span class="p">,</span> <span class="s1">&#39;L45Sym&#39;</span><span class="p">,</span> <span class="s1">&#39;L1&#39;</span><span class="p">,</span> <span class="s1">&#39;L45Peak&#39;</span><span class="p">,</span> <span class="s1">&#39;L56Trans&#39;</span><span class="p">,</span> <span class="s1">&#39;L23Trans&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="pixels2figure"><a class="viewcode-back" href="../../../modules/visualize.activity_analysis.spatiotemporal_heatmap.pixels2figure.html#visualize.activity_analysis.spatiotemporal_heatmap.pixels2figure">[docs]</a><span class="k">def</span> <span class="nf">pixels2figure</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">t_max</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span> <span class="n">z_max</span> <span class="o">=</span> <span class="mi">1600</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-.</span><span class="mi">005</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=.</span><span class="mi">005</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>\
+<div class="viewcode-block" id="pixels2figure"><a class="viewcode-back" href="../../../_autosummary/visualize.activity_analysis.spatiotemporal_heatmap.html#visualize.activity_analysis.spatiotemporal_heatmap.pixels2figure">[docs]</a><span class="k">def</span> <span class="nf">pixels2figure</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">t_max</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span> <span class="n">z_max</span> <span class="o">=</span> <span class="mi">1600</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">.005</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">.005</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>\
                   <span class="n">xlabel</span> <span class="o">=</span> <span class="s2">&quot;t [ms]&quot;</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;soma distance [micrometers]&quot;</span><span class="p">,</span>
                   <span class="n">colorbarlabel</span> <span class="o">=</span> <span class="s1">&#39;active synapses / ms / micrometer / stim&#39;</span><span class="p">,</span> 
                   <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;seismic&#39;</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;takes pixels and returns histogram&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;takes pixels and returns histogram&#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fig</span><span class="p">:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">aspect</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> \

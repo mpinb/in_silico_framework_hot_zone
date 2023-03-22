@@ -3,18 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>visualize.cell_morphology_visualizer &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <title>visualize.cell_morphology_visualizer &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -31,6 +30,9 @@
           <a href="../../index.html" class="icon icon-home">
             In-Silico Framework (ISF)
           </a>
+              <div class="version">
+                0.0.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -40,24 +42,16 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/Interface.html">Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/SLURM_scripts.html">SLURM_scripts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/barrel_cortex.html">barrel_cortex</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/biophysics_fitting.html">biophysics_fitting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/compatibility.html">compatibility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/getting_started.html">getting_started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/mechanisms.html">mechanisms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/model_data_base.html">model_data_base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/nbrun.html">nbrun</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun2.html">simrun2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun3.html">simrun3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_parser.html">single_cell_parser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/spike_analysis.html">spike_analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/tests.html">tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/visualize.html">visualize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/visualize.html">visualize</a></li>
 </ul>
 
         </div>
@@ -114,21 +108,21 @@
 <span class="kn">from</span> <span class="nn">scipy.spatial.transform</span> <span class="kn">import</span> <span class="n">Rotation</span>
 
 
-<div class="viewcode-block" id="CellMorphologyVisualizer"><a class="viewcode-back" href="../../modules/visualize.cell_morphology_visualizer.CellMorphologyVisualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer">[docs]</a><span class="k">class</span> <span class="nc">CellMorphologyVisualizer</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CellMorphologyVisualizer"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer">[docs]</a><span class="k">class</span> <span class="nc">CellMorphologyVisualizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class initializes from a cell object and extracts relevant Cell data to a format that lends itself easier to plotting.</span>
 <span class="sd">    It contains useful methods for either plotting a cell morphology, the voltage along its body and its synaptic inputs.</span>
 <span class="sd">    This can be visualized in static images or as time series (videos, gif, animation, interactive window).</span>
 <span class="sd">    Also, the relevant cell information can also be exported to .vtk format for further visualization or interaction.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">align_trunk</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given a Cell object, this class initializes an object that is easier to work with</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Cell object</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
-        
-        <span class="sd">&quot;&quot;&quot;Visualization attributes&quot;&quot;&quot;</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Visualization attributes&quot;&quot;&quot;</span>
         <span class="c1"># Colors in which the synaptic input are going to be shown</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">population_to_color_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;INT&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;L4ss&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;L5st&#39;</span><span class="p">:</span><span class="s1">&#39;cyan&#39;</span><span class="p">,</span> <span class="s1">&#39;L5tt&#39;</span><span class="p">:</span><span class="s1">&#39;lime&#39;</span><span class="p">,</span>
                      <span class="s1">&#39;L6CC&#39;</span><span class="p">:</span><span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="s1">&#39;VPM&#39;</span><span class="p">:</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;L23&#39;</span><span class="p">:</span><span class="s1">&#39;magenta&#39;</span><span class="p">,</span> <span class="s1">&#39;inactive&#39;</span><span class="p">:</span><span class="s1">&#39;white&#39;</span><span class="p">}</span>
@@ -141,7 +135,7 @@
         <span class="c1"># Image quality</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dpi</span> <span class="o">=</span> <span class="mi">72</span>
 
-        <span class="sd">&quot;&quot;&quot;Morphology attributes</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Morphology attributes</span>
 <span class="sd">        Gather the necessary information to plot the cell morphology.</span>
 <span class="sd">        This info is always necessary to plot the cell.</span>
 <span class="sd">        morphology: pandas dataframe with points.</span>
@@ -158,7 +152,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">diameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">morphology</span><span class="p">[</span><span class="s2">&quot;diameter&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">section_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">morphology</span><span class="p">[</span><span class="s2">&quot;section&quot;</span><span class="p">]</span>
 
-        <span class="sd">&quot;&quot;&quot;Simulation-related parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Simulation-related parameters</span>
 <span class="sd">        These only get initialised when the cell object contains simulation data&quot;&quot;&quot;</span>
         <span class="c1"># Max and min voltages colorcoded in the cell morphology</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># mV</span>
@@ -177,19 +171,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">scalar_data</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">possible_scalars</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;K_Pst.ik&#39;</span><span class="p">,</span> <span class="s1">&#39;Ih.m&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca_LVAst.ik&#39;</span><span class="p">,</span> <span class="s1">&#39;Nap_Et2.ina&#39;</span><span class="p">,</span> <span class="s1">&#39;SK_E2.ik&#39;</span><span class="p">,</span> <span class="s1">&#39;Nap_Et2.h&#39;</span><span class="p">,</span> <span class="s1">&#39;K_Pst.h&#39;</span><span class="p">,</span> <span class="s1">&#39;Nap_Et2.m&#39;</span><span class="p">,</span> <span class="s1">&#39;NaTa_t.h&#39;</span><span class="p">,</span> <span class="s1">&#39;SK_E2.z&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca_HVA.h&#39;</span><span class="p">,</span> <span class="s1">&#39;Ih.ihcn&#39;</span><span class="p">,</span> <span class="s1">&#39;K_Tst.ik&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca_HVA.m&#39;</span><span class="p">,</span> <span class="s1">&#39;Im.ik&#39;</span><span class="p">,</span> <span class="s1">&#39;NaTa_t.ina&#39;</span><span class="p">,</span> <span class="s1">&#39;NaTa_t.m&#39;</span><span class="p">,</span> <span class="s1">&#39;SKv3_1.m&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca_LVAst.h&#39;</span><span class="p">,</span> <span class="s1">&#39;K_Pst.m&#39;</span><span class="p">,</span> <span class="s1">&#39;SKv3_1.ik&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca_LVAst.m&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca_HVA.ica&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca_LVAst.ica&#39;</span><span class="p">,</span> <span class="s1">&#39;K_Tst.m&#39;</span><span class="p">,</span> <span class="s1">&#39;CaDynamics_E2.cai&#39;</span><span class="p">,</span> <span class="s1">&#39;K_Tst.h&#39;</span><span class="p">,</span> <span class="s1">&#39;cai&#39;</span><span class="p">}</span>
 
-        <span class="sd">&quot;&quot;&quot;List contaning the voltage of the cell during a timeseries. Each element corresponds to a time point.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List contaning the voltage of the cell during a timeseries. Each element corresponds to a time point.</span>
 <span class="sd">        Each element of the list contains n elements, being n the number of points of the cell morphology. </span>
 <span class="sd">        Hence, the value of each element is the voltage at each point of the cell morphology.&quot;&quot;&quot;</span>
         <span class="c1"># None means it has no simulation data. Empty list means it has simulation data that has not been initialised yet.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">voltage_timeseries</span> <span class="o">=</span> <span class="kc">None</span>
-        
-        <span class="sd">&quot;&quot;&quot;List containing the synapse activations during a timeseries (Similarly to voltage_timeseries). </span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List containing the synapse activations during a timeseries (Similarly to voltage_timeseries). </span>
 <span class="sd">        Each element corresponds to a time point. Each element is a dictionary where each key is the type of</span>
 <span class="sd">        input population and the value is the list of active synapses for that type of population at that time point. </span>
 <span class="sd">        The list contains the 3d coordinates where each active synapse is located.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synapses_timeseries</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="sd">&quot;&quot;&quot;List containing the ion dynamics during a timeseries (Similarly to voltage_timeseries). </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List containing the ion dynamics during a timeseries (Similarly to voltage_timeseries). </span>
 <span class="sd">        Each element is a list corresponding to 1 timepoint, containing per-point info on the ion channel state or ion concentration. TODO</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ion_dynamics_timeseries</span> <span class="o">=</span> <span class="kc">None</span>
@@ -211,8 +205,8 @@
         <span class="c1"># Max and min voltages colorcoded in the cell morphology</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">80</span> <span class="c1"># mV</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">=</span> <span class="mi">20</span> <span class="c1"># mV</span>
-        
-        <span class="sd">&quot;&quot;&quot;Time&quot;&quot;&quot;</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Time&quot;&quot;&quot;</span>
         <span class="c1"># Time points of the simulation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">simulation_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">tVec</span><span class="p">)</span>
         <span class="c1"># Time offset w.r.t. simulation start. useful if &#39;0 ms&#39; is supposed to refer to stimulus time</span>
@@ -224,13 +218,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulation_times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">simulation_times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_step</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">times_to_show</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__update_times_to_show</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_step</span><span class="p">)</span>  <span class="c1"># initialise time range to visualise</span>
-        
-        <span class="sd">&quot;&quot;&quot;List contaning the voltage of the cell during a timeseries. Each element corresponds to a time point.</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List contaning the voltage of the cell during a timeseries. Each element corresponds to a time point.</span>
 <span class="sd">        Each element of the list contains n elements, being n the number of points of the cell morphology. </span>
 <span class="sd">        Hence, the value of each element is the voltage at each point of the cell morphology.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">voltage_timeseries</span> <span class="o">=</span> <span class="p">[]</span>
-        
-        <span class="sd">&quot;&quot;&quot;List containing the synapse activations during a timeseries (Similarly to voltage_timeseries). </span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List containing the synapse activations during a timeseries (Similarly to voltage_timeseries). </span>
 <span class="sd">        Each element corresponds to a time point. Each element is a dictionary where each key is the type of</span>
 <span class="sd">        input population and the value is the list of active synapses for that type of population at that time point. </span>
 <span class="sd">        The list contains the 3d coordinates where each active synapse is located.&quot;&quot;&quot;</span>
@@ -241,7 +235,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">scalar_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;voltage&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">voltage_timeseries</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__align_trunk_with_z_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the polar angle between the trunk and z-axis (zenith).</span>
 <span class="sd">        Anchors the soma to (0, 0, 0) and aligns the trunk to the z-axis.</span>
 
@@ -278,7 +272,7 @@
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__get_morphology</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Retrieve cell MORPHOLOGY from cell object.</span>
 <span class="sd">        Fills the self.morphology attribute</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -305,7 +299,7 @@
         <span class="k">return</span> <span class="n">morphology</span>
     
     <span class="k">def</span> <span class="nf">__plot_cell_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voltage</span><span class="p">,</span> <span class="n">synapses</span><span class="p">,</span> <span class="n">time_point</span><span class="p">,</span> <span class="n">voltage_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">synapse_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations</span>
 <span class="sd">        are shown for a particular time point.</span>
 <span class="sd">        Args:</span>
@@ -348,7 +342,7 @@
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_to_color_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39;inactive&#39;</span><span class="p">:</span>
                     <span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">([],[],[],</span><span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">population_to_color_dict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">75</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1715</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="c1"># -0.1715, 0.75, 1., .1</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1715</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">.1</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="c1"># -0.1715, 0.75, 1., .1</span>
                       <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Time = </span><span class="si">{}</span><span class="s1">ms</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">time_point</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">time_offset</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">voltage_legend</span><span class="p">:</span>
             <span class="n">cbaxes</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.64</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span> <span class="c1"># 0.64, 0.2, 0.05, 0.5</span>
@@ -370,7 +364,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     
     <span class="k">def</span> <span class="nf">__get_voltages_at_timepoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_point</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Retrieves the VOLTAGE along the whole cell morphology from cell object at a particular time point.</span>
 <span class="sd">        Args:</span>
 <span class="sd">         - time_point: time point from which we want to gather the voltage</span>
@@ -406,7 +400,7 @@
         <span class="k">return</span> <span class="n">voltage_points</span>
 
     <span class="k">def</span> <span class="nf">__get_ion_dynamic_at_timepoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_point</span><span class="p">,</span> <span class="n">ion_keyword</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Retrieves the ion dynamics along the whole cell morphology from cell object at a particular time point.</span>
 <span class="sd">        Args:</span>
 <span class="sd">         - time_point: time point from which we want to gather the voltage</span>
@@ -448,7 +442,7 @@
         <span class="k">return</span> <span class="n">ion_points</span>
 
     <span class="k">def</span> <span class="nf">__get_soma_voltage_at_timepoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_point</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Retrieves the VOLTAGE along the whole cell morphology from cell object at a particular time point.</span>
 <span class="sd">        Args:</span>
 <span class="sd">         - time_point: time point from which we want to gather the voltage</span>
@@ -464,7 +458,7 @@
         <span class="k">return</span> <span class="n">voltages</span>
 
     <span class="k">def</span> <span class="nf">__calc_voltage_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Retrieves VOLTAGE along the whole cell body during a set of time points (specified in self.times_to_show).</span>
 <span class="sd">        Fills the self.voltage_timeseries attribute.</span>
 <span class="sd">        Only does so when it has not been computed yet.</span>
@@ -484,7 +478,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Voltage retrieval runtime (s): &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
     
     <span class="k">def</span> <span class="nf">__calc_ion_dynamics_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ion_keyword</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Retrieves ion dynamics info along the whole cell body during a set of time points (specified in self.times_to_show).</span>
 <span class="sd">        Fills the self.ion_dynamics attribute.</span>
 <span class="sd">        Only does so when it has not been computed yet.</span>
@@ -505,7 +499,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ion dynamics retrieval runtime (s): &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
 
     <span class="k">def</span> <span class="nf">__get_synapses_at_timepoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_point</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Retrieves the SYNAPSE ACTIVATIONS at a particular time point.</span>
 <span class="sd">        Args:</span>
 <span class="sd">         - time_point: time point from which we want to gather the synapse activations</span>
@@ -545,7 +539,7 @@
         <span class="k">return</span> <span class="n">synapses</span>
         
     <span class="k">def</span> <span class="nf">__calc_synapses_timeseries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Retrieves the SYNAPSE ACTIVATIONS during a set of time points (specified in self.time).</span>
 <span class="sd">        Fills the self.synapses_timeseries attribute.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -560,7 +554,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Synapses retrieval runtime (s): &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
             
     <span class="k">def</span> <span class="nf">__update_times_to_show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Checks if the specified time range equals the previously defined one. If not, updates the time range.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the specified time range equals the previously defined one. If not, updates the time range.</span>
 <span class="sd">        If all arguments are None, does nothing. Useful for defining default time range</span>
 <span class="sd">        TODO: what if a newly defined t_step does not match the simulation dt?</span>
 
@@ -596,7 +590,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">times_to_show</span> <span class="o">=</span> <span class="n">new_time</span>  
 
     <span class="k">def</span> <span class="nf">__timeseries_images_cell_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">voltage_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">synapse_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Creates a list of images where a neuron morphology color-coded with voltage together with synapse activations are</span>
 <span class="sd">        shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)</span>
 <span class="sd">        and in each image the neuron rotates a bit (3 degrees) over its axis.</span>
@@ -647,7 +641,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Images generation runtime (s): &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
             
     <span class="k">def</span> <span class="nf">__write_vtk_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_name</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">,</span> <span class="n">time_point</span><span class="p">,</span> <span class="n">scalar_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Format in which a cell morphology (in a singular time point) (color-coded with scalar data, by default membrane voltage) </span>
 <span class="sd">        is saved to be visualized in paraview</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -667,7 +661,7 @@
             <span class="k">return</span> <span class="n">p</span>
 
         <span class="k">def</span> <span class="nf">line_pairs_str_</span><span class="p">(</span><span class="n">line_pairs_</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            This method adds lines to the vtk mesh pair per pair, such that each line segment is always defined by only two points.</span>
 <span class="sd">            This is useful for when you want to specify a varying diameter</span>
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -686,7 +680,7 @@
             <span class="k">return</span> <span class="n">diameter_string</span>
         
         <span class="k">def</span> <span class="nf">membrane_voltage_str_</span><span class="p">(</span><span class="n">data_</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Given an array :@param data: of something, returns a string where each row of the string is a single element of that array.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">v_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -718,7 +712,7 @@
                 <span class="n">of</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">membrane_voltage_str_</span><span class="p">(</span><span class="n">scalar_data</span><span class="p">))</span>
     
     <span class="k">def</span> <span class="nf">__get_interactive_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;rgb(180,180,180)&quot;</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s2">&quot;notebook_connected&quot;</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; </span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; </span>
 <span class="sd">        Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with NO data overlayed.</span>
 
 <span class="sd">        Args:</span>
@@ -760,7 +754,7 @@
 
     <span class="k">def</span> <span class="nf">__get_interactive_plot_with_scalar_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar_data_keyword</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span>
                                                 <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;rgb(180,180,180)&quot;</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s2">&quot;notebook_connected&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;This is the main function to set up an interactive plot with scalar data overlayed.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is the main function to set up an interactive plot with scalar data overlayed.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            scalar_data_keyword (str, optional): Scalar data to overlay on interactive plot. Defaults to None.</span>
@@ -814,7 +808,7 @@
 
         <span class="c1"># update color scale</span>
         <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="n">time_point</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Function that gets called whenever the slider gets changed. Requests the membrane voltages at a certain time point</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">widget_morphology</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">marker</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;white&quot;</span> <span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">scalar_data_per_time</span><span class="p">[</span><span class="n">time_point</span><span class="p">]]},</span> <span class="n">selector</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;morphology&quot;</span><span class="p">))</span>
@@ -849,7 +843,7 @@
         <span class="k">return</span> <span class="n">vb</span>
         
     <span class="k">def</span> <span class="nf">__display_interactive_morphology_only_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;rgb(180,180,180)&quot;</span><span class="p">,</span> <span class="n">highlight_section</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s2">&quot;notebook_connected&quot;</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; </span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; </span>
 <span class="sd">        Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with NO data overlayed.</span>
 <span class="sd">        If you want to overlay scalar data, such as membrane voltage, please use :@function self.display_interactive_voltage_in_morphology_3d:</span>
 
@@ -876,8 +870,8 @@
     
     <span class="c1"># Public methods</span>
 
-    <span class="k">def</span> <span class="nf">show_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="CellMorphologyVisualizer.show_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.show_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">show_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Creates a python plot of the cell morphology in 3D</span>
 <span class="sd">        Args:</span>
 <span class="sd">            - Save: path where the plot will be saved. If it&#39;s empty it will not be saved</span>
@@ -907,10 +901,10 @@
         <span class="k">if</span> <span class="n">save</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save</span><span class="p">)</span><span class="c1">#,bbox_inches=&#39;tight&#39;)</span>
         <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
         
-    <span class="k">def</span> <span class="nf">show_voltage_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_point</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">voltage_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="CellMorphologyVisualizer.show_voltage_in_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.show_voltage_in_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">show_voltage_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_point</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">voltage_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Creates a python plot of the cell morphology in 3D color-coded with voltage for a particular time point.</span>
 <span class="sd">        Args:</span>
 <span class="sd">            - time_point: time of the simulation which we would like to visualize</span>
@@ -947,7 +941,7 @@
         
         <span class="c1"># Add legends</span>
         <span class="k">if</span> <span class="n">voltage_legend</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1715</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="c1"># -0.1715, 0.75, 1., .1</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1715</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">.1</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="c1"># -0.1715, 0.75, 1., .1</span>
                       <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Time = </span><span class="si">{}</span><span class="s1">ms</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">time_point</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
             <span class="n">cbaxes</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.64</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span> <span class="c1"># 0.64, 0.2, 0.05, 0.5</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">),</span>
@@ -963,11 +957,11 @@
         <span class="k">if</span> <span class="n">save</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save</span><span class="p">)</span><span class="c1">#,bbox_inches=&#39;tight&#39;)</span>
         <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
     
-    <span class="k">def</span> <span class="nf">show_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_point</span><span class="p">,</span> <span class="n">time_show_syn_activ</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">voltage_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">synapse_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+<div class="viewcode-block" id="CellMorphologyVisualizer.show_voltage_synapses_in_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.show_voltage_synapses_in_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">show_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_point</span><span class="p">,</span> <span class="n">time_show_syn_activ</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">voltage_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">synapse_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                                                <span class="n">save</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations</span>
 <span class="sd">        are shown for a particular time point.</span>
 <span class="sd">        Args:</span>
@@ -986,12 +980,12 @@
         <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax</span> 
         <span class="n">voltage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_voltages_at_timepoint</span><span class="p">(</span><span class="n">time_point</span><span class="p">)</span>
         <span class="n">synapses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_synapses_at_timepoint</span><span class="p">(</span><span class="n">time_point</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__plot_cell_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="n">voltage</span><span class="p">,</span><span class="n">synapses</span><span class="p">,</span><span class="n">time_point</span><span class="p">,</span><span class="n">voltage_legend</span><span class="o">=</span><span class="n">voltage_legend</span><span class="p">,</span><span class="n">synapse_legend</span><span class="o">=</span><span class="n">synapse_legend</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="n">save</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="n">plot</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__plot_cell_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="n">voltage</span><span class="p">,</span><span class="n">synapses</span><span class="p">,</span><span class="n">time_point</span><span class="p">,</span><span class="n">voltage_legend</span><span class="o">=</span><span class="n">voltage_legend</span><span class="p">,</span><span class="n">synapse_legend</span><span class="o">=</span><span class="n">synapse_legend</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="n">save</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="n">plot</span><span class="p">)</span></div>
       
-    <span class="k">def</span> <span class="nf">write_gif_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images_path</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="CellMorphologyVisualizer.write_gif_voltage_synapses_in_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.write_gif_voltage_synapses_in_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">write_gif_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images_path</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                                    <span class="n">neuron_rotation</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">time_show_syn_activ</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">frame_duration</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
                                                    <span class="n">voltage_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">synapse_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are</span>
 <span class="sd">        shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.</span>
 <span class="sd">        These images are then put together into a gif.</span>
@@ -1021,12 +1015,12 @@
         <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">=</span> <span class="n">vmin</span> 
         <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">__timeseries_images_cell_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="n">images_path</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">voltage_legend</span><span class="p">,</span> <span class="n">synapse_legend</span><span class="p">)</span>
-        <span class="n">write_gif_from_images</span><span class="p">(</span><span class="n">images_path</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">frame_duration</span><span class="p">)</span>
+        <span class="n">write_gif_from_images</span><span class="p">(</span><span class="n">images_path</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">frame_duration</span><span class="p">)</span></div>
          
-    <span class="k">def</span> <span class="nf">write_video_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images_path</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+<div class="viewcode-block" id="CellMorphologyVisualizer.write_video_voltage_synapses_in_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.write_video_voltage_synapses_in_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">write_video_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images_path</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                                                       <span class="n">neuron_rotation</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">time_show_syn_activ</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                                                       <span class="n">framerate</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="s1">&#39;mpeg4&#39;</span><span class="p">,</span><span class="n">voltage_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">synapse_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are</span>
 <span class="sd">        shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.</span>
 <span class="sd">        These images are then put together into a video.</span>
@@ -1057,12 +1051,12 @@
         <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">=</span> <span class="n">vmin</span> 
         <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">__timeseries_images_cell_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="n">images_path</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">voltage_legend</span><span class="p">,</span> <span class="n">synapse_legend</span><span class="p">)</span>
-        <span class="n">write_video_from_images</span><span class="p">(</span><span class="n">images_path</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">framerate</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="n">codec</span><span class="p">)</span>
+        <span class="n">write_video_from_images</span><span class="p">(</span><span class="n">images_path</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">framerate</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="n">codec</span><span class="p">)</span></div>
           
-    <span class="k">def</span> <span class="nf">display_animation_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+<div class="viewcode-block" id="CellMorphologyVisualizer.display_animation_voltage_synapses_in_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_animation_voltage_synapses_in_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">display_animation_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                                                             <span class="n">neuron_rotation</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">time_show_syn_activ</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                                            <span class="n">voltage_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">synapse_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are</span>
 <span class="sd">        shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.</span>
 <span class="sd">        These images are then put together into a python animation.</span>
@@ -1089,11 +1083,11 @@
         <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">=</span> <span class="n">vmin</span> 
         <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">__timeseries_images_cell_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="n">images_path</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">voltage_legend</span><span class="p">,</span> <span class="n">synapse_legend</span><span class="p">)</span>
-        <span class="n">display_animation_from_images</span><span class="p">(</span><span class="n">images_path</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">embedded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">display_animation_from_images</span><span class="p">(</span><span class="n">images_path</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">embedded</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
     
-    <span class="k">def</span> <span class="nf">display_interactive_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;rgb(180,180,180)&quot;</span><span class="p">,</span> <span class="n">highlight_section</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s2">&quot;notebook_connected&quot;</span><span class="p">,</span> 
+<div class="viewcode-block" id="CellMorphologyVisualizer.display_interactive_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">display_interactive_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;rgb(180,180,180)&quot;</span><span class="p">,</span> <span class="n">highlight_section</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s2">&quot;notebook_connected&quot;</span><span class="p">,</span> 
                                           <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s2">&quot;jet&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            data (str, optional): Scalar data to overlay on interactive plot. Defaults to None.</span>
@@ -1113,10 +1107,10 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__display_interactive_morphology_only_3d</span><span class="p">(</span><span class="n">background_color</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span> <span class="n">highlight_section</span><span class="o">=</span><span class="n">highlight_section</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="n">renderer</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_interactive_plot_with_scalar_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="n">t_end</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="n">t_step</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> 
-                                                                <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="n">renderer</span><span class="p">)</span>
+                                                                <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="n">renderer</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">display_interactive_voltage_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;rgb(180,180,180)&quot;</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s2">&quot;notebook_connected&quot;</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; </span>
+<div class="viewcode-block" id="CellMorphologyVisualizer.display_interactive_voltage_in_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_voltage_in_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">display_interactive_voltage_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;rgb(180,180,180)&quot;</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s2">&quot;notebook_connected&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; </span>
 <span class="sd">        TODO: add synapse activations!</span>
 <span class="sd">        TODO: add dendritic and somatic AP as secondary subplot</span>
 <span class="sd">        Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:</span>
@@ -1136,11 +1130,11 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            ipywidgets.VBox object: an interactive render of the cell.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_interactive_morphology_3d</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;voltage&quot;</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="n">t_end</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="n">t_step</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="n">renderer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_interactive_morphology_3d</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;voltage&quot;</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="n">t_end</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="n">t_step</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="n">renderer</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">display_interactive_ion_dynamics_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ion_keyword</span><span class="o">=</span><span class="s2">&quot;Ca_HVA.ica&quot;</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="CellMorphologyVisualizer.display_interactive_ion_dynamics_in_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_ion_dynamics_in_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">display_interactive_ion_dynamics_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ion_keyword</span><span class="o">=</span><span class="s2">&quot;Ca_HVA.ica&quot;</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span>
     <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;rgb(180,180,180)&quot;</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s2">&quot;notebook_connected&quot;</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; </span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; </span>
 <span class="sd">        Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:</span>
 <span class="sd">        - Ion channel dynamics</span>
 <span class="sd">        - Section ID</span>
@@ -1160,10 +1154,10 @@
 <span class="sd">            ipywidgets.VBox object: an interactive render of the cell.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_interactive_morphology_3d</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">ion_keyword</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="n">t_end</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="n">t_step</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span>
-                                                      <span class="n">background_color</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="n">renderer</span><span class="p">)</span>
+                                                      <span class="n">background_color</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="n">renderer</span><span class="p">)</span></div>
                
-    <span class="k">def</span> <span class="nf">write_vtk_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_name</span><span class="o">=</span><span class="s2">&quot;frame&quot;</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="CellMorphologyVisualizer.write_vtk_frames"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.write_vtk_frames">[docs]</a>    <span class="k">def</span> <span class="nf">write_vtk_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_name</span><span class="o">=</span><span class="s2">&quot;frame&quot;</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview</span>
 
 <span class="sd">        TODO: remove duplicate rows used to connect sections</span>
@@ -1181,13 +1175,13 @@
         <span class="k">if</span> <span class="n">HAS_TQDM</span><span class="p">:</span>
             <span class="n">progress</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Writing vtk frames to </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_dir</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">progress</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__write_vtk_frame</span><span class="p">(</span><span class="n">out_name</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">,</span> <span class="n">scalar_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">voltage_timeseries</span><span class="p">[</span><span class="n">t</span><span class="p">])</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__write_vtk_frame</span><span class="p">(</span><span class="n">out_name</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">,</span> <span class="n">scalar_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">voltage_timeseries</span><span class="p">[</span><span class="n">t</span><span class="p">])</span></div></div>
 
 <span class="nd">@dask</span><span class="o">.</span><span class="n">delayed</span>
 <span class="k">def</span> <span class="nf">plot_cell_voltage_synapses_in_morphology_3d</span><span class="p">(</span><span class="n">morphology</span><span class="p">,</span> <span class="n">voltage</span><span class="p">,</span> <span class="n">synapses</span><span class="p">,</span> <span class="n">time_point</span><span class="p">,</span> <span class="n">save</span><span class="p">,</span> <span class="n">population_to_color_dict</span><span class="p">,</span>
                                                 <span class="n">azim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">roll</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">75</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="n">voltage_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                                 <span class="n">synapse_legend</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">time_offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dpi</span> <span class="o">=</span> <span class="mi">72</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations</span>
 <span class="sd">    are shown for a particular time point.</span>
 <span class="sd">    Dask delayed function useful for parallelization of images generation. This dask delayed function cannot be part of the</span>
@@ -1248,7 +1242,7 @@
              <span class="n">ax</span><span class="o">=</span><span class="n">cbaxes</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;mV&#39;</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span><span class="c1">#, fraction=0.015, pad=-0.25)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
     <span class="c1"># Time always visible</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1715</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="c1"># -0.1715, 0.75, 1., .1</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1715</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">.1</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="c1"># -0.1715, 0.75, 1., .1</span>
                   <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Time = </span><span class="si">{}</span><span class="s1">ms</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">time_point</span><span class="o">-</span><span class="n">time_offset</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
         
     <span class="n">ax</span><span class="o">.</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span>

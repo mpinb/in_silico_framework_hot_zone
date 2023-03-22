@@ -3,18 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>biophysics_fitting.combiner &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <title>biophysics_fitting.combiner &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -31,6 +30,9 @@
           <a href="../../index.html" class="icon icon-home">
             In-Silico Framework (ISF)
           </a>
+              <div class="version">
+                0.0.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -40,24 +42,16 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/Interface.html">Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/SLURM_scripts.html">SLURM_scripts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/barrel_cortex.html">barrel_cortex</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/biophysics_fitting.html">biophysics_fitting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/compatibility.html">compatibility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/getting_started.html">getting_started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/mechanisms.html">mechanisms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/model_data_base.html">model_data_base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/nbrun.html">nbrun</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun2.html">simrun2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun3.html">simrun3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_parser.html">single_cell_parser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/spike_analysis.html">spike_analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/tests.html">tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/visualize.html">visualize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/visualize.html">visualize</a></li>
 </ul>
 
         </div>
@@ -92,7 +86,7 @@
 <span class="sd">@author: abast</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
-<div class="viewcode-block" id="Combiner_Setup"><a class="viewcode-back" href="../../modules/biophysics_fitting.combiner.Combiner_Setup.html#biophysics_fitting.combiner.Combiner_Setup">[docs]</a><span class="k">class</span> <span class="nc">Combiner_Setup</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">Combiner_Setup</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">combinations</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
@@ -100,10 +94,10 @@
         
     <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">combination</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">combinations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">combination</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         
-<div class="viewcode-block" id="Combiner"><a class="viewcode-back" href="../../modules/biophysics_fitting.combiner.Combiner.html#biophysics_fitting.combiner.Combiner">[docs]</a><span class="k">class</span> <span class="nc">Combiner</span><span class="p">:</span>
-    <span class="sd">&#39;&#39;&#39;This  class can be used to combine features (usually) computed by an Evaluator object.</span>
+<div class="viewcode-block" id="Combiner"><a class="viewcode-back" href="../../_autosummary/biophysics_fitting.combiner.html#biophysics_fitting.combiner.Combiner">[docs]</a><span class="k">class</span> <span class="nc">Combiner</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;This  class can be used to combine features (usually) computed by an Evaluator object.</span>
 <span class="sd">    </span>
 <span class="sd">    For a Simulator object s and a Evaluator object e and a Combiner object c, the typical usecase is:</span>
 <span class="sd">    voltage_traces_dict = s.run(params)</span>
@@ -133,8 +127,8 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setup</span> <span class="o">=</span> <span class="n">Combiner_Setup</span><span class="p">()</span>
         
-    <span class="k">def</span> <span class="nf">combine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Combines features that are computed by an Evaluator class.</span>
+<div class="viewcode-block" id="Combiner.combine"><a class="viewcode-back" href="../../_autosummary/biophysics_fitting.combiner.html#biophysics_fitting.combiner.Combiner.combine">[docs]</a>    <span class="k">def</span> <span class="nf">combine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Combines features that are computed by an Evaluator class.</span>
 <span class="sd">        </span>
 <span class="sd">        Details, how to set up the Combiner are in the docstring of</span>
 <span class="sd">        the Combiner class.   </span>
@@ -143,7 +137,7 @@
         <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">combinations</span><span class="p">):</span>
             <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="n">features</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">c</span><span class="p">]</span>
             <span class="n">out</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">combinefun</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">out</span></div>
+        <span class="k">return</span> <span class="n">out</span></div></div>
 </pre></div>
 
            </div>

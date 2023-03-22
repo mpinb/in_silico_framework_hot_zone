@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mechanisms &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">mechanisms</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/mechanisms.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mechanisms">
+<h1>mechanisms<a class="headerlink" href="#mechanisms" title="Permalink to this heading"></a></h1>
+<dl class="py data">
+<dt class="sig sig-object py" id="mechanisms.mechanisms">
+<span class="sig-prename descclassname"><span class="pre">mechanisms.</span></span><span class="sig-name descname"><span class="pre">mechanisms</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Mock</span> <span class="pre">name='mock.mechanisms'</span> <span class="pre">id='2249588052736'&gt;</span></em><a class="headerlink" href="#mechanisms.mechanisms" title="Permalink to this definition"></a></dt>
+<dd><p>Create a new <cite>Mock</cite> object. <cite>Mock</cite> takes several optional arguments
+that specify the behaviour of the Mock object:</p>
+<ul>
+<li><p><cite>spec</cite>: This can be either a list of strings or an existing object (a
+class or instance) that acts as the specification for the mock object. If
+you pass in an object then a list of strings is formed by calling dir on
+the object (excluding unsupported magic attributes and methods). Accessing
+any attribute not in this list will raise an <cite>AttributeError</cite>.</p>
+<p>If <cite>spec</cite> is an object (rather than a list of strings) then
+<cite>mock.__class__</cite> returns the class of the spec object. This allows mocks
+to pass <cite>isinstance</cite> tests.</p>
+</li>
+<li><p><cite>spec_set</cite>: A stricter variant of <cite>spec</cite>. If used, attempting to <em>set</em>
+or get an attribute on the mock that isn’t on the object passed as
+<cite>spec_set</cite> will raise an <cite>AttributeError</cite>.</p></li>
+<li><p><cite>side_effect</cite>: A function to be called whenever the Mock is called. See
+the <cite>side_effect</cite> attribute. Useful for raising exceptions or
+dynamically changing return values. The function is called with the same
+arguments as the mock, and unless it returns <cite>DEFAULT</cite>, the return
+value of this function is used as the return value.</p>
+<p>If <cite>side_effect</cite> is an iterable then each call to the mock will return
+the next value from the iterable. If any of the members of the iterable
+are exceptions they will be raised instead of returned.</p>
+</li>
+<li><p><cite>return_value</cite>: The value returned when the mock is called. By default
+this is a new Mock (created on first access). See the
+<cite>return_value</cite> attribute.</p></li>
+<li><p><cite>unsafe</cite>: By default, accessing any attribute whose name starts with
+<em>assert</em>, <em>assret</em>, <em>asert</em>, <em>aseert</em>, or <em>assrt</em> raises an AttributeError.
+Additionally, an AttributeError is raised when accessing
+attributes that match the name of an assertion method without the prefix
+<cite>assert_</cite>, e.g. accessing <cite>called_once</cite> instead of <cite>assert_called_once</cite>.
+Passing <cite>unsafe=True</cite> will allow access to these attributes.</p></li>
+<li><p><cite>wraps</cite>: Item for the mock object to wrap. If <cite>wraps</cite> is not None then
+calling the Mock will pass the call through to the wrapped object
+(returning the real result). Attribute access on the mock will return a
+Mock object that wraps the corresponding attribute of the wrapped object
+(so attempting to access an attribute that doesn’t exist will raise an
+<cite>AttributeError</cite>).</p>
+<p>If the mock has an explicit <cite>return_value</cite> set then calls are not passed
+to the wrapped object and the <cite>return_value</cite> is returned instead.</p>
+</li>
+<li><p><cite>name</cite>: If the mock has a name then it will be used in the repr of the
+mock. This can be useful for debugging. The name is propagated to child
+mocks.</p></li>
+</ul>
+<p>Mocks can also be called with arbitrary keyword arguments. These will be
+used to set attributes on the mock after it is created.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -3,18 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>model_data_base.analyze.LDA &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <title>model_data_base.analyze.LDA &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -31,6 +30,9 @@
           <a href="../../../index.html" class="icon icon-home">
             In-Silico Framework (ISF)
           </a>
+              <div class="version">
+                0.0.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -40,24 +42,16 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/Interface.html">Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/SLURM_scripts.html">SLURM_scripts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/barrel_cortex.html">barrel_cortex</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/biophysics_fitting.html">biophysics_fitting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/compatibility.html">compatibility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/getting_started.html">getting_started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/mechanisms.html">mechanisms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/model_data_base.html">model_data_base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/nbrun.html">nbrun</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/simrun2.html">simrun2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/simrun3.html">simrun3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/single_cell_parser.html">single_cell_parser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/spike_analysis.html">spike_analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/tests.html">tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/visualize.html">visualize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/visualize.html">visualize</a></li>
 </ul>
 
         </div>
@@ -94,7 +88,7 @@
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">roc_auc_score</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<div class="viewcode-block" id="make_groups_equal_size"><a class="viewcode-back" href="../../../modules/model_data_base.analyze.LDA.make_groups_equal_size.html#model_data_base.analyze.LDA.make_groups_equal_size">[docs]</a><span class="k">def</span> <span class="nf">make_groups_equal_size</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">make_groups_equal_size</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
     <span class="n">X_true</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">y_true</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">X_false</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
@@ -107,13 +101,13 @@
     <span class="n">X_false</span><span class="p">[:</span><span class="n">l</span><span class="p">,</span> <span class="p">:]</span>
     <span class="n">X_ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">X_true</span><span class="p">[:</span><span class="n">l</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X_false</span><span class="p">[:</span><span class="n">l</span><span class="p">,</span> <span class="p">:]])</span>
     <span class="n">y_ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">y_true</span><span class="p">[:</span><span class="n">l</span><span class="p">],</span> <span class="n">y_false</span><span class="p">[:</span><span class="n">l</span><span class="p">]])</span>
-    <span class="k">return</span> <span class="n">X_ret</span><span class="p">,</span> <span class="n">y_ret</span></div>
+    <span class="k">return</span> <span class="n">X_ret</span><span class="p">,</span> <span class="n">y_ret</span>
 
 <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">make_groups_equal_size</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]))[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span>
 <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">make_groups_equal_size</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
 
-<div class="viewcode-block" id="prediction_rates"><a class="viewcode-back" href="../../../modules/model_data_base.analyze.LDA.prediction_rates.html#model_data_base.analyze.LDA.prediction_rates">[docs]</a><span class="k">def</span> <span class="nf">prediction_rates</span><span class="p">(</span><span class="n">X_in</span><span class="p">,</span><span class="n">y_in</span><span class="p">,</span> <span class="n">classifier</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">return_</span> <span class="o">=</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="n">normalize_group_size</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">verbosity</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;eigen&#39;</span><span class="p">,</span> <span class="n">max_tries</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="prediction_rates"><a class="viewcode-back" href="../../../_autosummary/model_data_base.analyze.LDA.html#model_data_base.analyze.LDA.prediction_rates">[docs]</a><span class="k">def</span> <span class="nf">prediction_rates</span><span class="p">(</span><span class="n">X_in</span><span class="p">,</span><span class="n">y_in</span><span class="p">,</span> <span class="n">classifier</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">return_</span> <span class="o">=</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="n">normalize_group_size</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">verbosity</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;eigen&#39;</span><span class="p">,</span> <span class="n">max_tries</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    X: training data</span>
 <span class="sd">    y: target values</span>
 <span class="sd">    classifier: classifier to use</span>

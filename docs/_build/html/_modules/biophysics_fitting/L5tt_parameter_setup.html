@@ -3,18 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>biophysics_fitting.L5tt_parameter_setup &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <title>biophysics_fitting.L5tt_parameter_setup &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -31,6 +30,9 @@
           <a href="../../index.html" class="icon icon-home">
             In-Silico Framework (ISF)
           </a>
+              <div class="version">
+                0.0.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -40,24 +42,16 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/Interface.html">Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/SLURM_scripts.html">SLURM_scripts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/barrel_cortex.html">barrel_cortex</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/biophysics_fitting.html">biophysics_fitting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/compatibility.html">compatibility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/getting_started.html">getting_started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/mechanisms.html">mechanisms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/model_data_base.html">model_data_base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/nbrun.html">nbrun</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun2.html">simrun2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun3.html">simrun3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_parser.html">single_cell_parser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/spike_analysis.html">spike_analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/tests.html">tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/visualize.html">visualize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/visualize.html">visualize</a></li>
 </ul>
 
         </div>
@@ -90,7 +84,7 @@
 <span class="c1"># naming converters scp &lt;--&gt; hay</span>
 <span class="c1">#########################################</span>
 <span class="kn">import</span> <span class="nn">six</span>
-<div class="viewcode-block" id="hay_param_to_scp_neuron_param"><a class="viewcode-back" href="../../modules/biophysics_fitting.L5tt_parameter_setup.hay_param_to_scp_neuron_param.html#biophysics_fitting.L5tt_parameter_setup.hay_param_to_scp_neuron_param">[docs]</a><span class="k">def</span> <span class="nf">hay_param_to_scp_neuron_param</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">hay_param_to_scp_neuron_param</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;axon&#39;</span><span class="p">:</span>
         <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;AIS&#39;</span>
@@ -103,16 +97,16 @@
     <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;none&#39;</span> <span class="ow">and</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;g_pas&#39;</span><span class="p">:</span>
         <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;pas&#39;</span>
         <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;g&#39;</span>
-    <span class="k">return</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;mechanisms&#39;</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span></div>
+    <span class="k">return</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;mechanisms&#39;</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
 
-<div class="viewcode-block" id="hay_params_to_scp_neuron_params"><a class="viewcode-back" href="../../modules/biophysics_fitting.L5tt_parameter_setup.hay_params_to_scp_neuron_params.html#biophysics_fitting.L5tt_parameter_setup.hay_params_to_scp_neuron_params">[docs]</a><span class="k">def</span> <span class="nf">hay_params_to_scp_neuron_params</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">hay_param_to_scp_neuron_param</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">]</span></div>
+<span class="k">def</span> <span class="nf">hay_params_to_scp_neuron_params</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">hay_param_to_scp_neuron_param</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">]</span>
 
 <span class="c1">#############################################</span>
 <span class="c1"># template and template modify functions</span>
 <span class="c1">#############################################</span>
 
-<div class="viewcode-block" id="get_L5tt_template"><a class="viewcode-back" href="../../modules/biophysics_fitting.L5tt_parameter_setup.get_L5tt_template.html#biophysics_fitting.L5tt_parameter_setup.get_L5tt_template">[docs]</a><span class="k">def</span> <span class="nf">get_L5tt_template</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">get_L5tt_template</span><span class="p">():</span>
     <span class="n">p</span> <span class="o">=</span>  <span class="p">{</span><span class="s1">&#39;NMODL_mechanisms&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;channels&#39;</span><span class="p">:</span> <span class="s1">&#39;/&#39;</span><span class="p">},</span>
      <span class="s1">&#39;info&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;regger and abast&#39;</span><span class="p">,</span>
       <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;2018&#39;</span><span class="p">,</span>
@@ -190,19 +184,19 @@
       <span class="s1">&#39;tStart&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
       <span class="s1">&#39;tStop&#39;</span><span class="p">:</span> <span class="mf">300.0</span><span class="p">}}</span>
     <span class="kn">from</span> <span class="nn">sumatra.parameters</span> <span class="kn">import</span> <span class="n">NTParameterSet</span>
-    <span class="k">return</span> <span class="n">NTParameterSet</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;neuron&#39;</span><span class="p">])</span></div>
+    <span class="k">return</span> <span class="n">NTParameterSet</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;neuron&#39;</span><span class="p">])</span>
 
-<div class="viewcode-block" id="set_morphology"><a class="viewcode-back" href="../../modules/biophysics_fitting.L5tt_parameter_setup.set_morphology.html#biophysics_fitting.L5tt_parameter_setup.set_morphology">[docs]</a><span class="k">def</span> <span class="nf">set_morphology</span><span class="p">(</span><span class="n">cell_param</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">set_morphology</span><span class="p">(</span><span class="n">cell_param</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="n">cell_param</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
-    <span class="k">return</span> <span class="n">cell_param</span></div>
+    <span class="k">return</span> <span class="n">cell_param</span>
 
-<div class="viewcode-block" id="set_ephys"><a class="viewcode-back" href="../../modules/biophysics_fitting.L5tt_parameter_setup.set_ephys.html#biophysics_fitting.L5tt_parameter_setup.set_ephys">[docs]</a><span class="k">def</span> <span class="nf">set_ephys</span><span class="p">(</span><span class="n">cell_param</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="set_ephys"><a class="viewcode-back" href="../../_autosummary/biophysics_fitting.L5tt_parameter_setup.html#biophysics_fitting.L5tt_parameter_setup.set_ephys">[docs]</a><span class="k">def</span> <span class="nf">set_ephys</span><span class="p">(</span><span class="n">cell_param</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="s1">&#39;updates cell_param file. parameter names reflect the hay naming convention.&#39;</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">params</span><span class="p">):</span> 
         <span class="n">cell_param</span><span class="p">[</span><span class="n">hay_param_to_scp_neuron_param</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">cell_param</span></div>
 
-<div class="viewcode-block" id="set_param"><a class="viewcode-back" href="../../modules/biophysics_fitting.L5tt_parameter_setup.set_param.html#biophysics_fitting.L5tt_parameter_setup.set_param">[docs]</a><span class="k">def</span> <span class="nf">set_param</span><span class="p">(</span><span class="n">cell_param</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="set_param"><a class="viewcode-back" href="../../_autosummary/biophysics_fitting.L5tt_parameter_setup.html#biophysics_fitting.L5tt_parameter_setup.set_param">[docs]</a><span class="k">def</span> <span class="nf">set_param</span><span class="p">(</span><span class="n">cell_param</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="s1">&#39;updates cell_param file. parameter names reflect the hierarchy in the cell_param file itself.&#39;</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">cell_param</span>
@@ -211,7 +205,7 @@
         <span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">v</span>
     <span class="k">return</span> <span class="n">cell_param</span></div>
 
-<div class="viewcode-block" id="set_many_param"><a class="viewcode-back" href="../../modules/biophysics_fitting.L5tt_parameter_setup.set_many_param.html#biophysics_fitting.L5tt_parameter_setup.set_many_param">[docs]</a><span class="k">def</span> <span class="nf">set_many_param</span><span class="p">(</span><span class="n">cell_param</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">set_many_param</span><span class="p">(</span><span class="n">cell_param</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     
     <span class="n">master_values</span> <span class="o">=</span> <span class="p">{}</span>
     
@@ -227,9 +221,9 @@
                 <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
             <span class="n">p</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">stored_value</span>
               
-    <span class="k">return</span> <span class="n">cell_param</span></div>
+    <span class="k">return</span> <span class="n">cell_param</span>
 
-<div class="viewcode-block" id="set_hot_zone"><a class="viewcode-back" href="../../modules/biophysics_fitting.L5tt_parameter_setup.set_hot_zone.html#biophysics_fitting.L5tt_parameter_setup.set_hot_zone">[docs]</a><span class="k">def</span> <span class="nf">set_hot_zone</span><span class="p">(</span><span class="n">cell_param</span><span class="p">,</span> <span class="n">min_</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">outsidescale_sections</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">set_hot_zone</span><span class="p">(</span><span class="n">cell_param</span><span class="p">,</span> <span class="n">min_</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">outsidescale_sections</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="n">cell_param</span><span class="p">[</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mechanisms</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;Ca_LVAst&#39;</span><span class="p">][</span><span class="s1">&#39;begin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_</span>
     <span class="n">cell_param</span><span class="p">[</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mechanisms</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;Ca_LVAst&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_</span>
     <span class="n">cell_param</span><span class="p">[</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mechanisms</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;Ca_HVA&#39;</span><span class="p">][</span><span class="s1">&#39;begin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_</span>
@@ -238,7 +232,7 @@
         <span class="k">assert</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">outsidescale_sections</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
         <span class="n">cell_param</span><span class="p">[</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mechanisms</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;Ca_LVAst&#39;</span><span class="p">][</span><span class="s1">&#39;outsidescale_sections&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">outsidescale_sections</span>
         <span class="n">cell_param</span><span class="p">[</span><span class="s1">&#39;ApicalDendrite&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mechanisms</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;Ca_HVA&#39;</span><span class="p">][</span><span class="s1">&#39;outsidescale_sections&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">outsidescale_sections</span>
-    <span class="k">return</span> <span class="n">cell_param</span></div>
+    <span class="k">return</span> <span class="n">cell_param</span>
 </pre></div>
 
            </div>

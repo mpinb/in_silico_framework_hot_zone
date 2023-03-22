@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>singlecell_input_mapper.singlecell_input_mapper.network_embedding &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="singlecell_input_mapper.singlecell_input_mapper.reader" href="singlecell_input_mapper.singlecell_input_mapper.reader.html" />
+    <link rel="prev" title="singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet" href="singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            In-Silico Framework (ISF)
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simrun3.html">simrun3</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.html">singlecell_input_mapper.evoked_PSTH_from_spike_times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.map_singlecell_inputs.html">singlecell_input_mapper.map_singlecell_inputs</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html">singlecell_input_mapper.singlecell_input_mapper</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.cell.html">singlecell_input_mapper.singlecell_input_mapper.cell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet.html">singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">singlecell_input_mapper.singlecell_input_mapper.network_embedding</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper"><code class="docutils literal notranslate"><span class="pre">NetworkMapper</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.reader.html">singlecell_input_mapper.singlecell_input_mapper.reader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.scalar_field.html">singlecell_input_mapper.singlecell_input_mapper.scalar_field</a></li>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.html">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.writer.html">singlecell_input_mapper.singlecell_input_mapper.writer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">In-Silico Framework (ISF)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+          <li class="breadcrumb-item"><a href="singlecell_input_mapper.singlecell_input_mapper.html">singlecell_input_mapper.singlecell_input_mapper</a></li>
+      <li class="breadcrumb-item active">singlecell_input_mapper.singlecell_input_mapper.network_embedding</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/singlecell_input_mapper.singlecell_input_mapper.network_embedding.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-singlecell_input_mapper.singlecell_input_mapper.network_embedding">
+<span id="singlecell-input-mapper-singlecell-input-mapper-network-embedding"></span><h1>singlecell_input_mapper.singlecell_input_mapper.network_embedding<a class="headerlink" href="#module-singlecell_input_mapper.singlecell_input_mapper.network_embedding" title="Permalink to this heading"></a></h1>
+<p>Created on Nov 17, 2012</p>
+<p>&#64;author: regger</p>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper" title="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NetworkMapper</span></code></a>(postCell, postCellType, ...)</p></td>
+<td><p>Handles connectivity of presynaptic populations to multi-compartmental neuron model.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCell</span></code>([column, cellType])</p></td>
+<td><p>simple object for use as cell connecting to synapses</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SynapseDensity</span></code>(cell, postCellType, ...)</p></td>
+<td><p>Synapse density computation for one postsynaptic neuron and arbitrary presynaptic bouton and other postsynaptic PST densities</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SynapseMapper</span></code>([cell, synDist, isDensity])</p></td>
+<td><p>SynapseMapper assigns synapses to neuron morphology self.cell is neuron SpatialGraph self.synDist is average synapse distribution (3D scalar field) self.isDensity: True - synapse distribution interpreted as avg     density; actual number of synapses assigned is drawn from a      Poisson distribution     False - synapse distribution interpreted as actual number of     synapses per voxel and directly assigned self.voxelEdgeMap: dictionary mapping synapse distribution mesh     coordinates on list with pairs of indices that correspond     to the edge and edgePt ID of all morphology points inside that voxel</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mdbopen</span></code>(path[, mode])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.network_embedding.</span></span><span class="sig-name descname"><span class="pre">NetworkMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">postCell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postCellType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellTypeNumbersSpreadsheet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connectionsSpreadsheet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exPST</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inhPST</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Handles connectivity of presynaptic populations
+to multi-compartmental neuron model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding">
+<span class="sig-name descname"><span class="pre">create_network_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">postCellName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boutonDensities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrOfSamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper.create_network_embedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding" title="Permalink to this definition"></a></dt>
+<dd><p>Public interface:
+used for creating fixed network connectivity.</p>
+<p>Give this network realization a (somewhat) unique name!!!!     
+then save it at the same location as the anatomical realization
+IMPORTANT: assumes path names to anatomical realization files
+work from the working directory! so should be correct relative, or
+preferably absolute paths.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_for_simulations">
+<span class="sig-name descname"><span class="pre">create_network_embedding_for_simulations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">postCellName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boutonDensities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrOfRealizations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper.create_network_embedding_for_simulations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_for_simulations" title="Permalink to this definition"></a></dt>
+<dd><p>Public interface:
+used for creating fixed network connectivity for use in Monte Carlo simulations.
+Same principle as above method, but creates fixed number of network realizations
+to allow investigating effects of anatomical variability on neuron responses.
+Give this network realization a (somewhat) unique name!!!!     
+then save it at the same location as the anatomical realization
+IMPORTANT: assumes path names to anatomical realization files
+work from the working directory! so should be correct relative, or
+preferably absolute paths.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_from_synapse_densities">
+<span class="sig-name descname"><span class="pre">create_network_embedding_from_synapse_densities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">postCellName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapseDensities</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper.create_network_embedding_from_synapse_densities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_from_synapse_densities" title="Permalink to this definition"></a></dt>
+<dd><p>Public interface:
+used for creating fixed network connectivity from pre-computed
+synapse densities. Good for testing…</p>
+<p>Give this network realization a (somewhat) unique name!!!!     
+then save it at the same location as the anatomical realization
+IMPORTANT: assumes path names to anatomical realization files
+work from the working directory! so should be correct relative, or
+preferably absolute paths.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet.html" class="btn btn-neutral float-left" title="singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="singlecell_input_mapper.singlecell_input_mapper.reader.html" class="btn btn-neutral float-right" title="singlecell_input_mapper.singlecell_input_mapper.reader" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -3,18 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>singlecell_input_mapper.evoked_PSTH_from_spike_times &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <title>singlecell_input_mapper.evoked_PSTH_from_spike_times &mdash; In-Silico Framework (ISF) 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -31,6 +30,9 @@
           <a href="../../index.html" class="icon icon-home">
             In-Silico Framework (ISF)
           </a>
+              <div class="version">
+                0.0.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -40,24 +42,16 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/Interface.html">Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/SLURM_scripts.html">SLURM_scripts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/barrel_cortex.html">barrel_cortex</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/biophysics_fitting.html">biophysics_fitting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/compatibility.html">compatibility</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/getting_started.html">getting_started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/mechanisms.html">mechanisms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/model_data_base.html">model_data_base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/nbrun.html">nbrun</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/project_specific_ipynb_code.html">project_specific_ipynb_code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun2.html">simrun2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/simrun3.html">simrun3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_analyzer.html">single_cell_analyzer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/single_cell_parser.html">single_cell_parser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/spike_analysis.html">spike_analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/tests.html">tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules/visualize.html">visualize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/SLURM_scripts.html">SLURM_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/barrel_cortex.html">barrel_cortex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/biophysics_fitting.html">biophysics_fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/getting_started.html">getting_started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/model_data_base.html">model_data_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/simrun2.html">simrun2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/simrun3.html">simrun3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/singlecell_input_mapper.html">singlecell_input_mapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/spike_analysis.html">spike_analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/visualize.html">visualize</a></li>
 </ul>
 
         </div>
@@ -125,8 +119,8 @@
             <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span>\
             <span class="mi">7</span><span class="p">:</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="s1">&#39;D3&#39;</span><span class="p">}</span>
 
-<div class="viewcode-block" id="create_average_celltype_PSTH_from_clusters"><a class="viewcode-back" href="../../modules/singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters.html#singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters">[docs]</a><span class="k">def</span> <span class="nf">create_average_celltype_PSTH_from_clusters</span><span class="p">(</span><span class="n">cellTypeFolder</span><span class="p">,</span> <span class="n">outFileName</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="create_average_celltype_PSTH_from_clusters"><a class="viewcode-back" href="../../_autosummary/singlecell_input_mapper.evoked_PSTH_from_spike_times.html#singlecell_input_mapper.evoked_PSTH_from_spike_times.create_average_celltype_PSTH_from_clusters">[docs]</a><span class="k">def</span> <span class="nf">create_average_celltype_PSTH_from_clusters</span><span class="p">(</span><span class="n">cellTypeFolder</span><span class="p">,</span> <span class="n">outFileName</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    loads cluster files from CDK recordings and automatically</span>
 <span class="sd">    determines avg ongoing activity and evoked PSTH for cell type</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -283,7 +277,7 @@
 <span class="c1">#    print &#39;D4:&#39;</span>
 <span class="c1">#    print &#39;AP per stim: &#39;, spikeProb</span>
 
-<div class="viewcode-block" id="create_evoked_PSTH"><a class="viewcode-back" href="../../modules/singlecell_input_mapper.evoked_PSTH_from_spike_times.create_evoked_PSTH.html#singlecell_input_mapper.evoked_PSTH_from_spike_times.create_evoked_PSTH">[docs]</a><span class="k">def</span> <span class="nf">create_evoked_PSTH</span><span class="p">(</span><span class="n">spikeTimesName</span><span class="p">,</span> <span class="n">cellType</span><span class="p">,</span> <span class="n">ongoingRate</span><span class="p">,</span> <span class="n">outFileName</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">create_evoked_PSTH</span><span class="p">(</span><span class="n">spikeTimesName</span><span class="p">,</span> <span class="n">cellType</span><span class="p">,</span> <span class="n">ongoingRate</span><span class="p">,</span> <span class="n">outFileName</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*************&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;creating evoked PSTH from spike times in </span><span class="si">{:s}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spikeTimesName</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*************&#39;</span><span class="p">)</span>
@@ -336,9 +330,9 @@
                 <span class="n">line</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">%.4f</span><span class="s1">,&#39;</span> <span class="o">%</span> <span class="n">prob</span>
             <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;],</span><span class="se">\n</span><span class="s1">},</span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="n">PSTHFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="n">PSTHFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;}&#39;</span><span class="p">)</span></div>
+        <span class="n">PSTHFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;}&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="load_spike_times"><a class="viewcode-back" href="../../modules/singlecell_input_mapper.evoked_PSTH_from_spike_times.load_spike_times.html#singlecell_input_mapper.evoked_PSTH_from_spike_times.load_spike_times">[docs]</a><span class="k">def</span> <span class="nf">load_spike_times</span><span class="p">(</span><span class="n">spikeTimesName</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">load_spike_times</span><span class="p">(</span><span class="n">spikeTimesName</span><span class="p">):</span>
     <span class="n">whiskers</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;B1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;B2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;B3&#39;</span><span class="p">,</span>\
                 <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span>\
                 <span class="mi">6</span><span class="p">:</span> <span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="s1">&#39;D3&#39;</span><span class="p">}</span>
@@ -368,9 +362,9 @@
                 <span class="n">whiskerDeflectionTrials</span><span class="p">[</span><span class="n">whisker</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">whiskerSpikeTimes</span><span class="p">[</span><span class="n">whisker</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     
-    <span class="k">return</span> <span class="n">whiskerSpikeTimes</span><span class="p">,</span> <span class="n">whiskerDeflectionTrials</span></div>
+    <span class="k">return</span> <span class="n">whiskerSpikeTimes</span><span class="p">,</span> <span class="n">whiskerDeflectionTrials</span>
 
-<div class="viewcode-block" id="load_cluster_trials"><a class="viewcode-back" href="../../modules/singlecell_input_mapper.evoked_PSTH_from_spike_times.load_cluster_trials.html#singlecell_input_mapper.evoked_PSTH_from_spike_times.load_cluster_trials">[docs]</a><span class="k">def</span> <span class="nf">load_cluster_trials</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">load_cluster_trials</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">trialNumber</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">spikeTimes</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
@@ -384,16 +378,16 @@
         <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
             <span class="n">trialsSpikeTimes</span><span class="p">[</span><span class="n">nr</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     
-    <span class="k">return</span> <span class="n">trialsSpikeTimes</span></div>
+    <span class="k">return</span> <span class="n">trialsSpikeTimes</span>
 
-<div class="viewcode-block" id="scan_directory"><a class="viewcode-back" href="../../modules/singlecell_input_mapper.evoked_PSTH_from_spike_times.scan_directory.html#singlecell_input_mapper.evoked_PSTH_from_spike_times.scan_directory">[docs]</a><span class="k">def</span> <span class="nf">scan_directory</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">fnames</span><span class="p">,</span> <span class="n">suffix</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">scan_directory</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">fnames</span><span class="p">,</span> <span class="n">suffix</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
             <span class="n">scan_directory</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fnames</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">):</span>
             <span class="n">fnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">continue</span></div>
+            <span class="k">continue</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
