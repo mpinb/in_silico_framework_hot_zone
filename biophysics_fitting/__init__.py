@@ -1,7 +1,7 @@
 import pandas as pd
 
 def connected_to_dend_beyond(cell, sec, beyond_dist, n_children_required = 2):
-    """Given a :@class single_cell_parser.cell.Cell: object and section number, 
+    """Given a :class:`~single_cell_parser.cell.Cell` object and section number, 
     this method returns true if at least two children of the branchpoint reach beyond dist
 
     Args:
