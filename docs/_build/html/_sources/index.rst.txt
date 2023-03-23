@@ -13,11 +13,6 @@ Module list
    :toctree: _autosummary
    :recursive:
 
-   .. rubric:: Top-level files
-
-   :py:mod:`Interface`
-
-   .. rubric:: Modules
    SLURM_scripts
    barrel_cortex
    biophysics_fitting
@@ -36,10 +31,18 @@ Module list
    ..tests
    visualize
 
+.. toctree::
+   .. rubric:: Top-level files
+
+   :py:mod:`Interface`
+
+   .. rubric:: Modules
+
+
 Usage
 ==================
 
-Take a look at the :py:mod:`getting_started`` module for various notebooks on how to use ISF.
+Take a look at the :py:mod:`getting_started` module for various notebooks on how to use ISF.
 
 Indices and tables
 ==================

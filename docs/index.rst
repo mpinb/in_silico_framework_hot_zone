@@ -13,11 +13,6 @@ Module list
    :toctree: _autosummary
    :recursive:
 
-   .. rubric:: Top-level files
-
-   :py:mod:`Interface`
-
-   .. rubric:: Modules
    SLURM_scripts
    barrel_cortex
    biophysics_fitting
@@ -35,6 +30,14 @@ Module list
    spike_analysis
    ..tests
    visualize
+
+.. toctree::
+   .. rubric:: Top-level files
+
+   :py:mod:`Interface`
+
+   .. rubric:: Modules
+
 
 Usage
 ==================
