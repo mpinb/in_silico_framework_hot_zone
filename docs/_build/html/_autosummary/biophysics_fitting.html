@@ -9,6 +9,7 @@
         <title>biophysics_fitting - In-Silico Framework (ISF) 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_paramlinks.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/default.css" />
     
@@ -396,7 +397,7 @@
 <td><p>Given a <a class="reference internal" href="single_cell_parser.cell.html#single_cell_parser.cell.Cell" title="single_cell_parser.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> object and section number,  this method returns true if at least two children of the branchpoint reach beyond dist</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.get_branching_depth" title="biophysics_fitting.get_branching_depth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_branching_depth</span></code></a>(cell, sec[, beyond_dist])</p></td>
-<td><p>Given a Cell object and a section number, this method returns the amount of sections that have children beyond some distance <cite>beyond_dist</cite> inbetween the soma and the given section.</p></td>
+<td><p>Given a Cell object and a section number, this method returns the amount of sections that have children beyond some distance <a href="#id1"><span class="problematic" id="id2">:param:`beyond_dist`</span></a> inbetween the soma and the given section.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.get_branching_depth_series" title="biophysics_fitting.get_branching_depth_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_branching_depth_series</span></code></a>(cell)</p></td>
 <td><p>Careful: z-depth only accurate for D2-registered cells!</p></td>
@@ -430,16 +431,16 @@ n_children_required (int, optional): Least amount of children required. Defaults
 <dt class="sig sig-object py" id="biophysics_fitting.get_branching_depth">
 <span class="sig-prename descclassname"><span class="pre">biophysics_fitting.</span></span><span class="sig-name descname"><span class="pre">get_branching_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beyond_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting.html#get_branching_depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.get_branching_depth" title="Permalink to this definition">#</a></dt>
 <dd><p>Given a Cell object and a section number, this method returns the amount of sections that have children
-beyond some distance <cite>beyond_dist</cite> inbetween the soma and the given section.</p>
+beyond some distance <a href="#id3"><span class="problematic" id="id4">:param:`beyond_dist`</span></a> inbetween the soma and the given section.</p>
 <p>If this number is 0, that means that the given section, and all its parent sections up to the soma,
-have no children that exceed a distance to soma of <cite>beyond_dist</cite>.</p>
+have no children that exceed a distance to soma of <a href="#id5"><span class="problematic" id="id6">:param:`beyond_dist`</span></a>.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><ul class="simple">
 <li><p>cell (Cell): The Cell object</p></li>
 <li><p>sec (int): The section number</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p>int: Amount of sections between <cite>sec</cite> and soma that have at least 2 children that are further from the soma than <cite>beyond_dist</cite></p>
+<dt>Returns:</dt><dd><p>int: Amount of sections between <a href="#id7"><span class="problematic" id="id8">:param:`sec`</span></a> and soma that have at least 2 children that are further from the soma than <a href="#id9"><span class="problematic" id="id10">:param:`beyond_dist`</span></a></p>
 </dd>
 </dl>
 </dd></dl>

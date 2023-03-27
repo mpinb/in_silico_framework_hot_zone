@@ -36,6 +36,8 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.coverage',
     'sphinx.ext.intersphinx',
+    ## Allow :param: ref
+    'sphinx_paramlinks',
     ## Include autosymmary
     'sphinx.ext.autosummary'
 ]
