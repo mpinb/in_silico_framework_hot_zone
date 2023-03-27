@@ -13,12 +13,10 @@ Every student needs to be able to synchronize their repository with https://gith
 
 ## Usage
 
-The [Interface module](./Interface.py) provides high-level access to all submodules in the in-silico-framework. It provides acces to:
-- The [NEURON simulator](https://www.neuron.yale.edu/neuron/)
-- Parameter parsing modules for [analysis or experiment setup](./single_cell_parser/)
-- Data management tools via the [Model DataBase (mdb) module](./model_data_base/)
-- Visualisation methods via the [Visualize module](./visualize/)
-- ...
+The [Interface module](./Interface.py) glues together all submodules and gives direct access to them. Rather than importing individual submodules, it is recommended to access them via Interface. Most of your code will probably start with
+```python
+import Interface as I
+```
 
 A walkthrough of the capabilities of ISF is presented in the ["Getting Started" notebook](./getting_started/getting_started.ipynb). Core functionalities are repeated below.
 
