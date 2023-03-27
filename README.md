@@ -10,6 +10,11 @@
 
 Every student needs to be able to synchronize their repository with https://github.com/research-center-caesar/in_silico_framework. Detailed instructions on how to install the repo are given in the [installer directory](./installer/).
 
+## Documentation
+
+The current state of the documentation can be found [here](./docs/_build/html/index.html). While this site is not yet hosted on a dedicated webserver, you will just have to open the `index.html` file locally in your favorite browser.
+
+Documentation is a work in progress. It is generated automatically from docstrings using Sphinx autosummary. Missing entries in the documentation are generally due to missing docstrings in the source code.
 
 ## Usage
 
@@ -38,12 +43,14 @@ sim_mdb._register_this_database()
 	
 ### Simulating
 
-Running a simulation requires 3 things to be defined
-1. A neuron morphology (hoc-morphology)
-2. A biophysical description of the neuron, i.e. the ion-channel distribution (parameter file)
-3. Some input (current injection, synaptic input ...)
+Running a simulation requires 3 things to be defined: the neuron morphology, the biophysical properties of the neuron, and some activity (either current injection or synaptic activity). Current injection experiments do not require defining synapse locations or synapse dynamics.
+|               | Current injection    | Synaptic activity                          |
+|---------------|----------------------|-------------------------------------------|
+| 1. Morphology | `.hoc` morphology    | <ul><li>`.hoc` morphology</li><li>Synapse locations</li></ul>|
+| 2. Biophysics | Ion channel dynamics |  <ul><li>Ion channel dynamics</li><li>Synapse dynamics</li></ul>|
+| 3. Activity   | Current injection    | Synaptic activity                         |
 
-Usually, launching biophysically detailed simulations is done with the [simrun2](./simrun2/) or [simrun3](./simrun3/) module. These provide **high-level acces** to define parameters and run simulations.
+Usually, launching biophysically detailed simulations is done with the [simrun2](./simrun2/) or [simrun3](./simrun3/) module. These provide **high-level acces** to define these parameters and run simulations.
 
 When you would like more direct and **low-level access** to the simulations, you can do so by parsing a parameter file (`.param` file) with [Single Cell Parser (scp)](./single_cell_parser/). This parameter file is read in as a nested dictionary that contains the biophysical parameters and the filename of a morphology file (`.hoc` file).
 
@@ -72,4 +79,4 @@ for amp in amplitudes:
 	
 ![](./docs/_static/_figures/VoltageResponse.png)
 
-ISF allows for way more complex simulations by embedding in-vivo recorded anatomies into an in-silico model of the barrel cortex, and simulating synaptic activity, rather than performing current injections. We recommend the reader to visit [Getting Started](./getting_started/getting_started.ipynb) for more info.
+ISF allows for way more complex simulations by embedding in-vivo recorded anatomies into an in-silico model of the barrel cortex with [singlecell_input_mapper](./singlecell_input_mapper), and simulating synaptic activity rather than performing current injections. We recommend the reader to visit [Getting Started](./getting_started/getting_started.ipynb) for more info.
