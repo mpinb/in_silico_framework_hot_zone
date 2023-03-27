@@ -52,8 +52,8 @@ def get_branching_depth(cell, sec, beyond_dist=1000):
     have no children that exceed a distance to soma of ``beyond_dist``.
 
     Args:
-        cell (Cell): The Cell object
-        sec (int): The section number
+        - cell (Cell): The Cell object
+        - sec (int): The section number
 
     Returns:
         int: Amount of sections between ``sec`` and soma that have at least 2 children that are further from the soma than ``beyond_dist``

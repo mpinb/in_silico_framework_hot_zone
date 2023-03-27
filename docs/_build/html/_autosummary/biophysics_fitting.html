@@ -434,8 +434,10 @@ beyond some distance <code class="docutils literal notranslate"><span class="pre
 <p>If this number is 0, that means that the given section, and all its parent sections up to the soma,
 have no children that exceed a distance to soma of <code class="docutils literal notranslate"><span class="pre">beyond_dist</span></code>.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>cell (Cell): The Cell object
-sec (int): The section number</p>
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>cell (Cell): The Cell object</p></li>
+<li><p>sec (int): The section number</p></li>
+</ul>
 </dd>
 <dt>Returns:</dt><dd><p>int: Amount of sections between <code class="docutils literal notranslate"><span class="pre">sec</span></code> and soma that have at least 2 children that are further from the soma than <code class="docutils literal notranslate"><span class="pre">beyond_dist</span></code></p>
 </dd>
