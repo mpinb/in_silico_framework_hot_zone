@@ -431,7 +431,7 @@
 <span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">import</span> <span class="nn">unicodedata</span>
 
-<div class="viewcode-block" id="slugify"><a class="viewcode-back" href="../../_autosummary/model_data_base.model_data_base.html#model_data_base.mdb_initializers.load_simrun_general.slugify">[docs]</a><span class="k">def</span> <span class="nf">slugify</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="slugify"><a class="viewcode-back" href="../../_autosummary/model_data_base.model_data_base.html#model_data_base.model_data_base.slugify">[docs]</a><span class="k">def</span> <span class="nf">slugify</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalizes string, converts to lowercase, removes non-alpha characters,</span>
 <span class="sd">    and converts spaces to hyphens.</span>
@@ -448,7 +448,7 @@
         <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">value</span></div>
     
-<div class="viewcode-block" id="LoaderWrapper"><a class="viewcode-back" href="../../_autosummary/model_data_base.model_data_base.html#model_data_base.mdb_initializers.load_simrun_general.LoaderWrapper">[docs]</a><span class="k">class</span> <span class="nc">LoaderWrapper</span><span class="p">:</span>
+<div class="viewcode-block" id="LoaderWrapper"><a class="viewcode-back" href="../../_autosummary/model_data_base.model_data_base.html#model_data_base.model_data_base.LoaderWrapper">[docs]</a><span class="k">class</span> <span class="nc">LoaderWrapper</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;This is a pointer to data, which is stored elsewhere.</span>
 <span class="sd">    </span>
 <span class="sd">    It is used by ModelDataBase, if data is stored in a subfolder of the </span>
@@ -476,7 +476,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relpath</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">relpath</span> <span class="o">=</span> <span class="n">relpath</span></div>
         
-<div class="viewcode-block" id="FunctionWrapper"><a class="viewcode-back" href="../../_autosummary/model_data_base.model_data_base.html#model_data_base.mdb_initializers.load_simrun_general.FunctionWrapper">[docs]</a><span class="k">class</span> <span class="nc">FunctionWrapper</span><span class="p">:</span>
+<div class="viewcode-block" id="FunctionWrapper"><a class="viewcode-back" href="../../_autosummary/model_data_base.model_data_base.html#model_data_base.model_data_base.FunctionWrapper">[docs]</a><span class="k">class</span> <span class="nc">FunctionWrapper</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;This class wraps arouand an object that cannot be saved directly (e.g. </span>
 <span class="sd">    using pickle) but needs an initialization function instead.</span>
 <span class="sd">    </span>
@@ -488,7 +488,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fun</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">fun</span></div>
                 
-<div class="viewcode-block" id="MdbException"><a class="viewcode-back" href="../../_autosummary/model_data_base.model_data_base.html#model_data_base.mdb_initializers.load_simrun_general.MdbException">[docs]</a><span class="k">class</span> <span class="nc">MdbException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="MdbException"><a class="viewcode-back" href="../../_autosummary/model_data_base.model_data_base.html#model_data_base.model_data_base.MdbException">[docs]</a><span class="k">class</span> <span class="nc">MdbException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Typical mdb errors&#39;&#39;&#39;</span>
     <span class="k">pass</span>        </div>
 
@@ -515,7 +515,7 @@
                                <span class="o">+</span> <span class="s2">&quot;Cannot create the directories specified in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">working_dir</span><span class="p">)</span>
 
 <span class="c1">###methods to hide dask progress bar based on settings:</span>
-<div class="viewcode-block" id="empty_context_manager"><a class="viewcode-back" href="../../_autosummary/model_data_base.model_data_base.html#model_data_base.mdb_initializers.load_simrun_general.empty_context_manager">[docs]</a><span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
+<div class="viewcode-block" id="empty_context_manager"><a class="viewcode-back" href="../../_autosummary/model_data_base.model_data_base.html#model_data_base.model_data_base.empty_context_manager">[docs]</a><span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
 <span class="k">def</span> <span class="nf">empty_context_manager</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;does nothing. is meant to replace ProgressBar, if no output is needed&#39;&#39;&#39;</span>
     <span class="k">yield</span></div>

@@ -392,7 +392,7 @@
 <span class="sd">    this method returns true if at least two children of the branchpoint reach beyond dist</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        cell (Cell): The Cell object</span>
+<span class="sd">        cell (:class:`~single_cell_parser.cell.Cell`): The Cell object</span>
 <span class="sd">        sec (int): Index of Cell section</span>
 <span class="sd">        beyond_dist (float): Distance threshold</span>
 <span class="sd">        n_children_required (int, optional): Least amount of children required. Defaults to 2.</span>
@@ -433,17 +433,17 @@
 
 <div class="viewcode-block" id="get_branching_depth"><a class="viewcode-back" href="../_autosummary/biophysics_fitting.html#biophysics_fitting.get_branching_depth">[docs]</a><span class="k">def</span> <span class="nf">get_branching_depth</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">beyond_dist</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Given a Cell object and a section number, this method returns the amount of sections that have children</span>
-<span class="sd">    beyond some distance :@param beyond_dist: inbetween the soma and the given section.</span>
+<span class="sd">    beyond some distance :param:`beyond_dist` inbetween the soma and the given section.</span>
 
 <span class="sd">    If this number is 0, that means that the given section, and all its parent sections up to the soma,</span>
-<span class="sd">    have no children that exceed a distance to soma of :@param beyond_dist:.</span>
+<span class="sd">    have no children that exceed a distance to soma of :param:`beyond_dist`.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        cell (Cell): The Cell object</span>
 <span class="sd">        sec (int): The section number</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        int: Amount of sections between :@param sec: and soma that have at least 2 children that are further from the soma than :@param beyond_dist:</span>
+<span class="sd">        int: Amount of sections between :param:`sec` and soma that have at least 2 children that are further from the soma than :param:`beyond_dist`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">depth</span> <span class="o">=</span> <span class="n">connected_to_dend_beyond</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">beyond_dist</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">sec</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;soma&#39;</span><span class="p">:</span>

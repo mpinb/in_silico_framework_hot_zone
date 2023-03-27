@@ -393,7 +393,7 @@
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<div class="viewcode-block" id="param_to_kwargs"><a class="viewcode-back" href="../../_autosummary/biophysics_fitting.parameters.html#biophysics_fitting.hay_complete_default_setup.param_to_kwargs">[docs]</a><span class="k">def</span> <span class="nf">param_to_kwargs</span><span class="p">(</span><span class="n">fun</span><span class="p">):</span>
+<div class="viewcode-block" id="param_to_kwargs"><a class="viewcode-back" href="../../_autosummary/biophysics_fitting.parameters.html#biophysics_fitting.parameters.param_to_kwargs">[docs]</a><span class="k">def</span> <span class="nf">param_to_kwargs</span><span class="p">(</span><span class="n">fun</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;returns a function that can be called with params = [some_Series].</span>
 <span class="sd">    The content of Series is added to kwargs&#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="nf">fun2</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -403,7 +403,7 @@
         <span class="k">return</span> <span class="n">fun</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">fun2</span></div>
 
-<div class="viewcode-block" id="param_selector"><a class="viewcode-back" href="../../_autosummary/biophysics_fitting.parameters.html#biophysics_fitting.hay_complete_default_setup.param_selector">[docs]</a><span class="k">def</span> <span class="nf">param_selector</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<div class="viewcode-block" id="param_selector"><a class="viewcode-back" href="../../_autosummary/biophysics_fitting.parameters.html#biophysics_fitting.parameters.param_selector">[docs]</a><span class="k">def</span> <span class="nf">param_selector</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Allows to select from a Series with an Index like a.b.c, a.b.d.</span>
 
 <span class="sd">    params is a series with an index that contains strings seperated by &quot;.&quot;</span>
