@@ -12,6 +12,7 @@ of cells in barrel cortex. This includes:
  - efficiently store the simulation results and provide an easy interface to query data
 
 The recommended use is to import it in a jupyter notebook in the following manner::
+
     import Interface as I
     
 '''
