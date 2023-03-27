@@ -22,7 +22,7 @@ A walkthrough of the capabilities of ISF is presented in the ["Getting Started" 
 
 ### Model DataBase (mdb)
 
-A model database is on-disk storage whose syntax is mimicking a dictionary in python. Data in an mdb can be saved with various formats (use I.dumper_ autocomplete). The format needs to be specified while saving the data, but not for loading the data. This allows to change (optimize) the format without the need to update code operating on it. A mdb has been designed to contain and give convenient access to data from large scale simulations, which do not fit in memory. Access to a modeldatabase is done with the [mdb module](./model_data_base). Some MDB's need to be registered to resolve hashed paths to absolute paths before you can navigate them.
+A model database is on-disk storage whose syntax is mimicking a dictionary in python. Data in an mdb can be saved with various formats (use `I.dumper_ autocomplete`). The format needs to be specified while saving the data, but not for loading the data. This allows to change (optimize) the format without the need to update code operating on it. A mdb has been designed to contain and give convenient access to data from large scale simulations, which do not fit in memory. Access to a modeldatabase is done with the [mdb module](./model_data_base). Some MDB's need to be registered to resolve hashed paths to absolute paths before you can navigate them.
 ```python
 import Interface as I
 I.ModelDataBase # main class of model_data_base
@@ -40,7 +40,7 @@ sim_mdb._register_this_database()
 
 Running a simulation requires 3 things to be defined
 1. A neuron morphology (hoc-morphology)
-2. A biophysical description of the neuron morphology, i.e. the ion-channel distribution (parameter file)
+2. A biophysical description of the neuron, i.e. the ion-channel distribution (parameter file)
 3. Some input (current injection, synaptic input ...)
 
 Usually, launching biophysically detailed simulations is done with the [simrun2](./simrun2/) or [simrun3](./simrun3/) module. These provide **high-level acces** to define parameters and run simulations.
@@ -56,7 +56,7 @@ cell_parameters = I.scp.build_parameters(parameter_file) # this is the main meth
 cell = I.scp.create_cell(cell_parameters.neuron)
 ```
 
-Running a simulation on the previously defined cell can be done like so:
+If we now define a injection site, injection amplitude, and a recording site, we have everything we need for a classic current injection experiment.
 ```python
 import neuron
 h = neuron.h  # NEURON's python API
@@ -71,3 +71,5 @@ for amp in amplitudes:
 ```
 	
 ![](./docs/_static/_figures/VoltageResponse.png)
+
+ISF allows for way more complex simulations by embedding in-vivo recorded anatomies into an in-silico model of the barrel cortex, and simulating synaptic activity, rather than performing current injections. We recommend the reader to visit [Getting Started](./getting_started/getting_started.ipynb) for more info.
