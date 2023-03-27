@@ -5,7 +5,7 @@ def connected_to_dend_beyond(cell, sec, beyond_dist, n_children_required = 2):
     this method returns true if at least two children of the branchpoint reach beyond dist
 
     Args:
-        cell (Cell): The Cell object
+        cell (:class:`~single_cell_parser.cell.Cell`): The Cell object
         sec (int): Index of Cell section
         beyond_dist (float): Distance threshold
         n_children_required (int, optional): Least amount of children required. Defaults to 2.
@@ -46,17 +46,17 @@ def get_inner_sec_dist_list(cell, select = ['ApicalDendrite', 'Dendrite']):
 
 def get_branching_depth(cell, sec, beyond_dist=1000):
     """Given a Cell object and a section number, this method returns the amount of sections that have children
-    beyond some distance :@param beyond_dist: inbetween the soma and the given section.
+    beyond some distance :param:`beyond_dist` inbetween the soma and the given section.
 
     If this number is 0, that means that the given section, and all its parent sections up to the soma,
-    have no children that exceed a distance to soma of :@param beyond_dist:.
+    have no children that exceed a distance to soma of :param:`beyond_dist`.
 
     Args:
         cell (Cell): The Cell object
         sec (int): The section number
 
     Returns:
-        int: Amount of sections between :@param sec: and soma that have at least 2 children that are further from the soma than :@param beyond_dist:
+        int: Amount of sections between :param:`sec` and soma that have at least 2 children that are further from the soma than :param:`beyond_dist`
     """
     depth = connected_to_dend_beyond(cell, sec, beyond_dist)
     if sec.parent.label.lower() == 'soma':
