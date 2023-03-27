@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -400,7 +400,7 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delayed</span></code>([obj, name, pure, nout, traverse])</p></td>
 <td><p>Wraps a function or object to produce a <code class="docutils literal notranslate"><span class="pre">Delayed</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#simrun2.generate_synapse_activations.generate_synapse_activations" title="simrun2.generate_synapse_activations.generate_synapse_activations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_synapse_activations</span></code></a>(cellParamName, ...)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_synapse_activations</span></code>(cellParamName, ...)</p></td>
 <td><p>Generates nSweeps*nprocs synapse activation files and puts them in the folder dirPrefix/results/simName.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_seed</span></code>([recursion_depth])</p></td>
@@ -434,57 +434,6 @@
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="simrun2.generate_synapse_activations.generate_synapse_activations">
-<span class="sig-prename descclassname"><span class="pre">simrun2.generate_synapse_activations.</span></span><span class="sig-name descname"><span class="pre">generate_synapse_activations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cellParamName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evokedUpParamName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dirPrefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nSweeps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nprocs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">345</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/generate_synapse_activations.html#generate_synapse_activations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.generate_synapse_activations.generate_synapse_activations" title="Permalink to this definition">#</a></dt>
-<dd><p>Generates nSweeps*nprocs synapse activation files and puts them in
-the folder dirPrefix/results/simName. Returns delayed object, which can
-be computed with an arbitrary dask scheduler. For each process, a new
-seed is generated using the seed generator.</p>
-<dl>
-<dt>Parameters:</dt><dd><dl>
-<dt>cellParamName: str, Path to cell parameter file, containing information about:</dt><dd><ul>
-<li><p>info: autor, date, name</p></li>
-<li><p>NMODL_mechanisms: path to NEURON mechanisms</p></li>
-<li><dl>
-<dt>neuron: </dt><dd><p>-path to hoc-file
-- per subcellular compartment (Soma, AIS, …):</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>electrical properties</p></li>
-<li><p>mechanisms</p></li>
-</ul>
-</div></blockquote>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-<dt>evokedUpParamName: str, Path to network parameter file, containing information about:</dt><dd><ul class="simple">
-<li><p>autor, name, date</p></li>
-<li><dl class="simple">
-<dt>for each cell-type: </dt><dd><p>synapse: release probability, path to distribution file, receptor and associated parameters
-connectionFile: path to connection file
-cell number
-celltype: pointcell, spiketrain</p>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-<p>nSweeps: number of synapse activations per process
-nprocs: number of independent processes
-tStop: time in ms at which the synaptic input should stop.</p>
-</dd>
-</dl>
-<p>Returns: Delayed object. Can be computed with arbitrary scheduler.
-Computing delayed object returns: List of lists. Each child list contains the paths</p>
-<blockquote>
-<div><p>of the synapse activation files generated by one worker</p>
-</div></blockquote>
-</dd></dl>
-
 </section>
 
         </article>
@@ -530,27 +479,8 @@ Computing delayed object returns: List of lists. Each child list contains the pa
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">simrun2.generate_synapse_activations</a><ul>
-<li><a class="reference internal" href="#simrun2.generate_synapse_activations.generate_synapse_activations"><code class="docutils literal notranslate"><span class="pre">generate_synapse_activations()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

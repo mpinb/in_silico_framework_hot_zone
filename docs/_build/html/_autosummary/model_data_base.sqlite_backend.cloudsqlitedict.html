@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -404,19 +404,19 @@ don’t forget to call <cite>mydict.commit()</cite> when done with a transaction
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.decode" title="model_data_base.sqlite_backend.cloudsqlitedict.decode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decode</span></code></a>(obj)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">decode</span></code>(obj)</p></td>
 <td><p>Deserialize objects retrieved from SQLite.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dumps</span></code>(obj[, protocol, buffer_callback])</p></td>
 <td><p>Serialize obj as a string of bytes allocated in memory</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.encode" title="model_data_base.sqlite_backend.cloudsqlitedict.encode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">encode</span></code></a>(obj)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">encode</span></code>(obj)</p></td>
 <td><p>Serialize an object using pickle to a binary format accepted by SQLite.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">loads</span></code>(data, *[, fix_imports, encoding, ...])</p></td>
 <td><p>Read and return an object from the given pickle data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.open" title="model_data_base.sqlite_backend.cloudsqlitedict.open"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">open</span></code>(*args, **kwargs)</p></td>
 <td><p>See documentation of the SqliteDict class.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">reraise</span></code>(tp, value[, tb])</p></td>
@@ -438,7 +438,7 @@ don’t forget to call <cite>mydict.commit()</cite> when done with a transaction
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SqliteDict</span></code>([filename, tablename, flag, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread" title="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SqliteMultithread</span></code></a>(filename, autocommit, ...)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SqliteMultithread</span></code>(filename, autocommit, ...)</p></td>
 <td><p>Wrap sqlite connection in a way that allows concurrent requests from multiple threads.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Thread</span></code>([group, target, name, args, kwargs, ...])</p></td>
@@ -447,75 +447,6 @@ don’t forget to call <cite>mydict.commit()</cite> when done with a transaction
 </tbody>
 </table>
 </div>
-<dl class="py class">
-<dt class="sig sig-object py" id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">model_data_base.sqlite_backend.cloudsqlitedict.</span></span><span class="sig-name descname"><span class="pre">SqliteMultithread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autocommit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">journal_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></p>
-<p>Wrap sqlite connection in a way that allows concurrent requests from multiple threads.</p>
-<p>This is done by internally queueing the requests and processing them sequentially
-in a separate thread (in the same order they arrived).</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.check_raise_error">
-<span class="sig-name descname"><span class="pre">check_raise_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.check_raise_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.check_raise_error" title="Permalink to this definition">#</a></dt>
-<dd><p>Check for and raise exception for any previous sqlite query.</p>
-<p>For the <cite>execute*</cite> family of method calls, such calls are non-blocking and any
-exception raised in the thread cannot be handled by the calling Thread (usually
-MainThread).  This method is called on <cite>close</cite>, and prior to any subsequent
-calls to the <cite>execute*</cite> methods to check for and raise an exception in a
-previous call to the MainThread.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.execute">
-<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.execute" title="Permalink to this definition">#</a></dt>
-<dd><p><cite>execute</cite> calls are non-blocking: just queue up the request and return immediately.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.run" title="Permalink to this definition">#</a></dt>
-<dd><p>Method representing the thread’s activity.</p>
-<p>You may override this method in a subclass. The standard run() method
-invokes the callable object passed to the object’s constructor as the
-target argument, if any, with sequential and keyword arguments taken
-from the args and kwargs arguments, respectively.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select">
-<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.select"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select" title="Permalink to this definition">#</a></dt>
-<dd><p>Unlike sqlite’s native select, this select doesn’t handle iteration efficiently.</p>
-<p>The result of <cite>select</cite> starts filling up with values as soon as the
-request is dequeued, and although you can iterate over the result normally
-(<cite>for res in self.select(): …</cite>), the entire result will be in memory.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select_one">
-<span class="sig-name descname"><span class="pre">select_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#SqliteMultithread.select_one"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select_one" title="Permalink to this definition">#</a></dt>
-<dd><p>Return only the first row of the SELECT, or None if there are no matching rows.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.sqlite_backend.cloudsqlitedict.decode">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.sqlite_backend.cloudsqlitedict.</span></span><span class="sig-name descname"><span class="pre">decode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#decode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.decode" title="Permalink to this definition">#</a></dt>
-<dd><p>Deserialize objects retrieved from SQLite.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.sqlite_backend.cloudsqlitedict.encode">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.sqlite_backend.cloudsqlitedict.</span></span><span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.encode" title="Permalink to this definition">#</a></dt>
-<dd><p>Serialize an object using pickle to a binary format accepted by SQLite.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.sqlite_backend.cloudsqlitedict.open">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.sqlite_backend.cloudsqlitedict.</span></span><span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/sqlite_backend/cloudsqlitedict.html#open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.sqlite_backend.cloudsqlitedict.open" title="Permalink to this definition">#</a></dt>
-<dd><p>See documentation of the SqliteDict class.</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -561,37 +492,8 @@ request is dequeued, and although you can iterate over the result normally
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">model_data_base.sqlite_backend.cloudsqlitedict</a><ul>
-<li><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread"><code class="docutils literal notranslate"><span class="pre">SqliteMultithread</span></code></a><ul>
-<li><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.check_raise_error"><code class="docutils literal notranslate"><span class="pre">SqliteMultithread.check_raise_error()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.execute"><code class="docutils literal notranslate"><span class="pre">SqliteMultithread.execute()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.run"><code class="docutils literal notranslate"><span class="pre">SqliteMultithread.run()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select"><code class="docutils literal notranslate"><span class="pre">SqliteMultithread.select()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.SqliteMultithread.select_one"><code class="docutils literal notranslate"><span class="pre">SqliteMultithread.select_one()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.decode"><code class="docutils literal notranslate"><span class="pre">decode()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.encode"><code class="docutils literal notranslate"><span class="pre">encode()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.sqlite_backend.cloudsqlitedict.open"><code class="docutils literal notranslate"><span class="pre">open()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

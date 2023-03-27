@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -404,29 +404,15 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">time_list_from_pd</span></code>(syn)</p></td>
 <td><p>returns the columns, that can be interpreted as integer: 'name1' 'nam2' '3' '1' '2' --&gt; '3' '1' '2'  The underlying assupmtion is, that the dataframe syn consists of columsn like 'name', 'color', 'bla', which describe the data and columns like '1', '2', '3', which are the actual data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.analyze.spatiotemporal_binning.universal" title="model_data_base.analyze.spatiotemporal_binning.universal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">universal</span></code></a>(df, distance_column[, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">universal</span></code>(df, distance_column[, ...])</p></td>
 <td><p>kwargs:  spacial_distance_bins = 50,  min_time = 0,     max_time = 300, time_distance_bins = 1</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.analyze.spatiotemporal_binning.universal_pd" title="model_data_base.analyze.spatiotemporal_binning.universal_pd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">universal_pd</span></code></a>(df, distance_column[, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">universal_pd</span></code>(df, distance_column[, ...])</p></td>
 <td><p>speed-optimized binning code for 2d-binning of pandas.DataFrame.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.analyze.spatiotemporal_binning.universal">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.analyze.spatiotemporal_binning.</span></span><span class="sig-name descname"><span class="pre">universal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacial_distance_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_distance_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/analyze/spatiotemporal_binning.html#universal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.analyze.spatiotemporal_binning.universal" title="Permalink to this definition">#</a></dt>
-<dd><p>kwargs: 
-spacial_distance_bins = 50, 
-min_time = 0,     max_time = 300, time_distance_bins = 1</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.analyze.spatiotemporal_binning.universal_pd">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.analyze.spatiotemporal_binning.</span></span><span class="sig-name descname"><span class="pre">universal_pd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacial_distance_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_distance_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/analyze/spatiotemporal_binning.html#universal_pd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.analyze.spatiotemporal_binning.universal_pd" title="Permalink to this definition">#</a></dt>
-<dd><p>speed-optimized binning code for 2d-binning of pandas.DataFrame.</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -472,28 +458,8 @@ min_time = 0,     max_time = 300, time_distance_bins = 1</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">model_data_base.analyze.spatiotemporal_binning</a><ul>
-<li><a class="reference internal" href="#model_data_base.analyze.spatiotemporal_binning.universal"><code class="docutils literal notranslate"><span class="pre">universal()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.analyze.spatiotemporal_binning.universal_pd"><code class="docutils literal notranslate"><span class="pre">universal_pd()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

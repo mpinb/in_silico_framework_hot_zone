@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -398,22 +398,22 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">first_line_to_key</span></code>(stringios)</p></td>
 <td><p>takes a list io StringIO objects.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.IO.roberts_formats.read_InputMapper_summary" title="model_data_base.IO.roberts_formats.read_InputMapper_summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_InputMapper_summary</span></code></a>(pathOrBuffer[, sep])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_InputMapper_summary</span></code>(pathOrBuffer[, sep])</p></td>
 <td><p>Expects the path to a summary csv file of the Single Cell Mapper, returns the tables as pandas tables</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.IO.roberts_formats.read_csv_uneven_length" title="model_data_base.IO.roberts_formats.read_csv_uneven_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_csv_uneven_length</span></code></a>(path, n_commas[, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_csv_uneven_length</span></code>(path, n_commas[, ...])</p></td>
 <td><p>general function to read in a csv file with varying length data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format" title="model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pandas_cell_activation_from_roberts_format</span></code></a>(path)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pandas_cell_activation_from_roberts_format</span></code>(path)</p></td>
 <td><p>reads cell activation file from simulation and converts it to pandas table</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format" title="model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pandas_synapse_activation_from_roberts_format</span></code></a>(path)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pandas_synapse_activation_from_roberts_format</span></code>(path)</p></td>
 <td><p>reads synapse activation file from simulation and converts it to pandas table</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_file_to_buffers</span></code>(f[, split_str])</p></td>
 <td><p>reads a file f and splits it, whenever &quot;split_str&quot; is found.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format" title="model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pandas_synapse_activation_to_roberts_format</span></code></a>(...)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pandas_synapse_activation_to_roberts_format</span></code>(...)</p></td>
 <td><p>save pandas df in a format, which can be understood by the simulator</p></td>
 </tr>
 </tbody>
@@ -429,48 +429,6 @@
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.IO.roberts_formats.read_InputMapper_summary">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.roberts_formats.</span></span><span class="sig-name descname"><span class="pre">read_InputMapper_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pathOrBuffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\t'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/roberts_formats.html#read_InputMapper_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_InputMapper_summary" title="Permalink to this definition">#</a></dt>
-<dd><p>Expects the path to a summary csv file of the Single Cell Mapper,
-returns the tables as pandas tables</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.IO.roberts_formats.read_csv_uneven_length">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.roberts_formats.</span></span><span class="sig-name descname"><span class="pre">read_csv_uneven_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_commas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skiprows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/roberts_formats.html#read_csv_uneven_length"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_csv_uneven_length" title="Permalink to this definition">#</a></dt>
-<dd><p>general function to read in a csv file with varying length data.</p>
-<dl>
-<dt>args:</dt><dd><p>path: path to file
-n_commas: maximum length of fields</p>
-</dd>
-<dt>kwargs:</dt><dd><p>header: you can provide an alternative header
-skiprows: skip rows at the beginning of the file (e.g. one to skip the</p>
-<blockquote>
-<div><p>header if you specified one manually)</p>
-</div></blockquote>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.roberts_formats.</span></span><span class="sig-name descname"><span class="pre">read_pandas_cell_activation_from_roberts_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_trail_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'no_sim_trail_assigned'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_commas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/roberts_formats.html#read_pandas_cell_activation_from_roberts_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format" title="Permalink to this definition">#</a></dt>
-<dd><p>reads cell activation file from simulation and converts it to pandas table</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.roberts_formats.</span></span><span class="sig-name descname"><span class="pre">read_pandas_synapse_activation_from_roberts_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_trail_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'no_sim_trail_assigned'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_commas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/roberts_formats.html#read_pandas_synapse_activation_from_roberts_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format" title="Permalink to this definition">#</a></dt>
-<dd><p>reads synapse activation file from simulation and converts it to pandas table</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.roberts_formats.</span></span><span class="sig-name descname"><span class="pre">write_pandas_synapse_activation_to_roberts_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">syn_activation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/roberts_formats.html#write_pandas_synapse_activation_to_roberts_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format" title="Permalink to this definition">#</a></dt>
-<dd><p>save pandas df in a format, which can be understood by the simulator</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -516,31 +474,8 @@ skiprows: skip rows at the beginning of the file (e.g. one to skip the</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">model_data_base.IO.roberts_formats</a><ul>
-<li><a class="reference internal" href="#model_data_base.IO.roberts_formats.read_InputMapper_summary"><code class="docutils literal notranslate"><span class="pre">read_InputMapper_summary()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.IO.roberts_formats.read_csv_uneven_length"><code class="docutils literal notranslate"><span class="pre">read_csv_uneven_length()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.IO.roberts_formats.read_pandas_cell_activation_from_roberts_format"><code class="docutils literal notranslate"><span class="pre">read_pandas_cell_activation_from_roberts_format()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.IO.roberts_formats.read_pandas_synapse_activation_from_roberts_format"><code class="docutils literal notranslate"><span class="pre">read_pandas_synapse_activation_from_roberts_format()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.IO.roberts_formats.write_pandas_synapse_activation_to_roberts_format"><code class="docutils literal notranslate"><span class="pre">write_pandas_synapse_activation_to_roberts_format()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

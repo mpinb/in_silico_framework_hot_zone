@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,7 +394,7 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper" title="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NetworkMapper</span></code></a>(postCell, postCellType, ...)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">NetworkMapper</span></code>(postCell, postCellType, ...)</p></td>
 <td><p>Handles connectivity of presynaptic populations to multi-compartmental neuron model.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCell</span></code>([column, cellType])</p></td>
@@ -412,53 +412,6 @@
 </tbody>
 </table>
 </div>
-<dl class="py class">
-<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.network_embedding.</span></span><span class="sig-name descname"><span class="pre">NetworkMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">postCell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postCellType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellTypeNumbersSpreadsheet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connectionsSpreadsheet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exPST</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inhPST</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Handles connectivity of presynaptic populations
-to multi-compartmental neuron model.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding">
-<span class="sig-name descname"><span class="pre">create_network_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">postCellName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boutonDensities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrOfSamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper.create_network_embedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding" title="Permalink to this definition">#</a></dt>
-<dd><p>Public interface:
-used for creating fixed network connectivity.</p>
-<p>Give this network realization a (somewhat) unique name!!!!     
-then save it at the same location as the anatomical realization
-IMPORTANT: assumes path names to anatomical realization files
-work from the working directory! so should be correct relative, or
-preferably absolute paths.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_for_simulations">
-<span class="sig-name descname"><span class="pre">create_network_embedding_for_simulations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">postCellName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boutonDensities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrOfRealizations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper.create_network_embedding_for_simulations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_for_simulations" title="Permalink to this definition">#</a></dt>
-<dd><p>Public interface:
-used for creating fixed network connectivity for use in Monte Carlo simulations.
-Same principle as above method, but creates fixed number of network realizations
-to allow investigating effects of anatomical variability on neuron responses.
-Give this network realization a (somewhat) unique name!!!!     
-then save it at the same location as the anatomical realization
-IMPORTANT: assumes path names to anatomical realization files
-work from the working directory! so should be correct relative, or
-preferably absolute paths.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_from_synapse_densities">
-<span class="sig-name descname"><span class="pre">create_network_embedding_from_synapse_densities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">postCellName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapseDensities</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/network_embedding.html#NetworkMapper.create_network_embedding_from_synapse_densities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_from_synapse_densities" title="Permalink to this definition">#</a></dt>
-<dd><p>Public interface:
-used for creating fixed network connectivity from pre-computed
-synapse densities. Good for testing…</p>
-<p>Give this network realization a (somewhat) unique name!!!!     
-then save it at the same location as the anatomical realization
-IMPORTANT: assumes path names to anatomical realization files
-work from the working directory! so should be correct relative, or
-preferably absolute paths.</p>
-</dd></dl>
-
-</dd></dl>
-
 </section>
 
         </article>
@@ -504,32 +457,8 @@ preferably absolute paths.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">singlecell_input_mapper.singlecell_input_mapper.network_embedding</a><ul>
-<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper"><code class="docutils literal notranslate"><span class="pre">NetworkMapper</span></code></a><ul>
-<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding"><code class="docutils literal notranslate"><span class="pre">NetworkMapper.create_network_embedding()</span></code></a></li>
-<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_for_simulations"><code class="docutils literal notranslate"><span class="pre">NetworkMapper.create_network_embedding_for_simulations()</span></code></a></li>
-<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.network_embedding.NetworkMapper.create_network_embedding_from_synapse_densities"><code class="docutils literal notranslate"><span class="pre">NetworkMapper.create_network_embedding_from_synapse_densities()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

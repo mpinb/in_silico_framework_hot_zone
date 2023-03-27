@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -392,7 +392,7 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.IO.LoaderDumper.just_create_folder.check" title="model_data_base.IO.LoaderDumper.just_create_folder.check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check</span></code></a>(obj)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check</span></code>(obj)</p></td>
 <td><p>checks wherther obj can be saved with this dumper</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump</span></code>(obj, savedir)</p></td>
@@ -408,39 +408,12 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Loader</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder" title="model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ManagedFolder</span></code></a></p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ManagedFolder</span></code></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<dl class="py class">
-<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.just_create_folder.</span></span><span class="sig-name descname"><span class="pre">ManagedFolder</span></span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#ManagedFolder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.get_file">
-<span class="sig-name descname"><span class="pre">get_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">suffix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#ManagedFolder.get_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.get_file" title="Permalink to this definition">#</a></dt>
-<dd><p>if folder only contains one file of specified suffix, this file is returned</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.join">
-<span class="sig-name descname"><span class="pre">join</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#ManagedFolder.join"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.join" title="Permalink to this definition">#</a></dt>
-<dd><p>Concatenate any number of strings.</p>
-<p>The string whose method is called is inserted in between each given string.
-The result is returned as a new string.</p>
-<p>Example: ‘.’.join([‘ab’, ‘pq’, ‘rs’]) -&gt; ‘ab.pq.rs’</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.just_create_folder.check">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.just_create_folder.</span></span><span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/just_create_folder.html#check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.just_create_folder.check" title="Permalink to this definition">#</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -486,32 +459,8 @@ The result is returned as a new string.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">model_data_base.IO.LoaderDumper.just_create_folder</a><ul>
-<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder"><code class="docutils literal notranslate"><span class="pre">ManagedFolder</span></code></a><ul>
-<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.get_file"><code class="docutils literal notranslate"><span class="pre">ManagedFolder.get_file()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.just_create_folder.ManagedFolder.join"><code class="docutils literal notranslate"><span class="pre">ManagedFolder.join()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.just_create_folder.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

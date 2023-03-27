@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -401,7 +401,7 @@ with NeuroNet subcellular synapse distributions</p>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_parameters_sumatra</span></code>(filename)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.create_cell" title="single_cell_parser.create_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_cell</span></code></a>(parameters[, scaleFunc, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_cell</span></code>(parameters[, scaleFunc, ...])</p></td>
 <td><p>default way of creating NEURON cell models; includes spatial discretization and inserts biophysical mechanisms according to parameter file</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_functional_network</span></code>(cellParamName, ...)</p></td>
@@ -410,10 +410,10 @@ with NeuroNet subcellular synapse distributions</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_synapse_realization</span></code>(pname)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.init_neuron_run" title="single_cell_parser.init_neuron_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_neuron_run</span></code></a>(simparam[, vardt])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_neuron_run</span></code>(simparam[, vardt])</p></td>
 <td><p>Default NEURON run with inital parameters according to parameter file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.load_NMODL_parameters" title="single_cell_parser.load_NMODL_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_NMODL_parameters</span></code></a>(parameters)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_NMODL_parameters</span></code>(parameters)</p></td>
 <td><p>automatically loads NMODL mechanisms from paths in parameter file</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_complete_synapse_activation_file</span></code>(fname)</p></td>
@@ -437,13 +437,13 @@ with NeuroNet subcellular synapse distributions</p>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_weight_file</span></code>(fname)</p></td>
 <td><p>reads list of all anatomical synapses and their maximum conductance values. Input: file of format:     synapse type  synapse ID      section IDtsection pt IDtreceptor type (string)tconductance values Returns: two (!!!) dictionaries with cell types as keys, ordered the same as the anatomical synapses:     1st with section ID and pt ID, 2nd with synaptic weights, coded as dictionaries     (keys=receptor strings) containing weights: (gmax_0, gmax_1, ... , gmax_n).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.sec_distance_to_soma" title="single_cell_parser.sec_distance_to_soma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sec_distance_to_soma</span></code></a>(currentSec)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sec_distance_to_soma</span></code>(currentSec)</p></td>
 <td><p>compute path length from sec(x=0) to soma</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.spines_update_network_paramfile" title="single_cell_parser.spines_update_network_paramfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_network_paramfile</span></code></a>(...)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_network_paramfile</span></code>(...)</p></td>
 <td><p>update the network.param file to point to the new synapse distribution file</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.spines_update_synapse_distribution_file" title="single_cell_parser.spines_update_synapse_distribution_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_synapse_distribution_file</span></code></a>(...)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">spines_update_synapse_distribution_file</span></code>(...)</p></td>
 <td><p>Update the .syn file to correctly point to spine heads as excitatory synapse locations.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_PSTH</span></code>([fname, PSTH, bins])</p></td>
@@ -516,51 +516,6 @@ with NeuroNet subcellular synapse distributions</p>
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="single_cell_parser.create_cell">
-<span class="sig-prename descclassname"><span class="pre">single_cell_parser.</span></span><span class="sig-name descname"><span class="pre">create_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaleFunc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setUpBiophysics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser.html#create_cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.create_cell" title="Permalink to this definition">#</a></dt>
-<dd><p>default way of creating NEURON cell models;
-includes spatial discretization and inserts
-biophysical mechanisms according to parameter file</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="single_cell_parser.init_neuron_run">
-<span class="sig-prename descclassname"><span class="pre">single_cell_parser.</span></span><span class="sig-name descname"><span class="pre">init_neuron_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simparam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vardt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">events</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser.html#init_neuron_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.init_neuron_run" title="Permalink to this definition">#</a></dt>
-<dd><p>Default NEURON run with inital parameters
-according to parameter file.
-Optional parameters: callable “events” that are
-passed to Event objects holding a FInitializeHandler.
-This can be used to implement changes of parameters during
-the course of the simulation using h.cvode.event(t, “statement”)
-in the supplied callable, where “statement” is another
-Python callable which may be used to change parameters.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="single_cell_parser.load_NMODL_parameters">
-<span class="sig-prename descclassname"><span class="pre">single_cell_parser.</span></span><span class="sig-name descname"><span class="pre">load_NMODL_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser.html#load_NMODL_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.load_NMODL_parameters" title="Permalink to this definition">#</a></dt>
-<dd><p>automatically loads NMODL mechanisms from paths in parameter file</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="single_cell_parser.sec_distance_to_soma">
-<span class="sig-prename descclassname"><span class="pre">single_cell_parser.</span></span><span class="sig-name descname"><span class="pre">sec_distance_to_soma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currentSec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser.html#sec_distance_to_soma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.sec_distance_to_soma" title="Permalink to this definition">#</a></dt>
-<dd><p>compute path length from sec(x=0) to soma</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="single_cell_parser.spines_update_network_paramfile">
-<span class="sig-prename descclassname"><span class="pre">single_cell_parser.</span></span><span class="sig-name descname"><span class="pre">spines_update_network_paramfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_synapse_distribution_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_paramfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_network_paramfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser.html#spines_update_network_paramfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.spines_update_network_paramfile" title="Permalink to this definition">#</a></dt>
-<dd><p>update the network.param file to point to the new synapse distribution file</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="single_cell_parser.spines_update_synapse_distribution_file">
-<span class="sig-prename descclassname"><span class="pre">single_cell_parser.</span></span><span class="sig-name descname"><span class="pre">spines_update_synapse_distribution_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapse_distribution_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_synapse_distribution_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser.html#spines_update_synapse_distribution_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.spines_update_synapse_distribution_file" title="Permalink to this definition">#</a></dt>
-<dd><p>Update the .syn file to correctly point to spine heads as excitatory synapse locations. Spines must already exist, so call after create_cell, using the same .syn file that was used to create the cell. new_synfile will be created if it does not already exist.</p>
-</dd></dl>
-
 <p class="rubric">Modules</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
@@ -658,32 +613,8 @@ Python callable which may be used to change parameters.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">single_cell_parser</a><ul>
-<li><a class="reference internal" href="#single_cell_parser.create_cell"><code class="docutils literal notranslate"><span class="pre">create_cell()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.init_neuron_run"><code class="docutils literal notranslate"><span class="pre">init_neuron_run()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.load_NMODL_parameters"><code class="docutils literal notranslate"><span class="pre">load_NMODL_parameters()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.sec_distance_to_soma"><code class="docutils literal notranslate"><span class="pre">sec_distance_to_soma()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.spines_update_network_paramfile"><code class="docutils literal notranslate"><span class="pre">spines_update_network_paramfile()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.spines_update_synapse_distribution_file"><code class="docutils literal notranslate"><span class="pre">spines_update_synapse_distribution_file()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

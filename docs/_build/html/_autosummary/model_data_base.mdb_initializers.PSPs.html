@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -395,7 +395,7 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_mdb_path</span></code>(*args, **kwargs)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb" title="model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_PSP_determinants_from_mdb</span></code></a>(mdb)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_PSP_determinants_from_mdb</span></code>(mdb)</p></td>
 <td><p>returns the combinations of neuron_parameters and network embeddings for which  PSPs need to be computed for somatic summation model</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_confile_form_network_param</span></code>(n)</p></td>
@@ -404,7 +404,7 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_parameterfiles_df_with_confile_and_neuron_param_path</span></code>(mdb)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.mdb_initializers.PSPs.init" title="model_data_base.mdb_initializers.PSPs.init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code></a>(mdb[, client, description_key, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code>(mdb[, client, description_key, ...])</p></td>
 <td><p>This calculates PSPs for a model_data_base, that has been initialized with I.mdb_init_simrun_general.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_mdb_path</span></code>(path)</p></td>
@@ -413,27 +413,6 @@
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.PSPs.</span></span><span class="sig-name descname"><span class="pre">get_PSP_determinants_from_mdb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/PSPs.html#get_PSP_determinants_from_mdb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb" title="Permalink to this definition">#</a></dt>
-<dd><p>returns the combinations of neuron_parameters and network embeddings for which 
-PSPs need to be computed for somatic summation model</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.mdb_initializers.PSPs.init">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.PSPs.</span></span><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSPClass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSPClass_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/PSPs.html#init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.PSPs.init" title="Permalink to this definition">#</a></dt>
-<dd><p>This calculates PSPs for a model_data_base, that has been initialized with
-I.mdb_init_simrun_general. It determines all network embeddings (confile) and neuron models (neuron_param)
-present in the database and initializes the PSPs computation accordingly.</p>
-<p>The PSPs are calculated using PSPClass. This can e.g. be a class defined in simrun3.PSP_with_modification.
-This class will be initialized as follows for all neuron_param and confile:
-psp_class_instance = PSPClass(neuron_param, confile, <a href="#id1"><span class="problematic" id="id2">**</span></a>PSPClass_kwargs)</p>
-<p>PSPClass needs to provide a get method, that returns a PSPs object, as defined in simrun3.synaptic_strength_fitting.
-The PSPs object will be executed and saved to mdb under the following location:
-mdb[‘PSPs’][‘description_key’, PSPClass.__name__, ‘neuron_param_path’, ‘confile_path’]</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -479,28 +458,8 @@ mdb[‘PSPs’][‘description_key’, PSPClass.__name__, ‘neuron_param_path�
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">model_data_base.mdb_initializers.PSPs</a><ul>
-<li><a class="reference internal" href="#model_data_base.mdb_initializers.PSPs.get_PSP_determinants_from_mdb"><code class="docutils literal notranslate"><span class="pre">get_PSP_determinants_from_mdb()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.mdb_initializers.PSPs.init"><code class="docutils literal notranslate"><span class="pre">init()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

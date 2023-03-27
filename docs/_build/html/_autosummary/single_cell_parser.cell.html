@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,19 +394,19 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.cell.Cell" title="single_cell_parser.cell.Cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cell</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cell</span></code>()</p></td>
 <td><p>Cell object providing morphological information and hoc interface</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.cell.PointCell" title="single_cell_parser.cell.PointCell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCell</span></code></a>([spikeTimes])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointCell</span></code>([spikeTimes])</p></td>
 <td><p>simple object for use as spike source stores spike times in hoc Vector and numpy array requires VecStim to trigger spikes at specified times</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.cell.PySection" title="single_cell_parser.cell.PySection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PySection</span></code></a>([name, cell, label])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PySection</span></code>([name, cell, label])</p></td>
 <td><p>Subclass of nrn.Section providing additional geometric and mechanism information/ handling methods</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sequence</span></code>()</p></td>
 <td><p>All the operations on a read-only sequence.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.cell.SpikeTrain" title="single_cell_parser.cell.SpikeTrain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpikeTrain</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpikeTrain</span></code>()</p></td>
 <td><p>DEPRECATED: only still in here in case some old dependency turns up that has not been found yet.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SynParameterChanger</span></code>(cell, synParam, t)</p></td>
@@ -418,228 +418,6 @@
 </tbody>
 </table>
 </div>
-<dl class="py class">
-<dt class="sig sig-object py" id="single_cell_parser.cell.Cell">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_parser.cell.</span></span><span class="sig-name descname"><span class="pre">Cell</span></span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.Cell" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Cell object providing morphological information
-and hoc interface</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.Cell.change_synapse_parameters">
-<span class="sig-name descname"><span class="pre">change_synapse_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.change_synapse_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.change_synapse_parameters" title="Permalink to this definition">#</a></dt>
-<dd><p>Change parameters of synapses during simulation.
-self.changeSynParamDict is dictionary of network parameter sets
-with keys corresponding to event times.
-This allows automatic update of parameter sets
-according to their relative timing.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.Cell.distance_between_pts">
-<span class="sig-name descname"><span class="pre">distance_between_pts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.distance_between_pts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.distance_between_pts" title="Permalink to this definition">#</a></dt>
-<dd><p>computes path length between to points given by
-location x1 and x2 in sections sec1 and sec2
-or by ptID x1 and x2 and section ID sec1 and sec2.
-for now, use built-in NEURON method distance.
-This should probably be changed at some point in the future
-into something like a look-up table of pair-wise distances,
-because repeated computations for 1000s of synapses are going
-to be very expensive… also, only approximate, since NEURON
-computes distances between centers of segments</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.Cell.distance_to_soma">
-<span class="sig-name descname"><span class="pre">distance_to_soma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.distance_to_soma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.distance_to_soma" title="Permalink to this definition">#</a></dt>
-<dd><p>computes path length between soma and point given by
-location x in sections sec or by ptID x and section ID sec</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.Cell.get_section_adjacancy_map">
-<span class="sig-name descname"><span class="pre">get_section_adjacancy_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.get_section_adjacancy_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.get_section_adjacancy_map" title="Permalink to this definition">#</a></dt>
-<dd><p>Generates a map that shows which sections are connected to which sections.
-Saves this as a class attribute if it’s the first time calculatingm otherwise returns</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>self (cell): the cell boject</p>
-</dd>
-<dt>Returns:</dt><dd><p>dict: a dictionary where each key is the section id, and the value is a list of adjacent section ids</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.Cell.max_distance">
-<span class="sig-name descname"><span class="pre">max_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.max_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.max_distance" title="Permalink to this definition">#</a></dt>
-<dd><p>computes maximum path length to soma
-of all branches with the same label</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.Cell.re_init_cell">
-<span class="sig-name descname"><span class="pre">re_init_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">replayMode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#Cell.re_init_cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.Cell.re_init_cell" title="Permalink to this definition">#</a></dt>
-<dd><p>re-initialize for next simulation run</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PointCell">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_parser.cell.</span></span><span class="sig-name descname"><span class="pre">PointCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spikeTimes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#PointCell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.PointCell" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>simple object for use as spike source
-stores spike times in hoc Vector and numpy array
-requires VecStim to trigger spikes at specified times</p>
-<p>initialize with list (iterable) of spike times</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PointCell.append">
-<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spikeT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#PointCell.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.PointCell.append" title="Permalink to this definition">#</a></dt>
-<dd><p>append additional spike time</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PointCell.compute_spike_train_times">
-<span class="sig-name descname"><span class="pre">compute_spike_train_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nSpikes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#PointCell.compute_spike_train_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.PointCell.compute_spike_train_times" title="Permalink to this definition">#</a></dt>
-<dd><p>Activate point cell</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PointCell.play">
-<span class="sig-name descname"><span class="pre">play</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#PointCell.play"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.PointCell.play" title="Permalink to this definition">#</a></dt>
-<dd><p>Activate point cell</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PointCell.turn_off">
-<span class="sig-name descname"><span class="pre">turn_off</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#PointCell.turn_off"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.PointCell.turn_off" title="Permalink to this definition">#</a></dt>
-<dd><p>M. Hines: Note that one can turn off a VecStim without destroying it
-by using VecStim.play() with no args. Turn it back on by
-supplying a Vector arg. Or one could resize the Vector to 0.
-necessary b/c vecevent.mod does not implement ref counting</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_parser.cell.</span></span><span class="sig-name descname"><span class="pre">PySection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#PySection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.PySection" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Section</span></code></p>
-<p>Subclass of nrn.Section providing additional geometric
-and mechanism information/ handling methods</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.area">
-<span class="sig-name descname"><span class="pre">area</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.area" title="Permalink to this definition">#</a></dt>
-<dd><p>list of center points of segments used during simulation (only for visualization)</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.bounds">
-<span class="sig-name descname"><span class="pre">bounds</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.bounds" title="Permalink to this definition">#</a></dt>
-<dd><p>number of traced 3D coordinates</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.diamList">
-<span class="sig-name descname"><span class="pre">diamList</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.diamList" title="Permalink to this definition">#</a></dt>
-<dd><p>total area of all NEURON segments in this section</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.label">
-<span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.label" title="Permalink to this definition">#</a></dt>
-<dd><p>reference to parent section</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.nrOfPts">
-<span class="sig-name descname"><span class="pre">nrOfPts</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.nrOfPts" title="Permalink to this definition">#</a></dt>
-<dd><p>list of traced 3D coordinates</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.parent">
-<span class="sig-name descname"><span class="pre">parent</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.parent" title="Permalink to this definition">#</a></dt>
-<dd><p>connection point at parent section</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.parentx">
-<span class="sig-name descname"><span class="pre">parentx</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.parentx" title="Permalink to this definition">#</a></dt>
-<dd><p>bounding box around 3D coordinates</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.pts">
-<span class="sig-name descname"><span class="pre">pts</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.pts" title="Permalink to this definition">#</a></dt>
-<dd><p>list of relative position of 3D points along section</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.recVList">
-<span class="sig-name descname"><span class="pre">recVList</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.recVList" title="Permalink to this definition">#</a></dt>
-<dd><p>dict of range variables recorded</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.relPts">
-<span class="sig-name descname"><span class="pre">relPts</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.relPts" title="Permalink to this definition">#</a></dt>
-<dd><p>list of diameters at traced 3D coordinates</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.segDiams">
-<span class="sig-name descname"><span class="pre">segDiams</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.segDiams" title="Permalink to this definition">#</a></dt>
-<dd><p>list of neuron Vectors recording voltage in each compartment</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.segPts">
-<span class="sig-name descname"><span class="pre">segPts</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.segPts" title="Permalink to this definition">#</a></dt>
-<dd><p>list of x values corresponding to center of each segment
-for looping akin to the hoc function for(x) (without 0  and 1)</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.segx">
-<span class="sig-name descname"><span class="pre">segx</span></span><a class="headerlink" href="#single_cell_parser.cell.PySection.segx" title="Permalink to this definition">#</a></dt>
-<dd><p>list of diameters of all segments</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.set_3d_geometry">
-<span class="sig-name descname"><span class="pre">set_3d_geometry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diams</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#PySection.set_3d_geometry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.PySection.set_3d_geometry" title="Permalink to this definition">#</a></dt>
-<dd><p>invokes NEURON 3D geometry setup</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.PySection.set_segments">
-<span class="sig-name descname"><span class="pre">set_segments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nrOfSegments</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#PySection.set_segments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.PySection.set_segments" title="Permalink to this definition">#</a></dt>
-<dd><p>Set spatial discretization. should be used
-together with biophysical parameters to produce
-meaningful, yet efficient discretization.
-calls private methods to initialize recordings etc.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="single_cell_parser.cell.SpikeTrain">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_parser.cell.</span></span><span class="sig-name descname"><span class="pre">SpikeTrain</span></span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#SpikeTrain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.SpikeTrain" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#single_cell_parser.cell.PointCell" title="single_cell_parser.cell.PointCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointCell</span></code></a></p>
-<p>DEPRECATED: only still in here in case some old
-dependency turns up that has not been found yet.
-Simple object for use as spike train source.
-Pre-computes spike times according to user-provided
-parameters and plays them as a regular point cell.
-Computation of spike times as in NEURON NetStim.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.cell.SpikeTrain.compute_spike_times">
-<span class="sig-name descname"><span class="pre">compute_spike_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nSpikes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell.html#SpikeTrain.compute_spike_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell.SpikeTrain.compute_spike_times" title="Permalink to this definition">#</a></dt>
-<dd><p>Activate point cell</p>
-</dd></dl>
-
-</dd></dl>
-
 </section>
 
         </article>
@@ -685,64 +463,8 @@ Computation of spike times as in NEURON NetStim.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">single_cell_parser.cell</a><ul>
-<li><a class="reference internal" href="#single_cell_parser.cell.Cell"><code class="docutils literal notranslate"><span class="pre">Cell</span></code></a><ul>
-<li><a class="reference internal" href="#single_cell_parser.cell.Cell.change_synapse_parameters"><code class="docutils literal notranslate"><span class="pre">Cell.change_synapse_parameters()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.Cell.distance_between_pts"><code class="docutils literal notranslate"><span class="pre">Cell.distance_between_pts()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.Cell.distance_to_soma"><code class="docutils literal notranslate"><span class="pre">Cell.distance_to_soma()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.Cell.get_section_adjacancy_map"><code class="docutils literal notranslate"><span class="pre">Cell.get_section_adjacancy_map()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.Cell.max_distance"><code class="docutils literal notranslate"><span class="pre">Cell.max_distance()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.Cell.re_init_cell"><code class="docutils literal notranslate"><span class="pre">Cell.re_init_cell()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PointCell"><code class="docutils literal notranslate"><span class="pre">PointCell</span></code></a><ul>
-<li><a class="reference internal" href="#single_cell_parser.cell.PointCell.append"><code class="docutils literal notranslate"><span class="pre">PointCell.append()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PointCell.compute_spike_train_times"><code class="docutils literal notranslate"><span class="pre">PointCell.compute_spike_train_times()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PointCell.play"><code class="docutils literal notranslate"><span class="pre">PointCell.play()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PointCell.turn_off"><code class="docutils literal notranslate"><span class="pre">PointCell.turn_off()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection"><code class="docutils literal notranslate"><span class="pre">PySection</span></code></a><ul>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.area"><code class="docutils literal notranslate"><span class="pre">PySection.area</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.bounds"><code class="docutils literal notranslate"><span class="pre">PySection.bounds</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.diamList"><code class="docutils literal notranslate"><span class="pre">PySection.diamList</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.label"><code class="docutils literal notranslate"><span class="pre">PySection.label</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.nrOfPts"><code class="docutils literal notranslate"><span class="pre">PySection.nrOfPts</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.parent"><code class="docutils literal notranslate"><span class="pre">PySection.parent</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.parentx"><code class="docutils literal notranslate"><span class="pre">PySection.parentx</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.pts"><code class="docutils literal notranslate"><span class="pre">PySection.pts</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.recVList"><code class="docutils literal notranslate"><span class="pre">PySection.recVList</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.relPts"><code class="docutils literal notranslate"><span class="pre">PySection.relPts</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.segDiams"><code class="docutils literal notranslate"><span class="pre">PySection.segDiams</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.segPts"><code class="docutils literal notranslate"><span class="pre">PySection.segPts</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.segx"><code class="docutils literal notranslate"><span class="pre">PySection.segx</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.set_3d_geometry"><code class="docutils literal notranslate"><span class="pre">PySection.set_3d_geometry()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.cell.PySection.set_segments"><code class="docutils literal notranslate"><span class="pre">PySection.set_segments()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#single_cell_parser.cell.SpikeTrain"><code class="docutils literal notranslate"><span class="pre">SpikeTrain</span></code></a><ul>
-<li><a class="reference internal" href="#single_cell_parser.cell.SpikeTrain.compute_spike_times"><code class="docutils literal notranslate"><span class="pre">SpikeTrain.compute_spike_times()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

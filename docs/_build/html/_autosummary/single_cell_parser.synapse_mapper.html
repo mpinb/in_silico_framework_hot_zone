@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,69 +394,12 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.synapse_mapper.SynapseMapper" title="single_cell_parser.synapse_mapper.SynapseMapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SynapseMapper</span></code></a>([cell, synDist, isDensity])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SynapseMapper</span></code>([cell, synDist, isDensity])</p></td>
 <td><p>SynapseMapper assigns synapses to neuron morphology self.cell is neuron SpatialGraph self.synDist is average synapse distribution (3D scalar field) self.isDensity: True - synapse distribution interpreted as avg     density; actual number of synapses assigned is drawn from a      Poisson distribution     False - synapse distribution interpreted as actual number of     synapses per voxel and directly assigned self.voxelEdgeMap: dictionary mapping synapse distribution mesh     coordinates on list with pairs of indices that correspond     to the edge and edgePt ID of all morphology points inside that voxel</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<dl class="py class">
-<dt class="sig sig-object py" id="single_cell_parser.synapse_mapper.SynapseMapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_parser.synapse_mapper.</span></span><span class="sig-name descname"><span class="pre">SynapseMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synDist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isDensity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse_mapper.html#SynapseMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.synapse_mapper.SynapseMapper" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>SynapseMapper assigns synapses to neuron morphology
-self.cell is neuron SpatialGraph
-self.synDist is average synapse distribution (3D scalar field)
-self.isDensity: True - synapse distribution interpreted as avg</p>
-<blockquote>
-<div><p>density; actual number of synapses assigned is drawn from a 
-Poisson distribution
-False - synapse distribution interpreted as actual number of
-synapses per voxel and directly assigned</p>
-</div></blockquote>
-<dl class="simple">
-<dt>self.voxelEdgeMap: dictionary mapping synapse distribution mesh</dt><dd><p>coordinates on list with pairs of indices that correspond
-to the edge and edgePt ID of all morphology points inside that voxel</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.synapse_mapper.SynapseMapper.create_synapses">
-<span class="sig-name descname"><span class="pre">create_synapses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Generic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse_mapper.html#SynapseMapper.create_synapses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.synapse_mapper.SynapseMapper.create_synapses" title="Permalink to this definition">#</a></dt>
-<dd><p>main function; creates instantiation of synapses
-on cell from synapse distribution</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.synapse_mapper.SynapseMapper.map_pruned_synapse_realization">
-<span class="sig-name descname"><span class="pre">map_pruned_synapse_realization</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse_mapper.html#SynapseMapper.map_pruned_synapse_realization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.synapse_mapper.SynapseMapper.map_pruned_synapse_realization" title="Permalink to this definition">#</a></dt>
-<dd><p>maps previously created synapse realization onto neuron
-morphology. self.synDist has to be dict with synapse types as
-keywords and list of tuples (sectionID, sectionx, pruned) coding
-the synapse location on the specific sections and anatomical pruning
-status of these synapses.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_model_distribution">
-<span class="sig-name descname"><span class="pre">map_synapse_model_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">synType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">structLabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse_mapper.html#SynapseMapper.map_synapse_model_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_model_distribution" title="Permalink to this definition">#</a></dt>
-<dd><p>maps modeled synapse distribution (e.g. normal, uniform, …)
-onto dendritic tree. synapse distribution synDist 
-has to be iterable of distances of synapses; should be radial
-only, i.e. dendritic branches are selected randomly.
-substructure may be indicated by structLabel.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_realization">
-<span class="sig-name descname"><span class="pre">map_synapse_realization</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse_mapper.html#SynapseMapper.map_synapse_realization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_realization" title="Permalink to this definition">#</a></dt>
-<dd><p>maps previously created synapse realization onto neuron
-morphology. self.synDist has to be dict with synapse types as
-keywords and list of tuples (sectionID, sectionx) coding
-the synapse location on the specific sections.</p>
-</dd></dl>
-
-</dd></dl>
-
 </section>
 
         </article>
@@ -502,33 +445,8 @@ the synapse location on the specific sections.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">single_cell_parser.synapse_mapper</a><ul>
-<li><a class="reference internal" href="#single_cell_parser.synapse_mapper.SynapseMapper"><code class="docutils literal notranslate"><span class="pre">SynapseMapper</span></code></a><ul>
-<li><a class="reference internal" href="#single_cell_parser.synapse_mapper.SynapseMapper.create_synapses"><code class="docutils literal notranslate"><span class="pre">SynapseMapper.create_synapses()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.synapse_mapper.SynapseMapper.map_pruned_synapse_realization"><code class="docutils literal notranslate"><span class="pre">SynapseMapper.map_pruned_synapse_realization()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_model_distribution"><code class="docutils literal notranslate"><span class="pre">SynapseMapper.map_synapse_model_distribution()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_realization"><code class="docutils literal notranslate"><span class="pre">SynapseMapper.map_synapse_realization()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

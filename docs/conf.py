@@ -45,8 +45,8 @@ extensions = [
 # autodoc_member_order = 'bysource'
 ## Default flags used by autodoc directives
 autodoc_default_options = {
-    'members': True,
-    'show-inheritance': True,
+    'members': False,
+    'show-inheritance': False,
 }
 ## Generate autodoc stubs with summaries from code
 autosummary_generate = True

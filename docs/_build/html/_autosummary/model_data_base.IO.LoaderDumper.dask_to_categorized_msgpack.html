@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -419,10 +419,10 @@ reduce network traffic for suitable dataframes. Suitable dataframes are for exam
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bundle_delayeds</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str"><code class="xref py py-obj docutils literal notranslate"><span class="pre">category_to_str</span></code></a>(pdf)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">category_to_str</span></code>(pdf)</p></td>
 <td><p>careful: changes pdf!</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check</span></code></a>(obj)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check</span></code>(obj)</p></td>
 <td><p>checks wherther obj can be saved with this dumper</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code>(seq, num)</p></td>
@@ -431,10 +431,10 @@ reduce network traffic for suitable dataframes. Suitable dataframes are for exam
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump</span></code>(obj, savedir[, repartition, get, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_writer_function</span></code></a>(categorize)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_writer_function</span></code>(categorize)</p></td>
 <td><p>returns function, that stores pandas dataframe</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">my_dask_writer</span></code></a>(ddf, path[, optimize_graph, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">my_dask_writer</span></code>(ddf, path[, optimize_graph, ...])</p></td>
 <td><p>Very simple method to store a dask dataframe to a bunch of files.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">myrepartition</span></code>(ddf, N)</p></td>
@@ -443,7 +443,7 @@ reduce network traffic for suitable dataframes. Suitable dataframes are for exam
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_msgpack</span></code>(path_or_buf[, encoding, iterator])</p></td>
 <td><p>Load msgpack pandas object from the specified file path Parameters ---------- path_or_buf : string File path, BytesIO like or string encoding: Encoding for decoding msgpack str type iterator : boolean, if True, return an iterator to the unpacker            (default is False) Returns ------- obj : type of object stored in file</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category" title="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str_to_category</span></code></a>(pdf)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str_to_category</span></code>(pdf)</p></td>
 <td><p>careful: changes pdf!</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_msgpack</span></code>(path_or_buf, *args, **kwargs)</p></td>
@@ -465,40 +465,6 @@ reduce network traffic for suitable dataframes. Suitable dataframes are for exam
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</span></span><span class="sig-name descname"><span class="pre">category_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#category_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str" title="Permalink to this definition">#</a></dt>
-<dd><p>careful: changes pdf!</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</span></span><span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check" title="Permalink to this definition">#</a></dt>
-<dd><p>checks wherther obj can be saved with this dumper</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</span></span><span class="sig-name descname"><span class="pre">get_writer_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">categorize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#get_writer_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function" title="Permalink to this definition">#</a></dt>
-<dd><p>returns function, that stores pandas dataframe</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</span></span><span class="sig-name descname"><span class="pre">my_dask_writer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ddf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#my_dask_writer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer" title="Permalink to this definition">#</a></dt>
-<dd><p>Very simple method to store a dask dataframe to a bunch of files.
-There was a lot of frustration with the respective dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
-takes all the ram (512GB!) or takes a very long time to “optimize” / merge the graph.</p>
-<p>Update: this issue was addressed here:
-<a class="reference external" href="https://github.com/dask/dask/issues/1888">https://github.com/dask/dask/issues/1888</a></p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</span></span><span class="sig-name descname"><span class="pre">str_to_category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#str_to_category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category" title="Permalink to this definition">#</a></dt>
-<dd><p>careful: changes pdf!</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -544,31 +510,8 @@ takes all the ram (512GB!) or takes a very long time to “optimize” / merge t
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack</a><ul>
-<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.category_to_str"><code class="docutils literal notranslate"><span class="pre">category_to_str()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.get_writer_function"><code class="docutils literal notranslate"><span class="pre">get_writer_function()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer"><code class="docutils literal notranslate"><span class="pre">my_dask_writer()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.str_to_category"><code class="docutils literal notranslate"><span class="pre">str_to_category()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

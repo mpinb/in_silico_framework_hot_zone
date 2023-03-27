@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -397,13 +397,13 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">con_file_to_NumberOfConnectedCells_sheet</span></code>(...)</p></td>
 <td><p>con_file: path to .con file genereate by SingleCellInputMapper</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_anatomical_realization_map" title="singlecell_input_mapper.singlecell_input_mapper.writer.write_anatomical_realization_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_anatomical_realization_map</span></code></a>([fname, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_anatomical_realization_map</span></code>([fname, ...])</p></td>
 <td><p>writes list of all functional connections coded by tuples (cell type, presynaptic cell index, synapse index).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_cell_synapse_locations" title="singlecell_input_mapper.singlecell_input_mapper.writer.write_cell_synapse_locations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cell_synapse_locations</span></code></a>([fname, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cell_synapse_locations</span></code>([fname, ...])</p></td>
 <td><p>writes list of all synapses with the locations coded by section ID and section x of cell with ID 'cellID'</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_landmark_file" title="singlecell_input_mapper.singlecell_input_mapper.writer.write_landmark_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_landmark_file</span></code></a>([fname, landmarkList])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_landmark_file</span></code>([fname, landmarkList])</p></td>
 <td><p>write Amira landmark file landmarkList has to be iterable of tuples, each of which holds 3 float coordinates</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_population_and_sample_connectivity_summary</span></code>([...])</p></td>
@@ -434,29 +434,6 @@
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.writer.write_anatomical_realization_map">
-<span class="sig-prename descclassname"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.writer.</span></span><span class="sig-name descname"><span class="pre">write_anatomical_realization_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">functionalMap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anatomicalID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/writer.html#write_anatomical_realization_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_anatomical_realization_map" title="Permalink to this definition">#</a></dt>
-<dd><p>writes list of all functional connections
-coded by tuples (cell type, presynaptic cell index, synapse index).
-Only valid for anatomical synapse realization given by anatomicalID</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.writer.write_cell_synapse_locations">
-<span class="sig-prename descclassname"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.writer.</span></span><span class="sig-name descname"><span class="pre">write_cell_synapse_locations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/writer.html#write_cell_synapse_locations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_cell_synapse_locations" title="Permalink to this definition">#</a></dt>
-<dd><p>writes list of all synapses with the locations
-coded by section ID and section x of cell with ID ‘cellID’</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.writer.write_landmark_file">
-<span class="sig-prename descclassname"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.writer.</span></span><span class="sig-name descname"><span class="pre">write_landmark_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">landmarkList</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/writer.html#write_landmark_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_landmark_file" title="Permalink to this definition">#</a></dt>
-<dd><p>write Amira landmark file
-landmarkList has to be iterable of tuples,
-each of which holds 3 float coordinates</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -502,29 +479,8 @@ each of which holds 3 float coordinates</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">singlecell_input_mapper.singlecell_input_mapper.writer</a><ul>
-<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_anatomical_realization_map"><code class="docutils literal notranslate"><span class="pre">write_anatomical_realization_map()</span></code></a></li>
-<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_cell_synapse_locations"><code class="docutils literal notranslate"><span class="pre">write_cell_synapse_locations()</span></code></a></li>
-<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.writer.write_landmark_file"><code class="docutils literal notranslate"><span class="pre">write_landmark_file()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

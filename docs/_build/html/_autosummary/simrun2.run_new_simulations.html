@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -410,7 +410,7 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_mdb_path</span></code>(path)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#simrun2.run_new_simulations.run_new_simulations" title="simrun2.run_new_simulations.run_new_simulations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_new_simulations</span></code></a>(cellParamName, ...[, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_new_simulations</span></code>(cellParamName, ...[, ...])</p></td>
 <td><p>Generates nSweeps*nprocs synapse activation files and puts them in the folder dirPrefix/results/[unique_identifier].</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_apical</span></code>(cell)</p></td>
@@ -435,53 +435,6 @@
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="simrun2.run_new_simulations.run_new_simulations">
-<span class="sig-prename descclassname"><span class="pre">simrun2.run_new_simulations.</span></span><span class="sig-name descname"><span class="pre">run_new_simulations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cellParamName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evokedUpParamName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dirPrefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nSweeps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nprocs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">345</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_apical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_generator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_process</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/run_new_simulations.html#run_new_simulations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.run_new_simulations.run_new_simulations" title="Permalink to this definition">#</a></dt>
-<dd><p>Generates nSweeps*nprocs synapse activation files and puts them in
-the folder dirPrefix/results/[unique_identifier]. Returns delayed object, which can
-be computed with an arbitrary dask scheduler. For each process, a new
-seed is generated using the seed generator.</p>
-<dl>
-<dt>Parameters:</dt><dd><dl>
-<dt>cellParamName: str, Path to cell parameter file, containing information about:</dt><dd><ul>
-<li><p>info: autor, date, name</p></li>
-<li><p>NMODL_mechanisms: path to NEURON mechanisms</p></li>
-<li><dl>
-<dt>neuron: </dt><dd><p>-path to hoc-file
-- per subcellular compartment (Soma, AIS, …):</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>electrical properties</p></li>
-<li><p>mechanisms</p></li>
-</ul>
-</div></blockquote>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-<dt>evokedUpParamName: str, Path to network parameter file, containing information about:</dt><dd><ul class="simple">
-<li><p>autor, name, date</p></li>
-<li><dl class="simple">
-<dt>for each cell-type: </dt><dd><p>synapse: release probability, path to distribution file, receptor and associated parameters
-connectionFile: path to connection file
-cell number
-celltype: pointcell, spiketrain</p>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-<p>nSweeps: number of synapse activations per process
-nprocs: number of independent processes
-tStop: time in ms at which the synaptic input should stop.</p>
-</dd>
-</dl>
-<p>Returns: Delayed object. Can be computed with arbitrary scheduler.</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -527,27 +480,8 @@ tStop: time in ms at which the synaptic input should stop.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">simrun2.run_new_simulations</a><ul>
-<li><a class="reference internal" href="#simrun2.run_new_simulations.run_new_simulations"><code class="docutils literal notranslate"><span class="pre">run_new_simulations()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

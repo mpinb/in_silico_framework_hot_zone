@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,7 +394,7 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.model_data_base.empty_context_manager" title="model_data_base.model_data_base.empty_context_manager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">empty_context_manager</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">empty_context_manager</span></code>(*args, **kwargs)</p></td>
 <td><p>does nothing.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_progress_bar_function</span></code>()</p></td>
@@ -403,7 +403,7 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_versions</span></code>()</p></td>
 <td><p>Get version information or return default if unable to do so.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.model_data_base.slugify" title="model_data_base.model_data_base.slugify"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slugify</span></code></a>(value)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">slugify</span></code>(value)</p></td>
 <td><p>Normalizes string, converts to lowercase, removes non-alpha characters, and converts spaces to hyphens.</p></td>
 </tr>
 </tbody>
@@ -413,13 +413,13 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.model_data_base.FunctionWrapper" title="model_data_base.model_data_base.FunctionWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FunctionWrapper</span></code></a>(fun)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">FunctionWrapper</span></code>(fun)</p></td>
 <td><p>This class wraps arouand an object that cannot be saved directly (e.g.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">InMemoryBackend</span></code>(backend[, keys])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.model_data_base.LoaderWrapper" title="model_data_base.model_data_base.LoaderWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LoaderWrapper</span></code></a>(relpath)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LoaderWrapper</span></code>(relpath)</p></td>
 <td><p>This is a pointer to data, which is stored elsewhere.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelDataBase</span></code>(basedir[, forceload, ...])</p></td>
@@ -444,88 +444,12 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.model_data_base.MdbException" title="model_data_base.model_data_base.MdbException"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MdbException</span></code></a></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">MdbException</span></code></p></td>
 <td><p>Typical mdb errors</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<dl class="py class">
-<dt class="sig sig-object py" id="model_data_base.model_data_base.FunctionWrapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">model_data_base.model_data_base.</span></span><span class="sig-name descname"><span class="pre">FunctionWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/model_data_base.html#FunctionWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.model_data_base.FunctionWrapper" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>This class wraps arouand an object that cannot be saved directly (e.g. 
-using pickle) but needs an initialization function instead.</p>
-<p>To use it, 
-1. create a function, that does not expect any argument and returns the object</p>
-<blockquote>
-<div><p>you want to save</p>
-</div></blockquote>
-<ol class="arabic simple" start="2">
-<li><p>create an instance of this class and pass your function</p></li>
-<li><p>save it in the database with wathever dumper you want</p></li>
-</ol>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="model_data_base.model_data_base.LoaderWrapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">model_data_base.model_data_base.</span></span><span class="sig-name descname"><span class="pre">LoaderWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/model_data_base.html#LoaderWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.model_data_base.LoaderWrapper" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>This is a pointer to data, which is stored elsewhere.</p>
-<p>It is used by ModelDataBase, if data is stored in a subfolder of the 
-model_data_base.basedir folder. It is not used, if the data is stored directly
-in the sqlite database.</p>
-<p>The process of storing data in a subfolder is as follows:
-1. The subfolder is generated using the mkdtemp method
-2. the respective dumper puts its data there
-3. the dumper also saves a Loader.pickle file there. This contains an object</p>
-<blockquote>
-<div><p>with a get method (call it to restore the data) and everything else
-necessary to recover the data</p>
-</div></blockquote>
-<ol class="arabic simple" start="4">
-<li><dl class="simple">
-<dt>A LoaderWrapper object pointing to the datafolder with a relative</dt><dd><p>path (to allow moving of the database) is saved under the respective key
-in the model_data_base</p>
-</dd>
-</dl>
-</li>
-</ol>
-<p>The process of loading in the data is as follows:
-1. the user request it: mdb[‘somekey’]
-2. the LoaderWrapper object is loaded from the backend sql database
-3. the Loader.pickle file in the respective folder is loaded
-4. the get-methdo of the unpickled object is called with the</p>
-<blockquote>
-<div><p>absolute path to the folder.</p>
-</div></blockquote>
-<ol class="arabic simple" start="5">
-<li><p>the returned object is returned to the user</p></li>
-</ol>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="model_data_base.model_data_base.MdbException">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">model_data_base.model_data_base.</span></span><span class="sig-name descname"><span class="pre">MdbException</span></span><a class="reference internal" href="../_modules/model_data_base/model_data_base.html#MdbException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.model_data_base.MdbException" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<p>Typical mdb errors</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.model_data_base.empty_context_manager">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.model_data_base.</span></span><span class="sig-name descname"><span class="pre">empty_context_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/model_data_base.html#empty_context_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.model_data_base.empty_context_manager" title="Permalink to this definition">#</a></dt>
-<dd><p>does nothing. is meant to replace ProgressBar, if no output is needed</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="model_data_base.model_data_base.slugify">
-<span class="sig-prename descclassname"><span class="pre">model_data_base.model_data_base.</span></span><span class="sig-name descname"><span class="pre">slugify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/model_data_base.html#slugify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.model_data_base.slugify" title="Permalink to this definition">#</a></dt>
-<dd><p>Normalizes string, converts to lowercase, removes non-alpha characters,
-and converts spaces to hyphens.</p>
-<p><a class="reference external" href="http://stackoverflow.com/questions/295135/turn-a-string-into-a-valid-filename">http://stackoverflow.com/questions/295135/turn-a-string-into-a-valid-filename</a>
-a bit modified</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -571,31 +495,8 @@ a bit modified</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">model_data_base.model_data_base</a><ul>
-<li><a class="reference internal" href="#model_data_base.model_data_base.FunctionWrapper"><code class="docutils literal notranslate"><span class="pre">FunctionWrapper</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.model_data_base.LoaderWrapper"><code class="docutils literal notranslate"><span class="pre">LoaderWrapper</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.model_data_base.MdbException"><code class="docutils literal notranslate"><span class="pre">MdbException</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.model_data_base.empty_context_manager"><code class="docutils literal notranslate"><span class="pre">empty_context_manager()</span></code></a></li>
-<li><a class="reference internal" href="#model_data_base.model_data_base.slugify"><code class="docutils literal notranslate"><span class="pre">slugify()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

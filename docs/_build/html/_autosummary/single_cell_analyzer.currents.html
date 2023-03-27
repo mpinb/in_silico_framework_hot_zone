@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,32 +394,15 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_analyzer.currents.analyze_voltage_trace" title="single_cell_analyzer.currents.analyze_voltage_trace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_voltage_trace</span></code></a>(vTrace, tTrace)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_voltage_trace</span></code>(vTrace, tTrace)</p></td>
 <td><p>takes neuron Vectors and finds time and amplitude of max depolarization</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_analyzer.currents.compute_soma_currents" title="single_cell_analyzer.currents.compute_soma_currents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_soma_currents</span></code></a>(cell, currents, tVec)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_soma_currents</span></code>(cell, currents, tVec)</p></td>
 <td><p>TODO: this needs to be automated.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="single_cell_analyzer.currents.analyze_voltage_trace">
-<span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.currents.</span></span><span class="sig-name descname"><span class="pre">analyze_voltage_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vTrace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tTrace</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/currents.html#analyze_voltage_trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.currents.analyze_voltage_trace" title="Permalink to this definition">#</a></dt>
-<dd><p>takes neuron Vectors and finds time and
-amplitude of max depolarization</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="single_cell_analyzer.currents.compute_soma_currents">
-<span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.currents.</span></span><span class="sig-name descname"><span class="pre">compute_soma_currents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tVec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/currents.html#compute_soma_currents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.currents.compute_soma_currents" title="Permalink to this definition">#</a></dt>
-<dd><p>TODO: this needs to be automated… i.e., should be such that   
-section, or better, segment is passed as an argument and all    
-ionic/axial/capacitive currents are automatically calculated    
-=&gt; add automatic recording of all ionic (and synaptic?) currents
-and conductances to PySection/Synapse classes</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -465,28 +448,8 @@ and conductances to PySection/Synapse classes</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">single_cell_analyzer.currents</a><ul>
-<li><a class="reference internal" href="#single_cell_analyzer.currents.analyze_voltage_trace"><code class="docutils literal notranslate"><span class="pre">analyze_voltage_trace()</span></code></a></li>
-<li><a class="reference internal" href="#single_cell_analyzer.currents.compute_soma_currents"><code class="docutils literal notranslate"><span class="pre">compute_soma_currents()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

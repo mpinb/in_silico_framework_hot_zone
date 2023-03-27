@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -399,10 +399,10 @@ to create a population.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.eaAlphaMuPlusLambdaCheckpoint" title="biophysics_fitting.optimizer.eaAlphaMuPlusLambdaCheckpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eaAlphaMuPlusLambdaCheckpoint</span></code></a>(population, ...)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">eaAlphaMuPlusLambdaCheckpoint</span></code>(population, ...)</p></td>
 <td><p>This is the <span class="math notranslate nohighlight">\((~\alpha,\mu~,~\lambda)\)</span> evolutionary algorithm Args:     population(list of deap Individuals)     toolbox(deap Toolbox)     mu(int): Total parent population size of EA     cxpb(float): Crossover probability     mutpb(float): Mutation probability     ngen(int): Total number of generation to run     stats(deap.tools.Statistics): generation of statistics     halloffame(deap.tools.HallOfFame): hall of fame     cp_frequency(int): generations between checkpoints     cp_filename(ModelDataBase or None): mdb_run, where the checkpoint is stored in [generation]_checlpoint. Was: path to checkpoint filename     continue_cp(bool): whether to continue.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.get_max_generation" title="biophysics_fitting.optimizer.get_max_generation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_max_generation</span></code></a>(mdb_run)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_max_generation</span></code>(mdb_run)</p></td>
 <td><p>returns the index of the next iteration</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mymap</span></code>(mdb_setup, mdb_run, c)</p></td>
@@ -411,22 +411,22 @@ to create a population.</p>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_objective_function</span></code>(mdb_setup)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.get_population_with_different_n_objectives" title="biophysics_fitting.optimizer.get_population_with_different_n_objectives"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_population_with_different_n_objectives</span></code></a>(...)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_population_with_different_n_objectives</span></code>(...)</p></td>
 <td><p>function to adapt the number of objectives of individuals</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">robust_int</span></code>(x)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.run" title="biophysics_fitting.optimizer.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>(self[, max_ngen, offspring_size, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code>(self[, max_ngen, offspring_size, ...])</p></td>
 <td><p>Copy pasted from the BluePyOpt package, however extended, such that a start population can be defined.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_result</span></code>(mdb_run, features, objectives)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.setup_mdb_run" title="biophysics_fitting.optimizer.setup_mdb_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_mdb_run</span></code></a>(mdb_setup, run)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_mdb_run</span></code>(mdb_setup, run)</p></td>
 <td><p>mdb_setup contains a sub mdb for each run of the full optimization.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.start_run" title="biophysics_fitting.optimizer.start_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_run</span></code></a>(mdb_setup, n[, pop, client, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_run</span></code>(mdb_setup, n[, pop, client, ...])</p></td>
 <td><p>function to start an optimization run as specified in mdb_setup.</p></td>
 </tr>
 </tbody>
@@ -439,105 +439,12 @@ to create a population.</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">WSListIndividual</span></code>(*args, **kwargs)</p></td>
 <td><p>Individual consisting of list with weighted sum field</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.my_ibea_evaluator" title="biophysics_fitting.optimizer.my_ibea_evaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">my_ibea_evaluator</span></code></a>(parameter_df, n_objectives)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">my_ibea_evaluator</span></code>(parameter_df, n_objectives)</p></td>
 <td><p>Graupner-Brunel Evaluator</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="biophysics_fitting.optimizer.eaAlphaMuPlusLambdaCheckpoint">
-<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.optimizer.</span></span><span class="sig-name descname"><span class="pre">eaAlphaMuPlusLambdaCheckpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toolbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cxpb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutpb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">halloffame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cp_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdb_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continue_cp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#eaAlphaMuPlusLambdaCheckpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.optimizer.eaAlphaMuPlusLambdaCheckpoint" title="Permalink to this definition">#</a></dt>
-<dd><p>This is the <span class="math notranslate nohighlight">\((~\alpha,\mu~,~\lambda)\)</span> evolutionary algorithm
-Args:</p>
-<blockquote>
-<div><p>population(list of deap Individuals)
-toolbox(deap Toolbox)
-mu(int): Total parent population size of EA
-cxpb(float): Crossover probability
-mutpb(float): Mutation probability
-ngen(int): Total number of generation to run
-stats(deap.tools.Statistics): generation of statistics
-halloffame(deap.tools.HallOfFame): hall of fame
-cp_frequency(int): generations between checkpoints
-cp_filename(ModelDataBase or None): mdb_run, where the checkpoint is stored in [generation]_checlpoint. Was: path to checkpoint filename
-continue_cp(bool): whether to continue</p>
-</div></blockquote>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="biophysics_fitting.optimizer.get_max_generation">
-<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.optimizer.</span></span><span class="sig-name descname"><span class="pre">get_max_generation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdb_run</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#get_max_generation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.optimizer.get_max_generation" title="Permalink to this definition">#</a></dt>
-<dd><p>returns the index of the next iteration</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="biophysics_fitting.optimizer.get_population_with_different_n_objectives">
-<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.optimizer.</span></span><span class="sig-name descname"><span class="pre">get_population_with_different_n_objectives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_objectives</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#get_population_with_different_n_objectives"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.optimizer.get_population_with_different_n_objectives" title="Permalink to this definition">#</a></dt>
-<dd><p>function to adapt the number of objectives of individuals</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="biophysics_fitting.optimizer.my_ibea_evaluator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">biophysics_fitting.optimizer.</span></span><span class="sig-name descname"><span class="pre">my_ibea_evaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameter_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_objectives</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#my_ibea_evaluator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.optimizer.my_ibea_evaluator" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Evaluator</span></code></p>
-<p>Graupner-Brunel Evaluator</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists">
-<span class="sig-name descname"><span class="pre">evaluate_with_lists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#my_ibea_evaluator.evaluate_with_lists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists" title="Permalink to this definition">#</a></dt>
-<dd><p>Evaluate parameter a parameter set (abstract).</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>params (list of Parameters):</dt><dd><p>The parameter values to be evaluated.</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><dl class="simple">
-<dt>objectives (list of Objectives):</dt><dd><p>List of Objectives with values calculated by the Evaluator.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="biophysics_fitting.optimizer.run">
-<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.optimizer.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_ngen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offspring_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continue_cp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cp_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cp_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.optimizer.run" title="Permalink to this definition">#</a></dt>
-<dd><p>Copy pasted from the BluePyOpt package, however extended, such that a start population can be defined.
-Note: the population needs to be in a special format. Use methods in biophysics_fitting.population 
-to create a population.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="biophysics_fitting.optimizer.setup_mdb_run">
-<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.optimizer.</span></span><span class="sig-name descname"><span class="pre">setup_mdb_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdb_setup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#setup_mdb_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.optimizer.setup_mdb_run" title="Permalink to this definition">#</a></dt>
-<dd><p>mdb_setup contains a sub mdb for each run of the full optimization. This sub mdb is created here</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="biophysics_fitting.optimizer.start_run">
-<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.optimizer.</span></span><span class="sig-name descname"><span class="pre">start_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdb_setup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continue_cp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offspring_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutpb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cxpb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_ngen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">600</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#start_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.optimizer.start_run" title="Permalink to this definition">#</a></dt>
-<dd><p>function to start an optimization run as specified in mdb_setup. The following attributes need
-to be defined in mdb_setup:</p>
-<ul class="simple">
-<li><p>params … this is a pandas.DataFrame with the parameternames as index and the columns <a href="#id1"><span class="problematic" id="id2">min_</span></a> and <a href="#id3"><span class="problematic" id="id4">max_</span></a></p></li>
-<li><p>get_Simulator … function, that returns a biophysics_fitting.simulator.Simulator object</p></li>
-<li><p>get_Evaluator … function, that returns a biophysics_fitting.evaluator.Evaluator object.</p></li>
-<li><p>get_Combiner … function, that returns a biophysics_fitting.combiner.Combiner object</p></li>
-</ul>
-<p>get_Simulator, get_Evaluator, get_Combiner accept the mdb_setup model_data_base as argument.</p>
-<p>This allows, that e.g. the Simular can depend on the model_data_base. Therefore it is e.g. possible, 
-that the path to the morphology is not saved as absolute path. Instead, fixed parameters can be
-updated accordingly.</p>
-<p>For an exemplary setup of a Simulaotr, Evaluator and Combiner object, see 
-biophysics_fitting.hay_complete_default_setup.</p>
-<p>For on examplary setup of a complete optimization project see 
-20190111_fitting_CDK_morphologies_Kv3_1_slope_step.ipynb</p>
-<p>You can also have a look at the test case in test_biophysics_fitting.test_optimizer.py</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -583,36 +490,8 @@ biophysics_fitting.hay_complete_default_setup.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">biophysics_fitting.optimizer</a><ul>
-<li><a class="reference internal" href="#biophysics_fitting.optimizer.eaAlphaMuPlusLambdaCheckpoint"><code class="docutils literal notranslate"><span class="pre">eaAlphaMuPlusLambdaCheckpoint()</span></code></a></li>
-<li><a class="reference internal" href="#biophysics_fitting.optimizer.get_max_generation"><code class="docutils literal notranslate"><span class="pre">get_max_generation()</span></code></a></li>
-<li><a class="reference internal" href="#biophysics_fitting.optimizer.get_population_with_different_n_objectives"><code class="docutils literal notranslate"><span class="pre">get_population_with_different_n_objectives()</span></code></a></li>
-<li><a class="reference internal" href="#biophysics_fitting.optimizer.my_ibea_evaluator"><code class="docutils literal notranslate"><span class="pre">my_ibea_evaluator</span></code></a><ul>
-<li><a class="reference internal" href="#biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists"><code class="docutils literal notranslate"><span class="pre">my_ibea_evaluator.evaluate_with_lists()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#biophysics_fitting.optimizer.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
-<li><a class="reference internal" href="#biophysics_fitting.optimizer.setup_mdb_run"><code class="docutils literal notranslate"><span class="pre">setup_mdb_run()</span></code></a></li>
-<li><a class="reference internal" href="#biophysics_fitting.optimizer.start_run"><code class="docutils literal notranslate"><span class="pre">start_run()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

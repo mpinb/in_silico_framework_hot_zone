@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -557,7 +557,7 @@ of cells in barrel cortex. This includes:</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_synapse_activation</span></code>(sa[, selfcheck, ...])</p></td>
 <td><p>Splits synapse activation in EXC and INH component.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#Interface.svg2emf" title="Interface.svg2emf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">svg2emf</span></code></a>(filename[, path_to_inkscape])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">svg2emf</span></code>(filename[, path_to_inkscape])</p></td>
 <td><p>converts svg to emf, which can be imported in word using inkscape.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">synapse_activation_binning_dask</span></code>(ddf, **kwargs)</p></td>
@@ -600,12 +600,6 @@ of cells in barrel cortex. This includes:</p>
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="Interface.svg2emf">
-<span class="sig-prename descclassname"><span class="pre">Interface.</span></span><span class="sig-name descname"><span class="pre">svg2emf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_inkscape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/usr/bin/inkscape'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Interface.html#svg2emf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Interface.svg2emf" title="Permalink to this definition">#</a></dt>
-<dd><p>converts svg to emf, which can be imported in word using inkscape.</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -633,27 +627,8 @@ of cells in barrel cortex. This includes:</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Interface</a><ul>
-<li><a class="reference internal" href="#Interface.svg2emf"><code class="docutils literal notranslate"><span class="pre">svg2emf()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

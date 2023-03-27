@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -414,7 +414,7 @@ It includes:</p>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">convertible_to_float</span></code>(x)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#barrel_cortex.correct_hoc_depth" title="barrel_cortex.correct_hoc_depth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">correct_hoc_depth</span></code></a>(hoc_in, hoc_reference_or_depth)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">correct_hoc_depth</span></code>(hoc_in, hoc_reference_or_depth)</p></td>
 <td><p>Variables: reference_depth_or_hoc: depth in which to put morphology, either specified through float or      a path to a hoc morphology from which the soma centroid position will be extracted and used as depth coordinate_system_z_move: which z axis to choose to move the morphology. Must be one of the barrels ('C1', 'Alpha', ...) measure_fun: function that receives a point and returns a depth. Typical choices:     partial(get_distance_below_L45_barrel_surface, barrel = 'C2')     get_distance_below_L45_surface.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_3x3</span></code>(hocpath_C2, outdir)</p></td>
@@ -438,10 +438,10 @@ It includes:</p>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cell_object_from_hoc</span></code>(hocpath[, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#barrel_cortex.get_distance_below_L45_barrel_surface" title="barrel_cortex.get_distance_below_L45_barrel_surface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_distance_below_L45_barrel_surface</span></code></a>(p[, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_distance_below_L45_barrel_surface</span></code>(p[, ...])</p></td>
 <td><p>distance below L45 surface of individual barrel</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#barrel_cortex.get_distance_below_L45_surface" title="barrel_cortex.get_distance_below_L45_surface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_distance_below_L45_surface</span></code></a>(p)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_distance_below_L45_surface</span></code>(p)</p></td>
 <td><p>surface is interpolated from barrel center points</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_distance_from_plane</span></code>(plane_point1, ...)</p></td>
@@ -456,13 +456,13 @@ It includes:</p>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_z_coordinate_necessary_to_put_point_in_specified_depth</span></code>(p, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#barrel_cortex.move_hoc_absolute" title="barrel_cortex.move_hoc_absolute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">move_hoc_absolute</span></code></a>(hocpath, x, y, z[, outpath])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">move_hoc_absolute</span></code>(hocpath, x, y, z[, outpath])</p></td>
 <td><p>moves hoc morphology such that soma centroid is at absolute position x,y,z.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">move_hoc_to_hoc</span></code>(hoc_in, hoc_reference[, outpath])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#barrel_cortex.move_hoc_xyz" title="barrel_cortex.move_hoc_xyz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">move_hoc_xyz</span></code></a>(hocpath, x, y, z[, outpath, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">move_hoc_xyz</span></code>(hocpath, x, y, z[, outpath, ...])</p></td>
 <td><p>moves hoc morphology in xyz directions in the coordinate system of the specified barrel.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">norm</span></code>(x)</p></td>
@@ -511,54 +511,6 @@ It includes:</p>
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="barrel_cortex.correct_hoc_depth">
-<span class="sig-prename descclassname"><span class="pre">barrel_cortex.</span></span><span class="sig-name descname"><span class="pre">correct_hoc_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hoc_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hoc_reference_or_depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinate_system_z_move='C2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_fun=functools.partial(&lt;function</span> <span class="pre">get_distance_below_L45_barrel_surface&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">barrel='C2')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outpath=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/barrel_cortex.html#correct_hoc_depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#barrel_cortex.correct_hoc_depth" title="Permalink to this definition">#</a></dt>
-<dd><p>Variables:
-reference_depth_or_hoc: depth in which to put morphology, either specified through float or</p>
-<blockquote>
-<div><p>a path to a hoc morphology from which the soma centroid position will be extracted and used as depth</p>
-</div></blockquote>
-<dl class="simple">
-<dt>coordinate_system_z_move: which z axis to choose to move the morphology. </dt><dd><p>Must be one of the barrels (‘C1’, ‘Alpha’, …)</p>
-</dd>
-<dt>measure_fun: function that receives a point and returns a depth. Typical choices:</dt><dd><p>partial(get_distance_below_L45_barrel_surface, barrel = ‘C2’)
-get_distance_below_L45_surface</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="barrel_cortex.get_distance_below_L45_barrel_surface">
-<span class="sig-prename descclassname"><span class="pre">barrel_cortex.</span></span><span class="sig-name descname"><span class="pre">get_distance_below_L45_barrel_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">barrel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C2'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/barrel_cortex.html#get_distance_below_L45_barrel_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#barrel_cortex.get_distance_below_L45_barrel_surface" title="Permalink to this definition">#</a></dt>
-<dd><p>distance below L45 surface of individual barrel</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="barrel_cortex.get_distance_below_L45_surface">
-<span class="sig-prename descclassname"><span class="pre">barrel_cortex.</span></span><span class="sig-name descname"><span class="pre">get_distance_below_L45_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/barrel_cortex.html#get_distance_below_L45_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#barrel_cortex.get_distance_below_L45_surface" title="Permalink to this definition">#</a></dt>
-<dd><p>surface is interpolated from barrel center points</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="barrel_cortex.move_hoc_absolute">
-<span class="sig-prename descclassname"><span class="pre">barrel_cortex.</span></span><span class="sig-name descname"><span class="pre">move_hoc_absolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hocpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/barrel_cortex.html#move_hoc_absolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#barrel_cortex.move_hoc_absolute" title="Permalink to this definition">#</a></dt>
-<dd><p>moves hoc morphology such that soma centroid is at absolute position x,y,z.
-The coordinates must be in the global coordinate system, i.e. D2</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="barrel_cortex.move_hoc_xyz">
-<span class="sig-prename descclassname"><span class="pre">barrel_cortex.</span></span><span class="sig-name descname"><span class="pre">move_hoc_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hocpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinate_system</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'D2'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/barrel_cortex.html#move_hoc_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#barrel_cortex.move_hoc_xyz" title="Permalink to this definition">#</a></dt>
-<dd><p>moves hoc morphology in xyz directions in the coordinate system of the specified barrel.
-Cave: The coordinate system might be different from Roberts definition of local coordinate systems.
-It is generated as follows:
-- z is the local z axis of the column 
-- x has the same orientation as in the global coordinate system, but is tilted in 
-its z component to be orthogonal on the locaal z axis.
-- y is orthogonal to both, roughly pointing in the y direction of the global coordinate system</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -604,31 +556,8 @@ its z component to be orthogonal on the locaal z axis.
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">barrel_cortex</a><ul>
-<li><a class="reference internal" href="#barrel_cortex.correct_hoc_depth"><code class="docutils literal notranslate"><span class="pre">correct_hoc_depth()</span></code></a></li>
-<li><a class="reference internal" href="#barrel_cortex.get_distance_below_L45_barrel_surface"><code class="docutils literal notranslate"><span class="pre">get_distance_below_L45_barrel_surface()</span></code></a></li>
-<li><a class="reference internal" href="#barrel_cortex.get_distance_below_L45_surface"><code class="docutils literal notranslate"><span class="pre">get_distance_below_L45_surface()</span></code></a></li>
-<li><a class="reference internal" href="#barrel_cortex.move_hoc_absolute"><code class="docutils literal notranslate"><span class="pre">move_hoc_absolute()</span></code></a></li>
-<li><a class="reference internal" href="#barrel_cortex.move_hoc_xyz"><code class="docutils literal notranslate"><span class="pre">move_hoc_xyz()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

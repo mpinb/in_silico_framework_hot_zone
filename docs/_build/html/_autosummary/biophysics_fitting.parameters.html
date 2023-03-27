@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,10 +394,10 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.parameters.param_selector" title="biophysics_fitting.parameters.param_selector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">param_selector</span></code></a>(params, s)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">param_selector</span></code>(params, s)</p></td>
 <td><p>Allows to select from a Series with an Index like a.b.c, a.b.d.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.parameters.param_to_kwargs" title="biophysics_fitting.parameters.param_to_kwargs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">param_to_kwargs</span></code></a>(fun)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">param_to_kwargs</span></code>(fun)</p></td>
 <td><p>returns a function that can be called with params = [some_Series].</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_fixed_params</span></code>(params[, fixed_params])</p></td>
@@ -406,35 +406,6 @@
 </tbody>
 </table>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="biophysics_fitting.parameters.param_selector">
-<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.parameters.</span></span><span class="sig-name descname"><span class="pre">param_selector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/parameters.html#param_selector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.parameters.param_selector" title="Permalink to this definition">#</a></dt>
-<dd><p>Allows to select from a Series with an Index like a.b.c, a.b.d.</p>
-<p>params is a series with an index that contains strings seperated by “.”
-Therefore, params can reflect a hierarchy, e.g.</p>
-<blockquote>
-<div><p>a.a   1
-a.b   2
-c.x   1
-c.a.b 7</p>
-</div></blockquote>
-<p>This method allows to select from that Series using a string s. E.g.</p>
-<dl class="simple">
-<dt>param_selector(params, ‘a’):</dt><dd><p>&gt; a    1
-&gt; b    2</p>
-</dd>
-<dt>param_selector(params, ‘c.a’):</dt><dd><p>&gt; b    7</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="biophysics_fitting.parameters.param_to_kwargs">
-<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.parameters.</span></span><span class="sig-name descname"><span class="pre">param_to_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/parameters.html#param_to_kwargs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.parameters.param_to_kwargs" title="Permalink to this definition">#</a></dt>
-<dd><p>returns a function that can be called with params = [some_Series].
-The content of Series is added to kwargs</p>
-</dd></dl>
-
 </section>
 
         </article>
@@ -480,28 +451,8 @@ The content of Series is added to kwargs</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">biophysics_fitting.parameters</a><ul>
-<li><a class="reference internal" href="#biophysics_fitting.parameters.param_selector"><code class="docutils literal notranslate"><span class="pre">param_selector()</span></code></a></li>
-<li><a class="reference internal" href="#biophysics_fitting.parameters.param_to_kwargs"><code class="docutils literal notranslate"><span class="pre">param_to_kwargs()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
