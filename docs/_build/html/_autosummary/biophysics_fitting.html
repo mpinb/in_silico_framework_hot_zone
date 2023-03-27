@@ -9,7 +9,6 @@
         <title>biophysics_fitting - In-Silico Framework (ISF) 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx_paramlinks.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/default.css" />
     
@@ -397,7 +396,7 @@
 <td><p>Given a <a class="reference internal" href="single_cell_parser.cell.html#single_cell_parser.cell.Cell" title="single_cell_parser.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> object and section number, this method returns true if at least two children of the branchpoint reach beyond dist</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.get_branching_depth" title="biophysics_fitting.get_branching_depth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_branching_depth</span></code></a>(cell, sec[, beyond_dist])</p></td>
-<td><p>Given a Cell object and a section number, this method returns the amount of sections that have children beyond some distance :param:beyond_dist inbetween the soma and the given section.</p></td>
+<td><p>Given a Cell object and a section number, this method returns the amount of sections that have children beyond some distance <code class="docutils literal notranslate"><span class="pre">beyond_dist</span></code> inbetween the soma and the given section.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.get_branching_depth_series" title="biophysics_fitting.get_branching_depth_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_branching_depth_series</span></code></a>(cell)</p></td>
 <td><p>Careful: z-depth only accurate for D2-registered cells!</p></td>
@@ -426,7 +425,7 @@ this method returns true if at least two children of the branchpoint reach beyon
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Whether or not two of the section’s children reach beyond :&#64;param beyond_dist:</p>
+<dd class="field-even"><p>Whether or not two of the section’s children reach beyond <code class="docutils literal notranslate"><span class="pre">beyond_dist</span></code></p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -438,18 +437,18 @@ this method returns true if at least two children of the branchpoint reach beyon
 <dt class="sig sig-object py" id="biophysics_fitting.get_branching_depth">
 <span class="sig-prename descclassname"><span class="pre">biophysics_fitting.</span></span><span class="sig-name descname"><span class="pre">get_branching_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beyond_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting.html#get_branching_depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.get_branching_depth" title="Permalink to this definition">#</a></dt>
 <dd><p>Given a Cell object and a section number, this method returns the amount of sections that have children
-beyond some distance :param:beyond_dist inbetween the soma and the given section.</p>
+beyond some distance <code class="docutils literal notranslate"><span class="pre">beyond_dist</span></code> inbetween the soma and the given section.</p>
 <p>If this number is 0, that means that the given section, and all its parent sections up to the soma,
-have no children that exceed a distance to soma of :param:beyond_dist.</p>
+have no children that exceed a distance to soma of <code class="docutils literal notranslate"><span class="pre">beyond_dist</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cell</strong> (<em>-</em>) – The Cell object</p></li>
-<li><p><strong>sec</strong> (<em>-</em>) – The section number</p></li>
+<li><p><strong>cell</strong> (<a class="reference internal" href="single_cell_parser.cell.html#single_cell_parser.cell.Cell" title="single_cell_parser.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a>) – The Cell object</p></li>
+<li><p><strong>sec</strong> (<em>int</em>) – The section number</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Amount of sections between :param:sec and soma that have at least 2 children that are further from the soma than :param:beyond_dist</p>
+<dd class="field-even"><p>Amount of sections between <code class="docutils literal notranslate"><span class="pre">sec</span></code> and soma that have at least 2 children that are further from the soma than <code class="docutils literal notranslate"><span class="pre">beyond_dist</span></code></p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -463,7 +462,7 @@ have no children that exceed a distance to soma of :param:beyond_dist.</p>
 <dd><p>Careful: z-depth only accurate for D2-registered cells!</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>cell</strong> (<a class="reference internal" href="single_cell_parser.cell.html#single_cell_parser.cell.Cell" title="single_cell_parser.cell.Cell"><em>Cell</em></a>) – The Cell object</p>
+<dd class="field-odd"><p><strong>cell</strong> (<a class="reference internal" href="single_cell_parser.cell.html#single_cell_parser.cell.Cell" title="single_cell_parser.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a>) – The Cell object</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>contains the pia distance as index and a tuple (biforcation order, section) as value</p>
@@ -481,7 +480,7 @@ have no children that exceed a distance to soma of :param:beyond_dist.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cell</strong> (<a class="reference internal" href="single_cell_parser.cell.html#single_cell_parser.cell.Cell" title="single_cell_parser.cell.Cell"><em>Cell</em></a>) – The Cell object</p></li>
+<li><p><strong>cell</strong> (<a class="reference internal" href="single_cell_parser.cell.html#single_cell_parser.cell.Cell" title="single_cell_parser.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a>) – The Cell object</p></li>
 <li><p><strong>select</strong> (<em>list</em><em>, </em><em>optional</em>) – Selection of sections to consider, based on their label. Defaults to [‘ApicalDendrite’, ‘Dendrite’].</p></li>
 </ul>
 </dd>
