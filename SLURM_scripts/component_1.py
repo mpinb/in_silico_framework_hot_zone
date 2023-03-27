@@ -187,13 +187,13 @@ def setup_jupyter_notebook():
     #command = "/axon/scratch/abast/anaconda3/bin/jupyter-lab --ip='*' --no-browser --port=11113"
     os.system(command)
 # In[8]:
-
-if process_number == 0:
-    setup_locking_server()
-    setup_dask_scheduler(management_dir)
-    # setup_jupyter_notebook()
-setup_locking_config()
-setup_dask_workers(management_dir)
-if process_number == 0:
-    setup_jupyter_notebook()
-time.sleep(60*60*24*365)
+if __name__ == "__main__":
+    if process_number == 0:
+        setup_locking_server()
+        setup_dask_scheduler(management_dir)
+        # setup_jupyter_notebook()
+    setup_locking_config()
+    setup_dask_workers(management_dir)
+    if process_number == 0:
+        setup_jupyter_notebook()
+    time.sleep(60*60*24*365)

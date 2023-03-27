@@ -11,7 +11,8 @@ of cells in barrel cortex. This includes:
  - use that cluster to compute single cell responses to synaptic input
  - efficiently store the simulation results and provide an easy interface to query data
 
-The recommendet use is to import it in a jupyter notebook in the following manner:
+The recommended use is to import it in a jupyter notebook in the following manner::
+
     import Interface as I
     
 '''

@@ -184,13 +184,13 @@ def setup_jupyter_notebook(custom_port):
 
     logger.debug(command)
     os.system(command)
-
-if process_number == 0:
-    setup_locking_server(cluster)
-    setup_locking_config()
-    setup_dask_scheduler(management_dir)
-    setup_dask_workers(management_dir)
-    setup_jupyter_notebook(jupyter_port)
-else:
-    setup_locking_config()
-    setup_dask_workers(management_dir)
+if __name__ == "__main__":
+    if process_number == 0:
+        setup_locking_server(cluster)
+        setup_locking_config()
+        setup_dask_scheduler(management_dir)
+        setup_dask_workers(management_dir)
+        setup_jupyter_notebook(jupyter_port)
+    else:
+        setup_locking_config()
+        setup_dask_workers(management_dir)
