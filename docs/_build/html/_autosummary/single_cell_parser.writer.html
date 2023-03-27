@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -395,43 +395,43 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_landmark_template</span></code>(landmark_name, c, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">value_to_color</span></code>(v[, vmin, vmax])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.writer.value_to_color" title="single_cell_parser.writer.value_to_color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">value_to_color</span></code></a>(v[, vmin, vmax])</p></td>
 <td><p><a class="reference external" href="https://stackoverflow.com/questions/15140072/how-to-map-number-to-color-using-matplotlibs-colormap">https://stackoverflow.com/questions/15140072/how-to-map-number-to-color-using-matplotlibs-colormap</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_PSTH</span></code>([fname, PSTH, bins])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.writer.write_PSTH" title="single_cell_parser.writer.write_PSTH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_PSTH</span></code></a>([fname, PSTH, bins])</p></td>
 <td><p>Write PSTH and time bins of PSTH, where bins contain left and right end of each bin, i.e. len(bins) = len(PSTH) + 1.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_all_traces</span></code>(fname, t, vTraces)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cell_simulation</span></code>([fname, cell, traces, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.writer.write_cell_simulation" title="single_cell_parser.writer.write_cell_simulation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cell_simulation</span></code></a>([fname, cell, traces, ...])</p></td>
 <td><p>write Amira SpatialGraph files corresponding to time steps of entire simulation run.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cell_synapse_locations</span></code>([fname, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.writer.write_cell_synapse_locations" title="single_cell_parser.writer.write_cell_synapse_locations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_cell_synapse_locations</span></code></a>([fname, ...])</p></td>
 <td><p>writes list of all synapses with the locations coded by section ID and section x of cell with ID 'cellID'</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_functional_map</span></code>(fname, functionalMap)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_functional_realization_map</span></code>([fname, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.writer.write_functional_realization_map" title="single_cell_parser.writer.write_functional_realization_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_functional_realization_map</span></code></a>([fname, ...])</p></td>
 <td><p>writes list of all functional connections coded by tuples (cell type, presynaptic cell index, synapse index).</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_landmark_file</span></code>([fname, landmarkList])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.writer.write_landmark_file" title="single_cell_parser.writer.write_landmark_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_landmark_file</span></code></a>([fname, landmarkList])</p></td>
 <td><p>write Amira landmark file landmarkList has to be iterable of tuples, each of which holds 3 float coordinates</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_landmarks_colorcoded_to_folder</span></code>(...[, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_presynaptic_spike_times</span></code>([fname, cells])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.writer.write_presynaptic_spike_times" title="single_cell_parser.writer.write_presynaptic_spike_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_presynaptic_spike_times</span></code></a>([fname, cells])</p></td>
 <td><p>Write cell type, PC and spike times of all connected presynaptic point cells</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pruned_synapse_locations</span></code>([fname, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.writer.write_pruned_synapse_locations" title="single_cell_parser.writer.write_pruned_synapse_locations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pruned_synapse_locations</span></code></a>([fname, ...])</p></td>
 <td><p>writes list of all synapses with the locations coded by section ID and section x of cell with ID 'cellID' and a pruned flag (1 or 0)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sim_results</span></code>(fname, t, v)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_spike_times_file</span></code>([fname, spikeTimes])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.writer.write_spike_times_file" title="single_cell_parser.writer.write_spike_times_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_spike_times_file</span></code></a>([fname, spikeTimes])</p></td>
 <td><p>Write file containing trial numbers and all spike times in each trial (may be empty).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_synapse_activation_file</span></code>([fname, cell, ...])</p></td>
@@ -443,16 +443,77 @@
 </tbody>
 </table>
 </div>
-<p class="rubric">Classes</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mdbopen</span></code>(path[, mode])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.writer.value_to_color">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.writer.</span></span><span class="sig-name descname"><span class="pre">value_to_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/writer.html#value_to_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.writer.value_to_color" title="Permalink to this definition">#</a></dt>
+<dd><p><a class="reference external" href="https://stackoverflow.com/questions/15140072/how-to-map-number-to-color-using-matplotlibs-colormap">https://stackoverflow.com/questions/15140072/how-to-map-number-to-color-using-matplotlibs-colormap</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.writer.write_PSTH">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.writer.</span></span><span class="sig-name descname"><span class="pre">write_PSTH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSTH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/writer.html#write_PSTH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.writer.write_PSTH" title="Permalink to this definition">#</a></dt>
+<dd><p>Write PSTH and time bins of PSTH, where
+bins contain left and right end of each bin,
+i.e. len(bins) = len(PSTH) + 1</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.writer.write_cell_simulation">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.writer.</span></span><span class="sig-name descname"><span class="pre">write_cell_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tVec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allPoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/writer.html#write_cell_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.writer.write_cell_simulation" title="Permalink to this definition">#</a></dt>
+<dd><p>write Amira SpatialGraph files corresponding to time steps
+of entire simulation run. Recorded quantities are passed
+in tuple traces with strings and recorded in Vectors
+attached to Sections of cell
+TODO: Performs interpolation if nseg != nrOfPts for a Section</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.writer.write_cell_synapse_locations">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.writer.</span></span><span class="sig-name descname"><span class="pre">write_cell_synapse_locations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/writer.html#write_cell_synapse_locations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.writer.write_cell_synapse_locations" title="Permalink to this definition">#</a></dt>
+<dd><p>writes list of all synapses with the locations
+coded by section ID and section x of cell with ID ‘cellID’</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.writer.write_functional_realization_map">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.writer.</span></span><span class="sig-name descname"><span class="pre">write_functional_realization_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">functionalMap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anatomicalID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/writer.html#write_functional_realization_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.writer.write_functional_realization_map" title="Permalink to this definition">#</a></dt>
+<dd><p>writes list of all functional connections
+coded by tuples (cell type, presynaptic cell index, synapse index).
+Only valid for anatomical synapse realization given by anatomicalID</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.writer.write_landmark_file">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.writer.</span></span><span class="sig-name descname"><span class="pre">write_landmark_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">landmarkList</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/writer.html#write_landmark_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.writer.write_landmark_file" title="Permalink to this definition">#</a></dt>
+<dd><p>write Amira landmark file
+landmarkList has to be iterable of tuples,
+each of which holds 3 float coordinates</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.writer.write_presynaptic_spike_times">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.writer.</span></span><span class="sig-name descname"><span class="pre">write_presynaptic_spike_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/writer.html#write_presynaptic_spike_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.writer.write_presynaptic_spike_times" title="Permalink to this definition">#</a></dt>
+<dd><p>Write cell type, PC and spike times of all connected
+presynaptic point cells</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.writer.write_pruned_synapse_locations">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.writer.</span></span><span class="sig-name descname"><span class="pre">write_pruned_synapse_locations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/writer.html#write_pruned_synapse_locations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.writer.write_pruned_synapse_locations" title="Permalink to this definition">#</a></dt>
+<dd><p>writes list of all synapses with the locations
+coded by section ID and section x of cell with ID ‘cellID’
+and a pruned flag (1 or 0)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.writer.write_spike_times_file">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.writer.</span></span><span class="sig-name descname"><span class="pre">write_spike_times_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spikeTimes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/writer.html#write_spike_times_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.writer.write_spike_times_file" title="Permalink to this definition">#</a></dt>
+<dd><p>Write file containing trial numbers and all spike
+times in each trial (may be empty).
+spikeTimes should be dictionary with trial numbers as keys (integers),
+and tuples of spike times in each trial as values.</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -498,8 +559,35 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">single_cell_parser.writer</a><ul>
+<li><a class="reference internal" href="#single_cell_parser.writer.value_to_color"><code class="docutils literal notranslate"><span class="pre">value_to_color()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.writer.write_PSTH"><code class="docutils literal notranslate"><span class="pre">write_PSTH()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.writer.write_cell_simulation"><code class="docutils literal notranslate"><span class="pre">write_cell_simulation()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.writer.write_cell_synapse_locations"><code class="docutils literal notranslate"><span class="pre">write_cell_synapse_locations()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.writer.write_functional_realization_map"><code class="docutils literal notranslate"><span class="pre">write_functional_realization_map()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.writer.write_landmark_file"><code class="docutils literal notranslate"><span class="pre">write_landmark_file()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.writer.write_presynaptic_spike_times"><code class="docutils literal notranslate"><span class="pre">write_presynaptic_spike_times()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.writer.write_pruned_synapse_locations"><code class="docutils literal notranslate"><span class="pre">write_pruned_synapse_locations()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.writer.write_spike_times_file"><code class="docutils literal notranslate"><span class="pre">write_spike_times_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

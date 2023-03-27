@@ -23,13 +23,6 @@ SLURM\_scripts.clustercontrol
 
    
    
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      LooseVersion
-      StrictVersion
-   
    
 
    

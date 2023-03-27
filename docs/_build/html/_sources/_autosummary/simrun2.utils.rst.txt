@@ -15,7 +15,6 @@ simrun2.utils
    
       chunkIt
       load_param_file_if_path_is_provided
-      resolve_mdb_path
       scale_apical
       silence_stdout
       tar_folder

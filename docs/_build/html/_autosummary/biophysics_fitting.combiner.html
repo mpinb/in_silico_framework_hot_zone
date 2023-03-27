@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,7 +394,7 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Combiner</span></code>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.combiner.Combiner" title="biophysics_fitting.combiner.Combiner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Combiner</span></code></a>()</p></td>
 <td><p>This  class can be used to combine features (usually) computed by an Evaluator object.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Combiner_Setup</span></code>()</p></td>
@@ -403,6 +403,41 @@
 </tbody>
 </table>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="biophysics_fitting.combiner.Combiner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">biophysics_fitting.combiner.</span></span><span class="sig-name descname"><span class="pre">Combiner</span></span><a class="reference internal" href="../_modules/biophysics_fitting/combiner.html#Combiner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.combiner.Combiner" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This  class can be used to combine features (usually) computed by an Evaluator object.</p>
+<p>For a Simulator object s and a Evaluator object e and a Combiner object c, the typical usecase is:
+voltage_traces_dict = s.run(params)
+features = e.evaluate(voltage_traces_dict)
+combined_features = c.combine(features)</p>
+<p>Internally, the Combiner iterates over all names of specified combinations. Each combination
+is specified not only by a name of the combination, but also a list of names of the features,
+that go into that combination. Each list of features is then combined by calling combinefun with that list.</p>
+<p>Example: Assume, the evaluator returns a dictionary like:
+features = {‘feature1’: 1, ‘feature2’: 2, ‘feature3’: 3, ‘feature4’: 4}
+We want to combine feature1 and 2. We also want to combine features2, 3 and 4. Combining features should be done 
+by taking the maximum.</p>
+<p>How can this be set up?
+An example, how the Combiner object can be set up can be found in hay_complete_default_setup.    
+c = Combiner()
+c.setup.append(‘combination1’, [‘feature1’, ‘feature2’])
+c.setup.append(‘combination2’, [‘feature2’, ‘feature3’, ‘feature4’])
+c.setup.combinefun = max</p>
+<p>combined_features = c.combine(features)
+combined_features
+&gt; {‘combination1’: 2, ‘combination2’: 4}</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="biophysics_fitting.combiner.Combiner.combine">
+<span class="sig-name descname"><span class="pre">combine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/combiner.html#Combiner.combine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.combiner.Combiner.combine" title="Permalink to this definition">#</a></dt>
+<dd><p>Combines features that are computed by an Evaluator class.</p>
+<p>Details, how to set up the Combiner are in the docstring of
+the Combiner class.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
         </article>
@@ -448,8 +483,30 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">biophysics_fitting.combiner</a><ul>
+<li><a class="reference internal" href="#biophysics_fitting.combiner.Combiner"><code class="docutils literal notranslate"><span class="pre">Combiner</span></code></a><ul>
+<li><a class="reference internal" href="#biophysics_fitting.combiner.Combiner.combine"><code class="docutils literal notranslate"><span class="pre">Combiner.combine()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

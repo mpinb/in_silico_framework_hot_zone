@@ -13,7 +13,6 @@ model\_data\_base.model\_data\_base\_register
 
    .. autosummary::
    
-      cache
       get_mdb_by_unique_id
       register_mdb
    
@@ -25,19 +24,11 @@ model\_data\_base.model\_data\_base\_register
 
    .. autosummary::
    
-      ModelDataBase
       ModelDataBaseRegister
-      SQLBackend
    
    
 
    
-   
-   .. rubric:: Exceptions
-
-   .. autosummary::
-   
-      MdbException
    
    
 

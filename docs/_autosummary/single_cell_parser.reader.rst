@@ -33,7 +33,6 @@ single\_cell\_parser.reader
    .. autosummary::
    
       Edge
-      mdbopen
    
    
 

@@ -14,9 +14,6 @@ simrun3.PSP\_with\_cell\_modification
    .. autosummary::
    
       combine_PSP_objects
-      minimize
-      minimize_scalar
-      setup_soma_step
    
    
 
@@ -27,7 +24,6 @@ simrun3.PSP\_with\_cell\_modification
    .. autosummary::
    
       PSP_with_current_injection
-      PSPs
    
    
 

@@ -13,7 +13,6 @@ simrun2.syn\_strength\_simrun
 
    .. autosummary::
    
-      activate_functional_synapse
       scale_apical
       unitary_connections
       unitary_connections_inhibitory

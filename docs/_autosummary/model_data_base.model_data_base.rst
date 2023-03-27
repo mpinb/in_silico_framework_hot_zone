@@ -15,7 +15,6 @@ model\_data\_base.model\_data\_base
    
       empty_context_manager
       get_progress_bar_function
-      get_versions
       slugify
    
    
@@ -27,13 +26,10 @@ model\_data\_base.model\_data\_base
    .. autosummary::
    
       FunctionWrapper
-      InMemoryBackend
       LoaderWrapper
       ModelDataBase
       RegisteredFolder
-      SQLBackend
       SQLMetadataAccessor
-      defaultdict
    
    
 

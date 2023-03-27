@@ -13,7 +13,6 @@ model\_data\_base.analyze
 
    .. autosummary::
    
-      spike_detection
       split_synapse_activation
    
    

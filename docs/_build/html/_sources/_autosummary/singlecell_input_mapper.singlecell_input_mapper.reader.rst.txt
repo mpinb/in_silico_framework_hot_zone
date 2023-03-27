@@ -27,7 +27,6 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.reader
    .. autosummary::
    
       Edge
-      mdbopen
    
    
 

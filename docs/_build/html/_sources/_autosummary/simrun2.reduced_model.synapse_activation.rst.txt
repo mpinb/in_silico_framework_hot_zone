@@ -16,7 +16,6 @@
       get_cell_activations
       get_expectancy_value_of_activated_prox_synapses_by_EI
       get_expectancy_value_of_activated_prox_synapses_by_celltype
-      get_number_of_synapses_closer_than_x
       get_poisson_realizations_from_expectancy_values
    
    

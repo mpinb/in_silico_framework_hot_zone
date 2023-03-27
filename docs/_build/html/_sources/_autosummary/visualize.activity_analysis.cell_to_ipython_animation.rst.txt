@@ -13,10 +13,8 @@
 
    .. autosummary::
    
-      b64encode
       cell_to_animation
       cell_to_ipython_animation
-      chunkIt
       display_animation
       find_closest_index
       find_nearest

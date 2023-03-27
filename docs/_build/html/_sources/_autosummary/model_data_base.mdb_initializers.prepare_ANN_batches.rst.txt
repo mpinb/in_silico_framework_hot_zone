@@ -32,9 +32,6 @@
       init
       load_syn_weights
       run_delayeds_incrementally
-      save_SA_batch
-      save_VT_batch
-      save_st_and_ISI
       temporal_binning_augmented_sa
    
    

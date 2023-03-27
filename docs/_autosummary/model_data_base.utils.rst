@@ -27,7 +27,6 @@ model\_data\_base.utils
       select
       skit
       split_file_to_buffers
-      synchronous_ddf_concat
       unique
       wait_until_key_removed
    
@@ -40,18 +39,11 @@ model\_data\_base.utils
    .. autosummary::
    
       DelayedKeyboardInterrupt
-      defaultdict
       mkdtemp
    
    
 
    
-   
-   .. rubric:: Exceptions
-
-   .. autosummary::
-   
-      PicklingError
    
    
 

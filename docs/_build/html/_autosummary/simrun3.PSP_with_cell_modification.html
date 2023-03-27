@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -401,15 +401,6 @@ on top of such input to the somatic subthreashold potential.</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">combine_PSP_objects</span></code>(PSPexc, PSPinh)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">minimize</span></code>(fun, x0[, args, method, jac, hess, ...])</p></td>
-<td><p>Minimization of scalar function of one or more variables.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">minimize_scalar</span></code>(fun[, bracket, bounds, ...])</p></td>
-<td><p>Minimization of scalar function of one variable.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_soma_step</span></code>(cell[, amplitude, delay, ...])</p></td>
-<td><p></p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -417,15 +408,60 @@ on top of such input to the somatic subthreashold potential.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSP_with_current_injection</span></code>(neuron_param, confile)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection" title="simrun3.PSP_with_cell_modification.PSP_with_current_injection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSP_with_current_injection</span></code></a>(neuron_param, confile)</p></td>
 <td><p>allows to simulate EPSPs and IPSPs, where the soma resting potential is set to a defined potential by the injection of a constant current.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSPs</span></code>([neuron_param, confile, gExRange, ...])</p></td>
-<td><p>main class for calculation of ePSP amplitudes and synaptic strength fitting</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="simrun3.PSP_with_cell_modification.PSP_with_current_injection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simrun3.PSP_with_cell_modification.</span></span><span class="sig-name descname"><span class="pre">PSP_with_current_injection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neuron_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_vm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-70</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_for_timepoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_modify_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0.7)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/PSP_with_cell_modification.html#PSP_with_current_injection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>allows to simulate EPSPs and IPSPs, where the soma resting potential is set to a
+defined potential by the injection of a constant current.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="simrun3.PSP_with_cell_modification.PSP_with_current_injection.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/PSP_with_cell_modification.html#PSP_with_current_injection.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get" title="Permalink to this definition">#</a></dt>
+<dd><p>returns final PSP object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_neuron_param_with_current_injection">
+<span class="sig-name descname"><span class="pre">get_neuron_param_with_current_injection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/PSP_with_cell_modification.html#PSP_with_current_injection.get_neuron_param_with_current_injection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_neuron_param_with_current_injection" title="Permalink to this definition">#</a></dt>
+<dd><p>returns neuron_param, where a current injection is set up such that 
+the potential self.target_vm is reached at the timepoint self.optimize_for_timepoint</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_psp_simulator">
+<span class="sig-name descname"><span class="pre">get_psp_simulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gExRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_inh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'exc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'synapses'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/PSP_with_cell_modification.html#PSP_with_current_injection.get_psp_simulator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_psp_simulator" title="Permalink to this definition">#</a></dt>
+<dd><p>returns simrun3.synaptic_strength_fitting.PSPs method, which is set up to simulate
+individual synapse PSPs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_psp_simulator_exc_and_inh_combined">
+<span class="sig-name descname"><span class="pre">get_psp_simulator_exc_and_inh_combined</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gExRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'synapses'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/PSP_with_cell_modification.html#PSP_with_current_injection.get_psp_simulator_exc_and_inh_combined"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_psp_simulator_exc_and_inh_combined" title="Permalink to this definition">#</a></dt>
+<dd><p>call the run method of the returned object to execute the computation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simrun3.PSP_with_cell_modification.PSP_with_current_injection.optimize_holding_current">
+<span class="sig-name descname"><span class="pre">optimize_holding_current</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/PSP_with_cell_modification.html#PSP_with_current_injection.optimize_holding_current"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.optimize_holding_current" title="Permalink to this definition">#</a></dt>
+<dd><p>finds the current that needs to be injected to hold the somatic potential at target_vm.
+target_vm is defined during initialization of the object.
+bounds: (min_current, max_current) in which the optimizer searches</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simrun3.PSP_with_cell_modification.PSP_with_current_injection.plot_current_injection_voltage_trace">
+<span class="sig-name descname"><span class="pre">plot_current_injection_voltage_trace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/PSP_with_cell_modification.html#PSP_with_current_injection.plot_current_injection_voltage_trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.plot_current_injection_voltage_trace" title="Permalink to this definition">#</a></dt>
+<dd><p>visualizes current_injection voltage trace</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
         </article>
@@ -471,8 +507,35 @@ on top of such input to the somatic subthreashold potential.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">simrun3.PSP_with_cell_modification</a><ul>
+<li><a class="reference internal" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection"><code class="docutils literal notranslate"><span class="pre">PSP_with_current_injection</span></code></a><ul>
+<li><a class="reference internal" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get"><code class="docutils literal notranslate"><span class="pre">PSP_with_current_injection.get()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_neuron_param_with_current_injection"><code class="docutils literal notranslate"><span class="pre">PSP_with_current_injection.get_neuron_param_with_current_injection()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_psp_simulator"><code class="docutils literal notranslate"><span class="pre">PSP_with_current_injection.get_psp_simulator()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.get_psp_simulator_exc_and_inh_combined"><code class="docutils literal notranslate"><span class="pre">PSP_with_current_injection.get_psp_simulator_exc_and_inh_combined()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.optimize_holding_current"><code class="docutils literal notranslate"><span class="pre">PSP_with_current_injection.optimize_holding_current()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.PSP_with_cell_modification.PSP_with_current_injection.plot_current_injection_voltage_trace"><code class="docutils literal notranslate"><span class="pre">PSP_with_current_injection.plot_current_injection_voltage_trace()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

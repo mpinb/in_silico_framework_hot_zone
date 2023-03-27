@@ -13,20 +13,12 @@ single\_cell\_parser.network\_realizations
 
    .. autosummary::
    
-      build_parameters
       create_functional_network
       create_synapse_realization
    
    
 
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      NetworkMapper
-      SynapseMapper
    
    
 

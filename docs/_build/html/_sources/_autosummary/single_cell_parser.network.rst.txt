@@ -26,10 +26,6 @@ single\_cell\_parser.network
    .. autosummary::
    
       NetworkMapper
-      PointCell
-      Sequence
-      SpikeTrain
-      SynapseMapper
    
    
 

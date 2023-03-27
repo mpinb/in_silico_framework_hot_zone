@@ -13,30 +13,15 @@
 
    .. autosummary::
    
-      fig2np
-      manylines
       manylines_helper
-      return_figure_or_axis
    
    
 
    
    
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      PixelObject
-   
    
 
    
-   
-   .. rubric:: Exceptions
-
-   .. autosummary::
-   
-      ForceReturnException
    
    
 

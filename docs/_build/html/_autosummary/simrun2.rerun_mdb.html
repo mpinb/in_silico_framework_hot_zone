@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -392,34 +392,13 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code>(seq, num)</p></td>
-<td><p>splits seq in num lists, which have approximately equal size.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">convertible_to_int</span></code>(x)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">convertible_to_int</span></code>(x)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">execute_in_child_process</span></code>(fun)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_param_file_if_path_is_provided</span></code>(pathOrParam)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">rerun_mdb</span></code>(mdb, outdir[, tStop, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#simrun2.rerun_mdb.rerun_mdb" title="simrun2.rerun_mdb.rerun_mdb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rerun_mdb</span></code></a>(mdb, outdir[, tStop, ...])</p></td>
 <td><p>mdb: model data base initialized with I.mdb_init_simrun_general to be resimulated outdir: location where simulation files are supposed to be stored tStop: end of simulation neuron_param_modify_functions: list of functions which take a neuron param file and may return it changed network_param_modify_functions: list of functions which take a network param file and may return it changed synapse_activation_modify_functions: list of function, which take a synapse activation dataframe and may return it changed stis: sim_trial_indices which are to be resimulated.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_mdb_path</span></code>(path)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_apical</span></code>(cell)</p></td>
-<td><p>scale apical diameters depending on distance to soma; therefore only possible after creating complete cell</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">silence_stdout</span></code>(fun)</p></td>
-<td><p>robustly silences a function and restores stdout afterwars</p></td>
-</tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">synapse_activation_df_to_roberts_synapse_activation</span></code>(sa)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tar_folder</span></code>(source_dir[, delete_folder])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -432,12 +411,24 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opaque</span></code>(content)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">defaultValues</span></code>()</p></td>
-<td><p></p></td>
-</tr>
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun2.rerun_mdb.rerun_mdb">
+<span class="sig-prename descclassname"><span class="pre">simrun2.rerun_mdb.</span></span><span class="sig-name descname"><span class="pre">rerun_mdb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neuron_param_modify_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_param_modify_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapse_activation_modify_functions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_network_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_process</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/rerun_mdb.html#rerun_mdb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.rerun_mdb.rerun_mdb" title="Permalink to this definition">#</a></dt>
+<dd><p>mdb: model data base initialized with I.mdb_init_simrun_general to be resimulated
+outdir: location where simulation files are supposed to be stored
+tStop: end of simulation
+neuron_param_modify_functions: list of functions which take a neuron param file and may return it changed
+network_param_modify_functions: list of functions which take a network param file and may return it changed
+synapse_activation_modify_functions: list of function, which take a synapse activation dataframe and may return it changed
+stis: sim_trial_indices which are to be resimulated. If None, the whole database is going to be resimulated.
+silent: suppress output to stdout
+child_process: run simulation in child process. This can help if dask workers time out during the simulation.
+recreate_cell_every_run: set to True if you use synapse_activation as cell modify function.</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -483,8 +474,27 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">simrun2.rerun_mdb</a><ul>
+<li><a class="reference internal" href="#simrun2.rerun_mdb.rerun_mdb"><code class="docutils literal notranslate"><span class="pre">rerun_mdb()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -395,10 +395,10 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cellnumbers_from_confile</span></code>(confile)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_default_arguments</span></code>(func)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#simrun3.utils.get_default_arguments" title="simrun3.utils.get_default_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_default_arguments</span></code></a>(func)</p></td>
 <td><p>Gets the keyword arguments with their default value from any function.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_default_arguments_if_not_set</span></code>(o, kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun3.utils.set_default_arguments_if_not_set" title="simrun3.utils.set_default_arguments_if_not_set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_default_arguments_if_not_set</span></code></a>(o, kwargs)</p></td>
 <td><p>Used to update attributes of an object based on a dictionary.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_network_param_in_one_elem_dicts</span></code>(dict_)</p></td>
@@ -407,6 +407,25 @@
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun3.utils.get_default_arguments">
+<span class="sig-prename descclassname"><span class="pre">simrun3.utils.</span></span><span class="sig-name descname"><span class="pre">get_default_arguments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/utils.html#get_default_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.utils.get_default_arguments" title="Permalink to this definition">#</a></dt>
+<dd><p>Gets the keyword arguments with their default value from any function.</p>
+<p>import six
+Returns: dictionary, function names are keys, default values are values</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun3.utils.set_default_arguments_if_not_set">
+<span class="sig-prename descclassname"><span class="pre">simrun3.utils.</span></span><span class="sig-name descname"><span class="pre">set_default_arguments_if_not_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/utils.html#set_default_arguments_if_not_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.utils.set_default_arguments_if_not_set" title="Permalink to this definition">#</a></dt>
+<dd><p>Used to update attributes of an object based on a dictionary.
+If the attribute is already set, it is NOT opverwritten.</p>
+<p>Usecase: If an object has been pickled and the keyword arguments have been extended post hoc, 
+the new keyword arguments are missing. This can be used to update the object accordingly.</p>
+<p>import six
+Returns: None</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -452,8 +471,28 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">simrun3.utils</a><ul>
+<li><a class="reference internal" href="#simrun3.utils.get_default_arguments"><code class="docutils literal notranslate"><span class="pre">get_default_arguments()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.utils.set_default_arguments_if_not_set"><code class="docutils literal notranslate"><span class="pre">set_default_arguments_if_not_set()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

@@ -14,9 +14,7 @@
    .. autosummary::
    
       decode
-      dumps
       encode
-      loads
       open
       reraise
    
@@ -28,11 +26,8 @@
 
    .. autosummary::
    
-      DictClass
-      Queue
       SqliteDict
       SqliteMultithread
-      Thread
    
    
 

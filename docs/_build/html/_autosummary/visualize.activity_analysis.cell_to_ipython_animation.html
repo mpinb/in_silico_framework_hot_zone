@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -392,31 +392,25 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">b64encode</span></code>(s[, altchars])</p></td>
-<td><p>Encode the bytes-like object s using Base64 and return a bytes object.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_to_animation</span></code>(cell[, xlim, ylim, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.cell_to_animation" title="visualize.activity_analysis.cell_to_ipython_animation.cell_to_animation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_to_animation</span></code></a>(cell[, xlim, ylim, ...])</p></td>
 <td><p>takes a cell object and creates a 2d animation</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_to_ipython_animation</span></code>(cell[, xlim, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.cell_to_ipython_animation" title="visualize.activity_analysis.cell_to_ipython_animation.cell_to_ipython_animation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cell_to_ipython_animation</span></code></a>(cell[, xlim, ...])</p></td>
 <td><p>takes a cell object and creates a 2d animation</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code>(seq, num)</p></td>
-<td><p>splits seq in num lists, which have approximately equal size.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">display_animation</span></code>(files[, interval, style, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.display_animation" title="visualize.activity_analysis.cell_to_ipython_animation.display_animation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">display_animation</span></code></a>(files[, interval, style, ...])</p></td>
 <td><p>creates an IPython animation out of files specified in a globstring or a list of paths.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_closest_index</span></code>(list_, value)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.find_closest_index" title="visualize.activity_analysis.cell_to_ipython_animation.find_closest_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_closest_index</span></code></a>(list_, value)</p></td>
 <td><p>returns index of value within <a href="#id1"><span class="problematic" id="id2">list_</span></a>, which is closest to the value specified in the arguments</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_nearest</span></code>(array, value)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.find_nearest" title="visualize.activity_analysis.cell_to_ipython_animation.find_nearest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_nearest</span></code></a>(array, value)</p></td>
 <td><p><a class="reference external" href="https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array">https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array</a></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_default_axis</span></code>(range_var)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lines</span></code>(cell, n[, range_vars])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.get_lines" title="visualize.activity_analysis.cell_to_ipython_animation.get_lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lines</span></code></a>(cell, n[, range_vars])</p></td>
 <td><p>returns list of dictionaries of lines that can be displayed using the plot_lines function</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_synapse_points</span></code>(cell, n)</p></td>
@@ -425,15 +419,106 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_fig</span></code>([xlim, ylim])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">parallelMovieMaker</span></code>(basedir, lines[, xlim, ylim])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.parallelMovieMaker" title="visualize.activity_analysis.cell_to_ipython_animation.parallelMovieMaker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parallelMovieMaker</span></code></a>(basedir, lines[, xlim, ylim])</p></td>
 <td><p>creates figures in parallel and returns animation object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_lines_fun</span></code>(lines, ax)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.plot_lines_fun" title="visualize.activity_analysis.cell_to_ipython_animation.plot_lines_fun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_lines_fun</span></code></a>(lines, ax)</p></td>
 <td><p>generate plots out of lines</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="visualize.activity_analysis.cell_to_ipython_animation.cell_to_animation">
+<span class="sig-prename descclassname"><span class="pre">visualize.activity_analysis.cell_to_ipython_animation.</span></span><span class="sig-name descname"><span class="pre">cell_to_animation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">245</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">310</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Vm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_synaptic_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'animation'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/activity_analysis/cell_to_ipython_animation.html#cell_to_animation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.activity_analysis.cell_to_ipython_animation.cell_to_animation" title="Permalink to this definition">#</a></dt>
+<dd><p>takes a cell object and creates a 2d animation</p>
+<p>outdir: folder, where animation should be saved. The result will be .png files.</p>
+<dl class="simple">
+<dt>xlim: tuple like (0, 1600) that defines the limits of the x axis.</dt><dd><p>If None, tries to get default values for range var from get_default_axis
+Default: None.</p>
+</dd>
+<dt>ylim: tuple like (-80 0) that defines the limits of the y axis</dt><dd><p>If None, tries to get default values for range var from get_default_axis
+Default: None.</p>
+</dd>
+</dl>
+<p>tstart: time when animation should be started
+tend: time when animation should be stopped
+tstep: timestep between frames
+range_vars: str or list of str: range vars to display, default: ‘Vm’
+return glob: if false: only returns animation object, else returns</p>
+<blockquote>
+<div><p>tuple with globstring and animation object</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="visualize.activity_analysis.cell_to_ipython_animation.cell_to_ipython_animation">
+<span class="sig-prename descclassname"><span class="pre">visualize.activity_analysis.cell_to_ipython_animation.</span></span><span class="sig-name descname"><span class="pre">cell_to_ipython_animation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">245</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">310</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Vm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_synaptic_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'animation'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/activity_analysis/cell_to_ipython_animation.html#cell_to_ipython_animation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.activity_analysis.cell_to_ipython_animation.cell_to_ipython_animation" title="Permalink to this definition">#</a></dt>
+<dd><p>takes a cell object and creates a 2d animation</p>
+<p>outdir: folder, where animation should be saved. The result will be .png files.</p>
+<dl class="simple">
+<dt>xlim: tuple like (0, 1600) that defines the limits of the x axis.</dt><dd><p>If None, tries to get default values for range var from get_default_axis
+Default: None.</p>
+</dd>
+<dt>ylim: tuple like (-80 0) that defines the limits of the y axis</dt><dd><p>If None, tries to get default values for range var from get_default_axis
+Default: None.</p>
+</dd>
+</dl>
+<p>tstart: time when animation should be started
+tend: time when animation should be stopped
+tstep: timestep between frames
+range_vars: str or list of str: range vars to display, default: ‘Vm’
+return glob: if false: only returns animation object, else returns</p>
+<blockquote>
+<div><p>tuple with globstring and animation object</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="visualize.activity_analysis.cell_to_ipython_animation.display_animation">
+<span class="sig-prename descclassname"><span class="pre">visualize.activity_analysis.cell_to_ipython_animation.</span></span><span class="sig-name descname"><span class="pre">display_animation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">animID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/activity_analysis/cell_to_ipython_animation.html#display_animation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.activity_analysis.cell_to_ipython_animation.display_animation" title="Permalink to this definition">#</a></dt>
+<dd><p>creates an IPython animation out of files specified in a globstring or a list of paths.</p>
+<p>animID: unique integer to identify the animation in the javascript environment of IPython
+files: globstring or list of paths
+interval: time interval between frames</p>
+<p>CAVEAT: the paths need to be relative to the location of the ipynb / html file, since
+the are resolved in the browser and not by python</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="visualize.activity_analysis.cell_to_ipython_animation.find_closest_index">
+<span class="sig-prename descclassname"><span class="pre">visualize.activity_analysis.cell_to_ipython_animation.</span></span><span class="sig-name descname"><span class="pre">find_closest_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/activity_analysis/cell_to_ipython_animation.html#find_closest_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.activity_analysis.cell_to_ipython_animation.find_closest_index" title="Permalink to this definition">#</a></dt>
+<dd><p>returns index of value within <a href="#id3"><span class="problematic" id="id4">list_</span></a>, which is closest to the value specified in the arguments</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="visualize.activity_analysis.cell_to_ipython_animation.find_nearest">
+<span class="sig-prename descclassname"><span class="pre">visualize.activity_analysis.cell_to_ipython_animation.</span></span><span class="sig-name descname"><span class="pre">find_nearest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/activity_analysis/cell_to_ipython_animation.html#find_nearest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.activity_analysis.cell_to_ipython_animation.find_nearest" title="Permalink to this definition">#</a></dt>
+<dd><p><a class="reference external" href="https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array">https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="visualize.activity_analysis.cell_to_ipython_animation.get_lines">
+<span class="sig-prename descclassname"><span class="pre">visualize.activity_analysis.cell_to_ipython_animation.</span></span><span class="sig-name descname"><span class="pre">get_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Vm'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/activity_analysis/cell_to_ipython_animation.html#get_lines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.activity_analysis.cell_to_ipython_animation.get_lines" title="Permalink to this definition">#</a></dt>
+<dd><p>returns list of dictionaries of lines that can be displayed using the plot_lines function</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="visualize.activity_analysis.cell_to_ipython_animation.parallelMovieMaker">
+<span class="sig-prename descclassname"><span class="pre">visualize.activity_analysis.cell_to_ipython_animation.</span></span><span class="sig-name descname"><span class="pre">parallelMovieMaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basedir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">1500)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-80,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/activity_analysis/cell_to_ipython_animation.html#parallelMovieMaker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.activity_analysis.cell_to_ipython_animation.parallelMovieMaker" title="Permalink to this definition">#</a></dt>
+<dd><p>creates figures in parallel and returns animation object.
+basedir: path to store images
+lines: list of dictionaries of lines (generated by function generate_lines)
+xlim: limits of x axis
+ylim: limits of y axis</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="visualize.activity_analysis.cell_to_ipython_animation.plot_lines_fun">
+<span class="sig-prename descclassname"><span class="pre">visualize.activity_analysis.cell_to_ipython_animation.</span></span><span class="sig-name descname"><span class="pre">plot_lines_fun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/activity_analysis/cell_to_ipython_animation.html#plot_lines_fun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.activity_analysis.cell_to_ipython_animation.plot_lines_fun" title="Permalink to this definition">#</a></dt>
+<dd><p>generate plots out of lines</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -479,8 +564,34 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">visualize.activity_analysis.cell_to_ipython_animation</a><ul>
+<li><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.cell_to_animation"><code class="docutils literal notranslate"><span class="pre">cell_to_animation()</span></code></a></li>
+<li><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.cell_to_ipython_animation"><code class="docutils literal notranslate"><span class="pre">cell_to_ipython_animation()</span></code></a></li>
+<li><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.display_animation"><code class="docutils literal notranslate"><span class="pre">display_animation()</span></code></a></li>
+<li><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.find_closest_index"><code class="docutils literal notranslate"><span class="pre">find_closest_index()</span></code></a></li>
+<li><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.find_nearest"><code class="docutils literal notranslate"><span class="pre">find_nearest()</span></code></a></li>
+<li><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.get_lines"><code class="docutils literal notranslate"><span class="pre">get_lines()</span></code></a></li>
+<li><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.parallelMovieMaker"><code class="docutils literal notranslate"><span class="pre">parallelMovieMaker()</span></code></a></li>
+<li><a class="reference internal" href="#visualize.activity_analysis.cell_to_ipython_animation.plot_lines_fun"><code class="docutils literal notranslate"><span class="pre">plot_lines_fun()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

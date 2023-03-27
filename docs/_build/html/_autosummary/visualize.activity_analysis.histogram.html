@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -392,53 +392,19 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dask_to_pandas</span></code>(fun)</p></td>
-<td><p>decorator, that checks every passed parameter.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">histogram</span></code>(*args, **kwargs)</p></td>
-<td><p>expects a tuple of the format (bins,hist)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">histogram2</span></code>(hist_bins[, color, ax, label, mode])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#visualize.activity_analysis.histogram.histogram2" title="visualize.activity_analysis.histogram.histogram2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">histogram2</span></code></a>(hist_bins[, color, ax, label, mode])</p></td>
 <td><p>hist_bins: tuple of the format (bins,hist) where bins needs to be one element longer than hist bins: bin edges; hist: bin values</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pr</span></code>(*args, **kwargs)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_figure_or_axis</span></code>(plotfun)</p></td>
-<td><p>decorator, that looks, if the fig attribute is specified in kwargs. If fig is specified and isinstance plt.fiugre:     create axis, replace fig with axis, but return fig If fig is specified and isinstance axis:     do not change kwargs. return axis If fig is not specified:     create figure, create axis, call plotfunction with axis     return figure.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">skit</span></code>(*funcs, **kwargs)</p></td>
-<td><p>splits kwargs up to supply different functions with the right subset adapted from <a class="reference external" href="http://stackoverflow.com/a/23430335/5082048">http://stackoverflow.com/a/23430335/5082048</a></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">subsequent_calls_per_line</span></code>(plotfun)</p></td>
-<td><p>decorator, that can be used on plotfunctions, which require pd.Series as input to be used on groups of data.</p></td>
-</tr>
 </tbody>
 </table>
 </div>
-<p class="rubric">Classes</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Axes</span></code>(fig, rect[, facecolor, frameon, ...])</p></td>
-<td><p>The <cite>Axes</cite> contains most of the figure elements: <cite>~.axis.Axis</cite>, <cite>~.axis.Tick</cite>, <cite>~.lines.Line2D</cite>, <cite>~.text.Text</cite>, <cite>~.patches.Polygon</cite>, etc., and sets the coordinate system.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Figure</span></code>([figsize, dpi, facecolor, edgecolor, ...])</p></td>
-<td><p>The top level container for all the plot elements.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p class="rubric">Exceptions</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ForceReturnException</span></code>(return_value)</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="visualize.activity_analysis.histogram.histogram2">
+<span class="sig-prename descclassname"><span class="pre">visualize.activity_analysis.histogram.</span></span><span class="sig-name descname"><span class="pre">histogram2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist_bins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'step'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/activity_analysis/histogram.html#histogram2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.activity_analysis.histogram.histogram2" title="Permalink to this definition">#</a></dt>
+<dd><p>hist_bins: tuple of the format (bins,hist) where bins needs to be one element longer than hist
+bins: bin edges; hist: bin values</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -484,8 +450,27 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">visualize.activity_analysis.histogram</a><ul>
+<li><a class="reference internal" href="#visualize.activity_analysis.histogram.histogram2"><code class="docutils literal notranslate"><span class="pre">histogram2()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

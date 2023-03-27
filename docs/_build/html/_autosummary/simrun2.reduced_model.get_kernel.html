@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -401,25 +401,22 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_kernel_C2_grid</span></code>([...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_kernel_C2_grid_cached</span></code>(*args, **kwargs)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lookup_series_from_lda_values_spike_data</span></code>(...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#simrun2.reduced_model.get_kernel.get_lookup_series_from_lda_values_spike_data" title="simrun2.reduced_model.get_kernel.get_lookup_series_from_lda_values_spike_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lookup_series_from_lda_values_spike_data</span></code></a>(...)</p></td>
 <td><p>lda_values: one-dimensional array containing lda_values of trail spike: one-dimensional array containing True / False mask: one-dimensional array containing True / False. If True: the respective trail will be ignored.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_plt_axis</span></code>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_plt_axis</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate_lookup_series</span></code>(lookup_series)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate_lookup_series</span></code>(lookup_series)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_LUT</span></code>(lookup_series[, lda_values, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_LUT</span></code>(lookup_series[, lda_values, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_kernel_dict</span></code>(kernel_dict[, ax])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_kernel_dict</span></code>(kernel_dict[, ax])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">spike_in_interval</span></code>(st, tmin, tmax)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">spike_in_interval</span></code>(st, tmin, tmax)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -435,12 +432,20 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReducedLdaModelResult</span></code>(RM, lda_dict, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">partial</span></code></p></td>
-<td><p>partial(func, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>keywords) - new function with partial application of the given arguments and keywords.</p></td>
-</tr>
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun2.reduced_model.get_kernel.get_lookup_series_from_lda_values_spike_data">
+<span class="sig-prename descclassname"><span class="pre">simrun2.reduced_model.get_kernel.</span></span><span class="sig-name descname"><span class="pre">get_lookup_series_from_lda_values_spike_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lda_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike_before</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookup_series_stepsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/reduced_model/get_kernel.html#get_lookup_series_from_lda_values_spike_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.reduced_model.get_kernel.get_lookup_series_from_lda_values_spike_data" title="Permalink to this definition">#</a></dt>
+<dd><p>lda_values: one-dimensional array containing lda_values of trail
+spike: one-dimensional array containing True / False
+mask: one-dimensional array containing True / False.</p>
+<blockquote>
+<div><p>If True: the respective trail will be ignored.</p>
+</div></blockquote>
+</dd></dl>
+
 </section>
 
         </article>
@@ -486,8 +491,27 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">simrun2.reduced_model.get_kernel</a><ul>
+<li><a class="reference internal" href="#simrun2.reduced_model.get_kernel.get_lookup_series_from_lda_values_spike_data"><code class="docutils literal notranslate"><span class="pre">get_lookup_series_from_lda_values_spike_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

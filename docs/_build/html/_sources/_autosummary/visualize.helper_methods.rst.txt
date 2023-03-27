@@ -13,7 +13,6 @@ visualize.helper\_methods
 
    .. autosummary::
    
-      b64encode
       display_animation_from_images
       find_files_and_order_them
       write_gif_from_images
@@ -22,12 +21,6 @@ visualize.helper\_methods
    
 
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      mkdtemp
    
    
 

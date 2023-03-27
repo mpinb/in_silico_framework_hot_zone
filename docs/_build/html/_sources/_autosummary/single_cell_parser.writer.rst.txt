@@ -34,12 +34,6 @@ single\_cell\_parser.writer
 
    
    
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      mdbopen
-   
    
 
    

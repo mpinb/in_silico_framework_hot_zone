@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -396,67 +396,55 @@ Third: functions to analyze PSPs</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">activate_functional_synapse</span></code>(syn, cell, ...)</p></td>
-<td><p>Default method to activate single synapse.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_voltage_trace</span></code>(vTrace, tTrace)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun3.synaptic_strength_fitting.analyze_voltage_trace" title="simrun3.synaptic_strength_fitting.analyze_voltage_trace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_voltage_trace</span></code></a>(vTrace, tTrace)</p></td>
 <td><p>takes neuron Vectors and finds time and amplitude of max voltage deflection (pos and negative direction)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_optimal_g</span></code>(pdf)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_optimal_g</span></code>(pdf)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ePSP_summary_statistics</span></code>(vt[, threashold, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ePSP_summary_statistics</span></code>(vt[, threashold, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_ex_network_param_from_network_embedding</span></code>(confile)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding" title="simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_ex_network_param_from_network_embedding</span></code></a>(confile)</p></td>
 <td><p>returns a network parameter file that can be used to activate all presynaptic  conected cells as specified in confile:</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_inh_network_param_from_network_embedding</span></code>(confile)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_inh_network_param_from_network_embedding</span></code>(confile)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cell_with_network</span></code>(neuron_param, ...[, cache])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_optimal_g</span></code>(self, measured_data[, method, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_cellnumbers_from_confile</span></code>(confile)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_summary_statistics</span></code>(self[, method, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_optimal_g</span></code>(self, measured_data[, method, ...])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_summary_statistics</span></code>(self[, method, ...])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tMax_vMax</span></code>(t, v[, tStim, tEnd])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#simrun3.synaptic_strength_fitting.get_tMax_vMax" title="simrun3.synaptic_strength_fitting.get_tMax_vMax"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tMax_vMax</span></code></a>(t, v[, tStim, tEnd])</p></td>
 <td><p>This method calculates the ePSP amplitude by subtracting the voltage directly before the epsp, which is supposed to be at 160ms, from the voltagetrace.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tMax_vMax_baseline</span></code>(t_baseline, ...[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun3.synaptic_strength_fitting.get_tMax_vMax_baseline" title="simrun3.synaptic_strength_fitting.get_tMax_vMax_baseline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_tMax_vMax_baseline</span></code></a>(t_baseline, ...[, ...])</p></td>
 <td><p>this method calculates the ePSP amplitude by subtracting a voltage trace without any synapse activation from a voltage trace with synapse activation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_voltage_and_timing</span></code>(vt[, method, tStim, tEnd])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#simrun3.synaptic_strength_fitting.get_voltage_and_timing" title="simrun3.synaptic_strength_fitting.get_voltage_and_timing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_voltage_and_timing</span></code></a>(vt[, method, tStim, tEnd])</p></td>
 <td><p>calculate maxmimum and timing of the EPSPS vt: voltage traces, as returned by PSP.get_voltage_traces() method: dynamic_baseline: a simulation without any synaptic activation is      substracted from a simulation with cell activation. The maximum and      timepoint of maximum is returned method: constant_baseline: the voltage at t = 110ms (= directly before     synapse activation) is considered as baseline and substracted     from all voltages at all timepoints. The maximum and timepoint of the maximum after t = 110ms is      returned. .</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_fit</span></code>(gAMPANMDA, epsp)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_fit</span></code>(gAMPANMDA, epsp)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_fit_pdf</span></code>(pdf)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_fit_pdf</span></code>(pdf)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_celltypes</span></code>(vt[, detection_strings, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun3.synaptic_strength_fitting.merge_celltypes" title="simrun3.synaptic_strength_fitting.merge_celltypes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_celltypes</span></code></a>(vt[, detection_strings, ...])</p></td>
 <td><p>concatenates voltagetraces of celltypes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_ex_synapse</span></code>(cell_nw_generator, ...[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#simrun3.synaptic_strength_fitting.run_ex_synapse" title="simrun3.synaptic_strength_fitting.run_ex_synapse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_ex_synapse</span></code></a>(cell_nw_generator, ...[, ...])</p></td>
 <td><p>core function, that actually activates a single synapse and runs the simulation. cell_nw_generator: simrun3.get_cell_with_network.get_cell_with_network neuron_param: single_cell_parser.NTParameterSet specifying biophysical properties network_param: single_cell_parser.NTParameterSet specifying network properties celltype: presynaptic celltype preSynCellID: number of presynaptic cell that should be activated. None: No cell will be activated. gEx: conductance of AMPA and NMDA component vardt: whether variable stepsize solver should be used synapse_ids: if None, all synapses assigned to the presynaptic cell get activated. if a list of integers, only synapses with the specified indices get acivated.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_ex_synapses</span></code>(neuron_param, network_param, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun3.synaptic_strength_fitting.run_ex_synapses" title="simrun3.synaptic_strength_fitting.run_ex_synapses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_ex_synapses</span></code></a>(neuron_param, network_param, ...)</p></td>
 <td><p>method to consecutively calculate all EPSPs of all presynaptic cells of one celltype.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_ex_synapse_weight</span></code>(syn, weight)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_ex_synapse_weight</span></code>(syn, weight)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_inh_synapse_weight</span></code>(syn, weight)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_network_param_in_one_elem_dicts</span></code>(dict_)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_inh_synapse_weight</span></code>(syn, weight)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -466,12 +454,135 @@ Third: functions to analyze PSPs</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSPs</span></code>([neuron_param, confile, gExRange, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun3.synaptic_strength_fitting.PSPs" title="simrun3.synaptic_strength_fitting.PSPs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSPs</span></code></a>([neuron_param, confile, gExRange, ...])</p></td>
 <td><p>main class for calculation of ePSP amplitudes and synaptic strength fitting</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.PSPs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">simrun3.synaptic_strength_fitting.</span></span><span class="sig-name descname"><span class="pre">PSPs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neuron_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gExRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.5,</span> <span class="pre">1.0,</span> <span class="pre">1.5,</span> <span class="pre">2.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AMPA_component</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NMDA_component</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vardt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cells'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_inh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'exc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">110</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#PSPs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.PSPs" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>main class for calculation of ePSP amplitudes and synaptic strength fitting</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.PSPs.get_voltage_and_timing">
+<span class="sig-name descname"><span class="pre">get_voltage_and_timing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dynamic_baseline'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_celltype_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#PSPs.get_voltage_and_timing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.PSPs.get_voltage_and_timing" title="Permalink to this definition">#</a></dt>
+<dd><p>calculate maxmimum and timing of the EPSPS
+method: dynamic_baseline: a simulation without any synaptic activation is</p>
+<blockquote>
+<div><p>substracted from a simulation with cell activation. The maximum and 
+timepoint of maximum is returned</p>
+</div></blockquote>
+<dl class="simple">
+<dt>method: constant_baseline: the voltage at t = 110ms (= directly before</dt><dd><p>synapse activation) is considered as baseline and substracted
+from all voltages at all timepoints.
+The maximum and timepoint of the maximum after t = 110ms is 
+returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.PSPs.get_voltage_traces">
+<span class="sig-name descname"><span class="pre">get_voltage_traces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#PSPs.get_voltage_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.PSPs.get_voltage_traces" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns voltage and timing of all synapse activations.
+Fetches results from the cluster.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.PSPs.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rerun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#PSPs.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.PSPs.run" title="Permalink to this definition">#</a></dt>
+<dd><p>start running computation on dask.distributed.Client
+client: dask.distributedClient object</p>
+<dl class="simple">
+<dt>rerun: If True, a computation can be restarted. Otherwise, </dt><dd><p>calling this function has no effect if the 
+computation is already running</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.analyze_voltage_trace">
+<span class="sig-prename descclassname"><span class="pre">simrun3.synaptic_strength_fitting.</span></span><span class="sig-name descname"><span class="pre">analyze_voltage_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vTrace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tTrace</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#analyze_voltage_trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.analyze_voltage_trace" title="Permalink to this definition">#</a></dt>
+<dd><p>takes neuron Vectors and finds time and
+amplitude of max voltage deflection (pos and negative direction)</p>
+<p>modified from single cell analyzer</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding">
+<span class="sig-prename descclassname"><span class="pre">simrun3.synaptic_strength_fitting.</span></span><span class="sig-name descname"><span class="pre">generate_ex_network_param_from_network_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">confile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#generate_ex_network_param_from_network_embedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding" title="Permalink to this definition">#</a></dt>
+<dd><p>returns a network parameter file that can be used to activate all presynaptic 
+conected cells as specified in confile:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.get_tMax_vMax">
+<span class="sig-prename descclassname"><span class="pre">simrun3.synaptic_strength_fitting.</span></span><span class="sig-name descname"><span class="pre">get_tMax_vMax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#get_tMax_vMax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.get_tMax_vMax" title="Permalink to this definition">#</a></dt>
+<dd><p>This method calculates the ePSP amplitude by subtracting the voltage
+directly before the epsp, which is supposed to be at 160ms, from the voltagetrace.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.get_tMax_vMax_baseline">
+<span class="sig-prename descclassname"><span class="pre">simrun3.synaptic_strength_fitting.</span></span><span class="sig-name descname"><span class="pre">get_tMax_vMax_baseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_baseline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_baseline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#get_tMax_vMax_baseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.get_tMax_vMax_baseline" title="Permalink to this definition">#</a></dt>
+<dd><p>this method calculates the ePSP amplitude by subtracting a voltage trace without
+any synapse activation from a voltage trace with synapse activation.
+t_basline, v_baseline: voltage trace without synapse activation
+t,v: voltage trace with synapse activation</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.get_voltage_and_timing">
+<span class="sig-prename descclassname"><span class="pre">simrun3.synaptic_strength_fitting.</span></span><span class="sig-name descname"><span class="pre">get_voltage_and_timing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dynamic_baseline'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#get_voltage_and_timing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.get_voltage_and_timing" title="Permalink to this definition">#</a></dt>
+<dd><p>calculate maxmimum and timing of the EPSPS
+vt: voltage traces, as returned by PSP.get_voltage_traces()
+method: dynamic_baseline: a simulation without any synaptic activation is</p>
+<blockquote>
+<div><p>substracted from a simulation with cell activation. The maximum and 
+timepoint of maximum is returned</p>
+</div></blockquote>
+<dl class="simple">
+<dt>method: constant_baseline: the voltage at t = 110ms (= directly before</dt><dd><p>synapse activation) is considered as baseline and substracted
+from all voltages at all timepoints.
+The maximum and timepoint of the maximum after t = 110ms is 
+returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.merge_celltypes">
+<span class="sig-prename descclassname"><span class="pre">simrun3.synaptic_strength_fitting.</span></span><span class="sig-name descname"><span class="pre">merge_celltypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detection_strings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['L2',</span> <span class="pre">'L34',</span> <span class="pre">'L4',</span> <span class="pre">'L5st',</span> <span class="pre">'L5tt',</span> <span class="pre">'L6cc',</span> <span class="pre">'L6ct',</span> <span class="pre">'VPM_C2']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">celltype_must_be_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['L6cc',</span> <span class="pre">'L2',</span> <span class="pre">'VPM',</span> <span class="pre">'L4py',</span> <span class="pre">'L4ss',</span> <span class="pre">'L4sp',</span> <span class="pre">'L5st',</span> <span class="pre">'L6ct',</span> <span class="pre">'L34',</span> <span class="pre">'L6ccinv',</span> <span class="pre">'L5tt',</span> <span class="pre">'Generic']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#merge_celltypes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.merge_celltypes" title="Permalink to this definition">#</a></dt>
+<dd><p>concatenates voltagetraces of celltypes</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.run_ex_synapse">
+<span class="sig-prename descclassname"><span class="pre">simrun3.synaptic_strength_fitting.</span></span><span class="sig-name descname"><span class="pre">run_ex_synapse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_nw_generator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neuron_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">celltype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preSynCellID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gAMPA</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gNMDA</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gGABA</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vardt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapseID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#run_ex_synapse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.run_ex_synapse" title="Permalink to this definition">#</a></dt>
+<dd><p>core function, that actually activates a single synapse and runs the simulation.
+cell_nw_generator: simrun3.get_cell_with_network.get_cell_with_network
+neuron_param: single_cell_parser.NTParameterSet specifying biophysical properties
+network_param: single_cell_parser.NTParameterSet specifying network properties
+celltype: presynaptic celltype
+preSynCellID: number of presynaptic cell that should be activated. None: No cell will be activated.
+gEx: conductance of AMPA and NMDA component
+vardt: whether variable stepsize solver should be used
+synapse_ids: if None, all synapses assigned to the presynaptic cell get activated.</p>
+<blockquote>
+<div><p>if a list of integers, only synapses with the specified indices get acivated</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.run_ex_synapses">
+<span class="sig-prename descclassname"><span class="pre">simrun3.synaptic_strength_fitting.</span></span><span class="sig-name descname"><span class="pre">run_ex_synapses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neuron_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">celltype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gAMPA</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gNMDA</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gGABA</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vardt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cells'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#run_ex_synapses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.run_ex_synapses" title="Permalink to this definition">#</a></dt>
+<dd><p>method to consecutively calculate all EPSPs of all presynaptic cells of one celltype.</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -517,8 +628,40 @@ Third: functions to analyze PSPs</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">simrun3.synaptic_strength_fitting</a><ul>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.PSPs"><code class="docutils literal notranslate"><span class="pre">PSPs</span></code></a><ul>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.PSPs.get_voltage_and_timing"><code class="docutils literal notranslate"><span class="pre">PSPs.get_voltage_and_timing()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.PSPs.get_voltage_traces"><code class="docutils literal notranslate"><span class="pre">PSPs.get_voltage_traces()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.PSPs.run"><code class="docutils literal notranslate"><span class="pre">PSPs.run()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.analyze_voltage_trace"><code class="docutils literal notranslate"><span class="pre">analyze_voltage_trace()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding"><code class="docutils literal notranslate"><span class="pre">generate_ex_network_param_from_network_embedding()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.get_tMax_vMax"><code class="docutils literal notranslate"><span class="pre">get_tMax_vMax()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.get_tMax_vMax_baseline"><code class="docutils literal notranslate"><span class="pre">get_tMax_vMax_baseline()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.get_voltage_and_timing"><code class="docutils literal notranslate"><span class="pre">get_voltage_and_timing()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.merge_celltypes"><code class="docutils literal notranslate"><span class="pre">merge_celltypes()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.run_ex_synapse"><code class="docutils literal notranslate"><span class="pre">run_ex_synapse()</span></code></a></li>
+<li><a class="reference internal" href="#simrun3.synaptic_strength_fitting.run_ex_synapses"><code class="docutils literal notranslate"><span class="pre">run_ex_synapses()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

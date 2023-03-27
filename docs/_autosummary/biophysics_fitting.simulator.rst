@@ -13,7 +13,6 @@ biophysics\_fitting.simulator
 
    .. autosummary::
    
-      param_selector
       run_fun
    
    

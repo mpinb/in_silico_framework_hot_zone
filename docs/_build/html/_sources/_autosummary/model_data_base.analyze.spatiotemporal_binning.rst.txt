@@ -13,10 +13,6 @@ model\_data\_base.analyze.spatiotemporal\_binning
 
    .. autosummary::
    
-      add_aligned
-      map_return_to_series
-      pd_to_array
-      time_list_from_pd
       universal
       universal_pd
    

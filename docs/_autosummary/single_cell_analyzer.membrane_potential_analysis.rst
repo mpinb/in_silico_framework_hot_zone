@@ -34,7 +34,6 @@ single\_cell\_analyzer.membrane\_potential\_analysis
       RecordingSite
       RecordingSiteManager
       SpikeInit
-      mdbopen
    
    
 

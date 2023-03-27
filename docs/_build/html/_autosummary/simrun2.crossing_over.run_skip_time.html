@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -392,27 +392,32 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_by_time</span></code>(pdf, filterfun)</p></td>
-<td><p>takes a standard synapse activation file returns a new dataframe of the same format containing only the activations, for which filterfun returns True</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_synapse_activation</span></code>(pdf1, pdf2)</p></td>
-<td><p>merges two synapse activation data tables</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_time</span></code>(df, t_skip_start, t_skip_end)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun2.crossing_over.run_skip_time.skip_time" title="simrun2.crossing_over.run_skip_time.skip_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_time</span></code></a>(df, t_skip_start, t_skip_end)</p></td>
 <td><p>accepts a synapse activation pandas data frame.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_time_and_save</span></code>(df_db, sim_trail_index, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_time_and_save_parallel</span></code>(...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun2.crossing_over.run_skip_time.skip_time_and_save_parallel" title="simrun2.crossing_over.run_skip_time.skip_time_and_save_parallel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_time_and_save_parallel</span></code></a>(...)</p></td>
 <td><p>returns delayed object which on computation generates synapse activation files with skipped time interval</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pandas_synapse_activation_to_roberts_format</span></code>(...)</p></td>
-<td><p>save pandas df in a format, which can be understood by the simulator</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun2.crossing_over.run_skip_time.skip_time">
+<span class="sig-prename descclassname"><span class="pre">simrun2.crossing_over.run_skip_time.</span></span><span class="sig-name descname"><span class="pre">skip_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_skip_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_skip_end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/crossing_over/run_skip_time.html#skip_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.crossing_over.run_skip_time.skip_time" title="Permalink to this definition">#</a></dt>
+<dd><p>accepts a synapse activation pandas data frame. Returns a dataframe, where
+synapse activation in the specified interval is skipped.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun2.crossing_over.run_skip_time.skip_time_and_save_parallel">
+<span class="sig-prename descclassname"><span class="pre">simrun2.crossing_over.run_skip_time.</span></span><span class="sig-name descname"><span class="pre">skip_time_and_save_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">synapse_activation_db</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_trail_index_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_skip_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_skip_end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dirPrefix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/crossing_over/run_skip_time.html#skip_time_and_save_parallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.crossing_over.run_skip_time.skip_time_and_save_parallel" title="Permalink to this definition">#</a></dt>
+<dd><p>returns delayed object which on computation generates synapse activation files
+with skipped time interval</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -458,8 +463,28 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">simrun2.crossing_over.run_skip_time</a><ul>
+<li><a class="reference internal" href="#simrun2.crossing_over.run_skip_time.skip_time"><code class="docutils literal notranslate"><span class="pre">skip_time()</span></code></a></li>
+<li><a class="reference internal" href="#simrun2.crossing_over.run_skip_time.skip_time_and_save_parallel"><code class="docutils literal notranslate"><span class="pre">skip_time_and_save_parallel()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

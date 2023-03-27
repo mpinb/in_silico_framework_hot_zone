@@ -9,15 +9,6 @@
 
    
    
-   .. rubric:: Functions
-
-   .. autosummary::
-   
-      average_std
-      dask_to_pandas
-      return_figure_or_axis
-      subsequent_calls_per_line
-   
    
 
    

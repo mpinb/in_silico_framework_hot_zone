@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,18 +394,70 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarField</span></code>([mesh, origin, extent, spacing, ...])</p></td>
-<td><p>implements 3D scalar field based on numpy array used for e.g.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SynapseDensity</span></code>(cell, postCellType, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity" title="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SynapseDensity</span></code></a>(cell, postCellType, ...)</p></td>
 <td><p>Synapse density computation for one postsynaptic neuron and arbitrary presynaptic bouton and other postsynaptic PST densities</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SynapseMapper</span></code>([cell, synDist, isDensity])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper" title="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SynapseMapper</span></code></a>([cell, synDist, isDensity])</p></td>
 <td><p>SynapseMapper assigns synapses to neuron morphology self.cell is neuron SpatialGraph self.synDist is average synapse distribution (3D scalar field) self.isDensity: True - synapse distribution interpreted as avg     density; actual number of synapses assigned is drawn from a      Poisson distribution     False - synapse distribution interpreted as actual number of     synapses per voxel and directly assigned self.voxelEdgeMap: dictionary mapping synapse distribution mesh     coordinates on list with pairs of indices that correspond     to the edge and edgePt ID of all morphology points inside that voxel</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.</span></span><span class="sig-name descname"><span class="pre">SynapseDensity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postCellType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connectionSpreadsheet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exTypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inhTypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exPST</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inhPST</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseDensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Synapse density computation for one postsynaptic neuron
+and arbitrary presynaptic bouton and other postsynaptic
+PST densities</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_cell_PST">
+<span class="sig-name descname"><span class="pre">compute_cell_PST</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseDensity.compute_cell_PST"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_cell_PST" title="Permalink to this definition">#</a></dt>
+<dd><p>called once to compute 3D length/surface area
+densities and combine them with length/surface area
+PST densities to yield connection-specific 3D PST
+density of the postsynaptic neuron</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_synapse_density">
+<span class="sig-name descname"><span class="pre">compute_synapse_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boutonDensity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preCellType</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseDensity.compute_synapse_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_synapse_density" title="Permalink to this definition">#</a></dt>
+<dd><p>main interface for computing synapses originating
+from presynaptic bouton density of given cell type
+If bouton density and cell PST don’t overlap
+or synapse density == 0 everywhere, return None</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.</span></span><span class="sig-name descname"><span class="pre">SynapseMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synDist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isDensity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>SynapseMapper assigns synapses to neuron morphology
+self.cell is neuron SpatialGraph
+self.synDist is average synapse distribution (3D scalar field)
+self.isDensity: True - synapse distribution interpreted as avg</p>
+<blockquote>
+<div><p>density; actual number of synapses assigned is drawn from a 
+Poisson distribution
+False - synapse distribution interpreted as actual number of
+synapses per voxel and directly assigned</p>
+</div></blockquote>
+<dl class="simple">
+<dt>self.voxelEdgeMap: dictionary mapping synapse distribution mesh</dt><dd><p>coordinates on list with pairs of indices that correspond
+to the edge and edgePt ID of all morphology points inside that voxel</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses">
+<span class="sig-name descname"><span class="pre">create_synapses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Generic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singlecell_input_mapper/singlecell_input_mapper/synapse_mapper.html#SynapseMapper.create_synapses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses" title="Permalink to this definition">#</a></dt>
+<dd><p>main function; creates instantiation of synapses
+on cell from synapse distribution</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
         </article>
@@ -451,8 +503,35 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">singlecell_input_mapper.singlecell_input_mapper.synapse_mapper</a><ul>
+<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity"><code class="docutils literal notranslate"><span class="pre">SynapseDensity</span></code></a><ul>
+<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_cell_PST"><code class="docutils literal notranslate"><span class="pre">SynapseDensity.compute_cell_PST()</span></code></a></li>
+<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseDensity.compute_synapse_density"><code class="docutils literal notranslate"><span class="pre">SynapseDensity.compute_synapse_density()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper"><code class="docutils literal notranslate"><span class="pre">SynapseMapper</span></code></a><ul>
+<li><a class="reference internal" href="#singlecell_input_mapper.singlecell_input_mapper.synapse_mapper.SynapseMapper.create_synapses"><code class="docutils literal notranslate"><span class="pre">SynapseMapper.create_synapses()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

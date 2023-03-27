@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -396,31 +396,24 @@ anatomical and functional network realizations.</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_parameters</span></code>(filename)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_functional_network</span></code>(cellParamName, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.network_realizations.create_functional_network" title="single_cell_parser.network_realizations.create_functional_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_functional_network</span></code></a>(cellParamName, ...)</p></td>
 <td><p>Public interface: used for creating fixed functional connectivity.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_synapse_realization</span></code>(pname)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_synapse_realization</span></code>(pname)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p class="rubric">Classes</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">NetworkMapper</span></code>(postCell, nwParam[, simParam])</p></td>
-<td><p>Handles connectivity of presynaptic populations to multi-compartmental neuron model.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SynapseMapper</span></code>([cell, synDist, isDensity])</p></td>
-<td><p>SynapseMapper assigns synapses to neuron morphology self.cell is neuron SpatialGraph self.synDist is average synapse distribution (3D scalar field) self.isDensity: True - synapse distribution interpreted as avg     density; actual number of synapses assigned is drawn from a      Poisson distribution     False - synapse distribution interpreted as actual number of     synapses per voxel and directly assigned self.voxelEdgeMap: dictionary mapping synapse distribution mesh     coordinates on list with pairs of indices that correspond     to the edge and edgePt ID of all morphology points inside that voxel</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.network_realizations.create_functional_network">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.network_realizations.</span></span><span class="sig-name descname"><span class="pre">create_functional_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cellParamName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nwParamName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/network_realizations.html#create_functional_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.network_realizations.create_functional_network" title="Permalink to this definition">#</a></dt>
+<dd><p>Public interface:
+used for creating fixed functional connectivity.
+cellParamName - parameter file of postsynaptic neuron
+nwParamName - parameter file of anatomical network</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -466,8 +459,27 @@ anatomical and functional network realizations.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">single_cell_parser.network_realizations</a><ul>
+<li><a class="reference internal" href="#single_cell_parser.network_realizations.create_functional_network"><code class="docutils literal notranslate"><span class="pre">create_functional_network()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

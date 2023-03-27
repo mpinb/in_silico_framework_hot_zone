@@ -13,9 +13,6 @@ model\_data\_base.mdbopen
 
    .. autosummary::
    
-      cache
-      create_mdb_path
-      get_mdb_by_unique_id
       resolve_mdb_path
    
    
@@ -26,19 +23,12 @@ model\_data\_base.mdbopen
 
    .. autosummary::
    
-      ModelDataBase
       mdbopen
       taropen
    
    
 
    
-   
-   .. rubric:: Exceptions
-
-   .. autosummary::
-   
-      MdbException
    
    
 

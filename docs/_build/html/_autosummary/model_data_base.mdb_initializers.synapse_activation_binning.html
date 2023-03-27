@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -404,49 +404,97 @@ save_groupby(mdb, values, groupby)</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">applyfun</span></code>(pdf[, maxtime])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code>(mdb[, groupby, get, prefun, applyfun, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.mdb_initializers.synapse_activation_binning.init" title="model_data_base.mdb_initializers.synapse_activation_binning.init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code></a>(mdb[, groupby, get, prefun, applyfun, ...])</p></td>
 <td><p>Binning synapse activations.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_results_together</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">postfun</span></code>(s[, maxtime])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">postfun</span></code>(s[, maxtime])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">prefun</span></code>(df)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">prefun</span></code>(df)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_groupby</span></code></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">synapse_activation_postprocess_dask</span></code>(ddf, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask" title="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synapse_activation_postprocess_dask</span></code></a>(ddf, ...)</p></td>
 <td><p>Calculates bins of synapse activation dask dataframe per trail.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">synapse_activation_postprocess_pandas</span></code>(pdf[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas" title="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synapse_activation_postprocess_pandas</span></code></a>(pdf[, ...])</p></td>
 <td><p>see docstring of synapse_activation_postprocess_dask</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">temporal_binning</span></code>(*args, **kwargs)</p></td>
-<td><p>Binning of a pandas Dataframe, that contains timevalues in columns, whose name can be converted to int, like the usual spike_times dataframe.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tree_reduction</span></code>(delayeds, aggregate_fun[, length])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tree_reduction</span></code>(delayeds, aggregate_fun[, length])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p class="rubric">Classes</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">defaultdict</span></code></p></td>
-<td><p>defaultdict(default_factory[, ...]) --&gt; dict with default factory</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">partial</span></code></p></td>
-<td><p>partial(func, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>keywords) - new function with partial application of the given arguments and keywords.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.mdb_initializers.synapse_activation_binning.init">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.synapse_activation_binning.</span></span><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefun=&lt;function</span> <span class="pre">prefun&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">applyfun=&lt;function</span> <span class="pre">applyfun&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postfun=&lt;function</span> <span class="pre">postfun&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxtime=400</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.init" title="Permalink to this definition">#</a></dt>
+<dd><p>Binning synapse activations.</p>
+<dl>
+<dt>mdb: ModelDataBase object, which is already initalized, such that </dt><dd><p>the key mdb[‘synapse_activation’] exists.</p>
+</dd>
+<dt>groupby: (default: ‘’): species for which subgroups the bins should be </dt><dd><dl class="simple">
+<dt>calculated. Available values include: </dt><dd><p>‘celltype’, 
+‘presynaptic_column’, 
+‘proximal’, (soma distance &lt; 500 ym)
+‘EI’ (Lumping the EXC / INH celltypes together)
+‘binned_somadist’, 50 micron bins on soma distance</p>
+</dd>
+</dl>
+<p>It can also be any column in the specified dataframe.
+Can be a list, if “sub-subgroups” should be calculated.</p>
+</dd>
+</dl>
+<p>get: allows to specify a dask scheduler for the computation</p>
+<dl class="simple">
+<dt>Not implemented yet:</dt><dd><p>(prefun: function to apply on each partition before binning)
+(applyfun: actual binning function)
+(postfun: function to merge results together for one partition)</p>
+</dd>
+</dl>
+<p>returns: None. The binned synapse activation data will be stored in mdb.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.synapse_activation_binning.</span></span><span class="sig-name descname"><span class="pre">synapse_activation_postprocess_dask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ddf</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#synapse_activation_postprocess_dask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculates bins of synapse activation dask dataframe per trail.
+#Todo: make this method out of core</p>
+<dl>
+<dt>args:</dt><dd><p>ddf: synapse activation dask dataframe</p>
+</dd>
+<dt>kwargs:</dt><dd><dl>
+<dt>groupby: (default: ‘’): species for which subgroups the bins should be </dt><dd><dl class="simple">
+<dt>calculated. Available values include: </dt><dd><p>‘celltype’, 
+‘presynaptic_column’, 
+‘proximal’, (soma distance &lt; 500 ym)
+‘EI’ (Lumping the EXC / INH celltypes together)
+‘binned_somadist’ synapse counts for all 50 microns</p>
+</dd>
+</dl>
+<p>It can also be any column in the specified dataframe.
+Can be a list, if “sub-subgroups” should be calculated.</p>
+</dd>
+<dt>mdb: if specified, the result will be computed immediately and </dt><dd><p>saved in the database immediately.</p>
+</dd>
+<dt>get: only has an effect if ‘mdb’ kwarg is provided. In this case,</dt><dd><p>it allows to specify a dask scheduler for the computation</p>
+</dd>
+</dl>
+<p>(prefun: function to apply on each partition before binning)
+(applyfun: actual binning function)
+(postfun: function to merge results together for one partition)</p>
+</dd>
+<dt>returns: </dt><dd><p>dask.delayed object. If computed, this will return a dictionary 
+containing numpy arrays. rows: sim trails, columns: bins</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.synapse_activation_binning.</span></span><span class="sig-name descname"><span class="pre">synapse_activation_postprocess_pandas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">applyfun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postfun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#synapse_activation_postprocess_pandas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas" title="Permalink to this definition">#</a></dt>
+<dd><p>see docstring of synapse_activation_postprocess_dask</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -492,8 +540,29 @@ save_groupby(mdb, values, groupby)</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">model_data_base.mdb_initializers.synapse_activation_binning</a><ul>
+<li><a class="reference internal" href="#model_data_base.mdb_initializers.synapse_activation_binning.init"><code class="docutils literal notranslate"><span class="pre">init()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask"><code class="docutils literal notranslate"><span class="pre">synapse_activation_postprocess_dask()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_pandas"><code class="docutils literal notranslate"><span class="pre">synapse_activation_postprocess_pandas()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

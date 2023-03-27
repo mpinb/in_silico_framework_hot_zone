@@ -16,9 +16,6 @@ biophysics\_fitting.hay\_evaluation
       get_cur_stim
       get_feasible_model_objectives
       get_feasible_model_params
-      get_hay_objective_names
-      get_hay_params_pdf
-      get_hay_problem_description
       hay_evaluate
       hay_evaluate_BAC
       hay_evaluate_StepOne
@@ -33,12 +30,6 @@ biophysics\_fitting.hay\_evaluation
    
 
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      defaultdict
    
    
 

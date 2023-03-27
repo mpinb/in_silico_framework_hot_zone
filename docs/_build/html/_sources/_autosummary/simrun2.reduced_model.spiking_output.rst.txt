@@ -21,19 +21,12 @@
       correct_PSTH_by_refractory_period
       data2Convolutions
       get_reduced_model
-      rm
       spikingProbabilities2rawPSTH
       weightedNetInput2spikingProbabilities
    
    
 
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      partial
    
    
 

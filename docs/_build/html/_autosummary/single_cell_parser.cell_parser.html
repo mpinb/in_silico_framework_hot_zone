@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -397,18 +397,78 @@ within the parameters</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Cell</span></code>()</p></td>
-<td><p>Cell object providing morphological information and hoc interface</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CellParser</span></code>([hocFilename])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser" title="single_cell_parser.cell_parser.CellParser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CellParser</span></code></a>([hocFilename])</p></td>
 <td><p>class providing methods for setting up morphology in NEURON hoc object</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PySection</span></code>([name, cell, label])</p></td>
-<td><p>Subclass of nrn.Section providing additional geometric and mechanism information/ handling methods</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="single_cell_parser.cell_parser.CellParser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_parser.cell_parser.</span></span><span class="sig-name descname"><span class="pre">CellParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hocFilename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>class providing methods for setting up morphology in NEURON hoc object</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.cell_parser.CellParser.determine_nseg">
+<span class="sig-name descname"><span class="pre">determine_nseg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seg_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.determine_nseg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.determine_nseg" title="Permalink to this definition">#</a></dt>
+<dd><p>determine the number of segments (compartments)
+to be used according to the d-lambda rule
+optionally set frequency, default f=100.0 Hz</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.cell_parser.CellParser.get_cell">
+<span class="sig-name descname"><span class="pre">get_cell</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.get_cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.get_cell" title="Permalink to this definition">#</a></dt>
+<dd><p>returns cell if it is set up for simulations</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.cell_parser.CellParser.insert_membrane_properties">
+<span class="sig-name descname"><span class="pre">insert_membrane_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.insert_membrane_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.insert_membrane_properties" title="Permalink to this definition">#</a></dt>
+<dd><p>inserts membrane properties into all 
+structures named as “label”</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.cell_parser.CellParser.insert_range_mechanisms">
+<span class="sig-name descname"><span class="pre">insert_range_mechanisms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mechs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.insert_range_mechanisms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.insert_range_mechanisms" title="Permalink to this definition">#</a></dt>
+<dd><p>inserts range mechanisms into all structures named as “label”
+so far, only implements spatially uniform distributions, but easily
+extendable to other functional forms (e.g., piece-wise constant, linear etc.)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.cell_parser.CellParser.set_up_biophysics">
+<span class="sig-name descname"><span class="pre">set_up_biophysics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.set_up_biophysics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.set_up_biophysics" title="Permalink to this definition">#</a></dt>
+<dd><p>default method for initializing membrane properties
+(e.g. cm, Rm, spines), linear and non-linear mechanisms
+and determine the compartment sizes for the simulations.
+parameters should be the parameters of the postsynaptic
+neuron from the parameter file.
+This is the preferred method for setting up biophysics.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell">
+<span class="sig-name descname"><span class="pre">spatialgraph_to_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaleFunc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.spatialgraph_to_cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell" title="Permalink to this definition">#</a></dt>
+<dd><p>reads cell morphology from Amira hoc file
+and sets up PySections and Cell object
+optional: takes function object scaleFunc as argument
+for scaling dendritic diameters.
+scaleFunc takes cell object as argument</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.cell_parser.CellParser.update_range_mechanisms">
+<span class="sig-name descname"><span class="pre">update_range_mechanisms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">updateMechName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mechs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/cell_parser.html#CellParser.update_range_mechanisms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.cell_parser.CellParser.update_range_mechanisms" title="Permalink to this definition">#</a></dt>
+<dd><p>updates range mechanism ‘updateMechName’ in all structures named as “label”.
+essentially the same as insert_range_mechanisms, but does not
+insert mechanism; instead assumes they’re already present.
+used during parameter variations; e.g. for optimization of neuron models.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
         </article>
@@ -454,8 +514,36 @@ within the parameters</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">single_cell_parser.cell_parser</a><ul>
+<li><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser"><code class="docutils literal notranslate"><span class="pre">CellParser</span></code></a><ul>
+<li><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.determine_nseg"><code class="docutils literal notranslate"><span class="pre">CellParser.determine_nseg()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.get_cell"><code class="docutils literal notranslate"><span class="pre">CellParser.get_cell()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.insert_membrane_properties"><code class="docutils literal notranslate"><span class="pre">CellParser.insert_membrane_properties()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.insert_range_mechanisms"><code class="docutils literal notranslate"><span class="pre">CellParser.insert_range_mechanisms()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.set_up_biophysics"><code class="docutils literal notranslate"><span class="pre">CellParser.set_up_biophysics()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.spatialgraph_to_cell"><code class="docutils literal notranslate"><span class="pre">CellParser.spatialgraph_to_cell()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.cell_parser.CellParser.update_range_mechanisms"><code class="docutils literal notranslate"><span class="pre">CellParser.update_range_mechanisms()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

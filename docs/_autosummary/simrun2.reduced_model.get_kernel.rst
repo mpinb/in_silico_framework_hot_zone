@@ -16,7 +16,6 @@
       compare_lists_by_none_values
       concatenate_return_boundaries
       get_kernel_C2_grid
-      get_kernel_C2_grid_cached
       get_lookup_series_from_lda_values_spike_data
       get_plt_axis
       interpolate_lookup_series
@@ -34,7 +33,6 @@
    
       ReducedLdaModel
       ReducedLdaModelResult
-      partial
    
    
 

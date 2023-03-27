@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -395,41 +395,18 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fig2np</span></code>(fig)</p></td>
-<td><p>Converts fig-object to np-array as described here by Joe Kington: <a class="reference external" href="http://stackoverflow.com/questions/7821518/matplotlib-save-plot-to-numpy-array">http://stackoverflow.com/questions/7821518/matplotlib-save-plot-to-numpy-array</a></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">manylines</span></code>(*args, **kwargs)</p></td>
-<td><p>parallelizes the plot of many lines</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">manylines_helper</span></code>(pdf[, axis, colormap, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#visualize.activity_analysis.manylines.manylines_helper" title="visualize.activity_analysis.manylines.manylines_helper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">manylines_helper</span></code></a>(pdf[, axis, colormap, ...])</p></td>
 <td><p>helper function which runs on a single core and can be called by map_partitions()</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_figure_or_axis</span></code>(plotfun)</p></td>
-<td><p>decorator, that looks, if the fig attribute is specified in kwargs. If fig is specified and isinstance plt.fiugre:     create axis, replace fig with axis, but return fig If fig is specified and isinstance axis:     do not change kwargs. return axis If fig is not specified:     create figure, create axis, call plotfunction with axis     return figure.</p></td>
-</tr>
 </tbody>
 </table>
 </div>
-<p class="rubric">Classes</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PixelObject</span></code>(extent[, fig, array])</p></td>
-<td><p>holds all the information necessary to reconstruct a plot out of an array</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p class="rubric">Exceptions</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ForceReturnException</span></code>(return_value)</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="visualize.activity_analysis.manylines.manylines_helper">
+<span class="sig-prename descclassname"><span class="pre">visualize.activity_analysis.manylines.</span></span><span class="sig-name descname"><span class="pre">manylines_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colormap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(15,</span> <span class="pre">3)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">returnPixelObject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/activity_analysis/manylines.html#manylines_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.activity_analysis.manylines.manylines_helper" title="Permalink to this definition">#</a></dt>
+<dd><p>helper function which runs on a single core and can be called by map_partitions()</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -475,8 +452,27 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">visualize.activity_analysis.manylines</a><ul>
+<li><a class="reference internal" href="#visualize.activity_analysis.manylines.manylines_helper"><code class="docutils literal notranslate"><span class="pre">manylines_helper()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

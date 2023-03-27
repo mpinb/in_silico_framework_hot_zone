@@ -18,7 +18,6 @@ single\_cell\_parser.synapse
    .. autosummary::
    
       ExSyn
-      Sequence
       Synapse
    
    

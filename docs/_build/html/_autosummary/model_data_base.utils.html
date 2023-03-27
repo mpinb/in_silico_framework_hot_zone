@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -395,19 +395,19 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cache</span></code>(function)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code>(seq, num)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.utils.chunkIt" title="model_data_base.utils.chunkIt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code></a>(seq, num)</p></td>
 <td><p>splits seq in num lists, which have approximately equal size.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">convertible_to_int</span></code>(x)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fancy_dict_compare</span></code>(dict_1, dict_2[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.utils.fancy_dict_compare" title="model_data_base.utils.fancy_dict_compare"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fancy_dict_compare</span></code></a>(dict_1, dict_2[, ...])</p></td>
 <td><p>Compare two dictionaries recursively to find non mathcing elements</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">first_line_to_key</span></code>(stringios)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.utils.first_line_to_key" title="model_data_base.utils.first_line_to_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">first_line_to_key</span></code></a>(stringios)</p></td>
 <td><p>takes a list io StringIO objects.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">flatten</span></code>(l)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.utils.flatten" title="model_data_base.utils.flatten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flatten</span></code></a>(l)</p></td>
 <td><p><a class="reference external" href="https://stackoverflow.com/a/2158532/5082048">https://stackoverflow.com/a/2158532/5082048</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_file_or_folder_that_endswith</span></code>(path, endswith)</p></td>
@@ -416,31 +416,28 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_file_or_folder_that_startswith</span></code>(path, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">myrepartition</span></code>(ddf, N)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.utils.myrepartition" title="model_data_base.utils.myrepartition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">myrepartition</span></code></a>(ddf, N)</p></td>
 <td><p>This repartitions without generating more tasks</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas_to_array</span></code>(pdf, x_component_fun, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.utils.pandas_to_array" title="model_data_base.utils.pandas_to_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas_to_array</span></code></a>(pdf, x_component_fun, ...)</p></td>
 <td><p>this can convert a pandas dataframe, in which information is stored linearly to a 2D presentation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooled_std</span></code>(m, s, n)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.utils.pooled_std" title="model_data_base.utils.pooled_std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooled_std</span></code></a>(m, s, n)</p></td>
 <td><p>calculates the pooled standard deviation out of samples.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">select</span></code>(df, **kwargs)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">skit</span></code>(*funcs, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.utils.skit" title="model_data_base.utils.skit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skit</span></code></a>(*funcs, **kwargs)</p></td>
 <td><p>splits kwargs up to supply different functions with the right subset adapted from <a class="reference external" href="http://stackoverflow.com/a/23430335/5082048">http://stackoverflow.com/a/23430335/5082048</a></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_file_to_buffers</span></code>(f[, split_str])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.utils.split_file_to_buffers" title="model_data_base.utils.split_file_to_buffers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_file_to_buffers</span></code></a>(f[, split_str])</p></td>
 <td><p>reads a file f and splits it, whenever &quot;split_str&quot; is found.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">synchronous_ddf_concat</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">unique</span></code>(list_)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">unique</span></code>(list_)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">wait_until_key_removed</span></code>(mdb, key[, delay])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">wait_until_key_removed</span></code>(mdb, key[, delay])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -450,28 +447,120 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelayedKeyboardInterrupt</span></code>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.utils.DelayedKeyboardInterrupt" title="model_data_base.utils.DelayedKeyboardInterrupt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelayedKeyboardInterrupt</span></code></a>()</p></td>
 <td><p>context manager, that allows to delay a KeyboardInterrupt extended, such that it also works in subthreads.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">defaultdict</span></code></p></td>
-<td><p>defaultdict(default_factory[, ...]) --&gt; dict with default factory</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mkdtemp</span></code>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.utils.mkdtemp" title="model_data_base.utils.mkdtemp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mkdtemp</span></code></a>()</p></td>
 <td><p>context manager creating a temporary folder</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p class="rubric">Exceptions</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PicklingError</span></code></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="model_data_base.utils.DelayedKeyboardInterrupt">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">model_data_base.utils.</span></span><span class="sig-name descname"><span class="pre">DelayedKeyboardInterrupt</span></span><a class="reference internal" href="../_modules/model_data_base/utils.html#DelayedKeyboardInterrupt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.utils.DelayedKeyboardInterrupt" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>context manager, that allows to delay a KeyboardInterrupt
+extended, such that it also works in subthreads.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.utils.chunkIt">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.utils.</span></span><span class="sig-name descname"><span class="pre">chunkIt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/utils.html#chunkIt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.utils.chunkIt" title="Permalink to this definition">#</a></dt>
+<dd><p>splits seq in num lists, which have approximately equal size.
+<a class="reference external" href="https://stackoverflow.com/questions/2130016/splitting-a-list-of-arbitrary-size-into-only-roughly-n-equal-parts">https://stackoverflow.com/questions/2130016/splitting-a-list-of-arbitrary-size-into-only-roughly-n-equal-parts</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.utils.fancy_dict_compare">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.utils.</span></span><span class="sig-name descname"><span class="pre">fancy_dict_compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_1_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'d1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_2_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'d2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/utils.html#fancy_dict_compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.utils.fancy_dict_compare" title="Permalink to this definition">#</a></dt>
+<dd><p>Compare two dictionaries recursively to find non mathcing elements</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dict_1: dictionary 1
+dict_2: dictionary 2</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.utils.first_line_to_key">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.utils.</span></span><span class="sig-name descname"><span class="pre">first_line_to_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stringios</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/utils.html#first_line_to_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.utils.first_line_to_key" title="Permalink to this definition">#</a></dt>
+<dd><p>takes a list io StringIO objects. Each should contain one table.
+It returns a dictionary conatining the first line as key (assuming it is the name of the table)
+and the rest of it as value</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.utils.flatten">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.utils.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/utils.html#flatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.utils.flatten" title="Permalink to this definition">#</a></dt>
+<dd><p><a class="reference external" href="https://stackoverflow.com/a/2158532/5082048">https://stackoverflow.com/a/2158532/5082048</a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="model_data_base.utils.mkdtemp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">model_data_base.utils.</span></span><span class="sig-name descname"><span class="pre">mkdtemp</span></span><a class="reference internal" href="../_modules/model_data_base/utils.html#mkdtemp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.utils.mkdtemp" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>context manager creating a temporary folder</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.utils.myrepartition">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.utils.</span></span><span class="sig-name descname"><span class="pre">myrepartition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ddf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/utils.html#myrepartition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.utils.myrepartition" title="Permalink to this definition">#</a></dt>
+<dd><p>This repartitions without generating more tasks</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.utils.pandas_to_array">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.utils.</span></span><span class="sig-name descname"><span class="pre">pandas_to_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_component_fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_component_fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_fun</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/utils.html#pandas_to_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.utils.pandas_to_array" title="Permalink to this definition">#</a></dt>
+<dd><p>this can convert a pandas dataframe, in which information
+is stored linearly to a 2D presentation.</p>
+<dl class="simple">
+<dt>Example: you have a dataframe like:</dt><dd><p>‘bla’</p>
+</dd>
+</dl>
+<p>x_1_y_1    10
+x_2_y_1    15
+x_3_y_1    7
+x_1_y_2    2
+x_2_y_2    0
+x_3_y_2   -1</p>
+<dl class="simple">
+<dt>Ans it should be converted to:</dt><dd><p>1    2    3</p>
+</dd>
+</dl>
+<p>1      10   15   7
+2      2    0    -1
+3</p>
+<p>You can use:
+pandas_to_array(pdf, lambda index, values: index.split(‘_’)[1],                          lambda index, values: index.split(‘_’)[-1],                          lambda index, values: values.bla)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.utils.pooled_std">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.utils.</span></span><span class="sig-name descname"><span class="pre">pooled_std</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/utils.html#pooled_std"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.utils.pooled_std" title="Permalink to this definition">#</a></dt>
+<dd><p>calculates the pooled standard deviation out of samples.</p>
+<p>m: means
+s: unbiased standarddeviation (normalized by N-1)
+n: number of samples per group</p>
+<p>returns: pooled mean, pooled std</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.utils.skit">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.utils.</span></span><span class="sig-name descname"><span class="pre">skit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">funcs</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/utils.html#skit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.utils.skit" title="Permalink to this definition">#</a></dt>
+<dd><p>splits kwargs up to supply different functions with the right subset
+adapted from <a class="reference external" href="http://stackoverflow.com/a/23430335/5082048">http://stackoverflow.com/a/23430335/5082048</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.utils.split_file_to_buffers">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.utils.</span></span><span class="sig-name descname"><span class="pre">split_file_to_buffers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/utils.html#split_file_to_buffers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.utils.split_file_to_buffers" title="Permalink to this definition">#</a></dt>
+<dd><p>reads a file f and splits it, whenever “split_str” is found.
+Returns a list of StringIO Buffers.
+adapted from <a class="reference external" href="http://stackoverflow.com/a/33346758/5082048">http://stackoverflow.com/a/33346758/5082048</a></p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -517,8 +606,37 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">model_data_base.utils</a><ul>
+<li><a class="reference internal" href="#model_data_base.utils.DelayedKeyboardInterrupt"><code class="docutils literal notranslate"><span class="pre">DelayedKeyboardInterrupt</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.utils.chunkIt"><code class="docutils literal notranslate"><span class="pre">chunkIt()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.utils.fancy_dict_compare"><code class="docutils literal notranslate"><span class="pre">fancy_dict_compare()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.utils.first_line_to_key"><code class="docutils literal notranslate"><span class="pre">first_line_to_key()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.utils.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.utils.mkdtemp"><code class="docutils literal notranslate"><span class="pre">mkdtemp</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.utils.myrepartition"><code class="docutils literal notranslate"><span class="pre">myrepartition()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.utils.pandas_to_array"><code class="docutils literal notranslate"><span class="pre">pandas_to_array()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.utils.pooled_std"><code class="docutils literal notranslate"><span class="pre">pooled_std()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.utils.skit"><code class="docutils literal notranslate"><span class="pre">skit()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.utils.split_file_to_buffers"><code class="docutils literal notranslate"><span class="pre">split_file_to_buffers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

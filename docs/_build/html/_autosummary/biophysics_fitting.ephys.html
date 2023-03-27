@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -420,7 +420,7 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BAC_ISI_check_repolarization</span></code>(t, v[, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BAC_caSpike_height</span></code>(t, v, v_dend[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.ephys.BAC_caSpike_height" title="biophysics_fitting.ephys.BAC_caSpike_height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BAC_caSpike_height</span></code></a>(t, v, v_dend[, ...])</p></td>
 <td><p>returns heights of Ca spikes after tstim</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BAC_caSpike_height_check_1_Ca_AP</span></code>(t, v, v_dend)</p></td>
@@ -447,7 +447,7 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BPAPatt_check_relative_height</span></code>(t, v_soma, v_dend)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_crossing</span></code>(v, thresh)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.ephys.find_crossing" title="biophysics_fitting.ephys.find_crossing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_crossing</span></code></a>(v, thresh)</p></td>
 <td><p>Original NEURON doc: Function that giving a threshold returns a list of two vectors The first is the crossing up of that threshold The second is the crossing down of that threshold</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">spike_count</span></code>(t, v[, thresh])</p></td>
@@ -459,7 +459,7 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">trace_check_err</span></code>(t, v[, stim_onset, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">trace_check_max_prestim_dendrite_depo</span></code>(t, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.ephys.trace_check_max_prestim_dendrite_depo" title="biophysics_fitting.ephys.trace_check_max_prestim_dendrite_depo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trace_check_max_prestim_dendrite_depo</span></code></a>(t, ...)</p></td>
 <td><p>added by arco to check whether anywhere in the dendrite there is a spike before stimulus onset</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">voltage_base</span></code>(t, v, stim_delay)</p></td>
@@ -471,6 +471,28 @@
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="biophysics_fitting.ephys.BAC_caSpike_height">
+<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.ephys.</span></span><span class="sig-name descname"><span class="pre">BAC_caSpike_height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_dend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ca_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-55</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">295</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/ephys.html#BAC_caSpike_height"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.ephys.BAC_caSpike_height" title="Permalink to this definition">#</a></dt>
+<dd><p>returns heights of Ca spikes after tstim</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biophysics_fitting.ephys.find_crossing">
+<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.ephys.</span></span><span class="sig-name descname"><span class="pre">find_crossing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/ephys.html#find_crossing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.ephys.find_crossing" title="Permalink to this definition">#</a></dt>
+<dd><p>Original NEURON doc:
+Function that giving a threshold returns a list of two vectors
+The first is the crossing up of that threshold
+The second is the crossing down of that threshold</p>
+<p>Extended doku by Arco: returns [[],[]] if the number of crossing up vs crossing down is not equal.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biophysics_fitting.ephys.trace_check_max_prestim_dendrite_depo">
+<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.ephys.</span></span><span class="sig-name descname"><span class="pre">trace_check_max_prestim_dendrite_depo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stim_onset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_prestim_dendrite_depo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/ephys.html#trace_check_max_prestim_dendrite_depo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.ephys.trace_check_max_prestim_dendrite_depo" title="Permalink to this definition">#</a></dt>
+<dd><p>added by arco to check whether anywhere in the dendrite there is a spike before stimulus onset</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -516,8 +538,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">biophysics_fitting.ephys</a><ul>
+<li><a class="reference internal" href="#biophysics_fitting.ephys.BAC_caSpike_height"><code class="docutils literal notranslate"><span class="pre">BAC_caSpike_height()</span></code></a></li>
+<li><a class="reference internal" href="#biophysics_fitting.ephys.find_crossing"><code class="docutils literal notranslate"><span class="pre">find_crossing()</span></code></a></li>
+<li><a class="reference internal" href="#biophysics_fitting.ephys.trace_check_max_prestim_dendrite_depo"><code class="docutils literal notranslate"><span class="pre">trace_check_max_prestim_dendrite_depo()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

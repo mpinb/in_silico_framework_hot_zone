@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -392,15 +392,22 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_data_base.analyze.spike_detection.html#model_data_base.analyze.spike_detection" title="model_data_base.analyze.spike_detection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spike_detection</span></code></a>(ddf[, get, threshold])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_synapse_activation</span></code>(sa[, selfcheck, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.analyze.split_synapse_activation" title="model_data_base.analyze.split_synapse_activation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_synapse_activation</span></code></a>(sa[, selfcheck, ...])</p></td>
 <td><p>Splits synapse activation in EXC and INH component.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.analyze.split_synapse_activation">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.analyze.</span></span><span class="sig-name descname"><span class="pre">split_synapse_activation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selfcheck</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excitatory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['L6cc',</span> <span class="pre">'L2',</span> <span class="pre">'VPM',</span> <span class="pre">'L4py',</span> <span class="pre">'L4ss',</span> <span class="pre">'L4sp',</span> <span class="pre">'L5st',</span> <span class="pre">'L6ct',</span> <span class="pre">'L34',</span> <span class="pre">'L6ccinv',</span> <span class="pre">'L5tt',</span> <span class="pre">'Generic']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inhibiotry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['SymLocal1',</span> <span class="pre">'SymLocal2',</span> <span class="pre">'SymLocal3',</span> <span class="pre">'SymLocal4',</span> <span class="pre">'SymLocal5',</span> <span class="pre">'SymLocal6',</span> <span class="pre">'L45Sym',</span> <span class="pre">'L1',</span> <span class="pre">'L45Peak',</span> <span class="pre">'L56Trans',</span> <span class="pre">'L23Trans',</span> <span class="pre">'GenericINH',</span> <span class="pre">'INH']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/analyze.html#split_synapse_activation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.analyze.split_synapse_activation" title="Permalink to this definition">#</a></dt>
+<dd><p>Splits synapse activation in EXC and INH component.</p>
+<p>Assumes, that if the cell type mentioned in the column synapse_type is
+in the list Interface.excitatory, that the synapse is excitatory, else inhibitory.</p>
+<p>selfcheck: Default: True. If True, it is checked that every celltype is either
+asigned excitatory or inhibitory</p>
+</dd></dl>
+
 <p class="rubric">Modules</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
@@ -474,8 +481,27 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">model_data_base.analyze</a><ul>
+<li><a class="reference internal" href="#model_data_base.analyze.split_synapse_activation"><code class="docutils literal notranslate"><span class="pre">split_synapse_activation()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

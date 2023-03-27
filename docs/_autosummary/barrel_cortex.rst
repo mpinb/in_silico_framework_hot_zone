@@ -13,7 +13,6 @@
 
    .. autosummary::
    
-      cache
       calculate_point_distance
       construct_pt3add
       convertible_to_float
@@ -29,13 +28,11 @@
       get_distance_below_L45_surface
       get_distance_from_plane
       get_soma_centroid
-      get_xyz
       get_z_coordinate_necessary_to_put_point_in_specified_depth
       move_hoc_absolute
       move_hoc_to_hoc
       move_hoc_xyz
       norm
-      read_barrelfield
       test_correct_hoc_depth
       test_get_distance_below_L45_barrel_surface
       test_get_distance_below_L45_surface
@@ -49,12 +46,6 @@
    
 
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      partial
    
    
 

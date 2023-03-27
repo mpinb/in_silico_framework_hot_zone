@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -392,22 +392,19 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bundle_delayeds</span></code></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check</span></code>(obj)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_csv.check" title="model_data_base.IO.LoaderDumper.dask_to_csv.check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check</span></code></a>(obj)</p></td>
 <td><p>checks wherther obj can be saved with this dumper</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code>(seq, num)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_csv.chunkIt" title="model_data_base.IO.LoaderDumper.dask_to_csv.chunkIt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code></a>(seq, num)</p></td>
 <td><p>makes approx.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump</span></code>(obj, savedir[, repartition, get])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump</span></code>(obj, savedir[, repartition, get])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_to_csv_function</span></code>([index])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_csv.get_to_csv_function" title="model_data_base.IO.LoaderDumper.dask_to_csv.get_to_csv_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_to_csv_function</span></code></a>([index])</p></td>
 <td><p>returns function, that stores pandas dataframe</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">my_to_csv</span></code>(ddf, path[, optimize_graph, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_csv.my_to_csv" title="model_data_base.IO.LoaderDumper.dask_to_csv.my_to_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">my_to_csv</span></code></a>(ddf, path[, optimize_graph, ...])</p></td>
 <td><p>Very simple method to store a dask dataframe to a bunch of csv files.</p></td>
 </tr>
 </tbody>
@@ -423,6 +420,35 @@
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.dask_to_csv.check">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_csv.</span></span><span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_csv.html#check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_csv.check" title="Permalink to this definition">#</a></dt>
+<dd><p>checks wherther obj can be saved with this dumper</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.dask_to_csv.chunkIt">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_csv.</span></span><span class="sig-name descname"><span class="pre">chunkIt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_csv.html#chunkIt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_csv.chunkIt" title="Permalink to this definition">#</a></dt>
+<dd><p>makes approx. equal size chunks out of seq</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.dask_to_csv.get_to_csv_function">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_csv.</span></span><span class="sig-name descname"><span class="pre">get_to_csv_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_csv.html#get_to_csv_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_csv.get_to_csv_function" title="Permalink to this definition">#</a></dt>
+<dd><p>returns function, that stores pandas dataframe</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.dask_to_csv.my_to_csv">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_csv.</span></span><span class="sig-name descname"><span class="pre">my_to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ddf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_csv.html#my_to_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_csv.my_to_csv" title="Permalink to this definition">#</a></dt>
+<dd><p>Very simple method to store a dask dataframe to a bunch of csv files.
+The reason for it’s creation is a lot of frustration with the respective 
+dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
+takes all the ram (512GB!) or takes a very long time to “optimize” / merge the graph.</p>
+<p>Update: this issue was addressed here:
+<a class="reference external" href="https://github.com/dask/dask/issues/1888">https://github.com/dask/dask/issues/1888</a></p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -468,8 +494,30 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">model_data_base.IO.LoaderDumper.dask_to_csv</a><ul>
+<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_csv.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_csv.chunkIt"><code class="docutils literal notranslate"><span class="pre">chunkIt()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_csv.get_to_csv_function"><code class="docutils literal notranslate"><span class="pre">get_to_csv_function()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.IO.LoaderDumper.dask_to_csv.my_to_csv"><code class="docutils literal notranslate"><span class="pre">my_to_csv()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

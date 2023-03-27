@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,16 +394,16 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_complete_synapse_activation_file</span></code>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.reader.read_complete_synapse_activation_file" title="single_cell_parser.reader.read_complete_synapse_activation_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_complete_synapse_activation_file</span></code></a>(fname)</p></td>
 <td><p>reads list of all functional synapses and their activation times. Input: file of format:     synapse typetsynapse IDtsoma distancetsection IDtsection pt IDtdendrite labeltactivation times returns: dictionary with cell types as keys and list of synapse locations and activation times, coded as tuples: (synapse ID, soma distance, section ID, point ID, structure label, [t1, t2, ... , tn]).</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_functional_realization_map</span></code>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.reader.read_functional_realization_map" title="single_cell_parser.reader.read_functional_realization_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_functional_realization_map</span></code></a>(fname)</p></td>
 <td><p>reads list of all functional connections coded by tuples (cell type, presynaptic cell index, synapse index).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_hoc_file</span></code>([fname])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_landmark_file</span></code>(landmarkFilename)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.reader.read_landmark_file" title="single_cell_parser.reader.read_landmark_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_landmark_file</span></code></a>(landmarkFilename)</p></td>
 <td><p>returns list of (x,y,z) points</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pruned_synapse_realization</span></code>(fname)</p></td>
@@ -412,16 +412,16 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_scalar_field</span></code>([fname])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_spike_times_file</span></code>(fname)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.reader.read_spike_times_file" title="single_cell_parser.reader.read_spike_times_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_spike_times_file</span></code></a>(fname)</p></td>
 <td><p>reads list of all trials and spike times within these trials. Input: file of format:     trial nr.tactivation times (comma-separated list or empty) returns:     dictionary with trial numbers as keys (integers), and tuples of spike times     in each trial as values.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_activation_file</span></code>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.reader.read_synapse_activation_file" title="single_cell_parser.reader.read_synapse_activation_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_activation_file</span></code></a>(fname)</p></td>
 <td><p>reads list of all functional synapses and their activation times. Input: file of format:     synapse typetsynapse IDtsoma distancetsection IDtsection pt IDtdendrite labeltactivation times returns: dictionary with cell types as keys and list of synapse locations and activation times, coded as tuples: (synapse ID, section ID, section pt ID, [t1, t2, ... , tn]).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_realization</span></code>(fname)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_weight_file</span></code>(fname)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.reader.read_synapse_weight_file" title="single_cell_parser.reader.read_synapse_weight_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_weight_file</span></code></a>(fname)</p></td>
 <td><p>reads list of all anatomical synapses and their maximum conductance values. Input: file of format:     synapse type  synapse ID      section IDtsection pt IDtreceptor type (string)tconductance values Returns: two (!!!) dictionaries with cell types as keys, ordered the same as the anatomical synapses:     1st with section ID and pt ID, 2nd with synaptic weights, coded as dictionaries     (keys=receptor strings) containing weights: (gmax_0, gmax_1, ... , gmax_n).</p></td>
 </tr>
 </tbody>
@@ -431,15 +431,90 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.reader.Edge" title="single_cell_parser.reader.Edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code></a>()</p></td>
 <td><p>Edge object contains list of points, diameter at each point, label, string hocLabel, parentID Used during reading of hoc files</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mdbopen</span></code>(path[, mode])</p></td>
-<td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="single_cell_parser.reader.Edge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_parser.reader.</span></span><span class="sig-name descname"><span class="pre">Edge</span></span><a class="reference internal" href="../_modules/single_cell_parser/reader.html#Edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.reader.Edge" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Edge object contains list of points,
+diameter at each point, label,
+string hocLabel, parentID
+Used during reading of hoc files</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.reader.read_complete_synapse_activation_file">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.reader.</span></span><span class="sig-name descname"><span class="pre">read_complete_synapse_activation_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/reader.html#read_complete_synapse_activation_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.reader.read_complete_synapse_activation_file" title="Permalink to this definition">#</a></dt>
+<dd><p>reads list of all functional synapses and their activation times.
+Input: file of format:</p>
+<blockquote>
+<div><p>synapse typetsynapse IDtsoma distancetsection IDtsection pt IDtdendrite labeltactivation times</p>
+</div></blockquote>
+<p>returns: dictionary with cell types as keys and list of synapse locations and activation times,
+coded as tuples: (synapse ID, soma distance, section ID, point ID, structure label, [t1, t2, … , tn])</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.reader.read_functional_realization_map">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.reader.</span></span><span class="sig-name descname"><span class="pre">read_functional_realization_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/reader.html#read_functional_realization_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.reader.read_functional_realization_map" title="Permalink to this definition">#</a></dt>
+<dd><p>reads list of all functional connections
+coded by tuples (cell type, presynaptic cell index, synapse index).
+Only valid for anatomical synapse realization given by anatomicalID</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.reader.read_landmark_file">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.reader.</span></span><span class="sig-name descname"><span class="pre">read_landmark_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">landmarkFilename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/reader.html#read_landmark_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.reader.read_landmark_file" title="Permalink to this definition">#</a></dt>
+<dd><p>returns list of (x,y,z) points</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.reader.read_spike_times_file">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.reader.</span></span><span class="sig-name descname"><span class="pre">read_spike_times_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/reader.html#read_spike_times_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.reader.read_spike_times_file" title="Permalink to this definition">#</a></dt>
+<dd><p>reads list of all trials and spike times within these trials.
+Input: file of format:</p>
+<blockquote>
+<div><p>trial nr.tactivation times (comma-separated list or empty)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>returns:</dt><dd><p>dictionary with trial numbers as keys (integers), and tuples of spike times
+in each trial as values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.reader.read_synapse_activation_file">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.reader.</span></span><span class="sig-name descname"><span class="pre">read_synapse_activation_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/reader.html#read_synapse_activation_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.reader.read_synapse_activation_file" title="Permalink to this definition">#</a></dt>
+<dd><p>reads list of all functional synapses and their activation times.
+Input: file of format:</p>
+<blockquote>
+<div><p>synapse typetsynapse IDtsoma distancetsection IDtsection pt IDtdendrite labeltactivation times</p>
+</div></blockquote>
+<p>returns: dictionary with cell types as keys and list of synapse locations and activation times,
+coded as tuples: (synapse ID, section ID, section pt ID, [t1, t2, … , tn])</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_parser.reader.read_synapse_weight_file">
+<span class="sig-prename descclassname"><span class="pre">single_cell_parser.reader.</span></span><span class="sig-name descname"><span class="pre">read_synapse_weight_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/reader.html#read_synapse_weight_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.reader.read_synapse_weight_file" title="Permalink to this definition">#</a></dt>
+<dd><p>reads list of all anatomical synapses and their maximum conductance values.
+Input: file of format:</p>
+<blockquote>
+<div><p>synapse type  synapse ID      section IDtsection pt IDtreceptor type (string)tconductance values</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns: two (!!!) dictionaries with cell types as keys, ordered the same as the anatomical synapses:</dt><dd><p>1st with section ID and pt ID, 2nd with synaptic weights, coded as dictionaries
+(keys=receptor strings) containing weights: (gmax_0, gmax_1, … , gmax_n)</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
         </article>
@@ -485,8 +560,33 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">single_cell_parser.reader</a><ul>
+<li><a class="reference internal" href="#single_cell_parser.reader.Edge"><code class="docutils literal notranslate"><span class="pre">Edge</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.reader.read_complete_synapse_activation_file"><code class="docutils literal notranslate"><span class="pre">read_complete_synapse_activation_file()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.reader.read_functional_realization_map"><code class="docutils literal notranslate"><span class="pre">read_functional_realization_map()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.reader.read_landmark_file"><code class="docutils literal notranslate"><span class="pre">read_landmark_file()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.reader.read_spike_times_file"><code class="docutils literal notranslate"><span class="pre">read_spike_times_file()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.reader.read_synapse_activation_file"><code class="docutils literal notranslate"><span class="pre">read_synapse_activation_file()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.reader.read_synapse_weight_file"><code class="docutils literal notranslate"><span class="pre">read_synapse_weight_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

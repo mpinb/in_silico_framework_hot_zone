@@ -17,9 +17,7 @@ single\_cell\_parser.cell\_parser
 
    .. autosummary::
    
-      Cell
       CellParser
-      PySection
    
    
 

@@ -14,7 +14,6 @@
    .. autosummary::
    
       get_slice_by_x_value
-      histogram
       make_plots
       rebin_slice
       set_everything_up

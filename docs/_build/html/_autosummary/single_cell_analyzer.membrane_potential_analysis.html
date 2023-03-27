@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,13 +394,13 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSTH_from_spike_times</span></code>(spikeTimeVectors[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times" title="single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PSTH_from_spike_times</span></code></a>(spikeTimeVectors[, ...])</p></td>
 <td><p>Calculate PSTH from vectors of spike times with optional bin size and time window [tBegin, tEnd].</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_mean_psp_amplitude</span></code>(vTraces, tStim, dt)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_uPSP_amplitude</span></code>(t, v, tSyn[, isEPSP])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude" title="single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_uPSP_amplitude</span></code></a>(t, v, tSyn[, isEPSP])</p></td>
 <td><p>simple method for determining amplitude of unitary PSP starting at time tSyn: Determine baseline as median Vm during 10ms preceding the PSP In case of IPSPs set isEPSP=False</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_vm_histogram</span></code>(vTraces)</p></td>
@@ -409,16 +409,16 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_vm_std_windows</span></code>(vStd, tStim, dt)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">simple_spike_detection</span></code>(t, v[, tBegin, tEnd, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.simple_spike_detection" title="single_cell_analyzer.membrane_potential_analysis.simple_spike_detection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simple_spike_detection</span></code></a>(t, v[, tBegin, tEnd, ...])</p></td>
 <td><p>Simple spike detection method.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_spike_detection_respects_threshold</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">vm_mean</span></code>(vVec, tVec, tStim, dtStim)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.vm_mean" title="single_cell_analyzer.membrane_potential_analysis.vm_mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vm_mean</span></code></a>(vVec, tVec, tStim, dtStim)</p></td>
 <td><p>computes mean subthreshold voltage from voltage trace during stimulation time window [tStim, tStim+dtStim]</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">vm_std</span></code>(vVec, tVec, tStim, dtStim)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.vm_std" title="single_cell_analyzer.membrane_potential_analysis.vm_std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vm_std</span></code></a>(vVec, tVec, tStim, dtStim)</p></td>
 <td><p>computes standard deviation of subthreshold voltage from voltage trace during stimulation time window [tStim, tStim+dtStim]</p></td>
 </tr>
 </tbody>
@@ -428,21 +428,122 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RecordingSite</span></code>(secID, segID, label)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSite" title="single_cell_analyzer.membrane_potential_analysis.RecordingSite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RecordingSite</span></code></a>(secID, segID, label)</p></td>
 <td><p>light-weight container holding information about recording site: section and segment ID of attached cell, identifier label, and list of recorded voltage vectors</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RecordingSiteManager</span></code>(landmarkFilename, cell)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager" title="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RecordingSiteManager</span></code></a>(landmarkFilename, cell)</p></td>
 <td><p>simple class providing methods to handle recording sites defined by Amira LandmarkSet</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpikeInit</span></code>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit" title="single_cell_analyzer.membrane_potential_analysis.SpikeInit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpikeInit</span></code></a>()</p></td>
 <td><p>Provides methods for analysis of spike initiation in in vivo/ in vitro simulations.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mdbopen</span></code>(path[, mode])</p></td>
-<td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times">
+<span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.membrane_potential_analysis.</span></span><span class="sig-name descname"><span class="pre">PSTH_from_spike_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spikeTimeVectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tBegin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aligned</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#PSTH_from_spike_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate PSTH from vectors of spike times
+with optional bin size and time window [tBegin, tEnd].
+If aligned=True, then the bins are aligned to
+integer multiples of the bin size.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.RecordingSite">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.membrane_potential_analysis.</span></span><span class="sig-name descname"><span class="pre">RecordingSite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSite" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>light-weight container holding information
+about recording site:
+section and segment ID of attached cell,
+identifier label, and list of recorded voltage vectors</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.membrane_potential_analysis.</span></span><span class="sig-name descname"><span class="pre">RecordingSiteManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">landmarkFilename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSiteManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>simple class providing methods to handle recording
+sites defined by Amira LandmarkSet</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site">
+<span class="sig-name descname"><span class="pre">set_up_recording_site</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSiteManager.set_up_recording_site"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site" title="Permalink to this definition">#</a></dt>
+<dd><p>determine section/segment on cell corresponding
+to recording site location and create new
+RecordingSite</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings">
+<span class="sig-name descname"><span class="pre">update_recordings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#RecordingSiteManager.update_recordings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings" title="Permalink to this definition">#</a></dt>
+<dd><p>copy recorded voltages at recording sites</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.SpikeInit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.membrane_potential_analysis.</span></span><span class="sig-name descname"><span class="pre">SpikeInit</span></span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Provides methods for analysis of spike initiation
+in in vivo/ in vitro simulations. Can be used to
+obtain features of spike shape, adaptation etc…</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">analyze_single_spike</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tVec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit.analyze_single_spike"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike" title="Permalink to this definition">#</a></dt>
+<dd><p>for comparison with in vitro spike shape:
+compute spike height, FWHM (duration), AHP</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vm_steady_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tVec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtStim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#SpikeInit.vm_steady_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state" title="Permalink to this definition">#</a></dt>
+<dd><p>computes “steady-state” subthreshold voltage from
+voltage trace during stimulation time window
+[tStim, tStim+dtStim]
+this can be used to define voltage spike threshold
+at current intensities just below AP initiation</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude">
+<span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.membrane_potential_analysis.</span></span><span class="sig-name descname"><span class="pre">compute_uPSP_amplitude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tSyn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isEPSP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#compute_uPSP_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude" title="Permalink to this definition">#</a></dt>
+<dd><p>simple method for determining amplitude of
+unitary PSP starting at time tSyn:
+Determine baseline as median Vm during 10ms
+preceding the PSP
+In case of IPSPs set isEPSP=False</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.simple_spike_detection">
+<span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.membrane_potential_analysis.</span></span><span class="sig-name descname"><span class="pre">simple_spike_detection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tBegin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'regular'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#simple_spike_detection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.simple_spike_detection" title="Permalink to this definition">#</a></dt>
+<dd><p>Simple spike detection method. Identify
+spike times within optional window [tBegin, tEnd]
+by determining threshold crossing times from below
+supported modes:
+regular: absolute threshold crossing
+differential: threshold crossing of dv/dt</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.vm_mean">
+<span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.membrane_potential_analysis.</span></span><span class="sig-name descname"><span class="pre">vm_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vVec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tVec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtStim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#vm_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.vm_mean" title="Permalink to this definition">#</a></dt>
+<dd><p>computes mean subthreshold voltage from
+voltage trace during stimulation time window
+[tStim, tStim+dtStim]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_analyzer.membrane_potential_analysis.vm_std">
+<span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.membrane_potential_analysis.</span></span><span class="sig-name descname"><span class="pre">vm_std</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vVec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tVec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtStim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/membrane_potential_analysis.html#vm_std"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.membrane_potential_analysis.vm_std" title="Permalink to this definition">#</a></dt>
+<dd><p>computes standard deviation of subthreshold voltage from
+voltage trace during stimulation time window
+[tStim, tStim+dtStim]</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -488,8 +589,42 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">single_cell_analyzer.membrane_potential_analysis</a><ul>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.PSTH_from_spike_times"><code class="docutils literal notranslate"><span class="pre">PSTH_from_spike_times()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSite"><code class="docutils literal notranslate"><span class="pre">RecordingSite</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager"><code class="docutils literal notranslate"><span class="pre">RecordingSiteManager</span></code></a><ul>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.set_up_recording_site"><code class="docutils literal notranslate"><span class="pre">RecordingSiteManager.set_up_recording_site()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.RecordingSiteManager.update_recordings"><code class="docutils literal notranslate"><span class="pre">RecordingSiteManager.update_recordings()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit"><code class="docutils literal notranslate"><span class="pre">SpikeInit</span></code></a><ul>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.analyze_single_spike"><code class="docutils literal notranslate"><span class="pre">SpikeInit.analyze_single_spike()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.SpikeInit.vm_steady_state"><code class="docutils literal notranslate"><span class="pre">SpikeInit.vm_steady_state()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.compute_uPSP_amplitude"><code class="docutils literal notranslate"><span class="pre">compute_uPSP_amplitude()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.simple_spike_detection"><code class="docutils literal notranslate"><span class="pre">simple_spike_detection()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.vm_mean"><code class="docutils literal notranslate"><span class="pre">vm_mean()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_analyzer.membrane_potential_analysis.vm_std"><code class="docutils literal notranslate"><span class="pre">vm_std()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

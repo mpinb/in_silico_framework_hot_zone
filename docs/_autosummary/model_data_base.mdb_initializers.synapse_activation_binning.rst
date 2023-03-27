@@ -15,25 +15,15 @@
    
       applyfun
       init
-      merge_results_together
       postfun
       prefun
-      save_groupby
       synapse_activation_postprocess_dask
       synapse_activation_postprocess_pandas
-      temporal_binning
       tree_reduction
    
    
 
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      defaultdict
-      partial
    
    
 

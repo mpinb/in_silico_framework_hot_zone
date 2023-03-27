@@ -13,7 +13,6 @@ simrun3.somatic\_summation\_model
 
    .. autosummary::
    
-      convertible_to_int
       roll_rows_independently
    
    
@@ -25,7 +24,6 @@ simrun3.somatic\_summation\_model
    .. autosummary::
    
       ParseVT
-      defaultdict
    
    
 

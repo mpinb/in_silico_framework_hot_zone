@@ -25,20 +25,12 @@
 
    .. autosummary::
    
-      DelayedKeyboardInterrupt
       InMemoryBackend
       SQLiteBackend
-      SqliteDict
    
    
 
    
-   
-   .. rubric:: Exceptions
-
-   .. autosummary::
-   
-      ThreadError
    
    
 

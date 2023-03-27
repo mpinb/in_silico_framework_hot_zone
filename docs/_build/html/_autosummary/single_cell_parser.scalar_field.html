@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,12 +394,49 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarField</span></code>([mesh, origin, extent, spacing, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.scalar_field.ScalarField" title="single_cell_parser.scalar_field.ScalarField"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScalarField</span></code></a>([mesh, origin, extent, spacing, ...])</p></td>
 <td><p>implements 3D scalar field based on numpy array used for e.g.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="single_cell_parser.scalar_field.ScalarField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_parser.scalar_field.</span></span><span class="sig-name descname"><span class="pre">ScalarField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/scalar_field.html#ScalarField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.scalar_field.ScalarField" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>implements 3D scalar field based on numpy array
+used for e.g. sub-cellular synapse distributions
+modeled after vtkImageData; i.e. regular mesh
+with extent[6], spacing[3], and boundingBox[xMin, xMax, … , zMax]</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.scalar_field.ScalarField.get_mesh_coordinates">
+<span class="sig-name descname"><span class="pre">get_mesh_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/scalar_field.html#ScalarField.get_mesh_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.scalar_field.ScalarField.get_mesh_coordinates" title="Permalink to this definition">#</a></dt>
+<dd><p>does NOT perform range checking; index may be invalid!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.scalar_field.ScalarField.get_scalar">
+<span class="sig-name descname"><span class="pre">get_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/scalar_field.html#ScalarField.get_scalar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.scalar_field.ScalarField.get_scalar" title="Permalink to this definition">#</a></dt>
+<dd><p>does perform range checking; however, if outside
+of bounding box, simply returns 0, so use with caution!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.scalar_field.ScalarField.get_voxel_bounds">
+<span class="sig-name descname"><span class="pre">get_voxel_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ijk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/scalar_field.html#ScalarField.get_voxel_bounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.scalar_field.ScalarField.get_voxel_bounds" title="Permalink to this definition">#</a></dt>
+<dd><p>returns bounding box of voxel given by indices
+i,j,k. Does NOT perform bounds checking!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.scalar_field.ScalarField.resize_mesh">
+<span class="sig-name descname"><span class="pre">resize_mesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/scalar_field.html#ScalarField.resize_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.scalar_field.ScalarField.resize_mesh" title="Permalink to this definition">#</a></dt>
+<dd><p>resize mesh to bounding box around non-zero voxels
+also updates extent and boundingBox</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
         </article>
@@ -445,8 +482,33 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">single_cell_parser.scalar_field</a><ul>
+<li><a class="reference internal" href="#single_cell_parser.scalar_field.ScalarField"><code class="docutils literal notranslate"><span class="pre">ScalarField</span></code></a><ul>
+<li><a class="reference internal" href="#single_cell_parser.scalar_field.ScalarField.get_mesh_coordinates"><code class="docutils literal notranslate"><span class="pre">ScalarField.get_mesh_coordinates()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.scalar_field.ScalarField.get_scalar"><code class="docutils literal notranslate"><span class="pre">ScalarField.get_scalar()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.scalar_field.ScalarField.get_voxel_bounds"><code class="docutils literal notranslate"><span class="pre">ScalarField.get_voxel_bounds()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_parser.scalar_field.ScalarField.resize_mesh"><code class="docutils literal notranslate"><span class="pre">ScalarField.resize_mesh()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

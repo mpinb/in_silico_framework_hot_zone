@@ -13,7 +13,6 @@
 
    .. autosummary::
    
-      bundle_delayeds
       check
       chunkIt
       dump

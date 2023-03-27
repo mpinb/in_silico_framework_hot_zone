@@ -21,12 +21,6 @@ singlecell\_input\_mapper.evoked\_network\_param\_from\_template
 
    
    
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      mdbopen
-   
    
 
    

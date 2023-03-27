@@ -15,7 +15,6 @@ model\_data\_base.analyze.temporal\_binning
    
       temporal_binning_dask
       temporal_binning_pd
-      time_list_from_pd
       universal
    
    

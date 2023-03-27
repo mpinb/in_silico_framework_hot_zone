@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -392,16 +392,16 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">connected_to_dend_beyond</span></code>(cell, sec, beyond_dist)</p></td>
-<td><p>Given a <code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code> object and section number,  this method returns true if at least two children of the branchpoint reach beyond dist</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.connected_to_dend_beyond" title="biophysics_fitting.connected_to_dend_beyond"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connected_to_dend_beyond</span></code></a>(cell, sec, beyond_dist)</p></td>
+<td><p>Given a <a class="reference internal" href="single_cell_parser.cell.html#single_cell_parser.cell.Cell" title="single_cell_parser.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> object and section number,  this method returns true if at least two children of the branchpoint reach beyond dist</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_branching_depth</span></code>(cell, sec[, beyond_dist])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.get_branching_depth" title="biophysics_fitting.get_branching_depth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_branching_depth</span></code></a>(cell, sec[, beyond_dist])</p></td>
 <td><p>Given a Cell object and a section number, this method returns the amount of sections that have children beyond some distance :&#64;param beyond_dist: inbetween the soma and the given section.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_branching_depth_series</span></code>(cell)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.get_branching_depth_series" title="biophysics_fitting.get_branching_depth_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_branching_depth_series</span></code></a>(cell)</p></td>
 <td><p>Careful: z-depth only accurate for D2-registered cells!</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_inner_sec_dist_list</span></code>(cell[, select])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.get_inner_sec_dist_list" title="biophysics_fitting.get_inner_sec_dist_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_inner_sec_dist_list</span></code></a>(cell[, select])</p></td>
 <td><p>TODO: wat does this method do? Why take the y-value of the last point in a section and subtract 706?</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_main_bifurcation_section</span></code>(cell)</p></td>
@@ -410,6 +410,63 @@
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="biophysics_fitting.connected_to_dend_beyond">
+<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.</span></span><span class="sig-name descname"><span class="pre">connected_to_dend_beyond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beyond_dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_children_required</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting.html#connected_to_dend_beyond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.connected_to_dend_beyond" title="Permalink to this definition">#</a></dt>
+<dd><p>Given a <a class="reference internal" href="single_cell_parser.cell.html#single_cell_parser.cell.Cell" title="single_cell_parser.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> object and section number, 
+this method returns true if at least two children of the branchpoint reach beyond dist</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>cell (Cell): The Cell object
+sec (int): Index of Cell section
+beyond_dist (float): Distance threshold
+n_children_required (int, optional): Least amount of children required. Defaults to 2.</p>
+</dd>
+<dt>Returns:</dt><dd><p>bool: Whether or not two of the section’s children reach beyond :&#64;param beyond_dist:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biophysics_fitting.get_branching_depth">
+<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.</span></span><span class="sig-name descname"><span class="pre">get_branching_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beyond_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting.html#get_branching_depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.get_branching_depth" title="Permalink to this definition">#</a></dt>
+<dd><p>Given a Cell object and a section number, this method returns the amount of sections that have children
+beyond some distance :&#64;param beyond_dist: inbetween the soma and the given section.</p>
+<p>If this number is 0, that means that the given section, and all its parent sections up to the soma,
+have no children that exceed a distance to soma of :&#64;param beyond_dist:.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>cell (Cell): The Cell object
+sec (int): The section number</p>
+</dd>
+<dt>Returns:</dt><dd><p>int: Amount of sections between :&#64;param sec: and soma that have at least 2 children that are further from the soma than :&#64;param beyond_dist:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biophysics_fitting.get_branching_depth_series">
+<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.</span></span><span class="sig-name descname"><span class="pre">get_branching_depth_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting.html#get_branching_depth_series"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.get_branching_depth_series" title="Permalink to this definition">#</a></dt>
+<dd><p>Careful: z-depth only accurate for D2-registered cells!</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>cell (Cell): The Cell object</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.Series: contains the pia distance as index and a tuple (biforcation order, section) as value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biophysics_fitting.get_inner_sec_dist_list">
+<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.</span></span><span class="sig-name descname"><span class="pre">get_inner_sec_dist_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['ApicalDendrite',</span> <span class="pre">'Dendrite']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting.html#get_inner_sec_dist_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.get_inner_sec_dist_list" title="Permalink to this definition">#</a></dt>
+<dd><p>TODO: wat does this method do? Why take the y-value of the last point in a section and subtract 706?</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>cell (Cell): The Cell object
+select (list, optional): Selection of sections to consider, based on their label. Defaults to [‘ApicalDendrite’, ‘Dendrite’].</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: _description_</p>
+</dd>
+</dl>
+</dd></dl>
+
 <p class="rubric">Modules</p>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
@@ -507,8 +564,30 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">biophysics_fitting</a><ul>
+<li><a class="reference internal" href="#biophysics_fitting.connected_to_dend_beyond"><code class="docutils literal notranslate"><span class="pre">connected_to_dend_beyond()</span></code></a></li>
+<li><a class="reference internal" href="#biophysics_fitting.get_branching_depth"><code class="docutils literal notranslate"><span class="pre">get_branching_depth()</span></code></a></li>
+<li><a class="reference internal" href="#biophysics_fitting.get_branching_depth_series"><code class="docutils literal notranslate"><span class="pre">get_branching_depth_series()</span></code></a></li>
+<li><a class="reference internal" href="#biophysics_fitting.get_inner_sec_dist_list"><code class="docutils literal notranslate"><span class="pre">get_inner_sec_dist_list()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

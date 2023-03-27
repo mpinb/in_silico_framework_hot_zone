@@ -15,7 +15,6 @@
    
       check
       dump
-      get_mdb_by_unique_id
    
    
 
@@ -26,8 +25,6 @@
    .. autosummary::
    
       Loader
-      ModelDataBase
-      ReducedLdaModel
    
    
 

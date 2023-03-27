@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -398,10 +398,10 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">apical_injection</span></code>(cell, apicalBifurcationSec, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_apical_section_at_distance</span></code>(cell, distance)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#simrun2.test_BAC_firing.get_apical_section_at_distance" title="simrun2.test_BAC_firing.get_apical_section_at_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_apical_section_at_distance</span></code></a>(cell, distance)</p></td>
 <td><p>determine interior apical dendrite section (i.e.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_apical</span></code>(cell)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun2.test_BAC_firing.scale_apical" title="simrun2.test_BAC_firing.scale_apical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_apical</span></code></a>(cell)</p></td>
 <td><p>scale apical diameters depending on distance to soma; therefore only possible after creating complete cell</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">soma_apical_injection</span></code>(cell, somaAmplitude, ...)</p></td>
@@ -419,6 +419,21 @@
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun2.test_BAC_firing.get_apical_section_at_distance">
+<span class="sig-prename descclassname"><span class="pre">simrun2.test_BAC_firing.</span></span><span class="sig-name descname"><span class="pre">get_apical_section_at_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/test_BAC_firing.html#get_apical_section_at_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.test_BAC_firing.get_apical_section_at_distance" title="Permalink to this definition">#</a></dt>
+<dd><p>determine interior apical dendrite section (i.e. no ending section)
+closest to given distance</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun2.test_BAC_firing.scale_apical">
+<span class="sig-prename descclassname"><span class="pre">simrun2.test_BAC_firing.</span></span><span class="sig-name descname"><span class="pre">scale_apical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/test_BAC_firing.html#scale_apical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.test_BAC_firing.scale_apical" title="Permalink to this definition">#</a></dt>
+<dd><p>scale apical diameters depending on
+distance to soma; therefore only possible
+after creating complete cell</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -464,8 +479,28 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">simrun2.test_BAC_firing</a><ul>
+<li><a class="reference internal" href="#simrun2.test_BAC_firing.get_apical_section_at_distance"><code class="docutils literal notranslate"><span class="pre">get_apical_section_at_distance()</span></code></a></li>
+<li><a class="reference internal" href="#simrun2.test_BAC_firing.scale_apical"><code class="docutils literal notranslate"><span class="pre">scale_apical()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

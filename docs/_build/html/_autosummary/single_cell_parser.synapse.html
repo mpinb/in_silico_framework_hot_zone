@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,18 +394,47 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExSyn</span></code>(edgeID, edgePtID[, preCellType, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.synapse.ExSyn" title="single_cell_parser.synapse.ExSyn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExSyn</span></code></a>(edgeID, edgePtID[, preCellType, ...])</p></td>
 <td><p>simple excitatory synapse for playing around</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sequence</span></code>()</p></td>
-<td><p>All the operations on a read-only sequence.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Synapse</span></code>(edgeID, edgePtID, edgex[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.synapse.Synapse" title="single_cell_parser.synapse.Synapse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Synapse</span></code></a>(edgeID, edgePtID, edgex[, ...])</p></td>
 <td><p>Synapse base class Contains information about pre- and postsynaptic cell type, branch ID of postsynaptic cell, branch pt ID, and xyz-coordinates of synapse location Biophysical mechanisms are specified in subclasses</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="single_cell_parser.synapse.ExSyn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_parser.synapse.</span></span><span class="sig-name descname"><span class="pre">ExSyn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edgeID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edgePtID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preCellType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postCellType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse.html#ExSyn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.synapse.ExSyn" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#single_cell_parser.synapse.Synapse" title="single_cell_parser.synapse.Synapse"><code class="xref py py-class docutils literal notranslate"><span class="pre">Synapse</span></code></a></p>
+<p>simple excitatory synapse for playing around</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.synapse.ExSyn.activate_hoc_syn">
+<span class="sig-name descname"><span class="pre">activate_hoc_syn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetCell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse.html#ExSyn.activate_hoc_syn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.synapse.ExSyn.activate_hoc_syn" title="Permalink to this definition">#</a></dt>
+<dd><p>setup of all necessary hoc connections.
+stores all mechanisms and NetCons for reference counting.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="single_cell_parser.synapse.Synapse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">single_cell_parser.synapse.</span></span><span class="sig-name descname"><span class="pre">Synapse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edgeID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edgePtID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edgex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preCellType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postCellType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse.html#Synapse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.synapse.Synapse" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Synapse base class
+Contains information about pre- and postsynaptic cell type,
+branch ID of postsynaptic cell, branch pt ID,
+and xyz-coordinates of synapse location
+Biophysical mechanisms are specified in subclasses</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="single_cell_parser.synapse.Synapse.activate_hoc_syn">
+<span class="sig-name descname"><span class="pre">activate_hoc_syn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preCell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targetCell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">receptors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse.html#Synapse.activate_hoc_syn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.synapse.Synapse.activate_hoc_syn" title="Permalink to this definition">#</a></dt>
+<dd><p>setup of all necessary hoc connections.
+stores all mechanisms and NetCons for reference counting.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
         </article>
@@ -451,8 +480,34 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">single_cell_parser.synapse</a><ul>
+<li><a class="reference internal" href="#single_cell_parser.synapse.ExSyn"><code class="docutils literal notranslate"><span class="pre">ExSyn</span></code></a><ul>
+<li><a class="reference internal" href="#single_cell_parser.synapse.ExSyn.activate_hoc_syn"><code class="docutils literal notranslate"><span class="pre">ExSyn.activate_hoc_syn()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#single_cell_parser.synapse.Synapse"><code class="docutils literal notranslate"><span class="pre">Synapse</span></code></a><ul>
+<li><a class="reference internal" href="#single_cell_parser.synapse.Synapse.activate_hoc_syn"><code class="docutils literal notranslate"><span class="pre">Synapse.activate_hoc_syn()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

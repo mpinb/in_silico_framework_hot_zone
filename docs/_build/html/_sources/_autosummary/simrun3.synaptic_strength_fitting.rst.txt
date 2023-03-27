@@ -13,14 +13,11 @@ simrun3.synaptic\_strength\_fitting
 
    .. autosummary::
    
-      activate_functional_synapse
       analyze_voltage_trace
       calculate_optimal_g
       ePSP_summary_statistics
       generate_ex_network_param_from_network_embedding
       generate_inh_network_param_from_network_embedding
-      get_cell_with_network
-      get_cellnumbers_from_confile
       get_optimal_g
       get_summary_statistics
       get_tMax_vMax
@@ -33,7 +30,6 @@ simrun3.synaptic\_strength\_fitting
       run_ex_synapses
       set_ex_synapse_weight
       set_inh_synapse_weight
-      split_network_param_in_one_elem_dicts
    
    
 

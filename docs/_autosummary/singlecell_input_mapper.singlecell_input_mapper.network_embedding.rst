@@ -18,10 +18,6 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.network\_embedding
    .. autosummary::
    
       NetworkMapper
-      PointCell
-      SynapseDensity
-      SynapseMapper
-      mdbopen
    
    
 

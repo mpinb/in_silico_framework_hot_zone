@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -392,22 +392,19 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code>(seq, num)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun2.utils.chunkIt" title="simrun2.utils.chunkIt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code></a>(seq, num)</p></td>
 <td><p>splits seq in num lists, which have approximately equal size.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_param_file_if_path_is_provided</span></code>(pathOrParam)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_mdb_path</span></code>(path)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_apical</span></code>(cell)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun2.utils.scale_apical" title="simrun2.utils.scale_apical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_apical</span></code></a>(cell)</p></td>
 <td><p>scale apical diameters depending on distance to soma; therefore only possible after creating complete cell</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">silence_stdout</span></code>(fun)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#simrun2.utils.silence_stdout" title="simrun2.utils.silence_stdout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">silence_stdout</span></code></a>(fun)</p></td>
 <td><p>robustly silences a function and restores stdout afterwars</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tar_folder</span></code>(source_dir[, delete_folder])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tar_folder</span></code>(source_dir[, delete_folder])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -423,6 +420,27 @@
 </tbody>
 </table>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun2.utils.chunkIt">
+<span class="sig-prename descclassname"><span class="pre">simrun2.utils.</span></span><span class="sig-name descname"><span class="pre">chunkIt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/utils.html#chunkIt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.utils.chunkIt" title="Permalink to this definition">#</a></dt>
+<dd><p>splits seq in num lists, which have approximately equal size.
+<a class="reference external" href="https://stackoverflow.com/questions/2130016/splitting-a-list-of-arbitrary-size-into-only-roughly-n-equal-parts">https://stackoverflow.com/questions/2130016/splitting-a-list-of-arbitrary-size-into-only-roughly-n-equal-parts</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun2.utils.scale_apical">
+<span class="sig-prename descclassname"><span class="pre">simrun2.utils.</span></span><span class="sig-name descname"><span class="pre">scale_apical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/utils.html#scale_apical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.utils.scale_apical" title="Permalink to this definition">#</a></dt>
+<dd><p>scale apical diameters depending on
+distance to soma; therefore only possible
+after creating complete cell</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun2.utils.silence_stdout">
+<span class="sig-prename descclassname"><span class="pre">simrun2.utils.</span></span><span class="sig-name descname"><span class="pre">silence_stdout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/utils.html#silence_stdout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.utils.silence_stdout" title="Permalink to this definition">#</a></dt>
+<dd><p>robustly silences a function and restores stdout afterwars</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -468,8 +486,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">simrun2.utils</a><ul>
+<li><a class="reference internal" href="#simrun2.utils.chunkIt"><code class="docutils literal notranslate"><span class="pre">chunkIt()</span></code></a></li>
+<li><a class="reference internal" href="#simrun2.utils.scale_apical"><code class="docutils literal notranslate"><span class="pre">scale_apical()</span></code></a></li>
+<li><a class="reference internal" href="#simrun2.utils.silence_stdout"><code class="docutils literal notranslate"><span class="pre">silence_stdout()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

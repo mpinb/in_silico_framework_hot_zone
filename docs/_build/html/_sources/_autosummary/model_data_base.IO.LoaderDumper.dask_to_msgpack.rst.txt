@@ -13,18 +13,11 @@
 
    .. autosummary::
    
-      check
       dump
    
    
 
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      Loader
    
    
 

@@ -14,32 +14,12 @@
    .. autosummary::
    
       build_parameters
-      build_parameters_sumatra
       create_cell
-      create_functional_network
-      create_synapse_realization
       init_neuron_run
       load_NMODL_parameters
-      read_complete_synapse_activation_file
-      read_landmark_file
-      read_scalar_field
-      read_spike_times_file
-      read_synapse_activation_file
-      read_synapse_realization
-      read_synapse_weight_file
       sec_distance_to_soma
       spines_update_network_paramfile
       spines_update_synapse_distribution_file
-      write_PSTH
-      write_all_traces
-      write_cell_simulation
-      write_cell_synapse_locations
-      write_landmark_file
-      write_presynaptic_spike_times
-      write_sim_results
-      write_spike_times_file
-      write_synapse_activation_file
-      write_synapse_weight_file
    
    
 
@@ -49,16 +29,7 @@
 
    .. autosummary::
    
-      Cell
-      CellParser
       Event
-      NTParameterSet
-      NetworkMapper
-      PointCell
-      PySection
-      SynParameterChanger
-      SynapseMapper
-      mdbopen
    
    
 

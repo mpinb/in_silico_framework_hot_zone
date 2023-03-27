@@ -45,12 +45,12 @@ extensions = [
 # autodoc_member_order = 'bysource'
 ## Default flags used by autodoc directives
 autodoc_default_options = {
-    'members': False,
-    'show-inheritance': False,
+    'members': True,
+    'show-inheritance': True,
 }
 ## Generate autodoc stubs with summaries from code
 autosummary_generate = True
-autosummary_imported_members = True
+autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

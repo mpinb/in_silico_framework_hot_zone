@@ -27,12 +27,6 @@ single\_cell\_analyzer.synanalysis
 
    
    
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      mdbopen
-   
    
 
    

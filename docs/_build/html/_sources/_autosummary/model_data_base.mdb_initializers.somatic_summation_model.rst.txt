@@ -27,9 +27,6 @@
    
       CelltypeSpecificSynapticWeights
       DistributedDDFWithSaveMethod
-      ParseVT
-      defaultdict
-      partial
    
    
 

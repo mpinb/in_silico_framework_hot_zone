@@ -13,14 +13,6 @@
 
    
    
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      Axes
-      CellMorphologyVisualizer
-      Figure
-   
    
 
    

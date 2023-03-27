@@ -18,25 +18,13 @@ biophysics\_fitting.hay\_complete\_default\_setup\_python
       get_Simulator
       interpolate_vt
       map_truefalse_to_str
-      merge
-      param_to_kwargs
       record_BAC
       record_Step
       record_bAP
-      tVec
-      vmApical
-      vmMax
-      vmSoma
    
    
 
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      Evaluator
    
    
 

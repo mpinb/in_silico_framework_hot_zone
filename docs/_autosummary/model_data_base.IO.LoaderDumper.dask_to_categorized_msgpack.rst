@@ -13,17 +13,12 @@
 
    .. autosummary::
    
-      bundle_delayeds
       category_to_str
       check
-      chunkIt
       dump
       get_writer_function
       my_dask_writer
-      myrepartition
-      read_msgpack
       str_to_category
-      to_msgpack
    
    
 
@@ -34,7 +29,6 @@
    .. autosummary::
    
       Loader
-      mkdtemp
    
    
 

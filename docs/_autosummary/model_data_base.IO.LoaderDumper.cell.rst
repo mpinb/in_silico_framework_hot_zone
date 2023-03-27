@@ -15,8 +15,6 @@
    
       check
       dump
-      load_cell_from_file
-      save_cell_to_file
    
    
 
@@ -26,7 +24,6 @@
 
    .. autosummary::
    
-      Cell
       Loader
    
    

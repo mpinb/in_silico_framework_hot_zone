@@ -9,12 +9,6 @@ simrun3.robust\_dask\_delayed\_execution
 
    
    
-   .. rubric:: Functions
-
-   .. autosummary::
-   
-      get_lock
-   
    
 
    

@@ -32,7 +32,6 @@ biophysics\_fitting.optimizer
 
    .. autosummary::
    
-      WSListIndividual
       my_ibea_evaluator
    
    

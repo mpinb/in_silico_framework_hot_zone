@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -392,37 +392,34 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">lda_prediction_rates</span></code>(X_in, y_in[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.analyze.LDA.lda_prediction_rates" title="model_data_base.analyze.LDA.lda_prediction_rates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lda_prediction_rates</span></code></a>(X_in, y_in[, ...])</p></td>
 <td><p>X: training data y: target values classifier: classifier to use</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_groups_equal_size</span></code>(X, y)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">prediction_rates</span></code>(X_in, y_in[, classifier, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.analyze.LDA.prediction_rates" title="model_data_base.analyze.LDA.prediction_rates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prediction_rates</span></code></a>(X_in, y_in[, classifier, ...])</p></td>
 <td><p>X: training data y: target values classifier: classifier to use</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">roc_auc_score</span></code>(y_true, y_score, *[, average, ...])</p></td>
-<td><p>Compute Area Under the Receiver Operating Characteristic Curve (ROC AUC) from prediction scores.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">roc_curve</span></code>(y_true, y_score, *[, pos_label, ...])</p></td>
-<td><p>Compute Receiver operating characteristic (ROC)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_test_split</span></code>(*arrays, **options)</p></td>
-<td><p>Split arrays or matrices into random train and test subsets</p></td>
-</tr>
 </tbody>
 </table>
 </div>
-<p class="rubric">Classes</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LDA</span></code></p></td>
-<td><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">LinearDiscriminantAnalysis</span></code></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.analyze.LDA.lda_prediction_rates">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.analyze.LDA.</span></span><span class="sig-name descname"><span class="pre">lda_prediction_rates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'score'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_group_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'eigen'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_data_base.analyze.LDA.lda_prediction_rates" title="Permalink to this definition">#</a></dt>
+<dd><p>X: training data
+y: target values
+classifier: classifier to use</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_data_base.analyze.LDA.prediction_rates">
+<span class="sig-prename descclassname"><span class="pre">model_data_base.analyze.LDA.</span></span><span class="sig-name descname"><span class="pre">prediction_rates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'score'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_group_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'eigen'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/analyze/LDA.html#prediction_rates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.analyze.LDA.prediction_rates" title="Permalink to this definition">#</a></dt>
+<dd><p>X: training data
+y: target values
+classifier: classifier to use</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -468,8 +465,28 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">model_data_base.analyze.LDA</a><ul>
+<li><a class="reference internal" href="#model_data_base.analyze.LDA.lda_prediction_rates"><code class="docutils literal notranslate"><span class="pre">lda_prediction_rates()</span></code></a></li>
+<li><a class="reference internal" href="#model_data_base.analyze.LDA.prediction_rates"><code class="docutils literal notranslate"><span class="pre">prediction_rates()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

@@ -13,12 +13,10 @@
 
    .. autosummary::
    
-      create_mdb_path
       get_PSP_determinants_from_mdb
       get_confile_form_network_param
       get_parameterfiles_df_with_confile_and_neuron_param_path
       init
-      resolve_mdb_path
    
    
 

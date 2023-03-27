@@ -37,8 +37,6 @@ spike\_analysis.core
    .. autosummary::
    
       AnalyzeFile
-      PdfFileReader
-      PdfFileWriter
       ReaderDummy
       ReaderLabView
       ReaderSmr
@@ -55,7 +53,6 @@ spike\_analysis.core
       SpikeDetectionCreastTrough
       SpikeTimesAnalysis
       VisualizeEventAnalysis
-      partial
    
    
 

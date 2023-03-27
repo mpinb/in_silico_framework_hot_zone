@@ -1,4 +1,4 @@
-single\_cell\_parser.cell\_modify\_functions.apical\_epsp\_injection
+﻿single\_cell\_parser.cell\_modify\_functions.apical\_epsp\_injection
 ====================================================================
 
 .. automodule:: single_cell_parser.cell_modify_functions.apical_epsp_injection
@@ -14,7 +14,6 @@ single\_cell\_parser.cell\_modify\_functions.apical\_epsp\_injection
    .. autosummary::
    
       apical_epsp_injection
-      setup_apical_epsp_injection_
    
    
 

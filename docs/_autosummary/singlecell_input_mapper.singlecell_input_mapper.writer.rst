@@ -13,7 +13,6 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.writer
 
    .. autosummary::
    
-      con_file_to_NumberOfConnectedCells_sheet
       write_anatomical_realization_map
       write_cell_synapse_locations
       write_landmark_file
@@ -25,13 +24,6 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.writer
    
 
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      ScalarField
-      mdbopen
    
    
 

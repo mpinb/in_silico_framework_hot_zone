@@ -20,10 +20,8 @@ single\_cell\_parser.cell
       Cell
       PointCell
       PySection
-      Sequence
       SpikeTrain
       SynParameterChanger
-      chain
    
    
 

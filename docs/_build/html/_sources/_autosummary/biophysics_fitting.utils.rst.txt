@@ -13,7 +13,6 @@ biophysics\_fitting.utils
 
    .. autosummary::
    
-      connected_to_dend_beyond
       connected_to_structure_beyond
       execute_in_child_process
       execute_in_child_process_kept_alive
@@ -37,7 +36,6 @@ biophysics\_fitting.utils
    
       Undemonize
       VariableThatDoesNotGetPickled
-      partial
    
    
 

@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -394,16 +394,16 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_distance_to_soma</span></code>(sec, x[, cell, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_analyzer.synanalysis.compute_distance_to_soma" title="single_cell_analyzer.synanalysis.compute_distance_to_soma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_distance_to_soma</span></code></a>(sec, x[, cell, ...])</p></td>
 <td><p>Computes the distance from a point specified by section and sectionx to the soma.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_syn_distance</span></code>(cell, syn[, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_syn_distances</span></code>(cell, synType[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_analyzer.synanalysis.compute_syn_distances" title="single_cell_analyzer.synanalysis.compute_syn_distances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_syn_distances</span></code></a>(cell, synType[, ...])</p></td>
 <td><p>computes distances of all synapses on dendrite w.r.t.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_syn_distances_2Dprojected</span></code>(cell, synType)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#single_cell_analyzer.synanalysis.compute_syn_distances_2Dprojected" title="single_cell_analyzer.synanalysis.compute_syn_distances_2Dprojected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_syn_distances_2Dprojected</span></code></a>(cell, synType)</p></td>
 <td><p>computes distances of all synapses on dendrite w.r.t.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_synapse_distances_times</span></code>(fname, cell)</p></td>
@@ -424,16 +424,37 @@
 </tbody>
 </table>
 </div>
-<p class="rubric">Classes</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mdbopen</span></code>(path[, mode])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_analyzer.synanalysis.compute_distance_to_soma">
+<span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.synanalysis.</span></span><span class="sig-name descname"><span class="pre">compute_distance_to_soma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consider_gap_to_soma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#compute_distance_to_soma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.compute_distance_to_soma" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes the distance from a point specified by section and sectionx to the soma.</p>
+<p>sec: section of cell, either a PySection object or an int
+x: float, relative point on section, from 0 to 1
+cell: single_cell_parser Cell object, optional (only required if sec is given as an int)
+consider_gap_to_soma: boolean, optional. Accounts for the fact that dendrites don’t actually touch the soma.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_analyzer.synanalysis.compute_syn_distances">
+<span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.synanalysis.</span></span><span class="sig-name descname"><span class="pre">compute_syn_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consider_gap_to_soma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#compute_syn_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.compute_syn_distances" title="Permalink to this definition">#</a></dt>
+<dd><p>computes distances of all synapses on dendrite w.r.t. soma</p>
+<p>cell is cell object with attached synapses
+presynaptic cell type given by synType (string)
+optional: dendrite type given by label (string)</p>
+<p>returns 1D numpy array of distances to soma</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="single_cell_analyzer.synanalysis.compute_syn_distances_2Dprojected">
+<span class="sig-prename descclassname"><span class="pre">single_cell_analyzer.synanalysis.</span></span><span class="sig-name descname"><span class="pre">compute_syn_distances_2Dprojected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_analyzer/synanalysis.html#compute_syn_distances_2Dprojected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_analyzer.synanalysis.compute_syn_distances_2Dprojected" title="Permalink to this definition">#</a></dt>
+<dd><p>computes distances of all synapses on dendrite w.r.t. soma
+projected on 2D plane as seen during 2-photon spine imaging</p>
+<p>cell is cell object with attached synapses
+presynaptic cell type given by synType (string)
+optional: dendrite type given by label (string)</p>
+<p>returns 1D numpy array of distances to soma</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -479,8 +500,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">single_cell_analyzer.synanalysis</a><ul>
+<li><a class="reference internal" href="#single_cell_analyzer.synanalysis.compute_distance_to_soma"><code class="docutils literal notranslate"><span class="pre">compute_distance_to_soma()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_analyzer.synanalysis.compute_syn_distances"><code class="docutils literal notranslate"><span class="pre">compute_syn_distances()</span></code></a></li>
+<li><a class="reference internal" href="#single_cell_analyzer.synanalysis.compute_syn_distances_2Dprojected"><code class="docutils literal notranslate"><span class="pre">compute_syn_distances_2Dprojected()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

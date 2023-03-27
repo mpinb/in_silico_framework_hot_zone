@@ -14,8 +14,6 @@ model\_data\_base.analyze.spatial\_binning
    .. autosummary::
    
       spatial_binning
-      temporal_binning
-      time_list_from_pd
    
    
 

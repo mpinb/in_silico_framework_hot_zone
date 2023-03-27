@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -392,46 +392,39 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">chunkIt</span></code>(seq, num)</p></td>
-<td><p>splits seq in num lists, which have approximately equal size.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_param_file_if_path_is_provided</span></code>(pathOrParam)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_mdb_path</span></code>(path)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_apical</span></code>(cell)</p></td>
-<td><p>scale apical diameters depending on distance to soma; therefore only possible after creating complete cell</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">silence_stdout</span></code>(fun)</p></td>
-<td><p>robustly silences a function and restores stdout afterwars</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">simtrail_to_cell_object</span></code>(mdb, sim_trail_index)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simrun2.sim_trail_to_cell_object.simtrail_to_cell_object" title="simrun2.sim_trail_to_cell_object.simtrail_to_cell_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simtrail_to_cell_object</span></code></a>(mdb, sim_trail_index)</p></td>
 <td><p>Resimulates simulation trail and returns cell object. Expects Instance of ModelDataBase and sim_trail index. The mdb has to contain the paths to the parameterfiles at the following location:      ('parameterfiles', 'cellName')     ('parameterfiles', 'networkName').</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tar_folder</span></code>(source_dir[, delete_folder])</p></td>
-<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">trail_to_cell_object</span></code>([name, cellName, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_pandas_synapse_activation_to_roberts_format</span></code>(...)</p></td>
-<td><p>save pandas df in a format, which can be understood by the simulator</p></td>
-</tr>
 </tbody>
 </table>
 </div>
-<p class="rubric">Classes</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">defaultValues</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="simrun2.sim_trail_to_cell_object.simtrail_to_cell_object">
+<span class="sig-prename descclassname"><span class="pre">simrun2.sim_trail_to_cell_object.</span></span><span class="sig-name descname"><span class="pre">simtrail_to_cell_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_trail_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allPoints=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_apical=&lt;function</span> <span class="pre">scale_apical&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_vars=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapse_modfun=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neuron_modfun=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_modfun=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tStop=345</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/sim_trail_to_cell_object.html#simtrail_to_cell_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.sim_trail_to_cell_object.simtrail_to_cell_object" title="Permalink to this definition">#</a></dt>
+<dd><p>Resimulates simulation trail and returns cell object.
+Expects Instance of ModelDataBase and sim_trail index.
+The mdb has to contain the paths to the parameterfiles at the following location:</p>
+<blockquote>
+<div><p>(‘parameterfiles’, ‘cellName’)
+(‘parameterfiles’, ‘networkName’)</p>
+</div></blockquote>
+<dl>
+<dt>Keyword arguments:</dt><dd><dl class="simple">
+<dt>compute (default: True): If true, a cell object is returned. If false, the respective</dt><dd><p>delayed object is returned</p>
+</dd>
+<dt>allPoints (default: False): if True, the cell will be simulated at very high resolution.</dt><dd><p>This mode might be useful for high quality visualizations.</p>
+</dd>
+</dl>
+<p>scale_apical: function that gets called after the cell is set up. 
+range_vars: range variables that should be recorded
+silent: If True, nothing will be written to stdout</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
         </article>
@@ -477,8 +470,27 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">simrun2.sim_trail_to_cell_object</a><ul>
+<li><a class="reference internal" href="#simrun2.sim_trail_to_cell_object.simtrail_to_cell_object"><code class="docutils literal notranslate"><span class="pre">simtrail_to_cell_object()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

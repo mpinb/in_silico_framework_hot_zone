@@ -17,7 +17,6 @@ singlecell\_input\_mapper.singlecell\_input\_mapper.synapse\_mapper
 
    .. autosummary::
    
-      ScalarField
       SynapseDensity
       SynapseMapper
    

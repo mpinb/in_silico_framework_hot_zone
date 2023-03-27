@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -380,7 +380,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -403,58 +403,71 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_feasible_model_params</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hay_objective_names</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hay_params_pdf</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hay_problem_description</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate</span></code>(cur_stim, tvec, vList)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.hay_evaluation.hay_evaluate" title="biophysics_fitting.hay_evaluation.hay_evaluate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate</span></code></a>(cur_stim, tvec, vList)</p></td>
 <td><p>note: I had the problem with python segfaulting as soon as this function got executed.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate_BAC</span></code>([tVec, vList])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate_BAC</span></code>([tVec, vList])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate_StepOne</span></code>([tVec, vList])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate_StepOne</span></code>([tVec, vList])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate_StepThree</span></code>([tVec, vList])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate_StepThree</span></code>([tVec, vList])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate_StepTwo</span></code>([tVec, vList])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate_StepTwo</span></code>([tVec, vList])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate_bAP</span></code>([tVec, vList])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_evaluate_bAP</span></code>([tVec, vList])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_objective_function</span></code>(x)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.hay_evaluation.hay_objective_function" title="biophysics_fitting.hay_evaluation.hay_objective_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hay_objective_function</span></code></a>(x)</p></td>
 <td><p>evaluates L5tt cell Nr.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_setup</span></code>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_setup</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_hay_evaluator</span></code>([testing])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.hay_evaluation.setup_hay_evaluator" title="biophysics_fitting.hay_evaluation.setup_hay_evaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_hay_evaluator</span></code></a>([testing])</p></td>
 <td><p>this adds a stump cell to the neuron environment,which is necessary to acces the hay evaluate functions.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.hay_evaluation.test" title="biophysics_fitting.hay_evaluation.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>()</p></td>
 <td><p>compare the result of the optimization of the hay evaluator with a precomputed result</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p class="rubric">Classes</p>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">defaultdict</span></code></p></td>
-<td><p>defaultdict(default_factory[, ...]) --&gt; dict with default factory</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="biophysics_fitting.hay_evaluation.hay_evaluate">
+<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.hay_evaluation.</span></span><span class="sig-name descname"><span class="pre">hay_evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cur_stim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vList</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/hay_evaluation.html#hay_evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.hay_evaluation.hay_evaluate" title="Permalink to this definition">#</a></dt>
+<dd><p>note: I had the problem with python segfaulting as soon as this function got executed.
+In that case, make sure, the mechanisms are correctly compiled and loaded.
+You can load the mechanisms by importing the mechanisms module.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biophysics_fitting.hay_evaluation.hay_objective_function">
+<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.hay_evaluation.</span></span><span class="sig-name descname"><span class="pre">hay_objective_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/hay_evaluation.html#hay_objective_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.hay_evaluation.hay_objective_function" title="Permalink to this definition">#</a></dt>
+<dd><p>evaluates L5tt cell Nr. 86 using the channel densities defined in x.
+x: numpy array of length 32 specifying the free parameters
+returns: np.array of length 5 representing the 5 objectives</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biophysics_fitting.hay_evaluation.setup_hay_evaluator">
+<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.hay_evaluation.</span></span><span class="sig-name descname"><span class="pre">setup_hay_evaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">testing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/hay_evaluation.html#setup_hay_evaluator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.hay_evaluation.setup_hay_evaluator" title="Permalink to this definition">#</a></dt>
+<dd><p>this adds a stump cell to the neuron environment,which is
+necessary to acces the hay evaluate functions. For the vairalbe time step solver,
+this changes the step size and can therefore minimally change the results.
+before testing reproducability, it is therefore necessary to initialize
+the evaluator</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="biophysics_fitting.hay_evaluation.test">
+<span class="sig-prename descclassname"><span class="pre">biophysics_fitting.hay_evaluation.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/hay_evaluation.html#test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.hay_evaluation.test" title="Permalink to this definition">#</a></dt>
+<dd><p>compare the result of the optimization of the hay evaluator with a precomputed result</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -500,8 +513,30 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">biophysics_fitting.hay_evaluation</a><ul>
+<li><a class="reference internal" href="#biophysics_fitting.hay_evaluation.hay_evaluate"><code class="docutils literal notranslate"><span class="pre">hay_evaluate()</span></code></a></li>
+<li><a class="reference internal" href="#biophysics_fitting.hay_evaluation.hay_objective_function"><code class="docutils literal notranslate"><span class="pre">hay_objective_function()</span></code></a></li>
+<li><a class="reference internal" href="#biophysics_fitting.hay_evaluation.setup_hay_evaluator"><code class="docutils literal notranslate"><span class="pre">setup_hay_evaluator()</span></code></a></li>
+<li><a class="reference internal" href="#biophysics_fitting.hay_evaluation.test"><code class="docutils literal notranslate"><span class="pre">test()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
