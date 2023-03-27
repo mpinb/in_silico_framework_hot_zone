@@ -515,83 +515,123 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spike_analysis.core.</span></span><span class="sig-name descname"><span class="pre">SpikeDetectionCreastTrough</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim_creast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'minimum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim_trough</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'minimum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_creast_trough_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tdelta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stimulus_period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stimulus_period_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_creast_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'__no_cellid_assigned__'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike_time_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'latest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Detects spikes by creast and trough amplitude.</p>
-<section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">#</a></h2>
-<p>reader_object: object with get_voltage_traces and get_stim_times method, e.g. SmrReader
-lim_creast: float or str, threashold above which a creast of a spike is detected</p>
-<blockquote>
-<div><p>as such. Needs to be float or “minimum”, or “zero”. If “minimum” or “zero” is choosen, 
-the threashold will be set based on the histogram of all creasts. If “minimum” is 
-choosen, lim_creast will be set to the first minimum in the histogram above or equal to 0.4mV. 
-If “zero” is choosen, lim_creast will be set to the first empty bin.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>lim_trough: float or str, as lim_creast. If float is specified, you probably </dt><dd><p>want to use a negative value. lim creast and lim_trough need to be both floats, both 
-“zero” or both “minimum”.</p>
-</dd>
-<dt>max_creast_trough_interval: float. Maximum interval between creast and trough such that </dt><dd><p>a spike is recognized.</p>
-</dd>
-</dl>
-<p>tdelta: float, minimum interval between spikes
-stimulus_period: int, number of stimuli applied per trial. E.g., for paired pulse stimuli,</p>
-<blockquote>
-<div><p>it should be 2.</p>
-</div></blockquote>
-<p>stimulus_period_offset: int, number of stimulus that initiates first trial.
-cellid: str, name to be used in spike times dataframe</p>
-</section>
-<section id="attributes">
-<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading">#</a></h2>
-<dl class="simple">
-<dt>lim_creast: lim_creast used for spike detection (if “minimum” or “zero” was defined, this will</dt><dd><p>be the numeric value used”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reader_object</strong> (<em>object with get_voltage_traces and get_stim_times method</em><em>, </em><em>e.g. SmrReader</em>) – </p></li>
+<li><p><strong>lim_creast</strong> (<em>float</em><em> or </em><em>str</em><em>, </em><em>threashold above which a creast</em><em> of </em><em>a spike is detected</em>) – as such. Needs to be float or “minimum”, or “zero”. If “minimum” or “zero” is choosen,
+the threashold will be set based on the histogram of all creasts. If “minimum” is
+choosen, lim_creast will be set to the first minimum in the histogram above or equal to 0.4mV.
+If “zero” is choosen, lim_creast will be set to the first empty bin.</p></li>
+<li><p><strong>lim_trough</strong> (<em>float</em><em> or </em><em>str</em><em>, </em><em>as lim_creast. If float is specified</em><em>, </em><em>you probably</em>) – want to use a negative value. lim creast and lim_trough need to be both floats, both
+“zero” or both “minimum”.</p></li>
+<li><p><strong>max_creast_trough_interval</strong> (<em>float. Maximum interval between creast and trough such that</em>) – a spike is recognized.</p></li>
+<li><p><strong>tdelta</strong> (<em>float</em><em>, </em><em>minimum interval between spikes</em>) – </p></li>
+<li><p><strong>stimulus_period</strong> (<em>int</em><em>, </em><em>number</em><em> of </em><em>stimuli applied per trial. E.g.</em><em>, </em><em>for paired pulse stimuli</em><em>,</em>) – it should be 2.</p></li>
+<li><p><strong>stimulus_period_offset</strong> (<em>int</em><em>, </em><em>number</em><em> of </em><em>stimulus that initiates first trial.</em>) – </p></li>
+<li><p><strong>cellid</strong> (<em>str</em><em>, </em><em>name to be used in spike times dataframe</em>) – </p></li>
+</ul>
 </dd>
 </dl>
-<p>lim_trough: as above
-st: spike times dataframe, one row per trial
-spike_times: all extracted spike times, fullfilling creast and trough criterion, filtered such that</p>
-<blockquote>
-<div><p>the minimal ISI is above tdelta.</p>
-</div></blockquote>
-<p>_spike_times_creast: spike times fullfilling creast criterion
-_spike_times_trough: spike times fullfilling trough criterien</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spike_analysis.core.SpikeDetectionCreastTrough.lim_creast">
+<span class="sig-name descname"><span class="pre">lim_creast</span></span><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.lim_creast" title="Permalink to this definition">#</a></dt>
+<dd><p>be the numeric value used”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>lim_creast used for spike detection (if “minimum” or “zero” was defined, this will</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spike_analysis.core.SpikeDetectionCreastTrough.lim_trough">
+<span class="sig-name descname"><span class="pre">lim_trough</span></span><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.lim_trough" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>as above</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spike_analysis.core.SpikeDetectionCreastTrough.st">
+<span class="sig-name descname"><span class="pre">st</span></span><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.st" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>spike times dataframe, one row per trial</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spike_analysis.core.SpikeDetectionCreastTrough.spike_times">
+<span class="sig-name descname"><span class="pre">spike_times</span></span><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.spike_times" title="Permalink to this definition">#</a></dt>
+<dd><p>the minimal ISI is above tdelta.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>all extracted spike times, fullfilling creast and trough criterion, filtered such that</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spike_analysis.core.SpikeDetectionCreastTrough._spike_times_creast">
+<span class="sig-name descname"><span class="pre">_spike_times_creast</span></span><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough._spike_times_creast" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>spike times fullfilling creast criterion</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spike_analysis.core.SpikeDetectionCreastTrough._spike_times_trough">
+<span class="sig-name descname"><span class="pre">_spike_times_trough</span></span><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough._spike_times_trough" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>spike times fullfilling trough criterien</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="spike_analysis.core.SpikeDetectionCreastTrough.get_default_events">
 <span class="sig-name descname"><span class="pre">get_default_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">show_stim_times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_trough_candidates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.get_default_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.get_default_events" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns a list of events to be displayed with the show_events method.
 Creates events for deteced spikes (black line) and spike candidates [dotted black line]
-(i.e. creasts and troughs exceeding the limit but which do not qualify to 
+(i.e. creasts and troughs exceeding the limit but which do not qualify to
 be a spike)</p>
-<section id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
-<p>show_spike_times:</p>
-</section>
-<section id="returns">
-<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this heading">#</a></h3>
-<p>events: list, containing 4-tuples of the format (time, color, linestyle, linewidth)</p>
-</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>show_spike_times</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>events</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list, containing 4-tuples of the format (time, color, linestyle, linewidth)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="spike_analysis.core.SpikeDetectionCreastTrough.show_events">
 <span class="sig-name descname"><span class="pre">show_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savepdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showfig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-5,</span> <span class="pre">5)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#SpikeDetectionCreastTrough.show_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_analysis.core.SpikeDetectionCreastTrough.show_events" title="Permalink to this definition">#</a></dt>
 <dd><p>Shows voltage trace, threasholds and events.</p>
-<section id="id2">
-<h3>Parameters<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
-<dl>
-<dt>events: ‘auto’: uses the get_default_events_method. shows detected spikes as black line, spike candidates </dt><dd><blockquote>
-<div><p>as dotted black line, stimulus times as bold red line</p>
-</div></blockquote>
-<p>‘only_creast’: 
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>events</strong> (<em>'auto': uses the get_default_events_method. shows detected spikes as black line</em><em>, </em><em>spike candidates</em>) – <p>as dotted black line, stimulus times as bold red line
+‘only_creast’:
 list: explicitly define events to show. Needs to be list containing 4-touples in the following format</p>
 <blockquote>
 <div><p>(timepoint, ‘color’, ‘linestyle’, linewidth)</p>
 </div></blockquote>
+</p>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
-</section>
 </dd></dl>
 
 <dl class="py class">
@@ -605,22 +645,25 @@ list: explicitly define events to show. Needs to be list containing 4-touples in
 <dt class="sig sig-object py" id="spike_analysis.core.filter_short_ISIs">
 <span class="sig-prename descclassname"><span class="pre">spike_analysis.core.</span></span><span class="sig-name descname"><span class="pre">filter_short_ISIs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tdelta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#filter_short_ISIs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_analysis.core.filter_short_ISIs" title="Permalink to this definition">#</a></dt>
 <dd><p>Filters out any events that occur in an interval shorter than tdelta.</p>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
+<p class="rubric">Example</p>
 <p>filter_short_ISIs([1,2,3,4,5], tdelta = 1.5)
 &gt; [1, 3, 5]
 filter_short_ISIs([1,2,3,4,5], tdelta = 2)
 &gt; [1, 3, 5]</p>
-</section>
-<section id="id3">
-<h2>Parameters<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h2>
-<p>t: list, containing timepoints of events
-tdelta: float, optional, minimal interval between events</p>
-</section>
-<section id="id4">
-<h2>Returns<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h2>
-<p>out_t: list, containing filtered spike times</p>
-</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>list</em><em>, </em><em>containing timepoints</em><em> of </em><em>events</em>) – </p></li>
+<li><p><strong>tdelta</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>minimal interval between events</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>out_t</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list, containing filtered spike times</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -632,82 +675,104 @@ a corresponding creast at maximum 2ms before the trough. All creasts fullfilling
 this criterion are extracted. The spike time is set to the latest creast (if mode = ‘latest’)
 or the maximum creast amplitude (if mode = ‘creast_max’).</p>
 <p>If a through does not have a corresponding creast, no spike is detected.</p>
-<section id="id5">
-<h2>Parameters<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h2>
-<p>spike_times: list, containing spike times defined by the creast of the waveform
-spike_times_trough, list, containing spike times defined by the trough of the waveform</p>
-</section>
-<section id="id6">
-<h2>Returns<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h2>
-<p>filtered_spike_times: list, containing spikes fullfilling the definition above.</p>
-</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spike_times</strong> (<em>list</em><em>, </em><em>containing spike times defined by the creast</em><em> of </em><em>the waveform</em>) – </p></li>
+<li><p><strong>spike_times_trough</strong> – </p></li>
+<li><p><strong>list</strong> – </p></li>
+<li><p><strong>waveform</strong> (<em>containing spike times defined by the trough</em><em> of </em><em>the</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>filtered_spike_times</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list, containing spikes fullfilling the definition above.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="spike_analysis.core.get_peaks_above">
 <span class="sig-prename descclassname"><span class="pre">spike_analysis.core.</span></span><span class="sig-name descname"><span class="pre">get_peaks_above</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#get_peaks_above"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_analysis.core.get_peaks_above" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute timepoints of maxima above a threashold.</p>
-<section id="id7">
-<h2>Parameters<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h2>
-<p>t: list, containing timepoints
-v: list, containing recorded voltage
-lim: float, threashold, above which (&gt;=) maxima are detected.</p>
-</section>
-<section id="id8">
-<h2>Returns<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h2>
-<p>max_t: list, containing timepoints of maxima
-max_v: list, containing voltage at timepoints of maxima</p>
-</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>list</em><em>, </em><em>containing timepoints</em>) – </p></li>
+<li><p><strong>v</strong> (<em>list</em><em>, </em><em>containing recorded voltage</em>) – </p></li>
+<li><p><strong>lim</strong> (<em>float</em><em>, </em><em>threashold</em><em>, </em><em>above which</em><em> (</em><em>&gt;=</em><em>) </em><em>maxima are detected.</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>max_t</strong> (<em>list, containing timepoints of maxima</em>)</p></li>
+<li><p><strong>max_v</strong> (<em>list, containing voltage at timepoints of maxima</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="spike_analysis.core.get_period_label_by_time">
 <span class="sig-prename descclassname"><span class="pre">spike_analysis.core.</span></span><span class="sig-name descname"><span class="pre">get_period_label_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">periods</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#get_period_label_by_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_analysis.core.get_period_label_by_time" title="Permalink to this definition">#</a></dt>
 <dd><p>Classifies timepoint.</p>
-<section id="id9">
-<h2>Parameters<a class="headerlink" href="#id9" title="Permalink to this heading">#</a></h2>
-<p>periods: dict, containing period label as key and (period_start, period_end) as value
-t: float, timepoint to classify</p>
-</section>
-<section id="id10">
-<h2>Returns<a class="headerlink" href="#id10" title="Permalink to this heading">#</a></h2>
-<p>label: label of period in which t is in. ‘undefined’ if t is in no defined period</p>
-</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>periods</strong> (<em>dict</em><em>, </em><em>containing period label as key and</em><em> (</em><em>period_start</em><em>, </em><em>period_end</em><em>) </em><em>as value</em>) – </p></li>
+<li><p><strong>t</strong> (<em>float</em><em>, </em><em>timepoint to classify</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>label</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>label of period in which t is in. ‘undefined’ if t is in no defined period</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="spike_analysis.core.get_spike_times_from_row">
 <span class="sig-prename descclassname"><span class="pre">spike_analysis.core.</span></span><span class="sig-name descname"><span class="pre">get_spike_times_from_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#get_spike_times_from_row"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_analysis.core.get_spike_times_from_row" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns list containing all elements in row, that are not NaN.</p>
-<section id="id11">
-<h2>Parameters<a class="headerlink" href="#id11" title="Permalink to this heading">#</a></h2>
-<p>row: pandas.Series, containing spike times</p>
-</section>
-<section id="id12">
-<h2>Returns<a class="headerlink" href="#id12" title="Permalink to this heading">#</a></h2>
-<p>list, containint spike times</p>
-</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>row</strong> (<em>pandas.Series</em><em>, </em><em>containing spike times</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list, containint spike times</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="spike_analysis.core.get_st_from_spike_times_and_stim_times">
 <span class="sig-prename descclassname"><span class="pre">spike_analysis.core.</span></span><span class="sig-name descname"><span class="pre">get_st_from_spike_times_and_stim_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spike_times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stim_times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spike_times'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#get_st_from_spike_times_and_stim_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_analysis.core.get_st_from_spike_times_and_stim_times" title="Permalink to this definition">#</a></dt>
 <dd><p>Computes spike times dataframe based on list of spike times and stimulus times.</p>
-<p>Assumes that stimulus times have a constant interstimulus interval!    
+<p>Assumes that stimulus times have a constant interstimulus interval!
 Ignores spikes before the first stimulus and after the last stimulus + interstimulus interval.</p>
 <p>Special cases:
 If only one stimulus is defined, spike times after that stimulus are returned
 If no stimulus is defined, spike times are returned unchanged.</p>
-<section id="id13">
-<h2>Parameters<a class="headerlink" href="#id13" title="Permalink to this heading">#</a></h2>
-<p>spike_times: list of spike times
-stim_times: list of stimulus times</p>
-</section>
-<section id="id14">
-<h2>Returns<a class="headerlink" href="#id14" title="Permalink to this heading">#</a></h2>
-<p>Pandas dataframe. Its format is as follows: One row is one trial. The columns contain the spike times
-and are named in ascending order (0,1,2, …).</p>
-</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spike_times</strong> (<em>list</em><em> of </em><em>spike times</em>) – </p></li>
+<li><p><strong>stim_times</strong> (<em>list</em><em> of </em><em>stimulus times</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Pandas dataframe. Its format is as follows</strong> (<em>One row is one trial. The columns contain the spike times</em>)</p></li>
+<li><p><em>and are named in ascending order (0,1,2, …).</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -722,14 +787,17 @@ and are named in ascending order (0,1,2, …).</p>
 <dd><p>Read spike2 file.</p>
 <p>To avoid changing the spike2 file at all costs, the file is first copied to the temp folder,
 read from there. Then, the copy is deleted.</p>
-<section id="id15">
-<h2>Parameters<a class="headerlink" href="#id15" title="Permalink to this heading">#</a></h2>
-<p>path: absolute path to smr file</p>
-</section>
-<section id="id16">
-<h2>Returns<a class="headerlink" href="#id16" title="Permalink to this heading">#</a></h2>
-<p>data: neo.core.block.Block object, containing the content of the smr file</p>
-</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>absolute path to smr file</em>) – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>data</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>neo.core.block.Block object, containing the content of the smr file</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -737,21 +805,22 @@ read from there. Then, the copy is deleted.</p>
 <span class="sig-prename descclassname"><span class="pre">spike_analysis.core.</span></span><span class="sig-name descname"><span class="pre">stimulus_interval_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stim_times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#stimulus_interval_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_analysis.core.stimulus_interval_filter" title="Permalink to this definition">#</a></dt>
 <dd><p>Filters periodic stimuli such that only the first stimulus of each
 period is retained.</p>
-<section id="id17">
-<h2>Parameters<a class="headerlink" href="#id17" title="Permalink to this heading">#</a></h2>
-<p>stim_times: list, containing stimulus times
-period_length: number of stimuli forming one period, default: 1</p>
-<blockquote>
-<div><p>E.g. if you have stimuli at 10,20,40,50,70,80, period_length should be 2</p>
-</div></blockquote>
-<p>offset: number of the stimulus in each period to be extracted.</p>
-</section>
-<section id="id18">
-<h2>Returns<a class="headerlink" href="#id18" title="Permalink to this heading">#</a></h2>
-<p>stim_times: list, containing filtered stimulus times</p>
-</section>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stim_times</strong> (<em>list</em><em>, </em><em>containing stimulus times</em>) – </p></li>
+<li><p><strong>period_length</strong> (<em>number</em><em> of </em><em>stimuli forming one period</em><em>, </em><em>default: 1</em>) – E.g. if you have stimuli at 10,20,40,50,70,80, period_length should be 2</p></li>
+<li><p><strong>offset</strong> (<em>number</em><em> of </em><em>the stimulus in each period to be extracted.</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>stim_times</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list, containing filtered stimulus times</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
 <p>stimulus_interval_filter([1,2,3,4])
 &gt; [1,2,3,4]</p>
 <blockquote>
@@ -762,22 +831,24 @@ period_length: number of stimuli forming one period, default: 1</p>
 <div><p>stimulus_interval_filter([1,2,3,4], period=2, offset = 1)</p>
 </div></blockquote>
 <p>&gt; [2,4]</p>
-</section>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="spike_analysis.core.strip_st">
 <span class="sig-prename descclassname"><span class="pre">spike_analysis.core.</span></span><span class="sig-name descname"><span class="pre">strip_st</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">st</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spike_analysis/core.html#strip_st"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_analysis.core.strip_st" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns spike times dataframe only containing spike times, without metadata.</p>
-<section id="id19">
-<h2>Parameters<a class="headerlink" href="#id19" title="Permalink to this heading">#</a></h2>
-<p>st: pandas.DataFrame containing spike times as generated by get_st_from_spike_times_and_stim_times</p>
-</section>
-<section id="id20">
-<h2>Returns<a class="headerlink" href="#id20" title="Permalink to this heading">#</a></h2>
-<p>pandas.DataFrame, in which all columns, that cannot be converted to integer, are filtered out,
-i.e. the DataFrame contains only spike times and no metadata.</p>
-</section>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>st</strong> (<em>pandas.DataFrame containing spike times as generated by get_st_from_spike_times_and_stim_times</em>) – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>pandas.DataFrame, in which all columns, that cannot be converted to integer, are filtered out,</em></p></li>
+<li><p><em>i.e. the DataFrame contains only spike times and no metadata.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -841,6 +912,12 @@ i.e. the DataFrame contains only spike times and no metadata.</p>
 <li><a class="reference internal" href="#spike_analysis.core.ReaderDummy"><code class="docutils literal notranslate"><span class="pre">ReaderDummy</span></code></a></li>
 <li><a class="reference internal" href="#spike_analysis.core.ReaderSmr"><code class="docutils literal notranslate"><span class="pre">ReaderSmr</span></code></a></li>
 <li><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough"><code class="docutils literal notranslate"><span class="pre">SpikeDetectionCreastTrough</span></code></a><ul>
+<li><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough.lim_creast"><code class="docutils literal notranslate"><span class="pre">SpikeDetectionCreastTrough.lim_creast</span></code></a></li>
+<li><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough.lim_trough"><code class="docutils literal notranslate"><span class="pre">SpikeDetectionCreastTrough.lim_trough</span></code></a></li>
+<li><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough.st"><code class="docutils literal notranslate"><span class="pre">SpikeDetectionCreastTrough.st</span></code></a></li>
+<li><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough.spike_times"><code class="docutils literal notranslate"><span class="pre">SpikeDetectionCreastTrough.spike_times</span></code></a></li>
+<li><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough._spike_times_creast"><code class="docutils literal notranslate"><span class="pre">SpikeDetectionCreastTrough._spike_times_creast</span></code></a></li>
+<li><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough._spike_times_trough"><code class="docutils literal notranslate"><span class="pre">SpikeDetectionCreastTrough._spike_times_trough</span></code></a></li>
 <li><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough.get_default_events"><code class="docutils literal notranslate"><span class="pre">SpikeDetectionCreastTrough.get_default_events()</span></code></a></li>
 <li><a class="reference internal" href="#spike_analysis.core.SpikeDetectionCreastTrough.show_events"><code class="docutils literal notranslate"><span class="pre">SpikeDetectionCreastTrough.show_events()</span></code></a></li>
 </ul>

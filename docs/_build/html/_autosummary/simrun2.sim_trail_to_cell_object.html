@@ -394,7 +394,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#simrun2.sim_trail_to_cell_object.simtrail_to_cell_object" title="simrun2.sim_trail_to_cell_object.simtrail_to_cell_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simtrail_to_cell_object</span></code></a>(mdb, sim_trail_index)</p></td>
-<td><p>Resimulates simulation trail and returns cell object. Expects Instance of ModelDataBase and sim_trail index. The mdb has to contain the paths to the parameterfiles at the following location:      ('parameterfiles', 'cellName')     ('parameterfiles', 'networkName').</p></td>
+<td><p>Resimulates simulation trail and returns cell object. Expects Instance of ModelDataBase and sim_trail index. The mdb has to contain the paths to the parameterfiles at the following location:     ('parameterfiles', 'cellName')     ('parameterfiles', 'networkName').</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">trail_to_cell_object</span></code>([name, cellName, ...])</p></td>
 <td><p></p></td>
@@ -412,16 +412,17 @@ The mdb has to contain the paths to the parameterfiles at the following location
 <div><p>(‘parameterfiles’, ‘cellName’)
 (‘parameterfiles’, ‘networkName’)</p>
 </div></blockquote>
-<dl>
-<dt>Keyword arguments:</dt><dd><dl class="simple">
-<dt>compute (default: True): If true, a cell object is returned. If false, the respective</dt><dd><p>delayed object is returned</p>
-</dd>
-<dt>allPoints (default: False): if True, the cell will be simulated at very high resolution.</dt><dd><p>This mode might be useful for high quality visualizations.</p>
-</dd>
-</dl>
-<p>scale_apical: function that gets called after the cell is set up. 
-range_vars: range variables that should be recorded
-silent: If True, nothing will be written to stdout</p>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>default</strong> (<em>allPoints</em>) – True): If true, a cell object is returned. If false, the respective
+delayed object is returned</p></li>
+<li><p><strong>(</strong><strong>default</strong> – False): if True, the cell will be simulated at very high resolution.
+This mode might be useful for high quality visualizations.</p></li>
+<li><p><strong>scale_apical</strong> – function that gets called after the cell is set up.</p></li>
+<li><p><strong>range_vars</strong> – range variables that should be recorded</p></li>
+<li><p><strong>silent</strong> – If True, nothing will be written to stdout</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

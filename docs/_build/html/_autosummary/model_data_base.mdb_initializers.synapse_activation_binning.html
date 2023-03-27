@@ -431,11 +431,11 @@ save_groupby(mdb, values, groupby)</p>
 <span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.synapse_activation_binning.</span></span><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefun=&lt;function</span> <span class="pre">prefun&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">applyfun=&lt;function</span> <span class="pre">applyfun&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postfun=&lt;function</span> <span class="pre">postfun&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxtime=400</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.init" title="Permalink to this definition">#</a></dt>
 <dd><p>Binning synapse activations.</p>
 <dl>
-<dt>mdb: ModelDataBase object, which is already initalized, such that </dt><dd><p>the key mdb[‘synapse_activation’] exists.</p>
+<dt>mdb: ModelDataBase object, which is already initalized, such that</dt><dd><p>the key mdb[‘synapse_activation’] exists.</p>
 </dd>
-<dt>groupby: (default: ‘’): species for which subgroups the bins should be </dt><dd><dl class="simple">
-<dt>calculated. Available values include: </dt><dd><p>‘celltype’, 
-‘presynaptic_column’, 
+<dt>groupby: (default: ‘’): species for which subgroups the bins should be</dt><dd><dl class="simple">
+<dt>calculated. Available values include:</dt><dd><p>‘celltype’,
+‘presynaptic_column’,
 ‘proximal’, (soma distance &lt; 500 ym)
 ‘EI’ (Lumping the EXC / INH celltypes together)
 ‘binned_somadist’, 50 micron bins on soma distance</p>
@@ -460,13 +460,16 @@ Can be a list, if “sub-subgroups” should be calculated.</p>
 <span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.synapse_activation_binning.</span></span><span class="sig-name descname"><span class="pre">synapse_activation_postprocess_dask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ddf</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/synapse_activation_binning.html#synapse_activation_postprocess_dask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.synapse_activation_binning.synapse_activation_postprocess_dask" title="Permalink to this definition">#</a></dt>
 <dd><p>Calculates bins of synapse activation dask dataframe per trail.
 #Todo: make this method out of core</p>
-<dl>
-<dt>args:</dt><dd><p>ddf: synapse activation dask dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ddf</strong> – synapse activation dask dataframe</p>
 </dd>
+</dl>
+<dl>
 <dt>kwargs:</dt><dd><dl>
-<dt>groupby: (default: ‘’): species for which subgroups the bins should be </dt><dd><dl class="simple">
-<dt>calculated. Available values include: </dt><dd><p>‘celltype’, 
-‘presynaptic_column’, 
+<dt>groupby: (default: ‘’): species for which subgroups the bins should be</dt><dd><dl class="simple">
+<dt>calculated. Available values include:</dt><dd><p>‘celltype’,
+‘presynaptic_column’,
 ‘proximal’, (soma distance &lt; 500 ym)
 ‘EI’ (Lumping the EXC / INH celltypes together)
 ‘binned_somadist’ synapse counts for all 50 microns</p>
@@ -475,7 +478,7 @@ Can be a list, if “sub-subgroups” should be calculated.</p>
 <p>It can also be any column in the specified dataframe.
 Can be a list, if “sub-subgroups” should be calculated.</p>
 </dd>
-<dt>mdb: if specified, the result will be computed immediately and </dt><dd><p>saved in the database immediately.</p>
+<dt>mdb: if specified, the result will be computed immediately and</dt><dd><p>saved in the database immediately.</p>
 </dd>
 <dt>get: only has an effect if ‘mdb’ kwarg is provided. In this case,</dt><dd><p>it allows to specify a dask scheduler for the computation</p>
 </dd>
@@ -484,7 +487,10 @@ Can be a list, if “sub-subgroups” should be calculated.</p>
 (applyfun: actual binning function)
 (postfun: function to merge results together for one partition)</p>
 </dd>
-<dt>returns: </dt><dd><p>dask.delayed object. If computed, this will return a dictionary 
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dask.delayed object. If computed, this will return a dictionary
 containing numpy arrays. rows: sim trails, columns: bins</p>
 </dd>
 </dl>

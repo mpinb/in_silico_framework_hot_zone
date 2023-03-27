@@ -408,13 +408,15 @@
 the folder dirPrefix/results/simName. Returns delayed object, which can
 be computed with an arbitrary dask scheduler. For each process, a new
 seed is generated using the seed generator.</p>
-<dl>
-<dt>Parameters:</dt><dd><dl>
-<dt>cellParamName: str, Path to cell parameter file, containing information about:</dt><dd><ul>
-<li><p>info: autor, date, name</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cellParamName</strong> – <p>str, Path to cell parameter file, containing information about:
+- info: autor, date, name</p>
+<ul>
 <li><p>NMODL_mechanisms: path to NEURON mechanisms</p></li>
 <li><dl>
-<dt>neuron: </dt><dd><p>-path to hoc-file
+<dt>neuron:</dt><dd><p>-path to hoc-file
 - per subcellular compartment (Soma, AIS, …):</p>
 <blockquote>
 <div><ul class="simple">
@@ -426,23 +428,21 @@ seed is generated using the seed generator.</p>
 </dl>
 </li>
 </ul>
-</dd>
-<dt>evokedUpParamName: str, Path to network parameter file, containing information about:</dt><dd><ul class="simple">
-<li><p>autor, name, date</p></li>
-<li><dl class="simple">
-<dt>for each cell-type: </dt><dd><p>synapse: release probability, path to distribution file, receptor and associated parameters
+</p></li>
+<li><p><strong>evokedUpParamName</strong> – <p>str, Path to network parameter file, containing information about:
+- autor, name, date
+- for each cell-type:</p>
+<blockquote>
+<div><p>synapse: release probability, path to distribution file, receptor and associated parameters
 connectionFile: path to connection file
 cell number
 celltype: pointcell, spiketrain</p>
-</dd>
-</dl>
-</li>
+</div></blockquote>
+</p></li>
+<li><p><strong>nSweeps</strong> – number of synapse activations per process</p></li>
+<li><p><strong>nprocs</strong> – number of independent processes</p></li>
+<li><p><strong>tStop</strong> – time in ms at which the synaptic input should stop.</p></li>
 </ul>
-</dd>
-</dl>
-<p>nSweeps: number of synapse activations per process
-nprocs: number of independent processes
-tStop: time in ms at which the synaptic input should stop.</p>
 </dd>
 </dl>
 <p>Returns: Delayed object. Can be computed with arbitrary scheduler.

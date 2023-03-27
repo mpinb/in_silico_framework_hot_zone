@@ -413,7 +413,7 @@ It includes:</p>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#barrel_cortex.correct_hoc_depth" title="barrel_cortex.correct_hoc_depth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">correct_hoc_depth</span></code></a>(hoc_in, hoc_reference_or_depth)</p></td>
-<td><p>Variables: reference_depth_or_hoc: depth in which to put morphology, either specified through float or      a path to a hoc morphology from which the soma centroid position will be extracted and used as depth coordinate_system_z_move: which z axis to choose to move the morphology. Must be one of the barrels ('C1', 'Alpha', ...) measure_fun: function that receives a point and returns a depth. Typical choices:     partial(get_distance_below_L45_barrel_surface, barrel = 'C2')     get_distance_below_L45_surface.</p></td>
+<td><p>Variables: reference_depth_or_hoc: depth in which to put morphology, either specified through float or     a path to a hoc morphology from which the soma centroid position will be extracted and used as depth coordinate_system_z_move: which z axis to choose to move the morphology. Must be one of the barrels ('C1', 'Alpha', ...) measure_fun: function that receives a point and returns a depth. Typical choices:     partial(get_distance_below_L45_barrel_surface, barrel = 'C2')     get_distance_below_L45_surface.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_3x3</span></code>(hocpath_C2, outdir)</p></td>
 <td><p></p></td>
@@ -502,7 +502,7 @@ reference_depth_or_hoc: depth in which to put morphology, either specified throu
 <div><p>a path to a hoc morphology from which the soma centroid position will be extracted and used as depth</p>
 </div></blockquote>
 <dl class="simple">
-<dt>coordinate_system_z_move: which z axis to choose to move the morphology. </dt><dd><p>Must be one of the barrels (‘C1’, ‘Alpha’, …)</p>
+<dt>coordinate_system_z_move: which z axis to choose to move the morphology.</dt><dd><p>Must be one of the barrels (‘C1’, ‘Alpha’, …)</p>
 </dd>
 <dt>measure_fun: function that receives a point and returns a depth. Typical choices:</dt><dd><p>partial(get_distance_below_L45_barrel_surface, barrel = ‘C2’)
 get_distance_below_L45_surface</p>
@@ -535,8 +535,8 @@ The coordinates must be in the global coordinate system, i.e. D2</p>
 <dd><p>moves hoc morphology in xyz directions in the coordinate system of the specified barrel.
 Cave: The coordinate system might be different from Roberts definition of local coordinate systems.
 It is generated as follows:
-- z is the local z axis of the column 
-- x has the same orientation as in the global coordinate system, but is tilted in 
+- z is the local z axis of the column
+- x has the same orientation as in the global coordinate system, but is tilted in
 its z component to be orthogonal on the locaal z axis.
 - y is orthogonal to both, roughly pointing in the y direction of the global coordinate system</p>
 </dd></dl>

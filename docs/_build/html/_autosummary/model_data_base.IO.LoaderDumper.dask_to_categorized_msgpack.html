@@ -397,7 +397,7 @@
 <dl class="simple">
 <dt>How will it save the dataframe?</dt><dd><ol class="arabic simple">
 <li><dl class="simple">
-<dt>If the number of partitions is very big (&gt;10000), it will repartition the </dt><dd><p>dataframe to 5000 partitions. Loading such a dataframe is normaly possible
+<dt>If the number of partitions is very big (&gt;10000), it will repartition the</dt><dd><p>dataframe to 5000 partitions. Loading such a dataframe is normaly possible
 within 1 second.</p>
 </dd>
 </dl>
@@ -470,7 +470,7 @@ reduce network traffic for suitable dataframes. Suitable dataframes are for exam
 <dt class="sig sig-object py" id="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer">
 <span class="sig-prename descclassname"><span class="pre">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.</span></span><span class="sig-name descname"><span class="pre">my_dask_writer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ddf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/LoaderDumper/dask_to_categorized_msgpack.html#my_dask_writer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.my_dask_writer" title="Permalink to this definition">#</a></dt>
 <dd><p>Very simple method to store a dask dataframe to a bunch of files.
-There was a lot of frustration with the respective dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes 
+There was a lot of frustration with the respective dask method, which has some weired hard-to-reproduce issues, e.g. it sometimes
 takes all the ram (512GB!) or takes a very long time to “optimize” / merge the graph.</p>
 <p>Update: this issue was addressed here:
 <a class="reference external" href="https://github.com/dask/dask/issues/1888">https://github.com/dask/dask/issues/1888</a></p>

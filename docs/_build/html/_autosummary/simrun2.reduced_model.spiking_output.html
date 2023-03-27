@@ -437,14 +437,14 @@
 <span class="sig-prename descclassname"><span class="pre">simrun2.reduced_model.spiking_output.</span></span><span class="sig-name descname"><span class="pre">get_reduced_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonlinearity_LUT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refractory_period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_fun=&lt;built-in</span> <span class="pre">function</span> <span class="pre">sum&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LUT_resolution=1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun2/reduced_model/spiking_output.html#get_reduced_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun2.reduced_model.spiking_output.get_reduced_model" title="Permalink to this definition">#</a></dt>
 <dd><p>returns a function which you can feed with data and which will return evaluation results of the reduced model.</p>
 <dl class="simple">
-<dt>kernel_dict: dictionary of kernels, e.g. if you have a seperated kernel for EXC and INH input, </dt><dd><p>you could use {‘EXC’: [0,0,1], ‘INH’: [0,1,1]}</p>
+<dt>kernel_dict: dictionary of kernels, e.g. if you have a seperated kernel for EXC and INH input,</dt><dd><p>you could use {‘EXC’: [0,0,1], ‘INH’: [0,1,1]}</p>
 </dd>
 <dt>nonlinearity_LUT: dictionary, that contains values of nonlinearity. Keys are refractory periods. E.g.</dt><dd><p>you could have a dict like this: {0: pd.Series([0,0,.1,.2,.4,.3,.1,0,0]), 10: pd.Series([[0,0,.1,.2,.4,.8,1,1,1]])}.</p>
 </dd>
 </dl>
 <p>combine_fun: function to combine convolutions of a single trail together. Default:  sum</p>
 <dl class="simple">
-<dt>LUT_resolution: reolution of the nonlinearity_LUT. E.g. in case LUT_resolution == 1, the pd.Series objects </dt><dd><p>in the nonlinearity_LUT are expect to have keys for […,0,1,2,3, …], in case of LUT_resolution == 2,
+<dt>LUT_resolution: reolution of the nonlinearity_LUT. E.g. in case LUT_resolution == 1, the pd.Series objects</dt><dd><p>in the nonlinearity_LUT are expect to have keys for […,0,1,2,3, …], in case of LUT_resolution == 2,
 the pd.Series objects in the nonlinearity_LUT are expect to have keys for […,0,2,4,6, …]</p>
 </dd>
 </dl>

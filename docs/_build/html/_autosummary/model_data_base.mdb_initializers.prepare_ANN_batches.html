@@ -415,7 +415,7 @@
 <td><p>Given a section id, this method returns the distance to soma for all bins in this section</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_binsize" title="model_data_base.mdb_initializers.prepare_ANN_batches.get_binsize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_binsize</span></code></a>(length[, binsize_goal])</p></td>
-<td><p>given a length of a branch, returns number of binsize and number of bins that results in binning closest to  the binsize goal</p></td>
+<td><p>given a length of a branch, returns number of binsize and number of bins that results in binning closest to the binsize goal</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_max_depolarization_per_ms</span></code>(vt_dask)</p></td>
 <td><p></p></td>
@@ -442,7 +442,7 @@
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#model_data_base.mdb_initializers.prepare_ANN_batches.init" title="model_data_base.mdb_initializers.prepare_ANN_batches.init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init</span></code></a>(mdb[, mdb_target, min_time, max_time, ...])</p></td>
-<td><p>persist: whether the synapse activation dataframe should be loaded into memory  on the dask cluster.</p></td>
+<td><p>persist: whether the synapse activation dataframe should be loaded into memory on the dask cluster.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_syn_weights</span></code>(m, client)</p></td>
 <td><p></p></td>
@@ -479,11 +479,18 @@
 It then checks which bins are adjacent within these sections.
 Sections are defined by the neuron simulation, but bins are ad-hoc defined by data preparation for the ANN.
 Eeach section always has one or more bins.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>section_id (int): index of the neuron section
-section_distances_df (pd.DataFrame): the dataframe describing distance to soma for all sections, as provided by :&#64;function get_section_distances_df:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section_id</strong> (<em>int</em>) – index of the neuron section</p></li>
+<li><p><strong>section_distances_df</strong> (<em>pd.DataFrame</em>) – the dataframe describing distance to soma for all sections, as provided by :&#64;function get_section_distances_df:</p></li>
+</ul>
 </dd>
-<dt>Returns:</dt><dd><p>dict: a dictionary with pairs of adjacant bins.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dictionary with pairs of adjacant bins.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -492,11 +499,18 @@ section_distances_df (pd.DataFrame): the dataframe describing distance to soma f
 <dt class="sig sig-object py" id="model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_soma_distances_in_section">
 <span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.prepare_ANN_batches.</span></span><span class="sig-name descname"><span class="pre">get_bin_soma_distances_in_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_distances_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_bin_soma_distances_in_section"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_bin_soma_distances_in_section" title="Permalink to this definition">#</a></dt>
 <dd><p>Given a section id, this method returns the distance to soma for all bins in this section</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>section_id (int): Id of the neuron section
-section_distances_df (pd.DataFrame): the dataframe describing distance to soma for all sections, as provided by :&#64;function get_section_distances_df:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section_id</strong> (<em>int</em>) – Id of the neuron section</p></li>
+<li><p><strong>section_distances_df</strong> (<em>pd.DataFrame</em>) – the dataframe describing distance to soma for all sections, as provided by :&#64;function get_section_distances_df:</p></li>
+</ul>
 </dd>
-<dt>Returns:</dt><dd><p>list: A list containing the distance to soma for each bin in a section.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list containing the distance to soma for each bin in a section.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -504,7 +518,7 @@ section_distances_df (pd.DataFrame): the dataframe describing distance to soma f
 <dl class="py function">
 <dt class="sig sig-object py" id="model_data_base.mdb_initializers.prepare_ANN_batches.get_binsize">
 <span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.prepare_ANN_batches.</span></span><span class="sig-name descname"><span class="pre">get_binsize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binsize_goal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_binsize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_binsize" title="Permalink to this definition">#</a></dt>
-<dd><p>given a length of a branch, returns number of binsize and number of bins that results in binning closest to 
+<dd><p>given a length of a branch, returns number of binsize and number of bins that results in binning closest to
 the binsize goal</p>
 </dd></dl>
 
@@ -512,12 +526,19 @@ the binsize goal</p>
 <dt class="sig sig-object py" id="model_data_base.mdb_initializers.prepare_ANN_batches.get_neighboring_spatial_bins">
 <span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.prepare_ANN_batches.</span></span><span class="sig-name descname"><span class="pre">get_neighboring_spatial_bins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_distances_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bin_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_neighboring_spatial_bins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_neighboring_spatial_bins" title="Permalink to this definition">#</a></dt>
 <dd><p>Given a bin id, this method returns all the neighboring bins</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>cell (cell): cell object
-neup (_type_): neuron parameter file
-bin_id (_type_): BIn id of format: section_id/bin_id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell</strong> (<em>cell</em>) – cell object</p></li>
+<li><p><strong>neup</strong> (<em>_type_</em>) – neuron parameter file</p></li>
+<li><p><strong>bin_id</strong> (<em>_type_</em>) – BIn id of format: section_id/bin_id</p></li>
+</ul>
 </dd>
-<dt>Returns:</dt><dd><p>list: list of all ids of bins that neighbor the given bin</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of all ids of bins that neighbor the given bin</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -527,10 +548,15 @@ bin_id (_type_): BIn id of format: section_id/bin_id</p>
 <span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.prepare_ANN_batches.</span></span><span class="sig-name descname"><span class="pre">get_spatial_bin_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section_distances_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#get_spatial_bin_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.get_spatial_bin_names" title="Permalink to this definition">#</a></dt>
 <dd><p>Given a dataframe describing the distance to soma of all sections, as provided by :&#64;function get_section_distances_df:,
 this method returns the names for all the spatial bins of the format section_id/bin_id. E.g.: 5/2 denotes the second bin of section 5.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>section_distances_df (pd.DataFrame): the dataframe describing distance to soma for all sections, as provided by :&#64;function get_section_distances_df:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>section_distances_df</strong> (<em>pd.DataFrame</em>) – the dataframe describing distance to soma for all sections, as provided by :&#64;function get_section_distances_df:</p>
 </dd>
-<dt>Returns:</dt><dd><p>list: A list containing the bin ids in string format.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list containing the bin ids in string format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -538,7 +564,7 @@ this method returns the names for all the spatial bins of the format section_id/
 <dl class="py function">
 <dt class="sig sig-object py" id="model_data_base.mdb_initializers.prepare_ANN_batches.init">
 <span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.prepare_ANN_batches.</span></span><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdb_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bin_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batchsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sti_selection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sti_selection_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synaptic_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dend_ap_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_-30.0'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/prepare_ANN_batches.html#init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.prepare_ANN_batches.init" title="Permalink to this definition">#</a></dt>
-<dd><p>persist: whether the synapse activation dataframe should be loaded into memory 
+<dd><p>persist: whether the synapse activation dataframe should be loaded into memory
 on the dask cluster. Speeds up the process if it fits in memory, otherwise leads to crash</p>
 </dd></dl>
 

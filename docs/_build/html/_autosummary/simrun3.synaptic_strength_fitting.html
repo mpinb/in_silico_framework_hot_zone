@@ -407,7 +407,7 @@ Third: functions to analyze PSPs</p>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding" title="simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_ex_network_param_from_network_embedding</span></code></a>(confile)</p></td>
-<td><p>returns a network parameter file that can be used to activate all presynaptic  conected cells as specified in confile:</p></td>
+<td><p>returns a network parameter file that can be used to activate all presynaptic conected cells as specified in confile:</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_inh_network_param_from_network_embedding</span></code>(confile)</p></td>
 <td><p></p></td>
@@ -425,7 +425,7 @@ Third: functions to analyze PSPs</p>
 <td><p>this method calculates the ePSP amplitude by subtracting a voltage trace without any synapse activation from a voltage trace with synapse activation.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#simrun3.synaptic_strength_fitting.get_voltage_and_timing" title="simrun3.synaptic_strength_fitting.get_voltage_and_timing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_voltage_and_timing</span></code></a>(vt[, method, tStim, tEnd])</p></td>
-<td><p>calculate maxmimum and timing of the EPSPS vt: voltage traces, as returned by PSP.get_voltage_traces() method: dynamic_baseline: a simulation without any synaptic activation is      substracted from a simulation with cell activation. The maximum and      timepoint of maximum is returned method: constant_baseline: the voltage at t = 110ms (= directly before     synapse activation) is considered as baseline and substracted     from all voltages at all timepoints. The maximum and timepoint of the maximum after t = 110ms is      returned. .</p></td>
+<td><p>calculate maxmimum and timing of the EPSPS vt: voltage traces, as returned by PSP.get_voltage_traces() method: dynamic_baseline: a simulation without any synaptic activation is     substracted from a simulation with cell activation. The maximum and     timepoint of maximum is returned method: constant_baseline: the voltage at t = 110ms (= directly before     synapse activation) is considered as baseline and substracted     from all voltages at all timepoints. The maximum and timepoint of the maximum after t = 110ms is     returned.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_fit</span></code>(gAMPANMDA, epsp)</p></td>
 <td><p></p></td>
@@ -472,13 +472,13 @@ Third: functions to analyze PSPs</p>
 <dd><p>calculate maxmimum and timing of the EPSPS
 method: dynamic_baseline: a simulation without any synaptic activation is</p>
 <blockquote>
-<div><p>substracted from a simulation with cell activation. The maximum and 
+<div><p>substracted from a simulation with cell activation. The maximum and
 timepoint of maximum is returned</p>
 </div></blockquote>
 <dl class="simple">
 <dt>method: constant_baseline: the voltage at t = 110ms (= directly before</dt><dd><p>synapse activation) is considered as baseline and substracted
 from all voltages at all timepoints.
-The maximum and timepoint of the maximum after t = 110ms is 
+The maximum and timepoint of the maximum after t = 110ms is
 returned.</p>
 </dd>
 </dl>
@@ -497,7 +497,7 @@ Fetches results from the cluster.</p>
 <dd><p>start running computation on dask.distributed.Client
 client: dask.distributedClient object</p>
 <dl class="simple">
-<dt>rerun: If True, a computation can be restarted. Otherwise, </dt><dd><p>calling this function has no effect if the 
+<dt>rerun: If True, a computation can be restarted. Otherwise,</dt><dd><p>calling this function has no effect if the
 computation is already running</p>
 </dd>
 </dl>
@@ -516,7 +516,7 @@ amplitude of max voltage deflection (pos and negative direction)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding">
 <span class="sig-prename descclassname"><span class="pre">simrun3.synaptic_strength_fitting.</span></span><span class="sig-name descname"><span class="pre">generate_ex_network_param_from_network_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">confile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/simrun3/synaptic_strength_fitting.html#generate_ex_network_param_from_network_embedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#simrun3.synaptic_strength_fitting.generate_ex_network_param_from_network_embedding" title="Permalink to this definition">#</a></dt>
-<dd><p>returns a network parameter file that can be used to activate all presynaptic 
+<dd><p>returns a network parameter file that can be used to activate all presynaptic
 conected cells as specified in confile:</p>
 </dd></dl>
 
@@ -543,13 +543,13 @@ t,v: voltage trace with synapse activation</p>
 vt: voltage traces, as returned by PSP.get_voltage_traces()
 method: dynamic_baseline: a simulation without any synaptic activation is</p>
 <blockquote>
-<div><p>substracted from a simulation with cell activation. The maximum and 
+<div><p>substracted from a simulation with cell activation. The maximum and
 timepoint of maximum is returned</p>
 </div></blockquote>
 <dl class="simple">
 <dt>method: constant_baseline: the voltage at t = 110ms (= directly before</dt><dd><p>synapse activation) is considered as baseline and substracted
 from all voltages at all timepoints.
-The maximum and timepoint of the maximum after t = 110ms is 
+The maximum and timepoint of the maximum after t = 110ms is
 returned.</p>
 </dd>
 </dl>

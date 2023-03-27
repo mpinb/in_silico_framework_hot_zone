@@ -424,7 +424,7 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>simrun3.somatic_summation_model allows specifying synaptic weights of individual synapses.
 It therefore takes a dictionarry that maps from (celltype, synapseID) to the weight of that synapse.</p>
-<p>In the default case, we assign synaptic weights per celltype, not per individual synapse. This class 
+<p>In the default case, we assign synaptic weights per celltype, not per individual synapse. This class
 provides a dictionary like interface, that allows to access an individual synapse
 with the tuple (celltype, synapseID) and returns the synaptic weight assigned to the celltype.</p>
 <p>It can be initialized by parsing a netowrk.param file that gets created during simulations.</p>
@@ -433,10 +433,10 @@ with the tuple (celltype, synapseID) and returns the synaptic weight assigned to
 <dl class="py function">
 <dt class="sig sig-object py" id="model_data_base.mdb_initializers.somatic_summation_model.sa_to_vt_bypassing_lock">
 <span class="sig-prename descclassname"><span class="pre">model_data_base.mdb_initializers.somatic_summation_model.</span></span><span class="sig-name descname"><span class="pre">sa_to_vt_bypassing_lock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdb_loader_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descriptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">individual_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select_celltypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/mdb_initializers/somatic_summation_model.html#sa_to_vt_bypassing_lock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.mdb_initializers.somatic_summation_model.sa_to_vt_bypassing_lock" title="Permalink to this definition">#</a></dt>
-<dd><p>simulates the somatic summation model for given synapse activation. 
+<dd><p>simulates the somatic summation model for given synapse activation.
 The synapse activation dataframe sa may contain several simtrails.
 The PSPs matching the anatomical location are automatically loaded. For this,
-it is necessary that the model data base has been initialized with 
+it is necessary that the model data base has been initialized with
 model_data_base.mdb_initializers.PSPs.init</p>
 </dd></dl>
 

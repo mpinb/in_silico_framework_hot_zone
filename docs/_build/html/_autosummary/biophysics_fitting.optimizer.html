@@ -393,7 +393,7 @@
 Also extended, such that the optimizations can be organized in a model data base.
 Also extended to be executed on a distributed system using dask.
 Also extended to return all objectives, not only the combined ones.
-Note: the population needs to be in a special format. Use methods in biophysics_fitting.population 
+Note: the population needs to be in a special format. Use methods in biophysics_fitting.population
 to create a population.</p>
 <p>The main interface is the function start_run.</p>
 <p class="rubric">Functions</p>
@@ -401,7 +401,7 @@ to create a population.</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.eaAlphaMuPlusLambdaCheckpoint" title="biophysics_fitting.optimizer.eaAlphaMuPlusLambdaCheckpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eaAlphaMuPlusLambdaCheckpoint</span></code></a>(population, ...)</p></td>
-<td><p>This is the <span class="math notranslate nohighlight">\((~\alpha,\mu~,~\lambda)\)</span> evolutionary algorithm Args:     population(list of deap Individuals)     toolbox(deap Toolbox)     mu(int): Total parent population size of EA     cxpb(float): Crossover probability     mutpb(float): Mutation probability     ngen(int): Total number of generation to run     stats(deap.tools.Statistics): generation of statistics     halloffame(deap.tools.HallOfFame): hall of fame     cp_frequency(int): generations between checkpoints     cp_filename(ModelDataBase or None): mdb_run, where the checkpoint is stored in [generation]_checlpoint. Was: path to checkpoint filename     continue_cp(bool): whether to continue.</p></td>
+<td><p>This is the <span class="math notranslate nohighlight">\((~\alpha,\mu~,~\lambda)\)</span> evolutionary algorithm :param population: :type population: list of deap Individuals :param toolbox: :type toolbox: deap Toolbox :param mu: Total parent population size of EA :type mu: int :param cxpb: Crossover probability :type cxpb: float :param mutpb: Mutation probability :type mutpb: float :param ngen: Total number of generation to run :type ngen: int :param stats: generation of statistics :type stats: deap.tools.Statistics :param halloffame: hall of fame :type halloffame: deap.tools.HallOfFame :param cp_frequency: generations between checkpoints :type cp_frequency: int :param cp_filename: mdb_run, where the checkpoint is stored in [generation]_checlpoint.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#biophysics_fitting.optimizer.get_max_generation" title="biophysics_fitting.optimizer.get_max_generation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_max_generation</span></code></a>(mdb_run)</p></td>
 <td><p>returns the index of the next iteration</p></td>
@@ -447,20 +447,28 @@ to create a population.</p>
 <dt class="sig sig-object py" id="biophysics_fitting.optimizer.eaAlphaMuPlusLambdaCheckpoint">
 <span class="sig-prename descclassname"><span class="pre">biophysics_fitting.optimizer.</span></span><span class="sig-name descname"><span class="pre">eaAlphaMuPlusLambdaCheckpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toolbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cxpb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutpb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">halloffame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cp_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdb_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continue_cp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#eaAlphaMuPlusLambdaCheckpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.optimizer.eaAlphaMuPlusLambdaCheckpoint" title="Permalink to this definition">#</a></dt>
 <dd><p>This is the <span class="math notranslate nohighlight">\((~\alpha,\mu~,~\lambda)\)</span> evolutionary algorithm
-Args:</p>
-<blockquote>
-<div><p>population(list of deap Individuals)
-toolbox(deap Toolbox)
-mu(int): Total parent population size of EA
-cxpb(float): Crossover probability
-mutpb(float): Mutation probability
-ngen(int): Total number of generation to run
-stats(deap.tools.Statistics): generation of statistics
-halloffame(deap.tools.HallOfFame): hall of fame
-cp_frequency(int): generations between checkpoints
-cp_filename(ModelDataBase or None): mdb_run, where the checkpoint is stored in [generation]_checlpoint. Was: path to checkpoint filename
-continue_cp(bool): whether to continue</p>
-</div></blockquote>
+:param population:
+:type population: list of deap Individuals
+:param toolbox:
+:type toolbox: deap Toolbox
+:param mu: Total parent population size of EA
+:type mu: int
+:param cxpb: Crossover probability
+:type cxpb: float
+:param mutpb: Mutation probability
+:type mutpb: float
+:param ngen: Total number of generation to run
+:type ngen: int
+:param stats: generation of statistics
+:type stats: deap.tools.Statistics
+:param halloffame: hall of fame
+:type halloffame: deap.tools.HallOfFame
+:param cp_frequency: generations between checkpoints
+:type cp_frequency: int
+:param cp_filename: mdb_run, where the checkpoint is stored in [generation]_checlpoint. Was: path to checkpoint filename
+:type cp_filename: ModelDataBase or None
+:param continue_cp: whether to continue
+:type continue_cp: bool</p>
 </dd></dl>
 
 <dl class="py function">
@@ -484,16 +492,15 @@ continue_cp(bool): whether to continue</p>
 <dt class="sig sig-object py" id="biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists">
 <span class="sig-name descname"><span class="pre">evaluate_with_lists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#my_ibea_evaluator.evaluate_with_lists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.optimizer.my_ibea_evaluator.evaluate_with_lists" title="Permalink to this definition">#</a></dt>
 <dd><p>Evaluate parameter a parameter set (abstract).</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>params (list of Parameters):</dt><dd><p>The parameter values to be evaluated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<em>list</em><em> of </em><em>Parameters</em>) – The parameter values to be evaluated.</p>
 </dd>
-</dl>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Objectives with values calculated by the Evaluator.</p>
 </dd>
-<dt>Returns:</dt><dd><dl class="simple">
-<dt>objectives (list of Objectives):</dt><dd><p>List of Objectives with values calculated by the Evaluator.</p>
-</dd>
-</dl>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>objectives (list of Objectives)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -504,7 +511,7 @@ continue_cp(bool): whether to continue</p>
 <dt class="sig sig-object py" id="biophysics_fitting.optimizer.run">
 <span class="sig-prename descclassname"><span class="pre">biophysics_fitting.optimizer.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_ngen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offspring_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continue_cp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cp_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cp_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biophysics_fitting/optimizer.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#biophysics_fitting.optimizer.run" title="Permalink to this definition">#</a></dt>
 <dd><p>Copy pasted from the BluePyOpt package, however extended, such that a start population can be defined.
-Note: the population needs to be in a special format. Use methods in biophysics_fitting.population 
+Note: the population needs to be in a special format. Use methods in biophysics_fitting.population
 to create a population.</p>
 </dd></dl>
 
@@ -526,12 +533,12 @@ to be defined in mdb_setup:</p>
 <li><p>get_Combiner … function, that returns a biophysics_fitting.combiner.Combiner object</p></li>
 </ul>
 <p>get_Simulator, get_Evaluator, get_Combiner accept the mdb_setup model_data_base as argument.</p>
-<p>This allows, that e.g. the Simular can depend on the model_data_base. Therefore it is e.g. possible, 
+<p>This allows, that e.g. the Simular can depend on the model_data_base. Therefore it is e.g. possible,
 that the path to the morphology is not saved as absolute path. Instead, fixed parameters can be
 updated accordingly.</p>
-<p>For an exemplary setup of a Simulaotr, Evaluator and Combiner object, see 
+<p>For an exemplary setup of a Simulaotr, Evaluator and Combiner object, see
 biophysics_fitting.hay_complete_default_setup.</p>
-<p>For on examplary setup of a complete optimization project see 
+<p>For on examplary setup of a complete optimization project see
 20190111_fitting_CDK_morphologies_Kv3_1_slope_step.ipynb</p>
 <p>You can also have a look at the test case in test_biophysics_fitting.test_optimizer.py</p>
 </dd></dl>

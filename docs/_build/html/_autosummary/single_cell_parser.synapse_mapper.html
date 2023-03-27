@@ -396,7 +396,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.synapse_mapper.SynapseMapper" title="single_cell_parser.synapse_mapper.SynapseMapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SynapseMapper</span></code></a>([cell, synDist, isDensity])</p></td>
-<td><p>SynapseMapper assigns synapses to neuron morphology self.cell is neuron SpatialGraph self.synDist is average synapse distribution (3D scalar field) self.isDensity: True - synapse distribution interpreted as avg     density; actual number of synapses assigned is drawn from a      Poisson distribution     False - synapse distribution interpreted as actual number of     synapses per voxel and directly assigned self.voxelEdgeMap: dictionary mapping synapse distribution mesh     coordinates on list with pairs of indices that correspond     to the edge and edgePt ID of all morphology points inside that voxel</p></td>
+<td><p>SynapseMapper assigns synapses to neuron morphology self.cell is neuron SpatialGraph self.synDist is average synapse distribution (3D scalar field) self.isDensity: True - synapse distribution interpreted as avg     density; actual number of synapses assigned is drawn from a     Poisson distribution     False - synapse distribution interpreted as actual number of     synapses per voxel and directly assigned self.voxelEdgeMap: dictionary mapping synapse distribution mesh     coordinates on list with pairs of indices that correspond     to the edge and edgePt ID of all morphology points inside that voxel</p></td>
 </tr>
 </tbody>
 </table>
@@ -410,7 +410,7 @@ self.cell is neuron SpatialGraph
 self.synDist is average synapse distribution (3D scalar field)
 self.isDensity: True - synapse distribution interpreted as avg</p>
 <blockquote>
-<div><p>density; actual number of synapses assigned is drawn from a 
+<div><p>density; actual number of synapses assigned is drawn from a
 Poisson distribution
 False - synapse distribution interpreted as actual number of
 synapses per voxel and directly assigned</p>
@@ -441,7 +441,7 @@ status of these synapses.</p>
 <dt class="sig sig-object py" id="single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_model_distribution">
 <span class="sig-name descname"><span class="pre">map_synapse_model_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">synType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">structLabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/single_cell_parser/synapse_mapper.html#SynapseMapper.map_synapse_model_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#single_cell_parser.synapse_mapper.SynapseMapper.map_synapse_model_distribution" title="Permalink to this definition">#</a></dt>
 <dd><p>maps modeled synapse distribution (e.g. normal, uniform, …)
-onto dendritic tree. synapse distribution synDist 
+onto dendritic tree. synapse distribution synDist
 has to be iterable of distances of synapses; should be radial
 only, i.e. dendritic branches are selected randomly.
 substructure may be indicated by structLabel.</p>

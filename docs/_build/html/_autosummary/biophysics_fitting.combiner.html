@@ -418,10 +418,10 @@ is specified not only by a name of the combination, but also a list of names of 
 that go into that combination. Each list of features is then combined by calling combinefun with that list.</p>
 <p>Example: Assume, the evaluator returns a dictionary like:
 features = {‘feature1’: 1, ‘feature2’: 2, ‘feature3’: 3, ‘feature4’: 4}
-We want to combine feature1 and 2. We also want to combine features2, 3 and 4. Combining features should be done 
+We want to combine feature1 and 2. We also want to combine features2, 3 and 4. Combining features should be done
 by taking the maximum.</p>
 <p>How can this be set up?
-An example, how the Combiner object can be set up can be found in hay_complete_default_setup.    
+An example, how the Combiner object can be set up can be found in hay_complete_default_setup.
 c = Combiner()
 c.setup.append(‘combination1’, [‘feature1’, ‘feature2’])
 c.setup.append(‘combination2’, [‘feature2’, ‘feature3’, ‘feature4’])

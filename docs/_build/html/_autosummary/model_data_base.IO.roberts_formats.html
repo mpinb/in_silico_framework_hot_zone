@@ -422,10 +422,15 @@ returns the tables as pandas tables</p>
 <dt class="sig sig-object py" id="model_data_base.IO.roberts_formats.read_csv_uneven_length">
 <span class="sig-prename descclassname"><span class="pre">model_data_base.IO.roberts_formats.</span></span><span class="sig-name descname"><span class="pre">read_csv_uneven_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_commas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skiprows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/IO/roberts_formats.html#read_csv_uneven_length"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.IO.roberts_formats.read_csv_uneven_length" title="Permalink to this definition">#</a></dt>
 <dd><p>general function to read in a csv file with varying length data.</p>
-<dl>
-<dt>args:</dt><dd><p>path: path to file
-n_commas: maximum length of fields</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – path to file</p></li>
+<li><p><strong>n_commas</strong> – maximum length of fields</p></li>
+</ul>
 </dd>
+</dl>
+<dl>
 <dt>kwargs:</dt><dd><p>header: you can provide an alternative header
 skiprows: skip rows at the beginning of the file (e.g. one to skip the</p>
 <blockquote>

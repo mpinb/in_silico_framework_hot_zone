@@ -414,7 +414,7 @@
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#single_cell_parser.reader.read_spike_times_file" title="single_cell_parser.reader.read_spike_times_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_spike_times_file</span></code></a>(fname)</p></td>
-<td><p>reads list of all trials and spike times within these trials. Input: file of format:     trial nr.tactivation times (comma-separated list or empty) returns:     dictionary with trial numbers as keys (integers), and tuples of spike times     in each trial as values.</p></td>
+<td><p>reads list of all trials and spike times within these trials. Input: file of format:     trial nr.tactivation times (comma-separated list or empty) :returns: dictionary with trial numbers as keys (integers), and tuples of spike times           in each trial as values.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#single_cell_parser.reader.read_synapse_activation_file" title="single_cell_parser.reader.read_synapse_activation_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_synapse_activation_file</span></code></a>(fname)</p></td>
 <td><p>reads list of all functional synapses and their activation times. Input: file of format:     synapse typetsynapse IDtsoma distancetsection IDtsection pt IDtdendrite labeltactivation times returns: dictionary with cell types as keys and list of synapse locations and activation times, coded as tuples: (synapse ID, section ID, section pt ID, [t1, t2, ... , tn]).</p></td>
@@ -482,8 +482,9 @@ Input: file of format:</p>
 <blockquote>
 <div><p>trial nr.tactivation times (comma-separated list or empty)</p>
 </div></blockquote>
-<dl class="simple">
-<dt>returns:</dt><dd><p>dictionary with trial numbers as keys (integers), and tuples of spike times
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dictionary with trial numbers as keys (integers), and tuples of spike times
 in each trial as values</p>
 </dd>
 </dl>

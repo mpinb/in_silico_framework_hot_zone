@@ -443,9 +443,9 @@
 <dt class="sig sig-object py" id="model_data_base.model_data_base.FunctionWrapper">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">model_data_base.model_data_base.</span></span><span class="sig-name descname"><span class="pre">FunctionWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/model_data_base.html#FunctionWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.model_data_base.FunctionWrapper" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>This class wraps arouand an object that cannot be saved directly (e.g. 
+<p>This class wraps arouand an object that cannot be saved directly (e.g.
 using pickle) but needs an initialization function instead.</p>
-<p>To use it, 
+<p>To use it,
 1. create a function, that does not expect any argument and returns the object</p>
 <blockquote>
 <div><p>you want to save</p>
@@ -461,7 +461,7 @@ using pickle) but needs an initialization function instead.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">model_data_base.model_data_base.</span></span><span class="sig-name descname"><span class="pre">LoaderWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/model_data_base/model_data_base.html#LoaderWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_data_base.model_data_base.LoaderWrapper" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This is a pointer to data, which is stored elsewhere.</p>
-<p>It is used by ModelDataBase, if data is stored in a subfolder of the 
+<p>It is used by ModelDataBase, if data is stored in a subfolder of the
 model_data_base.basedir folder. It is not used, if the data is stored directly
 in the sqlite database.</p>
 <p>The process of storing data in a subfolder is as follows:
