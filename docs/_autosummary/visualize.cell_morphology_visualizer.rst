@@ -33,6 +33,7 @@ visualize.cell\_morphology\_visualizer
       Rotation
       VBox
       interactive
+      tqdm
    
    
 

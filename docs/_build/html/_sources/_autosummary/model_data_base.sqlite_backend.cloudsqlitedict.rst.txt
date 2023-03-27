@@ -14,7 +14,9 @@
    .. autosummary::
    
       decode
+      dumps
       encode
+      loads
       open
       reraise
    

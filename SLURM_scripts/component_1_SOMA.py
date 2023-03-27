@@ -201,12 +201,12 @@ def setup_jupyter_notebook(management_dir):
     # append output to same file as notebook (ance the >> operator rather than >)
     os.system(command + "&>>{} &".format(os.path.join(management_dir,  "jupyter.txt")))
 # In[8]:
-
-if PROCESS_NUMBER == 0:
-    setup_locking_server()
-    setup_dask_scheduler(MANAGEMENT_DIR)
-    if LAUNCH_JUPYTER_SERVER:
-        setup_jupyter_notebook(MANAGEMENT_DIR)
-setup_locking_config()
-setup_dask_workers(MANAGEMENT_DIR)    
-time.sleep(60*60*24*365)
+if __name__ == "__main__":
+    if PROCESS_NUMBER == 0:
+        setup_locking_server()
+        setup_dask_scheduler(MANAGEMENT_DIR)
+        if LAUNCH_JUPYTER_SERVER:
+            setup_jupyter_notebook(MANAGEMENT_DIR)
+    setup_locking_config()
+    setup_dask_workers(MANAGEMENT_DIR)    
+    time.sleep(60*60*24*365)

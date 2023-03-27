@@ -1,6 +1,23 @@
 ﻿mechanisms
 ==========
 
-.. currentmodule:: mechanisms
+.. automodule:: mechanisms
 
-.. autodata:: mechanisms
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

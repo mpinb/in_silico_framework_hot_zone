@@ -2,13 +2,13 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
 
-    <!-- Generated with Sphinx 6.2.0 and Furo 2022.12.07 -->
+    <!-- Generated with Sphinx 6.1.3 and Furo 2023.03.23 -->
         <title>mechanisms - In-Silico Framework (ISF) 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/default.css" />
     
@@ -135,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -162,16 +162,25 @@
   <ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="SLURM_scripts.html">SLURM_scripts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.clustercontrol.html">SLURM_scripts.clustercontrol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SLURM_scripts.component_isf.html">SLURM_scripts.component_isf</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="barrel_cortex.html">barrel_cortex</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="biophysics_fitting.html">biophysics_fitting</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.L5tt_parameter_setup.html">biophysics_fitting.L5tt_parameter_setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.combiner.html">biophysics_fitting.combiner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.ephys.html">biophysics_fitting.ephys</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.evaluator.html">biophysics_fitting.evaluator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_complete_default_setup.html">biophysics_fitting.hay_complete_default_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_complete_default_setup_python.html">biophysics_fitting.hay_complete_default_setup_python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_evaluation.html">biophysics_fitting.hay_evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_evaluation_python.html">biophysics_fitting.hay_evaluation_python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.hay_specification.html">biophysics_fitting.hay_specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.model_selection.html">biophysics_fitting.model_selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.optimizer.html">biophysics_fitting.optimizer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.parameters.html">biophysics_fitting.parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.setup_stim.html">biophysics_fitting.setup_stim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.simulator.html">biophysics_fitting.simulator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="biophysics_fitting.utils.html">biophysics_fitting.utils</a></li>
 </ul>
 </li>
@@ -179,16 +188,23 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="model_data_base.html">model_data_base</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="model_data_base.IO.html">model_data_base.IO</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="model_data_base.IO.LoaderDumper.html">model_data_base.IO.LoaderDumper</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.cell.html">model_data_base.IO.LoaderDumper.cell</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack.html">model_data_base.IO.LoaderDumper.dask_to_categorized_msgpack</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_csv.html">model_data_base.IO.LoaderDumper.dask_to_csv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.dask_to_msgpack.html">model_data_base.IO.LoaderDumper.dask_to_msgpack</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.genetic_algorithm_generation.html">model_data_base.IO.LoaderDumper.genetic_algorithm_generation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.just_create_folder.html">model_data_base.IO.LoaderDumper.just_create_folder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.just_create_mdb.html">model_data_base.IO.LoaderDumper.just_create_mdb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.numpy_to_msgpack.html">model_data_base.IO.LoaderDumper.numpy_to_msgpack</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.numpy_to_npy.html">model_data_base.IO.LoaderDumper.numpy_to_npy</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.numpy_to_npz.html">model_data_base.IO.LoaderDumper.numpy_to_npz</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.pandas_to_msgpack.html">model_data_base.IO.LoaderDumper.pandas_to_msgpack</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.pandas_to_pickle.html">model_data_base.IO.LoaderDumper.pandas_to_pickle</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.parent_classes.html">model_data_base.IO.LoaderDumper.parent_classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.reduced_lda_model.html">model_data_base.IO.LoaderDumper.reduced_lda_model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.settings.html">model_data_base.IO.LoaderDumper.settings</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.to_cloudpickle.html">model_data_base.IO.LoaderDumper.to_cloudpickle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.to_msgpack.html">model_data_base.IO.LoaderDumper.to_msgpack</a></li>
 <li class="toctree-l4"><a class="reference internal" href="model_data_base.IO.LoaderDumper.to_pickle.html">model_data_base.IO.LoaderDumper.to_pickle</a></li>
 </ul>
 </li>
@@ -207,10 +223,17 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="model_data_base.mdb_initializers.html">model_data_base.mdb_initializers</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.PSPs.html">model_data_base.mdb_initializers.PSPs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.load_simrun_general.html">model_data_base.mdb_initializers.load_simrun_general</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.prepare_ANN_batches.html">model_data_base.mdb_initializers.prepare_ANN_batches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.somatic_summation_model.html">model_data_base.mdb_initializers.somatic_summation_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model_data_base.mdb_initializers.synapse_activation_binning.html">model_data_base.mdb_initializers.synapse_activation_binning</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.model_data_base.html">model_data_base.model_data_base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.settings.html">model_data_base.settings</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="model_data_base.sqlite_backend.html">model_data_base.sqlite_backend</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.sqlite_backend.cloudsqlitedict.html">model_data_base.sqlite_backend.cloudsqlitedict</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.sqlite_backend.sqlite_backend.html">model_data_base.sqlite_backend.sqlite_backend</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model_data_base.sqlite_backend.tuplecloudsqlitedict.html">model_data_base.sqlite_backend.tuplecloudsqlitedict</a></li>
@@ -219,30 +242,86 @@
 <li class="toctree-l2"><a class="reference internal" href="model_data_base.utils.html">model_data_base.utils</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="simrun2.html">simrun2</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="simrun2.crossing_over.html">simrun2.crossing_over</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="simrun2.html">simrun2</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="simrun2.crossing_over.html">simrun2.crossing_over</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="simrun2.crossing_over.crossing_over_simple_interface.html">simrun2.crossing_over.crossing_over_simple_interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="simrun2.crossing_over.run_skip_time.html">simrun2.crossing_over.run_skip_time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="simrun2.crossing_over.utils.html">simrun2.crossing_over.utils</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="simrun2.reduced_model.html">simrun2.reduced_model</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.generate_synapse_activations.html">simrun2.generate_synapse_activations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.parameters_to_cell.html">simrun2.parameters_to_cell</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="simrun2.reduced_model.html">simrun2.reduced_model</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="simrun2.reduced_model.get_kernel.html">simrun2.reduced_model.get_kernel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="simrun2.reduced_model.spiking_output.html">simrun2.reduced_model.spiking_output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simrun2.reduced_model.synapse_activation.html">simrun2.reduced_model.synapse_activation</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.rerun_mdb.html">simrun2.rerun_mdb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.run_existing_synapse_activations.html">simrun2.run_existing_synapse_activations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.run_new_simulations.html">simrun2.run_new_simulations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun2.seed_manager.html">simrun2.seed_manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.sim_trail_to_cell_object.html">simrun2.sim_trail_to_cell_object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun2.syn_strength_Lang_fig5_batch_run.html">simrun2.syn_strength_Lang_fig5_batch_run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.syn_strength_simrun.html">simrun2.syn_strength_simrun</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.test_BAC_firing.html">simrun2.test_BAC_firing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.test_passive_properties.html">simrun2.test_passive_properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.test_sustained_firing.html">simrun2.test_sustained_firing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun2.utils.html">simrun2.utils</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="simrun3.html">simrun3</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="simrun3.html">simrun3</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.PSP_with_cell_modification.html">simrun3.PSP_with_cell_modification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.get_cell_with_network.html">simrun3.get_cell_with_network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun3.robust_dask_delayed_execution.html">simrun3.robust_dask_delayed_execution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simrun3.somatic_summation_model.html">simrun3.somatic_summation_model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.synaptic_strength_fitting.html">simrun3.synaptic_strength_fitting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simrun3.utils.html">simrun3.utils</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="single_cell_analyzer.html">single_cell_analyzer</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.currents.html">single_cell_analyzer.currents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.membrane_potential_analysis.html">single_cell_analyzer.membrane_potential_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_analyzer.synanalysis.html">single_cell_analyzer.synanalysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="single_cell_parser.html">single_cell_parser</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell.html">single_cell_parser.cell</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="single_cell_parser.cell_modify_functions.html">single_cell_parser.cell_modify_functions</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.BAC_injection.html">single_cell_parser.cell_modify_functions.BAC_injection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.apical_current_injection.html">single_cell_parser.cell_modify_functions.apical_current_injection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.apical_epsp_injection.html">single_cell_parser.cell_modify_functions.apical_epsp_injection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.scale_apical.html">single_cell_parser.cell_modify_functions.scale_apical</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.scale_apical_morph_86.html">single_cell_parser.cell_modify_functions.scale_apical_morph_86</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.soma_current_injection.html">single_cell_parser.cell_modify_functions.soma_current_injection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.cell_modify_functions.synaptic_input.html">single_cell_parser.cell_modify_functions.synaptic_input</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.cell_parser.html">single_cell_parser.cell_parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network.html">single_cell_parser.network</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="single_cell_parser.network_modify_functions.html">single_cell_parser.network_modify_functions</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.network_modify_functions.silence_synapses_by_somadist.html">single_cell_parser.network_modify_functions.silence_synapses_by_somadist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="single_cell_parser.network_modify_functions.silence_synapses_by_somadist_and_spike_source.html">single_cell_parser.network_modify_functions.silence_synapses_by_somadist_and_spike_source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_param_modify_functions.html">single_cell_parser.network_param_modify_functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.network_realizations.html">single_cell_parser.network_realizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.reader.html">single_cell_parser.reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.scalar_field.html">single_cell_parser.scalar_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.serialize_cell.html">single_cell_parser.serialize_cell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.sim_control.html">single_cell_parser.sim_control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse.html">single_cell_parser.synapse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.synapse_mapper.html">single_cell_parser.synapse_mapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.vpm_activation.html">single_cell_parser.vpm_activation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="single_cell_parser.writer.html">single_cell_parser.writer</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="singlecell_input_mapper.html">singlecell_input_mapper</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.evoked_PSTH_from_spike_times.html">singlecell_input_mapper.evoked_PSTH_from_spike_times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.evoked_network_param_from_template.html">singlecell_input_mapper.evoked_network_param_from_template</a></li>
 <li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.map_singlecell_inputs.html">singlecell_input_mapper.map_singlecell_inputs</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html">singlecell_input_mapper.singlecell_input_mapper</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="singlecell_input_mapper.ongoing_network_param_from_template.html">singlecell_input_mapper.ongoing_network_param_from_template</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.html">singlecell_input_mapper.singlecell_input_mapper</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.cell.html">singlecell_input_mapper.singlecell_input_mapper.cell</a></li>
 <li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet.html">singlecell_input_mapper.singlecell_input_mapper.generate_nr_of_cells_spreadsheet</a></li>
 <li class="toctree-l3"><a class="reference internal" href="singlecell_input_mapper.singlecell_input_mapper.network_embedding.html">singlecell_input_mapper.singlecell_input_mapper.network_embedding</a></li>
@@ -254,9 +333,12 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="spike_analysis.html">spike_analysis</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="visualize.html">visualize</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="visualize.activity_analysis.html">visualize.activity_analysis</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="spike_analysis.html">spike_analysis</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="spike_analysis.core.html">spike_analysis.core</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="visualize.html">visualize</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="visualize.activity_analysis.html">visualize.activity_analysis</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="visualize.activity_analysis.array_slices_interactive.html">visualize.activity_analysis.array_slices_interactive</a></li>
 <li class="toctree-l3"><a class="reference internal" href="visualize.activity_analysis.average_std.html">visualize.activity_analysis.average_std</a></li>
 <li class="toctree-l3"><a class="reference internal" href="visualize.activity_analysis.cell_to_ipython_animation.html">visualize.activity_analysis.cell_to_ipython_animation</a></li>
@@ -298,67 +380,14 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="mechanisms">
-<h1>mechanisms<a class="headerlink" href="#mechanisms" title="Permalink to this heading">#</a></h1>
-<dl class="py data">
-<dt class="sig sig-object py" id="mechanisms.mechanisms">
-<span class="sig-prename descclassname"><span class="pre">mechanisms.</span></span><span class="sig-name descname"><span class="pre">mechanisms</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Mock</span> <span class="pre">name='mock.mechanisms'</span> <span class="pre">id='2820551995264'&gt;</span></em><a class="headerlink" href="#mechanisms.mechanisms" title="Permalink to this definition">#</a></dt>
-<dd><p>Create a new <cite>Mock</cite> object. <cite>Mock</cite> takes several optional arguments
-that specify the behaviour of the Mock object:</p>
-<ul>
-<li><p><cite>spec</cite>: This can be either a list of strings or an existing object (a
-class or instance) that acts as the specification for the mock object. If
-you pass in an object then a list of strings is formed by calling dir on
-the object (excluding unsupported magic attributes and methods). Accessing
-any attribute not in this list will raise an <cite>AttributeError</cite>.</p>
-<p>If <cite>spec</cite> is an object (rather than a list of strings) then
-<cite>mock.__class__</cite> returns the class of the spec object. This allows mocks
-to pass <cite>isinstance</cite> tests.</p>
-</li>
-<li><p><cite>spec_set</cite>: A stricter variant of <cite>spec</cite>. If used, attempting to <em>set</em>
-or get an attribute on the mock that isn’t on the object passed as
-<cite>spec_set</cite> will raise an <cite>AttributeError</cite>.</p></li>
-<li><p><cite>side_effect</cite>: A function to be called whenever the Mock is called. See
-the <cite>side_effect</cite> attribute. Useful for raising exceptions or
-dynamically changing return values. The function is called with the same
-arguments as the mock, and unless it returns <cite>DEFAULT</cite>, the return
-value of this function is used as the return value.</p>
-<p>If <cite>side_effect</cite> is an iterable then each call to the mock will return
-the next value from the iterable. If any of the members of the iterable
-are exceptions they will be raised instead of returned.</p>
-</li>
-<li><p><cite>return_value</cite>: The value returned when the mock is called. By default
-this is a new Mock (created on first access). See the
-<cite>return_value</cite> attribute.</p></li>
-<li><p><cite>unsafe</cite>: By default, accessing any attribute whose name starts with
-<em>assert</em>, <em>assret</em>, <em>asert</em>, <em>aseert</em>, or <em>assrt</em> raises an AttributeError.
-Additionally, an AttributeError is raised when accessing
-attributes that match the name of an assertion method without the prefix
-<cite>assert_</cite>, e.g. accessing <cite>called_once</cite> instead of <cite>assert_called_once</cite>.
-Passing <cite>unsafe=True</cite> will allow access to these attributes.</p></li>
-<li><p><cite>wraps</cite>: Item for the mock object to wrap. If <cite>wraps</cite> is not None then
-calling the Mock will pass the call through to the wrapped object
-(returning the real result). Attribute access on the mock will return a
-Mock object that wraps the corresponding attribute of the wrapped object
-(so attempting to access an attribute that doesn’t exist will raise an
-<cite>AttributeError</cite>).</p>
-<p>If the mock has an explicit <cite>return_value</cite> set then calls are not passed
-to the wrapped object and the <cite>return_value</cite> is returned instead.</p>
-</li>
-<li><p><cite>name</cite>: If the mock has a name then it will be used in the repr of the
-mock. This can be useful for debugging. The name is propagated to child
-mocks.</p></li>
-</ul>
-<p>Mocks can also be called with arbitrary keyword arguments. These will be
-used to set attributes on the mock after it is created.</p>
-</dd></dl>
-
+          <section id="module-mechanisms">
+<span id="mechanisms"></span><h1>mechanisms<a class="headerlink" href="#module-mechanisms" title="Permalink to this heading">#</a></h1>
 </section>
 
         </article>
@@ -386,27 +415,8 @@ used to set attributes on the mock after it is created.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">mechanisms</a><ul>
-<li><a class="reference internal" href="#mechanisms.mechanisms"><code class="docutils literal notranslate"><span class="pre">mechanisms</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

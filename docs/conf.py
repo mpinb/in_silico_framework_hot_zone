@@ -8,11 +8,11 @@
 
 import sys
 import os
-import mock
+# import mock
 
-MOCK_MODULES = ['neuron', 'cloudpickle', 'tables', 'distributed', 'mechanisms']
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+# MOCK_MODULES = ['neuron', 'cloudpickle', 'tables', 'distributed', 'mechanisms']
+# for mod_name in MOCK_MODULES:
+#     sys.modules[mod_name] = mock.Mock()
 
 project = 'In-Silico Framework (ISF)'
 copyright = '2023, Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keaton, Bjorge Meulemeester, Omar Valerio'
