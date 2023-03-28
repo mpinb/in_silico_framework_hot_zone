@@ -161,7 +161,10 @@ except ImportError:
 
 import single_cell_analyzer as sca
 import single_cell_parser as scp
-from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
+try:
+    from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
+except ImportError:
+    print("Could not import visualize.cell_morphology_visualizer!")
 from visualize.helper_methods import write_video_from_images, write_gif_from_images, display_animation_from_images
 
 from simrun2.reduced_model import synapse_activation \
