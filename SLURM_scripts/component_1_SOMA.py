@@ -196,7 +196,7 @@ def setup_jupyter_notebook(management_dir):
     #command = 'screen -S jupyterlab -dm bash -c "source ~/.bashrc; source_3; ' +     '''jupyter-lab --ip='*' --no-browser --port=11113"'''
     #command = '''bash -c "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" &'''
     #command = '''(source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113) &'''
-    command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" '''
+    command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113 --NotebookApp.allow_origin='*'" '''
     #command = "/axon/scratch/abast/anaconda3/bin/jupyter-lab --ip='*' --no-browser --port=11113"
     # append output to same file as notebook (ance the >> operator rather than >)
     os.system(command + "&>>{} &".format(os.path.join(management_dir,  "jupyter.txt")))
