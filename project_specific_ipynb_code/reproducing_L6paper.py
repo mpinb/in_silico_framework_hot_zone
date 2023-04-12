@@ -1134,8 +1134,8 @@ def fig2b_functional_embedding(mdb,sti,outdir,
     if I.os.path.exists(outdir):
         print('warning! the specified directory already exists!')
         # I.shutil.rmtree(outdir)    
+    neup, netp = load_param_files_from_mdb(mdb,sti)
     if cells:
-        neup, netp = load_param_files_from_mdb(mdb,sti)
         landmarks_pdf_all = get_fraction_of_all_cells(1)
         landmarks_pdf_presynaptic = landmarks_pdf_all.groupby('label').apply(lambda x: x.reset_index(drop = True))
         ca = mdb['cell_activation'].loc[sti].compute()
@@ -1143,7 +1143,11 @@ def fig2b_functional_embedding(mdb,sti,outdir,
                                                         min_time,
                                                         max_time,
                                                         set_index = ['presynaptic_cell_type',
-                                                                     'cell_ID']) 
+                                                                     'cell_ID'])
+        selection_missing = [s for s in selection if not s in landmarks_pdf_presynaptic.index]        
+        selection = [s for s in selection if s in landmarks_pdf_presynaptic.index]
+        if selection_missing:
+            print("couldnb't find presynaptic cells for", selection_missing)
         landmarks_pdf_presynaptic = landmarks_pdf_presynaptic.loc[selection].dropna()
         
         #save_fractions_of_landmark_pdf(landmarks_pdf_all, outdir + '/all_cells',
