@@ -989,3 +989,20 @@ class Plot:
             if not 'dendritic_recordings' in self.mdb[model][key].keys():
                 self._reinit_mdb(self.mdb[model][key])
             plot_prox_vt(self.mdb[model][key], list(st.index))
+
+#
+def categorize_onset_response(st, tmin, tmax):
+    '''the default method for determining and categorizing the onset response'''
+    st = st.copy()
+    early_ = I.spike_in_interval(st, tmin-10, tmin)
+    st[st < tmin] = I.np.nan
+    st.values.sort()
+    st[st > tmax] = I.np.nan
+    st = st - tmin
+    out = I.pd.Series(index = st.index)
+    out[st[0]> 0] = 'singlet'
+    out[(st[1]-st[0])<= 10] = 'doublet'
+    out[(st[2]-st[0]) <= 30] = 'triplet'
+    out = out.fillna('no response')
+    out[early_] = 'early_' + out
+    return out
