@@ -224,9 +224,9 @@ def _evoked_activity(mdb, stis, outdir,
     print('done loading synapse activations')    
     sa = {s:g for s,g in sa.groupby(sa.index)}
     
-    outdir_absolute = os.path.join(outdir, sti_base)
-    if not os.path.exists(outdir_absolute):
-        os.makedirs(outdir_absolute)
+    #outdir_absolute = os.path.join(outdir, sti_base)
+    #if not os.path.exists(outdir_absolute):
+    #   os.makedirs(outdir_absolute)
     
     parameterfiles = parameterfiles.loc[stis]
     parameterfiles = parameterfiles.drop_duplicates()
@@ -332,7 +332,7 @@ def _evoked_activity(mdb, stis, outdir,
     v_dend_df = pd.DataFrame(v_dend_list).T
     # collect spike times for all trials
     time_points = cell.t
-    soma_AP_times = [simple_spike_detection(time_points, v_soma_df[trial], mode = 'regular', threshold = 0) for trial in range(v_dend_df.shape[1])]
+    soma_AP_times = [simple_spike_detection(time_points, v_soma_df[trial], mode = 'regular', threshold = 0) for trial in range(v_soma_df.shape[1])]
     dend_AP_times = [simple_spike_detection(time_points, v_dend_df[trial], mode = 'regular', threshold = -30) for trial in range(v_dend_df.shape[1])]
     # Transform to ISI lists and one-hot encoded AP
     AP_DEND = [spike_times_to_onehot(spike_times, min_time, max_time, temporal_resolution) for spike_times in dend_AP_times]
@@ -342,12 +342,15 @@ def _evoked_activity(mdb, stis, outdir,
     SA = np.concatenate(sa_arr_list, axis = 0)
     VT = VT
     #-------------- Save as .npy format --------------#
-    np.save(os.path.join(outdir_absolute, "AP_DEND.npy"), AP_DEND) # arco: replace outdir with outdir_absolute
-    np.save(os.path.join(outdir_absolute, "ISI_DEND.npy"), ISI_DEND)
-    np.save(os.path.join(outdir_absolute, "AP_SOMA.npy"), AP_SOMA)
-    np.save(os.path.join(outdir_absolute, "ISI_SOMA.npy"), ISI_SOMA)
-    np.save(os.path.join(outdir_absolute, "SA.npy"), SA)
-    np.save(os.path.join(outdir_absolute, "VT.npy"), VT)
+    np.savez(outdir_absolute, AP_DEND = AP_DEND, ISI_DEND = ISI_DEND, 
+                              AP_SOMA = AP_SOMA, ISI_SOMA = ISI_SOMA, 
+                              SA = SA, VT = VT)
+    # np.save(os.path.join(outdir_absolute, "AP_DEND.npy"), AP_DEND) # arco: replace outdir with outdir_absolute
+    # np.save(os.path.join(outdir_absolute, "ISI_DEND.npy"), ISI_DEND)
+    # np.save(os.path.join(outdir_absolute, "AP_SOMA.npy"), AP_SOMA)
+    # np.save(os.path.join(outdir_absolute, "ISI_SOMA.npy"), ISI_SOMA)
+    # np.save(os.path.join(outdir_absolute, "SA.npy"), SA)
+    # np.save(os.path.join(outdir_absolute, "VT.npy"), VT)
     
 class Opaque:
     
