@@ -95,9 +95,9 @@ def get_bin_adjacency_map_in_section(cell, section_id, section_distances_df):
 
 
     Returns:
-        dict: a dictionary with pairs of adjacant bins.
+        dict: a dictionary with bins as keys and a list of adjacent bins as values.
     """
-    neighboring_bins = {}
+    neighboring_bins = []
     neighbor_map = cell.get_section_adjacancy_map()
     for parent in neighbor_map[int(section_id)]["parents"]:
         # section_id/1 is connected to some parent section, but which bin?
@@ -105,19 +105,24 @@ def get_bin_adjacency_map_in_section(cell, section_id, section_distances_df):
         d_of_this_bin = get_bin_soma_distances_in_section(section_id, section_distances_df)[0]
         diff = [abs(parent_d - d_of_this_bin) for parent_d in distances]
         closest = I.np.argmin(diff)
-        neighboring_bins["{}/{}".format(section_id, 1)] = "{}/{}".format(parent, closest+1)
+        neighboring_bins.append(("{}/{}".format(section_id, 1), "{}/{}".format(parent, closest+1)))
     for child in neighbor_map[int(section_id)]["children"]:
         # children/1 is connected to some bin of the current section, but which bin?
         distances = get_bin_soma_distances_in_section(section_id, section_distances_df)
         d_of_child_bin = get_bin_soma_distances_in_section(child, section_distances_df)[0]
         diff = [abs(d - d_of_child_bin) for d in distances]
         closest = I.np.argmin(diff)
-        neighboring_bins["{}/{}".format(child, 1)] = "{}/{}".format(section_id, closest+1)
-    # assure mutuality
-    neighboring_bins_copy = neighboring_bins.copy()
-    for key, val in neighboring_bins_copy.items():
-        neighboring_bins[val] = key
-    return neighboring_bins
+        neighboring_bins.append(("{}/{}".format(child, 1), "{}/{}".format(section_id, closest+1)))
+    neighboring_bins_dict = {}
+    for a,b in neighboring_bins:
+        if not a in neighboring_bins_dict:
+            neighboring_bins_dict[a] = []
+        if not b in neighboring_bins_dict:
+            neighboring_bins_dict[b] = []
+        neighboring_bins_dict[a].append(b)
+        neighboring_bins_dict[b].append(a)
+
+    return neighboring_bins_dict
 
 def get_neighboring_spatial_bins(cell, section_distances_df, bin_id):
     """Given a bin id, this method returns all the neighboring bins
@@ -143,7 +148,7 @@ def get_neighboring_spatial_bins(cell, section_distances_df, bin_id):
     # check for adjacent sections
     bin_adj = get_bin_adjacency_map_in_section(cell, section_id_, section_distances_df)
     if bin_id in bin_adj:
-        neighbors.append(bin_adj[bin_id])
+        neighbors.extend(bin_adj[bin_id])
     return neighbors
 
 def augment_synapse_activation_df_with_branch_bin(sa_, 
