@@ -1,4 +1,3 @@
-import os
 import dask
 import numpy as np
 import pandas as pd
@@ -55,9 +54,7 @@ def bin_points_and_voltage(cell, section_distances_df=None, spatial_binsize_goal
         binned_vms = bin_voltages_in_section(section_distances_df=section_distances_df, section_id=sec_n, cell=cell)
         for i, pt in enumerate(pts):
             # Points within the same section
-            x = pt[0]
-            y = pt[1]
-            z = pt[2]
+            x, y, z = pt
             d = sec.diamList[i]
             points.append([x, y, z, d, sec_n])
             vms.append(binned_vms[i])
