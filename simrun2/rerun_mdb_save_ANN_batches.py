@@ -339,9 +339,9 @@ def _evoked_activity(mdb, stis, outdir,
     SA = np.concatenate(sa_arr_list, axis = 0)
     VT = VT
     #-------------- Save as .npy format --------------#
-    np.savez(outdir_absolute, AP_DEND = AP_DEND, ISI_DEND = ISI_DEND, 
-                              AP_SOMA = AP_SOMA, ISI_SOMA = ISI_SOMA, 
-                              SA = SA, VT = VT)
+    np.savez(outdir_absolute, AP_DEND = AP_DEND.half(), ISI_DEND = ISI_DEND.half(), 
+                              AP_SOMA = AP_SOMA.half(), ISI_SOMA = ISI_SOMA.half(), 
+                              SA = SA.half(), VT = VT.half())
     # np.save(os.path.join(outdir_absolute, "AP_DEND.npy"), AP_DEND) # arco: replace outdir with outdir_absolute
     # np.save(os.path.join(outdir_absolute, "ISI_DEND.npy"), ISI_DEND)
     # np.save(os.path.join(outdir_absolute, "AP_SOMA.npy"), AP_SOMA)
