@@ -114,14 +114,23 @@ def get_bin_adjacency_map_in_section(cell, section_id, section_distances_df):
         neighboring_bins.append(("{}/{}".format(section_id, bin_n + 1 + 1), "{}/{}".format(section_id, bin_n + 1)))
 
     # add adjacent bins from parent section (if there is one)
-    for parent in neighbor_map[int(section_id)]["parents"]:
+    for parent_section in neighbor_map[int(section_id)]["parents"]:
         # section_id/1 is connected to some parent section, but at which parent bin?
-        parent_bin_distances = get_bin_soma_distances_in_section(parent, section_distances_df)  # all bins in the parent section
+        parent_bin_distances = get_bin_soma_distances_in_section(parent_section, section_distances_df)  # all bins in the parent section
         d_section_begin = get_bin_soma_distances_in_section(section_id, section_distances_df)[0]
         diff = [abs(parent_bin_d - d_section_begin) for parent_bin_d in parent_bin_distances]
         closest_parent_bin = I.np.argmin(diff) + 1
         # the section is connected (section_id/1) to its parent at this bin (parent_id/closest_bin)
-        neighboring_bins.append(("{}/{}".format(section_id, 1), "{}/{}".format(parent, closest_parent_bin)))
+        neighboring_bins.append(("{}/{}".format(section_id, 1), "{}/{}".format(parent_section, closest_parent_bin)))
+
+        # check if parent section has a 3-way split (or more?)
+        # check if parent bin is the last bin in the section
+        if int(closest_parent_bin) == section_distances_df.iloc[parent_section]['n_bins']:
+            # fetch the children of the parent that are not equal to section_id, i.e. the siblings
+            sibling_sections = [e for e in neighbor_map[parent_section]["children"] if e != section_id]
+            # if parent has other children, then these are siblings, i.e. 3-way splits (or more)
+            for sibling_section in sibling_sections:
+                neighboring_bins.append(("{}/{}".format(section_id, 1), "{}/{}".format(sibling_section, 1)))
 
     # add adjacent bins from child sections (if there are any)
     for child in neighbor_map[int(section_id)]["children"]:
