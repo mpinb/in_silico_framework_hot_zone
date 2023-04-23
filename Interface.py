@@ -37,6 +37,7 @@ from functools import partial
 import itertools
 from collections import defaultdict
 import cloudpickle
+import six
 
 try:
     from IPython import display
@@ -100,6 +101,9 @@ from model_data_base.IO.LoaderDumper import to_pickle as dumper_to_pickle
 from model_data_base.IO.LoaderDumper import to_cloudpickle as dumper_to_cloudpickle
 from model_data_base.IO.LoaderDumper import to_msgpack as dumper_to_msgpack
 from model_data_base.IO.LoaderDumper import reduced_lda_model as dumper_reduced_lda_model
+
+if six.PY3:
+    from model_data_base.IO.LoaderDumper.shared_numpy_store import  SharedNumpyStore, shared_array_from_numpy, shared_array_from_disk, shared_array_from_shared_mem_name    
 
 from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
