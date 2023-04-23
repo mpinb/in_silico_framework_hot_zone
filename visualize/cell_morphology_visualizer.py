@@ -1086,7 +1086,7 @@ class CellMorphologyVisualizer:
         display_animation_from_images(images_path, 1, embedded=True)
 
     def display_interactive_morphology_3d(self, data=None, background_color="rgb(180,180,180)", highlight_section=None, renderer="notebook_connected",
-                                          t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map="jet"):
+                                          t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map="jet", show=True):
         """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
 
         Args:
@@ -1104,10 +1104,12 @@ class CellMorphologyVisualizer:
             ipywidgets.VBox object: an interactive render of the cell.
         """
         if data is None:
-            return self.__display_interactive_morphology_only_3d(background_color=background_color, highlight_section=highlight_section, renderer=renderer)
+            f = self.__display_interactive_morphology_only_3d(background_color=background_color, highlight_section=highlight_section, renderer=renderer)
         else:
-            return self.__get_interactive_plot_with_scalar_data(data, t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax,
-                                                                color_map=color_map, background_color=background_color, renderer=renderer)
+            f = self.__get_interactive_plot_with_scalar_data(data, t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax,
+                                                             color_map=color_map, background_color=background_color, renderer=renderer)
+        
+        return f.show() if show else f
 
     def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet', background_color="rgb(180,180,180)", renderer="notebook_connected"):
         ''' 
