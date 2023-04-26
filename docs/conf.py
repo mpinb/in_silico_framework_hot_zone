@@ -33,6 +33,7 @@ sys.path.append(os.path.join(os.path.abspath(os.pardir)))
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.todo',
     'sphinx_paramlinks',
     'sphinx.ext.viewcode',
     'sphinx.ext.coverage',
@@ -53,6 +54,7 @@ autodoc_default_options = {
 ## Generate autodoc stubs with summaries from code
 autosummary_generate = True
 autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
+paramlinks_hyperlink_param='name'
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
