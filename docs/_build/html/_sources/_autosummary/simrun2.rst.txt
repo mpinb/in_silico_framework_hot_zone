@@ -32,6 +32,7 @@
    simrun2.parameters_to_cell
    simrun2.reduced_model
    simrun2.rerun_mdb
+   simrun2.rerun_mdb_save_ANN_batches
    simrun2.run_existing_synapse_activations
    simrun2.run_new_simulations
    simrun2.seed_manager

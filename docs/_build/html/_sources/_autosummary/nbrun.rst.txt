@@ -14,19 +14,11 @@
    .. autosummary::
    
       dict_to_code
-      display
       run_notebook
    
    
 
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-   
-      ExecutePreprocessor
-      FileLink
    
    
 

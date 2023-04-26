@@ -1,4 +1,4 @@
-﻿model\_data\_base.IO.LoaderDumper.cell
+model\_data\_base.IO.LoaderDumper.cell
 ======================================
 
 .. automodule:: model_data_base.IO.LoaderDumper.cell
