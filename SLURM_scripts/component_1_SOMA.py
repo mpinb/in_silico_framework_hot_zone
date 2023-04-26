@@ -10,27 +10,7 @@ import sys
 import yaml
 import socket
 import time
-# In[2]:
 
-MANAGEMENT_DIR = sys.argv[1]
-LAUNCH_JUPYTER_SERVER = True  # by default, if left unspecified
-if len(sys.argv) > 2:
-    # component_1_SOMA.py was called from submit.sh with extra arguments
-    LAUNCH_JUPYTER_SERVER = bool(int(sys.argv[2]))  # only launch when interactive session is started
-    print("Launching Jupyter server: {}".format(LAUNCH_JUPYTER_SERVER))
-print('using management dir {}'.format(MANAGEMENT_DIR))
-
-# In[3]:
-
-#if os.path.exists(management_dir):
-#    shutil.rmtree(management_dir)
-if not os.path.exists(MANAGEMENT_DIR):
-    try:    
-        os.makedirs(MANAGEMENT_DIR)
-    except OSError: # if another process was faster creating it
-        pass
-
-# In[21]:
 
 #################################
 # methods for coordinating jobs
@@ -76,10 +56,6 @@ def reset_process_number():
         with open(p, 'w') as f:
             f.write('')
 
-PROCESS_NUMBER = get_process_number()
-
-
-# In[5]:
 
 #################################################
 # setting up locking server
@@ -138,9 +114,6 @@ def check_locking_config():
     #print model_data_base.distributed_lock.server
     #print model_data_base.distributed_lock.client
 
-
-# In[6]:
-
 #################################################
 # setting up dask-scheduler
 #################################################
@@ -161,7 +134,6 @@ def setup_dask_scheduler(management_dir):
     os.system(command)
     print('-'*50)
 
-# In[7]:
 
 #################################################
 # setting up dask-worker
@@ -202,6 +174,29 @@ def setup_jupyter_notebook(management_dir):
     os.system(command + "&>>{} &".format(os.path.join(management_dir,  "jupyter.txt")))
 # In[8]:
 if __name__ == "__main__":
+    try:
+        MANAGEMENT_DIR = sys.argv[1]
+    except IndexError:
+        # The python file was run without an argument: likely for testing purposes
+        sys.exit(1)
+    
+    LAUNCH_JUPYTER_SERVER = True  # by default, if left unspecified
+    if len(sys.argv) > 2:
+        # component_1_SOMA.py was called from submit.sh with extra arguments
+        LAUNCH_JUPYTER_SERVER = bool(int(sys.argv[2]))  # only launch when interactive session is started
+        print("Launching Jupyter server: {}".format(LAUNCH_JUPYTER_SERVER))
+    print('using management dir {}'.format(MANAGEMENT_DIR))
+
+
+    #if os.path.exists(management_dir):
+    #    shutil.rmtree(management_dir)
+    if os.path.exists(MANAGEMENT_DIR):
+        try:    
+            os.makedirs(MANAGEMENT_DIR)
+        except OSError: # if another process was faster creating it
+            pass
+    PROCESS_NUMBER = get_process_number()
+
     if PROCESS_NUMBER == 0:
         setup_locking_server()
         setup_dask_scheduler(MANAGEMENT_DIR)
