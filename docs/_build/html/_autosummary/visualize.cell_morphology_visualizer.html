@@ -434,46 +434,58 @@ Also, the relevant cell information can also be exported to .vtk format for furt
 <span class="sig-name descname"><span class="pre">display_animation_voltage_synapses_in_morphology_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neuron_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_show_syn_activ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapse_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/cell_morphology_visualizer.html#CellMorphologyVisualizer.display_animation_voltage_synapses_in_morphology_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_animation_voltage_synapses_in_morphology_3d" title="Permalink to this definition">#</a></dt>
 <dd><p>Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
 shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
-These images are then put together into a python animation.
-:param - images_path: path where the images for the gif will be generated
-:param - t_start: start time point of our time series visualization
-:param - t_end: last time point of our time series visualization
-:param - t_step: time between the different time points of our visualization
-:param - client: dask client for parallelization
-:param - neuron_rotation: rotation degrees of the neuron at each frame (in azimuth)
-:param - time_show_syn_activ: Time in the simulation during which a synapse activation is shown during the visualization
-:param - vmin: min voltages colorcoded in the cell morphology
-:param - vmax: max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)
-:param - voltage_legend: whether the voltage legend should appear in the plot
-:param - synapse_legend: whether the synapse activations legend should appear in the plot
-:param t_start:
-:param t_end and t_step will define the self.time attribute:</p>
+These images are then put together into a python animation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images_path</strong> (<em>-</em>) – path where the images for the gif will be generated</p></li>
+<li><p><strong>t_start</strong> (<em>-</em>) – start time point of our time series visualization</p></li>
+<li><p><strong>t_end</strong> (<em>-</em>) – last time point of our time series visualization</p></li>
+<li><p><strong>t_step</strong> (<em>-</em>) – time between the different time points of our visualization</p></li>
+<li><p><strong>client</strong> (<em>-</em>) – dask client for parallelization</p></li>
+<li><p><strong>neuron_rotation</strong> (<em>-</em>) – rotation degrees of the neuron at each frame (in azimuth)</p></li>
+<li><p><strong>time_show_syn_activ</strong> (<em>-</em>) – Time in the simulation during which a synapse activation is shown during the visualization</p></li>
+<li><p><strong>vmin</strong> (<em>-</em>) – min voltages colorcoded in the cell morphology</p></li>
+<li><p><strong>vmax</strong> (<em>-</em>) – max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)</p></li>
+<li><p><strong>voltage_legend</strong> (<em>-</em>) – whether the voltage legend should appear in the plot</p></li>
+<li><p><strong>synapse_legend</strong> (<em>-</em>) – whether the synapse activations legend should appear in the plot</p></li>
+<li><p><strong>t_start</strong> – </p></li>
+<li><p><strong>attribute</strong> (<em>t_end and t_step will define the self.time</em>) – </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_ion_dynamics_in_morphology_3d">
 <span class="sig-name descname"><span class="pre">display_interactive_ion_dynamics_in_morphology_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ion_keyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Ca_HVA.ica'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'jet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rgb(180,180,180)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'notebook_connected'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/cell_morphology_visualizer.html#CellMorphologyVisualizer.display_interactive_ion_dynamics_in_morphology_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_ion_dynamics_in_morphology_3d" title="Permalink to this definition">#</a></dt>
-<dd><p>Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
-- Ion channel dynamics
-- Section ID
-- 3D Coordinates
-:param - ion_dynamics: keyword to specify which ion channel dynamic to plot. Either the name of a rangeVar
-:param - t_start: start time point of our time series visualization
-:param - t_end: last time point of our time series visualization
-:param - t_step: time between the different time points of our visualization
-:param - vmin: min voltages colorcoded in the cell morphology
-:param - vmax: max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)
-:param - color_map: voltage color map
-:param - background_color: just some grey by default
-:param - renderer:
-:param t_start:
-:param t_end and t_step will define the self.time attribute:</p>
+<dd><p>Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:</p>
+<ul class="simple">
+<li><p>Ion channel dynamics</p></li>
+<li><p>Section ID</p></li>
+<li><p>3D Coordinates</p></li>
+</ul>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>an interactive render of the cell.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ion_dynamics</strong> (<em>-</em>) – keyword to specify which ion channel dynamic to plot. Either the name of a rangeVar</p></li>
+<li><p><strong>t_start</strong> (<em>-</em>) – start time point of our time series visualization</p></li>
+<li><p><strong>t_end</strong> (<em>-</em>) – last time point of our time series visualization</p></li>
+<li><p><strong>t_step</strong> (<em>-</em>) – time between the different time points of our visualization</p></li>
+<li><p><strong>vmin</strong> (<em>-</em>) – min voltages colorcoded in the cell morphology</p></li>
+<li><p><strong>vmax</strong> (<em>-</em>) – max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)</p></li>
+<li><p><strong>color_map</strong> (<em>-</em>) – voltage color map</p></li>
+<li><p><strong>background_color</strong> (<em>-</em>) – just some grey by default</p></li>
+<li><p><strong>renderer</strong> (<em>-</em>) – </p></li>
+<li><p><strong>t_start</strong> – </p></li>
+<li><p><strong>attribute</strong> (<em>t_end and t_step will define the self.time</em>) – </p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>ipywidgets.VBox object</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>an interactive render of the cell.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ipywidgets.VBox object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -508,28 +520,32 @@ These images are then put together into a python animation.
 <dl class="py method">
 <dt class="sig sig-object py" id="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_voltage_in_morphology_3d">
 <span class="sig-name descname"><span class="pre">display_interactive_voltage_in_morphology_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'jet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rgb(180,180,180)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'notebook_connected'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/cell_morphology_visualizer.html#CellMorphologyVisualizer.display_interactive_voltage_in_morphology_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_voltage_in_morphology_3d" title="Permalink to this definition">#</a></dt>
-<dd><p>TODO: add synapse activations!
-TODO: add dendritic and somatic AP as secondary subplot
-Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
-- Membrane voltage
-- Section ID
-- 3D Coordinates
-:param - t_start: start time point of our time series visualization
-:param - t_end: last time point of our time series visualization
-:param - t_step: time between the different time points of our visualization
-:param - vmin: min voltages colorcoded in the cell morphology
-:param - vmax: max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)
-:param - color_map: voltage color map
-:param - background_color: just some grey by default
-:param - renderer:
-:param t_start:
-:param t_end and t_step will define the self.time attribute:</p>
+<dd><p>TODO: add synapse activations!</p>
+<p>TODO: add dendritic and somatic AP as secondary subplot</p>
+<p>Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:</p>
+<ul class="simple">
+<li><p>Membrane voltage</p></li>
+<li><p>Section ID</p></li>
+<li><p>3D Coordinates</p></li>
+</ul>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>an interactive render of the cell.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_start</strong> (<em>-</em>) – start time point of our time series visualization</p></li>
+<li><p><strong>t_end</strong> (<em>-</em>) – last time point of our time series visualization</p></li>
+<li><p><strong>t_step</strong> (<em>-</em>) – time between the different time points of our visualization</p></li>
+<li><p><strong>vmin</strong> (<em>-</em>) – min voltages colorcoded in the cell morphology</p></li>
+<li><p><strong>vmax</strong> (<em>-</em>) – max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)</p></li>
+<li><p><strong>color_map</strong> (<em>-</em>) – voltage color map</p></li>
+<li><p><strong>background_color</strong> (<em>-</em>) – just some grey by default</p></li>
+<li><p><strong>renderer</strong> (<em>-</em>) – </p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>ipywidgets.VBox object</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>an interactive render of the cell.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ipywidgets.VBox object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -617,36 +633,54 @@ None means it has no simulation data. Empty list means it has simulation data th
 <dl class="py method">
 <dt class="sig sig-object py" id="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.show_morphology_3d">
 <span class="sig-name descname"><span class="pre">show_morphology_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/cell_morphology_visualizer.html#CellMorphologyVisualizer.show_morphology_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.show_morphology_3d" title="Permalink to this definition">#</a></dt>
-<dd><p>Creates a python plot of the cell morphology in 3D
-:param - Save: path where the plot will be saved. If it’s empty it will not be saved
-:param - Plot: whether the plot should be shown.</p>
+<dd><p>Creates a python plot of the cell morphology in 3D</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Save</strong> (<em>-</em>) – path where the plot will be saved. If it’s empty it will not be saved</p></li>
+<li><p><strong>Plot</strong> (<em>-</em>) – whether the plot should be shown.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.show_voltage_in_morphology_3d">
 <span class="sig-name descname"><span class="pre">show_voltage_in_morphology_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/cell_morphology_visualizer.html#CellMorphologyVisualizer.show_voltage_in_morphology_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.show_voltage_in_morphology_3d" title="Permalink to this definition">#</a></dt>
-<dd><p>Creates a python plot of the cell morphology in 3D color-coded with voltage for a particular time point.
-:param - time_point: time of the simulation which we would like to visualize
-:param - vmin: min voltages colorcoded in the cell morphology
-:param - vmax: max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)
-:param - voltage_legend: whether the voltage legend should appear in the plot
-:param - save: path where the plot will be saved. If it’s empty it will not be saved
-:param - plot: whether the plot should be shown.</p>
+<dd><p>Creates a python plot of the cell morphology in 3D color-coded with voltage for a particular time point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_point</strong> (<em>-</em>) – time of the simulation which we would like to visualize</p></li>
+<li><p><strong>vmin</strong> (<em>-</em>) – min voltages colorcoded in the cell morphology</p></li>
+<li><p><strong>vmax</strong> (<em>-</em>) – max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)</p></li>
+<li><p><strong>voltage_legend</strong> (<em>-</em>) – whether the voltage legend should appear in the plot</p></li>
+<li><p><strong>save</strong> (<em>-</em>) – path where the plot will be saved. If it’s empty it will not be saved</p></li>
+<li><p><strong>plot</strong> (<em>-</em>) – whether the plot should be shown.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.show_voltage_synapses_in_morphology_3d">
 <span class="sig-name descname"><span class="pre">show_voltage_synapses_in_morphology_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_show_syn_activ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapse_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/cell_morphology_visualizer.html#CellMorphologyVisualizer.show_voltage_synapses_in_morphology_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.show_voltage_synapses_in_morphology_3d" title="Permalink to this definition">#</a></dt>
 <dd><p>Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
-are shown for a particular time point.
-:param - Time_point: time of the simulation which we would like to visualize
-:param - time_show_syn_activ: Time in the simulation during which a synapse activation is shown during the visualization
-:param - vmin: min voltages colorcoded in the cell morphology
-:param - vmax: max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)
-:param - voltage_legend: whether the voltage legend should appear in the plot
-:param - synapse_legend: whether the synapse activations legend should appear in the plot
-:param - Save: path where the plot will be saved. If it’s empty it will not be saved
-:param - Plot: whether the plot should be shown.</p>
+are shown for a particular time point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Time_point</strong> (<em>-</em>) – time of the simulation which we would like to visualize</p></li>
+<li><p><strong>time_show_syn_activ</strong> (<em>-</em>) – Time in the simulation during which a synapse activation is shown during the visualization</p></li>
+<li><p><strong>vmin</strong> (<em>-</em>) – min voltages colorcoded in the cell morphology</p></li>
+<li><p><strong>vmax</strong> (<em>-</em>) – max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)</p></li>
+<li><p><strong>voltage_legend</strong> (<em>-</em>) – whether the voltage legend should appear in the plot</p></li>
+<li><p><strong>synapse_legend</strong> (<em>-</em>) – whether the synapse activations legend should appear in the plot</p></li>
+<li><p><strong>Save</strong> (<em>-</em>) – path where the plot will be saved. If it’s empty it will not be saved</p></li>
+<li><p><strong>Plot</strong> (<em>-</em>) – whether the plot should be shown.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -767,36 +801,48 @@ These images are then put together into a gif.</p>
 <span class="sig-name descname"><span class="pre">write_video_voltage_synapses_in_morphology_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neuron_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_show_syn_activ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framerate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mpeg4'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voltage_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synapse_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/cell_morphology_visualizer.html#CellMorphologyVisualizer.write_video_voltage_synapses_in_morphology_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.write_video_voltage_synapses_in_morphology_3d" title="Permalink to this definition">#</a></dt>
 <dd><p>Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
 shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
-These images are then put together into a video.
-:param - images_path: dir where the images for the video will be generated
-:param - out_path: dir where the video will be generated + name of the video
-:param - t_start: start time point of our time series visualization
-:param - t_end: last time point of our time series visualization
-:param - t_step: time between the different time points of our visualization
-:param - client: dask client for parallelization
-:param - neuron_rotation: rotation degrees of the neuron at each frame (in azimuth)
-:param - time_show_syn_activ: Time in the simulation during which a synapse activation is shown during the visualization
-:param - vmin: min voltages colorcoded in the cell morphology
-:param - vmax: max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)
-:param - framerate: frames per second
-:param - quality:
-:param - codec:
-:param - voltage_legend: whether the voltage legend should appear in the plot
-:param - synapse_legend: whether the synapse activations legend should appear in the plot
-:param t_start:
-:param t_end and t_step will define the self.time attribute:</p>
+These images are then put together into a video.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images_path</strong> (<em>-</em>) – dir where the images for the video will be generated</p></li>
+<li><p><strong>out_path</strong> (<em>-</em>) – dir where the video will be generated + name of the video</p></li>
+<li><p><strong>t_start</strong> (<em>-</em>) – start time point of our time series visualization</p></li>
+<li><p><strong>t_end</strong> (<em>-</em>) – last time point of our time series visualization</p></li>
+<li><p><strong>t_step</strong> (<em>-</em>) – time between the different time points of our visualization</p></li>
+<li><p><strong>client</strong> (<em>-</em>) – dask client for parallelization</p></li>
+<li><p><strong>neuron_rotation</strong> (<em>-</em>) – rotation degrees of the neuron at each frame (in azimuth)</p></li>
+<li><p><strong>time_show_syn_activ</strong> (<em>-</em>) – Time in the simulation during which a synapse activation is shown during the visualization</p></li>
+<li><p><strong>vmin</strong> (<em>-</em>) – min voltages colorcoded in the cell morphology</p></li>
+<li><p><strong>vmax</strong> (<em>-</em>) – max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)</p></li>
+<li><p><strong>framerate</strong> (<em>-</em>) – frames per second</p></li>
+<li><p><strong>quality</strong> (<em>-</em>) – </p></li>
+<li><p><strong>codec</strong> (<em>-</em>) – </p></li>
+<li><p><strong>voltage_legend</strong> (<em>-</em>) – whether the voltage legend should appear in the plot</p></li>
+<li><p><strong>synapse_legend</strong> (<em>-</em>) – whether the synapse activations legend should appear in the plot</p></li>
+<li><p><strong>t_start</strong> – </p></li>
+<li><p><strong>attribute</strong> (<em>t_end and t_step will define the self.time</em>) – </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.write_vtk_frames">
 <span class="sig-name descname"><span class="pre">write_vtk_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'frame'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/cell_morphology_visualizer.html#CellMorphologyVisualizer.write_vtk_frames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.write_vtk_frames" title="Permalink to this definition">#</a></dt>
 <dd><p>Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview</p>
-<p>TODO: remove duplicate rows used to connect sections
-:param - t_start: start time point of our time series visualization
-:param - t_end: last time point of our time series visualization
-:param - t_step: time between the different time points of our visualization
-:param - out_name: name of the file (not path, the file will be generated in out_dir)
-:param - out_dir: path where the images for the gif will be generated</p>
+<p>TODO: remove duplicate rows used to connect sections</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_start</strong> (<em>-</em>) – start time point of our time series visualization</p></li>
+<li><p><strong>t_end</strong> (<em>-</em>) – last time point of our time series visualization</p></li>
+<li><p><strong>t_step</strong> (<em>-</em>) – time between the different time points of our visualization</p></li>
+<li><p><strong>out_name</strong> (<em>-</em>) – name of the file (not path, the file will be generated in out_dir)</p></li>
+<li><p><strong>out_dir</strong> (<em>-</em>) – path where the images for the gif will be generated</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

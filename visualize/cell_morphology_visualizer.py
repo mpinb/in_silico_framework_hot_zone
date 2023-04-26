@@ -256,6 +256,7 @@ class CellMorphologyVisualizer:
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
         are shown for a particular time point.
+
         Args:
             - voltage: voltage along the whole cell morphology for a particular time point
             - synapses: synapse activations for a particular timepoint
@@ -326,6 +327,7 @@ class CellMorphologyVisualizer:
     def __get_voltages_at_timepoint(self, time_point):
         '''
         Retrieves the VOLTAGE along the whole cell morphology from cell object at a particular time point.
+
         Args:
          - time_point: time point from which we want to gather the voltage
         '''
@@ -362,6 +364,7 @@ class CellMorphologyVisualizer:
     def __get_ion_dynamic_at_timepoint(self, time_point, ion_keyword):
         '''
         Retrieves the ion dynamics along the whole cell morphology from cell object at a particular time point.
+
         Args:
          - time_point: time point from which we want to gather the voltage
         '''
@@ -406,6 +409,7 @@ class CellMorphologyVisualizer:
     def __get_soma_voltage_at_timepoint(self, time_point):
         '''
         Retrieves the VOLTAGE along the whole cell morphology from cell object at a particular time point.
+
         Args:
          - time_point: time point from which we want to gather the voltage
         '''
@@ -464,6 +468,7 @@ class CellMorphologyVisualizer:
     def __get_synapses_at_timepoint(self, time_point):
         '''
         Retrieves the SYNAPSE ACTIVATIONS at a particular time point.
+
         Args:
          - time_point: time point from which we want to gather the synapse activations
         '''
@@ -565,7 +570,7 @@ class CellMorphologyVisualizer:
         shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)
         and in each image the neuron rotates a bit (3 degrees) over its axis.
 
-        The parameters :@param t_start:, :@param t_end: and :@param t_step: will define the self.time attribute
+        The parameters :param:t_start, :param:t_end and :param:t_step will define the self.time attribute
 
         Args:
             - t_start: start time point of our time series visualization
@@ -865,6 +870,7 @@ class CellMorphologyVisualizer:
     def show_morphology_3d(self, save='', plot=True):
         '''
         Creates a python plot of the cell morphology in 3D
+
         Args:
             - Save: path where the plot will be saved. If it's empty it will not be saved
             - Plot: whether the plot should be shown.
@@ -900,6 +906,7 @@ class CellMorphologyVisualizer:
     def show_voltage_in_morphology_3d(self, time_point, vmin=None, vmax=None, voltage_legend=True, save='', plot=True):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage for a particular time point.
+
         Args:
             - time_point: time of the simulation which we would like to visualize
             - vmin: min voltages colorcoded in the cell morphology
@@ -965,6 +972,7 @@ class CellMorphologyVisualizer:
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
         are shown for a particular time point.
+
         Args:
             - Time_point: time of the simulation which we would like to visualize
             - time_show_syn_activ: Time in the simulation during which a synapse activation is shown during the visualization
@@ -1035,6 +1043,7 @@ class CellMorphologyVisualizer:
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a video.
+
         Args:
             - images_path: dir where the images for the video will be generated
             - out_path: dir where the video will be generated + name of the video
@@ -1078,6 +1087,7 @@ class CellMorphologyVisualizer:
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a python animation.
+
         Args:
             - images_path: path where the images for the gif will be generated
             - t_start: start time point of our time series visualization
@@ -1138,11 +1148,15 @@ class CellMorphologyVisualizer:
     def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet', background_color="rgb(180,180,180)", renderer="notebook_connected"):
         ''' 
         TODO: add synapse activations!
+
         TODO: add dendritic and somatic AP as secondary subplot
+
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
+
         - Membrane voltage
         - Section ID
         - 3D Coordinates
+
         Args:
             - t_start: start time point of our time series visualization
             - t_end: last time point of our time series visualization
@@ -1152,7 +1166,7 @@ class CellMorphologyVisualizer:
             - color_map: voltage color map
             - background_color: just some grey by default
             - renderer
-            t_start, t_end and t_step will define the self.time attribute
+
         Returns:
             ipywidgets.VBox object: an interactive render of the cell.
         '''
@@ -1162,9 +1176,11 @@ class CellMorphologyVisualizer:
                                                           background_color="rgb(180,180,180)", renderer="notebook_connected"):
         ''' 
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
+
         - Ion channel dynamics
         - Section ID
         - 3D Coordinates
+
         Args:
             - ion_dynamics: keyword to specify which ion channel dynamic to plot. Either the name of a rangeVar
             - t_start: start time point of our time series visualization
@@ -1187,6 +1203,7 @@ class CellMorphologyVisualizer:
         Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview
 
         TODO: remove duplicate rows used to connect sections
+        
         Args:
             - t_start: start time point of our time series visualization
             - t_end: last time point of our time series visualization
@@ -1215,6 +1232,7 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, t
     Dask delayed function useful for parallelization of images generation. This dask delayed function cannot be part of the
     visualization class, dask does not allow it because this class has a cell object as an attribute and dask cannot serialize it,
     if the cell object wasn't an attribute this function could be a class method. TODO: find for a possible solution.
+
     Args:
         - morphology: pandas dataframe with points. Each point contains the x, y and z coordinates, a diameter and the section
           of the neuron to which that point belongs. Each section of a neuron is limited by a branching point or the end of 
