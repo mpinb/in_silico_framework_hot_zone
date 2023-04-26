@@ -110,7 +110,7 @@ class CellMorphologyVisualizer:
         """Time interval for visualisation. Does not have to equal the simulation time interval.
         By default, the simulation is chopped to the specified t_begin and t_end, and evenly divided in 10 timesteps."""
         self.times_to_show = None
-        """An array of time points to visualize. Gets calculated from :param self.t_begin:, :param self.t_end: and :param self.t_step:"""
+        """An array of time points to visualize. Gets calculated from :param:self.t_begin, :param:self.t_end and :param:self.t_step"""
 
         self.scalar_data = None
         """Scalar data to overlay on the meuron morphology. If there is simulation data available, this is initialized as the membrane voltage, but ion currents are also possible"""
@@ -527,7 +527,7 @@ class CellMorphologyVisualizer:
         """Checks if the specified time range equals the previously defined one. If not, updates the time range.
         If all arguments are None, does nothing. Useful for defining default time range
         
-        Todo
+        Todo:
             what if a newly defined t_step does not match the simulation dt?
 
         Args:
@@ -572,7 +572,7 @@ class CellMorphologyVisualizer:
         shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)
         and in each image the neuron rotates a bit (3 degrees) over its axis.
 
-        The parameters :param self.t_begin:, :param self.t_end: and :param self.t_step: will define the self.time attribute
+        The parameters :param:self.t_begin, :param:self.t_end and :param:self.t_step will define the :param:self.time attribute
 
         Args:
             - t_start: start time point of our time series visualization
@@ -1004,7 +1004,7 @@ class CellMorphologyVisualizer:
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a gif.
-        :param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute
+        The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:self.time attribute
 
         Args:
             - images_path: dir where the images for the gif will be generated
@@ -1045,7 +1045,7 @@ class CellMorphologyVisualizer:
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a video.
-        :param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute
+        The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:time attribute
 
         Args:
             - images_path: dir where the images for the video will be generated
@@ -1089,7 +1089,7 @@ class CellMorphologyVisualizer:
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a python animation.
-        :param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute
+        The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:self.time attribute
 
 
         Args:
@@ -1125,7 +1125,7 @@ class CellMorphologyVisualizer:
     def display_interactive_morphology_3d(self, data=None, background_color="rgb(180,180,180)", highlight_section=None, renderer="notebook_connected",
                                           t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map="jet", show=True):
         """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
-        :param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute
+        The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:self.time attribute
 
         Args:
             data (str, optional): Scalar data to overlay on interactive plot. Defaults to None.
@@ -1171,7 +1171,7 @@ class CellMorphologyVisualizer:
         Returns:
             ipywidgets.VBox object: an interactive render of the cell.
 
-        Todo
+        Todo:
             add synapse activations!
             add dendritic and somatic AP as secondary subplot
         '''
@@ -1207,7 +1207,7 @@ class CellMorphologyVisualizer:
         '''
         Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview
 
-        Todo
+        Todo:
             remove duplicate rows used to connect sections
 
         Args:
@@ -1239,7 +1239,7 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, t
     visualization class, dask does not allow it because this class has a cell object as an attribute and dask cannot serialize it,
     if the cell object wasn't an attribute this function could be a class method.
     
-    Todo
+    Todo:
         find for a possible solution.
 
     Args:

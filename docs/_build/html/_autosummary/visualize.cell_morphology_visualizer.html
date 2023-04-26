@@ -9,6 +9,7 @@
         <title>visualize.cell_morphology_visualizer - In-Silico Framework (ISF) 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_paramlinks.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/default.css" />
     
@@ -436,7 +437,7 @@ Also, the relevant cell information can also be exported to .vtk format for furt
 <dd><p>Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
 shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
 These images are then put together into a python animation.
-:param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute</p>
+The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:self.time attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -492,7 +493,7 @@ These images are then put together into a python animation.
 <dt class="sig sig-object py" id="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_morphology_3d">
 <span class="sig-name descname"><span class="pre">display_interactive_morphology_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rgb(180,180,180)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlight_section</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'notebook_connected'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'jet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/cell_morphology_visualizer.html#CellMorphologyVisualizer.display_interactive_morphology_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_morphology_3d" title="Permalink to this definition">#</a></dt>
 <dd><p>This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
-:param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute</p>
+The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:self.time attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -543,11 +544,6 @@ These images are then put together into a python animation.
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ipywidgets.VBox object</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>Todo</dt><dd><p>add synapse activations!
-add dendritic and somatic AP as secondary subplot</p>
 </dd>
 </dl>
 </dd></dl>
@@ -737,13 +733,13 @@ By default, the simulation is chopped to the specified t_begin and t_end, and ev
 <dl class="py attribute">
 <dt class="sig sig-object py" id="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.times_to_show">
 <span class="sig-name descname"><span class="pre">times_to_show</span></span><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.times_to_show" title="Permalink to this definition">#</a></dt>
-<dd><p>, :param self.t_end: and :param self.t_step:</p>
+<dd><p>self.t_begin, :param:self.t_end and :param:self.t_step</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>An array of time points to visualize. Gets calculated from</p>
 </dd>
 <dt class="field-even">Type<span class="colon">:</span></dt>
-<dd class="field-even"><p>param self.t_begin</p>
+<dd class="field-even"><p>param</p>
 </dd>
 </dl>
 </dd></dl>
@@ -775,7 +771,7 @@ None means it has no simulation data. Empty list means it has simulation data th
 <dd><p>Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
 shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
 These images are then put together into a gif.
-:param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute</p>
+The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:self.time attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -803,7 +799,7 @@ These images are then put together into a gif.
 <dd><p>Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
 shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
 These images are then put together into a video.
-:param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute</p>
+The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:time attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -831,10 +827,6 @@ These images are then put together into a video.
 <dt class="sig sig-object py" id="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.write_vtk_frames">
 <span class="sig-name descname"><span class="pre">write_vtk_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'frame'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/cell_morphology_visualizer.html#CellMorphologyVisualizer.write_vtk_frames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.write_vtk_frames" title="Permalink to this definition">#</a></dt>
 <dd><p>Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview</p>
-<dl class="simple">
-<dt>Todo</dt><dd><p>remove duplicate rows used to connect sections</p>
-</dd>
-</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

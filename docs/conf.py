@@ -33,6 +33,7 @@ sys.path.append(os.path.join(os.path.abspath(os.pardir)))
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx_paramlinks',
     'sphinx.ext.viewcode',
     'sphinx.ext.coverage',
     'sphinx.ext.intersphinx',
