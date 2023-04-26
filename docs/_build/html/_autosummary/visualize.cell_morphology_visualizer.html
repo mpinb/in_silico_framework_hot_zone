@@ -437,7 +437,7 @@ Also, the relevant cell information can also be exported to .vtk format for furt
 <dd><p>Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
 shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
 These images are then put together into a python animation.
-The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:self.time attribute</p>
+The parameters :paramref:t_begin, :paramref:t_end and :paramref:t_step will define the :paramref:self.time attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -493,7 +493,7 @@ The parameters :param:t_begin, :param:t_end and :param:t_step will define the :p
 <dt class="sig sig-object py" id="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_morphology_3d">
 <span class="sig-name descname"><span class="pre">display_interactive_morphology_3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rgb(180,180,180)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlight_section</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'notebook_connected'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'jet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/visualize/cell_morphology_visualizer.html#CellMorphologyVisualizer.display_interactive_morphology_3d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_morphology_3d" title="Permalink to this definition">#</a></dt>
 <dd><p>This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
-The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:self.time attribute</p>
+The parameters :paramref:t_begin, :paramref:t_end and :paramref:t_step will define the :paramref:self.time attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -733,13 +733,13 @@ By default, the simulation is chopped to the specified t_begin and t_end, and ev
 <dl class="py attribute">
 <dt class="sig sig-object py" id="visualize.cell_morphology_visualizer.CellMorphologyVisualizer.times_to_show">
 <span class="sig-name descname"><span class="pre">times_to_show</span></span><a class="headerlink" href="#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.times_to_show" title="Permalink to this definition">#</a></dt>
-<dd><p>self.t_begin, :param:self.t_end and :param:self.t_step</p>
+<dd><p>self.t_begin, :paramref:self.t_end and :paramref:self.t_step</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>An array of time points to visualize. Gets calculated from</p>
 </dd>
 <dt class="field-even">Type<span class="colon">:</span></dt>
-<dd class="field-even"><p>param</p>
+<dd class="field-even"><p>paramref</p>
 </dd>
 </dl>
 </dd></dl>
@@ -771,7 +771,7 @@ None means it has no simulation data. Empty list means it has simulation data th
 <dd><p>Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
 shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
 These images are then put together into a gif.
-The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:self.time attribute</p>
+The parameters :paramref:t_begin, :paramref:t_end and :paramref:t_step will define the :paramref:self.time attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -799,7 +799,7 @@ The parameters :param:t_begin, :param:t_end and :param:t_step will define the :p
 <dd><p>Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
 shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
 These images are then put together into a video.
-The parameters :param:t_begin, :param:t_end and :param:t_step will define the :param:time attribute</p>
+The parameters :paramref:t_begin, :paramref:t_end and :paramref:t_step will define the :paramref:time attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
