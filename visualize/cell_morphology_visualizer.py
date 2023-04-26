@@ -1002,6 +1002,7 @@ class CellMorphologyVisualizer:
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a gif.
+        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute
 
         Args:
             - images_path: dir where the images for the gif will be generated
@@ -1017,7 +1018,6 @@ class CellMorphologyVisualizer:
             - frame_duration: duration of each frame in ms
             - voltage_legend: whether the voltage legend should appear in the plot
             - synapse_legend: whether the synapse activations legend should appear in the plot
-            t_start, t_end and t_step will define the self.time attribute
         '''
         self.__assert_has_simulation_data()
         if client is None:
@@ -1043,6 +1043,7 @@ class CellMorphologyVisualizer:
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a video.
+        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute
 
         Args:
             - images_path: dir where the images for the video will be generated
@@ -1060,7 +1061,6 @@ class CellMorphologyVisualizer:
             - codec
             - voltage_legend: whether the voltage legend should appear in the plot
             - synapse_legend: whether the synapse activations legend should appear in the plot
-            t_start, t_end and t_step will define the self.time attribute
         '''
         self.__assert_has_simulation_data()
         if client is None:
@@ -1087,6 +1087,8 @@ class CellMorphologyVisualizer:
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
         These images are then put together into a python animation.
+        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute
+
 
         Args:
             - images_path: path where the images for the gif will be generated
@@ -1100,7 +1102,6 @@ class CellMorphologyVisualizer:
             - vmax: max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)
             - voltage_legend: whether the voltage legend should appear in the plot
             - synapse_legend: whether the synapse activations legend should appear in the plot
-            t_start, t_end and t_step will define the self.time attribute
         '''
         self.__assert_has_simulation_data()
         if client is None:
@@ -1122,6 +1123,7 @@ class CellMorphologyVisualizer:
     def display_interactive_morphology_3d(self, data=None, background_color="rgb(180,180,180)", highlight_section=None, renderer="notebook_connected",
                                           t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map="jet", show=True):
         """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
+        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute
 
         Args:
             data (str, optional): Scalar data to overlay on interactive plot. Defaults to None.
@@ -1191,7 +1193,7 @@ class CellMorphologyVisualizer:
             - color_map: voltage color map
             - background_color: just some grey by default
             - renderer
-            t_start, t_end and t_step will define the self.time attribute
+            
         Returns:
             ipywidgets.VBox object: an interactive render of the cell.
         '''
@@ -1203,7 +1205,7 @@ class CellMorphologyVisualizer:
         Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview
 
         TODO: remove duplicate rows used to connect sections
-        
+
         Args:
             - t_start: start time point of our time series visualization
             - t_end: last time point of our time series visualization

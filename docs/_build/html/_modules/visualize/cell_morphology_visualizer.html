@@ -1394,6 +1394,7 @@
 <span class="sd">        Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are</span>
 <span class="sd">        shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.</span>
 <span class="sd">        These images are then put together into a gif.</span>
+<span class="sd">        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            - images_path: dir where the images for the gif will be generated</span>
@@ -1409,7 +1410,6 @@
 <span class="sd">            - frame_duration: duration of each frame in ms</span>
 <span class="sd">            - voltage_legend: whether the voltage legend should appear in the plot</span>
 <span class="sd">            - synapse_legend: whether the synapse activations legend should appear in the plot</span>
-<span class="sd">            t_start, t_end and t_step will define the self.time attribute</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__assert_has_simulation_data</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1435,6 +1435,7 @@
 <span class="sd">        Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are</span>
 <span class="sd">        shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.</span>
 <span class="sd">        These images are then put together into a video.</span>
+<span class="sd">        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            - images_path: dir where the images for the video will be generated</span>
@@ -1452,7 +1453,6 @@
 <span class="sd">            - codec</span>
 <span class="sd">            - voltage_legend: whether the voltage legend should appear in the plot</span>
 <span class="sd">            - synapse_legend: whether the synapse activations legend should appear in the plot</span>
-<span class="sd">            t_start, t_end and t_step will define the self.time attribute</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__assert_has_simulation_data</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1479,6 +1479,8 @@
 <span class="sd">        Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are</span>
 <span class="sd">        shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.</span>
 <span class="sd">        These images are then put together into a python animation.</span>
+<span class="sd">        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute</span>
+
 
 <span class="sd">        Args:</span>
 <span class="sd">            - images_path: path where the images for the gif will be generated</span>
@@ -1492,7 +1494,6 @@
 <span class="sd">            - vmax: max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)</span>
 <span class="sd">            - voltage_legend: whether the voltage legend should appear in the plot</span>
 <span class="sd">            - synapse_legend: whether the synapse activations legend should appear in the plot</span>
-<span class="sd">            t_start, t_end and t_step will define the self.time attribute</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__assert_has_simulation_data</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1514,6 +1515,7 @@
 <div class="viewcode-block" id="CellMorphologyVisualizer.display_interactive_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">display_interactive_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;rgb(180,180,180)&quot;</span><span class="p">,</span> <span class="n">highlight_section</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s2">&quot;notebook_connected&quot;</span><span class="p">,</span>
                                           <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s2">&quot;jet&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).</span>
+<span class="sd">        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            data (str, optional): Scalar data to overlay on interactive plot. Defaults to None.</span>
@@ -1583,7 +1585,7 @@
 <span class="sd">            - color_map: voltage color map</span>
 <span class="sd">            - background_color: just some grey by default</span>
 <span class="sd">            - renderer</span>
-<span class="sd">            t_start, t_end and t_step will define the self.time attribute</span>
+<span class="sd">            </span>
 <span class="sd">        Returns:</span>
 <span class="sd">            ipywidgets.VBox object: an interactive render of the cell.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -1595,7 +1597,7 @@
 <span class="sd">        Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview</span>
 
 <span class="sd">        TODO: remove duplicate rows used to connect sections</span>
-<span class="sd">        </span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            - t_start: start time point of our time series visualization</span>
 <span class="sd">            - t_end: last time point of our time series visualization</span>
