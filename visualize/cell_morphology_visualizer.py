@@ -42,81 +42,104 @@ class CellMorphologyVisualizer:
         """
         Given a Cell object, this class initializes an object that is easier to work with
         """
+        # ---------------------------------------------------------------
         # Cell object
         self.cell = cell
+        """The Cell object"""
 
-        """Visualization attributes"""
-        # Colors in which the synaptic input are going to be shown
+        # ---------------------------------------------------------------
+        # Visualization attributes
         self.population_to_color_dict = {'INT': 'black', 'L4ss': 'orange', 'L5st': 'cyan', 'L5tt': 'lime',
                                          'L6CC': 'yellow', 'VPM': 'red', 'L23': 'magenta', 'inactive': 'white'}
-        # Angles in which our 3D plots are shown
-        self.azim = 0  # Azimuth of the projection in degrees.
-        self.dist = 10  # Distance of the camera to the object.
-        # Elevation of the camera above the equatorial plane in degrees.
-        self.elev = 30
-        self.roll = 0
-        # Rotation degrees of the neuron at each frame during timeseries visualization (in azimuth)
-        self.neuron_rotation = 3
-        # Image quality
-        self.dpi = 72
+        """Colors in which the synaptic input are going to be shown"""
 
-        """Morphology attributes
-        Gather the necessary information to plot the cell morphology.
-        This info is always necessary to plot the cell.
-        morphology: pandas dataframe with points.
-        Each point contains the x, y and z coordinates, a diameter and the section index
-        of the neuron to which that point belongs.
-        Sections are defined as the regions of cell morphology
-        between 2 branching points / end of a branch.
-        """
+        ## Angles in which our 3D plots are shown
+        self.azim = 0
+        """Azimuth of the projection in degrees."""
+        self.dist = 10
+        """Distance of the camera to the object."""
+        self.elev = 30
+        """Elevation of the camera above the equatorial plane in degrees."""
+        self.roll = 0
+        self.neuron_rotation = 3
+        """Rotation degrees of the neuron at each frame during timeseries visualization (in azimuth)"""
+        self.dpi = 72
+        """Image quality"""
+
+        # ---------------------------------------------------------------
+        # Morphology attributes
+        ## Gather the necessary information to plot the cell morphology.
+        ## This info is always necessary to plot the cell.
+        
         self.line_pairs = []  # initialised below
+        """Pairs of point indices that define a line, i.e. some cell segment"""
         self.morphology = self.__get_morphology()  # a pandas DataFrame
+        """A pd.DataFrame containing point information, diameter and section ID"""
         if align_trunk:
             self.__align_trunk_with_z_axis()
         self.points = self.morphology[["x", "y", "z"]]
+        """The 3D point coordinates of the cell"""
         self.diameters = self.morphology["diameter"]
+        """Diameters of the cell segments"""
         self.section_indices = self.morphology["section"]
+        """Section indices of the Cell segments"""
 
-        """Simulation-related parameters
-        These only get initialised when the cell object contains simulation data"""
-        # Max and min voltages colorcoded in the cell morphology
+        # ---------------------------------------------------------------
+        # Simulation-related parameters
+        ## These only get initialised when the cell object actually contains simulation data.
+        ## This info is not necessary to plot the cell morphology, but some more advanced methods need this information
+        
         self.vmin = None  # mV
+        """Max voltage colorcoded in the cell morphology (mV)"""
         self.vmax = None  # mV
-        # Time points of the simulation
+        """Min voltage colorcoded in the cell morphology (mV)"""
         self.simulation_times = None
-        # Time offset w.r.t. simulation start. useful if '0 ms' is supposed to refer to stimulus time
+        """Time points of the simulation"""
         self.time_offset = None
-        # Time points we want to visualize (values by default)
+        """Time offset w.r.t. simulation start. useful if '0 ms' is supposed to refer to stimulus time"""
         self.t_start = None
-        self.dt = None
-        self.t_step = None
+        """Time point where we want to start visualising.
+        By default, this gets initialised to the start of the simulation."""
         self.t_end = None
+        """Time point where the visualisation of the simulation stops.
+        By default, this gets initialised to the end of the simulation."""
+        self.dt = None
+        """Time interval of the simulation"""
+        # TODO: add support for variable timestep
+        self.t_step = None
+        """Time interval for visualisation. Does not have to equal the simulation time interval.
+        By default, the simulation is chopped to the specified t_begin and t_end, and evenly divided in 10 timesteps."""
         self.times_to_show = None
+        """An array of time points to visualize. Gets calculated from :param:self.t_begin, :param:self.t_end and :param:self.t_step"""
 
         self.scalar_data = None
+        """Scalar data to overlay on the meuron morphology. If there is simulation data available, this is initialized as the membrane voltage, but ion currents are also possible"""
         self.possible_scalars = {'K_Pst.ik', 'Ih.m', 'Ca_LVAst.ik', 'Nap_Et2.ina', 'SK_E2.ik', 'Nap_Et2.h', 'K_Pst.h', 'Nap_Et2.m', 'NaTa_t.h', 'SK_E2.z', 'Ca_HVA.h', 'Ih.ihcn', 'K_Tst.ik',
                                  'Ca_HVA.m', 'Im.ik', 'NaTa_t.ina', 'NaTa_t.m', 'SKv3_1.m', 'Ca_LVAst.h', 'K_Pst.m', 'SKv3_1.ik', 'Ca_LVAst.m', 'Ca_HVA.ica', 'Ca_LVAst.ica', 'K_Tst.m',
                                  'CaDynamics_E2.cai', 'K_Tst.h', 'cai'}
+        """Accepted keywords for scalar data other than membrane voltage."""
 
+        self.voltage_timeseries = None
         """List contaning the voltage of the cell during a timeseries. Each element corresponds to a time point.
         Each element of the list contains n elements, being n the number of points of the cell morphology. 
-        Hence, the value of each element is the voltage at each point of the cell morphology."""
-        # None means it has no simulation data. Empty list means it has simulation data that has not been initialised yet.
-        self.voltage_timeseries = None
+        Hence, the value of each element is the voltage at each point of the cell morphology.
+        None means it has no simulation data. Empty list means it has simulation data that has not been initialised yet."""
 
+        self.synapses_timeseries = None
         """List containing the synapse activations during a timeseries (Similarly to voltage_timeseries). 
         Each element corresponds to a time point. Each element is a dictionary where each key is the type of
         input population and the value is the list of active synapses for that type of population at that time point. 
-        The list contains the 3d coordinates where each active synapse is located."""
-        self.synapses_timeseries = None
+        The list contains the 3d coordinates where each active synapse is located.
+        None means it has no simulation data. Empty list means it has simulation data that has not been initialised yet."""
 
-        """List containing the ion dynamics during a timeseries (Similarly to voltage_timeseries). 
-        Each element is a list corresponding to 1 timepoint, containing per-point info on the ion channel state or ion concentration. TODO
-        """
         self.ion_dynamics_timeseries = None
+        """List containing the ion dynamics during a timeseries (Similarly to voltage_timeseries). 
+        Each element is a list corresponding to 1 timepoint, containing per-point info on the ion channel state or ion concentration.
+        None means it has no simulation data. Empty list means it has simulation data that has not been initialised yet.
+        """
 
-        # Time in the simulation during which a synapse activation is shown during the visualization
         self.time_show_syn_activ = 2  # ms
+        """Time in the simulation during which a synapse activation is shown during the visualization"""
 
         if self.__has_simulation_data():
             self.__init_simulation_data()
@@ -141,6 +164,7 @@ class CellMorphologyVisualizer:
         # Time points we want to visualize (values by default)
         self.t_start = self.simulation_times[0]
         self.dt = self.simulation_times[1] - self.t_start
+        # TODO: add support for variable timestep
         self.t_step = (len(self.simulation_times)//10) * self.dt
         self.t_end = self.simulation_times[-1] - \
             self.simulation_times[-1] % self.t_step
