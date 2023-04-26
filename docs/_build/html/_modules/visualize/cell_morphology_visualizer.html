@@ -159,6 +159,7 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/Interface.html">Interface</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../_autosummary/SLURM_scripts.html">SLURM_scripts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../_autosummary/SLURM_scripts.clustercontrol.html">SLURM_scripts.clustercontrol</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../_autosummary/SLURM_scripts.component_1.html">SLURM_scripts.component_1</a></li>
@@ -502,7 +503,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Time interval for visualisation. Does not have to equal the simulation time interval.</span>
 <span class="sd">        By default, the simulation is chopped to the specified t_begin and t_end, and evenly divided in 10 timesteps.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">times_to_show</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;An array of time points to visualize. Gets calculated from :param:self.t_begin, :param:self.t_end and :param:self.t_step&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;An array of time points to visualize. Gets calculated from :param self.t_begin:, :param self.t_end: and :param self.t_step:&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">scalar_data</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Scalar data to overlay on the meuron morphology. If there is simulation data available, this is initialized as the membrane voltage, but ion currents are also possible&quot;&quot;&quot;</span>
@@ -918,7 +919,9 @@
     <span class="k">def</span> <span class="nf">__update_times_to_show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the specified time range equals the previously defined one. If not, updates the time range.</span>
 <span class="sd">        If all arguments are None, does nothing. Useful for defining default time range</span>
-<span class="sd">        TODO: what if a newly defined t_step does not match the simulation dt?</span>
+<span class="sd">        </span>
+<span class="sd">        Todo</span>
+<span class="sd">            what if a newly defined t_step does not match the simulation dt?</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            t_start (float): start time</span>
@@ -962,7 +965,7 @@
 <span class="sd">        shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)</span>
 <span class="sd">        and in each image the neuron rotates a bit (3 degrees) over its axis.</span>
 
-<span class="sd">        The parameters :param:t_start, :param:t_end and :param:t_step will define the self.time attribute</span>
+<span class="sd">        The parameters :param self.t_begin:, :param self.t_end: and :param self.t_step: will define the self.time attribute</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            - t_start: start time point of our time series visualization</span>
@@ -1394,7 +1397,7 @@
 <span class="sd">        Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are</span>
 <span class="sd">        shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.</span>
 <span class="sd">        These images are then put together into a gif.</span>
-<span class="sd">        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute</span>
+<span class="sd">        :param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            - images_path: dir where the images for the gif will be generated</span>
@@ -1435,7 +1438,7 @@
 <span class="sd">        Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are</span>
 <span class="sd">        shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.</span>
 <span class="sd">        These images are then put together into a video.</span>
-<span class="sd">        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute</span>
+<span class="sd">        :param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            - images_path: dir where the images for the video will be generated</span>
@@ -1479,7 +1482,7 @@
 <span class="sd">        Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are</span>
 <span class="sd">        shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.</span>
 <span class="sd">        These images are then put together into a python animation.</span>
-<span class="sd">        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute</span>
+<span class="sd">        :param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute</span>
 
 
 <span class="sd">        Args:</span>
@@ -1515,7 +1518,7 @@
 <div class="viewcode-block" id="CellMorphologyVisualizer.display_interactive_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">display_interactive_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;rgb(180,180,180)&quot;</span><span class="p">,</span> <span class="n">highlight_section</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s2">&quot;notebook_connected&quot;</span><span class="p">,</span>
                                           <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s2">&quot;jet&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).</span>
-<span class="sd">        :param:t_start, :param:t_end and :param:t_step will define the self.time attribute</span>
+<span class="sd">        :param t_begin:, :param t_end: and :param t_step: will define the :param self.time: attribute</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            data (str, optional): Scalar data to overlay on interactive plot. Defaults to None.</span>
@@ -1541,9 +1544,6 @@
 
 <div class="viewcode-block" id="CellMorphologyVisualizer.display_interactive_voltage_in_morphology_3d"><a class="viewcode-back" href="../../_autosummary/visualize.cell_morphology_visualizer.html#visualize.cell_morphology_visualizer.CellMorphologyVisualizer.display_interactive_voltage_in_morphology_3d">[docs]</a>    <span class="k">def</span> <span class="nf">display_interactive_voltage_in_morphology_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="s2">&quot;rgb(180,180,180)&quot;</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s2">&quot;notebook_connected&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39; </span>
-<span class="sd">        TODO: add synapse activations!</span>
-
-<span class="sd">        TODO: add dendritic and somatic AP as secondary subplot</span>
 
 <span class="sd">        Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:</span>
 
@@ -1563,6 +1563,10 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            ipywidgets.VBox object: an interactive render of the cell.</span>
+
+<span class="sd">        Todo</span>
+<span class="sd">            add synapse activations!</span>
+<span class="sd">            add dendritic and somatic AP as secondary subplot</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_interactive_morphology_3d</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s2">&quot;voltage&quot;</span><span class="p">,</span> <span class="n">t_start</span><span class="o">=</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="o">=</span><span class="n">t_end</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="n">t_step</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="n">renderer</span><span class="p">)</span></div>
 
@@ -1596,7 +1600,8 @@
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview</span>
 
-<span class="sd">        TODO: remove duplicate rows used to connect sections</span>
+<span class="sd">        Todo</span>
+<span class="sd">            remove duplicate rows used to connect sections</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            - t_start: start time point of our time series visualization</span>
@@ -1625,7 +1630,10 @@
 <span class="sd">    are shown for a particular time point.</span>
 <span class="sd">    Dask delayed function useful for parallelization of images generation. This dask delayed function cannot be part of the</span>
 <span class="sd">    visualization class, dask does not allow it because this class has a cell object as an attribute and dask cannot serialize it,</span>
-<span class="sd">    if the cell object wasn&#39;t an attribute this function could be a class method. TODO: find for a possible solution.</span>
+<span class="sd">    if the cell object wasn&#39;t an attribute this function could be a class method.</span>
+<span class="sd">    </span>
+<span class="sd">    Todo</span>
+<span class="sd">        find for a possible solution.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        - morphology: pandas dataframe with points. Each point contains the x, y and z coordinates, a diameter and the section</span>
