@@ -4,9 +4,9 @@ name: In-Silico-Framework (Python 3) install and test
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master, refractor ]
+    branches: [ master, refractor, tests ]
   pull_request:
-    branches: [ master, refractor ]
+    branches: [ master, refractor, tests ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -79,4 +79,4 @@ jobs:
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=38786 --dashboard-address=38787 &
           dask-worker localhost:38786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          python tests/mypytest
+          python tests/mypytest.py
