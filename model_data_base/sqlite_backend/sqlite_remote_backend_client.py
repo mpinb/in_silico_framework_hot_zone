@@ -2,12 +2,17 @@ import os
 import zmq
 import cloudpickle
 import yaml
+import sys
 #context = zmq.Context()
 #socket = context.socket(zmq.REQ)
 #socket.connect('tcp://130.183.178.36:5555')
 
-# we here assume backend is sqlite_remote, as otherwise this module would not be loaded
-config_path = os.environ['ISF_MDB_CONFIG']
+try:
+    config_path = os.environ['ISF_MDB_CONFIG']
+except KeyError:
+    # the key ISF_MDB_CONFIG is not set
+    # likely, the module is called upon from an import
+    sys.exit(1)
 with open(os.environ['ISF_MDB_CONFIG'], 'r') as f:
     config = yaml.load(f)
 

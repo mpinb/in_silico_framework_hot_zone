@@ -83,43 +83,80 @@ def get_bin_soma_distances_in_section(section_id, section_distances_df):
     return soma_d
 
 def get_bin_adjacency_map_in_section(cell, section_id, section_distances_df):
-    """Fetches all the sections neighboring the given section id.
-    It then checks which bins are adjacent within these sections.
+    """
+    Creates an adjacency map with bin-specific resolution for a given section.
+    
+    Consecutive bins in the same section are trivially connected.
+    This method also fetches other sections connected to the given section id, and checks at which bins they connect.
     Sections are defined by the neuron simulation, but bins are ad-hoc defined by data preparation for the ANN.
+
+    This method exploits the tree structure of a neuron, i.e. a child section is always connected at the beginning
+    This means that all child sections are connected to their parent section at bin number 1
+    The goal is then to figure out at which bin in the parent section the child is connected to.
     Eeach section always has one or more bins.
 
     
     Args:
+        cell (Cell): the Cell object
         section_id (int): index of the neuron section
-        section_distances_df (pd.DataFrame): the dataframe describing distance to soma for all sections, as provided by :@function get_section_distances_df:
-
+        section_distances_df (pd.DataFrame): the dataframe describing distance to soma for all sections, as provided by :fun:get_section_distances_df
 
     Returns:
-        dict: a dictionary with pairs of adjacant bins.
+        neighboring_bins_dict (dict): a dictionary with bins as keys and a list of adjacent bins as values.
     """
-    neighboring_bins = {}
+    neighboring_bins = []
     neighbor_map = cell.get_section_adjacancy_map()
-    for parent in neighbor_map[int(section_id)]["parents"]:
-        # section_id/1 is connected to some parent section, but which bin?
-        distances = get_bin_soma_distances_in_section(parent, section_distances_df)
-        d_of_this_bin = get_bin_soma_distances_in_section(section_id, section_distances_df)[0]
-        diff = [abs(parent_d - d_of_this_bin) for parent_d in distances]
-        closest = I.np.argmin(diff)
-        neighboring_bins["{}/{}".format(section_id, 1)] = "{}/{}".format(parent, closest+1)
-    for child in neighbor_map[int(section_id)]["children"]:
-        # children/1 is connected to some bin of the current section, but which bin?
-        distances = get_bin_soma_distances_in_section(section_id, section_distances_df)
-        d_of_child_bin = get_bin_soma_distances_in_section(child, section_distances_df)[0]
-        diff = [abs(d - d_of_child_bin) for d in distances]
-        closest = I.np.argmin(diff)
-        neighboring_bins["{}/{}".format(child, 1)] = "{}/{}".format(section_id, closest+1)
-    # assure mutuality
-    neighboring_bins_copy = neighboring_bins.copy()
-    for key, val in neighboring_bins_copy.items():
-        neighboring_bins[val] = key
-    return neighboring_bins
+    
+    # add adjacent bins from the current section
+    for bin_n in range(section_distances_df.iloc[section_id]['n_bins'] - 1):
+        # Each consecutive bin within the same section is connected.
+        # They are added once here and will be inverted and duplicated later.
+        neighboring_bins.append(("{}/{}".format(section_id, bin_n + 1 + 1), "{}/{}".format(section_id, bin_n + 1)))
 
-def get_neighboring_spatial_bins(cell, section_distances_df, bin_id):
+    # add adjacent bins from parent section (if there is one)
+    for parent_section in neighbor_map[int(section_id)]["parents"]:
+        # section_id/1 is connected to some parent section, but at which parent bin?
+        parent_bin_distances = get_bin_soma_distances_in_section(parent_section, section_distances_df)  # all bins in the parent section
+        d_section_begin = get_bin_soma_distances_in_section(section_id, section_distances_df)[0]
+        diff = [abs(parent_bin_d - d_section_begin) for parent_bin_d in parent_bin_distances]
+        closest_parent_bin = I.np.argmin(diff) + 1
+        # the section is connected (section_id/1) to its parent at this bin (parent_id/closest_bin)
+        neighboring_bins.append(("{}/{}".format(section_id, 1), "{}/{}".format(parent_section, closest_parent_bin)))
+
+        # check if parent section has a 3-way split (or more?)
+        # check if parent bin is the last bin in the section
+        if int(closest_parent_bin) == section_distances_df.iloc[parent_section]['n_bins']:
+            # fetch the children of the parent that are not equal to section_id, i.e. the siblings
+            sibling_sections = [e for e in neighbor_map[parent_section]["children"] if e != section_id]
+            # if parent has other children, then these are siblings, i.e. 3-way splits (or more)
+            for sibling_section in sibling_sections:
+                neighboring_bins.append(("{}/{}".format(section_id, 1), "{}/{}".format(sibling_section, 1)))
+
+    # add adjacent bins from child sections (if there are any)
+    for child in neighbor_map[int(section_id)]["children"]:
+        # Each child bin (child_id/1) is connected to the section section_id, but at which bin?
+        bin_distances = get_bin_soma_distances_in_section(section_id, section_distances_df)
+        d_child_section_begin = get_bin_soma_distances_in_section(child, section_distances_df)[0]  # the bin of the child connected to the current section
+        diff = [abs(d - d_child_section_begin) for d in bin_distances]
+        closest_child_bin = I.np.argmin(diff) + 1
+        # the section has a child (child_id/1) at this bin (section_id/closest_bin)
+        neighboring_bins.append(("{}/{}".format(child, 1), "{}/{}".format(section_id, closest_child_bin)))
+
+    # convert bin pairs to a dict, 
+    # and assure mutuality (a is connected to b AND b is connected to a)
+    neighboring_bins_dict = {}
+    for a,b in neighboring_bins:
+        if not a in neighboring_bins_dict:
+            neighboring_bins_dict[a] = []
+        if not b in neighboring_bins_dict:
+            neighboring_bins_dict[b] = []
+        neighboring_bins_dict[a].append(b)
+        # mutuality
+        neighboring_bins_dict[b].append(a)
+
+    return neighboring_bins_dict
+
+def get_neighboring_spatial_bins(cell, bin_id, section_distances_df):
     """Given a bin id, this method returns all the neighboring bins
 
     Args:
@@ -130,25 +167,29 @@ def get_neighboring_spatial_bins(cell, section_distances_df, bin_id):
     Returns:
         list: list of all ids of bins that neighbor the given bin
     """
-    neighbors = []
     section_id_, bin_id_ = map(int, bin_id.split('/'))
     n_bins = section_distances_df.iloc[int(section_id_)]['n_bins']
     assert 0 < int(bin_id_) <= n_bins, "Bin does not exist. Section {} only has {} bins, but you asked for bin #{}".format(section_id_, n_bins, bin_id_)
-    if 1 < int(bin_id_):
-        # append previous bin
-        neighbors.append('{}/{}'.format(section_id_, int(bin_id_) - 1))
-    if int(bin_id_) < n_bins:
-        # append next bin
-        neighbors.append('{}/{}'.format(section_id_, int(bin_id_) + 1))
     # check for adjacent sections
     bin_adj = get_bin_adjacency_map_in_section(cell, section_id_, section_distances_df)
-    if bin_id in bin_adj:
-        neighbors.append(bin_adj[bin_id])
+    neighbors = bin_adj[bin_id]
     return neighbors
 
 def augment_synapse_activation_df_with_branch_bin(sa_, 
                                                   section_distances_df = None, 
                                                   synaptic_weight_dict = None):
+    """Given a DataFrame of synaptic activity, this method adds columns giving information on where on the branch this syaptic activity was present.
+    This information is represented in a specific format: section_id/bin_within_section.
+    For this, the sections have to be split up in spatial bins, which is represented in :@param section_distances_df:
+
+    Args:
+        sa_ (pd.DataFrame): The dataframe of synaptic activity
+        section_distances_df (pd.DataFrame, optional): DataFrame representing each section's spatial bins and binsizes. Defaults to None.
+        synaptic_weight_dict (_type_, optional): _description_. Defaults to None.
+
+    Returns:
+        _type_: _description_
+    """
     out = []
     for secID, df in sa_.groupby('section_ID'):
         min_ = section_distances_df.loc[secID]['min_']
@@ -182,7 +223,62 @@ def save_st_and_ISI(st, batch_id, chunk, min_time, max_time, outdir,suffix = 'SO
     I.np.save(outdir.join('batch_{}_AP_{}.npy').format(batch_id,suffix), AP_array)
     I.np.save(outdir.join('batch_{}_ISI_{}.npy').format(batch_id,suffix), ISI_array)
     
+def spike_times_to_onehot(spike_times, min_time=0, max_time=505, time_step=1):
+    """This method resembles model_database.analyse.spike_detection.spike_in_interval, but more general.
+    Given an array of spike times, this method one-hot encodes them to a list of size (max_time - min_time)//time_step,
+    where each time step, a boolean represents if a spike was found in this time_step.
+    """
+    assert len(I.np.array(spike_times).shape) == 1, "Please provide a 1-dimensional array as spike_times"
+    assert all([s >= 0 for s in spike_times]), "Negative time values found. Are you sure you passed spike times as first argument?"
+    if spike_times and (max(spike_times) > max_time):
+        raise UserWarning("Spike times found larger than max_time. These will not be included in the one-hot encoding")
+    spike_times = [e for e in spike_times if min_time < e < max_time]
+    time_steps = I.np.arange(min_time, max_time, time_step)
+    n_time_steps = len(time_steps)
+    one_hot = [False]*n_time_steps
+    for st in spike_times:
+        one_hot[int(st//time_step)] = True
+    return one_hot
+
+def compute_ISI_from_st_list(st, min_time=0, max_time=505, time_step=1):
+    """Given an array of spike times, this method returns a list of size (:@param max_time: - :@param_min_time:)//:@param time_step:,
+    where each time step gives the amount of time since the last spike in ms.
+    Do not provide a pd.Series or pd.DataFrame here. For that, use :@function model_database.mdb_initialisers.prepare_ANN_batches.compute_ISI_from_st: instead.
+
+    Args:
+        st (array): _description_
+        min_time (int, optional): Min time of time window in ms. Defaults to 0.
+        max_time (int, optional): Max time of time window in ms. Defaults to 505.
+        time_step (int, optional): Timestep in ms. Defaults to 1.
+
+    Returns:
+        _type_: _description_
+    """
+    assert type(st) not in (I.pd.DataFrame, I.pd.Series), "This methods is for arrays or lists. When using a pandas Dataframe or Series, use model_database.mdb_initialisers.prepare_ANN_batches.compute_ISI_from_st instead."
+    assert type(st) in (list, I.np.array), "Please provide a list or array as spike times."
+    st = [e for e in st if min_time <= e <= max_time]
+    ISI = []
+    for timepoint in I.np.arange(min_time, max_time, time_step):
+        st_ = [e for e in st if e < timepoint]
+        if st_:
+            max_spike_time_before_timepoint = max(st_)
+            ISI.append(timepoint - max_spike_time_before_timepoint)
+        else:
+            ISI.append(timepoint)
+    return ISI
+
 def compute_ISI_from_st(st, timepoint, fillna = None):
+    """Given a pandas DataFrame or pandas Series of spike times :@param st: and a timepoint, this method returns
+    the time between :@param timepoint: and the most recent spike in ms.
+
+    Args:
+        st (pd.DataFrame | pd.Series): array of spike times
+        timepoint (float/int): time point to compute last spike time from
+        fillna (int, optional): Fill with NaN until the array has this length. Defaults to None (no NaN filling).
+
+    Returns:
+        float/array: The time between :@param timepoint: and the most recent spike in ms.
+    """
     '''suggestion: use the temporal window width as fillna'''
     assert(fillna is not None)
     st = st.copy()
@@ -193,16 +289,45 @@ def compute_ISI_from_st(st, timepoint, fillna = None):
         ISI = ISI.fillna(fillna)
     return ISI
 
-def compute_ISI_array(st, min_time, max_time, fillna = 1000):
+def compute_ISI_array(st, min_time, max_time, fillna = 1000, step=1):
+    """For each time point inbetween :@param min_time: and :@param max_time: (in steps of :@param step:),
+    this method calculates where each element is the time since the last spike in ms.
+
+    Args:
+        st (array): array of spike times
+        min_time (float/int): minimum time in ms
+        max_time (float/int): maximum time in ms
+        fillna (int, optional): Fill with NaN until the array has this length. Defaults to 1000.
+        step (int/float, optional): Size of timestep in ms. Defaults to 1.
+
+    Returns:
+        array: An array of length (:@param max_time: - :@param min_time:)//:@param step:,
+        where each element has as a value the time since the last spike in ms.
+    """
     ISI = []
-    for t in range(min_time, max_time):
+    for t in I.np.arange(min_time, max_time, step):
         ISI.append(compute_ISI_from_st(st, t, fillna).to_numpy().reshape(-1,1))
     return I.np.concatenate(ISI, axis = 1)
 
-def compute_AP_array(st, min_time, max_time, fillna = 1000):
+def compute_AP_array(st, min_time, max_time, fillna = 1000, step=1):
+    """Given a collection of spike times of a single trial, this method returns an array of length (max_time - min_time)//step,
+    where, on each timestep of size :@param step:, a boolean represents if a spike is found in this interval.
+
+    TODO: what is fillna?
+
+    Args:
+        st (array): Array of spike times
+        min_time (float/int): Min time in ms
+        max_time (float/int): Max time in ms
+        fillna (int, optional, unused): Fill with NaN until the array has this length. Defaults to 1000. Added for congruence to compute_ISI_array?
+        step (int, optional): Size of timesteps to consider. Defaults to 1 ms
+
+    Returns:
+        array: Array where each element is a boolean representing if an AP was present during this timestep.
+    """
     AP = []
-    for i in range(min_time, max_time):
-        AP.append(I.spike_in_interval(st, i,i +1).to_numpy().reshape(-1,1))
+    for t in range(min_time, max_time, step):
+        AP.append(I.spike_in_interval(st, t, t+step).to_numpy().reshape(-1,1))
     return I.np.concatenate(AP, axis = 1)
 
 def load_syn_weights(m, client):

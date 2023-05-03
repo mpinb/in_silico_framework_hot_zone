@@ -30,6 +30,13 @@ def nan_if_error(fun):
     return helper
 
 class BAC:
+    """This class contains methods to calculate various metrics
+    to assess the accuracy of some simulation based on the voltage trace
+    it produced. These metrics were introduced by Idan Segev, and illustrated in
+    "Ion channel distributions in cortical neurons are optimized for energy-efficient
+    active dendritic computations" by Arco Bast and Marcel Oberlaender.
+    TODO: link doi when published.
+    """
     def __init__(self,
                  hot_zone_thresh=-55, 
                  soma_thresh=-30,

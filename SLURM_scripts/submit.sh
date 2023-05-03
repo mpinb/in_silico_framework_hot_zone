@@ -141,19 +141,18 @@ if [ ${#partition} == 3 -a $interactive == "1" ]; then
   partition=$partition"-interactive"
 fi
 
+if [[ ${partition:0:3} == CPU ]]; then
+    gres="0"
+fi
+
 # Loading cuda and setting gres depending on GPU/CPU partition
 if [ $interactive == 1 ]; then
   interactive_string=" interactive"
   cuda=$'\nmodule load cuda'
-  if [[ ${partition:0:3} -ne CPU ]]; then
+  if [ ${partition:0:3} != "CPU" -a $gres -eq 0 ]; then
     # Either GPU-interactive or A100 interactive
     # Set gres to 4 if working on a GPU-interactive partition it if hasn't been set manually already
-    if [ $gres -eq 0 ]; then
-      gres="4"
-    fi
-  elif [[ ${partition:0:3} == CPU ]]; then
-    # CPU-interactive job. Different way of loading Cuda, idk why
-    gres="0"
+    gres="4"
   fi
 elif [ $interactive == 0 ]; then
   interactive_string=""

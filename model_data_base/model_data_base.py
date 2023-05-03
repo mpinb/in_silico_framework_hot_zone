@@ -317,6 +317,15 @@ class ModelDataBase(object):
         warnings.warn("Get_managed_folder is deprecated.  Use create_managed_folder instead.") 
         return self.create_managed_folder(key)
     
+    def create_shared_numpy_store(self, key, raise_ = True):
+        if key in list(self.keys()):
+            if raise_:
+                raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
+        else:
+            self.setitem(key, None, dumper = shared_numpy_store)        
+        return self[key]
+            
+    
     def create_sub_mdb(self, key, register = 'as_parent', raise_ = True):
         '''creates a ModelDataBase within a ModelDataBase. Example:
         mdb.create_sub_mdb('my_sub_database')
@@ -726,6 +735,8 @@ from .IO.LoaderDumper import just_create_folder
 from .IO.LoaderDumper import just_create_mdb
 from .IO.LoaderDumper import to_pickle
 from .IO.LoaderDumper import to_cloudpickle
+if six.PY3:
+    from .IO.LoaderDumper import shared_numpy_store
                       
 VC = _module_versions.version_cached
 

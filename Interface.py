@@ -11,7 +11,8 @@ of cells in barrel cortex. This includes:
  - use that cluster to compute single cell responses to synaptic input
  - efficiently store the simulation results and provide an easy interface to query data
 
-The recommendet use is to import it in a jupyter notebook in the following manner:
+The recommended use is to import it in a jupyter notebook in the following manner::
+
     import Interface as I
     
 '''
@@ -36,6 +37,7 @@ from functools import partial
 import itertools
 from collections import defaultdict
 import cloudpickle
+import six
 
 try:
     from IPython import display
@@ -100,6 +102,9 @@ from model_data_base.IO.LoaderDumper import to_cloudpickle as dumper_to_cloudpic
 from model_data_base.IO.LoaderDumper import to_msgpack as dumper_to_msgpack
 from model_data_base.IO.LoaderDumper import reduced_lda_model as dumper_reduced_lda_model
 
+if six.PY3:
+    from model_data_base.IO.LoaderDumper.shared_numpy_store import  SharedNumpyStore, shared_array_from_numpy, shared_array_from_disk, shared_array_from_shared_mem_name    
+
 from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 from model_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format
@@ -128,14 +133,13 @@ try: ##to avoid import errors in distributed system because of missing matplotli
     import matplotlib
     import matplotlib.pyplot as plt
     try:
-        from visualize.activity_analysis.average_std import average_std as average_std
-        from visualize.activity_analysis.histogram import histogram as histogram
-        from visualize.activity_analysis.manylines import manylines
-        from visualize.activity_analysis.rasterplot import rasterplot, rasterplot2, rasterplot2_pdf_grouped
-        from visualize.activity_analysis.cell_to_ipython_animation import cell_to_ipython_animation, cell_to_animation, display_animation
+        from visualize.average_std import average_std as average_std
+        from visualize.histogram import histogram as histogram
+        from visualize.manylines import manylines
+        from visualize.rasterplot import rasterplot, rasterplot2, rasterplot2_pdf_grouped
+        from visualize.cell_to_ipython_animation import cell_to_ipython_animation, cell_to_animation, display_animation
         from visualize._figure_array_converter import show_pixel_object, PixelObject
     except ImportError as e:
-        print("Could not import visualize.activity_analysis!")
         print(e)
 except ImportError:
     print("Could not import matplotlib!")
@@ -161,7 +165,10 @@ except ImportError:
 
 import single_cell_analyzer as sca
 import single_cell_parser as scp
-from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
+try:
+    from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
+except ImportError:
+    print("Could not import visualize.cell_morphology_visualizer!")
 from visualize.helper_methods import write_video_from_images, write_gif_from_images, display_animation_from_images
 
 from simrun2.reduced_model import synapse_activation \

@@ -386,12 +386,9 @@ class Cell(object):
             for child_section_n, section in enumerate(self.sections):
                 # get parents
                 section_adjacency_map[child_section_n] = {
-                    "parents": section.parent,
-                    "children": []
+                    "parents": [self.sections.index(section.parent)] if section.parent else [],
+                    "children": [self.sections.index(c) for c in section.children()]
                     }
-            # assign children in same dict
-            for child_section_n, parent_section_n in section_adjacency_map.items():
-                section_adjacency_map[parent_section_n]["children"].append(child_section_n)
             self.section_adjacency_map = section_adjacency_map
         return self.section_adjacency_map
 

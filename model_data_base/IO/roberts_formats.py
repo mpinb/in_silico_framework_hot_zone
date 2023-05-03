@@ -96,6 +96,17 @@ def read_pandas_synapse_activation_from_roberts_format(path, sim_trail_index = '
     header = 'synapse_type,synapse_ID,soma_distance,section_ID,section_pt_ID,dendrite_label,'
     return _read_roberts_csv_uneven_length_helper(path, header, sim_trail_index, max_commas, set_index)
 
+def synapse_activation_df_to_roberts_synapse_activation(sa):
+    synapses = dict()
+    import six
+    for index, values in sa.iterrows():
+        if not values.synapse_type in synapses:
+            synapses[values.synapse_type] = []
+        synTimes = [v for k, v in six.iteritems(values) if convertible_to_int(k) and not np.isnan(v)]
+        tuple_ = values.synapse_ID, values.section_ID, values.section_pt_ID, synTimes, values.soma_distance
+        synapses[values.synapse_type].append(tuple_)
+    return synapses
+
 def read_pandas_cell_activation_from_roberts_format(path, sim_trail_index = 'no_sim_trail_assigned', \
                                                     max_commas = None, set_index = True):
     '''reads cell activation file from simulation and converts it to pandas table'''

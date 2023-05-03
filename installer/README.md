@@ -93,10 +93,10 @@ source_3; python -m ipykernel install --name base --user --display-name isf3
 > __Warning__: It is recommended to replace the local dask distributed config with the one provided in the [installer module](../installer/distributed.yaml)
 
 ## Cluster
-The [cluster](../cluster/) module provides various modules for cluster control. Two scripts tend to be used a lot, so it is worth adding them as an alias to your ~/.bashrc. You can name these commands however you want.
+The [cluster](../cluster/) module provides various modules for cluster control. Two scripts tend to be used a lot, so it is worth adding them as an alias to your ~/.bashrc. You can name these commands however you want.  (NOTE: There is no _cluster_ module yet.)
 ```bash
-alias submit="/gpfs/soma_fs/scratch/<username>/project_src/in_silico_framework/cluster/SLURM_scripts/submit.sh"
-alias jupylink="/gpfs/soma_fs/scratch/<username>/project_src/in_silico_framework/cluster/SLURM_scripts/jupyter_link.sh"
+alias submit="$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/submit.sh"
+alias jupylink="$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/jupyter_link.sh"
 ```
 
 Check if you can submit a job by requesting an interactive CPU partition (the `-c` and `-i` flags):
