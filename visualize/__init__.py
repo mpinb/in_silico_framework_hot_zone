@@ -6,7 +6,7 @@ Authors: Arco Bast, Maria Royo, Bjorge Meulemeester
 """
 
 from .cell_morphology_visualizer import CellMorphologyVisualizer
-import matplotlib
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
