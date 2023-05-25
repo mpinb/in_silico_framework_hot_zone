@@ -108,7 +108,7 @@ def write_gif_from_images(images, out_path, interval=40, images_format = '.png',
                 frames = []
                 for f in os.listdir(temp_folder):
                     if f.endswith(images_format):
-                        frames.append(Image.open(os.path.join(images_dir,f)))
+                        frames.append(Image.open(os.path.join(temp_folder,f)))
                 # Save into a GIF file that loops forever   
                 frames[0].save(out_path, format='GIF', append_images=frames[1:], save_all=True, duration=interval, loop=0)
     else:
