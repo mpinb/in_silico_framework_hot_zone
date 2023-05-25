@@ -84,7 +84,11 @@ class CellMorphologyVisualizer:
         self.line_pairs = []  # initialised below
         """Pairs of point indices that define a line, i.e. some cell segment"""
         self.morphology = self.__get_morphology()  # a pandas DataFrame
+        soma = [section for section in self.cell.sections if section.label == "Soma"][0]
+        self.soma_center = np.mean(soma.pts, axis=0)
         """A pd.DataFrame containing point information, diameter and section ID"""
+        self.rotation_with_zaxis = None
+        """Rotation object that defines the transformation between the cell trunk and the z-axis"""
         if align_trunk:
             self.__align_trunk_with_z_axis()
         self.points = self.morphology[["x", "y", "z"]]
@@ -209,12 +213,10 @@ class CellMorphologyVisualizer:
         """
 
         assert len(self.morphology) > 0, "No morphology initialised yet"
-        soma = [section for section in self.cell.sections if section.label == "Soma"][0]
-        soma_center = np.mean(soma.pts, axis=0)
         # the bifurcation sections is the entire section: can be quite large
         # take last point, i.e. furthest from soma
         bifurcation = get_main_bifurcation_section(self.cell).pts[-1]
-        soma_bif_vector = bifurcation - soma_center
+        soma_bif_vector = bifurcation - self.soma_center
         soma_bif_vector /= np.linalg.norm(soma_bif_vector)
         # angle with z-axis
         zenith = np.arccos(
@@ -231,8 +233,9 @@ class CellMorphologyVisualizer:
 
         # Anchor soma to (0, 0, 0) and rotate trunk to align with z-axis
         self.morphology[['x', 'y', 'z']] = rotation.apply(
-            [e - soma_center for e in self.morphology[['x', 'y', 'z']].values]
+            [e - self.soma_center for e in self.morphology[['x', 'y', 'z']].values]
         )
+        self.rotation_with_zaxis = rotation
 
     def __get_morphology(self):
         '''
@@ -514,9 +517,10 @@ class CellMorphologyVisualizer:
                     if time_point-self.time_show_syn_activ < spikeTime < time_point+self.time_show_syn_activ:
                         population_name = match_model_celltype_to_PSTH_celltype(
                             population)
-                        synapses[population_name].append([synapse.coordinates[0],
-                                                          synapse.coordinates[1],
-                                                          synapse.coordinates[2]])
+                        pt = synapse.coordinates
+                        if self.rotation_with_zaxis is not None:  # no alignment with z-axis
+                            pt = self.rotation_with_zaxis.apply(synapse.coordinates - self.soma_center)
+                        synapses[population_name].append(pt)
         return synapses
 
     def __calc_synapses_timeseries(self):
@@ -748,7 +752,7 @@ class CellMorphologyVisualizer:
         return fig
 
     def __get_interactive_plot_with_scalar_data(self, scalar_data_keyword, vmin=None, vmax=None, color_map='jet',
-                                                background_color="rgb(180,180,180)"):
+                                                background_color="rgb(180,180,180)", ip=None):
         """This is the main function to set up an interactive plot with scalar data overlayed.
         It fetches the scalar data of interest (usually membrane voltage, but others are possible; check with self.possible_scalars).
         It only fetches data for the time points specified in self.times_to_show, as only these timepoints will be plotted out.
@@ -782,7 +786,7 @@ class CellMorphologyVisualizer:
                 t, ion_keyword=scalar_data_keyword) for t in np.arange(self.t_start, self.t_end+self.dt, self.dt)]).T
             scalar_data_per_time = {
                 t: self.scalar_data[scalar_data_keyword][t_idx] for t_idx, t in enumerate(self.times_to_show)}
-
+        assert type(ip) == str, "Please provide the ip adress of the dash app host as a string. Should be the same ip where the dask client is running."
         if vmin is not None:
             self.vmin = vmin
         if vmax is not None:
@@ -867,8 +871,7 @@ class CellMorphologyVisualizer:
             return fig_cell, fig_trace
                 
 
-        return app.run_server(debug=True, use_reloader=False, port=5050, host="10.102.3.90")
-
+        return app.run_server(debug=True, use_reloader=False, port=5050, host=ip)
 
     def __display_interactive_morphology_only_3d(self, background_color="rgb(180,180,180)", highlight_section=None):
         ''' 
@@ -1066,7 +1069,7 @@ class CellMorphologyVisualizer:
             self.vmax = vmax
         self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(
             images_path, client, voltage_legend, synapse_legend)
-        write_gif_from_images(images_path, out_path, duration=frame_duration)
+        write_gif_from_images(images_path, out_path, interval=frame_duration)
 
     def write_video_voltage_synapses_in_morphology_3d(self, images_path, out_path, client=None, t_start=None, t_end=None, t_step=None,
                                                       neuron_rotation=None, time_show_syn_activ=None, vmin=None, vmax=None,
@@ -1153,7 +1156,7 @@ class CellMorphologyVisualizer:
         display_animation_from_images(images_path, 1, embedded=True)
 
     def display_interactive_morphology_3d(self, data=None, background_color="rgb(180,180,180)", highlight_section=None, renderer="notebook_connected",
-                                          t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map="jet", show=True):
+                                          t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map="jet", show=True, ip=None):
         """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
         The parameters :param:t_start, :param:t_end and :param:t_step will define the :param:self.time attribute
 
@@ -1179,11 +1182,12 @@ class CellMorphologyVisualizer:
             return f.show() if show else f
         else:
             f = self.__get_interactive_plot_with_scalar_data(data, vmin=vmin, vmax=vmax,
-                                                             color_map=color_map, background_color=background_color)
+                                                             color_map=color_map, background_color=background_color, ip=ip)
 
             return f
 
-    def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet', background_color="rgb(180,180,180)", renderer="notebook_connected"):
+    def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet', background_color="rgb(180,180,180)", 
+                                                     renderer="notebook_connected", ip=None):
         ''' 
 
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
@@ -1209,10 +1213,11 @@ class CellMorphologyVisualizer:
             add synapse activations!
             add dendritic and somatic AP as secondary subplot
         '''
-        return self.display_interactive_morphology_3d(data="voltage", t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax, color_map=color_map, background_color=background_color, renderer=renderer)
+        return self.display_interactive_morphology_3d(data="voltage", t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax, color_map=color_map, 
+                                                      background_color=background_color, renderer=renderer, ip=ip)
 
     def display_interactive_ion_dynamics_in_morphology_3d(self, ion_keyword="Ca_HVA.ica", t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet',
-                                                          background_color="rgb(180,180,180)", renderer="notebook_connected"):
+                                                          background_color="rgb(180,180,180)", renderer="notebook_connected", ip=None):
         ''' 
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
 
@@ -1235,7 +1240,7 @@ class CellMorphologyVisualizer:
             ipywidgets.VBox object: an interactive render of the cell.
         '''
         return self.display_interactive_morphology_3d(data=ion_keyword, t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax, color_map=color_map,
-                                                      background_color=background_color, renderer=renderer)
+                                                      background_color=background_color, renderer=renderer, ip=ip)
 
     def write_vtk_frames(self, out_name="frame", out_dir=".", t_start=None, t_end=None, t_step=None):
         '''
