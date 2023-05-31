@@ -3,12 +3,12 @@
 # Default options
 nodes="1"
 partition="GPU"
-cores="48"
-mem="0"
+cores="24"
+mem="192000"
 memstr="max"
 time="1-0:00"
 tpn=""
-gres="4"  # default for GPU jobs
+gres="2"  # default for GPU jobs
 qosline=""  # not set yet
 cuda=$'\n#module load cuda'  # If working on a GPU partition: load cuda with single hashtag, idk why?
 interactive="0"

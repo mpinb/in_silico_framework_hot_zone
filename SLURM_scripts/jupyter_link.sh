@@ -5,6 +5,9 @@
 trap "exit 1" SIGUSR1
 PROC=$$
 
+# If a job doesnt start, this string will change tot he reason as to why it doesnt
+QOS=""
+
 NC='\033[0m' # No Color
 ORANGE='\033[0;33m' # orange color
 
@@ -124,6 +127,7 @@ function fetch_jupyter_notebook_link {
 #######################################
 function fetch_ip {
     management_dir="$MYBASEDIR/management_dir_$1"
+    # management dir does not eexist yet. Assume it is still being created.
     while ! test -d "$management_dir"; do
         printf_with_dots "Creating \"management_dir_$1\" "
     done;
@@ -153,7 +157,28 @@ function format_jupyter_link {
     echo $jupyter_link
 }
 
+
+#######################################
+# Checks for QOS errors
+# Arguments:
+#   1: The name of the job
+#######################################
+function QOS_precheck {
+    while [[ "$(squeue | grep $1)" == "" ]]; do
+        printf_with_dots "Waiting for job \"$1\" to be submitted "
+    done;
+    reason="$(squeue --me | grep -oP '\(\K[^\)]+' | tail -n1)"
+    while [[ $reason == "None" ]]; do
+        printf_with_dots "Waiting for job \"$1\" to be submitted "
+        reason="$(squeue --me | grep -oP '\(\K[^\)]+' | tail -n1)";
+    done;
+    while [[ $reason =~ .*"QOS".* ]]; do
+        printf_with_dots "Job can't be started (right now). Reason: $reason"
+    done;
+}
+
 args_precheck $#;  # check amount of arguments
+QOS_precheck "$1";
 job_name="$1"
 jupyter_file="$MYBASEDIR/management_dir_$job_name/jupyter.txt"
 ip="$(fetch_ip $job_name)";
