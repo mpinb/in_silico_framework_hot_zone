@@ -83,9 +83,11 @@ class CellMorphologyVisualizer:
 
         self.line_pairs = []  # initialised below
         """Pairs of point indices that define a line, i.e. some cell segment"""
-        self.morphology = self.__get_morphology()  # a pandas DataFrame
         soma = [section for section in self.cell.sections if section.label == "Soma"][0]
         self.soma_center = np.mean(soma.pts, axis=0)
+
+        self.morphology = self.__get_morphology()  # a pandas DataFrame
+        
         """A pd.DataFrame containing point information, diameter and section ID"""
         self.rotation_with_zaxis = None
         """Rotation object that defines the transformation between the cell trunk and the z-axis"""
@@ -246,19 +248,29 @@ class CellMorphologyVisualizer:
 
         points = []
         for sec_n, sec in enumerate(self.cell.sections):
-            if sec.label in ['Soma', 'AIS', 'Myelin']:
+            if sec.label == 'Soma':
+                # TODO: if soma is added, somatic voltage should lso be added
+                # x, y, z = self.soma_center
+                # # soma size
+                # mn, mx = np.min(self.cell.soma.pts, axis=0), np.max(self.cell.soma.pts, axis=0)
+                # d_range = [mx_ - mn_ for mx_, mn_ in zip(mx, mn)]
+                # d = max(d_range)
+                # points.append([x, y, z, d, 0])
                 continue
-            # Point that belongs to the previous section (x, y, z and diameter)
-            x, y, z = sec.parent.pts[-1]
-            d = sec.parent.diamList[-1]
-            points.append([x, y, z, d, sec_n])
-
-            for i, pt in enumerate(sec.pts):
-                # Points within the same section
-                x, y, z = pt
-                self.line_pairs.append([i, i+1])
-                d = sec.diamList[i]
+            elif sec.label in ['AIS', 'Myelin']:
+                continue
+            else:
+                # Point that belongs to the previous section (x, y, z and diameter)
+                x, y, z = sec.parent.pts[-1]
+                d = sec.parent.diamList[-1]
                 points.append([x, y, z, d, sec_n])
+
+                for i, pt in enumerate(sec.pts):
+                    # Points within the same section
+                    x, y, z = pt
+                    d = sec.diamList[i]
+                    points.append([x, y, z, d, sec_n])
+
         morphology = pd.DataFrame(
             points, columns=['x', 'y', 'z', 'diameter', 'section'])
         t2 = time.time()
@@ -653,21 +665,9 @@ class CellMorphologyVisualizer:
                 p += "\n"
             return p
 
-        def line_pairs_str_(line_pairs_):
-            """
-            This method adds lines to the vtk mesh pair per pair, such that each line segment is always defined by only two points.
-            This is useful for when you want to specify a varying diameter
-            """
-            n = 0
-            l = ""
-            for p1, p2 in line_pairs_:
-                l += "2 {} {}\n".format(p1, p2)
-                n += 1
-            return l
-
-        def diameter_str_(diameters_):
+        def scalar_str_(scalar_data):
             diameter_string = ""
-            for d in diameters_:
+            for d in scalar_data:
                 diameter_string += str(d)
                 diameter_string += "\n"
             return diameter_string
@@ -677,36 +677,60 @@ class CellMorphologyVisualizer:
             Given an array :@param data: of something, returns a string where each row of the string is a single element of that array.
             """
             v_string = ""
-            for d in data_:
-                v += str(d)
-                v += "\n"
+            for data_for_point in data_:
+                v_string += str(data_for_point)
+                v_string += '\n'
             return v_string
 
         # write out all data to .vtk file
-        with open(os.join(out_dir, out_name)+"_{:06d}.vtk".format(time_point), "w+", encoding="utf-8") as of:
+        with open(os.path.join(out_dir, out_name)+"_{:06d}.vtk".format(int(str(round(time_point, 1)).replace('.', ''))), "w+", encoding="utf-8") as of:
             of.write(header_(out_name))
 
             # Points
             of.write("POINTS {} float\n".format(len(self.points)))
-            of.write(points_str_(self.points))
+            of.write(points_str_(self.points.values))
 
             # Line
             # LINES n_cells total_amount_integers
-            of.write("LINES {} {}\n".format(
-                len(self.line_pairs), 3*len(self.line_pairs)))
-            # e.g. 2 16 765 means index 765 and 16 define a single line, the leading 2 defines the amount of points that define a line
-            of.write(line_pairs_str_(self.line_pairs))
+            lines_str = ""
+            n_lines = 0
+            n_comps = 0
+            for sec_n in range(len(self.cell.sections)):
+                points_this_sec = self.morphology[self.morphology['section'] == sec_n].index.values
+                if len(points_this_sec) > 0:
+                    n_lines += 1
+                    n_comps += 1
+                    lines_str += str(len(points_this_sec))
+                    for p in points_this_sec:
+                        n_comps += 1
+                        lines_str += " " + str(p)
+                    lines_str += '\n'
+            of.write("LINES {n_lines} {size}\n".format(n_lines=n_lines, size=n_comps))
+            # WARNING: size of lines is the amount of line vertices plus the leading number defining the amount of vertices per line
+            # which happens to be n_points + n_sections (since the sections are not connected)
+            of.write(lines_str)
 
-            # Diameters
-            of.write("POINT_DATA {}\nSCALARS Diameter float 1\nLOOKUP_TABLE default\n".format(
-                len(self.diameters)))  # SCALARS name_of_data data_type n_components
-            of.write(diameter_str_(self.diameters))
+            # e.g. 2 16 765 means index 765 and 16 define a single line, the leading 2 defines the amount of points that define a line
+            #of.write(line_pairs_str_(self.line_pairs))
+
+            # Additional data
+            of.write("FIELD data 1\n")
+
+            # section id
+            of.write("section_id 1 {} int\n".format(len(self.morphology)))
+            of.write(scalar_str_(self.morphology['section'].values))
 
             # Scalar data (as of now only membrane voltages)
-            if scalar_data is not None:
-                of.write("CELL_DATA {}\nSCALARS Vm float 1\nLOOKUP_TABLE default\n".format(
-                    len(self.morphology)))
+            if scalar_data is None:
+                pass
+            else:
+                of.write("POINT_DATA {}\nSCALARS Vm float 1\nLOOKUP_TABLE default\n".format(len(self.morphology)))
                 of.write(membrane_voltage_str_(scalar_data))
+
+            # Diameters
+            of.write("SCALARS Diameter float 1\nLOOKUP_TABLE default\n".format(len(self.morphology)))
+            of.write(scalar_str_(self.diameters))
+
 
     def __get_interactive_cell(self, background_color="rgb(180,180,180)"):
         ''' 
@@ -1242,7 +1266,7 @@ class CellMorphologyVisualizer:
         return self.display_interactive_morphology_3d(data=ion_keyword, t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax, color_map=color_map,
                                                       background_color=background_color, renderer=renderer, ip=ip)
 
-    def write_vtk_frames(self, out_name="frame", out_dir=".", t_start=None, t_end=None, t_step=None):
+    def write_vtk_frames(self, out_name="frame", out_dir=".", t_start=None, t_end=None, t_step=None, scalar_data=None):
         '''
         Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview
 
@@ -1259,12 +1283,19 @@ class CellMorphologyVisualizer:
         self.__update_times_to_show(t_start, t_end, t_step)
         self.__calc_voltage_timeseries()
 
-        progress = self.times_to_show
+        progress = range(len(self.times_to_show))
         if HAS_TQDM:
-            progress = tqdm(t, desc="Writing vtk frames to {}".format(out_dir))
-        for t in progress:
+            progress = tqdm(progress, desc="Writing vtk frames to {}".format(out_dir))
+
+        if scalar_data == None:
             self.__write_vtk_frame(
-                out_name, out_dir, scalar_data=self.voltage_timeseries[t])
+                out_name, out_dir, time_point=self.times_to_show[0], scalar_data=None)
+        elif scalar_data.lower() in ("voltage", "membrane voltage", "vm"):
+            for i in progress:
+                self.__write_vtk_frame(
+                    out_name, out_dir, time_point=self.times_to_show[i], scalar_data=self.voltage_timeseries[i])
+        else:
+            raise NotImplementedError("scalar data keyword not implemented, please pass one of the following: (None, vm, membrane voltage, voltage)")
 
 
 @dask.delayed
