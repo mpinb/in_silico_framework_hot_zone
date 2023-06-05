@@ -731,7 +731,6 @@ class CellMorphologyVisualizer:
             of.write("SCALARS Diameter float 1\nLOOKUP_TABLE default\n".format(len(self.morphology)))
             of.write(scalar_str_(self.diameters))
 
-
     def __get_interactive_cell(self, background_color="rgb(180,180,180)"):
         ''' 
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with NO data overlayed.
@@ -858,7 +857,7 @@ class CellMorphologyVisualizer:
             "all_inputs": {
                 "time": Input("time-slider", "value"),
                 "click": Input("dcc_cell", "clickData"),
-                "relayout": Input("dcc_cell", "relayoutData")
+                #"relayout": Input("dcc_cell", "relayoutData")
             }},
             )
         def _update(all_inputs):
@@ -1207,13 +1206,12 @@ class CellMorphologyVisualizer:
         else:
             f = self.__get_interactive_plot_with_scalar_data(data, vmin=vmin, vmax=vmax,
                                                              color_map=color_map, background_color=background_color, ip=ip)
-
             return f
 
     def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet', background_color="rgb(180,180,180)", 
                                                      renderer="notebook_connected", ip=None):
         ''' 
-
+        Wrapper function around display_interactive_morphology_3d. Usefule to have explicit parameter "voltage" in method name.
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
 
         - Membrane voltage

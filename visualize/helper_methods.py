@@ -201,3 +201,39 @@ def find_files_and_order_them(files, files_format='.png'):
         for elem in files:
             listFiles += find_files_and_order_them(elem,files_format)
     return listFiles
+
+
+def convert_amira_surf_to_vtk(surf_file, outname='surface', outdir='.'):
+    """Given the path to an amira .surf file, this method converts it to a .vtk surface file.
+
+    Args:
+        surf_file (str): path to amira .surf file
+        outname (str, optional): Name of the output vtk surface file. Defaults to 'surface'.
+        outdir (str, optional): Directory to save the file to. Defaults to '.'.
+    """
+    with open(surf_file) as f:
+        lines = f.readlines()
+
+        vertices_header_n = [i for i in range(len(lines)) if "Vertices " in lines[i]][0]
+
+        n_vertices = int(lines[vertices_header_n].split(' ')[-1])
+        vertices = lines[vertices_header_n+1:vertices_header_n+1+n_vertices]
+        vertices = [e.lstrip().rstrip() for e in vertices]
+
+        tiangle_header_n = [i for i in range(len(lines)) if "Triangles " in lines[i]][0]
+        n_triangles = int(lines[tiangle_header_n].split(' ')[-1])
+        triangles = lines[tiangle_header_n+1:tiangle_header_n+1+n_triangles]
+        triangles = [e.lstrip().rstrip() for e in triangles]
+        triangles = [[str(int(e)-1) for e in triangle.split(' ')] for triangle in triangles]  # amira counts from 1, vtk from 0. Offset the off-by-one error
+
+        with open(os.path.join(outdir, outname)+'.vtk', 'w+') as of:
+            of.write("# vtk DataFile Version 4.0\nsurface\nASCII\nDATASET POLYDATA\n")
+            of.write("POINTS {} float\n".format(n_vertices))
+            for vert in vertices:
+                of.write(vert)
+                of.write('\n')
+
+            of.write('\nPOLYGONS {} {}\n'.format(n_triangles, (3+1)*n_triangles))
+            for tri in triangles:
+                of.write("3 "+ " ".join(tri))
+                of.write('\n')
