@@ -815,7 +815,7 @@ class CellMorphologyVisualizer:
         if vmax is not None:
             self.vmax = vmax
         sections = self.morphology["section"]
-
+        self.scalar_data_per_time = scalar_data_per_time
         ### Create figure
         # Interactive cell
         fig_cell = self.__get_interactive_cell(
@@ -878,8 +878,12 @@ class CellMorphologyVisualizer:
             else:
                 # triggered by either time slider or initial load
                 time_point = c.time.value
+                keys = np.array(sorted(list(scalar_data_per_time.keys())))
+                print(keys)
+                closest_time_point = keys[np.argmin(np.abs(keys-time_point))]
+                print('requested_timepoint', time_point, 'selected_timepoint', closest_time_point)
                 fig_cell.update_traces(marker={"color": [
-                                                "white" if e is None else e for e in scalar_data_per_time[time_point]]}, 
+                                                "white" if e is None else e for e in scalar_data_per_time[closest_time_point]]}, 
                                                 #selector=dict(name="morphology")
                                                 )
                 fig_cell.layout.title = "{} at time={} ms".format(
