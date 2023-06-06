@@ -1,4 +1,4 @@
-﻿simrun2.reduced\_model.spiking\_output
+simrun2.reduced\_model.spiking\_output
 ======================================
 
 .. automodule:: simrun2.reduced_model.spiking_output

@@ -3,15 +3,16 @@
 # Default options
 nodes="1"
 partition="GPU"
-cores="48"
-mem="0"
+cores="24"
+mem="192000"
 memstr="max"
 time="1-0:00"
 tpn=""
-gres="4"  # default for GPU jobs
+gres="2"  # default for GPU jobs
 qosline=""  # not set yet
 cuda=$'\n#module load cuda'  # If working on a GPU partition: load cuda with single hashtag, idk why?
 interactive="0"
+gpu_interactive_as_gpu="0"
 
 help() {
   cat <<EOF
@@ -40,7 +41,7 @@ help() {
 
     -t <val>
       Amount of time
-      Format: "d-h:m"
+      Format: "d-hh:mm:ss"
       default: $time
 
     -c
@@ -48,6 +49,9 @@ help() {
 
     -i
       Launch an interactive job.
+
+    -I
+      Run on GPU-interactive node, with defaults the same as GPU.
 
     -p <val>
       Request a specific partition. Overwrites the -i and -g flags.
@@ -101,7 +105,7 @@ function check_name {
 args_precheck $# $1;
 
 # Parse options
-while getopts "hN:n:m:t:cip:T:r:A" OPT;
+while getopts "hN:n:m:t:ciIp:T:r:A" OPT;
 do
   case "$OPT" in
     h) usage
@@ -112,6 +116,7 @@ do
     t) time=${OPTARG};;
     c) partition="CPU";;
     i) interactive="1";;
+    I) gpu_interactive_as_gpu="1";;
     p) partition=${OPTARG};;  # overwrites i or c flag
     T) tpn=${OPTARG};;
     r) gres=${OPTARG};;
@@ -169,6 +174,12 @@ fi
 if [ ! -z "$tpn" ]; then
   tpn="#SBATCH --ntasks-per-node="$tpn
 fi
+
+# Setting partition to '-interactive' with 'non-interactive' defaults (placed at the end to avoid standard "interactive logic")
+if [ $gpu_interactive_as_gpu == 1 ]; then
+  partition=$partition"-interactive"
+fi
+
 
 ################### Print out job info ###################
 width="$(tput cols)"

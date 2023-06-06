@@ -8,6 +8,7 @@
         <title>barrel_cortex - In-Silico Framework (ISF) 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_paramlinks.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../_static/default.css" />
     
@@ -159,8 +160,12 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
+<li class="toctree-l1"><a class="reference internal" href="../_autosummary/Interface.html">Interface</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../_autosummary/SLURM_scripts.html">SLURM_scripts</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/SLURM_scripts.clustercontrol.html">SLURM_scripts.clustercontrol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/SLURM_scripts.component_1.html">SLURM_scripts.component_1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/SLURM_scripts.component_1_SOMA.html">SLURM_scripts.component_1_SOMA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/SLURM_scripts.component_1_special.html">SLURM_scripts.component_1_special</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/SLURM_scripts.component_isf.html">SLURM_scripts.component_isf</a></li>
 </ul>
 </li>
@@ -202,6 +207,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../_autosummary/model_data_base.IO.LoaderDumper.parent_classes.html">model_data_base.IO.LoaderDumper.parent_classes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../_autosummary/model_data_base.IO.LoaderDumper.reduced_lda_model.html">model_data_base.IO.LoaderDumper.reduced_lda_model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../_autosummary/model_data_base.IO.LoaderDumper.settings.html">model_data_base.IO.LoaderDumper.settings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../_autosummary/model_data_base.IO.LoaderDumper.shared_numpy_store.html">model_data_base.IO.LoaderDumper.shared_numpy_store</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../_autosummary/model_data_base.IO.LoaderDumper.to_cloudpickle.html">model_data_base.IO.LoaderDumper.to_cloudpickle</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../_autosummary/model_data_base.IO.LoaderDumper.to_msgpack.html">model_data_base.IO.LoaderDumper.to_msgpack</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../_autosummary/model_data_base.IO.LoaderDumper.to_pickle.html">model_data_base.IO.LoaderDumper.to_pickle</a></li>
@@ -219,6 +225,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../_autosummary/model_data_base.analyze.spatiotemporal_binning.html">model_data_base.analyze.spatiotemporal_binning</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../_autosummary/model_data_base.analyze.spike_detection.html">model_data_base.analyze.spike_detection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../_autosummary/model_data_base.analyze.temporal_binning.html">model_data_base.analyze.temporal_binning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_autosummary/model_data_base.analyze.voltage_binning.html">model_data_base.analyze.voltage_binning</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/model_data_base.distributed_lock.html">model_data_base.distributed_lock</a></li>
@@ -257,6 +264,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun2.rerun_mdb.html">simrun2.rerun_mdb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun2.rerun_mdb_save_ANN_batches.html">simrun2.rerun_mdb_save_ANN_batches</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun2.run_existing_synapse_activations.html">simrun2.run_existing_synapse_activations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun2.run_new_simulations.html">simrun2.run_new_simulations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun2.seed_manager.html">simrun2.seed_manager</a></li>
@@ -272,7 +280,9 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../_autosummary/simrun3.html">simrun3</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun3.PSP_with_cell_modification.html">simrun3.PSP_with_cell_modification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun3.get_cell_with_network.html">simrun3.get_cell_with_network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun3.modular_reduced_model_inference.html">simrun3.modular_reduced_model_inference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun3.robust_dask_delayed_execution.html">simrun3.robust_dask_delayed_execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun3.simulation_flow.html">simrun3.simulation_flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun3.somatic_summation_model.html">simrun3.somatic_summation_model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun3.synaptic_strength_fitting.html">simrun3.synaptic_strength_fitting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/simrun3.utils.html">simrun3.utils</a></li>
@@ -337,18 +347,15 @@
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../_autosummary/visualize.html">visualize</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../_autosummary/visualize.activity_analysis.html">visualize.activity_analysis</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../_autosummary/visualize.activity_analysis.array_slices_interactive.html">visualize.activity_analysis.array_slices_interactive</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../_autosummary/visualize.activity_analysis.average_std.html">visualize.activity_analysis.average_std</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../_autosummary/visualize.activity_analysis.cell_to_ipython_animation.html">visualize.activity_analysis.cell_to_ipython_animation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../_autosummary/visualize.activity_analysis.histogram.html">visualize.activity_analysis.histogram</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../_autosummary/visualize.activity_analysis.manylines.html">visualize.activity_analysis.manylines</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../_autosummary/visualize.activity_analysis.rasterplot.html">visualize.activity_analysis.rasterplot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../_autosummary/visualize.activity_analysis.spatiotemporal_heatmap.html">visualize.activity_analysis.spatiotemporal_heatmap</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/visualize.array_slices_interactive.html">visualize.array_slices_interactive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/visualize.average_std.html">visualize.average_std</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/visualize.cell_morphology_visualizer.html">visualize.cell_morphology_visualizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/visualize.cell_to_ipython_animation.html">visualize.cell_to_ipython_animation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../_autosummary/visualize.helper_methods.html">visualize.helper_methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/visualize.histogram.html">visualize.histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/visualize.manylines.html">visualize.manylines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/visualize.rasterplot.html">visualize.rasterplot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../_autosummary/visualize.spatiotemporal_heatmap.html">visualize.spatiotemporal_heatmap</a></li>
 </ul>
 </li>
 </ul>
@@ -434,7 +441,7 @@
 
 <span class="k">def</span> <span class="nf">get_cell_object_from_hoc</span><span class="p">(</span><span class="n">hocpath</span><span class="p">,</span> <span class="n">setUpBiophysics</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="kn">import</span> <span class="nn">single_cell_parser</span> <span class="k">as</span> <span class="nn">scp</span>
-    <span class="sd">&#39;&#39;&#39;returns cell object, which allows accessing points of individual branches&#39;&#39;&#39;</span>    
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;returns cell object, which allows accessing points of individual branches&#39;&#39;&#39;</span>    
     <span class="c1"># import singlecell_input_mapper.singlecell_input_mapper.cell</span>
     <span class="c1"># ssm = singlecell_input_mapper.singlecell_input_mapper.cell.CellParser(hocpath)    </span>
     <span class="c1"># ssm.spatialgraph_to_cell()</span>
@@ -551,7 +558,7 @@
     <span class="k">return</span> <span class="n">soma_centroid</span>
 
 <div class="viewcode-block" id="move_hoc_xyz"><a class="viewcode-back" href="../_autosummary/barrel_cortex.html#barrel_cortex.move_hoc_xyz">[docs]</a><span class="k">def</span> <span class="nf">move_hoc_xyz</span><span class="p">(</span><span class="n">hocpath</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span> <span class="n">outpath</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">coordinate_system</span> <span class="o">=</span> <span class="s1">&#39;D2&#39;</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;moves hoc morphology in xyz directions in the coordinate system of the specified barrel.</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;moves hoc morphology in xyz directions in the coordinate system of the specified barrel.</span>
 <span class="sd">    Cave: The coordinate system might be different from Roberts definition of local coordinate systems.</span>
 <span class="sd">    It is generated as follows:</span>
 <span class="sd">    - z is the local z axis of the column </span>
@@ -592,7 +599,7 @@
         <span class="k">assert</span><span class="p">((</span><span class="n">centroid</span> <span class="o">!=</span> <span class="n">centroid2</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
         
 <div class="viewcode-block" id="move_hoc_absolute"><a class="viewcode-back" href="../_autosummary/barrel_cortex.html#barrel_cortex.move_hoc_absolute">[docs]</a><span class="k">def</span> <span class="nf">move_hoc_absolute</span><span class="p">(</span><span class="n">hocpath</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span> <span class="n">outpath</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;moves hoc morphology such that soma centroid is at absolute position x,y,z.</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;moves hoc morphology such that soma centroid is at absolute position x,y,z.</span>
 <span class="sd">    The coordinates must be in the global coordinate system, i.e. D2</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
@@ -630,7 +637,7 @@
 
 <span class="nd">@cache</span>
 <span class="k">def</span> <span class="nf">get_xyz</span><span class="p">(</span><span class="n">column</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;returns base vectors were </span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;returns base vectors were </span>
 <span class="sd">    - z is the local z axis of the column </span>
 <span class="sd">    - x has the same orientation as in the global coordinate system, but is tilted in </span>
 <span class="sd">    its z component to be orthogonal on the locaal z axis.</span>
@@ -648,7 +655,7 @@
 
 
 <div class="viewcode-block" id="get_distance_below_L45_barrel_surface"><a class="viewcode-back" href="../_autosummary/barrel_cortex.html#barrel_cortex.get_distance_below_L45_barrel_surface">[docs]</a><span class="k">def</span> <span class="nf">get_distance_below_L45_barrel_surface</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">barrel</span> <span class="o">=</span> <span class="s1">&#39;C2&#39;</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;distance below L45 surface of individual barrel&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;distance below L45 surface of individual barrel&#39;&#39;&#39;</span>
     <span class="n">edge_points</span><span class="p">,</span> <span class="n">barrel_center_points</span><span class="p">,</span> <span class="n">z_axis</span> <span class="o">=</span> <span class="n">read_barrelfield</span><span class="p">()</span>
     <span class="n">three_points</span> <span class="o">=</span> <span class="n">edge_points</span><span class="p">[</span><span class="n">edge_points</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="n">barrel</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">get_distance_from_plane</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">three_points</span> <span class="o">+</span> <span class="p">[</span><span class="n">p</span><span class="p">]))[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
@@ -665,7 +672,7 @@
 
 
 <div class="viewcode-block" id="get_distance_below_L45_surface"><a class="viewcode-back" href="../_autosummary/barrel_cortex.html#barrel_cortex.get_distance_below_L45_surface">[docs]</a><span class="k">def</span> <span class="nf">get_distance_below_L45_surface</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;surface is interpolated from barrel center points&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;surface is interpolated from barrel center points&#39;&#39;&#39;</span>
     <span class="n">edge_points</span><span class="p">,</span> <span class="n">barrel_center_points</span><span class="p">,</span> <span class="n">z_axis</span> <span class="o">=</span> <span class="n">read_barrelfield</span><span class="p">()</span>
     <span class="n">three_nearest_points</span> <span class="o">=</span> <span class="n">barrel_center_points</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">calculate_point_distance</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">p</span><span class="p">),</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
     <span class="n">three_nearest_points</span> <span class="o">=</span> <span class="n">barrel_center_points</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">three_nearest_points</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -689,7 +696,7 @@
                       <span class="n">coordinate_system_z_move</span> <span class="o">=</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> 
                       <span class="n">measure_fun</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">get_distance_below_L45_barrel_surface</span><span class="p">,</span> <span class="n">barrel</span> <span class="o">=</span> <span class="s1">&#39;C2&#39;</span><span class="p">),</span>
                       <span class="n">outpath</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; Variables:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Variables:</span>
 <span class="sd">    reference_depth_or_hoc: depth in which to put morphology, either specified through float or </span>
 <span class="sd">        a path to a hoc morphology from which the soma centroid position will be extracted and used as depth</span>
 <span class="sd">    coordinate_system_z_move: which z axis to choose to move the morphology. </span>

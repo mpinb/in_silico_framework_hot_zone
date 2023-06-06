@@ -1,4 +1,4 @@
-﻿model\_data\_base.mdb\_initializers.PSPs
+model\_data\_base.mdb\_initializers.PSPs
 ========================================
 
 .. automodule:: model_data_base.mdb_initializers.PSPs

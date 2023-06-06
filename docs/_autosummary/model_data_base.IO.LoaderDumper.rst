@@ -50,6 +50,7 @@ model\_data\_base.IO.LoaderDumper
    model_data_base.IO.LoaderDumper.parent_classes
    model_data_base.IO.LoaderDumper.reduced_lda_model
    model_data_base.IO.LoaderDumper.settings
+   model_data_base.IO.LoaderDumper.shared_numpy_store
    model_data_base.IO.LoaderDumper.to_cloudpickle
    model_data_base.IO.LoaderDumper.to_msgpack
    model_data_base.IO.LoaderDumper.to_pickle
