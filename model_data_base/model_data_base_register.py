@@ -36,6 +36,14 @@ class ModelDataBaseRegister():
                 self.mdb['failed', dir_] = e
         
         #print self.mdb.keys()
+
+    def merge_remote_register(self, remote_path):
+        mdbr_remote = ModelDataBaseRegister(remote_path)
+        # get all remote model ids
+        whole_registry = {k: mdbr_remote.mdb[k] for k in mdbr_remote.mdb.keys()}
+        whole_registry_filtered = {k:v for k,v in whole_registry.items() if I.os.path.exists(v)}
+        for k in whole_registry_filtered.keys():
+            self.mdb[k] = whole_registry_filtered[k]
     
     def add_mdb(self, mdb):
         self.mdb[mdb._unique_id] = os.path.abspath(mdb.basedir)
