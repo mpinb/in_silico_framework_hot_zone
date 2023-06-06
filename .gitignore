@@ -80,3 +80,13 @@ venv/
 installer/conda_packages
 installer/pip_packages
 notebooks/*
+installer/Anaconda2-4.2.0-Linux-x86_64.sh
+installer/isf-py2-requirements.txt
+installer/isf3-https-requirements_old.txt
+installer/bla/jupyter_contrib_core-0.3.3-py27_0.tar.bz2
+installer/bla/jupyter_contrib_core-0.3.3-py27_0.tar.bz2.1
+installer/bla/jupyter_contrib_core-0.3.3-py27_0.tar.bz2.2
+installer/bla/jupyter_highlight_selected_word-0.2.0-py27_0.tar.bz2
+installer/bla/jupyter_latex_envs-1.4.4-py27_0.tar.bz2
+installer/bla/jupyter_nbextensions_configurator-0.4.0-py27_0.tar.bz2
+installer/x86_64/mod_func.c
