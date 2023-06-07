@@ -1,4 +1,5 @@
 from model_data_base.mdbopen import mdbopen
+import os
 '''
 Created on Mar 8, 2012
 
@@ -392,6 +393,9 @@ def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoin
             totalNrPts += sec.nseg
         else:
             totalNrPts += sec.nrOfPts
+
+    if not os.path.exists(os.path.dirname(fname)):
+        os.makedirs(os.path.dirname(fname))
     
     header = "# AmiraMesh 3D ASCII 2.0" + "\n"
     header += "# This SpatialGraph file was created by the Neuron Registration Tool NeuroMap " + "\n"
