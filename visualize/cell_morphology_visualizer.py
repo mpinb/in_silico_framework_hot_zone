@@ -86,13 +86,13 @@ class CellMorphologyVisualizer:
         soma = [section for section in self.cell.sections if section.label == "Soma"][0]
         self.soma_center = np.mean(soma.pts, axis=0)
 
-        self.morphology = self.__get_morphology()  # a pandas DataFrame
+        self.morphology = self._get_morphology()  # a pandas DataFrame
         
         """A pd.DataFrame containing point information, diameter and section ID"""
         self.rotation_with_zaxis = None
         """Rotation object that defines the transformation between the cell trunk and the z-axis"""
         if align_trunk:
-            self.__align_trunk_with_z_axis()
+            self._align_trunk_with_z_axis()
         self.points = self.morphology[["x", "y", "z"]]
         """The 3D point coordinates of the cell"""
         self.diameters = self.morphology["diameter"]
@@ -157,17 +157,17 @@ class CellMorphologyVisualizer:
         self.time_show_syn_activ = 2  # ms
         """Time in the simulation during which a synapse activation is shown during the visualization"""
 
-        if self.__has_simulation_data():
-            self.__init_simulation_data()
+        if self._has_simulation_data():
+            self._init_simulation_data()
 
     # "Private" methods
-    def __has_simulation_data(self):
+    def _has_simulation_data(self):
         return len(self.cell.soma.recVList[0]) > 0
 
-    def __assert_has_simulation_data(self):
-        assert self.__has_simulation_data(), "This cell object has no simulation data, yet you are trying to plot data that is only available after a simulation. You can only plot its morphology, not its membrane voltage or synapses."
+    def _assert_has_simulation_data(self):
+        assert self._has_simulation_data(), "This cell object has no simulation data, yet you are trying to plot data that is only available after a simulation. You can only plot its morphology, not its membrane voltage or synapses."
 
-    def __init_simulation_data(self):
+    def _init_simulation_data(self):
         # Max and min voltages colorcoded in the cell morphology
         self.vmin = -80  # mV
         self.vmax = 20  # mV
@@ -186,7 +186,7 @@ class CellMorphologyVisualizer:
             self.simulation_times[-1] % self.t_step
         self.times_to_show = np.empty(0)
         # initialise time range to visualise
-        self.__update_times_to_show(self.t_start, self.t_end, self.t_step)
+        self._update_times_to_show(self.t_start, self.t_end, self.t_step)
 
         """List contaning the voltage of the cell during a timeseries. Each element corresponds to a time point.
         Each element of the list contains n elements, being n the number of points of the cell morphology. 
@@ -203,7 +203,7 @@ class CellMorphologyVisualizer:
         self.time_show_syn_activ = 2  # ms
         self.scalar_data = {"voltage": self.voltage_timeseries}
 
-    def __align_trunk_with_z_axis(self):
+    def _align_trunk_with_z_axis(self):
         """
         Calculates the polar angle between the trunk and z-axis (zenith).
         Anchors the soma to (0, 0, 0) and aligns the trunk to the z-axis.
@@ -239,7 +239,7 @@ class CellMorphologyVisualizer:
         )
         self.rotation_with_zaxis = rotation
 
-    def __get_morphology(self):
+    def _get_morphology(self):
         '''
         Retrieve cell MORPHOLOGY from cell object.
         Fills the self.morphology attribute
@@ -277,7 +277,7 @@ class CellMorphologyVisualizer:
         print('Initialised simulation data in {} seconds'.format(np.around(t2-t1, 2)))
         return morphology
 
-    def __plot_cell_voltage_synapses_in_morphology_3d(self, voltage, synapses, time_point, voltage_legend=True, synapse_legend=True, save='', plot=True):
+    def _plot_cell_voltage_synapses_in_morphology_3d(self, voltage, synapses, time_point, voltage_legend=True, synapse_legend=True, save='', plot=True):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
         are shown for a particular time point.
@@ -349,7 +349,7 @@ class CellMorphologyVisualizer:
         else:
             plt.close()
 
-    def __get_voltages_at_timepoint(self, time_point):
+    def _get_voltages_at_timepoint(self, time_point):
         '''
         Retrieves the VOLTAGE along the whole cell morphology from cell object at a particular time point.
         Fetches this voltage from the original cell object
@@ -387,7 +387,7 @@ class CellMorphologyVisualizer:
                 voltage_points.append(sec.recVList[current_seg][n_sim_point])
         return voltage_points
 
-    def __get_ion_dynamic_at_timepoint(self, time_point, ion_keyword):
+    def _get_ion_dynamic_at_timepoint(self, time_point, ion_keyword):
         '''
         Retrieves the ion dynamics along the whole cell morphology from cell object at a particular time point.
 
@@ -432,7 +432,7 @@ class CellMorphologyVisualizer:
                     ion_points.append(None)
         return ion_points
 
-    def __get_soma_voltage_at_timepoint(self, time_point):
+    def _get_soma_voltage_at_timepoint(self, time_point):
         '''
         Retrieves the VOLTAGE along the whole cell morphology from cell object at a particular time point.
 
@@ -443,13 +443,13 @@ class CellMorphologyVisualizer:
         sec = [sec for sec in self.cell.sections if sec.label == "Soma"][0]
         return sec.recVList[0][n_sim_point]
 
-    def __get_soma_voltage_between_timepoints(self, t_start, t_end, t_step):
+    def _get_soma_voltage_between_timepoints(self, t_start, t_end, t_step):
         voltages = []
         for t_ in np.arange(t_start, t_end+t_step, t_step):
-            voltages.append(self.__get_soma_voltage_at_timepoint(t_))
+            voltages.append(self._get_soma_voltage_at_timepoint(t_))
         return voltages
 
-    def __calc_voltage_timeseries(self):
+    def _calc_voltage_timeseries(self):
         '''
         Retrieves VOLTAGE along the whole cell body during a set of time points (specified in self.times_to_show).
         Fills the self.voltage_timeseries attribute.
@@ -469,7 +469,7 @@ class CellMorphologyVisualizer:
         t2 = time.time()
         print('Voltage retrieval runtime (s): ' + str(np.around(t2-t1, 2)))
 
-    def __calc_ion_dynamics_timeseries(self, ion_keyword):
+    def _calc_ion_dynamics_timeseries(self, ion_keyword):
         '''
         Retrieves ion dynamics info along the whole cell body during a set of time points (specified in self.times_to_show).
         Fills the self.ion_dynamics attribute.
@@ -485,13 +485,13 @@ class CellMorphologyVisualizer:
 
         t1 = time.time()
         for time_point in self.times_to_show:  # For each frame of the video/animation
-            ion_dynamics = self.__get_ion_dynamic_at_timepoint(
+            ion_dynamics = self._get_ion_dynamic_at_timepoint(
                 time_point, ion_keyword)
             self.scalar_data[ion_keyword].append(ion_dynamics)
         t2 = time.time()
         print('Ion dynamics retrieval runtime (s): ' + str(np.around(t2-t1, 2)))
 
-    def __get_synapses_at_timepoint(self, time_point):
+    def _get_synapses_at_timepoint(self, time_point):
         '''
         Retrieves the SYNAPSE ACTIVATIONS at a particular time point.
 
@@ -525,6 +525,8 @@ class CellMorphologyVisualizer:
                     'L5tt': [], 'L6CC': [], 'VPM': [], 'L23': []}
         for population in self.cell.synapses.keys():
             for synapse in self.cell.synapses[population]:
+                if synapse.preCell is None:
+                    continue
                 for spikeTime in synapse.preCell.spikeTimes:
                     if time_point-self.time_show_syn_activ < spikeTime < time_point+self.time_show_syn_activ:
                         population_name = match_model_celltype_to_PSTH_celltype(
@@ -535,7 +537,7 @@ class CellMorphologyVisualizer:
                         synapses[population_name].append(pt)
         return synapses
 
-    def __calc_synapses_timeseries(self):
+    def _calc_synapses_timeseries(self):
         '''
         Retrieves the SYNAPSE ACTIVATIONS during a set of time points (specified in self.time).
         Fills the self.synapses_timeseries attribute.
@@ -545,12 +547,12 @@ class CellMorphologyVisualizer:
 
         t1 = time.time()
         for time_point in self.times_to_show:  # For each frame of the video/animation
-            synapses = self.__get_synapses_at_timepoint(time_point)
+            synapses = self._get_synapses_at_timepoint(time_point)
             self.synapses_timeseries.append(synapses)
         t2 = time.time()
         print('Synapses retrieval runtime (s): ' + str(np.around(t2-t1, 2)))
 
-    def __update_times_to_show(self, t_start=None, t_end=None, t_step=None):
+    def _update_times_to_show(self, t_start=None, t_end=None, t_step=None):
         """Checks if the specified time range equals the previously defined one. If not, updates the time range.
         If all arguments are None, does nothing. Useful for defining default time range
 
@@ -593,7 +595,7 @@ class CellMorphologyVisualizer:
                     self.synapses_timeseries = []
             self.times_to_show = new_time
 
-    def __timeseries_images_cell_voltage_synapses_in_morphology_3d(self, path, client=None, voltage_legend=True, synapse_legend=True):
+    def _timeseries_images_cell_voltage_synapses_in_morphology_3d(self, path, client=None, voltage_legend=True, synapse_legend=True):
         '''
         Creates a list of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)
@@ -619,8 +621,8 @@ class CellMorphologyVisualizer:
 
         # Gathers the voltage and synapse activations time series.
         # Then images are generated for each specified time step.
-        self.__calc_voltage_timeseries()
-        self.__calc_synapses_timeseries()
+        self._calc_voltage_timeseries()
+        self._calc_synapses_timeseries()
 
         out = []
         azim_ = self.azim
@@ -644,7 +646,7 @@ class CellMorphologyVisualizer:
         t2 = time.time()
         print('Images generation runtime (s): ' + str(np.around(t2-t1, 2)))
 
-    def __write_vtk_frame(self, out_name, out_dir, time_point, scalar_data=None):
+    def _write_vtk_frame(self, out_name, out_dir, time_point, scalar_data=None):
         '''
         Format in which a cell morphology (in a singular time point) (color-coded with scalar data, by default membrane voltage) 
         is saved to be visualized in paraview
@@ -720,18 +722,19 @@ class CellMorphologyVisualizer:
             of.write("section_id 1 {} int\n".format(len(self.morphology)))
             of.write(scalar_str_(self.morphology['section'].values))
 
-            # Scalar data (as of now only membrane voltages)
+            # Scalar data (as of now only membrane voltages and diameter)
+            of.write("POINT_DATA {}\n".format(len(self.morphology)))
             if scalar_data is None:
                 pass
             else:
-                of.write("POINT_DATA {}\nSCALARS Vm float 1\nLOOKUP_TABLE default\n".format(len(self.morphology)))
+                of.write("SCALARS Vm float 1\nLOOKUP_TABLE default\n".format(len(self.morphology)))
                 of.write(membrane_voltage_str_(scalar_data))
 
             # Diameters
             of.write("SCALARS Diameter float 1\nLOOKUP_TABLE default\n".format(len(self.morphology)))
             of.write(scalar_str_(self.diameters))
 
-    def __get_interactive_cell(self, background_color="rgb(180,180,180)"):
+    def _get_interactive_cell(self, background_color="rgb(180,180,180)"):
         ''' 
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with NO data overlayed.
 
@@ -774,7 +777,7 @@ class CellMorphologyVisualizer:
         )
         return fig
 
-    def __get_interactive_plot_with_scalar_data(self, scalar_data_keyword, vmin=None, vmax=None, color_map='jet',
+    def _get_interactive_plot_with_scalar_data(self, scalar_data_keyword, vmin=None, vmax=None, color_map='jet',
                                                 background_color="rgb(180,180,180)", ip=None):
         """This is the main function to set up an interactive plot with scalar data overlayed.
         It fetches the scalar data of interest (usually membrane voltage, but others are possible; check with self.possible_scalars).
@@ -791,7 +794,7 @@ class CellMorphologyVisualizer:
             ipywidgets.VBox object: an interactive render of the cell.
         """
         if scalar_data_keyword.lower() in ("voltage", "membrane voltage", "vm"):
-            self.__calc_voltage_timeseries()
+            self._calc_voltage_timeseries()
             scalar_data_per_section = np.array(self.voltage_timeseries).T
             # high resolution (takes long)
             # scalar_data_per_section = np.array([self.__get_voltages_at_timepoint(
@@ -803,9 +806,9 @@ class CellMorphologyVisualizer:
         else:
             assert scalar_data_keyword.lower() in (e.lower()
                                                    for e in self.possible_scalars), "Keyword {} is not associated with membrane voltage, and does not appear in the possible ion dynamic keywords: {}".format(scalar_data_keyword, self.possible_scalars)
-            self.__calc_ion_dynamics_timeseries(
+            self._calc_ion_dynamics_timeseries(
                 ion_keyword=scalar_data_keyword)
-            scalar_data_per_section = np.array([self.__get_ion_dynamic_at_timepoint(
+            scalar_data_per_section = np.array([self._get_ion_dynamic_at_timepoint(
                 t, ion_keyword=scalar_data_keyword) for t in np.arange(self.t_start, self.t_end+self.dt, self.dt)]).T
             scalar_data_per_time = {
                 t: self.scalar_data[scalar_data_keyword][t_idx] for t_idx, t in enumerate(self.times_to_show)}
@@ -817,7 +820,7 @@ class CellMorphologyVisualizer:
         sections = self.morphology["section"]
         ### Create figure
         # Interactive cell
-        fig_cell = self.__get_interactive_cell(
+        fig_cell = self._get_interactive_cell(
             background_color=background_color)
         fig_cell.update_traces(name="morphology", marker=dict(colorscale=color_map))
         fig_cell.add_trace(go.Scatter3d(x=[0], y=[0], z=[0], name="selection",
@@ -898,7 +901,7 @@ class CellMorphologyVisualizer:
 
         return app.run_server(debug=True, use_reloader=False, port=5050, host=ip)
 
-    def __display_interactive_morphology_only_3d(self, background_color="rgb(180,180,180)", highlight_section=None):
+    def _display_interactive_morphology_only_3d(self, background_color="rgb(180,180,180)", highlight_section=None):
         ''' 
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with NO data overlayed.
         If you want to overlay scalar data, such as membrane voltage, please use :@function self.display_interactive_voltage_in_morphology_3d:
@@ -911,7 +914,7 @@ class CellMorphologyVisualizer:
             ipywidgets.VBox object: an interactive render of the cell.
         '''
         df = self.morphology.copy()
-        fig_cell = self.__get_interactive_cell(
+        fig_cell = self._get_interactive_cell(
             background_color=background_color)
         if highlight_section:
             fig_cell.add_traces(
@@ -975,7 +978,7 @@ class CellMorphologyVisualizer:
             - save: path where the plot will be saved. If it's empty it will not be saved
             - plot: whether the plot should be shown.
         '''
-        self.__assert_has_simulation_data()
+        self._assert_has_simulation_data()
         if vmin is not None:
             self.vmin = vmin
         if vmax is not None:
@@ -1043,7 +1046,7 @@ class CellMorphologyVisualizer:
             - Save: path where the plot will be saved. If it's empty it will not be saved
             - Plot: whether the plot should be shown.
         '''
-        self.__assert_has_simulation_data()
+        self._assert_has_simulation_data()
         if time_show_syn_activ is not None:
             self.time_show_syn_activ = time_show_syn_activ
         if vmin is not None:
@@ -1051,8 +1054,8 @@ class CellMorphologyVisualizer:
         if vmax is not None:
             self.vmax = vmax
         voltage = self.__get_voltages_at_timepoint(time_point)
-        synapses = self.__get_synapses_at_timepoint(time_point)
-        self.__plot_cell_voltage_synapses_in_morphology_3d(
+        synapses = self._get_synapses_at_timepoint(time_point)
+        self._plot_cell_voltage_synapses_in_morphology_3d(
             voltage, synapses, time_point, voltage_legend=voltage_legend, synapse_legend=synapse_legend, save=save, plot=plot)
 
     def write_gif_voltage_synapses_in_morphology_3d(self, images_path, out_path, client=None, t_start=None, t_end=None, t_step=None,
@@ -1079,11 +1082,11 @@ class CellMorphologyVisualizer:
             - voltage_legend: whether the voltage legend should appear in the plot
             - synapse_legend: whether the synapse activations legend should appear in the plot
         '''
-        self.__assert_has_simulation_data()
+        self._assert_has_simulation_data()
         if client is None:
             raise ValueError(
                 "Please provide a dask client object for the client argument")
-        self.__update_times_to_show(t_start, t_end, t_step)
+        self._update_times_to_show(t_start, t_end, t_step)
         if neuron_rotation is not None:
             self.neuron_rotation = neuron_rotation
         if time_show_syn_activ is not None:
@@ -1092,7 +1095,7 @@ class CellMorphologyVisualizer:
             self.vmin = vmin
         if vmax is not None:
             self.vmax = vmax
-        self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(
+        self._timeseries_images_cell_voltage_synapses_in_morphology_3d(
             images_path, client, voltage_legend, synapse_legend)
         write_gif_from_images(images_path, out_path, interval=frame_duration)
 
@@ -1122,11 +1125,11 @@ class CellMorphologyVisualizer:
             - voltage_legend: whether the voltage legend should appear in the plot
             - synapse_legend: whether the synapse activations legend should appear in the plot
         '''
-        self.__assert_has_simulation_data()
+        self._assert_has_simulation_data()
         if client is None:
             raise ValueError(
                 "Please provide a dask client object for the client argument")
-        self.__update_times_to_show(t_start, t_end, t_step)
+        self._update_times_to_show(t_start, t_end, t_step)
         if neuron_rotation is not None:
             self.neuron_rotation = neuron_rotation
         if time_show_syn_activ is not None:
@@ -1135,7 +1138,7 @@ class CellMorphologyVisualizer:
             self.vmin = vmin
         if vmax is not None:
             self.vmax = vmax
-        self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(
+        self._timeseries_images_cell_voltage_synapses_in_morphology_3d(
             images_path, client, voltage_legend, synapse_legend)
         write_video_from_images(images_path, out_path,
                                 fps=framerate, quality=quality, codec=codec)
@@ -1163,11 +1166,11 @@ class CellMorphologyVisualizer:
             - voltage_legend: whether the voltage legend should appear in the plot
             - synapse_legend: whether the synapse activations legend should appear in the plot
         '''
-        self.__assert_has_simulation_data()
+        self._assert_has_simulation_data()
         if client is None:
             raise ValueError(
                 "Please provide a dask client object for the client argument")
-        self.__update_times_to_show(t_start, t_end, t_step)
+        self._update_times_to_show(t_start, t_end, t_step)
         if neuron_rotation is not None:
             self.neuron_rotation = neuron_rotation
         if time_show_syn_activ is not None:
@@ -1176,7 +1179,7 @@ class CellMorphologyVisualizer:
             self.vmin = vmin
         if vmax is not None:
             self.vmax = vmax
-        self.__timeseries_images_cell_voltage_synapses_in_morphology_3d(
+        self._timeseries_images_cell_voltage_synapses_in_morphology_3d(
             images_path, client, voltage_legend, synapse_legend)
         display_animation_from_images(images_path, 1, embedded=True)
 
@@ -1199,14 +1202,14 @@ class CellMorphologyVisualizer:
         Returns:
             ipywidgets.VBox object: an interactive render of the cell.
         """
-        self.__update_times_to_show(t_start, t_end, t_step)
+        self._update_times_to_show(t_start, t_end, t_step)
         pio.renderers.default = renderer
         if data is None:
-            f = self.__display_interactive_morphology_only_3d(
+            f = self._display_interactive_morphology_only_3d(
                 background_color=background_color, highlight_section=highlight_section)
             return f.show() if show else f
         else:
-            f = self.__get_interactive_plot_with_scalar_data(data, vmin=vmin, vmax=vmax,
+            f = self._get_interactive_plot_with_scalar_data(data, vmin=vmin, vmax=vmax,
                                                              color_map=color_map, background_color=background_color, ip=ip)
             return f
 
@@ -1280,19 +1283,16 @@ class CellMorphologyVisualizer:
             - out_name: name of the file (not path, the file will be generated in out_dir)
             - out_dir: path where the images for the gif will be generated
         '''
-        self.__update_times_to_show(t_start, t_end, t_step)
-        self.__calc_voltage_timeseries()
-
-        progress = range(len(self.times_to_show))
-        if HAS_TQDM:
-            progress = tqdm(progress, desc="Writing vtk frames to {}".format(out_dir))
+        if scalar_data is not None and self._has_simulation_data():
+            self._update_times_to_show(t_start, t_end, t_step)
+            self._calc_voltage_timeseries()
 
         if scalar_data == None:
-            self.__write_vtk_frame(
-                out_name, out_dir, time_point=self.times_to_show[0], scalar_data=None)
+            self._write_vtk_frame(
+                out_name, out_dir, time_point=0, scalar_data=None)
         elif scalar_data.lower() in ("voltage", "membrane voltage", "vm"):
-            for i in progress:
-                self.__write_vtk_frame(
+            for i in range(len(self.times_to_show)):
+                self._write_vtk_frame(
                     out_name, out_dir, time_point=self.times_to_show[i], scalar_data=self.voltage_timeseries[i])
         else:
             raise NotImplementedError("scalar data keyword not implemented, please pass one of the following: (None, vm, membrane voltage, voltage)")
