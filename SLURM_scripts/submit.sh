@@ -139,7 +139,8 @@ function QOS_precheck {
     while [[ $(squeue --me | grep $1 ) == "" ]]; do
         printf_with_dots "Waiting for job $1 to be submitted "
     done;
-    reason="$(squeue --me | grep -oP '\(\K[^\)]+' | tail -n1)"
+    # grep for ID, then grep for something inbetween brackets (the QOS reason)
+    reason="$(squeue --me | grep $1 | grep -oP '\(\K[^\)]+' | tail -n1)"
     printf $reason
     while [[ $reason == "None" ]]; do
         printf_with_dots "Waiting for job \"$1\" to be submitted "
