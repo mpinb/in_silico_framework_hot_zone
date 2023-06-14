@@ -269,6 +269,7 @@ output=$(sbatch <<EoF
 $tpn
 unset XDG_RUNTIME_DIR
 unset DISPLAY
+module load ffmpeg
 export SLURM_CPU_BIND=none
 ulimit -Sn "\$(ulimit -Hn)"
 srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA.py \$MYBASEDIR/management_dir_$name $interactive

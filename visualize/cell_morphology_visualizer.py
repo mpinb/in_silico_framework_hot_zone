@@ -4,11 +4,12 @@ import pandas as pd
 from ipywidgets import interactive, VBox, HBox, widgets, Layout
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d.axes3d import Axes3D
 import numpy as np
 import os
 import dask
 import time
-from .helper_methods import write_video_from_images, write_gif_from_images, display_animation_from_images
+from .helper_methods import write_video_from_images, write_gif_from_images, display_animation_from_images, draw_arrow
 import warnings
 from barrel_cortex import inhibitory
 # let ImportWarnings show up when importing this module through Interface
@@ -277,7 +278,8 @@ class CellMorphologyVisualizer:
         print('Initialised simulation data in {} seconds'.format(np.around(t2-t1, 2)))
         return morphology
 
-    def _plot_cell_voltage_synapses_in_morphology_3d(self, voltage, synapses, time_point, voltage_legend=True, synapse_legend=True, save='', plot=True):
+    def _plot_cell_voltage_synapses_in_morphology_3d(self, voltage, synapses, time_point, voltage_legend=True, synapse_legend=True, save='', plot=True,
+                                                     highlight_section=None, highlight_arrow_args=None):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
         are shown for a particular time point.
@@ -315,6 +317,9 @@ class CellMorphologyVisualizer:
                 color = self.population_to_color_dict[population]
                 ax.scatter3D(synapse[0], synapse[1], synapse[2],
                              color=color, edgecolors='grey', s=75)
+        
+        if highlight_section is not None:
+            draw_arrow(self.morphology, ax=ax, highlight_section=highlight_section, highlight_arrow_args=highlight_arrow_args)
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_zticks([])
@@ -463,7 +468,7 @@ class CellMorphologyVisualizer:
 
         t1 = time.time()
         for time_point in self.times_to_show:  # For each frame of the video/animation
-            voltage = self.__get_voltages_at_timepoint(time_point)
+            voltage = self._get_voltages_at_timepoint(time_point)
             self.voltage_timeseries.append(voltage)
         self.scalar_data["voltage"] = self.voltage_timeseries
         t2 = time.time()
@@ -595,7 +600,8 @@ class CellMorphologyVisualizer:
                     self.synapses_timeseries = []
             self.times_to_show = new_time
 
-    def _timeseries_images_cell_voltage_synapses_in_morphology_3d(self, path, client=None, voltage_legend=True, synapse_legend=True):
+    def _timeseries_images_cell_voltage_synapses_in_morphology_3d(self, path, client=None, voltage_legend=True, synapse_legend=True,
+                                                                  highlight_section=None, highlight_arrow_args=None):
         '''
         Creates a list of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)
@@ -638,7 +644,8 @@ class CellMorphologyVisualizer:
                 morphology=self.morphology, voltage=voltage, synapses=synapses,
                 time_point=time_point, save=filename, population_to_color_dict=self.population_to_color_dict,
                 azim=self.azim, dist=self.dist, roll=self.roll, elev=self.elev, vmin=self.vmin, vmax=self.vmax,
-                voltage_legend=voltage_legend, synapse_legend=synapse_legend, time_offset=self.time_offset, dpi=self.dpi))
+                voltage_legend=voltage_legend, synapse_legend=synapse_legend, time_offset=self.time_offset, dpi=self.dpi,
+                highlight_section=highlight_section, highlight_arrow_args=highlight_arrow_args))
             self.azim += self.neuron_rotation
         self.azim = azim_
         futures = client.compute(out)
@@ -797,7 +804,7 @@ class CellMorphologyVisualizer:
             self._calc_voltage_timeseries()
             scalar_data_per_section = np.array(self.voltage_timeseries).T
             # high resolution (takes long)
-            # scalar_data_per_section = np.array([self.__get_voltages_at_timepoint(
+            # scalar_data_per_section = np.array([self._get_voltages_at_timepoint(
             #     t) for t in np.arange(self.t_start, self.t_end+self.dt, self.dt)]).T
             round_floats = 2
             scalar_data_per_time = {t: np.round(
@@ -925,12 +932,12 @@ class CellMorphologyVisualizer:
             )
 
         # create FigureWidget from figure
-        f = go.FigureWidget(data=fig_cell.data, layout=fig_cell.layout)
-        return f
+        # f = go.FigureWidget(data=fig_cell.data, layout=fig_cell.layout)
+        return fig_cell
 
     # Public methods
 
-    def show_morphology_3d(self, save='', plot=True):
+    def show_morphology_3d(self, save='', plot=True, highlight_section=None, highlight_arrow_args=None):
         '''
         Creates a python plot of the cell morphology in 3D
 
@@ -939,7 +946,11 @@ class CellMorphologyVisualizer:
             - Plot: whether the plot should be shown.
         '''
         fig = plt.figure(figsize=(15, 15), dpi=self.dpi)
-        ax = plt.axes(projection='3d', proj_type='ortho')
+        
+        ax = plt.axes(projection='3d', 
+                      proj_type='ortho'
+                      )
+        
         sections = np.unique(self.morphology['section'].values)
         for sec in sections:
             points = self.morphology.loc[self.morphology['section'] == sec]
@@ -950,23 +961,30 @@ class CellMorphologyVisualizer:
                     ax.plot3D([points.loc[i]['x'], points.loc[i+1]['x']],
                               [points.loc[i]['y'], points.loc[i+1]['y']],
                               [points.loc[i]['z'], points.loc[i+1]['z']], color='grey', lw=linewidth)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_zticks([])
-        plt.axis('off')
+        
+        # ax.set_xticks([])
+        # ax.set_yticks([])
+        # ax.set_zticks([])
+        # plt.axis('off')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
         ax.azim = self.azim
         ax.dist = self.dist
         ax.elev = self.elev
         ax.roll = self.roll
+        # plot arrow, if necessary
+        if highlight_section is not None:
+            draw_arrow(self.morphology, ax, highlight_section, highlight_arrow_args)
         ax.set_box_aspect(
             [ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
-
+        
+        
         if save != '':
             plt.savefig(save)  # ,bbox_inches='tight')
         if plot:
             plt.show()
 
-    def show_voltage_in_morphology_3d(self, time_point, vmin=None, vmax=None, voltage_legend=True, save='', plot=True):
+    def show_voltage_in_morphology_3d(self, time_point, vmin=None, vmax=None, voltage_legend=True, save='', plot=True, highlight_section=None, highlight_arrow_args=None):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage for a particular time point.
 
@@ -978,12 +996,13 @@ class CellMorphologyVisualizer:
             - save: path where the plot will be saved. If it's empty it will not be saved
             - plot: whether the plot should be shown.
         '''
+        
         self._assert_has_simulation_data()
         if vmin is not None:
             self.vmin = vmin
         if vmax is not None:
             self.vmax = vmax
-        voltage = self.__get_voltages_at_timepoint(time_point)
+        voltage = self._get_voltages_at_timepoint(time_point)
 
         # Plot morphology with colorcoded voltage
         cmap = mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(
@@ -1003,6 +1022,9 @@ class CellMorphologyVisualizer:
                               [points.loc[i]['y'], points.loc[i+1]['y']],
                               [points.loc[i]['z'], points.loc[i+1]['z']], color=mpl.cm.jet(color), lw=linewidth)
 
+        # plot arrow, if necessary
+        if highlight_section is not None:
+            draw_arrow(self.morphology, ax, highlight_section, highlight_arrow_args)
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_zticks([])
@@ -1031,7 +1053,7 @@ class CellMorphologyVisualizer:
             plt.show()
 
     def show_voltage_synapses_in_morphology_3d(self, time_point, time_show_syn_activ=None, vmin=None, vmax=None, voltage_legend=True, synapse_legend=True,
-                                               save='', plot=True):
+                                               save='', plot=True, highlight_section=None, highlight_arrow_args=None):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
         are shown for a particular time point.
@@ -1046,6 +1068,7 @@ class CellMorphologyVisualizer:
             - Save: path where the plot will be saved. If it's empty it will not be saved
             - Plot: whether the plot should be shown.
         '''
+        
         self._assert_has_simulation_data()
         if time_show_syn_activ is not None:
             self.time_show_syn_activ = time_show_syn_activ
@@ -1053,14 +1076,14 @@ class CellMorphologyVisualizer:
             self.vmin = vmin
         if vmax is not None:
             self.vmax = vmax
-        voltage = self.__get_voltages_at_timepoint(time_point)
+        voltage = self._get_voltages_at_timepoint(time_point)
         synapses = self._get_synapses_at_timepoint(time_point)
         self._plot_cell_voltage_synapses_in_morphology_3d(
-            voltage, synapses, time_point, voltage_legend=voltage_legend, synapse_legend=synapse_legend, save=save, plot=plot)
+            voltage, synapses, time_point, voltage_legend=voltage_legend, synapse_legend=synapse_legend, save=save, plot=plot, highlight_section=None, highlight_arrow_args=None)
 
     def write_gif_voltage_synapses_in_morphology_3d(self, images_path, out_path, client=None, t_start=None, t_end=None, t_step=None,
                                                     neuron_rotation=None, time_show_syn_activ=None, vmin=None, vmax=None, frame_duration=40,
-                                                    voltage_legend=True, synapse_legend=True):
+                                                    voltage_legend=True, synapse_legend=True, highlight_section=None, highlight_arrow_args=None):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
@@ -1096,12 +1119,14 @@ class CellMorphologyVisualizer:
         if vmax is not None:
             self.vmax = vmax
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(
-            images_path, client, voltage_legend, synapse_legend)
+            images_path, client, voltage_legend, synapse_legend,
+            highlight_section=highlight_section, highlight_arrow_args=highlight_arrow_args)
         write_gif_from_images(images_path, out_path, interval=frame_duration)
 
     def write_video_voltage_synapses_in_morphology_3d(self, images_path, out_path, client=None, t_start=None, t_end=None, t_step=None,
                                                       neuron_rotation=None, time_show_syn_activ=None, vmin=None, vmax=None,
-                                                      framerate=12, quality=5, codec='mpeg4', voltage_legend=True, synapse_legend=True):
+                                                      framerate=12, quality=5, codec='mpeg4', voltage_legend=True, synapse_legend=True,
+                                                      highlight_section=None, highlight_arrow_args=None):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
@@ -1139,7 +1164,8 @@ class CellMorphologyVisualizer:
         if vmax is not None:
             self.vmax = vmax
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(
-            images_path, client, voltage_legend, synapse_legend)
+            images_path, client, voltage_legend, synapse_legend,
+            highlight_section=highlight_section, highlight_arrow_args=highlight_arrow_args)
         write_video_from_images(images_path, out_path,
                                 fps=framerate, quality=quality, codec=codec)
 
@@ -1301,7 +1327,7 @@ class CellMorphologyVisualizer:
 @dask.delayed
 def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, time_point, save, population_to_color_dict,
                                                 azim=0, dist=10, elev=30, roll=0, vmin=-75, vmax=-30, voltage_legend=True,
-                                                synapse_legend=True, time_offset=0, dpi=72):
+                                                synapse_legend=True, time_offset=0, dpi=72, highlight_section=None, highlight_arrow_args=None):
     '''
     Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
     are shown for a particular time point.
@@ -1331,6 +1357,7 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, t
         - voltage_legend: whether the voltage legend should appear in the plot
         - synapse_legend: whether the synapse activations legend should appear in the plot
     '''
+    
     # Plot morphology with colorcoded voltage
     cmap = mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(
         vmin=vmin, vmax=vmax), cmap=plt.get_cmap('jet'))
@@ -1354,6 +1381,9 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, t
             color = population_to_color_dict[population]
             ax.scatter3D(synapse[0], synapse[1], synapse[2],
                          color=color, edgecolors='grey', s=75)
+    
+    if highlight_section is not None:
+        draw_arrow(morphology, ax, highlight_section, highlight_arrow_args)
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_zticks([])

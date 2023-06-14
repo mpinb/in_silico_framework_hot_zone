@@ -10,11 +10,18 @@ import shutil
 from PIL import Image
 import jinja2
 import IPython
+import dask
 import glob
 import numpy as np
 from base64 import b64encode
 import subprocess
 from model_data_base.utils import mkdtemp
+import math
+
+from mpl_toolkits.mplot3d.proj3d import proj_transform
+from matplotlib.patches import FancyArrowPatch
+from matplotlib.text import Annotation
+from mpl_toolkits.mplot3d.axes3d import Axes3D
 
 def write_video_from_images(images, out_path, fps=24, images_format = '.png', quality=5, codec='mpeg4', auto_sort_paths=True ):
     '''
@@ -34,15 +41,14 @@ def write_video_from_images(images, out_path, fps=24, images_format = '.png', qu
     
     if not out_path.endswith('.mp4'):
         raise ValueError('output path must be the path to an mp4 video!')
-        
     # make it a list if we want to auto_sort_paths since this is what find_files_and_order_them expects
-    if isinstance(images, str) and (auto_sort_paths == True):
+    if isinstance(images, str) and auto_sort_paths == True:
         if not os.path.isdir(images):
             raise ValueError('images must be a path to a folder or a list of folders or a list of images')
         images = [images]
         
     # call ffmpeg directly
-    if isinstance(images, str) and os.path.isdir(images) and (auto_sort_paths == False):
+    if isinstance(images, str) and os.path.isdir(images) and auto_sort_paths == False:
         out = subprocess.call(["ffmpeg", "-y", "-r", str(fps), "-i", images+"/%*"+images_format, 
                                        "-vcodec", codec, "-q:v", str(quality), "-r", str(fps), out_path])    
     #
@@ -55,8 +61,8 @@ def write_video_from_images(images, out_path, fps=24, images_format = '.png', qu
             for i,file in enumerate(listFrames):
                 new_name = str(i+1).zfill(6)+images_format
                 shutil.copy(file,os.path.join(temp_folder, new_name))
-            out = subprocess.call(["ffmpeg", "-y", "-r", str(fps), "-i", temp_folder+"/%*"+images_format, 
-                                   "-vcodec", codec, "-q:v", str(quality), "-r", str(fps), out_path])
+            out = subprocess.call(["ffmpeg", "-y", "-r", str(fps), "-i", str(temp_folder+"/%*"+images_format), 
+                                   "-vcodec", str(codec), "-q:v", str(quality), "-r", str(fps), str(out_path)])
     else:
         raise ValueError("images must be a list of images, a directory with images or a list of directories with images")
         
@@ -135,7 +141,7 @@ def display_animation_from_images(files, interval=10, style=False, animID = None
     CAVEAT: the paths need to be relative to the location of the ipynb / html file, since
     the are resolved in the browser and not by python'''
     if animID is None:
-        animID = np.random.randint(10000000000000) # needs to be unique within one ipynb
+        animID = np.random.randint(arrow_size000000000000) # needs to be unique within one ipynb
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
     template = env.get_template('animation_template.html')
 
@@ -160,20 +166,20 @@ def find_files_and_order_them(files, files_format='.png'):
     - files_format: format of the files to get
     Returns:
     List of the files contained in the files argument. These files are in order, and takes into account
-    if the name of the file is a number (1 would go before 10 even if the number of the file is not 0-padded). 
+    if the name of the file is a number (1 would go before arrow_size even if the number of the file is not 0-padded). 
     If the files param was a list of directories, the files are in order within each directory but the
     directories order is maintained.
     Example:
     if files is a list of directories:
         [dir_a,  dir_b, dir_c] containing the following files:
          dir_a | dir_b | dir_c
-           100 | world |     C
-            10 |    30 |     B
+           arrow_size0 | world |     C
+            arrow_size |    30 |     B
              2 |     5 |     A
              1 | hello |    70
           file |   200 |     9
     the result would be:
-    1, 2, 10, 100, file, 5, 30, 200, hello, world, 9, 70, A, B, C        
+    1, 2, arrow_size, arrow_size0, file, 5, 30, 200, hello, world, 9, 70, A, B, C        
     '''
 
     if isinstance(files, str):
@@ -202,4 +208,54 @@ def find_files_and_order_them(files, files_format='.png'):
             listFiles += find_files_and_order_them(elem,files_format)
     return listFiles
 
+class Arrow3D(FancyArrowPatch):
 
+    def __init__(self, x, y, z, dx, dy, dz, *args, **kwargs):
+        super().__init__((0, 0), (0, 0), *args, **kwargs)
+        self._xyz = (x, y, z)
+        self._dxdydz = (dx, dy, dz)
+
+    def draw(self, renderer):
+        x1, y1, z1 = self._xyz
+        dx, dy, dz = self._dxdydz
+        x2, y2, z2 = (x1 + dx, y1 + dy, z1 + dz)
+
+        xs, ys, zs = proj_transform((x1, x2), (y1, y2), (z1, z2), self.axes.M)
+        self.set_positions((xs[0], ys[0]), (xs[1], ys[1]))
+        super().draw(renderer)
+        
+    def do_3d_projection(self, renderer=None):
+        x1, y1, z1 = self._xyz
+        dx, dy, dz = self._dxdydz
+        x2, y2, z2 = (x1 + dx, y1 + dy, z1 + dz)
+
+        xs, ys, zs = proj_transform((x1, x2), (y1, y2), (z1, z2), self.axes.M)
+        self.set_positions((xs[0], ys[0]), (xs[1], ys[1]))
+
+        return np.min(zs) 
+
+def _arrow3D(ax, x, y, z, dx, dy, dz, *args, **kwargs):
+    '''Add an 3d arrow to an `Axes3D` instance.'''
+
+    arrow = Arrow3D(x, y, z, dx, dy, dz, *args, **kwargs)
+    ax.add_artist(arrow)
+
+def draw_arrow(morphology, ax, highlight_section, highlight_arrow_args, arrow_size=40):
+    
+    assert type(highlight_section) == int, "Please provide the section index as an argument for highlight_arrow. You passed {}".format(highlight_section)
+    assert highlight_section in morphology['section'], "The given section id is not present in the cell morphology"
+
+    setattr(Axes3D, 'arrow3D', _arrow3D)
+    if highlight_arrow_args is None:
+        highlight_arrow_args = dict(mutation_scale=20, ec ='black', fc='white')
+    x, y, z = morphology[morphology['section'] == highlight_section][['x', 'y', 'z']].mean(axis=0)
+
+    # get start of arrow
+    start_x, start_y, start_z = x, y, z+arrow_size
+    dx, dy, dz = 0, 0, -arrow_size
+    #print(start_x, start_y)
+    ax.arrow3D(
+        start_x, start_y, start_z,
+        dx, dy, dz,
+        **highlight_arrow_args
+    )
