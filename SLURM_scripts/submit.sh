@@ -134,7 +134,9 @@ function check_name {
 #   1: The ID of the job
 #######################################
 function QOS_precheck {
-    while [[ $(squeue | grep $1 ) == "" ]]; do
+    local width="$(tput cols)"
+
+    while [[ $(squeue --me | grep $1 ) == "" ]]; do
         printf_with_dots "Waiting for job $1 to be submitted "
     done;
     reason="$(squeue --me | grep -oP '\(\K[^\)]+' | tail -n1)"
@@ -144,11 +146,13 @@ function QOS_precheck {
         reason="$(squeue --me | grep -oP '\(\K[^\)]+' | tail -n1)";
     done;
     if [[ "$reason" =~ .*"QOS".* ]]; then  # reason has QOS in the name: something went wrong
-        printf_with_dots "Job can't be started (right now). Reason: $reason"
+        local string="Job can't be started (right now). Reason: $reason"
+        local string_length=${#string}
+        local padding=$(($width - $string_length))  # to clean out previous long strings
+        printf "\r$string%*s" "$padding";
         exit 1;
     else
       local string="Job $1 submitted succesfully"
-      local width="$(tput cols)"
       local string_length=${#string}
       local padding=$(($width - $string_length))  # to clean out previous long strings
       printf "\r$string%*s" "$padding";
@@ -270,15 +274,29 @@ srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework
 EoF
 )
 
-id=$(echo $output | tr -d -c 0-9)
-QOS_precheck $id  # the job ID
-printf '%0.s-' $(seq 1 $width)  # fill width with "-" char
-echo ""
-if [ $interactive == "1" ]; then
-  # fetch working directory of current script
-  __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  # also run jupyter_link to fetch the link where the jupyter server is running
-  bash ${__dir}/jupyter_link.sh $name
+if [[ $output == "" ]]; then
+  # If a job can not be started due to an sbatch error (unavailable node configuration),
+  # then sbatch will print an error itself to stdout
+  # and the command output will be empty
+  exit 1;
 else
-  printf "Batch job: no jupyter server will be launched.\n"
+  # sbatch does not throw an error, but some errors might still appear
+  id=$(echo $output | tr -d -c 0-9)
+  # check for QOS errors
+  QOS_precheck $id  # the job ID
+
+  # No QOS errors, continue setting up management dir, and jupyter servers
+  printf '%0.s-' $(seq 1 $width)  # fill width with "-" char
+  echo ""
+  # setup jupyter server if it is an interactive job
+  if [ $interactive == "1" ]; then
+    # fetch working directory of current script
+    __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    # also run jupyter_link to fetch the link where the jupyter server is running
+    bash ${__dir}/jupyter_link.sh $name
+  # don't setup jupyter server if it is not an interactive job
+  else
+    printf "Batch job: no jupyter server will be launched.\n"
+  fi
 fi
+
