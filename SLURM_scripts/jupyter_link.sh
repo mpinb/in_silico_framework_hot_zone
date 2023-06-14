@@ -148,7 +148,7 @@ function fetch_ip {
 #######################################
 function format_jupyter_link {
     local link_suffix="$(echo $2 | grep -oP '(?<=:1111[23]/)'.* | head -1)"  # grep for anything after the port number
-    local port_number="$(cut -d':' -f3 <<<$2 | cut -c1-5)"  # cut the ip on colo, take third element, take first 4 chars of that
+    local port_number="$(cut -d':' -f3 <<<$2 | cut -c1-5)"  # cut the ip on colon take third element, take first 4 chars of that
     if [ -z "$link_suffix" ] ;  # no suffix is found: no token
     then
         printf "\nWarning: No token is set for this Jupyter server.\nVSCode will not be able to connect to this server, and notebooks running on this server can not be shared by link.\n">&2
@@ -158,27 +158,7 @@ function format_jupyter_link {
 }
 
 
-#######################################
-# Checks for QOS errors
-# Arguments:
-#   1: The name of the job
-#######################################
-function QOS_precheck {
-    while [[ "$(squeue | grep $1)" == "" ]]; do
-        printf_with_dots "Waiting for job \"$1\" to be submitted "
-    done;
-    reason="$(squeue --me | grep -oP '\(\K[^\)]+' | tail -n1)"
-    while [[ $reason == "None" ]]; do
-        printf_with_dots "Waiting for job \"$1\" to be submitted "
-        reason="$(squeue --me | grep -oP '\(\K[^\)]+' | tail -n1)";
-    done;
-    while [[ $reason =~ .*"QOS".* ]]; do
-        printf_with_dots "Job can't be started (right now). Reason: $reason"
-    done;
-}
-
 args_precheck $#;  # check amount of arguments
-QOS_precheck "$1";
 job_name="$1"
 jupyter_file="$MYBASEDIR/management_dir_$job_name/jupyter.txt"
 ip="$(fetch_ip $job_name)";
@@ -196,3 +176,6 @@ ${ORANGE}Jupyter notebook${NC} server for \"$1\" is running at:
 $jupyter_notebook_link
 \n"
 exit 0;
+
+
+# TODO: if the management_dir exists, this script should work. QOS checks should happen in submit, not here
