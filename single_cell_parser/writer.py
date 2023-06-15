@@ -1,4 +1,5 @@
 from model_data_base.mdbopen import mdbopen
+import os
 '''
 Created on Mar 8, 2012
 
@@ -374,6 +375,18 @@ def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoin
     of entire simulation run. Recorded quantities are passed
     in tuple traces with strings and recorded in Vectors
     attached to Sections of cell
+
+    Typical use case:
+    I.scp.writer.write_cell_simulation('/output/directory',
+                            cell = cell,
+                            traces = ['Vm'],
+                            tVec = cell.tVec,
+                            step_frames = 1,
+                            selected_index=[selected_index],
+                            allPoints = True)
+    Also make sure to have created the cell with allPoints = True.
+
+
     TODO: Performs interpolation if nseg != nrOfPts for a Section
     '''
     if fname is None or cell is None or traces is None or tVec is None:
@@ -392,6 +405,9 @@ def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoin
             totalNrPts += sec.nseg
         else:
             totalNrPts += sec.nrOfPts
+
+    if not os.path.exists(os.path.dirname(fname)):
+        os.makedirs(os.path.dirname(fname))
     
     header = "# AmiraMesh 3D ASCII 2.0" + "\n"
     header += "# This SpatialGraph file was created by the Neuron Registration Tool NeuroMap " + "\n"

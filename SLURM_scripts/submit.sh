@@ -3,12 +3,12 @@
 # Default options
 nodes="1"
 partition="GPU"
-cores="48"
-mem="0"
+cores="24"
+mem="192000"
 memstr="max"
 time="1-0:00"
 tpn=""
-gres="4"  # default for GPU jobs
+gres="2"  # default for GPU jobs
 qosline=""  # not set yet
 cuda=$'\n#module load cuda'  # If working on a GPU partition: load cuda with single hashtag, idk why?
 interactive="0"
@@ -90,6 +90,32 @@ function args_precheck {
 }
 
 #######################################
+# Given a string, continuously prints the string with an 
+# updated "..." icon
+# Arguments:
+#   1. A string
+#######################################
+# Little spinning icon
+dot[0]="   "
+dot[1]=".  "
+dot[2]=".. "
+dot[3]="..."
+function printf_with_dots {
+    local string=$1
+    local width="$(tput cols)"
+    local string_length=${#string}
+    local padding=$(($width - $string_length - 4))  # to clean out previous long strings
+    for i in "${dot[@]}"
+    do
+        # \r removes previous line
+        # \b$i is the ... icon
+        # >&2 writes to stdout
+        printf "\r$1\b$i%*s" "$padding">&2
+        sleep 0.3
+    done
+}
+
+#######################################
 # Checks if a job is already running with same name
 # Arguments:
 #   1: The name of the job
@@ -100,6 +126,38 @@ function check_name {
       echo "A job with this name is already running. Requested resources will be appended to job \"$1\""
     fi
     return 0
+}
+
+#######################################
+# Checks for QOS errors
+# Arguments:
+#   1: The ID of the job
+#######################################
+function QOS_precheck {
+    local width="$(tput cols)"
+
+    while [[ $(squeue --me | grep $1 ) == "" ]]; do
+        printf_with_dots "Waiting for job $1 to be submitted "
+    done;
+    # grep for ID, then grep for something inbetween brackets (the QOS reason)
+    reason="$(squeue --me | grep $1 | grep -oP '\(\K[^\)]+' | tail -n1)"
+    printf $reason
+    while [[ $reason == "None" ]]; do
+        printf_with_dots "Waiting for job \"$1\" to be submitted "
+        reason="$(squeue --me | grep -oP '\(\K[^\)]+' | tail -n1)";
+    done;
+    if [[ "$reason" =~ .*"QOS".* ]]; then  # reason has QOS in the name: something went wrong
+        local string="Job can't be started (right now). Reason: $reason"
+        local string_length=${#string}
+        local padding=$(($width - $string_length))  # to clean out previous long strings
+        printf "\r$string%*s" "$padding";
+        exit 1;
+    else
+      local string="Job $1 submitted succesfully"
+      local string_length=${#string}
+      local padding=$(($width - $string_length))  # to clean out previous long strings
+      printf "\r$string%*s" "$padding";
+    fi;
 }
 
 args_precheck $# $1;
@@ -211,20 +269,36 @@ output=$(sbatch <<EoF
 $tpn
 unset XDG_RUNTIME_DIR
 unset DISPLAY
+module load ffmpeg
 export SLURM_CPU_BIND=none
 ulimit -Sn "\$(ulimit -Hn)"
 srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA.py \$MYBASEDIR/management_dir_$name $interactive
 EoF
 )
-echo $output
-printf "Use squeue to check its running status\n"
-printf '%0.s-' $(seq 1 $width)  # fill width with "-" char
-echo ""
-if [ $interactive == "1" ]; then
-  # fetch working directory of current script
-  __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  # also run jupyter_link to fetch the link where the jupyter server is running
-  bash ${__dir}/jupyter_link.sh $name
+
+if [[ $output == "" ]]; then
+  # If a job can not be started due to an sbatch error (unavailable node configuration),
+  # then sbatch will print an error itself to stdout
+  # and the command output will be empty
+  exit 1;
 else
-  printf "Batch job: no jupyter server will be launched.\n"
+  # sbatch does not throw an error, but some errors might still appear
+  id=$(echo $output | tr -d -c 0-9)
+  # check for QOS errors
+  QOS_precheck $id  # the job ID
+
+  # No QOS errors, continue setting up management dir, and jupyter servers
+  printf '%0.s-' $(seq 1 $width)  # fill width with "-" char
+  echo ""
+  # setup jupyter server if it is an interactive job
+  if [ $interactive == "1" ]; then
+    # fetch working directory of current script
+    __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    # also run jupyter_link to fetch the link where the jupyter server is running
+    bash ${__dir}/jupyter_link.sh $name
+  # don't setup jupyter server if it is not an interactive job
+  else
+    printf "Batch job: no jupyter server will be launched.\n"
+  fi
 fi
+

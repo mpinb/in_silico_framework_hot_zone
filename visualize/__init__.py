@@ -1,18 +1,13 @@
-#  
-# from os.path import dirname, basename, isfile
-# import glob
-# modules = glob.glob(dirname(__file__)+"/*.py")
-# print [basename(f)[:-3] for f in modules if isfile(f)]
-# #__all__ = [basename(f)[:-3] for f in modules if isfile(f)]
+"""
+This init file imports all the important classes from this directory. This way, each submodule in this directory can focus on a single task, and this __init__ file then
+serves as an easy importable module in Interface.
 
-#from average_std import average_std
-#from  histogram import histogram
-#from manylines import manylines
-#from rasterplot import rasterplot
-#from spaciotemporal_heatmap import pixels2figure as spaciotemporal_heatmap
+Authors: Arco Bast, Maria Royo, Bjorge Meulemeester
+"""
 
-
-# from os.path import dirname, basename, isfile
-# import glob
-# modules = glob.glob(dirname(__file__)+"/*.py")
-# __all__ = [basename(f)[:-3] for f in modules if isfile(f)]
+from .cell_morphology_visualizer import CellMorphologyVisualizer
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.axes import Axes
+import numpy as np

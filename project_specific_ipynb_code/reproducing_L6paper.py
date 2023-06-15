@@ -1371,6 +1371,7 @@ def combine_bins(bins_list):
     for i in bins_list[0].index:
         bins_values = I.np.mean([b[i][1] for b in bins_list], axis = 0)
         bins_values_std = I.np.std([b[i][1] for b in bins_list], axis = 0)
+        b = bins_list[0]
         bins_out.append((b[0][0], bins_values))
         bins_std_out.append((b[0][0], bins_values_std))        
     return I.pd.Series(bins_out, index = bins_list[0].index), \
@@ -1382,19 +1383,23 @@ def spatial_synapse_activation_data(sa,
                                     max_time = 245+700,
                                     spatial_bin_size = 50,
                                     client = None):
-    ds = sa.to_delayed()
+    ds = sa.to_delayed() # this assumes that we have one partition per simulation trial, but if the mdb is optimized, this is not the case
     
     @I.dask.delayed
-    def _helper(sa_pd):
-        bins = sa_pd.groupby(celltype_group_fun(sa_pd))\
-            .apply(lambda x: I.spatial_binning(x, 
-                                                min_time = min_time, 
-                                                max_time = max_time,
-                                                spatial_bin_size = spatial_bin_size))
-        return bins
+    def _helper(sa_pd_all):
+        bins_list = []
+        for name, sa_pd in sa_pd_all.groupby(sa_pd_all.index):
+            bins = sa_pd.groupby(celltype_group_fun(sa_pd))\
+                .apply(lambda x: I.spatial_binning(x, 
+                                                    min_time = min_time, 
+                                                    max_time = max_time,
+                                                    spatial_bin_size = spatial_bin_size))
+            bins_list.append(bins)
+        return bins_list
     ds = [_helper(d) for d in ds]
     futures = client.compute(ds)
     bins_list = client.gather(futures)
+    bins_list = [x for x in bins_list for x in x]
     return combine_bins(bins_list)
 
 def fig2x_active_synapses_by_soma_distance(sa, 
@@ -1413,12 +1418,15 @@ def fig2x_active_synapses_by_soma_distance(sa,
                 colormap = colormap, 
                 fig = ax)
     I.plt.xlim([min(spatial_bin_size),max(spatial_bin_size)])
+    
+    return bins_mean, bins_std
 
 # Panel D
 def combine_bins(bins_list):
     bins_out = []
     bins_std_out = []
     for i in bins_list[0].index:
+        b = bins_list[0]
         bins_values = I.np.mean([b[i][1] for b in bins_list], axis = 0)
         bins_values_std = I.np.std([b[i][1] for b in bins_list], axis = 0)
         bins_out.append((b[0][0], bins_values))

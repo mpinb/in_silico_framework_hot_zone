@@ -5,6 +5,9 @@
 trap "exit 1" SIGUSR1
 PROC=$$
 
+# If a job doesnt start, this string will change tot he reason as to why it doesnt
+QOS=""
+
 NC='\033[0m' # No Color
 ORANGE='\033[0;33m' # orange color
 
@@ -124,6 +127,7 @@ function fetch_jupyter_notebook_link {
 #######################################
 function fetch_ip {
     management_dir="$MYBASEDIR/management_dir_$1"
+    # management dir does not eexist yet. Assume it is still being created.
     while ! test -d "$management_dir"; do
         printf_with_dots "Creating \"management_dir_$1\" "
     done;
@@ -144,7 +148,7 @@ function fetch_ip {
 #######################################
 function format_jupyter_link {
     local link_suffix="$(echo $2 | grep -oP '(?<=:1111[23]/)'.* | head -1)"  # grep for anything after the port number
-    local port_number="$(cut -d':' -f3 <<<$2 | cut -c1-5)"  # cut the ip on colo, take third element, take first 4 chars of that
+    local port_number="$(cut -d':' -f3 <<<$2 | cut -c1-5)"  # cut the ip on colon take third element, take first 4 chars of that
     if [ -z "$link_suffix" ] ;  # no suffix is found: no token
     then
         printf "\nWarning: No token is set for this Jupyter server.\nVSCode will not be able to connect to this server, and notebooks running on this server can not be shared by link.\n">&2
@@ -152,6 +156,7 @@ function format_jupyter_link {
     local jupyter_link="http://$1:$port_number/$link_suffix"
     echo $jupyter_link
 }
+
 
 args_precheck $#;  # check amount of arguments
 job_name="$1"
@@ -171,3 +176,6 @@ ${ORANGE}Jupyter notebook${NC} server for \"$1\" is running at:
 $jupyter_notebook_link
 \n"
 exit 0;
+
+
+# TODO: if the management_dir exists, this script should work. QOS checks should happen in submit, not here

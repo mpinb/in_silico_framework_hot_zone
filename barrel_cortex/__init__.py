@@ -37,6 +37,8 @@ color_cellTypeColorMap_L6paper_with_INH = {'L2': '#119fe4', 'L34': '#0037fe', 'L
                     'L4sp': '#66b56d', 'L4ss': '#66b56d', 'L5st': '#ffec00', 'L5tt': 'orange',\
                     'L6cc': '#ef9f9e', 'L6ccinv': '#e30210', 'L6ct': '#9933fe', 'VPM': '#1d1d1a', 'INH':'#d8d8d8'}
 
+color_cellTypeColorMapHotZone = {'L23':'#27aae2', 'L4ss':'#9e1f64', 'L5tt':'#f7941d', 'L5st':'#1a75bb', 'L6CC':'#000000' , 'VPM': '#019444', 'INT': '#999999'}
+
 excitatory = ['L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34', 'L6ccinv', 'L5tt', 'Generic']
 inhibitory = ['SymLocal1', 'SymLocal2', 'SymLocal3', 'SymLocal4', 'SymLocal5', 'SymLocal6', 'L45Sym', 'L1', 'L45Peak', 'L56Trans', 'L23Trans', 'GenericINH', 'INH']
 
