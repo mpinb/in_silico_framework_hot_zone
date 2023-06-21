@@ -11,7 +11,7 @@ QOS=""
 # The user-defined port numbers of jupyter notebook/lab
 __LOCATION__="$(dirname "$(realpath "$0")")"
 NOTEBOOK_PORT=$(awk -F "=" '/jupyter_notebook/ {print $2}' $__LOCATION__/user_settings.ini)
-LAB_PORT=$(awk -F "=" '/jupyter_notebook/ {print $2}' $__LOCATION__/user_settings.ini)
+LAB_PORT=$(awk -F "=" '/jupyter_lab/ {print $2}' $__LOCATION__/user_settings.ini)
 DASK_PORT=$(awk -F "=" '/dask_client_2/ {print $2}' $__LOCATION__/user_settings.ini)
 
 NC='\033[0m' # No Color
