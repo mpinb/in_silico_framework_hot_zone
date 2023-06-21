@@ -10,6 +10,14 @@ import sys
 import yaml
 import socket
 import time
+import configparser
+
+### setting up user-defined port numbers ###
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+config = configparser.ConfigParser()
+config.read(os.path.join(__location__, 'user_settings.ini'))
+ports = config['PORT_NUMBERS']
 
 
 #################################
@@ -70,7 +78,11 @@ def setup_locking_server():
     #print command
     #os.system(command)
     #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
-    config = [{'config': {'hosts': 'somalogin02-hs:33333'}, 'type': 'zookeeper'}]
+    config = [{
+        'config': {
+            'hosts': 'somalogin02-hs:{}'.format(ports['locking_server'])
+            }, 
+        'type': 'zookeeper'}]
     # config = [{'type': 'file'}]  # uncomment this line if zookeeper is not running (i.e., you receive an error similar to 'No handlers could be found for logger "kazoo.client"')
     with open(get_locking_file_path(), 'w') as f:
         f.write(yaml.dump(config))
@@ -124,12 +136,12 @@ def setup_dask_scheduler(management_dir):
     print('-'*50)
     print('setting up dask-scheduler')
     sfile, sfile3 = _get_sfile(management_dir)
-    command = 'dask-scheduler --scheduler-file={} --port=28786 --bokeh-port=28787 --interface=ib0 &'
-    command = command.format(sfile)
+    command = 'dask-scheduler --scheduler-file={} --port={} --bokeh-port={} --interface=ib0 &'
+    command = command.format(sfile, ports['dask_client_2'], ports['dask_dashboard_2'])
     print(command)
     os.system(command)
-    command = '''bash -ci "source ~/.bashrc; source_3; dask-scheduler --scheduler-file={} --port=38786 --interface=ib0 --dashboard-address=:38787" &'''
-    command = command.format(sfile3)
+    command = '''bash -ci "source ~/.bashrc; source_3; dask-scheduler --scheduler-file={} --port={} --interface=ib0 --dashboard-address=:{}" &'''
+    command = command.format(sfile3, ports['dask_client_3'], ports['dask_dashboard_3'])
     print(command)
     os.system(command)
     print('-'*50)
@@ -159,7 +171,8 @@ def setup_jupyter_notebook(management_dir):
     print('-'*50)
     print('setting up jupyter notebook')
     check_locking_config() 
-    command = "cd notebooks; jupyter-notebook --ip='*' --no-browser --port=11112 "
+    command = "cd notebooks; jupyter-notebook --ip='*' --no-browser --port={} "
+    command = command.format(ports['jupyter_notebook'])
     print(command)
     # Redirect both stdout and stderr (&) to file
     os.system(command + "&>>{} &".format(os.path.join(management_dir,  "jupyter.txt")))    
@@ -168,7 +181,8 @@ def setup_jupyter_notebook(management_dir):
     #command = 'screen -S jupyterlab -dm bash -c "source ~/.bashrc; source_3; ' +     '''jupyter-lab --ip='*' --no-browser --port=11113"'''
     #command = '''bash -c "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113" &'''
     #command = '''(source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113) &'''
-    command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port=11113 --NotebookApp.allow_origin='*'" '''
+    command = '''bash -ci "source ~/.bashrc; source_3; jupyter-lab --ip='*' --no-browser --port={} --NotebookApp.allow_origin='*' --NotebookApp.ip='0.0.0.0'" '''
+    command = command.format(ports['jupyter_lab'])
     #command = "/axon/scratch/abast/anaconda3/bin/jupyter-lab --ip='*' --no-browser --port=11113"
     # append output to same file as notebook (ance the >> operator rather than >)
     os.system(command + "&>>{} &".format(os.path.join(management_dir,  "jupyter.txt")))
