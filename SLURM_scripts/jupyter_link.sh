@@ -10,8 +10,6 @@ QOS=""
 
 # The user-defined port numbers of jupyter notebook/lab
 __LOCATION__="$(dirname "$(realpath "$0")")"
-NOTEBOOK_PORT=$(awk -F "=" '/jupyter_notebook/ {print $2}' $__LOCATION__/user_settings.ini)
-LAB_PORT=$(awk -F "=" '/jupyter_lab/ {print $2}' $__LOCATION__/user_settings.ini)
 DASK_PORT=$(awk -F "=" '/dask_client_2/ {print $2}' $__LOCATION__/user_settings.ini)
 
 NC='\033[0m' # No Color
@@ -97,10 +95,10 @@ function fetch_jupyter_lab_link {
     while ! test -f $jupyter_file; do
         printf_with_dots "Setting up jupyter lab server "
     done;
-    local link="$(cat $jupyter_file | grep -Eo http://.*:$LAB_PORT/.* | head -1)"
+    local link="$(cat $jupyter_file | grep -Eo "LabApp] http://.*" | grep -Eo http://.* | head -1)"
     while [ -z "$link" ]; do  # wait until link is written and grep returns a match
         printf_with_dots "Launching Jupyter Lab server "
-        local link="$(cat $jupyter_file | grep -Eo http://.*:$LAB_PORT/.* | head -1)"
+        local link="$(cat $jupyter_file | grep -Eo "LabApp] http://.*" | grep -Eo http://.* | head -1)"
     done;
     echo "${link}"
 }
@@ -116,10 +114,10 @@ function fetch_jupyter_notebook_link {
     while ! test -f $jupyter_file; do
         printf_with_dots "Setting up Jupyter Notebook server "
     done;
-    local link="$(cat $jupyter_file | grep -Eo http://.*:$NOTEBOOK_PORT/.* | head -1)"
+    local link="$(cat $jupyter_file | grep -Eo "NotebookApp] http://.*" | grep -Eo http://.* | head -1)"
     while [ -z "$link" ]; do  # wait until link is written and grep returns a match
         printf_with_dots "Launching Jupyter Notebook server "
-        local link="$(cat $jupyter_file | grep -Eo http://.*:$NOTEBOOK_PORT/.* | head -1)"
+        local link="$(cat $jupyter_file | grep -Eo NotebookApp] http://.* | grep -Eo http://.* | head -1)"
     done;
     echo "${link}"
 }
