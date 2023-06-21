@@ -962,10 +962,10 @@ class CellMorphologyVisualizer:
                               [points.loc[i]['y'], points.loc[i+1]['y']],
                               [points.loc[i]['z'], points.loc[i+1]['z']], color='grey', lw=linewidth)
         
-        # ax.set_xticks([])
-        # ax.set_yticks([])
-        # ax.set_zticks([])
-        # plt.axis('off')
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_zticks([])
+        plt.axis('off')
         ax.set_xlabel('x')
         ax.set_ylabel('y')
         ax.azim = self.azim
