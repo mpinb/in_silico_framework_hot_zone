@@ -4,15 +4,17 @@
 nodes="1"
 partition="GPU"
 cores="24"
-mem="192000"
+mem="192000"  # half of max memory of a GPU node
 memstr="max"
 time="1-0:00"
 tpn=""
-gres="2"  # default for GPU jobs
+gres="2"  # default for GPU jobs (half of max)
 qosline=""  # not set yet
 cuda=$'\n#module load cuda'  # If working on a GPU partition: load cuda with single hashtag, idk why?
 interactive="0"
 gpu_interactive_as_gpu="0"
+notebook=""
+notebook_kwargs=""
 
 help() {
   cat <<EOF
@@ -71,6 +73,12 @@ help() {
       Default:
         $gres for CPU jobs and non-interactive GPU jobs
         4 for interactive GPU jobs
+
+    -b <val>
+      Run a notebook
+      Pass the name of a notebook to submit it as a batch job
+      Default:
+        None
 EOF
 }
 
@@ -163,7 +171,7 @@ function QOS_precheck {
 args_precheck $# $1;
 
 # Parse options
-while getopts "hN:n:m:t:ciIp:T:r:A" OPT;
+while getopts "hN:n:m:t:ciIp:T:r:Ab:" OPT;
 do
   case "$OPT" in
     h) usage
@@ -179,6 +187,7 @@ do
     T) tpn=${OPTARG};;
     r) gres=${OPTARG};;
     A) partition="GPU-a100";;  # appendix to start the correct python file
+    b) notebook=${OPTARG};;
     \?) # incorrect option
       echo "Error: Invalid option"
       exit 1;;
@@ -188,8 +197,7 @@ shift $(( OPTIND - 1 ))  # shift the option index to point to the first non-opti
 name=$1
 shift;
 
-if [ -z "$name" ]
-then
+if [ -z "$name" ]; then
   echo "Warning: no jobname was passed. Job will start without a name."
 fi
 check_name $name
@@ -239,6 +247,25 @@ if [ $gpu_interactive_as_gpu == 1 ]; then
 fi
 
 
+################### Normal submission (batch or interactive job) ###################
+run_str="srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/setup_SLURM.py \$MYBASEDIR/management_dir_$name"
+if [ $interactive == "1" ]; then
+  run_str=$run_str" --launch_jupyter_server"
+fi
+
+################### Submitting a notebook: adapt the run_str ###################
+if [ ! -z $notebook ]; then
+  if [ $interactive == 1 ]; then
+    echo "Please submit notebooks as a batch job, not interactive."
+    echo "Beware that the default submit options is interactive."
+    echo "You can e.g. manually set the partition to GPU/CPU with the -p flag"
+    exit 1
+  fi
+  run_str=$run_str" --notebook_name $notebook"
+fi
+
+# TODO: hard thing is to get SLURM to run two tasks and distribute resources accordingly. Maybe it's easier to implement nbrun in setup_SLURM and consider it 1 task?
+
 ################### Print out job info ###################
 width="$(tput cols)"
 printf '%0.s-' $(seq 1 $width)  # fill width with "-" char
@@ -260,8 +287,8 @@ output=$(sbatch <<EoF
 #SBATCH --job-name=$name
 #SBATCH -p $partition # partition (queue)
 #SBATCH -N $nodes # number of nodes
-#SBATCH -n $cores # number of cores
-#SBATCH --mem $mem # memory pool for all cores
+#SBATCH -n $cores # number of tasks
+#SBATCH --mem $mem # memory pool for all tasks
 #SBATCH -t $time # time (D-HH:MM)
 #SBATCH -o out.slurm.%N.%j.slurm # STDOUT
 #SBATCH -e err.slurm.%N.%j.slurm # STDERR
@@ -272,7 +299,7 @@ unset DISPLAY
 module load ffmpeg
 export SLURM_CPU_BIND=none
 ulimit -Sn "\$(ulimit -Hn)"
-srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA.py \$MYBASEDIR/management_dir_$name $interactive
+$run_str
 EoF
 )
 

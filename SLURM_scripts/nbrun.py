@@ -14,6 +14,8 @@ import time
 from IPython.display import display, FileLink
 import nbformat
 from nbconvert.preprocessors import ExecutePreprocessor
+import argparse
+import random
 
 
 def dict_to_code(mapping):
@@ -33,6 +35,7 @@ def dict_to_code(mapping):
     lines = ("{} = {}".format(key, repr(value))
              for key, value in list(mapping.items()))
     return '\n'.join(lines)
+
 
 def run_notebook(notebook_name, nb_suffix='-out', out_path='.', nb_kwargs=None,
                  insert_pos=1, timeout=3600, execute_kwargs=None):
@@ -65,6 +68,9 @@ def run_notebook(notebook_name, nb_suffix='-out', out_path='.', nb_kwargs=None,
             `ExecutePreprocessor`.
         out_path (string): folder where to save the output notebook.
     """
+
+    print("[nbrun.py]: Running notebook: {}".format(notebook_name))
+
     timestamp_cell = "**Executed:** %s\n\n**Duration:** %d seconds."
     if nb_kwargs is not None:
         header = '# Cell inserted during automated execution.'
@@ -80,7 +86,7 @@ def run_notebook(notebook_name, nb_suffix='-out', out_path='.', nb_kwargs=None,
         execute_kwargs = {}
     ep = ExecutePreprocessor(timeout=timeout, **execute_kwargs)
     nb = nbformat.read(nb_name_input, as_version=4)
-    if len(nb_kwargs) > 0:
+    if nb_kwargs is not None and len(nb_kwargs) > 0:
         nb['cells'].insert(1, nbformat.v4.new_code_cell(code_cell))
 
     start_time = time.time()
@@ -102,3 +108,19 @@ def run_notebook(notebook_name, nb_suffix='-out', out_path='.', nb_kwargs=None,
         # Save the notebook even when it raises an error
         nbformat.write(nb, nb_name_output)
         display(FileLink(nb_name_output))
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('notebook_name')
+    parser.add_argument("--nb_kwargs", dest="nb_kwargs_from_cline", action=StoreDictKeyPair, metavar="KEY1=VAL1,KEY2=VAL2...", nargs='?', const=None)
+    suff = random.choice([1, 2, 3, 4, 5, 6, 7, 8,9 ,10, 11, 12, 13, 14, 15, 16, 17, 18])
+    parser.add_argument("--nb_suffix", nargs='?', const="-out", default=suff)
+
+    args = parser.parse_args()
+
+    print("running notebook {}".format(args.notebook_name))
+    print(args.nb_suffix)
+
+    run_notebook(notebook_name=args.notebook_name, nb_kwargs=args.nb_kwargs_from_cline, nb_suffix=args.nb_suffix)
