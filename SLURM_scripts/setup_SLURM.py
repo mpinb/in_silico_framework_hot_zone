@@ -24,6 +24,7 @@ from setup_jupyter_server import setup_jupyter_server
 from contextlib import contextmanager
 import argparse
 from nbrun import run_notebook
+from socket import gethostbyname, gethostname
 
 
 class StoreDictKeyPair(argparse.Action):
@@ -87,7 +88,7 @@ def read_user_port_numbers():
     ports = config['PORT_NUMBERS']
     return ports
 
-def main(management_dir, launch_jupyter_server=True, notebook=None):
+def main(management_dir, launch_jupyter_server=True, notebook=None, nb_kwargs=None):
     if os.path.exists(management_dir):
         try:    
             os.makedirs(management_dir)
@@ -98,21 +99,24 @@ def main(management_dir, launch_jupyter_server=True, notebook=None):
 
     if PROCESS_NUMBER == 0:
         setup_locking_server(management_dir, PORTS)
-        setup_dask_scheduler(management_dir, PORTS)
+        setup_dask_scheduler(management_dir, PORTS)  # this process creates scheduler.json and scheduler3.json
         if launch_jupyter_server:
             setup_jupyter_server(management_dir, PORTS)
+        # Set the IP adress of whatever node you got assigned as a environment variable
+        ip = gethostbyname(gethostname())  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
+        os.environ['IP_MAIN'] = ip
+        os.environ['IP_INFINIBAND'] = ip.replace('100', '102')  # a bit hackish, but it works
         
     setup_locking_config(management_dir)
     setup_dask_workers(management_dir)
 
     if notebook is not None and PROCESS_NUMBER == 0:
-        run_notebook(notebook)
+        run_notebook(notebook, nb_kwargs=nb_kwargs)
         exit(0)  # quit SLURM when notebook has finished running
     else:
         time.sleep(60*60*24*365)
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser()
     parser.add_argument('management_dir')  # non-optional positional argument
     # parser.add_argument("--nb_kwargs", dest="nb_kwargs_from_cline", action=StoreDictKeyPair, metavar="KEY1=VAL1,KEY2=VAL2...", nargs='?', const=None)
@@ -128,4 +132,7 @@ if __name__ == "__main__":
         print("Launching Jupyter server: {}".format(LAUNCH_JUPYTER_SERVER))
     print('using management dir {}'.format(MANAGEMENT_DIR))
 
-    main(MANAGEMENT_DIR, LAUNCH_JUPYTER_SERVER, notebook=args.notebook_name)
+    main(MANAGEMENT_DIR, LAUNCH_JUPYTER_SERVER,
+         notebook=args.notebook_name, 
+         #nb_kwargs=args.nb_kwargs
+         )

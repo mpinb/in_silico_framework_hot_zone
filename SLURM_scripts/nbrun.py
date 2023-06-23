@@ -97,7 +97,7 @@ def run_notebook(notebook_name, nb_suffix='-out', out_path='.', nb_kwargs=None,
         # Execution failed, print a message then raise.
         msg = 'Error executing the notebook "%s".\n\n' % notebook_name
         msg += 'See notebook "%s" for the traceback.' % nb_name_output
-        print(msg)
+        print('[nbrun.py]: '+msg)
         raise
     else:
         # On successful execution, add timestamping cell
@@ -111,16 +111,10 @@ def run_notebook(notebook_name, nb_suffix='-out', out_path='.', nb_kwargs=None,
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser()
     parser.add_argument('notebook_name')
-    parser.add_argument("--nb_kwargs", dest="nb_kwargs_from_cline", action=StoreDictKeyPair, metavar="KEY1=VAL1,KEY2=VAL2...", nargs='?', const=None)
-    suff = random.choice([1, 2, 3, 4, 5, 6, 7, 8,9 ,10, 11, 12, 13, 14, 15, 16, 17, 18])
-    parser.add_argument("--nb_suffix", nargs='?', const="-out", default=suff)
+    parser.add_argument("--nb_suffix", nargs='?', const="-out", default="-out")
 
     args = parser.parse_args()
-
-    print("running notebook {}".format(args.notebook_name))
-    print(args.nb_suffix)
 
     run_notebook(notebook_name=args.notebook_name, nb_kwargs=args.nb_kwargs_from_cline, nb_suffix=args.nb_suffix)
