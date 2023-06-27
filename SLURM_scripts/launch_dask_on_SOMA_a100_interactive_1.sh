@@ -3,14 +3,13 @@
 #SBATCH -N 1 # number of nodes
 #SBATCH -n 32 # number of cores
 #SBATCH --mem 0 # memory pool for all cores
-#SBATCH -t 5-0:00 # time (D-HH:MM)
+#SBATCH -t infinite # time (D-HH:MM)
 #SBATCH -o out.slurm.%N.%j.slurm # STDOUT
 #SBATCH -e err.slurm.%N.%j.slurm # STDERR
 ##SBATCH --ntasks-per-node=20
 #SBATCH --gres=gpu:4
 #SBATCH --qos GPU-a100
 #module load cuda
-module load ffmpeg
 unset XDG_RUNTIME_DIR
 unset DISPLAY
 export SLURM_CPU_BIND=none
