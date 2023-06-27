@@ -80,7 +80,8 @@ class Tests(unittest.TestCase):
         dirPrefix = tempfile.mkdtemp()
         try:
             dummy = simrun2.run_new_simulations.run_new_simulations(cellParamName, networkName, dirPrefix=dirPrefix, nSweeps=1, nprocs=1, tStop=345, silent=True)
-            dummy = dummy.compute(get = dask.get)
+            # dummy is a list of delayeds
+            dummy = I.dask.compute(*dummy)
         except:
             raise
         finally:
