@@ -49,7 +49,7 @@ class Tests(unittest.TestCase):
         db = self.db
         #plot figure and convert it to PixelObject
         import matplotlib.pyplot as plt
-        from model_data_base.plotfunctions._figure_array_converter import PixelObject
+        from visualize._figure_array_converter import PixelObject
         fig = plt.figure()
         fig.add_subplot(111).plot([1,5,3,4])
         po = PixelObject([0, 10, 0, 10], fig = fig)

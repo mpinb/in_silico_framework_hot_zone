@@ -18,12 +18,12 @@ import os
 import sys
 import time
 import configparser
-from setup_locking_server import setup_locking_server, setup_locking_config
-from setup_dask_workers import setup_dask_scheduler, setup_dask_workers
-from setup_jupyter_server import setup_jupyter_server
+from SLURM_scripts.setup_locking_server import setup_locking_server, setup_locking_config
+from SLURM_scripts.setup_dask_workers import setup_dask_scheduler, setup_dask_workers
+from SLURM_scripts.setup_jupyter_server import setup_jupyter_server
 from contextlib import contextmanager
 import argparse
-from nbrun import run_notebook
+from SLURM_scripts.nbrun import run_notebook
 from socket import gethostbyname, gethostname
 
 
@@ -103,9 +103,9 @@ def main(management_dir, launch_jupyter_server=True, notebook=None, nb_kwargs=No
         if launch_jupyter_server:
             setup_jupyter_server(management_dir, PORTS)
         # Set the IP adress of whatever node you got assigned as a environment variable
-        ip = gethostbyname(gethostname())  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
-        os.environ['IP_MAIN'] = ip
-        os.environ['IP_INFINIBAND'] = ip.replace('100', '102')  # a bit hackish, but it works
+    ip = gethostbyname(gethostname())  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
+    os.environ['IP_MAIN'] = ip
+    os.environ['IP_INFINIBAND'] = ip.replace('100', '102')  # a bit hackish, but it works
         
     setup_locking_config(management_dir)
     setup_dask_workers(management_dir)

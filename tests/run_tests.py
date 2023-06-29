@@ -69,7 +69,7 @@ run = '.'  # this just runs everything
 """
 run = 'test_model_data_base.analyze.spaciotemporal_binning_test'
 run = 'test_model_data_base.IO.LoaderDumper.dumpers_real_data_test'
-run = 'test_model_data_base.plotfunctions.manylines_test'
+run = 'test_visualize.manylines_test'
 run = 'test_model_data_base.utils_test'
 run = 'test_model_data_base.analyze.temporal_binning_test'
 run = 'test_biophysics_fitting.optimizer_test'
