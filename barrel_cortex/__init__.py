@@ -139,7 +139,7 @@ def construct_pt3add(values):
     values = tuple(values)
     return "{pt3dadd(%.6f, %.6f, %.6f, %.6f)}\n" % values
 
-def extract_pt3add(line, selfcheck = True):
+def extract_pt3add(line, selfcheck = False):
     line_dummy = line.replace('(', ' ').replace(')', ' ').replace(',', ' ').split()
     values = [float(s) for s in line_dummy if convertible_to_float(s)]
     if selfcheck:
@@ -224,7 +224,7 @@ def test_move_hoc_absolute():
         move_hoc_absolute(hocpath, 0,0,0, outpath = outpath)
         np.testing.assert_array_almost_equal(get_soma_centroid(outpath), [0,0,0])
 
-def move_hoc_to_hoc(hoc_in, hoc_reference, outpath = None):
+def move_hoc_to_hoc(hoc_in, hoc_reference, outpath = None, ):
     centroid_in = get_soma_centroid(hoc_in)
     centroid_reference = get_soma_centroid(hoc_reference)
     x,y,z = centroid_reference - centroid_in
@@ -422,3 +422,6 @@ def create_SuC(hocpath_C2, outdir):
 #with I.utils.mkdtemp() as d:
 #    create_SuC(hocpath, d)
 #    print I.os.listdir(d)
+
+
+import Interface as I
