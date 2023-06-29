@@ -523,7 +523,76 @@ class CurrentAnalysis:
             ax = fig.add_subplot(111)  
         for lv, name in enumerate(self.rangeVars):
             ax.plot(self.t, I.np.array(self.sec.recordVars[name][self.segID])*-1, label = name)
-            
+
+def unfold_dict(d):
+    out = {}
+    for k, v in six.iteritems(d):
+        if not isinstance(v, dict):
+            out[k]=v
+        else:
+            for kk, vv in six.iteritems(v):
+                out[k+'.'+kk] = vv
+    return out
+
+def get_values_at_timepoint(tVec, value_dict,t):
+    range_vars = ['SK_E2.ik','Im.ik','Ca_LVAst.ica','SKv3_1.ik','Ca_HVA.ica','Ih.ihcn','NaTa_t.ina']
+    i = I.np.argmin(I.np.abs(tVec-t))
+    return {k:v[i] for k,v in six.iteritems(value_dict) if k in range_vars}
+
+colormap = {'NaTa_t.ina':'red',
+            'Ca_HVA.ica':'dodgerblue',
+            'Ca_LVAst.ica':'lightblue',
+            'SKv3_1.ik':'lightgreen',
+            'SK_E2.ik':'darkgreen',
+            'Ih.ihcn': 'grey',
+            'Im.ik':'yellow'}
+
+def get_charge(ca, tmin = 295, tmax = 350):
+    t = I.np.arange(0,tmax,0.025)
+    v = I.np.interp(t, ca.t, ca.depolarizing_currents_sum) # [select]
+    select = (t > tmin) & (t < tmax)
+    v2 = I.np.interp(t, ca.t, ca.hyperpolarizing_currents_sum) # [select]
+    return I.np.abs(v[select]).sum()*0.025 + I.np.abs(v2[select]).sum()*0.025
+
+def get_charges(ca, tmin = 295, tmax = 350):
+    t = I.np.arange(0,tmax,0.025)
+    v = ca.depolarizing_currents + ca.hyperpolarizing_currents
+    vs = {k: v[lv,:] for lv, k in enumerate(ca.rangeVars)}
+    vs = {k: I.np.abs(I.np.interp(t, ca.t, v)) for k,v in six.iteritems(vs)}
+    select = (t > tmin) & (t < tmax)
+    vs = {k: v[select].sum()*0.025 for k,v in six.iteritems(vs)}
+    return vs
+
+def evaluate_currents(voltage_traces_dict):
+    vt = voltage_traces_dict
+    range_vars = ['SK_E2.ik','Im.ik','Ca_LVAst.ica','SKv3_1.ik','Ca_HVA.ica','Ih.ihcn','NaTa_t.ina']
+    out_ = {}
+    keys = vt['bAP.range_vars'].keys() # recording sites, also includes proximal and distal site
+    # rename proximal and distal site, which is indicated by the numerical value of its soma distance to 'prox' and 'dist'
+    min_ = min([k for k in keys if I.utils.convertible_to_int(k)]) 
+    max_ = max([k for k in keys if I.utils.convertible_to_int(k)])
+    dict_ = {min_:'prox', max_:'dist', 'bifurcation': 'bifurcation', 'Soma':'Soma', 'AIS':'AIS'}
+    keys_new = [dict_[k] for k in keys]
+    # update names in dictionary accordingly
+    vt_new = {kk: {kn: vt[kk][k] for kn, k in zip(keys_new, keys)} for kk in ['bAP.range_vars', 'BAC.range_vars']}
+    # save densities of mechanisms at respective location
+    out_['constants_bifurcation'] = vt_new['BAC.range_vars']['bifurcation']['constants'].item()
+    out_['constants_prox'] = vt_new['BAC.range_vars']['prox']['constants'].item()
+    out_['constants_dist'] = vt_new['BAC.range_vars']['dist']['constants'].item()
+    # save currents at respective location
+    for stim in ['bAP.range_vars', 'BAC.range_vars']:
+        prefix = stim.split('.')[0]
+        tVec = vt[prefix+'.'+'hay_measure']['tVec']
+        for k in keys_new:
+            out_[prefix + '_' + k + '_current_550ms'] = get_values_at_timepoint(tVec, vt_new[stim][k], 490)
+            out_[prefix + '_' + k + '_current_250ms'] = get_values_at_timepoint(tVec, vt_new[stim][k], 250)
+            ca = CurrentAnalysis(vt_new[stim][k], 
+                 tVec = tVec, 
+                 rangeVars = range_vars,
+                 colormap = colormap)
+            out_[prefix + '_' + k + '_charges'] = get_charges(ca)
+            out_[prefix + '_' + k + '_charge'] = get_charge(ca)
+    return unfold_dict(out_)
 ######################################
 # change simulator to additionally report apical dendrite currents
 ######################################
