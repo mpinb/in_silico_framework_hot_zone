@@ -103,6 +103,7 @@ def main(management_dir, launch_jupyter_server=True, notebook=None, nb_kwargs=No
         if launch_jupyter_server:
             setup_jupyter_server(management_dir, PORTS)
         # Set the IP adress of whatever node you got assigned as a environment variable
+    # TODO: why doesn't this work? It does not seem to be added to the environment variables
     ip = gethostbyname(gethostname())  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
     os.environ['IP_MAIN'] = ip
     os.environ['IP_INFINIBAND'] = ip.replace('100', '102')  # a bit hackish, but it works

@@ -217,15 +217,17 @@ def get_client():
         import distributed
         try:
             ip = os.environ['IP_INFINIBAND']
-            client = distributed.Client(ip+':'+client_port)
-            return client
         except KeyError as e:
-            print(e)
-            print("ip is only available as a Interface global variable if you submitted your job with SLURM_scripts/submit.sh")
+            print("IP is not available as environment variable")
+            print("fetching ip...")
+            from socket import gethostbyname, gethostname
+            ip = gethostbyname(gethostname())  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
+            os.environ['IP_MAIN'] = ip
+            ip = ip.replace('100', '102')
+            os.environ['IP_INFINIBAND'] = ip.replace('100', '102')  # a bit hackish, but it works
     except ImportError as e:
         print(e)
-    ip=None
-    client = None
+    client = distributed.Client(ip+':'+client_port)
     return client
 
 
