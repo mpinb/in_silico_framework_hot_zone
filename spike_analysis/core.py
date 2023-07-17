@@ -227,8 +227,8 @@ def filter_spike_times(spike_times, spike_times_trough, creast_trough_interval =
         aligned_creasts = spike_times[(spike_times >= x-creast_trough_interval) & (spike_times < x)] # [y for y in spike_times if (y < x) and (y >= x-2)]
         aligned_creast_amplitude = spike_times_amplitude[(spike_times >= x-creast_trough_interval) & (spike_times < x)]
         # artifact detection to get rid of traces that depolarize far beyond typical AP height
-        if (spike_times_amplitude[(spike_times >= x-creast_trough_interval-5) & (spike_times < x)] > upper_creast_threshold).any():
-            continue
+        # if (spike_times_amplitude[(spike_times >= x-creast_trough_interval-5) & (spike_times < x)] > upper_creast_threshold).any():
+        #     continue
         if len(aligned_creasts) > 0:
             if mode == 'latest':
                 assert(aligned_creasts.max() == aligned_creasts[-1])
