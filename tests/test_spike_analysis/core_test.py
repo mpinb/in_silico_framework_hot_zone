@@ -5,10 +5,11 @@ import numpy as np
 import pandas as pd
 
 class _TestSpikeTimes:
-    def __init__(self, t, v, stim_times):
+    def __init__(self, t=[], v=[], stim_times=[], spike_times=[]):
         self.t = t
         self.v = v
         self.stim_times = stim_times
+        self.spike_times = spike_times
         self.t_start=0
         self.t_end=200
         
@@ -37,13 +38,15 @@ class Tests:
         np.testing.assert_almost_equal(v_res, [4]) 
             
     def test_filter_spike_times(self):
-        assert(filter_spike_times([],[]) == np.array([]), np.array([]))
-        assert(filter_spike_times([],[10]) == np.array([]))
-        assert(filter_spike_times([8],[10]) == np.array([8]))
-        assert(filter_spike_times([8],[]) == np.array([]))
-        assert(filter_spike_times([8,8.1, 8.2],[10]) == np.array([8.2]))
-        assert(filter_spike_times([8,8.1, 8.2],[10, 10.1]) == np.array([8.2, 8.2]))
-        assert(filter_spike_times([8,8.1, 8.2],[10, 10.1, 10.2]) == np.array([8.2, 8.2, 8.2]))
+        sta = np.array([1])
+        assert(filter_spike_times([],[], spike_times_amplitude=sta) == np.array([]), np.array([]))
+        assert(filter_spike_times([],[10], spike_times_amplitude=sta) == np.array([]), np.array([]))
+        assert(filter_spike_times([8],[10], spike_times_amplitude=sta) == np.array([8]), np.array([1]))
+        assert(filter_spike_times([8],[], spike_times_amplitude=sta) == np.array([]), np.array([]))
+        sta = np.array([1, 1, 1])
+        assert(filter_spike_times([8,8.1, 8.2],[10], spike_times_amplitude=sta) == np.array([8.2]), np.array(1))
+        assert(filter_spike_times([8,8.1, 8.2],[10, 10.1], spike_times_amplitude=sta) == np.array([8.2, 8.2]), np.array([1, 1]))
+        assert(filter_spike_times([8,8.1, 8.2],[10, 10.1, 10.2], spike_times_amplitude=sta) == np.array([8.2, 8.2, 8.2]), np.array([1, 1, 1]))
                 
     def test_filter_short_ISIs(self):
         spike_times = [0,1,2,3,4,5,6,7,8]
@@ -74,42 +77,42 @@ class Tests:
         I.np.testing.assert_almost_equal(v, strip_st(df).values)
         
     def test_SpikeDetectionCreastTrough_spike_detection(self):
-        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,0,1,-1,0,0,1,-.5,0,0,0], [])
+        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,0,1,-1,0,0,1,-.5,0,0,0])
         sd = SpikeDetectionCreastTrough(tst)
         sd.run_analysis()
         assert(sd.spike_times == [2.0, 6.0])
         
-        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,0,1,-1,0,0,1,-.5,0,0,0], [])
+        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,0,1,-1,0,0,1,-.5,0,0,0])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-.7, lim_creast=.7)
         sd.run_analysis()
         assert(sd.spike_times == [2.0])
         
-        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,0,1,-2,0,0,1,-1,0,0,0], [])
+        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,0,1,-2,0,0,1,-1,0,0,0])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=.7)
         sd.run_analysis()
         assert(sd.spike_times == [2.0, 6.0])
         
-        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,1,-2,0,0,1,-1,0,0,0], [])
+        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,1,-2,0,0,1,-1,0,0,0])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=.7)
         sd.run_analysis()
         assert(sd.spike_times == [2.0, 6.0])
         
-        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,-2,0,0,1,-1,0,0,0], [])
+        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,-2,0,0,1,-1,0,0,0])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=.7)
         sd.run_analysis()
         assert(sd.spike_times == [1.0, 6.0])
         
-        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,0,-2,0,1,-1,0,0,0], [])
+        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,0,-2,0,1,-1,0,0,0])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=.7)
         sd.run_analysis()
         assert(sd.spike_times == [6.0])
         
-        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,0,-2,0,1,-1,0,0,0], [])
+        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,0,-2,0,1,-1,0,0,0])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=1.1)
         sd.run_analysis()
         assert(sd.spike_times == [])
         
-        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,0,-2,0,1,-1,0,0,0], [])
+        tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,0,-2,0,1,-1,0,0,0])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=.5, max_creast_trough_interval=3)
         sd.run_analysis()
         assert(sd.spike_times == [1.0, 6.0])        
@@ -117,42 +120,42 @@ class Tests:
     def test_SpikeDetectionCreastTrough_lim_detection(self):
         v = []
         t = list(range(len(v)))
-        tst = _TestSpikeTimes(t,v, [])
+        tst = _TestSpikeTimes(t,v)
         sd = SpikeDetectionCreastTrough(tst, lim_trough='minimum', lim_creast='minimum', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .4)
         I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
         
         v = [0,.4,0]
         t = list(range(len(v)))
-        tst = _TestSpikeTimes(t,v, [])
+        tst = _TestSpikeTimes(t,v)
         sd = SpikeDetectionCreastTrough(tst, lim_trough='minimum', lim_creast='minimum', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .5)
         I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
         
         v = [0,.4,-.4]
         t = list(range(len(v)))
-        tst = _TestSpikeTimes(t,v, [])
+        tst = _TestSpikeTimes(t,v)
         sd = SpikeDetectionCreastTrough(tst, lim_trough='minimum', lim_creast='minimum', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .5)
         I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
         
         v = [0,.4,-.4,0.]
         t = list(range(len(v)))
-        tst = _TestSpikeTimes(t,v, [])
+        tst = _TestSpikeTimes(t,v)
         sd = SpikeDetectionCreastTrough(tst, lim_trough='minimum', lim_creast='minimum', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .5)
         I.np.testing.assert_almost_equal(sd.lim_trough, -.5)
         
         v = []
         t = list(range(len(v)))
-        tst = _TestSpikeTimes(t,v, [])
+        tst = _TestSpikeTimes(t,v)
         sd = SpikeDetectionCreastTrough(tst, lim_trough='zero', lim_creast='zero', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .4)
         I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
 
         v = [0,.4,-.4,0.]
         t = list(range(len(v)))
-        tst = _TestSpikeTimes(t,v, [])
+        tst = _TestSpikeTimes(t,v)
         sd = SpikeDetectionCreastTrough(tst, lim_trough='zero', lim_creast='zero', max_creast_trough_interval=3)
         I.np.testing.assert_almost_equal(sd.lim_creast, .5)
         I.np.testing.assert_almost_equal(sd.lim_trough, -.5)
@@ -166,44 +169,41 @@ class Tests:
         
     def test_event_analysis_ISIn(self):
         st = [-1,2,4,7,11]
+        tst = _TestSpikeTimes(spike_times=st)  # init test spike times object with just the spike_times attribute
+        stap = STAPlugin_ISIn()  # spike time analysis plugin
+        stap.setup(SpikeTimesAnalysis(tst))
         nan = np.NaN
         expected = I.pd.DataFrame({'ISI_1': {0: 3.0, 1: 2.0, 2: 3.0, 3: 4.0, 4: nan},
          'ISI_2': {0: 5.0, 1: 5.0, 2: 7.0, 3: nan, 4: nan},
          'ISI_3': {0: 8.0, 1: 9.0, 2: nan, 3: nan, 4: nan},
          'ISI_4': {0: 12.0, 1: nan, 2: nan, 3: nan, 4: nan},
          'event_time': {0: -1, 1: 2, 2: 4, 3: 7, 4: 11}})
-        pd.util.testing.assert_frame_equal(pd.DataFrame(expected), event_analysis_ISIn(st))
+        pd.util.testing.assert_frame_equal(pd.DataFrame(expected), stap.event_analysis_ISIn(st))
         
     def test_event_analysis_bursts(self):
         nan = np.NaN
-        
-        st = []
-        expected = I.pd.DataFrame()
-        df = event_analysis_bursts(st)
-        I.pd.util.testing.assert_frame_equal(expected, df)
-        
-        st = [1]
-        expected = I.pd.DataFrame({'event_class': {0: 'singlet'}, 'event_time': {0: 1}})
-        df = event_analysis_bursts(st)
-        I.pd.util.testing.assert_frame_equal(expected, df)
-        
-        st = [1, 2]
-        expected = I.pd.DataFrame({'ISI_1': {0: 1}, 'event_class': {0: 'doublet'}, 'event_time': {0: 1}})
-        df = event_analysis_bursts(st)
-        I.pd.util.testing.assert_frame_equal(expected, df)
-        
-        st = [1, 2, 3]
-        expected = I.pd.DataFrame({'ISI_1': {0: 1},
-         'ISI_2': {0: 2},
-         'event_class': {0: 'triplet'},
-         'event_time': {0: 1}})
-        df = event_analysis_bursts(st)
-        I.pd.util.testing.assert_frame_equal(expected, df)
-        
-        st = [1, 2, 3, 4]
-        expected = I.pd.DataFrame({'ISI_1': {0: 1.0, 1: nan},
-         'ISI_2': {0: 2.0, 1: nan},
-         'event_class': {0: 'triplet', 1: 'singlet'},
-         'event_time': {0: 1, 1: 4}})
-        df = event_analysis_bursts(st)
-        I.pd.util.testing.assert_frame_equal(expected, df)      
+        spike_times = [[], [1], [1, 2], [1, 2, 3], [1, 2, 3, 4]]
+        expecteds = [
+            I.pd.DataFrame(),
+            I.pd.DataFrame({'event_class': {0: 'singlet'}, 'event_time': {0: 1}}),
+            I.pd.DataFrame({'ISI_1': {0: 1}, 'event_class': {0: 'doublet'}, 'event_time': {0: 1}}),
+            I.pd.DataFrame({'ISI_1': {0: 1},
+                'ISI_2': {0: 2},
+                'event_class': {0: 'triplet'},
+                'event_time': {0: 1}}
+                ),
+            I.pd.DataFrame({'ISI_1': {0: 1.0, 1: nan},
+                'ISI_2': {0: 2.0, 1: nan},
+                'event_class': {0: 'triplet', 1: 'singlet'},
+                'event_time': {0: 1, 1: 4}}
+                )
+        ]
+
+        for st, expected in zip(spike_times, expecteds):
+            tst = _TestSpikeTimes(spike_times=st)  # init test spike times object with just the spike_times attribute
+            stap = STAPlugin_bursts()  # spike time analysis plugin
+            stap.setup(SpikeTimesAnalysis(tst))
+            df = stap.event_analysis_bursts(st, event_maxtimes=stap.event_maxtimes, event_names=stap.event_names)
+            I.pd.util.testing.assert_frame_equal(expected, df, 
+            check_like=True,  # ignore order of columns with check_like
+            )  
