@@ -9,6 +9,8 @@ class _TestSpikeTimes:
         self.t = t
         self.v = v
         self.stim_times = stim_times
+        self.t_start=0
+        self.t_end=200
         
     def get_voltage_traces(self):
         return I.np.array(self.t), I.np.array(self.v)
@@ -35,13 +37,13 @@ class Tests:
         np.testing.assert_almost_equal(v_res, [4]) 
             
     def test_filter_spike_times(self):
-        assert(filter_spike_times([],[]) == [])
-        assert(filter_spike_times([],[10]) == [])
-        assert(filter_spike_times([8],[10]) == [8])
-        assert(filter_spike_times([8],[]) == [])
-        assert(filter_spike_times([8,8.1, 8.2],[10]) == [8.2])
-        assert(filter_spike_times([8,8.1, 8.2],[10, 10.1]) == [8.2, 8.2])
-        assert(filter_spike_times([8,8.1, 8.2],[10, 10.1, 10.2]) == [8.2, 8.2, 8.2])
+        assert(filter_spike_times([],[]) == np.array([]), np.array([]))
+        assert(filter_spike_times([],[10]) == np.array([]))
+        assert(filter_spike_times([8],[10]) == np.array([8]))
+        assert(filter_spike_times([8],[]) == np.array([]))
+        assert(filter_spike_times([8,8.1, 8.2],[10]) == np.array([8.2]))
+        assert(filter_spike_times([8,8.1, 8.2],[10, 10.1]) == np.array([8.2, 8.2]))
+        assert(filter_spike_times([8,8.1, 8.2],[10, 10.1, 10.2]) == np.array([8.2, 8.2, 8.2]))
                 
     def test_filter_short_ISIs(self):
         spike_times = [0,1,2,3,4,5,6,7,8]
@@ -75,42 +77,42 @@ class Tests:
         tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,0,1,-1,0,0,1,-.5,0,0,0], [])
         sd = SpikeDetectionCreastTrough(tst)
         sd.run_analysis()
-        assert(sd.st.to_dict() == {0: {0: 2.0}, 1: {0: 6.0}})
+        assert(sd.spike_times == [2.0, 6.0])
         
         tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,0,1,-1,0,0,1,-.5,0,0,0], [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-.7, lim_creast=.7)
         sd.run_analysis()
-        assert(sd.st.to_dict() == {0: {0: 2.0}})
+        assert(sd.spike_times == [2.0])
         
         tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,0,1,-2,0,0,1,-1,0,0,0], [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=.7)
         sd.run_analysis()
-        assert(sd.st.to_dict() == {0: {0: 2.0}, 1: {0: 6.0}})
+        assert(sd.spike_times == [2.0, 6.0])
         
         tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,1,-2,0,0,1,-1,0,0,0], [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=.7)
         sd.run_analysis()
-        assert(sd.st.to_dict() == {0: {0: 2.0}, 1: {0: 6.0}})
+        assert(sd.spike_times == [2.0, 6.0])
         
         tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,-2,0,0,1,-1,0,0,0], [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=.7)
         sd.run_analysis()
-        assert(sd.st.to_dict() == {0: {0: 1.0}, 1: {0: 6.0}})
+        assert(sd.spike_times == [1.0, 6.0])
         
         tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,0,-2,0,1,-1,0,0,0], [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=.7)
         sd.run_analysis()
-        assert(sd.st.to_dict() == {0: {0: 6.0}})
+        assert(sd.spike_times == [6.0])
         
         tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,0,-2,0,1,-1,0,0,0], [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=1.1)
         sd.run_analysis()
-        assert(sd.st.to_dict() == {})
+        assert(sd.spike_times == [])
         
         tst = _TestSpikeTimes([0,1,2,3,4,5,6,7,8,9,10], [0,1,0,0,-2,0,1,-1,0,0,0], [])
         sd = SpikeDetectionCreastTrough(tst, lim_trough=-1., lim_creast=.5, max_creast_trough_interval=3)
         sd.run_analysis()
-        assert(sd.st.to_dict() == {0: {0: 1.0}, 1: {0: 6.0}})        
+        assert(sd.spike_times == [1.0, 6.0])        
         
     def test_SpikeDetectionCreastTrough_lim_detection(self):
         v = []
