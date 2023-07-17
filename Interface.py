@@ -165,6 +165,7 @@ except ImportError:
 
 import single_cell_analyzer as sca
 import single_cell_parser as scp
+from single_cell_parser import network  # simrun3.synaptic_strength_fitting relies on this
 try:
     from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
 except ImportError:

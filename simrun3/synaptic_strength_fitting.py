@@ -6,7 +6,7 @@ Third: functions to analyze PSPs'''
 
 import warnings
 import Interface as I
-activate_functional_synapse = I.scp.network.activate_functional_synapse
+activate_functional_synapse = I.network.activate_functional_synapse
 from .utils import get_cellnumbers_from_confile, split_network_param_in_one_elem_dicts
 from .get_cell_with_network import get_cell_with_network
 from biophysics_fitting.hay_evaluation import objectives_BAC, objectives_step
