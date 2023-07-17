@@ -7,10 +7,10 @@ from .context import *
 from getting_started import getting_started_dir # path to getting started folder
 from single_cell_parser.serialize_cell import *
 from model_data_base.utils import silence_stdout
-from .. import setup_current_injection_experiment
+from tests import setup_current_injection_experiment
 
-class Tests(unittest.TestCase):
-    def setup_current_injection_experiment(self):
+class TestCellMorphologyVisualizer(unittest.TestCase):
+    def setUp(self):
         self.cell = setup_current_injection_experiment()
         self.cv = None
 
