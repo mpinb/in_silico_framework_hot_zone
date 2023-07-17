@@ -5,10 +5,7 @@ from visualize.histogram import *
 
 from model_data_base.analyze import temporal_binning
 
-class Tests(unittest.TestCase):
-        
-        
-    
+class TestHistogram(unittest.TestCase):
     def setUp(self):
         self.pdf = pd.DataFrame({'blabla': ['a', 1, 3], \
                                 '1': [1, 5, 10], \

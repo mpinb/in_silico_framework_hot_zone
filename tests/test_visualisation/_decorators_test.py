@@ -1,12 +1,12 @@
 import unittest
-from ..context import *
+from .context import *
 from visualize._decorators import *
 import pandas as pd
 import pandas.util.testing as pdt
 import dask.dataframe as dd
 from mock import MagicMock, call
 
-class Tests(unittest.TestCase):
+class TestDecorators(unittest.TestCase):
     def test_dask_to_pandas(self):
         def fun(*args, **kwargs):
             return args, kwargs
