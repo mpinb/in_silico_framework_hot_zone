@@ -12,7 +12,7 @@ import os
 
 
 
-class Tests(unittest.TestCase):          
+class TestRobertsFormats(unittest.TestCase):          
     def setUp(self):
         self.synapse_file_path = os.path.join(test_data_folder, \
                                               '20150815-1530_20240', \

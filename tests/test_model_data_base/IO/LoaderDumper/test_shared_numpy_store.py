@@ -45,7 +45,7 @@ def uninterruptible_task():
         
 
 
-class Tests(unittest.TestCase):
+class TestSharedNumpyStore(unittest.TestCase):
     def test_shared_array_functions(self):
         arr = np.array([1, 2, 3])
         buffer, shared_array = shared_array_from_numpy(arr, name=None)

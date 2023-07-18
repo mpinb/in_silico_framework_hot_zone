@@ -13,7 +13,7 @@ import mechanisms
 from .context import *
 
 
-class Tests(unittest.TestCase): 
+class TestSerializeCell(unittest.TestCase): 
     def setUp(self):
         cell_param = os.path.join(getting_started_dir, \
                             'biophysical_constraints', \

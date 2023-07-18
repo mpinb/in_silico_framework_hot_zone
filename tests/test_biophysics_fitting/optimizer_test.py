@@ -217,7 +217,7 @@ def get_features():
 #     return features
 
 
-class Tests(unittest.TestCase):       
+class TestOptimizer(unittest.TestCase):       
     def setUp(self):
         pass
 

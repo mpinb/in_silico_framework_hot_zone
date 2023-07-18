@@ -45,7 +45,7 @@ assert(os.path.exists(cellParamName))
 assert(os.path.exists(networkName))
 assert(os.path.exists(example_path))
 
-class Tests(unittest.TestCase):       
+class TestSimrun(unittest.TestCase):       
     def setUp(self):
         pass
 

@@ -17,7 +17,7 @@ PSPs = simrun3.synaptic_strength_fitting.PSPs
 #         res = I.dask.compute(*args, get = I.dask.get)
 #         return [FakeFuture(r) for r in res]
     
-class Tests(unittest.TestCase):       
+class TestSynapticStrengthFitting(unittest.TestCase):       
     def setUp(self):
         pass
 
@@ -35,7 +35,7 @@ class Tests(unittest.TestCase):
         indexes = [lv for lv, k in enumerate(psps._keys) if k[0] == 'VPM_C2']
         psps._delayeds = [psps._delayeds[index] for index in indexes]
         psps._keys = [psps._keys[index] for index in indexes]
-        c =I.distributed.client_object_duck_typed # c = FakeClient()
+        c = I.distributed.client_object_duck_typed # c = FakeClient()
         psps.run(c)
         optimal_g_pdf = psps.get_optimal_g(I.barrel_cortex.get_EPSP_measurement())
         gVPM = optimal_g_pdf.loc['VPM_C2']['optimal g']

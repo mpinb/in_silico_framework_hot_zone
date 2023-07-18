@@ -25,7 +25,7 @@ def get_test_Rm():
         Rm.fit([mdb])
     return Rm
 
-class Tests(unittest.TestCase): 
+class TestGetKernel(unittest.TestCase): 
     def test_statistical_ReducedLdaModel_inference(self): 
         '''compare model infered from test data to expectancy'''
         Rm = get_test_Rm()

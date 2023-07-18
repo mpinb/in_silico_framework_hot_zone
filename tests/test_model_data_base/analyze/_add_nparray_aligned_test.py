@@ -3,7 +3,7 @@ import numpy as np
 from ..context import *
 from model_data_base.analyze._add_nparray_aligned import *
 
-class Tests(unittest.TestCase):
+class TestAddNumpyArrayAligned(unittest.TestCase):
     def setUp(self):
         self.a = np.array([[1,2],[3,4]])
         self.b = np.array([[1,2,3],[3,4,5]])

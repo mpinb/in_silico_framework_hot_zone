@@ -5,7 +5,7 @@ from . import context
 
 from biophysics_fitting.parameters import param_selector, param_to_kwargs
 
-class Tests(unittest.TestCase):       
+class TestParameters(unittest.TestCase):       
     def setUp(self):
         pass
 
