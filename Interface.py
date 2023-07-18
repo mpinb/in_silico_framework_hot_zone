@@ -29,6 +29,7 @@ import pandas as pd
 import numpy as np
 import dask
 import dask.dataframe as dd
+import distributed
 import warnings
 import traceback
 import sys
@@ -215,19 +216,15 @@ def get_client():
     ports = get_user_port_numbers()
     client_port = ports['dask_client_3']
     try:
-        import distributed
-        try:
-            ip = os.environ['IP_INFINIBAND']
-        except KeyError as e:
-            print("IP is not available as environment variable")
-            print("fetching ip...")
-            from socket import gethostbyname, gethostname
-            ip = gethostbyname(gethostname())  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
-            os.environ['IP_MAIN'] = ip
-            ip = ip.replace('100', '102')
-            os.environ['IP_INFINIBAND'] = ip.replace('100', '102')  # a bit hackish, but it works
-    except ImportError as e:
-        print(e)
+        ip = os.environ['IP_INFINIBAND']
+    except KeyError as e:
+        print("IP is not available as environment variable")
+        print("fetching ip...")
+        from socket import gethostbyname, gethostname
+        ip = gethostbyname(gethostname())  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
+        os.environ['IP_MAIN'] = ip
+        ip = ip.replace('100', '102')
+        os.environ['IP_INFINIBAND'] = ip.replace('100', '102')  # a bit hackish, but it works
     client = distributed.Client(ip+':'+client_port)
     return client
 
