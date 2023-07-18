@@ -26,11 +26,10 @@ def dump(obj, savedir, rows_per_file = None):
     '''rows_per_file: automatically splits dataframe, such that rows_per_file rows of the df are
     saved in each file. This helps with large dataframes which otherwise would hit the 1GB limit of msgpack.'''
 #     obj.to_msgpack(os.path.join(savedir, 'pandas_to_msgpack'), compress = 'blosc')
-
+    import os
     if rows_per_file is not None:
         row = 0
         lv = 0
-        import os
         while True:
             current_obj = obj.iloc[row:row+rows_per_file]
             row += rows_per_file
