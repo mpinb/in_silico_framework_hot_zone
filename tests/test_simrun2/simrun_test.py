@@ -8,9 +8,7 @@ from pandas.util.testing import assert_frame_equal
 import dask
 import dask.dataframe as dd
 import neuron
-
 import Interface as I
-
 from . import decorators
 import unittest
 import numpy as np
@@ -45,76 +43,71 @@ assert(os.path.exists(cellParamName))
 assert(os.path.exists(networkName))
 assert(os.path.exists(example_path))
 
-class TestSimrun(unittest.TestCase):       
-    def setUp(self):
-        pass
+class TestSimrun():
 
-
-    @decorators.testlevel(1)    
-    def test_generate_synapse_activation_returns_filelist(self):
-        dirPrefix = tempfile.mkdtemp()
+    #@decorators.testlevel(1)    
+    def test_generate_synapse_activation_returns_filelist(self, tmpdir):
         try:
-            dummy = simrun2.generate_synapse_activations.generate_synapse_activations(cellParamName, networkName, dirPrefix=dirPrefix, nSweeps=1, nprocs=1, tStop=345, silent=True)
+            dummy = simrun2.generate_synapse_activations.generate_synapse_activations(cellParamName, networkName, dirPrefix=tmpdir.dirname, nSweeps=1, nprocs=1, tStop=345, silent=True)
             dummy = dummy.compute(get = dask.get)
         except:
             raise
         finally:
-            shutil.rmtree(dirPrefix)
-        self.assertIsInstance(dummy[0][0][0], str)        
+            shutil.rmtree(tmpdir)
+        assert isinstance(dummy[0][0][0], str)        
       
-    @decorators.testlevel(2)    
-    def test_run_existing_synapse_activation_returns_identifier_dataframe_anf_results_folder(self):        
-        dirPrefix = tempfile.mkdtemp()
+    #@decorators.testlevel(2)    
+    def test_run_existing_synapse_activation_returns_identifier_dataframe_and_results_folder(self, tmpdir):        
         try:
-            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
+            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
+                cellParamName, networkName, [example_path], dirPrefix=tmpdir.dirname, nprocs=1, tStop=345, silent=True
+                )
             dummy = dummy.compute(get = dask.get)
         except:
             raise
-        finally:
-            shutil.rmtree(dirPrefix)
-        self.assertIsInstance(dummy[0][0][0], pd.DataFrame)      
-        self.assertIsInstance(dummy[0][0][1], str)  
+        assert isinstance(dummy[0][0][0], pd.DataFrame)      
+        assert isinstance(dummy[0][0][1], str)
+
            
-    @decorators.testlevel(2)    
-    def test_run_new_simulations_returns_dirname(self):
-        dirPrefix = tempfile.mkdtemp()
+    #@decorators.testlevel(2)    
+    def test_run_new_simulations_returns_dirname(self, tmpdir):
         try:
-            dummy = simrun2.run_new_simulations.run_new_simulations(cellParamName, networkName, dirPrefix=dirPrefix, nSweeps=1, nprocs=1, tStop=345, silent=True)
+            dummy = simrun2.run_new_simulations.run_new_simulations(
+                cellParamName, networkName, dirPrefix=tmpdir.dirname, nSweeps=1, nprocs=1, tStop=345, silent=True
+                )
             # dummy is a list of delayeds
             dummy = I.dask.compute(*dummy)
         except:
             raise
-        finally:
-            shutil.rmtree(dirPrefix)
-        self.assertIsInstance(dummy[0][0], str)  
+        assert isinstance(dummy[0][0], str)  
           
-    @decorators.testlevel(2)              
-    def test_position_of_morphology_does_not_matter_after_network_mapping(self):  
+    #@decorators.testlevel(2)              
+    def test_position_of_morphology_does_not_matter_after_network_mapping(self, tmpdir):  
         try:
-            dirPrefix = tempfile.mkdtemp()
-            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
-            dummy = dummy.compute(get = dask.get)
+            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
+                cellParamName, networkName, [example_path], dirPrefix=tmpdir.dirname, nprocs=1, tStop=345, silent=True
+                )
+            dummy = dummy.compute(get=dask.get)
             cellParam = I.scp.build_parameters(cellParamName)
             cellParam.neuron.filename = os.path.join(parent, 'test_simrun2',\
                          'data', \
                          '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2_B1border.hoc')
-            cellParamName_other_position = os.path.join(dirPrefix, 'other_position.param')                
+            cellParamName_other_position = os.path.join(tmpdir / 'other_position.param')                
             cellParam.save(cellParamName_other_position)
-            dummy2 = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName_other_position, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
-            dummy2 = dummy2.compute(get = dask.get)
+            dummy2 = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName_other_position, networkName, [example_path], dirPrefix=tmpdir.dirname, nprocs=1, tStop=345, silent=True)
+            dummy2 = dummy2.compute(get=dask.get)
             df1 = I.read_pandas_synapse_activation_from_roberts_format(os.path.join(dummy[0][0][1], 'simulation_run%s_synapses.csv' % dummy[0][0][0].iloc[0].number))
             df2 = I.read_pandas_synapse_activation_from_roberts_format(os.path.join(dummy2[0][0][1], 'simulation_run%s_synapses.csv' % dummy[0][0][0].iloc[0].number))
             assert_frame_equal(df1, df2)            
         except:
             raise
-        finally:
-            shutil.rmtree(dirPrefix)
           
-    @decorators.testlevel(2)               
-    def test_reproduce_simulation_trail_from_roberts_model_control(self):
-        dirPrefix = tempfile.mkdtemp()
+    #@decorators.testlevel(2)               
+    def test_reproduce_simulation_trail_from_roberts_model_control(self, tmpdir):
         try:
-            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName, networkName, [example_path], dirPrefix=dirPrefix, nprocs=1, tStop=345, silent=True)
+            dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
+                cellParamName, networkName, [example_path], dirPrefix=tmpdir.dirname, nprocs=1, tStop=345, silent=True
+                )
             dummy = dummy.compute(get = dask.get)
                 
             #synapse activation
@@ -141,27 +134,25 @@ class TestSimrun(unittest.TestCase):
             np.testing.assert_almost_equal(pdf1.values, pdf2.values, decimal = 3)
         except:
             raise
-        finally:
-            shutil.rmtree(dirPrefix)
-        self.assertIsInstance(dummy[0][0][0], pd.DataFrame)      
-        self.assertIsInstance(dummy[0][0][1], str)         
+        assert isinstance(dummy[0][0][0], pd.DataFrame)      
+        assert isinstance(dummy[0][0][1], str)         
                
-           
-   
-#     def test_ongoing_frequency_in_new_monte_carlo_simulation_is_like_in_roberts_control(self):
-#         try:
-#             pass
-#         except:
-#             raise
-#         finally:
-#             pass
-#          
-#          
-#     def test_different_schedulers_give_same_result():
-#         pass
-    @decorators.testlevel(2)    
-    def test_crossing_over_trails_show_identical_response_before_crossing_over_time(self):
-        dirPrefix = tempfile.mkdtemp()
+    """ 
+    def test_ongoing_frequency_in_new_monte_carlo_simulation_is_like_in_roberts_control(self):
+        try:
+            pass
+        except:
+            raise
+        finally:
+            pass
+    
+         
+    def test_different_schedulers_give_same_result():
+        pass
+    """
+    
+    #@decorators.testlevel(2)    
+    def test_crossing_over_trails_show_identical_response_before_crossing_over_time(tmpdir):
         import test_model_data_base.context
         try:
             t = np.random.randint(100, high = 150)
@@ -170,16 +161,9 @@ class TestSimrun(unittest.TestCase):
                 pdf, res = simrun2.crossing_over.crossing_over_simple_interface.crossing_over(mdb, sim_trail, t, 
                                                                                               cellParamName, 
                                                                                               networkName, 
-                                                                                              dirPrefix = dirPrefix, 
+                                                                                              dirPrefix = tmpdir.dirname, 
                                                                                               nSweeps=2, 
                                                                                               tStop=345)
                 res = res.compute(get = dask.get)
                 df = pd.read_csv(glob.glob(os.path.join(res[0][0][0][1], '*vm_all_traces.csv'))[0], sep = '\t')
                 assert_almost_equal(df[df.t<t]['Vm run 00'].values, df[df.t<t]['Vm run 01'].values)
-        except:
-            raise
-        finally:
-            shutil.rmtree(dirPrefix)
-          
-          
-          
