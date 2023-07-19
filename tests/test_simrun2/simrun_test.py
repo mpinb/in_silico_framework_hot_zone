@@ -167,3 +167,5 @@ class TestSimrun():
                 res = res.compute(get = dask.get)
                 df = pd.read_csv(glob.glob(os.path.join(res[0][0][0][1], '*vm_all_traces.csv'))[0], sep = '\t')
                 assert_almost_equal(df[df.t<t]['Vm run 00'].values, df[df.t<t]['Vm run 01'].values)
+        except:
+            raise
