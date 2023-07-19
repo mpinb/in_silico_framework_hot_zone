@@ -306,28 +306,26 @@ s.setup.stim_setup_funs.append(BAC.stim_setup, params_to_kwargs(examplary_stim_s
         print("simulating {} took {} seconds".format(stim, time.time()-t))
         return cell, params
 
-    def run(self, params):
-        '''Simulates all stimuli for a given parameter vector.
-        Returns: Dictionary where stim_response_measure_funs names are keys, 
-        return values of the stim_response_measure_funs (usually voltage traces) are values.
-        
-        Details, how to set up the Simulator are in the docstring of
-        the Simulator class.        
-        '''
-        self.setup.check()
-        out = {}            
-        for stim in self.setup.get_stims(): # , fun in self.setup.stim_setup_funs:
-            cell, params = self.get_simulated_cell(params, stim)
-            # extract result
-            for name, fun in self.setup.get_stim_response_measure_fun(stim):
-                #print name, param_selector(params, name)
-                #print params
-                result = fun(cell, params = param_selector(params, name))
-                out.update({name: result})
-            del cell            
+    def run(self, params, stims = None):
+            '''Simulates all stimuli for a given parameter vector.
+            Returns: Dictionary where stim_response_measure_funs names are keys, 
+            return values of the stim_response_measure_funs (usually voltage traces) are values.
 
-        return out
-
+            Details, how to set up the Simulator are in the docstring of
+            the Simulator class.        
+            '''
+            if stims is None:
+                stims = self.setup.get_stims()
+            self.setup.check()
+            out = {}            
+            for stim in stims:
+                cell, params = self.get_simulated_cell(params, stim)
+                # extract result
+                for name, fun in self.setup.get_stim_response_measure_fun(stim):
+                    result = fun(cell, params = param_selector(params, name))
+                    out.update({name: result})
+                del cell
+            return out
 
 def run_fun(cell,
             T = 34.0, Vinit = -75.0, dt = 0.025, 

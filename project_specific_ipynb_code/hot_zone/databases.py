@@ -20,4 +20,4 @@ morphologies_folder = mdb.create_managed_folder('morphologies', raise_ = False)
 # biopysics mdb
 mdb_biopysics_selection = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20221020_hot_zone_biophysical_composition',readonly = True)
 mdb_biophysics_py3_BAC2_step = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20220325_run_low_refractory_period_optimization3_two_BAC_plus_step')
-mdb_WR69_step = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/backup_axon_scratch_20211217/results/20191231_fitting_WR69_2_Kv3_1_slope_variable_dend_scale_cluster_step//', readonly=True)
+mdb_WR69_step = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/backup_axon_scratch_20211217/results/20191231_fitting_WR69_2_Kv3_1_slope_variable_dend_scale_cluster_step/', readonly=True)

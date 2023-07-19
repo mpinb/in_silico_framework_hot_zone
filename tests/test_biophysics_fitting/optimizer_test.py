@@ -1,7 +1,8 @@
 import Interface as I
 from . import decorators
 import unittest
-from .context import *
+# import global variables from context
+from .context import PARENT, DATA_DIR
 # import context
 import distributed
 
@@ -67,7 +68,7 @@ def set_up_mdb(step = False):
     mdb.create_sub_mdb('86')
     
     mdb['86'].create_managed_folder('morphology')
-    I.shutil.copy(I.os.path.join(data_dir, '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2.hoc'),
+    I.shutil.copy(I.os.path.join(DATA_DIR, '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2.hoc'),
         mdb['86']['morphology'].join('86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2.hoc')) #
 
     mdb['86']['fixed_params'] = {'BAC.hay_measure.recSite': 835,
@@ -251,7 +252,7 @@ class Tests(unittest.TestCase):
         # before testing reproducability, it is therefore necessary to initialize
         # the evaluator
 
-        mdb_legacy = I.ModelDataBase(I.os.path.join(data_dir, 
+        mdb_legacy = I.ModelDataBase(I.os.path.join(DATA_DIR, 
                                                     'example_Kv3_1_slope_variable_dend_scale_step'),
                                      readonly = True)#
                                       

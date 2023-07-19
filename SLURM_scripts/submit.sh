@@ -2,17 +2,18 @@
 
 # Default options
 nodes="1"
-partition="GPU"
-cores="24"
-mem="192000"
+partition="CPU"
+cores="0"
+mem="93750"  # half of max memory of a CPU node
 memstr="max"
 time="1-0:00"
 tpn=""
-gres="2"  # default for GPU jobs
+gres="0"  # default for GPU jobs (half of max)
 qosline=""  # not set yet
 cuda=$'\n#module load cuda'  # If working on a GPU partition: load cuda with single hashtag, idk why?
 interactive="0"
-gpu_interactive_as_gpu="0"
+notebook=""
+notebook_kwargs=""
 
 help() {
   cat <<EOF
@@ -71,6 +72,12 @@ help() {
       Default:
         $gres for CPU jobs and non-interactive GPU jobs
         4 for interactive GPU jobs
+
+    -b <val>
+      Run a notebook
+      Pass the name of a notebook to submit it as a batch job
+      Default:
+        None
 EOF
 }
 
@@ -163,7 +170,7 @@ function QOS_precheck {
 args_precheck $# $1;
 
 # Parse options
-while getopts "hN:n:m:t:ciIp:T:r:A" OPT;
+while getopts "hN:n:m:t:cgiIp:T:r:Ab:" OPT;
 do
   case "$OPT" in
     h) usage
@@ -173,12 +180,13 @@ do
     m) mem=${OPTARG};memstr=$mem;;
     t) time=${OPTARG};;
     c) partition="CPU";;
+    g) partition="GPU";;
     i) interactive="1";;
-    I) gpu_interactive_as_gpu="1";;
     p) partition=${OPTARG};;  # overwrites i or c flag
     T) tpn=${OPTARG};;
     r) gres=${OPTARG};;
     A) partition="GPU-a100";;  # appendix to start the correct python file
+    b) notebook=${OPTARG};;
     \?) # incorrect option
       echo "Error: Invalid option"
       exit 1;;
@@ -188,8 +196,7 @@ shift $(( OPTIND - 1 ))  # shift the option index to point to the first non-opti
 name=$1
 shift;
 
-if [ -z "$name" ]
-then
+if [ -z "$name" ]; then
   echo "Warning: no jobname was passed. Job will start without a name."
 fi
 check_name $name
@@ -197,47 +204,76 @@ check_name $name
 ################### Cluster logic ###################
 # Here, some extra variables are changed or created to add to the SLURM script depending on your needs
 
-# Adapt partition name for interactive jobs
+### 1. Figure out which partition is requested with the flags
+
+# Adapt partition name for interactive jobs requested with -i flag
 if [ ${#partition} == 3 -a $interactive == "1" ]; then
   # GPU or CPU interactive session
   # adapt partition name to have -interactive in it
   partition=$partition"-interactive"
 fi
 
-if [[ ${partition:0:3} == CPU ]]; then
-    gres="0"
+#### 2. Depending on the partition, reset default values to max if they have not been explicitly specified.
+#### 2.1: CPU partitions (CPU or CPU-interactive)
+if [[ ${partition:0:3} == CPU ]]; then 
+  gres="0"  # no GPUs
+  if [ $mem == "0" ]; then  # memory is unspecified
+    mem=93750  # half of max of a CPU node
+  fi
+  if [ $cores == "0" ]; then  # amount of cores is unspecified
+    cores=24
+  fi
+#### 2.2: GPU partitions (GPU or GPU-interactive)
+elif [[ ${partition:0:3} == GPU ]]; then  
+  if [ $gres == "0" ]; then  # gres is unspecified
+    gres="2"  # by default, set to half of max gres for GPU partitions
+  fi
+  if [ $mem == "0" ]; then  # memory is unspecified
+    mem=187500  # half of max of a GPU node
+  fi
+  if [ $cores == "0" ]; then  # amount of cores is unspecified for the user
+    cores=24
+  fi
+else  # A-100 node
+  if [ $cores == "0" ]; then  # amount of cores is unspecified for the user
+    cores=32
+  fi
+  # set qos
+  qosline=$'\n#SBATCH --qos=GPU-a100'
+  # if memory is unspecified, it will simply pass 0, which still works for the A-100
 fi
 
-# Loading cuda and setting gres depending on GPU/CPU partition
+
+#### 3. Depending on interactive/bash, load cuda
 if [ $interactive == 1 ]; then
   interactive_string=" interactive"
   cuda=$'\nmodule load cuda'
-  if [ ${partition:0:3} != "CPU" -a $gres -eq 0 ]; then
-    # Either GPU-interactive or A100 interactive
-    # Set gres to 4 if working on a GPU-interactive partition it if hasn't been set manually already
-    gres="4"
-  fi
-elif [ $interactive == 0 ]; then
+else
   interactive_string=""
-fi
-
-# Manually set qos line in case the A100 was requested with the -p flag instead of the A flag
-if [ $partition = "GPU-a100" ]; then
-  qosline=$'\n#SBATCH --qos=GPU-a100'
-  if [ $cores \> 32 ]; then
-    cores=32
-  fi
 fi
 
 if [ ! -z "$tpn" ]; then
   tpn="#SBATCH --ntasks-per-node="$tpn
 fi
 
-# Setting partition to '-interactive' with 'non-interactive' defaults (placed at the end to avoid standard "interactive logic")
-if [ $gpu_interactive_as_gpu == 1 ]; then
-  partition=$partition"-interactive"
+################### Normal submission (batch or interactive job) ###################
+run_str="srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/setup_SLURM.py \$MYBASEDIR/management_dir_$name"
+if [ $interactive == "1" ]; then
+  run_str=$run_str" --launch_jupyter_server"
 fi
 
+################### Submitting a notebook: adapt the run_str ###################
+if [ ! -z $notebook ]; then
+  if [ $interactive == 1 ]; then
+    echo "Please submit notebooks as a batch job, not interactive."
+    echo "Beware that the default submit options is interactive."
+    echo "You can e.g. manually set the partition to GPU/CPU with the -p flag"
+    exit 1
+  fi
+  run_str=$run_str" --notebook_name $notebook"
+fi
+
+# TODO: hard thing is to get SLURM to run two tasks and distribute resources accordingly. Maybe it's easier to implement nbrun in setup_SLURM and consider it 1 task?
 
 ################### Print out job info ###################
 width="$(tput cols)"
@@ -260,8 +296,8 @@ output=$(sbatch <<EoF
 #SBATCH --job-name=$name
 #SBATCH -p $partition # partition (queue)
 #SBATCH -N $nodes # number of nodes
-#SBATCH -n $cores # number of cores
-#SBATCH --mem $mem # memory pool for all cores
+#SBATCH -n $cores # number of tasks
+#SBATCH --mem $mem # memory pool for all tasks
 #SBATCH -t $time # time (D-HH:MM)
 #SBATCH -o out.slurm.%N.%j.slurm # STDOUT
 #SBATCH -e err.slurm.%N.%j.slurm # STDERR
@@ -272,7 +308,7 @@ unset DISPLAY
 module load ffmpeg
 export SLURM_CPU_BIND=none
 ulimit -Sn "\$(ulimit -Hn)"
-srun -n1 -N$nodes -c$cores python -u \$MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/component_1_SOMA.py \$MYBASEDIR/management_dir_$name $interactive
+$run_str
 EoF
 )
 

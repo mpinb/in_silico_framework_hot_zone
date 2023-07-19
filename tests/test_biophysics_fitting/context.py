@@ -4,7 +4,7 @@ import sys
 import tempfile
 import getting_started
 
-parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-data_dir = os.path.join(os.path.dirname(__file__), 'data')
+PARENT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 
-sys.path.insert(0, parent)
+sys.path.insert(0, PARENT)

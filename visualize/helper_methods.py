@@ -13,6 +13,7 @@ import IPython
 import dask
 import glob
 import numpy as np
+import pandas as pd
 from base64 import b64encode
 import subprocess
 from model_data_base.utils import mkdtemp
@@ -240,19 +241,46 @@ def _arrow3D(ax, x, y, z, dx, dy, dz, *args, **kwargs):
     arrow = Arrow3D(x, y, z, dx, dy, dz, *args, **kwargs)
     ax.add_artist(arrow)
 
-def draw_arrow(morphology, ax, highlight_section, highlight_arrow_args, arrow_size=40):
+def draw_arrow(morphology, ax, 
+               highlight_section, 
+               highlight_x, 
+               highlight_arrow_args, 
+               arrow_size=50):
     
     assert type(highlight_section) == int, "Please provide the section index as an argument for highlight_arrow. You passed {}".format(highlight_section)
     assert highlight_section in morphology['section'], "The given section id is not present in the cell morphology"
 
     setattr(Axes3D, 'arrow3D', _arrow3D)
     if highlight_arrow_args is None:
-        highlight_arrow_args = dict(mutation_scale=20, ec ='black', fc='white')
-    x, y, z = morphology[morphology['section'] == highlight_section][['x', 'y', 'z']].mean(axis=0)
+        highlight_arrow_args = {}
+    
+    # overwrite defaults if they were set
+    x = dict(mutation_scale=20, ec ='black', fc='white')
+    x.update(highlight_arrow_args)
+    highlight_arrow_args = x
+    morphology = morphology.copy()
+    morphology = morphology.fillna(0) # soma section gets 0 as section ID
+    df = morphology[morphology['section'] == highlight_section]
+    index = np.argmin(np.abs(df.relPts-highlight_x))
+    x, y, z = df.iloc[index][['x','y','z']]
+    #x, y, z = morphology[morphology['section'] == highlight_section][['x', 'y', 'z']].mean(axis=0)
 
     # get start of arrow
     start_x, start_y, start_z = x, y, z+arrow_size
     dx, dy, dz = 0, 0, -arrow_size
+    ddx = ddy = 0
+    
+    if 'rotation' in highlight_arrow_args:
+        alpha = highlight_arrow_args['rotation']
+        del highlight_arrow_args['rotation']
+        dx2, dz2 = np.dot(np.array([[np.cos(alpha), -np.sin(alpha)], 
+                              [np.sin(alpha), np.cos(alpha)]]), 
+                              [dx,dz])
+        start_x = start_x + (dx - dx2)
+        start_z = start_z + (dz - dz2)
+        dx = dx2
+        dz = dz2
+    
     #print(start_x, start_y)
     ax.arrow3D(
         start_x, start_y, start_z,

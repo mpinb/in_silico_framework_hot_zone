@@ -1,5 +1,5 @@
 import os
-# import cloudpickle
+import cloudpickle
 import compatibility
 import numpy as np
 from . import parent_classes
@@ -18,6 +18,6 @@ class Loader(parent_classes.Loader):
 def dump(obj, savedir):
     save_cell_to_file(os.path.join(savedir, 'cell'), obj)
 
-#     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
-#         cloudpickle.dump(Loader(), file_)
-    compatibility.cloudpickle_fun(Loader(), file_)
+    with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+        cloudpickle.dump(Loader(), file_)
+    #compatibility.cloudpickle_fun(Loader(), file_)

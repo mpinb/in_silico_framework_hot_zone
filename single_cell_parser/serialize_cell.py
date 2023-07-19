@@ -82,9 +82,9 @@ def restore_cell_from_serializable_object(sc):
 
 def save_cell_to_file(path, cell):
     sc = cell_to_serializable_object(cell)
-    pd.Series([sc]).to_msgpack(path)
+    pd.Series([sc]).to_pickle(path)
     
 def load_cell_from_file(path):
-    pds = pd.read_msgpack(path)
+    pds = pd.read_pickle(path)
     sc = pds[0]
     return restore_cell_from_serializable_object(sc)

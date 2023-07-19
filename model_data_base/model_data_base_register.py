@@ -36,14 +36,6 @@ class ModelDataBaseRegister():
                 self.mdb['failed', dir_] = e
         
         #print self.mdb.keys()
-
-    def merge_remote_register(self, remote_path):
-        mdbr_remote = ModelDataBaseRegister(remote_path)
-        # get all remote model ids
-        whole_registry = {k: mdbr_remote.mdb[k] for k in mdbr_remote.mdb.keys()}
-        whole_registry_filtered = {k:v for k,v in whole_registry.items() if I.os.path.exists(v)}
-        for k in whole_registry_filtered.keys():
-            self.mdb[k] = whole_registry_filtered[k]
     
     def add_mdb(self, mdb):
         self.mdb[mdb._unique_id] = os.path.abspath(mdb.basedir)
@@ -83,6 +75,15 @@ def get_mdb_by_unique_id(unique_id):
     mdb = ModelDataBase(mdb_path, nocreate=True)
     assert mdb.get_id() == unique_id
     return mdb
+
+def assimilate_remote_register(remote_path, local_path=_foldername):
+    mdbr_remote = ModelDataBaseRegister(remote_path)
+    mdbr_local = ModelDataBaseRegister(local_path)
+    # get all remote model ids
+    whole_registry = {k: mdbr_remote.mdb[k] for k in mdbr_remote.mdb.keys()}
+    whole_registry_filtered = {k:v for k,v in whole_registry.items() if os.path.exists(v)}
+    for k in whole_registry_filtered.keys():
+        mdbr_local.mdb[k] = whole_registry_filtered[k]
         
 
 from .model_data_base import ModelDataBase, MdbException       

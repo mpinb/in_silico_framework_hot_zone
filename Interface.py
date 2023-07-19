@@ -29,6 +29,7 @@ import pandas as pd
 import numpy as np
 import dask
 import dask.dataframe as dd
+import distributed
 import warnings
 import traceback
 import sys
@@ -48,7 +49,6 @@ try:
     import seaborn as sns
 except ImportError:
     print("Could not import seaborn")
-
 
 
 # def warn_with_traceback(message, category, filename, lineno, file=None, line=None):
@@ -127,6 +127,7 @@ from model_data_base.utils import cache
 from model_data_base import utils
 
 from model_data_base.model_data_base_register import get_mdb_by_unique_id
+from model_data_base.model_data_base_register import assimilate_remote_register
 from model_data_base.mdbopen import resolve_mdb_path, create_mdb_path
 
 try: ##to avoid import errors in distributed system because of missing matplotlib backend
@@ -189,12 +190,47 @@ from singlecell_input_mapper.ongoing_network_param_from_template import create_n
 
 if get_versions()['dirty']: warnings.warn('The source folder has uncommited changes!')
 
-try:
-    import distributed
-    from SLURM_scripts import clustercontrol
-    cluster = clustercontrol.cluster
-except ImportError:
-    pass
+def get_user_port_numbers():
+    """Read the port numbers defined in SLURM_scripts/user_settings.ini
+
+    Returns:
+        dict: port numbers as values, names as keys
+    """
+    import configparser
+    # user-defined port numbers
+    __location__ = os.path.realpath(
+        os.path.join(os.getcwd(), os.path.dirname(__file__))
+        )
+    config = configparser.ConfigParser()
+    config.read(os.path.join(__location__, 'SLURM_scripts/user_settings.ini'))
+    ports = config['PORT_NUMBERS']
+    return ports
+
+def get_client():
+    """Gets the distributed.client object if dask has been setup
+
+    Returns:
+        Client: the client object
+    """
+    ports = get_user_port_numbers()
+    client_port = ports['dask_client_3']
+    try:
+        import distributed
+        try:
+            ip = os.environ['IP_INFINIBAND']
+        except KeyError as e:
+            print("IP is not available as environment variable")
+            print("fetching ip...")
+            from socket import gethostbyname, gethostname
+            ip = gethostbyname(gethostname())  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
+            os.environ['IP_MAIN'] = ip
+            ip = ip.replace('100', '102')
+            os.environ['IP_INFINIBAND'] = ip.replace('100', '102')  # a bit hackish, but it works
+    except ImportError as e:
+        print(e)
+    client = distributed.Client(ip+':'+client_port)
+    return client
+
 
 defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
 

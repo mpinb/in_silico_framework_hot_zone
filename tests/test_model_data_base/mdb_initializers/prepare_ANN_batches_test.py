@@ -41,7 +41,9 @@ class Tests(unittest.TestCase):
         time_steps=[1, 13]  # test different time step intervals for one-hot encoding
         for time_step in time_steps:
             one_hot = spike_times_to_onehot(self.spike_times, min_time=0, max_time=505, time_step=time_step)
-            assert all([a == b for a, b in zip([st//time_step for st in self.spike_times],  np.where(one_hot)[0])]), \
+            comparison = [int(st//time_step) for st in self.spike_times]  # how onehot should work
+            comparison = sorted(list(set(comparison)))  # remove duplicate entries
+            assert all([a == b for a, b in zip(comparison,  np.where(one_hot)[0])]), \
             "One-hot encoding failed.\nSpike times: {}\none-hot coding:{}\nLocations where spike equals True:{}".format(self.spike_times, one_hot, np.where(one_hot)[0])
         try:
             spike_times_to_onehot([-1, -200])  # should give error
