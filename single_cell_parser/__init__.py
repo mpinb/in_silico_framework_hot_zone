@@ -4,7 +4,7 @@ for single cell simulations
 with NeuroNet subcellular synapse distributions
 '''
 import logging
-log = logging.getlog(__name__)
+log = logging.getlogger(__name__)
 import sys
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)  # write to stdout, default log level is INFO
 import tables #so florida servers have no problem with neuron
