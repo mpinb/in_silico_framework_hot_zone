@@ -29,10 +29,10 @@ def pytest_configure(config):
     if six.PY2:
         client = distributed.Client('localhost:28786')
     else:
-        client = get_client()
+        client = distributed.Client('localhost:38786')
     # print("setting distributed duck-typed object as module level attribute")
     distributed.client_object_duck_typed = client
-    logging.disable(logging.INFO)  # Disable all logs with a level equal than or less sever than INFO
+    logging.disable(logging.INFO)  # Disable all logs with a level equal to or less severe than INFO
 
         
 
