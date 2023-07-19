@@ -7,10 +7,11 @@ import distributed
 import six
 
 # NOTE: consider removing this if else.
-if six.PY2:
-    client = distributed.Client('localhost:28786')
-else:
-    client = distributed.Client('localhost:38786')
+# This is defined in conftest.py, which is ran before this file
+# if six.PY2:
+#     client = distributed.Client('localhost:28786')
+# else:
+#     client = distributed.Client('localhost:38786')
 
 """
 # switch matplotlib backend to make sure that test suite can 
@@ -43,7 +44,7 @@ VERBOSITY = 10
 # TODO: why is a client started here?
 # TODO: Make code testable. How do unittest react to exceptions? Does the test fail?
 # TODO: Have mehtods throw errors if something goes wrong.
-distributed.client_object_duck_typed = client
+#distributed.client_object_duck_typed = client
 #######################################
 # SET TESTLEVEL HERE
 # Choose a low testlevel if you only want to run quick tests.
