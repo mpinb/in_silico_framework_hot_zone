@@ -1,0 +1,158 @@
+<template name="detailView">
+    <div id="settingsDiv" style="height: 750px; overflow: auto;">        
+        <table style="width:100%;">
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td  colspan="2">              
+                                <div class="badge badge-secondary matrixHeader">                         
+                                    matrix functions                                
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table style="font-size: 14px;">
+                                    <tr>
+                                        <td>
+                                            zoom
+                                        </td>
+                                        <td style="padding-left: 10px;">
+                                            <i>mousewheel</i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            zoom rows
+                                        </td>
+                                        <td style="padding-left: 10px;">
+                                            <i>Ctrl + mousewheel</i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            zoom columns
+                                        </td>
+                                        <td style="padding-left: 10px;">
+                                            <i>Ctrl + Alt + mousewheel</i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            pan
+                                        </td>
+                                        <td style="padding-left: 10px;">
+                                            <i>left-button down + drag</i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            (de)select matrix cell
+                                        </td>
+                                        <td style="padding-left: 10px;">
+                                            <i>left-click</i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            select multiple cells
+                                        </td>
+                                        <td style="padding-left: 10px;">
+                                            <i>Shift + mousehover</i>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>   
+                        <tr>
+                            <td style="padding-top: 5px;" colspan="2">                                
+                                <div class="badge badge-secondary matrixHeader">
+                                    download matrix
+                                </div>
+                            </td>
+                        </tr>    
+                        <tr>
+                            <td colspan="2">
+                                {{> React component=DownloadControl data=viewManager}}
+                            </td>
+                        </tr>                      
+                        <!--
+                        <tr>
+                            <td>
+                                <button style="border-width: 1px" id="reOrderMatrix">reorder</button>
+                            </td>
+                        </tr>
+                        -->
+                        <tr>
+                            <td style="padding-top: 5px" colspan="2">                                
+                                <div class="badge badge-secondary matrixHeader">
+                                    current selection
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><button class="matrixButton" id="clearTileSelection">clear selection ({{numSelectedTiles}})</button>
+                            </td>
+                        </tr>                        
+                        <tr>
+                            <td colspan="2">
+                                <div id="distributionvis"></div>
+                            </td>    
+                        </tr>
+                        <tr>
+                            <td style="padding-top: 5px" colspan="2">              
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="badge badge-secondary matrixHeader">                  
+                                                    reorder matrix 
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="color:red"><b>(R)</b></div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>                                
+                            </td>
+                        </tr>    
+                        <tr>
+                            <td colspan="2">
+                                {{> React component=ReorderControl data=viewManager}}
+                            </td>
+                        </tr>    
+                        {{#if neuronInspectorVisible}}
+                        <tr>
+                            <td style="padding-top: 5px" colspan="2">                                
+                                <div class="badge badge-secondary matrixHeader">
+                                    neuron inspector
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="matrixButton" style="width: 180px" id="getSamples">get neuron IDs</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="matrixButton" style="width:180px" id="launchNeuroGlancer">launch neuronglancer</button>
+                            </td>                            
+                        </tr>
+                        {{/if}}                        
+                    </table>
+                </td>                
+            </tr>
+            {{#if neuronInspectorVisible}}
+            <tr>
+                <td>
+                    <div id="neuronsvis" class="card-header" style="height: 200px; width: 100%; overflow-y: scroll;">
+                    </div>
+                </td>
+            </tr>
+            {{/if}}           
+        </table>
+    </div>
+</template>
