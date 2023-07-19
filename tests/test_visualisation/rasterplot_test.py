@@ -17,10 +17,12 @@ class TestRasterplot(unittest.TestCase):
 
     def test_pandas(self):
         fig = rasterplot(self.df, tlim = (0,350))
+        plt.close()
 
     def test_dask(self):
         ddf = dd.from_pandas(self.df, npartitions = 2)
         fig = rasterplot(self.df, tlim = (0,350))
+        plt.close()
 
     def test_can_be_called_with_figures_and_axes(self):
         from  matplotlib.figure import Figure
@@ -29,4 +31,5 @@ class TestRasterplot(unittest.TestCase):
         ax = fig.add_subplot(1,1,1)
         self.assertIsInstance(rasterplot(self.df, tlim = (0,350)), Figure)
         self.assertIs(rasterplot(self.df, tlim = (0,350), fig = fig), fig)
-        self.assertIs(rasterplot(self.df, tlim = (0,350), fig = ax), ax)  
+        self.assertIs(rasterplot(self.df, tlim = (0,350), fig = ax), ax)
+        plt.close()

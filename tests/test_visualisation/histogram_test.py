@@ -16,6 +16,7 @@ class TestHistogram(unittest.TestCase):
     
     def test_histogram_can_be_called_with_tuple(self):
         histogram(self.testhist)
+        plt.close()
                   
     def test_histogram_can_be_called_with_series(self):
         from  matplotlib.figure import Figure
@@ -25,4 +26,5 @@ class TestHistogram(unittest.TestCase):
         pds = pd.Series({'A': self.testhist, 'labelB': self.testhist})
         self.assertIsInstance(histogram(pds), Figure)
         self.assertIs(histogram(pds, fig = fig), fig)
-        self.assertIs(histogram(pds, fig = ax), ax)                          
+        self.assertIs(histogram(pds, fig = ax), ax)
+        plt.close()                        

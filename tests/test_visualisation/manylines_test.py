@@ -37,6 +37,7 @@ class TestManyLines(unittest.TestCase):
         fig = plt.figure()
         manylines(ddf, axis = [1, 10, 1, 10], fig = fig, get = client.get)
         if savefigs: fig.savefig(os.path.join(self.tempdir, 'manylines_no_group_dask.png'))
+        plt.close()
     
     @decorators.testlevel(1)             
     def test_manylines_grouped(self):
@@ -52,6 +53,7 @@ class TestManyLines(unittest.TestCase):
                         groupby_attribute = 'attribute', \
                         colormap = self.colormap, fig = fig, get = client.get)
         if savefigs: fig.savefig(os.path.join(self.tempdir, 'manylines_grouped_dask.png'))
+        plt.close()
     
     @decorators.testlevel(1)    
     def test_manylines_no_group_returnPixelObject(self):
@@ -61,6 +63,7 @@ class TestManyLines(unittest.TestCase):
         fig = plt.figure()
         show_pixel_object(po, fig = fig)
         if savefigs: fig.savefig(os.path.join(self.tempdir, 'manylines_no_group_po_pandas.png'))
+        plt.close()
     
     @decorators.testlevel(1)            
     def test_manylines_grouped_returnPixelObject(self):
@@ -84,5 +87,6 @@ class TestManyLines(unittest.TestCase):
         fig = plt.figure()
         show_pixel_object(po, fig = fig)
         if savefigs: fig.savefig(os.path.join(self.tempdir, 'manylines_grouped_po_dask.png'))
+        plt.close()
          
                      
