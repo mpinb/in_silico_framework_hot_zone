@@ -1,5 +1,3 @@
-import './viewSpecifications.html'
-import { Template } from 'meteor/templating';
 import React, { useState } from 'react';
 import { deepCopy } from './core/utilCore';
 
@@ -12,17 +10,11 @@ const styleSelect = {
     fontSize: 14,
 }
 
-const styleDatasources = {
-    fontSize: 12,
-    fontStyle: "italic"
-}
-
-
 class ViewSpecificationsControl extends React.Component {
     constructor(props) {
         super(props);
 
-        this.viewManager = props.data;
+        this.viewManager = props.viewManager;
         this.dataManager = this.viewManager.dataManager;
 
         this.available_view_types = this.dataManager.available_views;        
@@ -232,22 +224,5 @@ class ViewSpecificationsControl extends React.Component {
     }
 }
 
-Template.viewSpecifications.onCreated(function () {
-    this.viewManager = Template.currentData();
-});
-
-Template.viewSpecifications.onRendered(function () {
-    this.viewManager = Template.currentData();
-});
-
-Template.viewSpecifications.helpers({
-    ViewSpecificationsControl() {
-        return ViewSpecificationsControl;
-    },
-
-    viewManager() {
-        return Template.instance().viewManager;
-    }
-});
 
 export default ViewSpecificationsControl

@@ -1,7 +1,4 @@
-import './grammarView.html'
-import { Template } from 'meteor/templating';
 import React, { useState } from 'react';
-import { deepCopy } from './core/utilCore';
 
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
@@ -9,22 +6,6 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css'; //Example style, you can use another
 
-
-const prettier = require("prettier");
-const parser = require("@babel/parser");
-
-const styleMenuHeader = {
-    fontSize: 14,
-    fontWeight: "bold",
-}
-
-const styleDefault = {
-    fontSize: 14,
-}
-
-const styleButton = {
-    borderWidth: 1
-}
 
 const styleOverflowable = {
     overflowY: 'auto',
@@ -67,7 +48,7 @@ class GrammarControl extends React.Component {
     constructor(props) {
         super(props);
 
-        this.viewManager = props.data;
+        this.viewManager = props.viewManager;
         this.dataManager = this.viewManager.dataManager;
 
         this.state = {
@@ -145,23 +126,5 @@ class GrammarControl extends React.Component {
     }
 }
 
-
-Template.grammarView.onCreated(function () {
-    this.viewManager = Template.currentData();
-});
-
-Template.grammarView.onRendered(function () {
-    this.viewManager = Template.currentData();
-});
-
-
-Template.grammarView.helpers({
-    GrammarControl() {
-        return GrammarControl;
-    },
-
-    viewManager() {
-        return Template.instance().viewManager;
-    }
-});
+export default GrammarControl
 

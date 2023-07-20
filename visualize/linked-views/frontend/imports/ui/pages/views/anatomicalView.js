@@ -1,7 +1,3 @@
-import './anatomicalView.html'
-import { Template } from 'meteor/templating';
-import { Colorscale } from 'react-colorscales';
-import ColorscalePicker from 'react-colorscales';
 import React, { useState } from 'react';
 import { deepCopy } from './core/utilCore';
 
@@ -725,32 +721,7 @@ function setSelection(tpl, selection) {
 }
 
 
-Template.anatomicalView.onCreated(function () {
-  this.viewManager = Template.currentData();
-});
 
-Template.anatomicalView.onRendered(function () {
-  this.viewManager = Template.currentData();
-
-  let tpl = Template.instance();
-  tpl.autorun(() => {
-    initEngine(tpl);
-  });
-
-  this.viewManager.OnSelectionChanged.add((selection) => {
-    setSelection(tpl, selection);
-  });
-
-});
-
-Template.anatomicalView.helpers({
-  renderContainerId() {
-    return "renderContainer0";
-  },
-  renderCanvasId() {
-    return "renderCanvas0";
-  },
-})
 
 
 

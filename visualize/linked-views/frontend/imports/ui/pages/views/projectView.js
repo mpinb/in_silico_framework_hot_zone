@@ -1,14 +1,12 @@
-import './projectView.html';
-import { Template } from 'meteor/templating';
 import React, { useState } from 'react';
 import { deepCopy } from './core/utilCore';
 
 
-class RemoteJsonManager extends React.Component {
+class ProjectControl extends React.Component {
   constructor(props) {
     super(props);
 
-    this.viewManager = props.data;
+    this.viewManager = props.viewManager;
     this.dataManager = this.viewManager.dataManager;
 
     this.state = {
@@ -141,24 +139,6 @@ class RemoteJsonManager extends React.Component {
   }
 }
 
-export default RemoteJsonManager;
+export default ProjectControl;
 
 
-Template.projectView.onCreated(function () {
-    this.viewManager = Template.currentData();    
-});
-
-Template.projectView.onRendered(function () {
-    this.viewManager = Template.currentData();    
-});
-
-
-Template.projectView.helpers({
-    ProjectControl() {
-        return RemoteJsonManager;
-    },
-
-    viewManager() {
-        return Template.instance().viewManager;
-    }
-});
