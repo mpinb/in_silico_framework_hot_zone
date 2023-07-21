@@ -19,7 +19,7 @@ h = neuron.h
 import dask
 import pandas as pd
 import socket
-from .utils import *
+from . import utils
     
 def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files, \
                      dirPrefix = '', tStop = 345.0, scale_apical = None, post_hook = {}, \
@@ -51,8 +51,8 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
         print('warning: empty_simulation')
         return
     
-    neuronParameters = load_param_file_if_path_is_provided(cellParamName)
-    evokedUpNWParameters = load_param_file_if_path_is_provided(evokedUpParamName) ##sumatra function for reading in parameter file
+    neuronParameters = utils.load_param_file_if_path_is_provided(cellParamName)
+    evokedUpNWParameters = utils.load_param_file_if_path_is_provided(evokedUpParamName) ##sumatra function for reading in parameter file
 
     scp.load_NMODL_parameters(neuronParameters)
     scp.load_NMODL_parameters(evokedUpNWParameters)
@@ -68,7 +68,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
     seed = '00000'    
     uniqueID = 'seed' + str(seed) + '_pid' + str(os.getpid())
     if auto_organize_results_folder:
-        dirName = os.path.join(resolve_mdb_path(dirPrefix), 'results', \
+        dirName = os.path.join(utils.resolve_mdb_path(dirPrefix), 'results', \
                            time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID) + '_running')
     else:
         dirName = dirPrefix
@@ -171,7 +171,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
     evokedUpNWParameters.save(os.path.join(dirName, uniqueID+ '_network_model.param'))
     
     if auto_organize_results_folder:       
-        dirName_final = os.path.join(resolve_mdb_path(dirPrefix), 'results', \
+        dirName_final = os.path.join(utils.resolve_mdb_path(dirPrefix), 'results', \
                                time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
         os.rename(dirName, dirName_final)   
         
@@ -223,7 +223,7 @@ def run_existing_synapse_activations(cellParamName, evokedUpParamName, synapseAc
             raise RuntimeError("Did not find any files on the specified location. Please provide list or globstring.")
     assert(isinstance(synapseActivation, list))
     
-    chunks = chunkIt(synapseActivation, nprocs)
+    chunks = utils.chunkIt(synapseActivation, nprocs)
     
     myfun = lambda synapse_activation_files: _evoked_activity(cellParamName, evokedUpParamName, \
                                          synapse_activation_files, \
@@ -231,7 +231,7 @@ def run_existing_synapse_activations(cellParamName, evokedUpParamName, synapseAc
                                          tStop = tStop, scale_apical = scale_apical, post_hook = post_hook, \
                                          auto_organize_results_folder = auto_organize_results_folder, cell_generator = cell_generator)
     if silent:
-        myfun = silence_stdout(myfun)
+        myfun = utils.silence_stdout(myfun)
         
     d = [dask.delayed(myfun)(paths) for paths in chunks]
     return dask.delayed(lambda *args: args)(d) #return single delayed object, that computes everything
