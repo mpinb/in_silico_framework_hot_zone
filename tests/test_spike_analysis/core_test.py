@@ -39,14 +39,17 @@ class Tests:
             
     def test_filter_spike_times(self):
         sta = np.array([1])
-        assert filter_spike_times([],[], spike_times_amplitude=sta) == np.array([]), np.array([])
-        assert filter_spike_times([],[10], spike_times_amplitude=sta) == np.array([]), np.array([])
-        assert filter_spike_times([8],[10], spike_times_amplitude=sta) == np.array([8]), np.array([1])
-        assert filter_spike_times([8],[], spike_times_amplitude=sta) == np.array([]), np.array([])
+        assert not any(filter_spike_times([],[], spike_times_amplitude=sta))
+        assert not any(filter_spike_times([],[10], spike_times_amplitude=sta))
+        assert filter_spike_times([8],[10], spike_times_amplitude=sta) == (np.array([8]), np.array([1]))
+        assert not any(filter_spike_times([8],[], spike_times_amplitude=sta))
+        
         sta = np.array([1, 1, 1])
-        assert filter_spike_times([8,8.1, 8.2],[10], spike_times_amplitude=sta) == np.array([8.2]), np.array([1])
-        assert filter_spike_times([8,8.1, 8.2],[10, 10.1], spike_times_amplitude=sta) == np.array([8.2, 8.2]), np.array([1, 1])
-        assert filter_spike_times([8,8.1, 8.2],[10, 10.1, 10.2], spike_times_amplitude=sta) == np.array([8.2, 8.2, 8.2]), np.array([1, 1, 1])
+        for spike_times_trough in [[10], [10, 10.1], [10, 10.1, 10.2]]:
+            l = len(spike_times_trough)
+            st, ampl = filter_spike_times([8, 8.1, 8.2], spike_times_trough, spike_times_amplitude=sta)
+            assert all(st == np.array(l*[8.2]))
+            assert all(ampl == np.array(l*[1]))
                 
     def test_filter_short_ISIs(self):
         spike_times = [0,1,2,3,4,5,6,7,8]
