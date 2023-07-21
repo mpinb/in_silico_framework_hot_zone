@@ -1,7 +1,7 @@
-import single_cell_parser as scp
 from model_data_base.mdbopen import resolve_mdb_path
 
 def load_param_file_if_path_is_provided(pathOrParam):
+    import single_cell_parser as scp
     if isinstance(pathOrParam, str):
         pathOrParam = resolve_mdb_path(pathOrParam)
         return scp.build_parameters(pathOrParam)
