@@ -1,5 +1,5 @@
 from .context import *
-
+import test_model_data_base.context
 import os, sys, glob, shutil, tempfile
 import numpy as np
 from numpy.testing import assert_almost_equal
@@ -81,23 +81,35 @@ class TestSimrun():
             raise
         assert isinstance(dummy[0][0], str)  
           
-    #@decorators.testlevel(2)              
-    def test_position_of_morphology_does_not_matter_after_network_mapping(self, tmpdir):  
+    #@decorators.testlevel(2)           
+    def test_position_of_morphology_does_not_matter_after_network_mapping(self, tmpdir):
+        # simrun2 renames a dir once it finishes running
+        # so create single-purpose subdirectories for simulation output
+        subdir1 = tmpdir.mkdir("sub1")
+        subdir2 = tmpdir.mkdir("sub2")
+        subdir_params = tmpdir.mkdir("params")
         try:
             dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
-                cellParamName, networkName, [example_path], dirPrefix=tmpdir.dirname, nprocs=1, tStop=345, silent=True
+                cellParamName, networkName, [example_path], dirPrefix=str(subdir1), nprocs=1, tStop=345, silent=True
                 )
             dummy = dummy.compute(get=dask.get)
             cellParam = I.scp.build_parameters(cellParamName)
+            # change location of cell by respecifying param file
             cellParam.neuron.filename = os.path.join(parent, 'test_simrun2',\
                          'data', \
                          '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2_B1border.hoc')
-            cellParamName_other_position = os.path.join(tmpdir / 'other_position.param')                
+            cellParamName_other_position = os.path.join(str(subdir_params), 'other_position.param')                
             cellParam.save(cellParamName_other_position)
-            dummy2 = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(cellParamName_other_position, networkName, [example_path], dirPrefix=tmpdir.dirname, nprocs=1, tStop=345, silent=True)
+            dummy2 = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
+                cellParamName_other_position, networkName, [example_path], dirPrefix=str(subdir2), nprocs=1, tStop=345, silent=True
+                )
             dummy2 = dummy2.compute(get=dask.get)
-            df1 = I.read_pandas_synapse_activation_from_roberts_format(os.path.join(dummy[0][0][1], 'simulation_run%s_synapses.csv' % dummy[0][0][0].iloc[0].number))
-            df2 = I.read_pandas_synapse_activation_from_roberts_format(os.path.join(dummy2[0][0][1], 'simulation_run%s_synapses.csv' % dummy[0][0][0].iloc[0].number))
+            df1 = I.read_pandas_synapse_activation_from_roberts_format(
+                os.path.join(dummy[0][0][1], 'simulation_run%s_synapses.csv' % dummy[0][0][0].iloc[0].number)
+                )
+            df2 = I.read_pandas_synapse_activation_from_roberts_format(
+                os.path.join(dummy2[0][0][1], 'simulation_run%s_synapses.csv' % dummy[0][0][0].iloc[0].number)
+                )
             assert_frame_equal(df1, df2)            
         except:
             raise
@@ -153,17 +165,13 @@ class TestSimrun():
     
     #@decorators.testlevel(2)    
     def test_crossing_over_trails_show_identical_response_before_crossing_over_time(self, tmpdir):
-        import test_model_data_base.context
         try:
             t = np.random.randint(100, high = 150)
             with test_model_data_base.context.FreshlyInitializedMdb() as mdb:
                 sim_trail = list(mdb['sim_trail_index'])[0]
-                pdf, res = simrun2.crossing_over.crossing_over_simple_interface.crossing_over(mdb, sim_trail, t, 
-                                                                                              cellParamName, 
-                                                                                              networkName, 
-                                                                                              dirPrefix = tmpdir.dirname, 
-                                                                                              nSweeps=2, 
-                                                                                              tStop=345)
+                pdf, res = simrun2.crossing_over.crossing_over_simple_interface.crossing_over(
+                    mdb, sim_trail, t, cellParamName, networkName, dirPrefix = str(tmpdir), nSweeps=2, tStop=345
+                    )
                 res = res.compute(get = dask.get)
                 df = pd.read_csv(glob.glob(os.path.join(res[0][0][0][1], '*vm_all_traces.csv'))[0], sep = '\t')
                 assert_almost_equal(df[df.t<t]['Vm run 00'].values, df[df.t<t]['Vm run 01'].values)
