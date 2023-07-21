@@ -35,7 +35,10 @@ class FreshlyInitializedMdb(object):
         from model_data_base.mdb_initializers.load_simrun_general import init
         from model_data_base.utils import silence_stdout
         with silence_stdout:
-            init(self.mdb, test_data_folder, client = client)
+            init(self.mdb, test_data_folder, client = client, 
+                 rewrite_in_optimized_format=False, 
+                 parameterfiles=False,
+                 dendritic_voltage_traces=False)
        
         return self.mdb
     
