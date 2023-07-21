@@ -173,7 +173,8 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
     if auto_organize_results_folder:       
         dirName_final = os.path.join(utils.resolve_mdb_path(dirPrefix), 'results', \
                                time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
-        os.rename(dirName, dirName_final)   
+        os.rename(dirName, dirName_final)
+        dirName = dirName_final 
         
     print('writing list of synapse files')
     if post_hook: ##
