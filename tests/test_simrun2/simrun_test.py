@@ -152,7 +152,7 @@ class TestSimrun():
     """
     
     #@decorators.testlevel(2)    
-    def test_crossing_over_trails_show_identical_response_before_crossing_over_time(tmpdir):
+    def test_crossing_over_trails_show_identical_response_before_crossing_over_time(self, tmpdir):
         import test_model_data_base.context
         try:
             t = np.random.randint(100, high = 150)
