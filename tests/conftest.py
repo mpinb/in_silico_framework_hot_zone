@@ -1,3 +1,4 @@
+# Pytest configuration file
 # this code will be run before any other pytest code
 # even before pytest discovery
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
@@ -8,6 +9,7 @@ import socket
 import Interface
 from Interface import get_client
 import logging
+disable_loggers = ['single_cell_parser']
 
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -29,12 +31,16 @@ def pytest_configure(config):
     if six.PY2:
         client = distributed.Client('localhost:28786')
     else:
-        client = distributed.Client('localhost:38786')
+        client = get_client()
     # print("setting distributed duck-typed object as module level attribute")
     distributed.client_object_duck_typed = client
-    logging.getLogger("single_cell_parser").setLevel(logging.WARNING) # clean up output a bit
-    # Disable all child loggers of urllib3, e.g. urllib3.connectionpool
-    logging.getLogger("single_cell_parser").propagate = False
+    
+    logger_names = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
+    for logger_to_disable_name in disable_loggers:
+        for logger_name in logger_names:
+            if logger_to_disable_name in logger_name:
+                # disable all loggers if a part of its name appears in disable_loggers
+                logging.getLogger(logger_name).disabled = True
 
         
 
