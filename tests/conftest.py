@@ -15,6 +15,14 @@ def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
 
+def disable_loggers_and_subloggers(parent_logger_names):
+    logger_names = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
+    for logger_to_disable_name in parent_logger_names:
+        for logger_name in logger_names:
+            if logger_to_disable_name in logger_name:
+                # disable all loggers if a part of its name appears in disable_loggers
+                logging.getLogger(logger_name).disabled = True
+
 
 def pytest_configure(config):
     import distributed
@@ -31,16 +39,12 @@ def pytest_configure(config):
     if six.PY2:
         client = distributed.Client('localhost:28786')
     else:
-        client = get_client()
+        client = distributed.Client('localhost:38786')
     # print("setting distributed duck-typed object as module level attribute")
     distributed.client_object_duck_typed = client
     
-    logger_names = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
-    for logger_to_disable_name in disable_loggers:
-        for logger_name in logger_names:
-            if logger_to_disable_name in logger_name:
-                # disable all loggers if a part of its name appears in disable_loggers
-                logging.getLogger(logger_name).disabled = True
+    disable_loggers_and_subloggers(disable_loggers)
+    
 
         
 
