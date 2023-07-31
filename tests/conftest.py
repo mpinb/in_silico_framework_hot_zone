@@ -16,12 +16,12 @@ def is_port_in_use(port):
         return s.connect_ex(('localhost', port)) == 0
 
 def disable_loggers_and_subloggers(parent_logger_names):
-    logger_names = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
+    active_loggers = logging.root.manager.loggerDict
     for logger_to_disable_name in parent_logger_names:
-        for logger_name in logger_names:
-            if logger_to_disable_name in logger_name:
+        for active_logger_name, active_logger in active_loggers.items():
+            if logger_to_disable_name in active_logger_name:
                 # disable all loggers if a part of its name appears in disable_loggers
-                logging.getLogger(logger_name).disabled = True
+                active_logger.disabled = True
 
 
 def pytest_configure(config):
