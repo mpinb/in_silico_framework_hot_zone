@@ -10,10 +10,8 @@ import pandas
 from pandas.util.testing import assert_frame_equal
 import os
 
-
-
 class TestRobertsFormats:          
-    def setUp(self):
+    def __init__(self):
         self.synapse_file_path = os.path.join(test_data_folder, \
                                               '20150815-1530_20240', \
                                               'simulation_run0000_synapses.csv')
