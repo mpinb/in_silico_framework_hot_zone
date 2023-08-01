@@ -43,6 +43,31 @@ assert(os.path.exists(cellParamName))
 assert(os.path.exists(networkName))
 assert(os.path.exists(example_path))
 
+def scale_apical(cell):
+    import neuron
+    h = neuron.h
+    '''
+    scale apical diameters depending on
+    distance to soma; therefore only possible
+    after creating complete cell
+    '''
+    dendScale = 2.5
+    scaleCount = 0
+    for sec in cell.sections:
+        if sec.label == 'ApicalDendrite':
+            dist = cell.distance_to_soma(sec, 1.0)
+            if dist > 1000.0:
+                continue
+            # for cell 86:
+            if scaleCount > 32:
+                break
+            scaleCount += 1
+            # dummy = h.pt3dclear(sec=sec)
+            for i in range(sec.nrOfPts):
+                oldDiam = sec.diamList[i]
+                newDiam = dendScale*oldDiam
+                h.pt3dchange(i, newDiam, sec=sec)
+
 class TestSimrun():
 
     #@decorators.testlevel(1)    
@@ -118,7 +143,7 @@ class TestSimrun():
     def test_reproduce_simulation_trail_from_roberts_model_control(self, tmpdir):
         try:
             dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
-                cellParamName, networkName, [example_path], dirPrefix=tmpdir.dirname, nprocs=1, tStop=345, silent=True
+                cellParamName, networkName, [example_path], dirPrefix=tmpdir.dirname, nprocs=1, tStop=345, silent=True, scale_apical=scale_apical
                 )
             dummy = dummy.compute(get = dask.get)
                 
