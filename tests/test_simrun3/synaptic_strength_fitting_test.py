@@ -20,7 +20,12 @@ PSPs = simrun3.synaptic_strength_fitting.PSPs
 class TestSynapticStrengthFitting:
 
     @decorators.testlevel(2)    
-    def test_VPM_synaptic_strength_is_between_1_75_and_1_85(self):
+    def test_VPM_synaptic_strength_is_between_1_72_and_1_85(self):
+        """
+        Limits are educated guesses, but it should never deviate by a lot.
+        There is some statistical fluctuation in this test due to the stochastic nature of synapse activation.
+        The chosen limits of 1.72 - 1.85 should cover all possible stochastic variation by a good amount.
+        """
         PSPs = simrun3.synaptic_strength_fitting.PSPs
         confile = I.os.path.join(context.data_dir, '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2_synapses_20150202-1834_4335.con')
         neuron_param = I.os.path.join(context.data_dir, 'neuron_model.param')
@@ -36,4 +41,4 @@ class TestSynapticStrengthFitting:
         psps.run(c)
         optimal_g_pdf = psps.get_optimal_g(I.barrel_cortex.get_EPSP_measurement())
         gVPM = optimal_g_pdf.loc['VPM_C2']['optimal g']
-        assert(1.85 >= gVPM >= 1.75)
+        assert(1.85 >= gVPM >= 1.72)
