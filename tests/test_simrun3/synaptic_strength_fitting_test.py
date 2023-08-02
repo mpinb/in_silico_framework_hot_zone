@@ -17,19 +17,16 @@ PSPs = simrun3.synaptic_strength_fitting.PSPs
 #         res = I.dask.compute(*args, get = I.dask.get)
 #         return [FakeFuture(r) for r in res]
     
-class TestSynapticStrengthFitting(unittest.TestCase):       
-    def setUp(self):
-        pass
+class TestSynapticStrengthFitting:
 
     @decorators.testlevel(2)    
     def test_VPM_synaptic_strength_is_between_1_75_and_1_85(self):
         PSPs = simrun3.synaptic_strength_fitting.PSPs
         confile = I.os.path.join(context.data_dir, '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2_synapses_20150202-1834_4335.con')
-        #neuron_param = getting_started.neuronParam
-        filename = getting_started.hocfile     
         neuron_param = I.os.path.join(context.data_dir, 'neuron_model.param')
         neuron_param = I.scp.build_parameters(neuron_param)
         neuron_param.neuron['cell_modify_functions'] = I.scp.NTParameterSet({'scale_apical_morph_86': {}})
+        filename = I.os.path.join(context.data_dir, "86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2.hoc")
         neuron_param.neuron['filename'] = filename
         psps = PSPs(confile=confile, neuron_param=neuron_param)
         indexes = [lv for lv, k in enumerate(psps._keys) if k[0] == 'VPM_C2']
@@ -39,5 +36,4 @@ class TestSynapticStrengthFitting(unittest.TestCase):
         psps.run(c)
         optimal_g_pdf = psps.get_optimal_g(I.barrel_cortex.get_EPSP_measurement())
         gVPM = optimal_g_pdf.loc['VPM_C2']['optimal g']
-        self.assertGreaterEqual(gVPM, 1.75)
-        self.assertGreaterEqual(1.85, gVPM)        
+        assert(1.85 >= gVPM >= 1.75)
