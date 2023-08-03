@@ -43,7 +43,7 @@ def pytest_configure(config):
     # print("setting distributed duck-typed object as module level attribute")
     distributed.client_object_duck_typed = client
     # only log warnings
-    logging.setLevel(logging.WARNING)
+    logging.getLogger().setLevel(logging.WARNING)  # set logging level of root logger to WARNING
     
 
         
