@@ -45,18 +45,16 @@ assert(os.path.exists(example_path))
 
 class TestSimrun():
 
-    #@decorators.testlevel(1)    
+    @decorators.testlevel(1)
     def test_generate_synapse_activation_returns_filelist(self, tmpdir):
         try:
             dummy = simrun2.generate_synapse_activations.generate_synapse_activations(cellParamName, networkName, dirPrefix=tmpdir.dirname, nSweeps=1, nprocs=1, tStop=345, silent=True)
             dummy = dummy.compute(get = dask.get)
         except:
             raise
-        finally:
-            shutil.rmtree(tmpdir)
         assert isinstance(dummy[0][0][0], str)        
       
-    #@decorators.testlevel(2)    
+    @decorators.testlevel(2)    
     def test_run_existing_synapse_activation_returns_identifier_dataframe_and_results_folder(self, tmpdir):        
         try:
             dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
@@ -69,7 +67,7 @@ class TestSimrun():
         assert isinstance(dummy[0][0][1], str)
 
            
-    #@decorators.testlevel(2)    
+    @decorators.testlevel(2)    
     def test_run_new_simulations_returns_dirname(self, tmpdir):
         try:
             dummy = simrun2.run_new_simulations.run_new_simulations(
@@ -81,7 +79,7 @@ class TestSimrun():
             raise
         assert isinstance(dummy[0][0], str)  
           
-    #@decorators.testlevel(2)           
+    @decorators.testlevel(2)           
     def test_position_of_morphology_does_not_matter_after_network_mapping(self, tmpdir):
         # simrun2 renames a dir once it finishes running
         # so create single-purpose subdirectories for simulation output
@@ -114,7 +112,7 @@ class TestSimrun():
         except:
             raise
           
-    #@decorators.testlevel(2)               
+    @decorators.testlevel(2)               
     def test_reproduce_simulation_trail_from_roberts_model_control(self, tmpdir):
         try:
             dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
@@ -163,7 +161,7 @@ class TestSimrun():
         pass
     """
     
-    #@decorators.testlevel(2)    
+    @decorators.testlevel(2)    
     def test_crossing_over_trails_show_identical_response_before_crossing_over_time(self, tmpdir):
         try:
             t = np.random.randint(100, high = 150)
