@@ -38,7 +38,7 @@ def uninterruptible_task():
     with Uninterruptible():
         print("Starting uninterruptible task...")
         for i in range(5):
-            print(f"Uninterruptible task progress: {i+1}/5")
+            print("Uninterruptible task progress: {}/5".format(i+1))
             time.sleep(1/5)
         print("Uninterruptible task completed.")
         
