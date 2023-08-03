@@ -7,7 +7,12 @@ Date: 05/01/2023
 
 import os
 import shutil
-from PIL import Image
+import six
+if six.PY3:
+    from PIL import Image
+else:
+    import warnings
+    warnings.warn("PIL could not be imported. Writing gifs will not work. Try a Py3 version.")
 import jinja2
 import IPython
 import dask
