@@ -7,12 +7,6 @@ Date: 05/01/2023
 
 import os
 import shutil
-import six
-if six.PY3:
-    from PIL import Image
-else:
-    import warnings
-    warnings.warn("PIL could not be imported. Writing gifs will not work. Try a Py3 version.")
 import jinja2
 import IPython
 import dask
@@ -90,6 +84,12 @@ def write_gif_from_images(images, out_path, interval=40, images_format = '.png',
         - images_format: .png, .pdf, .jpg...
         - auto_sort_paths: paths to images sorted
     '''
+    import six
+    if six.PY3:
+        from PIL import Image
+    else:
+        raise EnvironmentError("PIL.Image could not be imported. Writing gifs will not work. Try on a Python 3 environment with PIL installed.")
+
     if not out_path.endswith('.gif'):
         raise ValueError('output path must be the path to a gif!')
     
