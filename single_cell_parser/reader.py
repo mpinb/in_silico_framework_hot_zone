@@ -9,6 +9,7 @@ from . import scalar_field
 from model_data_base.mdbopen import mdbopen
 import logging
 log = logging.getLogger(__name__)
+log.propagate=True
 
 class Edge(object):
     '''
