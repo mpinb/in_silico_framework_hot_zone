@@ -1,4 +1,3 @@
-from scipy.spatial.transform import Rotation
 from biophysics_fitting import get_main_bifurcation_section
 import pandas as pd
 from ipywidgets import interactive, VBox, HBox, widgets, Layout
@@ -14,6 +13,11 @@ import warnings
 from barrel_cortex import inhibitory
 # let ImportWarnings show up when importing this module through Interface
 warnings.filterwarnings("default", category=ImportWarning, module=__name__)
+import six
+if six.PY3:
+    from scipy.spatial.transform import Rotation
+else:
+    warnings.warn("Scipy version is too old to import spatial.transform.Rotation. Cell alignment will not work.")
 try:
     from tqdm import tqdm
     HAS_TQDM = True
