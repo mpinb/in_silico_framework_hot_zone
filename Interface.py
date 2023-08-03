@@ -222,7 +222,10 @@ def get_client():
         Client: the client object
     """
     ports = get_user_port_numbers()
-    client_port = ports['dask_client_3']
+    if six.PY2:
+        client_port = ports['dask_client_2']
+    else:
+        client_port = ports['dask_client_3']
     try:
         ip = os.environ['IP_INFINIBAND']
     except KeyError as e:
@@ -231,8 +234,8 @@ def get_client():
         from socket import gethostbyname, gethostname
         ip = gethostbyname(gethostname())  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
         os.environ['IP_MAIN'] = ip
-        ip = ip.replace('100', '102')
-        os.environ['IP_INFINIBAND'] = ip.replace('100', '102')  # a bit hackish, but it works
+        ip_infiniband = ip.replace('100', '102')  # a bit hackish, but it works
+        os.environ['IP_INFINIBAND'] = ip_infiniband
     client = distributed.Client(ip+':'+client_port)
     return client
 
