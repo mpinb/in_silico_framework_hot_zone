@@ -42,8 +42,8 @@ def pytest_configure(config):
         client = distributed.Client('localhost:38786')
     # print("setting distributed duck-typed object as module level attribute")
     distributed.client_object_duck_typed = client
-    
-    disable_loggers_and_subloggers(disable_loggers)
+    # only log warnings
+    logging.setLevel(logging.WARNING)
     
 
         
