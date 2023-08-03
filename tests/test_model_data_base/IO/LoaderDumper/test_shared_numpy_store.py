@@ -28,7 +28,7 @@ def interruptible_task():
     import time
     print("Starting interruptible task...")
     for i in range(5):
-        print(f"Interruptible task progress: {i+1}/5")
+        print("Interruptible task progress: {}/5".format(i+1))
         time.sleep(1/5)
     print("Interruptible task completed.")
 
