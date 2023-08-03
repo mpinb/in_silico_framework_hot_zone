@@ -104,8 +104,8 @@ class TestGetKernel(unittest.TestCase):
             t1 = time.time()-t1
             t2 = time.time()
             Rm.apply_static(mdb, model_number = mn)
-            t2 = time.time() - t2     
-            np.testing.assert_array_less(max(t1,t2) / float(min(t1,t2)), 2)
+            t2 = time.time() - t2
+            np.testing.assert_array_less(max(t1,t2) / float(min(t1,t2)), 1.9)  # used to be 2, but sometimes it takes slightly longer than twice as fast...
          
     def test_concatenate_return_boundaries(self):
         a = np.array([[1,2,3],[2,3,4]])
