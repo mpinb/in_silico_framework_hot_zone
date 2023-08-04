@@ -2,7 +2,7 @@
 # this code will be run before any other pytest code
 # even before pytest discovery
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
-# for setting environment variables, use pytest.ini instead
+# for setting environment variables, use pytest.ini or .env instead
 import os
 import pytest
 import socket
@@ -19,7 +19,7 @@ def disable_loggers_and_subloggers(parent_logger_names):
     active_loggers = logging.root.manager.loggerDict
     for logger_to_disable_name in parent_logger_names:
         for active_logger_name, active_logger in active_loggers.items():
-            if logger_to_disable_name in active_logger_name:
+            if logger_to_disable_name.lower() in active_logger_name.lower():
                 # disable all loggers if a part of its name appears in disable_loggers
                 active_logger.disabled = True
 
