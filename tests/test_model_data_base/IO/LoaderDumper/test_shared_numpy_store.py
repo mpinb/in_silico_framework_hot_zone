@@ -143,7 +143,7 @@ def test_robustness():
 
         nps.close()        
         
-
+@pytest.mark.skipif(six.PY2, reason="Unavailable on Py2. Uninterruptable processes are interruptable in Py2.")
 def test_uninterruptible():
     print("Running interruptible task in a separate process.")
     t0 = time.time()        
