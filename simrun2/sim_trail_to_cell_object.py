@@ -36,10 +36,11 @@ def synapse_activation_df_to_roberts_synapse_activation(sa):
     return synapses
 
 def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = False, \
-                            scale_apical = scale_apical, range_vars = None, silent = True, 
+                            scale_apical = None, range_vars = None, silent = True, 
                             neuron_param_modify_functions = [],
                             network_param_modify_functions = [],
                             synapse_activation_modify_functions = [],
+                            additional_network_params = [],                            
                             tStop = 345):
     '''Resimulates simulation trail and returns cell object.
     Expects Instance of ModelDataBase and sim_trail index.
@@ -81,7 +82,8 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
                                     tStop = tStop,
                                     neuron_param_modify_functions = neuron_param_modify_functions,
                                     network_param_modify_functions = network_param_modify_functions,
-                                    synapse_activation_modify_functions = synapse_activation_modify_functions)
+                                    synapse_activation_modify_functions = synapse_activation_modify_functions,
+                                    additional_network_params = additional_network_params)
     finally:
         if silent == True:
             sys.stdout = stdout_bak
@@ -90,10 +92,11 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
 
 import tempfile
 def trail_to_cell_object(name = None, cellName = None, networkName = None, synapse_activation_file = None, \
-                    range_vars = None, scale_apical = scale_apical, allPoints = False, compute = True, tStop = 345,
+                    range_vars = None, scale_apical = None, allPoints = False, compute = True, tStop = 345,
                     neuron_param_modify_functions = [],
                     network_param_modify_functions = [],
-                    synapse_activation_modify_functions = []):
+                    synapse_activation_modify_functions = [],
+                    additional_network_params = []):
     tempdir = None
 
     try:
@@ -114,7 +117,8 @@ def trail_to_cell_object(name = None, cellName = None, networkName = None, synap
         cellName = cellName
         evokedUpParamName = networkName
         neuronParameters = load_param_file_if_path_is_provided(cellName)
-        evokedUpNWParameters = load_param_file_if_path_is_provided(evokedUpParamName) ##sumatra function for reading in parameter file
+        evokedUpNWParameters = load_param_file_if_path_is_provided(evokedUpParamName)     
+        additional_network_params = [scp.build_parameters(p) for p in additional_network_params]
         for fun in network_param_modify_functions:
             evokedUpNWParameters = fun(evokedUpNWParameters)
         for fun in neuron_param_modify_functions:

@@ -247,12 +247,12 @@ class CellMorphologyVisualizer:
         for sec_n, sec in enumerate(self.cell.sections):
             if sec.label == 'Soma':
                 # TODO: if soma is added, somatic voltage should lso be added
-                # x, y, z = self.soma_center
+                x, y, z = self.soma_center
                 # # soma size
-                # mn, mx = np.min(self.cell.soma.pts, axis=0), np.max(self.cell.soma.pts, axis=0)
-                # d_range = [mx_ - mn_ for mx_, mn_ in zip(mx, mn)]
-                # d = max(d_range)
-                # points.append([x, y, z, d, 0])
+                mn, mx = np.min(self.cell.soma.pts, axis=0), np.max(self.cell.soma.pts, axis=0)
+                d_range = [mx_ - mn_ for mx_, mn_ in zip(mx, mn)]
+                d = max(d_range)
+                points.append([x, y, z, d, 0])
                 continue
             elif sec.label in ['AIS', 'Myelin']:
                 continue
@@ -362,7 +362,7 @@ class CellMorphologyVisualizer:
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
         voltage_points = []
         for sec in self.cell.sections:
-            if sec.label in ['Soma', 'AIS', 'Myelin']:
+            if sec.label in ['AIS', 'Myelin']:
                 continue
 
             # Add voltage at the last point of the previous section
