@@ -32,7 +32,6 @@ def shared_array_from_disk(path, shape = None, dtype = None, name = None):
         f.readinto(shm.buf)
     return shm, shm_arr
 
-from multiprocessing.resource_tracker import unregister
 def shared_array_from_shared_mem_name(fname, shape = None, dtype = None):
     '''loads an already shared array by its name'''
     shm = shared_memory.SharedMemory(name=fname)
