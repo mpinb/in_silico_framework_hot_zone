@@ -1,7 +1,14 @@
 import os
 import hashlib
 import numpy as np
-from multiprocessing import shared_memory
+import logging
+log = logging.getLogger(__name__)
+log.propagate = True
+import six
+if six.Py3:
+    from multiprocessing import shared_memory
+else:
+    log.warning("multiprocessing.shared_memory can not be imported in Python 2 (available in >=Py3.8)")
 #from . import shared_memory_bugfixed as shared_memory
 import tempfile
 import shutil
