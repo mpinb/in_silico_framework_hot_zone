@@ -11,6 +11,6 @@ class TestCellMorphologyVisualizer:
 
     def test_init(self):
         self.cv = CellMorphologyVisualizer(self.cell, align_trunk=six.PY3)  # don't align trunk in py2, ithas no scipy Rotation object
-        self.assertIsInstance(self.cv, CellMorphologyVisualizer)
+        assert isinstance(self.cv, CellMorphologyVisualizer)
 
     # TODO: add more tests
