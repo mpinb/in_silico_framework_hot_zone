@@ -272,7 +272,7 @@ class WeightPlot():
     def save_plot_of_weights_at_t(self, t, n_celltypes, weight_scaling, n_spatial_bins, temporal_window_width, celltype, outdir):
         self.plot_weights(n_celltypes, weight_scaling, n_spatial_bins, temporal_window_width, categories=False, celltype=celltype, t=t,
                             return_axes=False)  # to make interactive plot
-        I.plt.title(f"Time: {t}")
+        I.plt.title("Time: {}".format(t))
         I.plt.savefig(outdir.join("frames/l5pt_weights_t={:03d}.png".format(t)), dpi=100)
         I.plt.close()
     
@@ -302,7 +302,7 @@ def write_frame_at_synaptic_input(weighted_input, df, stepsize=0.2, ax_lim=(0,30
     # plot data
     data = df[(df["bottleneck_node"] <=weighted_input+stepsize) & (df["bottleneck_node"] > weighted_input)]  # this is surprisingly quick
     I.plt.scatter(data["soma_isi"].values, data["dend_isi"].values, s=3, c=data["model_output"], cmap="viridis", vmin=0, vmax=1)
-    I.plt.title(f"weighted_input={round(weighted_input, 2)}")
+    I.plt.title("weighted_input={}".format(round(weighted_input, 2)))
     I.plt.colorbar()
 
     # plot y=x for visual guide to see equal timing dend and soma
@@ -365,7 +365,7 @@ def write_overlay_frame(model, weighted_input, df, outdir, stepsize=0.2, ax_lim=
     # plot data
     data = df[(df["bottleneck_node"] <=weighted_input+stepsize) & (df["bottleneck_node"] > weighted_input)]  # this is surprisingly quick
     I.plt.scatter(data["soma_isi"].values, data["dend_isi"].values, s=3, c=data["model_output"], cmap="viridis", vmin=0, vmax=1)
-    I.plt.title(f"weighted_input={round(weighted_input, 2)}")
+    I.plt.title("weighted_input={}".format(round(weighted_input, 2)))
     I.plt.colorbar()
 
     # save plot

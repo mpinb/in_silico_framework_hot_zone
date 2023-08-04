@@ -85,7 +85,7 @@ class SharedNumpyStore:
         if not name in self._files:
             self.update()
             if not name in self._files:
-                raise ValueError(f"Array with name {name} not found in the store.")
+                raise ValueError("Array with name {} not found in the store.".format(name))
 
         _, shape, dtype = SharedNumpyStore._get_metadata_from_fname(self._files[name])
         return self._files[name], shape, dtype
