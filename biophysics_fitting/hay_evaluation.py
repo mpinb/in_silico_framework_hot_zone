@@ -11,12 +11,37 @@ import pandas as pd
 import neuron
 h = neuron.h
 import warnings
+import sys
 import contextlib, io
 import logging
 log = logging.getLogger(__name__)
 log.propagate=True  # propagate to biophysics_fitting.__init__
 # moved to the bottom to resolve circular import
 # from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
+
+class StreamToLogger(object):
+    """
+    Fake file-like stream object that redirects writes to a logger instance.
+    Used for reading in .hoc files that provide output due to various print statements.
+    """
+    def __init__(self, logger, level):
+       self.logger = logger
+       self.level = level
+       self.linebuf = ''
+
+    def write(self, buf):
+       for line in buf.rstrip().splitlines():
+          self.logger.log(self.level, line.rstrip())
+
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, *args):
+        self.flush()
+
+    def flush(self):
+        pass
+
 
 neuron_basedir = os.path.join(os.path.dirname(__file__), 'MOEA_EH_minimal')
 
@@ -49,8 +74,7 @@ def setup_hay_evaluator(testing = False):
     
     central_file_name = 'fit_config_89_CDK20050712_BAC_step_arco_run1.hoc'
 
-    f = io.StringIO()
-    with contextlib.redirect_stdout(f):  # buffer and capture output provided by reading in .hoc files
+    with StreamToLogger(log, 10) as sys.stdout:  # redirect to log with level DEBUG (10)
         try:
             neuron.h.central_file_name    
             if not neuron.h.central_file_name == central_file_name:
@@ -63,9 +87,6 @@ def setup_hay_evaluator(testing = False):
             h('load_file("MOEA_gui_for_objective_calculation.hoc")')  
             if testing: 
                 test()
-    
-    for line in f.getvalue().splitlines():
-        log.debug(line)
 
 def is_setup():
     import neuron
@@ -127,14 +148,11 @@ def hay_objective_function(x):
     x = h.Vector().from_python(x)
 
     h.organism[0].set_genome(x)
-    f = io.StringIO()
-    with contextlib.redirect_stdout(f):  # buffer and capture output provided by reading in .hoc files
+    with StreamToLogger(log, 10) as sys.stdout:  # redirect to log with level DEBUG (10)
         try:
             h.evaluator.evaluate_population(o)
         except:
             return [1000]*5
-    for line in f.getvalue().splitlines():
-        log.debug(line)
     return pd.Series(np.array(o[0].pass_fitness_vec()), index = get_hay_objective_names())
 
 def test():
@@ -202,8 +220,7 @@ def hay_evaluate(cur_stim, tvec, vList):
     for v in vList:
         hoc_vList.append(h.Vector().from_python(v))
 
-    f = io.StringIO()
-    with contextlib.redirect_stdout(f):  # buffer and capture output provided by reading in .hoc files
+    with StreamToLogger(log, 10) as sys.stdout:  # redirect to log with level DEBUG (10)
         try:
             x = h.calculator.get_organism_stimulus_error(feature_mean_list.o(cur_stim),
                                             feature_std_list.o(cur_stim),
@@ -221,8 +238,6 @@ def hay_evaluate(cur_stim, tvec, vList):
             # if incomplete simulation data is provided to the hay evaluate function,        
             # this raises an hoc error 
             return {k.s: 1000 for k in list(h.evaluator.stimulus_feature_name_list.o(cur_stim))}
-    for line in f.getvalue().splitlines():
-        log.debug(line)
     
     return {h.evaluator.stimulus_feature_name_list.o(cur_stim).o(lv).s: x for lv, x in enumerate(x)}
         
