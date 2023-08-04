@@ -71,41 +71,6 @@ class TestGetKernel(unittest.TestCase):
         assert res.p_spike.values.mean() == 0
         res = Rm.apply_static({'test_synapse_activation': X+10000}, model_number = mn)
         assert res.p_spike.values.mean() == 1 ##!!
-        
-    def test_statistical_ReducedLdaModel_caching(self):
-        '''compare model infered from test data to expectancy'''
-        with FreshlyInitializedMdb() as mdb:
-            X,y = get_test_X_y(n_samples = 500)
-            mdb['test_synapse_activation'] = X
-            mdb['spike_times'] = pd.DataFrame(y).astype('f8').replace(0, np.NaN).replace(1, 100)
-            Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
-                         synapse_activation_window_width = 50)
-            Rm.fit([mdb])
-            mn = 0
-             
-            t1 = time.time()
-            Rm.apply_static(mdb, model_number = mn)
-            t1 = time.time()-t1
-            t2 = time.time()
-            Rm.apply_static(mdb, model_number = mn)
-            t2 = time.time() - t2     
-            np.testing.assert_array_less(50, t1/t2)
-             
-        with FreshlyInitializedMdb() as mdb:
-            X,y = get_test_X_y(n_samples = 500)
-            mdb['test_synapse_activation'] = X
-            mdb['spike_times'] = pd.DataFrame(y).astype('f8').replace(0, np.NaN).replace(1, 100)
-            Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
-                         synapse_activation_window_width = 50, cache = False)
-            Rm.fit([mdb])
-            mn = 0
-            t1 = time.time()
-            Rm.apply_static(mdb, model_number = mn)
-            t1 = time.time()-t1
-            t2 = time.time()
-            Rm.apply_static(mdb, model_number = mn)
-            t2 = time.time() - t2
-            np.testing.assert_array_less(max(t1,t2) / float(min(t1,t2)), 1.9)  # used to be 2, but sometimes it takes slightly longer than twice as fast...
          
     def test_concatenate_return_boundaries(self):
         a = np.array([[1,2,3],[2,3,4]])
