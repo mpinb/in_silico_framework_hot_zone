@@ -11,6 +11,9 @@ import pandas as pd
 import neuron
 h = neuron.h
 import warnings
+import logging
+log = logging.getLogger(__name__)
+log.propagate=True  # propagate to biophysics_fitting.__init__
 # moved to the bottom to resolve circular import
 # from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
 
@@ -33,6 +36,7 @@ def setup_hay_evaluator(testing = False):
     assert(os.path.exists(neuron_basedir))
     import neuron
     h = neuron.h
+    import contextlib, io
     
     warnings.warn("Setting up hay evaluator. This loads several variables " + 
                   "to the NEURON envioronment. Also, it creates a unconnected " + 
@@ -43,18 +47,24 @@ def setup_hay_evaluator(testing = False):
                   )
     
     central_file_name = 'fit_config_89_CDK20050712_BAC_step_arco_run1.hoc'
-    try:
-        neuron.h.central_file_name    
-        if not neuron.h.central_file_name == central_file_name:
-            raise ValueError('Once the central_file_name is set, it cannot be changed!')
-    except AttributeError:
-        #print 'setting up NEURON config'        
-        h('chdir("{path}")'.format(path = neuron_basedir))
-        h('strdef central_file_name')
-        h('central_file_name = "{}"'.format(central_file_name))
-        h('load_file("MOEA_gui_for_objective_calculation.hoc")')  
-        if testing: 
-            test()          
+
+    f = io.StringIO()
+    with contextlib.redirect_stdout(f):  # buffer and capture output provided by reading in .hoc files
+        try:
+            neuron.h.central_file_name    
+            if not neuron.h.central_file_name == central_file_name:
+                raise ValueError('Once the central_file_name is set, it cannot be changed!')
+        except AttributeError:
+            #print 'setting up NEURON config'        
+            h('chdir("{path}")'.format(path = neuron_basedir))
+            h('strdef central_file_name')
+            h('central_file_name = "{}"'.format(central_file_name))
+            h('load_file("MOEA_gui_for_objective_calculation.hoc")')  
+            if testing: 
+                test()
+    
+    for line in f.getvalue().splitlines():
+        log.debug(line)
 
 def is_setup():
     import neuron

@@ -11,6 +11,9 @@ from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_t
 import numpy as np
 import pandas as pd
 from .utils import *
+import logging
+log = logging.getLogger(__name__)
+log.propagate = True
 
 h = neuron.h
 
@@ -153,7 +156,7 @@ def trail_to_cell_object(name = None, cellName = None, networkName = None, synap
             scp.init_neuron_run(neuronParameters.sim, vardt=False) #trigger the actual simulation
             stopTime = time.time()
             simdt = stopTime - startTime
-            print('NEURON runtime: {:.2f} s'.format(simdt))
+            log.info('NEURON runtime: {:.2f} s'.format(simdt))
             t = np.array(tVec)
             vmSoma = np.array(cell.soma.recVList[0])
             cell.t = np.array(t[offsetBin:])
