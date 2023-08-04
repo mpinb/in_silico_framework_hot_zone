@@ -7,6 +7,7 @@ import glob
 import json
 import pandas as pd
 import numpy as np
+import vaex
 
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
@@ -78,7 +79,8 @@ def getPCA(df):
 class LinkedViewsServer:
     def __init__(self, data_folder):
         self.data_folder = Path(data_folder)        
-        self.thread = None        
+        self.thread = None    
+        self.vaex_df = None
 
         self.loadDataLegacy()
 
@@ -120,7 +122,7 @@ class LinkedViewsServer:
         self.thread.start()
         print(f"server is running at port {self.port}")
         self.start_logging()
-        print("set data:        server.set_data(df)")
+        print("set data:        server.set_data(vaex_df)")
         print("stop server:     server.stop()")
         
 
@@ -153,9 +155,9 @@ class LinkedViewsServer:
     def stop_logging(self):
         logging.getLogger().removeHandler(self.logfile_handler)
 
-    def set_data(self, df):
-        assert self.server is not None
-        raise NotImplementedError
+    def set_data(self, vaex_df):
+        assert self.server is not None        
+        self.vaex_df = vaex_df
 
     def init_routes(self):
         self.app.add_url_rule('/', 'index', self.index)        
@@ -165,6 +167,7 @@ class LinkedViewsServer:
         self.app.add_url_rule('/matrixServer/getMetaData', 'getMetaData', self.getMetaData, methods=["GET", "POST"])
         self.app.add_url_rule('/matrixServer/getResourceJSON', self.getResourceJSON, methods=["GET", "POST"])
         self.app.add_url_rule("/matrixServer/getValues", "getValues", self.getValues, methods=["GET", "POST"])
+        self.app.add_url_rule("/matrixServer/getDensity", "getDensity", self.getDensity, methods=["POST"])
 
     def index(self):
         return f"Tables: {[name for name in self.tables.keys()]}"
@@ -310,3 +313,58 @@ class LinkedViewsServer:
                 """
                 return json.dumps(response_data)
     
+
+    def getDensity(self): 
+        self.last_request = request.data
+        if request.method == "POST":            
+            if request.data:
+                data = request.get_json(force=True)
+
+                tableName = data["table"]
+                if(tableName not in ["vaex_df"]):
+                    raise ValueError(tableName)
+
+                df = self.vaex_df
+
+                columns = data["columns"]                
+                #indices = data["indices"]
+                format = data["format"]
+                if(format in ["count"]):
+                    assert len(columns) == 2
+                elif(format in ["min", "max", "mean", "median"]):
+                    assert len(columns) == 3
+                    value_column = columns[2]
+                else:
+                    raise ValueError(format)
+
+                binbycols = columns[0:2]
+                density_grid_shape = tuple(data["density_grid_shape"])
+                nCells = density_grid_shape[0] * density_grid_shape[1]
+                indices = np.arange(nCells)
+                                                
+                minmax_x = df.minmax(binbycols[0])
+                minmax_y = df.minmax(binbycols[1])
+                data_ranges = [minmax_x.tolist(), minmax_y.tolist()]
+
+                if(format == "count"):
+                    values = df.count(binby=binbycols, shape=density_grid_shape)
+                elif(format == "min"):                    
+                    values = df.min(value_column, binby=binbycols, shape=density_grid_shape)
+                elif(format == "max"):                    
+                    values = df.max(value_column, binby=binbycols, shape=density_grid_shape)
+                elif(format == "mean"):                    
+                    values = df.mean(value_column, binby=binbycols, shape=density_grid_shape)
+                elif(format == "median"):
+                    values = df.median_approx(value_column, binby=binbycols, shape=density_grid_shape)
+                else:
+                    raise ValueError(format)                            
+                
+                response_data = {
+                    "columns" : columns,
+                    "indices" : indices.tolist(),
+                    "values" : values.tolist(),
+                    "density_grid_shape" : data["density_grid_shape"],
+                    "data_ranges" : data_ranges
+                }
+
+                return json.dumps(response_data)
