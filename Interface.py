@@ -236,7 +236,7 @@ def get_client():
         os.environ['IP_MAIN'] = ip
         ip_infiniband = ip.replace('100', '102')  # a bit hackish, but it works
         os.environ['IP_INFINIBAND'] = ip_infiniband
-    client = distributed.Client(ip+':'+client_port)
+    client = distributed.Client(ip_infiniband+':'+client_port)
     return client
 
 
