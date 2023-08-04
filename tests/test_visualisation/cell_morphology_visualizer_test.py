@@ -5,7 +5,7 @@ from tests import setup_current_injection_experiment
 import six
 
 class TestCellMorphologyVisualizer:
-    def __init__(self):
+    def setup_class(self):
         self.cell = setup_current_injection_experiment()
         self.cv = None
 
