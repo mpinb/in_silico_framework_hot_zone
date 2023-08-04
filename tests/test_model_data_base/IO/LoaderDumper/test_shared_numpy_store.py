@@ -43,7 +43,7 @@ def uninterruptible_task():
         print("Uninterruptible task completed.")
         
 
-@pytest.mark.skipif(six.Py2, "Unavailable on Py2. The multiprocessing got `shared_memory` in Python 3.8")
+@pytest.mark.skipif(six.PY2, "Unavailable on Py2. The multiprocessing got `shared_memory` in Python 3.8")
 def test_shared_array_functions():
     arr = np.array([1, 2, 3])
     buffer, shared_array = shared_array_from_numpy(arr, name=None)
@@ -52,7 +52,7 @@ def test_shared_array_functions():
     shm.close()    
     shm.unlink()        
     
-@pytest.mark.skipif(six.Py2, "Unavailable on Py2. The multiprocessing got `shared_memory` in Python 3.8")
+@pytest.mark.skipif(six.PY2, "Unavailable on Py2. The multiprocessing got `shared_memory` in Python 3.8")
 def test_SharedNumpyStore():
     arr = np.array([1, 2, 3])
     with TemporaryDirectory() as tempdir:
@@ -62,7 +62,7 @@ def test_SharedNumpyStore():
         assert np.array_equal(arr, shared_array)
         nps.close()
         
-@pytest.mark.skipif(six.Py2, "Unavailable on Py2. The multiprocessing got `shared_memory` in Python 3.8")
+@pytest.mark.skipif(six.PY2, "Unavailable on Py2. The multiprocessing got `shared_memory` in Python 3.8")
 def test_append_save():
     arr1 = np.array([[1, 2, 3], [4, 5, 6]])
     arr2 = np.array([[7, 8, 9], [10, 11, 12]])
@@ -85,7 +85,7 @@ def test_append_save():
         assert np.array_equal(combined_arr, shared_array)  
         nps.close()
         
-@pytest.mark.skipif(six.Py2, "Unavailable on Py2. The multiprocessing got `shared_memory` in Python 3.8")
+@pytest.mark.skipif(six.PY2, "Unavailable on Py2. The multiprocessing got `shared_memory` in Python 3.8")
 def test_append_save_no_flush_leaves_array_unchanged():
     arr1 = np.array([[1, 2, 3], [4, 5, 6]])
     arr2 = np.array([[7, 8, 9], [10, 11, 12]])
@@ -108,7 +108,7 @@ def test_append_save_no_flush_leaves_array_unchanged():
         assert np.array_equal(arr1, shared_array) 
         nps.close()
    
-@pytest.mark.skipif(six.Py2, "Unavailable on Py2. The multiprocessing got `shared_memory` in Python 3.8")
+@pytest.mark.skipif(six.PY2, "Unavailable on Py2. The multiprocessing got `shared_memory` in Python 3.8")
 def test_robustness():
     arr1 = np.array([[1, 2, 3], [4, 5, 6]])
     arr2 = np.array([[7, 8, 9], [10, 11, 12]])
