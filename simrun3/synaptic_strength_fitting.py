@@ -10,7 +10,9 @@ activate_functional_synapse = I.network.activate_functional_synapse
 from .utils import get_cellnumbers_from_confile, split_network_param_in_one_elem_dicts
 from .get_cell_with_network import get_cell_with_network
 from biophysics_fitting.hay_evaluation import objectives_BAC, objectives_step
-
+import logging
+log = logging.getLogger(__name__)
+log.propagate = True
 
 ###############################
 # First part: class to manage synaptic strength fitting
@@ -53,7 +55,7 @@ class PSPs:
         
     def _setup_computation(self, exc_inh):
         if exc_inh == 'exc':
-            print('setting up computation for exc cells')
+            log.info('setting up computation for exc cells')
             for n in self.network_params_by_celltype:
                 assert(len(list(n.network.keys())) == 1)
                 celltype = list(n.network.keys())[0]
@@ -67,7 +69,7 @@ class PSPs:
                                      tStim = self.tStim, tEnd = self.tEnd)
                     self._delayeds.append(d)
         elif exc_inh == 'inh':
-            print('setting up computation for inh cells')
+            log.info('setting up computation for inh cells')
             for n in self.network_params_by_celltype:
                 assert(len(list(n.network.keys())) == 1)
                 celltype = list(n.network.keys())[0]
@@ -192,7 +194,7 @@ class PSPs:
         for k in sorted(nwMap.cells.keys()):
             if not mergestring in k:
                 continue
-            print(k)
+            log.info(k)
             cells.extend(nwMap.cells[k])
         synapses = [c.synapseList for c in cells]
         syn_coordinates = [[syn.coordinates for syn in synlist] for synlist in synapses]
@@ -322,8 +324,8 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     # without the following lines, the simulation will crash from time to time
     try: 
         cell.evokedNW.re_init_network()
-        print('found evokedNW attached to cell')
-        print('explicitly resetting it.')
+        log.info('found evokedNW attached to cell')
+        log.info('explicitly resetting it.')
     except AttributeError:
         pass
 
@@ -356,7 +358,7 @@ def run_ex_synapses(neuron_param, network_param, celltype, gAMPA = None, gNMDA =
     n_cells = len(nwMap.connected_cells[celltype])
     if mode == 'cells':
         for preSynCellID in range(n_cells):
-            print("Activating presyanaptic cell {} of {} cells of celltype {}".format(preSynCellID + 1, 
+            log.info("Activating presyanaptic cell {} of {} cells of celltype {}".format(preSynCellID + 1, 
                                                                                       n_cells,
                                                                                       celltype))
             t,v = run_ex_synapse(cell_nw_generator, neuron_param, network_param, 
@@ -368,7 +370,7 @@ def run_ex_synapses(neuron_param, network_param, celltype, gAMPA = None, gNMDA =
         for preSynCellID in range(n_cells):
             n_synapses = len(nwMap.cells[celltype][preSynCellID].synapseList)
             for preSynCellSynapseID in range(n_synapses):
-                print("Activating synapse {} of presyanaptic cell {} of {} cells of celltype {}".format(preSynCellSynapseID + 1, 
+                log.info("Activating synapse {} of presyanaptic cell {} of {} cells of celltype {}".format(preSynCellSynapseID + 1, 
                                                                                          preSynCellID + 1, 
                                                                                          n_cells,
                                                                                          celltype))
@@ -539,7 +541,7 @@ def merge_celltypes(vt,
     for detection_string in detection_strings:
         for celltype in sorted(vt.keys()):
             if not celltype.split('_')[0] in celltype_must_be_in:
-                print('skipping {}'.format(celltype))
+                log.info('skipping {}'.format(celltype))
                 continue
             for gAMPA in sorted(vt[celltype].keys()):
                 for gNMDA in sorted(vt[celltype][gAMPA].keys()):
@@ -561,7 +563,7 @@ def ePSP_summary_statistics(vt, threashold = 0.1, tPSPStart = 100.0):
                 t = list(v[0] for v in vt if v[1] >= threashold)                
                 v = list(v[1] for v in vt if v[1] >= threashold)
                 if len(t) == 0:
-                    print(("skipping celltype {}, gAMPA {}, gNMDA {}: no response above threashold of {} found".format(celltype, gAMPA, gNMDA, threashold)))
+                    log.info(("skipping celltype {}, gAMPA {}, gNMDA {}: no response above threashold of {} found".format(celltype, gAMPA, gNMDA, threashold)))
                     continue
                 out = {}                    
                 out['epspMean'] = I.np.mean(v)
