@@ -14,34 +14,11 @@ import warnings
 import sys
 import contextlib, io
 import logging
+from .utils import StreamToLogger
 log = logging.getLogger(__name__)
 log.propagate=True  # propagate to biophysics_fitting.__init__
 # moved to the bottom to resolve circular import
 # from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
-
-class StreamToLogger(object):
-    """
-    Fake file-like stream object that redirects writes to a logger instance.
-    Used for reading in .hoc files that provide output due to various print statements.
-    """
-    def __init__(self, logger, level):
-       self.logger = logger
-       self.level = level
-       self.linebuf = ''
-
-    def write(self, buf):
-       for line in buf.rstrip().splitlines():
-          self.logger.log(self.level, line.rstrip())
-
-    def __enter__(self):
-        return self
-    
-    def __exit__(self, *args):
-        self.flush()
-
-    def flush(self):
-        pass
-
 
 neuron_basedir = os.path.join(os.path.dirname(__file__), 'MOEA_EH_minimal')
 
