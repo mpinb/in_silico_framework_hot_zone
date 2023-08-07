@@ -368,3 +368,15 @@ class LinkedViewsServer:
                 }
 
                 return json.dumps(response_data)
+
+
+if __name__ == "__main__":
+    import vaex
+
+    data_folder = "/scratch/visual/bzfharth/in-silico-install-dir/project_src/in_silico_framework/getting_started/linked-views-example-data/backend_data_2023-06-22"
+    server = LinkedViewsServer(data_folder)
+    server.start(5000)
+    
+    filename = "/scratch/visual/bzfharth/in-silico-install-dir/project_src/in_silico_framework/getting_started/linked-views-example-data/backend_data_2023-06-22/simulation_samples.csv"
+    df = vaex.from_csv(filename, copy_index=False)
+    server.set_data(df)

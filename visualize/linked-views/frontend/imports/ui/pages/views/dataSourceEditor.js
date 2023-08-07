@@ -4,10 +4,13 @@ import Select from 'react-select';
 import { deepCopy } from './core/utilCore.js';
 
 
-const styleSelect = {
-    width: 350,
-    fontSize: 14
-}
+const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      width: '250px',
+      fontSize: '14px'
+    }),
+  };
 
 class DataSourceEditor extends React.Component {
     constructor(props) {
@@ -86,8 +89,7 @@ class DataSourceEditor extends React.Component {
     }
 
     render() {
-        console.log(this.state.activeSelections);
-        console.log(this.availableColumns);
+                
         return (
             <table style={{ width: '100%' }}>
                 <tbody>
@@ -102,15 +104,15 @@ class DataSourceEditor extends React.Component {
                             <div style={{ width: "500px", height: '350px', overflow: 'auto' }}>
                                 <table style={{ width: '100%' }}><tbody>
                                     <tr key="name-row"><td><input type="text" value={this.state.name} onInput={this.handleNameChange.bind(this)}></input></td></tr>
-                                    {this.state.activeSelections.map((selectedValue, index) => (
+                                    {activeSelections.map((selectedValue, index) => (
                                         <tr key={index}>
                                             <td>
                                                 <div style={{ display: 'flex' }}>
                                                     <Select
-                                                        value={selectedValue}
+                                                        value={this.availableSelections.find((item) => item.value === selectedValue)}
                                                         onChange={this.handleSelectChange.bind(this, index)}
                                                         options={this.availableSelections}
-                                                        style={styleSelect}
+                                                        styles={customStyles}
                                                     />
                                                 </div>
                                             </td>
