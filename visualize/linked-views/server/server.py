@@ -58,7 +58,7 @@ def get_data_ranges(df):
     return ranges 
 
 def get_data_ranges_vaex(df):
-    col_names = list(df.columns)
+    col_names = df.get_column_names()
     ranges = {}
     ranges["min"] = df.min(col_names).tolist()
     ranges["max"] = df.max(col_names).tolist()
@@ -167,7 +167,7 @@ class LinkedViewsServer:
     def set_data(self, vaex_df):
         assert self.server is not None        
         self.vaex_df = vaex_df
-        self.vaex_columns = list(vaex_df.columns)
+        self.vaex_columns = vaex_df.get_column_names()
 
     def init_routes(self):
         self.app.add_url_rule('/', 'index', self.index)        
@@ -242,7 +242,7 @@ class LinkedViewsServer:
                     meta_data.append({
                         "name" : "vaex_df",
                         "num_rows" : self.vaex_df.shape[0],
-                        "columns" : list(self.vaex_df.columns),
+                        "columns" : self.vaex_columns,
                         "data_ranges" : get_data_ranges_vaex(self.vaex_df)                
                     })
 

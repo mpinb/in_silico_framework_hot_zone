@@ -155,8 +155,12 @@ class DensityPlot extends CoordinatedView {
           return (v-min_value)/delta;
         }      
       }
+
+      const norm_coord = (i, ni) => {
+        return -1 + 2*i/ni
+      }
       
-      const values_plot = coords_value.map(v => [v[0]/nx, v[1]/ny, norm_value(v[2])]);
+      const values_plot = coords_value.map(v => [norm_coord(v[0],nx), norm_coord(v[1],ny), norm_value(v[2])]);
                   
       that.scatterplot.draw(values_plot);
 
