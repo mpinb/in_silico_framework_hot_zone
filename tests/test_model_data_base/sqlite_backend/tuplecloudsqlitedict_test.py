@@ -14,7 +14,7 @@ def write_data_to_dict(path, key):
     dict_[key] = data
             
             
-class Tests(unittest.TestCase):
+class TestTupleCloudSQLiteDict(unittest.TestCase):
     def setUp(self):
         self.tempdir = tempfile.mkdtemp()
         self.path = os.path.join(self.tempdir, 'tuplecloudsql_test.db')

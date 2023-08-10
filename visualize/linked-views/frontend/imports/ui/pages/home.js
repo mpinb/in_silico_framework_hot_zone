@@ -1,15 +1,18 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 import './home.html'
 import '/imports/ui/css/goldenlayout-base.css';
 import '/imports/ui/css/goldenlayout-light-theme.css';
 
-import './views/projectView';
-import './views/grammarView.js';
-import './views/gridLayout.js';
-import './views/viewSpecifications.js';
 
 import { Template } from 'meteor/templating';
 import { ViewManager } from './views/core/viewManager';
 
+import ProjectControl from './views/projectView';
+import ViewSpecificationsControl from './views/viewSpecifications';
+import GrammarControl from './views/grammarView.js';
+import GridControl from './views/gridLayout.js';
 
 
 Template.home.onRendered(() => {
@@ -38,25 +41,25 @@ Template.home.onRendered(() => {
                                 id: "sidebar",
                                 content: [
                                     {
-                                        type: 'component',
-                                        componentName: 'viewer',
+                                        type: 'react-component',
+                                        component: 'project-control',
                                         title: 'Session',
                                         isClosable: false,
-                                        componentState: { name: 'channel-viewer', id: 'channel-viewer', uuid: "new", loaded: 'false' }
+                                        props: { viewManager : viewManager }
                                     },
                                     {
-                                        type: 'component',
-                                        componentName: 'viewer',
+                                        type: 'react-component',
+                                        component: 'view-specifications-control',
                                         title: 'View specifications',
                                         isClosable: false,
-                                        componentState: { name: 'tree-viewer', id: 'tree-viewer', uuid: "new", loaded: 'false' }
+                                        props: { viewManager : viewManager }
                                     },
                                     {
-                                        type: 'component',
-                                        componentName: 'viewer',
+                                        type: 'react-component',
+                                        component: 'grammar-control',
                                         title: 'Interaction grammar',
                                         isClosable: false,
-                                        componentState: { name: 'project-viewer', id: 'project-viewer', uuid: "new", loaded: 'false' }
+                                        props: { viewManager : viewManager }
                                     }                                 
                                 ]
                             }
@@ -70,14 +73,12 @@ Template.home.onRendered(() => {
                                 type: 'stack',
                                 id: "sidebar",
                                 content: [
-
                                     {
-                                        type: 'component',
-                                        componentName: 'viewer',
-                                        title: 'Workspace',
-                                        id: 'matrix-viewer',
+                                        type: 'react-component',                                        
+                                        component: "grid-control",
+                                        title: 'Workspace',                                        
                                         isClosable: false,
-                                        componentState: { name: 'matrix-viewer', id: 'matrix-viewer', uuid: "new", loaded: 'false' }
+                                        props: { viewManager : viewManager }
                                     }
                                 ]
                             },
@@ -90,47 +91,15 @@ Template.home.onRendered(() => {
         let container = document.getElementById('layoutContainer');
         myLayout = new GoldenLayout(config, container);
 
-        myLayout.registerComponent('viewer', function (container, componentState) {
-            container.getElement().html('<div class="' + componentState.name + '"></div>');
-            container.on('show', function () {
-                if (container.getState().loaded == 'false') {
-                    $(function () {
-                        createTemplate(container.getState().name, viewManager);
-                        container.extendState({ loaded: 'true' });
-                    });
-                }
-            });
-
-            container.on('resize', function () {
-                if (container.getState().loaded == 'true') {
-                    //viewManager.onResize(container);
-                }
-            });
-        });
+        myLayout.registerComponent("project-control", ProjectControl);
+        myLayout.registerComponent("view-specifications-control", ViewSpecificationsControl);
+        myLayout.registerComponent("grammar-control", GrammarControl);
+        myLayout.registerComponent("grid-control", GridControl);
+        
+        window.React = React;
+        window.ReactDOM = ReactDOM;
 
         myLayout.init();
     });
 
 });
-
-
-function createTemplate(name, viewManager) {
-
-    if (name == 'tree-viewer') {
-        Blaze.renderWithData(Template.viewSpecifications, viewManager, $('.tree-viewer')[0]);
-    }
-
-    if (name == 'project-viewer') {
-        Blaze.renderWithData(Template.grammarView, viewManager, $('.project-viewer')[0]);
-    }    
-
-    
-    if (name == 'channel-viewer') {
-        Blaze.renderWithData(Template.projectView, viewManager, $('.channel-viewer')[0]);
-    }
-    
-
-    if (name == 'matrix-viewer') {
-        Blaze.renderWithData(Template.gridLayout, viewManager, $('.matrix-viewer')[0]);
-    }
-}

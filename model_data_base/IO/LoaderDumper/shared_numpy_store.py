@@ -1,7 +1,14 @@
 import os
 import hashlib
 import numpy as np
-from multiprocessing import shared_memory
+import logging
+log = logging.getLogger(__name__)
+log.propagate = True
+import six
+if six.PY3:
+    from multiprocessing import shared_memory
+else:
+    log.warning("multiprocessing.shared_memory can not be imported in Python 2 (available in >=Py3.8)")
 #from . import shared_memory_bugfixed as shared_memory
 import tempfile
 import shutil
@@ -25,7 +32,6 @@ def shared_array_from_disk(path, shape = None, dtype = None, name = None):
         f.readinto(shm.buf)
     return shm, shm_arr
 
-from multiprocessing.resource_tracker import unregister
 def shared_array_from_shared_mem_name(fname, shape = None, dtype = None):
     '''loads an already shared array by its name'''
     shm = shared_memory.SharedMemory(name=fname)
@@ -85,7 +91,7 @@ class SharedNumpyStore:
         if not name in self._files:
             self.update()
             if not name in self._files:
-                raise ValueError(f"Array with name {name} not found in the store.")
+                raise ValueError("Array with name {} not found in the store.".format(name))
 
         _, shape, dtype = SharedNumpyStore._get_metadata_from_fname(self._files[name])
         return self._files[name], shape, dtype

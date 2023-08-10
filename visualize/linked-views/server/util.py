@@ -432,3 +432,53 @@ def loadDataVector(filename, colIdx, delimiter=" ", skiprows=0):
         for i in range(skiprows, len(lines)):            
             x[i-skiprows] = int(lines[i].rstrip().split(delimiter)[colIdx])
         return x
+
+def getParamsCols():
+    params_py2 = ['ephys.CaDynamics_E2.apic.decay',
+        'ephys.CaDynamics_E2.apic.gamma', 'ephys.CaDynamics_E2.axon.decay',
+        'ephys.CaDynamics_E2.axon.gamma', 'ephys.CaDynamics_E2.soma.decay',
+        'ephys.CaDynamics_E2.soma.gamma', 'ephys.Ca_HVA.apic.gCa_HVAbar',
+        'ephys.Ca_HVA.axon.gCa_HVAbar', 'ephys.Ca_HVA.soma.gCa_HVAbar',
+        'ephys.Ca_LVAst.apic.gCa_LVAstbar', 'ephys.Ca_LVAst.axon.gCa_LVAstbar',
+        'ephys.Ca_LVAst.soma.gCa_LVAstbar', 'ephys.Im.apic.gImbar',
+        'ephys.K_Pst.axon.gK_Pstbar', 'ephys.K_Pst.soma.gK_Pstbar',
+        'ephys.K_Tst.axon.gK_Tstbar', 'ephys.K_Tst.soma.gK_Tstbar',
+        'ephys.NaTa_t.apic.gNaTa_tbar', 'ephys.NaTa_t.axon.gNaTa_tbar',
+        'ephys.NaTa_t.soma.gNaTa_tbar', 'ephys.Nap_Et2.axon.gNap_Et2bar',
+        'ephys.Nap_Et2.soma.gNap_Et2bar', 'ephys.SK_E2.apic.gSK_E2bar',
+        'ephys.SK_E2.axon.gSK_E2bar', 'ephys.SK_E2.soma.gSK_E2bar',
+        'ephys.SKv3_1.apic.gSKv3_1bar', 'ephys.SKv3_1.apic.offset',
+        'ephys.SKv3_1.apic.slope', 'ephys.SKv3_1.axon.gSKv3_1bar',
+        'ephys.SKv3_1.soma.gSKv3_1bar', 'ephys.none.apic.g_pas',
+        'ephys.none.axon.g_pas', 'ephys.none.dend.g_pas',
+        'ephys.none.soma.g_pas', 'scale_apical.scale']
+
+    params_py3 = [p.replace('ephys.CaDynamics_E2', 'ephys.CaDynamics_E2_v2') for p in params_py2]
+    return params_py3
+
+
+
+"""
+code for sending request to server from notebook
+
+import requests
+
+url = "http://127.0.0.1:5000/matrixServer/getDensity"
+
+data = {
+    "table" : "vaex_df",
+    "format" : "mean",
+    "columns" : [*binbycols,value_col],
+    "density_grid_shape" : [10,10]
+}
+
+response = requests.post(url, json=data)
+# Check the status code of the response
+if response.status_code == 200:  # 200 means success
+    data = response.json()  # Assuming the server returns JSON data
+    print(data)
+else:
+    print(f"Request failed with status code: {response.status_code}")
+    print(response.text)  # Print the response content, which may contain the error message from the server
+
+"""

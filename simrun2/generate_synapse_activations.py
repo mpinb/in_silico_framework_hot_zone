@@ -14,7 +14,9 @@ from .seed_manager import get_seed
 from .utils import *
 import os
 import socket
-
+import logging
+log = logging.getLogger(__name__)
+log.propagate = True
 
 
 def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', seed = None, nSweeps = 1000, tStop = 345):
@@ -41,7 +43,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', seed = No
     '''
     assert seed is not None
     np.random.seed(seed)
-    print("seed: %i" % seed)
+    log.info("seed: %i" % seed)
     neuronParameters = scp.build_parameters(cellParamName)
     evokedUpNWParameters = scp.build_parameters(evokedUpParamName) ##sumatra function for reading in parameter file
     scp.load_NMODL_parameters(neuronParameters)
@@ -75,19 +77,19 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', seed = No
         evokedNW.create_saved_network2()
         stopTime = time.time()
         setupdt = stopTime - startTime
-        print('Network setup time: %.2f s' % setupdt)
+        log.info('Network setup time: %.2f s' % setupdt)
                 
         synTypes = list(cell.synapses.keys())
         synTypes.sort()
         
-        print('writing simulation results')
+        log.info('writing simulation results')
         fname = 'simulation'
         fname += '_run%04d' % nRun
         
         t = None
         synName = dirName + '/' + fname + '_synapses.csv'
         out.append(synName)
-        print('computing active synapse properties')
+        log.info('computing active synapse properties')
         sca.compute_synapse_distances_times(synName, cell, t, synTypes)
         preSynCellsName = dirName + '/' + fname + '_presynaptic_cells.csv'
         scp.write_presynaptic_spike_times(preSynCellsName, evokedNW.cells)
@@ -97,9 +99,9 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', seed = No
         cell.re_init_cell()
         evokedNW.re_init_network()
         
-        print('-------------------------------')
+        log.info('-------------------------------')
     
-    print('writing simulation parameter files')
+    log.info('writing simulation parameter files')
     neuronParameters.save(os.path.join(dirName, 'neuron_model.param'))
     evokedUpNWParameters.save(os.path.join(dirName, 'network_model.param'))
     return out

@@ -6,7 +6,7 @@ import os, unittest
 from .context import *
 
 
-class Tests(unittest.TestCase): 
+class TestSingleCellParserInit(unittest.TestCase): 
     def setUp(self):
         self.cell_param = os.path.join(getting_started.getting_started_dir, \
                             'biophysical_constraints', \

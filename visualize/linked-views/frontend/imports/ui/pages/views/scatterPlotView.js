@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import createScatterplot from 'regl-scatterplot';
-import { viridisColormap, colorMapWhiteBlack } from './core/colorManager';
+import { viridisColormapReverse, colorMapWhiteBlack } from './core/colorManager';
 import CoordinatedView from './core/coordinatedView';
 
 import * as d3 from 'd3';
@@ -145,7 +145,7 @@ class ReglScatterPlot extends CoordinatedView {
       pointSize: 2,
       lassoOnLongPress: true,
       lassoColor: "#ffa500",
-      pointColor: this.has_color ? viridisColormap : ["#4682b4"], 
+      pointColor: this.has_color ? viridisColormapReverse : ["#4682b4"], 
       opacityInactiveMax: 0.3,
       colorBy: this.has_color ? 'valueA' : undefined,
       keyMap: { alt: 'lasso', shift: 'rotate' }
@@ -157,6 +157,7 @@ class ReglScatterPlot extends CoordinatedView {
     console.log(this.data_sources);
     this.dataManager.loadValues((data) => {
 
+      that.currentData = data;
       //console.log("server response", this.name, data)
 
       let values = data.values;

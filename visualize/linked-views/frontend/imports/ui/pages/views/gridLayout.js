@@ -1,13 +1,9 @@
-import './gridLayout.html'
-import { Template } from 'meteor/templating';
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
 import GridLayout from "react-grid-layout";
 
-import { deepCopy } from './core/utilCore';
+
 import "../../css/grid.css";
 
-import VegaView from "./vegaLiteView"
 import ReglScatterPlot from './scatterPlotView';
 import ParallelCoordinates from './parallelCoordinatesView';
 import AnatomicalView from './anatomicalView';
@@ -15,24 +11,8 @@ import VoltageTraceView from './voltageTraceView';
 import TimeControlView from './timeControlView';
 import CelltypeView from './celltypeView';
 import CelltypeDensityView from './celltypeDensityView';
+import DensityPlot from './densityPlotView';
 
-
-const styleMenuHeader = {
-    fontSize: 14,
-    fontWeight: "bold",
-}
-
-const styleDefault = {
-    fontSize: 14,
-}
-
-const styleGridCellInfo = {
-    fontSize: 10,
-}
-
-const styleButton = {
-    borderWidth: 1
-}
 
 const gridItemStyle = {
     border: '1px solid lightgrey',
@@ -51,7 +31,7 @@ class GridControl extends React.Component {
     constructor(props) {
         super(props);
 
-        this.viewManager = props.data;
+        this.viewManager = props.viewManager;
         this.dataManager = this.viewManager.dataManager;
 
         this.state = {
@@ -87,15 +67,7 @@ class GridControl extends React.Component {
         let isScatterPlot = false;
         let view = undefined;
         if (viewSpec) {
-            if (viewSpec.type == "vega-scatterplot") {
-                isScatterPlot = true;
-                view = <VegaView
-                    viewManager={this.viewManager}
-                    data_sources={viewSpec.data_sources}
-                    name={viewName}
-                    table={viewSpec.table}
-                />
-            } else if (viewSpec.type == "regl-scatterplot" || viewSpec.type == "regl-scatterplot-large" || viewSpec.type == "scatterplot PCA" ||
+            if (viewSpec.type == "regl-scatterplot" || viewSpec.type == "regl-scatterplot-large" || viewSpec.type == "scatterplot PCA" ||
                 viewSpec.type == "regl-scatterplot neurons" || viewSpec.type == "regl-scatterplot synapses") {
                 isScatterPlot = true;
                 let embedding = viewSpec.type == "scatterplot PCA" ? "PCA" : "none";
@@ -171,7 +143,19 @@ class GridControl extends React.Component {
                     width={width}
                     height={height}
                     table={viewSpec.table}
-                />            
+                />  
+            } else if (viewSpec.type == "density-count" || viewSpec.type == "density-min" || viewSpec.type == "density-max"
+                || viewSpec.type == "density-mean" || viewSpec.type == "density-median") {
+                view = <DensityPlot
+                    viewManager={this.viewManager}
+                    data_sources={viewSpec.data_sources}
+                    name={viewName}
+                    width={width}
+                    height={height}
+                    table={viewSpec.table}
+                    configuration={viewSpec.configuration}
+                />
+
             } else {
                 view = <div>unknown view type: {viewSpec.type}</div>
             }
@@ -250,24 +234,5 @@ class GridControl extends React.Component {
 }
 
 
+export default GridControl
 
-
-
-Template.gridLayout.onCreated(function () {
-    this.viewManager = Template.currentData();
-});
-
-Template.gridLayout.onRendered(function () {
-    this.viewManager = Template.currentData();
-});
-
-
-Template.gridLayout.helpers({
-    GridLayoutControl() {
-        return GridControl;
-    },
-
-    viewManager() {
-        return Template.instance().viewManager;
-    }
-});

@@ -28,6 +28,12 @@ meteor run --settings settings.json
 
 ### Known issues
 If there are certificate errors downloading packages during install or run use the following setting before executing meteor command.
+#### Resolve in Linux
+```
+NODE_TLS_REJECT_UNAUTHORIZED=0 meteor <any-command>
+```
+
+#### Resolve in Windows
 In standard command prompt:
 ```
 set NODE_TLS_REJECT_UNAUTHORIZED=0

@@ -1,7 +1,7 @@
 import os
 import neuron
 h = neuron.h
-import single_cell_parser as scp
+from Interface import scp
 from getting_started import getting_started_dir # path to getting started folder
 from model_data_base.utils import silence_stdout
 

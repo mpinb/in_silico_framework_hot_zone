@@ -40,6 +40,14 @@ from collections import defaultdict
 import cloudpickle
 import six
 
+### logging setup
+import logging
+root_logger = logging.getLogger()
+log_stream_handler = logging.StreamHandler(stream=sys.stdout)  # a singular stream handler, so that all logs can redirect to this one
+log_stream_handler.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
+root_logger.handlers = [log_stream_handler]
+
+
 try:
     from IPython import display
 except ImportError:
@@ -166,6 +174,7 @@ except ImportError:
 
 import single_cell_analyzer as sca
 import single_cell_parser as scp
+from single_cell_parser import network  # simrun3.synaptic_strength_fitting relies on this
 try:
     from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
 except ImportError:
@@ -213,22 +222,20 @@ def get_client():
         Client: the client object
     """
     ports = get_user_port_numbers()
-    client_port = ports['dask_client_3']
-    try:
-        import distributed
-        try:
-            ip = os.environ['IP_INFINIBAND']
-        except KeyError as e:
-            print("IP is not available as environment variable")
-            print("fetching ip...")
-            from socket import gethostbyname, gethostname
-            ip = gethostbyname(gethostname())  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
-            os.environ['IP_MAIN'] = ip
-            ip = ip.replace('100', '102')
-            os.environ['IP_INFINIBAND'] = ip.replace('100', '102')  # a bit hackish, but it works
-    except ImportError as e:
-        print(e)
-    client = distributed.Client(ip+':'+client_port)
+    if six.PY2:
+        client_port = ports['dask_client_2']
+    else:
+        client_port = ports['dask_client_3']
+
+    from socket import gethostbyname, gethostname
+    hostname = gethostname()
+    ip = gethostbyname(hostname)  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
+    if 'soma' in hostname:
+        #we're on the soma cluster and have infiniband
+        ip_infiniband = ip.replace('100', '102')  # a bit hackish, but it works
+        client = distributed.Client(ip_infiniband+':'+client_port)
+    else:
+        client = distributed.Client(ip+':'+client_port)
     return client
 
 

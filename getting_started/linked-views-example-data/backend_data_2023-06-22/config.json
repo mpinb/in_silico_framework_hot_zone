@@ -44,6 +44,56 @@
             "min_num_datasources": 0,
             "max_num_datasources": 3,
             "table": "simulation_samples.csv"
+        },
+        {
+            "type": "density-count",
+            "min_num_datasources": 2,
+            "max_num_datasources": 2,
+            "table": "vaex_df",
+            "configuration": {
+            	"format" : "count",
+                "density_grid_shape": [100,100]
+            }
+        },
+        {
+            "type": "density-min",
+            "min_num_datasources": 3,
+            "max_num_datasources": 3,
+            "table": "vaex_df",
+            "configuration": {
+            	"format" : "min",
+                "density_grid_shape": [100,100]
+            }
+        },
+        {
+            "type": "density-max",
+            "min_num_datasources": 3,
+            "max_num_datasources": 3,
+            "table": "vaex_df",
+            "configuration": {
+            	"format" : "max",
+                "density_grid_shape": [100,100]
+            }
+        },
+        {
+            "type": "density-mean",
+            "min_num_datasources": 3,
+            "max_num_datasources": 3,
+            "table": "vaex_df",
+            "configuration": {
+            	"format" : "mean",
+                "density_grid_shape": [100,100]
+            }
+        },
+        {
+            "type": "density-median",
+            "min_num_datasources": 3,
+            "max_num_datasources": 3,
+            "table": "vaex_df",
+            "configuration": {
+            	"format" : "median",
+                "density_grid_shape": [100,100]
+            }
         }
     ],
     "cached_tables" : [],

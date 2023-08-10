@@ -21,7 +21,7 @@ def robust_del_fun(mdb, key):
     except KeyError:
         pass
             
-class Tests(unittest.TestCase): 
+class TestDumperSmall(unittest.TestCase): 
     def setUp(self):
         # set up model_data_base in temporary folder and initialize it.
         # This additionally is an implicit test, which ensures that the

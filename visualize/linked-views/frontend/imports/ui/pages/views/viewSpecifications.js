@@ -1,5 +1,3 @@
-import './viewSpecifications.html'
-import { Template } from 'meteor/templating';
 import React, { useState } from 'react';
 import { deepCopy } from './core/utilCore';
 
@@ -7,25 +5,24 @@ import Select from 'react-select';
 import DataSourceEditor from './dataSourceEditor';
 import { string } from 'prop-types';
 
-const styleSelect = {
-    width: 250,
-    fontSize: 14,
-}
-
-const styleDatasources = {
-    fontSize: 12,
-    fontStyle: "italic"
-}
-
+const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      width: '250px',
+      fontSize: '14px'
+    }),
+  };
 
 class ViewSpecificationsControl extends React.Component {
     constructor(props) {
         super(props);
 
-        this.viewManager = props.data;
+        this.viewManager = props.viewManager;
         this.dataManager = this.viewManager.dataManager;
 
         this.available_view_types = this.dataManager.available_views;        
+
+        console.log(this.available_view_types);
 
         this.state = {
             objects: this.viewManager.view_specifications,
@@ -50,6 +47,7 @@ class ViewSpecificationsControl extends React.Component {
     }
 
     handleViewOptionChange(event) {        
+        console.log(event)
         this.setState((state, props) => {
             if(event){
                 state.selected_view_add = event.value;            
@@ -141,17 +139,19 @@ class ViewSpecificationsControl extends React.Component {
             return <div className='codeText'>{id}: {type}</div>
         }
 
-        const { objects, editingIndex, editedName } = this.state;
-        return (
+        const { objects, editingIndex, editedName } = this.state;        
+        const { selectedOption } = this.state.selected_view_add;
+        
+        return (            
             <table style={{ width: '100%' }}><tbody>
                 <tr>
                     <td>
                         <div style={{ display: 'flex' }}>
                             <Select
-                                value={this.state.selected_view_add}
+                                value={selectedOption}
                                 onChange={this.handleViewOptionChange.bind(this)}
                                 options={this.dataManager.available_views.map(x => ({value: x.type, label: x.type}))}
-                                style={styleSelect}
+                                styles={customStyles}
                             />
                             <button className='blueButton' onClick={this.handleViewAddClick.bind(this)}>Add</button>
                         </div>
@@ -232,22 +232,5 @@ class ViewSpecificationsControl extends React.Component {
     }
 }
 
-Template.viewSpecifications.onCreated(function () {
-    this.viewManager = Template.currentData();
-});
-
-Template.viewSpecifications.onRendered(function () {
-    this.viewManager = Template.currentData();
-});
-
-Template.viewSpecifications.helpers({
-    ViewSpecificationsControl() {
-        return ViewSpecificationsControl;
-    },
-
-    viewManager() {
-        return Template.instance().viewManager;
-    }
-});
 
 export default ViewSpecificationsControl

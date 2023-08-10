@@ -79,4 +79,4 @@ jobs:
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=38786 --dashboard-address=38787 &
           dask-worker localhost:38786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          python tests/mypytest.py
+          pytest -rsx -vv --color=yes tests/
