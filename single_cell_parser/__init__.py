@@ -3,7 +3,8 @@ cell parser and synapse mapper
 for single cell simulations
 with NeuroNet subcellular synapse distributions
 '''
-
+import logging
+log = logging.getLogger(__name__)
 import tables #so florida servers have no problem with neuron
 from .writer import write_cell_simulation
 from .writer import write_landmark_file
@@ -84,21 +85,21 @@ def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = T
     if scaleFunc is not None:
         warnings.warn('Keyword scaleFunc is deprecated! ' + 
                       'New: To ensure reproducability, scaleFunc should be specified in the parameters, as described in single_cell_parser.cell_modify_funs')
-    print('-------------------------------')
-    print('Starting setup of cell model...')
+    log.info('-------------------------------')
+    log.info('Starting setup of cell model...')
     axon = False
     
     if 'AIS' in list(parameters.keys()):
         axon = True
     
         
-    print('Loading cell morphology...')
+    log.info('Loading cell morphology...')
     parser = CellParser(parameters.filename)
     parser.spatialgraph_to_cell(parameters, axon, scaleFunc)
     if setUpBiophysics:
-        print('Setting up biophysical model...')
+        log.info('Setting up biophysical model...')
         parser.set_up_biophysics(parameters, allPoints)
-    print('-------------------------------')
+    log.info('-------------------------------')
     
     parser.apply_cell_modify_functions(parameters)       
     parser.cell.init_time_recording()
@@ -196,7 +197,7 @@ def spines_update_synapse_distribution_file(cell, synapse_distribution_file, new
 
     with open(new_synapse_distribution_file, "w") as synapse_file:    
         synapse_file.writelines(file_data)
-    print("Success: .syn file updated")
+    log.info("Success: .syn file updated")
         
     
 def spines_update_network_paramfile(new_synapse_distribution_file, network_paramfile, new_network_paramfile):
@@ -205,7 +206,7 @@ def spines_update_network_paramfile(new_synapse_distribution_file, network_param
     for i in list(network_param.network.keys()):
         network_param.network[i].synapses.distributionFile = new_synapse_distribution_file
     network_param.save(new_network_paramfile)
-    print("Success: network.param file updated")
+    log.info("Success: network.param file updated")
     
 
 

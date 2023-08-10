@@ -14,7 +14,7 @@ client = distributed.client_object_duck_typed
 
 assert(client is not None)
 
-class Tests(unittest.TestCase):
+class TestLoadSimrunGeneral(unittest.TestCase):
     def setUp(self):
         # set up model_data_base in temporary folder and initialize it.
         # This additionally is an implicit test, which ensures that the

@@ -15,6 +15,8 @@ from itertools import chain
 import single_cell_analyzer as sca
 import pandas as pd
 import json
+import logging
+log = logging.getLogger(__name__)
 
 class Cell(object):
     '''
@@ -187,7 +189,7 @@ class Cell(object):
                 del synapses[:]
                 del self.synapses[preType]
             except KeyError:
-                print('Synapses of type ' + preType + ' not present on cell')
+                log.info('Synapses of type ' + preType + ' not present on cell')
             return
 
     def init_time_recording(self):
@@ -635,7 +637,7 @@ class PySection(nrn.Section):
                 for seg in self:
                     vec = h.Vector()
                     hRef = eval('seg._ref_'+var)
-                    print('seg._ref_'+var)
+                    log.info('seg._ref_'+var)
                     vec.record(hRef, sec=self)
                     self.recordVars[var].append(vec)
         else:

@@ -11,7 +11,7 @@ import warnings
 from pandas.util.testing import assert_frame_equal
 from model_data_base import IO
 
-class Tests(unittest.TestCase):       
+class TestModelDataBase(unittest.TestCase):       
     def setUp(self):        
         self.path_fresh_mdb = tempfile.mkdtemp()
         self.fresh_mdb = ModelDataBase(self.path_fresh_mdb)

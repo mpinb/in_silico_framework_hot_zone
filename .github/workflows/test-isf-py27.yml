@@ -5,9 +5,9 @@ name: In-Silico-Framework (Python 2.7) install and test
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master, refractor ]
+    branches: [ master, refractor, testing ]
   pull_request:
-    branches: [ master, refractor ]
+    branches: [ master, refractor, testing ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -74,4 +74,4 @@ jobs:
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=28786 --bokeh-port=28787 &
           dask-worker localhost:28786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          python tests/run_tests.py
+          python -m pytest -rsx -vv --color=yes tests/

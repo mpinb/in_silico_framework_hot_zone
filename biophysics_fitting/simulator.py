@@ -9,6 +9,9 @@ For detailed documentation start with the docstring of the Simulator class.
 import single_cell_parser as scp
 from .parameters import param_selector
 import time
+import logging
+log = logging.getLogger(__name__)
+log.propagate=True  # propagate to biophysics_fitting.__init__
 
 
 class Simulator_Setup:
@@ -303,7 +306,7 @@ s.setup.stim_setup_funs.append(BAC.stim_setup, params_to_kwargs(examplary_stim_s
         name, fun = self.setup.get_stim_run_fun_by_stim(stim)
         #print name,param_selector(params, name)
         cell = fun(cell, params = param_selector(params, name))
-        print("simulating {} took {} seconds".format(stim, time.time()-t))
+        log.info("simulating {} took {} seconds".format(stim, time.time()-t))
         return cell, params
 
     def run(self, params, stims = None):

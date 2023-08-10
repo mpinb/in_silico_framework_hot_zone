@@ -39,9 +39,11 @@ class silence_stdout():
             return self(fun)
         
     def __enter__(self):
+        logging.disable(logging.CRITICAL)
         sys.stdout = six.StringIO()
         
     def __exit__(self, *args, **kwargs):
+        logging.disable(logging.NOTSET)
         sys.stdout = self.save_stdout
         
     def __call__(self, func):

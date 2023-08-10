@@ -7,6 +7,9 @@ Created on Mar 8, 2012
 import numpy as np
 from . import scalar_field
 from model_data_base.mdbopen import mdbopen
+import logging
+log = logging.getLogger(__name__)
+log.propagate=True
 
 class Edge(object):
     '''
@@ -34,7 +37,7 @@ def read_hoc_file(fname=''):
         raise IOError('Input file is not a .hoc file!')
     
     with mdbopen(fname, 'r') as neuronFile:
-        print("Reading hoc file", fname)
+        log.info("Reading hoc file %s" % fname)
 #        cell = co.Cell()
 #        simply store list of edges
 #        cell is parsed in CellParser
@@ -169,7 +172,7 @@ def read_scalar_field(fname=''):
         raise IOError('Input file is not an Amira Mesh file!')
     
     with mdbopen(fname, 'r') as meshFile:
-#            print "Reading Amira Mesh file", fname
+#            log.info "Reading Amira Mesh file", fname
         mesh = None
         extent, dims, bounds, origin, spacing = [], [], [], [], [0.,0.,0.]
         dataSection, hasExtent, hasBounds = False, False, False
@@ -211,7 +214,7 @@ def read_scalar_field(fname=''):
                     i = index - dims[0]*(j + dims[1]*k)
                     mesh[i,j,k] = data
                     index += 1
-#                        print 'i,j,k = %s,%s,%s' % (i, j, k)
+#                        log.info 'i,j,k = %s,%s,%s' % (i, j, k)
         
         return scalar_field.ScalarField(mesh, origin, extent, spacing, bounds)
 
@@ -299,9 +302,9 @@ def read_synapse_activation_file(fname):
     returns: dictionary with cell types as keys and list of synapse locations and activation times,
     coded as tuples: (synapse ID, section ID, section pt ID, [t1, t2, ... , tn])
     '''
-#    print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-#    print 'reading synapse activation file'
-#    print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+#    log.info 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+#    log.info 'reading synapse activation file'
+#    log.info 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
     synapses = {}
     lineCnt = 0
     with mdbopen(fname, 'r') as synFile:
@@ -420,9 +423,9 @@ def read_synapse_weight_file(fname):
         1st with section ID and pt ID, 2nd with synaptic weights, coded as dictionaries
         (keys=receptor strings) containing weights: (gmax_0, gmax_1, ... , gmax_n)
     '''
-#    print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-#    print 'reading synapse strength file'
-#    print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+#    log.info 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+#    log.info 'reading synapse strength file'
+#    log.info 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
     synWeights, synLocations = {}, {}
     lineCnt = 0
     with mdbopen(fname, 'r') as synFile:
@@ -490,4 +493,4 @@ if __name__ == '__main__':
     for i in range(1000):
         testAmFname = 'SynapseCount.14678.am'
         read_scalar_field(testAmFname)
-    print('Done!')
+    log.info('Done!')
