@@ -10,6 +10,8 @@ from . import cell_parser
 from . import synapse_mapper as smap
 from . import sim_control
 import numpy as np
+import logging
+log = logging.getLogger(__name__)
 
 '''anatomical parameters'''
 # ? look @ vpm -> L5tt mapping results
@@ -108,7 +110,7 @@ def run_sim():
             spikeTimes.append(spikeTVec)
             vpmConnectedCells[i].play(spikeTVec)
     
-    print('{:d} active & connected VPM cells!'.format(len(spikeTimes)))
+    log.info('{:d} active & connected VPM cells!'.format(len(spikeTimes)))
     _assign_functional_synapses(cell, vpmConnectedCells)
     
     sim = sim_control.SimControl(cell=cell, sim_time=30, dt=0.025, T=6)

@@ -23,7 +23,7 @@ def robust_del_fun(mdb, key):
             
 assert client is not None 
 
-class Tests(unittest.TestCase): 
+class TestLoaderDumperRealData(unittest.TestCase): 
     def setUp(self):
         # set up model_data_base in temporary folder and initialize it.
         # This additionally is an implicit test, which ensures that the

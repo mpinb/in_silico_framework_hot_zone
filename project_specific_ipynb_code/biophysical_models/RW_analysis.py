@@ -23,6 +23,7 @@ def read_pickle(seed_folder, particle_id):
     dfs = [I.pd.read_pickle(I.os.path.join(path, p)) for p in df_names]
     df = I.pd.concat(dfs).reset_index(drop=True)
     df['iteration'] = df.index
+    df['particle_id'] = particle_id
     return df
 
 def read_all(basedir, n_particles = 1000):

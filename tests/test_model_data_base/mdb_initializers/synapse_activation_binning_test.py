@@ -16,7 +16,7 @@ client = distributed.client_object_duck_typed
 
 optimize_simrun_general = silence_stdout(optimize_simrun_general)
 
-class Tests(unittest.TestCase):
+class TestSynapseActivationBinning(unittest.TestCase):
     def setUp(self):
         # set up model_data_base in temporary folder and initialize it.
         # This additionally is an implicit test, which ensures that the

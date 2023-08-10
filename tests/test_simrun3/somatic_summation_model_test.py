@@ -47,7 +47,7 @@ def get_fake_synapse_activation_dataframe():
              ['Generic2', 1, 5, 15, 25]]
     return pd.DataFrame(array, columns = columns, index = index)  
 
-class Tests(unittest.TestCase):       
+class TestSomaticSummationModel(unittest.TestCase):       
     def setUp(self):
         pass
 

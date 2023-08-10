@@ -1,10 +1,14 @@
+# Pytest configuration file
 # this code will be run before any other pytest code
 # even before pytest discovery
-# useful to setup whatever needs to be done before the actual testing or test discovery
-# for setting environment variables, use pytest.ini instead
+# useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
+# for setting environment variables, use pytest.ini or .env instead
 import os
+import pytest
 import socket
-
+import Interface
+from Interface import get_client
+import logging
 
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -27,7 +31,11 @@ def pytest_configure(config):
         client = distributed.Client('localhost:28786')
     else:
         client = distributed.Client('localhost:38786')
+    # print("setting distributed duck-typed object as module level attribute")
     distributed.client_object_duck_typed = client
+    # only log warnings
+    logging.getLogger().setLevel(logging.WARNING)  # set logging level of root logger to WARNING
+    
 
         
 

@@ -14,7 +14,7 @@ except KeyError:
     # likely, the module is called upon from an import
     sys.exit(1)
 with open(os.environ['ISF_MDB_CONFIG'], 'r') as f:
-    config = yaml.load(f)
+    config = yaml.load(f, Loader=yaml.FullLoader)
 
 assert(config['backend']['type'] == 'sqlite_remote')
 url = config['backend']['url']

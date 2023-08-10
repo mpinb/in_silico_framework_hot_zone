@@ -13,7 +13,7 @@ import numpy as np
 import os
 import six
 # import single_cell_parser as scp # moved to bottom to resolve import error
-from model_data_base.utils import cache
+from model_data_base import utils
 
 def get_EPSP_measurement():
     EPSP_mean = [0.49,0.49,0.35,0.47,0.46,0.44,0.44,0.571]
@@ -78,7 +78,7 @@ def norm(x):
     x = np.array(x)
     return x/np.sqrt((x**2).sum())
 
-@cache
+@utils.cache
 def read_barrelfield():
     mapping_label_id = {'A1': 13, 'A2': 14, 'A3': 15, 'A4': 16,\
                         'B1': 18, 'B2': 19, 'B3': 20, 'B4': 21,\
@@ -160,8 +160,7 @@ def test_transform_point():
     
 def get_soma_centroid(hocpath):
     from model_data_base.utils import silence_stdout
-    with I.silence_stdout:
-        source_soma_points = get_cell_object_from_hoc(hocpath).soma.pts
+    source_soma_points = get_cell_object_from_hoc(hocpath).soma.pts
     soma_centroid = np.array(source_soma_points).mean(axis = 0)
     return soma_centroid
 
@@ -192,9 +191,9 @@ def move_hoc_xyz(hocpath, x,y,z, outpath = None, coordinate_system = 'D2'):
 
 def test_move_hoc_xyz():
     import getting_started
-    import Interface as I
-    hocpath = I.scp.build_parameters(getting_started.neuronParam).neuron.filename
-    with I.utils.mkdtemp() as d:
+    import single_cell_parser as scp
+    hocpath = scp.build_parameters(getting_started.neuronParam).neuron.filename
+    with utils.mkdtemp() as d:
         centroid =  get_soma_centroid(hocpath) 
         outpath1 = os.path.join(d, 'hoc.hoc') 
         outpath2 = os.path.join(d, 'hoc2.hoc') 
@@ -217,10 +216,10 @@ def move_hoc_absolute(hocpath, x,y,z, outpath = None):
 
 def test_move_hoc_absolute():
     import getting_started
-    import Interface as I
-    hocpath = I.scp.build_parameters(getting_started.neuronParam).neuron.filename
-    with I.utils.mkdtemp() as d:
-        outpath = I.os.path.join(d, 'hoc.hoc') 
+    import single_cell_parser as scp
+    hocpath = scp.build_parameters(getting_started.neuronParam).neuron.filename
+    with utils.mkdtemp() as d:
+        outpath = os.path.join(d, 'hoc.hoc') 
         move_hoc_absolute(hocpath, 0,0,0, outpath = outpath)
         np.testing.assert_array_almost_equal(get_soma_centroid(outpath), [0,0,0])
 
@@ -232,9 +231,9 @@ def move_hoc_to_hoc(hoc_in, hoc_reference, outpath = None, ):
 
 def test_move_hoc_to_hoc():
     import getting_started
-    import Interface as I    
-    hocpath = I.scp.build_parameters(getting_started.neuronParam).neuron.filename
-    with I.utils.mkdtemp() as d:
+    import single_cell_parser as scp  
+    hocpath = scp.build_parameters(getting_started.neuronParam).neuron.filename
+    with utils.mkdtemp() as d:
         outpath1 = os.path.join(d, 'hoc.hoc') 
         move_hoc_xyz(hocpath, 1,2,3, outpath1, 'C2')
         outpath2 = os.path.join(d, 'hoc2.hoc') 
@@ -243,7 +242,7 @@ def test_move_hoc_to_hoc():
         centroid2 =  get_soma_centroid(outpath2) 
         np.testing.assert_almost_equal(centroid1, centroid2)
 
-@cache
+@utils.cache
 def get_xyz(column):
     '''returns base vectors were 
     - z is the local z axis of the column 
@@ -257,9 +256,9 @@ def get_xyz(column):
     z_ = n
     y_ = norm(np.cross(z_, x_))    
     return x_,y_,z_
-#I.np.testing.assert_almost_equal(get_xyz('D2')[0], [1,0,0])
-#I.np.testing.assert_almost_equal(get_xyz('D2')[1], [0,1,0])
-#I.np.testing.assert_almost_equal(get_xyz('D2')[2], [0,0,1])
+#np.testing.assert_almost_equal(get_xyz('D2')[0], [1,0,0])
+#np.testing.assert_almost_equal(get_xyz('D2')[1], [0,1,0])
+#np.testing.assert_almost_equal(get_xyz('D2')[2], [0,0,1])
 
 
 def get_distance_below_L45_barrel_surface(p, barrel = 'C2'):
@@ -326,25 +325,25 @@ def correct_hoc_depth(hoc_in, hoc_reference_or_depth,
 
 def test_correct_hoc_depth():
     import getting_started
-    import Interface as I
-    hocpath = I.scp.build_parameters(getting_started.neuronParam).neuron.filename
-    with I.utils.mkdtemp() as d:
-        outpath = I.os.path.join(d, 'hoc.hoc') 
+    import single_cell_parser as scp
+    hocpath = scp.build_parameters(getting_started.neuronParam).neuron.filename
+    with utils.mkdtemp() as d:
+        outpath = os.path.join(d, 'hoc.hoc') 
         measure_fun = partial(get_distance_below_L45_barrel_surface, barrel = 'C2')
         correct_hoc_depth(hoc_in = hocpath, hoc_reference_or_depth = 0, coordinate_system_z_move = 'C2', 
                           measure_fun = measure_fun, 
                           outpath = outpath)
         centroid = get_soma_centroid(outpath)
         depth = measure_fun(centroid)
-        I.np.testing.assert_almost_equal(depth, 0, decimal = 5)
+        np.testing.assert_almost_equal(depth, 0, decimal = 5)
 
-        outpath2 = I.os.path.join(d, 'hoc2.hoc') 
+        outpath2 = os.path.join(d, 'hoc2.hoc') 
         correct_hoc_depth(hoc_in = hocpath, hoc_reference_or_depth = 0, coordinate_system_z_move = 'D2', 
                           measure_fun = measure_fun, 
                           outpath = outpath2)
         centroid2 = get_soma_centroid(outpath2)
         depth2 = measure_fun(centroid2)
-        I.np.testing.assert_almost_equal(depth, 0, decimal = 5)
+        np.testing.assert_almost_equal(depth, 0, decimal = 5)
         assert((centroid != centroid2).all())
         
 def get_3x3_C2_soma_centroids():
@@ -370,10 +369,10 @@ def create_3x3(hocpath_C2, outdir):
                           outpath = outpath)
     
 #import getting_started
-#hocpath = I.scp.build_parameters(getting_started.neuronParam).neuron.filename
-#with I.utils.mkdtemp() as d:
+#hocpath = scp.build_parameters(getting_started.neuronParam).neuron.filename
+#with utils.mkdtemp() as d:
 #    create_3x3(hocpath, d)
-#    print I.os.listdir(d)
+#    print os.listdir(d)
 
 def create_9x9(hocpath_C2, outdir):
     centroids = get_3x3_C2_soma_centroids()
@@ -392,10 +391,10 @@ def create_9x9(hocpath_C2, outdir):
             move_hoc_xyz(outpath, x, y, 0, outpath = outpath2, coordinate_system = 'C2')
             
 #import getting_started
-#hocpath = I.scp.build_parameters(getting_started.neuronParam).neuron.filename
-#with I.utils.mkdtemp() as d:
+#hocpath = scp.build_parameters(getting_started.neuronParam).neuron.filename
+#with utils.mkdtemp() as d:
 #    create_9x9(hocpath, d)
-#    print I.os.listdir(d)
+#    print os.listdir(d)
 
 def create_SuC(hocpath_C2, outdir):
     centroids = get_3x3_C2_soma_centroids()
@@ -418,10 +417,10 @@ def create_SuC(hocpath_C2, outdir):
                               outpath = outpath2)
             
 #import getting_started
-#hocpath = I.scp.build_parameters(getting_started.neuronParam).neuron.filename
-#with I.utils.mkdtemp() as d:
+#hocpath = scp.build_parameters(getting_started.neuronParam).neuron.filename
+#with utils.mkdtemp() as d:
 #    create_SuC(hocpath, d)
-#    print I.os.listdir(d)
+#    print os.listdir(d)
 
 
-import Interface as I
+# import Interface as I

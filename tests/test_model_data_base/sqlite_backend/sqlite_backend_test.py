@@ -17,7 +17,7 @@ def write_data_to_dict(path, key):
     data = np.ones(shape = (1000,1000))*int(key)
     dict_[key] = data
             
-class Tests(unittest.TestCase):
+class TestSQLiteBackend(unittest.TestCase):
     def setUp(self):
         self.tempdir = tempfile.mkdtemp()
         self.path = os.path.join(self.tempdir, 'tuplecloudsql_test.db')

@@ -5,10 +5,7 @@ from visualize.histogram import *
 
 from model_data_base.analyze import temporal_binning
 
-class Tests(unittest.TestCase):
-        
-        
-    
+class TestHistogram(unittest.TestCase):
     def setUp(self):
         self.pdf = pd.DataFrame({'blabla': ['a', 1, 3], \
                                 '1': [1, 5, 10], \
@@ -19,6 +16,7 @@ class Tests(unittest.TestCase):
     
     def test_histogram_can_be_called_with_tuple(self):
         histogram(self.testhist)
+        plt.close()
                   
     def test_histogram_can_be_called_with_series(self):
         from  matplotlib.figure import Figure
@@ -28,4 +26,5 @@ class Tests(unittest.TestCase):
         pds = pd.Series({'A': self.testhist, 'labelB': self.testhist})
         self.assertIsInstance(histogram(pds), Figure)
         self.assertIs(histogram(pds, fig = fig), fig)
-        self.assertIs(histogram(pds, fig = ax), ax)                          
+        self.assertIs(histogram(pds, fig = ax), ax)
+        plt.close()                        

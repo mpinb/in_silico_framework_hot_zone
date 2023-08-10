@@ -10,7 +10,7 @@ def assert_search_mdb_did_not_fail(mdbr):
     #for k in keys: print (mdbr.mdb[k])
     assert(not keys)
     
-class Tests(unittest.TestCase):       
+class TestModelDataBaseRegister(unittest.TestCase):       
     def setUp(self):        
         self.basetempdir = tempfile.mkdtemp()
         

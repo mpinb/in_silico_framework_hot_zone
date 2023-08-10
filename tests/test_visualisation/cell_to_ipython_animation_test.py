@@ -3,7 +3,7 @@ import numpy as np
 from .context import *
 from visualize.cell_to_ipython_animation import *
 
-class Tests(unittest.TestCase):
+class Test_CellToIPythonAnimation(unittest.TestCase):
     def setUp(self):
         self.cell = None
     

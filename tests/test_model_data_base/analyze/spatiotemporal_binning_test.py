@@ -7,7 +7,7 @@ from  model_data_base.model_data_base import ModelDataBase
 import numpy as np
 import pandas as pd
 
-class Tests(unittest.TestCase):
+class TestSpatioTemporalBinning(unittest.TestCase):
     def setUp(self):
         self.test_dataframe = {'distance': [0, 0, 1, 4, 5, 5.3, 5.4], 
                  '1': [10, np.NaN, 10, 11, 20, 20, 20],
