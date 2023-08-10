@@ -9,19 +9,10 @@ import socket
 import Interface
 from Interface import get_client
 import logging
-disable_loggers = ['single_cell_parser']
 
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
-
-def disable_loggers_and_subloggers(parent_logger_names):
-    active_loggers = logging.root.manager.loggerDict
-    for logger_to_disable_name in parent_logger_names:
-        for active_logger_name, active_logger in active_loggers.items():
-            if logger_to_disable_name.lower() in active_logger_name.lower():
-                # disable all loggers if a part of its name appears in disable_loggers
-                active_logger.disabled = True
 
 
 def pytest_configure(config):

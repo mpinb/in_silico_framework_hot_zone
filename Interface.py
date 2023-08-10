@@ -226,17 +226,16 @@ def get_client():
         client_port = ports['dask_client_2']
     else:
         client_port = ports['dask_client_3']
-    try:
-        ip = os.environ['IP_INFINIBAND']
-    except KeyError as e:
-        print("IP is not available as environment variable")
-        print("fetching ip...")
-        from socket import gethostbyname, gethostname
-        ip = gethostbyname(gethostname())  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
-        os.environ['IP_MAIN'] = ip
+
+    from socket import gethostbyname, gethostname
+    hostname = gethostname()
+    ip = gethostbyname(hostname)  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
+    if 'soma' in hostname:
+        #we're on the soma cluster and have infiniband
         ip_infiniband = ip.replace('100', '102')  # a bit hackish, but it works
-        os.environ['IP_INFINIBAND'] = ip_infiniband
-    client = distributed.Client(ip_infiniband+':'+client_port)
+        client = distributed.Client(ip_infiniband+':'+client_port)
+    else:
+        client = distributed.Client(ip+':'+client_port)
     return client
 
 
