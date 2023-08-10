@@ -11,6 +11,7 @@ import VoltageTraceView from './voltageTraceView';
 import TimeControlView from './timeControlView';
 import CelltypeView from './celltypeView';
 import CelltypeDensityView from './celltypeDensityView';
+import DensityPlot from './densityPlotView';
 
 
 const gridItemStyle = {
@@ -142,7 +143,19 @@ class GridControl extends React.Component {
                     width={width}
                     height={height}
                     table={viewSpec.table}
-                />            
+                />  
+            } else if (viewSpec.type == "density-count" || viewSpec.type == "density-min" || viewSpec.type == "density-max"
+                || viewSpec.type == "density-mean" || viewSpec.type == "density-median") {
+                view = <DensityPlot
+                    viewManager={this.viewManager}
+                    data_sources={viewSpec.data_sources}
+                    name={viewName}
+                    width={width}
+                    height={height}
+                    table={viewSpec.table}
+                    configuration={viewSpec.configuration}
+                />
+
             } else {
                 view = <div>unknown view type: {viewSpec.type}</div>
             }

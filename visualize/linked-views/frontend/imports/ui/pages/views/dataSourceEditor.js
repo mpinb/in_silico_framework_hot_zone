@@ -104,7 +104,7 @@ class DataSourceEditor extends React.Component {
                             <div style={{ width: "500px", height: '350px', overflow: 'auto' }}>
                                 <table style={{ width: '100%' }}><tbody>
                                     <tr key="name-row"><td><input type="text" value={this.state.name} onInput={this.handleNameChange.bind(this)}></input></td></tr>
-                                    {activeSelections.map((selectedValue, index) => (
+                                    {this.state.activeSelections.map((selectedValue, index) => (
                                         <tr key={index}>
                                             <td>
                                                 <div style={{ display: 'flex' }}>

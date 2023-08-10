@@ -18,6 +18,7 @@ from flask_cors import CORS
 
 from werkzeug.serving import make_server
 
+INVALID_NUMBER = -999999
 
 def load_tables(data_folder, config, max_num_rows = 50000):    
     csvFiles = glob.glob(os.path.join(data_folder,"*.csv"))
@@ -56,6 +57,13 @@ def get_data_ranges(df):
     ranges["max"] = df.max().to_list()
     return ranges 
 
+def get_data_ranges_vaex(df):
+    col_names = list(df.columns)
+    ranges = {}
+    ranges["min"] = df.min(col_names).tolist()
+    ranges["max"] = df.max(col_names).tolist()
+    return ranges 
+
 def normalize(df, low=-1, high=1):
     scaler = MinMaxScaler(feature_range=(low, high))
     df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
@@ -81,6 +89,7 @@ class LinkedViewsServer:
         self.data_folder = Path(data_folder)        
         self.thread = None    
         self.vaex_df = None
+        self.selections = {}
 
         self.loadDataLegacy()
 
@@ -158,6 +167,7 @@ class LinkedViewsServer:
     def set_data(self, vaex_df):
         assert self.server is not None        
         self.vaex_df = vaex_df
+        self.vaex_columns = list(vaex_df.columns)
 
     def init_routes(self):
         self.app.add_url_rule('/', 'index', self.index)        
@@ -168,9 +178,13 @@ class LinkedViewsServer:
         self.app.add_url_rule('/matrixServer/getResourceJSON', self.getResourceJSON, methods=["GET", "POST"])
         self.app.add_url_rule("/matrixServer/getValues", "getValues", self.getValues, methods=["GET", "POST"])
         self.app.add_url_rule("/matrixServer/getDensity", "getDensity", self.getDensity, methods=["POST"])
+        self.app.add_url_rule("/matrixServer/setDensityPlotSelection", "setDensityPlotSelection", self.setDensityPlotSelection, methods=["POST"])
 
     def index(self):
-        return f"Tables: {[name for name in self.tables.keys()]}"
+        if(self.vaex_df):
+            return f"vaex df columns: {[name for name in list(self.vaex_df.columns)]}"
+        else:
+            return f"Tables: {[name for name in self.tables.keys()]}"
 
 
     """
@@ -223,6 +237,15 @@ class LinkedViewsServer:
                         "columns" : df.columns.to_list(),
                         "data_ranges" : get_data_ranges(df)                
                     })
+
+                if(self.vaex_df is not None):                       
+                    meta_data.append({
+                        "name" : "vaex_df",
+                        "num_rows" : self.vaex_df.shape[0],
+                        "columns" : list(self.vaex_df.columns),
+                        "data_ranges" : get_data_ranges_vaex(self.vaex_df)                
+                    })
+
 
                 response_data = {
                     "meta_data" : meta_data,
@@ -340,14 +363,16 @@ class LinkedViewsServer:
                 binbycols = columns[0:2]
                 density_grid_shape = tuple(data["density_grid_shape"])
                 nCells = density_grid_shape[0] * density_grid_shape[1]
-                indices = np.arange(nCells)
+                #indices = np.arange(nCells)
                                                 
                 minmax_x = df.minmax(binbycols[0])
                 minmax_y = df.minmax(binbycols[1])
                 data_ranges = [minmax_x.tolist(), minmax_y.tolist()]
 
+                masked_value = INVALID_NUMBER
                 if(format == "count"):
                     values = df.count(binby=binbycols, shape=density_grid_shape)
+                    masked_value = 0
                 elif(format == "min"):                    
                     values = df.min(value_column, binby=binbycols, shape=density_grid_shape)
                 elif(format == "max"):                    
@@ -357,17 +382,46 @@ class LinkedViewsServer:
                 elif(format == "median"):
                     values = df.median_approx(value_column, binby=binbycols, shape=density_grid_shape)
                 else:
-                    raise ValueError(format)                            
+                    raise ValueError(format)             
+
+                values = np.nan_to_num(values, nan=INVALID_NUMBER)
                 
                 response_data = {
                     "columns" : columns,
-                    "indices" : indices.tolist(),
+                    #"indices" : indices.tolist(),
                     "values" : values.tolist(),
                     "density_grid_shape" : data["density_grid_shape"],
-                    "data_ranges" : data_ranges
+                    "data_ranges" : data_ranges,
+                    "masked_value" : masked_value
                 }
 
                 return json.dumps(response_data)
+
+
+    def setDensityPlotSelection(self): 
+        self.last_request = request.data
+        if request.method == "POST":            
+            if request.data:
+                data = request.get_json(force=True)
+                
+                table = data["table"]
+                columns = data["columns"]
+                bin_ranges = data["bin_ranges"]
+                selection_name = data["selection_name"]
+                
+                assert table == "vaex_df"
+                for column in columns:
+                    assert column in self.vaex_columns
+
+                self.selections[selection_name] = {
+                    "columns" : columns,
+                    "bin_ranges" : bin_ranges
+                }
+
+                response_data = {}
+                return json.dumps(response_data)
+
+
 
 
 if __name__ == "__main__":
@@ -379,4 +433,5 @@ if __name__ == "__main__":
     
     filename = "/scratch/visual/bzfharth/in-silico-install-dir/project_src/in_silico_framework/getting_started/linked-views-example-data/backend_data_2023-06-22/simulation_samples.csv"
     df = vaex.from_csv(filename, copy_index=False)
+
     server.set_data(df)
