@@ -89,15 +89,12 @@ class ViewSpecificationsControl extends React.Component {
     };
     
 
-    handleSaveClick = (newName, dataSources) => {
-        console.log("new name", newName);
+    handleSaveClick = (viewSpec) => {        
         let that = this;
-        this.setState((state, props) => {            
-            state.objects[state.editingIndex].name = newName;
-            state.objects[state.editingIndex].data_sources = deepCopy(dataSources);
+        this.setState((state) => {            
+            state.objects[state.editingIndex] = deepCopy(viewSpec);
             that.notifyChanged(state.objects);
-            state.editingIndex = -1;
-            console.log(state);
+            state.editingIndex = -1;            
             return state;
         })
     };
@@ -168,7 +165,7 @@ class ViewSpecificationsControl extends React.Component {
                                     <tr key={object.id}>
                                         <td>
                                             {index === editingIndex ? (
-                                                <table>
+                                                <table style={{width:"100%"}}>
                                                     <tbody>
                                                         <tr>                                                            
                                                             <td>
@@ -180,12 +177,8 @@ class ViewSpecificationsControl extends React.Component {
                                                                 <div>
                                                                     <DataSourceEditor viewManager={this.viewManager}
                                                                         saveFn={this.handleSaveClick.bind(this)}
-                                                                        cancelFn={this.handleCancelClick.bind(this)}
-                                                                        minSources={object.min_num_datasources}
-                                                                        maxSources={object.max_num_datasources}
-                                                                        selectedSources={object.data_sources}
-                                                                        viewName={object.name}
-                                                                        tableName = {object.table}
+                                                                        cancelFn={this.handleCancelClick.bind(this)}                                                                       
+                                                                        viewSpecification = {object}
                                                                     ></DataSourceEditor>
                                                                 </div>
                                                             </td>

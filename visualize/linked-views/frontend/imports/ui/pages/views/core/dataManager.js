@@ -502,7 +502,8 @@ export class DataManager {
             if (error) {
                 console.log(error);
             } else {                               
-                let data = JSON.parse(response.content);                
+                let data = JSON.parse(response.content);      
+                console.log(data.values);          
                 data.values = normalizeDensityValues(data.values, data.masked_value);                
                 callback(data);                
             }

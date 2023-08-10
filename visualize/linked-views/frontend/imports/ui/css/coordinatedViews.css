@@ -215,6 +215,12 @@ https://www.bestcssbuttongenerator.com/
     font-size: 10px;
 }
 
+.blueTable {    
+    border-color: steelblue;
+    border-width: 1px;
+	border-style: solid;
+}
+
 .parameterText {    
     color: black;
     font-family: "Fira Mono", monospace;

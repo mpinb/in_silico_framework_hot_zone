@@ -144,8 +144,7 @@ class GridControl extends React.Component {
                     height={height}
                     table={viewSpec.table}
                 />  
-            } else if (viewSpec.type == "density-count" || viewSpec.type == "density-min" || viewSpec.type == "density-max"
-                || viewSpec.type == "density-mean" || viewSpec.type == "density-median") {
+            } else if (viewSpec.type == "density-2-channel" || viewSpec.type == "density-3-channel") {
                 view = <DensityPlot
                     viewManager={this.viewManager}
                     data_sources={viewSpec.data_sources}
