@@ -2,13 +2,15 @@
 import * as d3 from 'd3';
 
 
-function interpolateViridis(numSteps){
+function interpolateViridis(numSteps, reverse=false){
     const scale = d3.scaleSequential(d3.interpolateViridis).domain([0, numSteps-1]);
     let colors = [];
     for(let i=0; i<numSteps; i++){
         colors.push(scale(i));
     }
-    colors.reverse();
+    if(reverse){
+        colors.reverse();   
+    }
     return colors;
 }
 
@@ -23,6 +25,7 @@ function interpolateBlueRed(numSteps){
 }
 
 export const viridisColormap = interpolateViridis(100);
+export const viridisColormapReverse = interpolateViridis(100, true);
 export const blueRedColormap = interpolateBlueRed(100);
 
 

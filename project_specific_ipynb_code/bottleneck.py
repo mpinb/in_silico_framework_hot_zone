@@ -47,7 +47,7 @@ def show_cell(ax, weights = None, scaling = None, t = 0):
             # I.plt.plot(x,z,alpha = 1)
             
 ## show morphology split up in dendrite pieces
-def show_cell(ax, cell, weights = None, scaling = None, t = 0, section_distances_df = None, spatial_bin_names = None, show_bins = False):
+def show_cell(ax, cell, weights = None, scaling = None, t = 0, section_distances_df = None, spatial_bin_names = None, show_bins = False, spatial_bin_names_df = None):
     '''uses global variables:
     trunk_sections, tuft_sections, oblique_sections'''
     for lv, sec in enumerate(cell.sections):
@@ -80,12 +80,15 @@ def show_cell(ax, cell, weights = None, scaling = None, t = 0, section_distances
             spatial_bin_name = str(lv) + '/' + str(bin_)
             spatial_bin_index = spatial_bin_names.index(spatial_bin_name)
             if weights is None:
+                trunk_sections = list(set(spatial_bin_names_df[spatial_bin_names_df.label == '2_trunk'].index.str.split('/').str[0].astype(int)))
+                tuft_sections = list(set(spatial_bin_names_df[spatial_bin_names_df.label == '3_tuft'].index.str.split('/').str[0].astype(int)))
+                oblique_sections = list(set(spatial_bin_names_df[spatial_bin_names_df.label == '1_oblique'].index.str.split('/').str[0].astype(int)))
                 color = 'grey'
-                if sec in trunk_sections:
+                if cell.sections.index(sec) in trunk_sections:
                     color = 'red'
-                if sec in tuft_sections:
+                if cell.sections.index(sec) in tuft_sections:
                     color = 'blue'
-                if sec in oblique_sections:
+                if cell.sections.index(sec) in oblique_sections:
                     color = 'green'
             else:
                 spatial_bin_name = str(lv) + '/' + str(bin_)
@@ -183,7 +186,11 @@ def plot_weights(weight,  bottleneck_size = None, n_celltypes = None, n_spatial_
         #axes[0,1].axhline(t)
 
     else:
-        show_cell(ax)
+        show_cell(ax, 
+                  cell = cell,
+                  section_distances_df = section_distances_df,
+                  spatial_bin_names = list(spatial_bin_names_df.index),
+                  spatial_bin_names_df = spatial_bin_names_df)
     
     I.sns.despine(ax = ax, left = True, bottom = True)
     ax.set_aspect('equal')

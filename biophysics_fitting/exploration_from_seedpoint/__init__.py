@@ -82,7 +82,7 @@ class RW:
         # check if we start from scratch or if we resume an exploration
         iterations = [int(f.split('.')[0]) for f in os.listdir(OPERATION_DIR) if f.endswith('.pickle')]
         iterations = sorted(iterations,reverse=True)
-        if max(iterations) > 60000:
+        if iterations and max(iterations) > 60000:
             print('more than 60000 iterations done. exit gracegfully')
             sys.exit(0)
         if len(iterations) == 0:

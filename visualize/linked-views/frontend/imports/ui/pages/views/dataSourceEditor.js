@@ -1,12 +1,40 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+
+
 import { deepCopy } from './core/utilCore.js';
 
 
-const styleSelect = {
-    width: 350,
-    fontSize: 14
+const customStyles = {
+    control: (provided) => ({
+        ...provided,
+        width: '350px',
+        fontSize: '14px'
+    }),
+};
+
+const styleOverflowable = {
+    overflowY: 'auto',
+    float: 'left',
+    width: '100%',
+    height: '400px',
+    position: 'relative'
+};
+
+function parseJson(text) {
+    try {
+        const json = JSON.parse(text);
+        return json;
+    } catch (error) {
+        return undefined;
+    }
+};
+
+function stringifyViewSpec(json) {
+    return JSON.stringify(json, null, 2)
 }
 
 class DataSourceEditor extends React.Component {
@@ -17,112 +45,174 @@ class DataSourceEditor extends React.Component {
         this.dataManager = this.viewManager.dataManager;
         this.saveFn = props.saveFn;
         this.cancelFn = props.cancelFn;
-        this.minSources = props.minSources;
-        this.maxSources = props.maxSources;        
-        this.tableName = props.tableName;        
-        this.preselectedSources = deepCopy(props.selectedSources)
-
-        let metaData = this.dataManager.metaData.filter(table => table.name == this.tableName);
-        if(!metaData.length){
-            console.log("invalid view spec", this.tableName, this.dataManager.metaData)            
-        }
-        metaData = metaData[0];
-        this.availableColumns = [];
-        for (let i = 0; i < metaData.columns.length; i++) {
-            this.availableColumns = this.availableColumns.concat(metaData.columns[i]);
-        }
-        this.availableSelections = this.availableColumns.map(x => ({
-            value: x,
-            label: x
-        }));
-
-        let activeSelections = [];
-        for (let i = 0; i < this.preselectedSources.length; i++) {
-            activeSelections.push(this.preselectedSources[i]);
-        }
-
-        let n_empty = this.maxSources - activeSelections.length;
-        for (let i = 0; i < n_empty; i++) {
-            activeSelections.push(undefined);
-        }
+    
+        const viewSpecOriginal = deepCopy(props.viewSpecification);
         this.state = {
-            activeSelections: activeSelections,
-            name: props.viewName
+            showEditor: false,
+            viewSpec: viewSpecOriginal,
+            viewSpecText: stringifyViewSpec(viewSpecOriginal),        
+            message: ""
         }
-
-        console.log(this.state.activeSelections);
     }
 
     handleSelectChange(index, event) {
-        this.setState((state, props) => {
-            if (event === null) {
-                state.activeSelections[index] = undefined;
-            } else {
-                state.activeSelections[index] = event.value;
+        console.log(index, event);
+        this.setState((state, props) => {                        
+            if (event !== null) {
+                if(index >= state.viewSpec.data_sources.length){
+                    state.viewSpec.data_sources.push(event.value)
+                } else {
+                    state.viewSpec.data_sources[index] = event.value;
+                }                
             }
+            state.viewSpecText = stringifyViewSpec(state.viewSpec);
             return state;
         });
     }
 
     handleNameChange(event) {
-        this.setState((state)=>{
-            state.name = event.target.value;
+        this.setState((state) => {
+            state.viewSpec.name = event.target.value;
+            state.viewSpecText = stringifyViewSpec(state.viewSpec);
             return state;
         });
     }
 
-    handleSaveClick() {
-        let newSelection = [];
-        for (let i = 0; i < this.state.activeSelections.length; i++) {
-            if (this.state.activeSelections[i] !== undefined) {
-                newSelection.push(this.state.activeSelections[i]);
-            }
-        }
-        this.saveFn(this.state.name, newSelection);
+    handleSaveClick() {        
+        this.saveFn(this.state.viewSpec);
     }
 
-    handleCancelClick() {        
+    handleCancelClick() {
         this.cancelFn();
     }
 
+    handleEditorCheckboxChanged(event) {
+        let checked = event.target.checked;
+        this.setState((state) => {
+            state.showEditor = checked;
+            return state;
+        });
+    }
+
+    handleEditorChange(newValue) {
+        const json = parseJson(newValue);
+        if (json) {
+            this.setState((state) => {
+                state.viewSpecText = newValue;
+                state.viewSpec = json;
+                state.message = "";
+                console.log(state);
+                return state;
+            });
+        } else {
+            this.setState((state) => {
+                state.viewSpecText = newValue;
+                state.message = "invalid JSON";
+                return state;
+            });
+        }
+    }
+
+
     render() {
-        console.log(this.state.activeSelections);
-        console.log(this.availableColumns);
+
+        const showErrorAndCancel = (message) => {
+            return <div>{message}<button className="blueButton" onClick={this.handleCancelClick.bind(this)} style={{marginLeft:"3px"}}>Cancel</button></div>
+        }
+
+        // determine available table columns        
+        const specifiedTable = this.state.viewSpec.table;
+        const metaData = this.dataManager.metaData.filter(table => table.name == specifiedTable);
+        if (!metaData.length) {            
+            return showErrorAndCancel("table not found: " + specifiedTable);
+        }        
+        const availableColumns = metaData[0].columns.map(x => ({
+            value: x,
+            label: x
+        }));
+
+        const dataSourceIndices = new Array(this.state.viewSpec.max_num_datasources).fill().map((val, idx) => idx);
+
+        const getColumnAtIndex = (idx) => {
+            if(idx >= this.state.viewSpec.data_sources.length){
+                return undefined
+            } else {
+                const columnName = this.state.viewSpec.data_sources[idx];
+                return {
+                    value: columnName,
+                    label: columnName
+                }
+            }
+        }
+
         return (
-            <table style={{ width: '100%' }}>
-                <tbody>
-                    <tr>
-                        <td colSpan={2}>                        
-                            <button className="blueButton" onClick={this.handleSaveClick.bind(this)}>Save</button>                        
-                            <button className="blueButton" style={{marginLeft:3}} onClick={this.handleCancelClick.bind(this)}>Cancel</button>                        
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colSpan={2}>
-                            <div style={{ width: "500px", height: '350px', overflow: 'auto' }}>
-                                <table style={{ width: '100%' }}><tbody>
-                                    <tr key="name-row"><td><input type="text" value={this.state.name} onInput={this.handleNameChange.bind(this)}></input></td></tr>
-                                    {this.state.activeSelections.map((selectedValue, index) => (
-                                        <tr key={index}>
-                                            <td>
-                                                <div style={{ display: 'flex' }}>
-                                                    <Select
-                                                        value={selectedValue}
-                                                        onChange={this.handleSelectChange.bind(this, index)}
-                                                        options={this.availableSelections}
-                                                        style={styleSelect}
-                                                    />
-                                                </div>
-                                            </td>
-                                        </tr>))
-                                    }
-                                </tbody>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            
+            <div>
+                <table style={{ width: '100%'}} className='blueTable'>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <button className="blueButton" onClick={this.handleSaveClick.bind(this)} style={{marginLeft:"3px"}}>Save</button>                            
+                                <button className="blueButton" onClick={this.handleCancelClick.bind(this)} style={{marginLeft:"3px"}}>Cancel</button>                           
+                                <label>
+                                    <input type="checkbox"
+                                        checked={this.state.showEditor}
+                                        onChange={this.handleEditorCheckboxChanged.bind(this)}
+                                        style={{marginLeft:"3px", marginRight:"3px"}} />
+                                    JSON editor
+                                </label>
+                            </td>
+                            <td style={{textAlign:"right"}}>                                                                
+                                <div>{this.state.message}</div>
+                            </td>
+                        </tr>
+                        {
+                            this.state.showEditor ?
+                                (
+                                    <tr>
+                                        <td colSpan={2}>
+                                            <div style={styleOverflowable}><Editor
+                                                value={this.state.viewSpecText}
+                                                onValueChange={this.handleEditorChange.bind(this)}
+                                                highlight={(code) => highlight(code, languages.js)}
+                                                padding={10}
+                                                style={{
+                                                    background: "white",
+                                                    fontFamily: '"Fira code", "Fira Mono", monospace',
+                                                    fontSize: 12,
+                                                }}
+                                            /></div>
+                                        </td>
+                                    </tr>
+                                ) : (<tr>
+                                    <td colSpan={2}>
+                                        <div style={{ width: "500px", height: '350px', overflow: 'auto' }}>
+                                            <table style={{ width: '100%' }}><tbody>
+                                                <tr key="name-row"><td><input type="text" value={this.state.viewSpec.name} onInput={this.handleNameChange.bind(this)}></input></td></tr>
+                                                {dataSourceIndices.map(index => (
+                                                    <tr key={index}>
+                                                        <td>
+                                                            <div style={{ display: 'flex' }}>
+                                                                <Select
+                                                                    value={getColumnAtIndex(index)}
+                                                                    onChange={this.handleSelectChange.bind(this, index)}
+                                                                    options={availableColumns}
+                                                                    styles={customStyles}
+                                                                />
+                                                            </div>
+                                                        </td>
+                                                    </tr>))
+                                                }
+                                            </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>)
+                        }
+
+                    </tbody>
+                </table>
+            </div>
         )
     }
 }

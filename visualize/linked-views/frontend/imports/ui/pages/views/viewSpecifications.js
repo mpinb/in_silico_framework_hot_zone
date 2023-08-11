@@ -5,10 +5,13 @@ import Select from 'react-select';
 import DataSourceEditor from './dataSourceEditor';
 import { string } from 'prop-types';
 
-const styleSelect = {
-    width: 250,
-    fontSize: 14,
-}
+const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      width: '250px',
+      fontSize: '14px'
+    }),
+  };
 
 class ViewSpecificationsControl extends React.Component {
     constructor(props) {
@@ -18,6 +21,8 @@ class ViewSpecificationsControl extends React.Component {
         this.dataManager = this.viewManager.dataManager;
 
         this.available_view_types = this.dataManager.available_views;        
+
+        console.log(this.available_view_types);
 
         this.state = {
             objects: this.viewManager.view_specifications,
@@ -42,6 +47,7 @@ class ViewSpecificationsControl extends React.Component {
     }
 
     handleViewOptionChange(event) {        
+        console.log(event)
         this.setState((state, props) => {
             if(event){
                 state.selected_view_add = event.value;            
@@ -83,15 +89,12 @@ class ViewSpecificationsControl extends React.Component {
     };
     
 
-    handleSaveClick = (newName, dataSources) => {
-        console.log("new name", newName);
+    handleSaveClick = (viewSpec) => {        
         let that = this;
-        this.setState((state, props) => {            
-            state.objects[state.editingIndex].name = newName;
-            state.objects[state.editingIndex].data_sources = deepCopy(dataSources);
+        this.setState((state) => {            
+            state.objects[state.editingIndex] = deepCopy(viewSpec);
             that.notifyChanged(state.objects);
-            state.editingIndex = -1;
-            console.log(state);
+            state.editingIndex = -1;            
             return state;
         })
     };
@@ -133,17 +136,19 @@ class ViewSpecificationsControl extends React.Component {
             return <div className='codeText'>{id}: {type}</div>
         }
 
-        const { objects, editingIndex, editedName } = this.state;
-        return (
+        const { objects, editingIndex, editedName } = this.state;        
+        const { selectedOption } = this.state.selected_view_add;
+        
+        return (            
             <table style={{ width: '100%' }}><tbody>
                 <tr>
                     <td>
                         <div style={{ display: 'flex' }}>
                             <Select
-                                value={this.state.selected_view_add}
+                                value={selectedOption}
                                 onChange={this.handleViewOptionChange.bind(this)}
                                 options={this.dataManager.available_views.map(x => ({value: x.type, label: x.type}))}
-                                style={styleSelect}
+                                styles={customStyles}
                             />
                             <button className='blueButton' onClick={this.handleViewAddClick.bind(this)}>Add</button>
                         </div>
@@ -160,7 +165,7 @@ class ViewSpecificationsControl extends React.Component {
                                     <tr key={object.id}>
                                         <td>
                                             {index === editingIndex ? (
-                                                <table>
+                                                <table style={{width:"100%"}}>
                                                     <tbody>
                                                         <tr>                                                            
                                                             <td>
@@ -172,12 +177,8 @@ class ViewSpecificationsControl extends React.Component {
                                                                 <div>
                                                                     <DataSourceEditor viewManager={this.viewManager}
                                                                         saveFn={this.handleSaveClick.bind(this)}
-                                                                        cancelFn={this.handleCancelClick.bind(this)}
-                                                                        minSources={object.min_num_datasources}
-                                                                        maxSources={object.max_num_datasources}
-                                                                        selectedSources={object.data_sources}
-                                                                        viewName={object.name}
-                                                                        tableName = {object.table}
+                                                                        cancelFn={this.handleCancelClick.bind(this)}                                                                       
+                                                                        viewSpecification = {object}
                                                                     ></DataSourceEditor>
                                                                 </div>
                                                             </td>
