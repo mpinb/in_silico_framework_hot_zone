@@ -4,6 +4,7 @@ The following 3rd party modules are used: pandas, dask, distributed
 '''
 
 import six
+import yaml
 import cloudpickle
 
 # try: # new dask versions
@@ -39,7 +40,9 @@ if six.PY2:
         
     def uncloudpickle_fun(file_path):
         with open(file_path, 'rb') as f:
-            return cloudpickle.load(f)        
+            return cloudpickle.load(f)
+        
+    YamlLoader = yaml.Loader
 
 elif six.PY3:
     def pickle_fun(obj, file_path):
@@ -57,3 +60,5 @@ elif six.PY3:
     def uncloudpickle_fun(file_path):
         with open(file_path, 'rb') as f:
             return cloudpickle.load(f, encoding='latin1')
+        
+    YamlLoader = yaml.FullLoader  # Better choice, but only exists in Py3
