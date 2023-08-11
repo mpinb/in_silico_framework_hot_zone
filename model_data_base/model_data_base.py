@@ -11,13 +11,13 @@ import tempfile
 import datetime
 import cloudpickle as pickle
 import yaml
-
+from compatibility import YamlLoader
 
 
 if 'ISF_MDB_CONFIG' in os.environ:
     config_path = os.environ['ISF_MDB_CONFIG']
     with open(os.environ['ISF_MDB_CONFIG'], 'r') as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
+        config = yaml.load(f, Loader=YamlLoader)
 else:
     # config = dict(backend = dict(type = 'sqlite_remote', url = 'ip:port')) 
     config = dict(backend = dict(type = 'sqlite'))
