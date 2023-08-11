@@ -1,6 +1,35 @@
 import { deepCopy, getColumnMinMaxValues } from './utilCore.js';
 var JSZip = require("jszip");
 
+
+function normalizeDensityValues(values, invalidValue = -999999){        
+    const coords_value = [];
+    const valid_values = [];
+    for(let i=0; i<values.length; i++){
+        for(let j=0; j<values[i].length; j++){
+            const value = values[i][j];
+            if(value != invalidValue){
+                valid_values.push(value);
+                coords_value.push([i,j, value])
+            }                
+        }    
+    }
+
+    min_value = undefined;
+    max_value = undefined;
+
+    if(valid_values.length){
+        min_value = Math.min(...valid_values);
+        max_value = Math.max(...valid_values);
+    }
+
+    return {
+        coords_value,
+        min_value,
+        max_value
+    }
+}
+
 export class DataManager {
     constructor(viewManager) {
         this.viewManager = viewManager;
@@ -110,6 +139,8 @@ export class DataManager {
         //console.log(result);
         return result;       
     }
+
+    
 
     expandTable(tableFlat, columnNames){
         let expandedTable = [];
@@ -459,6 +490,37 @@ export class DataManager {
             }
         });
     }
+
+
+    getDensityValues(callback, table, columns, format, density_grid_shape) {
+        HTTP.post(this.getMatrixServerURL('/getDensity'), { data: {
+            "table" : table,            
+            "columns" : columns,
+            "format"  : format,
+            "density_grid_shape" : density_grid_shape
+        } }, function (error, response) {            
+            if (error) {
+                console.log(error);
+            } else {                               
+                let data = JSON.parse(response.content);      
+                console.log(data.values);          
+                data.values = normalizeDensityValues(data.values, data.masked_value);                
+                callback(data);                
+            }
+        });
+    }
+
+    setDensityPlotSelection(filter_data) {
+        HTTP.post(this.getMatrixServerURL('/setDensityPlotSelection'), { data: filter_data }, function (error, response) {            
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(response);
+            }
+        });
+    }
+
+    
 
     getResource(callback, filename) {
         if(this.cachedResource){
