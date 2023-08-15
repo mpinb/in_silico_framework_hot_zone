@@ -368,15 +368,16 @@ class LinkedViewsServer:
                 minmax_x = df.minmax(binbycols[0])
                 minmax_y = df.minmax(binbycols[1])
                 data_ranges = [minmax_x.tolist(), minmax_y.tolist()]
-
-                masked_value = INVALID_NUMBER
+                
                 if(format == "count"):
-                    values = df.count(binby=binbycols, shape=density_grid_shape)
-                    masked_value = 0
+                    values = df.count(binby=binbycols, shape=density_grid_shape).astype(float)
+                    values[values == 0] = np.nan
                 elif(format == "min"):                    
                     values = df.min(value_column, binby=binbycols, shape=density_grid_shape)
+                    values[values > 10**100] = np.nan
                 elif(format == "max"):                    
                     values = df.max(value_column, binby=binbycols, shape=density_grid_shape)
+                    values[values < -10**100] = np.nan
                 elif(format == "mean"):                    
                     values = df.mean(value_column, binby=binbycols, shape=density_grid_shape)
                 elif(format == "median"):
@@ -392,7 +393,7 @@ class LinkedViewsServer:
                     "values" : values.tolist(),
                     "density_grid_shape" : data["density_grid_shape"],
                     "data_ranges" : data_ranges,
-                    "masked_value" : masked_value
+                    "masked_value" : INVALID_NUMBER
                 }
 
                 return json.dumps(response_data)

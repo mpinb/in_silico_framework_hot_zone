@@ -3,6 +3,7 @@ import zmq
 import cloudpickle
 import yaml
 import sys
+from compatibility import YamlLoader
 #context = zmq.Context()
 #socket = context.socket(zmq.REQ)
 #socket.connect('tcp://130.183.178.36:5555')
@@ -14,7 +15,7 @@ except KeyError:
     # likely, the module is called upon from an import
     sys.exit(1)
 with open(os.environ['ISF_MDB_CONFIG'], 'r') as f:
-    config = yaml.load(f, Loader=yaml.FullLoader)
+    config = yaml.load(f, Loader=YamlLoader)
 
 assert(config['backend']['type'] == 'sqlite_remote')
 url = config['backend']['url']
