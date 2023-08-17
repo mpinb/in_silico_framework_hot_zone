@@ -75,6 +75,7 @@ jobs:
           dask-scheduler --port=28786 --bokeh-port=28787 &
           dask-worker localhost:28786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
           coverage run -m pytest -rsx -vv --color=yes --cov tests/
+          coverage xml -o tests/coverage_reports/coverage_py2.xml
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
