@@ -147,7 +147,6 @@ dependencies:
   - blosc==1.5.1
   - bluepyopt==1.8.5
   - configparser==4.0.2
-  - coverage==4.2
   - deap==1.2.2
   - defusedxml==0.7.1
   - django==1.8.19
