@@ -4,7 +4,9 @@
 
 # The In-Silico-Framework (ISF)
 [![In-Silico-Framework (Python 2.7) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27.yml)
-[![In-Silico-Framework (Python 3.8) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py3.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py3.yml)</div>
+[![In-Silico-Framework (Python 3.8) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py3.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py3.yml)
+[![codecov](https://codecov.io/gh/mpinb/in_silico_framework/graph/badge.svg?token=V4P4QMFM12)](https://codecov.io/gh/mpinb/in_silico_framework)
+</div>
 
 ## Installation
 
