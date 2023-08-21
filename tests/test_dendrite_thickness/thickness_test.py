@@ -7,7 +7,7 @@ import numpy as np
 
 from dendrite_thickness.thickness import IO, pipeline, utils
 from dendrite_thickness.thickness import thickness as th
-from .context import PARENT
+from .context import CURRENT_DIR
 import pandas as pd
 
 import logging
@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 
 
 def test_am_read():
-    am_path = os.path.join(PARENT, 'test_files/S13_final_done_Alison_zScale_40.am')
+    am_path = os.path.join(CURRENT_DIR, 'test_files/S13_final_done_Alison_zScale_40.am')
     log.info(am_path)
     log.info("***********")
     log.info("TEST Am.read() method:")
@@ -60,7 +60,7 @@ def test_am_write():
     log.info("***********")
     log.info("TEST Am.write() method:")
     log.info("***********")
-    am_path = os.path.join(PARENT, 'test_files/S13_final_done_Alison_zScale_40.am')
+    am_path = os.path.join(CURRENT_DIR, 'test_files/S13_final_done_Alison_zScale_40.am')
     am_object = IO.Am(am_path)
     am_object.read()
 
@@ -76,7 +76,7 @@ def test_correct_seed():
     # x = 2400, y = 2364, value = 150
     # the maximum value in a area of thickness 10 micron is 181 at [2403, 2447]
     image_point = [2400, 2364]
-    image_file = os.path.join(PARENT, 'test_files/S13_max_z_projection.tif')
+    image_file = os.path.join(CURRENT_DIR, 'test_files/S13_max_z_projection.tif')
     rx_object = th.ThicknessExtractor([], image_file)
     corrected_point = rx_object._correct_seed(image_point)
     log.info("The _correct_seed function correct the point [2400, 2364] to  [2403, 2447]:")
@@ -95,11 +95,11 @@ def test_correct_seed():
 
 
 def test_pipeline():
-    am_folder_path = os.path.join(PARENT, 'test_files/am_files')
-    tif_folder_path = os.path.join(PARENT, 'test_files/image_files')
-    hoc_file_path = os.path.join(PARENT, 'test_files/WR58_Cell5_L5TT_Final.hoc')
-    output_folder_path = os.path.join(PARENT, 'test_files/output')
-    bijective_points_path = os.path.join(PARENT, 'test_files/manual_landmarks.landmarkAscii')
+    am_folder_path = os.path.join(CURRENT_DIR, 'test_files/am_files')
+    tif_folder_path = os.path.join(CURRENT_DIR, 'test_files/image_files')
+    hoc_file_path = os.path.join(CURRENT_DIR, 'test_files/WR58_Cell5_L5TT_Final.hoc')
+    output_folder_path = os.path.join(CURRENT_DIR, 'test_files/output')
+    bijective_points_path = os.path.join(CURRENT_DIR, 'test_files/manual_landmarks.landmarkAscii')
 
     p = pipeline.ExtractThicknessPipeline()
 
