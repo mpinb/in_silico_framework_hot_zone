@@ -3,7 +3,7 @@ from .context import h, fname
 
 def test_cell_parser():
     testParser = CellParser(fname)
-    testParser.spatialgraph_to_cell()
+    testParser.spatialgraph_to_cell(parameters=None)
     testParser.insert_passive_membrane('Soma')
     testParser.insert_passive_membrane('Dendrite')
     testParser.insert_passive_membrane('ApicalDendrite')
