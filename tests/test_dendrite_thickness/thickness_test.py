@@ -5,12 +5,11 @@ import os
 
 import numpy as np
 
-from . import IO
-from . import thickness as th
-from . import pipeline
+from dendrite_thickness.thickness import IO, pipeline, utils
+from dendrite_thickness.thickness import thickness as th
 from dendrite_thickness.thickness.definitions import ROOT_DIR
 import pandas as pd
-from . import utils as u
+
 import logging
 log = logging.getLogger(__name__)
 
@@ -51,7 +50,7 @@ def test_am_read():
 
     log.info("The point read from the file is as the same as the one from the " \
           "Am.read() method: " + \
-          str(u.are_same_points(defined_point, point)))
+          str(utils.are_same_points(defined_point, point)))
     log.info("-------")
 
     del am_object
