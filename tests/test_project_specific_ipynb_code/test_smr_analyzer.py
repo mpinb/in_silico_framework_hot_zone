@@ -1,6 +1,6 @@
 from simrun2 import generate_synapse_activations
 import dask
-from context import cellParamName, networkName
+from .context import cellParamName, networkName
 
 def test_generate_synapse_activation_returns_filelist(tmpdir):
     dirPrefix = tmpdir.dirname

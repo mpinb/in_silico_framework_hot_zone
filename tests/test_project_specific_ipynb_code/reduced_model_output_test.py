@@ -1,5 +1,5 @@
 import numpy as np
-from context import *
+from .context import *
 
 def test_apply_release_probability():
     prob = 0.3

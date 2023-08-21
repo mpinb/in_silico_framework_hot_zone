@@ -1,5 +1,5 @@
 from barrel_cortex import *
-from context import barrel_center_points
+from .context import barrel_center_points
 
 def test_pt3add():
     teststr = "{pt3dadd(-191.183289, 445.022980, -402.017792, 0.450000)}\n"
