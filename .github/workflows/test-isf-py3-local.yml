@@ -22,7 +22,7 @@ jobs:
       # Install Anaconda3 and update conda package manager
       - name: Install Anaconda3
         run: |
-          Invoke-WebRequest Anaconda3-2020.11-Windows-x86_64.exe
+          Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-2020.11-Windows-x86_64.exe
           sh Anaconda3-2020.11-Linux-x86_64.sh -b -p ~/conda3-isf
           source ~/conda3-isf/bin/activate
           conda info
