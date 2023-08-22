@@ -3,6 +3,8 @@ name: In-Silico-Framework (Python 3) install and test locally
 # Controls when the workflow will run
 on:
   # Allows you to run this workflow manually from the Actions tab
+  push: 
+    branches: [ 'testing' ]
   workflow_dispatch:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
