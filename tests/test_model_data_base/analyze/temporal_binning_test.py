@@ -11,7 +11,7 @@ npartitions = 80
 
 client = distributed.client_object_duck_typed
 
-class Tests(unittest.TestCase):
+class TestTemporalBinning(unittest.TestCase):
     def setUp(self):
         self.pdf = pd.DataFrame({'blabla': ['a', 1, 3], \
                                 '1': [1, 5, 10], \

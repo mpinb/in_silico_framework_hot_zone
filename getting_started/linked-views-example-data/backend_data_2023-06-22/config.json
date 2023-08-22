@@ -44,6 +44,30 @@
             "min_num_datasources": 0,
             "max_num_datasources": 3,
             "table": "simulation_samples.csv"
+        },
+        {
+            "type": "density-2-channel",
+            "min_num_datasources": 2,
+            "max_num_datasources": 2,
+            "table": "vaex_df",
+            "configuration": {
+            	"format" : "count",
+                "density_grid_shape": [100,100],
+                "point_size": 5,
+                "point_opacity": 0.8                
+            }
+        },
+        {
+            "type": "density-3-channel",
+            "min_num_datasources": 3,
+            "max_num_datasources": 3,
+            "table": "vaex_df",
+            "configuration": {
+            	"format" : "mean",
+                "density_grid_shape": [100,100],
+                "point_size": 5,
+                "point_opacity": 0.8
+            }
         }
     ],
     "cached_tables" : [],

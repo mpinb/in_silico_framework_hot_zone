@@ -7,6 +7,7 @@ import sqlite3
 import cloudpickle
 import yaml
 import sys
+from compatibility import YamlLoader
 
 try:
     config_path = os.environ['ISF_MDB_CONFIG']
@@ -14,7 +15,7 @@ except KeyError:
     # module is likely called upon from import instead of being run directly -> this key is not necessarily set then
     sys.exit(1)
 with open(os.environ['ISF_MDB_CONFIG'], 'r') as f:
-    config = yaml.load(f)
+    config = yaml.load(f, Loader=YamlLoader)
 # we here assume backend is sqlite_remote, as otherwise this module would not be loaded
 assert(config['backend']['type'] == 'sqlite_remote')
 ip, port = config['backend']['url'].split(':')

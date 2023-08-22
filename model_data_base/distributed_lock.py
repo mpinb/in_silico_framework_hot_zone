@@ -4,11 +4,12 @@ import distributed
 import yaml
 import os
 import warnings
+from compatibility import YamlLoader
 
 if 'ISF_DISTRIBUTED_LOCK_CONFIG' in os.environ:
     config_path = os.environ['ISF_DISTRIBUTED_LOCK_CONFIG']
     with open(os.environ['ISF_DISTRIBUTED_LOCK_CONFIG'], 'r') as f:
-        config = yaml.load(f)
+        config = yaml.load(f, Loader=YamlLoader)
 else:
     warnings.warn('environment variable ISF_DISTRIBUTED_LOCK_CONFIG is not set. ' + 
                   'Falling back to default configuration.')

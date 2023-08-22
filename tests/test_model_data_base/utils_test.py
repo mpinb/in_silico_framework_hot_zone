@@ -7,7 +7,7 @@ from pandas.util.testing import assert_frame_equal
 import distributed
 
 
-class Tests(unittest.TestCase):        
+class TestUtils(unittest.TestCase):        
     def test_pandas_to_array(self):
         '''make sure pandas to array works with dict, series and dataframe'''
         dict_ = {'x_1_y_1': 10, 'x_2_y_1': 15, 'x_3_y_1': 7,'x_1_y_2': 2, 'x_2_y_2': 0, 'x_3_y_2': -1}

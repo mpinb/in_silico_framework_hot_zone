@@ -8,7 +8,7 @@ import numpy as np
 import tempfile
 import model_data_base
 
-class Tests(unittest.TestCase):
+class TestDaskWrapper(unittest.TestCase):
 
     @decorators.testlevel(0)                
     def test_concat_path_elements_to_filelist(self):

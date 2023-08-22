@@ -1,7 +1,5 @@
-from scipy.spatial.transform import Rotation
 from biophysics_fitting import get_main_bifurcation_section
 import pandas as pd
-from ipywidgets import interactive, VBox, HBox, widgets, Layout
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.axes3d import Axes3D
@@ -14,13 +12,11 @@ import warnings
 from barrel_cortex import inhibitory
 # let ImportWarnings show up when importing this module through Interface
 warnings.filterwarnings("default", category=ImportWarning, module=__name__)
-try:
-    from tqdm import tqdm
-    HAS_TQDM = True
-except ImportError:
-    warnings.warn(
-        "tqdm not found in the current environment. No progressbars will be displayed", ImportWarning)
-    HAS_TQDM = False
+import six
+if six.PY3:
+    from scipy.spatial.transform import Rotation
+else:
+    warnings.warn("Scipy version is too old to import spatial.transform.Rotation. Cell alignment will not work.")
 try:
     from dash import Dash, dcc, html, Input, Output, State
     from dash.exceptions import PreventUpdate

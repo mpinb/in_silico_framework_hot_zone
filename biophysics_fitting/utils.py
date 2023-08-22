@@ -168,3 +168,26 @@ def execute_in_child_process_kept_alive(fun):
     #fun.pool = pool
     return _helper
 
+class StreamToLogger(object):
+    """
+    Fake file-like stream object that redirects writes to a logger instance.
+    Used for reading in .hoc files that provide output due to various print statements.
+    """
+    def __init__(self, logger, level):
+       self.logger = logger
+       self.level = level
+       self.linebuf = ''
+
+    def write(self, buf):
+       for line in buf.rstrip().splitlines():
+          self.logger.log(self.level, line.rstrip())
+
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, *args):
+        self.flush()
+
+    def flush(self):
+        pass
+
