@@ -8,5 +8,5 @@ h = neuron.h
 
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 this_folder = os.path.abspath(os.path.dirname(__file__))
-fname = 'data/85.hoc'
+fname = os.path.join(this_folder, 'data', '85.hoc')
 sys.path.insert(0, parent)
