@@ -77,7 +77,8 @@ def test_correct_seed():
     # x = 2400, y = 2364, value = 150
     # the maximum value in a area of thickness 10 micron is 181 at [2403, 2447]
     image_point = [2400, 2364]
-    rx_object = th.ThicknessExtractor([], IMAGE_FILE)
+    rx_object = th.ThicknessExtractor([], image_file=IMAGE_FILE)
+    print(rx_object.padded_image)
     corrected_point = rx_object._correct_seed(image_point)
     log.info("The _correct_seed function correct the point [2400, 2364] to  [2403, 2447]:")
     if corrected_point == [2403, 2447]:
@@ -121,8 +122,8 @@ def test_pipeline():
     log.info(p.hoc_file)
 
     # TODO: these methods don't exist anymore?
-    # p.set_thickness_extractor_parameters()
-    # p.set_bijective_points_by_file(bijective_points_path)
+    p.set_thickness_extractor_parameters()
+    p.set_am_to_hoc_transformation_by_landmarkAscii(bijective_points_path)
 
 #   p.set_client_for_parallelization("localhost", 8780)
 
