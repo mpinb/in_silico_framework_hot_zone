@@ -1,5 +1,5 @@
 # Installation of in-silico-framework followed by CI tests.
-name: In-Silico-Framework (Python 3) install and test
+name: In-Silico-Framework (Python 3) install and test locally
 # Controls when the workflow will run
 on:
   # Allows you to run this workflow manually from the Actions tab
