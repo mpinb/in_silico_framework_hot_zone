@@ -26,7 +26,7 @@ jobs:
       - name: Install Anaconda2
         run: |
           Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-4.2.0-Windows-x86_64.exe -UseBasicParsing
-          sh Anaconda2-4.2.0-Linux-x86_64.sh -b -p ~/conda2-isf
+          bash Anaconda2-4.2.0-Linux-x86_64.sh -b -p ~/conda2-isf
           source ~/conda2-isf/bin/activate
           conda info
 
