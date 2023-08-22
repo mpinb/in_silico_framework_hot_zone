@@ -23,16 +23,16 @@ jobs:
       - name: Install Anaconda3
         run: |
           Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-2020.11-Windows-x86_64.exe -UseBasicParsing
-          start /wait Anaconda3-2020.11-Windows-x86_64.exe /D=%UserProfile%\conda3-isf /S
+          start /wait "" Anaconda3-2020.11-Windows-x86_64.exe /D=%UserProfile%\conda3-isf /S
           source %UserProfile%\conda3-isf\bin\activate
           conda info
       # Updating the root environment. Install ISF dependencies (YAML)
       # NOTE: The environment file (yaml) is in the ISF repository 'installer' folder
       - name: Install ISF dependencies
         run: |
-          source ~/conda3-isf/bin/activate
+          source %UserProfile%\conda3-isf\bin\activate
           echo "Installing 'in silico framework' dependencies."
-          conda-env create --name isf-py3 --file installer/env-isf-py3.yml --quiet
+          conda-env create --name isf-py3 --file installer\env-isf-py3.yml --quiet
           source activate isf-py3
           conda list
           
@@ -40,7 +40,7 @@ jobs:
       - name: Patch dask library
         run: |
           echo "Patching dask library."
-          source ~/conda3-isf/bin/activate
+          source %UserProfile%\conda3-isf\bin\activate
           source activate isf-py3
           cd installer
           python patch_dask_linux64.py
@@ -51,8 +51,8 @@ jobs:
           echo "Installing pandas-msgpack"
           git clone https://github.com/abast/pandas-msgpack.git
           # Applying patch to pandas-msgpack (generating files using newer Cython)
-          git -C pandas-msgpack apply ../installer/pandas_msgpack.patch
-          source ~/conda3-isf/bin/activate
+          git -C pandas-msgpack apply ..\installer\pandas_msgpack.patch
+          source %UserProfile%\conda3-isf\bin\activate
           source activate isf-py3
           cd pandas-msgpack; python setup.py install
           pip list --format=freeze | grep pandas
@@ -61,26 +61,26 @@ jobs:
       - name: Compile neuron mechanisms
         run: |
           echo "Compiling neuron mechanisms"
-          source ~/conda3-isf/bin/activate
+          source %UserProfile%\conda3-isf\bin\activate
           source activate isf-py3
           pushd .
-          cd mechanisms/channels_py3; nrnivmodl
+          cd mechanisms\channels_py3; nrnivmodl
           popd
-          cd mechanisms/netcon_py3; nrnivmodl
+          cd mechanisms\netcon_py3; nrnivmodl
           
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
-          source ~/conda3-isf/bin/activate
+          source %UserProfile%\conda3-isf\bin\activate
           source activate isf-py3
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=38786 --dashboard-address=38787 &
           dask-worker localhost:38786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          pytest -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. tests
+          pytest -rsx -vv --color=yes --cov-report xml:tests\coverage_reports\report_py3.xml --cov=. tests
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/coverage_reports/report_py3.xml
+          files: .\tests\coverage_reports\report_py3.xml
           verbose: true # optional (default = false)
         

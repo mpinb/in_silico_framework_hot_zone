@@ -26,7 +26,7 @@ jobs:
       - name: Install Anaconda2
         run: |
           Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-4.2.0-Windows-x86_64.exe -UseBasicParsing
-          start /wait Anaconda3-4.2.0-Windows-x86_64.exe /D=%UserProfile%\conda2-isf /S
+          start /wait "" Anaconda3-4.2.0-Windows-x86_64.exe /D=%UserProfile%\conda2-isf /S
           source %UserProfile%\conda2-isf\bin\activate
           conda info
 
@@ -34,9 +34,9 @@ jobs:
       # NOTE: The environment file (yaml) is in the ISF repository 'installer' folder
       - name: Install ISF dependencies
         run: |
-          source ~/conda2-isf/bin/activate
+          source %UserProfile%\conda2-isf\bin\activate
           echo "Installing 'in silico framework' dependencies in silent mode."
-          conda-env create --name isf-py27 --file installer/env-isf-py27.yml --quiet
+          conda-env create --name isf-py27 --file installer\env-isf-py27.yml --quiet
           source activate isf-py27
           conda list
           
@@ -44,7 +44,7 @@ jobs:
       - name: Patch pandas library
         run: |
           echo "Patching pandas library."
-          source ~/conda2-isf/bin/activate
+          source %UserProfile%\conda2-isf\bin\activate
           source activate isf-py27
           cd installer
           python patch_pandas_linux64.py
@@ -54,19 +54,19 @@ jobs:
       - name: Compile neuron mechanisms
         run: |
           echo "Compiling neuron mechanisms"
-          source ~/conda2-isf/bin/activate
+          source %UserProfile%\conda2-isf\bin\activate
           source activate isf-py27
           pushd .
-          cd mechanisms/channels_py2; nrnivmodl
+          cd mechanisms\channels_py2; nrnivmodl
           popd
-          cd mechanisms/netcon_py2; nrnivmodl
+          cd mechanisms\netcon_py2; nrnivmodl
           
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
-          source ~/conda2-isf/bin/activate
+          source %UserProfile%\conda2-isf\bin\activate
           source activate isf-py27
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=28786 --bokeh-port=28787 &
           dask-worker localhost:28786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          python -m pytest -rsx -vv --color=yes tests/
+          python -m pytest -rsx -vv --color=yes tests
