@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: bash -l {0}
+        shell: pwsh
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
