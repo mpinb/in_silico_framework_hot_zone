@@ -25,7 +25,7 @@ jobs:
       # Install Anaconda2 and update conda package manager
       - name: Install Anaconda2
         run: |
-          Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-4.2.0-Windows-x86_64.exe -UseBasicParsing
+          Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-4.2.0-Windows-x86_64.exe -UseBasicParsing -OutFile "Anaconda3-4.2.0-Windows-x86_64.exe"
           Start-process -FilePath "Anaconda3-4.2.0-Windows-x86_64.exe" -ArgumentList "/D=%UserProfile%\conda2-isf /S" -Wait
           source %UserProfile%\conda2-isf\bin\activate
           conda info

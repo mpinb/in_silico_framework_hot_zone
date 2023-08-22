@@ -22,7 +22,7 @@ jobs:
       # Install Anaconda3 and update conda package manager
       - name: Install Anaconda3
         run: |
-          Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-2020.11-Windows-x86_64.exe -UseBasicParsing
+          Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-2020.11-Windows-x86_64.exe -UseBasicParsing -OutFile "Anaconda3-2020.11-Windows-x86_64.exe"
           Start-process -FilePath "Anaconda3-2020.11-Windows-x86_64.exe" -ArgumentList "/D=%UserProfile%\conda3-isf /S" -Wait
           source %UserProfile%\conda3-isf\bin\activate
           conda info
