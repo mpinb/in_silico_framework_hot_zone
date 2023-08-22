@@ -1,2 +1,2 @@
 import os
-CURRENT_DIR = os.path.abspathos.path.dirname(__file__)
+CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
