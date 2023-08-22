@@ -22,8 +22,8 @@ jobs:
       # Install Anaconda3 and update conda package manager
       - name: Install Anaconda3
         run: |
-          wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh
-          bash Anaconda3-2020.11-Linux-x86_64.sh -b -p ~/conda3-isf
+          Invoke-WebRequest Anaconda3-2020.11-Windows-x86_64.exe
+          sh Anaconda3-2020.11-Linux-x86_64.sh -b -p ~/conda3-isf
           source ~/conda3-isf/bin/activate
           conda info
       # Updating the root environment. Install ISF dependencies (YAML)
