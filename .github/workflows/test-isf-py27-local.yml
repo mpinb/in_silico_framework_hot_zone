@@ -26,8 +26,8 @@ jobs:
       - name: Install Anaconda2
         run: |
           Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-4.2.0-Windows-x86_64.exe -UseBasicParsing
-          bash Anaconda2-4.2.0-Linux-x86_64.sh -b -p ~/conda2-isf
-          source ~/conda2-isf/bin/activate
+          start /wait Anaconda3-4.2.0-Windows-x86_64.exe /D=%UserProfile%\conda2-isf /S
+          source %UserProfile%\conda2-isf\bin\activate
           conda info
 
       # Updating the root environment. Install ISF dependencies (YAML)
