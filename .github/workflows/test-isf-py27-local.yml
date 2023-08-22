@@ -26,7 +26,7 @@ jobs:
       - name: Install Anaconda2
         run: |
           Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-4.2.0-Windows-x86_64.exe -UseBasicParsing
-          start /wait "" Anaconda3-4.2.0-Windows-x86_64.exe /D=%UserProfile%\conda2-isf /S
+          Start-process Anaconda3-4.2.0-Windows-x86_64.exe /D=%UserProfile%\conda2-isf /S -Wait
           source %UserProfile%\conda2-isf\bin\activate
           conda info
 

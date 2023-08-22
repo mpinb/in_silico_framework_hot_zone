@@ -23,7 +23,7 @@ jobs:
       - name: Install Anaconda3
         run: |
           Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-2020.11-Windows-x86_64.exe -UseBasicParsing
-          start /wait "" Anaconda3-2020.11-Windows-x86_64.exe /D=%UserProfile%\conda3-isf /S
+          Start-process Anaconda3-2020.11-Windows-x86_64.exe /D=%UserProfile%\conda3-isf /S -Wait
           source %UserProfile%\conda3-isf\bin\activate
           conda info
       # Updating the root environment. Install ISF dependencies (YAML)
