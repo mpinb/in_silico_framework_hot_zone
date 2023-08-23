@@ -23,7 +23,8 @@ jobs:
       - name: Install Anaconda3
         run: |
           Invoke-WebRequest https://repo.anaconda.com/archive/Anaconda3-2020.11-Windows-x86_64.exe -UseBasicParsing -OutFile "Anaconda3-2020.11-Windows-x86_64.exe"
-          Start-process -FilePath "Anaconda3-2020.11-Windows-x86_64.exe" -ArgumentList "/D=%UserProfile%\conda3-isf /S" -Wait
+          # TODO: this opens the guy, despite the /S flag?
+          Start-process -FilePath "Anaconda3-2020.11-Windows-x86_64.exe" -ArgumentList "/D=%UserProfile%\conda3-isf","/S","/InstallationType=JustMe","/RegisterPython=0" -Wait
           source %UserProfile%\conda3-isf\bin\activate
           conda info
       # Updating the root environment. Install ISF dependencies (YAML)
