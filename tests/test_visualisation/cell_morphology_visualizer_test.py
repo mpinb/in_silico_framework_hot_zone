@@ -29,7 +29,7 @@ class TestCellMorphologyVisualizer:
     def test_write_gif_voltage_synapses_in_morphology_3d(self, tmpdir):
         outdir = tmpdir.dirname
         self.cmv.write_gif_voltage_synapses_in_morphology_3d(
-            images_path=outdir, outpath=outdir,
+            images_path=outdir, out_path=outdir,
             t_start=self.t_start, t_end=self.t_end, t_step=self.t_step
             )
 
