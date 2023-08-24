@@ -23,6 +23,17 @@ from matplotlib.patches import FancyArrowPatch
 from matplotlib.text import Annotation
 from mpl_toolkits.mplot3d.axes3d import Axes3D
 
+POPULATION_TO_COLOR_DICT = {
+    'INT': 'black', 
+    'L4ss': 'orange', 
+    'L5st': 'cyan', 
+    'L5tt': 'lime',
+    'L6CC': 'yellow',
+    'VPM': 'red',
+    'L23': 'magenta',
+    'inactive': 'white'}
+"""Colors in which the synaptic input are going to be shown"""
+
 def write_video_from_images(images, out_path, fps=24, images_format = '.png', quality=5, codec='mpeg4', auto_sort_paths=True ):
     '''
     Creates a video from a set of images. Images must be specified as a list of images, a directory with images or a list of directories with images.
