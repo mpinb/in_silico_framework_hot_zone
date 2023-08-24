@@ -1,10 +1,11 @@
 # Installation of in-silico-framework followed by CI tests.
-name: In-Silico-Framework (Python 3) install and test
+# Builds ISF locally on the MPINB-hosted runner and runs all tests
+name: ISF Py3 (local) build/test
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master, testing ]
+    branches: '*'
   pull_request:
     branches: [ master ]
   # Allows you to run this workflow manually from the Actions tab
@@ -23,20 +24,18 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       # Install Anaconda3 and update conda package manager
-      - name: Download Anaconda3
-        run: |
-          wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh --quiet
-      - name: Remove previous installation of Anaconda (if it exists)
-        run: |
-          DIR="$HOME/conda3-isf"
-          if [ -d "$DIR" ]; then
-            echo "Removing previous Anaconda installation"
-            rm -r "$DIR"
-          else
-            echo "no previous Anaconda installation found. Continuing..."
-          fi
       - name: Install Anaconda3
         run: |
+          echo "Downloading Anaconda3-2020.11-Linux-x86_64"
+          wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh --quiet
+          DIR="$HOME/conda3-isf"
+          if [ -d "$DIR" ]; then
+            echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
+            rm -r "$DIR"
+          else
+            echo "No previous Anaconda installation found. Continuing..."
+          fi
+          echo "Installing Anaconda3"
           bash Anaconda3-2020.11-Linux-x86_64.sh -b -p $HOME/conda3-isf
           source $HOME/conda3-isf/bin/activate
           conda info

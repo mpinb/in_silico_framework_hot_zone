@@ -1,13 +1,7 @@
 # Installation of in-silico-framework followed by CI tests.
-name: In-Silico-Framework (Python 3) install and test
+name: ISF Py3 (github) build/test
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ master, refractor, testing ]
-  pull_request:
-    branches: [ master ]
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -25,9 +19,18 @@ jobs:
       # Install Anaconda3 and update conda package manager
       - name: Install Anaconda3
         run: |
+          echo "Downloading Anaconda3-2020.11-Linux-x86_64"
           wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh --quiet
-          bash Anaconda3-2020.11-Linux-x86_64.sh -b -p ~/conda3-isf
-          source ~/conda3-isf/bin/activate
+          DIR="$HOME/conda3-isf"
+          if [ -d "$DIR" ]; then
+            echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
+            rm -r "$DIR"
+          else
+            echo "No previous Anaconda installation found. Continuing..."
+          fi
+          echo "Installing Anaconda3"
+          bash Anaconda3-2020.11-Linux-x86_64.sh -b -p $HOME/conda3-isf
+          source $HOME/conda3-isf/bin/activate
           conda info
       # Updating the root environment. Install ISF dependencies (YAML)
       # NOTE: The environment file (yaml) is in the ISF repository 'installer' folder
