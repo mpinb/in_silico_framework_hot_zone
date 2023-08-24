@@ -178,7 +178,7 @@ class ThicknessExtractor:
 
             ray_length = len(ray_indices)
             assert ray_length % 2 == 1, "ray_length should be uneven"
-            half_ray_length = (ray_length - 1) / 2
+            half_ray_length = int((ray_length - 1) / 2)
 
             back_contour_index = self.get_contour_index(point, ray_indices[0:half_ray_length + 1][::-1])
             front_contour_index = self.get_contour_index(point, ray_indices[half_ray_length:ray_length])
