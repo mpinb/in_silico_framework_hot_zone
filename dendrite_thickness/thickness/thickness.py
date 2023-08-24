@@ -14,11 +14,6 @@ Limitations:
 -----------
 
 
-Tests
------
-
-- The test functions are inside the test.py. One can also use them as example of how to use the functions.
-
 """
 import os
 import sys
@@ -138,7 +133,6 @@ class ThicknessExtractor:
             # self.all_overlaps = self.update_all_data_with_overlaps()
 
         self._get_thicknesses_from_all_data()
-        self._tidy_up()
 
     def get_all_data_by_point(self, point):
         """
@@ -329,13 +323,6 @@ class ThicknessExtractor:
                                                                         corrected_point, intensity_value2))
         return corrected_point
 
-    def _tidy_up(self):
-        del self.image
-        del self.padded_image
-        del self.points
-        del self.convert_points
-        del self.contour_list
-
     def update_all_data_with_overlaps(self):
         points = self.seed_corrected_points
         overlaps = []
@@ -379,6 +366,13 @@ class ThicknessExtractor:
     def _get_thicknesses_from_all_data(self):
         thickness_list = [self.all_data[idx]["min_thickness"] for idx in range(len(self.points))]
         self.thickness_list = self.convert_points.thickness_to_micron(thickness_list)
+
+    def __del__(self):
+        del self.image
+        del self.padded_image
+        del self.points
+        del self.convert_points
+        del self.contour_list
 
 
 def _check_overlap(contour1, contour2):

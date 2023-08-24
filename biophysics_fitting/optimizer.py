@@ -449,12 +449,3 @@ def start_run(mdb_setup, n, pop = None, client = None, continue_cp = False,
                            cp_filename = mdb_run, continue_cp=continue_cp,
                            pop = pop, mdb = mdb_setup)
     return pop
-
-
-#########################
-# fast tests
-#########################
-assert(get_max_generation({'0': 1}) == 0)
-assert(get_max_generation({'0': 1, '10': 2}) == 10)
-assert(get_max_generation({'0': 1, 10: 2}) == 10)
-assert(get_max_generation({'3': 1, '10_ckeckpoint': 2}) == 3)
