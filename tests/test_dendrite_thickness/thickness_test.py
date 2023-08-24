@@ -76,7 +76,7 @@ def test_correct_seed():
     # image point and its value, extracted using ImageJ:
     # x = 2400, y = 2364, value = 150
     # the maximum value in a area of thickness 10 micron is 181 at [2403, 2447]
-    image_point = [2400, 2364]
+    image_point = [2400, 2364, 150]  # [x, y, value]
     rx_object = th.ThicknessExtractor([], image_file=IMAGE_FILE)
     corrected_point = rx_object._correct_seed(image_point)
     log.info("The _correct_seed function correct the point [2400, 2364] to  [2403, 2447]:")
