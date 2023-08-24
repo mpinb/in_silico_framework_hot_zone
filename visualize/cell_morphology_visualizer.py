@@ -788,7 +788,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             - plot: whether the plot should be shown.
         '''
         
-        self._assert_has_simulation_data()
+        assert self._has_simulation_data()
         if vmin is not None:
             self.vmin = vmin
         if vmax is not None:
@@ -863,7 +863,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             - Plot: whether the plot should be shown.
         '''
         
-        self._assert_has_simulation_data()
+        assert self._has_simulation_data()
         if time_show_syn_activ is not None:
             self.time_show_syn_activ = time_show_syn_activ
         if vmin is not None:
@@ -900,7 +900,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             - voltage_legend: whether the voltage legend should appear in the plot
             - synapse_legend: whether the synapse activations legend should appear in the plot
         '''
-        self._assert_has_simulation_data()
+        assert self._has_simulation_data()
         if client is None:
             raise ValueError(
                 "Please provide a dask client object for the client argument")
@@ -946,7 +946,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             - voltage_legend: whether the voltage legend should appear in the plot
             - synapse_legend: whether the synapse activations legend should appear in the plot
         '''
-        self._assert_has_simulation_data()
+        assert self._has_simulation_data()
         if client is None:
             raise ValueError(
                 "Please provide a dask client object for the client argument")
@@ -990,7 +990,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             - voltage_legend: whether the voltage legend should appear in the plot
             - synapse_legend: whether the synapse activations legend should appear in the plot
         '''
-        self._assert_has_simulation_data()
+        assert self._has_simulation_data()
         if client is None:
             raise ValueError(
                 "Please provide a dask client object for the client argument")
