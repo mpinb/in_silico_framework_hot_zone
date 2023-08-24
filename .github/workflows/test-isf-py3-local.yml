@@ -26,6 +26,15 @@ jobs:
       - name: Download Anaconda3
         run: |
           wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh --quiet
+      - name: Remove previous installation of Anaconda (if it exists)
+        run: |
+          DIR="$HOME/conda3-isf"
+          if [ -d "$DIR" ]; then
+            echo "Removing previous Anaconda installation"
+            rm -r "$DIR"
+          else
+            echo "no previous Anaconda installation found. Continuing..."
+          fi
       - name: Install Anaconda3
         run: |
           bash Anaconda3-2020.11-Linux-x86_64.sh -b -p $HOME/conda3-isf
