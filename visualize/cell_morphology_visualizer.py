@@ -253,7 +253,8 @@ class CMVDataParser:
                 continue
 
             # Add voltage at the last point of the previous section
-            voltage_points.append(sec.parent.recVList[-1][n_sim_point])
+            if sec.label.lower() != "soma":
+                voltage_points.append(sec.parent.recVList[-1][n_sim_point])
 
             # Compute segments limits (voltage is measure at the middle of each segment, not section)
             segs_limits = [0]
@@ -728,7 +729,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             of.write("SCALARS Diameter float 1\nLOOKUP_TABLE default\n".format(len(self.morphology)))
             of.write(scalar_str_(self.diameters))
     
-    def show_morphology_3d(self, save='', plot=True, highlight_section=None, highlight_arrow_args=None):
+    def show_morphology_3d(self, save='', plot=True, highlight_section=None, highlight_x=None, highlight_arrow_args=None):
         '''
         Creates a python plot of the cell morphology in 3D
 
@@ -765,7 +766,9 @@ class CellMorphologyVisualizer(CMVDataParser):
         ax.roll = self.roll
         # plot arrow, if necessary
         if highlight_section is not None:
-            draw_arrow(self.morphology, ax, highlight_section, highlight_arrow_args)
+            draw_arrow(
+                self.morphology, ax,
+                highlight_section=highlight_section, highlight_arrow_args=highlight_arrow_args)
         ax.set_box_aspect(
             [ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
         
@@ -775,7 +778,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         if plot:
             plt.show()
 
-    def show_voltage_in_morphology_3d(self, time_point, vmin=None, vmax=None, voltage_legend=True, save='', plot=True, highlight_section=None, highlight_arrow_args=None):
+    def show_voltage_in_morphology_3d(self, time_point, vmin=None, vmax=None, voltage_legend=True, save='', plot=True, highlight_section=None, highlight_x=None, highlight_arrow_args=None):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage for a particular time point.
 
@@ -845,8 +848,8 @@ class CellMorphologyVisualizer(CMVDataParser):
 
     def show_voltage_synapses_in_morphology_3d(self, time_point, time_show_syn_activ=None, 
                                                vmin=None, vmax=None, voltage_legend=True, 
-                                               synapse_legend=True,save='', 
-                                               plot=True, highlight_section=None, highlight_arrow_args=None,
+                                               synapse_legend=True,save='', plot=True,
+                                               highlight_section=None, highlight_x=None, highlight_arrow_args=None,
                                                show_synapses = True):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
@@ -873,12 +876,16 @@ class CellMorphologyVisualizer(CMVDataParser):
         voltage = self._get_voltages_at_timepoint(time_point)
         synapses = self._get_synapses_at_timepoint(time_point)
         self._plot_cell_voltage_synapses_in_morphology_3d(
-            voltage, synapses, time_point, voltage_legend=voltage_legend, synapse_legend=synapse_legend, save=save, plot=plot, highlight_section=None, highlight_arrow_args=None, show_synapses = show_synapses)
+            voltage, synapses, time_point, voltage_legend=voltage_legend, 
+            synapse_legend=synapse_legend, save=save, plot=plot, 
+            highlight_section=highlight_section, highlight_x=highlight_x,
+            highlight_arrow_args=highlight_arrow_args, show_synapses=show_synapses
+            )
 
-    def write_gif_voltage_synapses_in_morphology_3d(self, images_path, out_path, client=None, 
+    def write_gif_voltage_synapses_in_morphology_3d(self, images_path, out_path, client, 
                 t_start=None, t_end=None, t_step=None, neuron_rotation=None, time_show_syn_activ=None, 
                 vmin=None, vmax=None, frame_duration=40,voltage_legend=True, synapse_legend=True, 
-                highlight_section=None, highlight_arrow_args=None, show_synapses = True):
+                highlight_section=None, highlight_x=None, highlight_arrow_args=None, show_synapses = True):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
@@ -901,9 +908,6 @@ class CellMorphologyVisualizer(CMVDataParser):
             - synapse_legend: whether the synapse activations legend should appear in the plot
         '''
         assert self._has_simulation_data()
-        if client is None:
-            raise ValueError(
-                "Please provide a dask client object for the client argument")
         self._update_times_to_show(t_start, t_end, t_step)
         if neuron_rotation is not None:
             self.neuron_rotation = neuron_rotation
@@ -915,14 +919,14 @@ class CellMorphologyVisualizer(CMVDataParser):
             self.vmax = vmax
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(
             images_path, client, voltage_legend, synapse_legend,
-            highlight_section=highlight_section, highlight_arrow_args=highlight_arrow_args,
+            highlight_section=highlight_section, highlight_x=highlight_x, highlight_arrow_args=highlight_arrow_args,
             show_synapses = show_synapses)
         write_gif_from_images(images_path, out_path, interval=frame_duration)
 
-    def write_video_voltage_synapses_in_morphology_3d(self, images_path, out_path, client=None, t_start=None, 
+    def write_video_voltage_synapses_in_morphology_3d(self, images_path, out_path, client, t_start=None, 
                       t_end=None, t_step=None, neuron_rotation=None, time_show_syn_activ=None, vmin=None, vmax=None,
                       framerate=12, quality=5, codec='mpeg4', voltage_legend=True, synapse_legend=True,
-                      highlight_section=None, highlight_arrow_args=None, show_synapses = True):
+                      highlight_section=None, highlight_x=None, highlight_arrow_args=None, show_synapses = True):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
@@ -947,9 +951,6 @@ class CellMorphologyVisualizer(CMVDataParser):
             - synapse_legend: whether the synapse activations legend should appear in the plot
         '''
         assert self._has_simulation_data()
-        if client is None:
-            raise ValueError(
-                "Please provide a dask client object for the client argument")
         self._update_times_to_show(t_start, t_end, t_step)
         if neuron_rotation is not None:
             self.neuron_rotation = neuron_rotation
@@ -961,15 +962,15 @@ class CellMorphologyVisualizer(CMVDataParser):
             self.vmax = vmax
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(
             images_path, client, voltage_legend, synapse_legend,
-            highlight_section=highlight_section, highlight_arrow_args=highlight_arrow_args,
+            highlight_section=highlight_section, highlight_x=highlight_x, highlight_arrow_args=highlight_arrow_args,
             show_synapses = show_synapses)
         write_video_from_images(images_path, out_path,
                                 fps=framerate, quality=quality, codec=codec)
 
-    def display_animation_voltage_synapses_in_morphology_3d(self, images_path, client=None, t_start=None,
+    def display_animation_voltage_synapses_in_morphology_3d(self, images_path, client, t_start=None,
         t_end=None,t_step=None,neuron_rotation=None, time_show_syn_activ=None, vmin=None, vmax=None,
          voltage_legend=True, synapse_legend=True, show_synapses = True,
-         highlight_section=None, highlight_arrow_args=None,display = True):
+         highlight_section=None, highlight_x=None, highlight_arrow_args=None,display = True):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
@@ -991,9 +992,6 @@ class CellMorphologyVisualizer(CMVDataParser):
             - synapse_legend: whether the synapse activations legend should appear in the plot
         '''
         assert self._has_simulation_data()
-        if client is None:
-            raise ValueError(
-                "Please provide a dask client object for the client argument")
         self._update_times_to_show(t_start, t_end, t_step)
         if neuron_rotation is not None:
             self.neuron_rotation = neuron_rotation

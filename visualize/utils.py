@@ -258,9 +258,9 @@ def _arrow3D(ax, x, y, z, dx, dy, dz, *args, **kwargs):
     ax.add_artist(arrow)
 
 def draw_arrow(morphology, ax, 
-               highlight_section, 
-               highlight_x, 
-               highlight_arrow_args, 
+               highlight_section=None, 
+               highlight_x=None, 
+               highlight_arrow_args=None, 
                arrow_size=50):
     
     assert type(highlight_section) == int, "Please provide the section index as an argument for highlight_arrow. You passed {}".format(highlight_section)
