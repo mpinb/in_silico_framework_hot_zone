@@ -515,11 +515,13 @@ class CellMorphologyVisualizer(CMVDataParser):
         """Image quality"""
 
         self.show_synapses = True
+        """Whether or not to show the synapses on the plots that support this. Can be turned off manually here for e.g. testing purposes."""
         self.synapse_legend=True
         """whether the synapse activations legend should appear in the plot"""
         self.voltage_legend=True
         """whether the voltage legend should appear in the plot"""
         self.highlight_arrow_args=None
+        """Additional arguments for the arrow. See available kwargs on https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.patches.Arrow.html#matplotlib.patches.Arrow"""
 
     def _plot_cell_voltage_synapses_in_morphology_3d(self, voltage, synapses, time_point, save='', plot=True,
                                                      highlight_section=None, highlight_x=None, show_synapses=True):
