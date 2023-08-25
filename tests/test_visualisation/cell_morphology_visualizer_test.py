@@ -28,17 +28,17 @@ class TestCellMorphologyVisualizer:
         self.cmv.show_voltage_synapses_in_morphology_3d(time_point=0)
 
     def test_write_gif_voltage_synapses_in_morphology_3d(self, tmpdir):
-        outdir = tmpdir.dirname
+        outdir = str(tmpdir.dirname)
         self.cmv.write_gif_voltage_synapses_in_morphology_3d(
-            images_path=outdir, out_path=outdir,
+            images_path=outdir, out_path=outdir+".gif",
             t_start=self.t_start, t_end=self.t_end, t_step=self.t_step,
             client=distributed.client_object_duck_typed
             )
 
     def test_write_video_voltage_synapses_in_morphology_3d(self, tmpdir):
-        outdir = tmpdir.dirname
+        outdir = str(tmpdir.dirname)
         self.cmv.write_video_voltage_synapses_in_morphology_3d(
-            images_path=outdir, out_path=tmpdir, 
+            images_path=outdir, out_path=tmpdir+".mp4", 
             t_start=self.t_start, t_end=self.t_end, t_step=self.t_end,
             client=distributed.client_object_duck_typed
         )
