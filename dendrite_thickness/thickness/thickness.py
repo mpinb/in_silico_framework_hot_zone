@@ -420,6 +420,16 @@ def _get_intersection(line1, line2):
 
 
 def _circle_filter(x, y, r):
+    """Check if a point is within a circle of radius :param: r and center (0,0)
+
+    Args:
+        x (int/float)
+        y (int/float)
+        r (int/float)
+
+    Returns:
+        int: 1 if the point is within the circle, 0 otherwise
+    """
     if x ** 2 + y ** 2 <= r ** 2:
         return 1
     else:
@@ -433,6 +443,19 @@ def _pad_image(image, radius):
 
 
 def _crop_image(image_array, center, radius, circle=False):
+    """Given an image as a 2D array, this method crops it around :param:center.
+    The crop is either a square of size 2x:param:radius by 2x:param:radius and center :param:center,
+    or, in case :param:circle equals True, a circle with radius :param:radius.
+
+    Args:
+        image_array (array): The 2D image array
+        center (array): 1x2 array of xy coordinates. Coordinates should be the index of pixels. 
+        radius (int): size of the crop in both directions. Total size will be 
+        circle (bool, optional): _description_. Defaults to False.
+
+    Returns:
+        np.array: 2D array of the cropped image  # TODO 2 by N or 3 by N?
+    """
     c1, c2 = int(center[0]), int(center[1])
     assert (c1 - radius >= 0)
     assert (c2 - radius >= 0)
