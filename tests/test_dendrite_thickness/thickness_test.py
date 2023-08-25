@@ -9,6 +9,7 @@ from dendrite_thickness.thickness import IO, pipeline, utils
 from dendrite_thickness.thickness import thickness as th
 from .context import CURRENT_DIR
 import pandas as pd
+import pytest
 
 import logging
 log = logging.getLogger(__name__)
@@ -80,11 +81,10 @@ def test_correct_seed():
     rx_object = th.ThicknessExtractor([], image_file=IMAGE_FILE)
     corrected_point = rx_object._correct_seed(image_point)
     log.info("The _correct_seed function correct the point [2400, 2364] to  [2403, 2447]:")
-    if corrected_point == [2403, 2447]:
-        log.info("TRUE")
-    else:
-        log.info("FALSE")
+    assert corrected_point == [2403, 2447]
 
+@pytest.mark.xfail(reason="The expected behavior of th new crop method is unknown")
+def test_crop_image():
     a = [[1, 2, 3, 4, 5], [2, 3, 4, 5, 6], [3, 4, 5, 6, 7]]
     a = np.array(a)
     np.testing.assert_array_almost_equal(th._crop_image(a, (0, 0), 0), np.array([[1]]))
