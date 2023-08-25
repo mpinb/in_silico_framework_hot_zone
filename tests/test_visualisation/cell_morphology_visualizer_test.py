@@ -4,6 +4,7 @@ from single_cell_parser.serialize_cell import *
 from tests import setup_current_injection_experiment
 import six
 import pytest
+import distributed
 
 class TestCellMorphologyVisualizer:
     def setup_class(self):
@@ -30,20 +31,23 @@ class TestCellMorphologyVisualizer:
         outdir = tmpdir.dirname
         self.cmv.write_gif_voltage_synapses_in_morphology_3d(
             images_path=outdir, out_path=outdir,
-            t_start=self.t_start, t_end=self.t_end, t_step=self.t_step
+            t_start=self.t_start, t_end=self.t_end, t_step=self.t_step,
+            client=distributed.client_object_duck_typed
             )
 
     def test_write_video_voltage_synapses_in_morphology_3d(self, tmpdir):
         outdir = tmpdir.dirname
         self.cmv.write_video_voltage_synapses_in_morphology_3d(
             images_path=outdir, out_path=tmpdir, 
-            t_start=self.t_start, t_end=self.t_end, t_step=self.t_end
+            t_start=self.t_start, t_end=self.t_end, t_step=self.t_end,
+            client=distributed.client_object_duck_typed
         )
 
     def test_display_animation_voltage_synapses_in_morphology_3d(self, tmpdir):
         outdir = tmpdir.dirname
         self.cmv.display_animation_voltage_synapses_in_morphology_3d(
-            images_path=outdir, t_start=self.t_start, t_end=self.t_end, t_step=self.t_step
+            images_path=outdir, t_start=self.t_start, t_end=self.t_end, t_step=self.t_step,
+            client=distributed.client_object_duck_typed
         )
 
 @pytest.mark.skipif(six.PY2, "Interactive visualizations are not available on Py2")
