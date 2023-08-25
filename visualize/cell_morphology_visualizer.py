@@ -504,7 +504,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         """
         Given a Cell object, this class initializes an object that is easier to work with
         """
-        super().__init__(cell, align_trunk)  # class that holds simulation data
+        super(CMVDataParser, self).__init__(cell, align_trunk)  # class that holds simulation data
         # ---------------------------------------------------------------
         # Visualization attributes
         self.camera = self.azim, self.dist, self.elev, self.roll = 0, 10, 30, 0
@@ -1040,7 +1040,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
     It relies on Dash and Plotly to do so.
     """
     def __init__(self, cell, align_trunk=True):
-        super().__init__(cell, align_trunk=align_trunk)
+        super(CMVDataParser, self).__init__(cell, align_trunk=align_trunk)
     
     def _get_interactive_cell(self, background_color="rgb(180,180,180)"):
         ''' 
