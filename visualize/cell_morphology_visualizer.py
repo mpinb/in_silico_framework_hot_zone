@@ -489,9 +489,15 @@ class CMVDataParser:
 class CellMorphologyVisualizer(CMVDataParser):
     """
     This class initializes from a cell object and extracts relevant Cell data to a format that lends itself easier to plotting.
-    It contains useful methods for either plotting a cell morphology, the voltage along its body and its synaptic inputs.
+    It contains useful methods for: 
+        1. plotting a cell morphology
+        2. the voltage along its body
+        3. its synaptic inputs.
     This can be visualized in static images or as time series (videos, gif, animation, interactive window).
-    Also, the relevant cell information can also be exported to .vtk format for further visualization or interaction.
+    It relies mostly on Matplotlib to do so.
+
+    The relevant cell information can also be exported to .vtk format for further visualization or interaction.
+    No explicit VTK dependency is needed for this; it simply writes it out as a .txt file.
     """
 
     def __init__(self, cell, align_trunk=True):
@@ -509,7 +515,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         """Image quality"""
 
     def _plot_cell_voltage_synapses_in_morphology_3d(self, voltage, synapses, time_point, voltage_legend=True, synapse_legend=True, save='', plot=True,
-                                                     highlight_section=None, highlight_arrow_args=None):
+                                                     highlight_section=None, highlight_x=None, highlight_arrow_args=None):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
         are shown for a particular time point.
@@ -548,8 +554,8 @@ class CellMorphologyVisualizer(CMVDataParser):
                 ax.scatter3D(synapse[0], synapse[1], synapse[2],
                              color=color, edgecolors='grey', s=75)
         
-        if highlight_section is not None:
-            draw_arrow(self.morphology, ax=ax, highlight_section=highlight_section, highlight_arrow_args=highlight_arrow_args)
+        if highlight_section is not None or highlight_x is not None:
+            draw_arrow(self.morphology, ax=ax, highlight_section=highlight_section, highlight_x=highlight_x, highlight_arrow_args=highlight_arrow_args)
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_zticks([])
@@ -586,7 +592,7 @@ class CellMorphologyVisualizer(CMVDataParser):
 
     def _timeseries_images_cell_voltage_synapses_in_morphology_3d(self, path, client=None, 
                                           voltage_legend=True, synapse_legend=True, show_synapses = True,
-                                          highlight_section=None, highlight_arrow_args=None):
+                                          highlight_section=None, highlight_x=None, highlight_arrow_args=None):
         '''
         Creates a list of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)
@@ -630,7 +636,7 @@ class CellMorphologyVisualizer(CMVDataParser):
                 time_point=time_point, save=filename, population_to_color_dict=POPULATION_TO_COLOR_DICT,
                 azim=self.azim, dist=self.dist, roll=self.roll, elev=self.elev, vmin=self.vmin, vmax=self.vmax,
                 voltage_legend=voltage_legend, synapse_legend=synapse_legend, time_offset=self.time_offset, dpi=self.dpi,
-                highlight_section=highlight_section, highlight_arrow_args=highlight_arrow_args, 
+                highlight_section=highlight_section, highlight_x=highlight_x, highlight_arrow_args=highlight_arrow_args, 
                 show_synapses = show_synapses))
             self.azim += self.neuron_rotation
         self.azim = azim_
@@ -1037,6 +1043,11 @@ class CellMorphologyVisualizer(CMVDataParser):
 
 
 class CellMorphologyInteractiveVisualizer(CMVDataParser):
+    """
+    This class initializes from a cell object and extracts relevant Cell data to a format that lends itself easier to plotting.
+    It contains useful methods for interactively visualizing a cell morphology, the voltage along its body, or ion channel dynamics.
+    It relies on Dash and Plotly to do so.
+    """
     def __init__(self, cell, align_trunk=True):
         super().__init__(cell, align_trunk=align_trunk)
     
