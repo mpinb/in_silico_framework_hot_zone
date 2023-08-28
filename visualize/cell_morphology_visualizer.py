@@ -28,9 +28,10 @@ else:
     warnings.warn("Scipy version is too old to import spatial.transform.Rotation. Cell alignment will not work.")
     warnings.warn("Interactive visualizations only work on Py3. Dash and plotly are not compatible with the Py2 version of ISF.")
 
+    
 
-class CMVDataParser(object):
-    def __init__(self, cell, align_trunk):
+class CMVDataParser:
+    def __init__(self, cell, align_trunk=True):
         """
         Given a Cell object, this class initializes an object that is easier to work with for visualization purposes
         """
