@@ -28,10 +28,9 @@ else:
     warnings.warn("Scipy version is too old to import spatial.transform.Rotation. Cell alignment will not work.")
     warnings.warn("Interactive visualizations only work on Py3. Dash and plotly are not compatible with the Py2 version of ISF.")
 
-    
 
-class CMVDataParser:
-    def __init__(self, cell, align_trunk=True):
+class CMVDataParser(object):
+    def __init__(self, cell, align_trunk):
         """
         Given a Cell object, this class initializes an object that is easier to work with for visualization purposes
         """
@@ -504,7 +503,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         """
         Given a Cell object, this class initializes an object that is easier to work with
         """
-        super(CMVDataParser, self).__init__(cell, align_trunk)  # class that holds simulation data
+        super().__init__(cell, align_trunk)  # class that holds simulation data
         # ---------------------------------------------------------------
         # Visualization attributes
         self.camera = self.azim, self.dist, self.elev, self.roll = 0, 10, 30, 0
