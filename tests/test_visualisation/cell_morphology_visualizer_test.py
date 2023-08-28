@@ -6,6 +6,7 @@ import six
 import pytest
 import distributed
 
+@pytest.mark.skipif(six.PY2, "The cell_morphology_visualizer methods are not available on Py2")
 class TestCellMorphologyVisualizer:
     def setup_class(self):
         self.cell = setup_current_injection_experiment()
@@ -50,7 +51,7 @@ class TestCellMorphologyVisualizer:
             client=distributed.client_object_duck_typed
         )
 
-@pytest.mark.skipif(six.PY2, "Interactive visualizations are not available on Py2")
+@pytest.mark.skipif(six.PY2, "The cell_morphology_visualizer methods are not available on Py2")
 class TestCellMorphologyInteractiveVisualizer:
     def __init__(self):
         self.cell = setup_current_injection_experiment(rangevars=['NaTa_t.ina'])
