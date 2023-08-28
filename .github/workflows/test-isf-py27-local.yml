@@ -1,14 +1,9 @@
 # Installation of in-silico-framework followed by CI tests.
-name: In-Silico-Framework (Python 2.7) install and test
-
+name: In-Silico-Framework (Python 2.7) install and test locally
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ master, refractor, testing ]
-  pull_request:
-    branches: [ master, refractor, testing ]
-
+  push: 
+    branches: [ 'testing' ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -17,7 +12,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     defaults:
       run:
         shell: bash -l {0}
