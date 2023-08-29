@@ -28,19 +28,15 @@ jobs:
       # Install Anaconda2 and update conda package manager
       - name: Install Anaconda2
         run: |
-          echo "Downloading Anaconda2-4.2.0-Linux-x86_64"
-          wget https://repo.anaconda.com/archive/Anaconda2-4.2.0-Linux-x86_64.sh --quiet
-          DIR="$HOME/conda2-isf"
+          DIR="$HOME/anaconda_isf2"
           if [ -d "$DIR" ]; then
             echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
             rm -r "$DIR"
           else
             echo "No previous Anaconda installation found. Continuing..."
           fi
-          echo "Installing Anaconda2"
-          bash Anaconda2-4.2.0-Linux-x86_64.sh -b -p ~/conda2-isf
-          source ~/conda2-isf/bin/activate
-          conda info
+          export ISF_HOME=.
+          ./installer/isf-install.sh -d -t py2 -i anaconda_isf2
       # Updating the root environment. Install ISF dependencies (YAML)
       # NOTE: The environment file (yaml) is in the ISF repository 'installer' folder
       - name: Install ISF dependencies
