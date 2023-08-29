@@ -28,7 +28,7 @@ jobs:
       # Install Anaconda2 and update conda package manager
       - name: Install Anaconda2
         run: |
-          CONDA_TARGET_DIR="$HOME"
+          CONDA_TARGET_DIR="$HOME/anaconda_isf2"
           if [ -d "$CONDA_TARGET_DIR" ]; then
             echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
             rm -r "$CONDA_TARGET_DIR"
