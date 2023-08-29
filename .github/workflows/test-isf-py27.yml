@@ -31,42 +31,12 @@ jobs:
           else
             echo "No previous Anaconda installation found. Continuing..."
           fi
-          export ISF_HOME=$(pwd)
+          export ISF_HOME=`pwd`
           pushd .
           cd installer
           ./isf-install.sh -d -t py2 -i anaconda_isf2
           popd
-      # Updating the root environment. Install ISF dependencies (YAML)
-      # NOTE: The environment file (yaml) is in the ISF repository 'installer' folder
-      - name: Install ISF dependencies
-        run: |
-          source ~/conda2-isf/bin/activate
-          echo "Installing 'in silico framework' dependencies in silent mode."
-          conda-env create --name isf-py27 --file installer/env-isf-py27.yml --quiet
-          source activate isf-py27
           conda list
-          
-      # Patch pandas library to support CategoricalIndex in msgpack format
-      - name: Patch pandas library
-        run: |
-          echo "Patching pandas library."
-          source ~/conda2-isf/bin/activate
-          source activate isf-py27
-          cd installer
-          python patch_pandas_linux64.py
-          conda list
-
-      # Compile neuron mechanisms
-      - name: Compile neuron mechanisms
-        run: |
-          echo "Compiling neuron mechanisms"
-          source ~/conda2-isf/bin/activate
-          source activate isf-py27
-          pushd .
-          cd mechanisms/channels_py2; nrnivmodl
-          popd
-          cd mechanisms/netcon_py2; nrnivmodl
-          
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
