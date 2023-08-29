@@ -24,25 +24,24 @@ jobs:
       # Install Anaconda2 and update conda package manager
       - name: Install Anaconda2
         run: |
-          export ISF_HOME=`pwd`
-          DIR="$HOME/anaconda_isf2"
-          if [ -d "$DIR" ]; then
+          CONDA_TARGET_DIR="$HOME"
+          if [ -d "$CONDA_TARGET_DIR" ]; then
             echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
-            rm -r "$DIR"
+            rm -r "$CONDA_TARGET_DIR"
           else
             echo "No previous Anaconda installation found. Continuing..."
           fi
+          export ISF_HOME="$HOME"
           pushd .
           cd installer
-          ./isf-install.sh -d -t py2 -i $ISF_HOME/anaconda_isf2
+          ./isf-install.sh -d -t py2 -i $CONDA_TARGET_DIR
           popd
-          source $ISF_HOME/anaconda_isf2/bin/activate
+          source $CONDA_TARGET_DIR/bin/activate
           conda list
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
-          source $ISF_HOME/anaconda_isf2/bin/activate
-          source activate isf-py27
+          source $CONDA_TARGET_DIR/bin/activate
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=28786 --bokeh-port=28787 &
           dask-worker localhost:28786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &

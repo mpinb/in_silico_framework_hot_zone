@@ -26,25 +26,24 @@ jobs:
       # Install Anaconda3 and update conda package manager
       - name: Install Anaconda3
         run: |
-          export ISF_HOME=`pwd`
-          DIR="$ISF_HOME/anaconda_isf3"
-          if [ -d "$DIR" ]; then
+          CONDA_TARGET_DIR="$HOME/anaconda_isf3"
+          if [ -d "$HOME/anaconda_isf3" ]; then
             echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
-            rm -r "$DIR"
+            rm -r "$HOME/anaconda_isf3"
           else
             echo "No previous Anaconda installation found. Continuing..."
           fi
+          export ISF_HOME="$HOME"
           pushd .
           cd installer
-          ./isf-install.sh -d -t py3 -i $ISF_HOME/anaconda_isf3
+          ./isf-install.sh -d -t py3 -i $CONDA_TARGET_DIR
           popd
-          source $ISF_HOME/anaconda_isf3/bin/activate
+          source $CONDA_TARGET_DIR/bin/activate
           conda list
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
           source $ISF_HOME/conda3-isf/bin/activate
-          source activate isf-py3
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=38786 --dashboard-address=38787 &
           dask-worker localhost:38786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
