@@ -19,14 +19,14 @@ jobs:
       # Install Anaconda3 and update conda package manager
       - name: Install Anaconda3
         run: |
-          CONDA_TARGET_DIR="$HOME/anaconda_isf3"
+          export ISF_HOME="$HOME/project_source_isf"
+          CONDA_TARGET_DIR="$ISF_HOME/anaconda_isf3"
           if [ -d "$CONDA_TARGET_DIR" ]; then
             echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
             rm -r "$CONDA_TARGET_DIR"
           else
             echo "No previous Anaconda installation found. Continuing..."
           fi
-          export ISF_HOME="$HOME"
           pushd .
           cd installer
           ./isf-install.sh -d -t py3 -i $CONDA_TARGET_DIR
