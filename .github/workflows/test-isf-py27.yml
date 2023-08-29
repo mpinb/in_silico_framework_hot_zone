@@ -24,7 +24,7 @@ jobs:
       # Install Anaconda2 and update conda package manager
       - name: Install Anaconda2
         run: |
-          export ISF_HOME="$HOME/project_source_isf"
+          export ISF_HOME="$HOME/in_silico_framework"
           CONDA_TARGET_DIR="$ISF_HOME/anaconda_isf2"
           if [ -d "$CONDA_TARGET_DIR" ]; then
             echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
