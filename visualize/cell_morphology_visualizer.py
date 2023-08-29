@@ -777,7 +777,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         # plot arrow, if necessary
         if highlight_section is not None or highlight_x is not None:
             draw_arrow(self.morphology, ax,
-                highlight_section=highlight_section, highlight_arrow_args=self.highlight_arrow_args)
+                highlight_section=highlight_section, highlight_x=highlight_x, highlight_arrow_args=self.highlight_arrow_args)
         ax.set_box_aspect(
             [ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
         
@@ -881,10 +881,9 @@ class CellMorphologyVisualizer(CMVDataParser):
         voltage = self._get_voltages_at_timepoint(time_point)
         synapses = self._get_synapses_at_timepoint(time_point)
         self._plot_cell_voltage_synapses_in_morphology_3d(
-            voltage, synapses, time_point, voltage_legend=self.voltage_legend, 
-            synapse_legend=self.synapse_legend, save=save, plot=plot, 
-            highlight_section=highlight_section, highlight_x=highlight_x,
-            highlight_arrow_args=self.highlight_arrow_args, show_synapses=self.show_synapses
+            voltage, synapses, time_point, 
+            save=save, plot=plot, 
+            highlight_section=highlight_section, highlight_x=highlight_x
             )
 
     def write_gif_voltage_synapses_in_morphology_3d(self, images_path, out_path, client, 
@@ -921,9 +920,9 @@ class CellMorphologyVisualizer(CMVDataParser):
         if vmax is not None:
             self.vmax = vmax
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(
-            images_path, client, self.voltage_legend, self.synapse_legend,
-            highlight_section=highlight_section, highlight_x=highlight_x, highlight_arrow_args=self.highlight_arrow_args,
-            show_synapses=self.show_synapses)
+            images_path, client,
+            highlight_section=highlight_section, highlight_x=highlight_x
+            )
         write_gif_from_images(images_path, out_path, interval=frame_duration)
 
     def write_video_voltage_synapses_in_morphology_3d(self, images_path, out_path, client, t_start=None, 
@@ -962,9 +961,9 @@ class CellMorphologyVisualizer(CMVDataParser):
         if vmax is not None:
             self.vmax = vmax
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(
-            images_path, client, self.voltage_legend, self.synapse_legend,
-            highlight_section=highlight_section, highlight_x=highlight_x, highlight_arrow_args=self.highlight_arrow_args,
-            show_synapses = self.show_synapses)
+            images_path, client,
+            highlight_section=highlight_section, highlight_x=highlight_x
+            )
         write_video_from_images(images_path, out_path,
                                 fps=framerate, quality=quality, codec=codec)
 
@@ -999,8 +998,8 @@ class CellMorphologyVisualizer(CMVDataParser):
         if vmax is not None:
             self.vmax = vmax
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(
-            images_path, client, self.voltage_legend, self.synapse_legend, show_synapses=self.show_synapses,
-            highlight_section=highlight_section, highlight_x=highlight_x, highlight_arrow_args=self.highlight_arrow_args)
+            images_path, client,
+            highlight_section=highlight_section, highlight_x=highlight_x)
         if display:
             display_animation_from_images(images_path, 1, embedded=True)
 
