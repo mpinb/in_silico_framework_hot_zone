@@ -140,7 +140,7 @@ fi
 echo "Installing In-Silico-Framework conda dependencies."
 offline_requirements="isf-${target_python}-requirements.txt"
 env_name="isf-${target_python}"
-sed "s|https://.*/|$(pwd)/conda_packages/|" ${conda_requirements} > ${offline_requirements}
+sed "s|https://.*/|$ISF_HOME/installer/conda_packages/|" ${conda_requirements} > ${offline_requirements}
 ${conda_env_cmd} update  --file ${offline_requirements} --quiet
 
 # STEP 5) Activate python environment and install a recent version of pip
@@ -183,7 +183,7 @@ fi
 # STEP 8c) Install modified pandas_msgpack (only Python3)
 if [ ${target_python} == "py3" ]; then
     echo "Install modified pandas_msgpack"
-    PD_MSGPACK_HOME="$(pwd)/pandas-msgpack"
+    PD_MSGPACK_HOME="$ISF_HOME/installer/pandas-msgpack"
     if [ ! -r "${PD_MSGPACK_HOME}" ]; then
         git clone https://github.com/abast/pandas-msgpack.git
     fi
