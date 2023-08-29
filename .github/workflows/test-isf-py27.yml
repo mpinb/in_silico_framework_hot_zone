@@ -34,7 +34,7 @@ jobs:
           export ISF_HOME=.
           pushd .
           cd installer
-          ./installer/isf-install.sh -d -t py2 -i anaconda_isf2
+          ./isf-install.sh -d -t py2 -i anaconda_isf2
           popd
       # Updating the root environment. Install ISF dependencies (YAML)
       # NOTE: The environment file (yaml) is in the ISF repository 'installer' folder
