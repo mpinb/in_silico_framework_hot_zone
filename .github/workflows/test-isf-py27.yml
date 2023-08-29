@@ -43,8 +43,9 @@ jobs:
         run: |
           export ISF_HOME=`pwd`
           CONDA_TARGET_DIR="$ISF_HOME/anaconda_isf2"
-          source $CONDA_TARGET_DIR/bin/activate
-          export PYTHONPATH="$(pwd)"
+          source $CONDA_TARGET_DIR/bin/activate;
+          echo "Using Python: $(which python)"
+          export PYTHONPATH="$ISF_HOME"
           dask-scheduler --port=28786 --bokeh-port=28787 &
           dask-worker localhost:28786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
           python -m pytest -rsx -vv --color=yes tests/
