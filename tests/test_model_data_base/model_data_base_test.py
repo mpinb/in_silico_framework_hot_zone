@@ -83,8 +83,8 @@ class TestModelDataBase(unittest.TestCase):
         existing metadata'''
         self.fresh_mdb.setitem('test', 1, dumper = 'self')
         self.fresh_mdb.setitem('test2', 1, dumper = to_pickle)
-        import subprocess
-        subprocess.run("git status")
+        from subprocess import check_output
+        self.assertEqual("lololo", check_output(["git status"]))
         self.assertEqual(self.fresh_mdb.metadata['test']['version'], \
                          model_data_base.get_versions()['version'])
         self.assertEqual(self.fresh_mdb.metadata['test2']['version'], \
