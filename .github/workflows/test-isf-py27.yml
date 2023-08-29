@@ -36,11 +36,12 @@ jobs:
           cd installer
           ./isf-install.sh -d -t py2 -i anaconda_isf2
           popd
+          source $ISF_HOME/anaconda_isf2/bin/activate
           conda list
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
-          source ~/conda2-isf/bin/activate
+          source $ISF_HOME/anaconda_isf2/bin/activate
           source activate isf-py27
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=28786 --bokeh-port=28787 &

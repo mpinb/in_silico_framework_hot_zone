@@ -38,11 +38,12 @@ jobs:
           cd installer
           ./isf-install.sh -d -t py3 -i anaconda_isf3
           popd
+          source $ISF_HOME/anaconda_isf3/bin/activate
           conda list
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
-          source $HOME/conda3-isf/bin/activate
+          source $ISF_HOME/conda3-isf/bin/activate
           source activate isf-py3
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=38786 --dashboard-address=38787 &
