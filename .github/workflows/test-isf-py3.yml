@@ -26,7 +26,7 @@ jobs:
           else
             echo "No previous Anaconda installation found. Continuing..."
           fi
-          export ISF_HOME=.
+          export ISF_HOME=$(pwd)
           pushd .
           cd installer
           ./isf-install.sh -d -t py3 -i anaconda_isf3

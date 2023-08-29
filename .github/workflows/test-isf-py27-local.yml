@@ -35,12 +35,11 @@ jobs:
           else
             echo "No previous Anaconda installation found. Continuing..."
           fi
-          export ISF_HOME="~/in_silico_framework"
+          export ISF_HOME=$(pwd)
           pushd .
           cd installer
           ./isf-install.sh -d -t py2 -i anaconda_isf2
           popd
-          
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
