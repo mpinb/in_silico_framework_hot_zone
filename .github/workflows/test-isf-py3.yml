@@ -36,6 +36,8 @@ jobs:
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
+          export ISF_HOME=`pwd`
+          CONDA_TARGET_DIR="$ISF_HOME/anaconda_isf3"
           source $CONDA_TARGET_DIR/bin/activate
           export PYTHONPATH="$(pwd)"
           dask-scheduler --port=38786 --dashboard-address=38787 &
