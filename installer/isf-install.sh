@@ -189,7 +189,7 @@ if [ ${target_python} == "py3" ]; then
         git clone https://github.com/abast/pandas-msgpack.git
     fi
     # Using Cython to generate and compile pandas-msgpack
-    git -C pandas-msgpack apply pandas_msgpack.patch
+    git -C pandas-msgpack apply $ISF_HOME/installer/pandas_msgpack.patch
     cd "pandas-msgpack"; python setup.py build_ext --inplace --force install
     pip list --format=freeze | grep pandas
     popd
