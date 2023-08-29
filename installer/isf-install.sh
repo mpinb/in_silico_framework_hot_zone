@@ -183,13 +183,16 @@ fi
 # STEP 8c) Install modified pandas_msgpack (only Python3)
 if [ ${target_python} == "py3" ]; then
     echo "Install modified pandas_msgpack"
-    PD_MSGPACK_HOME="$ISF_HOME/installer/pandas-msgpack"
-    if [ ! -r "${PD_MSGPACK_HOME}" ]; then
+    pushd .
+    cd "$ISF_HOME/installer"
+    if [ ! -r "pandas-msgpack" ]; then
         git clone https://github.com/abast/pandas-msgpack.git
     fi
     # Using Cython to generate and compile pandas-msgpack
-    cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
-    pip list | grep pandas
+    git -C pandas-msgpack apply ../installer/pandas_msgpack.patch
+    cd "pandas-msgpack"; python setup.py build_ext --inplace --force install
+    pip list --format=freeze | grep pandas
+    popd
 fi
 
 # STEP 9) Compiling neuron mechanisms.
