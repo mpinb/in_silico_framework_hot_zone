@@ -28,9 +28,9 @@ def pytest_configure(config):
     # If running locally, make sure you have a dask scheduler and dask worker running on these ports
 
     if six.PY2:
-        client = distributed.Client('localhost:28786')
+        client = get_client()
     else:
-        client = distributed.Client('localhost:38786')
+        client = get_client()
     # print("setting distributed duck-typed object as module level attribute")
     distributed.client_object_duck_typed = client
     # only log warnings
