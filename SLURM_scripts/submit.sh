@@ -224,7 +224,7 @@ if [[ ${partition:0:3} == CPU ]]; then
     cores=24
   fi
 #### 2.2: GPU partitions (GPU or GPU-interactive)
-elif [[ $partition:0:3} == GPU ]]; then  
+elif [[ $partition == "GPU" ]]; then  
   if [ $gres == "0" ]; then  # gres is unspecified
     gres="2"  # by default, set to half of max gres for GPU partitions
   fi
@@ -234,9 +234,12 @@ elif [[ $partition:0:3} == GPU ]]; then
   if [ $cores == "0" ]; then  # amount of cores is unspecified for the user
     cores=24
   fi
-if [[ $partition == "GPU-A100" ]]; then 
+else  # GPU-a100
   if [ $cores == "0" ]; then  # amount of cores is unspecified for the user
     cores=32
+  fi
+  if [ $gres == "0" ]; then  # gres is unspecified
+    gres="4"  # by default, set to half of max gres for GPU partitions
   fi
   # set qos
   qosline=$'\n#SBATCH --qos=GPU-a100'
