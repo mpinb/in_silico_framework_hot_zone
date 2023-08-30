@@ -234,7 +234,7 @@ elif [[ $partition:0:3} == GPU ]]; then
   if [ $cores == "0" ]; then  # amount of cores is unspecified for the user
     cores=24
   fi
-if [[ $partition:0:3} == "GPU-A100" ]]; then 
+if [[ $partition == "GPU-A100" ]]; then 
   if [ $cores == "0" ]; then  # amount of cores is unspecified for the user
     cores=32
   fi
