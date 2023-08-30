@@ -26,6 +26,7 @@ def dump(obj, savedir, rows_per_file = None):
     '''rows_per_file: automatically splits dataframe, such that rows_per_file rows of the df are
     saved in each file. This helps with large dataframes which otherwise would hit the 1GB limit of msgpack.'''
 #     obj.to_msgpack(os.path.join(savedir, 'pandas_to_msgpack'), compress = 'blosc')
+    raise RuntimeError('pandas-msgpack is not supported anymore in the model_data_base')
     import os
     if rows_per_file is not None:
         row = 0

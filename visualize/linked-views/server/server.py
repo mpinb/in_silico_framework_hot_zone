@@ -69,7 +69,6 @@ def normalize(df, low=-1, high=1):
     df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
     return df_normalized
 
-
 def getPCA(df):    
     scaler = StandardScaler()
     scaled_data = scaler.fit_transform(df)
@@ -113,11 +112,10 @@ class LinkedViewsServer:
         if(self.thread is not None):
             print(f"server already running at port {self.port}")
             return        
-        
         try:
             self.app = Flask(__name__)       
             CORS(self.app)     
-            self.server = make_server('127.0.0.1', port, self.app)                        
+            self.server = make_server('0.0.0.0', port, self.app)                        
             self.port = port
             self.init_routes()
         except SystemExit as e:
@@ -168,6 +166,8 @@ class LinkedViewsServer:
         assert self.server is not None        
         self.vaex_df = vaex_df
         self.vaex_columns = vaex_df.get_column_names()
+        self.vaex_data_ranges = get_data_ranges_vaex(vaex_df)
+    
 
     def init_routes(self):
         self.app.add_url_rule('/', 'index', self.index)        
@@ -243,7 +243,7 @@ class LinkedViewsServer:
                         "name" : "vaex_df",
                         "num_rows" : self.vaex_df.shape[0],
                         "columns" : self.vaex_columns,
-                        "data_ranges" : get_data_ranges_vaex(self.vaex_df)                
+                        "data_ranges" : self.vaex_data_ranges#'get_data_ranges_vaex(self.vaex_df)                
                     })
 
 
