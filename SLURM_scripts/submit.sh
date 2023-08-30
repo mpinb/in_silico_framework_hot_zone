@@ -224,7 +224,7 @@ if [[ ${partition:0:3} == CPU ]]; then
     cores=24
   fi
 #### 2.2: GPU partitions (GPU or GPU-interactive)
-elif [[ ${partition:0:3} == GPU ]]; then  
+elif [[ $partition:0:3} == GPU ]]; then  
   if [ $gres == "0" ]; then  # gres is unspecified
     gres="2"  # by default, set to half of max gres for GPU partitions
   fi
@@ -234,7 +234,7 @@ elif [[ ${partition:0:3} == GPU ]]; then
   if [ $cores == "0" ]; then  # amount of cores is unspecified for the user
     cores=24
   fi
-else  # A-100 node
+if [[ $partition:0:3} == "GPU-A100" ]]; then 
   if [ $cores == "0" ]; then  # amount of cores is unspecified for the user
     cores=32
   fi
@@ -247,7 +247,7 @@ fi
 #### 3. Depending on interactive/bash, load cuda
 if [ $interactive == 1 ]; then
   interactive_string=" interactive"
-  cuda=$'\nmodule load cuda'
+  cuda=$'\n#module load cuda'
 else
   interactive_string=""
 fi
