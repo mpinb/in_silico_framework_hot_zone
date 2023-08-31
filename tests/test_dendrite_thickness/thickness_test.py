@@ -59,12 +59,13 @@ def test_am_read():
     del am_object
 
 
-def test_am_write():
+def test_am_write(tmpdir):
     log.info("***********")
     log.info("TEST Am.write() method:")
     log.info("***********")
     am_object = IO.Am(AM_FILE)
     am_object.read()
+    am_object.output_path=str(tmpdir.dirname)
 
     #   Test 1
     am_object.write()
@@ -94,11 +95,11 @@ def test_crop_image():
                                          np.array([[0, 3, 0], [3, 4, 5], [0, 5, 0]]))
 
 
-def test_pipeline():
+def test_pipeline(tmpdir):
     am_folder_path = os.path.join(CURRENT_DIR, 'test_files/am_files')
     tif_folder_path = os.path.join(CURRENT_DIR, 'test_files/image_files')
     hoc_file_path = os.path.join(CURRENT_DIR, 'test_files/WR58_Cell5_L5TT_Final.hoc')
-    output_folder_path = os.path.join(CURRENT_DIR, 'test_files/output')
+    output_folder_path = str(tmpdir.dirname)
     bijective_points_path = os.path.join(CURRENT_DIR, 'test_files/manual_landmarks.landmarkAscii')
 
     p = pipeline.ExtractThicknessPipeline()
