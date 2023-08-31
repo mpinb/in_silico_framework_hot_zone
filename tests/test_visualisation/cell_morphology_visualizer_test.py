@@ -35,7 +35,7 @@ class TestCellMorphologyVisualizer:
     def test_write_gif_voltage_synapses_in_morphology_3d(self, tmpdir):
         outdir = str(tmpdir.dirname)
         self.cmv.write_gif_voltage_synapses_in_morphology_3d(
-            images_path=outdir, out_path=outdir+".gif",
+            images_path=outdir, out_path=os.path.join(outdir, "test_gif.gif"),
             t_start=self.t_start, t_end=self.t_end, t_step=self.t_step,
             client=distributed.client_object_duck_typed
             )
@@ -44,14 +44,14 @@ class TestCellMorphologyVisualizer:
     def test_write_video_voltage_synapses_in_morphology_3d(self, tmpdir):
         outdir = str(tmpdir.dirname)
         self.cmv.write_video_voltage_synapses_in_morphology_3d(
-            images_path=outdir, out_path=tmpdir+".mp4", 
+            images_path=outdir, out_path=os.path.join(outdir, "test_video.mp4"), 
             t_start=self.t_start, t_end=self.t_end, t_step=self.t_end,
             client=distributed.client_object_duck_typed
         )
 
     @pytest.mark.skipif(six.PY2, reason="The cell_morphology_visualizer methods are not available on Py2")
     def test_display_animation_voltage_synapses_in_morphology_3d(self, tmpdir):
-        outdir = tmpdir.dirname
+        outdir = str(tmpdir.dirname)
         self.cmv.display_animation_voltage_synapses_in_morphology_3d(
             images_path=outdir, t_start=self.t_start, t_end=self.t_end, t_step=self.t_step,
             client=distributed.client_object_duck_typed
