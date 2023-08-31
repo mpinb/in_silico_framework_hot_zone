@@ -13,6 +13,7 @@ import ProjectControl from './views/projectView';
 import ViewSpecificationsControl from './views/viewSpecifications';
 import GrammarControl from './views/grammarView.js';
 import GridControl from './views/gridLayout.js';
+import ServerControl from './views/serverControl';
 
 
 Template.home.onRendered(() => {
@@ -42,6 +43,13 @@ Template.home.onRendered(() => {
                                 content: [
                                     {
                                         type: 'react-component',
+                                        component: 'server-control',
+                                        title: 'Server',
+                                        isClosable: false,
+                                        props: { viewManager : viewManager }
+                                    },
+                                    {
+                                        type: 'react-component',
                                         component: 'project-control',
                                         title: 'Session',
                                         isClosable: false,
@@ -50,14 +58,14 @@ Template.home.onRendered(() => {
                                     {
                                         type: 'react-component',
                                         component: 'view-specifications-control',
-                                        title: 'View specifications',
+                                        title: 'Views',
                                         isClosable: false,
                                         props: { viewManager : viewManager }
                                     },
                                     {
                                         type: 'react-component',
                                         component: 'grammar-control',
-                                        title: 'Interaction grammar',
+                                        title: 'Layout/interactions',
                                         isClosable: false,
                                         props: { viewManager : viewManager }
                                     }                                 
@@ -91,10 +99,11 @@ Template.home.onRendered(() => {
         let container = document.getElementById('layoutContainer');
         myLayout = new GoldenLayout(config, container);
 
+        myLayout.registerComponent("server-control", ServerControl);
         myLayout.registerComponent("project-control", ProjectControl);
         myLayout.registerComponent("view-specifications-control", ViewSpecificationsControl);
         myLayout.registerComponent("grammar-control", GrammarControl);
-        myLayout.registerComponent("grid-control", GridControl);
+        myLayout.registerComponent("grid-control", GridControl);        
         
         window.React = React;
         window.ReactDOM = ReactDOM;

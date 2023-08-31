@@ -1,4 +1,6 @@
 import { deepCopy, getColumnMinMaxValues } from './utilCore.js';
+import { getSessionDataServerURL } from '../serverControl.js';
+
 var JSZip = require("jszip");
 
 
@@ -62,14 +64,14 @@ export class DataManager {
     loadTable(callback, tableName) {
         let that = this;
         const columns = this.getColumnsOfTable(tableName);
-        console.log("load table", tableName);
+        //console.log("load table", tableName);
         this.getValues((serverResponse)=>{
-            console.log("receive table", tableName);
+            //console.log("receive table", tableName);
             const tableFlat = serverResponse.values;
             that.cache[tableName] = tableFlat;         
             that.cacheExpanded[tableName] = this.expandTable(tableFlat, columns);
             that.cacheTableProps[tableName] = getColumnMinMaxValues(tableFlat, columns);   
-            console.log("processed table", tableName);
+            //console.log("processed table", tableName);
             callback();
         }, tableName, [], columns, "flat")
         
@@ -81,6 +83,8 @@ export class DataManager {
         this.getMetaData((responseData) => {
             that.metaData = responseData.meta_data;
             that.available_views = responseData.available_views;
+            //console.log(responseData);
+            that.table_mapping = responseData.table_mapping; 
             
             const cachedTables = responseData.cached_tables;
             const numTablesToLoad = cachedTables.length;
@@ -90,9 +94,6 @@ export class DataManager {
                 that.loadTable(() => {
                     numTablesLoaded += 1;
                     if(numTablesLoaded == numTablesToLoad){
-                        //console.log(that.cache);
-                        //console.log(that.cacheExpanded);
-                        //console.log(that.cacheTableProps);
                         callback();
                     }
                 }, cachedTables[tableIdx]);
@@ -136,12 +137,10 @@ export class DataManager {
                 result.push(resultRow)
             }            
         }        
-        //console.log(result);
         return result;       
     }
 
     
-
     expandTable(tableFlat, columnNames){
         let expandedTable = [];
         for(let rowIdx = 0; rowIdx < tableFlat.length; rowIdx++){
@@ -212,12 +211,9 @@ export class DataManager {
                 }
             }             
 
-            //console.log(cacheKey, indices, table, format);
-
             if(cacheKey !== undefined){                
                 const cachedData = this.cacheServerData[cacheKey];
                 if(cachedData !== undefined){
-                    //console.log("load cache", cacheKey);
                     callback(cachedData);
                 }                
             }
@@ -225,7 +221,6 @@ export class DataManager {
             let that = this;
             this.getValues((data) => {
                 if(cacheKey !== undefined){
-                    //console.log("cache", cacheKey);
                     that.cacheServerData[cacheKey] = data;
                 }
                 callback(data)
@@ -351,25 +346,26 @@ export class DataManager {
         }
     }    
 
-    getMatrixServerURL(endpoint) {
+    getDataServerURL(endpoint) {
         if (endpoint[0] !== '/') {
             endpoint = '/' + endpoint;
         }
         if (Meteor.settings.public.DEV) {
-            return Meteor.settings.public.MATRIX_SERVER_DEV + endpoint;
+            const url = getSessionDataServerURL(Meteor.settings.public.DATA_SERVER_DEV);
+            return url + endpoint;
         } else {
-            return Meteor.settings.public.MATRIX_SERVER_PROD + endpoint;
+            return Meteor.settings.public.DATA_SERVER_PROD + endpoint;
         }
     }
 
-    getMatrixComputeServerURL(endpoint) {
+    getComputeServerURL(endpoint) {
         if (endpoint[0] !== '/') {
             endpoint = '/' + endpoint;
         }
         if (Meteor.settings.public.DEV) {
-            return Meteor.settings.public.MATRIX_COMPUTE_SERVER_DEV + endpoint;
+            return Meteor.settings.public.COMPUTE_SERVER_DEV + endpoint;
         } else {
-            return Meteor.settings.public.MATRIX_COMPUTE_SERVER_PROD + endpoint;
+            return Meteor.settings.public.COMPUTE_SERVER_PROD + endpoint;
         }
     }
 
@@ -386,12 +382,12 @@ export class DataManager {
 
 
     /*  ##############################################
-                    matrix view queries
+                    HTTP queries
         ##############################################        
     */
 
     getTileData(requestData, callback) {
-        HTTP.post(this.getMatrixComputeServerURL('/getTiles'), {data:requestData}, function (error, response) {
+        HTTP.post(this.getComputeServerURL('/getTiles'), {data:requestData}, function (error, response) {
             if (error) {
                 console.log(error);
             } else {
@@ -404,7 +400,7 @@ export class DataManager {
 
     getSimulation(callback, parameters) {
         console.log("send", parameters);
-        HTTP.post(this.getMatrixComputeServerURL('/getSimulation'), {data: {
+        HTTP.post(this.getComputeServerURL('/getSimulation'), {data: {
             "parameters" : parameters        
         }}, function (error, response) {
             if (error) {
@@ -422,7 +418,7 @@ export class DataManager {
             return callback(this.cachedMorpholoy);
         }
         let that = this;
-        HTTP.post(this.getMatrixComputeServerURL('/getMorphology'), {data: {
+        HTTP.post(this.getComputeServerURL('/getMorphology'), {data: {
             "morphologyName" : morphologyName
         }}, function (error, response) {
             if (error) {
@@ -436,7 +432,7 @@ export class DataManager {
     }
 
     getSamples(requestData, callback) {
-        HTTP.post(this.getMatrixComputeServerURL('/getSamples'), {data:requestData}, function (error, response) {
+        HTTP.post(this.getComputeServerURL('/getSamples'), {data:requestData}, function (error, response) {
             if (error) {
                 console.log(error);
             } else {
@@ -447,7 +443,7 @@ export class DataManager {
     }
     
     getProfiles(callback) {
-        HTTP.post(this.getMatrixServerURL('/getProfiles'), { data: {} }, function (error, response) {
+        HTTP.post(this.getDataServerURL('/getProfiles'), { data: {} }, function (error, response) {
             if (error) {
                 console.log(error);
             } else {
@@ -459,7 +455,7 @@ export class DataManager {
 
 
     getValues(callback, table, indices, columns, format="expanded") {
-        HTTP.post(this.getMatrixServerURL('/getValues'), { data: {
+        HTTP.post(this.getDataServerURL('/getValues'), { data: {
             "table" : table,
             "indices" : indices,
             "columns" : columns,
@@ -467,24 +463,7 @@ export class DataManager {
         } }, function (error, response) {            
             if (error) {
                 console.log(error);
-            } else {
-                /*
-                let binaryData = response.content;
-                //console.log(binaryData);
-                let zip = new JSZip();
-                zip.loadAsync(binaryData, {encoding : null})
-                    .then(zip => {                    
-                        return zip.file('data.json').async('string');
-                    })
-                    .then(jsonString => {                    
-                        let values = JSON.parse(jsonString);
-                        callback(values);
-                    })
-                        .catch(error => {
-                        console.error('Error unzipping the file:', error);
-                    });
-                
-                */
+            } else {               
                 let values = JSON.parse(response.content);
                 callback(values);                
             }
@@ -493,7 +472,7 @@ export class DataManager {
 
 
     getDensityValues(callback, table, columns, format, density_grid_shape) {
-        HTTP.post(this.getMatrixServerURL('/getDensity'), { data: {
+        HTTP.post(this.getDataServerURL('/getDensity'), { data: {
             "table" : table,            
             "columns" : columns,
             "format"  : format,
@@ -511,7 +490,7 @@ export class DataManager {
     }
 
     setDensityPlotSelection(filter_data) {
-        HTTP.post(this.getMatrixServerURL('/setDensityPlotSelection'), { data: filter_data }, function (error, response) {            
+        HTTP.post(this.getDataServerURL('/setDensityPlotSelection'), { data: filter_data }, function (error, response) {            
             if (error) {
                 console.log(error);
             } else {
@@ -527,7 +506,7 @@ export class DataManager {
             return callback(this.cachedResource);
         }
         let that = this;
-        HTTP.post(this.getMatrixServerURL('/getResourceJSON'), { data: {
+        HTTP.post(this.getDataServerURL('/getResourceJSON'), { data: {
             "filename" : filename
         } }, function (error, response) {            
             if (error) {
@@ -541,7 +520,7 @@ export class DataManager {
     }
 
     getMetaData(callback) {
-        HTTP.post(this.getMatrixServerURL('/getMetaData'), { data: {} }, function (error, response) {
+        HTTP.post(this.getDataServerURL('/getMetaData'), { data: {} }, function (error, response) {
             if (error) {
                 console.log(error);
             } else {
@@ -549,7 +528,5 @@ export class DataManager {
                 callback(responseData);
             }
         });
-    }
-
-    
+    }   
 }

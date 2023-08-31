@@ -9,10 +9,9 @@ import ParallelCoordinates from './parallelCoordinatesView';
 import AnatomicalView from './anatomicalView';
 import VoltageTraceView from './voltageTraceView';
 import TimeControlView from './timeControlView';
-import CelltypeView from './celltypeView';
-import CelltypeDensityView from './celltypeDensityView';
+import VegaView from './vegaView';
 import DensityPlot from './densityPlotView';
-
+import ViewFactory from './viewFactory';
 
 const gridItemStyle = {
     border: '1px solid lightgrey',
@@ -33,6 +32,7 @@ class GridControl extends React.Component {
 
         this.viewManager = props.viewManager;
         this.dataManager = this.viewManager.dataManager;
+        this.viewFactory = new ViewFactory(this.viewManager);
 
         this.state = {
             layout: undefined
@@ -53,7 +53,6 @@ class GridControl extends React.Component {
     getView(cellProps, grid) {
         const margin = 10
         const header = 15;
-        const headerSP = 45;
           
         let width = cellProps.w * grid.width / grid.cols - 2 * margin;
         let height = cellProps.h * grid.rowHeight - header;
@@ -64,101 +63,11 @@ class GridControl extends React.Component {
             return <div>not specified: {viewName}</div>
         }
         
-        let isScatterPlot = false;
+        let isScatterPlot = viewSpec.type.indexOf("regl") !== -1;
         let view = undefined;
         if (viewSpec) {
-            if (viewSpec.type == "regl-scatterplot" || viewSpec.type == "regl-scatterplot-large" || viewSpec.type == "scatterplot PCA" ||
-                viewSpec.type == "regl-scatterplot neurons" || viewSpec.type == "regl-scatterplot synapses") {
-                isScatterPlot = true;
-                let embedding = viewSpec.type == "scatterplot PCA" ? "PCA" : "none";
-                view = <ReglScatterPlot
-                    viewManager={this.viewManager}
-                    data_sources={viewSpec.data_sources}
-                    name={viewName}
-                    width={width}
-                    height={height-headerSP}
-                    embedding={embedding}
-                    table={viewSpec.table}
-                />
-            } else if (viewSpec.type == "plotly-parallelcoords") {
-                view = <ParallelCoordinates
-                    viewManager={this.viewManager}
-                    data_sources={viewSpec.data_sources}
-                    name={viewName}
-                    width={width}
-                    height={height}
-                    table={viewSpec.table}
-                />
-            } else if (viewSpec.type.indexOf("anatomical-view") != -1) {
-                view = <AnatomicalView
-                    viewManager={this.viewManager}
-                    data_sources={viewSpec.data_sources}
-                    name={viewName}
-                    width={width}
-                    height={height}
-                    table={viewSpec.table}
-                    configuration={viewSpec.configuration}
-                />
-            } else if (viewSpec.type == "voltage-trace") {
-                view = <VoltageTraceView
-                    viewManager={this.viewManager}
-                    data_sources={viewSpec.data_sources}
-                    name={viewName}
-                    width={width}
-                    height={height}
-                    table={viewSpec.table}
-                />
-            } else if (viewSpec.type == "time-control") {
-                view = <TimeControlView
-                    viewManager={this.viewManager}
-                    data_sources={viewSpec.data_sources}
-                    name={viewName}
-                    width={width}
-                    height={height}
-                    table={viewSpec.table}
-                />
-            } else if (viewSpec.type == "barchart-celltypes") {
-                view = <CelltypeView
-                    viewManager={this.viewManager}
-                    data_sources={viewSpec.data_sources}
-                    name={viewName}
-                    width={width}
-                    height={height}
-                    table={viewSpec.table}
-                />
-            } else if (viewSpec.type == "barchart-celltypes-synapses") {
-                view = <CelltypeView
-                    viewManager={this.viewManager}
-                    data_sources={viewSpec.data_sources}
-                    name={viewName}
-                    width={width}
-                    height={height}
-                    table={viewSpec.table}
-                />
-            } else if (viewSpec.type == "celltype-density-synapses") {
-                view = <CelltypeDensityView
-                    viewManager={this.viewManager}
-                    data_sources={viewSpec.data_sources}
-                    name={viewName}
-                    width={width}
-                    height={height}
-                    table={viewSpec.table}
-                />  
-            } else if (viewSpec.type == "density-2-channel" || viewSpec.type == "density-3-channel") {
-                view = <DensityPlot
-                    viewManager={this.viewManager}
-                    data_sources={viewSpec.data_sources}
-                    name={viewName}
-                    width={width}
-                    height={height}
-                    table={viewSpec.table}
-                    configuration={viewSpec.configuration}
-                />
 
-            } else {
-                view = <div>unknown view type: {viewSpec.type}</div>
-            }
-            
+            view = this.viewFactory.getView(viewName, viewSpec, width, height);                        
             /*
             <tr>
                 <td style={styleGridCellInfo}>{JSON.stringify(cellProps)} {index}</td>

@@ -13,6 +13,7 @@ class CoordinatedView extends React.Component {
       this.width = props.width;
       this.height = props.height;
       this.name = props.name;
+      this.configuration = props.configuration ? props.configuration : {};
       
       this.state = {};                  
     }

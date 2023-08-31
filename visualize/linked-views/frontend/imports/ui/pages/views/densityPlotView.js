@@ -75,9 +75,7 @@ class DensityPlot extends CoordinatedView {
 
       filters.push([value_range_x, value_range_y]);
     }
-    //console.log("notify select", this.points);
-    //this.scatterplot.select([6421, 7782], { preventEvent: true }); 
-
+   
     let filter_data = {
       "table" : this.table,
       "columns" : [columns[0], columns[1]],
@@ -88,7 +86,6 @@ class DensityPlot extends CoordinatedView {
     //console.log(filter_data);
     this.dataManager.setDensityPlotSelection(filter_data);
 
-    //this.notify(new SelectionEvent(this.name, this.table).setIndices(eventArgs.points));
   }
 
 
@@ -114,10 +111,7 @@ class DensityPlot extends CoordinatedView {
     const context = canvas.getContext('2d');
     const { width, height } = canvas.getBoundingClientRect();
 
-    //const xScale = scaleLinear().domain([0, 42]);
-    //const yScale = scaleLinear().domain([-5, 5]);
-
-    //http://regl.party/api#context-loss-mitigation
+   
 
     this.scatterplot = createScatterplot({
       canvas,
@@ -136,7 +130,6 @@ class DensityPlot extends CoordinatedView {
     let that = this;    
     this.dataManager.getDensityValues((data) => {
 
-      console.log(data);
       this.currentData = data;
 
       const nx = this.configuration.density_grid_shape[0];
@@ -164,14 +157,6 @@ class DensityPlot extends CoordinatedView {
                   
       that.scatterplot.draw(values_plot);
 
-      /*            
-      if(this.viewManager.mySpecialIndices.length){
-        const preselectedIndices = this.viewManager.mySpecialIndices;
-        this.previousSelection = deepCopy(preselectedIndices);
-        this.notify(new SelectionEvent(this.name, this.table).setIndices(preselectedIndices));
-      }
-      */
-      
       that.scatterplot.subscribe("select", this.handleSelect.bind(this));
       that.scatterplot.subscribe("deselect", this.handleDeselect.bind(this));
      

@@ -32,11 +32,6 @@ class TimeControlView extends CoordinatedView {
         this.state.tEnd = 375, //this.dataManager.simulationData.voltage_timeseries_points.tend           
         this.state.simulations = [];
         this.sampleIndices = [];
-
-        const lowEnergy = [6421,3579,4169,6034,1779];
-        const highEnergy = [7782,9446,5326,5372,3993]
-        
-        //this.setSampleIndices([6421, 7782]);        
     }
 
     updateSelection(interactionEvent) {                    
@@ -96,16 +91,6 @@ class TimeControlView extends CoordinatedView {
                     }
                     return state;
                 });
-                /*
-                this.notify({
-                    interactionType : "select",
-                    selectedEntityType: "simulation",
-                    data : {
-                        data_type : "voltage_timeseries_points",
-                        voltage_timeseries_points : deepCopy(simulationData.voltage_timeseries_points)
-                    }                
-                });                
-                */
             } else {
                 console.log("simulation failed for", simulationProps);
             }            

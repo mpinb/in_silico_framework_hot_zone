@@ -22,7 +22,7 @@ class ViewSpecificationsControl extends React.Component {
 
         this.available_view_types = this.dataManager.available_views;        
 
-        console.log(this.available_view_types);
+        //console.log(this.available_view_types);
 
         this.state = {
             objects: this.viewManager.view_specifications,
@@ -38,7 +38,6 @@ class ViewSpecificationsControl extends React.Component {
             })
         })
 
-        console.log(this.state.objects);
     }
 
     getViewId() {
@@ -47,7 +46,6 @@ class ViewSpecificationsControl extends React.Component {
     }
 
     handleViewOptionChange(event) {        
-        console.log(event)
         this.setState((state, props) => {
             if(event){
                 state.selected_view_add = event.value;            
@@ -70,7 +68,6 @@ class ViewSpecificationsControl extends React.Component {
         let that = this;
         this.setState((state, props) => {
             state.objects.push(newView);
-            console.log(state.objects);
             that.notifyChanged(state.objects);
             return state;
         });        

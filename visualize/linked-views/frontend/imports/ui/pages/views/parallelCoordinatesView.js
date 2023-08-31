@@ -117,13 +117,6 @@ class ParallelCoordinates extends CoordinatedView {
 
     this.propagateEvents = false;
     this.previousSelection = [];
-    /*
-    this.observerSelectionChanged = this.viewManager.OnSelectionChanged.add((eventArgs) => {      
-      let indices = eventArgs.indices;
-      let isFilter = eventArgs.eventType == "select";
-      this.loadTraces(false, isFilter, indices);
-    });
-    */
   }
 
   updateSelection(interactionEvent) {    
@@ -245,20 +238,15 @@ class ParallelCoordinates extends CoordinatedView {
 
   handleSelection(eventData) {
     const selectedPoints = eventData.points.map((point) => point.pointIndex);
-    //this.setState({ selectedPoints });
-
-    console.log('Selected Points:', selectedPoints);
   }
 
   handleEvent(eventData) {
     const dimensions = eventData.data[0].dimensions;
-    //console.log(dimensions);
 
     let nTotal = dimensions[0].values.length;
     let filtered_indices = dimensions[0].values.map((value, index) => {return index});
     
     for (let i = 0; i < dimensions.length; i++) {
-      //console.log(dimensions[i].constraintrange);
       if (dimensions[i].constraintrange) {      
         let constraints = dimensions[i].constraintrange;        
 
@@ -284,16 +272,6 @@ class ParallelCoordinates extends CoordinatedView {
       }        
     }
     
-    /*
-    const indices_original = this.state.traces[0].indices_original
-    if (filtered_indices.length < indices_original.length) {      
-      let indices_original_filtered = [];
-      for (let i = 0; i < filtered_indices.length; i++) {
-        indices_original_filtered.push(indices_original[filtered_indices[i]]);        
-      }
-      this.notify(new SelectionEvent(this.name, this.table).setIndices(indices_original_filtered));
-      //this.viewManager.notifySelectionEvent(this.name, "select", indices_original_filtered);
-    }*/    
     if(this.propagateEvents){      
       this.notify(new SelectionEvent(this.name, this.table).setIndices(filtered_indices));                      
     } else {

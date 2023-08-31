@@ -106,7 +106,6 @@ class VoltageTraceView extends CoordinatedView {
     getSpec() {
       return {
           "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-          "description": "A simple scatter plot example.",         
           "data": {
               "name": "table"
           },
@@ -127,8 +126,6 @@ class VoltageTraceView extends CoordinatedView {
     }
 
     render() {
-      //console.log(this.getData());
-      let that = this;
       return <VegaLite 
           spec = {this.getSpec()} 
           data = {this.getData()}           
