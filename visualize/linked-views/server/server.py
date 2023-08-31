@@ -1,5 +1,6 @@
 import os
 import logging
+from logging import handlers
 import tempfile
 import threading
 import util
@@ -8,6 +9,7 @@ import json
 import pandas as pd
 import numpy as np
 import vaex
+import vaex.ml
 
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
@@ -47,7 +49,9 @@ def load_tables(data_folder, config, max_num_rows = 50000):
     return tables
 
 
-def write_objects_to_file(filenameProjects, objects):
+def write_objects_to_file(filenameProjects, objects):    
+    if(filenameProjects is None):
+        return
     with open(filenameProjects, 'w') as file:
         json.dump(objects, file)
 
@@ -84,27 +88,38 @@ def getPCA(df):
 
     
 class LinkedViewsServer:
-    def __init__(self, data_folder):
-        self.data_folder = Path(data_folder)        
+    def __init__(self, config_file_path = None, data_folder=None):
+        if(config_file_path is not None):
+            self.config_file_path = config_file_path
+        else:
+            self.config_file_path = Path(os.path.dirname(__file__))/"defaults"/"config.json"
+
+        print(self.config_file_path)
+
+        self.data_folder = data_folder
+        if(self.data_folder):
+            self.resourceDir = self.data_folder/"resources"
+        else:
+            self.resourceDir = None
+        self.filenameProjects = None
+
         self.thread = None    
         self.vaex_df = None
         self.selections = {}
 
-        self.loadDataLegacy()
+        self.config = util.loadJson(self.config_file_path)
 
-    def loadDataLegacy(self):
-        self.resourceDir = self.data_folder/"resources"
-        self.config = util.loadJson(self.data_folder/"config.json")
-        self.tables = load_tables(self.data_folder, self.config)
-
-        self.objects = []
-        self.filenameProjects = self.data_folder/"projects.json"
-
-        # Load objects from the file on server startup
-        try:
-            with open(self.filenameProjects, 'r') as file:
-                self.objects = json.load(file)
-        except FileNotFoundError:
+        if(self.data_folder):
+            self.tables = load_tables(self.data_folder, self.config)
+            self.filenameProjects = self.data_folder/"projects.json"
+            # Load objects from the file on server startup
+            try:
+                with open(self.filenameProjects, 'r') as file:
+                    self.objects = json.load(file)
+            except FileNotFoundError:
+                self.objects = []
+        else:
+            self.tables = {}
             self.objects = []
 
 
@@ -164,21 +179,24 @@ class LinkedViewsServer:
 
     def set_data(self, vaex_df):
         assert self.server is not None        
-        self.vaex_df = vaex_df
-        self.vaex_columns = vaex_df.get_column_names()
+        self.vaex_df = vaex_df        
+        self.vaex_columns = vaex_df.get_column_names()         
+        self.vaex_df["row_index"] = np.arange(self.vaex_df.shape[0])
         self.vaex_data_ranges = get_data_ranges_vaex(vaex_df)
     
 
     def init_routes(self):
-        self.app.add_url_rule('/', 'index', self.index)        
-        self.app.add_url_rule('/matrixServer/', 'get_objects', self.get_objects, methods=['GET'])
-        self.app.add_url_rule('/matrixServer/<name>', 'delete_object', self.delete_object, methods=['DELETE'])
-        self.app.add_url_rule('/matrixServer/', 'add_object', self.add_object, methods=['POST'])
-        self.app.add_url_rule('/matrixServer/getMetaData', 'getMetaData', self.getMetaData, methods=["GET", "POST"])
-        self.app.add_url_rule('/matrixServer/getResourceJSON', self.getResourceJSON, methods=["GET", "POST"])
-        self.app.add_url_rule("/matrixServer/getValues", "getValues", self.getValues, methods=["GET", "POST"])
-        self.app.add_url_rule("/matrixServer/getDensity", "getDensity", self.getDensity, methods=["POST"])
-        self.app.add_url_rule("/matrixServer/setDensityPlotSelection", "setDensityPlotSelection", self.setDensityPlotSelection, methods=["POST"])
+        self.app.add_url_rule('/', 'index', self.index)
+        self.app.add_url_rule('/getSelections', 'getSelections', self.getSelections)
+        self.app.add_url_rule('/getSelectedIndices', 'getSelectedIndices', self.getSelectedIndices)
+        self.app.add_url_rule('/dataServer/', 'get_objects', self.get_objects, methods=['GET'])
+        self.app.add_url_rule('/dataServer/<name>', 'delete_object', self.delete_object, methods=['DELETE'])
+        self.app.add_url_rule('/dataServer/', 'add_object', self.add_object, methods=['POST'])
+        self.app.add_url_rule('/dataServer/getMetaData', 'getMetaData', self.getMetaData, methods=["GET", "POST"])
+        self.app.add_url_rule('/dataServer/getResourceJSON', self.getResourceJSON, methods=["GET", "POST"])
+        self.app.add_url_rule("/dataServer/getValues", "getValues", self.getValues, methods=["GET", "POST"])
+        self.app.add_url_rule("/dataServer/getDensity", "getDensity", self.getDensity, methods=["POST"])
+        self.app.add_url_rule("/dataServer/setDensityPlotSelection", "setDensityPlotSelection", self.setDensityPlotSelection, methods=["POST"])
 
     def index(self):
         if(self.vaex_df):
@@ -213,6 +231,25 @@ class LinkedViewsServer:
         self.objects.append(new_object)
         write_objects_to_file(self.filenameProjects, self.objects)
         return jsonify(new_object)
+
+
+    def add_session(self, sessionData, name=None):
+        if(name is None):
+            name = f"session-{len(self.objects)+1}"
+        sessionData["name"] = name
+        self.objects.append(sessionData)
+        return name 
+
+    def remove_session(self, name):
+        self.delete_object(name)
+
+
+    def get_session(self, name):
+        for session in self.objects:
+            if(session["name"] == name):
+                return session
+        return None
+
 
     """
     ########################################################################################
@@ -348,7 +385,7 @@ class LinkedViewsServer:
                     raise ValueError(tableName)
 
                 df = self.vaex_df
-
+              
                 columns = data["columns"]                
                 #indices = data["indices"]
                 format = data["format"]
@@ -423,16 +460,64 @@ class LinkedViewsServer:
                 return json.dumps(response_data)
 
 
+    def computeSelection(self):
+        if("global" in self.selections):
+            columns = self.selections["global"]["columns"] 
+            col1 = columns[0]
+            col2 = columns[1]
+
+            ranges = self.selections["global"]["bin_ranges"]
+
+            self.vaex_df.select_nothing(name="selection_global")
+            for idx, range_i in enumerate(ranges):    
+                limit_i = [(range_i[0][0], range_i[0][1]), (range_i[1][0], range_i[1][1])]        
+                self.vaex_df.select_rectangle(self.vaex_df[col1], self.vaex_df[col2], limit_i, name="selection_global", mode="or")
+
+            df_selected_indices = self.vaex_df.evaluate(self.vaex_df["row_index"], selection="selection_global")
+            return df_selected_indices
+        else:
+            return None            
+
+
+    def getSelections(self):
+        return self.selections
+
+
+    def getSelectedIndices(self):
+        df_selected_indices = self.computeSelection()
+        if(df_selected_indices is None):
+            return "no selection"
+        else:
+            return f"number of selected rows: {df_selected_indices.shape[0]}"
+
+
 
 
 if __name__ == "__main__":
-    import vaex
 
-    data_folder = "/scratch/visual/bzfharth/in-silico-install-dir/project_src/in_silico_framework/getting_started/linked-views-example-data/backend_data_2023-06-22"
-    server = LinkedViewsServer(data_folder)
+
+    import defaults.default_sessions as defaults
+    
+    def append_PCA(df, columns, descriptor, n_components = 2):
+        pca = vaex.ml.PCA(features=columns, n_components=n_components)    
+        df_transformed = pca.fit_transform(df)
+        for component_idx in range(0, n_components):
+            df_transformed.rename(f"PCA_{component_idx}", f"{descriptor}-{component_idx+1}")
+        return df_transformed
+
+    #data_folder = "/scratch/visual/bzfharth/in-silico-install-dir/project_src/in_silico_framework/getting_started/linked-views-example-data/backend_data_2023-06-22"
+    server = LinkedViewsServer()
     server.start(5000)
     
+    server.add_session(defaults.biophysics_fitting())
+
     filename = "/scratch/visual/bzfharth/in-silico-install-dir/project_src/in_silico_framework/getting_started/linked-views-example-data/backend_data_2023-06-22/simulation_samples.csv"
     df = vaex.from_csv(filename, copy_index=False)
+    df_extended = append_PCA(df, util.getParamsCols(), "PCA-ephys")
 
-    server.set_data(df)
+    server.set_data(df_extended)
+
+    import time
+    time.sleep(600)
+
+    
