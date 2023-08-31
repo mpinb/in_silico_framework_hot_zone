@@ -37,7 +37,7 @@ jobs:
           fi
           pushd .
           cd installer/py2.7
-          ./install.sh $CONDA_TARGET_DIR
+          ./install.sh $CONDA_TARGET_DIR || exit 1
           popd
           source $CONDA_TARGET_DIR/bin/activate
           conda list
