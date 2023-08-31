@@ -1,6 +1,6 @@
 # Installation of in-silico-framework followed by CI tests.
 # Builds ISF locally on the MPINB-hosted runner and runs all tests
-name: ISF Py3 (local) build/test
+name: ISF Py3.8 (local) build/test
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
