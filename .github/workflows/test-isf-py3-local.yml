@@ -26,25 +26,23 @@ jobs:
       # Install Anaconda3 and update conda package manager
       - name: Install Anaconda3
         run: |
-          export ISF_HOME=`pwd`
-          CONDA_TARGET_DIR="$ISF_HOME/anaconda_isf3"
-          if [ -d "$HOME/anaconda_isf3" ]; then
+          CONDA_TARGET_DIR="$(pwd)/anaconda_isf3"
+          if [ -d "$CONDA_TARGET_DIR" ]; then
             echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
-            rm -r "$HOME/anaconda_isf3"
+            rm -r "$CONDA_TARGET_DIR"
           else
             echo "No previous Anaconda installation found. Continuing..."
           fi
           pushd .
-          cd installer
-          ./isf-install.sh -d -t py3 -i $CONDA_TARGET_DIR
+          cd installer/py3.8
+          ./install.sh $CONDA_TARGET_DIR
           popd
           source $CONDA_TARGET_DIR/bin/activate
           conda list
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
-          export ISF_HOME=`pwd`
-          CONDA_TARGET_DIR="$ISF_HOME/anaconda_isf3"
+          CONDA_TARGET_DIR="$(pwd)/anaconda_isf3"
           source $CONDA_TARGET_DIR/bin/activate;
           echo "Using Python: $(which python)"
           export PYTHONPATH="$ISF_HOME"
