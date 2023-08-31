@@ -1111,14 +1111,17 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
                 self.voltage_timeseries[t_idx], round_floats) for t_idx, t in enumerate(self.times_to_show)}
 
         else:
-            assert scalar_data_keyword.lower() in (e.lower()
-                                                   for e in self.possible_scalars), "Keyword {} is not associated with membrane voltage, and does not appear in the possible ion dynamic keywords: {}".format(scalar_data_keyword, self.possible_scalars)
-            self._calc_ion_dynamics_timeseries(
-                ion_keyword=scalar_data_keyword)
-            scalar_data_per_section = np.array([self._get_ion_dynamic_at_timepoint(
-                t, ion_keyword=scalar_data_keyword) for t in np.arange(self.t_start, self.t_end+self.dt, self.dt)]).T
+            assert scalar_data_keyword.lower() in (
+                e.lower() for e in self.possible_scalars), "Keyword {} is not associated with membrane voltage, and does not appear in the possible ion dynamic keywords: {}".format(scalar_data_keyword, self.possible_scalars)
+            self._calc_ion_dynamics_timeseries(ion_keyword=scalar_data_keyword)
+            scalar_data_per_section = np.array(
+                [self._get_ion_dynamic_at_timepoint(
+                    t, ion_keyword=scalar_data_keyword
+                    ) for t in np.arange(self.t_start, self.t_end+self.dt, self.dt)
+                    ]).T
             scalar_data_per_time = {
-                t: self.scalar_data[scalar_data_keyword][t_idx] for t_idx, t in enumerate(self.times_to_show)}
+                t: self.scalar_data[scalar_data_keyword][t_idx] for t_idx, t in enumerate(self.times_to_show)
+                }
         assert type(ip) == str, "Please provide the ip adress of the dash app host as a string. Should be the same ip where the dask client is running."
         if vmin is not None:
             self.vmin = vmin
