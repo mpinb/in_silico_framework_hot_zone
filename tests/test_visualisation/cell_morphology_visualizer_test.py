@@ -41,6 +41,7 @@ class TestCellMorphologyVisualizer:
             )
 
     @pytest.mark.skipif(six.PY2, reason="The cell_morphology_visualizer methods are not available on Py2")
+    @pytest.mark.xfail(strict=False, reason="ffmpeg is not installed on the local runner")
     def test_write_video_voltage_synapses_in_morphology_3d(self, tmpdir):
         outdir = str(tmpdir.dirname)
         self.cmv.write_video_voltage_synapses_in_morphology_3d(
