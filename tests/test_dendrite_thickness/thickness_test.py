@@ -65,7 +65,7 @@ def test_am_write(tmpdir):
     log.info("***********")
     am_object = IO.Am(AM_FILE)
     am_object.read()
-    am_object.output_path=str(tmpdir.dirname)
+    am_object.output_path=os.path.join(str(tmpdir.dirname), 'test')
 
     #   Test 1
     am_object.write()
