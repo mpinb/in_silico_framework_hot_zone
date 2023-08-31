@@ -6,6 +6,8 @@
 # 3. Patches pandas-msgpack and saves it as a local package
 # 4. Compiles NEURON mechanisms
 
+set -e  # exit if error occurs
+
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda3-2020.11-Linux-x86_64.sh
 channels=$SCRIPT_DIR/../../mechanisms/channels_py3
@@ -135,6 +137,7 @@ PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
 if [ ! -r "${PD_MSGPACK_HOME}" ]; then
     git clone https://github.com/abast/pandas-msgpack.git
 fi
+git -C pandas-msgpack apply $SCRIPT_DIR/pandas_msgpack.patch
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
 

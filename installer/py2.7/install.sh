@@ -6,6 +6,8 @@
 # 3. Patches pandas-msgpack and saves it as a local package
 # 4. Compiles NEURON mechanisms
 
+set -e  # exit if error occurs
+
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda2-4.2.0-Linux-x86_64.sh
 channels=$SCRIPT_DIR/../../mechanisms/channels_py2
