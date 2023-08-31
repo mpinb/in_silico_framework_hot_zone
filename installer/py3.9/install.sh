@@ -9,7 +9,7 @@
 set -e  # exit if error occurs
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-anaconda_installer=Anaconda3-2020.11-Linux-x86_64.sh
+anaconda_installer=Anaconda3-2022.10-Linux-x86_64.sh
 channels=$SCRIPT_DIR/../../mechanisms/channels_py3
 
 function print_title {
@@ -106,8 +106,13 @@ print_title "2. Installing conda dependencies "
 # 2.0 -- Downloading In-Silico-Framework conda dependencies (if necessary).
 if [ "${download_conda_packages_flag}" == "true" ]; then
     echo "Downloading In-Silico-Framework conda dependencies."
-    cat conda_requirements.txt | grep http | xargs -t -n 1 -P 8 wget -N -q -P $SCRIPT_DIR/downloads/conda_packages
-    echo "Download conda packages completed."
+    package_list=$(cat $SCRIPT_DIR/conda_requirements.txt | grep '^http')
+    if [ -z "$package_list" ]; then
+        echo "No conda packages to download."
+    else
+        echo "Downloading In-Silico-Framework conda dependencies."
+        echo $package_list | xargs -t -n 1 -P 8 wget -N -q -P $SCRIPT_DIR/downloads/conda_packages
+        echo "Download conda packages completed."
 fi
 # 2.1 -- Installing In-Silico-Framework conda dependencies.
 echo "Installing In-Silico-Framework conda dependencies."
@@ -137,7 +142,6 @@ PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
 if [ ! -r "${PD_MSGPACK_HOME}" ]; then
     git clone https://github.com/abast/pandas-msgpack.git
 fi
-git -C pandas-msgpack apply $SCRIPT_DIR/pandas_msgpack.patch
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
 
