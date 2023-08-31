@@ -110,7 +110,7 @@ if [ "${download_conda_packages_flag}" == "true" ]; then
         echo "No conda packages to download."
     else
         echo "Downloading In-Silico-Framework conda dependencies."
-        echo $package_list | xargs -t -n 1 -P 8 wget -N -q -P $SCRIPT_DIR/downloads/conda_packages
+        echo $package_list | xargs -t -n 1 -P 8 wget -N -q -P $SCRIPT_DIR/downloads/conda_packages || exit 1
         echo "Download conda packages completed."
     fi
 fi
