@@ -99,26 +99,30 @@ export class SelectionEvent extends InteractionEvent {
         let indicesForOp = this.indices;
 
         if(viewTable != this.source_view_table){
-            /*
-            console.log(viewTable, this.source_view_table);
-            if(this.source_view_table == "synapses.csv"){                
-                const synapsesTable = this.viewManager.dataManager.cacheExpanded["synapses.csv"]
-                const neuronsTable = this.viewManager.dataManager.cacheExpanded["neurons.csv"]
-                indicesForOp = synapsesTable.reduce((accum, row) => {
-                    console.log(row.rowIdx);
-                    if(this.indices.has(row.rowIdx)){
-                        let neuronsRow = neuronsTable.find(r => r.neuron_id == row.neuron_id)
-                        console.log(neuronsRow);
-                        if(neuronsRow){
-                            accum.add(neuronsRow.rowIdx);
-                        }
-                    }
-                    return accum;
-                }, new Set())                
-            } else {
-                throw Error(this.source_view_table);
+            indicesForOp = new Set();
+
+            const tableMapping = this.viewManager.dataManager.table_mapping;
+            console.log(viewTable, this.source_view_table, tableMapping);
+            
+            const mapping = tableMapping.find(m => m.left_table == this.source_view_table && m.right_table == viewTable);
+            const leftKey = mapping.left_key;
+            const rightKey = mapping.right_key;            
+            
+            const leftTable = this.viewManager.dataManager.cacheExpanded[this.source_view_table];
+            const rightTable = this.viewManager.dataManager.cacheExpanded[viewTable];
+
+            const leftKeyValues = new Set();                    
+            const indicesArray = Array.from(this.indices);
+            for(let i = 0; i<indicesArray.length; i++){
+                const index = indicesArray[i];                                
+                leftKeyValues.add(leftTable[index][leftKey]);
+            }            
+            
+            for(let i = 0; i<rightTable.length; i++){
+                if(leftKeyValues.has(rightTable[i][rightKey])){
+                    indicesForOp.add(i);
+                }
             }
-            */
         }
 
         if(this.viewsAssign.indexOf(viewName) !== -1){            

@@ -2,78 +2,14 @@ import React, { useState } from 'react';
 import { deepCopy } from './core/utilCore';
 
 import CoordinatedView from './core/coordinatedView';
-import { SelectionEvent } from './core/interactionEvent';
 
 import 'babylonjs-loaders';
 import * as BABYLON from 'babylonjs';
-import * as GUI from 'babylonjs-gui';
-import * as BABYLONMAT from 'babylonjs-materials';
-import { getBarrelModelData } from './barrel_model.js';
-import { normalizeArray, blueRedColormap, getRGBFromString, getColormapIndex, hexToRgb } from './core/colorManager';
-import { tokTypes } from '@babel/parser';
+import { blueRedColormap, getRGBFromString, getColormapIndex, hexToRgb } from './core/colorManager';
+
 
 var greyColor = new BABYLON.Color3(50, 50, 50);
-var opacityLayer = 0.5;
-var colorRed = new BABYLON.Color3(255, 0, 0);
-var selectedBarrelColor = new BABYLON.Color4(255, 0, 0, 0.7);
-var barrelColor = new BABYLON.Color4(0, 0, 0, 0.1);
-var barrelCapColor = new BABYLON.Color4(0, 0, 0, 0.05);
-// var colorAntiqueWhite = new BABYLON.Color3(50, 46, 42);
-var colorAntiqueWhite = new BABYLON.Color3(64, 60, 55);
 var intensity = 0.02;
-const opacityBarrel = 0.5;
-
-
-const column_order = [
-  "A1",
-  "A2",
-  "A3",
-  "A4",
-  "B1",
-  "B2",
-  "B3",
-  "B4",
-  "C1",
-  "C2",
-  "C3",
-  "C4",
-  "D1",
-  "D2",
-  "D3",
-  "D4",
-  "E1",
-  "E2",
-  "E3",
-  "E4",
-  "Alpha",
-  "Beta",
-  "Gamma",
-  "Delta",
-]
-
-
-// Variable to track whether the control key is pressed
-var isControlPressed = false;
-
-// Add event listeners for keydown and keyup events
-document.addEventListener("keydown", onKeyDown, false);
-document.addEventListener("keyup", onKeyUp, false);
-
-// Function to handle keydown event
-function onKeyDown(event) {
-  if (event.key === "Control") {
-    // Set the flag indicating that the control key is pressed
-    isControlPressed = true;
-  }
-}
-
-// Function to handle keyup event
-function onKeyUp(event) {
-  if (event.key === "Control") {
-    // Set the flag indicating that the control key is released
-    isControlPressed = false;
-  }
-}
 
 
 // https://www.w3resource.com/javascript-exercises/javascript-math-exercise-23.php
@@ -227,13 +163,12 @@ function logCameraParameters(camera) {
 
 
 function createPointCloud(tpl) {
-  //tpl.engine.displayLoadingUI();
 
   let initPCS = () => {
     let data = tpl.pcs_data;
     nPoints = data[0].length;
     console.log(nPoints);
-    const pointSize = tpl.configuration.name == "soma-barrelcortex-synapses" ? 3 : 2;
+    const pointSize = tpl.configuration.pointSize ? tpl.configuration.pointSize : 2;
     tpl.pcs = new BABYLON.PointsCloudSystem("pcs", pointSize, tpl.scene, {
       updatable : true
     });
@@ -257,51 +192,31 @@ function createPointCloud(tpl) {
 
     tpl.pcs.beforeUpdateParticles = () => {
       tpl.pcs_initialized = false;
-      //tpl.engine.displayLoadingUI();
     }
 
     tpl.pcs.afterUpdateParticles = () => {
       tpl.pcs_initialized = true;
-      //tpl.engine.hideLoadingUI();
     }
     
     tpl.pcs.addPoints(nPoints, initFunction);
     tpl.pcs.buildMeshAsync().then(() => {
       tpl.pcs_initialized = true;
-      //tpl.engine.hideLoadingUI();
     });
   }
 
-  //let key = "modelData/viewer_2020-10-02/soma/soma_positions_" + tpl.pcs_samplingFactor.toString() + ".json.zip";
-  //loadZippedJson(key, "soma_positions_" + tpl.pcs_samplingFactor.toString() +".json", (data) => {
-
-  const columns = tpl.configuration.name == "soma-barrelcortex" ?  ["soma_x", "soma_y", "soma_z", "celltype"] : ["x", "y", "z", "celltype"];
-
+  const columns = tpl.data_sources; 
+  console.log(columns);
   tpl.dataManager.loadValues((serverData) => {
     const values = serverData.values;
-    data = [[],[],[],[]]
-    if(tpl.configuration.name == "soma-barrelcortex"){ 
-      tpl.pcs_data = values.reduce((accum, x) => {
-        accum[0].push(x.soma_x);
-        accum[1].push(x.soma_y);
-        accum[2].push(x.soma_z);
-        accum[3].push(1);//x.celltype);
-        return accum;
-      }, data);
-    } else if (tpl.configuration.name == "soma-barrelcortex-synapses"){
-      tpl.pcs_data = values.reduce((accum, x) => {
-        accum[0].push(x.x);
-        accum[1].push(x.y);
-        accum[2].push(x.z);
-        accum[3].push(1);//x.celltype);
-        return accum;
-      }, data);
-    }
-
-    console.log(tpl.pcs_data);
-    tpl.pcs_selection = values.map((x,idx) => 1);
-    console.log(tpl.pcs_data);
-    console.log(tpl.pcs_data);
+    data = [[],[],[],[]]    
+    tpl.pcs_data = values.reduce((accum, x) => {
+      accum[0].push(x[columns[0]]);
+      accum[1].push(x[columns[1]]);
+      accum[2].push(x[columns[2]]);
+      accum[3].push(1);
+      return accum;
+    }, data);        
+    tpl.pcs_selection = values.map((x,idx) => 1);    
     initPCS();
   }, tpl.table, [], columns, "expanded");  
 }
@@ -332,16 +247,6 @@ function createScene(tpl) {
   let beta = 1.17;
   let radius = 5000;
   let centerZ = -300;
-
-  //let centerZ = 700;
-
-  /*
-  if (tpl.context === 'frontView' || tpl.context === 'gallery') {
-    alpha = 0.59;
-    beta = 1.49;
-    radius = 3830;
-    centerZ = -350;
-  }*/
 
   if (tpl.configuration.name == "single-morphology") {
     tpl.camera = new BABYLON.ArcRotateCamera(
@@ -381,16 +286,12 @@ function createScene(tpl) {
 
 
   // Attach event listeners to camera properties
-  //tpl.camera.onViewMatrixChangedObservable.add(logCameraParameters);
-  //tpl.camera.onProjectionMatrixChangedObservable.add(logCameraParameters);
+  // tpl.camera.onViewMatrixChangedObservable.add(logCameraParameters);
+  // tpl.camera.onProjectionMatrixChangedObservable.add(logCameraParameters);
 
-
-  // tpl.camera.useBouncingBehavior = true;
-  // tpl.camera.useAutoRotationBehavior = true;
   tpl.camera.idleRotationWaitTime = 50000;
   tpl.camera.attachControl(tpl.canvas, false);
 
-  //if (tpl.configuration.name != "single-morphology") {
   var light = new BABYLON.HemisphericLight(
     'HemiLight', new BABYLON.Vector3(0, 0, -1), tpl.scene);
   light.intensity = 0.2 * intensity;
@@ -398,53 +299,20 @@ function createScene(tpl) {
   var light2 = new BABYLON.HemisphericLight(
     'HemiLight2', new BABYLON.Vector3(0, 0, 1), tpl.scene);
   light2.intensity = 0.2 * intensity;
-  //}
 
   initMaterials(tpl);
 
-  if (tpl.configuration.name == "soma-barrelcortex" || tpl.configuration.name == "soma-barrelcortex-synapses") {
-    createAxes(tpl);
-    //createColumns(tpl);
+  if (tpl.configuration.showAxes) {
+    createAxes(tpl);    
+  }
+
+  if(tpl.data_sources.length){
     createPointCloud(tpl);
   }
-
-  if (!tpl.rootNodesInitialized) {
-    let rootAxon = new BABYLON.Mesh('axons', tpl.scene);
-    let rootDendrite = new BABYLON.Mesh('dendrites', tpl.scene);
-    tpl.rootNodesInitialized = true;
-  }
-
-  /*
-  initMorphologies(tpl);
-  // createSomaParticleSystem(tpl);
-  // loadNeuronSelection(tpl,"selection_L5PT.json");
- 
-  if (tpl.subcontext === 'soma') {
-    createPointCloud(tpl);
-  }
- 
-  if (tpl.subcontext === 'subcellular' ||
-    tpl.subcontext === 'spatial' || tpl.context == "matrixViewDev") {
-    createParticleSystem(tpl);
-  }
- 
-  createGrid(tpl);
-  if (tpl.context !== 'gallery') {
-    createControls(tpl);
-  }
-  */
-
-  //createColumns(tpl);
-  //createLayers(tpl);
-  //applySettings(tpl);
-
-  //tpl.scene.clearColor = new BABYLON.Color4(0, 0, 0, 1);
-
 
   createMorphology(tpl)
 }
 
-// https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/custom/updatingVertices
 
 function createMorphology(tpl) {
   if (!tpl.morphology) {
@@ -486,7 +354,6 @@ function createMorphology(tpl) {
       tube.material = tpl.interpolatedMaterials_blueRed[0]
     }
     
-
     // create probe
     const probePosition = new BABYLON.Vector3(...points[pointIndices[middleIndex]]);
     const coneHeight = 150
@@ -524,101 +391,12 @@ function createMorphology(tpl) {
       )
     );
 
-  
-
     tpl.tubeHandles.push(tube);
   }
 }
 
-function createColumn(rootMesh, barrel, tpl) {
-  let faceColors = [barrelCapColor, barrelColor, barrelCapColor];
-  let selectedFaceColors = [barrelCapColor, barrelColor, barrelCapColor];
 
-  let material = tpl.scene.getMaterialByName('defaultCylinderSurface');
 
-  BABYLON.MeshBuilder.Create
-  var cylinder = BABYLON.MeshBuilder.CreateCylinder(
-    getId(), {
-    diameter: 2 * barrel.radius,
-    height: barrel.height,
-    hasRings: true,
-    enclose: true
-  },
-    tpl.scene);
-
-  // cylinder.material = material;
-
-  let phi = Math.atan2(barrel.dir_y, barrel.dir_z);
-  let phi2 = Math.atan2(barrel.dir_x, barrel.dir_z);
-  cylinder.rotate(BABYLON.Axis.X, phi, BABYLON.Space.WORLD)
-  cylinder.rotate(BABYLON.Axis.Z, -phi2, BABYLON.Space.WORLD)
-
-  cylinder.position =
-    new BABYLON.Vector3(barrel.pos_x, barrel.pos_z, barrel.pos_y);
-  // cylinder.hasVertexAlpha = true;
-  cylinder.setParent(rootMesh);
-
-  let linePoints = [];
-  linePoints.push(new BABYLON.Vector3(0, -500, 0));
-  linePoints.push(new BABYLON.Vector3(0, 500, 0));
-  /*
-  let dashedLines = BABYLON.MeshBuilder.CreateDashedLines(
-      getId(), {points: linePoints, dashNb: 10}, tpl.scene);
-  dashedLines.edgesWidth = 20;
-  dashedLines.rotate(BABYLON.Axis.X, phi, BABYLON.Space.WORLD);
-  dashedLines.rotate(BABYLON.Axis.Z, -phi2, BABYLON.Space.WORLD);
-  dashedLines.position =
-      new BABYLON.Vector3(barrel.pos_x, barrel.pos_z, barrel.pos_y);
-  dashedLines.color = new BABYLON.Color3(0.5, 0.5, 0.5);
-  dashedLines.setParent(rootMesh);
-  */
-
-  BABYLON.Tags.EnableFor(cylinder);
-  let tags = 'column ' + barrel.description;
-  cylinder.barrel_name = barrel.description;
-  cylinder.addTags(tags);
-
-  // Create an action manager for the mesh
-  cylinder.actionManager = new BABYLON.ActionManager(tpl.scene);
-
-  // Register a click event on the mesh
-  cylinder.actionManager.registerAction(
-    new BABYLON.ExecuteCodeAction(
-      BABYLON.ActionManager.OnPickTrigger,
-      function (event) {
-        // Handle the click event here
-        console.log(isControlPressed);
-        let index = column_order.indexOf(event.source.barrel_name);
-        //tpl.viewManager.notifySelectionChanged([index]);
-      }
-    )
-  );
-
-  setColumnSelection(tpl, cylinder);
-}
-
-function setColumnSelection(tpl, mesh) {
-  let isSelected = false;// mesh.matchesTagsQuery(tpl.columnQuery) &&
-  //  (getCondition(tpl.selection, 'nearestColumn') ||
-  //    tpl.subcontext === 'geometryX');
-  let material = tpl.scene.getMaterialByName('defaultCylinderSurface');
-  let selectedMaterial = tpl.scene.getMaterialByName('selectedCylinderSurface');
-  if (isSelected) {
-    mesh.material = selectedMaterial;
-  } else {
-    mesh.material = material;
-  }
-}
-
-function createColumns(tpl) {
-  let rootMesh = new BABYLON.Mesh('columns', tpl.scene);
-  let barrels = getBarrelModelData();
-  tpl.selectedColumns = [];
-  for (var i = 0; i < barrels.length; i++) {
-    let barrel = barrels[i];
-    createColumn(rootMesh, barrel, tpl);
-  }
-}
 
 function initEngine(tpl) {
   if (tpl.engine) {
@@ -643,87 +421,6 @@ function initEngine(tpl) {
   });
 }
 
-/*
-function setColumnSelection(tpl, mesh, isSelected) {
-  let isSelected = mesh.matchesTagsQuery(tpl.columnQuery) &&
-    (getCondition(tpl.selection, 'nearestColumn') ||
-      tpl.subcontext === 'geometryX');
-  let material = tpl.scene.getMaterialByName('defaultCylinderSurface');
-  let selectedMaterial = tpl.scene.getMaterialByName('selectedCylinderSurface');
-  if (isSelected) {
-    mesh.material = selectedMaterial;
-  } else {
-    mesh.material = material;
-  }
-}*/
-
-function joinOptions(options) {
-  let condition = '';
-  for (var i = 0; i < options.length; i++) {
-    if (i > 0) {
-      condition += ' || '
-    }
-    condition += options[i];
-  }
-  return condition;
-}
-
-function setSelection(tpl, selection) {
-  if (!tpl.scene) {
-    return;
-  }
-
-  // set morphology selection
-  /*
-  let morphologies = tpl.scene.getMeshesByTags('morphology');
-  for (var i = 0; i < morphologies.length; i++) {
-    setVisibilityByTag(tpl, morphologies[i]);
-  }*/
-
-  let selected_columns = [];
-  for (let i = 0; i < selection.length; i++) {
-    selected_columns.push(column_order[selection[i]]);
-  }
-  const column_query = joinOptions(selected_columns);
-
-  let columns = tpl.scene.getMeshesByTags('column');
-  for (var i = 0; i < columns.length; i++) {
-    mesh = columns[i];
-    if (!selection.length) {
-      mesh.material = tpl.scene.getMaterialByName('defaultCylinderSurface');
-    } else if (mesh.matchesTagsQuery(column_query)) {
-      mesh.material = tpl.scene.getMaterialByName('selectedCylinderSurface');
-    } else {
-      mesh.material = tpl.scene.getMaterialByName('defaultCylinderSurface');
-    }
-  }
-
-  /*
-  let layers = tpl.scene.getMeshesByTags('layer');
-  for (var i = 0; i < layers.length; i++) {
-    setLayerSelection(tpl, layers[i]);
-  }
-
-  if (tpl.subcontext === 'soma') {
-    if(tpl.pcs_initialized){
-      loadPointCloudSelection(tpl, tpl.selectedKey)
-    }
-  }
-
-  if (tpl.subcontext === 'subcellular' ||
-    tpl.subcontext === 'spatial') {
-    loadDensity(tpl, tpl.selectedKey);
-  }
-
-  if(tpl.context == "matrixViewDev") {
-    setSelectedCubes(tpl, tpl.data.selectedCubes);
-  }*/
-}
-
-
-
-
-
 
 const styleBackground = {
   backgroundColor: "white",
@@ -736,9 +433,6 @@ class AnatomicalView extends CoordinatedView {
     super(props);
 
     this.myRef = React.createRef();
-    this.data_dimensions = props.data_sources;
-    console.log(this.props);
-    this.configuration = props.configuration;
     
     this.points = [] 
 
@@ -784,31 +478,25 @@ class AnatomicalView extends CoordinatedView {
     }
   }
 
-  onTubeSelected(tube) {
-
-    if(this.configuration.name == "soma-barrelcortex"){
-      this.notify(new SelectionEvent(this.name, this.table).setDeselect());
+  onTubeSelected(tube) {    
+    const pointIdx = tube.pointIdx;    
+    if (this.selectedSegments.indexOf(pointIdx) == -1) {
+      this.selectedSegments.push(pointIdx);            
     } else {
-      const pointIdx = tube.pointIdx;    
-      if (this.selectedSegments.indexOf(pointIdx) == -1) {
-        this.selectedSegments.push(pointIdx);            
-      } else {
-        this.selectedSegments = this.selectedSegments.filter(x => x != pointIdx);      
-      }    
-      this.updateProbes(); 
-      this.notify({
-        interactionType : "select",
-        selectedEntityType: "dendrite_segment",
-        data : {
-            data_type: "dendrite_segment",
-            segment_ids : deepCopy(this.selectedSegments)
-        }                
-      });
+      this.selectedSegments = this.selectedSegments.filter(x => x != pointIdx);      
     }    
+    this.updateProbes(); 
+    this.notify({
+      interactionType : "select",
+      selectedEntityType: "dendrite_segment",
+      data : {
+          data_type: "dendrite_segment",
+          segment_ids : deepCopy(this.selectedSegments)
+      }                
+    });        
   }
 
   updateProbes(){
-    // update probes
     for(let i = 0; i<this.tubeHandles.length; i++){
       const tube = this.tubeHandles[i];
       const probe = tube.getChildren()[0];
@@ -833,10 +521,7 @@ class AnatomicalView extends CoordinatedView {
       return;
     }
     
-    console.log(this.state)
     let voltagesPoints = this.state.voltage_timeseries_points.voltage_traces[timeStep];
-  
-
     for (let i = 0; i < this.tubeHandles.length; i++) {
       let tube = this.tubeHandles[i];
       let currentVoltage = voltagesPoints[tube.pointIdx];
@@ -863,21 +548,18 @@ class AnatomicalView extends CoordinatedView {
     this.canvas = canvas;
 
     let that = this;
-
-    that.swapYZ = this.configuration.name == "soma-barrelcortex" || "soma-barrelcortex-synapses";
-
-    if(this.configuration.name == "soma-barrelcortex" || this.configuration.name == "soma-barrelcortex-synapses"){
+        
+    const morphology = this.configuration.morphology;
+    if(morphology){
+      this.swapYZ = this.configuration.morphologySwapYZ;
       this.viewManager.dataManager.getResource((morphology) => {
         that.morphology = morphology.jsonData;
-        console.log(morphology);
-        initEngine(that);
-      }, "281900.json");
-    } else {    
-      this.viewManager.dataManager.getMorphology((morpholgy) => {
-        that.morphology = morpholgy;
-        initEngine(that);
-      }, "WR64");
-    } 
+        initEngine(that);        
+      }, morphology);  
+    } else {
+      this.morphology = undefined;
+      initEngine(that);
+    }
 
     super.componentDidMount();
   }

@@ -47,8 +47,6 @@ export class InteractionHandler {
                 }
             }
 
-            console.log(filterSatisfied);
-
             if(filterSatisfied){          
 
                 if(action.assignData !== undefined) {                    

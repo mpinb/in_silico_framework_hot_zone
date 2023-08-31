@@ -24,7 +24,7 @@ class ProjectControl extends React.Component {
   loadObjects = async () => {
     try {
       this.setState({ isLoading: true });
-      const response = await fetch(this.dataManager.getMatrixServerURL("")); // Replace with your server URL
+      const response = await fetch(this.dataManager.getDataServerURL("")); // Replace with your server URL
       const objects = await response.json();
       //console.log(objects);
       this.setState({ objects, isLoading: false });
@@ -36,7 +36,7 @@ class ProjectControl extends React.Component {
 
   deleteObject = async (objectName) => {
     try {
-      await fetch(this.dataManager.getMatrixServerURL("") + `${objectName}`, {
+      await fetch(this.dataManager.getDataServerURL("") + `${objectName}`, {
         method: 'DELETE',
       }); // Replace with your server URL
       this.setState((prevState) => ({
@@ -77,7 +77,7 @@ class ProjectControl extends React.Component {
     if (!newObjectName || !spec) return;
 
     try {
-      const response = await fetch(this.dataManager.getMatrixServerURL(""), {
+      const response = await fetch(this.dataManager.getDataServerURL(""), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

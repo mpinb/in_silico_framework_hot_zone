@@ -3,7 +3,6 @@ import { DataManager } from './dataManager';
 import { InteractionHandler } from './interactionHandler';
 import { deepCopy, areIdentical } from './utilCore';
 import { getDefaultGrammar } from '../grammarView';
-import { default_spec } from '../view_factory';
 
 function intersectArrays(array1, array2) {
     const set = {};
@@ -40,8 +39,7 @@ export class ViewManager {
 
         this.view_specifications = [];
         this.view_visibility = {};
-
-        this.mySpecialIndices = [];
+        this.selectionOnLayoutChange = [];
 
         this.OnProjectLoaded = new BABYLON.Observable();        
         this.OnLayoutChanged = new BABYLON.Observable();
@@ -54,13 +52,10 @@ export class ViewManager {
     }    
 
     setGrammar(grammar) {
-        // todo: check consistency
-
         this.grammar = deepCopy(grammar);
         this.grid = deepCopy(grammar.grid);
         this.layouts = deepCopy(grammar.layouts);
-        this.activeLayout = grammar.initialLayout;
-        //this.views = deepCopy(grammar.views);
+        this.activeLayout = grammar.initialLayout;        
         this.interactions = deepCopy(grammar.interactions);
     }
 
