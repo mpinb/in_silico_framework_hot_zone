@@ -127,6 +127,7 @@ python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_requirements.t
 # -------------------- 4. Patching dask library -------------------- #
 print_title "4. Patching dask library"
 python $SCRIPT_DIR/patch_dask_linux64.py
+echo "Dask library patched."
 
 # -------------------- 5. Patching pandas-msgpack -------------------- #
 print_title "5. Patching pandas-msgpack"
