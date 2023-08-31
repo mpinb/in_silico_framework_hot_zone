@@ -71,5 +71,6 @@
         }
     ],
     "cached_tables" : [],
+    "table_mapping" : {},
     "sampling_settings" : {}
 }

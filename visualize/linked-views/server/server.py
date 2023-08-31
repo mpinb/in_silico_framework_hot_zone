@@ -92,13 +92,13 @@ class LinkedViewsServer:
         if(config_file_path is not None):
             self.config_file_path = config_file_path
         else:
-            self.config_file_path = Path(os.path.dirname(__file__))/"defaults"/"config.json"
+            self.config_file_path = Path(os.path.dirname(__file__))/"defaults"/"config.json"        
 
-        print(self.config_file_path)
-
-        self.data_folder = data_folder
-        if(self.data_folder):
+        self.data_folder = None 
+        if(data_folder):
+            self.data_folder = Path(data_folder)
             self.resourceDir = self.data_folder/"resources"
+            self.config_file_path = self.data_folder/"config.json"
         else:
             self.resourceDir = None
         self.filenameProjects = None
@@ -108,6 +108,7 @@ class LinkedViewsServer:
         self.selections = {}
         self.active_selection = None
 
+        print(self.config_file_path)
         self.config = util.loadJson(self.config_file_path)
 
         if(self.data_folder):
@@ -194,7 +195,7 @@ class LinkedViewsServer:
         self.app.add_url_rule('/dataServer/<name>', 'delete_object', self.delete_object, methods=['DELETE'])
         self.app.add_url_rule('/dataServer/', 'add_object', self.add_object, methods=['POST'])
         self.app.add_url_rule('/dataServer/getMetaData', 'getMetaData', self.getMetaData, methods=["GET", "POST"])
-        self.app.add_url_rule('/dataServer/getResourceJSON', self.getResourceJSON, methods=["GET", "POST"])
+        self.app.add_url_rule('/dataServer/getResourceJSON', 'getResourceJSON', self.getResourceJSON, methods=["GET", "POST"])
         self.app.add_url_rule("/dataServer/getValues", "getValues", self.getValues, methods=["GET", "POST"])
         self.app.add_url_rule("/dataServer/getDensity", "getDensity", self.getDensity, methods=["POST"])
         self.app.add_url_rule("/dataServer/setDensityPlotSelection", "setDensityPlotSelection", self.setDensityPlotSelection, methods=["POST"])
@@ -288,6 +289,7 @@ class LinkedViewsServer:
                 response_data = {
                     "meta_data" : meta_data,
                     "available_views" : self.config["available_views"],
+                    "table_mapping" : self.config["table_mapping"],
                     "cached_tables" : self.config["cached_tables"]
                 }
                 return json.dumps(response_data)
@@ -302,6 +304,7 @@ class LinkedViewsServer:
 
                 resourceName = data["filename"]
                 filename = self.resourceDir/resourceName
+                print(filename)
 
                 if(not os.path.exists(filename)):
                     raise ValueError(filename)
@@ -406,7 +409,6 @@ class LinkedViewsServer:
                 minmax_x = df.minmax(binbycols[0])
                 minmax_y = df.minmax(binbycols[1])
                 data_ranges = [minmax_x.tolist(), minmax_y.tolist()]
-                print(data_ranges)
                 
                 if(format == "count"):
                     values = df.count(binby=binbycols, shape=density_grid_shape, selection=self.active_selection, limits=data_ranges).astype(float)
