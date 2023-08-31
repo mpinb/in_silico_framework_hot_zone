@@ -41,7 +41,7 @@ while [ -z $CONDA_INSTALL_PATH ]; do
 done
 
 # -------------------- 0. Setup -------------------- #
-print_title "0. Preliminary checks"
+print_title "0/5. Preliminary checks"
 # 0.0 -- Create downloads folder (if it does not exist)
 if [ ! -d "$SCRIPT_DIR/downloads" ]; then
     mkdir $SCRIPT_DIR/downloads;
@@ -88,7 +88,7 @@ if [[ "${download_conda_flag}" == "false" && "${download_conda_packages_flag}" =
 fi
 
 # -------------------- 1. Installing Anaconda -------------------- #
-print_title "1. Installing Anaconda"
+print_title "1/5. Installing Anaconda"
 # 1.0 -- Downloading Anaconda (if necessary).
 if [[ "${download_conda_flag}" == "true" ]]; then
     echo "Downloading ${anaconda_installer}"
@@ -102,7 +102,7 @@ source ${CONDA_INSTALL_PATH}/bin/activate
 conda info
 
 # -------------------- 2. Installing conda dependencies -------------------- #
-print_title "2. Installing conda dependencies "
+print_title "2/5. Installing conda dependencies "
 # 2.0 -- Downloading In-Silico-Framework conda dependencies (if necessary).
 if [ "${download_conda_packages_flag}" == "true" ]; then
     echo "Downloading In-Silico-Framework conda dependencies."
@@ -115,7 +115,7 @@ sed "s|https://.*/|$SCRIPT_DIR/downloads/conda_packages/|" $SCRIPT_DIR/conda_req
 conda update --file $SCRIPT_DIR/tempfile --quiet
 
 # -------------------- 3. Installing PyPI dependencies -------------------- #
-print_title "3. Installing PyPI dependencies"
+print_title "3/5. Installing PyPI dependencies"
 # 3.0 -- Downloading In-Silico-Framework pip dependencies (if necessary).
 if [ "${download_pip_packages_flag}" == "true" ]; then
     echo "Downloading In-Silico-Framework pip dependencies."
@@ -127,13 +127,13 @@ echo "Installing In-Silico-Framework pip dependencies."
 python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages
 
 # -------------------- 4. Patching pandas library -------------------- #
-echo "Patch pandas to support CategoricalIndex"
+print_title "4/5. Patch pandas to support CategoricalIndex"
 python $SCRIPT_DIR/patch_pandas_linux64.py
 
 # -------------------- 5. Compiling NEURON mechanisms -------------------- #
-print_title "6. Compiling NEURON mechanisms"
+print_title "5/5. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 cd $channels; nrnivmodl
 
-# -------------------- 6. Cleanup -------------------- #
+# -------------------- Cleanup -------------------- #
 rm $SCRIPT_DIR/tempfile
