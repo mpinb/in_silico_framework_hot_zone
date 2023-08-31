@@ -1,4 +1,4 @@
-def biophysics_fitting():
+def workspace_1():
     return {
         "data": {
             "viewSpec": [
@@ -70,7 +70,7 @@ def biophysics_fitting():
     }
 
 
-def biophysics_fitting_2():
+def workspace_2():
     return {
         "data": {
             "grammar": {

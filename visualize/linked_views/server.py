@@ -3,7 +3,7 @@ import logging
 from logging import handlers
 import tempfile
 import threading
-import util
+from . import util
 import glob
 import json
 import pandas as pd
