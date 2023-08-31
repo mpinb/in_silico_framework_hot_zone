@@ -106,6 +106,7 @@ class LinkedViewsServer:
         self.thread = None    
         self.vaex_df = None
         self.selections = {}
+        self.active_selection = None
 
         self.config = util.loadJson(self.config_file_path)
 
@@ -405,20 +406,21 @@ class LinkedViewsServer:
                 minmax_x = df.minmax(binbycols[0])
                 minmax_y = df.minmax(binbycols[1])
                 data_ranges = [minmax_x.tolist(), minmax_y.tolist()]
+                print(data_ranges)
                 
                 if(format == "count"):
-                    values = df.count(binby=binbycols, shape=density_grid_shape).astype(float)
+                    values = df.count(binby=binbycols, shape=density_grid_shape, selection=self.active_selection, limits=data_ranges).astype(float)
                     values[values == 0] = np.nan
                 elif(format == "min"):                    
-                    values = df.min(value_column, binby=binbycols, shape=density_grid_shape)
+                    values = df.min(value_column, binby=binbycols, shape=density_grid_shape, selection=self.active_selection, limits=data_ranges)
                     values[values > 10**100] = np.nan
                 elif(format == "max"):                    
-                    values = df.max(value_column, binby=binbycols, shape=density_grid_shape)
+                    values = df.max(value_column, binby=binbycols, shape=density_grid_shape, selection=self.active_selection, limits=data_ranges)
                     values[values < -10**100] = np.nan
                 elif(format == "mean"):                    
-                    values = df.mean(value_column, binby=binbycols, shape=density_grid_shape)
+                    values = df.mean(value_column, binby=binbycols, shape=density_grid_shape, selection=self.active_selection, limits=data_ranges)
                 elif(format == "median"):
-                    values = df.median_approx(value_column, binby=binbycols, shape=density_grid_shape)
+                    values = df.median_approx(value_column, binby=binbycols, shape=density_grid_shape, selection=self.active_selection, limits=data_ranges)
                 else:
                     raise ValueError(format)             
 
@@ -460,7 +462,7 @@ class LinkedViewsServer:
                 return json.dumps(response_data)
 
 
-    def computeSelection(self):
+    def computeSelection(self, return_indices=True):
         if("global" in self.selections):
             columns = self.selections["global"]["columns"] 
             col1 = columns[0]
@@ -472,11 +474,19 @@ class LinkedViewsServer:
             for idx, range_i in enumerate(ranges):    
                 limit_i = [(range_i[0][0], range_i[0][1]), (range_i[1][0], range_i[1][1])]        
                 self.vaex_df.select_rectangle(self.vaex_df[col1], self.vaex_df[col2], limit_i, name="selection_global", mode="or")
+            self.active_selection = "selection_global"
 
-            df_selected_indices = self.vaex_df.evaluate(self.vaex_df["row_index"], selection="selection_global")
-            return df_selected_indices
+            if(return_indices):
+                df_selected_indices = self.vaex_df.evaluate(self.vaex_df["row_index"], selection="selection_global")
+                return df_selected_indices
+            else:
+                return "selection_global"
         else:
+            self.active_selection = None
             return None            
+
+    def resetSelection(self):
+        self.active_selection = None
 
 
     def getSelections(self):
