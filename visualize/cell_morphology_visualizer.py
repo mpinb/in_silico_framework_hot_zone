@@ -1039,7 +1039,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
     It relies on Dash and Plotly to do so.
     """
     def __init__(self, cell, align_trunk=True):
-        super(CMVDataParser, self).__init__(cell, align_trunk=align_trunk)
+        super().__init__(cell, align_trunk=align_trunk)
     
     def _get_interactive_cell(self, background_color="rgb(180,180,180)"):
         ''' 
