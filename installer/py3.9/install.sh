@@ -153,3 +153,4 @@ cd $channels; nrnivmodl
 
 # -------------------- 7. Cleanup -------------------- #
 rm $SCRIPT_DIR/tempfile
+exit 0
