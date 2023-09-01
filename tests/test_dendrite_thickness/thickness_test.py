@@ -70,8 +70,9 @@ def test_am_write(tmpdir):
     #   Test 1
     am_object.write()
 
-@pytest.mark.xfail(reason="The expected behavior of the new crop method is unknown")
+@pytest.mark.xfail(reason="Is this the correct image file? Load it and check the coordinates. Is this a dendrite?")
 def test_correct_seed():
+    # TODO: crop this image file to be a lot smaller, just for testing.
     log.info("***********")
     log.info("TEST thicknesses._correct_seed() method:")
     log.info("***********")
@@ -84,14 +85,18 @@ def test_correct_seed():
     log.info("The _correct_seed function correct the point [2400, 2364] to  [2403, 2447]:")
     assert corrected_point == [2403, 2447]
 
-@pytest.mark.xfail(reason="The expected behavior of th new crop method is unknown")
 def test_crop_image():
     a = [[1, 2, 3, 4, 5], [2, 3, 4, 5, 6], [3, 4, 5, 6, 7]]
     a = np.array(a)
+    
+    # 0 pixels surrounding
     np.testing.assert_array_almost_equal(th._crop_image(a, (0, 0), 0), np.array([[1]]))
-    np.testing.assert_array_almost_equal(th._crop_image(a, (0, 0), 1), np.array([[0, 0, 0], [0, 1, 2], [0, 2, 3]]))
-    np.testing.assert_array_almost_equal(th._crop_image(a, (0, 4), 1), np.array([[0, 0, 0], [4, 5, 0], [5, 6, 0]]))
-    np.testing.assert_array_almost_equal(th._crop_image(a, [1, 2], 1, circle=True),
+    # 1 pixels surrounding, zero pad the rest
+    radius = 1
+    a_padded = th.pad_image(a, radius)
+    np.testing.assert_array_almost_equal(th._crop_image(a_padded, (0+radius, 0+radius), 1), np.array([[0, 0, 0], [0, 1, 2], [0, 2, 3]]))
+    np.testing.assert_array_almost_equal(th._crop_image(a_padded, (0+radius, 4+radius), 1), np.array([[0, 0, 0], [4, 5, 0], [5, 6, 0]]))
+    np.testing.assert_array_almost_equal(th._crop_image(a_padded, [1+radius, 2+radius], 1, circle=True),
                                          np.array([[0, 3, 0], [3, 4, 5], [0, 5, 0]]))
 
 
