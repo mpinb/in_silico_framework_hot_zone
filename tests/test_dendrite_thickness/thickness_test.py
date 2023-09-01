@@ -54,6 +54,7 @@ def test_am_read():
     log.info("The point read from the file is as the same as the one from the " \
           "Am.read() method: " + \
           str(utils.are_same_points(defined_point, point)))
+    assert utils.are_same_points(defined_point, point)
     log.info("-------")
 
     del am_object
@@ -65,7 +66,7 @@ def test_am_write(tmpdir):
     log.info("***********")
     am_object = IO.Am(AM_FILE)
     am_object.read()
-    am_object.output_path=os.path.join(str(tmpdir.dirname), 'test')
+    am_object.output_path=os.path.join(CURRENT_DIR, 'test_files', 'output', 'test_write')
 
     #   Test 1
     am_object.write()
