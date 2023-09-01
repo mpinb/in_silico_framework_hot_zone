@@ -352,6 +352,7 @@ class CMVDataParser:
             return  # We have already retrieved the voltage timeseries
 
         t1 = time.time()
+        # TODO: this is embarrasingly parallel: use dask client
         for time_point in self.times_to_show:  # For each frame of the video/animation
             voltage = self._get_voltages_at_timepoint(time_point)
             self.voltage_timeseries.append(voltage)
@@ -1085,7 +1086,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         return fig
 
     def _get_interactive_plot_with_scalar_data(self, scalar_data_keyword, vmin=None, vmax=None, color_map='jet',
-                                                background_color="rgb(180,180,180)", ip=None):
+                                                background_color="rgb(180,180,180)"):
         """This is the main function to set up an interactive plot with scalar data overlayed.
         It fetches the scalar data of interest (usually membrane voltage, but others are possible; check with self.possible_scalars).
         It only fetches data for the time points specified in self.times_to_show, as only these timepoints will be plotted out.
@@ -1122,7 +1123,6 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             scalar_data_per_time = {
                 t: self.scalar_data[scalar_data_keyword][t_idx] for t_idx, t in enumerate(self.times_to_show)
                 }
-        assert type(ip) == str, "Please provide the ip adress of the dash app host as a string. Should be the same ip where the dask client is running."
         if vmin is not None:
             self.vmin = vmin
         if vmax is not None:
@@ -1151,8 +1151,8 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         
         # display the FigureWidget and slider with center justification
         slider = dcc.Slider(
-            min=self.t_start, max=self.t_end, step=self.t_step, value=self.t_start, id="time-slider", updatemode='drag',
-            marks=None,
+            min=self.t_start, max=self.t_end, step=self.t_step, value=self.t_start,
+            id="time-slider", updatemode='drag', marks=None,
             tooltip={"placement": "bottom", "always_visible": True}
         )
         
@@ -1239,7 +1239,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         return fig_cell
 
     def display_interactive_morphology_3d(self, data=None, background_color="rgb(180,180,180)", highlight_section=None, renderer="notebook_connected",
-                                          t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map="jet", show=True, ip=None):
+                                          t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map="jet", show=True):
         """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
         The parameters :param:t_start, :param:t_end and :param:t_step will define the :param:self.time attribute
 
@@ -1265,11 +1265,11 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             return f.show() if show else f
         else:
             f = self._get_interactive_plot_with_scalar_data(data, vmin=vmin, vmax=vmax,
-                         color_map=color_map, background_color=background_color, ip=ip)
+                         color_map=color_map, background_color=background_color)
             return f
 
     def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet', background_color="rgb(180,180,180)", 
-                                                     renderer="notebook_connected", ip=None):
+                                                     renderer="notebook_connected"):
         ''' 
         Wrapper function around display_interactive_morphology_3d. Usefule to have explicit parameter "voltage" in method name.
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
@@ -1296,10 +1296,10 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             add dendritic and somatic AP as secondary subplot
         '''
         return self.display_interactive_morphology_3d(data="voltage", t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax, color_map=color_map, 
-                                                      background_color=background_color, renderer=renderer, ip=ip)
+                                                      background_color=background_color, renderer=renderer)
 
     def display_interactive_ion_dynamics_in_morphology_3d(self, ion_keyword="Ca_HVA.ica", t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet',
-                                                          background_color="rgb(180,180,180)", renderer="notebook_connected", ip=None):
+                                                          background_color="rgb(180,180,180)", renderer="notebook_connected"):
         ''' 
         Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with the following data overlayed:
 
@@ -1322,7 +1322,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             ipywidgets.VBox object: an interactive render of the cell.
         '''
         return self.display_interactive_morphology_3d(data=ion_keyword, t_start=t_start, t_end=t_end, t_step=t_step, vmin=vmin, vmax=vmax, color_map=color_map,
-                                                      background_color=background_color, renderer=renderer, ip=ip)
+                                                      background_color=background_color, renderer=renderer)
 
 
 @dask.delayed
