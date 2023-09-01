@@ -25,7 +25,9 @@ from . import transformation as tr
 from .utils import get_size_of_object
 from . import utils as u
 import itertools
-
+import logging
+log = logging.getLogger(__name__)
+log.propagate=True
 
 class ThicknessExtractor:
     def __init__(self, points, image_file=None, xy_resolution=0.092, z_resolution=0.5, ray_length_front_to_back_in_micron=20,
@@ -121,13 +123,13 @@ class ThicknessExtractor:
             data = self.get_all_data_by_point(point)
             all_data[idx] = data
             all_data[idx]["overlaps"] = []
-            print(str(idx) + " am_points from " + str(len(sorted_points)) + " from slice " + self.slice_name + " are completed.")
+            log.info(str(idx) + " am_points from " + str(len(sorted_points)) + " from slice " + self.slice_name + " are completed.")
             sys.stdout.write("\033[F")
 
         import six
         all_data = {sort_indices[k]: v for k, v in six.iteritems(all_data)}
         self.all_data = all_data
-        print("size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.)))
+        log.info("size of object in MB all_data: " + str(get_size_of_object(all_data) / (1024. * 1024.)))
 
         # if self._3D is False:
             # self.all_overlaps = self.update_all_data_with_overlaps()
@@ -308,6 +310,17 @@ class ThicknessExtractor:
         return ray_points_indices
 
     def _correct_seed(self, point):
+        """
+        Given an input point of format [x, y, intensity_value], this method corrects the point by 
+        finding the nearest point with the highest intensity value. How "near" is defined by the
+        self._max_seed_correction_radius_in_image_coordinates_in_pixel parameter.
+
+        Args:
+            point (array): The image coordinates of the point to be corrected. Format: [x, y, intensity_value]
+
+        Returns:
+            corrected_point: The corrected point. Format: [new_x, new_y, original_intensity_value]
+        """
         # point = [int(point[0]), int(point[1]), point[2]]
         radius = self._max_seed_correction_radius_in_image_coordinates_in_pixel
         point_in_padded_image = point[0] + radius, point[1] + radius
@@ -320,7 +333,7 @@ class ThicknessExtractor:
         intensity_value = self.image.GetPixel([int(point[0]), int(point[1])])
         intensity_value2 = self.image.GetPixel([int(corrected_point[0]), int(corrected_point[1])])
         assert(intensity_value2 >= intensity_value)
-        print('original_point: {} / {} corrected_point: {} / {}'.format(point, intensity_value,
+        log.info('original_point: {} / {} corrected_point: {} / {}'.format(point, intensity_value,
                                                                         corrected_point, intensity_value2))
         return corrected_point
 
@@ -360,7 +373,7 @@ class ThicknessExtractor:
         self.current_z_coordinate = z_coordinate_key
 
     def _set_image(self, input_path):
-        print('setting image path to {}'.format(input_path))
+        log.info('setting image path to {}'.format(input_path))
         self.image = _read_image(input_path)
         self.padded_image = _pad_image(self.image, self._max_seed_correction_radius_in_image_coordinates_in_pixel)
 
@@ -388,7 +401,7 @@ def _check_overlap(contour1, contour2):
 
 
 def _slope(p1, p2):
-    print(p1)
+    log.info(p1)
     if p1[0] - p2[0] == 0:
         return np.inf
     return (p1[1] - p2[1]) / (p1[0] - p2[0])
@@ -457,8 +470,8 @@ def _crop_image(image_array, center, radius, circle=False):
         np.array: 2D array of the cropped image  # TODO 2 by N or 3 by N?
     """
     c1, c2 = int(center[0]), int(center[1])
-    assert (c1 - radius >= 0)
-    assert (c2 - radius >= 0)
+    # assert (c1 - radius >= 0)
+    # assert (c2 - radius >= 0)
 
     return_ = image_array[c1 - radius:c1 + radius + 1, c2 - radius:c2 + radius + 1]
     # return_ = b_pad[c1:c1 + 2 * radius + 1, c2:c2 + 2 * radius + 1]
