@@ -45,8 +45,8 @@ help() {
       Format: "d-hh:mm:ss"
       default: $time
 
-    -c
-      Request a CPU partition.
+    -g
+      Request a GPU partition.
 
     -i
       Launch an interactive job.
@@ -70,8 +70,8 @@ help() {
     -r <val>
       Set value for gres.
       Default:
-        $gres for CPU jobs and non-interactive GPU jobs
-        4 for interactive GPU jobs
+        2 for GPU jobs
+        4 for GPU-a100 jobs
 
     -b <val>
       Run a notebook
@@ -224,7 +224,7 @@ if [[ ${partition:0:3} == CPU ]]; then
     cores=24
   fi
 #### 2.2: GPU partitions (GPU or GPU-interactive)
-elif [[ $partition == "GPU" ]]; then  
+elif [[ ${partition:0:3} == "GPU" && $partition -ne "GPU-a100" ]]; then  
   if [ $gres == "0" ]; then  # gres is unspecified
     gres="2"  # by default, set to half of max gres for GPU partitions
   fi
@@ -234,7 +234,7 @@ elif [[ $partition == "GPU" ]]; then
   if [ $cores == "0" ]; then  # amount of cores is unspecified for the user
     cores=24
   fi
-else  # GPU-a100
+else  #### 2.3 GPU-a100
   if [ $cores == "0" ]; then  # amount of cores is unspecified for the user
     cores=32
   fi
