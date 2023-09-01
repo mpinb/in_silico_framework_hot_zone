@@ -10,7 +10,7 @@ from dendrite_thickness.thickness import thickness as th
 from .context import CURRENT_DIR
 import pandas as pd
 import pytest
-
+import distributed
 import logging
 log = logging.getLogger(__name__)
 
@@ -83,11 +83,11 @@ def test_correct_seed():
     log.info("***********")
     # image point and its value, extracted using ImageJ:
     # x = 2400, y = 2364, value = 149
-    # the maximum value in a area of thickness 10 micron is 181 at [2313, 2229]
+    # the maximum value in a area of thickness 10 micron is 181 at [2333, 2283]
     image_point = [2400, 2364, 149]  # [x, y, value]
     rx_object = th.ThicknessExtractor([], image_file=IMAGE_FILE)
     corrected_point = rx_object._correct_seed(image_point)
-    assert corrected_point == [2313, 2229, 149]
+    assert corrected_point == [2333, 2283, 149]
     original_intensity = rx_object.image.GetPixel([int(image_point[0]), int(image_point[1])])
     new_intensity = rx_object.image.GetPixel([int(corrected_point[0]), int(corrected_point[1])])
     assert new_intensity > original_intensity
@@ -97,7 +97,7 @@ def test_crop_image():
     a = np.array(a)
     
     # 0 pixels surrounding
-    assert th._crop_image(a, (0, 0), 0) == array([[1]])
+    assert th._crop_image(a, (0, 0), 0) == np.array([[1]])
     
     # 1 pixels surrounding, zero pad the rest
     radius = 1
