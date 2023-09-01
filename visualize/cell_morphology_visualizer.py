@@ -7,10 +7,12 @@ import numpy as np
 import os
 import dask
 import time
+from single_cell_parser import serialize_cell
 from .utils import write_video_from_images, write_gif_from_images, display_animation_from_images, draw_arrow, POPULATION_TO_COLOR_DICT
 import warnings
 from barrel_cortex import inhibitory
 import six
+import distributed
 import socket
 if six.PY3:
     from scipy.spatial.transform import Rotation
@@ -29,17 +31,18 @@ else:
     warnings.warn("Scipy version is too old to import spatial.transform.Rotation. Cell alignment will not work.")
     warnings.warn("Interactive visualizations only work on Py3. Dash and plotly are not compatible with the Py2 version of ISF.")
 
-    
-
+@dask.delayed 
 class CMVDataParser:
-    def __init__(self, cell, align_trunk=True):
+    def __init__(self, cell, align_trunk=True, client=None):
         """
         Given a Cell object, this class initializes an object that is easier to work with for visualization purposes
         """
         # ---------------------------------------------------------------
         # Cell object
-        self.cell = cell
+        self.cell = serialize_cell.cell_to_serializable_object(cell)
         """The Cell object"""
+        self.client = client
+        """Distributed client for parallelization"""
 
         # ---------------------------------------------------------------
         # Morphology attributes
@@ -48,16 +51,18 @@ class CMVDataParser:
 
         self.line_pairs = []  # initialised below
         """Pairs of point indices that define a line, i.e. some cell segment"""
-        soma = [section for section in self.cell.sections if section.label == "Soma"][0]
+        soma = [section for section in cell.sections if section.label == "Soma"][0]
+        self.soma = self.cell["sections"][0]
         self.soma_center = np.mean(soma.pts, axis=0)
 
-        self.morphology = self._get_morphology()  # a pandas DataFrame
+        self.morphology = self._get_morphology(cell)  # a pandas DataFrame
+        self.n_sections = max(self.morphology['section'])
         
         """A pd.DataFrame containing point information, diameter and section ID"""
         self.rotation_with_zaxis = None
         """Rotation object that defines the transformation between the cell trunk and the z-axis"""
         if align_trunk:
-            self._align_trunk_with_z_axis()
+            self._align_trunk_with_z_axis(cell)
         self.points = self.morphology[["x", "y", "z"]]
         """The 3D point coordinates of the cell"""
         self.diameters = self.morphology["diameter"]
@@ -126,7 +131,7 @@ class CMVDataParser:
             self._init_simulation_data()
     
     def _has_simulation_data(self):
-        return len(self.cell.soma.recVList[0]) > 0
+        return len(self.soma["recVList"][0]) > 0
 
     def _init_simulation_data(self):
         # Max and min voltages colorcoded in the cell morphology
@@ -135,7 +140,7 @@ class CMVDataParser:
 
         """Time"""
         # Time points of the simulation
-        self.simulation_times = np.array(self.cell.tVec)
+        self.simulation_times = np.array(self.cell['tVec'])
         # Time offset w.r.t. simulation start. useful if '0 ms' is supposed to refer to stimulus time
         self.time_offset = 0
         # Time points we want to visualize (values by default)
@@ -164,7 +169,7 @@ class CMVDataParser:
         self.time_show_syn_activ = 2  # ms
         self.scalar_data = {"voltage": self.voltage_timeseries}
 
-    def _align_trunk_with_z_axis(self):
+    def _align_trunk_with_z_axis(self, cell):
         """
         Calculates the polar angle between the trunk and z-axis (zenith).
         Anchors the soma to (0, 0, 0) and aligns the trunk to the z-axis.
@@ -178,7 +183,7 @@ class CMVDataParser:
         assert len(self.morphology) > 0, "No morphology initialised yet"
         # the bifurcation sections is the entire section: can be quite large
         # take last point, i.e. furthest from soma
-        bifurcation = get_main_bifurcation_section(self.cell).pts[-1]
+        bifurcation = get_main_bifurcation_section(cell).pts[-1]
         soma_bif_vector = bifurcation - self.soma_center
         soma_bif_vector /= np.linalg.norm(soma_bif_vector)
         # angle with z-axis
@@ -200,7 +205,7 @@ class CMVDataParser:
         )
         self.rotation_with_zaxis = rotation
 
-    def _get_morphology(self):
+    def _get_morphology(self, cell):
         '''
         Retrieve cell MORPHOLOGY from cell object.
         Fills the self.morphology attribute
@@ -208,33 +213,37 @@ class CMVDataParser:
         t1 = time.time()
 
         points = []
-        for sec_n, sec in enumerate(self.cell.sections):
+        for sec_n, sec in enumerate(cell.sections):
             if sec.label == 'Soma':
                 # TODO: if soma is added, somatic voltage should lso be added
                 x, y, z = self.soma_center
                 # # soma size
-                mn, mx = np.min(self.cell.soma.pts, axis=0), np.max(self.cell.soma.pts, axis=0)
+                mn, mx = np.min(cell.soma.pts, axis=0), np.max(cell.soma.pts, axis=0)
                 d_range = [mx_ - mn_ for mx_, mn_ in zip(mx, mn)]
                 d = max(d_range)
-                points.append([x, y, z, d, 0])
+                points.append([x, y, z, d, 0, 0])
                 continue
             elif sec.label in ['AIS', 'Myelin']:
                 continue
             else:
                 # Point that belongs to the previous section (x, y, z and diameter)
                 x, y, z = sec.parent.pts[-1]
+                x_in_sec = [seg.x for seg in sec.parent][-1]
                 d = sec.parent.diamList[-1]
-                points.append([x, y, z, d, sec_n])
+                points.append([x, y, z, d, 0])
 
+                xs_in_sec = [seg.x for seg in sec]
+                n_segments = len(xs_in_sec)
                 for i, pt in enumerate(sec.pts):
+                    seg_n = i % len(sec.pts)//n_segments
                     # Points within the same section
                     x, y, z = pt
                     d = sec.diamList[i]
                     rp = sec.relPts[i]
-                    points.append([x, y, z, d, rp, sec_n])
+                    points.append([x, y, z, d, rp, sec_n, seg_n])
 
         morphology = pd.DataFrame(
-            points, columns=['x', 'y', 'z', 'diameter', 'relPts', 'section'])
+            points, columns=['x', 'y', 'z', 'diameter', 'relPts', 'section', 'seg_n'])
         t2 = time.time()
         print('Initialised simulation data in {} seconds'.format(np.around(t2-t1, 2)))
         return morphology
@@ -249,33 +258,38 @@ class CMVDataParser:
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
         voltage_points = []
-        for sec in self.cell.sections:
-            if sec.label in ['AIS', 'Myelin']:
+        for sec_n, sec in enumerate(self.cell["sections"]):
+            sec_morphology = self.morphology[self.morphology["section"] == sec_n]
+            if sec["label"] in ['AIS', 'Myelin']:
                 continue
 
             # Add voltage at the last point of the previous section
-            if sec.label.lower() != "soma":
-                voltage_points.append(sec.parent.recVList[-1][n_sim_point])
+            if sec["label"].lower() != "soma":
+                parent = self.cell["sections"][sec_n-1]
+                voltage_points.append(parent['recVList'][-1][n_sim_point])
 
             # Compute segments limits (voltage is measure at the middle of each segment, not section)
             segs_limits = [0]
-            for j, seg in enumerate(sec):
-                segs_limits.append(segs_limits[j]+(seg.x-segs_limits[j])*2)
+            n_segments = len(sec_morphology)
+            for j, seg_n in enumerate(sec_morphology['seg_n']):
+                x = seg_n / n_segments
+                segs_limits.append(segs_limits[j]+(x-segs_limits[j])*2)
 
             # Map the segments to section points to assign a voltage to each line connecting 2 points
             current_seg = 0
             next_seg_flag = False
-            for i in range(len(sec.pts)):
+            rel_points = sec_morphology['relPts'].values
+            for i in range(len(sec_morphology)):
                 if i != 0:
                     if next_seg_flag:
                         current_seg += 1
                         next_seg_flag = False
-                    if sec.relPts[i-1] < segs_limits[current_seg+1] < sec.relPts[i]:
-                        if sec.relPts[i] - segs_limits[current_seg+1] > segs_limits[current_seg+1] - sec.relPts[i-1]:
+                    if rel_points[i-1] < segs_limits[current_seg+1] < rel_points[i]:
+                        if rel_points[i] - segs_limits[current_seg+1] > segs_limits[current_seg+1] - rel_points[i-1]:
                             current_seg += 1
                         else:
                             next_seg_flag = True
-                voltage_points.append(sec.recVList[current_seg][n_sim_point])
+                voltage_points.append(sec['recVList'][current_seg][n_sim_point])
         return voltage_points
 
     def _get_ion_dynamic_at_timepoint(self, time_point, ion_keyword):
@@ -287,7 +301,7 @@ class CMVDataParser:
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
         ion_points = []
-        for sec in self.cell.sections:
+        for sec in self.cell['sections']:
             if sec.label in ['Soma', 'AIS', 'Myelin']:
                 continue
 
@@ -331,7 +345,7 @@ class CMVDataParser:
          - time_point: time point from which we want to gather the voltage
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
-        sec = [sec for sec in self.cell.sections if sec.label == "Soma"][0]
+        sec = [sec for sec in self.cell['sections'] if sec.label == "Soma"][0]
         return sec.recVList[0][n_sim_point]
 
     def _get_soma_voltage_between_timepoints(self, t_start, t_end, t_step):
@@ -353,10 +367,13 @@ class CMVDataParser:
             return  # We have already retrieved the voltage timeseries
 
         t1 = time.time()
-        # TODO: this is embarrasingly parallel: use dask client
-        for time_point in self.times_to_show:  # For each frame of the video/animation
-            voltage = self._get_voltages_at_timepoint(time_point)
-            self.voltage_timeseries.append(voltage)
+        if self.client is not None:
+            delayeds = [dask.delayed(self._get_voltages_at_timepoint)(time_point) for time_point in self.times_to_show]
+            self.voltage_timeseries = self.client.compute(*delayeds)
+        else:
+            for time_point in self.times_to_show:  # For each frame of the video/animation
+                voltage = self._get_voltages_at_timepoint(time_point)
+                self.voltage_timeseries.append(voltage)
         self.scalar_data["voltage"] = self.voltage_timeseries
         t2 = time.time()
         print('Voltage retrieval runtime (s): ' + str(np.around(t2-t1, 2)))
@@ -376,10 +393,16 @@ class CMVDataParser:
             self.scalar_data[ion_keyword] = []
 
         t1 = time.time()
-        for time_point in self.times_to_show:  # For each frame of the video/animation
-            ion_dynamics = self._get_ion_dynamic_at_timepoint(
-                time_point, ion_keyword)
-            self.scalar_data[ion_keyword].append(ion_dynamics)
+        if self.client is not None:
+            delayeds = [dask.delayed(self._get_ion_dynamic_at_timepoint)(time_point, ion_keyword) for time_point in self.times_to_show]
+            results = self.client.compute(*delayeds)
+            print(results)
+            self.scalar_data[ion_keyword] = results
+        else:
+            for time_point in self.times_to_show:  # For each frame of the video/animation
+                ion_dynamics = self._get_ion_dynamic_at_timepoint(
+                    time_point, ion_keyword)
+                self.scalar_data[ion_keyword].append(ion_dynamics)
         t2 = time.time()
         print('Ion dynamics retrieval runtime (s): ' + str(np.around(t2-t1, 2)))
 
@@ -502,11 +525,14 @@ class CellMorphologyVisualizer(CMVDataParser):
     No explicit VTK dependency is needed for this; it simply writes it out as a .txt file.
     """
 
-    def __init__(self, cell, align_trunk=True):
+    def __init__(self, cell, align_trunk=True, client=None):
         """
         Given a Cell object, this class initializes an object that is easier to work with
         """
-        super().__init__(cell, align_trunk)  # class that holds simulation data
+        if client is None:
+            super().__init__(cell, align_trunk, client=None)  # class that holds simulation data
+        else:
+            super().__init__(cell, align_trunk, client=client)
         # ---------------------------------------------------------------
         # Visualization attributes
         self.camera = self.azim, self.dist, self.elev, self.roll = 0, 10, 30, 0
@@ -704,7 +730,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             lines_str = ""
             n_lines = 0
             n_comps = 0
-            for sec_n in range(len(self.cell.sections)):
+            for sec_n in range(len(self.cell['sections'])):
                 points_this_sec = self.morphology[self.morphology['section'] == sec_n].index.values
                 if len(points_this_sec) > 0:
                     n_lines += 1
@@ -1040,12 +1066,12 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
     It contains useful methods for interactively visualizing a cell morphology, the voltage along its body, or ion channel dynamics.
     It relies on Dash and Plotly to do so.
     """
-    def __init__(self, cell, align_trunk=True, ip=None):
-        super().__init__(cell, align_trunk=align_trunk)
-        if ip is None:
+    def __init__(self, cell, align_trunk=True, dash_ip=None, client=None):
+        super().__init__(cell, align_trunk=align_trunk, client=client)
+        if dash_ip is None:
             hostname = socket.gethostname()
-            ip = socket.gethostbyname(hostname)
-        self.ip = ip
+            dash_ip = socket.gethostbyname(hostname)
+        self.dash_ip = dash_ip
         """IP address to run dash server on."""
     
     def _get_interactive_cell(self, background_color="rgb(180,180,180)"):
@@ -1215,7 +1241,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             return fig_cell, fig_trace
                 
 
-        return app.run_server(debug=True, use_reloader=False, port=5050, host=self.ip)
+        return app.run_server(debug=True, use_reloader=False, port=5050, host=self.dash_ip)
 
     def _display_interactive_morphology_only_3d(self, background_color="rgb(180,180,180)", highlight_section=None):
         ''' 
