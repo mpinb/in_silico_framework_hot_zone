@@ -35,7 +35,7 @@ def pytest_configure(config):
     distributed.client_object_duck_typed = client
     # only log warnings
     logging.getLogger().setLevel(logging.WARNING)  # set logging level of root logger to WARNING
-    
+    logging.getLogger('biophysics_fitting').active = False  # disable logging of biophysics_fitting module
 
         
 
