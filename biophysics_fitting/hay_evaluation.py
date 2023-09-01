@@ -41,13 +41,14 @@ def setup_hay_evaluator(testing = False):
     h = neuron.h
     
     
-    warnings.warn("Setting up hay evaluator. This loads several variables " + 
-                  "to the NEURON envioronment. Also, it creates a unconnected " + 
-                  "cell (which is very small ~ 1 compartment) which has the purpose " + 
-                  "to 'just be there' such that the functionality necessary to evaluate " + 
-                  "voltage traces is available. This has the side effect that in the " + 
-                  "case of the variable time step solver, the timesteps can be changed."
-                  )
+    log.warning(
+        "Setting up hay evaluator. This loads several variables " + 
+        "to the NEURON envioronment. Also, it creates a unconnected " + 
+        "cell (which is very small ~ 1 compartment) which has the purpose " + 
+        "to 'just be there' such that the functionality necessary to evaluate " + 
+        "voltage traces is available. This has the side effect that in the " + 
+        "case of the variable time step solver, the timesteps can be changed."
+        )
     
     central_file_name = 'fit_config_89_CDK20050712_BAC_step_arco_run1.hoc'
 
