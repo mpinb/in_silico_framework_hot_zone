@@ -11,6 +11,7 @@ from .utils import write_video_from_images, write_gif_from_images, display_anima
 import warnings
 from barrel_cortex import inhibitory
 import six
+import socket
 if six.PY3:
     from scipy.spatial.transform import Rotation
     from dash import Dash, dcc, html, Input, Output, State
@@ -1039,8 +1040,13 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
     It contains useful methods for interactively visualizing a cell morphology, the voltage along its body, or ion channel dynamics.
     It relies on Dash and Plotly to do so.
     """
-    def __init__(self, cell, align_trunk=True):
+    def __init__(self, cell, align_trunk=True, ip=None):
         super().__init__(cell, align_trunk=align_trunk)
+        if ip is None:
+            hostname = socket.gethostname()
+            ip = socket.gethostbyname(hostname)
+        self.ip = ip
+        """IP address to run dash server on."""
     
     def _get_interactive_cell(self, background_color="rgb(180,180,180)"):
         ''' 
@@ -1209,7 +1215,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             return fig_cell, fig_trace
                 
 
-        return app.run_server(debug=True, use_reloader=False, port=5050, host=ip)
+        return app.run_server(debug=True, use_reloader=False, port=5050, host=self.ip)
 
     def _display_interactive_morphology_only_3d(self, background_color="rgb(180,180,180)", highlight_section=None):
         ''' 
