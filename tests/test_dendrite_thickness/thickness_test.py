@@ -15,7 +15,7 @@ import logging
 log = logging.getLogger(__name__)
 
 AM_FILE = os.path.join(CURRENT_DIR, 'test_files', 'am_files', 'S13_final_done_Alison_zScale_40.am')
-IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'S13_max_z_projection_64x54.tif')
+IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'S13_max_z_projection_64x54px.tif')
 
 
 def test_am_read():
