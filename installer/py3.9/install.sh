@@ -105,7 +105,7 @@ conda info
 # -------------------- 2. Installing conda dependencies -------------------- #
 print_title "2/6. Installing conda dependencies "
 # 2.0 -- Downloading In-Silico-Framework conda dependencies (if necessary).
-if [[ "${download_conda_packages_flag}" == "true" ]]; then
+if [ "${download_conda_packages_flag}" == "true" ]; then
     echo "Downloading In-Silico-Framework conda dependencies."
     # Get all lines starting with http (not #http), return empty string if there are none
     package_list=$(cat $SCRIPT_DIR/conda_requirements.txt | grep '^http' || echo "")
@@ -115,6 +115,7 @@ if [[ "${download_conda_packages_flag}" == "true" ]]; then
         echo "Downloading In-Silico-Framework conda dependencies."
         echo $package_list | xargs -t -n 1 -P 8 wget -N -q -P $SCRIPT_DIR/downloads/conda_packages
         echo "Download conda packages completed."
+    fi
 fi
 # 2.1 -- Installing In-Silico-Framework conda dependencies.
 echo "Installing In-Silico-Framework conda dependencies."
