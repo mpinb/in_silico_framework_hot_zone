@@ -11,6 +11,7 @@ set -e  # exit if error occurs
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda3-2022.10-Linux-x86_64.sh
 channels=$SCRIPT_DIR/../../mechanisms/channels_py3
+netcon=$SCRIPT_DIR/../../mechanisms/netcon_py3
 
 function print_title {
     local str=$1
@@ -104,7 +105,7 @@ conda info
 # -------------------- 2. Installing conda dependencies -------------------- #
 print_title "2/6. Installing conda dependencies "
 # 2.0 -- Downloading In-Silico-Framework conda dependencies (if necessary).
-if [ "${download_conda_packages_flag}" == "true" ]; then
+if [[ "${download_conda_packages_flag}" == "true" ]]; then
     echo "Downloading In-Silico-Framework conda dependencies."
     # Get all lines starting with http (not #http), return empty string if there are none
     package_list=$(cat $SCRIPT_DIR/conda_requirements.txt | grep '^http' || echo "")
@@ -150,6 +151,7 @@ pip list | grep pandas
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 cd $channels; nrnivmodl
+cd $netcon; nrnivmodl
 
 # -------------------- 7. Cleanup -------------------- #
 rm $SCRIPT_DIR/tempfile

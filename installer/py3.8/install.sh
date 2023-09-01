@@ -11,6 +11,7 @@ set -e  # exit if error occurs
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda3-2020.11-Linux-x86_64.sh
 channels=$SCRIPT_DIR/../../mechanisms/channels_py3
+netcon=$SCRIPT_DIR/../../mechanisms/netcon_py3
 
 function print_title {
     local str=$1
@@ -152,6 +153,7 @@ pip list | grep pandas
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 cd $channels; nrnivmodl
+cd $netcon; nrnivmodl
 
 # -------------------- 7. Cleanup -------------------- #
 rm $SCRIPT_DIR/tempfile
