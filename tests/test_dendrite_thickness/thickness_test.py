@@ -2,9 +2,7 @@
 This file is used for testing IO.py.
 """
 import os
-
 import numpy as np
-
 from dendrite_thickness.thickness import IO, pipeline, utils
 from dendrite_thickness.thickness import thickness as th
 from .context import CURRENT_DIR
