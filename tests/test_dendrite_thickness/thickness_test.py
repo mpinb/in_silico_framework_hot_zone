@@ -87,7 +87,7 @@ def test_correct_seed():
 
 def test_crop_image():
     a = [[1, 2, 3, 4, 5], [2, 3, 4, 5, 6], [3, 4, 5, 6, 7]]
-    a = np.array(a)
+    # a = np.array(a)
     
     # 0 pixels surrounding
     np.testing.assert_array_almost_equal(th._crop_image(a, (0, 0), 0), np.array([[1]]))
