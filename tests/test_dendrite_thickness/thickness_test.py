@@ -14,8 +14,8 @@ import pytest
 import logging
 log = logging.getLogger(__name__)
 
-AM_FILE = os.path.join(CURRENT_DIR, 'test_files', 'am_files', 'S13_final_done_Alison_zScale_40.am')
-IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'S13_max_z_projection.tif')
+AM_FILE = os.path.join(CURRENT_DIR, 'test_files', 'am_files', 'rest', 'S13_final_done_Alison_zScale_40.am')
+IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'rest', 'S13_max_z_projection.tif')
 
 
 def test_am_read():
@@ -136,9 +136,5 @@ def test_pipeline():
 
     # p.set_thickness_extractor_parameters()
     p.set_am_to_hoc_transformation_by_landmarkAscii(bijective_points_path)
-
-    # p.set_client_for_parallelization("localhost", 8780)
-
+    p.set_client_for_parallelization(distributed.client_object_duck_typed)
     df = p.run()
-    # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-    #     log.info(df)
