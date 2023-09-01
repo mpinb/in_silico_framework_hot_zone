@@ -24,7 +24,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       # Install Anaconda3 and update conda package manager
-      - name: Install Anaconda3
+      - name: Download, install & build ISF for Python 3.8
         run: |
           CONDA_TARGET_DIR="$(pwd)/anaconda_isf3"
           if [ -d "$CONDA_TARGET_DIR" ]; then
