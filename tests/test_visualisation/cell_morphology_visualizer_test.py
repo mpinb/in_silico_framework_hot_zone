@@ -8,8 +8,9 @@ import distributed
 
 class TestCellMorphologyVisualizer:
     def setup_class(self):
+        self.client = distributed.client_object_duck_typed
         self.cell = setup_current_injection_experiment()
-        self.cmv = CellMorphologyVisualizer(self.cell, align_trunk=six.PY3)  # don't align trunk in py2, ithas no scipy Rotation object
+        self.cmv = CellMorphologyVisualizer(self.cell, align_trunk=six.PY3, client=self.client)  # don't align trunk in py2, ithas no scipy Rotation object
         self.t_start, self.t_end, self.t_step = self.cmv.t_start, self.cmv.t_end, (self.cmv.t_end-self.cmv.t_start)//2  # a two-frame gif
     
     @pytest.mark.skipif(six.PY2, reason="The cell_morphology_visualizer methods are not available on Py2")
@@ -60,8 +61,9 @@ class TestCellMorphologyVisualizer:
 
 class TestCellMorphologyInteractiveVisualizer:
     def setup_class(self):
+        self.client = distributed.client_object_duck_typed
         self.cell = setup_current_injection_experiment(rangevars=['NaTa_t.ina'])
-        self.cmiv = CellMorphologyInteractiveVisualizer(cell=self.cell, align_trunk=six.PY3)
+        self.cmiv = CellMorphologyInteractiveVisualizer(cell=self.cell, align_trunk=six.PY3, client=self.client)
         self.t_start, self.t_end, self.t_step = 0, 1, 1  # a two-frame test
     
     @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
