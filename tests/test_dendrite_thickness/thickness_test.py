@@ -14,8 +14,8 @@ import pytest
 import logging
 log = logging.getLogger(__name__)
 
-AM_FILE = os.path.join(CURRENT_DIR, 'test_files', 'S13_final_done_Alison_zScale_40.am')
-IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'S13_max_z_projection.tif')
+AM_FILE = os.path.join(CURRENT_DIR, 'test_files', 'am_files', 'S13_final_done_Alison_zScale_40.am')
+IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'S13_max_z_projection.tif')
 
 
 def test_am_read():
@@ -100,11 +100,11 @@ def test_crop_image():
 
 
 def test_pipeline():
-    am_folder_path = os.path.join(CURRENT_DIR, 'test_files/am_files')
-    tif_folder_path = os.path.join(CURRENT_DIR, 'test_files/image_files')
-    hoc_file_path = os.path.join(CURRENT_DIR, 'test_files/WR58_Cell5_L5TT_Final.hoc')
-    output_folder_path = os.path.join(CURRENT_DIR, 'test_files/output')
-    bijective_points_path = os.path.join(CURRENT_DIR, 'test_files/manual_landmarks.landmarkAscii')
+    am_folder_path = os.path.join(CURRENT_DIR, 'test_files', 'am_files')
+    tif_folder_path = os.path.join(CURRENT_DIR, 'test_files', 'image_files')
+    hoc_file_path = os.path.join(CURRENT_DIR, 'test_files', 'WR58_Cell5_L5TT_Final.hoc')
+    output_folder_path = os.path.join(CURRENT_DIR, 'test_files', 'output')
+    bijective_points_path = os.path.join(CURRENT_DIR, 'test_files', 'manual_landmarks.landmarkAscii')
 
     p = pipeline.ExtractThicknessPipeline()
 
