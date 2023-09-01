@@ -15,7 +15,7 @@ import logging
 log = logging.getLogger(__name__)
 
 AM_FILE = os.path.join(CURRENT_DIR, 'test_files', 'am_files', 'S13_final_done_Alison_zScale_40.am')
-IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'S13_max_z_projection_64x54px.tif')
+IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'S13_max_z_projection.tif')
 
 
 def test_am_read():
@@ -73,16 +73,24 @@ def test_am_write(tmpdir):
 
 
 def test_correct_seed():
+    """
+    Find the nearest brightest point.
+    Input is [x, y, original_intensity]
+    Output is [new_x, new_y, original_intensity] (for some reason)
+    """
     log.info("***********")
     log.info("TEST thicknesses._correct_seed() method:")
     log.info("***********")
     # image point and its value, extracted using ImageJ:
-    # x = 2400, y = 2364, value = 150
-    # the maximum value in a area of thickness 10 micron is 181 at [2403, 2447]
-    image_point = [30, 33, 114]  # [x, y, value]
+    # x = 2400, y = 2364, value = 149
+    # the maximum value in a area of thickness 10 micron is 181 at [2313, 2229]
+    image_point = [2400, 2364, 149]  # [x, y, value]
     rx_object = th.ThicknessExtractor([], image_file=IMAGE_FILE)
     corrected_point = rx_object._correct_seed(image_point)
-    assert corrected_point == [0, 10, 114]
+    assert corrected_point == [2313, 2229, 149]
+    original_intensity = rx_object.image.GetPixel([int(image_point[0]), int(image_point[1])])
+    new_intensity = rx_object.image.GetPixel([int(corrected_point[0]), int(corrected_point[1])])
+    assert new_intensity > original_intensity
 
 def test_crop_image():
     a = [[1, 2, 3, 4, 5], [2, 3, 4, 5, 6], [3, 4, 5, 6, 7]]
