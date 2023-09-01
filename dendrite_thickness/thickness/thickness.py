@@ -213,7 +213,7 @@ class ThicknessExtractor:
                 pixel = [(int(x)) for x in ray_indices[i]]
                 intensity_value = image.GetPixel(pixel)
             except RuntimeError as error:
-                warnings.warn(error)
+                log.warn(error)
                 intensity_value = 0
             profile_values.append(intensity_value)
         return profile_values
@@ -225,7 +225,7 @@ class ThicknessExtractor:
         try:
             point_value = image.GetPixel(point_indices)
         except RuntimeError as error:
-            warnings.warn("Point outside the image! Assuming diameter 0")
+            log.warn("Point outside the image! Assuming diameter 0")
             return None
 
         # pointHalfValue = point_value/2.0
@@ -243,14 +243,14 @@ class ThicknessExtractor:
             try:
                 _index = ray_indices[i+1]
             except IndexError:
-                warnings.warn("End of ray reached! Center point intensity: {}".format (point_value))
+                log.warn("End of ray reached! Center point intensity: {}".format (point_value))
                 return ray_indices[i]
 
             # this fails, if the ray goes out of the image
             try:
                 pixel_2_value = image.GetPixel(_index)
             except IndexError as error:
-                warnings.warn("Ray goes out of image! Assuming diameter 0")
+                log.warn("Ray goes out of image! Assuming diameter 0")
 
             if pixel_1_value >= point_threshold_value >= pixel_2_value:
                 contour_indices = ray_indices[i]
@@ -382,11 +382,12 @@ class ThicknessExtractor:
         self.thickness_list = self.convert_points.thickness_to_micron(thickness_list)
 
     def __del__(self):
-        del self.image
+        del self.image_stack
         del self.padded_image
         del self.points
         del self.convert_points
         del self.contour_list
+        del self.seed_corrected_points
 
 
 def _check_overlap(contour1, contour2):
