@@ -14,8 +14,8 @@ import pytest
 import logging
 log = logging.getLogger(__name__)
 
-AM_FILE = os.path.join(CURRENT_DIR, 'test_files', 'am_files', 'rest', 'S13_final_done_Alison_zScale_40.am')
-IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'rest', 'S13_max_z_projection.tif')
+AM_FILE = os.path.join(CURRENT_DIR, 'test_files', 'S13_final_done_Alison_zScale_40.am')
+IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'S13_max_z_projection.tif')
 
 
 def test_am_read():
@@ -70,20 +70,19 @@ def test_am_write(tmpdir):
     #   Test 1
     am_object.write()
 
-@pytest.mark.xfail(reason="Is this the correct image file? Load it and check the coordinates. Is this a dendrite?")
+
 def test_correct_seed():
-    # TODO: crop this image file to be a lot smaller, just for testing.
     log.info("***********")
     log.info("TEST thicknesses._correct_seed() method:")
     log.info("***********")
     # image point and its value, extracted using ImageJ:
     # x = 2400, y = 2364, value = 150
     # the maximum value in a area of thickness 10 micron is 181 at [2403, 2447]
-    image_point = [2400, 2364, 150]  # [x, y, value]
+    image_point = [30, 33, 114]  # [x, y, value]
     rx_object = th.ThicknessExtractor([], image_file=IMAGE_FILE)
     corrected_point = rx_object._correct_seed(image_point)
     log.info("The _correct_seed function correct the point [2400, 2364] to  [2403, 2447]:")
-    assert corrected_point == [2403, 2447]
+    assert corrected_point == [0, 10, 114]
 
 def test_crop_image():
     a = [[1, 2, 3, 4, 5], [2, 3, 4, 5, 6], [3, 4, 5, 6, 7]]
@@ -100,11 +99,11 @@ def test_crop_image():
                                          np.array([[0, 3, 0], [3, 4, 5], [0, 5, 0]]))
 
 
-def test_pipeline(tmpdir):
+def test_pipeline():
     am_folder_path = os.path.join(CURRENT_DIR, 'test_files/am_files')
     tif_folder_path = os.path.join(CURRENT_DIR, 'test_files/image_files')
     hoc_file_path = os.path.join(CURRENT_DIR, 'test_files/WR58_Cell5_L5TT_Final.hoc')
-    output_folder_path = str(tmpdir.dirname)
+    output_folder_path = os.path.join(CURRENT_DIR, 'test_files/output')
     bijective_points_path = os.path.join(CURRENT_DIR, 'test_files/manual_landmarks.landmarkAscii')
 
     p = pipeline.ExtractThicknessPipeline()
@@ -129,8 +128,8 @@ def test_pipeline(tmpdir):
     # p.set_thickness_extractor_parameters()
     p.set_am_to_hoc_transformation_by_landmarkAscii(bijective_points_path)
 
-#   p.set_client_for_parallelization("localhost", 8780)
+    # p.set_client_for_parallelization("localhost", 8780)
 
     df = p.run()
-    with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-        log.info(df)
+    # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+    #     log.info(df)
