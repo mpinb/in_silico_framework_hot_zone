@@ -4,7 +4,7 @@
 nodes="1"
 partition="CPU"
 cores="0"
-mem="93750"  # half of max memory of a CPU node
+mem="0"  # max
 memstr="max"
 time="1-0:00"
 tpn=""
