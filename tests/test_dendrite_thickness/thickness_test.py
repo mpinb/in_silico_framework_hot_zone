@@ -15,7 +15,7 @@ import logging
 log = logging.getLogger(__name__)
 
 AM_FILE = os.path.join(CURRENT_DIR, 'test_files', 'am_files', 'S13_final_done_Alison_zScale_40.am')
-IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'S13_max_z_projection.tif')
+IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'S13_max_z_projection_64x54.tif')
 
 
 def test_am_read():
@@ -66,7 +66,7 @@ def test_am_write(tmpdir):
     log.info("***********")
     am_object = IO.Am(AM_FILE)
     am_object.read()
-    am_object.output_path=os.path.join(CURRENT_DIR, 'test_files', 'output', 'test_write')
+    am_object.output_path=os.path.join(CURRENT_DIR, 'test_files', 'output', 'test_write.am')
 
     #   Test 1
     am_object.write()
@@ -93,7 +93,7 @@ def test_crop_image():
     np.testing.assert_array_almost_equal(th._crop_image(a, (0, 0), 0), np.array([[1]]))
     # 1 pixels surrounding, zero pad the rest
     radius = 1
-    a_padded = th.pad_image(a, radius)
+    a_padded = th._pad_image(a, radius)
     np.testing.assert_array_almost_equal(th._crop_image(a_padded, (0+radius, 0+radius), 1), np.array([[0, 0, 0], [0, 1, 2], [0, 2, 3]]))
     np.testing.assert_array_almost_equal(th._crop_image(a_padded, (0+radius, 4+radius), 1), np.array([[0, 0, 0], [4, 5, 0], [5, 6, 0]]))
     np.testing.assert_array_almost_equal(th._crop_image(a_padded, [1+radius, 2+radius], 1, circle=True),
