@@ -82,18 +82,18 @@ def test_correct_seed():
     image_point = [30, 33, 114]  # [x, y, value]
     rx_object = th.ThicknessExtractor([], image_file=IMAGE_FILE)
     corrected_point = rx_object._correct_seed(image_point)
-    log.info("The _correct_seed function correct the point [2400, 2364] to  [2403, 2447]:")
     assert corrected_point == [0, 10, 114]
 
 def test_crop_image():
     a = [[1, 2, 3, 4, 5], [2, 3, 4, 5, 6], [3, 4, 5, 6, 7]]
-    # a = np.array(a)
+    a = np.array(a)
     
     # 0 pixels surrounding
-    np.testing.assert_array_almost_equal(th._crop_image(a, (0, 0), 0), np.array([[1]]))
+    assert th._crop_image(a, (0, 0), 0) == array([[1]])
+    
     # 1 pixels surrounding, zero pad the rest
     radius = 1
-    a_padded = th._pad_image(a, radius)
+    a_padded = np.pad(a, radius, 'constant', constant_values=0)
     np.testing.assert_array_almost_equal(th._crop_image(a_padded, (0+radius, 0+radius), 1), np.array([[0, 0, 0], [0, 1, 2], [0, 2, 3]]))
     np.testing.assert_array_almost_equal(th._crop_image(a_padded, (0+radius, 4+radius), 1), np.array([[0, 0, 0], [4, 5, 0], [5, 6, 0]]))
     np.testing.assert_array_almost_equal(th._crop_image(a_padded, [1+radius, 2+radius], 1, circle=True),
