@@ -1,6 +1,5 @@
 import logging
 log = logging.getLogger(__name__)
-log.propagate=True
 
 def scale_apical_morph_86(cell):
     '''

@@ -1,7 +1,6 @@
 from model_data_base.mdbopen import resolve_mdb_path
 import logging
 log = logging.getLogger(__name__)
-log.propagate=True
 
 def load_param_file_if_path_is_provided(pathOrParam):
     import single_cell_parser as scp

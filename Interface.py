@@ -42,7 +42,7 @@ import six
 
 ### logging setup
 import logging
-root_logger = logging.getLogger()
+root_logger = logging.getLogger()  # level is WARNING by default
 log_stream_handler = logging.StreamHandler(stream=sys.stdout)  # a singular stream handler, so that all logs can redirect to this one
 log_stream_handler.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
 root_logger.handlers = [log_stream_handler]

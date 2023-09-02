@@ -27,7 +27,6 @@ from . import utils as u
 import itertools
 import logging
 log = logging.getLogger(__name__)
-log.propagate=True
 
 class ThicknessExtractor:
     def __init__(self, points, image_file=None, xy_resolution=0.092, z_resolution=0.5, ray_length_front_to_back_in_micron=20,

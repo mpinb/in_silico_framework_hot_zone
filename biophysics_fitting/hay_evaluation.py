@@ -16,7 +16,6 @@ import contextlib, io
 import logging
 from .utils import StreamToLogger
 log = logging.getLogger(__name__)
-log.propagate=True  # propagate to biophysics_fitting.__init__
 # moved to the bottom to resolve circular import
 # from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
 
