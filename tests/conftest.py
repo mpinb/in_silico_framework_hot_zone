@@ -10,6 +10,8 @@ import Interface
 from Interface import get_client
 import logging
 
+suppress_logs = ["biophysics_fitting"]
+
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
@@ -34,9 +36,9 @@ def pytest_configure(config):
     # print("setting distributed duck-typed object as module level attribute")
     distributed.client_object_duck_typed = client
     # only log warnings
-    logging.getLogger().setLevel(logging.WARNING)  # set logging level of root logger to WARNING
-    logging.getLogger('biophysics_fitting').active = False  # disable logging of biophysics_fitting module
-
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.WARNING)  # set logging level of root logger to WARNING
+    for module_name in suppress_logs:
+        root_logger.addFilter(logging.Filter(module_name))  # suppress logs from this module
         
 
-# other config
