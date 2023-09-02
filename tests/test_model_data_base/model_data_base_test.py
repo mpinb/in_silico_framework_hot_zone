@@ -10,6 +10,7 @@ import tempfile
 import warnings
 from pandas.util.testing import assert_frame_equal
 from model_data_base import IO
+import subprocess
 
 class TestModelDataBase(unittest.TestCase):       
     def setUp(self):        
