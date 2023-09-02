@@ -31,9 +31,8 @@ else:
     warnings.warn("Scipy version is too old to import spatial.transform.Rotation. Cell alignment will not work.")
     warnings.warn("Interactive visualizations only work on Py3. Dash and plotly are not compatible with the Py2 version of ISF.")
 
-@dask.delayed 
 class CMVDataParser:
-    def __init__(self, cell, align_trunk=True, client=None):
+    def __init__(self, cell, align_trunk=True):
         """
         Given a Cell object, this class initializes an object that is easier to work with for visualization purposes
         """
@@ -41,8 +40,6 @@ class CMVDataParser:
         # Cell object
         self.cell = serialize_cell.cell_to_serializable_object(cell)
         """The Cell object"""
-        self.client = client
-        """Distributed client for parallelization"""
 
         # ---------------------------------------------------------------
         # Morphology attributes
@@ -367,13 +364,9 @@ class CMVDataParser:
             return  # We have already retrieved the voltage timeseries
 
         t1 = time.time()
-        if self.client is not None:
-            delayeds = [dask.delayed(self._get_voltages_at_timepoint)(time_point) for time_point in self.times_to_show]
-            self.voltage_timeseries = self.client.compute(*delayeds)
-        else:
-            for time_point in self.times_to_show:  # For each frame of the video/animation
-                voltage = self._get_voltages_at_timepoint(time_point)
-                self.voltage_timeseries.append(voltage)
+        for time_point in self.times_to_show:  # For each frame of the video/animation
+            voltage = self._get_voltages_at_timepoint(time_point)
+            self.voltage_timeseries.append(voltage)
         self.scalar_data["voltage"] = self.voltage_timeseries
         t2 = time.time()
         print('Voltage retrieval runtime (s): ' + str(np.around(t2-t1, 2)))
@@ -393,16 +386,10 @@ class CMVDataParser:
             self.scalar_data[ion_keyword] = []
 
         t1 = time.time()
-        if self.client is not None:
-            delayeds = [dask.delayed(self._get_ion_dynamic_at_timepoint)(time_point, ion_keyword) for time_point in self.times_to_show]
-            results = self.client.compute(*delayeds)
-            print(results)
-            self.scalar_data[ion_keyword] = results
-        else:
-            for time_point in self.times_to_show:  # For each frame of the video/animation
-                ion_dynamics = self._get_ion_dynamic_at_timepoint(
-                    time_point, ion_keyword)
-                self.scalar_data[ion_keyword].append(ion_dynamics)
+        for time_point in self.times_to_show:  # For each frame of the video/animation
+            ion_dynamics = self._get_ion_dynamic_at_timepoint(
+                time_point, ion_keyword)
+            self.scalar_data[ion_keyword].append(ion_dynamics)
         t2 = time.time()
         print('Ion dynamics retrieval runtime (s): ' + str(np.around(t2-t1, 2)))
 
@@ -438,17 +425,17 @@ class CMVDataParser:
 
         synapses = {'INT': [], 'L4ss': [], 'L5st': [],
                     'L5tt': [], 'L6CC': [], 'VPM': [], 'L23': []}
-        for population in self.cell.synapses.keys():
-            for synapse in self.cell.synapses[population]:
-                if synapse.preCell is None:
+        for population in self.cell["synapses"].keys():
+            for synapse in self.cell['synapses'][population]:
+                if synapse["preCell"] is None:
                     continue
-                for spikeTime in synapse.preCell.spikeTimes:
+                for spikeTime in synapse["preCell"]["spikeTimes"]:
                     if time_point-self.time_show_syn_activ < spikeTime < time_point+self.time_show_syn_activ:
                         population_name = match_model_celltype_to_PSTH_celltype(
                             population)
-                        pt = synapse.coordinates
+                        pt = synapse["coordinates"]
                         if self.rotation_with_zaxis is not None:  # no alignment with z-axis
-                            pt = self.rotation_with_zaxis.apply(synapse.coordinates - self.soma_center)
+                            pt = self.rotation_with_zaxis.apply(synapse["coordinates"] - self.soma_center)
                         synapses[population_name].append(pt)
         return synapses
 
@@ -525,14 +512,11 @@ class CellMorphologyVisualizer(CMVDataParser):
     No explicit VTK dependency is needed for this; it simply writes it out as a .txt file.
     """
 
-    def __init__(self, cell, align_trunk=True, client=None):
+    def __init__(self, cell, align_trunk=True):
         """
         Given a Cell object, this class initializes an object that is easier to work with
         """
-        if client is None:
-            super().__init__(cell, align_trunk, client=None)  # class that holds simulation data
-        else:
-            super().__init__(cell, align_trunk, client=client)
+        super().__init__(cell, align_trunk)  
         # ---------------------------------------------------------------
         # Visualization attributes
         self.camera = self.azim, self.dist, self.elev, self.roll = 0, 10, 30, 0

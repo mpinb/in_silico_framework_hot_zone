@@ -37,6 +37,22 @@ def cell_to_serializable_object(cell):
         dummy['recordVars'] = convert_dict_of_hoc_arrays_to_dict_of_np_arrays(sec.recordVars)
         dummy['label'] = sec.label
         out['sections'].append(dummy)
+
+    out['synapses'] = {}
+    # TODO: THe Synapse class can likely be parallellized (see scp.synapse)
+    # But do we need all the information?
+    for population in cell.synapses.keys():
+        dummy_population = []  # synapses that belong to this population
+        for synapse in cell.synapses[population]:
+            dummy_synapse = {}
+            dummy_synapse["preCell"] = {
+                "spikeTimes": synapse.preCell.spikeTimes
+            }
+            dummy_synapse["coordinates"] = synapse.coordinates
+            # TODO other synapse attributes
+            dummy_population.append(dummy_synapse)
+        out['synapses'][population] = dummy_population
+    
     with mdbopen(cell.hoc_path) as f:
         out['hoc'] = f.read() 
     return out
