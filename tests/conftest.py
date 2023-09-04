@@ -7,16 +7,22 @@ import os
 import pytest
 import socket
 import Interface as I
-from Interface import get_client
-from Interface import logger as rootlogger
+from Interface import get_client, root_logger, log_stream_handler
 import logging
 log = logging.getLogger(__name__)
 
 suppress_modules_list = ["biophysics_fitting"]
 
 class ModuleFilter(logging.Filter):
+    """
+    Given an array of module names, suppress logs from those modules
+
+    Args:
+        suppress_modules_list (array): array of module names
+    """
     def __init__(self, suppress_modules_list):
         self.suppress_modules_list = suppress_modules_list
+
     def filter(self, record):
         m = record.getMessage()
         return not any(
@@ -48,10 +54,8 @@ def pytest_configure(config):
     
     # Setup logging output
     # only log warnings
-    rootlogger.setLevel(logging.WARNING)  # set logging level of root logger to WARNING
-    # Suppress logs from verbose modules
-    for module_name in suppress_logs:
-        for handler in rootlogger.handlers:  # should only be one handler: the streamhandler
-            handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
+    root_logger.setLevel(logging.WARNING)  # set logging level of root logger to WARNING
+    # Suppress logs from verbose modules so they don't show in stdout
+    log_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
         
 
