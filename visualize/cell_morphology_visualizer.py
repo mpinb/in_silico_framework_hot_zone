@@ -256,16 +256,17 @@ class CMVDataParser:
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
         voltage_points = []
         for sec_n, sec in enumerate(self.cell["sections"]):
-            sec_morphology = self.morphology[self.morphology["section"] == sec_n]
             if sec["label"] in ['AIS', 'Myelin']:
                 continue
-
+            
+            sec_morphology = self.morphology[self.morphology["section"] == sec_n]
+            
             # Add voltage at the last point of the previous section
             if sec["label"].lower() != "soma":
-                parent = self.cell["sections"][sec_n-1]
-                voltage_points.append(parent['recVList'][-1][n_sim_point])
+                sec_parent = [s for s in self.cell["sections"] if s["name"] == sec["parent"]][0]
+                voltage_points.append(sec_parent['recVList'][-1][n_sim_point])
 
-            # Compute segments limits (voltage is measure at the middle of each segment, not section)
+            # Compute segments limits (voltage is measured at the middle of each segment, not section)
             segs_limits = [0]
             n_segments = len(sec_morphology)
             for j, seg_n in enumerate(sec_morphology['seg_n']):
@@ -298,38 +299,45 @@ class CMVDataParser:
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
         ion_points = []
-        for sec in self.cell['sections']:
-            if sec.label in ['Soma', 'AIS', 'Myelin']:
+        for sec_n, sec in enumerate(self.cell['sections']):
+            if sec["label"] in ['AIS', 'Myelin']:
                 continue
 
-            # Add voltage at the last point of the previous section
-            if not sec.parent.recordVars[ion_keyword] == []:
-                ion_points.append(
-                    sec.parent.recordVars[ion_keyword][-1][n_sim_point])
-            else:
-                ion_points.append(None)
+            sec_morphology = self.morphology[self.morphology["section"] == sec_n]
 
-            # Compute segments limits (voltage is measure at the middle of each segment, not section)
+            # Add ion dynamics at the last point of the previous section
+            if sec["label"].lower() != "soma":
+                sec_parent = [s for s in self.cell["sections"] if s["name"] == sec["parent"]][0]
+                rec_vars = sec_parent["recordVars"][ion_keyword]
+                if rec_vars == []:
+                    ion_points.append(None)
+                else:
+                    ion_points.append(
+                        sec_parent["recordVars"][ion_keyword][-1][n_sim_point])
+
+            # Compute segments limits (recVars are measure at the middle of each segment, not section)
             segs_limits = [0]
-            for j, seg in enumerate(sec):
-                segs_limits.append(segs_limits[j]+(seg.x-segs_limits[j])*2)
-
+            n_segments = len(sec_morphology)
+            for j, seg_n in enumerate(sec_morphology['seg_n']):
+                x = seg_n / n_segments
+                segs_limits.append(segs_limits[j]+(x-segs_limits[j])*2)
+            
             # Map the segments to section points to assign a voltage to each line connecting 2 points
             current_seg = 0
             next_seg_flag = False
-            for i in range(len(sec.pts)):
+            rel_points = sec_morphology['relPts'].values
+            for i in range(len(sec_morphology)):
                 if i != 0:
                     if next_seg_flag:
                         current_seg += 1
                         next_seg_flag = False
-                    if sec.relPts[i-1] < segs_limits[current_seg+1] < sec.relPts[i]:
-                        if sec.relPts[i] - segs_limits[current_seg+1] > segs_limits[current_seg+1] - sec.relPts[i-1]:
+                    if rel_points[i-1] < segs_limits[current_seg+1] < rel_points[i]:
+                        if rel_points[i] - segs_limits[current_seg+1] > segs_limits[current_seg+1] - sec["relPts"][i-1]:
                             current_seg += 1
                         else:
                             next_seg_flag = True
-                if not sec.recordVars[ion_keyword] == []:
-                    ion_points.append(
-                        sec.recordVars[ion_keyword][current_seg][n_sim_point])
+                if not sec["recordVars"][ion_keyword] == []:
+                    ion_points.append(sec["recordVars"][ion_keyword][current_seg][n_sim_point])
                 else:
                     ion_points.append(None)
         return ion_points
@@ -1125,18 +1133,16 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             # scalar_data_per_section = np.array([self._get_voltages_at_timepoint(
             #     t) for t in np.arange(self.t_start, self.t_end+self.dt, self.dt)]).T
             round_floats = 2
-            scalar_data_per_time = {t: np.round(
-                self.voltage_timeseries[t_idx], round_floats) for t_idx, t in enumerate(self.times_to_show)}
+            scalar_data_per_time = {
+                t: np.round(self.voltage_timeseries[t_idx], round_floats) for t_idx, t in enumerate(self.times_to_show)
+                }
 
         else:
             assert scalar_data_keyword.lower() in (
                 e.lower() for e in self.possible_scalars), "Keyword {} is not associated with membrane voltage, and does not appear in the possible ion dynamic keywords: {}".format(scalar_data_keyword, self.possible_scalars)
             self._calc_ion_dynamics_timeseries(ion_keyword=scalar_data_keyword)
-            scalar_data_per_section = np.array(
-                [self._get_ion_dynamic_at_timepoint(
-                    t, ion_keyword=scalar_data_keyword
-                    ) for t in np.arange(self.t_start, self.t_end+self.dt, self.dt)
-                    ]).T
+            scalar_data = self.scalar_data[scalar_data_keyword]
+            scalar_data_per_section = np.array(scalar_data).T
             scalar_data_per_time = {
                 t: self.scalar_data[scalar_data_keyword][t_idx] for t_idx, t in enumerate(self.times_to_show)
                 }
@@ -1225,8 +1231,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
                     )
             return fig_cell, fig_trace
                 
-
-        return app.run_server(debug=True, use_reloader=False, port=5050, host=self.dash_ip)
+        return app
 
     def _display_interactive_morphology_only_3d(self, background_color="rgb(180,180,180)", highlight_section=None):
         ''' 
@@ -1279,10 +1284,14 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         if data is None:
             f = self._display_interactive_morphology_only_3d(
                 background_color=background_color, highlight_section=highlight_section)
+            if self.show:
+                return f.show
         else:
             f = self._get_interactive_plot_with_scalar_data(data, vmin=vmin, vmax=vmax,
                          color_map=color_map, background_color=background_color)
-        return f.show if self.show else f
+            if self.show:
+                return f.run_server(debug=True, use_reloader=False, port=5050, host=self.dash_ip)
+        return f  # show is not True, return the object without executing the method that shows it
 
     def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet', background_color="rgb(180,180,180)", 
                                                      renderer="notebook_connected"):
