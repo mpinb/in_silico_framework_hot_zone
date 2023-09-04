@@ -66,17 +66,13 @@ def test_am_write():
     log.info("***********")
     am_object = IO.Am(AM_FILE)
     am_object.read()
-    am_object.output_path=os.path.join(CURRENT_DIR, 'test_files', 'output', 'test_write.am')
+    am_object.output_path = os.path.join(CURRENT_DIR, 'test_files', 'output', 'test_write.am')
+    if not os.path.exists(am_object.output_path):
+        f = open(am_object.output_path, "x")
 
     #   Test 1
     am_object.write()
-    # Don't track changes on this file, as it will break 
-    # tests.test_model_data_base.model_data_base_test.test_metadata_update
-    # Since that tests inherits from unittest.TestCase, it's setup will run during pytest discovery
-    # When no changes have been made yet. By the time test_metadata runs, the file has been changed
-    # Adapting the git commit status from clean to dirty
-    out = subprocess.check_output(['git', 'update-index', '--assume-unchanged', am_object.output_path])
-
+        
 
 def test_correct_seed():
     """
