@@ -1050,8 +1050,8 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
     It contains useful methods for interactively visualizing a cell morphology, the voltage along its body, or ion channel dynamics.
     It relies on Dash and Plotly to do so.
     """
-    def __init__(self, cell, align_trunk=True, dash_ip=None, client=None):
-        super().__init__(cell, align_trunk=align_trunk, client=client)
+    def __init__(self, cell, align_trunk=True, dash_ip=None):
+        super().__init__(cell, align_trunk=align_trunk)
         if dash_ip is None:
             hostname = socket.gethostname()
             dash_ip = socket.gethostbyname(hostname)
