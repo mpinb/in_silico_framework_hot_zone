@@ -8,6 +8,7 @@ from dendrite_thickness.thickness import thickness as th
 from .context import CURRENT_DIR
 import pandas as pd
 import pytest
+import six
 import distributed
 import logging
 log = logging.getLogger(__name__)
@@ -134,5 +135,6 @@ def test_pipeline():
 
     # p.set_thickness_extractor_parameters()
     p.set_am_to_hoc_transformation_by_landmarkAscii(bijective_points_path)
-    # p.set_client_for_parallelization(distributed.client_object_duck_typed)
+    if six.PY3:  # Only works on Py3?
+        p.set_client_for_parallelization(distributed.client_object_duck_typed)
     df = p.run()
