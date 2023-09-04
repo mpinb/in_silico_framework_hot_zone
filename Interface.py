@@ -42,12 +42,11 @@ import six
 
 ### logging setup
 import logging
-# All loggers will inherit the root logger's level and handlers
-root_logger = logging.getLogger()
-root_logger.setLevel(logging.INFO)  # set logging level of root logger to INFO
+# All loggers will inherit this root logger's level and handlers
+logger = logging.getLogger()
 log_stream_handler = logging.StreamHandler(stream=sys.stdout)  # a singular stream handler, so that all logs can redirect to this one
 log_stream_handler.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
-root_logger.handlers = [log_stream_handler]
+logger.handlers = [log_stream_handler]
 
 try:
     from IPython import display
