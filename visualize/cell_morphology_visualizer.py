@@ -1056,7 +1056,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             hostname = socket.gethostname()
             dash_ip = socket.gethostbyname(hostname)
         self.dash_ip = dash_ip
-        self.show = True  # set to False for testing
+        self.show = show  # set to False for testing
         """IP address to run dash server on."""
     
     def _get_interactive_cell(self, background_color="rgb(180,180,180)"):
