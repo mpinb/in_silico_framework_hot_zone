@@ -75,7 +75,7 @@ def test_am_write():
     # Since that tests inherits from unittest.TestCase, it's setup will run during pytest discovery
     # When no changes have been made yet. By the time test_metadata runs, the file has been changed
     # Adapting the git commit status from clean to dirty
-    subprocess.run(['git update-index --assume-unchanged {}'.format(am_object.output_path)])
+    out = subprocess.check_output(['git', 'update-index', '--assume-unchanged', am_object.output_path])
 
 
 def test_correct_seed():
