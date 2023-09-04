@@ -1050,12 +1050,13 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
     It contains useful methods for interactively visualizing a cell morphology, the voltage along its body, or ion channel dynamics.
     It relies on Dash and Plotly to do so.
     """
-    def __init__(self, cell, align_trunk=True, dash_ip=None):
+    def __init__(self, cell, align_trunk=True, dash_ip=None, show=True):
         super().__init__(cell, align_trunk=align_trunk)
         if dash_ip is None:
             hostname = socket.gethostname()
             dash_ip = socket.gethostbyname(hostname)
         self.dash_ip = dash_ip
+        self.show = True  # set to False for testing
         """IP address to run dash server on."""
     
     def _get_interactive_cell(self, background_color="rgb(180,180,180)"):
@@ -1255,7 +1256,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         return fig_cell
 
     def display_interactive_morphology_3d(self, data=None, background_color="rgb(180,180,180)", highlight_section=None, renderer="notebook_connected",
-                                          t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map="jet", show=True):
+                                          t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map="jet"):
         """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
         The parameters :param:t_start, :param:t_end and :param:t_step will define the :param:self.time attribute
 
@@ -1278,11 +1279,10 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         if data is None:
             f = self._display_interactive_morphology_only_3d(
                 background_color=background_color, highlight_section=highlight_section)
-            return f.show() if show else f
         else:
             f = self._get_interactive_plot_with_scalar_data(data, vmin=vmin, vmax=vmax,
                          color_map=color_map, background_color=background_color)
-            return f
+        return f.show if self.show else f
 
     def display_interactive_voltage_in_morphology_3d(self, t_start=None, t_end=None, t_step=None, vmin=None, vmax=None, color_map='jet', background_color="rgb(180,180,180)", 
                                                      renderer="notebook_connected"):

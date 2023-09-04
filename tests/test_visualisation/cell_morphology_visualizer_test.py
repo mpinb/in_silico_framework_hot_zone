@@ -63,7 +63,7 @@ class TestCellMorphologyInteractiveVisualizer:
     def setup_class(self):
         self.client = distributed.client_object_duck_typed
         self.cell = setup_current_injection_experiment(rangevars=['NaTa_t.ina'])
-        self.cmiv = CellMorphologyInteractiveVisualizer(cell=self.cell, align_trunk=six.PY3)
+        self.cmiv = CellMorphologyInteractiveVisualizer(cell=self.cell, align_trunk=six.PY3, show=False)
         self.t_start, self.t_end, self.t_step = 0, 1, 1  # a two-frame test
     
     @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
