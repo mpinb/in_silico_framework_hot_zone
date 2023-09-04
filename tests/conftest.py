@@ -10,6 +10,7 @@ import Interface as I
 from Interface import get_client, root_logger, root_logger_stream_handler
 import logging
 log = logging.getLogger(__name__)
+CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 suppress_modules_list = ["biophysics_fitting"]
 
@@ -40,6 +41,10 @@ def pytest_configure(config):
     matplotlib.use('agg')
     import matplotlib.pyplot as plt
     plt.switch_backend('agg')
+
+    output_thickness = os.path.join(CURRENT_DIR, 'test_dendrite_thickness', 'test_files', 'output')
+    if not os.path.exists(output_thickness):
+        os.mkdir(output_thickness)
 
     # Assume dask server and worker are already started
     # These are set up in the github workflow file.
