@@ -85,10 +85,12 @@ class TestModelDataBase(unittest.TestCase):
         self.fresh_mdb.setitem('test', 1, dumper = 'self')
         self.fresh_mdb.setitem('test2', 1, dumper = to_pickle)
         git_status = subprocess.check_output(['git status'], shell=True).decode('utf-8')
-        msg="{} =/= {}\n"+
-        "Did the commit turn dirty during testing?\n{}".format(
-            self.fresh_mdb.metadata['test']['version'], 
-            model_data_base.get_version()['version'], git_status)
+        msg= "{} =/= {}\n" + \
+        "Did the commit turn dirty during testing?\n" + \
+            "{}".format(
+                self.fresh_mdb.metadata['test']['version'], 
+                model_data_base.get_versions()['version'], git_status
+                )
         self.assertEqual(self.fresh_mdb.metadata['test']['version'], \
                          model_data_base.get_versions()['version'],
                          msg=msg)
