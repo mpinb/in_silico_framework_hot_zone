@@ -134,5 +134,5 @@ def test_pipeline():
 
     # p.set_thickness_extractor_parameters()
     p.set_am_to_hoc_transformation_by_landmarkAscii(bijective_points_path)
-    p.set_client_for_parallelization(distributed.client_object_duck_typed)
+    # p.set_client_for_parallelization(distributed.client_object_duck_typed)
     df = p.run()
