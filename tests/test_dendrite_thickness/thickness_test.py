@@ -10,6 +10,7 @@ import pandas as pd
 import pytest
 import six
 import distributed
+import subprocess
 import logging
 log = logging.getLogger(__name__)
 
@@ -59,7 +60,7 @@ def test_am_read():
     del am_object
 
 
-def test_am_write(tmpdir):
+def test_am_write():
     log.info("***********")
     log.info("TEST Am.write() method:")
     log.info("***********")
@@ -69,6 +70,12 @@ def test_am_write(tmpdir):
 
     #   Test 1
     am_object.write()
+    # Don't track changes on this file, as it will break 
+    # tests.test_model_data_base.model_data_base_test.test_metadata_update
+    # Since that tests inherits from unittest.TestCase, it's setup will run during pytest discovery
+    # When no changes have been made yet. By the time test_metadata runs, the file has been changed
+    # Adapting the git commit status from clean to dirty
+    subprocess.run(['git update-index --assume-unchanged {}'.format(am_object.output_path)])
 
 
 def test_correct_seed():
