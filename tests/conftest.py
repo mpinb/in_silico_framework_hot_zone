@@ -7,7 +7,7 @@ import os
 import pytest
 import socket
 import Interface as I
-from Interface import get_client, root_logger, log_stream_handler
+from Interface import get_client, root_logger, root_logger_stream_handler
 import logging
 log = logging.getLogger(__name__)
 
@@ -56,6 +56,6 @@ def pytest_configure(config):
     # only log warnings
     root_logger.setLevel(logging.WARNING)  # set logging level of root logger to WARNING
     # Suppress logs from verbose modules so they don't show in stdout
-    log_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
+    root_logger_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
         
 
