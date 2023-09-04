@@ -68,7 +68,8 @@ def test_am_write():
     am_object.read()
     am_object.output_path = os.path.join(CURRENT_DIR, 'test_files', 'output', 'test_write.am')
     if not os.path.exists(am_object.output_path):
-        f = open(am_object.output_path, "x")
+        with open(am_object.output_path, "w"):
+            pass  # create empty file
 
     #   Test 1
     am_object.write()
