@@ -8,14 +8,24 @@ import pytest
 import socket
 import Interface as I
 from Interface import get_client
+from Interface import logger as rootlogger
 import logging
+log = logging.getLogger(__name__)
 
-suppress_logs = ["biophysics_fitting"]
+suppress_modules_list = ["biophysics_fitting"]
+
+class ModuleFilter(logging.Filter):
+    def __init__(self, suppress_modules_list):
+        self.suppress_modules_list = suppress_modules_list
+    def filter(self, record):
+        m = record.getMessage()
+        return not any(
+            [module_name in m for module_name in self.suppress_modules_list]
+            )
 
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
-
 
 def pytest_configure(config):
     import distributed
@@ -33,11 +43,15 @@ def pytest_configure(config):
         client = distributed.Client('localhost:28786')
     else:
         client = distributed.Client('localhost:38786')
-    # print("setting distributed duck-typed object as module level attribute")
+    log.info("setting distributed duck-typed object as module level attribute")
     distributed.client_object_duck_typed = client
+    
+    # Setup logging output
     # only log warnings
-    I.logger.setLevel(logging.WARNING)  # set logging level of root logger to WARNING
+    rootlogger.setLevel(logging.WARNING)  # set logging level of root logger to WARNING
+    # Suppress logs from verbose modules
     for module_name in suppress_logs:
-        I.logger.addFilter(logging.Filter(module_name))  # suppress logs from this module
+        for handler in rootlogger.handlers:  # should only be one handler: the streamhandler
+            handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
         
 
