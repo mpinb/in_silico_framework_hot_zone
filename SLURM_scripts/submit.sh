@@ -224,7 +224,7 @@ if [[ ${partition:0:3} == CPU ]]; then
     cores=24
   fi
 #### 2.2: GPU partitions (GPU or GPU-interactive)
-elif [[ ${partition:0:3} == "GPU" && $partition -ne "GPU-a100" ]]; then  
+elif [[ ${partition:0:3} == GPU ]] && [[ $partition != "GPU-a100" ]]; then  
   if [ $gres == "0" ]; then  # gres is unspecified
     gres="2"  # by default, set to half of max gres for GPU partitions
   fi
