@@ -514,7 +514,7 @@ if __name__ == "__main__":
         pca = vaex.ml.PCA(features=columns, n_components=n_components)    
         df_transformed = pca.fit_transform(df)
         for component_idx in range(0, n_components):
-            df_transformed.rename("PCA_{}".format(component_idx), "{}-{}".format(descriptor, component_idx+1)))
+            df_transformed.rename("PCA_{}".format(component_idx), "{}-{}".format(descriptor, component_idx+1))
         return df_transformed
 
     #data_folder = "/scratch/visual/bzfharth/in-silico-install-dir/project_src/in_silico_framework/getting_started/linked-views-example-data/backend_data_2023-06-22"
