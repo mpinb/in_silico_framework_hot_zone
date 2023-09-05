@@ -33,9 +33,6 @@ import distributed
 # import pandas_msgpack # do not import this; it will break pickle in loaded dataframes
 from pandas_msgpack import to_msgpack, read_msgpack
 
-# If this module is called from within the test suite:
-TESTING = True if "PYTEST_CURRENT_TEST" in os.environ else False
-    
 
 ####
 # if you want to use this as template to implement another dask dumper: 
@@ -259,7 +256,9 @@ def dump(obj, savedir, repartition = False, get = None, categorize = True, clien
     Raises:
         RuntimeError: _description_
     """
-    if not TESTING:
+    import os
+    if not "IS_TESTING" in os.environ:
+        # Module was not called from within the test suite
         raise RuntimeError('pandas-msgpack is not supported anymore in the model_data_base')
     if client is None:
         assert get is not None

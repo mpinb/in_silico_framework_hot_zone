@@ -12,6 +12,8 @@ import logging
 log = logging.getLogger(__name__)
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 
+os.environ["IS_TESTING"] = "True"
+
 suppress_modules_list = ["biophysics_fitting"]
 
 class ModuleFilter(logging.Filter):
@@ -51,9 +53,9 @@ def pytest_configure(config):
     # If running locally, make sure you have a dask scheduler and dask worker running on these ports
 
     if six.PY2:
-        client = distributed.Client('localhost:28786')
+        client = get_client()
     else:
-        client = distributed.Client('localhost:38786')
+        client = get_client()
     log.info("setting distributed duck-typed object as module level attribute")
     distributed.client_object_duck_typed = client
     
