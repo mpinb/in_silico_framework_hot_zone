@@ -36,8 +36,8 @@ def cell_to_serializable_object(cell):
         dummy['recVList'] = convert_hoc_array_to_np_array(sec.recVList)
         dummy['recordVars'] = convert_dict_of_hoc_arrays_to_dict_of_np_arrays(sec.recordVars)
         dummy['label'] = sec.label
-        dummy['name'] = str(sec)
-        dummy['parent'] = str(sec.parent) if sec.parent is not None else None
+        dummy['sec_id'] = lv
+        dummy['parent_id'] = [lv_ for lv_, s in enumerate(cell.sections) if s == sec.parent][0] if sec.parent is not None else None
         out['sections'].append(dummy)
 
     out['synapses'] = {}

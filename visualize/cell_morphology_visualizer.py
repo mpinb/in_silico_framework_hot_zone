@@ -263,7 +263,7 @@ class CMVDataParser:
             
             # Add voltage at the last point of the previous section
             if sec["label"].lower() != "soma":
-                sec_parent = [s for s in self.cell["sections"] if s["name"] == sec["parent"]][0]
+                sec_parent = self.cell["sections"][sec["parent_id"]]
                 voltage_points.append(sec_parent['recVList'][-1][n_sim_point])
 
             # Compute segments limits (voltage is measured at the middle of each segment, not section)
@@ -307,7 +307,7 @@ class CMVDataParser:
 
             # Add ion dynamics at the last point of the previous section
             if sec["label"].lower() != "soma":
-                sec_parent = [s for s in self.cell["sections"] if s["name"] == sec["parent"]][0]
+                sec_parent = self.cell["sections"][sec["parent_id"]]
                 rec_vars = sec_parent["recordVars"][ion_keyword]
                 if rec_vars == []:
                     ion_points.append(None)
@@ -388,6 +388,12 @@ class CMVDataParser:
         Returns:
             Nothing. Updates the self.timeseries_voltage attribute
         '''
+
+        assert ion_keyword in self.possible_scalars, \
+            "Ion keyword not recognised. Possible keywords are: " + str(self.possible_scalars)
+        assert any([ion_keyword in sec["recordVars"].keys() for sec in self.cell["sections"]]), \
+            "No sections found with ion dynamics for ion keyword " + ion_keyword
+
         if ion_keyword in self.scalar_data.keys():
             return  # We have already retrieved the voltage timeseries
         else:
@@ -989,7 +995,7 @@ class CellMorphologyVisualizer(CMVDataParser):
 
     def display_animation_voltage_synapses_in_morphology_3d(self, images_path, client, t_start=None,
         t_end=None,t_step=None,neuron_rotation=None, time_show_syn_activ=None, vmin=None, vmax=None,
-        highlight_section=None, highlight_x=None, display=True):
+        highlight_section=None, highlight_x=None, display=True, tpf=1):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
@@ -1006,6 +1012,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             - time_show_syn_activ: Time in the simulation during which a synapse activation is shown during the visualization
             - vmin: min voltages colorcoded in the cell morphology
             - vmax: max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)
+            - tpf: time per frame (in ms)
         '''
         assert self._has_simulation_data()
         self._update_times_to_show(t_start, t_end, t_step)
@@ -1021,7 +1028,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             images_path, client,
             highlight_section=highlight_section, highlight_x=highlight_x)
         if display:
-            display_animation_from_images(images_path, 1, embedded=True)
+            display_animation_from_images(images_path, tpf, embedded=True)
 
     def write_vtk_frames(self, out_name="frame", out_dir=".", t_start=None, t_end=None, t_step=None, scalar_data=None):
         '''
@@ -1058,29 +1065,30 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
     It contains useful methods for interactively visualizing a cell morphology, the voltage along its body, or ion channel dynamics.
     It relies on Dash and Plotly to do so.
     """
-    def __init__(self, cell, align_trunk=True, dash_ip=None, show=True):
+    def __init__(self, cell, align_trunk=True, dash_ip=None, show=True, renderer="notebook_connected"):
         super().__init__(cell, align_trunk=align_trunk)
         if dash_ip is None:
             hostname = socket.gethostname()
             dash_ip = socket.gethostbyname(hostname)
         self.dash_ip = dash_ip
         self.show = show  # set to False for testing
+        self.renderer = renderer
         """IP address to run dash server on."""
     
     def _get_interactive_cell(self, background_color="rgb(180,180,180)"):
         ''' 
-        Setup plotly for rendering in notebooks. Shows an interactive 3D render of the Cell with NO data overlayed.
+        Setup plotly for rendering in notebooks.
+        Shows an interactive 3D render of the Cell with NO data overlayed.
 
         Args:
             - background_color: just some grey by default
-            - renderer
 
         Returns:
             plotly.graph_objs._figure.Figure: an interactive figure. Usually added to a ipywidgets.VBox object
         '''
 
         py.init_notebook_mode()
-        pio.renderers.default="notebook_connected"  # TODO make argument
+        pio.renderers.default=self.renderer  # TODO make argument
         transparent = "rgba(0, 0, 0, 0)"
         ax_layout = dict(
             backgroundcolor=transparent,
@@ -1096,8 +1104,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             self.morphology, x="x", y="y", z="z",
             hover_data=["section", "diameter"],
             size="diameter")
-        fig.update_traces(marker=dict(line=dict(width=0))
-                          )  # remove outline of markers
+        fig.update_traces(marker=dict(line=dict(width=0)))  # remove outline of markers
         fig.update_layout(scene=dict(
             xaxis=ax_layout,
             yaxis=ax_layout,
@@ -1285,7 +1292,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             f = self._display_interactive_morphology_only_3d(
                 background_color=background_color, highlight_section=highlight_section)
             if self.show:
-                return f.show
+                return f.show(renderer=renderer)
         else:
             f = self._get_interactive_plot_with_scalar_data(data, vmin=vmin, vmax=vmax,
                          color_map=color_map, background_color=background_color)
