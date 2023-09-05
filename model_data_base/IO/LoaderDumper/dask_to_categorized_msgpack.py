@@ -238,6 +238,7 @@ class Loader(parent_classes.Loader):
     
         
 def dump(obj, savedir, repartition = False, get = None, categorize = True, client = None):
+    raise RuntimeError('pandas-msgpack is not supported anymore in the model_data_base')
     if client is None:
         assert get is not None
         client = get
