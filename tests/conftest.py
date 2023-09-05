@@ -63,7 +63,3 @@ def pytest_configure(config):
     # Suppress logs from verbose modules so they don't show in stdout
     root_logger_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
         
-
-def pytest_generate_tests(metafunc):
-    # Set TESTING env variable, so that mdb can still test msgpack
-    os.environ['TESTING'] = True
