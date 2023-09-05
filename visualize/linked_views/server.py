@@ -165,7 +165,7 @@ class LinkedViewsServer:
     def start_logging(self):
         tmp_folder = Path(tempfile.gettempdir())
         log_filename = tmp_folder/"linked-views-server.log"
-        print("logs are written to {}".format(log_filename)))
+        print("logs are written to {}".format(log_filename))
         self.logfile_handler = logging.handlers.RotatingFileHandler(
             filename=log_filename,
             mode='w',
