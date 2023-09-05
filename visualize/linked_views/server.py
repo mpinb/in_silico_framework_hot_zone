@@ -202,9 +202,9 @@ class LinkedViewsServer:
 
     def index(self):
         if(self.vaex_df):
-            return f"vaex df columns: {[name for name in list(self.vaex_df.columns)]}"
+            return "vaex df columns: {}".format([name for name in list(self.vaex_df.columns)])
         else:
-            return f"Tables: {[name for name in self.tables.keys()]}"
+            return "Tables: {}".format([name for name in self.tables.keys()])
 
 
     """
