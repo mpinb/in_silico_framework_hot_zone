@@ -17,8 +17,6 @@ from .cell import PySection, Cell
 from . import cell_modify_functions
 import logging
 log = logging.getLogger(__name__)
-log.propagate=True
-
 
 class CellParser(object):
     '''
@@ -936,21 +934,4 @@ class CellParser(object):
                     hSpineHead.set_3d_geometry(points_head, diameters_head)
                     hSpineHead.parentx = 1.0
                     hSpineHead.parentID = self.cell.sections.index(hSpineNeck)
-
-if __name__ == '__main__':
-#    fname = raw_input('Enter hoc filename: ')
-    fname = '93_CDK080806_marcel_3x3_registered_zZeroBarrel.hoc.am-14678.hoc'
-    testParser = CellParser(fname)
-    testParser.spatialgraph_to_cell()
-    testParser.insert_passive_membrane('Soma')
-    testParser.insert_passive_membrane('Dendrite')
-    testParser.insert_passive_membrane('ApicalDendrite')
-    testParser.insert_hh_membrane('Soma')
-    testParser.insert_hh_membrane('Dendrite')
-    testParser.insert_hh_membrane('ApicalDendrite')
-    for label in list(testParser.cell.branches.keys()):
-        for branch in testParser.cell.branches[label]:
-            log.info('Branch: {:s}'.format(label))
-            for sec in branch:
-                h.psection(sec=sec)
     

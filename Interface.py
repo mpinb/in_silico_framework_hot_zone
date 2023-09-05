@@ -42,11 +42,18 @@ import six
 
 ### logging setup
 import logging
+# All loggers will inherit the root logger's level and handlers
 root_logger = logging.getLogger()
-log_stream_handler = logging.StreamHandler(stream=sys.stdout)  # a singular stream handler, so that all logs can redirect to this one
-log_stream_handler.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
-root_logger.handlers = [log_stream_handler]
-
+# Redirect warnings to the logging system. This will format them accordingly.
+logging.captureWarnings(True)
+if not any([h.name == "root_logger_stream_handler" for h in root_logger.handlers]):
+    # If the stream handler hasn't been set yet: set it.
+    # a singular stream handler, so that all logs can redirect to this one
+    root_logger_stream_handler = logging.StreamHandler(stream=sys.stdout)
+    root_logger_stream_handler.name = "root_logger_stream_handler"
+    root_logger_stream_handler.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
+    root_logger.handlers = [root_logger_stream_handler]  # Additional handlers can always be configured.
+root_logger_stream_handler = [h for h in root_logger.handlers if h.name == "root_logger_stream_handler"][0]
 
 try:
     from IPython import display
@@ -179,7 +186,7 @@ try:
     from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
 except ImportError:
     print("Could not import visualize.cell_morphology_visualizer!")
-from visualize.helper_methods import write_video_from_images, write_gif_from_images, display_animation_from_images
+from visualize.utils import write_video_from_images, write_gif_from_images, display_animation_from_images
 
 from simrun2.reduced_model import synapse_activation \
     as rm_synapse_activations
@@ -199,45 +206,7 @@ from singlecell_input_mapper.ongoing_network_param_from_template import create_n
 
 if get_versions()['dirty']: warnings.warn('The source folder has uncommited changes!')
 
-def get_user_port_numbers():
-    """Read the port numbers defined in SLURM_scripts/user_settings.ini
-
-    Returns:
-        dict: port numbers as values, names as keys
-    """
-    import configparser
-    # user-defined port numbers
-    __location__ = os.path.realpath(
-        os.path.join(os.getcwd(), os.path.dirname(__file__))
-        )
-    config = configparser.ConfigParser()
-    config.read(os.path.join(__location__, 'SLURM_scripts/user_settings.ini'))
-    ports = config['PORT_NUMBERS']
-    return ports
-
-def get_client():
-    """Gets the distributed.client object if dask has been setup
-
-    Returns:
-        Client: the client object
-    """
-    ports = get_user_port_numbers()
-    if six.PY2:
-        client_port = ports['dask_client_2']
-    else:
-        client_port = ports['dask_client_3']
-
-    from socket import gethostbyname, gethostname
-    hostname = gethostname()
-    ip = gethostbyname(hostname)  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
-    if 'soma' in hostname:
-        #we're on the soma cluster and have infiniband
-        ip_infiniband = ip.replace('100', '102')  # a bit hackish, but it works
-        client = distributed.Client(ip_infiniband+':'+client_port)
-    else:
-        client = distributed.Client(ip+':'+client_port)
-    return client
-
+from SLURM_scripts.utils import get_user_port_numbers, get_client
 
 defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
 

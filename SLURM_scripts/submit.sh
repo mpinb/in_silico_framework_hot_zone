@@ -4,7 +4,7 @@
 nodes="1"
 partition="CPU"
 cores="0"
-mem="93750"  # half of max memory of a CPU node
+mem="0"  # max
 memstr="max"
 time="1-0:00"
 tpn=""
@@ -224,7 +224,7 @@ if [[ ${partition:0:3} == CPU ]]; then
     cores=24
   fi
 #### 2.2: GPU partitions (GPU or GPU-interactive)
-elif [[ ${partition:0:3} == "GPU" && $partition -ne "GPU-a100" ]]; then  
+elif [[ ${partition:0:3} == GPU ]] && [[ $partition != "GPU-a100" ]]; then  
   if [ $gres == "0" ]; then  # gres is unspecified
     gres="2"  # by default, set to half of max gres for GPU partitions
   fi
