@@ -2,7 +2,7 @@ from . import dask_to_categorized_msgpack
 import os
 
 # If this module is called from within the test suite:
-TESTING = True if os.environ.get('TESTING') is not None else False
+TESTING = True if "PYTEST_CURRENT_TEST" in os.environ else False
 
 Loader = dask_to_categorized_msgpack.Loader
 check = dask_to_categorized_msgpack.check

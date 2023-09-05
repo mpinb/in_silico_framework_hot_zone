@@ -34,7 +34,7 @@ import distributed
 from pandas_msgpack import to_msgpack, read_msgpack
 
 # If this module is called from within the test suite:
-TESTING = True if os.environ.get('TESTING') is not None else False
+TESTING = True if "PYTEST_CURRENT_TEST" in os.environ else False
     
 
 ####

@@ -6,7 +6,7 @@ from . import parent_classes
 import pandas_msgpack
 
 # If this module is called from within the test suite:
-TESTING = True if os.environ.get('TESTING') is not None else False
+TESTING = True if "PYTEST_CURRENT_TEST" in os.environ else False
 
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''
