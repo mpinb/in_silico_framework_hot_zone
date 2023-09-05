@@ -237,7 +237,7 @@ class LinkedViewsServer:
 
     def add_session(self, sessionData, name=None):
         if(name is None):
-            name = f"session-{len(self.objects)+1}"
+            name = "session-{}".format(len(self.objects)+1)
         sessionData["name"] = name
         self.objects.append(sessionData)
         return name 
@@ -500,7 +500,7 @@ class LinkedViewsServer:
         if(df_selected_indices is None):
             return "no selection"
         else:
-            return f"number of selected rows: {df_selected_indices.shape[0]}"
+            return "number of selected rows: {}".format(df_selected_indices.shape[0])
 
 
 
