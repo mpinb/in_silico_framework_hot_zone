@@ -305,7 +305,8 @@ output=$(sbatch <<EoF
 $tpn
 unset XDG_RUNTIME_DIR
 unset DISPLAY
-module load ffmpeg
+module unload ffmpeg
+module load ffmpeg/4.4
 export SLURM_CPU_BIND=none
 ulimit -Sn "\$(ulimit -Hn)"
 $run_str
