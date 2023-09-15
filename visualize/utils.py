@@ -259,13 +259,13 @@ def _arrow3D(ax, x, y, z, dx, dy, dz, *args, **kwargs):
     ax.add_artist(arrow)
 
 def draw_arrow(morphology, ax, 
-               highlight_section, 
-               highlight_x, 
-               highlight_arrow_args, 
+               highlight_section=None, 
+               highlight_x=None, 
+               highlight_arrow_args=None, 
                arrow_size=50):
     
     assert type(highlight_section) == int, "Please provide the section index as an argument for highlight_arrow. You passed {}".format(highlight_section)
-    assert highlight_section in morphology['section'], "The given section id is not present in the cell morphology"
+    assert highlight_section in morphology['section'], "The given section id is not present in the cell morphology"        
 
     setattr(Axes3D, 'arrow3D', _arrow3D)
     if highlight_arrow_args is None:
@@ -275,12 +275,17 @@ def draw_arrow(morphology, ax,
     x = dict(mutation_scale=20, ec ='black', fc='white')
     x.update(highlight_arrow_args)
     highlight_arrow_args = x
+    
     morphology = morphology.copy()
     morphology = morphology.fillna(0) # soma section gets 0 as section ID
     df = morphology[morphology['section'] == highlight_section]
-    index = np.argmin(np.abs(df.relPts-highlight_x))
-    x, y, z = df.iloc[index][['x','y','z']]
-    #x, y, z = morphology[morphology['section'] == highlight_section][['x', 'y', 'z']].mean(axis=0)
+    if highlight_x is not None:
+        index = np.argmin(np.abs(df.relPts-highlight_x))
+        x, y, z = df.iloc[index][['x','y','z']]
+    elif highlight_section is not None:
+        x, y, z = morphology[morphology['section'] == highlight_section][['x', 'y', 'z']].mean(axis=0)
+    else:
+        raise ValueError("Please provide either a section index to highlight, or a distance from soma x.")
 
     # get start of arrow
     start_x, start_y, start_z = x, y, z+arrow_size

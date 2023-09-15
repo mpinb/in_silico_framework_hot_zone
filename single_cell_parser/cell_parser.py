@@ -17,8 +17,6 @@ from .cell import PySection, Cell
 from . import cell_modify_functions
 import logging
 log = logging.getLogger(__name__)
-log.propagate=True
-
 
 class CellParser(object):
     '''

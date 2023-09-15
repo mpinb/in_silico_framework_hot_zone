@@ -42,11 +42,18 @@ import six
 
 ### logging setup
 import logging
+# All loggers will inherit the root logger's level and handlers
 root_logger = logging.getLogger()
-log_stream_handler = logging.StreamHandler(stream=sys.stdout)  # a singular stream handler, so that all logs can redirect to this one
-log_stream_handler.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
-root_logger.handlers = [log_stream_handler]
-
+# Redirect warnings to the logging system. This will format them accordingly.
+logging.captureWarnings(True)
+if not any([h.name == "root_logger_stream_handler" for h in root_logger.handlers]):
+    # If the stream handler hasn't been set yet: set it.
+    # a singular stream handler, so that all logs can redirect to this one
+    root_logger_stream_handler = logging.StreamHandler(stream=sys.stdout)
+    root_logger_stream_handler.name = "root_logger_stream_handler"
+    root_logger_stream_handler.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
+    root_logger.handlers = [root_logger_stream_handler]  # Additional handlers can always be configured.
+root_logger_stream_handler = [h for h in root_logger.handlers if h.name == "root_logger_stream_handler"][0]
 
 try:
     from IPython import display
@@ -208,6 +215,12 @@ from biophysics_fitting import hay_complete_default_setup as bfit_hay_complete_d
 from biophysics_fitting import L5tt_parameter_setup as bfit_L5tt_parameter_setup
 from biophysics_fitting.parameters import param_to_kwargs as bfit_param_to_kwargs
 from biophysics_fitting.optimizer import start_run as bfit_start_run
+try:
+    import visualize.linked_views
+    from visualize.linked_views.server import LinkedViewsServer
+    from visualize.linked_views import defaults as LinkedViewsDefaults
+except ImportError:
+    print('Could not load linked views')
 
 from functools import partial
 
