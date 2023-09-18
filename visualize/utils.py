@@ -49,6 +49,7 @@ def write_video_from_images(images, out_path, fps=24, images_format = '.png', qu
         - codec
         - auto_sort_paths: paths to images sorted
     '''
+    subprocess.call(["module load", "ffmpeg"], shell=True)
     
     if not out_path.endswith('.mp4'):
         raise ValueError('output path must be the path to an mp4 video!')
@@ -61,7 +62,7 @@ def write_video_from_images(images, out_path, fps=24, images_format = '.png', qu
     # call ffmpeg directly
     if isinstance(images, str) and os.path.isdir(images) and auto_sort_paths == False:
         out = subprocess.call(["ffmpeg", "-y", "-r", str(fps), "-i", images+"/%*"+images_format, 
-                                       "-vcodec", codec, "-q:v", str(quality), "-r", str(fps), out_path])    
+                                       "-vcodec", codec, "-q:v", str(quality), "-r", str(fps), out_path]) 
     #
     elif isinstance(images, list):
         if auto_sort_paths:
@@ -121,17 +122,17 @@ def write_gif_from_images(images, out_path, interval=40, images_format = '.png',
         frames[0].save(out_path, format='GIF', append_images=frames[1:], save_all=True, duration=interval, loop=0)
     elif isinstance(images, list):
         if auto_sort_paths:
-            listFrames = find_files_and_order_them(images,images_format)
+            listFrames = find_files_and_order_them(images, images_format)
         else:
             listFrames = images
         with mkdtemp() as temp_folder:
-            for i,file in enumerate(listFrames):
+            for i, file in enumerate(listFrames):
                 new_name = str(i+1).zfill(6)+images_format
-                shutil.copy(file,os.path.join(temp_folder, new_name))
+                shutil.copy(file, os.path.join(temp_folder, new_name))
                 frames = []
                 for f in os.listdir(temp_folder):
                     if f.endswith(images_format):
-                        frames.append(Image.open(os.path.join(images,f)))
+                        frames.append(Image.open(os.path.join(images, f)))
                 # Save into a GIF file that loops forever   
                 frames[0].save(out_path, format='GIF', append_images=frames[1:], save_all=True, duration=interval, loop=0)
     else:

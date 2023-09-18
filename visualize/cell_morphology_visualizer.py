@@ -40,11 +40,11 @@ class CMVDataParser:
         self.line_pairs = []  # initialised below
         """Pairs of point indices that define a line, i.e. some cell segment"""
         soma = [section for section in cell.sections if section.label == "Soma"][0]
-        self.soma = self.cell["sections"][0]
+        self.soma = self.cell.soma
         self.soma_center = np.mean(soma.pts, axis=0)
 
         self.morphology = self._get_morphology(cell)  # a pandas DataFrame
-        self.n_sections = max(self.morphology['section'])
+        self.n_sections = len(cell.sections)
         
         """A pd.DataFrame containing point information, diameter and section ID"""
         self.rotation_with_zaxis = None
@@ -55,7 +55,7 @@ class CMVDataParser:
         """The 3D point coordinates of the cell"""
         self.diameters = self.morphology["diameter"]
         """Diameters of the cell segments"""
-        self.section_indices = self.morphology["section"]
+        self.section_indices = self.morphology['sec_n']
         """Section indices of the Cell segments"""
 
         # ---------------------------------------------------------------
@@ -119,7 +119,7 @@ class CMVDataParser:
             self._init_simulation_data()
     
     def _has_simulation_data(self):
-        return len(self.soma["recVList"][0]) > 0
+        return len(self.soma.recVList[0]) > 0
 
     def _init_simulation_data(self):
         # Max and min voltages colorcoded in the cell morphology
@@ -203,35 +203,32 @@ class CMVDataParser:
         points = []
         for sec_n, sec in enumerate(cell.sections):
             if sec.label == 'Soma':
-                # TODO: if soma is added, somatic voltage should lso be added
                 x, y, z = self.soma_center
-                # # soma size
+                # soma size
                 mn, mx = np.min(cell.soma.pts, axis=0), np.max(cell.soma.pts, axis=0)
                 d_range = [mx_ - mn_ for mx_, mn_ in zip(mx, mn)]
                 d = max(d_range)
-                points.append([x, y, z, d, 0, 0])
-                continue
+                points.append([x, y, z, d, sec_n, 0])
             elif sec.label in ['AIS', 'Myelin']:
                 continue
             else:
-                # Point that belongs to the previous section (x, y, z and diameter)
+                # Point that belongs to the previous section: first point of this section
                 x, y, z = sec.parent.pts[-1]
-                x_in_sec = [seg.x for seg in sec.parent][-1]
+                n_seg_parent = len([seg.x for seg in sec.parent])
                 d = sec.parent.diamList[-1]
-                points.append([x, y, z, d, 0])
+                points.append([x, y, z, d, sec_n, 0])
 
+                # Points within the same section
                 xs_in_sec = [seg.x for seg in sec]
-                n_segments = len(xs_in_sec)
+                n_segments = len([seg for seg in sec])
                 for i, pt in enumerate(sec.pts):
-                    seg_n = i % len(sec.pts)//n_segments
-                    # Points within the same section
+                    seg_n = int(n_segments * i / len(sec.pts))
                     x, y, z = pt
                     d = sec.diamList[i]
-                    rp = sec.relPts[i]
-                    points.append([x, y, z, d, rp, sec_n, seg_n])
+                    points.append([x, y, z, d, sec_n, seg_n])
 
         morphology = pd.DataFrame(
-            points, columns=['x', 'y', 'z', 'diameter', 'relPts', 'section', 'seg_n'])
+            points, columns=['x', 'y', 'z', 'diameter', 'sec_n', 'seg_n'])
         t2 = time.time()
         print('Initialised simulation data in {} seconds'.format(np.around(t2-t1, 2)))
         return morphology
@@ -245,40 +242,17 @@ class CMVDataParser:
          - time_point: time point from which we want to gather the voltage
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
-        voltage_points = []
-        for sec_n, sec in enumerate(self.cell["sections"]):
-            if sec["label"] in ['AIS', 'Myelin']:
-                continue
-            
-            sec_morphology = self.morphology[self.morphology["section"] == sec_n]
-            
-            # Add voltage at the last point of the previous section
-            if sec["label"].lower() != "soma":
-                sec_parent = self.cell["sections"][sec["parent_id"]]
-                voltage_points.append(sec_parent['recVList'][-1][n_sim_point])
-
-            # Compute segments limits (voltage is measured at the middle of each segment, not section)
-            segs_limits = [0]
-            n_segments = len(sec_morphology)
-            for j, seg_n in enumerate(sec_morphology['seg_n']):
-                x = seg_n / n_segments
-                segs_limits.append(segs_limits[j]+(x-segs_limits[j])*2)
-
-            # Map the segments to section points to assign a voltage to each line connecting 2 points
-            current_seg = 0
-            next_seg_flag = False
-            rel_points = sec_morphology['relPts'].values
-            for i in range(len(sec_morphology)):
-                if i != 0:
-                    if next_seg_flag:
-                        current_seg += 1
-                        next_seg_flag = False
-                    if rel_points[i-1] < segs_limits[current_seg+1] < rel_points[i]:
-                        if rel_points[i] - segs_limits[current_seg+1] > segs_limits[current_seg+1] - rel_points[i-1]:
-                            current_seg += 1
-                        else:
-                            next_seg_flag = True
-                voltage_points.append(sec['recVList'][current_seg][n_sim_point])
+        voltage_points = np.empty(len(self.morphology) + self.n_sections - 1)  # pre-allocate memory
+        voltage_points[0] = self.soma.recVList[0][n_sim_point]
+        i = 1  # keeps track of which index to fill in voltage_points
+        for sec_n, sec in enumerate([sec for sec in self.cell.sections if sec.label != "Soma"]):
+            n_segs = len([seg for seg in sec])
+            voltage_points[i] = sec.parent.recVList[-1][n_sim_point]
+            i += 1
+            for n, pt in enumerate(sec.pts):
+                seg_n = int(n_segs * n / len(sec.pts))
+                voltage_points[i] = sec.recVList[seg_n][n_sim_point]
+                i += 1
         return voltage_points
 
     def _get_ion_dynamic_at_timepoint(self, time_point, ion_keyword):
@@ -290,11 +264,23 @@ class CMVDataParser:
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
         ion_points = []
+        for sec_n, sec in enumerate(self.cell.sections):
+            if sec["label"] in ['AIS', 'Myelin']:
         for sec_n, sec in enumerate(self.cell['sections']):
             if sec["label"] in ['AIS', 'Myelin']:
                 continue
 
-            sec_morphology = self.morphology[self.morphology["section"] == sec_n]
+            sec_morphology = self.morphology[self.morphology['sec_n'] == sec_n]
+
+            # Add ion dynamics at the last point of the previous section
+            if sec["label"].lower() != "soma":
+                sec_parent = self.cell.sections["parent_id"]
+                rec_vars = sec_parent.recordVars[ion_keyword]
+                if rec_vars == []:
+                    ion_points.append(None)
+                else:
+                    ion_points.append(
+                        sec_parent.recordVars[ion_keyword][-1][n_sim_point])
 
             # Add ion dynamics at the last point of the previous section
             if sec["label"].lower() != "soma":
@@ -359,6 +345,7 @@ class CMVDataParser:
         Returns:
             Nothing. Updates the self.timeseries_voltage attribute
         '''
+        self._update_times_to_show(self.t_start, self.t_end, self.t_step)
         if len(self.voltage_timeseries) != 0:
             return  # We have already retrieved the voltage timeseries
 
@@ -366,7 +353,7 @@ class CMVDataParser:
         for time_point in self.times_to_show:  # For each frame of the video/animation
             voltage = self._get_voltages_at_timepoint(time_point)
             self.voltage_timeseries.append(voltage)
-        self.scalar_data["voltage"] = self.voltage_timeseries
+        # self.scalar_data["voltage"] = self.voltage_timeseries
         t2 = time.time()
         print('Voltage retrieval runtime (s): ' + str(np.around(t2-t1, 2)))
 
@@ -382,7 +369,7 @@ class CMVDataParser:
 
         assert ion_keyword in self.possible_scalars, \
             "Ion keyword not recognised. Possible keywords are: " + str(self.possible_scalars)
-        assert any([ion_keyword in sec["recordVars"].keys() for sec in self.cell["sections"]]), \
+        assert any([ion_keyword in sec["recordVars"].keys() for sec in self.cell.sections]), \
             "No sections found with ion dynamics for ion keyword " + ion_keyword
 
         if ion_keyword in self.scalar_data.keys():
@@ -430,8 +417,8 @@ class CMVDataParser:
 
         synapses = {'INT': [], 'L4ss': [], 'L5st': [],
                     'L5tt': [], 'L6CC': [], 'VPM': [], 'L23': []}
-        for population in self.cell["synapses"].keys():
-            for synapse in self.cell['synapses'][population]:
+        for population in self.cell.synapses.keys():
+            for synapse in self.cell.synapses[population]:
                 if synapse["preCell"] is None:
                     continue
                 for spikeTime in synapse["preCell"]["spikeTimes"]:
@@ -530,6 +517,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         """Rotation degrees of the neuron at each frame during timeseries visualization (in azimuth)"""
         self.dpi = 72
         """Image quality"""
+        self.background_color = (1, 1, 1, 1)  # white
 
         self.show_synapses = True
         """Whether or not to show the synapses on the plots that support this. Can be turned off manually here for e.g. testing purposes."""
@@ -540,7 +528,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         self.highlight_arrow_args=None
         """Additional arguments for the arrow. See available kwargs on https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.patches.Arrow.html#matplotlib.patches.Arrow"""
 
-    def _plot_cell_voltage_synapses_in_morphology_3d(self, voltage, synapses, time_point, save='', plot=True,
+    def _plot_cell_voltage_synapses_in_morphology_3d(self, synapses, time_point, save='', plot=True,
                                                      highlight_section=None, highlight_x=None, show_synapses=True):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
@@ -554,22 +542,29 @@ class CellMorphologyVisualizer(CMVDataParser):
             - Plot: whether the plot should be shown.
         '''
         # Plot morphology with colorcoded voltage
+        n_sim_point = np.argmin(np.abs(self.times_to_show - time_point))
+        voltage = self.voltage_timeseries[n_sim_point]
         cmap = mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(
             vmin=self.vmin, vmax=self.vmax), cmap=plt.get_cmap('jet'))
-        fig = plt.figure(figsize=(15, 15), dpi=self.dpi)
+        fig = plt.figure(figsize=(15, 15), dpi=self.dpi, facecolor=self.background_color)
         ax = plt.axes(projection='3d', proj_type='ortho')
-        sections = np.unique(self.morphology['section'].values)
-        for sec in sections:
-            points = self.morphology.loc[self.morphology['section'] == sec]
-            for i in points.index:
-                if i != points.index[-1]:
-                    color = ((voltage[i]+voltage[i+1])/2 -
-                             self.vmin)/(self.vmax-self.vmin)
-                    linewidth = (
-                        points.loc[i]['diameter']+points.loc[i+1]['diameter'])/2*1.5+0.2
-                    ax.plot3D([points.loc[i]['x'], points.loc[i+1]['x']],
-                              [points.loc[i]['y'], points.loc[i+1]['y']],
-                              [points.loc[i]['z'], points.loc[i+1]['z']], color=mpl.cm.jet(color), lw=linewidth)
+        ax.set_facecolor(self.background_color)
+        sections = self.morphology['sec_n'].unique()
+        for sec_n in sections:
+            points = self.morphology[self.morphology['sec_n'] == sec_n]
+            if len(points) == 1:  # soma
+                color = (voltage[0] - self.vmin)/(self.vmax-self.vmin)
+                linewidth = (points['diameter'][0])*1.5+0.2
+                ax.scatter3D(points['x'], points['y'], points['z'],
+                            color=mpl.cm.jet(color), s=linewidth)
+            else:
+                for i, j in zip(points.index.values[:-1], points.index.values[1:]):
+                    p1, p2 = points.loc[i], points.loc[j]
+                    color = ((voltage[i] + voltage[j])/2 - self.vmin)/(self.vmax-self.vmin)
+                    linewidth = (p1['diameter']+p2['diameter'])/2*1.5+0.2
+                    ax.plot3D([p1['x'], p2['x']],
+                                [p1['y'], p2['y']],
+                                [p1['z'], p2['z']], color=mpl.cm.jet(color), lw=linewidth)
 
         # Plot synapse activations
         if show_synapses:
@@ -609,7 +604,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             [ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
 
         if save != '':
-            plt.savefig(save)  # ,bbox_inches='tight')
+            plt.savefig(save, facecolor=fig.get_facecolor(), edgecolor='none')  # ,bbox_inches='tight')
         if plot:
             plt.show()
         else:
@@ -658,7 +653,7 @@ class CellMorphologyVisualizer(CMVDataParser):
                 azim=self.azim, dist=self.dist, roll=self.roll, elev=self.elev, vmin=self.vmin, vmax=self.vmax,
                 voltage_legend=self.voltage_legend, synapse_legend=self.synapse_legend, time_offset=self.time_offset, dpi=self.dpi,
                 highlight_section=highlight_section, highlight_x=highlight_x, highlight_arrow_args=self.highlight_arrow_args, 
-                show_synapses = self.show_synapses))
+                show_synapses = self.show_synapses, background_color=self.background_color))
             self.azim += self.neuron_rotation
         self.azim = azim_
         futures = client.compute(out)
@@ -719,8 +714,8 @@ class CellMorphologyVisualizer(CMVDataParser):
             lines_str = ""
             n_lines = 0
             n_comps = 0
-            for sec_n in range(len(self.cell['sections'])):
-                points_this_sec = self.morphology[self.morphology['section'] == sec_n].index.values
+            for sec_n in range(len(self.cell.sections)):
+                points_this_sec = self.morphology[self.morphology['sec_n'] == sec_n].index.values
                 if len(points_this_sec) > 0:
                     n_lines += 1
                     n_comps += 1
@@ -742,7 +737,7 @@ class CellMorphologyVisualizer(CMVDataParser):
 
             # section id
             of.write("section_id 1 {} int\n".format(len(self.morphology)))
-            of.write(scalar_str_(self.morphology['section'].values))
+            of.write(scalar_str_(self.morphology['sec_n'].values))
 
             # Scalar data (as of now only membrane voltages and diameter)
             of.write("POINT_DATA {}\n".format(len(self.morphology)))
@@ -770,9 +765,9 @@ class CellMorphologyVisualizer(CMVDataParser):
                       proj_type='ortho'
                       )
         
-        sections = np.unique(self.morphology['section'].values)
+        sections = np.unique(self.morphology['sec_n'].values)
         for sec in sections:
-            points = self.morphology.loc[self.morphology['section'] == sec]
+            points = self.morphology.loc[self.morphology['sec_n'] == sec]
             for i in points.index:
                 if i != points.index[-1]:
                     linewidth = (
@@ -828,9 +823,9 @@ class CellMorphologyVisualizer(CMVDataParser):
             vmin=self.vmin, vmax=self.vmax), cmap=plt.get_cmap('jet'))
         fig = plt.figure(figsize=(15, 15), dpi=self.dpi)
         ax = plt.axes(projection='3d', proj_type='ortho')
-        sections = np.unique(self.morphology['section'].values)
+        sections = np.unique(self.morphology['sec_n'].values)
         for sec in sections:
-            points = self.morphology.loc[self.morphology['section'] == sec]
+            points = self.morphology.loc[self.morphology['sec_n'] == sec]
             for i in points.index:
                 if i != points.index[-1]:
                     color = ((voltage[i]+voltage[i+1])/2 -
@@ -867,7 +862,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             [ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
 
         if save != '':
-            plt.savefig(save)  # ,bbox_inches='tight')
+            plt.savefig(save, facecolor=fig.get_facecolor(), edgecolor='none')  # ,bbox_inches='tight')
         if plot:
             plt.show()
 
@@ -1102,7 +1097,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         # Create figure
         fig = px.scatter_3d(
             self.morphology, x="x", y="y", z="z",
-            hover_data=["section", "diameter"],
+            hover_data=['sec_n', "diameter"],
             size="diameter")
         fig.update_traces(marker=dict(line=dict(width=0)))  # remove outline of markers
         fig.update_layout(scene=dict(
@@ -1157,7 +1152,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             self.vmin = vmin
         if vmax is not None:
             self.vmax = vmax
-        sections = self.morphology["section"]
+        sections = self.morphology['sec_n']
         ### Create figure
         # Interactive cell
         fig_cell = self._get_interactive_cell(
@@ -1257,8 +1252,8 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             background_color=background_color)
         if highlight_section:
             fig_cell.add_traces(
-                px.scatter_3d(df[df['section'] == highlight_section], x="x", y="y", z='z',
-                              hover_data=["x", "y", "z", "section", "diameter"], size="diameter")
+                px.scatter_3d(df[df['sec_n'] == highlight_section], x="x", y="y", z='z',
+                              hover_data=["x", "y", "z", 'sec_n', "diameter"], size="diameter")
                 .update_traces(marker=dict(line=dict(width=0), color='red'))
                 .data
             )
@@ -1362,7 +1357,7 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, t
                                                 azim=0, dist=10, elev=30, roll=0, vmin=-75, vmax=-30,
                                                 synapse_legend=True, voltage_legend=True, time_offset=0, dpi=72, 
                                                 highlight_section=None, highlight_x=None, highlight_arrow_args=None,
-                                                show_synapses = True):
+                                                show_synapses = True, background_color="#FFFFFF"):
     '''
     Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
     are shown for a particular time point.
@@ -1396,19 +1391,24 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, t
     # Plot morphology with colorcoded voltage
     cmap = mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(
         vmin=vmin, vmax=vmax), cmap=plt.get_cmap('jet'))
-    fig = plt.figure(figsize=(15, 15), dpi=dpi)
+    fig = plt.figure(figsize=(15, 15), dpi=dpi, facecolor=background_color)
     ax = plt.axes(projection='3d', proj_type='ortho')
-    sections = np.unique(morphology['section'].values)
-    for sec in sections:
-        points = morphology.loc[morphology['section'] == sec]
-        for i in points.index:
-            if i != points.index[-1]:
-                color = ((voltage[i]+voltage[i+1])/2 - vmin)/(vmax-vmin)
+    ax.set_facecolor(background_color)
+    section_numbers = np.unique(morphology['sec_n'].values)
+    for sec_n in section_numbers:
+        points = morphology.loc[morphology['sec_n'] == sec_n]
+        if sec_n == 0:  # soma
+            color = (voltage[0] - vmin)/(vmax-vmin)
+            linewidth = points.loc[0]['diameter']*1.5+0.2
+            ax.plot3D([points.loc[0]['x']], [points.loc[0]['y']], [points.loc[0]['z']], color=mpl.cm.jet(color), lw=linewidth)
+        else:
+            for i, j in zip(points.index[:-1], points.index[1:]):
+                color = ((voltage[i]+voltage[j])/2 - vmin)/(vmax-vmin)
                 linewidth = (points.loc[i]['diameter'] +
-                             points.loc[i+1]['diameter'])/2*1.5+0.2
-                ax.plot3D([points.loc[i]['x'], points.loc[i+1]['x']],
-                          [points.loc[i]['y'], points.loc[i+1]['y']],
-                          [points.loc[i]['z'], points.loc[i+1]['z']], color=mpl.cm.jet(color), lw=linewidth)
+                                points.loc[j]['diameter'])/2*1.5+0.2
+                ax.plot3D([points.loc[i]['x'], points.loc[j]['x']],
+                            [points.loc[i]['y'], points.loc[j]['y']],
+                            [points.loc[i]['z'], points.loc[j]['z']], color=mpl.cm.jet(color), lw=linewidth)
 
     # Plot synapse activations
     if show_synapses:
@@ -1450,5 +1450,5 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology, voltage, synapses, t
     ax.set_box_aspect(
         [ub - lb for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')])
 
-    plt.savefig(save, background = 'transparent')  # ,bbox_inches='tight')
+    plt.savefig(save, facecolor=fig.get_facecolor(), edgecolor='none', dpi=dpi)  # ,bbox_inches='tight')
     plt.close()
