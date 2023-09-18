@@ -19,6 +19,7 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+    name: Py2.7 (local) build/test
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
