@@ -212,6 +212,7 @@ class CMVDataParser:
         points = []
         for sec_n, sec in enumerate(cell.sections):
             if sec.label == 'Soma':
+                # TODO: if soma is added, somatic voltage should lso be added
                 x, y, z = self.soma_center
                 # soma size
                 mn, mx = np.min(cell.soma.pts, axis=0), np.max(cell.soma.pts, axis=0)
@@ -275,29 +276,16 @@ class CMVDataParser:
         ion_points = []
         for sec_n, sec in enumerate(self.cell['sections']):
             if sec["label"] in ['AIS', 'Myelin']:
+        for sec_n, sec in enumerate(self.cell.sections):
+            if sec["label"] in ['AIS', 'Myelin']:
                 continue
 
-            sec_morphology = self.morphology[self.morphology['sec_n'] == sec_n]
-
-            # Add ion dynamics at the last point of the previous section
-            if sec["label"].lower() != "soma":
-                sec_parent = self.cell.sections["parent_id"]
-                rec_vars = sec_parent.recordVars[ion_keyword]
-                if rec_vars == []:
-                    ion_points.append(None)
-                else:
-                    ion_points.append(
-                        sec_parent.recordVars[ion_keyword][-1][n_sim_point])
-
-            # Add ion dynamics at the last point of the previous section
-            if sec["label"].lower() != "soma":
-                sec_parent = self.cell["sections"][sec["parent_id"]]
-                rec_vars = sec_parent["recordVars"][ion_keyword]
-                if rec_vars == []:
-                    ion_points.append(None)
-                else:
-                    ion_points.append(
-                        sec_parent["recordVars"][ion_keyword][-1][n_sim_point])
+            # Add voltage at the last point of the previous section
+            if not sec.parent.recordVars[ion_keyword] == []:
+                ion_points.append(
+                    sec.parent.recordVars[ion_keyword][-1][n_sim_point])
+            else:
+                ion_points.append(None)
 
             # Compute segments limits (recVars are measure at the middle of each segment, not section)
             segs_limits = [0]
