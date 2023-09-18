@@ -38,7 +38,7 @@ class CMVDataParser:
         """
         # ---------------------------------------------------------------
         # Cell object
-        self.cell = serialize_cell.cell_to_serializable_object(cell)
+        self.cell = cell
         """The Cell object"""
 
         # ---------------------------------------------------------------
