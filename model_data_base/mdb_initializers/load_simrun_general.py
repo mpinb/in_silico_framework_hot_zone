@@ -12,7 +12,7 @@ import dask
 import single_cell_parser as scp
 import single_cell_analyzer as sca
 from model_data_base import utils, ModelDataBase
-from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, to_cloudpickle, to_pickle, pandas_to_msgpack
+from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, to_cloudpickle, to_pickle, pandas_to_parquet, dask_to_parquet
 from model_data_base.model_data_base import get_progress_bar_function,\
     MdbException
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format as read_sa
@@ -25,6 +25,7 @@ from model_data_base.utils import mkdtemp
 import compatibility        
 import warnings
 import scandir       
+import time
 
 
 ############################################
@@ -390,10 +391,11 @@ def _build_core(mdb, repartition = None):
     mdb['sim_trail_index'] = mdb['voltage_traces'].index.compute()
 
     print('generate metadata ...')  
-    mdb.setitem('metadata', create_metadata(mdb), dumper = pandas_to_msgpack)
+    mdb.setitem('metadata', create_metadata(mdb), dumper = pandas_to_parquet)
     
     print('add divisions to voltage traces dataframe')
     vt.divisions =  get_voltage_traces_divisions_by_metadata(mdb['metadata'], repartition = repartition)
+    (print(vt.divisions))
     mdb.setitem('voltage_traces', vt, dumper = to_cloudpickle)   
 
 def _build_synapse_activation(mdb, repartition = False, n_chunks = 5000):
@@ -547,7 +549,9 @@ def init(mdb, simresult_path,  \
     if spike_times: 
         print("---spike times---")
         vt = mdb['voltage_traces']
-        mdb.setitem('spike_times', spike_detection(vt), dumper = pandas_to_msgpack)                                        
+        sts = spike_detection(vt)
+        sts = convert_df_columns_to_str(sts)
+        mdb.setitem('spike_times', sts, dumper = pandas_to_parquet)                                        
     print('Initialization succesful.') 
     
 def add_dendritic_voltage_traces(mdb, rewrite_in_optimized_format = True, dendritic_spike_times = True, repartition = True, dendritic_spike_times_threshold = -30., get = None, client = None):
@@ -562,14 +566,15 @@ def add_dendritic_spike_times(mdb, dendritic_spike_times_threshold = -30.):
     for kk in list(mdb['dendritic_recordings'].keys()):
         vt = mdb['dendritic_recordings'][kk]
         st = spike_detection(vt, threshold = dendritic_spike_times_threshold)
-        m.setitem(kk+'_'+str(dendritic_spike_times_threshold), st, dumper = pandas_to_msgpack)                
+        st = convert_df_columns_to_str(st)
+        m.setitem(kk+'_'+str(dendritic_spike_times_threshold), st, dumper = pandas_to_parquet)                
         
 def _get_dumper(value):
     '''tries to automativcally infer the best dumper for each table'''
     if isinstance(value, pd.DataFrame):
-        return pandas_to_msgpack
+        return pandas_to_parquet
     elif isinstance(value, dd.DataFrame):
-        return dask_to_categorized_msgpack
+        return dask_to_parquet
     else:
         raise NotImplementedError()
     
@@ -618,9 +623,10 @@ def optimize(mdb, dumper = None, select = None, get = None, repartition = False,
                 print('optimizing {} using dumper {}'.format(str(key), \
                                              get_dumper_string_by_dumper_module(dumper)))
                 if isinstance(value, dd.DataFrame):
-                    mdb.setitem(key, value, dumper = dumper, get = get, repartition = repartition, client = client)
+                    value = convert_df_columns_to_str(value)
+                    mdb.setitem(key, value, dumper = dumper, client = client)
                 else:
-                    mdb.setitem(key, value, dumper = dumper, get = get)
+                    mdb.setitem(key, value, dumper = dumper)
 
             
     
@@ -648,3 +654,7 @@ def load_initialized_cell_and_evokedNW_from_mdb(mdb, sti, allPoints=False, recon
     else:
         evokedNW.create_saved_network2()
     return cell, evokedNW
+
+def convert_df_columns_to_str(df):
+    df = df.rename(columns={col: '{}'.format(col) for col in df.columns if type(col)!=str})
+    return df
