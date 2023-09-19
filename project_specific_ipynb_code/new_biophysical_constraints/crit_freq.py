@@ -40,14 +40,14 @@ def setup_soma_step_with_current(cell, amplitude = None, delay = None, duration 
 
 def setup_crit_freq_n(cell, delay=None, freq = None, amplitude = None, n_stim = None, duration = None):
     t = 1000/freq 
-    print(delay)
+    #print(delay)
     if isinstance(amplitude, list):
         amplitudes = amplitude
     else:
         amplitudes = [amplitude] * n_stim
     for i in range(n_stim):  
             setup_soma_step_with_current(cell, amplitude = amplitudes[i], delay = delay, duration = duration)
-            print(delay)
+            #print(delay)
             delay += t
 
 def record_crit_freq(cell, recSite1 = None, recSite2 = None):
@@ -203,21 +203,20 @@ class Crit_freq:
                  delay = None,
                  freq_list = None,
                  n_stim = None,
-                 definitions ={'Area':('Area',0,0),
-                                'Freq_list':('Freq_list',0,0), 
-                                'NumSpike':('NumSpike',0,0)},
-                 soma_threshold = -20):
+                 # definitions ={'Area':('Area',0,0),
+                 #                'Freq_list':('Freq_list',0,0), 
+                 #                'NumSpike':('NumSpike',0,0)},
+                 soma_threshold = 0):
         assert(n_stim is not None)
         self.delay = delay
-        self.definitions = definitions
+        # self.definitions = definitions
         self.n_stim = n_stim
         self.freq_list = freq_list
         self.soma_threshold = soma_threshold
         
     def get(self, **voltage_traces): 
         out = {}
-        for name,(_,mean,std) in iter(self.definitions.items()):
-#             out.update(getattr(self, name)(voltage_traces, mean, std))
+        for name in ['Area', 'Freq_list', 'NumSpike']:
             out.update(getattr(self, name)(voltage_traces))
         return out   
     
@@ -255,29 +254,61 @@ class Crit_freq:
 # Todo: make sure nan works as expected 
     
 def find_Crit_freq(dict_):
+    '''finalize function which gets called with the evaluation dict'''
+    if not 'crit_freq.Freq_list' in dict_:
+        print('crit_freq.Freq_list or crit_freq.Crit_freq not found. Skipping.')
+        return dict_
     area_list = [v for k,v in dict_.items() if 'Area' in k]
     freq_list =  dict_['crit_freq.Freq_list']
     area_ratio = dict([(freq,area_plus/area) for area, area_plus, freq in zip(area_list, (area_list[1:]), freq_list[1:])])
     if max(area_ratio.values())> 1.5: 
         dict_['crit_freq.Crit_freq'] = max(area_ratio, key = area_ratio.get)
     else:
-        dict_['crit_freq.Crit_freq'] = 0 
+        dict_['crit_freq.Crit_freq'] = float('nan')
 #     del(dict_['Freq_list'], dict_['Area1'], dict_['Area2'], dict_['Area3'], dict_['Area4'], dict_['Area5'])
     return dict_ #{'crit_freq.' + k:v for k,v in dict_.items()}
 #     return dict_['Crit_freq']
 #     return area_ratio 
 
+def crit_freq_error(value):
+    '''compute error from crit freq to match the empirical range (Larkum 1999, Kole 2007, Kole 2006, Berger )'''
+    if I.np.isnan(value):
+        return 10 # 10 would be the error of one stimulus not evoking 1 AP
+    allowed_min = 60 # min of distribution
+    allowed_max = 200 # max of distribution
+    bulk_min = 70 # lower bound on bulk of distribution
+    bulk_max = 110 # upper bound on bulk of distribution
+    target_error_representing_cutoff = 3.2 # cutoff for other bAP and BAC objectives
+    
+    if bulk_min <= value <= bulk_max:
+        return 0
+    if allowed_min <= value <= allowed_max:
+        return 1    
+    
+    width = (allowed_max - allowed_min) / 2
+    center = (allowed_max + allowed_min) / 2
+    out = I.np.abs(value - center) / (width / target_error_representing_cutoff)    
+    return out
+
 def combine(evaluation, freq_list = None):
+    crit_freq_found = False    
+    for k in evaluation.keys():
+        if 'crit_freq' in k:
+            crit_freq_found = True
+    if not crit_freq_found:
+        return evaluation
     out = []
     for stim in range(1, len(freq_list)+1):
         key = f'crit_freq.n_spikes{stim}'
-        print(key, evaluation[key])
+        # print(key, evaluation[key])
         out.extend(evaluation[key])
     out = I.np.array(out)
     error = out-1 # correct number of spikes are represented as 0, to little -1, too much +1
     error = 10*error**2 # correct number of spikes are represented as 0, not correct is 10
     error = sum(error)
-    evaluation['crit_freq.error'] = error
+    evaluation['crit_freq.num_spikes_error'] = error
+    crit_freq = evaluation['crit_freq.Crit_freq']
+    evaluation['crit_freq.frequency_error'] = crit_freq_error(crit_freq)
     return evaluation
 
 def put_name_of_stimulus_in_crit_freq_voltage_traces_dict(vt):
@@ -295,16 +326,14 @@ def modify_evaluator_to_evaluate_crit_freq_stimuli(e, freq_list = None, delay = 
     e.setup.finalize_funs.append(find_Crit_freq)
     e.setup.finalize_funs.append(I.partial(combine, freq_list = freq_list))
     
+
     
 ######################################################
 # Combiner which can evaluate the crit. freq. protocols
 ######################################################
 
 def modify_combiner_to_add_crit_freq_error(c, freq_list = None):
-    c.setup.append('crit_freq.error', ['crit_freq.error'])
-    
-    
-
+    c.setup.append('crit_freq.error', ['crit_freq.num_spikes_error', 'crit_freq.frequency_error'])
     
 ######################################################
 # visualize critical frequency 
