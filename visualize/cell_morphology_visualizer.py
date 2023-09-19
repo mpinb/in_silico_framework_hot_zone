@@ -137,7 +137,7 @@ class CMVDataParser:
 
         """Time"""
         # Time points of the simulation
-        self.simulation_times = np.array(self.cell['tVec'])
+        self.simulation_times = np.array(self.cell.tVec)
         # Time offset w.r.t. simulation start. useful if '0 ms' is supposed to refer to stimulus time
         self.time_offset = 0
         # Time points we want to visualize (values by default)
@@ -320,7 +320,7 @@ class CMVDataParser:
          - time_point: time point from which we want to gather the voltage
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
-        sec = [sec for sec in self.cell['sections'] if sec.label == "Soma"][0]
+        sec = [sec for sec in self.cell if sec.label == "Soma"][0]
         return sec.recVList[0][n_sim_point]
 
     def _get_soma_voltage_between_timepoints(self, t_start, t_end, t_step):
