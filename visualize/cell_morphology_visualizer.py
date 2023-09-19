@@ -494,7 +494,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         self.highlight_arrow_args=None
         """Additional arguments for the arrow. See available kwargs on https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.patches.Arrow.html#matplotlib.patches.Arrow"""
 
-    def _plot_cell_voltage_synapses_in_morphology_3d(self, synapses, time_point, save='', plot=True,
+    def _plot_cell_voltage_synapses_in_morphology_3d(self, voltage, synapses, time_point, save='', plot=True,
                                                      highlight_section=None, highlight_x=None, show_synapses=True):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
@@ -509,7 +509,6 @@ class CellMorphologyVisualizer(CMVDataParser):
         '''
         # Plot morphology with colorcoded voltage
         n_sim_point = np.argmin(np.abs(self.times_to_show - time_point))
-        voltage = self.voltage_timeseries[n_sim_point]
         cmap = mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(
             vmin=self.vmin, vmax=self.vmax), cmap=plt.get_cmap('jet'))
         fig = plt.figure(figsize=(15, 15), dpi=self.dpi, facecolor=self.background_color)
@@ -859,7 +858,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         voltage = self._get_voltages_at_timepoint(time_point)
         synapses = self._get_synapses_at_timepoint(time_point)
         self._plot_cell_voltage_synapses_in_morphology_3d(
-            synapses, time_point, 
+            voltage, synapses, time_point, 
             save=save, plot=plot, 
             highlight_section=highlight_section, highlight_x=highlight_x
             )
