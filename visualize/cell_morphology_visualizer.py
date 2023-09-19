@@ -275,7 +275,7 @@ class CMVDataParser:
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
         ion_points = []
         for sec_n, sec in enumerate(self.cell.sections):
-            if sec["label"] in ['AIS', 'Myelin']:
+            if sec.label in ['AIS', 'Myelin']:
                 continue
 
             # Add voltage at the last point of the previous section
@@ -302,12 +302,12 @@ class CMVDataParser:
                         current_seg += 1
                         next_seg_flag = False
                     if rel_points[i-1] < segs_limits[current_seg+1] < rel_points[i]:
-                        if rel_points[i] - segs_limits[current_seg+1] > segs_limits[current_seg+1] - sec["relPts"][i-1]:
+                        if rel_points[i] - segs_limits[current_seg+1] > segs_limits[current_seg+1] - sec.relPts[i-1]:
                             current_seg += 1
                         else:
                             next_seg_flag = True
-                if not sec["recordVars"][ion_keyword] == []:
-                    ion_points.append(sec["recordVars"][ion_keyword][current_seg][n_sim_point])
+                if not sec.recordVars[ion_keyword] == []:
+                    ion_points.append(sec.recordVars[ion_keyword][current_seg][n_sim_point])
                 else:
                     ion_points.append(None)
         return ion_points
@@ -362,7 +362,7 @@ class CMVDataParser:
 
         assert ion_keyword in self.possible_scalars, \
             "Ion keyword not recognised. Possible keywords are: " + str(self.possible_scalars)
-        assert any([ion_keyword in sec["recordVars"].keys() for sec in self.cell.sections]), \
+        assert any([ion_keyword in sec.recordVars.keys() for sec in self.cell.sections]), \
             "No sections found with ion dynamics for ion keyword " + ion_keyword
 
         if ion_keyword in self.scalar_data.keys():
