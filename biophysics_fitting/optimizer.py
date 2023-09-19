@@ -317,7 +317,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
             #pickle.dump(cp, open(cp_filename, "wb"))
             #logger.debug('Wrote checkpoint to %s', cp_filename)    
             
-        if 'satisfactory' in mdb.keys():
+        if 'satisfactory' in mdb.keys() and gen>1: #gen>1 to make sure a checkpoint is created
             break
 
     return population #, logbook, history
