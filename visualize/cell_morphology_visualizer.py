@@ -273,7 +273,7 @@ class CMVDataParser:
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
         ion_points = np.empty(len(self.morphology) + self.n_sections - 1)  # pre-allocate memory
-        ion_points[0] = self.soma.recordVars[ion_keyword][n_sim_point] or None
+        ion_points[0] = self.soma.recordVars[ion_keyword][0][n_sim_point] or None
         i = 1  # keeps track of which index to fill in voltage_points
         for sec_n, sec in enumerate([sec for sec in self.cell.sections if sec.label != "Soma"]):
             n_segs = len([seg for seg in sec])
