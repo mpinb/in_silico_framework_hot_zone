@@ -272,10 +272,8 @@ def find_Crit_freq(evaluation):
             evaluation['crit_freq.Crit_freq'] = max(area_ratio, key = area_ratio.get)
         else:
             evaluation['crit_freq.Crit_freq'] = float('nan')
-
-        crit_freq = evaluation['crit_freq.Crit_freq']
     
-    evaluation['crit_freq.frequency_error'] = crit_freq_error(crit_freq)
+    evaluation['crit_freq.frequency_error'] = crit_freq_error(evaluation['crit_freq.Crit_freq'])
     
     return evaluation #{'crit_freq.' + k:v for k,v in dict_.items()}
 
