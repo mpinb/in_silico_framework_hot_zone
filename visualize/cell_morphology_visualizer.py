@@ -264,8 +264,6 @@ class CMVDataParser:
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
         ion_points = []
-        for sec_n, sec in enumerate(self.cell.sections):
-            if sec["label"] in ['AIS', 'Myelin']:
         for sec_n, sec in enumerate(self.cell['sections']):
             if sec["label"] in ['AIS', 'Myelin']:
                 continue
