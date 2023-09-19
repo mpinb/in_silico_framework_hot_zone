@@ -212,7 +212,6 @@ class CMVDataParser:
         points = []
         for sec_n, sec in enumerate(cell.sections):
             if sec.label == 'Soma':
-                # TODO: if soma is added, somatic voltage should lso be added
                 x, y, z = self.soma_center
                 # soma size
                 mn, mx = np.min(cell.soma.pts, axis=0), np.max(cell.soma.pts, axis=0)
@@ -273,43 +272,17 @@ class CMVDataParser:
          - time_point: time point from which we want to gather the voltage
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
-        ion_points = []
-        for sec_n, sec in enumerate(self.cell.sections):
-            if sec.label in ['AIS', 'Myelin']:
-                continue
-
-            # Add voltage at the last point of the previous section
-            if not sec.parent.recordVars[ion_keyword] == []:
-                ion_points.append(
-                    sec.parent.recordVars[ion_keyword][-1][n_sim_point])
-            else:
-                ion_points.append(None)
-
-            # Compute segments limits (recVars are measure at the middle of each segment, not section)
-            segs_limits = [0]
-            n_segments = len(sec_morphology)
-            for j, seg_n in enumerate(sec_morphology['seg_n']):
-                x = seg_n / n_segments
-                segs_limits.append(segs_limits[j]+(x-segs_limits[j])*2)
-            
-            # Map the segments to section points to assign a voltage to each line connecting 2 points
-            current_seg = 0
-            next_seg_flag = False
-            rel_points = sec_morphology['relPts'].values
-            for i in range(len(sec_morphology)):
-                if i != 0:
-                    if next_seg_flag:
-                        current_seg += 1
-                        next_seg_flag = False
-                    if rel_points[i-1] < segs_limits[current_seg+1] < rel_points[i]:
-                        if rel_points[i] - segs_limits[current_seg+1] > segs_limits[current_seg+1] - sec.relPts[i-1]:
-                            current_seg += 1
-                        else:
-                            next_seg_flag = True
-                if not sec.recordVars[ion_keyword] == []:
-                    ion_points.append(sec.recordVars[ion_keyword][current_seg][n_sim_point])
-                else:
-                    ion_points.append(None)
+        ion_points = np.empty(len(self.morphology) + self.n_sections - 1)  # pre-allocate memory
+        ion_points[0] = self.soma.recordVars[ion_keyword][n_sim_point]
+        i = 1  # keeps track of which index to fill in voltage_points
+        for sec_n, sec in enumerate([sec for sec in self.cell.sections if sec.label != "Soma"]):
+            n_segs = len([seg for seg in sec])
+            voltage_points[i] = sec.parent.recordVars[ion_keyword][-1][n_sim_point]
+            i += 1
+            for n, pt in enumerate(sec.pts):
+                seg_n = int(n_segs * n / len(sec.pts))
+                voltage_points[i] = sec.recordVars[seg_n][n_sim_point]
+                i += 1
         return ion_points
 
     def _get_soma_voltage_at_timepoint(self, time_point):
@@ -886,7 +859,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         voltage = self._get_voltages_at_timepoint(time_point)
         synapses = self._get_synapses_at_timepoint(time_point)
         self._plot_cell_voltage_synapses_in_morphology_3d(
-            voltage, synapses, time_point, 
+            synapses, time_point, 
             save=save, plot=plot, 
             highlight_section=highlight_section, highlight_x=highlight_x
             )
