@@ -281,7 +281,7 @@ class CMVDataParser:
             i += 1
             for n, pt in enumerate(sec.pts):
                 seg_n = int(n_segs * n / len(sec.pts))
-                ion_points[i] = sec.recordVars[seg_n][n_sim_point] or None
+                ion_points[i] = sec.recordVars[ion_keyword][seg_n][n_sim_point] or None
                 i += 1
         return ion_points
 
