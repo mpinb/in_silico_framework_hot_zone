@@ -62,10 +62,20 @@ class TestCellMorphologyVisualizer:
 class TestCellMorphologyInteractiveVisualizer:
     def setup_class(self):
         self.client = distributed.client_object_duck_typed
-        self.cell = setup_current_injection_experiment(rangevars=['NaTa_t.ina'])
+        self.ion_keyword = 'NaTa_t.ina'
+        self.cell = setup_current_injection_experiment(rangevars=[self.ion_keyword])
         self.cmiv = CellMorphologyInteractiveVisualizer(cell=self.cell, align_trunk=six.PY3, show=False)
         self.t_start, self.t_end, self.t_step = 0, 1, 1  # a two-frame test
     
+    @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
+    def test_has_ion_data(self):
+        self.cmiv._calc_ion_dynamics_timeseries()
+        assert self.ion_keyword in self.scalar_data.keys()
+        # ionic data at timepoint 0
+        # should be one value per line connecting all te points in the morphology
+        # n_lines = n_points + n_section_connections = n_points + n_sections - 1
+        assert len(self.scalar_data[self.ion_keyword][0]) == len(self.cmiv.morphology) + self.cmiv.n_sections - 1
+
     @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
     def test_display_interactive_morphology_3d(self):
         self.cmiv.display_interactive_morphology_3d(
