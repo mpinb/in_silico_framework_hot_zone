@@ -1090,6 +1090,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         Returns:
             ipywidgets.VBox object: an interactive render of the cell.
         """
+        self._update_times_to_show(self.t_start, self.t_end, self.t_step)
         if scalar_data_keyword.lower() in ("voltage", "membrane voltage", "vm"):
             self._calc_voltage_timeseries()
             scalar_data_per_section = np.array(self.voltage_timeseries).T
