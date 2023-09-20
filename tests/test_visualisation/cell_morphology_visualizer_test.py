@@ -12,6 +12,7 @@ class TestCellMorphologyVisualizer:
         self.cell = setup_current_injection_experiment()
         self.cmv = CellMorphologyVisualizer(self.cell, align_trunk=six.PY3)  # don't align trunk in py2, ithas no scipy Rotation object
         self.t_start, self.t_end, self.t_step = self.cmv.t_start, self.cmv.t_end, (self.cmv.t_end-self.cmv.t_start)//2  # a two-frame gif
+        self.cmv.t_start, self.cmv.t_end, self.cmv.t_step = self.t_start, self.t_end, self.t_step
     
     @pytest.mark.skipif(six.PY2, reason="The cell_morphology_visualizer methods are not available on Py2")
     def test_init(self):
@@ -65,7 +66,7 @@ class TestCellMorphologyInteractiveVisualizer:
         self.ion_keyword = 'NaTa_t.ina'
         self.cell = setup_current_injection_experiment(rangevars=[self.ion_keyword])
         self.cmiv = CellMorphologyInteractiveVisualizer(cell=self.cell, align_trunk=six.PY3, show=False)
-        self.t_start, self.t_end, self.t_step = 0, 1, 1  # a two-frame test
+        self.cmiv.t_start, self.cmiv.t_end, self.cmiv.t_step = 0, 1, 0.5  # a two-frame test
     
     @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
     def test_has_ion_data(self):
@@ -78,16 +79,16 @@ class TestCellMorphologyInteractiveVisualizer:
 
     @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
     def test_display_interactive_morphology_3d(self):
-        self.cmiv.display_interactive_morphology_3d(
+        fig = self.cmiv.display_interactive_morphology_3d(
             t_start=self.t_start, t_end=self.t_end, t_step=self.t_step)
 
     @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
     def test_display_interactive_voltage_in_morphology_3d(self):
-        self.cmiv.display_interactive_voltage_in_morphology_3d(
+        fig = self.cmiv.display_interactive_voltage_in_morphology_3d(
             t_start=self.t_start, t_end=self.t_end, t_step=self.t_step)
 
     @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
     def test_display_interactive_ion_dynamics_in_morphology_3d(self):
-        self.cmiv.display_interactive_ion_dynamics_in_morphology_3d(
+        fig = self.cmiv.display_interactive_ion_dynamics_in_morphology_3d(
             ion_keyword='NaTa_t.ina',
             t_start=self.t_start, t_end=self.t_end, t_step=self.t_step)
