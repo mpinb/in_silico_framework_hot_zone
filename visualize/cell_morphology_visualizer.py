@@ -277,11 +277,17 @@ class CMVDataParser:
         i = 1  # keeps track of which index to fill in ion_points
         for sec_n, sec in enumerate([sec for sec in self.cell.sections if sec.label != "Soma"]):
             n_segs = len([seg for seg in sec])
-            ion_points[i] = sec.parent.recordVars[ion_keyword][-1][n_sim_point]
+            if len(sec.recordVars[ion_keyword][-1]) > 0:
+                ion_points[i] = sec.parent.recordVars[ion_keyword][-1][n_sim_point]
+            else:
+                ion_points[i] = None
             i += 1
             for n, pt in enumerate(sec.pts):
                 seg_n = int(n_segs * n / len(sec.pts))
-                ion_points[i] = sec.recordVars[ion_keyword][seg_n][n_sim_point] or None
+                if len(sec.recordVars[ion_keyword][seg_n]) > 0:
+                    ion_points[i] = sec.recordVars[ion_keyword][seg_n][n_sim_point]
+                else:
+                    ion_points[i] =  None
                 i += 1
         return ion_points
 
