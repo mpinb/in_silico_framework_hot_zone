@@ -69,7 +69,7 @@ class TestCellMorphologyInteractiveVisualizer:
     
     @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
     def test_has_ion_data(self):
-        self.cmiv._calc_ion_dynamics_timeseries()
+        self.cmiv._calc_ion_dynamics_timeseries(ion_keyword=self.ion_keyword)
         assert self.ion_keyword in self.scalar_data.keys()
         # ionic data at timepoint 0
         # should be one value per line connecting all te points in the morphology
