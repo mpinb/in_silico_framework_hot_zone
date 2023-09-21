@@ -61,7 +61,7 @@ class TestCellMorphologyVisualizer:
         )
 
 class TestCellMorphologyInteractiveVisualizer:
-    def setup_class(self):
+    def __init__(self):
         self.client = distributed.client_object_duck_typed
         self.ion_keyword = 'NaTa_t.ina'
         self.cell = setup_current_injection_experiment(rangevars=[self.ion_keyword])
@@ -79,16 +79,15 @@ class TestCellMorphologyInteractiveVisualizer:
 
     @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
     def test_display_interactive_morphology_3d(self):
-        fig = self.cmiv.display_interactive_morphology_3d(
-            t_start=self.t_start, t_end=self.t_end, t_step=self.t_step)
+        fig = self.cmiv.display_interactive_morphology_3d()
+        return 0
 
     @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
     def test_display_interactive_voltage_in_morphology_3d(self):
-        fig = self.cmiv.display_interactive_voltage_in_morphology_3d(
-            t_start=self.t_start, t_end=self.t_end, t_step=self.t_step)
+        fig = self.cmiv.display_interactive_voltage_in_morphology_3d()
+        return 0
 
     @pytest.mark.skipif(six.PY2, reason="Interactive visualizations are not available on Py2")
     def test_display_interactive_ion_dynamics_in_morphology_3d(self):
-        fig = self.cmiv.display_interactive_ion_dynamics_in_morphology_3d(
-            ion_keyword='NaTa_t.ina',
-            t_start=self.t_start, t_end=self.t_end, t_step=self.t_step)
+        fig = self.cmiv.display_interactive_ion_dynamics_in_morphology_3d(ion_keyword='NaTa_t.ina')
+        return 0

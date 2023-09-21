@@ -338,7 +338,7 @@ class CMVDataParser:
         Returns:
             Nothing. Updates the self.timeseries_voltage attribute
         '''
-
+        self._update_times_to_show(self.t_start, self.t_end, self.t_step)
         assert ion_keyword in self.possible_scalars, \
             "Ion keyword not recognised. Possible keywords are: " + str(self.possible_scalars)
         assert any([ion_keyword in sec.recordVars.keys() for sec in self.cell.sections]), \
@@ -348,7 +348,7 @@ class CMVDataParser:
             return  # We have already retrieved the voltage timeseries
         else:
             self.scalar_data[ion_keyword] = []
-
+        
         t1 = time.time()
         for time_point in self.times_to_show:  # For each frame of the video/animation
             ion_dynamics = self._get_ion_dynamic_at_timepoint(
@@ -1091,7 +1091,14 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             ipywidgets.VBox object: an interactive render of the cell.
         """
         self._update_times_to_show(self.t_start, self.t_end, self.t_step)
+        if vmin is not None:
+            self.vmin = vmin
+        if vmax is not None:
+            self.vmax = vmax
+        sections = self.morphology['sec_n']
+
         if scalar_data_keyword.lower() in ("voltage", "membrane voltage", "vm"):
+            # Prepare membrane voltage data
             self._calc_voltage_timeseries()
             scalar_data_per_section = np.array(self.voltage_timeseries).T
             # high resolution (takes long)
@@ -1103,6 +1110,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
                 }
 
         else:
+            # Prepare ion dynamics data
             assert scalar_data_keyword.lower() in (
                 e.lower() for e in self.possible_scalars), "Keyword {} is not associated with membrane voltage, and does not appear in the possible ion dynamic keywords: {}".format(scalar_data_keyword, self.possible_scalars)
             self._calc_ion_dynamics_timeseries(ion_keyword=scalar_data_keyword)
@@ -1111,12 +1119,8 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             scalar_data_per_time = {
                 t: self.scalar_data[scalar_data_keyword][t_idx] for t_idx, t in enumerate(self.times_to_show)
                 }
-        if vmin is not None:
-            self.vmin = vmin
-        if vmax is not None:
-            self.vmax = vmax
-        sections = self.morphology['sec_n']
-        ### Create figure
+        
+        #------------ Create figure
         # Interactive cell
         fig_cell = self._get_interactive_cell(
             background_color=background_color)
@@ -1144,10 +1148,13 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             tooltip={"placement": "bottom", "always_visible": True}
         )
         
-        # Create dash app
-        app = Dash()
+        # Start dash app
+        app = Dash(__name__)
         app.layout = html.Div([
-            dcc_cell, dcc_trace, html.Div(slider, id="output-container")])
+            dcc_cell, 
+            dcc_trace, 
+            html.Div(slider, id="output-container")]
+            )
 
         # update color scale
         @app.callback(
@@ -1249,11 +1256,13 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         if data is None:
             f = self._display_interactive_morphology_only_3d(
                 background_color=background_color, highlight_section=highlight_section)
+            # f is a FigureWidget
             if self.show:
                 return f.show(renderer=renderer)
         else:
             f = self._get_interactive_plot_with_scalar_data(data, vmin=vmin, vmax=vmax,
                          color_map=color_map, background_color=background_color)
+            # f is a dash app
             if self.show:
                 return f.run_server(debug=True, use_reloader=False, port=5050, host=self.dash_ip)
         return f  # show is not True, return the object without executing the method that shows it
