@@ -128,9 +128,15 @@ class CMVDataParser:
             self._init_simulation_data()
     
     def _has_simulation_data(self):
+        """
+        Test if the cell object has been simulated by checking if it has voltage data
+        """
         return len(self.soma.recVList[0]) > 0
 
     def _init_simulation_data(self):
+        """
+        Initializes the variables associated with simulation data. Does not fill these variables until they actually need to be calculated.
+        """
         # Max and min voltages colorcoded in the cell morphology
         self.vmin = -80  # mV
         self.vmax = 20  # mV
@@ -605,6 +611,7 @@ class CellMorphologyVisualizer(CMVDataParser):
 
         # Gathers the voltage and synapse activations time series.
         # Then images are generated for each specified time step.
+        self._update_times_to_show()
         self._calc_voltage_timeseries()
         self._calc_synapses_timeseries()
 
