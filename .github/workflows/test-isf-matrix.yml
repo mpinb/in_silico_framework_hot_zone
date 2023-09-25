@@ -21,12 +21,17 @@ jobs:
     strategy:
       matrix:
         version: [ "py3.8", "py2.7" ]
+      fail-fast: false  # don't quit other jobs when one fails
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
       # Install Anaconda3 and update conda package manager
       - name: Download, install & build ISF for ${{ matrix.version }}
+        id: build
         run: |
           CONDA_TARGET_DIR="$(pwd)/anaconda_isf${{ matrix.version }}"
           if [ -d "$CONDA_TARGET_DIR" ]; then
@@ -41,8 +46,10 @@ jobs:
           popd
           source $CONDA_TARGET_DIR/bin/activate
           conda list
+    
       # Run in-silico-framework tests
       - name: Test in-silico-framework ${{ matrix.version }}
+        if: steps.build.outcome == 'success'
         run: |
           CONDA_TARGET_DIR="$(pwd)/anaconda_isf${{ matrix.version }}"
           source $CONDA_TARGET_DIR/bin/activate;
@@ -50,7 +57,8 @@ jobs:
           export PYTHONPATH=$(pwd)
           dask-scheduler --port=38786 --dashboard-address=38787 &
           dask-worker localhost:38786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          pytest -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py${{ matrix.version }}.xml --cov=. tests
+          python -m pytest -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py${{ matrix.version }}.xml --cov=. tests
+      
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
