@@ -10,7 +10,7 @@ import pandas as pd
 import dask.dataframe as dd
 import dask
 import single_cell_parser as scp
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
 from model_data_base import utils, ModelDataBase
 from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, to_cloudpickle, to_pickle, pandas_to_msgpack
 from model_data_base.model_data_base import get_progress_bar_function,\

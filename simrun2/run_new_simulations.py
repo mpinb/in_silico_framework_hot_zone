@@ -15,7 +15,7 @@ import glob
 import tables 
 import neuron
 import single_cell_parser as scp
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
 import numpy as np
 h = neuron.h
 import dask
