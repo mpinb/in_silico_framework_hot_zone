@@ -1,7 +1,7 @@
 import numpy as np
 from model_data_base.utils import silence_stdout
 import single_cell_parser as scp
-import single_cell_analyzer as sca 
+import single_cell_parser.analyze as sca 
 from model_data_base.analyze import excitatory, inhibitory
 
 # import Interface as I # moved to bottom becose auf circular import

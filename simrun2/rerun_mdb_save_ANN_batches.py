@@ -1,7 +1,7 @@
 import dask
 import numpy as np
 import pandas as pd
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
 import single_cell_parser as scp
 from simrun2.rerun_mdb import synapse_activation_df_to_roberts_synapse_activation
 import time
