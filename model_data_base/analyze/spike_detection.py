@@ -3,7 +3,7 @@ import pandas as pd
 import dask
 import numpy as np
 
-from single_cell_analyzer.membrane_potential_analysis import simple_spike_detection
+from single_cell_parser.analyze.membrane_potential_analysis import simple_spike_detection
 def spike_in_interval(st, tmin, tmax):
     return ((st>=tmin) & (st<tmax)).any(axis = 1)  
 
