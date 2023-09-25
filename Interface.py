@@ -89,9 +89,11 @@ from model_data_base._version import get_versions
 versions = get_versions()
 __version__ = versions['version']
 __git_revision__ = versions['full-revisionid']
-
-print("Current version: {version}".format(version = __version__))
-print("Current pid: {pid}".format(pid = os.getpid()))
+if __version__ == "0+unknown":
+    raise OSError("Commit not found\nVersion is {}\nRevision_id is {}). Git is not found, or something else went wrong.".format(__version__, __git_revision__))
+else:
+    print("Current version: {version}".format(version = __version__))
+    print("Current pid: {pid}".format(pid = os.getpid()))
 
 import barrel_cortex
 from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
