@@ -39,6 +39,9 @@ import itertools
 from collections import defaultdict
 import cloudpickle
 import six
+import scipy 
+import scipy.signal 
+import math 
 
 ### logging setup
 import logging
@@ -179,7 +182,7 @@ try:
 except ImportError:
     print("Could not import full-compartmental-model simulator")
 
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
 import single_cell_parser as scp
 from single_cell_parser import network  # simrun3.synaptic_strength_fitting relies on this
 try:

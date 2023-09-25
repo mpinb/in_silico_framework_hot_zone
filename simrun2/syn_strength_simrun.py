@@ -10,7 +10,7 @@ import os.path
 import numpy as np
 import neuron
 import single_cell_parser as scp
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt

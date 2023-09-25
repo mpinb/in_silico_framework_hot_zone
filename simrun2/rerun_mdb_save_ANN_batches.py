@@ -1,13 +1,13 @@
 import dask
 import numpy as np
 import pandas as pd
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
 import single_cell_parser as scp
 from simrun2.rerun_mdb import synapse_activation_df_to_roberts_synapse_activation
 import time
 from model_data_base.mdb_initializers.prepare_ANN_batches import compute_AP_array, compute_ISI_array, spike_times_to_onehot, compute_ISI_from_st_list
 from model_data_base.mdb_initializers.prepare_ANN_batches import get_synapse_activation_array_weighted,augment_synapse_activation_df_with_branch_bin,get_spatial_bin_names
-from single_cell_analyzer.membrane_potential_analysis import simple_spike_detection 
+from single_cell_parser.analyze.membrane_potential_analysis import simple_spike_detection 
 from project_specific_ipynb_code.hot_zone import get_main_bifurcation_section
 
 from model_data_base.mdb_initializers.prepare_ANN_batches import get_binsize

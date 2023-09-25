@@ -9,7 +9,7 @@ from dask import delayed
 import neuron
 h = neuron.h
 import single_cell_parser as scp
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
 from .seed_manager import get_seed
 from .utils import *
 import os
