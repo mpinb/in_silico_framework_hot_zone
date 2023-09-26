@@ -12,7 +12,8 @@ jobs:
       py_version: 3.8
   test:
     needs: build  # assures there is a build of ISF
-    runs-on: [ self-hosted, ibs3005 ]
+    # Assure test runs on same machine as build
+    runs-on: [ self-hosted, ibs3005 , "${{needs.build.outputs.runner_label}}" ]
     defaults:
       run:
         shell: bash -l {0}
@@ -38,3 +39,4 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./tests/coverage_reports/report_py3.xml
           verbose: true # optional (default = false)
+      

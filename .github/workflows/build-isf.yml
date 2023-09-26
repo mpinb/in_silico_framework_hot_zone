@@ -6,12 +6,18 @@ on:
       py_version:
         required: true
         type: string
+    outputs:
+      runner_label: 
+        description: "Name of the runner the build ran on"
+        value: ${{  jobs.build.outputs.runner_label }}
 jobs:
   build:
     runs-on: [ self-hosted, ibs3005 ]
     defaults:
       run:
         shell: bash -l {0}
+    outputs:
+      runner_label: $( ${{ runner.name }} | grep -- ^[^-]*-+)
 
     steps:
     - uses: actions/checkout@v3
