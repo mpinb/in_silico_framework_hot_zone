@@ -17,7 +17,7 @@ jobs:
       - uses: ./.github/workflows/build-isf-py38-local
       - name: Test in-silico-framework
         run: |
-          CONDA_TARGET_DIR="$HOME/anaconda_isf3"
+          CONDA_TARGET_DIR="$(pwd)/anaconda_isf3"
           source $CONDA_TARGET_DIR/bin/activate;
           echo "Using Python: $(which python)"
           export PYTHONPATH=$CONDA_TARGET_DIR
