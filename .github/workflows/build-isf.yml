@@ -9,7 +9,7 @@ on:
     outputs:
       runner_label: 
         description: "Name of the runner the build ran on"
-        value: ${{  jobs.build.outputs.runner_label }}
+        value: ${{ jobs.build.outputs.runner_label }}
 jobs:
   build:
     runs-on: [ self-hosted, ibs3005 ]
@@ -17,7 +17,7 @@ jobs:
       run:
         shell: bash -l {0}
     outputs:
-      runner_label: $( ${{ runner.name }} | grep -- ^[^-]*-+)
+      runner_label: $( echo ${{ runner.name }} | grep -- ^[^-]*-+ )
 
     steps:
     - uses: actions/checkout@v3

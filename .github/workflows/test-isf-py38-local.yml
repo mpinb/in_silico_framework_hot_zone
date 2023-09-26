@@ -6,10 +6,12 @@ on:
   workflow_dispatch:
 
 jobs:
+
   build:
     uses: ./.github/workflows/build-isf.yml
     with:
       py_version: 3.8
+
   test:
     needs: build  # assures there is a build of ISF
     # Assure test runs on same machine as build
@@ -17,6 +19,7 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+
     steps:
       - name: Test in-silico-framework for Python 3.8
         run: |
@@ -33,6 +36,7 @@ jobs:
           dask-scheduler --port=$port_number --bokeh-port=$bokeh_port &
           dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 &
           pytest -n 4 -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. tests
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
