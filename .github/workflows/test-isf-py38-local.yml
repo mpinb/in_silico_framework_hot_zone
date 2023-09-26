@@ -14,7 +14,7 @@ jobs:
     name: ISF Py3.8 (local) test
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: ./.github/workflows/build-isf-py38-local
+      - uses: ./.github/workflows/build-isf-py38-local.yml
       - name: Test in-silico-framework
         run: |
           CONDA_TARGET_DIR="$(pwd)/anaconda_isf3"
