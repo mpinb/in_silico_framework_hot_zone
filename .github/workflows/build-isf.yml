@@ -7,26 +7,47 @@ on:
         required: true
         type: string
 jobs:
-  reusable_build:
+  build:
     runs-on: [ self-hosted, ibs3005 ]
     defaults:
       run:
         shell: bash -l {0}
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - name: Build ISF for Python ${{ inputs.py_version }}
-        run: |
-          CONDA_TARGET_DIR="$(pwd)/anaconda_isf${{ inputs.py_version }}"
-          if [ -d "$CONDA_TARGET_DIR" ]; then
-            echo "Found existing installation in $(pwd). Removing previous Anaconda installation..."
-            rm -r "$CONDA_TARGET_DIR"
-          else
-            echo "No previous Anaconda installation found. Continuing..."
-          fi
-          pushd .
-          cd installer/py${{ inputs.py_version }}
-          ./install.sh $CONDA_TARGET_DIR || exit 1
-          popd
-          source $CONDA_TARGET_DIR/bin/activate
-          conda list
+    - uses: actions/checkout@v3
+      id: checkout
+    - uses: xSAVIKx/artifact-exists-action@v0
+      id: check_coverage_artifact
+      with:
+        name: isf${{ inputs.py_version }}
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          all:
+            - 'installer/**'
+            - 'mechanisms/**'
+            - 'tests/**'
+            - '.github/**'
+
+    - name: Build ISF
+      # rebuild only if changes have been made, or the artifact is gone
+      if: (steps.changes.outputs.all == 'true') || ! (steps.check_coverage_artifact.output.exists)
+      run: |
+        CONDA_TARGET_DIR="$(pwd)/anaconda_isf${{ inputs.py_version }}"
+        if [ -d "$CONDA_TARGET_DIR" ]; then
+          echo "Found existing installation in $(pwd). Removing previous Anaconda installation..."
+          rm -r "$CONDA_TARGET_DIR"
+        else
+          echo "No previous Anaconda installation found. Continuing..."
+        fi
+        pushd .
+        cd installer/py${{ inputs.py_version }}
+        ./install.sh $CONDA_TARGET_DIR || exit 1
+        popd
+        source $CONDA_TARGET_DIR/bin/activate
+        conda list
+    - name: Save build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: isf${{ inputs.py_version }}
+        path: anaconda_isf${{ inputs.py_version }}
