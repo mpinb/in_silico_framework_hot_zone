@@ -29,6 +29,7 @@ getting_started/barrel_cortex/*
 !getting_started/barrel_cortex/*.7z.*
 MOEA_EH_model_visualization/**/*~
 .*
+!.github
 simrun2/used_seeds
 mechanisms/channels_py3/x86_64/*
 mechanisms/channels_py2/x86_64/*

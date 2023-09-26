@@ -1,21 +1,22 @@
 # Tests ISF3.8 on ibs3005
 name: ISF Py3.8 (local) test
 on:
-  workflow_call:
   push:
     branches: '*'
   workflow_dispatch:
 jobs:
+  build:
+    uses: ./.github/workflows/build-isf.yml
+    with:
+      py_version: "3.8"
+    secrets: inherit
   test:
     runs-on: [ self-hosted, ibs3005 ]
     defaults:
       run:
         shell: bash -l {0}
-    name: ISF Py3.8 (local) test
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: ./.github/workflows/build-isf-py38-local.yml
-      - name: Test in-silico-framework
+      - name: Test in-silico-framework for Python 3.8
         run: |
           CONDA_TARGET_DIR="$(pwd)/anaconda_isf3"
           source $CONDA_TARGET_DIR/bin/activate;
@@ -36,4 +37,3 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./tests/coverage_reports/report_py3.xml
           verbose: true # optional (default = false)
-        

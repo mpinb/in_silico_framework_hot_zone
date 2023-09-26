@@ -1,0 +1,44 @@
+# Builds ISF for any Python version (2.7/3.8/3.9), depending on the input
+name: Build ISF
+on:
+  workflow_call:
+    inputs:
+      py_version:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+  push:
+    branches: '*'
+    paths:  # Trigger the build only when changes are made to the following paths
+        - .github/**  # the workflow itself has changed
+        - installer/**  # the installer has changed
+        - mechanisms/**  # mechanisms need to be recompiled
+        - tests/**  # just to be safe
+  workflow_dispatch:
+jobs:
+  reusable_build:
+    runs-on: [ self-hosted, ibs3005 ]
+    defaults:
+      run:
+        shell: bash -l {0}
+    name: ISF Py${{ inputs.py_version }} (local) build
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Download, install & build ISF for Python ${{ inputs.py_version }}
+        run: |
+          CONDA_TARGET_DIR="$(pwd)/anaconda_isf${{ inputs.py_version }}"
+          if [ -d "$CONDA_TARGET_DIR" ]; then
+            echo "Found existing installation in $(pwd). Removing previous Anaconda installation..."
+            rm -r "$CONDA_TARGET_DIR"
+          else
+            echo "No previous Anaconda installation found. Continuing..."
+          fi
+          pushd .
+          cd installer/py${{ inputs.py_version }}
+          ./install.sh $CONDA_TARGET_DIR || exit 1
+          popd
+          source $CONDA_TARGET_DIR/bin/activate
+          conda list
