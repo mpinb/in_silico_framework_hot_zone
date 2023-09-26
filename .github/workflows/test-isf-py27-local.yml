@@ -4,7 +4,7 @@ name: ISF Py2.7 (local) build/test
 # Controls when the workflow will run
 on:
   push:
-    branches: 'master'
+    branches: [ 'master' , 'testing' ]
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
