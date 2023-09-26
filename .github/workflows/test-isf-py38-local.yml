@@ -11,6 +11,7 @@ jobs:
     with:
       py_version: 3.8
   test:
+    needs: build
     runs-on: [ self-hosted, ibs3005 ]
     defaults:
       run:
