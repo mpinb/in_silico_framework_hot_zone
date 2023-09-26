@@ -9,14 +9,6 @@ on:
     secrets:
       token:
         required: true
-  push:
-    branches: '*'
-    paths:  # Trigger the build only when changes are made to the following paths
-        - .github/**  # the workflow itself has changed
-        - installer/**  # the installer has changed
-        - mechanisms/**  # mechanisms need to be recompiled
-        - tests/**  # just to be safe
-  workflow_dispatch:
 jobs:
   reusable_build:
     runs-on: [ self-hosted, ibs3005 ]

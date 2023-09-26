@@ -4,11 +4,12 @@ on:
   push:
     branches: '*'
   workflow_dispatch:
+
 jobs:
   build:
     uses: ./.github/workflows/build-isf.yml
     with:
-      py_version: "3.8"
+      py_version: 3.8
     secrets: inherit
   test:
     runs-on: [ self-hosted, ibs3005 ]
