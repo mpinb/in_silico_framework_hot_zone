@@ -6,9 +6,6 @@ on:
       py_version:
         required: true
         type: string
-    secrets:
-      token:
-        required: true
 jobs:
   reusable_build:
     runs-on: [ self-hosted, ibs3005 ]
