@@ -12,16 +12,16 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+
     steps:
     - uses: actions/checkout@v3
       id: checkout
-    - uses: xSAVIKx/artifact-exists-action@v0
-      id: check_coverage_artifact
-      with:
-        name: isf${{ inputs.py_version }}
+
     - uses: dorny/paths-filter@v2
       id: changes
       with:
+        # compare with most recent commit on the same branch before the push
+        base: ${{ github.ref }}
         filters: |
           all:
             - 'installer/**'
@@ -30,8 +30,8 @@ jobs:
             - '.github/**'
 
     - name: Build ISF
-      # rebuild only if changes have been made, or the artifact is gone
-      if: (steps.changes.outputs.all == 'true') || ! (steps.check_coverage_artifact.output.exists)
+      # rebuild only if changes have been made, or the build does not exist
+      if: (steps.changes.outputs.all == 'true') || hashFiles('$(pwd)/anaconda_isf${{ inputs.py_version }}') == ''
       run: |
         CONDA_TARGET_DIR="$(pwd)/anaconda_isf${{ inputs.py_version }}"
         if [ -d "$CONDA_TARGET_DIR" ]; then
@@ -46,8 +46,3 @@ jobs:
         popd
         source $CONDA_TARGET_DIR/bin/activate
         conda list
-    - name: Save build artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: isf${{ inputs.py_version }}
-        path: anaconda_isf${{ inputs.py_version }}
