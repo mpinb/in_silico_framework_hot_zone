@@ -27,7 +27,7 @@ jobs:
       # Install Anaconda3 and update conda package manager
       - name: Download, install & build ISF for Python 3.8
         run: |
-          CONDA_TARGET_DIR="$(pwd)/anaconda_isf3"
+          CONDA_TARGET_DIR="$HOME/anaconda_isf3"
           if [ -d "$CONDA_TARGET_DIR" ]; then
             echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
             rm -r "$CONDA_TARGET_DIR"
@@ -43,10 +43,10 @@ jobs:
       # Run in-silico-framework tests
       - name: Test in-silico-framework
         run: |
-          CONDA_TARGET_DIR="$(pwd)/anaconda_isf3"
+          CONDA_TARGET_DIR="$HOME/anaconda_isf3"
           source $CONDA_TARGET_DIR/bin/activate;
           echo "Using Python: $(which python)"
-          export PYTHONPATH=$(pwd)
+          export PYTHONPATH=$CONDA_TARGET_DIR
           name=${{ runner.name }}
           runner_number=$( echo $name | grep -Eo '[0-9]+$' )
           port_number=${runner_number: -1}8786
