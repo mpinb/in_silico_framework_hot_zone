@@ -46,6 +46,12 @@ jobs:
           source $CONDA_TARGET_DIR/bin/activate;
           echo "Using Python: $(which python)"
           export PYTHONPATH=$(pwd)
-          dask-scheduler --port=28786 --bokeh-port=28787 &
-          dask-worker localhost:28786 --nthreads 1 --nprocs 4 --memory-limit=100e15 &
+          name=${{ runner.name }}
+          runner_number=$( echo $name | grep -Eo '[0-9]+$' )
+          port_number=${runner_number: -1}8786
+          bokeh_port=${runner_number: -1}8787
+          echo "Launching Dask server on $name"
+          echo "Using port $port_number and bokeh port $bokeh_port" 
+          dask-scheduler --port=$port_number --bokeh-port=$bokeh_port &
+          dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 &
           python -n 4 -m pytest -rsx -vv --color=yes tests/
