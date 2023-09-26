@@ -11,16 +11,12 @@ jobs:
     with:
       py_version: 3.8
   test:
-    needs: build
+    needs: build  # assures there is a build of ISF
     runs-on: [ self-hosted, ibs3005 ]
     defaults:
       run:
         shell: bash -l {0}
     steps:
-      - name: Download build
-        uses: actions/download-artifact@v3
-        with:
-          name: anaconda_isf3.8
       - name: Test in-silico-framework for Python 3.8
         run: |
           CONDA_TARGET_DIR="$(pwd)/anaconda_isf3.8"
