@@ -10,20 +10,20 @@ import distributed
 
 optimize = silence_stdout(optimize) 
         
-def test_optimization_works_dumpers_default(self, fresh_mdb):
+def test_optimization_works_dumpers_default(fresh_mdb):
     optimize(fresh_mdb, dumper = None, client = distributed.client_object_duck_typed)
     
-def test_optimization_works_dumpers_csv(self, fresh_mdb):
+def test_optimization_works_dumpers_csv(fresh_mdb):
     optimize(fresh_mdb, dumper = dask_to_csv, client = distributed.client_object_duck_typed)
         
-def test_optimization_works_dumpers_msgpack(self, fresh_mdb):
+def test_optimization_works_dumpers_msgpack(fresh_mdb):
     optimize(fresh_mdb, dumper = dask_to_msgpack, client = distributed.client_object_duck_typed)     
         
-def test_optimization_works_dumpers_categorized_msgpack(self, fresh_mdb):
+def test_optimization_works_dumpers_categorized_msgpack(fresh_mdb):
     optimize(fresh_mdb, dumper = dask_to_categorized_msgpack, client = distributed.client_object_duck_typed)                
         
 @decorators.testlevel(2)            
-def test_dataintegrity_no_empty_rows(self, fresh_mdb):
+def test_dataintegrity_no_empty_rows(fresh_mdb):
     e = fresh_mdb
     synapse_activation = e['synapse_activation']
     cell_activation = e['cell_activation']
@@ -39,13 +39,13 @@ def test_dataintegrity_no_empty_rows(self, fresh_mdb):
         assert 0 == len(voltage_traces[voltage_traces.isnan == True])
 
 @decorators.testlevel(2)       
-def test_voltage_traces_have_float_indices(self, fresh_mdb):
+def test_voltage_traces_have_float_indices(fresh_mdb):
     e = fresh_mdb
     assert isinstance(e['voltage_traces'].columns[0], float)
     assert isinstance(e['voltage_traces'].head().columns[0], float)       
     
 @decorators.testlevel(2)       
-def test_every_entry_in_initialized_mdb_can_be_serialized(self, fresh_mdb):
+def test_every_entry_in_initialized_mdb_can_be_serialized(fresh_mdb):
     import cloudpickle
     e = fresh_mdb
     for k in e.keys():
