@@ -15,6 +15,8 @@ jobs:
   test:
     needs: build  # assures there is a build of ISF
     # Assure test runs on whatever runner the build ran on
+    # Note that runners are requested based on label, not on name
+    # So the runner should have a label equal to its name
     runs-on: ${{ needs.build.outputs.runner_name }}
     defaults:
       run:
@@ -22,27 +24,26 @@ jobs:
 
     steps:
       - name: Test in-silico-framework for Python 3.8
-        run: |
-          CONDA_TARGET_DIR="$(pwd)/anaconda_isf3.8"
+        run: >
+          CONDA_TARGET_DIR="$(pwd)/anaconda_isf3.8";
           source $CONDA_TARGET_DIR/bin/activate;
-          echo "Using Python: $(which python)"
-          export PYTHONPATH=$CONDA_TARGET_DIR
-          name=${{ runner.name }}
-          runner_number=$( echo $name | grep -Eo '[0-9]+$' )
-          port_number=${runner_number: -1}8786
-          bokeh_port=${runner_number: -1}8787
-          echo "Launching Dask server on $name"
-          echo "Using port $port_number and bokeh port $bokeh_port"
-          ::group::{Dask output}
+          echo "Using Python: $(which python)";
+          export PYTHONPATH=$CONDA_TARGET_DIR;
+          name=${{ runner.name }};
+          runner_number=$( echo $name | grep -Eo '[0-9]+$' );
+          port_number=${runner_number: -1}8786;
+          bokeh_port=${runner_number: -1}8787;
+          echo "Launching Dask server on $name";
+          echo "Using port $port_number and bokeh port $bokeh_port";
           dask-scheduler --port=$port_number --bokeh-port=$bokeh_port &
           dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          ::endgroup::
-          pytest \
-           -n 4 \  
-           -rsx -vv --color=yes \
-           --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. \
-           --dask_server_port $bokeh_port \
-           tests
+          
+          pytest 
+          -n 4
+          -rsx -vv --color=yes
+          --cov-report xml:tests/coverage_reports/report_py3.xml --cov=.
+          --dask_server_port $bokeh_port
+          tests
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
