@@ -42,7 +42,7 @@ jobs:
           -n 4
           -rsx -vv --color=yes
           --cov-report xml:tests/coverage_reports/report_py3.xml --cov=.
-          --dask_server_port $bokeh_port
+          --dask_server_port $port_number
           tests
 
       - name: Upload coverage reports to Codecov
