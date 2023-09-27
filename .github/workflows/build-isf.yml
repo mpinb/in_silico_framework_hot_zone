@@ -7,9 +7,9 @@ on:
         required: true
         type: string
     outputs:
-      runner_label: 
+      runner_name: 
         description: "Name of the runner the build ran on"
-        value: ${{ jobs.build.outputs.runner_label }}
+        value: ${{ jobs.build.outputs.runner_name }}
 jobs:
   build:
     runs-on: [ self-hosted, ibs3005 ]
@@ -17,7 +17,7 @@ jobs:
       run:
         shell: bash -l {0}
     outputs:
-      runner_label: $( echo ${{ runner.name }} | grep -- ^[^-]*-+ )
+      runner_name: ${{ runner.name }}
 
     steps:
     - uses: actions/checkout@v3
@@ -52,3 +52,11 @@ jobs:
         popd
         source $CONDA_TARGET_DIR/bin/activate
         conda list
+
+    - name: Save runner label
+      id: get_runner
+      if: ${{ always() }}        
+      run: |
+        echo "selected runner = ${{ runner.name }}"
+
+            

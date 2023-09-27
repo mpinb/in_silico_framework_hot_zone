@@ -14,8 +14,8 @@ jobs:
 
   test:
     needs: build  # assures there is a build of ISF
-    # Assure test runs on same machine as build
-    runs-on: [ self-hosted, ibs3005 , "${{needs.build.outputs.runner_label}}" ]
+    # Assure test runs on whatever runner the build ran on
+    runs-on: ${{ needs.build.outputs.runner_name }}
     defaults:
       run:
         shell: bash -l {0}
