@@ -28,7 +28,7 @@ jobs:
           CONDA_TARGET_DIR="$(pwd)/anaconda_isf3.8";
           source $CONDA_TARGET_DIR/bin/activate;
           echo "Using Python: $(which python)";
-          export PYTHONPATH=$CONDA_TARGET_DIR;
+          export PYTHONPATH=$pwd;
           name=${{ runner.name }};
           runner_number=$( echo $name | grep -Eo '[0-9]+$' );
           port_number=${runner_number: -1}8786;
