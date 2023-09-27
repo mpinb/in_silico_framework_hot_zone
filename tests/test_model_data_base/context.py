@@ -45,3 +45,19 @@ class FreshlyInitializedMdb(object):
     def __exit__(self, *args, **kwargs):
         if os.path.exists(self.path):
             shutil.rmtree(self.path)
+
+@pytest.fixture
+def fresh_mdb(tmpdir):
+    path = str(tmpdir.dirname)
+    mdb = model_data_base.ModelDataBase(path)
+    #self.mdb.settings.show_computation_progress = False
+    from model_data_base.mdb_initializers.load_simrun_general import init
+    from model_data_base.utils import silence_stdout
+    with silence_stdout:
+        init(mdb, test_data_folder,
+                rewrite_in_optimized_format=False, 
+                parameterfiles=False,
+                dendritic_voltage_traces=False)
+    
+    return mdb
+
