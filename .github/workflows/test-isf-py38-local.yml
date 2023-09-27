@@ -1,4 +1,3 @@
-# Tests ISF3.8 on ibs3005
 name: ISF Py3.8 (local) test
 on:
   push:
@@ -8,6 +7,7 @@ on:
 jobs:
 
   build:
+    name: Build ISF 3.8
     uses: ./.github/workflows/build-isf.yml
     with:
       py_version: 3.8
@@ -32,10 +32,17 @@ jobs:
           port_number=${runner_number: -1}8786
           bokeh_port=${runner_number: -1}8787
           echo "Launching Dask server on $name"
-          echo "Using port $port_number and bokeh port $bokeh_port" 
+          echo "Using port $port_number and bokeh port $bokeh_port"
+          ::group::{Dask output}
           dask-scheduler --port=$port_number --bokeh-port=$bokeh_port &
           dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          pytest -n 4 -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. tests
+          ::endgroup::
+          pytest \
+           -n 4 \  
+           -rsx -vv --color=yes \
+           --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. \
+           --dask_server_port $bokeh_port \
+           tests
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

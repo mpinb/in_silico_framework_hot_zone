@@ -11,7 +11,7 @@ on:
         description: "Name of the runner the build ran on"
         value: ${{ jobs.build.outputs.runner_name }}
 jobs:
-  build:
+  Build:
     runs-on: [ self-hosted, ibs3005 ]
     defaults:
       run:

@@ -32,6 +32,9 @@ class ModuleFilter(logging.Filter):
             [module_name in m for module_name in self.suppress_modules_list]
             )
 
+def pytest_addoption(parser):
+    parser.addoption("dask_server_port", action="store", default="38787")
+
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
@@ -50,12 +53,8 @@ def pytest_configure(config):
 
     # Assume dask server and worker are already started
     # These are set up in the github workflow file.
-    # If running locally, make sure you have a dask scheduler and dask worker running on these ports
-
-    if six.PY2:
-        client = distributed.Client('localhost:28786')
-    else:
-        client = distributed.Client('localhost:38786')
+    # If running tests locally, make sure you have a dask scheduler and dask worker running on the ports you want
+    client = distributed.Client('localhost:{}'.format(config.option.dask_server_port))
     log.info("setting distributed duck-typed object as module level attribute")
     distributed.client_object_duck_typed = client
     
