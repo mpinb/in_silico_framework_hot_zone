@@ -48,8 +48,8 @@ class FreshlyInitializedMdb(object):
             shutil.rmtree(self.path)
 
 @pytest.fixture
-def fresh_mdb(tmpdir):
-    path = str(tmpdir.dirname)
+def fresh_mdb():
+    path = tmpdir.mkdtemp()
     mdb = model_data_base.ModelDataBase(path)
     #self.mdb.settings.show_computation_progress = False
     from model_data_base.mdb_initializers.load_simrun_general import init
