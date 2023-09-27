@@ -16,10 +16,10 @@ from numpy.testing import assert_array_equal
 
 
 def robust_del_fun(mdb, key):
-try:
-    del mdb[key]
-except KeyError:
-    pass
+    try:
+        del mdb[key]
+    except KeyError:
+        pass
         
 client = distributed.client_object_duck_typed
 assert client is not None 
