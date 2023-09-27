@@ -24,27 +24,21 @@ jobs:
 
     steps:
       - name: Test in-silico-framework for Python 3.8
-        run: >
-          CONDA_TARGET_DIR="$(pwd)/anaconda_isf3.8";
-          source $CONDA_TARGET_DIR/bin/activate;
-          echo "Using Python: $(which python)";
-          export PYTHONPATH=$(pwd);
-          echo $PYTHONPATH;
-          name=${{ runner.name }};
-          runner_number=$( echo $name | grep -Eo '[0-9]+$' );
-          port_number=387${runner_number: -1}6;
-          bokeh_port=387${runner_number: -1}7;
-          echo "Launching Dask server on $name";
-          echo "Using port $port_number and bokeh port $bokeh_port";
+        run: |
+          CONDA_TARGET_DIR="$(pwd)/anaconda_isf3.8"
+          source $CONDA_TARGET_DIR/bin/activate
+          echo "Using Python: $(which python)"
+          export PYTHONPATH=$(pwd)
+          echo $PYTHONPATH
+          name=${{ runner.name }}
+          runner_number=$( echo $name | grep -Eo '[0-9]+$' )
+          port_number=387${runner_number: -1}6
+          bokeh_port=387${runner_number: -1}7
+          echo "Launching Dask server on $name"
+          echo "Using port $port_number and bokeh port $bokeh_port"
           dask-scheduler --port=$port_number --bokeh-port=$bokeh_port &
           dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          
-          pytest 
-          -n 4
-          -rsx -vv --color=yes
-          --cov-report xml:tests/coverage_reports/report_py3.xml --cov=.
-          --dask_server_port $port_number
-          tests
+          pytest -n 4 -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. --dask_server_port $port_number tests
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
