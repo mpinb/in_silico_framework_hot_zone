@@ -34,8 +34,19 @@ jobs:
           runner_number=$( echo $name | grep -Eo '[0-9]+$' )
           port_number=387${runner_number: -1}6
           bokeh_port=387${runner_number: -1}7
+
+          echo "Setting dask config with env variables"
+          export DASK_DISTRIBUTED__WORKER__MEMORY__TARGET=0.90
+          export DASK_DISTRIBUTED__WORKER__MEMORY__SPILL=False
+          export DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE=False
+          export DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE=False
+
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
+          echo "Memory target: $DASK_DISTRIBUTED__WORKER__MEMORY__TARGET"
+          echo "Memory spill: $DASK_DISTRIBUTED__WORKER__MEMORY__SPILL"
+          echo "Memory pause: $DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE"
+          echo "Memory terminate: $DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE"
           dask-scheduler --port=$port_number --bokeh-port=$bokeh_port & 
           dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 &
           pytest -n 4 -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. --dask_server_port $port_number tests
