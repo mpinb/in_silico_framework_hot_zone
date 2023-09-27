@@ -8,7 +8,7 @@ from model_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_t
 from model_data_base.utils import silence_stdout
 import distributed
 
-optimize = silence_stdout(optimize)
+optimize = silence_stdout(optimize) 
         
 def test_optimization_works_dumpers_default(self, fresh_mdb):
     optimize(fresh_mdb, dumper = None, client = distributed.client_object_duck_typed)
