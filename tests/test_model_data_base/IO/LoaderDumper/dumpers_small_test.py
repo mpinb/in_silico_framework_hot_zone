@@ -21,8 +21,8 @@ def robust_del_fun(mdb, key):
     except KeyError:
         pass
             
-class TestDumperSmall(unittest.TestCase): 
-    def setUp(self):
+class TestDumperSmall: 
+    def setup_class(self):
         # set up model_data_base in temporary folder and initialize it.
         # This additionally is an implicit test, which ensures that the
         # initialization routine does not throw an error.
@@ -37,7 +37,8 @@ class TestDumperSmall(unittest.TestCase):
         self.ddf2 = dd.from_pandas(self.pdf2, npartitions = 2)
         assert(self.ddf.npartitions > 1)        
                        
-    def tearDown(self):
+    def teardown_class(self):
+        self.clean_up()
         if os.path.exists(self.path):
             shutil.rmtree(self.path)
             
