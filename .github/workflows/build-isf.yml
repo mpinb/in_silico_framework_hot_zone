@@ -37,14 +37,14 @@ jobs:
 
     - name: Build ISF
       # rebuild only if changes have been made, or the build does not exist
-      if: (steps.changes.outputs.all == 'true') || (hashFiles('$(pwd)/anaconda_isf${{ inputs.py_version }}') == '')
+      if: (steps.changes.outputs.all == 'true') || (hashFiles('~/anaconda_isf${{ inputs.py_version }}') == '')
       run: |
         echo "Changes since last commit: ${{ steps.changes.outputs.all }}"
         echo "Previous build:"
-        ls $(pwd)/anaconda_isf${{ inputs.py_version }}
-        CONDA_TARGET_DIR="$(pwd)/anaconda_isf${{ inputs.py_version }}"
+        ls ~/anaconda_isf${{ inputs.py_version }}
+        CONDA_TARGET_DIR="~/anaconda_isf${{ inputs.py_version }}"
         if [ -d "$CONDA_TARGET_DIR" ]; then
-          echo "Found existing installation in $(pwd). Removing previous Anaconda installation..."
+          echo "Found existing installation in ~. Removing previous Anaconda installation..."
           rm -r "$CONDA_TARGET_DIR"
         else
           echo "No previous Anaconda installation found. Continuing..."
