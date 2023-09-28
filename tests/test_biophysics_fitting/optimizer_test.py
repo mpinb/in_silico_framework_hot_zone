@@ -4,6 +4,7 @@ from . import decorators
 from .context import PARENT, DATA_DIR
 # import context
 import distributed
+import six
 import pytest
 from biophysics_fitting import hay_complete_default_setup, L5tt_parameter_setup
 from biophysics_fitting.parameters import param_to_kwargs
