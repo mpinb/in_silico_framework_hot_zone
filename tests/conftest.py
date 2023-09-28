@@ -11,7 +11,9 @@ from Interface import get_client, root_logger, root_logger_stream_handler
 import logging
 log = logging.getLogger(__name__)
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
-
+TEST_DATA_FOLDER = os.path.join(getting_started.parent, \
+                              'example_simulation_data', \
+                              'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/')
 os.environ["IS_TESTING"] = "True"
 
 suppress_modules_list = ["biophysics_fitting"]
@@ -40,7 +42,7 @@ def is_port_in_use(port):
         return s.connect_ex(('localhost', port)) == 0
 
 def setup_mdb_output_dir_tests():
-    assert(os.path.exists(test_data_folder))
+    assert(os.path.exists(TEST_DATA_FOLDER))
     this_dir = os.path.abspath(os.path.dirname(__file__))
     files_generated_by_tests = os.path.join(this_dir, 'test_model_data_base/data/files_generated_by_tests')
     if os.path.exists(files_generated_by_tests):
@@ -83,11 +85,9 @@ def fresh_mdb():
     #self.mdb.settings.show_computation_progress = False
     from model_data_base.mdb_initializers.load_simrun_general import init
     from model_data_base.utils import silence_stdout
-    test_data_folder = os.path.join(getting_started.parent, \
-                              'example_simulation_data', \
-                              'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/')
+    
     with silence_stdout:
-        init(mdb, test_data_folder,
+        init(mdb, TEST_DATA_FOLDER,
                 rewrite_in_optimized_format=False, 
                 parameterfiles=False,
                 dendritic_voltage_traces=False)
