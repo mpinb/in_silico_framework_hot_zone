@@ -40,6 +40,9 @@ jobs:
           export DASK_DISTRIBUTED__WORKER__MEMORY__SPILL=False
           export DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE=False
           export DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE=False
+          export DASK_DISTRIBUTED__LOGGING__DISTRIBUTED=debug
+          export DASK_DISTRIBUTED__LOGGING__DISTRIBUTED_WORKER=debug
+          export DASK_DISTRIBUTED__LOGGING__DISTRIBUTED_CLIENT=debug
 
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
