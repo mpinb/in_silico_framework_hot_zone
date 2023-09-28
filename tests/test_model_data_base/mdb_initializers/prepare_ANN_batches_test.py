@@ -1,8 +1,8 @@
-import unittest
 import tempfile
 import warnings
 from ..context import *
 import numpy as np
+import shutil
 from .. import decorators
 from model_data_base.mdb_initializers.prepare_ANN_batches import spike_times_to_onehot
 from model_data_base.mdb_initializers.load_simrun_general \
@@ -14,23 +14,22 @@ from model_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_t
 from model_data_base.utils import silence_stdout
 import distributed
 
-client = distributed.client_object_duck_typed
-
 optimize_simrun_general = silence_stdout(optimize_simrun_general)
 
-class TestPrepareANNBatches(unittest.TestCase):
-    def setUp(self):
+class TestPrepareANNBatches:
+    def setup_class(self, fresh_mdb, client):
         # set up model_data_base in temporary folder and initialize it.
         # This additionally is an implicit test, which ensures that the
         # initialization routine does not throw an error
-        self.fmdb = FreshlyInitializedMdb()
-        self.mdb = self.fmdb.__enter__()
+        self.mdb = fresh_mdb
         optimize_simrun_general(self.mdb, client = client)
         # example spike_times
         self.spike_times = [15.999999999999625, 23.724999999999188, 30.449999999998806, 165.79999999998614, 181.62499999997175, 298.3249999998656, 319.37499999984647]
                        
-    def tearDown(self):
-        self.fmdb.__exit__()
+    def teardown_class(self):
+        for key in self.mdb:
+            del key
+        shutil.rmtree(self.mdb.basedir)
         
     def test_API(self):
         init_synapse_activation(self.mdb, groupby = 'EI')

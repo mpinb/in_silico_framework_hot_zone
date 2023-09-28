@@ -1,8 +1,6 @@
-import unittest
 import tempfile
 import warnings
 from ..context import fresh_mdb
-from .. import decorators
 from model_data_base.mdb_initializers.load_simrun_general import optimize
 from model_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
 from model_data_base.utils import silence_stdout
@@ -10,19 +8,18 @@ import distributed
 
 optimize = silence_stdout(optimize) 
         
-def test_optimization_works_dumpers_default(fresh_mdb):
-    optimize(fresh_mdb, dumper = None, client = distributed.client_object_duck_typed)
+def test_optimization_works_dumpers_default(fresh_mdb, client):
+    optimize(fresh_mdb, dumper = None, client = client)
     
-def test_optimization_works_dumpers_csv(fresh_mdb):
-    optimize(fresh_mdb, dumper = dask_to_csv, client = distributed.client_object_duck_typed)
+def test_optimization_works_dumpers_csv(fresh_mdb, client):
+    optimize(fresh_mdb, dumper = dask_to_csv, client = client)
         
-def test_optimization_works_dumpers_msgpack(fresh_mdb):
-    optimize(fresh_mdb, dumper = dask_to_msgpack, client = distributed.client_object_duck_typed)     
+def test_optimization_works_dumpers_msgpack(fresh_mdb, client):
+    optimize(fresh_mdb, dumper = dask_to_msgpack, client = client)     
         
-def test_optimization_works_dumpers_categorized_msgpack(fresh_mdb):
-    optimize(fresh_mdb, dumper = dask_to_categorized_msgpack, client = distributed.client_object_duck_typed)                
+def test_optimization_works_dumpers_categorized_msgpack(fresh_mdb, client):
+    optimize(fresh_mdb, dumper = dask_to_categorized_msgpack, client = client)                
         
-@decorators.testlevel(2)            
 def test_dataintegrity_no_empty_rows(fresh_mdb):
     e = fresh_mdb
     synapse_activation = e['synapse_activation']
@@ -38,13 +35,13 @@ def test_dataintegrity_no_empty_rows(fresh_mdb):
         assert 0 == len(cell_activation[cell_activation.isnan == True])
         assert 0 == len(voltage_traces[voltage_traces.isnan == True])
 
-@decorators.testlevel(2)       
+#@decorators.testlevel(2)  
 def test_voltage_traces_have_float_indices(fresh_mdb):
     e = fresh_mdb
     assert isinstance(e['voltage_traces'].columns[0], float)
     assert isinstance(e['voltage_traces'].head().columns[0], float)       
     
-@decorators.testlevel(2)       
+#@decorators.testlevel(2)  
 def test_every_entry_in_initialized_mdb_can_be_serialized(fresh_mdb):
     import cloudpickle
     e = fresh_mdb

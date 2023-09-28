@@ -1,6 +1,5 @@
 import Interface as I
 from . import decorators
-import unittest
 # import global variables from context
 from .context import PARENT, DATA_DIR
 # import context
@@ -222,8 +221,8 @@ def test_get_max_generation():
     assert(get_max_generation({'0': 1, 10: 2}) == 10)
     assert(get_max_generation({'3': 1, '10_ckeckpoint': 2}) == 3)
 
-def test_mini_optimization_run(capsys):
-    c = distributed.client_object_duck_typed
+def test_mini_optimization_run(capsys, client):
+    c = client
     try:
         mdb = set_up_mdb(step = False)
         start_run(mdb['86'], 1, client = c, offspring_size = 2, max_ngen = 2)
@@ -245,7 +244,7 @@ def test_mini_optimization_run(capsys):
         I.shutil.rmtree(mdb.basedir)     
         raise
 
-@pytest.mark.skip(reason="This test is not Py3 compatible")
+@pytest.mark.skipif(six.PY3, reason="This test is not Py3 compatible")
 def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
     """
     TODO: make this test compatible with py3. Currently, it can not read the simulator object from mdb_legacy

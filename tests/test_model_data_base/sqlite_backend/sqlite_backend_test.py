@@ -1,4 +1,3 @@
-import unittest
 import shutil
 import os
 import time
@@ -17,31 +16,28 @@ def write_data_to_dict(path, key):
     data = np.ones(shape = (1000,1000))*int(key)
     dict_[key] = data
             
-class TestSQLiteBackend(unittest.TestCase):
-    def setUp(self):
+class TestSQLiteBackend:
+    def setup_class(self):
         self.tempdir = tempfile.mkdtemp()
         self.path = os.path.join(self.tempdir, 'tuplecloudsql_test.db')
         self.db = SqliteDict(self.path)
         
-    def tearDown(self):
+    def teardown_class(self):
         if os.path.exists(self.tempdir):
-            shutil.rmtree(self.tempdir)
-        distributed.client_object_duck_typed.restart()
-        
+            shutil.rmtree(self.tempdir)        
     
     def test_str_values_can_be_assigned(self):
         db = self.db
         db['test'] = 'test'
-        self.assertEqual(db['test'], 'test')
+        assert db['test'] == 'test'
     
     def test_tuple_values_can_be_assigned(self):
         db = self.db
         db[('test',)] = 'test'
-        self.assertEqual(db[('test',)], 'test')  
+        assert db[('test',)] == 'test'  
         db[('test','abc')] = 'test2'
-        self.assertEqual(db[('test','abc')], 'test2')  
+        assert db[('test','abc')] == 'test2'  
     
-    @decorators.testlevel(1)            
     def test_pixelObject_can_be_assigned(self):
         db = self.db
         #plot figure and convert it to PixelObject
@@ -55,14 +51,13 @@ class TestSQLiteBackend(unittest.TestCase):
         db[('test', 'myPixelObject')] = po
         po_reconstructed = db[('test', 'myPixelObject')]
     
-    @decorators.testlevel(1)            
-    def test_concurrent_writes(self):
+    #@decorators.testlevel(1)  
+    def test_concurrent_writes(self, client):
         keys = [str(lv) for lv in range(100)]
         job = {key: write_data_to_dict(self.path, key) for key in keys}
         job = dask.delayed(job)
          
-        c = distributed.client_object_duck_typed
-        c.compute(job).result()
+        client.compute(job).result()
          
         assert(set(self.db.keys()) == set(keys))
         for k in keys:

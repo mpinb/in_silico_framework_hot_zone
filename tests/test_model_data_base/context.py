@@ -22,14 +22,14 @@ test_data_folder = os.path.join(getting_started.parent, \
 class FreshlyInitializedMdb(object):
     '''context manager that provides a freshly initalized mdb for 
     testing purposes'''
-    def __enter__(self):
+    def __enter__(self, client):
         self.path = tempfile.mkdtemp()
         self.mdb = model_data_base.ModelDataBase(self.path)
         #self.mdb.settings.show_computation_progress = False
         from model_data_base.mdb_initializers.load_simrun_general import init
         from model_data_base.utils import silence_stdout
         with silence_stdout:
-            init(self.mdb, test_data_folder, client = distributed.client_object_duck_typed, 
+            init(self.mdb, test_data_folder, client = client, 
                  rewrite_in_optimized_format=False, 
                  parameterfiles=False,
                  dendritic_voltage_traces=False)

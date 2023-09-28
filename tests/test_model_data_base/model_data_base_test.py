@@ -3,7 +3,6 @@ from  model_data_base import model_data_base_register
 import model_data_base.IO.LoaderDumper.to_pickle  as to_pickle
 from . import decorators
 import pytest
-import unittest
 import os, shutil
 import numpy as np
 import tempfile

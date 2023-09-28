@@ -1,7 +1,6 @@
 from ...context import fresh_mdb
 from model_data_base.model_data_base import ModelDataBase
 from ... import decorators
-import unittest
 import tempfile
 import numpy as np
 from pandas.util.testing import assert_frame_equal
@@ -22,9 +21,6 @@ def robust_del_fun(mdb, key):
     except KeyError:
         pass
         
-client = distributed.client_object_duck_typed
-assert client is not None 
-
 
 def real_data_generic(fresh_mdb, dumper, client = None):
     if client is None:
@@ -45,12 +41,12 @@ def real_data_generic(fresh_mdb, dumper, client = None):
     a = dummy.compute(get = dask.multiprocessing.get)
     assert_frame_equal(a, b)        
 
-def test_dask_to_csv_real_data():
+def test_dask_to_csv_real_data(client):
     real_data_generic(dask_to_csv, client=client)
 
-def test_dask_to_categorized_msgpack_real_data():
+def test_dask_to_categorized_msgpack_real_data(client):
     real_data_generic(dask_to_categorized_msgpack, client = client)        
 
-def test_dask_to_msgpack_real_data():
+def test_dask_to_msgpack_real_data(client):
     real_data_generic(dask_to_msgpack, client = client)
     

@@ -1,4 +1,3 @@
-import unittest
 from .context import *
 from visualize._decorators import *
 import pandas as pd
@@ -6,22 +5,21 @@ import pandas.util.testing as pdt
 import dask.dataframe as dd
 from mock import MagicMock, call
 
-class TestDecorators(unittest.TestCase):
-    def test_dask_to_pandas(self):
-        def fun(*args, **kwargs):
-            return args, kwargs
-        
-        fun = dask_to_pandas(fun)
-        
-        pdf = pd.DataFrame({'A': [1,2,3], 'B': [3,4,5]})
-        ddf = dd.from_pandas(pdf, npartitions = 3)
-        
-        result_args, result_kwargs = fun(pdf, ddf, pdf, ddf, A=pdf, B = pdf, C = ddf)
-        
-        for val in result_args:
-            self.assertTrue(isinstance(val, pd.DataFrame))
-        for name in result_kwargs:
-            self.assertTrue(isinstance(result_kwargs[name], pd.DataFrame))
+def test_dask_to_pandas(self):
+    def fun(*args, **kwargs):
+        return args, kwargs
+    
+    fun = dask_to_pandas(fun)
+    
+    pdf = pd.DataFrame({'A': [1,2,3], 'B': [3,4,5]})
+    ddf = dd.from_pandas(pdf, npartitions = 3)
+    
+    result_args, result_kwargs = fun(pdf, ddf, pdf, ddf, A=pdf, B = pdf, C = ddf)
+    
+    for val in result_args:
+        assert isinstance(val, pd.DataFrame)
+    for name in result_kwargs:
+        asert isinstance(result_kwargs[name], pd.DataFrame)
             
             
     def test_subsequent_calls_per_line(self):

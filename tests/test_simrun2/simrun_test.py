@@ -10,7 +10,6 @@ import dask.dataframe as dd
 import single_cell_parser as scp
 import neuron
 from . import decorators
-import unittest
 import numpy as np
 from simrun2.utils import scale_apical
 import simrun2.generate_synapse_activations
@@ -39,9 +38,9 @@ example_path = os.path.join(getting_started_folder, \
                             '20150815-1530_20240', \
                             'simulation_run0000_synapses.csv')
 
-assert(os.path.exists(cellParamName))
-assert(os.path.exists(networkName))
-assert(os.path.exists(example_path))
+assert os.path.exists(cellParamName)
+assert os.path.exists(networkName)
+assert os.path.exists(example_path)
 
 
 #@decorators.testlevel(1)

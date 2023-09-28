@@ -1,7 +1,5 @@
 from ...context import *
 from model_data_base.model_data_base import ModelDataBase
-from ... import decorators
-import unittest
 import tempfile
 import numpy as np
 from pandas.util.testing import assert_frame_equal
@@ -71,10 +69,10 @@ class TestDumperSmall:
     def test_dask_to_csv_small(self):
         self.data_frame_generic_small(self.pdf2, self.ddf2, dask_to_csv)
         
-    def test_dask_to_msgpack_small(self):
+    def test_dask_to_msgpack_small(self, client):
         self.data_frame_generic_small(self.pdf2, self.ddf2, dask_to_msgpack, client = client)     
         
-    def test_dask_to_categorized_msgpack_small(self):
+    def test_dask_to_categorized_msgpack_small(self, client):
         self.data_frame_generic_small(self.pdf2, self.ddf2, dask_to_categorized_msgpack, client = client)
         
     def test_pandas_to_msgpack_small(self):
@@ -112,10 +110,10 @@ class TestDumperSmall:
         
         self.mdb.setitem('rm', Rm, dumper = reduced_lda_model)
         
-        self.assertIs(st, Rm.st)
-        self.assertIs(lda_values, Rm.lda_values)
-        self.assertIs(lda_value_dicts, Rm.lda_value_dicts)
-        self.assertIs(mdb_list, Rm.mdb_list)
+        assert st is Rm.st
+        assert lda_values is Rm.lda_values
+        assert lda_value_dicts is Rm.lda_value_dicts
+        assert mdb_list is Rm.mdb_list
         
         # can be loaded
         Rm_reloaded = self.mdb['rm']
