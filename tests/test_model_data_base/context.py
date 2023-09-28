@@ -4,7 +4,7 @@ import distributed
 import pytest
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 sys.path.insert(0, parent)
-
+import distributed
 from model_data_base import *
 import getting_started
 import mechanisms
@@ -49,7 +49,7 @@ class FreshlyInitializedMdb(object):
 
 @pytest.fixture
 def fresh_mdb():
-    path = tmpdir.mkdtemp()
+    path = tempfile.mkdtemp()
     mdb = model_data_base.ModelDataBase(path)
     #self.mdb.settings.show_computation_progress = False
     from model_data_base.mdb_initializers.load_simrun_general import init
