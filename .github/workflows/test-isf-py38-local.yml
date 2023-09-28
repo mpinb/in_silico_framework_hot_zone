@@ -42,8 +42,8 @@ jobs:
           export DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE=False
           export DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE=False
           export DASK_DISTRIBUTED__LOGGING__DISTRIBUTED=DEBUG
-          export DASK_DISTRIBUTED__LOGGING__LOGGERS__HANDLERS=file
-          export DASK_DISTRIBUTED__LOGGING__HANDLERS__FILE__FILENAME=dask.log
+          export DASK_LOGGING__LOGGERS__HANDLERS=file
+          export DASK_LOGGING__HANDLERS__FILE__FILENAME=dask.log
 
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"

@@ -37,7 +37,7 @@ jobs:
 
     - name: Build ISF
       # rebuild only if changes have been made, or the build does not exist
-      if: (steps.changes.outputs.all == 'true') || hashFiles('$(pwd)/anaconda_isf${{ inputs.py_version }}') == ''
+      if: (steps.changes.outputs.all == 'true') || (hashFiles('$(pwd)/anaconda_isf${{ inputs.py_version }}') == '')
       run: |
         echo "Changes since last commit: ${{ steps.changes.outputs.all }}"
         echo "Previous build:"
