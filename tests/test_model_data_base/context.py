@@ -49,6 +49,7 @@ class FreshlyInitializedMdb(object):
 
 @pytest.fixture
 def fresh_mdb():
+    # unique temp path
     path = tempfile.mkdtemp()
     mdb = model_data_base.ModelDataBase(path)
     #self.mdb.settings.show_computation_progress = False
@@ -60,5 +61,9 @@ def fresh_mdb():
                 parameterfiles=False,
                 dendritic_voltage_traces=False)
     
-    return mdb
+    yield mdb
+    # cleanup
+    for key in mdb:
+        del key
+    shutil.rmtree(path)
 
