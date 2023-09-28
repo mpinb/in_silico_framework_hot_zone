@@ -66,6 +66,6 @@ jobs:
       if: ${{ always() }}
       run: |
         echo "Build success = ${{ job.status }}"
-        echo ${{ job.status }} > $HOME/build_success.txt
+        echo ${{ job.status }} > $HOME/build_success.txt 
 
             
