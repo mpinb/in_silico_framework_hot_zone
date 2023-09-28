@@ -74,7 +74,8 @@ def pytest_configure(config):
     isf_logger.setLevel(logging.WARNING)  # set logging level of root logger to WARNING
     # Suppress logs from verbose modules so they don't show in stdout
     isf_logger_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
-        
+    logging.getLogger().disabled = True
+
 @pytest.fixture
 def fresh_mdb():
     # unique temp path
