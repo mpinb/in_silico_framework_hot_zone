@@ -34,8 +34,6 @@ jobs:
           all:
             - 'installer/**'
             - 'mechanisms/**'
-            - 'tests/**'
-            - '.github/**'
 
     - name: Build ISF
       # rebuild only if changes have been made, or the build does not exist
