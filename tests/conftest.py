@@ -3,7 +3,7 @@
 # even before pytest discovery
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
 # for setting environment variables, use pytest.ini or .env instead
-import os, shutil, logging, socket, pytest
+import os, shutil, logging, socket, pytest, tempfile
 import Interface as I
 from Interface import get_client, isf_logger, isf_logger_stream_handler
 import getting_started
@@ -74,11 +74,11 @@ def pytest_configure(config):
     root_logger.propagate=False
 
 @pytest.fixture
-def client(config):
+def client(pytestconfig):
     # Assume dask server and worker are already started
     # These are set up in the github workflow file.
     # If running tests locally, make sure you have a dask scheduler and dask worker running on the ports you want
-    return distributed.Client('localhost:{}'.format(config.getoption("--dask_server_port")))
+    return distributed.Client('localhost:{}'.format(pytestconfig.getoption("--dask_server_port")))
 
 @pytest.fixture
 def fresh_mdb():

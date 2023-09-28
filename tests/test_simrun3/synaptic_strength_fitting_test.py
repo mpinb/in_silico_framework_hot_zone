@@ -17,7 +17,7 @@ PSPs = simrun3.synaptic_strength_fitting.PSPs
 #         return [FakeFuture(r) for r in res]
     
 #@decorators.testlevel(2)    
-def test_VPM_synaptic_strength_is_between_1_72_and_1_85(self, client):
+def test_VPM_synaptic_strength_is_between_1_72_and_1_85(client):
     """
     Limits are educated guesses, but it should never deviate by a lot.
     There is some statistical fluctuation in this test due to the stochastic nature of synapse activation.

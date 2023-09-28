@@ -19,7 +19,7 @@ def test_dask_to_pandas(self):
     for val in result_args:
         assert isinstance(val, pd.DataFrame)
     for name in result_kwargs:
-        asert isinstance(result_kwargs[name], pd.DataFrame)
+        assert isinstance(result_kwargs[name], pd.DataFrame)
             
             
     def test_subsequent_calls_per_line(self):
