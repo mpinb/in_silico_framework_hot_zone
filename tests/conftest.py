@@ -3,12 +3,9 @@
 # even before pytest discovery
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
 # for setting environment variables, use pytest.ini or .env instead
-import os
-import pytest
-import socket
+import os, shutil, logging, socket, pytest
 import Interface as I
 from Interface import get_client, root_logger, root_logger_stream_handler
-import logging
 import getting_started
 log = logging.getLogger(__name__)
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
