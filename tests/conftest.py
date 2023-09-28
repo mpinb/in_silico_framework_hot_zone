@@ -134,6 +134,7 @@ def empty_mdb():
 
 @pytest.fixture
 def sqlite_db():
+    from model_data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SqliteDict
     tempdir = tempfile.mkdtemp()
     path = os.path.join(tempdir, 'tuplecloudsql_test.db')
     db = SqliteDict(path)
