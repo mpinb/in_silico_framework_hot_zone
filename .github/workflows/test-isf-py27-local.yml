@@ -31,10 +31,10 @@ jobs:
     steps:
       - name: Download, install & build ISF for Python 2.7
         run: |
-          CONDA_TARGET_DIR="$(pwd)/anaconda_isf2.7"
+          CONDA_TARGET_DIR="$HOME/anaconda_isf2.7"
           source $CONDA_TARGET_DIR/bin/activate
           echo "Using Python: $(which python)"
-          export PYTHONPATH=$(pwd)
+          export PYTHONPATH=$(pwd):$HOME
           echo $PYTHONPATH
           name=${{ runner.name }}
           runner_number=$( echo $name | grep -Eo '[0-9]+$' )
