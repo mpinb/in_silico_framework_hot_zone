@@ -41,7 +41,7 @@ jobs:
           export DASK_DISTRIBUTED__WORKER__MEMORY__SPILL=False
           export DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE=False
           export DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE=False
-          export DASK_DISTRIBUTED__LOGGING__DISTRIBUTED=DEBUG
+          export DASK_DISTRIBUTED__LOGGING__DISTRIBUTED=INFO
           export DASK_LOGGING__LOGGERS__HANDLERS=file
           export DASK_LOGGING__HANDLERS__FILE__FILENAME=dask.log
 
@@ -61,8 +61,7 @@ jobs:
         with:
           name: Dask scheduler output
           path: |
-            - $(pwd)/dask_scheduler.txt
-            - $(pwd)/dask_workers.txt
+            - dask.log
       - uses: actions/upload-artifact@v3
         if: ${{ always() }} 
         with:
