@@ -62,19 +62,22 @@ def pytest_configure(config):
     if not os.path.exists(output_thickness):
         os.mkdir(output_thickness)
 
-    # Assume dask server and worker are already started
-    # These are set up in the github workflow file.
-    # If running tests locally, make sure you have a dask scheduler and dask worker running on the ports you want
-    client = distributed.Client('localhost:{}'.format(config.getoption("--dask_server_port")))
-    log.info("setting distributed duck-typed object as module level attribute")
-    distributed.client_object_duck_typed = client
-    
     # Setup logging output
     # only log warnings
     isf_logger.setLevel(logging.WARNING)  # set logging level of root logger to WARNING
     # Suppress logs from verbose modules so they don't show in stdout
     isf_logger_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
-    logging.getLogger().disabled = True
+    root_logger = logging.getLogger()
+    root_logger_file_handler = logging.FileHandler("tests.log")
+    root_logger.handlers = [root_logger_file_handler]  # Additional handlers can always be configured.
+
+@pytest.fixture
+def client(config):
+    # Assume dask server and worker are already started
+    # These are set up in the github workflow file.
+    # If running tests locally, make sure you have a dask scheduler and dask worker running on the ports you want
+    client = distributed.Client('localhost:{}'.format(config.getoption("--dask_server_port")))
+    yield client
 
 @pytest.fixture
 def fresh_mdb():

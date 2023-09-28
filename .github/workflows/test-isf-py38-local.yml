@@ -52,7 +52,7 @@ jobs:
 
           (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > dask_scheduler.txt)&
           (dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 > dask_workers.txt)&
-          pytest -n 4 -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. --dask_server_port $port_number tests
+          pytest -n 4 -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. --dask_server_port $port_number tests/
 
       - uses: actions/upload-artifact@v3
         if: ${{ always() }} 
@@ -61,6 +61,12 @@ jobs:
           path: |
             - $(pwd)/dask_scheduler.txt
             - $(pwd)/dask_workers.txt
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }} 
+        with:
+          name: Tests logging output
+          path: |
+            - tests/test.log
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
