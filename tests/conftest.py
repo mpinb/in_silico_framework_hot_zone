@@ -97,7 +97,3 @@ def fresh_mdb():
     for key in mdb:
         del key
     shutil.rmtree(path)
-
-@pytest.fixture
-def mdb_test_output_path():
-    

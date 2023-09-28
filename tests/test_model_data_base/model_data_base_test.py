@@ -231,7 +231,7 @@ def test_compare_old_mdb_with_freshly_initialized_one(fresh_mdb):
                             nocreate = True)
     #old_mdb['reduced_model']
     
-    with FreshlyInitializedMdb() as fmdb:
+    with fresh_mdb as fmdb:
         assert_frame_equal(fmdb['voltage_traces'].compute(), \
                             fmdb['voltage_traces'].compute())
         assert_frame_equal(fmdb['synapse_activation'].compute(), \
