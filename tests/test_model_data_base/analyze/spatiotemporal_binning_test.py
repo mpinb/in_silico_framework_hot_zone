@@ -39,11 +39,10 @@ class TestSpatioTemporalBinning:
         b = np.array([[0, 0, 6, 1, 0, 1], [0, 0, 0, 0, 4, 2]])
         np.testing.assert_array_equal(a, b)      
     
-    def test_binning_real_data(self):
+    def test_binning_real_data(self, fresh_mdb):
         '''binning dask dataframes has to deliver the same
-        results as binning pandas dataframes'''
-        with FreshlyInitializedMdb() as mdb:   
-            assert('synapse_activation' in list(mdb.keys()))                 
-            x = universal(mdb['synapse_activation'].compute(get=dask.multiprocessing.get), 'soma_distance')
-            y = universal(mdb['synapse_activation'], 'soma_distance')
-            np.testing.assert_equal(x,y)
+        results as binning pandas dataframes''' 
+        assert('synapse_activation' in list(fresh_mdb.keys()))                 
+        x = universal(fresh_mdb['synapse_activation'].compute(get=dask.multiprocessing.get), 'soma_distance')
+        y = universal(fresh_mdb['synapse_activation'], 'soma_distance')
+        np.testing.assert_equal(x,y)
