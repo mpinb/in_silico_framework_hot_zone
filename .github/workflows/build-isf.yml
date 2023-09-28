@@ -62,23 +62,10 @@ jobs:
         source $CONDA_TARGET_DIR/bin/activate
         conda list
 
-    - name: Save runner label
-      id: get_runner
-      if: ${{ always() }}        
-      run: |
-        echo "selected runner = ${{ runner.name }}"
-
     - name: Save success state
       if: ${{ always() }}
       run: |
         echo "Build success = ${{ job.status }}"
         echo "Build success = ${{ job.status }}" > $HOME/build_success.txt
-
-    - name: Upload success state
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: build_success
-        path: $HOME/anaconda_isf${{ inputs.py_version }}
 
             
