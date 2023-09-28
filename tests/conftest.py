@@ -82,6 +82,9 @@ def fresh_mdb():
     #self.mdb.settings.show_computation_progress = False
     from model_data_base.mdb_initializers.load_simrun_general import init
     from model_data_base.utils import silence_stdout
+    test_data_folder = os.path.join(getting_started.parent, \
+                              'example_simulation_data', \
+                              'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/')
     with silence_stdout:
         init(mdb, test_data_folder,
                 rewrite_in_optimized_format=False, 
