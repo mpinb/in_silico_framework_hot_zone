@@ -1,4 +1,3 @@
-from .context import fresh_mdb
 from model_data_base.model_data_base import ModelDataBase, MdbException
 from  model_data_base import model_data_base_register 
 import model_data_base.IO.LoaderDumper.to_pickle  as to_pickle
@@ -128,7 +127,7 @@ def test_mdb_will_not_be_created_if_nocreate(fresh_mdb):
             
 def test_managed_folder_really_exists(fresh_mdb):
     fresh_mdb.create_managed_folder('asd')
-    assert os.path.exists(fresh_mdb['asd']))
+    assert os.path.exists(fresh_mdb['asd'])
         
     #deleting the db entry deletes the folder
     folder_path = fresh_mdb['asd']
@@ -208,7 +207,7 @@ def test_maybe_calculate_runs_calculation_the_first_time_and_gets_result_from_md
         return 1
     res = fresh_mdb.maybe_calculate('my_key_where_result_of_fun_should_be_stored', fun)
     assert res == 1
-    assert len(list(fresh_mdb.keys())), 1)
+    assert len(list(fresh_mdb.keys())) == 1
     assert len(flag) == 1
     res = fresh_mdb.maybe_calculate('my_key_where_result_of_fun_should_be_stored', fun)
     assert res == 1
