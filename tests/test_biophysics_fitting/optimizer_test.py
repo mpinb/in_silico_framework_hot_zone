@@ -222,7 +222,6 @@ def test_get_max_generation():
     assert(get_max_generation({'0': 1, 10: 2}) == 10)
     assert(get_max_generation({'3': 1, '10_ckeckpoint': 2}) == 3)
 
-#@decorators.testlevel(2)    
 def test_mini_optimization_run(capsys):
     c = distributed.client_object_duck_typed
     try:
