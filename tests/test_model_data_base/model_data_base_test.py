@@ -230,15 +230,14 @@ def test_compare_old_mdb_with_freshly_initialized_one(fresh_mdb):
                             nocreate = True)
     #old_mdb['reduced_model']
     
-    with fresh_mdb as fmdb:
-        assert_frame_equal(fmdb['voltage_traces'].compute(), \
-                            fmdb['voltage_traces'].compute())
-        assert_frame_equal(fmdb['synapse_activation'].compute(), \
-                            fmdb['synapse_activation'].compute())
-        assert_frame_equal(fmdb['cell_activation'].compute(), \
-                            fmdb['cell_activation'].compute())
-        assert_frame_equal(fmdb['metadata'], \
-                            fmdb['metadata'])
+    assert_frame_equal(fresh_mdb['voltage_traces'].compute(), \
+                        fresh_mdb['voltage_traces'].compute())
+    assert_frame_equal(fresh_mdb['synapse_activation'].compute(), \
+                        fresh_mdb['synapse_activation'].compute())
+    assert_frame_equal(fresh_mdb['cell_activation'].compute(), \
+                        fresh_mdb['cell_activation'].compute())
+    assert_frame_equal(fresh_mdb['metadata'], \
+                        fresh_mdb['metadata'])
         
     # reduced model can be loaded - commented out by Rieke during python 2to3 transition
 #         Rm = old_mdb['reduced_lda_model']
