@@ -36,15 +36,21 @@ jobs:
             - 'mechanisms/**'
 
     - name: Build ISF
-      # rebuild only if changes have been made, or the build does not exist
-      if: (steps.changes.outputs.all == 'true') || (hashFiles('~/anaconda_isf${{ inputs.py_version }}') == '')
+      # rebuild only if:
+      # - changes are made to the directories specified above
+      # - the build does not exist
+      # - the previous build failed or was cancelled
+      if: |
+        (steps.changes.outputs.all == 'true') || 
+        (hashFiles('$HOME/anaconda_isf${{ inputs.py_version }}') == '') || 
+        ( $(head -n 1 $HOME/build_succes) != 'success' )
       run: |
         echo "Changes since last commit: ${{ steps.changes.outputs.all }}"
         echo "Previous build:"
-        ls ~/anaconda_isf${{ inputs.py_version }}
-        CONDA_TARGET_DIR="~/anaconda_isf${{ inputs.py_version }}"
+        ls $HOME/anaconda_isf${{ inputs.py_version }}
+        CONDA_TARGET_DIR="$HOME/anaconda_isf${{ inputs.py_version }}"
         if [ -d "$CONDA_TARGET_DIR" ]; then
-          echo "Found existing installation in ~. Removing previous Anaconda installation..."
+          echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
           rm -r "$CONDA_TARGET_DIR"
         else
           echo "No previous Anaconda installation found. Continuing..."
@@ -61,5 +67,18 @@ jobs:
       if: ${{ always() }}        
       run: |
         echo "selected runner = ${{ runner.name }}"
+
+    - name: Save success state
+      if: ${{ always() }}
+      run: |
+        echo "Build success = ${{ job.status }}"
+        echo "Build success = ${{ job.status }}" > $HOME/build_success.txt
+
+    - name: Upload success state
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: build_success
+        path: $HOME/anaconda_isf${{ inputs.py_version }}
 
             
