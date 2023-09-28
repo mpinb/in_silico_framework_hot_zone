@@ -16,7 +16,7 @@ TEST_DATA_FOLDER = os.path.join(getting_started.parent, \
                               'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/')
 os.environ["IS_TESTING"] = "True"
 
-suppress_modules_list = ["biophysics_fitting"]
+suppress_modules_list = ["biophysics_fitting","distributed"]
 
 class ModuleFilter(logging.Filter):
     """
@@ -79,6 +79,21 @@ def client(pytestconfig):
 
 @pytest.fixture
 def fresh_mdb():
+    """Pytest fixture for a ModelDataBase object with a unique temp path.
+    Initializes data with model_data_base.mdb_initializers.load_simrun_general.init
+    Contains 8 keys with data:
+    1. simresult_path
+    2. filelist
+    3. sim_trail_index
+    4. metadata
+    5. voltage_traces
+    6. synapse_activation
+    7. cell_activation
+    8. spike_times
+
+    Yields:
+        model_data_base.ModelDataBase: An mdb with data
+    """
     # unique temp path
     path = tempfile.mkdtemp()
     mdb = model_data_base.ModelDataBase(path)
@@ -93,3 +108,37 @@ def fresh_mdb():
     yield mdb
     # cleanup
     shutil.rmtree(path)
+
+@pytest.fixture
+def empty_mdb():
+    """Pytest fixture for a ModelDataBase object with a unique temp path.
+    Does not initialize data, in contrast to fresh_mdb
+
+    Yields:
+        model_data_base.ModelDataBase: An empty mdb
+    """
+    # unique temp path
+    path = tempfile.mkdtemp()
+    mdb = model_data_base.ModelDataBase(path)
+    #self.mdb.settings.show_computation_progress = False
+    
+    with silence_stdout:
+        init(mdb, TEST_DATA_FOLDER,
+                rewrite_in_optimized_format=False, 
+                parameterfiles=False,
+                dendritic_voltage_traces=False)
+    
+    yield mdb
+    # cleanup
+    shutil.rmtree(path)
+
+@pytest.fixture
+def sqlite_db():
+    tempdir = tempfile.mkdtemp()
+    path = os.path.join(tempdir, 'tuplecloudsql_test.db')
+    db = SqliteDict(path)
+
+    yield db
+    # cleanup
+    if os.path.exists(tempdir):
+        shutil.rmtree(tempdir)  
