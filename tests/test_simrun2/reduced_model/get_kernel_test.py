@@ -24,9 +24,9 @@ def get_test_Rm(fresh_mdb):
     return Rm
 
 @pytest.mark.xfail(strict=False, reason="This test is statistical, and may sometimes fail.")
-def test_statistical_ReducedLdaModel_inference(): 
+def test_statistical_ReducedLdaModel_inference(fresh_mdb): 
     '''compare model infered from test data to expectancy'''
-    Rm = get_test_Rm()
+    Rm = get_test_Rm(fresh_mdb)
     Rm.plot() # make sure this can be executed
         
     assert 200 < np.array(Rm.lda_values).mean() < 400 ##!!

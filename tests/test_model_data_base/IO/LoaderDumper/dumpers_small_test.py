@@ -100,8 +100,8 @@ class TestDumperSmall:
         fun(np.random.randint(5, size=(100,)))
         fun(np.array([]))
         
-    def test_reduced_lda_model(self):
-        Rm = get_test_Rm()
+    def test_reduced_lda_model(self, fresh_mdb):
+        Rm = get_test_Rm(fresh_mdb)
         # does not change the original object
         st = Rm.st
         lda_values = Rm.lda_values

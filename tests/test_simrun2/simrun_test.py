@@ -160,16 +160,15 @@ def test_different_schedulers_give_same_result():
 """
     
 #@decorators.testlevel(2)    
-def test_crossing_over_trails_show_identical_response_before_crossing_over_time(tmpdir):
+def test_crossing_over_trails_show_identical_response_before_crossing_over_time(tmpdir, fresh_mdb):
     try:
-        t = np.random.randint(100, high = 150)
-        with test_model_data_base.context.FreshlyInitializedMdb() as mdb:
-            sim_trail = list(mdb['sim_trail_index'])[0]
-            pdf, res = simrun2.crossing_over.crossing_over_simple_interface.crossing_over(
-                mdb, sim_trail, t, cellParamName, networkName, dirPrefix = str(tmpdir), nSweeps=2, tStop=345
-                )
-            res = res.compute(get = dask.get)
-            df = pd.read_csv(glob.glob(os.path.join(res[0][0][0][1], '*vm_all_traces.csv'))[0], sep = '\t')
-            assert_almost_equal(df[df.t<t]['Vm run 00'].values, df[df.t<t]['Vm run 01'].values)
+    t = np.random.randint(100, high = 150)
+        sim_trail = list(mdb['sim_trail_index'])[0]
+        pdf, res = simrun2.crossing_over.crossing_over_simple_interface.crossing_over(
+            fresh_mdb, sim_trail, t, cellParamName, networkName, dirPrefix = str(tmpdir), nSweeps=2, tStop=345
+            )
+        res = res.compute(get = dask.get)
+        df = pd.read_csv(glob.glob(os.path.join(res[0][0][0][1], '*vm_all_traces.csv'))[0], sep = '\t')
+        assert_almost_equal(df[df.t<t]['Vm run 00'].values, df[df.t<t]['Vm run 01'].values)
     except:
         raise

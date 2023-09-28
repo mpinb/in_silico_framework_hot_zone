@@ -40,12 +40,12 @@ def real_data_generic(fresh_mdb, dumper, client = None):
     a = dummy.compute(get = dask.multiprocessing.get)
     assert_frame_equal(a, b)        
 
-def test_dask_to_csv_real_data(client):
-    real_data_generic(dask_to_csv, client=client)
+def test_dask_to_csv_real_data(client, fresh_mdb):
+    real_data_generic(fresh_mdb, dask_to_csv, client=client)
 
-def test_dask_to_categorized_msgpack_real_data(client):
-    real_data_generic(dask_to_categorized_msgpack, client = client)        
+def test_dask_to_categorized_msgpack_real_data(client, fresh_mdb):
+    real_data_generic(fresh_mdb, dask_to_categorized_msgpack, client = client)        
 
-def test_dask_to_msgpack_real_data(client):
-    real_data_generic(dask_to_msgpack, client = client)
+def test_dask_to_msgpack_real_data(client, fresh_mdb):
+    real_data_generic(fresh_mdb, dask_to_msgpack, client = client)
     

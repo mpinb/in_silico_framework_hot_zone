@@ -31,9 +31,8 @@ class TestTemporalBinning:
         np.testing.assert_array_equal(hist, np.array([4,2,0,1,1])) 
     
     #@decorators.testlevel(1) 
-    def test_binning_real_data(self, client):
-        with FreshlyInitializedMdb() as mdb:            
-            pdf = mdb['spike_times']
+    def test_binning_real_data(self, client, fresh_mdb):
+        pdf = fresh_mdb['spike_times']
         #if dask: convert to pandas
         try:
             pdf = pdf.compute()
