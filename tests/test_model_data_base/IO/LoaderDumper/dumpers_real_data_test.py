@@ -21,22 +21,30 @@ def robust_del_fun(mdb, key):
         pass
         
 
-def real_data_generic(fresh_mdb, dumper, client = None):
+def real_data_generic(mdb_, dumper_, client_= None):
+    """Helper method for further tests
+    Does not ask for any fixtures
+
+    Args:
+        mdb_ (ModelDataBase): mdb
+        dumper_ (dumper object): the dumper object. Must have a dump() method
+        client_ (distributed.Client, optional): client object. Defaults to None.
+    """
     if client is None:
-        fresh_mdb.setitem('voltage_traces2', fresh_mdb['voltage_traces'], dumper = dumper)
+        mdb_.setitem('voltage_traces2', mdb_['voltage_traces'], dumper = dumper_)
     else:
-        fresh_mdb.setitem('voltage_traces2', fresh_mdb['voltage_traces'], dumper = dumper, client = client)
-    dummy = fresh_mdb['voltage_traces2']
-    b = fresh_mdb['voltage_traces'].compute(get = dask.multiprocessing.get)
+        mdb_.setitem('voltage_traces2', mdb_['voltage_traces'], dumper = dumper_, client = client_)
+    dummy = mdb_['voltage_traces2']
+    b = mdb_['voltage_traces'].compute(get = dask.multiprocessing.get)
     a = dummy.compute(get = dask.multiprocessing.get)
     assert_frame_equal(a, b)   
     
-    if client is None:
-        fresh_mdb.setitem('synapse_activation2', fresh_mdb['synapse_activation'], dumper = dumper)
+    if client_ is None:
+        mdb_.setitem('synapse_activation2', mdb_['synapse_activation'], dumper = dumper_)
     else:
-        fresh_mdb.setitem('synapse_activation2', fresh_mdb['synapse_activation'], dumper = dumper, client = client)
-    dummy = fresh_mdb['synapse_activation2']
-    b = fresh_mdb['synapse_activation'].compute(get = dask.multiprocessing.get)
+        mdb_.setitem('synapse_activation2', mdb_['synapse_activation'], dumper = dumper_, client = client_)
+    dummy = mdb_['synapse_activation2']
+    b = mdb_['synapse_activation'].compute(get = dask.multiprocessing.get)
     a = dummy.compute(get = dask.multiprocessing.get)
     assert_frame_equal(a, b)        
 
