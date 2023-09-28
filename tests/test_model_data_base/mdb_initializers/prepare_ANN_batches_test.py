@@ -17,14 +17,13 @@ import distributed
 optimize_simrun_general = silence_stdout(optimize_simrun_general)
 
 class TestPrepareANNBatches:
-    def setup_class(self, fresh_mdb, client):
-        # set up model_data_base in temporary folder and initialize it.
-        # This additionally is an implicit test, which ensures that the
-        # initialization routine does not throw an error
+    def __init__(self, fresh_mdb, client):
         self.mdb = fresh_mdb
-        optimize_simrun_general(self.mdb, client = client)
         # example spike_times
         self.spike_times = [15.999999999999625, 23.724999999999188, 30.449999999998806, 165.79999999998614, 181.62499999997175, 298.3249999998656, 319.37499999984647]
+                       
+    def setup_class(self):
+        optimize_simrun_general(self.mdb, client = client)
                        
     def teardown_class(self):
         for key in self.mdb:
