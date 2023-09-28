@@ -66,7 +66,7 @@ jobs:
         with:
           name: Tests logging output
           path: |
-            - tests/test.log
+            - test.log
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

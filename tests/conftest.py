@@ -49,7 +49,7 @@ def setup_mdb_output_dir_tests():
     if not os.path.exists(files_generated_by_tests):
         os.makedirs(files_generated_by_tests)
 
-def pytest_configure(config):
+def pytest_configure(config, caplog):
     setup_mdb_output_dir_tests()
     import distributed
     import matplotlib
@@ -76,8 +76,7 @@ def client(config):
     # Assume dask server and worker are already started
     # These are set up in the github workflow file.
     # If running tests locally, make sure you have a dask scheduler and dask worker running on the ports you want
-    client = distributed.Client('localhost:{}'.format(config.getoption("--dask_server_port")))
-    yield client
+    return distributed.Client('localhost:{}'.format(config.getoption("--dask_server_port")))
 
 @pytest.fixture
 def fresh_mdb():
@@ -96,6 +95,4 @@ def fresh_mdb():
     
     yield mdb
     # cleanup
-    for key in mdb:
-        del key
     shutil.rmtree(path)
