@@ -49,7 +49,7 @@ def setup_mdb_output_dir_tests():
     if not os.path.exists(files_generated_by_tests):
         os.makedirs(files_generated_by_tests)
 
-def pytest_configure(config, caplog):
+def pytest_configure(config):
     setup_mdb_output_dir_tests()
     import distributed
     import matplotlib
@@ -62,14 +62,16 @@ def pytest_configure(config, caplog):
     if not os.path.exists(output_thickness):
         os.mkdir(output_thickness)
 
-    # Setup logging output
-    # only log warnings
-    isf_logger.setLevel(logging.WARNING)  # set logging level of root logger to WARNING
+    # --------------- Setup logging output
+    # only log warnings or worse
+    isf_logger.setLevel(logging.WARNING)  # set logging level of ISF logger to WARNING
     # Suppress logs from verbose modules so they don't show in stdout
     isf_logger_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
+    # redirect root logger to file rather than stdout
     root_logger = logging.getLogger()
-    root_logger_file_handler = logging.FileHandler("tests.log")
-    root_logger.handlers = [root_logger_file_handler]  # Additional handlers can always be configured.
+    file_handler = logging.FileHandler(os.path.join(CURRENT_DIR, "tests.log"))
+    root_logger.handlers = [file_handler]  # Additional handlers can always be configured.
+    root_logger.propagate=False
 
 @pytest.fixture
 def client(config):
