@@ -1,5 +1,6 @@
 from model_data_base.model_data_base import ModelDataBase, MdbException
-from model_data_base import model_data_base_register, get_versions
+from model_data_base import model_data_base_register
+from model_data_base.model_data_base import get_versions
 import model_data_base.IO.LoaderDumper.to_pickle  as to_pickle
 from . import decorators
 import pytest
