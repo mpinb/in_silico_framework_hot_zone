@@ -42,11 +42,11 @@ jobs:
       # - the previous build was not succesful for whatever reason
       if: |
         (steps.changes.outputs.all == 'true') || 
-        [ ! -d "$HOME/anaconda_isf${{ inputs.py_version }}" ] || 
-        ( $(head -n 1 $HOME/build_success${{ inputs.py_version }}.txt) != 'success' )
+        [ ! -d $HOME/anaconda_isf${{ inputs.py_version }} ] || 
+        ( $(head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt") != 'success' )
       run: |
         echo "Changes since last commit: ${{ steps.changes.outputs.all }}"
-        echo "Previous build state: $(head -n 1 $HOME/build_success.txt"
+        echo "Previous build state: $(head -n 1 $HOME/build_success.txt)"
         CONDA_TARGET_DIR="$HOME/anaconda_isf${{ inputs.py_version }}"
         if [ -d "$CONDA_TARGET_DIR" ]; then
           echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
