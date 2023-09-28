@@ -5,7 +5,7 @@ import pandas.util.testing as pdt
 import dask.dataframe as dd
 from mock import MagicMock, call
 
-def test_dask_to_pandas(self):
+def test_dask_to_pandas():
     def fun(*args, **kwargs):
         return args, kwargs
     
@@ -22,22 +22,21 @@ def test_dask_to_pandas(self):
         assert isinstance(result_kwargs[name], pd.DataFrame)
             
             
-    def test_subsequent_calls_per_line(self):
-        pdf = pd.DataFrame({'A': [1,2,3], 'B': [3,4,5]})
-        
-        m = MagicMock()
-        @subsequent_calls_per_line
-        def fun(*args, **kwargs):
-            m.args(args)
-            m.kwargs(kwargs)
-        
-        
-        m = MagicMock()
-        fun(1, pdf, pdf, 1, pdf, 3, A = pdf, fig = 'A')
-        call1 = call((1, pdf, pdf, 1, pdf, 3))
-        m.args.assert_has_calls([call1])
-        call_kwargs_1 = call(dict(A = pdf, fig = 'A'))
-        m.kwargs.assert_has_calls([call_kwargs_1])
+def test_subsequent_calls_per_line():
+    pdf = pd.DataFrame({'A': [1,2,3], 'B': [3,4,5]})
+    
+    m = MagicMock()
+    @subsequent_calls_per_line
+    def fun(*args, **kwargs):
+        m.args(args)
+        m.kwargs(kwargs)
+    
+    m = MagicMock()
+    fun(1, pdf, pdf, 1, pdf, 3, A = pdf, fig = 'A')
+    call1 = call((1, pdf, pdf, 1, pdf, 3))
+    m.args.assert_has_calls([call1])
+    call_kwargs_1 = call(dict(A = pdf, fig = 'A'))
+    m.kwargs.assert_has_calls([call_kwargs_1])
         
 #         m = MagicMock()
 #         fun(pdf, pdf, pdf, 1, pdf, 3, A = pdf, fig = 'A')
