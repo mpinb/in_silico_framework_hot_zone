@@ -42,7 +42,6 @@ jobs:
           export DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE=False
           export DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE=False
           export DASK_DISTRIBUTED__LOGGING=DEBUG
-          export DASK_DISTRIBUTED__LOGGING__HANDLERS__FILE=dask_debug.log
 
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
@@ -60,7 +59,6 @@ jobs:
           path: |
             - dask_scheduler.txt
             - dask_workers.txt
-            - dask_debug.log
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
