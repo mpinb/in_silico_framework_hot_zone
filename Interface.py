@@ -46,7 +46,7 @@ import math
 ### logging setup
 import logging
 # All loggers will inherit the root logger's level and handlers
-root_logger = logging.getLogger()
+root_logger = logging.getLogger("ISF")
 # Redirect warnings to the logging system. This will format them accordingly.
 logging.captureWarnings(True)
 if not any([h.name == "root_logger_stream_handler" for h in root_logger.handlers]):

@@ -12,7 +12,7 @@ import six
 import distributed
 import subprocess
 import logging
-log = logging.getLogger(__name__)
+log = logging.getLogger("ISF").getChild(__name__)
 
 AM_FILE = os.path.join(CURRENT_DIR, 'test_files', 'am_files', 'rest', 'S13_final_done_Alison_zScale_40.am')
 IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'rest', 'S13_max_z_projection.tif')

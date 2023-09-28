@@ -7,7 +7,7 @@ import os, shutil, logging, socket, pytest
 import Interface as I
 from Interface import get_client, root_logger, root_logger_stream_handler
 import getting_started
-log = logging.getLogger(__name__)
+log = logging.getLogger("ISF").getChild(__name__)
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 TEST_DATA_FOLDER = os.path.join(getting_started.parent, \
                               'example_simulation_data', \
