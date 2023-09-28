@@ -3,7 +3,9 @@
 # even before pytest discovery
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
 # for setting environment variables, use pytest.ini or .env instead
-import os, shutil, logging, socket, pytest, tempfile
+import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_base
+from model_data_base.mdb_initializers.load_simrun_general import init
+from model_data_base.utils import silence_stdout
 import Interface as I
 from Interface import get_client, isf_logger, isf_logger_stream_handler
 import getting_started
@@ -62,16 +64,11 @@ def pytest_configure(config):
     if not os.path.exists(output_thickness):
         os.mkdir(output_thickness)
 
-    # --------------- Setup logging output
+    # --------------- Setup logging output -------------------
     # only log warnings or worse
     isf_logger.setLevel(logging.WARNING)  # set logging level of ISF logger to WARNING
     # Suppress logs from verbose modules so they don't show in stdout
     isf_logger_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
-    # redirect root logger to file rather than stdout
-    root_logger = logging.getLogger()
-    file_handler = logging.FileHandler(os.path.join(CURRENT_DIR, "tests.log"))
-    root_logger.handlers = [file_handler]  # Additional handlers can always be configured.
-    root_logger.propagate=False
 
 @pytest.fixture
 def client(pytestconfig):
@@ -86,8 +83,6 @@ def fresh_mdb():
     path = tempfile.mkdtemp()
     mdb = model_data_base.ModelDataBase(path)
     #self.mdb.settings.show_computation_progress = False
-    from model_data_base.mdb_initializers.load_simrun_general import init
-    from model_data_base.utils import silence_stdout
     
     with silence_stdout:
         init(mdb, TEST_DATA_FOLDER,
