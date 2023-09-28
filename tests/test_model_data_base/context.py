@@ -18,13 +18,6 @@ test_data_folder = os.path.join(getting_started.parent, \
 # network_param_path = os.path.join(parent, 'test_model_data_base/data/test_data/C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/20150815-1530_20240/20240_network_model.param')
 # assert(os.path.exists(network_param_path))
 # test_data_folder = os.path.join(parent, 'test_model_data_base/data/test_data/C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/')
-assert(os.path.exists(test_data_folder))
-files_generated_by_tests = os.path.join(parent, 'test_model_data_base/data/files_generated_by_tests')
-if os.path.exists(files_generated_by_tests):
-    shutil.rmtree(files_generated_by_tests)
-os.makedirs(files_generated_by_tests)
-
-client = distributed.client_object_duck_typed
 
 class FreshlyInitializedMdb(object):
     '''context manager that provides a freshly initalized mdb for 
@@ -36,7 +29,7 @@ class FreshlyInitializedMdb(object):
         from model_data_base.mdb_initializers.load_simrun_general import init
         from model_data_base.utils import silence_stdout
         with silence_stdout:
-            init(self.mdb, test_data_folder, client = client, 
+            init(self.mdb, test_data_folder, client = distributed.client_object_duck_typed, 
                  rewrite_in_optimized_format=False, 
                  parameterfiles=False,
                  dendritic_voltage_traces=False)
