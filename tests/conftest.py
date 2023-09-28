@@ -5,7 +5,7 @@
 # for setting environment variables, use pytest.ini or .env instead
 import os, shutil, logging, socket, pytest
 import Interface as I
-from Interface import get_client, root_logger, root_logger_stream_handler
+from Interface import get_client, isf_logger, isf_logger_stream_handler
 import getting_started
 log = logging.getLogger("ISF").getChild(__name__)
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -71,9 +71,9 @@ def pytest_configure(config):
     
     # Setup logging output
     # only log warnings
-    root_logger.setLevel(logging.WARNING)  # set logging level of root logger to WARNING
+    isf_logger.setLevel(logging.WARNING)  # set logging level of root logger to WARNING
     # Suppress logs from verbose modules so they don't show in stdout
-    root_logger_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
+    isf_logger_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
         
 @pytest.fixture
 def fresh_mdb():
