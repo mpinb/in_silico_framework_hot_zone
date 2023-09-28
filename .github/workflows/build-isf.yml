@@ -36,10 +36,10 @@ jobs:
             - 'mechanisms/**'
 
     - name: Build ISF
-      # rebuild only if:
+      # (re)build only if:
       # - changes are made to the directories specified above
       # - the build does not exist
-      # - the previous build failed or was cancelled
+      # - the previous build was not succesful for whatever reason
       if: |
         (steps.changes.outputs.all == 'true') || 
         (hashFiles('$HOME/anaconda_isf${{ inputs.py_version }}') == '') || 
