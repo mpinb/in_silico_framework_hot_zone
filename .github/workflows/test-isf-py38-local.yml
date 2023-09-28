@@ -41,9 +41,8 @@ jobs:
           export DASK_DISTRIBUTED__WORKER__MEMORY__SPILL=False
           export DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE=False
           export DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE=False
-          export DASK_DISTRIBUTED__LOGGING__DISTRIBUTED=debug
-          export DASK_DISTRIBUTED__LOGGING__DISTRIBUTED_WORKER=debug
-          export DASK_DISTRIBUTED__LOGGING__DISTRIBUTED_CLIENT=debug
+          export DASK_DISTRIBUTED__LOGGING=DEBUG
+          export DASK_DISTRIBUTED__LOGGING__HANDLERS__FILE=dask_debug.log
 
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
@@ -51,8 +50,8 @@ jobs:
           echo "Memory spill: $DASK_DISTRIBUTED__WORKER__MEMORY__SPILL"
           echo "Memory pause: $DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE"
           echo "Memory terminate: $DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE"
-          (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port >> dask_scheduler.txt 2>&1)&
-          (dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 >> dask_workers.txt 2&1)&
+          (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > dask_scheduler.txt)&
+          (dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 > dask_workers.txt)&
           pytest -n 4 -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. --dask_server_port $port_number tests
 
       - uses: actions/upload-artifact@v3
@@ -61,6 +60,7 @@ jobs:
           path: |
             - dask_scheduler.txt
             - dask_workers.txt
+            - dask_debug.log
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
