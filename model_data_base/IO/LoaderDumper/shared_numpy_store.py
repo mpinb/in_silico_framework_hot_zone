@@ -50,6 +50,8 @@ class Uninterruptible:
         signal.signal(signal.SIGINT, self.original_sigint_handler)
         signal.signal(signal.SIGTERM, self.original_sigterm_handler)
 
+sns_list = []
+
 class SharedNumpyStore:
     def __init__(self, working_dir):
         """
@@ -68,6 +70,7 @@ class SharedNumpyStore:
         self._shared_memory_buffers = {} # contains all already loaded buffers and arrays
         self._pending_renames = {}
         self.update()
+        sns_list.append(self)
     
     def update(self):
         """Update the list of files in the working directory."""
@@ -205,12 +208,12 @@ class SharedNumpyStore:
                     self._shared_memory_buffers[name] = shared_array_from_disk(full_path, shape, dtype, fname + '__' + self._suffix)
                 else:
                     raise ValueError("The array is not in shared memory yet. Set load_from_disk=True if you want to load it from disk.")
-            return self._shared_memory_buffers[name]
+            return self._shared_memory_buffers[name][1]
         else:
-            raise NotImplementedError()
-            fname, shape, dtype = self._get_metadata_from_name(name)             
-            full_path = os.path.join(self.working_dir, fname)   
-            I.np.fromfile(full_path, dtype = dtype)
+            fname, shape, dtype = self._get_metadata_from_name(name) 
+            full_path = os.path.join(self.working_dir, fname)  
+            return np.fromfile(full_path, dtype = dtype).reshape(shape)
+            
 
 from . import parent_classes
 
