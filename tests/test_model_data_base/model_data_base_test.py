@@ -221,7 +221,7 @@ def test_accessing_non_existent_key_raises_KeyError(empty_mdb):
 def test_compare_old_mdb_with_freshly_initialized_one(fresh_mdb):
     '''ensure compatibility with old versions'''
     if six.PY3:
-        pandas.index = pandas.Index
+        pandas.indexes = pandas.core.indexes
     old_path = os.path.join(parent, \
                             'test_model_data_base', \
                             'data',\
