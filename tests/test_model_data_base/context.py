@@ -21,7 +21,9 @@ test_data_folder = os.path.join(getting_started.parent, \
 
 class FreshlyInitializedMdb(object):
     '''context manager that provides a freshly initalized mdb for 
-    testing purposes'''
+    testing purposes
+    
+    DEPRECATED: use the fixture fresh_mdb instead, defined in conftest.py'''
     def __enter__(self, client):
         self.path = tempfile.mkdtemp()
         self.mdb = model_data_base.ModelDataBase(self.path)
