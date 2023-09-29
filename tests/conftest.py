@@ -78,7 +78,7 @@ def client(pytestconfig):
     return distributed.Client('localhost:{}'.format(pytestconfig.getoption("--dask_server_port")))
 
 @pytest.fixture
-def fresh_mdb():
+def fresh_mdb(woker_id):
     """Pytest fixture for a ModelDataBase object with a unique temp path.
     Initializes data with model_data_base.mdb_initializers.load_simrun_general.init
     Contains 8 keys with data:
@@ -95,7 +95,7 @@ def fresh_mdb():
         model_data_base.ModelDataBase: An mdb with data
     """
     # unique temp path
-    path = tempfile.mkdtemp()
+    path = tempfile.mkdtemp(prefix=worker_id)
     mdb = model_data_base.ModelDataBase(path)
     #self.mdb.settings.show_computation_progress = False
     
@@ -110,7 +110,7 @@ def fresh_mdb():
     shutil.rmtree(path)
 
 @pytest.fixture
-def empty_mdb():
+def empty_mdb(worker_id):
     """Pytest fixture for a ModelDataBase object with a unique temp path.
     Does not initialize data, in contrast to fresh_mdb
 
@@ -118,7 +118,7 @@ def empty_mdb():
         model_data_base.ModelDataBase: An empty mdb
     """
     # unique temp path
-    path = tempfile.mkdtemp()
+    path = tempfile.mkdtemp(prefix=worker_id)
     mdb = model_data_base.ModelDataBase(path)
     #self.mdb.settings.show_computation_progress = False
     
