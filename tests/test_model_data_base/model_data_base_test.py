@@ -95,7 +95,7 @@ def test_check_working_dir_clean_for_build_works_correctly(empty_mdb):
     #cannot create database if file is in folder
     with open(os.path.join(testpath, 'somefile'), 'w'):
         pass
-    with pytest.raises(OSError):
+    with pytest.raises(MdbException):
         ModelDataBase(testpath)
         
     #can create database if folder can be created but does not exist
@@ -114,6 +114,7 @@ def test_check_working_dir_clean_for_build_works_correctly(empty_mdb):
     
 def test_mdb_does_not_permit_writes_if_readonly(empty_mdb):
     mdb = empty_mdb
+    mdb.readonly = True
     def fun():
         mdb['test'] = 1
     with pytest.raises(MdbException):
