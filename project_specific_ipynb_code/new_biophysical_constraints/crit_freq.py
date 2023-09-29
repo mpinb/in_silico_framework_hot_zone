@@ -253,12 +253,13 @@ class Crit_freq:
     
 # Todo: make sure nan works as expected 
     
-def find_Crit_freq(evaluation):
+def find_Crit_freq(evaluation, freq_list = None):
     '''finalize function which gets called with the evaluation dict'''
-    ### in case no crit. frequency stimuli have been simulated, do not cause an error
-    if not 'crit_freq.Freq_list' in evaluation:
-        print('crit_freq.Freq_list or crit_freq.Crit_freq not found. Skipping.')
-        return evaluation
+    ### in case crit. frequency stimuli have not been simulated, do not cause an error
+    for stim in range(1, len(freq_list)+1):
+        key = f'crit_freq.n_spikes{stim}'
+        if not key in evaluation:
+            return evaluation
     ### end of 'in case no crit. frequency stimuli have been simulated, do not cause an error'
 
     if evaluation['crit_freq.num_spikes_error'] > 0: # stimuli didn't work, cannot determine crit. frequency
@@ -298,13 +299,11 @@ def crit_freq_error(value):
     return out
 
 def check_AllStimuliWork(evaluation, freq_list = None):
-    crit_freq_found = False    
-    ### in case no crit. frequency stimuli have been simulated, do not cause an error
-    for k in evaluation.keys():
-        if 'crit_freq' in k:
-            crit_freq_found = True
-    if not crit_freq_found:
-        return evaluation
+    ### in case crit. frequency stimuli have not been simulated, do not cause an error
+    for stim in range(1, len(freq_list)+1):
+        key = f'crit_freq.n_spikes{stim}'
+        if not key in evaluation:
+            return evaluation
     ### end of 'in case no crit. frequency stimuli have been simulated, do not cause an error'
     
     out = []
@@ -333,7 +332,7 @@ def modify_evaluator_to_evaluate_crit_freq_stimuli(e, freq_list = None, delay = 
         e.setup.evaluate_funs.append([f'crit_freq{i}.hay_measure',cf.get,f'crit_freq{i}.features'])
     e.setup.pre_funs.append(put_name_of_stimulus_in_crit_freq_voltage_traces_dict)
     e.setup.finalize_funs.append(I.partial(check_AllStimuliWork, freq_list = freq_list))
-    e.setup.finalize_funs.append(find_Crit_freq)    
+    e.setup.finalize_funs.append(I.partial(find_Crit_freq, freq_list = freq_list))    
 
 
     
