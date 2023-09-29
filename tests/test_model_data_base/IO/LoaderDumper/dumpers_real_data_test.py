@@ -30,7 +30,7 @@ def real_data_generic(mdb_, dumper_, client_= None):
         dumper_ (dumper object): the dumper object. Must have a dump() method
         client_ (distributed.Client, optional): client object. Defaults to None.
     """
-    if client is None:
+    if client_ is None:
         mdb_.setitem('voltage_traces2', mdb_['voltage_traces'], dumper = dumper_)
     else:
         mdb_.setitem('voltage_traces2', mdb_['voltage_traces'], dumper = dumper_, client = client_)
@@ -49,11 +49,11 @@ def real_data_generic(mdb_, dumper_, client_= None):
     assert_frame_equal(a, b)        
 
 def test_dask_to_csv_real_data(client, fresh_mdb):
-    real_data_generic(mdb_=fresh_mdb, dumper_=dumper_dask_to_csv, client_=client)
+    real_data_generic(mdb_=fresh_mdb, dumper_=dask_to_csv, client_=client)
 
 def test_dask_to_categorized_msgpack_real_data(client, fresh_mdb):
     real_data_generic(mdb_=fresh_mdb, dumper_=dask_to_categorized_msgpack, client_=client)        
 
 def test_dask_to_msgpack_real_data(client, fresh_mdb):
-    real_data_generic(mdb=fresh_mdb, dumper_=dask_to_msgpack, client_=client)
+    real_data_generic(mdb_=fresh_mdb, dumper_=dask_to_msgpack, client_=client)
     
