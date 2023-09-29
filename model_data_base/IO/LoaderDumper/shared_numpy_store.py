@@ -159,6 +159,7 @@ class SharedNumpyStore:
             self.update()
             if not name in self._files:
                 self.save(arr,name)
+                return
                 
         # Get metadata (filename, shape, dtype) of the existing array
         fname, shape, dtype = self._get_metadata_from_name(name)
@@ -188,23 +189,28 @@ class SharedNumpyStore:
         self._pending_renames[fname] = name, new_fname        
         if autoflush:
             self.flush()
-
-    def load(self, name, load_from_disk = False):
-        # if already loaded, return:
-        if name in self._shared_memory_buffers:
+    
+    def load(self, name, load_from_disk = False, shared = True):
+        if shared:
+            # if already loaded, return:
+            if name in self._shared_memory_buffers:
+                return self._shared_memory_buffers[name]
+            # raises ValueError if array isn't stored here. If it is, get metadata
+            fname, shape, dtype = self._get_metadata_from_name(name) 
+            full_path = os.path.join(self.working_dir, fname)   
+            try: # already put in shared mem by other process?
+                self._shared_memory_buffers[name] = shared_array_from_shared_mem_name(fname + '__' + self._suffix, shape, dtype)
+            except FileNotFoundError:  # no --> load it!
+                if load_from_disk:
+                    self._shared_memory_buffers[name] = shared_array_from_disk(full_path, shape, dtype, fname + '__' + self._suffix)
+                else:
+                    raise ValueError("The array is not in shared memory yet. Set load_from_disk=True if you want to load it from disk.")
             return self._shared_memory_buffers[name]
-        # raises ValueError if array isn't stored here. If it is, get metadata
-        fname, shape, dtype = self._get_metadata_from_name(name) 
-        full_path = os.path.join(self.working_dir, fname)   
-        try: # already put in shared mem by other process?
-            self._shared_memory_buffers[name] = shared_array_from_shared_mem_name(fname + '__' + self._suffix, shape, dtype)
-        except FileNotFoundError:  # no --> load it!
-            if load_from_disk:
-                self._shared_memory_buffers[name] = shared_array_from_disk(full_path, shape, dtype, fname + '__' + self._suffix)
-            else:
-                raise ValueError("The array exists, but is not loaded into shared memory yet. Set load_from_disk=True if you want to load it here.")
-            
-        return self._shared_memory_buffers[name]
+        else:
+            raise NotImplementedError()
+            fname, shape, dtype = self._get_metadata_from_name(name)             
+            full_path = os.path.join(self.working_dir, fname)   
+            I.np.fromfile(full_path, dtype = dtype)
 
 from . import parent_classes
 
