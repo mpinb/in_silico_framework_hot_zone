@@ -234,11 +234,11 @@ def test_compare_old_mdb_with_freshly_initialized_one(fresh_mdb):
     #old_mdb['reduced_model']
     
     assert_frame_equal(fresh_mdb['voltage_traces'].compute(), \
-                        old_mdb['voltage_traces'].compute())
+                        old_mdb['voltage_traces'])
     assert_frame_equal(fresh_mdb['synapse_activation'].compute(), \
-                        old_mdb['synapse_activation'].compute())
+                        old_mdb['synapse_activation'])
     assert_frame_equal(fresh_mdb['cell_activation'].compute(), \
-                        old_mdb['cell_activation'].compute())
+                        old_mdb['cell_activation'])
     assert_frame_equal(fresh_mdb['metadata'], \
                         old_mdb['metadata'])
         
