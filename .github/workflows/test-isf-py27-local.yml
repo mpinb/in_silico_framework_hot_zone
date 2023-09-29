@@ -55,4 +55,4 @@ jobs:
           echo "Memory terminate: $DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE"
           dask-scheduler --port=$port_number --bokeh-port=$bokeh_port & 
           dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          python -m pytest -n 4 -rsx -vv --color=yes tests/
+          python -m pytest -rsx -vv --color=yes tests/
