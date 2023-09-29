@@ -120,13 +120,6 @@ def empty_mdb(worker_id):
     # unique temp path
     path = tempfile.mkdtemp(prefix=worker_id)
     mdb = model_data_base.ModelDataBase(path)
-    #self.mdb.settings.show_computation_progress = False
-    
-    with silence_stdout:
-        init(mdb, TEST_DATA_FOLDER,
-                rewrite_in_optimized_format=False, 
-                parameterfiles=False,
-                dendritic_voltage_traces=False)
     
     yield mdb
     # cleanup
