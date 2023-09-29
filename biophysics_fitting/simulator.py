@@ -312,12 +312,16 @@ s.setup.stim_setup_funs.append(BAC.stim_setup, params_to_kwargs(examplary_stim_s
             '''Simulates all stimuli for a given parameter vector.
             Returns: Dictionary where stim_response_measure_funs names are keys, 
             return values of the stim_response_measure_funs (usually voltage traces) are values.
+            
+            stims: which sitmuli to run. Either a str (for one stimulus) or a list of str.
 
             Details, how to set up the Simulator are in the docstring of
             the Simulator class.        
             '''
             if stims is None:
                 stims = self.setup.get_stims()
+            if isinstance(stims, str):
+                stims = [stims]
             self.setup.check()
             out = {}            
             for stim in stims:
