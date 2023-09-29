@@ -1,11 +1,13 @@
-import Interface as I
-from . import decorators
 # import global variables from context
 from .context import PARENT, DATA_DIR
-# import context
-import distributed
-import six
-import pytest
+import distributed, os, tempfile, six, shutil, pytest
+import pandas as pd
+import single_cell_parser as scp
+from model_data_base import utils
+from functools import partial
+from model_data_base.IO.LoaderDumper import to_cloudpickle, pandas_to_pickle
+from model_data_base.model_data_base import ModelDataBase
+from model_data_base.utils import silence_stdout
 from biophysics_fitting import hay_complete_default_setup, L5tt_parameter_setup
 from biophysics_fitting.parameters import param_to_kwargs
 from biophysics_fitting.optimizer import start_run, get_max_generation
@@ -19,7 +21,7 @@ from biophysics_fitting.optimizer import start_run, get_max_generation
 #     
 # class FakeClient():
 #     def compute(self, *args, **kwargs):
-#         res = I.dask.compute(*args, get = I.dask.get)
+#         res = dask.compute(*args, get = dask.get)
 #         return [FakeFuture(r) for r in res]
 
 from biophysics_fitting.hay_evaluation import setup_hay_evaluator
@@ -28,13 +30,13 @@ def set_up_mdb(step = False):
     '''completely sets up a model data base in a temporary folder for opimization'''
     def get_template():
         param = L5tt_parameter_setup.get_L5tt_template()
-        param.ApicalDendrite.mechanisms.range.SKv3_1 = I.scp.NTParameterSet({
+        param.ApicalDendrite.mechanisms.range.SKv3_1 = scp.NTParameterSet({
                 'slope': None,
                 'distance': 'relative',
                 'gSKv3_1bar': None,
                 'offset': None,
                 'spatial': 'linear'})
-        param['cell_modify_functions'] = I.scp.NTParameterSet({'scale_apical': {'scale': None}})
+        param['cell_modify_functions'] = scp.NTParameterSet({'scale_apical': {'scale': None}})
         return param
 
     def scale_apical(cell_param, params):
@@ -44,14 +46,14 @@ def set_up_mdb(step = False):
             
     params = hay_complete_default_setup.get_feasible_model_params().drop('x', axis = 1)
     params.index = 'ephys.' + params.index
-    params = params.append(I.pd.DataFrame({'ephys.SKv3_1.apic.slope': {'min': -3, 'max': 0},
+    params = params.append(pd.DataFrame({'ephys.SKv3_1.apic.slope': {'min': -3, 'max': 0},
                                            'ephys.SKv3_1.apic.offset': {'min': 0, 'max': 1}}).T)
-    params = params.append(I.pd.DataFrame({'min': .333, 'max': 3}, index = ['scale_apical.scale']))
+    params = params.append(pd.DataFrame({'min': .333, 'max': 3}, index = ['scale_apical.scale']))
     params = params.sort_index()
     
     def get_Simulator(mdb_setup, step = step):
         fixed_params = mdb_setup['get_fixed_params'](mdb_setup)
-        s = hay_complete_default_setup.get_Simulator(I.pd.Series(fixed_params), step = step)
+        s = hay_complete_default_setup.get_Simulator(pd.Series(fixed_params), step = step)
         s.setup.cell_param_generator = get_template
         s.setup.cell_param_modify_funs.append(('scale_apical', scale_apical))
         #s.setup.cell_modify_funs.append(('scale_apical', param_to_kwargs(scale_apical)))    
@@ -63,12 +65,12 @@ def set_up_mdb(step = False):
     def get_Combiner(mdb_setup, step = step):
         return hay_complete_default_setup.get_Combiner(step = step)
     
-    tempdir = I.tempfile.mkdtemp()
-    mdb = I.ModelDataBase(tempdir)    
+    tempdir = tempfile.mkdtemp()
+    mdb = ModelDataBase(tempdir)    
     mdb.create_sub_mdb('86')
     
     mdb['86'].create_managed_folder('morphology')
-    I.shutil.copy(I.os.path.join(DATA_DIR, '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2.hoc'),
+    shutil.copy(os.path.join(DATA_DIR, '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2.hoc'),
         mdb['86']['morphology'].join('86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2.hoc')) #
 
     mdb['86']['fixed_params'] = {'BAC.hay_measure.recSite': 835,
@@ -85,10 +87,10 @@ def set_up_mdb(step = False):
         return fixed_params    
     
     mdb['86']['get_fixed_params'] = get_fixed_params    
-    mdb['86'].setitem('params', params, dumper = I.dumper_pandas_to_pickle)    
-    mdb['86'].setitem('get_Simulator', I.partial(get_Simulator, step = True), dumper = I.dumper_to_cloudpickle)
-    mdb['86'].setitem('get_Evaluator', I.partial(get_Evaluator, step = True), dumper = I.dumper_to_cloudpickle)
-    mdb['86'].setitem('get_Combiner', I.partial(get_Combiner, step = True), dumper = I.dumper_to_cloudpickle)   
+    mdb['86'].setitem('params', params, dumper = pandas_to_pickle)    
+    mdb['86'].setitem('get_Simulator', partial(get_Simulator, step = True), dumper = to_cloudpickle)
+    mdb['86'].setitem('get_Evaluator', partial(get_Evaluator, step = True), dumper = to_cloudpickle)
+    mdb['86'].setitem('get_Combiner', partial(get_Combiner, step = True), dumper = to_cloudpickle)   
     
     return mdb 
 
@@ -128,7 +130,7 @@ def get_params():
          'ephys.none.dend.g_pas': 6.3767970209653598e-05,
          'ephys.none.soma.g_pas': 3.7758776052976391e-05,
          'scale_apical.scale': 2.9468848475576652}
-    return I.pd.Series(params)
+    return pd.Series(params)
  
 def get_features():
     features = {'AI1': 1.44214547254434,
@@ -228,7 +230,7 @@ def test_mini_optimization_run(capsys, client):
         mdb = set_up_mdb(step = False)
         start_run(mdb['86'], 1, client = c, offspring_size = 2, max_ngen = 2)
         # accessing simulation results of run
-        keys = [int(k) for k in list(mdb['86']['1'].keys()) if I.utils.convertible_to_int(k)]
+        keys = [int(k) for k in list(mdb['86']['1'].keys()) if utils.convertible_to_int(k)]
         assert(max(keys) == 2)
         # if continue_cp is not set (defaults to False), an Exception is raised if the same 
         # optimization is started again
@@ -236,13 +238,13 @@ def test_mini_optimization_run(capsys, client):
             start_run(mdb['86'], 1, client = c, offspring_size = 2, max_ngen = 4)
         # with continue_cp = True, the optimization gets continued
         start_run(mdb['86'], 1, client = c, offspring_size = 2, max_ngen = 4, continue_cp = True)
-        keys = [int(k) for k in list(mdb['86']['1'].keys()) if I.utils.convertible_to_int(k)]
+        keys = [int(k) for k in list(mdb['86']['1'].keys()) if utils.convertible_to_int(k)]
         assert(max(keys) == 4)
         start_run(mdb['86'], 2, client = c, offspring_size = 2, max_ngen = 2)
-        keys = [int(k) for k in list(mdb['86']['2'].keys()) if I.utils.convertible_to_int(k)]
+        keys = [int(k) for k in list(mdb['86']['2'].keys()) if utils.convertible_to_int(k)]
         assert(max(keys) == 2)   
     except:
-        I.shutil.rmtree(mdb.basedir)     
+        shutil.rmtree(mdb.basedir)     
         raise
 
 @pytest.mark.skipif(six.PY3, reason="This test is not Py3 compatible")
@@ -267,7 +269,7 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
     # before testing reproducability, it is therefore necessary to initialize
     # the evaluator
 
-    mdb_legacy = I.ModelDataBase(I.os.path.join(DATA_DIR, 
+    mdb_legacy = ModelDataBase(os.path.join(DATA_DIR, 
                                                 'example_Kv3_1_slope_variable_dend_scale_step'),
                                     readonly = True)#
                                     
@@ -277,7 +279,7 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
         s_new = mdb_new['86']['get_Simulator'](mdb_new['86'])
         e_legacy = mdb_legacy['86']['get_Evaluator'](mdb_legacy['86'])
         e_new = mdb_new['86']['get_Evaluator'](mdb_new['86'])
-        with I.silence_stdout:
+        with silence_stdout:
             # initialize 
             features_legacy = e_legacy.evaluate(s_legacy.run(get_params()))
             # 'correct' run
@@ -285,7 +287,7 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
             features_new = e_new.evaluate(s_new.run(get_params()))
                 
     except:
-        I.shutil.rmtree(mdb_new.basedir)     
+        shutil.rmtree(mdb_new.basedir)     
         raise
         
     for k in list(features_legacy.keys()):
@@ -301,13 +303,13 @@ def test_reproducability():
     try:
         s_new = mdb_new['86']['get_Simulator'](mdb_new['86'], step = False)
         e_new = mdb_new['86']['get_Evaluator'](mdb_new['86'], step = False)
-        with I.silence_stdout:
+        with silence_stdout:
             features_new = e_new.evaluate(s_new.run(get_params()))
     except:
-        I.shutil.rmtree(mdb_new.basedir)     
+        shutil.rmtree(mdb_new.basedir)     
         raise
     
     features_legacy = get_features()
     for k in list(features_new.keys()):
-        I.np.testing.assert_almost_equal(features_new[k], features_legacy[k], decimal = 6)
+        np.testing.assert_almost_equal(features_new[k], features_legacy[k], decimal = 6)
             
