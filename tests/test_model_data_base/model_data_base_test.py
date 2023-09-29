@@ -219,10 +219,9 @@ def test_accessing_non_existent_key_raises_KeyError(empty_mdb):
     with pytest.raises(KeyError):
         empty_mdb['some_nonexistent_key']
 
+@pytest.mark.skipif(six.PY3, reason="Old mdb only readable in Py2. Py3 does not have pandas.indexes. It has been moved to pandas.core.indexes.")
 def test_compare_old_mdb_with_freshly_initialized_one(fresh_mdb):
-    '''ensure compatibility with old versions'''
-    if six.PY3:
-        pandas.indexes = pandas.core.indexes
+    '''ensure compatibility with old versions'''        
     old_path = os.path.join(parent, \
                             'test_model_data_base', \
                             'data',\
