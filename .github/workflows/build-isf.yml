@@ -26,7 +26,7 @@ jobs:
 
     - name: Check changes with previous commit
       uses: dorny/paths-filter@v2
-      id: changes
+      id: commit_changed
       with:
         # compare with most recent commit on the same branch before the push
         base: ${{ github.ref }}
@@ -42,11 +42,11 @@ jobs:
       # - the build does not exist
       # - the previous build was not succesful for whatever reason
       if: |
-        ( steps.changes.outputs.all == "true" ) || 
+        ( steps.commit_changed.outputs.all == "true" ) || 
         ( test ! -d $HOME/anaconda_isf${{ inputs.py_version }} ) || 
         ( $(head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt") != "success" )
       run: |
-        echo "Changes since last commit: ${{ steps.changes.outputs.all }}"
+        echo "Changes since last commit: ${{ steps.commit_changed.outputs.all }}"
         echo "Previous build state: $(head -n 1 $HOME/build_success.txt)"
         CONDA_TARGET_DIR="$HOME/anaconda_isf${{ inputs.py_version }}"
         if [ -d "$CONDA_TARGET_DIR" ]; then
