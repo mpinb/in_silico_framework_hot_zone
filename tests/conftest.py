@@ -78,7 +78,7 @@ def client(pytestconfig):
     return distributed.Client('localhost:{}'.format(pytestconfig.getoption("--dask_server_port")))
 
 @pytest.fixture
-def fresh_mdb(woker_id):
+def fresh_mdb(worker_id):
     """Pytest fixture for a ModelDataBase object with a unique temp path.
     Initializes data with model_data_base.mdb_initializers.load_simrun_general.init
     Contains 8 keys with data:
@@ -107,6 +107,9 @@ def fresh_mdb(woker_id):
     
     yield mdb
     # cleanup
+    for key in mdb.keys():
+        del key
+    del mdb
     shutil.rmtree(path)
 
 @pytest.fixture
@@ -123,6 +126,9 @@ def empty_mdb(worker_id):
     
     yield mdb
     # cleanup
+    for key in mdb.keys():
+        del key
+    del mdb
     shutil.rmtree(path)
 
 @pytest.fixture
