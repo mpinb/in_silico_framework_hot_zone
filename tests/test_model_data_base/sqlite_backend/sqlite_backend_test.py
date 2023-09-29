@@ -44,7 +44,7 @@ def test_pixelObject_can_be_assigned(sqlite_db):
 #@decorators.testlevel(1)  
 def test_concurrent_writes(sqlite_db, client):
     keys = [str(lv) for lv in range(100)]
-    job = {key: write_data_to_dict(sqlite_db.basedir, key) for key in keys}
+    job = {key: write_data_to_dict(sqlite_db.path, key) for key in keys}
     job = dask.delayed(job)
         
     client.compute(job).result()
