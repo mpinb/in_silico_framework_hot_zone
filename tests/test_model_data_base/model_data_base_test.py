@@ -218,9 +218,10 @@ def test_accessing_non_existent_key_raises_KeyError(empty_mdb):
     with pytest.raises(KeyError):
         empty_mdb['some_nonexistent_key']
 
-@pytest.mark.skipif(six.PY3, reason="The old mdb can only be loaded with Py2.7, as it requires pandas.index. Py >=3.8 has IntIndex and BlockIndex, that has been patched in ISF to not exist.")
 def test_compare_old_mdb_with_freshly_initialized_one(fresh_mdb):
     '''ensure compatibility with old versions'''
+    if six.PY3:
+        pandas.index = pandas.Index
     old_path = os.path.join(parent, \
                             'test_model_data_base', \
                             'data',\
