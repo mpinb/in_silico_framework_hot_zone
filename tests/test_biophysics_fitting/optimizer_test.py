@@ -2,6 +2,7 @@
 from .context import PARENT, DATA_DIR
 import distributed, os, tempfile, six, shutil, pytest
 import pandas as pd
+import numpy as np
 import single_cell_parser as scp
 from model_data_base import utils
 from functools import partial
