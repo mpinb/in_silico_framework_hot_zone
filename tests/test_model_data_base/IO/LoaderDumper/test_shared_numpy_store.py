@@ -74,7 +74,7 @@ def test_append_save():
         nps.save(arr1, 'testarray')
         nps.append_save(arr2, 'testarray')
 
-        _, shared_array = nps.load('testarray', load_from_disk=True)
+        shared_array = nps.load('testarray', load_from_disk=True)
 
         print("Expected combined array:")
         print(combined_arr)
@@ -97,7 +97,7 @@ def test_append_save_no_flush_leaves_array_unchanged():
         nps.save(arr1, 'testarray')
         nps.append_save(arr2, 'testarray', autoflush = False)
 
-        _, shared_array = nps.load('testarray', load_from_disk=True)
+        shared_array = nps.load('testarray', load_from_disk=True)
 
         print("Expected combined array:")
         print(combined_arr)
