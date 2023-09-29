@@ -54,7 +54,7 @@ jobs:
 
           (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > dask_scheduler.txt)&
           (dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 > dask_workers.txt)&
-          pytest -n 4 -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. --dask_server_port $port_number tests/
+          pytest -n 4 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. --dask_server_port $port_number tests/
 
       - uses: actions/upload-artifact@v3
         if: ${{ always() }} 
@@ -62,7 +62,7 @@ jobs:
           name: Dask scheduler output
           path: |
             - dask.log
-            
+
       - uses: actions/upload-artifact@v3
         if: ${{ always() }} 
         with:
