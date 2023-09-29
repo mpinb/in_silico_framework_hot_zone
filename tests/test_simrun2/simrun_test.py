@@ -162,7 +162,7 @@ def test_different_schedulers_give_same_result():
 #@decorators.testlevel(2)    
 def test_crossing_over_trails_show_identical_response_before_crossing_over_time(tmpdir, fresh_mdb):
     try:
-    t = np.random.randint(100, high = 150)
+        t = np.random.randint(100, high = 150)
         sim_trail = list(mdb['sim_trail_index'])[0]
         pdf, res = simrun2.crossing_over.crossing_over_simple_interface.crossing_over(
             fresh_mdb, sim_trail, t, cellParamName, networkName, dirPrefix = str(tmpdir), nSweeps=2, tStop=345
