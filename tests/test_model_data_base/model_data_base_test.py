@@ -87,10 +87,9 @@ def test_metadata_update(empty_mdb):
     assert mdb.metadata['test']['metadata_creation_time'] =='post_hoc'
     assert mdb.metadata['test2']['metadata_creation_time'] == 'post_hoc'        
 
-def test_check_working_dir_clean_for_build_works_correctly(empty_mdb):
+def test_check_working_dir_clean_for_build_works_correctly():
     #can create database in empty folder
     testpath = tempfile.mkdtemp()
-    ModelDataBase(testpath)
         
     #cannot create database if file is in folder
     with open(os.path.join(testpath, 'somefile'), 'w'):
@@ -223,7 +222,7 @@ def test_accessing_non_existent_key_raises_KeyError(empty_mdb):
     with pytest.raises(KeyError):
         empty_mdb['some_nonexistent_key']
 
-def test_compare_old_mdb_with_freshly_initialized_one(empty_mdb):
+def test_compare_old_mdb_with_freshly_initialized_one(fresh_mdb):
     '''ensure compatibility with old versions'''
     old_path = os.path.join(parent, \
                             'test_model_data_base', \
@@ -234,14 +233,14 @@ def test_compare_old_mdb_with_freshly_initialized_one(empty_mdb):
                             nocreate = True)
     #old_mdb['reduced_model']
     
-    assert_frame_equal(empty_mdb['voltage_traces'].compute(), \
-                        empty_mdb['voltage_traces'].compute())
-    assert_frame_equal(empty_mdb['synapse_activation'].compute(), \
-                        empty_mdb['synapse_activation'].compute())
-    assert_frame_equal(empty_mdb['cell_activation'].compute(), \
-                        empty_mdb['cell_activation'].compute())
-    assert_frame_equal(empty_mdb['metadata'], \
-                        empty_mdb['metadata'])
+    assert_frame_equal(fresh_mdb['voltage_traces'].compute(), \
+                        old_mdb['voltage_traces'].compute())
+    assert_frame_equal(fresh_mdb['synapse_activation'].compute(), \
+                        old_mdb['synapse_activation'].compute())
+    assert_frame_equal(fresh_mdb['cell_activation'].compute(), \
+                        old_mdb['cell_activation'].compute())
+    assert_frame_equal(fresh_mdb['metadata'], \
+                        old_mdb['metadata'])
         
     # reduced model can be loaded - commented out by Rieke during python 2to3 transition
 #         Rm = old_mdb['reduced_lda_model']
