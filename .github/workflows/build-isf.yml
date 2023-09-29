@@ -42,8 +42,8 @@ jobs:
       # - the build does not exist
       # - the previous build was not succesful for whatever reason
       if: |
-        (steps.changes.outputs.all == "true") || 
-        [ ! -d $HOME/anaconda_isf${{ inputs.py_version }} ] || 
+        ( steps.changes.outputs.all == "true" ) || 
+        ( test -d $HOME/anaconda_isf${{ inputs.py_version }} ) || 
         ( $(head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt") != "success" )
       run: |
         echo "Changes since last commit: ${{ steps.changes.outputs.all }}"
