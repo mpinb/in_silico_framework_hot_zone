@@ -23,18 +23,56 @@ def shared_array_from_numpy(arr, name = None):
     np.copyto(shm_arr, arr)
     return shm, shm_arr
 
-def shared_array_from_disk(path, shape = None, dtype = None, name = None):
+def _get_offset_and_size_in_bytes(start_row, end_row, shape, dtype):
+    if start_row is None:
+        start_row = 0
+    if end_row is None:
+        end_row = shape[0]
+    assert(start_row <= end_row)
+    assert(start_row >= 0)
+    assert(end_row <= shape[0])
+    final_shape = tuple([end_row - start_row] + list(shape[1:]))
+    bytes_size = np.prod(final_shape) * np.dtype(dtype).itemsize
+    bytes_offset = np.prod([start_row] + list(shape[1:])) * np.dtype(dtype).itemsize 
+    return start_row, end_row, bytes_offset, bytes_size, final_shape
+
+def _check_filesize_matches_shape(path, shape, dtype):
+    bytes_file = os.path.getsize(path)
+    bytes_expected = np.prod(shape) * np.dtype(dtype).itemsize
+    if bytes_file != bytes_expected:
+        raise ValueError("File size doesn't match expected size")
+    
+def shared_array_from_disk(path, shape = None, dtype = None, name = None, start_row = None, end_row = None):
     '''loads an array saved to disk and puts it into shared memory'''
-    shm = shared_memory.SharedMemory(create=True, size=np.prod(shape) * np.dtype(dtype).itemsize, name = name)
-    shm_arr = np.ndarray(shape, dtype=dtype, buffer=shm.buf)    
+    _check_filesize_matches_shape(path, shape, dtype)
+    start_row, end_row, bytes_offset, bytes_size, final_shape = _get_offset_and_size_in_bytes(start_row, end_row, shape, dtype)   
+    shm = shared_memory.SharedMemory(create=True, size=bytes_size, name = name)
+    shm_arr = np.ndarray(final_shape, dtype=dtype, buffer=shm.buf)    
     with open(path, 'rb') as f:
-        f.readinto(shm.buf)
+        f.seek(bytes_offset)
+        # in principle nice, but does it work if the file is larger than the buffer, e.g. if end_row is somewhere in the middle of the file?
+        # I tested and it works, but I didn't find anything in the docs that guarantees that behavior
+        f.readinto(shm.buf) 
+        
+        # alternative method, reads in the file in chunks and moves it to shared memory, much slower
+        # chunk_size = 1_000_000_000  # or some other reasonable size, e.g., 1GB
+        # offset = 0
+        # while offset < len(shm.buf):
+        #     read_size = min(chunk_size, len(shm.buf) - offset)
+        #     chunk = f.read(read_size)
+        #     shm.buf[offset:offset+read_size] = chunk
+        #     offset += read_size
     return shm, shm_arr
+
+def memmap_from_disk(path, shape = None, dtype = None, name = None, start_row = None, end_row = None):
+    _check_filesize_matches_shape(path, shape, dtype)
+    start_row, end_row, bytes_offset, bytes_size, final_shape = _get_offset_and_size_in_bytes(start_row, end_row, shape, dtype)    
+    arr = np.memmap(full_path, dtype=np.dtype(dtype), mode='r', offset=bytes_offset, shape=final_shape, order='C')
+    return arr
 
 def shared_array_from_shared_mem_name(fname, shape = None, dtype = None):
     '''loads an already shared array by its name'''
     shm = shared_memory.SharedMemory(name=fname)
-    #unregister(fname, 'shared_memory')
     shm_arr = np.ndarray(shape, dtype, buffer=shm.buf)
     return shm, shm_arr
 
@@ -75,6 +113,8 @@ class SharedNumpyStore:
     def update(self):
         """Update the list of files in the working directory."""
         self._files = {f.split('__')[0]: f for f in os.listdir(self.working_dir)}
+        if 'Loader.pickle' in self._files:
+            del self._files['Loader.pickle']
     
     @staticmethod
     def _get_metadata_from_fname(fname):
@@ -125,6 +165,7 @@ class SharedNumpyStore:
         """
         Save a numpy array to disk at the working_dir of this instance of NumpyStore.
         """
+        assert(name != 'Loader.pickle') # reserved to model data base        
         assert(not '__' in name)
         fname = self._get_fname(arr, name)
         self._files[name] = fname        
@@ -155,6 +196,8 @@ class SharedNumpyStore:
         """
         Appends the given numpy array 'arr' to an existing array with the specified 'name'.
         """
+        assert(name != 'Loader.pickle') # reserved to model data base
+        assert(not '__' in name)
         # created together with chatgpt
         
         # Check if the array with the given name exists in the store
@@ -193,26 +236,51 @@ class SharedNumpyStore:
         if autoflush:
             self.flush()
     
-    def load(self, name, load_from_disk = False, shared = True):
-        if shared:
-            # if already loaded, return:
+    
+    def load(self, name, mode = 'shared_memory', start_row = None, end_row = None, allow_create_shm = False):
+        '''Load array.
+            mode: memmap: memory map the file and return a numpy memmap object.
+                  memory: load file into (not shared) memory and return a numpy array
+                  shared_memory: access file in shared memory and return numpy array. 
+            allow_create_shm: only relevant in mode shared_memory. 
+                If True, if the file on disk is not yet loaded into shared memory, load it.
+                If False, requires that file already exists in shared memory. Use this e.g. in child processes 
+                in which you want to be sure they don't create a new shared memory file. 
+            start_row: first row from the array to load
+            end_row: last row of the array to load
+            
+            Note: in shared_memory mode, for each call with different start_row or end_row parameters, a new independent 
+                file is created.
+            '''
+        fname, shape, dtype = self._get_metadata_from_name(name) 
+        start_row, end_row, bytes_offset, bytes_size, final_shape = _get_offset_and_size_in_bytes(start_row, end_row, shape, dtype)   
+        full_path = os.path.join(self.working_dir, fname)                      
+        if mode == 'memmap':
+            return np.memmap(full_path, dtype=np.dtype(dtype), mode='r', offset=bytes_offset, shape=final_shape, order='C')
+        elif mode == 'memory':
+            assert(bytes_size % np.dtype(dtype).itemsize == 0)
+            return np.fromfile(full_path, offset = bytes_offset, count = bytes_size // np.dtype(dtype).itemsize, dtype = dtype).reshape(final_shape)
+        elif 'shared_memory':
+            # if already loaded, return:            
             if name in self._shared_memory_buffers:
-                return self._shared_memory_buffers[name]
-            # raises ValueError if array isn't stored here. If it is, get metadata
-            fname, shape, dtype = self._get_metadata_from_name(name) 
-            full_path = os.path.join(self.working_dir, fname)   
-            try: # already put in shared mem by other process?
-                self._shared_memory_buffers[name] = shared_array_from_shared_mem_name(fname + '__' + self._suffix, shape, dtype)
-            except FileNotFoundError:  # no --> load it!
-                if load_from_disk:
-                    self._shared_memory_buffers[name] = shared_array_from_disk(full_path, shape, dtype, fname + '__' + self._suffix)
+                return self._shared_memory_buffers[name + '{}_{}'.format(start_row, end_row)][1]
+            # if not, check if another process put it into shared memory already
+            shared_mem_fname = fname + '__' + '{}_{}'.format(start_row, end_row) + '__' + self._suffix # the shared memory file known by the OS
+            shared_mem_name = name + '__{}_{}'.format(start_row, end_row) # the key used in the internal dictionaries to refer to the shared memory
+            try: # did another process put it into shared memory already?
+                self._shared_memory_buffers[shared_mem_name] = shared_array_from_shared_mem_name(shared_mem_name, final_shape, dtype)         
+                return self._shared_memory_buffers[shared_mem_name][1]
+            except FileNotFoundError as e: # no
+                if allow_create_shm:
+                    self._shared_memory_buffers[shared_mem_name] = shared_array_from_disk(full_path, shape, dtype, 
+                                                                               shared_mem_name,
+                                                                               start_row = start_row, end_row = end_row)
+                    return self._shared_memory_buffers[shared_mem_name][1]
                 else:
-                    raise ValueError("The array is not in shared memory yet. Set load_from_disk=True if you want to load it from disk.")
-            return self._shared_memory_buffers[name][1]
+                    raise ValueError("The array is not in shared memory yet. Set allow_create_shm to True to load the array into shared memory.")
         else:
-            fname, shape, dtype = self._get_metadata_from_name(name) 
-            full_path = os.path.join(self.working_dir, fname)  
-            return np.fromfile(full_path, dtype = dtype).reshape(shape)
+            raise ValueError('mode must be')
+            
             
 
 from . import parent_classes
