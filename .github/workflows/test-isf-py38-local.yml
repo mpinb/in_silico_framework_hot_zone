@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Test in-silico-framework for Python 3.8
         run: |
+          pkill dask-scheduler
+          pkill dask-worker
           CONDA_TARGET_DIR="$HOME/anaconda_isf3.8"
           source $CONDA_TARGET_DIR/bin/activate
           echo "Using Python: $(which python)"
@@ -41,9 +43,6 @@ jobs:
           export DASK_DISTRIBUTED__WORKER__MEMORY__SPILL=False
           export DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE=False
           export DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE=False
-          export DASK_DISTRIBUTED__LOGGING__DISTRIBUTED=INFO
-          export DASK_LOGGING__LOGGERS__HANDLERS=file
-          export DASK_LOGGING__HANDLERS__FILE__FILENAME=dask.log
 
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
@@ -54,7 +53,12 @@ jobs:
 
           (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > dask_scheduler.txt)&
           (dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 > dask_workers.txt)&
-          pytest -n 4 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. --dask_server_port $port_number tests/
+          pytest -n 4 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/coverage_reports/report_py38.xml --cov=. --dask_server_port $port_number tests/
+      - name: Cleanup dask orphan processes
+        if: ${{ always() }}
+        run: |
+          pkill dask-scheduler
+          pkill dask-worker
 
       - uses: actions/upload-artifact@v3
         if: ${{ always() }} 
@@ -74,6 +78,6 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/coverage_reports/report_py3.xml
+          files: ./tests/coverage_reports/report_py38.xml
           verbose: true # optional (default = false)
       
