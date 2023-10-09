@@ -29,7 +29,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Download, install & build ISF for Python 2.7
+      - name: Test ISF for Python 2.7
         run: |
           CONDA_TARGET_DIR="$HOME/anaconda_isf2.7"
           source $CONDA_TARGET_DIR/bin/activate
