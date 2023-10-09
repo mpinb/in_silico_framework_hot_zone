@@ -3,7 +3,7 @@
 # even before pytest discovery
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
 # for setting environment variables, use pytest.ini or .env instead
-import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_base
+import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_base, dask
 from model_data_base.mdb_initializers.load_simrun_general import init
 from model_data_base.utils import silence_stdout
 import Interface as I
@@ -69,6 +69,51 @@ def pytest_configure(config):
     isf_logger.setLevel(logging.WARNING)  # set logging level of ISF logger to WARNING
     # Suppress logs from verbose modules so they don't show in stdout
     isf_logger_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
+    # redirect test ouput to log file with more verbose output
+    isf_logging_file_handler = logging.RotatingFileHandler(os.path.join(CURRENT_DIR, "test.log"))
+    isf_logging_file_handler.setLevel(logging.INFO)
+    isf_logger.addHandler(isf_logging_file_handler)
+
+    # redirect dask logging
+    dask_logging_config = {
+        "logging": {
+            "handlers": {
+                "file": {  
+                    "class": logging.handlers.RotatingFileHandler,
+                    "filename": "dask_output.log",
+                    "level": "INFO"
+                },
+                # only a file handler for testing, no console handler (for brevity in console output)
+                # "console": {
+                #     "class" : logging.StreamHandler,
+                #     "level": "INFO"
+                # }
+            }
+            "loggers": {
+                "distributed.worker": {
+                    "level": "INFO",
+                    "handlers": "file"
+                }
+                "distributed.scheduler": {
+                    "level": "INFO",
+                    "handlers": "file"
+                    }
+            }
+        }
+    }
+    dask.config.set(dask_logging_config)
+
+    # ----------------- Other setup -------------------------------
+    # set dask workers config
+    dask_worker_config = {
+        "worker":{
+            "memory_target": 0.90,
+            "memory_spill": False,
+            "memory_pause": False,
+            "memory_terminate": False
+        }
+    }
+    dask.config.update(dask.config, dask_worker_config, priority="new")
 
 @pytest.fixture
 def client(pytestconfig):
