@@ -31,6 +31,11 @@ jobs:
     steps:
       - name: Test ISF for Python 2.7
         run: |
+          pkill dask-worker
+          pkill dask-scheduler
+          echo $(which pytest)
+          echo $PYTHONPATH
+          echo $(pytest --help)
           CONDA_TARGET_DIR="$HOME/anaconda_isf2.7"
           source $CONDA_TARGET_DIR/bin/activate
           echo "Using Python: $(which python)"
@@ -56,3 +61,9 @@ jobs:
           dask-scheduler --port=$port_number --bokeh-port=$bokeh_port & 
           dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 &
           python -m pytest -rsx -vv --color=yes tests/
+
+      - name: Cleanup dask orphan processes
+        if: ${{ always() }}
+        run: |
+          pkill dask-scheduler
+          pkill dask-worker
