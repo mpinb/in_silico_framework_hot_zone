@@ -7,54 +7,79 @@ on:
   workflow_dispatch:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+
   build:
-    # The type of runner that the job will run on
-    runs-on: [ self-hosted, ibs3005 ]
+    name: Build
+    uses: ./.github/workflows/build-isf.yml
+    with:
+      py_version: 3.9
+
+  test:
+    name: Test
+    needs: build  # assures there is a build of ISF
+    # Assure test runs on whatever runner the build ran on
+    # Note that runners are requested based on label, not on name
+    # So the runner should have a label equal to its name
+    runs-on: ${{ needs.build.outputs.runner_name }}
     defaults:
       run:
         shell: bash -l {0}
-    name: Py3.9 (local) build/test
-    # Steps represent a sequence of tasks that will be executed as part of the job
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      # Install Anaconda3 and update conda package manager
-      - name: Download, install & build ISF for Python 3.9
+      - name: Test in-silico-framework for Python 3.9
         run: |
-          CONDA_TARGET_DIR="$(pwd)/anaconda_isf3"
-          if [ -d "$CONDA_TARGET_DIR" ]; then
-            echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
-            rm -r "$CONDA_TARGET_DIR"
-          else
-            echo "No previous Anaconda installation found. Continuing..."
-          fi
-          pushd .
-          cd installer/py3.9
-          ./install.sh $CONDA_TARGET_DIR || exit 1
-          popd
+          pkill dask-scheduler
+          pkill dask-worker
+          CONDA_TARGET_DIR="$HOME/anaconda_isf3.9"
           source $CONDA_TARGET_DIR/bin/activate
-          conda list
-      # Run in-silico-framework tests
-      - name: Test in-silico-framework
-        run: |
-          CONDA_TARGET_DIR="$(pwd)/anaconda_isf3"
-          source $CONDA_TARGET_DIR/bin/activate;
           echo "Using Python: $(which python)"
-          export PYTHONPATH=$(pwd)
+          export PYTHONPATH=$(pwd):$HOME
+          echo $PYTHONPATH
           name=${{ runner.name }}
           runner_number=$( echo $name | grep -Eo '[0-9]+$' )
-          port_number=${runner_number: -1}8786
-          bokeh_port=${runner_number: -1}8787
+          port_number=387${runner_number: -1}6
+          bokeh_port=387${runner_number: -1}7
+
+          echo "Setting dask config with env variables"
+          export DASK_DISTRIBUTED__WORKER__MEMORY__TARGET=0.90
+          export DASK_DISTRIBUTED__WORKER__MEMORY__SPILL=False
+          export DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE=False
+          export DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE=False
+
           echo "Launching Dask server on $name"
-          echo "Using port $port_number and bokeh port $bokeh_port" 
-          dask-scheduler --port=$port_number --bokeh-port=$bokeh_port &
-          dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 &
-          pytest -n 4 -rsx -vv --color=yes --cov-report xml:tests/coverage_reports/report_py3.xml --cov=. tests
+          echo "Using port $port_number and bokeh port $bokeh_port"
+          echo "Memory target: $DASK_DISTRIBUTED__WORKER__MEMORY__TARGET"
+          echo "Memory spill: $DASK_DISTRIBUTED__WORKER__MEMORY__SPILL"
+          echo "Memory pause: $DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE"
+          echo "Memory terminate: $DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE"
+
+          (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > dask_scheduler.txt)&
+          (dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 > dask_workers.txt)&
+          pytest -n 4 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/coverage_reports/report_py39.xml --cov=. --dask_server_port $port_number tests/
+      - name: Cleanup dask orphan processes
+        if: ${{ always() }}
+        run: |
+          pkill dask-scheduler
+          pkill dask-worker
+
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }} 
+        with:
+          name: Dask scheduler output
+          path: |
+            - dask.log
+
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }} 
+        with:
+          name: Tests logging output
+          path: |
+            - $(pwd)/tests/test.log
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/coverage_reports/report_py3.xml
+          files: ./tests/coverage_reports/report_py39.xml
           verbose: true # optional (default = false)
-        
+      
