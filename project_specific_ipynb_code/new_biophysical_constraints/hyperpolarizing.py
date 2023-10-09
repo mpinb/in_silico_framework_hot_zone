@@ -8,7 +8,7 @@ from biophysics_fitting.hay_complete_default_setup import interpolate_vt
 from biophysics_fitting import utils
 from functools import partial
 from neuron import h 
-from crit_freq import setup_soma_step_with_current
+from project_specific_ipynb_code.new_biophysical_constraints.crit_freq import setup_soma_step_with_current
 
 ######################################################
 # Simulator which runs the hyperpolarizing stimuli protocols
@@ -21,28 +21,21 @@ def _append(cell, name, item):
         setattr(cell, name, [])
     getattr(cell, name).append(item)
     
-# make this nicer 
-def record_with_current(cell):
-    return {'tVec': tVec(cell), 
-        'vList': (vmSoma(cell), vmApical(cell, dist)), 
-        'iList': np.array(cell.iList)}
     
 def record_at_dist_with_current(cell, dist = None):
     if dist: 
         return {'tVec': tVec(cell), 
             'vList': (vmSoma(cell), vmApical(cell, dist)), 
             'iList': np.array(cell.iList)}
-    return record_with_current(cell)
     
-    
-def modify_simulator_to_run_hyperpolarizing_stimuli(s, duration = None, delay = None, amplitude = None):
-    """typical defaults:duration = 1000, delay = 1000, amplitude = -0.05"""
+def modify_simulator_to_run_hyperpolarizing_stimuli(s, duration = None, delay = None, amplitude = None, dist = None):
+    """typical defaults:duration = 1000, delay = 1000, amplitude = -0.05, dist = 400"""
     tStop = duration + delay + 1000
     s.setup.stim_run_funs.append(['hyperpolarizing.run', param_to_kwargs(partial(run_fun, T = 34.0, Vinit = -75.0, dt = 0.025, 
                                                                                  recordingSites = [], tStart = 0.0, tStop = tStop, vardt = True))])
     s.setup.stim_setup_funs.append(['hyperpolarizing.stim', param_to_kwargs(partial(setup_soma_step_with_current, amplitude = amplitude, delay = delay,
                                                                                     duration = duration))])
-    s.setup.stim_response_measure_funs.append(['hyperpolarizing.measure', param_to_kwargs(partial(record_at_dist_with_current))])
+    s.setup.stim_response_measure_funs.append(['hyperpolarizing.measure', param_to_kwargs(partial(record_at_dist_with_current, dist = dist))])
     
     
 def modify_simulator_to_run_dend_hyperpolarizing_stimuli(s, duration = None, delay = None, amplitude = None, dist = None):
@@ -63,9 +56,9 @@ class Hyperpolarizing:
                  delay = 1000,
                  duration = 1000,
                  amplitude = -0.05, 
-                 definitions={'Rin':('Rin',46.8,18.6), 
-                             'Sag':('Sag',36.6,9.2),
-                             'Attenuation':('Attenuation',20,10)}):
+                 definitions={'Rin':('Rin',30,7),  #Stuart.Spruston1998,  Berger.etal2003,  @Dembrow.etal2010, @Beaulieu-Laroche.etal2018
+                             'Sag':('Sag',21.55, 5.05), # Dembrow 2010
+                             'Attenuation':('Attenuation',30,6.7)}):  #spread param (std) is calculated from the range 
     
         self.delay = delay
         self.duration = duration
@@ -80,7 +73,12 @@ class Hyperpolarizing:
         
     def Rin(self, voltage_traces, mean, std):
         t,v = voltage_traces['tVec'],voltage_traces['vList']
-        Rin = (np.amin(v[0]) - v[0][int(np.where(t == (self.delay-20))[0])])/self.amplitude
+        
+        
+        c = np.where(t == (self.delay+self.duration-20))
+        b = np.where(t == (self.delay+self.duration))
+        
+        Rin = (np.average(v[0][int(c[0]):int(b[0])]) - v[0][int(np.where(t == (self.delay-20))[0])])/self.amplitude
        
         return {'hyperpolarizing.Rin.raw': Rin, 'hyperpolarizing.Rin.normalized': (Rin - mean)/std, 'hyperpolarizing.Rin':(Rin - mean)/std}
 
@@ -119,7 +117,7 @@ class Dend_hyperpolarizing:
                  delay = 300,
                  duration = 200,
                  amplitude = -0.05, 
-                 definitions={'Dend_Rin':('Dend_Rin',46.8,18.6)}):
+                 definitions={'Dend_Rin':('Dend_Rin',30,5)}): #Beaulieu-Laroche.etal2018, Kalmbach.etal2013 
     
         self.delay = delay
         self.duration = duration
@@ -134,9 +132,11 @@ class Dend_hyperpolarizing:
         
     def Dend_Rin(self, voltage_traces, mean, std):
         t,v = voltage_traces['tVec'],voltage_traces['vList']
-        d = np.where(t == self.delay)[0]
         
-        Rin = (np.amin(v[1][int(d):]) - v[1][int(np.where(t == (self.delay-20))[0])])/self.amplitude
+        c = np.where(t == (self.delay+self.duration-20))
+        b = np.where(t == (self.delay+self.duration))
+        
+        Rin = (np.average(v[1][int(c[0]):int(b[0])]) - v[1][int(np.where(t == (self.delay-20))[0])])/self.amplitude
        
         return {'hyperpolarizing.Dend_Rin.raw': Rin, 'hyperpolarizing.Dend_Rin.normalized': (Rin - mean)/std, 'hyperpolarizing.Dend_Rin':(Rin - mean)/std}
     

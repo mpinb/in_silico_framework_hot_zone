@@ -7,7 +7,7 @@ from simrun2.rerun_mdb import synapse_activation_df_to_roberts_synapse_activatio
 import time
 from model_data_base.mdb_initializers.prepare_ANN_batches import compute_AP_array, compute_ISI_array, spike_times_to_onehot, compute_ISI_from_st_list
 from model_data_base.mdb_initializers.prepare_ANN_batches import get_synapse_activation_array_weighted,augment_synapse_activation_df_with_branch_bin,get_spatial_bin_names
-from single_cell_parser.analyze.membrane_potential_analysis import simple_spike_detection 
+from single_cell_parser.analyze.membrane_potential_analysis import simple_spike_detection
 from project_specific_ipynb_code.hot_zone import get_main_bifurcation_section
 
 from model_data_base.mdb_initializers.prepare_ANN_batches import get_binsize
@@ -342,9 +342,9 @@ def _evoked_activity(mdb, stis, outdir,
     SA = np.concatenate(sa_arr_list, axis = 0)
     VT = VT
     #-------------- Save as .npy format --------------#
-    np.savez(outdir_absolute, AP_DEND = AP_DEND.half(), ISI_DEND = ISI_DEND.half(), 
-                              AP_SOMA = AP_SOMA.half(), ISI_SOMA = ISI_SOMA.half(), 
-                              SA = SA.half(), VT = VT.half())
+    np.savez(outdir_absolute, AP_DEND = I.np.array(AP_DEND, dtype='float16'), ISI_DEND = I.np.array(ISI_DEND, dtype='float16'), 
+                              AP_SOMA = I.np.array(AP_SOMA, dtype='float16'), ISI_SOMA = I.np.array(ISI_SOMA, dtype='float16'), 
+                              SA = I.np.array(SA, dtype='float16'), VT = I.np.array(VT, dtype='float16'))
     # np.save(os.path.join(outdir_absolute, "AP_DEND.npy"), AP_DEND) # arco: replace outdir with outdir_absolute
     # np.save(os.path.join(outdir_absolute, "ISI_DEND.npy"), ISI_DEND)
     # np.save(os.path.join(outdir_absolute, "AP_SOMA.npy"), AP_SOMA)

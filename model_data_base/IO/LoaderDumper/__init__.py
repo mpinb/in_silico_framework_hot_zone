@@ -24,7 +24,7 @@ def load(savedir, load_data = True, loader_kwargs = {}):
     with an arbitrary dumper'''
 #     with open(os.path.join(savedir, 'Loader.pickle'), 'rb') as file_:
 #         myloader = cloudpickle.load(file_, encoding = 'latin1')
-    myloader = compatibility.uncloudpickle_fun(os.path.join(savedir, 'Loader.pickle'))
+    myloader = compatibility.pandas_unpickle_fun(os.path.join(savedir, 'Loader.pickle'))
     
     if load_data:
         return myloader.get(savedir, **loader_kwargs)
@@ -41,7 +41,7 @@ def get_dumper_string_by_savedir(savedir):
     import inspect
 #     with open(os.path.join(savedir, 'Loader.pickle'), 'rb') as file_:
 #         myloader = cloudpickle.load(file_)
-    myloader = compatibility.uncloudpickle_fun(os.path.join(savedir, 'Loader.pickle'))
+    myloader = compatibility.pandas_unpickle_fun(os.path.join(savedir, 'Loader.pickle'))
     dumper = inspect.getmodule(myloader)
     return get_dumper_string_by_dumper_module(dumper)
     

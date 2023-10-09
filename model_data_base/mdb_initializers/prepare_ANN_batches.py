@@ -231,7 +231,7 @@ def spike_times_to_onehot(spike_times, min_time=0, max_time=505, time_step=1):
     assert len(I.np.array(spike_times).shape) == 1, "Please provide a 1-dimensional array as spike_times"
     assert all([s >= 0 for s in spike_times]), "Negative time values found. Are you sure you passed spike times as first argument?"
     if spike_times and (max(spike_times) > max_time):
-        raise UserWarning("Spike times found larger than max_time. These will not be included in the one-hot encoding")
+        warnings.warn("Spike times found larger than max_time. These will not be included in the one-hot encoding")
     spike_times = [e for e in spike_times if min_time < e < max_time]
     time_steps = I.np.arange(min_time, max_time, time_step)
     n_time_steps = len(time_steps)
