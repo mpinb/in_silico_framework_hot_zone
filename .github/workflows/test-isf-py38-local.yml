@@ -1,4 +1,4 @@
-name: ISF Py3.8 (local) test
+name: ISF Py 3.8
 on:
   push:
     branches: '*'
@@ -7,13 +7,13 @@ on:
 jobs:
 
   build:
-    name: Build ISF Py3.8
+    name: Build
     uses: ./.github/workflows/build-isf.yml
     with:
       py_version: 3.8
 
   test:
-    name: Test ISF Py3.8
+    name: Test
     needs: build  # assures there is a build of ISF
     # Assure test runs on whatever runner the build ran on
     # Note that runners are requested based on label, not on name

@@ -1,6 +1,6 @@
 # Installation of in-silico-framework followed by CI tests.
 # Builds ISF locally on the MPINB-hosted runner and runs all tests
-name: ISF Py3.9 (local) build/test
+name: ISF Py 3.9
 # Controls when the workflow will run
 on:
   # Allows you to run this workflow manually from the Actions tab
