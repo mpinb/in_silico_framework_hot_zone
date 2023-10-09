@@ -14,7 +14,7 @@ CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 TEST_DATA_FOLDER = os.path.join(getting_started.parent, \
                               'example_simulation_data', \
                               'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/')
-os.environ["IS_TESTING"] = "True"
+os.environ["ISF_IS_TESTING"] = "True"
 
 suppress_modules_list = ["biophysics_fitting","distributed"]
 
