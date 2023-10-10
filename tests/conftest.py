@@ -70,7 +70,7 @@ def pytest_configure(config):
     # Suppress logs from verbose modules so they don't show in stdout
     isf_logger_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
     # redirect test ouput to log file with more verbose output
-    isf_logging_file_handler = logging.RotatingFileHandler(os.path.join(CURRENT_DIR, "test.log"))
+    isf_logging_file_handler = logging.FileHandler(os.path.join(CURRENT_DIR, "test.log"))
     isf_logging_file_handler.setLevel(logging.INFO)
     isf_logger.addHandler(isf_logging_file_handler)
 
