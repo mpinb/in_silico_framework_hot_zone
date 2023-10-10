@@ -58,7 +58,7 @@ def test_SharedNumpyStore():
     with TemporaryDirectory() as tempdir:
         nps = SharedNumpyStore(tempdir)
         nps.save(arr, 'testarray')
-        buffer = nps.load('testarray', load_from_disk = True)
+        buffer = nps.load('testarray', mode="shared_memory", allow_create_shm = True)
         assert np.array_equal(arr, shared_array)
         nps.close()
         
@@ -74,7 +74,7 @@ def test_append_save():
         nps.save(arr1, 'testarray')
         nps.append_save(arr2, 'testarray')
 
-        shared_array = nps.load('testarray', load_from_disk=True)
+        shared_array = nps.load('testarray', mode="shared_memory", allow_create_shm=True)
 
         print("Expected combined array:")
         print(combined_arr)
@@ -97,7 +97,7 @@ def test_append_save_no_flush_leaves_array_unchanged():
         nps.save(arr1, 'testarray')
         nps.append_save(arr2, 'testarray', autoflush = False)
 
-        shared_array = nps.load('testarray', load_from_disk=True)
+        shared_array = nps.load('testarray', mode="shared_memory", allow_create_shm=True)
 
         print("Expected combined array:")
         print(combined_arr)
@@ -138,7 +138,7 @@ def test_robustness():
             f.write(os.urandom(10))
 
         # Load the array and check if it still works correctly
-        shared_array = nps.load('testarray', load_from_disk=True)
+        shared_array = nps.load('testarray', mode="shared_memory", allow_create_shm=True)
         assert np.array_equal(combined_arr, shared_array)
 
         nps.close()        
