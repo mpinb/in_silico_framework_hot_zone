@@ -48,7 +48,7 @@ def test_shared_array_functions():
     arr = np.array([1, 2, 3])
     buffer, shared_array = shared_array_from_numpy(arr, name=None)
     shm, shared_arr_from_name = shared_array_from_shared_mem_name(buffer.name, dtype=arr.dtype, shape=arr.shape)
-    assert np.array_equal(arr, shared_arr_from_name)    
+    assert np.array_equal(shm, shared_arr_from_name)    
     shm.close()    
     shm.unlink()        
     
