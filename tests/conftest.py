@@ -88,12 +88,12 @@ def pytest_configure(config):
                 #     "class" : logging.StreamHandler,
                 #     "level": "INFO"
                 # }
-            }
+            },
             "loggers": {
                 "distributed.worker": {
                     "level": "INFO",
                     "handlers": "file"
-                }
+                },
                 "distributed.scheduler": {
                     "level": "INFO",
                     "handlers": "file"
