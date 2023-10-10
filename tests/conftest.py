@@ -74,9 +74,10 @@ def pytest_configure(config):
     isf_logging_file_handler.setLevel(logging.INFO)
     isf_logger.addHandler(isf_logging_file_handler)
 
-    # redirect dask logging
-    dask_logging_config = {
-        "logging": {
+    # --------------- Setup dask  -------------------
+    
+    dask_config = {
+        "logging": {  # redirect dask logging to file
             "handlers": {
                 "file": {  
                     "class": logging.handlers.RotatingFileHandler,
@@ -92,28 +93,22 @@ def pytest_configure(config):
             "loggers": {
                 "distributed.worker": {
                     "level": "INFO",
-                    "handlers": "file"
-                },
+                    "handlers": "file",
+                    },
                 "distributed.scheduler": {
                     "level": "INFO",
-                    "handlers": "file"
-                    }
-            }
-        }
-    }
-    dask.config.set(dask_logging_config)
-
-    # ----------------- Other setup -------------------------------
-    # set dask workers config
-    dask_worker_config = {
-        "worker":{
+                    "handlers": "file",
+                    },
+                    },
+            },
+        "worker":{  # set worker config
             "memory_target": 0.90,
             "memory_spill": False,
             "memory_pause": False,
-            "memory_terminate": False
+            "memory_terminate": False,
+            },
         }
-    }
-    dask.config.update(dask.config, dask_worker_config, priority="new")
+    dask.config.set(dask_config)
 
 @pytest.fixture
 def client(pytestconfig):
