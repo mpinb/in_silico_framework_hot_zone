@@ -44,6 +44,11 @@ jobs:
       run: |
         echo "Changes since last commit: ${{ steps.commit_changed.outputs.all }}"
         echo "Previous build state: $(head -n 1 $HOME/build_success${{ inputs.py_version }}.txt)"
+        if [ -d "$HOME/anaconda_isf${{ inputs.py_version }}" ]; then
+          echo "Found existing installation in $HOME."
+        else
+          echo "No previous Anaconda installation found."
+        fi
         echo "Previous version at: $(test -d $HOME/anaconda_isf${{ inputs.py_version }})"
         echo "Build is needed"
 
