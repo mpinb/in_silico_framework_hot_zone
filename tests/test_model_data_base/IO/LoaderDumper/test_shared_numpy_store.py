@@ -59,7 +59,7 @@ def test_SharedNumpyStore():
         nps = SharedNumpyStore(tempdir)
         nps.save(arr, 'testarray')
         buffer = nps.load('testarray', mode="shared_memory", allow_create_shm = True)
-        assert np.array_equal(arr, shared_array)
+        assert np.array_equal(arr, buffer)
         nps.close()
         
 @pytest.mark.skipif(six.PY2, reason="Unavailable on Py2. The multiprocessing module got `shared_memory` in Python 3.8")
