@@ -227,8 +227,8 @@ def test_get_max_generation():
 
 def test_mini_optimization_run(capsys, client):
     c = client
+    mdb = set_up_mdb(step = False)
     try:
-        mdb = set_up_mdb(step = False)
         start_run(mdb['86'], 1, client = c, offspring_size = 2, max_ngen = 2)
         # accessing simulation results of run
         keys = [int(k) for k in list(mdb['86']['1'].keys()) if utils.convertible_to_int(k)]
