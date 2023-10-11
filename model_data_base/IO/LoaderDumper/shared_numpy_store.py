@@ -268,12 +268,12 @@ class SharedNumpyStore:
             shared_mem_fname = fname + '__' + '{}_{}'.format(start_row, end_row) + '__' + self._suffix # the shared memory file known by the OS
             shared_mem_name = name + '__{}_{}'.format(start_row, end_row) # the key used in the internal dictionaries to refer to the shared memory
             try: # did another process put it into shared memory already?
-                self._shared_memory_buffers[shared_mem_name] = shared_array_from_shared_mem_name(shared_mem_fname, final_shape, dtype)         
+                self._shared_memory_buffers[shared_mem_name] = shared_array_from_shared_mem_name(shared_mem_name, final_shape, dtype)         
                 return self._shared_memory_buffers[shared_mem_name][1]
             except FileNotFoundError as e: # no
                 if allow_create_shm:
                     self._shared_memory_buffers[shared_mem_name] = shared_array_from_disk(full_path, shape, dtype, 
-                                                                               shared_mem_fname,
+                                                                               shared_mem_name,
                                                                                start_row = start_row, end_row = end_row)
                     return self._shared_memory_buffers[shared_mem_name][1]
                 else:
