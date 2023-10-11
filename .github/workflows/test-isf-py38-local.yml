@@ -26,8 +26,8 @@ jobs:
     steps:
       - name: Test in-silico-framework for Python 3.8
         run: |
-          pkill dask-scheduler
-          pkill dask-worker
+          pkill -U $USER dask-scheduler
+          pkill -U $USER dask-worker
           CONDA_TARGET_DIR="$HOME/anaconda_isf3.8"
           source $CONDA_TARGET_DIR/bin/activate
           echo "Using Python: $(which python)"

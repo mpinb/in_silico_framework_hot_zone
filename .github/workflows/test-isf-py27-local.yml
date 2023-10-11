@@ -31,8 +31,8 @@ jobs:
     steps:
       - name: Test ISF for Python 2.7
         run: |
-          pkill dask-worker
-          pkill dask-scheduler
+          pkill -U $USER dask-worker
+          pkill -U $USER dask-scheduler
           CONDA_TARGET_DIR="$HOME/anaconda_isf2.7"
           source $CONDA_TARGET_DIR/bin/activate
           echo "Using Python: $(which python)"
