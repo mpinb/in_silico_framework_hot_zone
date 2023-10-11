@@ -70,37 +70,15 @@ def pytest_configure(config):
     # Suppress logs from verbose modules so they don't show in stdout
     isf_logger_stream_handler.addFilter(ModuleFilter(suppress_modules_list))  # suppress logs from this module
     # redirect test ouput to log file with more verbose output
-    isf_logging_file_handler = logging.FileHandler(os.path.join(CURRENT_DIR, "test.log"))
+    if not os.path.exists(os.path.join(CURRENT_DIR, "logs")):
+        os.mkdir(os.path.join(CURRENT_DIR, "logs"))
+    isf_logging_file_handler = logging.FileHandler(os.path.join(CURRENT_DIR, "logs", "test.log"))
     isf_logging_file_handler.setLevel(logging.INFO)
     isf_logger.addHandler(isf_logging_file_handler)
 
     # --------------- Setup dask  -------------------
     
     dask_config = {
-        "logging": {  # redirect dask logging to file
-            "handlers": {
-                "file": {  
-                    "class": logging.handlers.RotatingFileHandler,
-                    "filename": "dask_output.log",
-                    "level": "INFO"
-                },
-                # only a file handler for testing, no console handler (for brevity in console output)
-                # "console": {
-                #     "class" : logging.StreamHandler,
-                #     "level": "INFO"
-                # }
-            },
-            "loggers": {
-                "distributed.worker": {
-                    "level": "INFO",
-                    "handlers": "file",
-                    },
-                "distributed.scheduler": {
-                    "level": "INFO",
-                    "handlers": "file",
-                    },
-                    },
-            },
         "worker":{  # set worker config
             "memory_target": 0.90,
             "memory_spill": False,

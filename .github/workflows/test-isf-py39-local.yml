@@ -3,11 +3,11 @@
 name: ISF Py 3.9
 # Controls when the workflow will run
 on:
-  # Allows you to run this workflow manually from the Actions tab
+  push:
+    branches: '*'
   workflow_dispatch:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-
   build:
     name: Build
     uses: ./.github/workflows/build-isf.yml
@@ -28,58 +28,43 @@ jobs:
     steps:
       - name: Test in-silico-framework for Python 3.9
         run: |
-          pkill dask-scheduler
-          pkill dask-worker
+          pkill -U $USER dask-scheduler
+          pkill -U $USER dask-worker
           CONDA_TARGET_DIR="$HOME/anaconda_isf3.9"
           source $CONDA_TARGET_DIR/bin/activate
           echo "Using Python: $(which python)"
           export PYTHONPATH=$(pwd):$HOME
           echo $PYTHONPATH
+
           name=${{ runner.name }}
           runner_number=$( echo $name | grep -Eo '[0-9]+$' )
           port_number=387${runner_number: -1}6
           bokeh_port=387${runner_number: -1}7
-
-          echo "Setting dask config with env variables"
-          export DASK_DISTRIBUTED__WORKER__MEMORY__TARGET=0.90
-          export DASK_DISTRIBUTED__WORKER__MEMORY__SPILL=False
-          export DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE=False
-          export DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE=False
-
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
-          echo "Memory target: $DASK_DISTRIBUTED__WORKER__MEMORY__TARGET"
-          echo "Memory spill: $DASK_DISTRIBUTED__WORKER__MEMORY__SPILL"
-          echo "Memory pause: $DASK_DISTRIBUTED__WORKER__MEMORY__PAUSE"
-          echo "Memory terminate: $DASK_DISTRIBUTED__WORKER__MEMORY__TERMINATE"
 
-          (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > dask_scheduler.txt)&
-          (dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 > dask_workers.txt)&
-          pytest -n 4 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/coverage_reports/report_py39.xml --cov=. --dask_server_port $port_number tests/
+          mkdir -p ./tests/logs/
+
+          (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1)&
+          (dask-worker localhost:$port_number --nthreads 1 --nprocs 6 --memory-limit=100e15 > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1)&
+          pytest -n 6 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py39.xml --cov=. --dask_server_port $port_number tests/
       - name: Cleanup dask orphan processes
         if: ${{ always() }}
         run: |
-          pkill dask-scheduler
-          pkill dask-worker
+          pkill -U $USER dask-scheduler
+          pkill -U $USER dask-worker
 
-      - uses: actions/upload-artifact@v3
+      - name: Save test logs as artifacts
+        uses: actions/upload-artifact@v3
         if: ${{ always() }} 
         with:
-          name: Dask scheduler output
-          path: |
-            - dask.log
-
-      - uses: actions/upload-artifact@v3
-        if: ${{ always() }} 
-        with:
-          name: Tests logging output
-          path: |
-            - $(pwd)/tests/test.log
+          name: ${{ github.run_id }}_logs
+          path: ./tests/logs/
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/coverage_reports/report_py39.xml
+          files: ./tests/logs/report_py39.xml
           verbose: true # optional (default = false)
       

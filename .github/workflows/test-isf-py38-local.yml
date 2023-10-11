@@ -41,37 +41,28 @@ jobs:
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
 
-          (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port >> dask_scheduler.txt 2>&1)&
-          (dask-worker localhost:$port_number --nthreads 1 --nprocs 4 --memory-limit=100e15 >> dask_workers.txt 2>&1)&
-          pytest -n 4 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/coverage_reports/report_py38.xml --cov=. --dask_server_port $port_number tests/
+          mkdir -p ./tests/logs/
+
+          (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1)&
+          (dask-worker localhost:$port_number --nthreads 1 --nprocs 6 --memory-limit=100e15 > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1)&
+          pytest -n 6 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port $port_number tests/
       - name: Cleanup dask orphan processes
         if: ${{ always() }}
         run: |
           pkill -U $USER dask-scheduler
           pkill -U $USER dask-worker
 
-      - uses: actions/upload-artifact@v3
-        name: Upload dask logs
+      - name: Save test logs as artifacts
+        uses: actions/upload-artifact@v3
         if: ${{ always() }} 
         with:
-          name: Dask output
-          path: |
-            - dask_output.log
-            - dask_workers.txt
-            - dask_scheduler.txt
-
-      - uses: actions/upload-artifact@v3
-        name: Upload test logs
-        if: ${{ always() }} 
-        with:
-          name: Tests logging output
-          path: |
-            - test.log
+          name: ${{ github.run_id }}_logs
+          path: ./tests/logs/
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/coverage_reports/report_py38.xml
+          files: ./tests/logs/report_py38.xml
           verbose: true # optional (default = false)
       
