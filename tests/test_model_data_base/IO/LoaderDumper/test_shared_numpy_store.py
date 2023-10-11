@@ -18,10 +18,16 @@ class TemporaryDirectory: # just for testing
 
     def __enter__(self):
         self.name = tempfile.mkdtemp(suffix=self.suffix, prefix=self.prefix, dir=self.dir)
+        self.shm_dir = tempfile.mkdtemp(suffix=self.suffix, prefix=self.prefix, dir='/dev/shm/')
+        os.environ['JOB_SHMTMPDIR'] = self.shm_dir
+
         return self.name
 
     def __exit__(self, exc_type, exc_value, traceback):
         shutil.rmtree(self.name)
+        shutil.rmtree(self.shm_dir)
+        del os.environ['JOB_SHMTMPDIR']
+        
 
 
 def interruptible_task():
@@ -45,12 +51,13 @@ def uninterruptible_task():
 
 @pytest.mark.skipif(six.PY2, reason="Unavailable on Py2. The multiprocessing module got `shared_memory` in Python 3.8")
 def test_shared_array_functions():
-    arr = np.array([1, 2, 3])
-    buffer, shared_array = shared_array_from_numpy(arr, name=None)
-    shm, shared_arr_from_name = shared_array_from_shared_mem_name(buffer.name, dtype=arr.dtype, shape=arr.shape)
-    assert np.array_equal(arr, shared_arr_from_name)    
-    shm.close()    
-    shm.unlink()        
+    with TemporaryDirectory() as tempdir: # needed to set up JOB_SHMTMPDIR
+        arr = np.array([1, 2, 3])
+        buffer, shared_array = shared_array_from_numpy(arr, name='test')
+        shm, shared_arr_from_name = shared_array_from_shared_mem_name(buffer.name, dtype=arr.dtype, shape=arr.shape)
+        assert np.array_equal(arr, shared_arr_from_name)    
+        shm.close()    
+        shm.unlink()        
     
 @pytest.mark.skipif(six.PY2, reason="Unavailable on Py2. The multiprocessing module got `shared_memory` in Python 3.8")
 def test_SharedNumpyStore():
@@ -58,7 +65,7 @@ def test_SharedNumpyStore():
     with TemporaryDirectory() as tempdir:
         nps = SharedNumpyStore(tempdir)
         nps.save(arr, 'testarray')
-        buffer = nps.load('testarray', load_from_disk = True)
+        shared_array = nps.load('testarray', allow_create_shm = True)
         assert np.array_equal(arr, shared_array)
         nps.close()
         
@@ -74,7 +81,7 @@ def test_append_save():
         nps.save(arr1, 'testarray')
         nps.append_save(arr2, 'testarray')
 
-        shared_array = nps.load('testarray', load_from_disk=True)
+        shared_array = nps.load('testarray', allow_create_shm=True)
 
         print("Expected combined array:")
         print(combined_arr)
@@ -97,7 +104,7 @@ def test_append_save_no_flush_leaves_array_unchanged():
         nps.save(arr1, 'testarray')
         nps.append_save(arr2, 'testarray', autoflush = False)
 
-        shared_array = nps.load('testarray', load_from_disk=True)
+        shared_array = nps.load('testarray', allow_create_shm=True)
 
         print("Expected combined array:")
         print(combined_arr)
@@ -138,7 +145,7 @@ def test_robustness():
             f.write(os.urandom(10))
 
         # Load the array and check if it still works correctly
-        shared_array = nps.load('testarray', load_from_disk=True)
+        shared_array = nps.load('testarray', allow_create_shm=True)
         assert np.array_equal(combined_arr, shared_array)
 
         nps.close()        

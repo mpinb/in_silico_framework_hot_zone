@@ -66,8 +66,7 @@ if six.PY3:
 
 
             self._name = name
-
-            name = SHMDIR + '/' + name # if self._prepend_leading_slash else name
+            self._path = name = SHMDIR + '/' + name # if self._prepend_leading_slash else name
             self._fd = _posixshmem.shm_open(
                 name,
                 self._flags,
@@ -151,7 +150,7 @@ if six.PY3:
             to the shared memory block."""
             # if _USE_POSIX and self._name:
                 #from .resource_tracker import unregister
-            _posixshmem.shm_unlink(self._name)
+            _posixshmem.shm_unlink(self._path)
                 #unregister(self._name, "shared_memory")  
 else:
     log.warning("multiprocessing.shared_memory can not be imported in Python 2 (available in >=Py3.8)")
@@ -188,7 +187,7 @@ def _check_filesize_matches_shape(path, shape, dtype):
     
 def shared_array_from_disk(path, shape = None, dtype = None, name = None, start_row = None, end_row = None):
     '''loads an array saved to disk and puts it into shared memory'''
-    _check_filesize_matches_shape(path, shape, dtype)
+    #_check_filesize_matches_shape(path, shape, dtype)
     start_row, end_row, bytes_offset, bytes_size, final_shape = _get_offset_and_size_in_bytes(start_row, end_row, shape, dtype)   
     shm = SharedMemory(create=True, size=bytes_size, name = name)
     shm_arr = np.ndarray(final_shape, dtype=dtype, buffer=shm.buf)    
