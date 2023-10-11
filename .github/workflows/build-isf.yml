@@ -28,39 +28,22 @@ jobs:
       uses: dorny/paths-filter@v2
       id: commit_changed
       with:
-        # compare with most recent commit on the same branch before the push
+        # compare with the commit on the runner
         base: ${{ github.ref }}
         filters: |
           all:
             - "installer/**"
             - "mechanisms/**"
             - ".github/workflows/**"
-
-    - name: test if build is needed
-      if: |
-        steps.commit_changed.outputs.all == "true" ||
-        test ! -d $HOME/anaconda_isf${{ inputs.py_version }} ||
-        $(head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt") != "success"
-      run: |
-        echo "Changes since last commit: ${{ steps.commit_changed.outputs.all }}"
-        echo "Previous build state: $(head -n 1 $HOME/build_success${{ inputs.py_version }}.txt)"
-        if [ -d "$HOME/anaconda_isf${{ inputs.py_version }}" ]; then
-          echo "Found existing installation in $HOME."
-        else
-          echo "No previous Anaconda installation found."
-        fi
-        echo "Previous version at: $(test -d $HOME/anaconda_isf${{ inputs.py_version }})"
-        echo "Build is needed"
-
     - name: Build ISF
       # (re)build only if:
-      # - the commit has changes in the directories specified above compared to whatever previous commit is on the runner
-      # - the build does not exist
+      # - the commit has changes in the directories specified in step "check changes with previous commit" (compared to whatever previous commit is on the runner)
+      # - the build does not exist (yet)
       # - the previous build was not succesful for whatever reason
       if: |
-          steps.commit_changed.outputs.all == "true" ||
-          test ! -d $HOME/anaconda_isf${{ inputs.py_version }} ||
-          $(head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt") != "success"
+        steps.commit_changed.outputs.all == "true" ||
+        ! test -d $HOME/anaconda_isf${{ inputs.py_version }} ||
+        ! head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt") | grep -Fxq success
       run: |
         echo "Changes since last commit: ${{ steps.commit_changed.outputs.all }}"
         echo "Previous build state: $(head -n 1 $HOME/build_success${{ inputs.py_version }}.txt)"
