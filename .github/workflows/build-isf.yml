@@ -32,7 +32,7 @@ jobs:
         base: ${{ github.ref }}
         filters: |
           all:
-            - "installer/**"
+            - "installer/py${{ inputs.py_version }}/**"
             - "mechanisms/**"
             - ".github/workflows/**"
     - name: Build ISF
