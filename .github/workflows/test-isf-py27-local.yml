@@ -33,9 +33,6 @@ jobs:
         run: |
           pkill dask-worker
           pkill dask-scheduler
-          echo $(which pytest)
-          echo $PYTHONPATH
-          echo $(pytest --help)
           CONDA_TARGET_DIR="$HOME/anaconda_isf2.7"
           source $CONDA_TARGET_DIR/bin/activate
           echo "Using Python: $(which python)"
@@ -65,5 +62,5 @@ jobs:
       - name: Cleanup dask orphan processes
         if: ${{ always() }}
         run: |
-          pkill dask-scheduler
-          pkill dask-worker
+          pkill -U $USER dask-scheduler
+          pkill -U $USER dask-worker

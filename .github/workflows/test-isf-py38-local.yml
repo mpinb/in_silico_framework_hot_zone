@@ -47,10 +47,11 @@ jobs:
       - name: Cleanup dask orphan processes
         if: ${{ always() }}
         run: |
-          pkill dask-scheduler
-          pkill dask-worker
+          pkill -U $USER dask-scheduler
+          pkill -U $USER dask-worker
 
       - uses: actions/upload-artifact@v3
+        name: Upload dask logs
         if: ${{ always() }} 
         with:
           name: Dask output
@@ -60,11 +61,12 @@ jobs:
             - dask_scheduler.txt
 
       - uses: actions/upload-artifact@v3
+        name: Upload test logs
         if: ${{ always() }} 
         with:
           name: Tests logging output
           path: |
-            - $(pwd)/tests/test.log
+            - test.log
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
