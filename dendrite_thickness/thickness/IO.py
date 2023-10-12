@@ -56,7 +56,7 @@ class Am:
         self.input_path = input_path
         self.output_path = output_path
         self.transformation_matrix_exist = False
-        self.transformation_matrix = np.matrix([[ 1.,  0.,  0.,  0.],
+        self.transformation_matrix = np.array([[ 1.,  0.,  0.,  0.],
                                                 [ 0.,  1.,  0.,  0.],
                                                 [ 0.,  0.,  1.,  0.],
                                                 [ 0.,  0.,  0.,  1.]])
