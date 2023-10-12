@@ -6,7 +6,7 @@ from biophysics_fitting.ephys import find_crossing, find_crossing_old
 
 def test_find_crossing_and_find_crossing_old_are_equivalent():
     for lv in range(100):
-        v = I.np.random.rand(1000)
+        v = np.random.rand(1000)
         result1 = find_crossing(v, 0.9)
         result2 = find_crossing_old(v, 0.9)
         np.testing.assert_array_equal(result1, result2)
