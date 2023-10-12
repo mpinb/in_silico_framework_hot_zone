@@ -2,7 +2,12 @@ import os
 import hashlib
 import numpy as np
 import logging
-log = logging.getLogger(__name__)
+log = logging.getLogger("ISF").getChild(__name__)
+import tempfile
+import shutil
+import compatibility
+import signal
+
 import tempfile
 import shutil
 import compatibility
