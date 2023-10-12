@@ -53,9 +53,11 @@ if six.PY3:
 
             if 'JOB_SHMTMPDIR' in os.environ:
                 SHMDIR = os.environ['JOB_SHMTMPDIR']
+                logging.log(500, SHMDIR)
+                
                 if not SHMDIR.startswith('/dev/shm'):
                     raise NotImplementedError()
-                SHMDIR = SHMDIR[8:]
+                SHMDIR = SHMDIR[9:]
             else:
                 raise RuntimeError('Shared memory not available. Set JOB_SHMTMPDIR environment variable')
 
@@ -67,8 +69,9 @@ if six.PY3:
 
             self._name = name
             self._path = name = SHMDIR + '/' + name # if self._prepend_leading_slash else name
+            logging.log(500, self._path)
             self._fd = _posixshmem.shm_open(
-                name,
+                self._path,
                 self._flags,
                 mode=self._mode
             )
