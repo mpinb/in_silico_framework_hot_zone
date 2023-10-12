@@ -45,15 +45,15 @@ jobs:
         ! test -d $HOME/anaconda_isf${{ inputs.py_version }} ||
         ! head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt") | grep -Fxq success
       run: |
-        if [[ ${{ steps.commit_changed.outputs.all }} == "true" ]]; then
+        if [ ${{ steps.commit_changed.outputs.all }} == "true" ]; then
           echo "Previous commit has changes in the folders installer/py${{ inputs.py_version }}"
           echo "Rebuild necessary!"
         fi
-        if [[ ! test -d $HOME/anaconda_isf${{ inputs.py_version }} ]]; then
+        if [ ! -d $HOME/anaconda_isf${{ inputs.py_version }} ]; then
           echo "Build does not exist yet"
           echo "New build necessary!"
         fi
-        if [[ ! head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt" | grep -Fxq success ]]; then
+        if ! $(head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt" | grep -Fxq success) ; then
           echo "Previous build was not succesful"
           echo "Rebuild necessary!"
         fi
