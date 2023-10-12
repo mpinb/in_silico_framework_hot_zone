@@ -45,8 +45,19 @@ jobs:
         ! test -d $HOME/anaconda_isf${{ inputs.py_version }} ||
         ! head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt") | grep -Fxq success
       run: |
-        echo "Changes since last commit: ${{ steps.commit_changed.outputs.all }}"
-        echo "Previous build state: $(head -n 1 $HOME/build_success${{ inputs.py_version }}.txt)"
+        if [ ${{ steps.commit_changed.outputs.all }} == "true" ]; then
+          echo "Previous commit has changes in the folders installer/py${{ inputs.py_version }}"
+          echo "Rebuild necessary!"
+        fi
+        if [ ! test -d $HOME/anaconda_isf${{ inputs.py_version }} ]; then
+          echo "Build does not exist yet"
+          echo "New build necessary!"
+        fi
+        if [ ! head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt" | grep -Fxq success ]; then
+          echo "Previous build was not succesful"
+          echo "Rebuild necessary!"
+        fi
+        
         CONDA_TARGET_DIR="$HOME/anaconda_isf${{ inputs.py_version }}"
         if [ -d "$CONDA_TARGET_DIR" ]; then
           echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
