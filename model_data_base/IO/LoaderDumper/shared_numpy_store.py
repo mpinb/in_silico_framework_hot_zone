@@ -8,6 +8,11 @@ import shutil
 import compatibility
 import signal
 
+import tempfile
+import shutil
+import compatibility
+import signal
+
 import six
 if six.PY3:
     import _posixshmem
@@ -49,13 +54,16 @@ if six.PY3:
 
         def __init__(self, name=None, create=False, size=0, track_resource = False):
             assert(name is not None)
-            assert(name[0] != '/')
+            if not name[0] == '/':
+                name = '/' + name
 
             if 'JOB_SHMTMPDIR' in os.environ:
                 SHMDIR = os.environ['JOB_SHMTMPDIR']
+                logging.log(500, SHMDIR)
+                
                 if not SHMDIR.startswith('/dev/shm'):
                     raise NotImplementedError()
-                SHMDIR = SHMDIR[8:]
+                SHMDIR = SHMDIR[9:]
             else:
                 raise RuntimeError('Shared memory not available. Set JOB_SHMTMPDIR environment variable')
 
@@ -68,7 +76,7 @@ if six.PY3:
             self._name = name
             self._path = name = SHMDIR + '/' + name # if self._prepend_leading_slash else name
             self._fd = _posixshmem.shm_open(
-                name,
+                self._name,
                 self._flags,
                 mode=self._mode
             )
