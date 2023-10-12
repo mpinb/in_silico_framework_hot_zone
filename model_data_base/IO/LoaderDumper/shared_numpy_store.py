@@ -3,22 +3,165 @@ import hashlib
 import numpy as np
 import logging
 log = logging.getLogger("ISF").getChild(__name__)
-import six
-if six.PY3:
-    from multiprocessing import shared_memory
-else:
-    log.warning("multiprocessing.shared_memory can not be imported in Python 2 (available in >=Py3.8)")
-#from . import shared_memory_bugfixed as shared_memory
 import tempfile
 import shutil
 import compatibility
 import signal
-import blosc
+
+import six
+if six.PY3:
+    import _posixshmem
+    import mmap
+    _O_CREX = os.O_CREAT | os.O_EXCL
+    _USE_POSIX = True
+    class SharedMemory:
+        """
+        Modified from multiprocessing/shared_memory.py
+        - is by  created in the shared memory SLURM directory specified in the JOB_SHMTMPDIR environment variable    
+        - Adresses bug in https://bugs.python.org/issue39959 by not registering the shared memory object
+        - Only supports named shared memory
+        - and cleanup is left to slurm
+        Only supports POSIX, not windows.
+
+        Creates a new shared memory block or attaches to an existing
+        shared memory block.
+
+        Every shared memory block is assigned a unique name.  This enables
+        one process to create a shared memory block with a particular name
+        so that a different process can attach to that same shared memory
+        block using that same name.
+
+        As a resource for sharing data across processes, shared memory blocks
+        may outlive the original process that created them.  When one process
+        no longer needs access to a shared memory block that might still be
+        needed by other processes, the close() method should be called.
+        When a shared memory block is no longer needed by any process, the
+        unlink() method should be called to ensure proper cleanup."""
+
+        # Defaults; enables close() and unlink() to run without errors.
+        _name = None
+        _fd = -1
+        _mmap = None
+        _buf = None
+        _flags = os.O_RDWR
+        _mode = 0o600
+        _prepend_leading_slash = True # if _USE_POSIX else False
+
+        def __init__(self, name=None, create=False, size=0, track_resource = False):
+            assert(name is not None)
+            assert(name[0] != '/')
+
+            if 'JOB_SHMTMPDIR' in os.environ:
+                SHMDIR = os.environ['JOB_SHMTMPDIR']
+                if not SHMDIR.startswith('/dev/shm'):
+                    raise NotImplementedError()
+                SHMDIR = SHMDIR[8:]
+            else:
+                raise RuntimeError('Shared memory not available. Set JOB_SHMTMPDIR environment variable')
+
+            if not size >= 0:
+                raise ValueError("'size' must be a positive integer")
+            if create:
+                self._flags = _O_CREX | os.O_RDWR
+
+
+            self._name = name
+            self._path = name = SHMDIR + '/' + name # if self._prepend_leading_slash else name
+            self._fd = _posixshmem.shm_open(
+                name,
+                self._flags,
+                mode=self._mode
+            )
+            try:
+                if create and size:
+                    os.ftruncate(self._fd, size)
+                stats = os.fstat(self._fd)
+                size = stats.st_size
+                self._mmap = mmap.mmap(self._fd, size)
+            except OSError:
+                self.unlink()
+                raise
+
+            if track_resource:
+                raise NotImplementedError()
+            # from .resource_tracker import register
+            # if create:
+            #     register(self._name, "shared_memory")
+
+            self._size = size
+            self._buf = memoryview(self._mmap)
+
+        def __del__(self):
+            try:
+                self.close()
+            except OSError:
+                pass
+
+        def __reduce__(self):
+            return (
+                self.__class__,
+                (
+                    self.name,
+                    False,
+                    self.size,
+                ),
+            )
+
+        def __repr__(self):
+            return f'{self.__class__.__name__}({self.name!r}, size={self.size})'
+
+        @property
+        def buf(self):
+            "A memoryview of contents of the shared memory block."
+            return self._buf
+
+        @property
+        def name(self):
+            "Unique name that identifies the shared memory block."
+            reported_name = self._name
+            if _USE_POSIX and self._prepend_leading_slash:
+                if self._name.startswith("/"):
+                    reported_name = self._name[1:]
+            return reported_name
+
+        @property
+        def size(self):
+            "Size in bytes."
+            return self._size
+
+        def close(self):
+            """Closes access to the shared memory from this instance but does
+            not destroy the shared memory block."""
+            if self._buf is not None:
+                self._buf.release()
+                self._buf = None
+            if self._mmap is not None:
+                self._mmap.close()
+                self._mmap = None
+            if _USE_POSIX and self._fd >= 0:
+                os.close(self._fd)
+                self._fd = -1
+
+        def unlink(self):
+            """Requests that the underlying shared memory block be destroyed.
+
+            In order to ensure proper cleanup of resources, unlink should be
+            called once (and only once) across all processes which have access
+            to the shared memory block."""
+            # if _USE_POSIX and self._name:
+                #from .resource_tracker import unregister
+            _posixshmem.shm_unlink(self._path)
+                #unregister(self._name, "shared_memory")  
+else:
+    log.warning("multiprocessing.shared_memory can not be imported in Python 2 (available in >=Py3.8)")
+#from . import shared_memory_bugfixed as shared_memory
+
+
 
     
 def shared_array_from_numpy(arr, name = None):
     '''takes an array in memory and puts it into shared memory'''    
-    shm = shared_memory.SharedMemory(create=True, size=arr.nbytes, name = name)
+    shm = SharedMemory(create=True, size=arr.nbytes, name = name)
     shm_arr = np.ndarray(arr.shape, dtype=arr.dtype, buffer=shm.buf)
     np.copyto(shm_arr, arr)
     return shm, shm_arr
@@ -44,9 +187,9 @@ def _check_filesize_matches_shape(path, shape, dtype):
     
 def shared_array_from_disk(path, shape = None, dtype = None, name = None, start_row = None, end_row = None):
     '''loads an array saved to disk and puts it into shared memory'''
-    _check_filesize_matches_shape(path, shape, dtype)
+    #_check_filesize_matches_shape(path, shape, dtype)
     start_row, end_row, bytes_offset, bytes_size, final_shape = _get_offset_and_size_in_bytes(start_row, end_row, shape, dtype)   
-    shm = shared_memory.SharedMemory(create=True, size=bytes_size, name = name)
+    shm = SharedMemory(create=True, size=bytes_size, name = name)
     shm_arr = np.ndarray(final_shape, dtype=dtype, buffer=shm.buf)    
     with open(path, 'rb') as f:
         f.seek(bytes_offset)
@@ -72,7 +215,7 @@ def memmap_from_disk(path, shape = None, dtype = None, name = None, start_row = 
 
 def shared_array_from_shared_mem_name(fname, shape = None, dtype = None):
     '''loads an already shared array by its name'''
-    shm = shared_memory.SharedMemory(name=fname)
+    shm = SharedMemory(name=fname)
     shm_arr = np.ndarray(shape, dtype, buffer=shm.buf)
     return shm, shm_arr
 
@@ -87,8 +230,12 @@ class Uninterruptible:
     def __exit__(self, exc_type, exc_value, traceback):
         signal.signal(signal.SIGINT, self.original_sigint_handler)
         signal.signal(signal.SIGTERM, self.original_sigterm_handler)
-
+        
+###############################################
+# SharedNumpyStore objects are added to this list. Without it, the kernel dies if the shared memory object moves out of scope
+# TODO: find a better way to handle this
 sns_list = []
+#################################################
 
 class SharedNumpyStore:
     def __init__(self, working_dir):
@@ -236,7 +383,10 @@ class SharedNumpyStore:
         if autoflush:
             self.flush()
     
-    
+    def _update_name_to_account_for_start_row_end_row(self, name, start_row = None, end_row = None):
+        return name
+        # return name + '{}_{}'.format(start_row, end_row)
+        
     def load(self, name, mode = 'shared_memory', start_row = None, end_row = None, allow_create_shm = False):
         '''Load array.
             mode: memmap: memory map the file and return a numpy memmap object.
@@ -252,8 +402,12 @@ class SharedNumpyStore:
             Note: in shared_memory mode, for each call with different start_row or end_row parameters, a new independent 
                 file is created.
             '''
+        
+            
         fname, shape, dtype = self._get_metadata_from_name(name) 
-        start_row, end_row, bytes_offset, bytes_size, final_shape = _get_offset_and_size_in_bytes(start_row, end_row, shape, dtype)   
+        start_row, end_row, bytes_offset, bytes_size, final_shape = _get_offset_and_size_in_bytes(start_row, end_row, shape, dtype) 
+        
+        
         full_path = os.path.join(self.working_dir, fname)                      
         if mode == 'memmap':
             return np.memmap(full_path, dtype=np.dtype(dtype), mode='r', offset=bytes_offset, shape=final_shape, order='C')
@@ -282,6 +436,9 @@ class SharedNumpyStore:
             raise ValueError('mode must be')
             
             
+###############################
+# model data base stuff
+###############################
 
 from . import parent_classes
 
