@@ -28,14 +28,23 @@ jobs:
     steps:
       - name: Test in-silico-framework for Python 3.9
         run: |
-          pkill -U $USER dask-scheduler
+          echo "------------ Preliminary setup for tests -------------"
+          echo "Killing all dask processes on ${{ runner.name }} for user $USER (if they exist)"
           pkill -U $USER dask-worker
+          pkill -U $USER dask-scheduler
+          echo "Creating tests/logs/ directory..."
+          mkdir -p ./tests/logs/
+          echo "Removing previous coverage files..."
+          rm .coverage.${{ runner.name }}.*
+
+          echo "------------ Setting up environment -------------"
           CONDA_TARGET_DIR="$HOME/anaconda_isf3.9"
           source $CONDA_TARGET_DIR/bin/activate
           echo "Using Python: $(which python)"
           export PYTHONPATH=$(pwd):$HOME
           echo $PYTHONPATH
 
+          echo "------------ Configuring Dask -------------"
           name=${{ runner.name }}
           runner_number=$( echo $name | grep -Eo '[0-9]+$' )
           port_number=387${runner_number: -1}6
@@ -43,8 +52,7 @@ jobs:
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
 
-          mkdir -p ./tests/logs/
-
+          echo "------------ Running tests -------------"
           (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1)&
           (dask-worker localhost:$port_number --nthreads 1 --nprocs 6 --memory-limit=100e15 > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1)&
           pytest -n 6 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py39.xml --cov=. --dask_server_port $port_number tests/
