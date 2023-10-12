@@ -264,7 +264,7 @@ class Hoc:
                         thickness = thicknesses[in_neuron_line_number]
                         hoc_point = hoc_points[in_neuron_line_number]
                         line = line.replace("pt3dadd", "")
-                        matches = re.findall('-?\d+\.\d?\d+|\-?\d+', line)
+                        matches = re.findall(r'-?\d+\.\d?\d+|\-?\d+', line)
                         point = list(map(float, matches))
 
                         writeHocFile.write('{{pt3dadd({:f},{:f},{:f},{:f})}}\n'.format(hoc_point[0],
@@ -301,7 +301,7 @@ def read_numbers_in_line(line):
     3.437120056152344e+02 6.554999947547913e-01
 
     """
-    matches = re.findall('-?\d+\.\d+[e]?[+-]?\d+|\-?\d+[e]?', line)
+    matches = re.findall(r'-?\d+\.\d+[e]?[+-]?\d+|\-?\d+[e]?', line)
     if not matches:
         raise RuntimeError(
             "Expected number in line {} but did not set_transformation_matrix_by_aligned_points any".format(line))
