@@ -18,14 +18,16 @@ class TemporaryDirectory: # just for testing
 
     def __enter__(self):
         self.name = tempfile.mkdtemp(suffix=self.suffix, prefix=self.prefix, dir=self.dir)
-        self.shm_dir = tempfile.mkdtemp(suffix=self.suffix, prefix=self.prefix, dir='/dev/shm/')
-        os.environ['JOB_SHMTMPDIR'] = self.shm_dir
+        self.shm_fname = tempfile.mktemp(suffix=self.suffix, prefix=self.prefix, dir='/dev/shm/')[8:]
+        print(1, self.shm_fname)
+        os.environ['JOB_SHMTMPDIR'] = '/dev/shm' # Ubuntu does not support shm with subfolders
 
-        return self.name
+        return self# .name
 
     def __exit__(self, exc_type, exc_value, traceback):
         shutil.rmtree(self.name)
-        shutil.rmtree(self.shm_dir)
+        if os.path.exists(os.path.join('/dev/shm', self.shm_fname)):
+            os.remove(os.path.join('/dev/shm', self.shm_fname))
         del os.environ['JOB_SHMTMPDIR']
         
 
@@ -53,7 +55,7 @@ def uninterruptible_task():
 def test_shared_array_functions():
     with TemporaryDirectory() as tempdir: # needed to set up JOB_SHMTMPDIR
         arr = np.array([1, 2, 3])
-        buffer, shared_array = shared_array_from_numpy(arr, name='test')
+        buffer, shared_array = shared_array_from_numpy(arr, name=tempdir.shm_fname)
         shm, shared_arr_from_name = shared_array_from_shared_mem_name(buffer.name, dtype=arr.dtype, shape=arr.shape)
         assert np.array_equal(arr, shared_arr_from_name)    
         shm.close()    
@@ -63,7 +65,7 @@ def test_shared_array_functions():
 def test_SharedNumpyStore():
     arr = np.array([1, 2, 3])
     with TemporaryDirectory() as tempdir:
-        nps = SharedNumpyStore(tempdir)
+        nps = SharedNumpyStore(tempdir.name)
         nps.save(arr, 'testarray')
         shared_array = nps.load('testarray', allow_create_shm = True)
         assert np.array_equal(arr, shared_array)
@@ -76,7 +78,7 @@ def test_append_save():
     combined_arr = np.concatenate((arr1, arr2), axis=0)
 
     with TemporaryDirectory() as tempdir:
-        nps = SharedNumpyStore(tempdir)
+        nps = SharedNumpyStore(tempdir.name)
 
         nps.save(arr1, 'testarray')
         nps.append_save(arr2, 'testarray')
@@ -99,7 +101,7 @@ def test_append_save_no_flush_leaves_array_unchanged():
     combined_arr = np.concatenate((arr1, arr2), axis=0)
 
     with TemporaryDirectory() as tempdir:
-        nps = SharedNumpyStore(tempdir)
+        nps = SharedNumpyStore(tempdir.name)
 
         nps.save(arr1, 'testarray')
         nps.append_save(arr2, 'testarray', autoflush = False)
@@ -122,14 +124,14 @@ def test_robustness():
     combined_arr = np.vstack((arr1, arr2))
 
     with TemporaryDirectory() as tempdir:
-        nps = SharedNumpyStore(tempdir)
+        nps = SharedNumpyStore(tempdir.name)
 
         # Save and append arrays
         nps.save(arr1, 'testarray')
         
         # Append 10 random bytes at the end of the file
         fname, shape, dtype = nps._get_metadata_from_fname(nps._files['testarray'])
-        file_path = os.path.join(tempdir, fname)
+        file_path = os.path.join(tempdir.name, fname)
         print(file_path)            
         with open(file_path, 'ab') as f:
             f.write(os.urandom(10))
@@ -139,7 +141,7 @@ def test_robustness():
 
         # Append 10 random bytes at the end of the file
         fname, shape, dtype = nps._get_metadata_from_fname(nps._files['testarray'])
-        file_path = os.path.join(tempdir, fname)
+        file_path = os.path.join(tempdir.name, fname)
         print(file_path)
         with open(file_path, 'ab') as f:
             f.write(os.urandom(10))
