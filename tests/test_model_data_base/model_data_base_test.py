@@ -231,7 +231,7 @@ def test_compare_old_mdb_with_freshly_initialized_one(client):
                             readonly = True, \
                             nocreate = True)
     #old_mdb['reduced_model']
-    with FreshlyInitializedMdb(client) as fresh_mdb:
+    with FreshlyInitializedMdb(client=client) as fresh_mdb:
         assert_frame_equal(fresh_mdb['voltage_traces'].compute(), \
                             old_mdb['voltage_traces'].compute())
         assert_frame_equal(fresh_mdb['synapse_activation'].compute(), \
