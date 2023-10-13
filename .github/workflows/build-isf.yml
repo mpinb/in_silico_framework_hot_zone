@@ -35,29 +35,40 @@ jobs:
             - "installer/py${{ inputs.py_version }}/**"
             - "mechanisms/**"
             - ".github/workflows/**"
-    - name: Build ISF
+
+    - name: Check if (re)build is necessary
       # (re)build only if:
       # - the commit has changes in the directories specified in step "check changes with previous commit" (compared to whatever previous commit is on the runner)
       # - the build does not exist (yet)
       # - the previous build was not succesful for whatever reason
-      if: |
-        steps.commit_changed.outputs.all == "true" ||
-        ! test -d $HOME/anaconda_isf${{ inputs.py_version }} ||
-        ! head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt") | grep -Fxq success
       run: |
         if [ ${{ steps.commit_changed.outputs.all }} == "true" ]; then
-          echo "Previous commit has changes in the folders installer/py${{ inputs.py_version }}"
+          echo "Previous commit has changes that require a rebuild"
+          echo "Changes: "
+          echo "${{ steps.commit_changed.outputs.changes }}"
           echo "Rebuild necessary!"
+        else
+          echo "Previous commit has no changes that require a rebuild."
         fi
         if [ ! -d $HOME/anaconda_isf${{ inputs.py_version }} ]; then
           echo "Build does not exist yet"
           echo "New build necessary!"
+        else
+          echo "Build already exists in $HOME/anaconda_isf${{ inputs.py_version }}"
         fi
         if ! $(head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt" | grep -Fxq success) ; then
           echo "Previous build was not succesful"
           echo "Rebuild necessary!"
+        else
+          echo "Previous build was succesful"
         fi
-        
+
+    - name: Build ISF
+      if: |
+        steps.commit_changed.outputs.all == "true" ||
+        ! test -d $HOME/anaconda_isf${{ inputs.py_version }} ||
+        ! head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt" | grep -Fxq success
+      run: |
         CONDA_TARGET_DIR="$HOME/anaconda_isf${{ inputs.py_version }}"
         if [ -d "$CONDA_TARGET_DIR" ]; then
           echo "Found existing installation in $HOME. Removing previous Anaconda installation..."
