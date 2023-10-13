@@ -58,7 +58,7 @@ jobs:
           echo "Build does not exist yet"
           echo "New build necessary!"
           echo "needs_build=true" >> $GITHUB_OUTPUT
-        elif [ ! $(head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt" | grep -Fxq success) ] ; then
+        elif ! $(head -n 1 "$HOME/build_success${{ inputs.py_version }}.txt" | grep -Fxq success) ; then
           echo "Previous build was not succesful"
           echo "Rebuild necessary!"
           echo "needs_build=true" >> $GITHUB_OUTPUT
