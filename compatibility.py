@@ -41,6 +41,11 @@ if six.PY2:
     def uncloudpickle_fun(file_path):
         with open(file_path, 'rb') as f:
             return cloudpickle.load(f)
+                
+    def pandas_unpickle_fun(file_path):
+        import pandas.compat.pickle_compat #import Unpickler
+        with open(file_path, 'rb') as f:
+            return pandas.compat.pickle_compat.load(f)
         
     YamlLoader = yaml.Loader
 
