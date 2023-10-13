@@ -1,6 +1,7 @@
 import dask.dataframe
 import pandas as pd
 import pytest
+import six
 from pandas.util.testing import assert_frame_equal
   
 # functions for generating a dask dataframe
