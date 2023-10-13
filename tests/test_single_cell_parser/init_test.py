@@ -5,6 +5,7 @@ from model_data_base.utils import fancy_dict_compare
 import os
 import pytest
 from .context import *
+import numpy as np
 
 
 class TestSingleCellParserInit: 
@@ -37,7 +38,7 @@ class TestSingleCellParserInit:
         neuron_param.neuron['cell_modify_functions'] = scp.NTParameterSet({'scale_apical': {'scale': 10}})
         cell = scp.create_cell(neuron_param.neuron)
         diam_scaled = next(s for s in cell.sections if s.label == 'ApicalDendrite').diam
-        assert pytest.approx(diam_unscaled * 10) == pytest.approx(diam_scaled)
+        assert np.abs(diam_unscaled*10 - diam_scaled) < 1e-4
              
         
         
