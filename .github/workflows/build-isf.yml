@@ -31,7 +31,7 @@ jobs:
         # compare with the commit on the runner
         base: ${{ github.ref }}
         filters: |
-          all:
+          folders_needing_rebuild:
             - "installer/py${{ inputs.py_version }}/**"
             - "mechanisms/**"
             - ".github/workflows/**"
@@ -42,10 +42,10 @@ jobs:
       # - the build does not exist (yet)
       # - the previous build was not succesful for whatever reason
       run: |
-        if [ ${{ steps.commit_changed.outputs.all }} == "true" ]; then
-          echo "Previous commit has changes that require a rebuild"
+        if [ ${{ steps.commit_changed.outputs.folders_needing_rebuild }} == "true" ]; then
+          echo "Previous commit has ${{ steps.commit_changed.outputs.folders_needing_rebuild }} changes that require a rebuild"
           echo "Changes: "
-          echo "${{ steps.commit_changed.outputs.changes }}"
+          echo "${{ steps.commit_changed.outputs.folders_needing_rebuild }}"
           echo "Rebuild necessary!"
         else
           echo "Previous commit has no changes that require a rebuild."
