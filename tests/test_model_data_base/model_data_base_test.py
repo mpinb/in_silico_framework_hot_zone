@@ -5,9 +5,12 @@ import model_data_base.IO.LoaderDumper.to_pickle  as to_pickle
 from . import decorators
 import pytest, os, shutil, six, tempfile, warnings, subprocess
 import numpy as np
+from getting_started import parent as getting_started_parent
 from tests.test_model_data_base.context import FreshlyInitializedMdb
 import pandas
 from pandas.util.testing import assert_frame_equal
+from model_data_base.mdb_initializers.load_simrun_general import init
+from model_data_base.utils import silence_stdout
 from model_data_base import IO
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -227,23 +230,34 @@ def test_compare_old_mdb_with_freshly_initialized_one(client):
                             'test_model_data_base', \
                             'data',\
                             'already_initialized_mdb_for_compatibility_testing')
-    old_mdb = ModelDataBase(old_path, \
-                            readonly = True, \
-                            nocreate = True)
+    old_mdb = ModelDataBase(old_path, readonly = True, nocreate = True)
+
+    # Manually create mdb
+    path = tempfile.mkdtemp()
+    fresh_mdb = ModelDataBase(path)    
+    test_data_folder = os.path.join(getting_started_parent, 'example_simulation_data')
+    with silence_stdout:
+        init(fresh_mdb, test_data_folder, client=client, 
+                rewrite_in_optimized_format=False, 
+                parameterfiles=False,
+                dendritic_voltage_traces=False)
+
     #old_mdb['reduced_model']
-    with FreshlyInitializedMdb(client=client) as fresh_mdb:
-        assert_frame_equal(fresh_mdb['voltage_traces'].compute(), \
-                            old_mdb['voltage_traces'].compute())
-        assert_frame_equal(fresh_mdb['synapse_activation'].compute(), \
-                            old_mdb['synapse_activation'].compute())
-        assert_frame_equal(fresh_mdb['cell_activation'].compute(), \
-                            old_mdb['cell_activation'].compute())
-        assert_frame_equal(fresh_mdb['metadata'], \
-                            old_mdb['metadata'])
+    assert_frame_equal(fresh_mdb['voltage_traces'].compute().sort_index(axis=1), \
+                        old_mdb['voltage_traces'].compute().sort_index(axis=1))
+    assert_frame_equal(fresh_mdb['synapse_activation'].compute().sort_index(axis=1), \
+                        old_mdb['synapse_activation'].compute().sort_index(axis=1))
+    assert_frame_equal(fresh_mdb['cell_activation'].compute().sort_index(axis=1), \
+                        old_mdb['cell_activation'].compute().sort_index(axis=1))
+    assert_frame_equal(fresh_mdb['metadata'].sort_index(axis=1), \
+                        old_mdb['metadata'].sort_index(axis=1))
+
+    # cleanup
+    shutil.rmtree(path)
         
     # reduced model can be loaded - commented out by Rieke during python 2to3 transition
-#         Rm = old_mdb['reduced_lda_model']
-#         Rm.plot() # to make sure, this can be called
+    #     Rm = old_mdb['reduced_lda_model']
+    #     Rm.plot() # to make sure, this can be called
                     
 def test_check_if_key_exists_can_handle_str_and_tuple_keys(empty_mdb):
     empty_mdb['a'] = 1

@@ -26,7 +26,7 @@ class FreshlyInitializedMdb(object):
     It is recommended to use the pytest fixture fresh_mdb instead of this class, except when the location of the mdb is of importance. This is the case in tests:
     - tests/test_model_data_base/Model_data_base_test.py::test_compare_old_mdb_with_freshly_initialized_one
     '''
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.path = None
         self.mdb = None
 
