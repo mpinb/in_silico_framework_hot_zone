@@ -47,7 +47,7 @@ jobs:
       id: needs_build
       run: |
         echo "needs_build=false" >> $GITHUB_OUTPUT
-        if [ ${{ steps.commit_changed.outputs.trigger_rebuild == 'true' }} ]; then
+        if [ ${{ steps.commit_changed.outputs.trigger_rebuild }} == 'true' ]; then
           echo "Previous commit has ${{ steps.commit_changed.outputs.trigger_rebuild_count }} changes that require a rebuild"
           echo "Changes: "
           echo ${{ steps.commit_changed.outputs.trigger_rebuild_files }}
