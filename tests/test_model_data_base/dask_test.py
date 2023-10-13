@@ -14,7 +14,7 @@ def get_ddf():
     return dask.dataframe.from_delayed(delayed_list)
 
 @pytest.mark.skipif(six.PY2, reason="Skip to see why Py2 errors - TEMPORARY, pls fix")
-def test_join_operation_of_dask(client):
+def test_join_operation_of_dask():
     '''Tests the join operation of dask. Should be ok if dask >= 0.10.2
     Compare https://stackoverflow.com/questions/38416836/result-of-join-in-dask-dataframes-seems-to-depend-on-the-way-the-dask-datafram'''
     #generate dask dataframes, that will be joined
@@ -22,12 +22,12 @@ def test_join_operation_of_dask(client):
     ddf2 = dask.dataframe.from_pandas(pd.DataFrame({'B': [1,2,3]}, index = ['A0', 'B1', 'C3']), npartitions = 2)
         
     #recreate ddf1 by converting it to a pandas dataframe and afterwards to a dask dataframe
-    ddf1_from_pandas = dask.dataframe.from_pandas(client.compute(ddf1), npartitions = 3)
+    ddf1_from_pandas = dask.dataframe.from_pandas(ddf1.compute(), npartitions = 3)
         
     #compute joins
     dask_from_delayed_join = ddf1.join(ddf2, how = 'inner')
-    pandas_join = client.compute(ddf1).join(client.compute(ddf2), how = 'inner')
+    pandas_join = ddf1.compute().join(ddf2.compute(), how = 'inner')
     dask_from_pandas_join = ddf1_from_pandas.join(ddf2, how = 'inner')
     
-    assert_frame_equal(pandas_join, client.compute(dask_from_delayed_join))  
-    assert_frame_equal(pandas_join, client.compute(dask_from_pandas_join))
+    assert_frame_equal(pandas_join, dask_from_delayed_join.compute())  
+    assert_frame_equal(pandas_join, dask_from_pandas_join.compute())
