@@ -221,7 +221,7 @@ def test_accessing_non_existent_key_raises_KeyError(empty_mdb):
         empty_mdb['some_nonexistent_key']
 
 @pytest.mark.skipif(six.PY3, reason="Old mdb only readable in Py2. Py3 does not have pandas.indexes. It has been moved to pandas.core.indexes.")
-def test_compare_old_mdb_with_freshly_initialized_one(fresh_mdb):
+def test_compare_old_mdb_with_freshly_initialized_one(client):
     '''ensure compatibility with old versions'''        
     old_path = os.path.join(parent, \
                             'test_model_data_base', \
@@ -231,7 +231,7 @@ def test_compare_old_mdb_with_freshly_initialized_one(fresh_mdb):
                             readonly = True, \
                             nocreate = True)
     #old_mdb['reduced_model']
-    with FreshlyInitializedMdb() as fresh_mdb:
+    with FreshlyInitializedMdb(client) as fresh_mdb:
         assert_frame_equal(fresh_mdb['voltage_traces'].compute(), \
                             old_mdb['voltage_traces'].compute())
         assert_frame_equal(fresh_mdb['synapse_activation'].compute(), \
