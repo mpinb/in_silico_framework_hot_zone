@@ -5,7 +5,7 @@ import model_data_base.IO.LoaderDumper.to_pickle  as to_pickle
 from . import decorators
 import pytest, os, shutil, six, tempfile, warnings, subprocess
 import numpy as np
-from context import FreshlyInitializedMdb
+from tests.test_model_data_base.context import FreshlyInitializedMdb
 import pandas
 from pandas.util.testing import assert_frame_equal
 from model_data_base import IO
