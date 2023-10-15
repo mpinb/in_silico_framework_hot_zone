@@ -116,7 +116,7 @@ if six.PY3:
             )
 
         def __repr__(self):
-            return f'{self.__class__.__name__}({self.name!r}, size={self.size})'
+            return '{class_name}({name!r}, size={size})'.format(class_name=self.__class__.__name__, name=self.name, size=self.size)
 
         @property
         def buf(self):

@@ -22,9 +22,15 @@ test_data_folder = os.path.join(getting_started.parent, \
 class FreshlyInitializedMdb(object):
     '''context manager that provides a freshly initalized mdb for 
     testing purposes
-    
-    DEPRECATED: use the fixture fresh_mdb instead, defined in conftest.py'''
-    def __enter__(self, client):
+
+    It is recommended to use the pytest fixture fresh_mdb instead of this class, except when the location of the mdb is of importance. This is the case in tests:
+    - tests/test_model_data_base/Model_data_base_test.py::test_compare_old_mdb_with_freshly_initialized_one
+    '''
+    def __init__(self, *args, **kwargs):
+        self.path = None
+        self.mdb = None
+
+    def __call__(self, client):
         self.path = tempfile.mkdtemp()
         self.mdb = model_data_base.ModelDataBase(self.path)
         #self.mdb.settings.show_computation_progress = False
@@ -35,7 +41,8 @@ class FreshlyInitializedMdb(object):
                  rewrite_in_optimized_format=False, 
                  parameterfiles=False,
                  dendritic_voltage_traces=False)
-       
+
+    def __enter__(self):
         return self.mdb
     
     def __exit__(self, *args, **kwargs):
