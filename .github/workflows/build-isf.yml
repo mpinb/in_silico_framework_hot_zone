@@ -72,7 +72,7 @@ jobs:
     # This will only run if the build is actually necessary
     # Which is tested for in jobs.setup
     name: (re)build ISF
-    runs-on: [ self-hosted, ibs3005 , "py${{ inputs.py_version }}" ]
+    runs-on: ${{ needs.setup.outputs.runner_name }}
     defaults:
       run:
         shell: bash -l {0}
