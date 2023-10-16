@@ -11,13 +11,12 @@ on:
 jobs:
   
   build:
-    name: Build
     uses: ./.github/workflows/build-isf.yml
     with:
       py_version: 2.7
 
   test:
-    name: Test
+    name: Test Py2.7
     needs: build  # assures there is a build of ISF
     # Assure test runs on whatever runner the build ran on
     # Note that runners are requested based on label, not on name
