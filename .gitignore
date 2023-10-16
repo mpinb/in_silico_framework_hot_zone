@@ -100,3 +100,4 @@ installer/py*/downloads/conda_packages/*
 installer/py*/downloads/*
 
 SLURM_scripts/user_settings
+test.log
