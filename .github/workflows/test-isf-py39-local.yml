@@ -5,17 +5,18 @@ name: ISF Py 3.9
 on:
   push:
     branches: '*'
+  pull_request:
+    branches: '*'
   workflow_dispatch:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
-    name: Build
     uses: ./.github/workflows/build-isf.yml
     with:
       py_version: 3.9
 
   test:
-    name: Test
+    name: Test Py3.9
     needs: build  # assures there is a build of ISF
     # Assure test runs on whatever runner the build ran on
     # Note that runners are requested based on label, not on name

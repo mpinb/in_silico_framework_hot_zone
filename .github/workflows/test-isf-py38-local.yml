@@ -9,13 +9,12 @@ on:
 jobs:
 
   build:
-    name: Build
     uses: ./.github/workflows/build-isf.yml
     with:
       py_version: 3.8
 
   test:
-    name: Test
+    name: Test Py3.8
     needs: build  # assures there is a build of ISF
     # Assure test runs on whatever runner the build ran on
     # Note that runners are requested based on label, not on name
@@ -56,15 +55,6 @@ jobs:
           (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1)&
           (dask-worker localhost:$port_number --nthreads 1 --nprocs 6 --memory-limit=100e15 > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1)&
           pytest -n 6 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port $port_number tests/
-
-      # - name: Set test commit status
-      #   # necessary to use this workflow as satus check
-      #   uses: myrotvorets/set-commit-status-action@master
-      #   if: always()
-      #   with:
-      #     sha: ${{ github.head_ref }}.${{ github.sha }}
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     status: ${{ job.status }}
 
       - name: Cleanup dask orphan processes
         if: ${{ always() }}
