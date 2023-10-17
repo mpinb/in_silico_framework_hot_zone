@@ -382,7 +382,7 @@ def myrepartition(ddf, N):
         delayeds = [synchronous_ddf_concat(ddf_path, meta, N, n) for n in range(N)]
         return dd.from_delayed(delayeds, meta = meta)
     else:
-         len(divisions) - 1 == len(delayeds)
+        assert len(divisions) - 1 == len(delayeds)
         chunks_divisions = chunkIt(divisions[:-1], N)
         divisions = [c[0] for c in chunks_divisions] + [chunks_divisions[-1][-1]]
         delayeds = [synchronous_ddf_concat(ddf_path, meta, N, n) for n in range(N)]
