@@ -1,4 +1,5 @@
 import distributed
+
 # import fasteners
 # import redis
 import yaml
@@ -6,16 +7,20 @@ import os
 import warnings
 from compatibility import YamlLoader
 
-if 'ISF_DISTRIBUTED_LOCK_CONFIG' in os.environ:
-    config_path = os.environ['ISF_DISTRIBUTED_LOCK_CONFIG']
-    with open(os.environ['ISF_DISTRIBUTED_LOCK_CONFIG'], 'r') as f:
+if "ISF_DISTRIBUTED_LOCK_CONFIG" in os.environ:
+    config_path = os.environ["ISF_DISTRIBUTED_LOCK_CONFIG"]
+    with open(os.environ["ISF_DISTRIBUTED_LOCK_CONFIG"], "r") as f:
         config = yaml.load(f, Loader=YamlLoader)
 else:
-    warnings.warn('environment variable ISF_DISTRIBUTED_LOCK_CONFIG is not set. ' + 
-                  'Falling back to default configuration.')
-    config = [dict(type = 'redis', config = dict(host = 'spock', port = 8885, socket_timeout = 1)),
-              dict(type = 'redis', config = dict(host = 'localhost', port = 6379, socket_timeout = 1)),
-              dict(type = 'file')]
+    warnings.warn(
+        "environment variable ISF_DISTRIBUTED_LOCK_CONFIG is not set. "
+        + "Falling back to default configuration."
+    )
+    config = [
+        dict(type="redis", config=dict(host="spock", port=8885, socket_timeout=1)),
+        dict(type="redis", config=dict(host="localhost", port=6379, socket_timeout=1)),
+        dict(type="file"),
+    ]
 
 
 def get_client():
@@ -26,33 +31,39 @@ def get_client():
     - server: The server object.
     - client: The client object, which can be None if the server type is 'file'.
     """
-    
+
     for server in config:
-        print('trying to connect to distributed locking server {}'.format(str(server)))
-        if server['type'] == 'redis':
+        print("trying to connect to distributed locking server {}".format(str(server)))
+        if server["type"] == "redis":
             import redis
+
             try:
-                c = redis.StrictRedis(**server['config'])
+                c = redis.StrictRedis(**server["config"])
                 c.client_list()
-                print ('success!')
+                print("success!")
                 return server, c
             except (redis.exceptions.TimeoutError, redis.exceptions.ConnectionError):
                 pass
-        elif server['type'] == 'file':
-            warnings.warn('Using file based locking.'
-            'Please be careful on nfs mounts as file based locking has issues in this case.')
+        elif server["type"] == "file":
+            warnings.warn(
+                "Using file based locking."
+                "Please be careful on nfs mounts as file based locking has issues in this case."
+            )
             return server, None
-        elif server['type'] == 'zookeeper':
+        elif server["type"] == "zookeeper":
             import kazoo.client
-            zk = kazoo.client.KazooClient(**server['config'])
+
+            zk = kazoo.client.KazooClient(**server["config"])
             zk.start()
-            print ('success!')
+            print("success!")
             return server, zk
         else:
             raise NotImplementedError()
-    raise RuntimeError('could not connect to a locking server.')
+    raise RuntimeError("could not connect to a locking server.")
+
 
 server, client = get_client()
+
 
 def update_config(c):
     """
@@ -70,74 +81,89 @@ def update_config(c):
     config = c
     server, client = get_client()
 
+
 def get_lock(name):
     """
     Returns a lock object based on the server type specified in the configuration.
-    
+
     Args:
     - name: str, the name of the lock
-    
+
     Returns:
     - lock object: an object that implements the lock interface
-    
+
     Raises:
     - RuntimeError: if the server type is not supported
     """
-    
-    if server['type'] == 'file':
+
+    if server["type"] == "file":
         import fasteners
+
         return fasteners.InterProcessLock(name)
-    elif server['type'] == 'redis':
+    elif server["type"] == "redis":
         import redis
-        return redis.lock.Lock(client, name, timeout = 300)
-    elif server['type'] == 'zookeeper':
+
+        return redis.lock.Lock(client, name, timeout=300)
+    elif server["type"] == "zookeeper":
         return client.Lock(name)
     else:
-        raise RuntimeError('supported server types are redis, zookeeper and file. ' + 
-            'Current locking config is: {}'.format(str(server)))
-        
+        raise RuntimeError(
+            "supported server types are redis, zookeeper and file. "
+            + "Current locking config is: {}".format(str(server))
+        )
+
+
 def get_read_lock(name):
     """
     Returns a read lock object based on the server type specified in the configuration.
-    
+
     Args:
     - name (str): The name of the lock.
-    
+
     Returns:
     - lock object: A lock object based on the server type specified in the configuration.
     """
-    
-    if server['type'] == 'file':
+
+    if server["type"] == "file":
         import fasteners
+
         return fasteners.InterProcessLock(name)
-    elif server['type'] == 'redis':
+    elif server["type"] == "redis":
         import redis
-        return redis.lock.Lock(client, name, timeout = 300)
-    elif server['type'] == 'zookeeper':
+
+        return redis.lock.Lock(client, name, timeout=300)
+    elif server["type"] == "zookeeper":
         return client.ReadLock(name)
     else:
-        raise RuntimeError('supported server types are redis, zookeeper and file. ' + 
-            'Current locking config is: {}'.format(str(server)))
-        
+        raise RuntimeError(
+            "supported server types are redis, zookeeper and file. "
+            + "Current locking config is: {}".format(str(server))
+        )
+
+
 def get_write_lock(name):
     """
     Returns a write lock object based on the server type specified in the configuration.
-    
+
     Args:
     - name: str, the name of the lock
-    
+
     Returns:
     - lock object: a lock object based on the server type specified in the configuration
     """
-    
-    if server['type'] == 'file':
+
+    if server["type"] == "file":
         import fasteners
+
         return fasteners.InterProcessLock(name)
-    elif server['type'] == 'redis':
+    elif server["type"] == "redis":
         import redis
-        return redis.lock.Lock(client, name, timeout = 300)
-    elif server['type'] == 'zookeeper':
+
+        return redis.lock.Lock(client, name, timeout=300)
+    elif server["type"] == "zookeeper":
         return client.WriteLock(name)
     else:
-        raise RuntimeError('supported server types are redis, zookeeper and file. ' + 
-            'Current locking config is: {}'.format(str(server)))
+        raise RuntimeError(
+            "supported server types are redis, zookeeper and file. "
+            + "Current locking config is: {}".format(str(server))
+        )
