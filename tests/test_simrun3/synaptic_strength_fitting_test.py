@@ -37,4 +37,4 @@ def test_VPM_synaptic_strength_is_between_1_72_and_1_85(client):
     psps.run(client)
     optimal_g_pdf = psps.get_optimal_g(I.barrel_cortex.get_EPSP_measurement())
     gVPM = optimal_g_pdf.loc['VPM_C2']['optimal g']
-    assert(1.85 >= gVPM >= 1.72)
+    assert 1.85 >= gVPM >= 1.72

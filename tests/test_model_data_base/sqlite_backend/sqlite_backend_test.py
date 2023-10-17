@@ -49,6 +49,6 @@ def test_concurrent_writes(sqlite_db, client):
         
     client.compute(job).result()
         
-    assert(set(sqlite_db.keys()) == set(keys))
+    assert set(sqlite_db.keys()) == set(keys)
     for k in keys:
         np.testing.assert_equal(sqlite_db[k][0,0], int(k))

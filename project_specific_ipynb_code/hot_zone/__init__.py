@@ -53,7 +53,7 @@ def get_branching_depth_series(cell):
 def get_main_bifurcation_section(cell):
     sec_dist_list = get_branching_depth_series(cell)
     sec_dist_list_filtered = [sec[1] for sec in sec_dist_list if sec[0] == 1]
-    assert(len(sec_dist_list_filtered) == 1)
+    assert len(sec_dist_list_filtered) == 1
     return sec_dist_list_filtered[0]
 
 
@@ -89,28 +89,28 @@ def range_overlap(beginning1, end1, beginning2, end2, bool_ = True):
         out = bool(out)
     return out
 
-assert(not range_overlap(0,1,1,2))
-assert(not range_overlap(0,1,1.1,2))
-assert(not range_overlap(0,1,2,3))
-assert(range_overlap(0,1,0.9,2))
-assert(range_overlap(0,1.1,1,2))
-assert(range_overlap(0,1.1,0.9,1.1))
-assert(range_overlap(0,1.1,0.9,1))
-assert(range_overlap(0,1.1,-1,2))
-assert(range_overlap(0,1,0,1))
+assert not range_overlap(0,1,1,2)
+assert not range_overlap(0,1,1.1,2)
+assert not range_overlap(0,1,2,3)
+assert range_overlap(0,1,0.9,2)
+assert range_overlap(0,1.1,1,2)
+assert range_overlap(0,1.1,0.9,1.1)
+assert range_overlap(0,1.1,0.9,1)
+assert range_overlap(0,1.1,-1,2)
+assert range_overlap(0,1,0,1)
 
 #########################################
 # class that can visualize the synapse counts and can 
 # compute the density profiles
 #########################################
 def get_dist(x1, x2):
-    assert(len(x1) == len(x2))
+    assert len(x1) == len(x2)
     return I.np.sqrt(sum((xx1-xx2)**2 for xx1, xx2 in zip(x1, x2)))
 
 def get_L_from_sec(sec, lv):
     out = 0
     for lv in range(1, lv + 1):
-        assert(lv-1) >= 0
+        assert lv-1 >= 0
         out += get_dist(sec.pts[lv-1], sec.pts[lv])
     return out
 
@@ -583,10 +583,10 @@ class NetworkEmbedding:
     
     def load(self, synpath = None, conpath = None):
         if synpath is not None:
-            assert(synpath.endswith('.syn'))
+            assert synpath.endswith('.syn')
             conpath = synpath[:-4]+'.con'
         elif conpath is not None:
-            assert(conpath.endswith('.con'))
+            assert conpath.endswith('.con')
             synpath = conpath[:-4]+'.con'
         else:
             raise ValueError("you must specify either synpath or conpath!")
@@ -648,8 +648,8 @@ class NetworkEmbedding:
 #ne2.load(I.os.path.join(folder_, 'con.syn'))
 #I.shutil.rmtree(folder_)
 
-#assert(ne.synapses == ne2.synapses)
-#assert(ne.functionalMap == ne2.functionalMap)
+#assert ne.synapses == ne2.synapses
+#assert ne.functionalMap == ne2.functionalMap
 
 ######################################
 # class for loading cells
@@ -786,7 +786,7 @@ def event_rasterplot(st, st_prox = None, rasterplot_fun = I.rasterplot2,  event_
     rasterplot_fun(st[st_pattern == 'triplet'], c = '#ff0000', **kwargs)
     
 def get_doublet_triplet_times(x):
-    assert(x == sorted(x))
+    assert x == sorted(x)
     out_triplet = []
     out_doublet = []
     lv = 0
@@ -801,7 +801,7 @@ def get_doublet_triplet_times(x):
     return out_doublet, out_triplet
 
 def get_doublet_triplet_times_series(x, return_ = None):
-    assert(isinstance(x,I.pd.Series))
+    assert isinstance(x,I.pd.Series)
     x = list(x.dropna())
     if return_ == 'doublet':
         out = get_doublet_triplet_times(x)[0]

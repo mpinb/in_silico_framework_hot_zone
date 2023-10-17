@@ -3,10 +3,10 @@ from .context import barrel_center_points
 
 def test_pt3add():
     teststr = "{pt3dadd(-191.183289, 445.022980, -402.017792, 0.450000)}\n"
-    assert(teststr == construct_pt3add(extract_pt3add(teststr)))
+    assert teststr == construct_pt3add(extract_pt3add(teststr))
 
 def test_transform_point():
-    assert((transform_point(transform_point([0,0,0], 1, 0, 0, 'C2'), -1, 0, 0, 'C2') == [0,0,0]).all())
+    assert (transform_point(transform_point([0,0,0], 1, 0, 0, 'C2'), -1, 0, 0, 'C2') == [0,0,0]).all()
     
 def test_move_hoc_xyz():
     import getting_started
@@ -22,7 +22,7 @@ def test_move_hoc_xyz():
         np.testing.assert_almost_equal(centroid, centroid2)
         move_hoc_xyz(outpath1, -1,-2,-3, outpath2, 'C2')
         centroid2 = get_soma_centroid(outpath2)
-        assert((centroid != centroid2).all())
+        assert (centroid != centroid2).all()
 
 def test_move_hoc_absolute():
     import getting_started
@@ -81,4 +81,4 @@ def test_correct_hoc_depth():
         centroid2 = get_soma_centroid(outpath2)
         depth2 = measure_fun(centroid2)
         np.testing.assert_almost_equal(depth, 0, decimal = 5)
-        assert((centroid != centroid2).all())
+        assert (centroid != centroid2).all()

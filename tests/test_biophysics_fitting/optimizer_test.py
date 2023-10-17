@@ -41,7 +41,7 @@ def set_up_mdb(step = False):
         return param
 
     def scale_apical(cell_param, params):
-        assert(len(params) == 1)
+        assert len(params) == 1
         cell_param.cell_modify_functions.scale_apical.scale = params['scale']
         return cell_param    
             
@@ -220,10 +220,10 @@ def get_features():
 #     return features
 
 def test_get_max_generation():
-    assert(get_max_generation({'0': 1}) == 0)
-    assert(get_max_generation({'0': 1, '10': 2}) == 10)
-    assert(get_max_generation({'0': 1, 10: 2}) == 10)
-    assert(get_max_generation({'3': 1, '10_ckeckpoint': 2}) == 3)
+    assert get_max_generation({'0': 1}) == 0
+    assert get_max_generation({'0': 1, '10': 2}) == 10
+    assert get_max_generation({'0': 1, 10: 2}) == 10
+    assert get_max_generation({'3': 1, '10_ckeckpoint': 2}) == 3
 
 def test_mini_optimization_run(capsys, client):
     c = client
@@ -232,7 +232,7 @@ def test_mini_optimization_run(capsys, client):
         start_run(mdb['86'], 1, client = c, offspring_size = 2, max_ngen = 2)
         # accessing simulation results of run
         keys = [int(k) for k in list(mdb['86']['1'].keys()) if utils.convertible_to_int(k)]
-        assert(max(keys) == 2)
+        assert max(keys) == 2
         # if continue_cp is not set (defaults to False), an Exception is raised if the same 
         # optimization is started again
         with pytest.raises(ValueError):
@@ -240,10 +240,10 @@ def test_mini_optimization_run(capsys, client):
         # with continue_cp = True, the optimization gets continued
         start_run(mdb['86'], 1, client = c, offspring_size = 2, max_ngen = 4, continue_cp = True)
         keys = [int(k) for k in list(mdb['86']['1'].keys()) if utils.convertible_to_int(k)]
-        assert(max(keys) == 4)
+        assert max(keys) == 4
         start_run(mdb['86'], 2, client = c, offspring_size = 2, max_ngen = 2)
         keys = [int(k) for k in list(mdb['86']['2'].keys()) if utils.convertible_to_int(k)]
-        assert(max(keys) == 2)   
+        assert max(keys) == 2   
     except:
         shutil.rmtree(mdb.basedir)     
         raise
@@ -293,7 +293,7 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
         raise
         
     for k in list(features_legacy.keys()):
-        assert(features_legacy[k] == features_new[k])
+        assert features_legacy[k] == features_new[k]
         
 def test_reproducability():
     setup_hay_evaluator() # this adds a stump cell to the neuron environment,which is

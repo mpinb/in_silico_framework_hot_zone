@@ -17,7 +17,7 @@ def split_synapse_activation(sa, selfcheck = True, excitatory = excitatory, inhi
     if selfcheck:
         celltypes = sa.apply(lambda x: x.synapse_type.split('_')[0], axis = 1).drop_duplicates()
         for celltype in celltypes:
-            assert(celltype in excitatory + inhibitory)
+            assert celltype in excitatory + inhibitory
             
     sa['EI'] = sa.apply(lambda x: 'EXC' if x.synapse_type.split('_')[0] in excitatory else 'INH', axis = 1)
     return sa[sa.EI == 'EXC'], sa[sa.EI == 'INH']

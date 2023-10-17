@@ -1121,7 +1121,7 @@ def _activate_pre_cells_and_remove_simulated(self, stim, tStop = 300, simulated_
     nm = generate_spiketimes(stim, self.cell_counts, tStop = tStop, mdb = mdb)
     for celltype in nm.keys():
         for pre_cell, spike_times in zip(self.pre_cells[celltype], nm[celltype]):
-            assert(spike_times is not None)
+            assert spike_times is not None
             del pre_cell.spike_times[:]
             pre_cell.spike_times.extend(spike_times)
                 

@@ -255,7 +255,7 @@ class ThicknessExtractor:
                 contour_indices = ray_indices[i]
                 break
 
-        assert(contour_indices is not None)
+        assert contour_indices is not None
         return contour_indices
 
 
@@ -331,7 +331,7 @@ class ThicknessExtractor:
 
         intensity_value = self.image.GetPixel([int(point[0]), int(point[1])])
         intensity_value2 = self.image.GetPixel([int(corrected_point[0]), int(corrected_point[1])])
-        assert(intensity_value2 >= intensity_value)
+        assert intensity_value2 >= intensity_value
         log.info('original_point: {} / {} corrected_point: {} / {}'.format(point, intensity_value,
                                                                         corrected_point, intensity_value2))
         return corrected_point

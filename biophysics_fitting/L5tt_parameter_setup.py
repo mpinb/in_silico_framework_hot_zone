@@ -147,7 +147,7 @@ def set_hot_zone(cell_param, min_ = None, max_ = None, outsidescale_sections = N
     cell_param['ApicalDendrite'].mechanisms.range['Ca_HVA']['begin'] = min_
     cell_param['ApicalDendrite'].mechanisms.range['Ca_HVA']['end'] = max_
     if outsidescale_sections is not None:
-        assert(isinstance(outsidescale_sections, list))
+        assert isinstance(outsidescale_sections, list)
         cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['outsidescale_sections'] = outsidescale_sections
         cell_param['ApicalDendrite'].mechanisms.range['Ca_HVA']['outsidescale_sections'] = outsidescale_sections
     return cell_param

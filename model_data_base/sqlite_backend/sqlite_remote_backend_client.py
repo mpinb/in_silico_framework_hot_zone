@@ -17,7 +17,7 @@ except KeyError:
 with open(os.environ['ISF_MDB_CONFIG'], 'r') as f:
     config = yaml.load(f, Loader=YamlLoader)
 
-assert(config['backend']['type'] == 'sqlite_remote')
+assert config['backend']['type'] == 'sqlite_remote'
 url = config['backend']['url']
 
 def check_key(key):

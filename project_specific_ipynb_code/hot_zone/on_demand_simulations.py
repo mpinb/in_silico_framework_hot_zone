@@ -270,7 +270,7 @@ def create_network_param_file(syn,con,PSTH,syn_strength,evoked_columns = 'all', 
             out['network'][celltype] = deepcopy(template_EXC)
             # awkward way of selecting the syn strength matching the current celltype
             synapse_strength_celltype = [x for x in syn_strength.keys() if x in celltype]
-            assert(len(synapse_strength_celltype) == 1)
+            assert len(synapse_strength_celltype) == 1
             synapse_strength_celltype = synapse_strength_celltype[0]
             if verbose:
                 print('setting synapse strength of celltype', celltype, 'to synapse strength of',  synapse_strength_celltype)

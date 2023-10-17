@@ -176,9 +176,9 @@ def test_uninterruptible():
     t_ni = time.time() - t0
     print('uninteruptible process was running for', time.time() - t0, 'seconds')
     
-    assert(t_i > 2/5)
-    assert(t_i < 5/5)
-    assert(t_ni > 5/5)
+    assert t_i > 2/5
+    assert t_i < 5/5
+    assert t_ni > 5/5
         
 #test_SharedNumpyStore()
 #test_shared_array_functions()    

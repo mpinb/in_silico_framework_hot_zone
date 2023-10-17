@@ -6,9 +6,9 @@ from model_data_base.IO.LoaderDumper import pandas_to_msgpack
 def get_confile_form_network_param(n):
     confile = set([n.network[k].synapses.connectionFile for k in list(n.network.keys())])
     synfile = set([n.network[k].synapses.distributionFile for k in list(n.network.keys())])
-    assert(len(confile) == 1)
-    assert(len(synfile) == 1)
-    assert(list(confile)[0][:-4] == list(synfile)[0][:-4])
+    assert len(confile) == 1
+    assert len(synfile) == 1
+    assert list(confile)[0][:-4] == list(synfile)[0][:-4]
     return list(confile)[0]
 
 def get_parameterfiles_df_with_confile_and_neuron_param_path(mdb):

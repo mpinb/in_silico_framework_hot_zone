@@ -57,7 +57,7 @@ def find_crossing_old(v, thresh):
     The second is the crossing down of that threshold
     
     Extended doku by Arco: returns [[],[]] if the number of crossing up vs crossing down is not equal.'''
-    assert(thresh is not None)
+    assert thresh is not None
     avec = []
     bvec = [] 
     ef = 0

@@ -63,7 +63,7 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
     try:    
         metadata = mdb['metadata']
         metadata = metadata[metadata.sim_trail_index == sim_trail_index]
-        assert(len(metadata) == 1)
+        assert len(metadata) == 1
         m = metadata.iloc[0]
         parameter_table = mdb['parameterfiles']
         cellName = parameter_table.loc[sim_trail_index].hash_neuron

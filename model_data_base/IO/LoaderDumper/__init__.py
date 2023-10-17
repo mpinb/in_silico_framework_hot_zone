@@ -34,7 +34,7 @@ def load(savedir, load_data = True, loader_kwargs = {}):
 def get_dumper_string_by_dumper_module(dumper_module):
     name = dumper_module.__name__
     prefix = 'model_data_base.IO.LoaderDumper.'
-    assert(name.startswith(prefix))
+    assert name.startswith(prefix)
     return name[len(prefix):]
     
 def get_dumper_string_by_savedir(savedir):

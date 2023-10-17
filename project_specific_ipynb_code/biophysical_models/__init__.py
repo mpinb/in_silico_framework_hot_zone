@@ -633,7 +633,7 @@ def fun_setup_current_recording(cell, params = None):
     range_vars_soma = ['Nap_Et2.ina','K_Pst.ik','K_Tst.ik'] + ['NaTa_t.ina','Ca_LVAst.ica','Ca_HVA.ica','Ih.ihcn','SKv3_1.ik','SK_E2.ik', 'ik','ina','ica','cai','eca', 'v']
     constants_soma = ['Nap_Et2.gNap_Et2bar','K_Pst.gK_Pstbar','K_Tst.gK_Tstbar'] + ['NaTa_t.gNaTa_tbar','Ca_LVAst.gCa_LVAstbar','Ca_HVA.gCa_HVAbar','Ih.gIhbar','SKv3_1.gSKv3_1bar','SK_E2.gSK_E2bar', 'ek','ena']
     cell.range_vars_dict = {}
-    assert(len(distance) == len(segs))
+    assert len(distance) == len(segs)
     for d, seg in zip(distance, segs):
         if not d in ('Soma', 'AIS'):
             range_vars_dict = _init_range_var_recording_in_segment(seg, range_vars)

@@ -88,5 +88,5 @@ def get_branching_depth_series(cell):
 def get_main_bifurcation_section(cell):
     sec_dist_list = get_branching_depth_series(cell)
     sec_dist_list_filtered = [sec[1] for sec in sec_dist_list if sec[0] == 1]
-    assert(len(sec_dist_list_filtered) == 1)
+    assert len(sec_dist_list_filtered) == 1
     return sec_dist_list_filtered[0]

@@ -53,19 +53,19 @@ class Simulator_Setup:
         prefix1 = list({x.split('.')[0] for x in names1})
         prefix2 = list({x.split('.')[0] for x in names2})
         
-        assert(tuple(sorted(prefix1)) == tuple(sorted(prefix2)))
+        assert tuple(sorted(prefix1)) == tuple(sorted(prefix2))
         
     def get_stims(self):
         return [x[0].split('.')[0] for x in self.stim_run_funs]
     
     def get_stim_setup_fun_by_stim(self, stim):
         l = [x for x in self.stim_setup_funs if x[0].split('.')[0] == stim]
-        assert(len(l) == 1)
+        assert len(l) == 1
         return l[0]
     
     def get_stim_run_fun_by_stim(self, stim):
         l = [x for x in self.stim_run_funs if x[0].split('.')[0] == stim]
-        assert(len(l) == 1)
+        assert len(l) == 1
         return l[0]   
     
     def get_stim_response_measure_fun(self, stim):

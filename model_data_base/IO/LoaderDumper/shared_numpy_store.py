@@ -53,7 +53,7 @@ if six.PY3:
         _prepend_leading_slash = True # if _USE_POSIX else False
 
         def __init__(self, name=None, create=False, size=0, track_resource = False):
-            assert(name is not None)
+            assert name is not None
             if not name[0] == '/':
                 name = '/' + name
 
@@ -179,9 +179,9 @@ def _get_offset_and_size_in_bytes(start_row, end_row, shape, dtype):
         start_row = 0
     if end_row is None:
         end_row = shape[0]
-    assert(start_row <= end_row)
-    assert(start_row >= 0)
-    assert(end_row <= shape[0])
+    assert start_row <= end_row
+    assert start_row >= 0
+    assert end_row <= shape[0]
     final_shape = tuple([end_row - start_row] + list(shape[1:]))
     bytes_size = np.prod(final_shape) * np.dtype(dtype).itemsize
     bytes_offset = np.prod([start_row] + list(shape[1:])) * np.dtype(dtype).itemsize 
@@ -258,7 +258,7 @@ class SharedNumpyStore:
         self.working_dir = working_dir
         if not os.path.exists(working_dir):
             os.makedirs(working_dir)
-        assert(not working_dir.endswith('/')) # ambiguity that would confuse the hash            
+        assert not working_dir.endswith('/') # ambiguity that would confuse the hash            
         self._suffix = hashlib.md5(working_dir.encode('utf-8')).hexdigest()[:8]
         self._shared_memory_buffers = {} # contains all already loaded buffers and arrays
         self._pending_renames = {}
@@ -320,8 +320,8 @@ class SharedNumpyStore:
         """
         Save a numpy array to disk at the working_dir of this instance of NumpyStore.
         """
-        assert(name != 'Loader.pickle') # reserved to model data base        
-        assert(not '__' in name)
+        assert name != 'Loader.pickle' # reserved to model data base        
+        assert not '__' in name
         fname = self._get_fname(arr, name)
         self._files[name] = fname        
         full_path = os.path.join(self.working_dir, fname)
@@ -351,8 +351,8 @@ class SharedNumpyStore:
         """
         Appends the given numpy array 'arr' to an existing array with the specified 'name'.
         """
-        assert(name != 'Loader.pickle') # reserved to model data base
-        assert(not '__' in name)
+        assert name != 'Loader.pickle' # reserved to model data base
+        assert not '__' in name
         # created together with chatgpt
         
         # Check if the array with the given name exists in the store
@@ -380,7 +380,7 @@ class SharedNumpyStore:
         last_byte_written = self.get_expected_file_length(name)    
         print('last_byte_written', last_byte_written)
         # Open the existing file in append mode and write the new array data
-        assert(fname not in self._pending_renames)
+        assert fname not in self._pending_renames
         
         with open(existing_file_path, 'r+b') as f:
             f.seek(last_byte_written)
@@ -420,7 +420,7 @@ class SharedNumpyStore:
         if mode == 'memmap':
             return np.memmap(full_path, dtype=np.dtype(dtype), mode='r', offset=bytes_offset, shape=final_shape, order='C')
         elif mode == 'memory':
-            assert(bytes_size % np.dtype(dtype).itemsize == 0)
+            assert bytes_size % np.dtype(dtype).itemsize == 0
             return np.fromfile(full_path, offset = bytes_offset, count = bytes_size // np.dtype(dtype).itemsize, dtype = dtype).reshape(final_shape)
         elif 'shared_memory':
             # if already loaded, return:            

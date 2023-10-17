@@ -185,7 +185,7 @@ def get_peaks_above(t, v, lim):
     max_t: list, containing timepoints of maxima
     max_v: list, containing voltage at timepoints of maxima
     '''
-    assert(len(t) == len(v))
+    assert len(t) == len(v)
     v, t = I.np.array(v), I.np.array(t)
     left_diff = v[1:-1] - v[:-2]
     right_diff= v[1:-1] - v[2:]
@@ -237,7 +237,7 @@ def filter_spike_times(spike_times, spike_times_trough,
                 continue
         if len(aligned_creasts) > 0:
             if mode == 'latest':
-                assert(aligned_creasts.max() == aligned_creasts[-1])
+                assert aligned_creasts.max() == aligned_creasts[-1]
                 s.append(aligned_creasts[-1]) # before: aligned_creats[0]
                 s_ampl.append(aligned_creast_amplitude[-1])
             if mode == 'creast_max':

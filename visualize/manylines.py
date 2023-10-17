@@ -22,7 +22,7 @@ npartitions = 80
 def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
               fig = None, figsize = (15,3), returnPixelObject = False, get = None):
     '''parallelizes the plot of many lines'''
-    assert(fig is not None) # decorator takes care, that it is allwys axes
+    assert fig is not None # decorator takes care, that it is allwys axes
 #     assert get is not None
     if returnPixelObject:
         fig = plt.figure(dpi = 400, figsize = figsize)
@@ -117,7 +117,7 @@ def manylines_helper(pdf, axis = None, colormap = None, groupby_attribute = None
         
     # after this point: fig must be axes object:
     from matplotlib.axes import Axes
-    assert(isinstance(ax, Axes)) 
+    assert isinstance(ax, Axes) 
     
     if groupby_attribute is None:    
         for _, row in pdf.iterrows():

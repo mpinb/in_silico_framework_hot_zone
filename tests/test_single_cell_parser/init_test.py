@@ -17,8 +17,8 @@ class TestSingleCellParserInit:
                             'functional_constraints', \
                             'network.param')
         
-        assert(os.path.exists(self.cell_param))
-        assert(os.path.exists(self.network_param))
+        assert os.path.exists(self.cell_param)
+        assert os.path.exists(self.network_param)
     
     def test_fast_and_slow_mode_of_build_parameters_gives_same_results(self):
         bp = scp.build_parameters

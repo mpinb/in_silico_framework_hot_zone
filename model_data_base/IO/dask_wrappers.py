@@ -15,7 +15,7 @@ def concat_path_elements_to_filelist(*args):
     max_len = max([len(x) for x in args])
     args = [x*max_len if len(x)==1 else x for x in args]
     min_len = min([len(x) for x in args])
-    assert(min_len == max_len)
+    assert min_len == max_len
     ret = [os.path.join(*[str(x) for x in x]) for x in zip(*args)]
     return ret
     

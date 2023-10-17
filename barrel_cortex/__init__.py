@@ -122,7 +122,7 @@ def read_barrelfield():
     def fun(x):
         x = x.drop('label', axis = 1).iloc[[0,10,20,30]].values.tolist()
         n, c, dist = get_distance_from_plane(*x)
-        assert(dist < 0.01)
+        assert dist < 0.01
         return pd.Series(n)
     z_axis = edge_points.groupby('label').apply(fun)
     

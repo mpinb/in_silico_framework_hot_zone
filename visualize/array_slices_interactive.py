@@ -24,7 +24,7 @@ def rebin_slice(slice_, min_, max_, wished_binsize, scale_last_bin=False):
     print(("effective binsize: {:s}".format(effective_binsize)))
     newslice = [sum(slice_[current: current+nr_consecutive_bins]) for current in xrange(0, len(slice_), nr_consecutive_bins)]
     newbins = np.arange(min_, min_ + effective_binsize*(len(newslice)+1), effective_binsize)
-    assert(len(newbins) == len(newslice) + 1)#
+    assert len(newbins) == len(newslice) + 1#
     
     return effective_binsize, np.array(list(newbins)), np.array(list(newslice))
 

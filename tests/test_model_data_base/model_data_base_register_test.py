@@ -8,7 +8,7 @@ def assert_search_mdb_did_not_fail(mdbr):
     keys = list(mdbr.mdb.keys())
     keys = [k for k in keys if isinstance(k, tuple)]
     #for k in keys: print (mdbr.mdb[k])
-    assert(not keys)
+    assert not keys
     
 class TestModelDataBaseRegister:       
     def setup_class(self):        

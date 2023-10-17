@@ -132,7 +132,7 @@ def synapse_activation_postprocess_dask(ddf, **kwargs):
     ret = tree_reduction(ds, merge_results_together)
     
     if mdb is not None:
-        assert('groupby' in kwargs)
+        assert 'groupby' in kwargs
         save_groupby_delayed = dask.delayed(save_groupby)
         ret_saved = save_groupby_delayed(mdb, ret, kwargs['groupby'])
         ret_saved.compute(get = get)

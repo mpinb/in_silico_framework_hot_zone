@@ -132,15 +132,15 @@ class PSP_with_current_injection:
     
     
 def combine_PSP_objects(PSPexc, PSPinh):
-    assert(PSPexc.neuron_param == PSPinh.neuron_param)
-    assert(PSPexc.confile == PSPinh.confile)
-    assert(PSPexc.gExRange == PSPinh.gExRange)
-    assert(PSPexc.AMPA_component == PSPinh.AMPA_component)
-    assert(PSPexc.NMDA_component == PSPinh.NMDA_component)
-    assert(PSPexc.tStim == PSPinh.tStim)
-    assert(PSPexc.tEnd == PSPinh.tEnd)
-    assert(PSPexc.vardt == PSPinh.vardt)
-    assert(PSPexc.mode == PSPinh.mode)
+    assert PSPexc.neuron_param == PSPinh.neuron_param
+    assert PSPexc.confile == PSPinh.confile
+    assert PSPexc.gExRange == PSPinh.gExRange
+    assert PSPexc.AMPA_component == PSPinh.AMPA_component
+    assert PSPexc.NMDA_component == PSPinh.NMDA_component
+    assert PSPexc.tStim == PSPinh.tStim
+    assert PSPexc.tEnd == PSPinh.tEnd
+    assert PSPexc.vardt == PSPinh.vardt
+    assert PSPexc.mode == PSPinh.mode
 #     psp_out = PSPs(PSPexc.neuron_param, PSPexc.confile, PSPexc.gExRange,
 #                    PSPexc.AMPA_component, PSPexc.NMDA_component,
 #                    PSPexc.vardt, PSPexc.mode)

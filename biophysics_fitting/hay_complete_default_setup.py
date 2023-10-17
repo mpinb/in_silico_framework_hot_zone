@@ -43,8 +43,8 @@ def get_fixed_params_example():
     return fixed_params
 
 def record_bAP(cell, recSite1 = None, recSite2 = None):
-    assert(recSite1 is not None)
-    assert(recSite2 is not None)
+    assert recSite1 is not None
+    assert recSite2 is not None
     return {'tVec': tVec(cell), 
             'vList': (vmSoma(cell), vmApical(cell, recSite1), vmApical(cell, recSite2))}
 

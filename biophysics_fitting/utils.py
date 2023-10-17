@@ -65,7 +65,7 @@ def _get_apical_sec_and_i_at_distance(cell, dist):
     return sec, mindx, minSeg
 
 def vmApical(cell, dist = None):
-    assert(dist is not None)
+    assert dist is not None
     sec, mindx, minSeg = _get_apical_sec_and_i_at_distance(cell, dist)
     return np.array(sec.recVList[minSeg])  
 

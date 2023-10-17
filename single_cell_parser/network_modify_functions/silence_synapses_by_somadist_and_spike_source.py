@@ -6,8 +6,8 @@ def silence_synapses_by_somadist_and_spike_source(cell, evokedNW,
                                             spike_sources = None):
     '''silences synapse activation at a somadistance (specified in soma_dist_ranges),
     that are from origins not listed in spike_sources.'''
-    assert(soma_dist_ranges is not None)
-    assert(spike_sources is not None)
+    assert soma_dist_ranges is not None
+    assert spike_sources is not None
     import six
     for synapse_type, ranges_ in six.iteritems(soma_dist_ranges):
         try:

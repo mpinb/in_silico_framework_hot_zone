@@ -80,7 +80,7 @@ class Rm(object):
     
     def add_strategy(self, strategy, setup = True, view = None):
         name = strategy.name
-        assert(name not in self.strategies.keys())
+        assert name not in self.strategies.keys()
         self.strategies[name] = strategy
         if view is None:
             view = self.Data
@@ -114,7 +114,7 @@ class Rm(object):
                     solver.optimize_all_splits()
     
     def _gather_results(self, client):
-        assert(client is not None)
+        assert client is not None
         self.DataSplitEvaluation.optimizer_results = \
             client.gather(self.DataSplitEvaluation.optimizer_results)
         self.results_remote = False
@@ -165,7 +165,7 @@ class Strategy(object):
     def get_score_static(_get_score, x, cupy_split = None):
         x = np.array(x).astype('f4')
         score = _get_score(x)        
-#         assert(len(score[dereference(cupy_split)]) < len(score))
+#         assert len(score[dereference(cupy_split)]) < len(score)
 
         if cupy_split is not None:
             return score[dereference(cupy_split)]
@@ -174,7 +174,7 @@ class Strategy(object):
     
     @staticmethod
     def get_y_static(y, numpy_split = None):
-#         assert(len(y[numpy_split]) <len(y))
+#         assert len(y[numpy_split]) <len(y)
         if numpy_split is not None:
             return y[numpy_split]
         else:
@@ -262,7 +262,7 @@ class DataSplitEvaluation(object):
         self.scores_keys = []
         
     def add_random_split(self, name, percentage_train = .7, l = None):
-        assert(name not in self.splits.keys())
+        assert name not in self.splits.keys()
         if l is None:
             n = self.Rm.get_n_trials()
             l = range(n)
@@ -277,7 +277,7 @@ class DataSplitEvaluation(object):
                              'subtest1': subtest1, 'subtest2': subtest2}
     
     def add_isi_dependent_random_split(self, name, min_isi = 10, percentage_train = .7):
-        assert(name not in self.splits.keys())
+        assert name not in self.splits.keys()
         ISI = self.Rm.extract('ISI') * -1
         ISI = ISI.fillna(min_isi+1)
         ISI = ISI.reset_index(drop = True)
@@ -496,7 +496,7 @@ class DataExtractor_categorizedTemporalSynapseActivation(DataExtractor):
             for m in mdbs:
                 #print set(m[key].keys())
                 #print keys
-                assert(set(m[key].keys()) == set(keys))
+                assert set(m[key].keys()) == set(keys)
                 if self.selected_indices is None:
                     out[k].append(m[key][k][:, self.tmax-self.width:self.tmax])
                 else:

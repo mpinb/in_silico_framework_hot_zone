@@ -82,7 +82,7 @@ def check_locking_config():
     print('locking configuration')
     print(model_data_base.distributed_lock.server)
     print(model_data_base.distributed_lock.client)
-    #assert(model_data_base.distributed_lock.server['type'] == 'redis')
+    #assert model_data_base.distributed_lock.server['type'] == 'redis'
     #import socket
     #socket.gethostname()
 

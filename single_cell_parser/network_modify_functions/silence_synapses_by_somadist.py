@@ -10,7 +10,7 @@ def silence_synapses_by_somadist(cell, evokedNW, soma_dist_ranges = None):
                  'L5tt_C2': [1000,1200]}
     '''
     
-    assert(soma_dist_ranges is not None)
+    assert soma_dist_ranges is not None
     
     import six
     for synapse_type, ranges_ in six.iteritems(soma_dist_ranges):

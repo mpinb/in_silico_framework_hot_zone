@@ -35,7 +35,7 @@ def get_st_from_spike_times_and_stim_times(name, spike_times, stim_times):
 
 ## original spike detection code
 # def get_peaks_above(t, v, lim, tdelta = 0):
-#     assert(len(t) == len(v))
+#     assert len(t) == len(v)
 #     out_t = []
 #     out_v = []
 #     for lv in range(1, len(t) - 1):
@@ -57,7 +57,7 @@ def get_st_from_spike_times_and_stim_times(name, spike_times, stim_times):
 
 
 def get_peaks_above(t, v, lim):
-    assert(len(t) == len(v))
+    assert len(t) == len(v)
     v, t = I.np.array(v), I.np.array(t)
     left_diff = v[1:-1] - v[:-2]
     right_diff= v[1:-1] - v[2:]
@@ -113,7 +113,7 @@ def filter_short_ISIs(t, tdelta = 0):
             
     return out_t
       
-assert(filter_short_ISIs([0,1,2,3,4,5,6,7,8], tdelta=1) == [0,2,4,6,8])
+assert filter_short_ISIs([0,1,2,3,4,5,6,7,8], tdelta=1) == [0,2,4,6,8]
 
 def strip_st(st):
     '''returns spike times dataframe only containing spike times, without metadata'''
@@ -328,7 +328,7 @@ class AnalyzeFile:
                     
         # automatic detection of creast and trough limit
         if isinstance(lim_creast, str):
-            assert(isinstance(lim_trough, str))
+            assert isinstance(lim_trough, str)
             lim_creast, lim_trough = self.get_creast_and_trough_ampltidues_by_bins(lim_creast)
             self.lim_creast = lim_creast
             self.lim_trough = lim_trough            
@@ -466,7 +466,7 @@ class AnalyzeFile:
             t = [t for t in self.t if (t > self.stim_times[0] - 3000) and (t < self.stim_times[-1] + 3000)]        
             v = [v for tt, v in zip(self.t, self.v) if (tt > self.stim_times[0] - 3000) and (tt < self.stim_times[-1] + 3000)]
             t, v = I.np.array(t), I.np.array(v)
-            assert(len(t) == len(v))
+            assert len(t) == len(v)
             _st, _st_magnitude = get_peaks_above(t, v, 0)
             _stt, _stt_magnitude = get_peaks_above(t, v * -1, 0)
             return _st, _st_magnitude, _stt, _stt_magnitude

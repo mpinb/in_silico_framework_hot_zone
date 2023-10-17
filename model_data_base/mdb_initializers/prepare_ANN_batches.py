@@ -280,7 +280,7 @@ def compute_ISI_from_st(st, timepoint, fillna = None):
         float/array: The time between :@param timepoint: and the most recent spike in ms.
     """
     '''suggestion: use the temporal window width as fillna'''
-    assert(fillna is not None)
+    assert fillna is not None
     st = st.copy()
     st[st>timepoint] = I.np.NaN                       # set all spike times beyond timepoint to NaN
     max_spike_time_before_timepoint = st.max(axis=1)
@@ -457,7 +457,7 @@ class Init:
          dend_ap_suffix = '_-30.0'):
         
         if sti_selection is not None:
-            assert(sti_selection_name is not None)
+            assert sti_selection_name is not None
         if mdb_target is None:
             mdb_target = mdb
         
@@ -622,7 +622,7 @@ def init(mdb,
         mdb_target = mdb
         
     if sti_selection is not None:
-        assert(sti_selection_name is not None)
+        assert sti_selection_name is not None
     
     sa = mdb['synapse_activation']
     st = mdb['spike_times']

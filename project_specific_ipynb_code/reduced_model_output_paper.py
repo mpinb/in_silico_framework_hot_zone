@@ -272,7 +272,7 @@ class PostCell:
             pre_cell: PreCell object with spike times computed
             soma_dist: float
             excinh: str, exc or inh, reflecting presynaptic celltype'''
-        assert(isinstance(pre_cell.spike_times, list))
+        assert isinstance(pre_cell.spike_times, list)
         spatial_bin = int(I.np.floor(float(soma_dist)/spatial_bin_size)) # self.rm.get_spatial_bin_by_soma_dist(soma_dist)
         if excinh == 'exc':
             self._EXC_times[spatial_bin].append(pre_cell.spike_times)
@@ -396,7 +396,7 @@ class Network:
         network_mapper = generate_spiketimes(stim, self.cell_counts, tStop = tStop, mdb = mdb)
         for celltype in list(self.pre_cells.keys()):
             for pre_cell, spike_times in zip(self.pre_cells[celltype], network_mapper[celltype]):
-                assert(spike_times is not None)
+                assert spike_times is not None
                 del pre_cell.spike_times[:]
                 pre_cell.spike_times.extend(spike_times)
                 # pre_cell.spike_times = spike_times

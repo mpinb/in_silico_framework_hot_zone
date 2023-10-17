@@ -19,8 +19,8 @@ else:
     netcon = 'netcon_py3'
 
 try:
-    assert(any([os.path.exists(os.path.join(parent, channels, a)) for a in arch]))
-    assert(any([os.path.exists(os.path.join(parent, netcon, a)) for a in arch]))
+    assert any([os.path.exists(os.path.join(parent, channels, a)) for a in arch])
+    assert any([os.path.exists(os.path.join(parent, netcon, a)) for a in arch])
 except AssertionError:
     print("neuron mechanisms are not compiled.") 
     print("Trying to compile them. Only works, if nrnivmodl is in PATH")
@@ -28,8 +28,8 @@ except AssertionError:
     os.system('(cd {path}; nrnivmodl)'.format(path = os.path.join(parent, netcon)))
     
     try:
-        assert(any([os.path.exists(os.path.join(parent, channels, a)) for a in arch]))
-        assert(any([os.path.exists(os.path.join(parent, netcon, a)) for a in arch]))
+        assert any([os.path.exists(os.path.join(parent, channels, a)) for a in arch])
+        assert any([os.path.exists(os.path.join(parent, netcon, a)) for a in arch])
     except AssertionError:
         print("Could not complile mechanisms. Please do it manually")
         raise

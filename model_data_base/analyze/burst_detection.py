@@ -18,7 +18,7 @@
 #         next_spike = spike_times[lv+1] 
 #         voltage_dummy = proximal_voltage_series[(proximal_voltage_series.index >= spike) & \
 #                                                     (proximal_voltage_series.index < next_spike)]  
-#         assert(isinstance(proximal_voltage_series, pd.Series))        
+#         assert isinstance(proximal_voltage_series, pd.Series)
 
 #         voltage_dummy = voltage_dummy.min()
 #         if voltage_dummy >= burst_cutoff:

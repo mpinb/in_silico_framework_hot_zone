@@ -10,7 +10,7 @@ def read_parameters(seed_folder, particle_id, normalized=False, only_in_space = 
     if only_return_parameters:
         df = df[param_names]
     else:
-        assert(normalized == False)
+        assert normalized == False
     if normalized:
         df = (df-param_ranges['min'])/(param_ranges['max']-param_ranges['min'])
     df['particle_id'] = particle_id

@@ -17,7 +17,7 @@ except KeyError:
 with open(os.environ['ISF_MDB_CONFIG'], 'r') as f:
     config = yaml.load(f, Loader=YamlLoader)
 # we here assume backend is sqlite_remote, as otherwise this module would not be loaded
-assert(config['backend']['type'] == 'sqlite_remote')
+assert config['backend']['type'] == 'sqlite_remote'
 ip, port = config['backend']['url'].split(':')
 
 class SQLiteDict:

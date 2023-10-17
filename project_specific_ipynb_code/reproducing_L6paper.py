@@ -28,12 +28,12 @@ class L6config:
                  runs = None,
                  locs = ['C2center', 'C1border', 'C3border', 'B1border', 'B2border', 'B3border', 'D1border', 'D2border', 'D3border'],
                  stims = ['B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'D1', 'D2', 'D3', 'E2']):
-        assert(mdb is not None)
-        assert(biophysical_model_mdb is not None)
-        assert(biophysical_model_mdb_key is not None)
-        assert(anatomical_model_mdb is not None)        
-        assert(runs is not None)
-        assert(hocpath is not None)
+        assert mdb is not None
+        assert biophysical_model_mdb is not None
+        assert biophysical_model_mdb_key is not None
+        assert anatomical_model_mdb is not None    
+        assert runs is not None
+        assert hocpath is not None
         self.mdb = mdb
         self.biophysical_model_mdb = biophysical_model_mdb
         self.biophysical_model_mdb_key = biophysical_model_mdb_key
@@ -645,16 +645,16 @@ def signchange(x,y):
         return False
     else:
         return True
-assert(signchange(-2,1))
-assert(~signchange(2,1))
-assert(~signchange(-22,-1))
-assert(signchange(22,-1789))
+assert signchange(-2,1)
+assert ~signchange(2,1)
+assert ~signchange(-22,-1)
+assert signchange(22,-1789)
 
 def linear_interpolation_between_pairs(X,Y, x):
-#     assert(x<=max(X))
-#     assert(x>=min(X))
+#     assert x<=max(X)
+#     assert x>=min(X)
 #     pair = [lv for lv in range(len(X)-1) if signchange(X[lv]-x, X[lv+1]-x)]
-#     assert(len(pair) == 1)
+#     assert len(pair) == 1
 #     pair = pair[0]
 #     m = (Y[pair+1]-Y[pair]) / (X[pair+1]-X[pair])
 #     c = Y[pair]-X[pair]*m
@@ -665,7 +665,7 @@ def linear_interpolation_between_pairs(X,Y, x):
     else:
         pair = [lv for lv in range(len(X)-1) if X[lv] < x < X[lv + 1]]
      
-        assert(len(pair) == 1)
+        assert len(pair) == 1
         pair = pair[0]
         m = (Y[pair+1]-Y[pair]) / (X[pair+1]-X[pair])
         c = Y[pair]-X[pair]*m

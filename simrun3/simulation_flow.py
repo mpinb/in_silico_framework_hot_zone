@@ -50,10 +50,10 @@ d.add(1, dict(name1 = dict(par1 = 5, par2 = 1)))
 d.add(2, dict(name1 = dict(par1 = 6, par2 = 2)))
 d.add(3, dict(name1 = dict(par1 = 5, par2 = 3)))
 d.add(4, dict(name1 = dict(par1 = 6, par2 = 4)))
-assert(d.resolve({'name1': {'par1': 5, 'par2': 1}}) == 1)
-assert(d.resolve({'name1': {'par1': 6, 'par2': 2}}) == 2)
-assert(d.resolve({'name1': {'par1': 5, 'par2': 3}}) == 3)
-assert(d.resolve({'name1': {'par1': 6, 'par2': 4}}) == 4)
+assert d.resolve({'name1': {'par1': 5, 'par2': 1}}) == 1
+assert d.resolve({'name1': {'par1': 6, 'par2': 2}}) == 2
+assert d.resolve({'name1': {'par1': 5, 'par2': 3}}) == 3
+assert d.resolve({'name1': {'par1': 6, 'par2': 4}}) == 4
 try:
     d.resolve({'name1': {'par1': 5, 'par2': 2}})
 except: 
@@ -237,8 +237,8 @@ class SimulationFlow:
         I.distributed.wait(self._futures_paramfiles)
         self._set_relative_paths()
         for p in self._relative_paths:
-            assert(I.os.path.exists(self._final_param_files.join(p).join('cell.param')))
-            assert(I.os.path.exists(self._final_param_files.join(p).join('network.param')))
+            assert I.os.path.exists(self._final_param_files.join(p).join('cell.param'))
+            assert I.os.path.exists(self._final_param_files.join(p).join('network.param'))
         if 'simrun' in list(self.mdb.keys()):
             print('Warning! The simrun folder is not empty!')
         outdir = self.mdb.create_managed_folder('simrun', raise_ = False)
@@ -356,4 +356,4 @@ def _execute_parameterfile_creation(parameters,
 #  {'cell': {'id_': 'm2'},
 #   'modify_syn_strength': {'syn_strength': 'syn_strength_2'},
 #   'network': {'loc': 'n2'}}]
-# assert(out == out_expected)
+# assert out == out_expected

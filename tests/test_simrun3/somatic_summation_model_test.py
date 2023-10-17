@@ -56,18 +56,18 @@ class TestSomaticSummationModel:
 
     def test_compute_vt_array(self):
         pvt = _get_pvt(3,1,1,5)
-        assert(pvt.vt_array.shape == (6,5))
+        assert pvt.vt_array.shape == (6,5)
         pvt = _get_pvt(3,1,1,6)
-        assert(pvt.vt_array.shape == (6,6))
+        assert pvt.vt_array.shape == (6,6)
         pvt = _get_pvt(3,1,.5,6)
-        assert(pvt.vt_array.shape == (6,12))
+        assert pvt.vt_array.shape == (6,12)
         vt_array_index_expected = {('Generic1', 0): 0,
          ('Generic1', 1): 1,
          ('Generic1', 2): 2,
          ('Generic2', 0): 3,
          ('Generic2', 1): 4,
          ('Generic2', 2): 5}
-        assert(pvt.vt_array_index == vt_array_index_expected)
+        assert pvt.vt_array_index == vt_array_index_expected
         pvt = _get_pvt(3,1,1,5)
         vt_array_expected = np.array([[ 0.1,  0. ,  0. ,  0. ,  0. ],
                [ 0.2,  0. ,  0. ,  0. ,  0. ],
@@ -105,7 +105,7 @@ class TestSomaticSummationModel:
          ('Generic2', 1),
          ('Generic2', 1)]
         offsets_expected = np.array([ 0,  5, 10, 15, 25])
-        assert(synapses == synapses_expected)
+        assert synapses == synapses_expected
         np.testing.assert_array_almost_equal(offsets, offsets_expected) 
         
     def test_parse_sa_without_weights(self):

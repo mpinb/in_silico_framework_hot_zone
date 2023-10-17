@@ -224,7 +224,7 @@ def run_existing_synapse_activations(cellParamName, evokedUpParamName, synapseAc
         synapseActivation = glob.glob(str)
         if not synapseActivation:
             raise RuntimeError("Did not find any files on the specified location. Please provide list or globstring.")
-    assert(isinstance(synapseActivation, list))
+    assert isinstance(synapseActivation, list)
     
     chunks = utils.chunkIt(synapseActivation, nprocs)
     

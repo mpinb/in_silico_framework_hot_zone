@@ -75,7 +75,7 @@ class SQLiteBackend(object):
     def __getitem__(self, arg):
         '''Backend method to retrive item from the database'''
         dict_ = self._vectorized_getitem([arg])
-        assert(len(dict_) == 1)
+        assert len(dict_) == 1
         return list(dict_.values())[0]
     
     def _vectorized_getitem(self, keys):

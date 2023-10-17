@@ -130,7 +130,7 @@ class my_ibea_evaluator(bpop.evaluators.Evaluator):
     def __init__(self, parameter_df, n_objectives):
         """Constructor"""
         super(my_ibea_evaluator, self).__init__()
-        assert(isinstance(parameter_df, I.pd.DataFrame)) # we rely on the fact that the dataframe has an order
+        assert isinstance(parameter_df, I.pd.DataFrame) # we rely on the fact that the dataframe has an order
         self.parameter_df = parameter_df
         self.params = [bpop.parameters.Parameter
                        (index, bounds=(x['min'], x['max']))
@@ -247,7 +247,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
     # added by arco
     if mdb_run is not None:
         assert isinstance(mdb_run, I.ModelDataBase) # mdb_run
-    assert(halloffame is None)
+    assert halloffame is None
     # end added by arco
 
     if continue_cp:
@@ -436,7 +436,7 @@ def start_run(mdb_setup, n, pop = None, client = None, continue_cp = False, offs
     if continue_cp == True:
         # if we want to continue a preexisting optimization, no population may be provided
         # also check, whether the optimization really exists
-        assert(pop is None)
+        assert pop is None
         if not str(n) in list(mdb_setup.keys()):
             raise ValueError('run {} is not in mdb_setup. Nothing to continue'.format(n))
     if continue_cp == False:

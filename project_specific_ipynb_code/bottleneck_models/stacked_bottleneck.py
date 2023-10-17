@@ -75,7 +75,7 @@ class Model(nn.Module):
            Second element is ISI for each trial
         '''
         X,ISI_SOMA,ISI_DEND = X_ISI_MCM_list
-        assert(isinstance(X,torch.Tensor))
+        assert isinstance(X,torch.Tensor)
         out = self.linear1(X)
         list_ = [out]
         if self.bottleneck_ISI_soma:

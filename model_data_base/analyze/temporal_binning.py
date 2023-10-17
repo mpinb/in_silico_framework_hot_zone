@@ -17,9 +17,9 @@ def temporal_binning_pd(df, bin_size = None, min_time = None, max_time = None, n
         if bin_size is None: bin_size = 1
         bin_borders = np.arange(min_time, max_time + bin_size, bin_size)
     else:
-        assert(bin_size is None)
-        assert(min_time is None)
-        assert(max_time is None)
+        assert bin_size is None
+        assert min_time is None
+        assert max_time is None
         
     
     data = np.histogram(timelist, bin_borders)[0]

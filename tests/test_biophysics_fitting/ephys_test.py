@@ -15,4 +15,4 @@ def test_find_crossing():
     l = [1,1,2,3,3,3,2,1,3,1,1,1,1,1,3,1,1,1]
     assert find_crossing(l, 2) == [[3, 8, 14], [6, 9, 15]]
     assert find_crossing(l, 2.5) == [[3, 8, 14], [6, 9, 15]]
-    # assert(find_crossing(l + [3], 2.5) == [[], []])
+    # assert find_crossing(l + [3], 2.5) == [[], []]

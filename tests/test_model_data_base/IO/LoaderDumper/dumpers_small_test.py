@@ -33,7 +33,7 @@ class TestDumperSmall:
         self.pdf2 = pd.DataFrame({0: [1,2,3,4,5,6], 1: ['1', '2', '3', '1', '2', '3'], '2': [1, 2, 3, 1, 2, 3], \
                                  'myname': ['bla', 'bla', 'bla', 'bla', 'bla', 'bla']})  
         self.ddf2 = dd.from_pandas(self.pdf2, npartitions = 2)
-        assert(self.ddf.npartitions > 1)        
+        assert self.ddf.npartitions > 1        
                        
     def teardown_class(self):
         if os.path.exists(self.path):

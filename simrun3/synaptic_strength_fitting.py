@@ -28,7 +28,7 @@ class PSPs:
         gExRange: synaptic strength values to be checked
         vardt: should the variable step size solver be used=
         '''
-        assert('neuron' in list(neuron_param.keys()))
+        assert 'neuron' in list(neuron_param.keys())
         self.neuron_param = neuron_param
         self.confile = confile
         self.gExRange = gExRange
@@ -56,7 +56,7 @@ class PSPs:
         if exc_inh == 'exc':
             log.info('setting up computation for exc cells')
             for n in self.network_params_by_celltype:
-                assert(len(list(n.network.keys())) == 1)
+                assert len(list(n.network.keys())) == 1
                 celltype = list(n.network.keys())[0]
                 n.network[celltype]['synapses']
                 for gEx in self.gExRange:
@@ -70,7 +70,7 @@ class PSPs:
         elif exc_inh == 'inh':
             log.info('setting up computation for inh cells')
             for n in self.network_params_by_celltype:
-                assert(len(list(n.network.keys())) == 1)
+                assert len(list(n.network.keys())) == 1
                 celltype = list(n.network.keys())[0]
                 n.network[celltype]['synapses']
                 for gEx in self.gExRange:
@@ -98,7 +98,7 @@ class PSPs:
         Fetches results from the cluster.'''
         if self.result is None:
             self.result = [f.result() for f in self.futures]
-            assert(len(self._keys) == len(self.result))   
+            assert len(self._keys) == len(self.result)   
             del self.futures
             self.futures = 'done'  
         out = I.defaultdict_defaultdict()
@@ -256,7 +256,7 @@ class PSPs:
 #############################################
 def set_ex_synapse_weight(syn, weight):
     if weight is not None:
-        assert(len(weight) == 2)
+        assert len(weight) == 2
         gAMPA = weight[0]
         gNMDA = weight[1]
         syn.weight = {'glutamate_syn': [gAMPA, gNMDA]}
@@ -280,8 +280,8 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
     synapse_ids: if None, all synapses assigned to the presynaptic cell get activated.
         if a list of integers, only synapses with the specified indices get acivated'''
     spikeTime = 0 
-    assert(tStim is not None)
-    assert(tEnd is not None)
+    assert tStim is not None
+    assert tEnd is not None
     cell, nwMap = cell_nw_generator()
     
     # do not disable cells hat do not originate from this network_param
@@ -300,7 +300,7 @@ def run_ex_synapse(cell_nw_generator, neuron_param, network_param, celltype, pre
             syn.weight['gaba_syn'] = [gGABA]
 
     if preSynCellID is not None:
-        assert(((gAMPA is not None) and (gNMDA is not None)) or (gGABA is not None))
+        assert ((gAMPA is not None) and (gNMDA is not None)) or (gGABA is not None)
         preSynCell = nwMap.cells[celltype][preSynCellID]
         if synapseID is None:
             synapse_list = preSynCell.synapseList
@@ -496,8 +496,8 @@ def get_tMax_vMax_baseline(t_baseline,v_baseline, t,v, tStim = None, tEnd = None
     any synapse activation from a voltage trace with synapse activation.
     t_basline, v_baseline: voltage trace without synapse activation
     t,v: voltage trace with synapse activation'''
-    assert(tStim is not None)
-    assert(tEnd is not None)    
+    assert tStim is not None
+    assert tEnd is not None    
     try:
         t,v = I.np.arange(0,tEnd,0.025), I.np.interp(I.np.arange(0,tEnd,0.025), t, v)
     except:
@@ -523,8 +523,8 @@ def analyze_voltage_trace(vTrace, tTrace):
 def get_tMax_vMax(t,v, tStim = None, tEnd = None):
     '''This method calculates the ePSP amplitude by subtracting the voltage
     directly before the epsp, which is supposed to be at 160ms, from the voltagetrace.'''
-    assert(tStim is not None)
-    assert(tEnd is not None)
+    assert tStim is not None
+    assert tEnd is not None
     t,v = I.np.arange(0,tEnd,0.025), I.np.interp(I.np.arange(0,tEnd,0.025), t, v) 
     start_index = int(tStim - 1 / 0.025)
     stop_index = int(tStim / 0.025)
@@ -583,7 +583,7 @@ def linear_fit(gAMPANMDA, epsp):
     return I.np.polyfit(gAMPANMDA, epsp, 1)
 
 def linear_fit_pdf(pdf):
-    assert(pdf['gAMPA'].equals(pdf['gNMDA']))
+    assert pdf['gAMPA'].equals(pdf['gNMDA'])
     return I.pd.Series({'EPSP mean_offset': linear_fit(pdf.gAMPA, pdf.epspMean)[1],
                                        'EPSP mean_slope': linear_fit(pdf.gAMPA, pdf.epspMean)[0],
                                        'EPSP std_offset': linear_fit(pdf.gAMPA, pdf.epspStd)[1],

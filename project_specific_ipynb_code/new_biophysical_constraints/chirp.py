@@ -64,7 +64,7 @@ def setup_iclamp_vplay(cell, delay = None, duration = None, final_freq = None, d
 
 
 def record_chirp_dist(cell, recSite_dist = None, recSite2 = None):
-    assert(recSite2 is not None)
+    assert recSite2 is not None
     return {'tVec': tVec(cell), 
         'vList': (vmSoma(cell), vmApical(cell, recSite_dist), vmApical(cell, recSite2)),
         'iList': np.array(cell.iList)}

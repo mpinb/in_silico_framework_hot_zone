@@ -8,7 +8,7 @@ def test_can_load_hoc_file_with_label_BasalDendrite():
     #print path
     try:
         read_hoc_file(path)
-        assert(True)
+        assert True
     except:
-        assert(False)
+        assert False
         

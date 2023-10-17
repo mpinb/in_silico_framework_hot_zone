@@ -71,8 +71,8 @@ def _read_roberts_csv_uneven_length_helper(path, header, sim_trail_index = 'no_s
     '''
     if isinstance(path, (list, tuple)): 
         #checks for the vectorized case
-        assert(isinstance(sim_trail_index, (list, tuple)))
-        assert(max_commas is not None)
+        assert isinstance(sim_trail_index, (list, tuple))
+        assert max_commas is not None
     else:
         path = [path]
         sim_trail_index = [sim_trail_index]

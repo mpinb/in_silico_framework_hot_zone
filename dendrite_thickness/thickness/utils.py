@@ -126,7 +126,7 @@ def create_image_stack_dict_of_slice(folder_path, subfolders = None):
     tif_folder_path = folder_path
     if subfolders:
         tif_folder_path = get_files_by_folder(tif_folder_path, subfolders)
-    assert(len(tif_folder_path) == 1)
+    assert len(tif_folder_path) == 1
     tif_folder_path = tif_folder_path[0]
     slice_image_stack_list = get_files_by_folder(tif_folder_path, "tif")
     slice_image_stack_dict = {int(path.split('/')[-1].split('.')[0].split('_')[-1].strip('z')):

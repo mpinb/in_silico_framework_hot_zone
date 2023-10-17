@@ -51,8 +51,8 @@ def setup_crit_freq_n(cell, delay=None, freq = None, amplitude = None, n_stim = 
             delay += t
 
 def record_crit_freq(cell, recSite1 = None, recSite2 = None):
-    assert(recSite1 is not None)
-    assert(recSite2 is not None)
+    assert recSite1 is not None
+    assert recSite2 is not None
     return {'tVec': tVec(cell), 
             'vList': (vmSoma(cell), vmApical(cell, recSite1), vmApical(cell, recSite2)),
             'iList': np.array(cell.iList)}
@@ -122,7 +122,7 @@ def find_crossing(v, thresh):
     The second is the crossing down of that threshold
     
     Extended doku by Arco: returns [[],[]] if the number of crossing up vs crossing down is not equal.'''
-    assert(thresh is not None)
+    assert thresh is not None
     avec = []
     bvec = [] 
     ef = 0
@@ -181,7 +181,7 @@ def get_spike_n_per_interval(voltage_traces, soma_threshold, delay, freq_list, n
 
 #             interval_spike_counts[key][f'interval{i}'] = n 
             interval_spike_counts[key].append(n) 
-    assert(len(interval_spike_counts) == 1)
+    assert len(interval_spike_counts) == 1
     key = list(interval_spike_counts.keys())[0]
     return interval_spike_counts[key]  
 
@@ -207,7 +207,7 @@ class Crit_freq:
                  #                'Freq_list':('Freq_list',0,0), 
                  #                'NumSpike':('NumSpike',0,0)},
                  soma_threshold = 0):
-        assert(n_stim is not None)
+        assert n_stim is not None
         self.delay = delay
         # self.definitions = definitions
         self.n_stim = n_stim

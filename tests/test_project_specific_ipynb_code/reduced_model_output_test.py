@@ -8,8 +8,8 @@ def test_apply_release_probability():
     _arr = [len(list(utils.flatten(PostCell._apply_release_probability_and_merge(arr, prob)))) \
             / float(reference_len) 
      for lv in range(10000)]
-    assert(np.mean(_arr) < prob+0.01)
-    assert(np.mean(_arr) > prob-0.01)
+    assert np.mean(_arr) < prob+0.01
+    assert np.mean(_arr) > prob-0.01
     
 def test_get_SA_array():
     array = [[1,2,3,2,3,4],[3,4,5],[]]

@@ -176,8 +176,8 @@ def plot_weights(weight,  bottleneck_size = None, n_celltypes = None, n_spatial_
     ax = axcell
     
     if not categories:
-        assert(timepoint_selected_for_dendrite_visualization is not None)
-        assert(celltype_selected_for_dendrite_visualization is not None)
+        assert timepoint_selected_for_dendrite_visualization is not None
+        assert celltype_selected_for_dendrite_visualization is not None
         show_cell(ax, cell = cell, weights = weights2[celltype_selected_for_dendrite_visualization,:,:], # weight.reshape(n_celltypes,n_spatial_bins,temporal_window_width)[celltype_selected_for_dendrite_visualization],
               scaling = scaling,
               t = timepoint_selected_for_dendrite_visualization,

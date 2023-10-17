@@ -718,7 +718,7 @@ def write_cell_simulation(fname=None, cell=None, traces=None, tVec=None, allPoin
 
                             outFile.write(line)
                             
-                        assert(lv_for_record_vars == len(sec.recordVars[var]))        
+                        assert lv_for_record_vars == len(sec.recordVars[var])        
     
     
     

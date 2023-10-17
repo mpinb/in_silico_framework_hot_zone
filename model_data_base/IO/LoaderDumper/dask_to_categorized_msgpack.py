@@ -271,7 +271,7 @@ def dump(obj, savedir, repartition = False, get = None, categorize = True, clien
     meta = obj._meta
     index_name = obj.index.name
     if obj.known_divisions:
-        assert(obj.npartitions + 1 == len(obj.divisions))
+        assert obj.npartitions + 1 == len(obj.divisions)
         divisions = obj.divisions
     else:
         divisions = None

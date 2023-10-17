@@ -127,10 +127,10 @@ def test_reproduce_simulation_trail_from_roberts_model_control(tmpdir):
             
         #voltage traces
         path1 = glob.glob(os.path.join(dummy[0][0][1], '*_vm_all_traces*.csv'))
-        assert(len(path1) == 1)
+        assert len(path1) == 1
         path1 = path1[0]
         path2 = glob.glob(os.path.join(os.path.dirname(example_path), '*_vm_all_traces.csv'))
-        assert(len(path2) == 1)
+        assert len(path2) == 1
         path2 = path2[0]
         pdf1 = pd.read_csv(path2, sep = '\t')[['t', 'Vm run 00']]
         pdf2 = pd.read_csv(path1, sep = '\t')

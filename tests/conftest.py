@@ -42,7 +42,7 @@ def is_port_in_use(port):
         return s.connect_ex(('localhost', port)) == 0
 
 def setup_mdb_output_dir_tests():
-    assert(os.path.exists(TEST_DATA_FOLDER))
+    assert os.path.exists(TEST_DATA_FOLDER)
     this_dir = os.path.abspath(os.path.dirname(__file__))
     files_generated_by_tests = os.path.join(this_dir, 'test_model_data_base/data/files_generated_by_tests')
     if os.path.exists(files_generated_by_tests):

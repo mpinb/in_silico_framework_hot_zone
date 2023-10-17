@@ -47,15 +47,15 @@ class RW:
             self.params_to_explore = params_to_explore
     
     def _normalize_params(self,p):
-        assert(isinstance(p,pd.Series))
-        assert(len(p) == len(self.all_param_names))
+        assert isinstance(p,pd.Series)
+        assert len(p) == len(self.all_param_names)
         min_ = self.param_ranges['min']
         max_ = self.param_ranges['max']
         return (p-min_)/(max_-min_)
     
     def _unnormalize_params(self, p):
-        assert(isinstance(p,pd.Series))
-        assert(len(p) == len(self.all_param_names))
+        assert isinstance(p,pd.Series)
+        assert len(p) == len(self.all_param_names)
         min_ = self.param_ranges['min']
         max_ = self.param_ranges['max']
         return p*(max_-min_)+min_
@@ -69,7 +69,7 @@ class RW:
         seed_point_for_exploration_normalized_selected_np = seed_point_for_exploration_normalized_pd[self.params_to_explore].values
         
         # set seed
-        assert(seed is not None)
+        assert seed is not None
         np.random.seed(seed)    
         
         # set up folder structure
@@ -90,7 +90,7 @@ class RW:
             p = seed_point_for_exploration_pd # p is pandas and the full vector and unnormalized
             iteration = 0
             inside, initial_evaluation = self.evaluation_function(p)
-            assert(inside)
+            assert inside
             initial_evaluation['inside'] = inside
             out = [initial_evaluation]  # out is what will be saved
         else:
@@ -109,7 +109,7 @@ class RW:
             
             out = []
             # set the random number generator to the latest state
-            assert(max(iterations) == iterations[0])
+            assert max(iterations) == iterations[0]
             rngn_path = os.path.join(OPERATION_DIR, '{}.pickle.rngn'.format(iterations[0]))
             with open(rngn_path, 'rb') as f:
                 rngn = cloudpickle.load(f)
@@ -210,15 +210,15 @@ class RW_adaptive_step_size:
             self.params_to_explore = params_to_explore
     
     def _normalize_params(self,p):
-        assert(isinstance(p,pd.Series))
-        assert(len(p) == len(self.all_param_names))
+        assert isinstance(p,pd.Series)
+        assert len(p) == len(self.all_param_names)
         min_ = self.param_ranges['min']
         max_ = self.param_ranges['max']
         return (p-min_)/(max_-min_)
     
     def _unnormalize_params(self, p):
-        assert(isinstance(p,pd.Series))
-        assert(len(p) == len(self.all_param_names))
+        assert isinstance(p,pd.Series)
+        assert len(p) == len(self.all_param_names)
         min_ = self.param_ranges['min']
         max_ = self.param_ranges['max']
         return p*(max_-min_)+min_
@@ -257,7 +257,7 @@ class RW_adaptive_step_size:
         seed_point_for_exploration_normalized_selected_np = seed_point_for_exploration_normalized_pd[self.params_to_explore].values
         
         # set seed
-        assert(seed is not None)
+        assert seed is not None
         np.random.seed(seed)    
         
         # set up folder structure
@@ -288,7 +288,7 @@ class RW_adaptive_step_size:
             p = seed_point_for_exploration_pd # p is pandas and the full vector and unnormalized
             iteration = 0
             inside, initial_evaluation = self.evaluation_function(p)
-            assert(inside)
+            assert inside
             initial_evaluation['inside'] = inside
             initial_evaluation['iteration'] = iteration
             initial_evaluation['particle_id'] = particle_id
@@ -312,7 +312,7 @@ class RW_adaptive_step_size:
             
             out = []
             # set the random number generator to the latest state
-            assert(max(iterations) == iterations[0])
+            assert max(iterations) == iterations[0]
             rngn_path = os.path.join(OPERATION_DIR, '{}.pickle.rngn'.format(iterations[0]))
             with open(rngn_path, 'rb') as f:
                 rngn = cloudpickle.load(f)

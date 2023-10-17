@@ -190,7 +190,7 @@ class ReducedLdaModel():
         
         dummy = [synapse_activation_window_min, synapse_activation_window_max, synapse_activation_window_width]
         if compare_lists_by_none_values(dummy, [1, 1, 1]):
-            assert(synapse_activation_window_width == synapse_activation_window_max - synapse_activation_window_min)
+            assert synapse_activation_window_width == synapse_activation_window_max - synapse_activation_window_min
         elif compare_lists_by_none_values(dummy, [None, None, 1]):
             synapse_activation_window_max = output_window_max
             synapse_activation_window_min = synapse_activation_window_max - synapse_activation_window_width

@@ -36,7 +36,7 @@ class Model(nn.Module):
         ISI_DEND: n_trials x 1 = time to previous dendritic spike
         '''
         X, ISI_SOMA, ISI_DEND = X_ISI_MCM_list
-        assert(isinstance(X,torch.Tensor))
+        assert isinstance(X,torch.Tensor)
         out = self.linear1(X)
         list_ = [out]
         if self.bottleneck_ISI_soma:
@@ -77,7 +77,7 @@ def get_bin(value, bin_min, bin_max, n_bins, tolerance = 0.1):
 def get_neuron_param_file(m):   # this m should be the model data base which has the data like synaptic activation data
     folder = m['parameterfiles_cell_folder']
     f = [f for f in folder.listdir() if not f.endswith('.pickle')]#+.keys()
-    assert(len(f) == 1)
+    assert len(f) == 1
     return folder.join(f[0])
 
 def get_section_distances_df(neuron_param_file, silent = True):

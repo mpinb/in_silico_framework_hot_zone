@@ -102,7 +102,7 @@ def read_voltage_traces_from_npz(prefix, fname):
 def read_voltage_traces_by_filenames(prefix, fnames, divisions = None, repartition = None):
     '''takes list of filenames pointing to voltage trace files,
     returns dask dataframe'''
-    assert(repartition is not None)
+    assert repartition is not None
     fnames = sorted(fnames)
     if repartition and len(fnames) > 10000:
         fnames_chunks = utils.chunkIt(fnames, 5000)
@@ -110,13 +110,13 @@ def read_voltage_traces_by_filenames(prefix, fnames, divisions = None, repartiti
     else:
         delayeds = [read_voltage_traces_from_file_delayed(prefix, fname) for fname in fnames]  
     if divisions is not None:
-        assert(len(divisions) - 1 == len(delayeds))
+        assert len(divisions) - 1 == len(delayeds)
     meta = read_voltage_traces_from_file(prefix, fnames[0]).head()
     ddf = dd.from_delayed(delayeds, meta = meta, divisions = divisions)
     return ddf
 
 def get_voltage_traces_divisions_by_metadata(metadata, repartition = None):
-    assert(repartition is not None)
+    assert repartition is not None
     divisions = metadata[metadata.trailnr == min(metadata.trailnr)]
     divisions = list(divisions.sim_trail_index)
     if len(divisions) > 10000 and repartition:
@@ -225,7 +225,7 @@ def get_max_commas(paths):
 ###########################################
 
 def load_dendritic_voltage_traces_helper(mdb, suffix, divisions = None, repartition = None):
-    assert(repartition is not None)
+    assert repartition is not None
     m = mdb['metadata'] 
     if not suffix.endswith('.csv'):
         suffix = suffix + '.csv'
@@ -369,7 +369,7 @@ def write_param_files_to_folder(df, folder, path_column, hash_column, transform_
 # Build database using the helper functions above
 ###########################################################################################
 def _build_core(mdb, repartition = None):
-    assert(repartition is not None)
+    assert repartition is not None
     print('---building data base core---')
 
     print('generate filelist ...')
@@ -457,7 +457,7 @@ def _get_rec_site_managers(mdb):
     return out
 
 def _build_dendritic_voltage_traces(mdb, suffix_dict = None, repartition = None):
-    assert(repartition is not None)
+    assert repartition is not None
     print('---building dendritic voltage traces dataframes---')
     
     if suffix_dict is None:
@@ -527,7 +527,7 @@ def init(mdb, simresult_path,  \
     if burst_times:
         raise ValueError('deprecated!')
     if rewrite_in_optimized_format:
-        assert(client is not None)
+        assert client is not None
         get = client.get
 #     get = compatibility.multiprocessing_scheduler if get is None else get
 #     with dask.set_options(get = get):

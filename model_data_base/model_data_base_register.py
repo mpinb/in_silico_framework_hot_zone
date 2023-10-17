@@ -9,7 +9,7 @@ class ModelDataBaseRegister():
     def __init__(self, basedir, search_mdbs = "on_first_init"):
         if not basedir.endswith(_foldername):
             basedir = os.path.join(basedir, _foldername)
-        assert(basedir.endswith(_foldername))
+        assert basedir.endswith(_foldername)
         self.basedir = basedir
         if not os.path.exists(self.basedir):
             self._first_init = True

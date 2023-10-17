@@ -43,7 +43,7 @@ def get_expectancy_value_of_activated_prox_synapses_by_celltype(cell_param, netw
     int(distal)
     synapse_numbers = get_number_of_synapses_closer_than_x(distal, network_param, cell_param)
     cell_activations = get_cell_activations(network_param, tStop = tStop)
-    assert(set(synapse_numbers.keys()) == set(cell_activations.keys()))
+    assert set(synapse_numbers.keys()) == set(cell_activations.keys())
     return {key: cell_activations[key] * float(synapse_numbers[key]) for key in list(synapse_numbers.keys())}
 
 def get_expectancy_value_of_activated_prox_synapses_by_EI(cell_param, network_param, seed = None, tStop = 345, proximal = None, distal = None):

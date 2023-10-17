@@ -9,7 +9,7 @@ def change_ongoing_interval(n, factor = 1, pop = None):
             continue
         x = n.network[c]
         if isinstance(x.celltype, str):
-            assert(x.celltype == 'spiketrain')
+            assert x.celltype == 'spiketrain'
             x.interval = x.interval * factor
         else:
             x.celltype.spiketrain.interval = x.celltype.spiketrain.interval * factor
@@ -19,7 +19,7 @@ def set_stim_onset(n, onset = None):
     for c in list(n.network.keys()):
         x = n.network[c]
         if isinstance(x.celltype, str):
-            assert(x.celltype == 'spiketrain')
+            assert x.celltype == 'spiketrain'
             continue
         else:
             x.celltype.pointcell.offset = onset
@@ -29,7 +29,7 @@ def change_glutamate_syn_weights(param, g_optimal = None, pop = barrel_cortex.ex
         celltype = key.split('_')[0]
         if celltype in pop: # I.excitatory:
             index = [x for x in g_optimal.index if x in celltype]
-            assert(len(index) == 1)
+            assert len(index) == 1
             
             if type(g_optimal) == pd.core.series.Series:
                 g = g_optimal[index[0]]
@@ -52,13 +52,13 @@ def change_evoked_INH_scaling(param, factor, pop = barrel_cortex.inhibitory):
             param.network[key].celltype.pointcell.probabilities = prob
             
 def _celltype_matches(celltype_name, celltypes, columns):
-    assert(isinstance(celltypes, list))
-    assert(isinstance(columns, list))
+    assert isinstance(celltypes, list)
+    assert isinstance(columns, list)
     return  celltype_name.split('_')[0] in celltypes \
                 and (celltype_name.split('_')[1] in columns or 'S1' in columns)
 
 def _has_evoked(param, celltype):
-    assert(celltype in list(param.network.keys()))    
+    assert celltype in list(param.network.keys())    
     x = param.network[celltype]
     try:
         x.celltype.pointcell.probabilities

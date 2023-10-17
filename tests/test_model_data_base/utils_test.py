@@ -37,13 +37,13 @@ def test_cache():
         flag.append(x)
         return x
     
-    assert(len(flag) == 0)
+    assert len(flag) == 0
     fun(1)
-    assert(len(flag) == 1)
+    assert len(flag) == 1
     fun(1)
-    assert(len(flag) == 1)
+    assert len(flag) == 1
     fun(fun)
-    assert(len(flag) == 2)
+    assert len(flag) == 2
         
 def test_myrepartition(client):
     pdf = pd.DataFrame(np.random.randint(100, size = (1000,3)))
