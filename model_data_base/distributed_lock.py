@@ -19,6 +19,14 @@ else:
 
 
 def get_client():
+    """
+    Connects to a distributed locking server and returns the server and client object.
+
+    Returns:
+    - server: The server object.
+    - client: The client object, which can be None if the server type is 'file'.
+    """
+    
     for server in config:
         print('trying to connect to distributed locking server {}'.format(str(server)))
         if server['type'] == 'redis':
@@ -47,6 +55,15 @@ def get_client():
 server, client = get_client()
 
 def update_config(c):
+    """
+    Update the global configuration variables with the provided configuration.
+
+    Args:
+        c (dict): A dictionary containing the new configuration values.
+
+    Returns:
+        None
+    """
     global server
     global client
     global config
@@ -54,6 +71,19 @@ def update_config(c):
     server, client = get_client()
 
 def get_lock(name):
+    """
+    Returns a lock object based on the server type specified in the configuration.
+    
+    Args:
+    - name: str, the name of the lock
+    
+    Returns:
+    - lock object: an object that implements the lock interface
+    
+    Raises:
+    - RuntimeError: if the server type is not supported
+    """
+    
     if server['type'] == 'file':
         import fasteners
         return fasteners.InterProcessLock(name)
@@ -67,6 +97,16 @@ def get_lock(name):
             'Current locking config is: {}'.format(str(server)))
         
 def get_read_lock(name):
+    """
+    Returns a read lock object based on the server type specified in the configuration.
+    
+    Args:
+    - name (str): The name of the lock.
+    
+    Returns:
+    - lock object: A lock object based on the server type specified in the configuration.
+    """
+    
     if server['type'] == 'file':
         import fasteners
         return fasteners.InterProcessLock(name)
@@ -80,6 +120,16 @@ def get_read_lock(name):
             'Current locking config is: {}'.format(str(server)))
         
 def get_write_lock(name):
+    """
+    Returns a write lock object based on the server type specified in the configuration.
+    
+    Args:
+    - name: str, the name of the lock
+    
+    Returns:
+    - lock object: a lock object based on the server type specified in the configuration
+    """
+    
     if server['type'] == 'file':
         import fasteners
         return fasteners.InterProcessLock(name)
