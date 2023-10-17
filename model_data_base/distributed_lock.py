@@ -13,12 +13,13 @@ if "ISF_DISTRIBUTED_LOCK_CONFIG" in os.environ:
         config = yaml.load(f, Loader=YamlLoader)
 else:
     warnings.warn(
-        "environment variable ISF_DISTRIBUTED_LOCK_CONFIG is not set. "
-        + "Falling back to default configuration."
-    )
+        "environment variable ISF_DISTRIBUTED_LOCK_CONFIG is not set. " +
+        "Falling back to default configuration.")
     config = [
-        dict(type="redis", config=dict(host="spock", port=8885, socket_timeout=1)),
-        dict(type="redis", config=dict(host="localhost", port=6379, socket_timeout=1)),
+        dict(type="redis",
+             config=dict(host="spock", port=8885, socket_timeout=1)),
+        dict(type="redis",
+             config=dict(host="localhost", port=6379, socket_timeout=1)),
         dict(type="file"),
     ]
 
@@ -33,7 +34,8 @@ def get_client():
     """
 
     for server in config:
-        print("trying to connect to distributed locking server {}".format(str(server)))
+        print("trying to connect to distributed locking server {}".format(
+            str(server)))
         if server["type"] == "redis":
             import redis
 
@@ -42,7 +44,8 @@ def get_client():
                 c.client_list()
                 print("success!")
                 return server, c
-            except (redis.exceptions.TimeoutError, redis.exceptions.ConnectionError):
+            except (redis.exceptions.TimeoutError,
+                    redis.exceptions.ConnectionError):
                 pass
         elif server["type"] == "file":
             warnings.warn(
@@ -108,9 +111,8 @@ def get_lock(name):
         return client.Lock(name)
     else:
         raise RuntimeError(
-            "supported server types are redis, zookeeper and file. "
-            + "Current locking config is: {}".format(str(server))
-        )
+            "supported server types are redis, zookeeper and file. " +
+            "Current locking config is: {}".format(str(server)))
 
 
 def get_read_lock(name):
@@ -136,9 +138,8 @@ def get_read_lock(name):
         return client.ReadLock(name)
     else:
         raise RuntimeError(
-            "supported server types are redis, zookeeper and file. "
-            + "Current locking config is: {}".format(str(server))
-        )
+            "supported server types are redis, zookeeper and file. " +
+            "Current locking config is: {}".format(str(server)))
 
 
 def get_write_lock(name):
@@ -164,6 +165,5 @@ def get_write_lock(name):
         return client.WriteLock(name)
     else:
         raise RuntimeError(
-            "supported server types are redis, zookeeper and file. "
-            + "Current locking config is: {}".format(str(server))
-        )
+            "supported server types are redis, zookeeper and file. " +
+            "Current locking config is: {}".format(str(server)))
