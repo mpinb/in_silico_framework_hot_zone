@@ -156,5 +156,5 @@ def modify_combiner_to_add_hyperpolarizing_stimuli_error(c):
     c.setup.append('hyperpolarizing.Rin', ['hyperpolarizing.Rin'])
     c.setup.append('hyperpolarizing.Sag', ['hyperpolarizing.Sag'])
     c.setup.append('hyperpolarizing.Attenuation', ['hyperpolarizing.Attenuation'])
-    c.setup.append('hyperpolarizing.Dend_Rin', ['hyperpolarizing..Dend_Rin'])
+    c.setup.append('hyperpolarizing.Dend_Rin', ['hyperpolarizing.Dend_Rin'])
     
