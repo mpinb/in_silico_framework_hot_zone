@@ -8,6 +8,7 @@
 
 set -e  # exit if error occurs
 
+WORKING_DIR=$(pwd)
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda3-2020.11-Linux-x86_64.sh
 channels=$SCRIPT_DIR/../../mechanisms/channels_py3
@@ -98,6 +99,7 @@ fi
 # 1.1 -- Installing Anaconda
 echo "Anaconda will be installed in: ${CONDA_INSTALL_PATH}"
 bash $SCRIPT_DIR/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
+cd $WORKING_DIR
 echo "Activating environment by running \"source ${CONDA_INSTALL_PATH}/bin/activate\""
 source ${CONDA_INSTALL_PATH}/bin/activate
 conda info
@@ -120,6 +122,7 @@ fi
 echo "Installing In-Silico-Framework conda dependencies."
 sed "s|https://.*/|$SCRIPT_DIR/downloads/conda_packages/|" $SCRIPT_DIR/conda_requirements.txt > $SCRIPT_DIR/tempfile
 conda update --file $SCRIPT_DIR/tempfile --quiet
+cd $WORKING_DIR
 
 # -------------------- 3. Installing PyPI dependencies -------------------- #
 print_title "3/6. Installing PyPI dependencies"
@@ -132,11 +135,13 @@ fi
 # 3.1 -- Installing In-Silico-Framework pip dependencies.
 echo "Installing In-Silico-Framework pip dependencies."
 python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages
+cd $WORKING_DIR
 
 # -------------------- 4. Patching dask library -------------------- #
 print_title "4/6. Patching dask library"
 python $SCRIPT_DIR/patch_dask_linux64.py
 echo "Dask library patched."
+cd $WORKING_DIR
 
 # -------------------- 5. Patching pandas-msgpack -------------------- #
 print_title "5/6. Patching pandas-msgpack"
@@ -148,6 +153,7 @@ fi
 git -C pandas-msgpack apply $SCRIPT_DIR/pandas_msgpack.patch
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
+cd $WORKING_DIR
 
 # -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "6/6. Compiling NEURON mechanisms"
