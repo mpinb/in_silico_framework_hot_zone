@@ -126,7 +126,7 @@ class Cell(object):
             sec2 = self.sections[sec2]
             x1 = sec1.relPts(x1)
             x2 = sec2.relPts(x2)
-#        set origin
+        # set origin
         silent = h.distance(0, x1, sec=sec1)
         return h.distance(x2, sec=sec2)
 
@@ -187,7 +187,7 @@ class Cell(object):
     def remove_synapses(self, preType=None):
         if preType is None:
             return
-#        remove all
+        # remove all
         if preType == 'All' or preType == 'all':
             for synType in list(self.synapses.keys()):
                 synapses = self.synapses[synType]
@@ -196,7 +196,7 @@ class Cell(object):
             return
 
 
-#        only one type
+        # only one type
         else:
             try:
                 synapses = self.synapses[preType]
@@ -257,7 +257,7 @@ class Cell(object):
                        for t in syn.preCell.spikeTimes:
                            if t >= tChange:
                                if np.random.rand() < prelNew:
-#                                    syn.releaseSite.append(t)
+                                    # syn.releaseSite.append(t)
                                    newSpikes.append(t)
                                    syn.releaseSite.spikeTimes.append(t)
                                    print '\t\tnew release time %.2f' % (t)
@@ -265,7 +265,7 @@ class Cell(object):
                            print '\t\told NetCon: %s' % (syn.netcons[0])
                            print '\t\told NetCon valid: %d' % (syn.netcons[0].valid())
                            del syn.netcons[0]
-#                            syn.netcons = []
+                           # syn.netcons = []
                            print '\t\tcreating new VecStim'
                            del syn.releaseSite.spikes
                            syn.releaseSite.spikes = h.VecStim()

@@ -3,26 +3,24 @@ import neo
 from PyPDF2 import PdfFileWriter, PdfFileReader
 import json
 from functools import partial
+import neo
 
 ################################
 # reader
 ################################
 
-
 def read_smr_file(path):
-    '''Read spike2 file.
-    
-    To avoid changing the spike2 file at all costs, the file is first copied to the temp folder,
-    read from there. Then, the copy is deleted.
-    
-    Parameters
-    ----------
-    path: absolute path to smr file
-    
-    Returns
-    -------
-    data: neo.core.block.Block object, containing the content of the smr file
-    '''
+    """Reads a Spike2 file and returns its content as a neo.core.block.Block object.
+
+    To avoid modifying the original Spike2 file, a copy of the file is first created in a temporary folder.
+    The copy is then read and returned as a neo.core.block.Block object. Finally, the temporary folder is deleted.
+
+    Args:
+        path (str): Absolute path to the Spike2 file.
+
+    Returns:
+        neo.core.block.Block: A neo.core.block.Block object containing the content of the Spike2 file.
+    """
     # copying file to tmp_folder to avoid modifying it at all cost
     dest_folder = I.tempfile.mkdtemp()
     I.shutil.copy(path, dest_folder)
@@ -34,7 +32,28 @@ def read_smr_file(path):
 
 
 class ReaderSmr:
-    '''Reader for smr-files, which allows accessing stimulus times and voltage tracces'''
+    '''
+    A class for reading smr-files and accessing stimulus times and voltage traces.
+
+    Args:
+        path (str): The path to the smr-file.
+        analogsignal_id (int): The ID of the analog signal to read.
+        stim_times_channel (str): The name of the channel containing the stimulus times.
+        min_rel_time (float): The minimum relative time to include in the voltage traces.
+        max_rel_time (float): The maximum relative time to include in the voltage traces.
+
+    Attributes:
+        path (str): The path to the smr-file.
+        analogsignal_id (int): The ID of the analog signal to read.
+        stim_times_channel (str): The name of the channel containing the stimulus times.
+        min_rel_time (float): The minimum relative time to include in the voltage traces.
+        max_rel_time (float): The maximum relative time to include in the voltage traces.
+        t (numpy.ndarray): The time points of the voltage traces.
+        v (numpy.ndarray): The voltage values of the traces.
+        stim_times (list): The times of the stimuli.
+        t_start (float): The start time of the voltage traces.
+        t_end (float): The end time of the voltage traces.
+    '''
 
     def __init__(self,
                  path,
@@ -73,15 +92,31 @@ class ReaderSmr:
         self.t_start = self.t[0]
         self.t_end = self.t[-1]
 
-        #todo min_time, max_time
-
     def get_voltage_traces(self):
+        '''
+        Returns the time points and voltage values of the traces.
+
+        Returns:
+            tuple: A tuple containing the time points and voltage values of the traces.
+        '''
         return self.t, self.v
 
     def get_stim_times(self):
+        '''
+        Returns the times of the stimuli.
+
+        Returns:
+            list: A list containing the times of the stimuli.
+        '''
         return list(self.stim_times)
 
     def get_serialize_dict(self):
+        '''
+        Returns a dictionary containing the attributes of the ReaderSmr object.
+
+        Returns:
+            dict: A dictionary containing the attributes of the ReaderSmr object.
+        '''
         return {
             'path': self.path,
             'analogsignal_id': self.analogsignal_id,
@@ -200,25 +235,24 @@ def load_reader(dict_):
 
 
 def get_peaks_above(t, v, lim):
-    '''Compute timepoints of maxima above a threashold.
-    
-    Parameters
-    ----------
-    t: list, containing timepoints
-    v: list, containing recorded voltage
-    lim: float, threashold, above which (>=) maxima are detected.
-    
-    Returns
-    -------
-    max_t: list, containing timepoints of maxima
-    max_v: list, containing voltage at timepoints of maxima
-    '''
+    """
+    Compute timepoints of maxima above a threshold.
+
+    Args:
+        t (list): A list containing timepoints.
+        v (list): A list containing recorded voltage.
+        lim (float): A threshold above which (>=) maxima are detected.
+
+    Returns:
+        max_t (list): A list containing timepoints of maxima.
+        max_v (list): A list containing voltage at timepoints of maxima.
+    """
     assert len(t) == len(v)
     v, t = I.np.array(v), I.np.array(t)
     left_diff = v[1:-1] - v[:-2]
     right_diff = v[1:-1] - v[2:]
     values = v[1:-1]
-    # use >= because sometimes the spikes reach the threashold of the amplifier of +5mV
+    # use >= because sometimes the spikes reach the threshold of the amplifier of +5mV
     # by >, they would not be detected
     indices = I.np.argwhere((left_diff >= 0) & (right_diff >= 0) &
                             (values >= lim)).ravel() + 1
@@ -226,6 +260,17 @@ def get_peaks_above(t, v, lim):
 
 
 def get_upcross(t, v, lim):
+    """
+    Finds the times and corresponding voltages of upcrossings of a given threshold.
+
+    Args:
+        t (numpy.ndarray): Array of time values.
+        v (numpy.ndarray): Array of voltage values.
+        lim (float): Threshold value.
+
+    Returns:
+        Tuple[numpy.ndarray, numpy.ndarray]: Tuple containing arrays of time and voltage values at upcrossings.
+    """
     indices = I.np.argwhere((v[:-1] < lim) & (v[1:] >= lim)).ravel() + 1
     return t[indices], v[indices]
 
@@ -248,14 +293,12 @@ def filter_spike_times(
     
     If a through does not have a corresponding creast, no spike is detected.
     
-    Parameters
-    ----------
-    spike_times: list, containing spike times defined by the creast of the waveform
-    spike_times_trough, list, containing spike times defined by the trough of the waveform
+    Args:
+        - spike_times: list, containing spike times defined by the creast of the waveform
+        - spike_times_trough, list, containing spike times defined by the trough of the waveform
     
-    Returns
-    -------
-    filtered_spike_times: list, containing spikes fullfilling the definition above.'''
+    Returns:
+        filtered_spike_times: list, containing spikes fullfilling the definition above.'''
     if not mode in ['latest', 'creast_max']:
         raise ValueError("mode must be 'latest' or 'creast_max'!")
     s = []
@@ -288,24 +331,23 @@ def filter_spike_times(
 
 
 def filter_short_ISIs(t, tdelta=0.):
-    '''Filters out any events that occur in an interval shorter than tdelta.
-    
-    Example
-    -------
-    filter_short_ISIs([1,2,3,4,5], tdelta = 1.5)
-    > [1, 3, 5]
-    filter_short_ISIs([1,2,3,4,5], tdelta = 2)
-    > [1, 3, 5] 
-    
-    Parameters
-    ----------
-    t: list, containing timepoints of events
-    tdelta: float, optional, minimal interval between events
-    
-    Returns
-    -------
-    out_t: list, containing filtered spike times 
-    '''
+    """
+    Filters out any events that occur in an interval shorter than tdelta.
+
+    Args:
+        t (list): A list containing timepoints of events.
+        tdelta (float, optional): Minimal interval between events. Defaults to 0.
+
+    Returns:
+        list: A list containing filtered spike times.
+
+    Examples:
+        >>> filter_short_ISIs([1,2,3,4,5], tdelta=1.5)
+        [1, 3, 5]
+
+        >>> filter_short_ISIs([1,2,3,4,5], tdelta=2)
+        [1, 3, 5]
+    """
     if len(t) == 0:
         return []
 
@@ -330,31 +372,27 @@ def _find_stimulus_interval(stim_times):
 
 
 def stimulus_interval_filter(stim_times, period_length=1, offset=0):
-    '''Filters periodic stimuli such that only the first stimulus of each
-    period is retained.
-    
-    Parameters
-    ----------
-    stim_times: list, containing stimulus times
-    period_length: number of stimuli forming one period, default: 1
-        E.g. if you have stimuli at 10,20,40,50,70,80, period_length should be 2
-    offset: number of the stimulus in each period to be extracted. 
-    
-    Returns
-    -------
-    stim_times: list, containing filtered stimulus times
-    
-    Examples
-    --------
-    stimulus_interval_filter([1,2,3,4])
-    > [1,2,3,4]
-    
-     stimulus_interval_filter([1,2,3,4], period=2)
-    > [1,3]   
-    
-     stimulus_interval_filter([1,2,3,4], period=2, offset = 1)
-    > [2,4]       
-    '''
+    """
+    Filters periodic stimuli such that only the first stimulus of each period is retained.
+
+    Args:
+        stim_times (list): A list containing stimulus times.
+        period_length (int, optional): The number of stimuli forming one period. Defaults to 1.
+        offset (int, optional): The number of the stimulus in each period to be extracted. Defaults to 0.
+
+    Returns:
+        list: A list containing filtered stimulus times.
+
+    Examples:
+        >>> stimulus_interval_filter([1,2,3,4])
+        [1, 2, 3, 4]
+
+        >>> stimulus_interval_filter([1,2,3,4], period_length=2)
+        [1, 3]
+
+        >>> stimulus_interval_filter([1,2,3,4], period_length=2, offset=1)
+        [2, 4]
+    """
     return stim_times[offset::period_length]
 
 
@@ -372,34 +410,37 @@ def stimulus_interval_filter(stim_times, period_length=1, offset=0):
 #####################################################
 # convert list of spike times and list of stim times into dataframe
 #####################################################
-def get_st_from_spike_times_and_stim_times(spike_times,
-                                           stim_times,
-                                           offset=0,
-                                           mode='spike_times'):
-    '''Computes spike times dataframe based on list of spike times and stimulus times. 
+import pandas as pd
+import numpy as np
 
-    Assumes that stimulus times have a constant interstimulus interval!    
-    Ignores spikes before the first stimulus and after the last stimulus + interstimulus interval.
-    
-    Special cases:
-    If only one stimulus is defined, spike times after that stimulus are returned
-    If no stimulus is defined, spike times are returned unchanged.
-    
-    Parameters
-    ----------
-    spike_times: list of spike times
-    stim_times: list of stimulus times
-    
-    Returns
-    -------
-    Pandas dataframe. Its format is as follows: One row is one trial. The columns contain the spike times
-    and are named in ascending order (0,1,2, ...).'''
+import pandas as pd
+import numpy as np
 
+def get_st_from_spike_times_and_stim_times(spike_times: list[float],
+                                           stim_times: list[float],
+                                           offset: float = 0,
+                                           mode: str = 'spike_times') -> pd.DataFrame:
+    """Computes spike times dataframe based on list of spike times and stimulus times.
+
+    Args:
+        spike_times (list[float]): List of spike times.
+        stim_times (list[float]): List of stimulus times.
+        offset (float, optional): Offset value. Defaults to 0.
+        mode (str, optional): Mode of computation. Can be 'spike_times' or 'ISIs'. Defaults to 'spike_times'.
+
+    Returns:
+        pd.DataFrame: Pandas dataframe. Its format is as follows: One row is one trial. The columns contain the spike times
+        and are named in ascending order (0,1,2, ...).
+
+    Raises:
+        ValueError: If mode is not 'spike_times' or 'ISIs'.
+        ValueError: If offset is not negative.
+    """
     if len(stim_times) == 0:
-        stim_interval = I.np.Inf
+        stim_interval = np.Inf
         stim_times = [0.]
     elif len(stim_times) == 1:
-        stim_interval = I.np.Inf
+        stim_interval = np.Inf
     else:
         stim_interval = _find_stimulus_interval(stim_times)
     if offset > 0:
@@ -413,13 +454,13 @@ def get_st_from_spike_times_and_stim_times(spike_times,
                 if ((s - stim_time) >= offset) and (
                     (s - stim_time) < stim_interval + offset)
             ]
-            values = I.pd.Series({lv: v for lv, v in enumerate(values)})
+            values = pd.Series({lv: v for lv, v in enumerate(values)})
             values.name = lv
             out.append(values)
-        return I.pd.DataFrame(out)
+        return pd.DataFrame(out)
     elif mode == 'ISIs':
         out_ISIs = []
-        ISIs = I.pd.Series(spike_times).diff().tolist()
+        ISIs = pd.Series(spike_times).diff().tolist()
         for lv, stim_time in enumerate(stim_times):
             values = [
                 s[1]
@@ -427,39 +468,42 @@ def get_st_from_spike_times_and_stim_times(spike_times,
                 if ((s[0] - stim_time) >= offset) and (
                     (s[0] - stim_time) < stim_interval + offset)
             ]
-            values = I.pd.Series({lv: v for lv, v in enumerate(values)})
+            values = pd.Series({lv: v for lv, v in enumerate(values)})
             values.name = lv
             out_ISIs.append(values)
-        return I.pd.DataFrame(out_ISIs)
+        return pd.DataFrame(out_ISIs)
     else:
         raise ValueError('mode must be spike_times or ISIs')
 
 
-def strip_st(st):
-    '''Returns spike times dataframe only containing spike times, without metadata.
+import pandas as pd
+import my_utils as I
+
+def strip_st(st: pd.DataFrame) -> pd.DataFrame:
+    """
+    Returns a DataFrame containing only spike times, without metadata.
     
-    Parameters
-    ----------
-    st: pandas.DataFrame containing spike times as generated by get_st_from_spike_times_and_stim_times
+    Args:
+        st: A pandas DataFrame containing spike times as generated by get_st_from_spike_times_and_stim_times
     
-    Returns
-    -------
-    pandas.DataFrame, in which all columns, that cannot be converted to integer, are filtered out,
-    i.e. the DataFrame contains only spike times and no metadata.
-    '''
+    Returns:
+        A pandas DataFrame, in which all columns that cannot be converted to integer are filtered out,
+        i.e. the DataFrame contains only spike times and no metadata.
+    """
     return st[[c for c in st.columns if I.utils.convertible_to_int(c)]]
 
 
-def get_spike_times_from_row(row):
-    '''Returns list containing all elements in row, that are not NaN.
+import pandas as pd
+
+def get_spike_times_from_row(row: pd.Series) -> list:
+    """Returns a list containing all non-NaN elements in the given pandas Series.
     
-    Parameters
-    ----------
-    row: pandas.Series, containing spike times
-    
-    Returns
-    -------
-    list, containint spike times'''
+    Args:
+        row (pd.Series): A pandas Series containing spike times.
+        
+    Returns:
+        list: A list containing spike times.
+    """
     row = row.dropna()
     import six
     row = [v for i, v in six.iteritems(row)]
