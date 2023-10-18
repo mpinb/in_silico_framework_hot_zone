@@ -13,6 +13,29 @@ def trace_check(
         max_prestim_dendrite_depo=-50,
         vmax=None,  ## added by arco
         name=''):
+    """
+    Check the properties of a voltage trace:
+    1. Check that at least minspikenum are present.
+    2. Check if it properly returns to rest.
+    3. Check that there are no spikes before stimulus onset (in soma or dendrite).
+    4. Check if last spike is before deadline.
+    5. Check that the maximum dendritic depolarization before stimulus onset is not too large.
+
+    Args:
+        t (array): Time array.
+        v (array): Voltage array.
+        stim_onset (float): Time of stimulus onset.
+        stim_duration (float): Duration of stimulus.
+        minspikenum (int): Minimum number of spikes required.
+        soma_threshold (float): Threshold voltage for spike detection.
+        returning_to_rest (float): Voltage difference between last reported voltage and voltage base.
+        max_prestim_dendrite_depo (float): Maximum dendritic depolarization before stimulus onset.
+        vmax (float): Maximum voltage.
+        name (str): Name of the trace.
+
+    Returns:
+        dict: Dictionary containing the results of the checks.
+    """
     n = spike_count(t, v, thresh=soma_threshold)
     out = {}
     # check that at least minspikenum are present
