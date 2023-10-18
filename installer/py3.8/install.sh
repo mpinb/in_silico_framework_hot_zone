@@ -98,11 +98,16 @@ if [[ "${download_conda_flag}" == "true" ]]; then
 fi
 # 1.1 -- Installing Anaconda
 echo "Anaconda will be installed in: ${CONDA_INSTALL_PATH}"
-bash $SCRIPT_DIR/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
-cd $WORKING_DIR
-echo "Activating environment by running \"source ${CONDA_INSTALL_PATH}/bin/activate\""
-source ${CONDA_INSTALL_PATH}/bin/activate
+bash ${SCRIPT_DIR}/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
+export PYTHONPATH=${WORKING_DIR}/${CONDA_INSTALL_PATH}
+# setup conda in current shell; avoid having to restart shell
+eval $($CONDA_INSTALL_PATH/bin/conda shell.bash hook);
+source ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh;
+echo "Activating environment by running \"conda activate ${CONDA_INSTALL_PATH}/bin/activate\"";
+conda activate ${WORKING_DIR}/${CONDA_INSTALL_PATH};
 conda info
+echo $(which python)
+echo $(python --version)
 
 # -------------------- 2. Installing conda dependencies -------------------- #
 print_title "2/6. Installing conda dependencies "
@@ -144,11 +149,14 @@ echo "Dask library patched."
 cd $WORKING_DIR
 
 # -------------------- 5. Patching pandas-msgpack -------------------- #
-print_title "5/6. Patching pandas-msgpack"
+print_title "5/6. Installing & patching pandas-msgpack"
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
 if [ ! -r "${PD_MSGPACK_HOME}" ]; then
+    pushd .
+    cd $SCRIPT_DIR
     echo "Cloning pandas-msgpack from GitHub."
     git clone https://github.com/abast/pandas-msgpack.git;
+    popd
 fi
 git -C pandas-msgpack apply $SCRIPT_DIR/pandas_msgpack.patch
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
