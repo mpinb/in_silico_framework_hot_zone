@@ -140,6 +140,17 @@ def find_crossing(v, thresh):
 
 
 def voltage_base(t, v, stim_delay):
+    """
+    Calculates the mean voltage between 0.5 * stim_delay and 0.75 * stim_delay.
+
+    Args:
+        t (numpy.ndarray): Array of time values.
+        v (numpy.ndarray): Array of voltage values.
+        stim_delay (float): Delay time of the stimulus.
+
+    Returns:
+        float: Mean voltage between 0.5*stim_delay and 0.75*stim_delay.
+    """
     try:
         ta = I.np.nonzero(
             t >= 0.5 *
@@ -154,6 +165,17 @@ def voltage_base(t, v, stim_delay):
 
 
 def voltage_base2(voltage_traces, recSiteID, t0):
+    """
+    Returns the voltage at a given time point t0 for a specific recording site ID.
+
+    Args:
+    - voltage_traces (dict): A dictionary containing voltage traces for different recording sites.
+    - recSiteID (int): The ID of the recording site for which the voltage is to be returned.
+    - t0 (float): The time point at which the voltage is to be returned.
+
+    Returns:
+    - The voltage at time point t0 for the specified recording site ID.
+    """
     t = voltage_traces['baseline']['tVec']
     v = voltage_traces['baseline']['vList']['recSiteID']
     i = I.np.argmin(I.np.abs(t - t0))
@@ -161,21 +183,69 @@ def voltage_base2(voltage_traces, recSiteID, t0):
 
 
 def spike_count(t, v, thresh=None):
+    """
+    Counts the number of spikes in a voltage trace.
+
+    Args:
+        t (array_like): Time values of the voltage trace, in seconds.
+        v (array_like): Voltage values of the trace, in volts.
+        thresh (float, optional): Spike detection threshold, in volts. If not specified, the threshold
+            will be set to the mean of the voltage trace.
+
+    Returns:
+        int: The number of spikes detected in the trace.
+    """
+    
     return len(find_crossing(v, thresh)[0])
 
 
 # AP_height is the mean amplitude of all detected spikes. Amplitude is max depolarization
 # occuring during a spike. If there is no spike, returns 20 times standard deviation
 def AP_height_check_1AP(t, v, thresh=None):
+    """
+    Determines if an action potential (AP) is present in a voltage trace by checking if the voltage crosses a given threshold.
+    
+    Args:
+        t (array-like): Array of time values corresponding to the voltage trace.
+        v (array-like): Array of voltage values for the trace.
+        thresh (float, optional): The voltage threshold to use for detecting the AP. If None, defaults to the maximum voltage
+            value divided by 2.
+    
+    Returns:
+        bool: True if at least one AP is detected in the voltage trace, False otherwise.
+    """
+    
     return len(find_crossing(v, thresh)) >= 1
 
 
 def AP_height(t, v, thresh=None):
+    """
+    Computes the amplitude of each action potential (AP) in a voltage trace.
+    
+    Args:
+        t (numpy.ndarray): Array of time values.
+        v (numpy.ndarray): Array of voltage values.
+        thresh (float, optional): AP threshold voltage. If None, uses the default threshold of find_crossing().
+    
+    Returns:
+        numpy.ndarray: Array of AP amplitudes.
+    """
     out = [max(v[ti:tj]) for ti, tj in zip(*find_crossing(v, thresh))]
     return I.np.array(out)
 
 
 def AP_width(t, v, thresh):
+    """
+    Calculates the action potential (AP) width of a given voltage trace `v` with respect to a given threshold `thresh`.
+    
+    Args:
+        t (numpy.ndarray): Array of time values corresponding to the voltage trace `v`.
+        v (numpy.ndarray): Array of voltage values.
+        thresh (float): Threshold voltage value for detecting AP onset and offset.
+        
+    Returns:
+        numpy.ndarray: Array of AP widths (in seconds) for each detected AP in the voltage trace `v`.
+    """
     w = [t[tk] - t[ti] for ti, tk in zip(*find_crossing(v, thresh))]
     return I.np.array(w)
 
@@ -184,6 +254,17 @@ AP_width_check_1AP = AP_height_check_1AP
 
 
 def AP_width(t, v, thresh):
+    """
+    Calculates the action potential (AP) width given the time and voltage arrays and a threshold value.
+
+    Args:
+        t (numpy.ndarray): Array of time values.
+        v (numpy.ndarray): Array of voltage values.
+        thresh (float): Threshold value for detecting AP.
+
+    Returns:
+        numpy.ndarray: Array of AP widths.
+    """
     w = [t[tk] - t[ti] for ti, tk in zip(*find_crossing(v, thresh))]
     return I.np.array(w)
 
@@ -194,10 +275,34 @@ AP_width_check_1AP = AP_height_check_1AP
 # Original: Computes the minimum membrane potential in between consecutive spikes
 # and returns the mean of these values. Returns 20*std if less than 2 spikes.
 def AHP_depth_abs_check_2AP(t, v, thresh=None):
+    """
+    Determines whether there are at least two action potentials (APs) in the voltage trace `v` 
+    within the time range `t` that cross the threshold `thresh`.
+    
+    Args:
+        t (numpy.ndarray): The time range of the voltage trace.
+        v (numpy.ndarray): The voltage trace.
+        thresh (float, optional): The threshold voltage for detecting APs. Defaults to None.
+    
+    Returns:
+        bool: True if there are at least two APs in the voltage trace `v` within the time range `t` 
+        that cross the threshold `thresh`, False otherwise.
+    """
     return spike_count(t, v, thresh=thresh) >= 2
 
 
 def AHP_depth_abs(t, v, thresh=None):
+    """
+    Calculates the absolute afterhyperpolarization (AHP) depth for a given voltage trace.
+    
+    Args:
+        t (numpy.ndarray): Array of time values.
+        v (numpy.ndarray): Array of voltage values.
+        thresh (float, optional): Threshold voltage for action potential detection. Defaults to None.
+    
+    Returns:
+        numpy.ndarray: Array of AHP depths, one for each action potential in the voltage trace.
+    """
     apIndexList = I.np.array(find_crossing(v, thresh))
     apIndexList = [(apIndexList[1, lv], apIndexList[0, lv + 1])
                    for lv in range(apIndexList.shape[1] - 1)]  # the gaps
@@ -207,12 +312,33 @@ def AHP_depth_abs(t, v, thresh=None):
 # Original: Returns 20std if no spike has been detected. Returns 20std if there are less than two
 # somatic APs. Returns 20*std if peak of Ca spike preceedes second somatic spike.
 def BAC_caSpike_height_check_1_Ca_AP(t, v, v_dend, thresh=None):
-    #print(spike_count(t,v_dend,thresh))
+    """
+    Checks if there is exactly one calcium spike in the dendritic voltage trace.
+
+    Args:
+        t (array): Time array.
+        v (array): Somatic voltage array.
+        v_dend (array): Dendritic voltage array.
+        thresh (float, optional): Spike detection threshold. Defaults to None.
+
+    Returns:
+        bool: True if there is exactly one calcium spike in the dendritic voltage trace, False otherwise.
+    """
     return spike_count(t, v_dend, thresh) == 1
 
 
 def BAC_caSpike_height_check_gt2_Na_spikes(t, v, v_dend, thresh=None):
-    #print(spike_count(t,v,thresh))
+    """Checks if the number of spikes in the voltage trace is greater than or equal to 2.
+
+    Args:
+        t (array): Array of time values.
+        v (array): Array of voltage values.
+        v_dend (array): Array of dendritic voltage values.
+        thresh (float, optional): Spike detection threshold. Defaults to None.
+
+    Returns:
+        bool: True if the number of spikes is greater than or equal to 2, False otherwise.
+    """
     return spike_count(t, v, thresh) >= 2
 
 
@@ -221,14 +347,41 @@ def BAC_caSpike_height_check_Ca_spikes_after_Na_spike(t,
                                                       v_dend,
                                                       n=2,
                                                       thresh=None):
+    """Checks if a calcium spike occurs after the nth sodium spike.
+
+    Args:
+        t (numpy.ndarray): Array of time values.
+        v (numpy.ndarray): Array of voltage values.
+        v_dend (numpy.ndarray): Array of dendritic voltage values.
+        n (int, optional): The number of the sodium spike to check for.
+            Defaults to 2.
+        thresh (float, optional): The voltage threshold for detecting spikes.
+            If None, defaults to the maximum value of v divided by 10.
+            Defaults to None.
+
+    Returns:
+        bool: True if a calcium spike occurs after the nth sodium spike,
+            False otherwise.
+    """
     t_max_Ca = t[v_dend == max(v_dend)][0]
     t_nth_spike = t[find_crossing(v, thresh)[0][n - 1]]
-    #print(t_max_Ca, t_nth_spike)
     return t_max_Ca >= t_nth_spike
 
 
 def BAC_caSpike_height(t, v, v_dend, ca_thresh=-55, tstim=295):
-    '''returns heights of Ca spikes after tstim'''
+    """
+    Returns the height of the calcium spike after tstim.
+
+    Args:
+        t (array-like): Time array.
+        v (array-like): Voltage array.
+        v_dend (array-like): Dendritic voltage array.
+        ca_thresh (float, optional): Calcium threshold. Defaults to -55.
+        tstim (float, optional): Time of stimulation. Defaults to 295.
+
+    Returns:
+        float: Height of the calcium spike.
+    """
     hs = AP_height(t, v_dend, ca_thresh)
     i = next((lv for lv, i in enumerate(find_crossing(v_dend, ca_thresh)[0])
               if t[i] >= tstim))
@@ -243,26 +396,79 @@ BAC_caSpike_width_check_1_Ca_AP = BAC_caSpike_height_check_1_Ca_AP
 
 
 def BAC_caSpike_width(t, v, v_dend, thresh=None):
+    """
+    Calculates the width of a calcium spike action potential.
+    
+    Args:
+        t (array-like): The time values of the action potential.
+        v (array-like): The voltage values of the action potential.
+        v_dend (array-like): The voltage values of the dendrite.
+        thresh (float, optional): The threshold voltage for the action potential.
+        
+    Returns:
+        float: The width of the calcium spike action potential.
+    """
     return AP_width(t, v_dend, thresh)[0]
 
 
 # Original: Returns 20*std if no spike is detected, or if the amplitude of the dendritic potential
 # is larger than the somatic amplitude. Somatic and dendritic amplitude are calculated
 # as difference between the voltage_base at the respective recording site and the maximum depolarization.
+def BPAPatt_check_relative_height(t, v_soma, v_dend, bAP_thresh=None, stim_onset=None):
+    """
+    Computes the ratio of the backpropagating action potential (bAP) amplitude at the soma and dendrite
+    and returns True if the ratio is greater than 1, False otherwise.
+
+    Args:
+        t (numpy.ndarray): Array of time points.
+        v_soma (numpy.ndarray): Array of voltage values at the soma.
+        v_dend (numpy.ndarray): Array of voltage values at the dendrite.
+        bAP_thresh (float, optional): Threshold for detecting bAPs. Defaults to None.
+        stim_onset (float, optional): Time point of the stimulus onset. Defaults to None.
+
+    Returns:
+        bool: True if the ratio of bAP amplitude at soma and dendrite is greater than 1, False otherwise.
+    """
+    return BPAPatt(t, v_soma, bAP_thresh, stim_onset) / BPAPatt(t, v_dend, bAP_thresh, stim_onset) > 1
 def BPAPatt_check_relative_height(t,
                                   v_soma,
                                   v_dend,
                                   bAP_thresh=None,
                                   stim_onset=None):
+                                  
     return BPAPatt(t, v_soma, bAP_thresh, stim_onset) / BPAPatt(
         t, v_dend, bAP_thresh, stim_onset) > 1
 
 
 def BPAPatt_check_1_AP(t, v_soma, thresh=None, stim_onset=None):
+    """
+    Checks if there is exactly one action potential in the somatic voltage trace.
+    
+    Args:
+    - t (array): time array [ms]
+    - v_soma (array): somatic voltage trace [mV]
+    - thresh (float): spike threshold [mV]
+    - stim_onset (float): time of stimulus onset [ms]
+    
+    Returns:
+    - bool: True if there is exactly one action potential, False otherwise
+    """
     return spike_count(t, v_soma, thresh) == 1
 
 
 def BPAPatt(t, v_dend, thresh='+2mV', stim_onset=None):
+    """
+    Computes the amplitude of the backpropagating action potential (bAP) at the dendrite.
+
+    Args:
+        t (array): Time array.
+        v_dend (array): Dendritic voltage array.
+        thresh (str or float): Threshold voltage for detecting the bAP. Default is '+2mV'.
+        stim_onset (float): Time of the stimulus onset. Default is None.
+
+    Returns:
+        float: Amplitude of the bAP at the dendrite.
+    """
     b2 = voltage_base(t, v_dend, stim_onset)  # 295 is the delay of the bAP stim
     if thresh == '+2mV':
         thresh = b2 + 2
@@ -279,16 +485,49 @@ def BPAPatt(t, v_dend, thresh='+2mV', stim_onset=None):
 # return 20*std if V(t = 295+45) > -55 computes the deviation of the mean
 # ISI from the experimental mean
 def BAC_ISI_check_2_or_3_APs(t, v, thresh=None):
+    """Check if there are 2 or 3 action potentials (APs) in a given voltage trace for a BAC stimulus.
+    
+    Args:
+        t (array): Array of time values.
+        v (array): Array of voltage values.
+        thresh (float, optional): Spike threshold. Defaults to None.
+    
+    Returns:
+        bool: True if there are 2 or 3 APs, False otherwise.
+    """
     n = spike_count(t, v, thresh=thresh)
     return (n == 2) or (n == 3)
 
 
 def BAC_ISI_check_repolarization(t, v, stim_end=None, repolarization=None):
+    """
+    Checks if the membrane potential has repolarized to a certain value after a stimulus for a BAC stimulus.
+
+    Args:
+        t (numpy.ndarray): Array of time values.
+        v (numpy.ndarray): Array of membrane potential values.
+        stim_end (float, optional): Time at which the stimulus ends. Defaults to None.
+        repolarization (float, optional): Value to which the membrane potential should repolarize. Defaults to None.
+
+    Returns:
+        bool: True if the membrane potential has repolarized to the specified value, False otherwise.
+    """
     i = I.np.nonzero(t >= stim_end)[0][0]
     return v[i] < repolarization
 
 
 def BAC_ISI(t, v, thresh=None):
+    """
+    Computes the Inter-Spike Interval (ISI) of a voltage trace for a BAC stimulus.
+    
+    Args:
+        t (numpy.ndarray): Array of time values.
+        v (numpy.ndarray): Array of voltage values.
+        thresh (float, optional): Voltage threshold for spike detection. Defaults to None.
+    
+    Returns:
+        float: Burst Averaged Inter-Spike Interval (BAC ISI) value.
+    """
     spikes = find_crossing(v, thresh)[0]
     ISI_1 = t[spikes[1]] - t[spikes[0]]
     if len(spikes) == 3:
