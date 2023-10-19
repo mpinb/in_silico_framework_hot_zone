@@ -1,9 +1,19 @@
-import Interface as I
-import neo
+import neo, json, tempfile, shutil, os
 from PyPDF2 import PdfFileWriter, PdfFileReader
 import json
 from functools import partial
 import neo
+import pandas as pd
+import numpy as np
+from model_data_base import utils as mdb_utils
+from collections import defaultdict
+import tempfile
+import matplotlib.pyplot as plt
+from IPython import display
+import seaborn as sns
+from model_data_base.analyze.spike_detection import spike_in_interval as mdb_analyze_spike_in_interval
+from model_data_base.analyze.temporal_binning import universal as temporal_binning
+from visualize import histogram
 
 ################################
 # reader
@@ -22,12 +32,12 @@ def read_smr_file(path):
         neo.core.block.Block: A neo.core.block.Block object containing the content of the Spike2 file.
     """
     # copying file to tmp_folder to avoid modifying it at all cost
-    dest_folder = I.tempfile.mkdtemp()
-    I.shutil.copy(path, dest_folder)
-    path = I.os.path.join(dest_folder, I.os.path.basename(path))
+    dest_folder = tempfile.mkdtemp()
+    shutil.copy(path, dest_folder)
+    path = os.path.join(dest_folder, os.path.basename(path))
     reader = neo.io.Spike2IO(filename=path)
     data = reader.read(lazy=False, signal_group_mode='split-all')[0]
-    I.shutil.rmtree(dest_folder)
+    shutil.rmtree(dest_folder)
     return data
 
 
@@ -78,7 +88,7 @@ class ReaderSmr:
             self._events = events = {
                 e.annotations['id']: e for e in data.segments[0].events
             }
-            self.stim_times = I.np.array(events[stim_times_channel]) * 1000
+            self.stim_times = mp.array(events[stim_times_channel]) * 1000
         else:
             self.stim_times = []
 
@@ -155,7 +165,7 @@ def read_labview_junk1_dat_files(path, scale=100, sampling_rate=32000):
         data = np.fromfile(
             f, dtype='>f4')  # interpret binary data as big endian float32
     t = [lv * 1. / sampling_rate for lv in range(len(data))]
-    return I.np.array(t) * 1000, data * scale
+    return mp.array(t) * 1000, data * scale
 
 
 def highpass_filter(y, sr):
@@ -248,13 +258,13 @@ def get_peaks_above(t, v, lim):
         max_v (list): A list containing voltage at timepoints of maxima.
     """
     assert len(t) == len(v)
-    v, t = I.np.array(v), I.np.array(t)
+    v, t = mp.array(v), mp.array(t)
     left_diff = v[1:-1] - v[:-2]
     right_diff = v[1:-1] - v[2:]
     values = v[1:-1]
     # use >= because sometimes the spikes reach the threshold of the amplifier of +5mV
     # by >, they would not be detected
-    indices = I.np.argwhere((left_diff >= 0) & (right_diff >= 0) &
+    indices = mp.argwhere((left_diff >= 0) & (right_diff >= 0) &
                             (values >= lim)).ravel() + 1
     return list(t[indices]), list(v[indices])
 
@@ -271,7 +281,7 @@ def get_upcross(t, v, lim):
     Returns:
         Tuple[numpy.ndarray, numpy.ndarray]: Tuple containing arrays of time and voltage values at upcrossings.
     """
-    indices = I.np.argwhere((v[:-1] < lim) & (v[1:] >= lim)).ravel() + 1
+    indices = mp.argwhere((v[:-1] < lim) & (v[1:] >= lim)).ravel() + 1
     return t[indices], v[indices]
 
 
@@ -303,7 +313,7 @@ def filter_spike_times(
         raise ValueError("mode must be 'latest' or 'creast_max'!")
     s = []
     s_ampl = []
-    spike_times = I.np.array(spike_times)
+    spike_times = mp.array(spike_times)
     for x in spike_times_trough:
         aligned_creasts = spike_times[
             (spike_times >= x - creast_trough_interval) &
@@ -324,10 +334,10 @@ def filter_spike_times(
                 s.append(aligned_creasts[-1])  # before: aligned_creats[0]
                 s_ampl.append(aligned_creast_amplitude[-1])
             if mode == 'creast_max':
-                index = I.np.argmax(aligned_creast_amplitude)
+                index = mp.argmax(aligned_creast_amplitude)
                 s_ampl.append(aligned_creast_amplitude[index])
                 s.append(aligned_creasts[index])
-    return I.np.array(s), I.np.array(s_ampl)
+    return mp.array(s), mp.array(s_ampl)
 
 
 def filter_short_ISIs(t, tdelta=0.):
@@ -397,7 +407,7 @@ def stimulus_interval_filter(stim_times, period_length=1, offset=0):
 
 
 ## automatic interval detection ... not to be trusted
-#     max_interval = max(set(I.np.diff(stim_times).round()))
+#     max_interval = max(set(mp.diff(stim_times).round()))
 #     out = []
 #     for i in intervals:
 #         if out:
@@ -410,11 +420,6 @@ def stimulus_interval_filter(stim_times, period_length=1, offset=0):
 #####################################################
 # convert list of spike times and list of stim times into dataframe
 #####################################################
-import pandas as pd
-import numpy as np
-
-import pandas as pd
-import numpy as np
 
 def get_st_from_spike_times_and_stim_times(spike_times,
                                            stim_times,
@@ -476,8 +481,6 @@ def get_st_from_spike_times_and_stim_times(spike_times,
         raise ValueError('mode must be spike_times or ISIs')
 
 
-import pandas as pd
-import my_utils as I
 
 def strip_st(st):
     """
@@ -490,7 +493,7 @@ def strip_st(st):
         A pandas DataFrame, in which all columns that cannot be converted to integer are filtered out,
         i.e. the DataFrame contains only spike times and no metadata.
     """
-    return st[[c for c in st.columns if I.utils.convertible_to_int(c)]]
+    return st[[c for c in st.columns if mdb_utils.convertible_to_int(c)]]
 
 
 import pandas as pd
@@ -551,7 +554,7 @@ class SpikeDetectionCreastTrough(object):
                  tdelta=1.,
                  stimulus_period=1,
                  stimulus_period_offset=0,
-                 upper_creast_threshold=I.np.inf,
+                 upper_creast_threshold=mp.inf,
                  cellid='__no_cellid_assigned__',
                  spike_time_mode='latest'):
         self.reader = reader_object
@@ -601,7 +604,7 @@ class SpikeDetectionCreastTrough(object):
         upper_creast_threshold = self.upper_creast_threshold
         # spike times detected by creast
         a, b = get_peaks_above(t, v, lim_creast)
-        self._spike_times_creast, self._spike_amplitudes_creast = a, I.np.array(
+        self._spike_times_creast, self._spike_amplitudes_creast = a, mp.array(
             b)
         #self._spike_times_creast_filtered = filter_short_ISIs(self._spike_times_creast, tdelta=tdelta)
         # spike times detected by trough
@@ -625,7 +628,7 @@ class SpikeDetectionCreastTrough(object):
     def get_creast_and_trough_ampltidues_by_bins(self, mode='zero'):
         # aliases
         t, v = self.reader.get_voltage_traces()
-        t, v = I.np.array(t), I.np.array(v)
+        t, v = mp.array(t), mp.array(v)
 
         if len(self.stim_times) < 2:
             str_ = "less than 2 stimuli found. using whole trace to determine "
@@ -643,19 +646,19 @@ class SpikeDetectionCreastTrough(object):
         _, troughs = get_peaks_above(t, v * -1, 0)
 
         # compute bins
-        bins = I.np.arange(0, 7, 0.1)
-        binned_data_st, _ = I.np.histogram(creasts, bins=bins)
-        binned_data_sst, _ = I.np.histogram(troughs, bins=bins)
+        bins = mp.arange(0, 7, 0.1)
+        binned_data_st, _ = mp.histogram(creasts, bins=bins)
+        binned_data_sst, _ = mp.histogram(troughs, bins=bins)
         if mode == 'zero':
-            minimun_zero_bin_st = bins[I.np.argwhere(
+            minimun_zero_bin_st = bins[mp.argwhere(
                 binned_data_st[4:-1] == 0).min() + 4]
-            minimun_zero_bin_sst = bins[I.np.argwhere(
+            minimun_zero_bin_sst = bins[mp.argwhere(
                 binned_data_sst[4:-1] == 0).min() + 4]
         elif mode == 'minimum':
-            minimun_zero_bin_st = bins[I.np.argwhere(
+            minimun_zero_bin_st = bins[mp.argwhere(
                 ((binned_data_st[4:-1] - binned_data_st[5:]) < 0) |
                 (binned_data_st[4:-1] == 0)).min() + 4]
-            minimun_zero_bin_sst = bins[I.np.argwhere(
+            minimun_zero_bin_sst = bins[mp.argwhere(
                 ((binned_data_sst[4:-1] - binned_data_sst[5:]) < 0) |
                 (binned_data_sst[4:-1] == 0)).min() + 4]
         return minimun_zero_bin_st, minimun_zero_bin_sst * -1
@@ -680,7 +683,7 @@ class SpikeDetectionCreastTrough(object):
             (s, 'k', '--', .5)
             for s in self._spike_times_creast
             if not s in self.spike_times
-        ]  # len([ss for ss in self.spike_times if I.np.abs(ss-s) < 1])]
+        ]  # len([ss for ss in self.spike_times if mp.abs(ss-s) < 1])]
         if show_trough_candidates:
             events += [(s, 'k', '--', .5)
                        for s in self._spike_times_trough
@@ -731,35 +734,35 @@ class SpikeDetectionCreastTrough(object):
                 break
             index = (t > offset_time - 15) & (t < offset_time + 15)
             tt, vv = t[index], v[index]
-            fig = I.plt.figure(figsize=(15, 4))
-            I.plt.plot(tt, vv)  ###
-            I.plt.axhline(self.lim_creast, color='grey', linewidth=.5)
-            I.plt.axhline(self.lim_trough, color='grey', linewidth=.5)
-            I.plt.axhline(self.upper_creast_threshold,
+            fig = plt.figure(figsize=(15, 4))
+            plt.plot(tt, vv)  ###
+            plt.axhline(self.lim_creast, color='grey', linewidth=.5)
+            plt.axhline(self.lim_trough, color='grey', linewidth=.5)
+            plt.axhline(self.upper_creast_threshold,
                           color='red',
                           linewidth=.5)
 
             for lv, (event_t, c, linestyle, linewidth) in enumerate(events):
                 if offset_time - 15 <= event_t <= offset_time + 15:
-                    I.plt.axvline(event_t,
+                    plt.axvline(event_t,
                                   color=c,
                                   linewidth=linewidth,
                                   linestyle=linestyle,
                                   alpha=0.6)
                     n = lv  # n is index of last event shown
             n += 1
-            I.plt.gca().ticklabel_format(useOffset=False)
-            I.sns.despine()
-            I.plt.ylim(*ylim)
-            I.plt.xlabel('t / ms')
-            I.plt.ylabel('recorded potential / mV')
+            plt.gca().ticklabel_format(useOffset=False)
+            sns.despine()
+            plt.ylim(*ylim)
+            plt.xlabel('t / ms')
+            plt.ylabel('recorded potential / mV')
             if showfig:
-                I.display.display(fig)
+                display.display(fig)
             if savepdf:
                 fig.savefig(savepdf)
                 inputpdf = PdfFileReader(savepdf, "rb")
                 output.addPage(inputpdf.getPage(0))
-            I.plt.close()
+            plt.close()
         if savepdf:
             with open(savepdf, "wb") as outputStream:
                 output.write(outputStream)
@@ -841,7 +844,7 @@ def _spike_times_series_from_spike_times_dataframe(st):
     dummy = [
         (name, get_spike_times_from_row(row)) for name, row in st.iterrows()
     ]
-    spike_times = I.pd.Series([d[1] for d in dummy],
+    spike_times = pd.Series([d[1] for d in dummy],
                               index=[d[0] for d in dummy])
     return spike_times
 
@@ -877,7 +880,7 @@ def _sta_apply_helper(spike_times, analysis_function, periods={}):
         df = analysis_function(spike_times)
         df['trial'] = name
         out.append(df)
-    out = I.pd.concat(out).reset_index(drop=True)
+    out = pd.concat(out).reset_index(drop=True)
     out['period'] = out.apply(
         lambda x: get_period_label_by_time(periods, x.event_time), axis=1)
     return out
@@ -949,7 +952,7 @@ class STAPlugin_ISIn(STAPlugin_TEMPLATE):
                 ISIs['ISI_{}'.format(nn)] = spike_times[lv + nn] - time
             ISIs['event_time'] = time
             out.append(ISIs)
-        return I.pd.DataFrame(out)
+        return pd.DataFrame(out)
 
 
 class STAPlugin_bursts(STAPlugin_TEMPLATE):
@@ -1010,7 +1013,7 @@ class STAPlugin_bursts(STAPlugin_TEMPLATE):
         events_in_descending_order = sorted(list(event_maxtimes.keys()),
                                             reverse=True)
 
-        row = I.np.array(row)
+        row = mp.array(row)
         out = []
         lv = 0
         while True:
@@ -1031,7 +1034,7 @@ class STAPlugin_bursts(STAPlugin_TEMPLATE):
 
             out.append(out_dict)
             lv += 1 + n
-        return I.pd.DataFrame(out)
+        return pd.DataFrame(out)
 
 
 class STAPlugin_annotate_bursts_in_st(STAPlugin_TEMPLATE):
@@ -1073,10 +1076,10 @@ class STAPlugin_annotate_bursts_in_st(STAPlugin_TEMPLATE):
         def fun(s):
             l_ = [[e] * event_names_inverse[e] for e in s]
             l_ = [x for x in l_ for x in x]
-            return I.pd.Series(l_)
+            return pd.Series(l_)
 
-        df = I.pd.concat(
-            [fun(df.event_class) if len(df) else I.pd.Series() for df in dfs],
+        df = pd.concat(
+            [fun(df.event_class) if len(df) else pd.Series() for df in dfs],
             axis=1).T
         df.index = st.index
         self._result = df
@@ -1167,7 +1170,7 @@ class STAPlugin_extract_column_in_filtered_dataframe(STAPlugin_TEMPLATE):
 
     def setup(self, spike_times_analysis):
         df = spike_times_analysis.get(self.source)
-        df = I.select(df, **self.select)
+        df = mdb_utils.select(df, **self.select)
         column = list(df[self.column_name])
         self._result = column
 
@@ -1210,8 +1213,8 @@ class STAPlugin_response_probability_in_period(STAPlugin_TEMPLATE):
         else:
             t_start, t_end = self.t_start, self.t_end
         st = spike_times_analysis.get(self.source)
-        self._by_trial = I.spike_in_interval(st, t_start, t_end)
-        self._result = I.np.mean(self._by_trial)
+        self._by_trial = mdb_analyze_spike_in_interval(st, t_start, t_end)
+        self._result = mp.mean(self._by_trial)
 
 
 class STAPlugin_response_latency_in_period(STAPlugin_TEMPLATE):
@@ -1239,7 +1242,7 @@ class STAPlugin_response_latency_in_period(STAPlugin_TEMPLATE):
     def _helper_median(l_):
         l_ = l_.dropna()
         if len(l_):
-            return I.np.median(l_)
+            return mp.median(l_)
         else:
             return float('nan')
 
@@ -1309,20 +1312,20 @@ class VisualizeEventAnalysis:
 
     def plot_PSTH(self, min_time=0, max_time=2500, bin_size=5):
         st = self.ea.st
-        bins = I.temporal_binning(st, min_time=0, max_time=2500, bin_size=5)
-        fig = I.plt.figure()
-        I.histogram(bins, fig=fig.add_subplot(111))
+        bins = temporal_binning(st, min_time=0, max_time=2500, bin_size=5)
+        fig = plt.figure()
+        histogram(bins, fig=fig.add_subplot(111))
         ax = fig.axes[-1]
         ax.set_xlabel('t / ms')
         ax.set_ylabel('# spikes / trial / ms')
         ax.set_ylim([0, 0.5])
-        I.sns.despine()
+        sns.despine()
         return fig
 
     def plot_ISI1_vs_ISI2(self,
                           interval_dict,
                           rp=2.5,
-                          color_dict=I.defaultdict(lambda: 'k'),
+                          color_dict=defaultdict(lambda: 'k'),
                           ax1=None,
                           ax2=None):
 
@@ -1338,7 +1341,7 @@ class VisualizeEventAnalysis:
         tmax = interval_dict['late'][1]
         e = e[e.event_time < tmax]
         if (ax1 is None) or (ax2 is None):
-            fig = I.plt.figure(figsize=(6, 3), dpi=200)
+            fig = plt.figure(figsize=(6, 3), dpi=200)
             ax1 = fig.add_subplot(121)
             ax2 = fig.add_subplot(122)
 
@@ -1370,7 +1373,7 @@ class VisualizeEventAnalysis:
                 print('skipping')
                 continue
             e_filtered.event_time.plot(kind='hist',
-                                       bins=I.np.arange(0, tmax, 1),
+                                       bins=mp.arange(0, tmax, 1),
                                        cumulative=True,
                                        histtype='step',
                                        color=c,
@@ -1379,7 +1382,7 @@ class VisualizeEventAnalysis:
         ax2.set_xlabel('t / ms')
         #ax2.axvline(700, color = 'grey')
 
-        I.sns.despine()
+        sns.despine()
 
     def plot(self):
         for k in dir(self):
@@ -1440,7 +1443,7 @@ class AnalyzeFile:
         ]) / (s / 1000.)
 
     def get_onset_latency(self):
-        return I.np.median([
+        return mp.median([
             s for s in self.st[0]
             if self.periods['1onset'][0] <= s <= self.periods['1onset'][1]
         ])
@@ -1459,20 +1462,20 @@ class AnalyzeFile:
         return text
 
     def get_onset_spike_probability(self):
-        return I.spike_in_interval(self.st, *self.periods['1onset']).mean()
+        return mdb_analyze_spike_in_interval(self.st, *self.periods['1onset']).mean()
 
     def _get_fig(self, ax=None):
         if ax is not None:
             return ax
         else:
-            fig = I.plt.figure()
+            fig = plt.figure()
             return fig.add_subplot(111)
 
     def plot_onset_latency(self, ax=None):
         ax = self._get_fig(ax)
         onset_end = 100  # self.periods['1onset'][1]
         ax.axvspan(*self.periods['1onset'], color='lightgrey')
-        ax.hist(self.st[0].dropna().values, bins=I.np.arange(0, onset_end, 1))
+        ax.hist(self.st[0].dropna().values, bins=mp.arange(0, onset_end, 1))
         ax.set_xlabel('onset latency / ms')
 
     def get_df(self, groupby=['period'], normed=False):
@@ -1484,7 +1487,7 @@ class AnalyzeFile:
         ]
         _ = df.groupby(groupby).apply(lambda x: x.event_class.value_counts())
 
-        if isinstance(_, I.pd.Series):  # this happens, if
+        if isinstance(_, pd.Series):  # this happens, if
             _ = _.unstack(-1)
         _ = _.fillna(0)
 
@@ -1507,12 +1510,12 @@ class AnalyzeFile:
         d['period'] = d.index.get_level_values(0)
         d['type'] = d.index.get_level_values(1)
 
-        with I.pd.option_context("display.max_rows", 1000):
-            I.display.display(mean_.round(2))
-            I.display.display(mean_unnormed.round(2))
-        I.sns.barplot(data=d, x='period', y='n', hue='type', ax=ax)
+        with pd.option_context("display.max_rows", 1000):
+            display.display(mean_.round(2))
+            display.display(mean_unnormed.round(2))
+        sns.barplot(data=d, x='period', y='n', hue='type', ax=ax)
         ax.set_ylim([0, 1])
-        I.plt.ylabel('% of spiking activity')
+        plt.ylabel('% of spiking activity')
         ax.legend()
 
     def get_n_onset2(self):
@@ -1521,7 +1524,7 @@ class AnalyzeFile:
 
         df = af.event_df
         len_ = af.st.shape[0]
-        out = I.pd.Series([0] * len_)
+        out = pd.Series([0] * len_)
 
         df = df[(df.event_time >= tmin) & (df.event_time < tmax)]
         df['trial'] = df.trial.str.split('/').str[1].astype(int)
@@ -1550,24 +1553,24 @@ class AnalyzeFile:
         ax = self._get_fig(ax)
         ax.set_xlabel('t / ms')
         ax.set_ylabel('# spikes / ms / trial')
-        bins = I.temporal_binning(self.st, min_time=0)
-        I.histogram(bins, fig=ax)
+        bins = temporal_binning(self.st, min_time=0)
+        histogram(bins, fig=ax)
 
     def plot_all_flat(self):
         af = self
-        fig = I.plt.figure(figsize=(25, 3))
+        fig = plt.figure(figsize=(25, 3))
         af.plot_spike_amplitude_histograms(ax=fig.add_subplot(151))
         af.plot_onset_latency(ax=fig.add_subplot(152))
         af.plot_PSTH(ax=fig.add_subplot(153))
         af.plot_burst_fractions(ax=fig.add_subplot(154))
         af.plot_n_onset(ax=fig.add_subplot(155))
-        I.plt.tight_layout()
-        I.sns.despine()
+        plt.tight_layout()
+        sns.despine()
 
     def plot_all_stacked(self, text=''):
         text = text + self.describe()
         af = self
-        fig = I.plt.figure(figsize=(15, 4))
+        fig = plt.figure(figsize=(15, 4))
         ax = fig.add_subplot(231)
         ax.text(0, 0, text)
         ax.axis('off')
@@ -1577,5 +1580,5 @@ class AnalyzeFile:
         af.plot_PSTH(ax=fig.add_subplot(232))
         af.plot_burst_fractions(ax=fig.add_subplot(236))
         af.plot_n_onset(ax=fig.add_subplot(233))
-        I.plt.tight_layout()
-        I.sns.despine()
+        plt.tight_layout()
+        sns.despine()
