@@ -104,7 +104,7 @@ bash ${SCRIPT_DIR}/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
 eval $($CONDA_INSTALL_PATH/bin/conda shell.bash hook);
 source ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh;
 echo "Activating environment by running \"conda activate ${CONDA_INSTALL_PATH}/bin/activate\"";
-conda activate ${CONDA_INSTALL_PATH};
+conda activate ${CONDA_INSTALL_PATH}/;
 conda info
 echo $(which python)
 echo $(python --version)
