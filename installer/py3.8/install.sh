@@ -99,7 +99,8 @@ if [[ "${download_conda_flag}" == "true" ]]; then
 fi
 # 1.1 -- Installing Anaconda
 echo "Anaconda will be installed in: ${CONDA_INSTALL_PATH}"
-echo "Activating environment by running \"source activate ${CONDA_INSTALL_PATH}/bin/activate\"";
+bash ${SCRIPT_DIR}/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
+echo "Activating environment by running \"source ${CONDA_INSTALL_PATH}/bin/activate\"";
 source ${CONDA_INSTALL_PATH}/bin/activate;
 conda info
 echo $(which python)
