@@ -88,7 +88,7 @@ class ReaderSmr:
             self._events = events = {
                 e.annotations['id']: e for e in data.segments[0].events
             }
-            self.stim_times = mp.array(events[stim_times_channel]) * 1000
+            self.stim_times = np.array(events[stim_times_channel]) * 1000
         else:
             self.stim_times = []
 
@@ -165,7 +165,7 @@ def read_labview_junk1_dat_files(path, scale=100, sampling_rate=32000):
         data = np.fromfile(
             f, dtype='>f4')  # interpret binary data as big endian float32
     t = [lv * 1. / sampling_rate for lv in range(len(data))]
-    return mp.array(t) * 1000, data * scale
+    return np.array(t) * 1000, data * scale
 
 
 def highpass_filter(y, sr):
@@ -258,13 +258,13 @@ def get_peaks_above(t, v, lim):
         max_v (list): A list containing voltage at timepoints of maxima.
     """
     assert len(t) == len(v)
-    v, t = mp.array(v), mp.array(t)
+    v, t = np.array(v), np.array(t)
     left_diff = v[1:-1] - v[:-2]
     right_diff = v[1:-1] - v[2:]
     values = v[1:-1]
     # use >= because sometimes the spikes reach the threshold of the amplifier of +5mV
     # by >, they would not be detected
-    indices = mp.argwhere((left_diff >= 0) & (right_diff >= 0) &
+    indices = np.argwhere((left_diff >= 0) & (right_diff >= 0) &
                             (values >= lim)).ravel() + 1
     return list(t[indices]), list(v[indices])
 
@@ -281,7 +281,7 @@ def get_upcross(t, v, lim):
     Returns:
         Tuple[numpy.ndarray, numpy.ndarray]: Tuple containing arrays of time and voltage values at upcrossings.
     """
-    indices = mp.argwhere((v[:-1] < lim) & (v[1:] >= lim)).ravel() + 1
+    indices = np.argwhere((v[:-1] < lim) & (v[1:] >= lim)).ravel() + 1
     return t[indices], v[indices]
 
 
@@ -313,7 +313,7 @@ def filter_spike_times(
         raise ValueError("mode must be 'latest' or 'creast_max'!")
     s = []
     s_ampl = []
-    spike_times = mp.array(spike_times)
+    spike_times = np.array(spike_times)
     for x in spike_times_trough:
         aligned_creasts = spike_times[
             (spike_times >= x - creast_trough_interval) &
@@ -334,10 +334,10 @@ def filter_spike_times(
                 s.append(aligned_creasts[-1])  # before: aligned_creats[0]
                 s_ampl.append(aligned_creast_amplitude[-1])
             if mode == 'creast_max':
-                index = mp.argmax(aligned_creast_amplitude)
+                index = np.argmax(aligned_creast_amplitude)
                 s_ampl.append(aligned_creast_amplitude[index])
                 s.append(aligned_creasts[index])
-    return mp.array(s), mp.array(s_ampl)
+    return np.array(s), np.array(s_ampl)
 
 
 def filter_short_ISIs(t, tdelta=0.):
@@ -407,7 +407,7 @@ def stimulus_interval_filter(stim_times, period_length=1, offset=0):
 
 
 ## automatic interval detection ... not to be trusted
-#     max_interval = max(set(mp.diff(stim_times).round()))
+#     max_interval = max(set(np.diff(stim_times).round()))
 #     out = []
 #     for i in intervals:
 #         if out:
@@ -554,7 +554,7 @@ class SpikeDetectionCreastTrough(object):
                  tdelta=1.,
                  stimulus_period=1,
                  stimulus_period_offset=0,
-                 upper_creast_threshold=mp.inf,
+                 upper_creast_threshold=np.inf,
                  cellid='__no_cellid_assigned__',
                  spike_time_mode='latest'):
         self.reader = reader_object
@@ -604,7 +604,7 @@ class SpikeDetectionCreastTrough(object):
         upper_creast_threshold = self.upper_creast_threshold
         # spike times detected by creast
         a, b = get_peaks_above(t, v, lim_creast)
-        self._spike_times_creast, self._spike_amplitudes_creast = a, mp.array(
+        self._spike_times_creast, self._spike_amplitudes_creast = a, np.array(
             b)
         #self._spike_times_creast_filtered = filter_short_ISIs(self._spike_times_creast, tdelta=tdelta)
         # spike times detected by trough
@@ -628,7 +628,7 @@ class SpikeDetectionCreastTrough(object):
     def get_creast_and_trough_ampltidues_by_bins(self, mode='zero'):
         # aliases
         t, v = self.reader.get_voltage_traces()
-        t, v = mp.array(t), mp.array(v)
+        t, v = np.array(t), np.array(v)
 
         if len(self.stim_times) < 2:
             str_ = "less than 2 stimuli found. using whole trace to determine "
@@ -646,19 +646,19 @@ class SpikeDetectionCreastTrough(object):
         _, troughs = get_peaks_above(t, v * -1, 0)
 
         # compute bins
-        bins = mp.arange(0, 7, 0.1)
-        binned_data_st, _ = mp.histogram(creasts, bins=bins)
-        binned_data_sst, _ = mp.histogram(troughs, bins=bins)
+        bins = np.arange(0, 7, 0.1)
+        binned_data_st, _ = np.histogram(creasts, bins=bins)
+        binned_data_sst, _ = np.histogram(troughs, bins=bins)
         if mode == 'zero':
-            minimun_zero_bin_st = bins[mp.argwhere(
+            minimun_zero_bin_st = bins[np.argwhere(
                 binned_data_st[4:-1] == 0).min() + 4]
-            minimun_zero_bin_sst = bins[mp.argwhere(
+            minimun_zero_bin_sst = bins[np.argwhere(
                 binned_data_sst[4:-1] == 0).min() + 4]
         elif mode == 'minimum':
-            minimun_zero_bin_st = bins[mp.argwhere(
+            minimun_zero_bin_st = bins[np.argwhere(
                 ((binned_data_st[4:-1] - binned_data_st[5:]) < 0) |
                 (binned_data_st[4:-1] == 0)).min() + 4]
-            minimun_zero_bin_sst = bins[mp.argwhere(
+            minimun_zero_bin_sst = bins[np.argwhere(
                 ((binned_data_sst[4:-1] - binned_data_sst[5:]) < 0) |
                 (binned_data_sst[4:-1] == 0)).min() + 4]
         return minimun_zero_bin_st, minimun_zero_bin_sst * -1
@@ -683,7 +683,7 @@ class SpikeDetectionCreastTrough(object):
             (s, 'k', '--', .5)
             for s in self._spike_times_creast
             if not s in self.spike_times
-        ]  # len([ss for ss in self.spike_times if mp.abs(ss-s) < 1])]
+        ]  # len([ss for ss in self.spike_times if np.abs(ss-s) < 1])]
         if show_trough_candidates:
             events += [(s, 'k', '--', .5)
                        for s in self._spike_times_trough
@@ -1013,7 +1013,7 @@ class STAPlugin_bursts(STAPlugin_TEMPLATE):
         events_in_descending_order = sorted(list(event_maxtimes.keys()),
                                             reverse=True)
 
-        row = mp.array(row)
+        row = np.array(row)
         out = []
         lv = 0
         while True:
@@ -1214,7 +1214,7 @@ class STAPlugin_response_probability_in_period(STAPlugin_TEMPLATE):
             t_start, t_end = self.t_start, self.t_end
         st = spike_times_analysis.get(self.source)
         self._by_trial = mdb_analyze_spike_in_interval(st, t_start, t_end)
-        self._result = mp.mean(self._by_trial)
+        self._result = np.mean(self._by_trial)
 
 
 class STAPlugin_response_latency_in_period(STAPlugin_TEMPLATE):
@@ -1242,7 +1242,7 @@ class STAPlugin_response_latency_in_period(STAPlugin_TEMPLATE):
     def _helper_median(l_):
         l_ = l_.dropna()
         if len(l_):
-            return mp.median(l_)
+            return np.median(l_)
         else:
             return float('nan')
 
@@ -1373,7 +1373,7 @@ class VisualizeEventAnalysis:
                 print('skipping')
                 continue
             e_filtered.event_time.plot(kind='hist',
-                                       bins=mp.arange(0, tmax, 1),
+                                       bins=np.arange(0, tmax, 1),
                                        cumulative=True,
                                        histtype='step',
                                        color=c,
@@ -1443,7 +1443,7 @@ class AnalyzeFile:
         ]) / (s / 1000.)
 
     def get_onset_latency(self):
-        return mp.median([
+        return np.median([
             s for s in self.st[0]
             if self.periods['1onset'][0] <= s <= self.periods['1onset'][1]
         ])
@@ -1475,7 +1475,7 @@ class AnalyzeFile:
         ax = self._get_fig(ax)
         onset_end = 100  # self.periods['1onset'][1]
         ax.axvspan(*self.periods['1onset'], color='lightgrey')
-        ax.hist(self.st[0].dropna().values, bins=mp.arange(0, onset_end, 1))
+        ax.hist(self.st[0].dropna().values, bins=np.arange(0, onset_end, 1))
         ax.set_xlabel('onset latency / ms')
 
     def get_df(self, groupby=['period'], normed=False):
