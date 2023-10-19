@@ -15,7 +15,7 @@ class _TestSpikeTimes:
         self.t_end = 200
 
     def get_voltage_traces(self):
-        return I.np.array(self.t), I.np.array(self.v)
+        return np.array(self.t), np.array(self.v)
 
     def get_stim_times(self):
         return self.stim_times
@@ -76,7 +76,7 @@ class Tests:
         stim_times = [10, 20]
         st = get_st_from_spike_times_and_stim_times(spike_times, stim_times)
         np.testing.assert_almost_equal(st.values,
-                                       I.np.array([[0, 1, 2], [0, 5, np.NaN]]))
+                                       np.array([[0, 1, 2], [0, 5, np.NaN]]))
         assert get_st_from_spike_times_and_stim_times([], []).to_dict() == {}
         assert get_st_from_spike_times_and_stim_times([1, 2], []).to_dict() == {
             0: {
@@ -109,7 +109,7 @@ class Tests:
         }).T
         v = df.values
         df['test'] = 'some_string'
-        I.np.testing.assert_almost_equal(v, strip_st(df).values)
+        np.testing.assert_almost_equal(v, strip_st(df).values)
 
     def test_SpikeDetectionCreastTrough_spike_detection(self):
         tst = _TestSpikeTimes([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -171,8 +171,8 @@ class Tests:
                                         lim_trough='minimum',
                                         lim_creast='minimum',
                                         max_creast_trough_interval=3)
-        I.np.testing.assert_almost_equal(sd.lim_creast, .4)
-        I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
+        np.testing.assert_almost_equal(sd.lim_creast, .4)
+        np.testing.assert_almost_equal(sd.lim_trough, -.4)
 
         v = [0, .4, 0]
         t = list(range(len(v)))
@@ -181,8 +181,8 @@ class Tests:
                                         lim_trough='minimum',
                                         lim_creast='minimum',
                                         max_creast_trough_interval=3)
-        I.np.testing.assert_almost_equal(sd.lim_creast, .5)
-        I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
+        np.testing.assert_almost_equal(sd.lim_creast, .5)
+        np.testing.assert_almost_equal(sd.lim_trough, -.4)
 
         v = [0, .4, -.4]
         t = list(range(len(v)))
@@ -191,8 +191,8 @@ class Tests:
                                         lim_trough='minimum',
                                         lim_creast='minimum',
                                         max_creast_trough_interval=3)
-        I.np.testing.assert_almost_equal(sd.lim_creast, .5)
-        I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
+        np.testing.assert_almost_equal(sd.lim_creast, .5)
+        np.testing.assert_almost_equal(sd.lim_trough, -.4)
 
         v = [0, .4, -.4, 0.]
         t = list(range(len(v)))
@@ -201,8 +201,8 @@ class Tests:
                                         lim_trough='minimum',
                                         lim_creast='minimum',
                                         max_creast_trough_interval=3)
-        I.np.testing.assert_almost_equal(sd.lim_creast, .5)
-        I.np.testing.assert_almost_equal(sd.lim_trough, -.5)
+        np.testing.assert_almost_equal(sd.lim_creast, .5)
+        np.testing.assert_almost_equal(sd.lim_trough, -.5)
 
         v = []
         t = list(range(len(v)))
@@ -211,8 +211,8 @@ class Tests:
                                         lim_trough='zero',
                                         lim_creast='zero',
                                         max_creast_trough_interval=3)
-        I.np.testing.assert_almost_equal(sd.lim_creast, .4)
-        I.np.testing.assert_almost_equal(sd.lim_trough, -.4)
+        np.testing.assert_almost_equal(sd.lim_creast, .4)
+        np.testing.assert_almost_equal(sd.lim_trough, -.4)
 
         v = [0, .4, -.4, 0.]
         t = list(range(len(v)))
@@ -221,8 +221,8 @@ class Tests:
                                         lim_trough='zero',
                                         lim_creast='zero',
                                         max_creast_trough_interval=3)
-        I.np.testing.assert_almost_equal(sd.lim_creast, .5)
-        I.np.testing.assert_almost_equal(sd.lim_trough, -.5)
+        np.testing.assert_almost_equal(sd.lim_creast, .5)
+        np.testing.assert_almost_equal(sd.lim_trough, -.5)
 
     def test_get_period_label_by_time(self):
         periods = {'1onset': (0, 100), '2sustained': (100, 1000)}
@@ -239,7 +239,7 @@ class Tests:
         stap = STAPlugin_ISIn()  # spike time analysis plugin
         stap.setup(SpikeTimesAnalysis(tst))
         nan = np.NaN
-        expected = I.pd.DataFrame({
+        expected = pd.DataFrame({
             'ISI_1': {
                 0: 3.0,
                 1: 2.0,
@@ -283,8 +283,8 @@ class Tests:
         nan = np.NaN
         spike_times = [[], [1], [1, 2], [1, 2, 3], [1, 2, 3, 4]]
         expecteds = [
-            I.pd.DataFrame(dtype=float),
-            I.pd.DataFrame({
+            pd.DataFrame(dtype=float),
+            pd.DataFrame({
                 'event_class': {
                     0: 'singlet'
                 },
@@ -292,7 +292,7 @@ class Tests:
                     0: 1
                 }
             }),
-            I.pd.DataFrame({
+            pd.DataFrame({
                 'ISI_1': {
                     0: 1
                 },
@@ -303,7 +303,7 @@ class Tests:
                     0: 1
                 }
             }),
-            I.pd.DataFrame({
+            pd.DataFrame({
                 'ISI_1': {
                     0: 1
                 },
@@ -317,7 +317,7 @@ class Tests:
                     0: 1
                 }
             }),
-            I.pd.DataFrame({
+            pd.DataFrame({
                 'ISI_1': {
                     0: 1.0,
                     1: nan
@@ -346,7 +346,7 @@ class Tests:
             df = stap.event_analysis_bursts(st,
                                             event_maxtimes=stap.event_maxtimes,
                                             event_names=stap.event_names)
-            I.pd.util.testing.assert_frame_equal(
+            pd.util.testing.assert_frame_equal(
                 expected,
                 df,
                 check_like=True,  # ignore order of columns with check_like
