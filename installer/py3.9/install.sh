@@ -44,6 +44,7 @@ done
 
 # # -------------------- 0. Setup -------------------- #
 print_title "0/6. Preliminary checks"
+pushd .  # save this dir on stack
 # 0.0 -- Create downloads folder (if it does not exist)
 if [ ! -d "$SCRIPT_DIR/downloads" ]; then
     mkdir $SCRIPT_DIR/downloads;
@@ -99,15 +100,15 @@ fi
 # 1.1 -- Installing Anaconda
 echo "Anaconda will be installed in: ${CONDA_INSTALL_PATH}"
 bash ${SCRIPT_DIR}/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
-pwd;
 # setup conda in current shell; avoid having to restart shell
 eval $($CONDA_INSTALL_PATH/bin/conda shell.bash hook);
 source ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh;
 echo "Activating environment by running \"conda activate ${CONDA_INSTALL_PATH}/bin/activate\"";
-conda activate ${WORKING_DIR}/${CONDA_INSTALL_PATH};
+conda activate ${CONDA_INSTALL_PATH};
 conda info
 echo $(which python)
 echo $(python --version)
+popd
 
 # -------------------- 2. Installing PyPI dependencies -------------------- #
 print_title "2/6. Installing PyPI dependencies"
@@ -120,7 +121,7 @@ fi
 # 3.1 -- Installing In-Silico-Framework pip dependencies.
 echo "Installing In-Silico-Framework pip dependencies."
 python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages
-cd $WORKING_DIR
+popd
 
 # -------------------- 3. Installing conda dependencies -------------------- #
 print_title "3/6. Installing conda dependencies "
@@ -153,13 +154,11 @@ print_title "5/6. Installing pandas-msgpack"
 export PYTHONPATH=${WORKING_DIR}/${CONDA_INSTALL_PATH}/pkgs
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
 if [ ! -r "${PD_MSGPACK_HOME}" ]; then
-    pushd .
     cd $SCRIPT_DIR
     git clone https://github.com/abast/pandas-msgpack.git
     popd
 fi
 # build pandas-msgpack
-pushd .
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
 popd
@@ -169,6 +168,7 @@ print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 cd $channels; nrnivmodl
 cd $netcon; nrnivmodl
+popd
 
 # -------------------- 7. Cleanup -------------------- #
 echo "Succesfully installed In-Silico-Framework for Python 3.9"
