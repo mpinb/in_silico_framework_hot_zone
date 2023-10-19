@@ -91,7 +91,7 @@ if [[ "${download_conda_flag}" == "false" && "${download_conda_packages_flag}" =
 fi
 
 # # -------------------- 1. Installing Anaconda -------------------- #
-print_title "1/6. Installing Anaconda"
+print_title "1/5. Installing Anaconda"
 # 1.0 -- Downloading Anaconda (if necessary).
 if [[ "${download_conda_flag}" == "true" ]]; then
     echo "Downloading ${anaconda_installer}"
@@ -108,11 +108,9 @@ conda activate ${CONDA_INSTALL_PATH}/;
 conda info
 echo $(which python)
 echo $(python --version)
-popd
-pushd .
 
 # -------------------- 2. Installing PyPI dependencies -------------------- #
-print_title "2/6. Installing PyPI dependencies"
+print_title "2/5. Installing PyPI dependencies"
 # 3.0 -- Downloading In-Silico-Framework pip dependencies (if necessary).
 if [ "${download_pip_packages_flag}" == "true" ]; then
     echo "Downloading In-Silico-Framework pip dependencies."
@@ -122,11 +120,9 @@ fi
 # 3.1 -- Installing In-Silico-Framework pip dependencies.
 echo "Installing In-Silico-Framework pip dependencies."
 python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages
-popd
-pushd .
 
 # -------------------- 3. Installing conda dependencies -------------------- #
-print_title "3/6. Installing conda dependencies "
+print_title "3/5. Installing conda dependencies "
 # 2.0 -- Downloading In-Silico-Framework conda dependencies (if necessary).
 if [ "${download_conda_packages_flag}" == "true" ]; then
     echo "Downloading In-Silico-Framework conda dependencies."
@@ -145,36 +141,22 @@ echo "Installing In-Silico-Framework conda dependencies."
 sed "s|https://.*/|$SCRIPT_DIR/downloads/conda_packages/|" $SCRIPT_DIR/conda_requirements.txt > $SCRIPT_DIR/tempfile
 conda update -p ${CONDA_INSTALL_PATH} $(<$SCRIPT_DIR/tempfile)
 
-# -------------------- 4. Patching dask library -------------------- #
-print_title "4/6. Patching dask library"
-python $SCRIPT_DIR/patch_dask_linux64.py
-cd $WORKING_DIR
-echo "Dask library patched."
-
 # -------------------- 5. Installing pandas-msgpack -------------------- #
-print_title "5/6. Installing pandas-msgpack"
-export PYTHONPATH=${WORKING_DIR}/${CONDA_INSTALL_PATH}/pkgs
+print_title "4/5. Installing pandas-msgpack"
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
 if [ ! -r "${PD_MSGPACK_HOME}" ]; then
     cd $SCRIPT_DIR
     git clone https://github.com/abast/pandas-msgpack.git
-    popd
-    pushd .
 fi
 # build pandas-msgpack
-git -C pandas-msgpack apply $SCRIPT_DIR/pandas_msgpack.patch
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
-popd
-pushd .
 
 # -------------------- 6. Compiling NEURON mechanisms -------------------- #
-print_title "6/6. Compiling NEURON mechanisms"
+print_title "5/5. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 cd $channels; nrnivmodl
 cd $netcon; nrnivmodl
-popd
-pushd .
 
 # -------------------- 7. Cleanup -------------------- #
 echo "Succesfully installed In-Silico-Framework for Python 3.9"
