@@ -99,11 +99,6 @@ if [[ "${download_conda_flag}" == "true" ]]; then
 fi
 # 1.1 -- Installing Anaconda
 echo "Anaconda will be installed in: ${CONDA_INSTALL_PATH}"
-bash ${SCRIPT_DIR}/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
-export PYTHONPATH=${WORKING_DIR}/${CONDA_INSTALL_PATH}
-# setup conda in current shell; avoid having to restart shell
-eval $($CONDA_INSTALL_PATH/bin/conda shell.bash hook);
-source ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh;
 echo "Activating environment by running \"source activate ${CONDA_INSTALL_PATH}/bin/activate\"";
 source activate ${CONDA_INSTALL_PATH};
 conda info
