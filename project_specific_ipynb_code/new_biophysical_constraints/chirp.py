@@ -71,7 +71,7 @@ def record_chirp_dist(cell, recSite_dist = None, recSite2 = None):
 
     
 def modify_simulator_to_run_chirp_stimuli(s, delay = None, duration = None, final_freq  = None, dist = None):
-    """typical defaults: delay = 300, duration = 20000, final_freq = 20, dist = 400"""
+    """typical defaults: delay = 300, duration = 10000, final_freq = 20, dist = 400"""
     
     tStop = duration + delay
     
@@ -307,12 +307,12 @@ def Synch(dict_):
 #             if abs(a1 - a2) < 0.5 and x>1:
 #                 synch[x] = (a1, a2)
         
-        if synch:
-            synch_freq = [key for i,key in enumerate(synch.keys()) if i ==  I.math.ceil(len(synch)/2)-1][0]
-        else:
-            synch_freq = -1000
+#         if synch:
+#             synch_freq = [key for i,key in enumerate(synch.keys()) if i ==  I.math.ceil(len(synch)/2)-1][0]
+#         else:
+#             synch_freq = -1000
 
-        T, A1, A2 = dict_['chirp.freq_axis'], dict_['chirp.ZPP'], dict_['chirp.ZPP_dend']
+        T, A1, A2 = dict_['chirp.freq_axis_high_res'], dict_['chirp.ZPP'], dict_['chirp.ZPP_dend']
         
         for x, a1, a2 in zip(T, A1, A2): 
             if abs(a1 - a2) < 0.5 and x>1: # below 1 Hz is not sampled by the chirp stimulus
@@ -364,10 +364,10 @@ def Synch(dict_):
     
     
 def modify_evaluator_to_evaluate_chirp_stimuli(e, delay = None, duration = None):
-    """typical defaults: delay = 300, duration = 20000"""
+    """typical defaults: delay = 300, duration = 10000"""
     
-    chirp = Chirp(delay = 300, duration = 20000)
-    chirp_dend = Chirp_dend(delay = 300, duration = 20000)
+    chirp = Chirp(delay = delay, duration = duration)
+    chirp_dend = Chirp_dend(delay = delay, duration = duration)
     
     e.setup.evaluate_funs.append(['chirp.hay_measure', chirp.get,'chirp.features'])
     e.setup.evaluate_funs.append(['chirp_dend.hay_measure', chirp_dend.get,'chirp_dend.features'])
