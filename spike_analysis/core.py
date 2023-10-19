@@ -416,10 +416,10 @@ import numpy as np
 import pandas as pd
 import numpy as np
 
-def get_st_from_spike_times_and_stim_times(spike_times: list[float],
-                                           stim_times: list[float],
-                                           offset: float = 0,
-                                           mode: str = 'spike_times') -> pd.DataFrame:
+def get_st_from_spike_times_and_stim_times(spike_times,
+                                           stim_times,
+                                           offset = 0,
+                                           mode = 'spike_times'):
     """Computes spike times dataframe based on list of spike times and stimulus times.
 
     Args:
@@ -479,7 +479,7 @@ def get_st_from_spike_times_and_stim_times(spike_times: list[float],
 import pandas as pd
 import my_utils as I
 
-def strip_st(st: pd.DataFrame) -> pd.DataFrame:
+def strip_st(st):
     """
     Returns a DataFrame containing only spike times, without metadata.
     
@@ -495,7 +495,7 @@ def strip_st(st: pd.DataFrame) -> pd.DataFrame:
 
 import pandas as pd
 
-def get_spike_times_from_row(row: pd.Series) -> list:
+def get_spike_times_from_row(row):
     """Returns a list containing all non-NaN elements in the given pandas Series.
     
     Args:
