@@ -100,7 +100,7 @@ fi
 # 1.1 -- Installing Anaconda
 echo "Anaconda will be installed in: ${CONDA_INSTALL_PATH}"
 echo "Activating environment by running \"source activate ${CONDA_INSTALL_PATH}/bin/activate\"";
-source activate ${CONDA_INSTALL_PATH};
+source ${CONDA_INSTALL_PATH}/bin/activate;
 conda info
 echo $(which python)
 echo $(python --version)
