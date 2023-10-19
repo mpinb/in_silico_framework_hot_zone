@@ -162,6 +162,7 @@ if [ ! -r "${PD_MSGPACK_HOME}" ]; then
     pushd .
 fi
 # build pandas-msgpack
+git -C pandas-msgpack apply $SCRIPT_DIR/pandas_msgpack.patch
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
 popd
