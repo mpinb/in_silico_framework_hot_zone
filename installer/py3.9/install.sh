@@ -152,20 +152,20 @@ cd $WORKING_DIR
 echo "Dask library patched."
 
 # -------------------- 5. Installing pandas-msgpack -------------------- #
-print_title "5/6. Installing pandas-msgpack"
-export PYTHONPATH=${WORKING_DIR}/${CONDA_INSTALL_PATH}/pkgs
-PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
-if [ ! -r "${PD_MSGPACK_HOME}" ]; then
-    cd $SCRIPT_DIR
-    git clone https://github.com/abast/pandas-msgpack.git
-    popd
-    pushd .
-fi
-# build pandas-msgpack
-cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
-pip list | grep pandas
-popd
-pushd .
+# print_title "5/6. Installing pandas-msgpack"
+# export PYTHONPATH=${WORKING_DIR}/${CONDA_INSTALL_PATH}/pkgs
+# PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
+# if [ ! -r "${PD_MSGPACK_HOME}" ]; then
+#     cd $SCRIPT_DIR
+#     git clone https://github.com/abast/pandas-msgpack.git
+#     popd
+#     pushd .
+# fi
+# # build pandas-msgpack
+# cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
+# pip list | grep pandas
+# popd
+# pushd .
 
 # -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "6/6. Compiling NEURON mechanisms"

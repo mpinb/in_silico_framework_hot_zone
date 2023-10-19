@@ -104,8 +104,8 @@ export PYTHONPATH=${WORKING_DIR}/${CONDA_INSTALL_PATH}
 # setup conda in current shell; avoid having to restart shell
 eval $($CONDA_INSTALL_PATH/bin/conda shell.bash hook);
 source ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh;
-echo "Activating environment by running \"conda activate ${CONDA_INSTALL_PATH}/bin/activate\"";
-conda activate ${CONDA_INSTALL_PATH};
+echo "Activating environment by running \"source activate ${CONDA_INSTALL_PATH}/bin/activate\"";
+source activate ${CONDA_INSTALL_PATH};
 conda info
 echo $(which python)
 echo $(python --version)
