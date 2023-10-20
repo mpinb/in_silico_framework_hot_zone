@@ -157,6 +157,7 @@ fi
 pip install cython==0.29.21  
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
+pip install cython==0.29.32  # restore cython version
 
 # -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "5/5. Compiling NEURON mechanisms"
