@@ -100,8 +100,11 @@ fi
 # 1.1 -- Installing Anaconda
 echo "Anaconda will be installed in: ${CONDA_INSTALL_PATH}"
 bash ${SCRIPT_DIR}/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
-echo "Activating environment by running \"source ${CONDA_INSTALL_PATH}/bin/activate\"";
-source ${CONDA_INSTALL_PATH}/bin/activate;
+# setup conda in current shell; avoid having to restart shell
+eval $($CONDA_INSTALL_PATH/bin/conda shell.bash hook);
+source ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh;
+echo "Activating environment by running \"conda activate ${CONDA_INSTALL_PATH}/bin/activate\"";
+conda activate ${CONDA_INSTALL_PATH}/;
 conda info
 echo $(which python)
 echo $(python --version)
