@@ -29,6 +29,7 @@ import pandas as pd
 import numpy as np
 import dask
 import dask.dataframe as dd
+import distributed
 import warnings
 import traceback
 import sys
@@ -37,6 +38,25 @@ from functools import partial
 import itertools
 from collections import defaultdict
 import cloudpickle
+import six
+import scipy 
+import scipy.signal 
+import math 
+
+### logging setup
+import logging
+# All loggers will inherit the root logger's level and handlers
+isf_logger = logging.getLogger("ISF")
+# Redirect warnings to the logging system. This will format them accordingly.
+logging.captureWarnings(True)
+if not any([h.name == "isf_logger_stream_handler" for h in isf_logger.handlers]):
+    # If the stream handler hasn't been set yet: set it.
+    # a singular stream handler, so that all logs can redirect to this one
+    isf_logger_stream_handler = logging.StreamHandler(stream=sys.stdout)
+    isf_logger_stream_handler.name = "isf_logger_stream_handler"
+    isf_logger_stream_handler.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
+    isf_logger.handlers = [isf_logger_stream_handler]  # Additional handlers can always be configured.
+isf_logger_stream_handler = [h for h in isf_logger.handlers if h.name == "isf_logger_stream_handler"][0]
 
 try:
     from IPython import display
@@ -47,7 +67,6 @@ try:
     import seaborn as sns
 except ImportError:
     print("Could not import seaborn")
-
 
 
 # def warn_with_traceback(message, category, filename, lineno, file=None, line=None):
@@ -67,12 +86,17 @@ except ImportError:
 # the current version. Use versioneer.py to be able 
 # to bundle package without the need of having git installed.
 from model_data_base._version import get_versions
-versions = get_versions()
-__version__ = versions['version']
-__git_revision__ = versions['full-revisionid']
+from model_data_base._module_versions import version_cached
 
-print("Current version: {version}".format(version = __version__))
-print("Current pid: {pid}".format(pid = os.getpid()))
+if not 'ISF_MINIMIZE_IO' in os.environ:
+    versions = get_versions()
+    __version__ = versions['version']
+    __git_revision__ = versions['full-revisionid']
+    if __version__ == "0+unknown":
+        raise OSError("Commit not found\nVersion is {}\nRevision_id is {}). Git is not found, or something else went wrong.".format(__version__, __git_revision__))
+    else:
+        print("Current version: {version}".format(version = __version__))
+        print("Current pid: {pid}".format(pid = os.getpid()))
 
 import barrel_cortex
 from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
@@ -93,6 +117,7 @@ from model_data_base.IO.LoaderDumper import numpy_to_npz as dumper_numpy_to_npz
 from model_data_base.IO.LoaderDumper import numpy_to_msgpack as dumper_numpy_to_msgpack
 from model_data_base.IO.LoaderDumper import pandas_to_pickle as dumper_pandas_to_pickle
 from model_data_base.IO.LoaderDumper import pandas_to_msgpack as dumper_pandas_to_msgpack
+from model_data_base.IO.LoaderDumper import pandas_to_parquet as dumper_pandas_to_parquet
 from model_data_base.IO.LoaderDumper import dask_to_msgpack as dumper_dask_to_msgpack
 from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack as dumper_dask_to_categorized_msgpack
 from model_data_base.IO.LoaderDumper import cell as dumper_cell
@@ -100,6 +125,9 @@ from model_data_base.IO.LoaderDumper import to_pickle as dumper_to_pickle
 from model_data_base.IO.LoaderDumper import to_cloudpickle as dumper_to_cloudpickle
 from model_data_base.IO.LoaderDumper import to_msgpack as dumper_to_msgpack
 from model_data_base.IO.LoaderDumper import reduced_lda_model as dumper_reduced_lda_model
+
+if six.PY3:
+    from model_data_base.IO.LoaderDumper.shared_numpy_store import  SharedNumpyStore, shared_array_from_numpy, shared_array_from_disk, shared_array_from_shared_mem_name    
 
 from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
@@ -121,8 +149,8 @@ from model_data_base.utils import select, pandas_to_array, pooled_std
 from model_data_base.utils import skit, chunkIt
 from model_data_base.utils import cache
 from model_data_base import utils
-
 from model_data_base.model_data_base_register import get_mdb_by_unique_id
+from model_data_base.model_data_base_register import assimilate_remote_register
 from model_data_base.mdbopen import resolve_mdb_path, create_mdb_path
 
 try: ##to avoid import errors in distributed system because of missing matplotlib backend
@@ -136,7 +164,6 @@ try: ##to avoid import errors in distributed system because of missing matplotli
         from visualize.cell_to_ipython_animation import cell_to_ipython_animation, cell_to_animation, display_animation
         from visualize._figure_array_converter import show_pixel_object, PixelObject
     except ImportError as e:
-        print("Could not import visualize.activity_analysis!")
         print(e)
 except ImportError:
     print("Could not import matplotlib!")
@@ -160,10 +187,14 @@ try:
 except ImportError:
     print("Could not import full-compartmental-model simulator")
 
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
 import single_cell_parser as scp
-from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
-from visualize.helper_methods import write_video_from_images, write_gif_from_images, display_animation_from_images
+from single_cell_parser import network  # simrun3.synaptic_strength_fitting relies on this
+try:
+    from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
+except ImportError:
+    print("Could not import visualize.cell_morphology_visualizer!")
+from visualize.utils import write_video_from_images, write_gif_from_images, display_animation_from_images
 
 from simrun2.reduced_model import synapse_activation \
     as rm_synapse_activations
@@ -181,14 +212,10 @@ from singlecell_input_mapper.evoked_network_param_from_template import create_ne
 from singlecell_input_mapper.ongoing_network_param_from_template import create_network_parameter \
            as create_ongoing_network_parameter           
 
-if get_versions()['dirty']: warnings.warn('The source folder has uncommited changes!')
+if not 'ISF_MINIMIZE_IO' in os.environ:
+    if get_versions()['dirty']: warnings.warn('The source folder has uncommited changes!')
 
-try:
-    import distributed
-    from SLURM_scripts import clustercontrol
-    cluster = clustercontrol.cluster
-except ImportError:
-    pass
+from SLURM_scripts.utils import get_user_port_numbers, get_client
 
 defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
 
@@ -197,6 +224,12 @@ from biophysics_fitting import hay_complete_default_setup as bfit_hay_complete_d
 from biophysics_fitting import L5tt_parameter_setup as bfit_L5tt_parameter_setup
 from biophysics_fitting.parameters import param_to_kwargs as bfit_param_to_kwargs
 from biophysics_fitting.optimizer import start_run as bfit_start_run
+try:
+    import visualize.linked_views
+    from visualize.linked_views.server import LinkedViewsServer
+    from visualize.linked_views import defaults as LinkedViewsDefaults
+except ImportError:
+    print('Could not load linked views')
 
 from functools import partial
 

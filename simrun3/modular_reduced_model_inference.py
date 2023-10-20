@@ -17,7 +17,7 @@ try:
     CUPY_ENABLED = True
 except ImportError:
     import numpy as np    
-    print 'CuPy could not be imported.'
+    print('CuPy could not be imported.')
     CUPY_ENABLED = False
 
 import pandas as pd
@@ -104,13 +104,13 @@ class Rm(object):
             for solver_name in sorted(strategy.solvers.keys()):
                 solver = strategy.solvers[solver_name]
                 if client is not None:
-                    print 'starting remote optimization', strategy_name, solver_name
+                    print('starting remote optimization'), strategy_name, solver_name
                     workers = client.scheduler_info()['workers'].keys() 
                     workers = get_n_workers_per_ip(workers, n_workers)  
                     solver.optimize_all_splits(client, workers = workers)
                     self.results_remote = True
                 else:
-                    print 'starting local optimization', strategy_name, solver_name
+                    print('starting local optimization'), strategy_name, solver_name
                     solver.optimize_all_splits()
     
     def _gather_results(self, client):
@@ -460,7 +460,7 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
             outs.append(out)
             
         outs = numpy.concatenate(outs, axis = 0)
-        print outs.shape
+        print(outs.shape)
         return outs
     
     def get(self):
@@ -652,7 +652,7 @@ class DataExtractor_daskDataframeColumn(DataExtractor): #rieketodo
         complete_key = list(self.key) + [self.column]
         complete_key = map(str, complete_key)
         complete_key = tuple(complete_key)
-        print complete_key
+        print(complete_key)
         if not complete_key in cache.keys():
             slice_ = self.mdb[self.key][self.column]
             slice_ = self.client.compute(slice_).result()

@@ -36,7 +36,25 @@ def cell_to_serializable_object(cell):
         dummy['recVList'] = convert_hoc_array_to_np_array(sec.recVList)
         dummy['recordVars'] = convert_dict_of_hoc_arrays_to_dict_of_np_arrays(sec.recordVars)
         dummy['label'] = sec.label
+        dummy['sec_id'] = lv
+        dummy['parent_id'] = [lv_ for lv_, s in enumerate(cell.sections) if s == sec.parent][0] if sec.parent is not None else None
         out['sections'].append(dummy)
+
+    out['synapses'] = {}
+    # TODO: THe Synapse class can likely be parallellized (see scp.synapse)
+    # But do we need all the information?
+    for population in cell.synapses.keys():
+        dummy_population = []  # synapses that belong to this population
+        for synapse in cell.synapses[population]:
+            dummy_synapse = {}
+            dummy_synapse["preCell"] = {
+                "spikeTimes": synapse.preCell.spikeTimes
+            }
+            dummy_synapse["coordinates"] = synapse.coordinates
+            # TODO other synapse attributes
+            dummy_population.append(dummy_synapse)
+        out['synapses'][population] = dummy_population
+    
     with mdbopen(cell.hoc_path) as f:
         out['hoc'] = f.read() 
     return out
@@ -82,9 +100,9 @@ def restore_cell_from_serializable_object(sc):
 
 def save_cell_to_file(path, cell):
     sc = cell_to_serializable_object(cell)
-    pd.Series([sc]).to_msgpack(path)
+    pd.Series([sc]).to_pickle(path)
     
 def load_cell_from_file(path):
-    pds = pd.read_msgpack(path)
+    pds = pd.read_pickle(path)
     sc = pds[0]
     return restore_cell_from_serializable_object(sc)

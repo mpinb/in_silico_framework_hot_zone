@@ -1,4 +1,4 @@
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
 
 def silence_synapses_by_somadist(cell, evokedNW, soma_dist_ranges = None):
     '''

@@ -1,4 +1,4 @@
-﻿model\_data\_base.mdb\_initializers.prepare\_ANN\_batches
+model\_data\_base.mdb\_initializers.prepare\_ANN\_batches
 =========================================================
 
 .. automodule:: model_data_base.mdb_initializers.prepare_ANN_batches
@@ -17,6 +17,7 @@
       compute_AP_array
       compute_ISI_array
       compute_ISI_from_st
+      compute_ISI_from_st_list
       get_bin
       get_bin_adjacency_map_in_section
       get_bin_soma_distances_in_section
@@ -32,6 +33,7 @@
       init
       load_syn_weights
       run_delayeds_incrementally
+      spike_times_to_onehot
       temporal_binning_augmented_sa
    
    

@@ -11,6 +11,11 @@ import pandas as pd
 import neuron
 h = neuron.h
 import warnings
+import sys
+import contextlib, io
+import logging
+from .utils import StreamToLogger
+log = logging.getLogger("ISF").getChild(__name__)
 # moved to the bottom to resolve circular import
 # from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
 
@@ -34,27 +39,31 @@ def setup_hay_evaluator(testing = False):
     import neuron
     h = neuron.h
     
-    warnings.warn("Setting up hay evaluator. This loads several variables " + 
-                  "to the NEURON envioronment. Also, it creates a unconnected " + 
-                  "cell (which is very small ~ 1 compartment) which has the purpose " + 
-                  "to 'just be there' such that the functionality necessary to evaluate " + 
-                  "voltage traces is available. This has the side effect that in the " + 
-                  "case of the variable time step solver, the timesteps can be changed."
-                  )
+    
+    log.warning(
+        "Setting up hay evaluator. This loads several variables " + 
+        "to the NEURON envioronment. Also, it creates a unconnected " + 
+        "cell (which is very small ~ 1 compartment) which has the purpose " + 
+        "to 'just be there' such that the functionality necessary to evaluate " + 
+        "voltage traces is available. This has the side effect that in the " + 
+        "case of the variable time step solver, the timesteps can be changed."
+        )
     
     central_file_name = 'fit_config_89_CDK20050712_BAC_step_arco_run1.hoc'
-    try:
-        neuron.h.central_file_name    
-        if not neuron.h.central_file_name == central_file_name:
-            raise ValueError('Once the central_file_name is set, it cannot be changed!')
-    except AttributeError:
-        #print 'setting up NEURON config'        
-        h('chdir("{path}")'.format(path = neuron_basedir))
-        h('strdef central_file_name')
-        h('central_file_name = "{}"'.format(central_file_name))
-        h('load_file("MOEA_gui_for_objective_calculation.hoc")')  
-        if testing: 
-            test()          
+
+    with StreamToLogger(log, 10) as sys.stdout:  # redirect to log with level DEBUG (10)
+        try:
+            neuron.h.central_file_name    
+            if not neuron.h.central_file_name == central_file_name:
+                raise ValueError('Once the central_file_name is set, it cannot be changed!')
+        except AttributeError:
+            #print 'setting up NEURON config'        
+            h('chdir("{path}")'.format(path = neuron_basedir))
+            h('strdef central_file_name')
+            h('central_file_name = "{}"'.format(central_file_name))
+            h('load_file("MOEA_gui_for_objective_calculation.hoc")')  
+            if testing: 
+                test()
 
 def is_setup():
     import neuron
@@ -107,8 +116,7 @@ def hay_objective_function(x):
     returns: np.array of length 5 representing the 5 objectives'''
 
     #import Interface as I
-    
-    setup_hay_evaluator()      
+    setup_hay_evaluator()
     
     # put organism in list, because evaluator needs a list
     o = h.List()
@@ -117,10 +125,11 @@ def hay_objective_function(x):
     x = h.Vector().from_python(x)
 
     h.organism[0].set_genome(x)
-    try:
-        h.evaluator.evaluate_population(o)
-    except:
-        return [1000]*5
+    with StreamToLogger(log, 10) as sys.stdout:  # redirect to log with level DEBUG (10)
+        try:
+            h.evaluator.evaluate_population(o)
+        except:
+            return [1000]*5
     return pd.Series(np.array(o[0].pass_fitness_vec()), index = get_hay_objective_names())
 
 def test():
@@ -187,24 +196,25 @@ def hay_evaluate(cur_stim, tvec, vList):
     hoc_vList = h.List()
     for v in vList:
         hoc_vList.append(h.Vector().from_python(v))
-    try:
-        x = h.calculator.get_organism_stimulus_error(feature_mean_list.o(cur_stim),
-                                           feature_std_list.o(cur_stim),
-                                           hoc_tvec,
-                                           hoc_vList,
-                                           apc_vector, ## seems to be unused?
-                                           stim1,
-                                           penalty,
-                                           use_density,
-                                           cur_stim, # $o4 argument
-                                           stimulus_feature_type_list.o(cur_stim),
-                                           stim_vec,
-                                           minspikenum)
-        
-    except RuntimeError: 
-        # if incomplete simulation data is provided to the hay evaluate function,        
-        # this raises an hoc error 
-        return {k.s: 1000 for k in list(h.evaluator.stimulus_feature_name_list.o(cur_stim))}
+
+    with StreamToLogger(log, 10) as sys.stdout:  # redirect to log with level DEBUG (10)
+        try:
+            x = h.calculator.get_organism_stimulus_error(feature_mean_list.o(cur_stim),
+                                            feature_std_list.o(cur_stim),
+                                            hoc_tvec,
+                                            hoc_vList,
+                                            apc_vector, ## seems to be unused?
+                                            stim1,
+                                            penalty,
+                                            use_density,
+                                            cur_stim, # $o4 argument
+                                            stimulus_feature_type_list.o(cur_stim),
+                                            stim_vec,
+                                            minspikenum)
+        except RuntimeError: 
+            # if incomplete simulation data is provided to the hay evaluate function,        
+            # this raises an hoc error 
+            return {k.s: 1000 for k in list(h.evaluator.stimulus_feature_name_list.o(cur_stim))}
     
     return {h.evaluator.stimulus_feature_name_list.o(cur_stim).o(lv).s: x for lv, x in enumerate(x)}
         

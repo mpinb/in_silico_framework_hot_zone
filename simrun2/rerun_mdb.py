@@ -1,5 +1,5 @@
 import single_cell_parser as scp
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
 import os
 import time
 import neuron
@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 from biophysics_fitting.utils import execute_in_child_process
 from .utils import *
+import logging
+log = logging.getLogger("ISF").getChild(__name__)
 
 def convertible_to_int(x):
     try:
@@ -38,7 +40,7 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
                      neuron_folder = None,
                      network_folder = None,
                      sa = None):
-    print('saving to ', outdir)
+    log.info('saving to ', outdir)
     import neuron
     h = neuron.h
     sti_bases = [s[:s.rfind('/')] for s in stis]
@@ -46,9 +48,9 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
         raise NotImplementedError
     sti_base = sti_bases[0]
     sa = sa.content
-    print('start loading synapse activations')
+    log.info('start loading synapse activations')
     sa = sa.loc[stis].compute(get = dask.get)
-    print('done loading synapse activations')    
+    log.info('done loading synapse activations')    
     sa = {s:g for s,g in sa.groupby(sa.index)}
     
     outdir_absolute = os.path.join(outdir, sti_base)
@@ -102,19 +104,19 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
             additional_evokedNW.create_saved_network2()
         stopTime = time.time()
         setupdt = stopTime - startTime
-        print('Network setup time: {:.2f} s'.format(setupdt))
+        log.info('Network setup time: {:.2f} s'.format(setupdt))
                 
         synTypes = list(cell.synapses.keys())
         synTypes.sort()
         
-        print('Testing evoked response properties run {:d} of {:d}'.format(lv+1, len(stis)))
+        log.info('Testing evoked response properties run {:d} of {:d}'.format(lv+1, len(stis)))
         tVec = h.Vector()
         tVec.record(h._ref_t)
         startTime = time.time()
         scp.init_neuron_run(neuron_param.sim, vardt=False) #trigger the actual simulation
         stopTime = time.time()
         simdt = stopTime - startTime
-        print('NEURON runtime: {:.2f} s'.format(simdt))
+        log.info('NEURON runtime: {:.2f} s'.format(simdt))
         
         vmSoma = np.array(cell.soma.recVList[0])
         t = np.array(tVec)
@@ -123,12 +125,12 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
         for RSManager in recSiteManagers:
             RSManager.update_recordings()
         
-        print('writing simulation results')
+        log.info('writing simulation results')
         fname = 'simulation'
         fname += '_run%07d' % sti_number
         
         synName = outdir_absolute + '/' + fname + '_synapses.csv'
-        print('computing active synapse properties')
+        log.info('computing active synapse properties')
         sca.compute_synapse_distances_times(synName, cell, t, synTypes) #calls scp.write_synapse_activation_file
         preSynCellsName = outdir_absolute + '/' + fname + '_presynaptic_cells.csv'
         scp.write_presynaptic_spike_times(preSynCellsName, evokedNW.cells)        
@@ -138,7 +140,7 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
         for additional_evokedNW in additional_evokedNWs:
             additional_evokedNW.re_init_network()
 
-        print('-------------------------------')
+        log.info('-------------------------------')
     vTraces = np.array(vTraces)
     dendTraces = []
     uniqueID = sti_base.strip('/').split('_')[-1]
@@ -153,7 +155,7 @@ def _evoked_activity(mdb, stis, outdir, tStop = None,
             dendTraces.append(tmpTraces)
     dendTraces = np.array(dendTraces)
     
-    print('writing simulation parameter files')
+    log.info('writing simulation parameter files')
     neuron_param.save(os.path.join(outdir_absolute, uniqueID + '_neuron_model.param'))
     network_param.save(os.path.join(outdir_absolute, uniqueID+ '_network_model.param'))        
         
@@ -201,7 +203,7 @@ def rerun_mdb(mdb, outdir, tStop = None,
         myfun = execute_in_child_process(myfun)
     
     myfun = dask.delayed(myfun)
-    print('outdir is', outdir)
+    log.info('outdir is', outdir)
     for stis in sim_trial_index_array:
         d = myfun(mdb, stis, outdir, tStop = tStop,
                              neuron_param_modify_functions = neuron_param_modify_functions,

@@ -1,4 +1,9 @@
 import pandas as pd
+import logging
+log = logging.getLogger("ISF").getChild(__name__)
+
+RANGE_VARS_APICAL = ['NaTa_t.ina', 'Ca_HVA.ica', 'Ca_LVAst.ica', 'SKv3_1.ik', 'SK_E2.ik', 'Ih.ihcn', 'Im.ik']
+RANGE_VARS_ALL_CHANNELS = RANGE_VARS_APICAL + ['Nap_Et2.ina', 'K_Pst.ik', 'K_Tst.ik']
 
 def connected_to_dend_beyond(cell, sec, beyond_dist, n_children_required = 2):
     """Given a :class:`~single_cell_parser.cell.Cell` object and section number, 
@@ -42,7 +47,6 @@ def get_inner_sec_dist_list(cell, select = ['ApicalDendrite', 'Dendrite']):
                  and sec.label in select
                 }
     return sec_dist_dict
-
 
 def get_branching_depth(cell, sec, beyond_dist=1000):
     """Given a Cell object and a section number, this method returns the amount of sections that have children

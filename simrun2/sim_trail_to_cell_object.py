@@ -6,18 +6,40 @@ import glob, shutil
 import tempfile
 import neuron
 import single_cell_parser as scp
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
 from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 import numpy as np
 import pandas as pd
 from .utils import *
+import logging
+log = logging.getLogger("ISF").getChild(__name__)
 
 h = neuron.h
 
+def convertible_to_int(x):
+    try:
+        int(x)
+        return True
+    except:
+        return False
+
+def synapse_activation_df_to_roberts_synapse_activation(sa):
+    synapses = dict()
+    import six
+    for index, values in sa.iterrows():
+        if not values.synapse_type in synapses:
+            synapses[values.synapse_type] = []
+        synTimes = [v for k, v in six.iteritems(values) if convertible_to_int(k) and not np.isnan(v)]
+        tuple_ = values.synapse_ID, values.section_ID, values.section_pt_ID, synTimes, values.soma_distance
+        synapses[values.synapse_type].append(tuple_)
+    return synapses
+
 def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = False, \
-                            scale_apical = scale_apical, range_vars = None, silent = True, \
-                            synapse_modfun = lambda x: x, neuron_modfun = lambda x: x, \
-                            network_modfun = lambda x: x,
+                            scale_apical = None, range_vars = None, silent = True, 
+                            neuron_param_modify_functions = [],
+                            network_param_modify_functions = [],
+                            synapse_activation_modify_functions = [],
+                            additional_network_params = [],                            
                             tStop = 345):
     '''Resimulates simulation trail and returns cell object.
     Expects Instance of ModelDataBase and sim_trail index.
@@ -46,16 +68,9 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
         parameter_table = mdb['parameterfiles']
         cellName = parameter_table.loc[sim_trail_index].hash_neuron
         cellName = os.path.join(mdb['parameterfiles_cell_folder'], cellName)
-        cellName = neuron_modfun(cellName)
         networkName = parameter_table.loc[sim_trail_index].hash_network
         networkName = os.path.join(mdb['parameterfiles_network_folder'], networkName)
-        networkName = network_modfun(networkName)
         sa = mdb['synapse_activation'].loc[sim_trail_index].compute()
-        # dir_ = tempfile.mkdtemp()
-        # path_ = os.path.join(dir_, 'sa.csv')
-		# write_pandas_synapse_activation_to_roberts_format(path_, sa)
-        # synapse_activation_file = path_ # os.path.join(mdb['simresult_path'], m['path'], m['synapses_file_name'])
-        sa = synapse_modfun(sa)
         dummy =  trail_to_cell_object(cellName = cellName, \
                                     networkName = networkName, \
                                     synapse_activation_file = sa, \
@@ -63,7 +78,11 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
                                     scale_apical = scale_apical, 
                                     allPoints = allPoints, 
                                     compute = compute,
-                                    tStop = tStop)
+                                    tStop = tStop,
+                                    neuron_param_modify_functions = neuron_param_modify_functions,
+                                    network_param_modify_functions = network_param_modify_functions,
+                                    synapse_activation_modify_functions = synapse_activation_modify_functions,
+                                    additional_network_params = additional_network_params)
     finally:
         if silent == True:
             sys.stdout = stdout_bak
@@ -72,27 +91,37 @@ def simtrail_to_cell_object(mdb, sim_trail_index, compute = True, allPoints = Fa
 
 import tempfile
 def trail_to_cell_object(name = None, cellName = None, networkName = None, synapse_activation_file = None, \
-                    range_vars = None, scale_apical = scale_apical, allPoints = False, compute = True, tStop = 345):
+                    range_vars = None, scale_apical = None, allPoints = False, compute = True, tStop = 345,
+                    neuron_param_modify_functions = [],
+                    network_param_modify_functions = [],
+                    synapse_activation_modify_functions = [],
+                    additional_network_params = []):
     tempdir = None
 
     try:
         #if pandas dataframe instead of path is given: convert pandas dataframe to file
         if isinstance(synapse_activation_file, pd.DataFrame):
             tempdir = tempfile.mkdtemp()
-            
-            write_pandas_synapse_activation_to_roberts_format(os.path.join(tempdir, 'synfile.csv'), \
-                                                              synapse_activation_file)
-            
-            synfile = os.path.join(tempdir, 'synfile.csv')
+            for fun in synapse_activation_modify_functions:
+                synapse_activation_file = fun(synapse_activation_file)
+
+            syn = synapse_activation_df_to_roberts_synapse_activation(synapse_activation_file)
+            synfile = syn
         elif isinstance(synapse_activation_file, str):
             synfile = synapse_activation_file
+            if len(synapse_activation_modify_functions) > 0:
+                raise NotImplementedError()
         #set up simulation            
         simName = name
         cellName = cellName
         evokedUpParamName = networkName
-        
         neuronParameters = load_param_file_if_path_is_provided(cellName)
-        evokedUpNWParameters = load_param_file_if_path_is_provided(evokedUpParamName) ##sumatra function for reading in parameter file
+        evokedUpNWParameters = load_param_file_if_path_is_provided(evokedUpParamName)     
+        additional_network_params = [scp.build_parameters(p) for p in additional_network_params]
+        for fun in network_param_modify_functions:
+            evokedUpNWParameters = fun(evokedUpNWParameters)
+        for fun in neuron_param_modify_functions:
+            neuronParameters = fun(neuronParameters)
         scp.load_NMODL_parameters(neuronParameters)
         scp.load_NMODL_parameters(evokedUpNWParameters)
         cellParam = neuronParameters.neuron
@@ -130,7 +159,7 @@ def trail_to_cell_object(name = None, cellName = None, networkName = None, synap
             scp.init_neuron_run(neuronParameters.sim, vardt=False) #trigger the actual simulation
             stopTime = time.time()
             simdt = stopTime - startTime
-            print('NEURON runtime: {:.2f} s'.format(simdt))
+            log.info('NEURON runtime: {:.2f} s'.format(simdt))
             t = np.array(tVec)
             vmSoma = np.array(cell.soma.recVList[0])
             cell.t = np.array(t[offsetBin:])

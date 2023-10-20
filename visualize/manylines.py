@@ -14,7 +14,6 @@ import dask.dataframe as dd
 # import dask
 from ._figure_array_converter import fig2np, PixelObject
 from ._decorators import return_figure_or_axis, ForceReturnException
-from ._decorators import return_figure_or_axis
 # from compatibility import multiprocessing_scheduler
 
 npartitions = 80

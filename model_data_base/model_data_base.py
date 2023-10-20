@@ -11,13 +11,13 @@ import tempfile
 import datetime
 import cloudpickle as pickle
 import yaml
-
+from compatibility import YamlLoader
 
 
 if 'ISF_MDB_CONFIG' in os.environ:
     config_path = os.environ['ISF_MDB_CONFIG']
     with open(os.environ['ISF_MDB_CONFIG'], 'r') as f:
-        config = yaml.load(f)
+        config = yaml.load(f, Loader=YamlLoader)
 else:
     # config = dict(backend = dict(type = 'sqlite_remote', url = 'ip:port')) 
     config = dict(backend = dict(type = 'sqlite'))
@@ -317,6 +317,15 @@ class ModelDataBase(object):
         warnings.warn("Get_managed_folder is deprecated.  Use create_managed_folder instead.") 
         return self.create_managed_folder(key)
     
+    def create_shared_numpy_store(self, key, raise_ = True):
+        if key in list(self.keys()):
+            if raise_:
+                raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
+        else:
+            self.setitem(key, None, dumper = shared_numpy_store)        
+        return self[key]
+            
+    
     def create_sub_mdb(self, key, register = 'as_parent', raise_ = True):
         '''creates a ModelDataBase within a ModelDataBase. Example:
         mdb.create_sub_mdb('my_sub_database')
@@ -339,14 +348,32 @@ class ModelDataBase(object):
         warnings.warn("get_sub_mdb is deprecated.  Use create_sub_mdb instead.")         
         return self.create_sub_mdb(key, register = register)
     
-    def __getitem__(self, arg):
+    def getitem(self, arg, **kwargs):
+        '''instead of mdb['key'], you can use mdb.getitem('key'). The advantage
+        is that this allows to pass additional arguments to the loader, e.g.
+        mdb.getitem('key', columns = [1,2,3]).'''
+        return self.__getitem__(arg, **kwargs)
+        
+    def _get_path(self, arg):
+        dummy = self._sql_backend[arg]
+        if isinstance(dummy, LoaderWrapper):
+            return os.path.join(self.basedir, dummy.relpath)
+        
+    def _get_dumper_string(savedir, arg):
+        path = self._get_path(arg)
+        if path is None:
+            return 'self'
+        else:
+            return IO.LoaderDumper.get_dumper_string_by_savedir(path)
+        
+    def __getitem__(self, arg, **kwargs):
         '''items can be retrieved from the ModelDataBase using this syntax:
         item = my_model_data_base[key]'''
         try:        
             # general case                
             dummy = self._sql_backend[arg]
             if isinstance(dummy, LoaderWrapper):
-                dummy = LoaderDumper.load(os.path.join(self.basedir, dummy.relpath)) 
+                dummy = LoaderDumper.load(os.path.join(self.basedir, dummy.relpath), loader_kwargs = kwargs) 
             if isinstance(dummy, FunctionWrapper):
                 dummy = dummy.fun()
             return dummy   
@@ -374,9 +401,9 @@ class ModelDataBase(object):
         if self.readonly is True:
             raise MdbException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         #this exists, so jupyter notebooks will not crash when they try to write something
-        elif self.readonly is 'warning': 
+        elif self.readonly == 'warning': 
             warnings.warn("DB is in readonly mode. Blocked writing attempt to key %s" % key)
-        elif self.readonly is False:
+        elif self.readonly == False:
             pass
         else:
             raise MdbException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
@@ -726,6 +753,8 @@ from .IO.LoaderDumper import just_create_folder
 from .IO.LoaderDumper import just_create_mdb
 from .IO.LoaderDumper import to_pickle
 from .IO.LoaderDumper import to_cloudpickle
+if six.PY3:
+    from .IO.LoaderDumper import shared_numpy_store
                       
 VC = _module_versions.version_cached
 

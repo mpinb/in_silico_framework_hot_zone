@@ -15,6 +15,8 @@ import math
 from . import reader
 from .cell import PySection, Cell
 from . import cell_modify_functions
+import logging
+log = logging.getLogger("ISF").getChild(__name__)
 
 class CellParser(object):
     '''
@@ -77,7 +79,7 @@ class CellParser(object):
             if 'rieke_spines' in list(parameters.spatialgraph_modify_functions.keys()):
                 self.rieke_spines(parameters)
             else:
-                print("No spines are being added...")
+                log.info("No spines are being added...")
         except AttributeError:
             pass
         
@@ -145,11 +147,11 @@ class CellParser(object):
             #if not 'rieke_spines' in parameters.spatialgraph_modify_functions.keys():
             #    if label == 'SpineHead' or label == 'SpineNeck':
             #        continue
-            print('    Adding membrane properties to %s' % label)
+            log.info('    Adding membrane properties to %s' % label)
             self.insert_membrane_properties(label, parameters[label].properties)
         
 #        spatial discretization
-        print('    Setting up spatial discretization...')
+        log.info('    Setting up spatial discretization...')
         if 'discretization' in parameters:
             f = parameters['discretization']['f']
             max_seg_length = parameters['discretization']['max_seg_length']
@@ -172,7 +174,7 @@ class CellParser(object):
                         continue
             except AttributeError:
                 pass
-            print('    Adding membrane range mechanisms to %s' % label)
+            log.info('    Adding membrane range mechanisms to %s' % label)
             self.insert_range_mechanisms(label, parameters[label].mechanisms.range)
             if 'ions' in parameters[label].properties:
                 self._insert_ion_properties(label, parameters[label].properties.ions)
@@ -189,19 +191,19 @@ class CellParser(object):
     def apply_cell_modify_functions(self, parameters):
         if 'cell_modify_functions' in list(parameters.keys()):
             if self.cell_modify_functions_applied == True:
-                print('Cell modify functions have already been applied. We '+\
+                log.info('Cell modify functions have already been applied. We '+\
                 'are now modifying the cell again. Please doublecheck, whether '+\
                 'this is intended. This should not occur, if the cell is setup '+\
                 'up using the recommended way, i.e. by calling '+\
                 'single_cell_parser.create_cell')
             for funname in list(parameters.cell_modify_functions.keys()):
                 kwargs = parameters.cell_modify_functions[funname]
-                print('Applying cell_modify_function {} with parameters {}'.format(funname, str(kwargs)))
+                log.info('Applying cell_modify_function {} with parameters {}'.format(funname, str(kwargs)))
                 fun = cell_modify_functions.get(funname)
                 self.cell = fun(self.cell, **kwargs)
             self.cell_modify_functions_applied = True
         else:
-            print('No cell_modify_functions to apply')
+            log.info('No cell_modify_functions to apply')
             
         self.cell.neuron_param = parameters
     
@@ -259,7 +261,7 @@ class CellParser(object):
         
         for mechName in list(mechs.keys()):
             mech = mechs[mechName]
-            print('        Inserting mechanism %s with spatial distribution %s' % (mechName, mech.spatial))
+            log.info('        Inserting mechanism %s with spatial distribution %s' % (mechName, mech.spatial))
             if mech.spatial == 'uniform':
                 ''' spatially uniform distribution'''
                 paramStrings = []
@@ -355,7 +357,100 @@ class CellParser(object):
                         for s in paramStrings:
                             s = '.'.join(('seg',mechName,s))
                             exec(s)
-            
+                            
+            # exponential distribution in the apical dendrite based on the distance by z
+            elif mech.spatial == 'exponential_by_z_dist':
+                ''' spatially exponential distribution:
+                f(x) = offset + linScale*exp(_lambda*(x-xOffset))'''
+                maxDist = self.cell.max_distance(label)
+    #                set origin to 0 of first branch with this label
+                if label == 'Soma':
+                    silent = h.distance(0, 0.0, sec=self.cell.soma)
+                else:
+                    for sec in self.cell.sections:
+                        if sec.label != label:
+                            continue
+                        if sec.parent.label == 'Soma':
+                            silent = h.distance(0, 0.0, sec=sec)
+                            break
+                relDistance = False
+                if mech['distance'] == 'relative':
+                    relDistance = True
+                offset = mech['offset']
+                linScale = mech['linScale']
+                _lambda = mech['_lambda']
+                xOffset = mech['xOffset']
+                for sec in self.cell.structures[label]:
+                    sec.insert(mechName)
+                    if label == 'ApicalDendrite':
+                        relPts_list = sec.relPts
+                        mid_soma = int(self.cell.soma.nrOfPts/2)
+                        z_distance_per_relPts = [sec.pts[i][2] - self.cell.soma.pts[mid_soma][2] for i in range(len(relPts_list))]
+                    for seg in sec:
+                        paramStrings = []
+                        for param in list(mech.keys()):
+                            if param == 'spatial' or param == 'distance' or param == 'offset'\
+                            or param == 'linScale' or param == '_lambda' or param == 'xOffset':
+                                continue
+                            if label == 'ApicalDendrite':
+                                dist = np.interp(seg.x, relPts_list, z_distance_per_relPts)
+                            else:
+                                dist = h.distance(seg.x, sec=sec)
+                            if relDistance:
+                                dist = dist/maxDist
+                            if not relDistance:
+                                dist = dist/1000
+                            rangeVarVal = mech[param]*(offset + linScale*np.exp(_lambda*(dist - xOffset)))
+                            s = param + '=' + str(rangeVarVal)
+                            paramStrings.append(s)
+                        for s in paramStrings:
+                            s = '.'.join(('seg',mechName,s))
+                            exec(s)
+
+            elif mech.spatial == 'capped_exponential':
+                ''' spatially exponential distribution until a maximum conductance, then uniform:
+                exponential function: f(x) = offset + linScale*exp(_lambda*(x-xOffset))'''
+                maxDist = self.cell.max_distance(label)
+#                set origin to 0 of first branch with this label
+                if label == 'Soma':
+                    silent = h.distance(0, 0.0, sec=self.cell.soma)
+                else:
+                    for sec in self.cell.sections:
+                        if sec.label != label:
+                            continue
+                        if sec.parent.label == 'Soma':
+                            silent = h.distance(0, 0.0, sec=sec)
+                            break
+                relDistance = False
+                if mech['distance'] == 'relative':
+                    relDistance = True
+                offset = mech['offset']
+                linScale = mech['linScale']
+                _lambda = mech['_lambda']
+                xOffset = mech['xOffset']
+                max_g = mech['max_g']
+                for sec in self.cell.structures[label]:
+                    sec.insert(mechName)
+                    for seg in sec:
+                        paramStrings = []
+                        for param in list(mech.keys()):
+                            if param == 'spatial' or param == 'distance' or param == 'offset' or param == 'max_g'\
+                            or param == 'linScale' or param == '_lambda' or param == 'xOffset':
+                                continue
+                            dist = h.distance(seg.x, sec=sec)
+                            if relDistance:
+                                dist = dist/maxDist
+                            rangeVarVal = mech[param]*(offset + linScale*np.exp(_lambda*(dist - xOffset)))
+                            if rangeVarVal < max_g:
+                                s = param + '=' + str(rangeVarVal)
+                                paramStrings.append(s)
+                            elif rangeVarVal >= max_g:
+                                s = param + '=' + str(max_g)
+                                paramStrings.append(s)
+                        for s in paramStrings:
+                            s = '.'.join(('seg',mechName,s))
+                            exec(s)
+
             elif mech.spatial == 'sigmoid':
                 ''' spatially sigmoid distribution:
                 f(x) = offset + linScale/(1+exp((x-xOffset)/width))'''
@@ -427,7 +522,7 @@ class CellParser(object):
                                 continue
                             dist = h.distance(seg.x, sec=sec)
                             if secID in outsideScale_sections:
-                                # print('setting section {} to outsidescale'.format(secID))
+                                # log.info('setting section {} to outsidescale'.format(secID))
                                 rangeVarVal = mech[param]*outsideScale
                             elif begin <= dist <= end:
                                 rangeVarVal = mech[param]
@@ -658,17 +753,17 @@ class CellParser(object):
                         if tmpL > maxL:
                             maxL = tmpL
                             maxLabel = label
-#                    print sec.name()
-#                    print '\tnr of points: %d' % sec.nrOfPts
-#                    print '\tnr of segments: %d' % sec.nseg
+#                    log.info sec.name()
+#                    log.info '\tnr of points: %d' % sec.nrOfPts
+#                    log.info '\tnr of segments: %d' % sec.nseg
         totalL = avgL
         avgL /= totalNSeg
-        print('    frequency used for determining discretization: {}'.format(f))
-        print('    maximum segment length: {}'.format(max_seg_length))
-        print('    Total number of compartments in model: %d' % totalNSeg)
-        print('    Total length of model cell: %.2f' % totalL)
-        print('    Average compartment length: %.2f' % avgL)
-        print('    Maximum compartment (%s) length: %.2f' % (maxLabel, maxL))
+        log.info('    frequency used for determining discretization: {}'.format(f))
+        log.info('    maximum segment length: {}'.format(max_seg_length))
+        log.info('    Total number of compartments in model: %d' % totalNSeg)
+        log.info('    Total length of model cell: %.2f' % totalL)
+        log.info('    Average compartment length: %.2f' % avgL)
+        log.info('    Maximum compartment (%s) length: %.2f' % (maxLabel, maxL))
 
     def _create_ais(self):
         '''create axon hillock and AIS for proper spike initiation
@@ -700,10 +795,10 @@ class CellParser(object):
         hillTaper = (aisDiam-hillBeginDiam)/(nseg-1) # from 4mu to 1mu
         hillStep = hillLength/(nseg-1)
         
-        print('Creating AIS:')
-        print('    soma diameter: %.2f' % somaDiam)
-        print('    axon hillock diameter: %.2f' % hillBeginDiam)
-        print('    initial segment diameter: %.2f' % aisDiam)
+        log.info('Creating AIS:')
+        log.info('    soma diameter: %.2f' % somaDiam)
+        log.info('    axon hillock diameter: %.2f' % hillBeginDiam)
+        log.info('    initial segment diameter: %.2f' % aisDiam)
         
         '''myelin & nodes'''
         myelinSeg = 25 # nr of segments internode section
@@ -815,10 +910,10 @@ class CellParser(object):
 #        hillTaper = (aisDiam-hillBeginDiam)/(hillSeg-1)
 #        hillStep = hillLength/(hillSeg-1)
         
-        print('Creating AIS:')
-        print('    axon hillock diameter: {:.2f}'.format(hillBeginDiam))
-        print('    initial segment diameter: {:.2f}'.format(aisDiam))
-        print('    myelin diameter: {:.2f}'.format(myelinDiam))
+        log.info('Creating AIS:')
+        log.info('    axon hillock diameter: {:.2f}'.format(hillBeginDiam))
+        log.info('    initial segment diameter: {:.2f}'.format(aisDiam))
+        log.info('    myelin diameter: {:.2f}'.format(myelinDiam))
         
         zAxis = np.array([0,0,1])
         
@@ -873,11 +968,11 @@ class CellParser(object):
         spineheadDiam = parameters.spatialgraph_modify_functions.rieke_spines.spine_morphology.spineheadDiam
         spineheadLength = parameters.spatialgraph_modify_functions.rieke_spines.spine_morphology.spineheadLength
     
-        print("Creating dendritic spines:")
-        print(("    spine neck length: {}".format(spineneckLength)))
-        print(("    spine neck diameter: {}".format(spineneckDiam)))
-        print(("    spine head length: {}".format(spineheadLength)))
-        print(("    spine head diameter: {}".format(spineheadDiam)))
+        log.info("Creating dendritic spines:")
+        log.info(("    spine neck length: {}".format(spineneckLength)))
+        log.info(("    spine neck diameter: {}".format(spineneckDiam)))
+        log.info(("    spine head length: {}".format(spineheadLength)))
+        log.info(("    spine head diameter: {}".format(spineheadDiam)))
        
         excitatory = ['L6cc', 'L2', 'VPM', 'L4py', 'L4ss', 'L4sp', 'L5st', 'L6ct', 'L34', 'L6ccinv', 'L5tt', 'Generic']
 
@@ -932,21 +1027,4 @@ class CellParser(object):
                     hSpineHead.set_3d_geometry(points_head, diameters_head)
                     hSpineHead.parentx = 1.0
                     hSpineHead.parentID = self.cell.sections.index(hSpineNeck)
-
-if __name__ == '__main__':
-#    fname = raw_input('Enter hoc filename: ')
-    fname = '93_CDK080806_marcel_3x3_registered_zZeroBarrel.hoc.am-14678.hoc'
-    testParser = CellParser(fname)
-    testParser.spatialgraph_to_cell()
-    testParser.insert_passive_membrane('Soma')
-    testParser.insert_passive_membrane('Dendrite')
-    testParser.insert_passive_membrane('ApicalDendrite')
-    testParser.insert_hh_membrane('Soma')
-    testParser.insert_hh_membrane('Dendrite')
-    testParser.insert_hh_membrane('ApicalDendrite')
-    for label in list(testParser.cell.branches.keys()):
-        for branch in testParser.cell.branches[label]:
-            print('Branch: {:s}'.format(label))
-            for sec in branch:
-                h.psection(sec=sec)
     

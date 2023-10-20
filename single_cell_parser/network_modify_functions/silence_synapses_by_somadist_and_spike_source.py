@@ -1,4 +1,6 @@
-import single_cell_analyzer as sca
+import single_cell_parser.analyze as sca
+import logging
+log = logging.getLogger("ISF").getChild(__name__)
 def silence_synapses_by_somadist_and_spike_source(cell, evokedNW, 
                                             soma_dist_ranges = None, 
                                             spike_sources = None):
@@ -11,7 +13,7 @@ def silence_synapses_by_somadist_and_spike_source(cell, evokedNW,
         try:
             synapses = cell.synapses[synapse_type]
         except KeyError:
-            print('skipping', synapse_type, '(no connected cells of that type present)')
+            log.info('skipping', synapse_type, '(no connected cells of that type present)')
         distances = sca.compute_syn_distances(cell, synapse_type)
         min_, max_ = ranges_
         for lv, (syn, dist) in enumerate(zip(synapses, distances)):
@@ -26,7 +28,7 @@ def silence_synapses_by_somadist_and_spike_source(cell, evokedNW,
                         #print 'activating ', st, ss                    
                         syn.releaseSite.append(st, spike_source = ss)
                     else:
-                        print('deactivating synapse of type {}, id {}, activation time {}, soma_distance {}, from source {}'.\
+                        log.info('deactivating synapse of type {}, id {}, activation time {}, soma_distance {}, from source {}'.\
                         format(synapse_type, lv, st, dist, ss))   
                 #syn.releaseSite.play()
                 syn.releaseSite.spikes.play(syn.releaseSite.spikeVec)

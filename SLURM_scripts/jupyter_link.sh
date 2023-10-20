@@ -5,6 +5,13 @@
 trap "exit 1" SIGUSR1
 PROC=$$
 
+# If a job doesnt start, this string will change tot he reason as to why it doesnt
+QOS=""
+
+# The user-defined port numbers of jupyter notebook/lab
+__LOCATION__="$(dirname "$(realpath "$0")")"
+DASK_PORT=$(awk -F "=" '/dask_client_2/ {print $2}' $__LOCATION__/user_settings.ini)
+
 NC='\033[0m' # No Color
 ORANGE='\033[0;33m' # orange color
 
@@ -88,10 +95,10 @@ function fetch_jupyter_lab_link {
     while ! test -f $jupyter_file; do
         printf_with_dots "Setting up jupyter lab server "
     done;
-    local link="$(cat $jupyter_file | grep -Eo http://.*:11113/.* | head -1)"
+    local link="$(cat $jupyter_file | grep -Eo "LabApp] http://.*" | grep -Eo http://.* | head -1)"
     while [ -z "$link" ]; do  # wait until link is written and grep returns a match
         printf_with_dots "Launching Jupyter Lab server "
-        local link="$(cat $jupyter_file | grep -Eo http://.*:11113/.* | head -1)"
+        local link="$(cat $jupyter_file | grep -Eo "LabApp] http://.*" | grep -Eo http://.* | head -1)"
     done;
     echo "${link}"
 }
@@ -107,10 +114,10 @@ function fetch_jupyter_notebook_link {
     while ! test -f $jupyter_file; do
         printf_with_dots "Setting up Jupyter Notebook server "
     done;
-    local link="$(cat $jupyter_file | grep -Eo http://.*:11112/.* | head -1)"
+    local link="$(cat $jupyter_file | grep -Eo "NotebookApp] http://.*" | grep -Eo http://.* | head -1)"
     while [ -z "$link" ]; do  # wait until link is written and grep returns a match
         printf_with_dots "Launching Jupyter Notebook server "
-        local link="$(cat $jupyter_file | grep -Eo http://.*:11112/.* | head -1)"
+        local link="$(cat $jupyter_file | grep -Eo NotebookApp] http://.* | grep -Eo http://.* | head -1)"
     done;
     echo "${link}"
 }
@@ -124,13 +131,15 @@ function fetch_jupyter_notebook_link {
 #######################################
 function fetch_ip {
     management_dir="$MYBASEDIR/management_dir_$1"
+    # management dir does not eexist yet. Assume it is still being created.
     while ! test -d "$management_dir"; do
         printf_with_dots "Creating \"management_dir_$1\" "
     done;
     while ! test -f "$management_dir/scheduler.json"; do
         printf_with_dots "Creating \"management_dir_$1/scheduler.json\" "
     done;
-    local ip="$(cat $management_dir/scheduler.json | grep -Eo tcp://\.*28786 | grep -o -P '(?<=tcp://).*(?=:28786)')"
+    # grep for tcp://something:dask_port, and then grep for anything inbetween tcp:// and :
+    local ip="$(cat $management_dir/scheduler.json | grep -Eo tcp://\.*:$DASK_PORT | grep -o -P '(?<=tcp://).*(?=:)')"
     echo "${ip}"
 }
 
@@ -143,15 +152,17 @@ function fetch_ip {
 #   2: The jupyter link
 #######################################
 function format_jupyter_link {
-    local link_suffix="$(echo $2 | grep -oP '(?<=:1111[23]/)'.* | head -1)"  # grep for anything after the port number
-    local port_number="$(cut -d':' -f3 <<<$2 | cut -c1-5)"  # cut the ip on colo, take third element, take first 4 chars of that
-    if [ -z "$link_suffix" ] ;  # no suffix is found: no token
+    # In the jupyter link, grep for everything after "?token="
+    local token="$(echo $2 | grep -o -P '(?<=\/\?token\=).*')"
+    local port_number="$(cut -d':' -f3 <<<$2 | cut -c1-5)"  # cut the ip on colon take third element, take first 4 chars of that
+    if [ -z "$token" ] ;  # no suffix is found: no token
     then
         printf "\nWarning: No token is set for this Jupyter server.\nVSCode will not be able to connect to this server, and notebooks running on this server can not be shared by link.\n">&2
     fi
-    local jupyter_link="http://$1:$port_number/$link_suffix"
+    local jupyter_link="http://$1:$port_number/?token=$token"
     echo $jupyter_link
 }
+
 
 args_precheck $#;  # check amount of arguments
 job_name="$1"
@@ -171,3 +182,6 @@ ${ORANGE}Jupyter notebook${NC} server for \"$1\" is running at:
 $jupyter_notebook_link
 \n"
 exit 0;
+
+
+# TODO: if the management_dir exists, this script should work. QOS checks should happen in submit, not here

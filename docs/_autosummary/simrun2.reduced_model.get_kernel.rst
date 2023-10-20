@@ -1,4 +1,4 @@
-﻿simrun2.reduced\_model.get\_kernel
+simrun2.reduced\_model.get\_kernel
 ==================================
 
 .. automodule:: simrun2.reduced_model.get_kernel
