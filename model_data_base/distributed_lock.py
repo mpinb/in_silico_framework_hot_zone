@@ -7,9 +7,11 @@ import os
 import warnings
 from compatibility import YamlLoader
 
-if "ISF_DISTRIBUTED_LOCK_CONFIG" in os.environ:
-    config_path = os.environ["ISF_DISTRIBUTED_LOCK_CONFIG"]
-    with open(os.environ["ISF_DISTRIBUTED_LOCK_CONFIG"], "r") as f:
+if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
+    pass
+elif 'ISF_DISTRIBUTED_LOCK_CONFIG' in os.environ:
+    config_path = os.environ['ISF_DISTRIBUTED_LOCK_CONFIG']
+    with open(os.environ['ISF_DISTRIBUTED_LOCK_CONFIG'], 'r') as f:
         config = yaml.load(f, Loader=YamlLoader)
 else:
     warnings.warn(
@@ -25,14 +27,8 @@ else:
 
 
 def get_client():
-    """
-    Connects to a distributed locking server and returns the server and client object.
-
-    Returns:
-    - server: The server object.
-    - client: The client object, which can be None if the server type is 'file'.
-    """
-
+    if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
+        return None, None
     for server in config:
         print("trying to connect to distributed locking server {}".format(
             str(server)))
@@ -86,20 +82,9 @@ def update_config(c):
 
 
 def get_lock(name):
-    """
-    Returns a lock object based on the server type specified in the configuration.
-
-    Args:
-    - name: str, the name of the lock
-
-    Returns:
-    - lock object: an object that implements the lock interface
-
-    Raises:
-    - RuntimeError: if the server type is not supported
-    """
-
-    if server["type"] == "file":
+    if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
+        raise RuntimeError('ISF_DISTRIBUTED_LOCK_BLOCK is defined, which turns off locking.')
+    if server['type'] == 'file':
         import fasteners
 
         return fasteners.InterProcessLock(name)
@@ -116,17 +101,9 @@ def get_lock(name):
 
 
 def get_read_lock(name):
-    """
-    Returns a read lock object based on the server type specified in the configuration.
-
-    Args:
-    - name (str): The name of the lock.
-
-    Returns:
-    - lock object: A lock object based on the server type specified in the configuration.
-    """
-
-    if server["type"] == "file":
+    if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
+        raise RuntimeError('ISF_DISTRIBUTED_LOCK_BLOCK is defined, which turns off locking.')    
+    if server['type'] == 'file':
         import fasteners
 
         return fasteners.InterProcessLock(name)
@@ -143,17 +120,9 @@ def get_read_lock(name):
 
 
 def get_write_lock(name):
-    """
-    Returns a write lock object based on the server type specified in the configuration.
-
-    Args:
-    - name: str, the name of the lock
-
-    Returns:
-    - lock object: a lock object based on the server type specified in the configuration
-    """
-
-    if server["type"] == "file":
+    if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
+        raise RuntimeError('ISF_DISTRIBUTED_LOCK_BLOCK is defined, which turns off locking.')    
+    if server['type'] == 'file':
         import fasteners
 
         return fasteners.InterProcessLock(name)
