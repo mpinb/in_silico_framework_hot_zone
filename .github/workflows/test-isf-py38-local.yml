@@ -48,8 +48,8 @@ jobs:
           runner_number=$( echo $name | grep -Eo '[0-9]+$' )
           port_number=387${runner_number: -1}6
           bokeh_port=387${runner_number: -1}7
-          lsof -i tcp:${port_number} | awk 'NR!=1 {print $2}' | xargs kill 
-          lsof -i tcp:${bokeh_port} | awk 'NR!=1 {print $2}' | xargs kill 
+          kill -9 `lsof -t -i:$port_number`
+          kill -9 `lsof -t -i:$bokeh_port` 
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
 
