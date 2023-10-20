@@ -66,7 +66,7 @@ def temporal_binning_dask(ddf,
 
     #bin each partition separately and sum to get result
     #     meta = pd.Series(zip(*(t_bins,data)))
-    out = ddf.map_partitions(fun2, meta=float).compute(get=client.get).sum()
+    out = ddf.map_partitions(fun2, meta=float).compute(scheduler=client).sum()
 
     if normalize:
         out = out / float(len(ddf))

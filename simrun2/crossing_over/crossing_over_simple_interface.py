@@ -61,7 +61,7 @@ def crossing_over_helper(pdf,
                                            nSweeps=nSweeps,
                                            nprocs=1,
                                            silent=silent)
-    synfiles = delayed.compute(get=dask.get)[0]
+    synfiles = delayed.compute(scheduler=dask.get)[0]
 
     pdf = filter_by_time(pdf, lambda x: x <= time)
     merged_synfile_temppath = tempfile.mkdtemp(
@@ -85,7 +85,7 @@ def crossing_over_helper(pdf,
                                                tStop=tStop,
                                                silent=silent,
                                                scale_apical=scale_apical)
-    ret = delayed.compute(get=dask.get)
+    ret = delayed.compute(scheduler=dask.get)
     shutil.rmtree(synfile_temppath)
     shutil.rmtree(merged_synfile_temppath)
     return ret

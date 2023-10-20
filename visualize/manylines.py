@@ -57,7 +57,7 @@ def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
         figures_list = df.map_partitions(fun2, meta=('A', 'object'))
         # get = dask.multiprocessing.get if get is None else get
         figures_list = figures_list.compute(
-            get=get)  #multiprocessing_scheduler)
+                scheduler=dask.get)  #multiprocessing_scheduler)
         # print figures_list
         # if fig is None: fig = plt.figure(figsize = figsize)
         # plt.axis('off')

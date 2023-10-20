@@ -14,7 +14,7 @@ def test_generate_synapse_activation_returns_filelist(tmpdir):
             nprocs=1,
             tStop=345,
             silent=True)
-        dummy = dummy.compute(get=dask.get)
+        dummy = dummy.compute(scheduler=dask.get)
     except:
         raise
     assert isinstance(dummy[0][0][0], str)

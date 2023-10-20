@@ -177,11 +177,11 @@ def init(mdb,
         mdb_vt.setitem((description_key, PSPClass_name),
                        vt_new,
                        dumper=dask_to_msgpack,
-                       get=client.get)
+                       scheduler=client)
     else:
         return DistributedDDFWithSaveMethod(mdb=mdb_vt,
                                             key=(description_key,
                                                  PSPClass_name),
                                             ddf=vt_new,
                                             dumper=dask_to_msgpack,
-                                            get=client.get)
+                                            scheduler=client)

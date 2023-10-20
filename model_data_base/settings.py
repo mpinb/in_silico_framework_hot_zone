@@ -8,7 +8,7 @@ import os  ##
 #scheduler = dask.multiprocessing.get
 #multiprocessing_scheduler = dask.multiprocessing.get#scheduler
 #show_computation_progress = True
-#dask.set_options(get = scheduler)
+#dask.set_options(scheduler=scheduler)
 #npartitions = 80
 
 # model_data_base_register

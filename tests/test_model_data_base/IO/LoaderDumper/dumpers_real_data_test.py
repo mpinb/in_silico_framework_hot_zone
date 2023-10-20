@@ -39,8 +39,8 @@ def real_data_generic(mdb_, dumper_, client_=None):
                      dumper=dumper_,
                      client=client_)
     dummy = mdb_['voltage_traces2']
-    b = mdb_['voltage_traces'].compute(get=dask.multiprocessing.get)
-    a = dummy.compute(get=dask.multiprocessing.get)
+    b = mdb_['voltage_traces'].compute(scheduler=dask.multiprocessing.get)
+    a = dummy.compute(scheduler=dask.multiprocessing.get)
     assert_frame_equal(a, b)
 
     if client_ is None:
@@ -53,8 +53,8 @@ def real_data_generic(mdb_, dumper_, client_=None):
                      dumper=dumper_,
                      client=client_)
     dummy = mdb_['synapse_activation2']
-    b = mdb_['synapse_activation'].compute(get=dask.multiprocessing.get)
-    a = dummy.compute(get=dask.multiprocessing.get)
+    b = mdb_['synapse_activation'].compute(scheduler=dask.multiprocessing.get)
+    a = dummy.compute(scheduler=dask.multiprocessing.get)
     assert_frame_equal(a, b)
 
 

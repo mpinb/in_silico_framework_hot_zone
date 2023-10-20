@@ -285,7 +285,7 @@ class PSPs:
                 merge=True,
                 merge_celltype_kwargs={},
                 fig=None):
-        vt = self.get_voltage_traces()  # d.compute(get = I.dask.get)
+        vt = self.get_voltage_traces()  # d.compute(scheduler=I.dask.get)
         if merge:
             vt = merge_celltypes(vt, **merge_celltype_kwargs)
         vt = vt[population][g][g]

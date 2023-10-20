@@ -262,7 +262,7 @@ def parallelMovieMaker(basedir, lines, xlim=(0, 1500), ylim=(-80, 0)):
 
     #dask.compute(delayed_list, get = dask.multiprocessing.get, optimize = False)
     #print "start computing"
-    #dask.delayed(delayed_list).compute(get = dask.multiprocessing.get, optimize = False)
+    #dask.delayed(delayed_list).compute(scheduler=dask.multiprocessing.get, optimize = False)
 
     return paths
 

@@ -54,7 +54,7 @@ def test_generate_synapse_activation_returns_filelist(tmpdir):
             nprocs=1,
             tStop=345,
             silent=True)
-        dummy = dummy.compute(get=dask.get)
+        dummy = dummy.compute(scheduler=dask.get)
     except:
         raise
     assert isinstance(dummy[0][0][0], str)
@@ -71,7 +71,7 @@ def test_run_existing_synapse_activation_returns_identifier_dataframe_and_result
             nprocs=1,
             tStop=345,
             silent=True)
-        dummy = dummy.compute(get=dask.get)
+        dummy = dummy.compute(scheduler=dask.get)
     except:
         raise
     assert isinstance(dummy[0][0][0], pd.DataFrame)
@@ -111,7 +111,7 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir):
             nprocs=1,
             tStop=345,
             silent=True)
-        dummy = dummy.compute(get=dask.get)
+        dummy = dummy.compute(scheduler=dask.get)
         cellParam = scp.build_parameters(cellParamName)
         # change location of cell by respecifying param file
         cellParam.neuron.filename = os.path.join(parent, 'test_simrun2',\
@@ -127,7 +127,7 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir):
             nprocs=1,
             tStop=345,
             silent=True)
-        dummy2 = dummy2.compute(get=dask.get)
+        dummy2 = dummy2.compute(scheduler=dask.get)
         df1 = read_pandas_synapse_activation_from_roberts_format(
             os.path.join(
                 dummy[0][0][1], 'simulation_run%s_synapses.csv' %
@@ -152,7 +152,7 @@ def test_reproduce_simulation_trail_from_roberts_model_control(tmpdir):
             tStop=345,
             silent=True,
             scale_apical=scale_apical)
-        dummy = dummy.compute(get=dask.get)
+        dummy = dummy.compute(scheduler=dask.get)
 
         #synapse activation
         df1 = read_pandas_synapse_activation_from_roberts_format(
@@ -218,7 +218,7 @@ def test_crossing_over_trails_show_identical_response_before_crossing_over_time(
             dirPrefix=str(tmpdir),
             nSweeps=2,
             tStop=345)
-        res = res.compute(get=dask.get)
+        res = res.compute(scheduler=dask.get)
         df = pd.read_csv(glob.glob(
             os.path.join(res[0][0][0][1], '*vm_all_traces.csv'))[0],
                          sep='\t')

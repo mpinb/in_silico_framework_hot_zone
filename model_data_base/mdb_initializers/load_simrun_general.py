@@ -536,7 +536,7 @@ def _build_synapse_activation(mdb, repartition=False, n_chunks=5000):
             divisions = [x[1] for x in path_sti_tuples
                         ] + [path_sti_tuples[-1][1]]
         ddf = dd.from_delayed(delayeds,
-                              meta=delayeds[0].compute(get=dask.threaded.get),
+                              meta=delayeds[0].compute(scheduler=dask.threaded.get),
                               divisions=divisions)
         print('save dataframe')
         mdb.setitem(key, ddf, dumper=dumper)
@@ -671,7 +671,7 @@ def init(mdb, simresult_path,  \
 
 
 #     get = compatibility.multiprocessing_scheduler if get is None else get
-#     with dask.set_options(get = get):
+#     with dask.set_options(scheduler=get):
 #with get_progress_bar_function()():
     mdb['simresult_path'] = simresult_path
     if core:
@@ -826,7 +826,7 @@ def load_initialized_cell_and_evokedNW_from_mdb(mdb,
     from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
     neup, netp = load_param_files_from_mdb(mdb, sti)
     sa = mdb['synapse_activation']
-    sa = sa.loc[sti].compute(get=dask.get)
+    sa = sa.loc[sti].compute(scheduler=dask.get)
     cell = scp.create_cell(neup.neuron, allPoints=allPoints)
     evokedNW = scp.NetworkMapper(cell, netp.network, simParam=neup.sim)
     if reconnect_synapses:
