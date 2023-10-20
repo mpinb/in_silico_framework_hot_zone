@@ -33,6 +33,8 @@ jobs:
           echo "Killing all dask processes on ${{ runner.name }} for user $USER (if they exist)"
           pkill -U $USER dask-worker
           pkill -U $USER dask-scheduler
+          rm /tmp/dask-worker-space/global.lock;
+          rm -rf /tmp/dask-worker-space/;
           echo "Creating tests/logs/ directory..."
           mkdir -p ./tests/logs/
           echo "Removing previous coverage files..."
