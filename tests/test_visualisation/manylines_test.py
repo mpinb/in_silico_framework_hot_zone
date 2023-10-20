@@ -94,7 +94,7 @@ class TestManyLines:
                         groupby_attribute = 'attribute', \
                         colormap = self.colormap, \
                         returnPixelObject = True,
-                        get = client.get)
+                        scheduler=client)
         assert isinstance(po, PixelObject)
         fig = plt.figure()
         show_pixel_object(po, fig=fig)
