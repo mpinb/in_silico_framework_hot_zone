@@ -53,6 +53,7 @@ class ProjectControl extends React.Component {
   };
 
   applyObject = (object) => {
+    console.log(object);
     this.viewManager.setGrammar(object.data.grammar);
     this.viewManager.OnProjectLoaded.notifyObservers();
     this.viewManager.updateWorkspace();    

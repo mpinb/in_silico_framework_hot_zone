@@ -13,7 +13,7 @@ Supports the creation of web-based data analytics dashboards consisting of linke
 Navigate to this folder, activate Python 3.8 environment of In-Silico-Framework (see [setup instructions](../../installer/README.md)), and start data server.
 ```
 source_3
-python server_legacy.py ../../getting_started/linked-views-example-data/case_study_1
+python data_server.py ../../getting_started/linked-views-example-data/case_study_1
 ```
 Replace `case_study_1` with `case_study_2` to view the second case study from the paper (excluding membrane potentials).
 

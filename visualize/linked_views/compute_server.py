@@ -3,7 +3,7 @@ Simulation server that computes membrane potential over time on dendrite surface
 for given model parameters (case study 2). This serves as an example for a compute 
 server.
 
-Code dependencies to the core simulation framework (authored by Arco Bast, Max Planck 
+Code dependencies to the core simulation framework (authored by Arco Bast et al., Max Planck 
 Institute for Neurobiology of Behavior, Bonn) have been commented out in this file. The 
 core simulation framework is not publicly available at this point and requires extensive
 configurations and supervision to set up locally.

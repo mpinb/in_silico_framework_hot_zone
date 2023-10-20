@@ -1,4 +1,6 @@
-
+"""
+Legacy backend server to run examples from VCBM 2023 publication (see README.md).
+"""
 import os
 import json
 import sys

@@ -61,7 +61,7 @@ class GrammarControl extends React.Component {
         
         let that = this;
         this.viewManager.OnProjectLoaded.add(()=>{
-          //console.log("project", this.viewManager.grammar);
+          console.log("project", this.viewManager.grammar);
           that.setState((state)=>{
             state.code = JSON.stringify(that.viewManager.grammar, null, 2);
             return state;

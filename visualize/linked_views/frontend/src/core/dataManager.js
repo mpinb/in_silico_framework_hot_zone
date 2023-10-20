@@ -428,14 +428,14 @@ export class DataManager {
             });        
     }
 
-    setDensityPlotSelection(filter_data) {
-        const data = {
-            "filter_data" : filter_data
-        }
+    setDensityPlotSelection(data) {        
         axios.post(this.getDataServerURL('/setDensityPlotSelection'), data, { headers })
             .then(response => {
                 console.log(response);
-            });        
+            })
+            .catch(error => {                
+                console.log(error);
+            });           
     }
 
 

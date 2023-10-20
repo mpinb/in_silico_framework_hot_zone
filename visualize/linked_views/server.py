@@ -1,4 +1,5 @@
 import os
+import time
 import logging
 from logging import handlers
 import tempfile
@@ -362,19 +363,6 @@ class LinkedViewsServer:
                     "data_ranges" : get_data_ranges(filtered_df)
                 }
 
-                # -------
-                """
-                json_string = json.dumps(response_data)
-                zip_buffer = BytesIO()    
-                with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_STORED) as zip_file:
-                    zip_file.writestr('data.json', json_string)
-
-                response = make_response(zip_buffer.getvalue())
-                response.headers['Content-Type'] = 'application/zip'
-                response.headers['Content-Disposition'] = 'attachment; filename=data.zip'
-                return response
-                # -------
-                """
                 return json.dumps(response_data)
     
 
@@ -507,29 +495,9 @@ class LinkedViewsServer:
 
 if __name__ == "__main__":
 
-
-    import defaults.default_sessions as defaults
-    
-    def append_PCA(df, columns, descriptor, n_components = 2):
-        pca = vaex.ml.PCA(features=columns, n_components=n_components)    
-        df_transformed = pca.fit_transform(df)
-        for component_idx in range(0, n_components):
-            df_transformed.rename(f"PCA_{component_idx}", f"{descriptor}-{component_idx+1}")
-        return df_transformed
-
-    #data_folder = "/scratch/visual/bzfharth/in-silico-install-dir/project_src/in_silico_framework/getting_started/linked-views-example-data/backend_data_2023-06-22"
     server = LinkedViewsServer()
     server.start(5000)
-    
-    server.add_session(defaults.biophysics_fitting())
-
-    filename = "/scratch/visual/bzfharth/in-silico-install-dir/project_src/in_silico_framework/getting_started/linked-views-example-data/backend_data_2023-06-22/simulation_samples.csv"
-    df = vaex.from_csv(filename, copy_index=False)
-    df_extended = append_PCA(df, util.getParamsCols(), "PCA-ephys")
-
-    server.set_data(df_extended)
-
-    import time
-    time.sleep(600)
+        
+    time.sleep(3600) # keep running for 1h
 
     
