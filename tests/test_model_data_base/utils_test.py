@@ -64,8 +64,8 @@ def test_cache():
 def test_myrepartition(client):
     pdf = pd.DataFrame(np.random.randint(100, size=(1000, 3)))
     ddf = dask.dataframe.from_pandas(pdf, npartitions=10)
-    pdf2 = myrepartition(ddf, 4).compute(scheduler=client)
+    pdf2 = client.compute(myrepartition(ddf, 4))
     pd.util.testing.assert_frame_equal(pdf, pdf2)
     ddf.divisions = tuple([None] * (ddf.npartitions + 1))
-    pdf2 = myrepartition(ddf, 4).compute(scheduler=client)
+    pdf2 = client.compute(myrepartition(ddf, 4))
     pd.util.testing.assert_frame_equal(pdf, pdf2)
