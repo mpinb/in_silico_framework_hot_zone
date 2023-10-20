@@ -361,7 +361,7 @@ def synchronous_ddf_concat(ddf_path, meta, N, n, scheduler=None):
     chunk = chunks_delayeds[n]
     ddf = dd.from_delayed(chunk, meta = meta)
     dask_options = dask.context._globals
-    pdf = ddf.compute(scheduler="synchronous").result()
+    pdf = ddf.compute(scheduler="synchronous")
     dask.context._globals = dask_options
     return pdf
 
