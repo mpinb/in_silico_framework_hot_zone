@@ -20,24 +20,18 @@ Note: If you did not add conda to the system PATH under Windows, you can us the 
 
 In your terminal / Powershell / Anaconda Prompt navigate to this repository, create a new Python environment, and install the required packages.
 ```
-cd <path-to-repository>
 conda create --name coordinated-views python=3.8
 conda activate coordinated-views
 pip install -r requirements.txt
 ```
 
-### 2. Start backend server
-Navigate to repository, activate Python environment, and start data server (case study 1).
-```
-cd <path-to-repository>
-conda activate coordinated-views
-python data_server.py data/case_study_1
-```
-Data for case study 2 can be obtained [here](https://cloud.zib.de/s/jmF7dejCm92Hpi6). To view the membrane potential on the dendrite additionally start the compute server:
+### 2. Start backend server (standalone Python server as in paper)
+Navigate to repository, activate Python environment, and start data server.
 ```
 conda activate coordinated-views
-python compute_server.py data/case_study_2/simulation_data
+python server_legacy.py ../../getting_started/linked-views-example-data/case_study_1
 ```
+Replace `case_study_1` with `case_study_2` to view the second case study from the paper (excluding membrane potentials).
 
 ### 3. Start web-based frontend
 Please refer to the [documentation](frontend/README.md) in the frontend folder.
