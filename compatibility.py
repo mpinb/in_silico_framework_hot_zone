@@ -75,3 +75,10 @@ elif six.PY3:
             return pandas.compat.pickle_compat.load(f)
 
     YamlLoader = yaml.FullLoader  # Better choice, but only exists in Py3
+
+    def yaml_load(*args, **kwargs):
+        if 'Loader' not in kwargs:
+            kwargs['Loader'] = YamlLoader
+        return yaml.load(*args, **kwargs)
+
+    yaml.load = yaml_load
