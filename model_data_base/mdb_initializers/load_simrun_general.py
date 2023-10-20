@@ -536,7 +536,7 @@ def _build_synapse_activation(mdb, repartition=False, n_chunks=5000):
             divisions = [x[1] for x in path_sti_tuples
                         ] + [path_sti_tuples[-1][1]]
         ddf = dd.from_delayed(delayeds,
-                              meta=delayeds[0].compute(scheduler=dask.threaded.get),
+                              meta=delayeds[0].compute(scheduler="threads"),
                               divisions=divisions)
         print('save dataframe')
         mdb.setitem(key, ddf, dumper=dumper)
@@ -640,7 +640,7 @@ def init(mdb, simresult_path,  \
          core = True, voltage_traces = True, synapse_activation = True,
          dendritic_voltage_traces = True, parameterfiles = True, \
          spike_times = True,  burst_times = False, \
-         repartition = True, get = None, rewrite_in_optimized_format = True,
+         repartition = True, scheduler = None, rewrite_in_optimized_format = True,
          dendritic_spike_times = True, dendritic_spike_times_threshold = -30.,
          client = None, n_chunks = 5000):
     '''Use this function to load simulation data generated with the simrun2 module 
@@ -667,11 +667,11 @@ def init(mdb, simresult_path,  \
         raise ValueError('deprecated!')
     if rewrite_in_optimized_format:
         assert client is not None
-        get = client.get
+        scheduler = client
 
 
 #     get = compatibility.multiprocessing_scheduler if get is None else get
-#     with dask.set_options(scheduler=get):
+#     with dask.set_options(scheduler=scheduler):
 #with get_progress_bar_function()():
     mdb['simresult_path'] = simresult_path
     if core:
@@ -680,7 +680,7 @@ def init(mdb, simresult_path,  \
             optimize(mdb,
                      select=['voltage_traces'],
                      repartition=False,
-                     get=get,
+                     scheduler=scheduler,
                      client=client)
     if parameterfiles:
         _build_param_files(mdb, client=client)
@@ -692,12 +692,12 @@ def init(mdb, simresult_path,  \
             optimize(mdb,
                      select=['cell_activation', 'synapse_activation'],
                      repartition=False,
-                     get=get,
+                     scheduler=scheduler,
                      client=client)
     if dendritic_voltage_traces:
         add_dendritic_voltage_traces(mdb, rewrite_in_optimized_format,
                                      dendritic_spike_times, repartition,
-                                     dendritic_spike_times_threshold, get,
+                                     dendritic_spike_times_threshold, scheduler,
                                      client)
     if spike_times:
         print("---spike times---")
@@ -713,14 +713,14 @@ def add_dendritic_voltage_traces(mdb,
                                  dendritic_spike_times=True,
                                  repartition=True,
                                  dendritic_spike_times_threshold=-30.,
-                                 get=None,
+                                 scheduler=None,
                                  client=None):
     _build_dendritic_voltage_traces(mdb, repartition=repartition)
     if rewrite_in_optimized_format:
         optimize(mdb['dendritic_recordings'],
                  select=list(mdb['dendritic_recordings'].keys()),
                  repartition=False,
-                 get=get,
+                 scheduler=scheduler,
                  client=client)
     if dendritic_spike_times:
         add_dendritic_spike_times(mdb, dendritic_spike_times_threshold)
@@ -749,7 +749,7 @@ def _get_dumper(value):
 def optimize(mdb,
              dumper=None,
              select=None,
-             get=None,
+             scheduler=None,
              repartition=False,
              client=None):
     '''
@@ -777,7 +777,7 @@ def optimize(mdb,
     select: If None, all data will be converted. You can specify a list of items that
     should be optimized, if only a subset should be optimized.
     
-    get: scheduler for task execution. If None, compatibility.multiprocessing_scheduler is used.
+    scheduler: scheduler for task execution. Can be a Client object, or a string: [distributed, multiprocessing, processes, single-threaded, sync, synchronous, threading, threads]
     '''
     keys = list(mdb.keys())
     keys_for_rewrite = select if select is not None else ['synapse_activation', \
@@ -792,7 +792,7 @@ def optimize(mdb,
             if isinstance(value, ModelDataBase):
                 optimize(value,
                          select=list(value.keys()),
-                         get=get,
+                         scheduler=scheduler,
                          client=client)
             else:
                 dumper = _get_dumper(value)
@@ -802,11 +802,11 @@ def optimize(mdb,
                     mdb.setitem(key,
                                 value,
                                 dumper=dumper,
-                                get=get,
+                                scheduler=scheduler,
                                 repartition=repartition,
                                 client=client)
                 else:
-                    mdb.setitem(key, value, dumper=dumper, get=get)
+                    mdb.setitem(key, value, dumper=dumper, scheduler=scheduler)
 
 
 def load_param_files_from_mdb(mdb, sti):
@@ -826,7 +826,7 @@ def load_initialized_cell_and_evokedNW_from_mdb(mdb,
     from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
     neup, netp = load_param_files_from_mdb(mdb, sti)
     sa = mdb['synapse_activation']
-    sa = sa.loc[sti].compute(scheduler=dask.get)
+    sa = sa.loc[sti].compute()
     cell = scp.create_cell(neup.neuron, allPoints=allPoints)
     evokedNW = scp.NetworkMapper(cell, netp.network, simParam=neup.sim)
     if reconnect_synapses:

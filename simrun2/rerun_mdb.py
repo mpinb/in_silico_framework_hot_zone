@@ -58,7 +58,7 @@ def _evoked_activity(mdb,
     sti_base = sti_bases[0]
     sa = sa.content
     log.info('start loading synapse activations')
-    sa = sa.loc[stis].compute(scheduler=dask.get)
+    sa = sa.loc[stis].compute(scheduler="synchronous")
     log.info('done loading synapse activations')
     sa = {s: g for s, g in sa.groupby(sa.index)}
 

@@ -19,7 +19,7 @@ npartitions = 80
 
 @return_figure_or_axis
 def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
-              fig = None, figsize = (15,3), returnPixelObject = False, get = None):
+              fig = None, figsize = (15,3), returnPixelObject = False, scheduler=None):
     '''parallelizes the plot of many lines'''
     assert fig is not None  # decorator takes care, that it is allwys axes
     #     assert get is not None
@@ -57,7 +57,7 @@ def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
         figures_list = df.map_partitions(fun2, meta=('A', 'object'))
         # get = dask.multiprocessing.get if get is None else get
         figures_list = figures_list.compute(
-                scheduler=dask.get)  #multiprocessing_scheduler)
+                scheduler=scheduler)  #multiprocessing_scheduler)
         # print figures_list
         # if fig is None: fig = plt.figure(figsize = figsize)
         # plt.axis('off')

@@ -47,7 +47,7 @@ def universal(df, distance_column, spacial_distance_bins = 50, min_time = 0, \
     elif isinstance(df, dd.DataFrame):
         #fun = map_return_to_series(fun)
         pixel_list = df.map_partitions(map_return_to_series(fun))\
-                        .compute(scheduler=dask.multiprocessing.get)
+                        .compute(scheduler="multiprocessing")
         pixel_list = list(pixel_list)
         #for x in pixel_list: print x
         #print add_aligned(*pixel_list)

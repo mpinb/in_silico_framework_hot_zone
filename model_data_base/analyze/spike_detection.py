@@ -24,9 +24,9 @@ def _helper(x, threshold=0):
     return pd.Series({lv: x for lv, x in enumerate(spikes)})
 
 
-def spike_detection(ddf, get=None, threshold=0):
+def spike_detection(ddf, scheduler=None, threshold=0):
     fun = partial(_helper, threshold=threshold)
     '''this method expects a dask dataframe and returns a pandas dataframe containing the spikes'''
     dummy = dask.compute(*list(
-        map(dask.delayed(lambda x: x.apply(fun, axis=1)), ddf.to_delayed())),scheduler=get)
+        map(dask.delayed(lambda x: x.apply(fun, axis=1)), ddf.to_delayed())),scheduler=scheduler)
     return pd.concat(dummy)

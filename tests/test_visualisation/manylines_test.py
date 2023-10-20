@@ -49,14 +49,14 @@ class TestManyLines:
         fig = plt.figure()
         manylines(df, axis = [1, 10, 1, 10], \
                         groupby_attribute = 'attribute', \
-                        colormap = self.colormap, fig = fig, get = client.get)
+                        colormap = self.colormap, fig = fig, scheduler=client)
         if savefigs:
             fig.savefig(
                 os.path.join(self.tempdir, 'manylines_grouped_pandas.png'))
         fig = plt.figure()
         manylines(ddf, axis = [1, 10, 1, 10], \
                         groupby_attribute = 'attribute', \
-                        colormap = self.colormap, fig = fig, get = client.get)
+                        colormap = self.colormap, fig = fig, scheduler=client)
         if savefigs:
             fig.savefig(os.path.join(self.tempdir,
                                      'manylines_grouped_dask.png'))
@@ -83,7 +83,7 @@ class TestManyLines:
                         groupby_attribute = 'attribute', \
                         colormap = self.colormap, \
                         returnPixelObject = True,
-                        get = client.get)
+                        scheduler=client)
         assert isinstance(po, PixelObject)
         fig = plt.figure()
         show_pixel_object(po, fig=fig)

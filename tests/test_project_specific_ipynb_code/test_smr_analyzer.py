@@ -3,7 +3,7 @@ import dask
 from .context import cellParamName, networkName
 
 
-def test_generate_synapse_activation_returns_filelist(tmpdir):
+def test_generate_synapse_activation_returns_filelist(tmpdir, client):
     dirPrefix = tmpdir.dirname
     try:
         dummy = generate_synapse_activations.generate_synapse_activations(
@@ -14,7 +14,7 @@ def test_generate_synapse_activation_returns_filelist(tmpdir):
             nprocs=1,
             tStop=345,
             silent=True)
-        dummy = dummy.compute(scheduler=dask.get)
+        dummy = client.compute(dummy).result()
     except:
         raise
     assert isinstance(dummy[0][0][0], str)

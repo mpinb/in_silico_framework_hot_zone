@@ -44,7 +44,7 @@ assert os.path.exists(example_path)
 
 
 #@decorators.testlevel(1)
-def test_generate_synapse_activation_returns_filelist(tmpdir):
+def test_generate_synapse_activation_returns_filelist(tmpdir, client):
     try:
         dummy = simrun2.generate_synapse_activations.generate_synapse_activations(
             cellParamName,
@@ -54,7 +54,7 @@ def test_generate_synapse_activation_returns_filelist(tmpdir):
             nprocs=1,
             tStop=345,
             silent=True)
-        dummy = dummy.compute(scheduler=dask.get)
+        dummy = client.compute(dummy).result()
     except:
         raise
     assert isinstance(dummy[0][0][0], str)
@@ -62,7 +62,7 @@ def test_generate_synapse_activation_returns_filelist(tmpdir):
 
 #@decorators.testlevel(2)
 def test_run_existing_synapse_activation_returns_identifier_dataframe_and_results_folder(
-        tmpdir):
+        tmpdir, client):
     try:
         dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
             cellParamName,
@@ -71,7 +71,7 @@ def test_run_existing_synapse_activation_returns_identifier_dataframe_and_result
             nprocs=1,
             tStop=345,
             silent=True)
-        dummy = dummy.compute(scheduler=dask.get)
+        dummy = client.compute(dummy).result()
     except:
         raise
     assert isinstance(dummy[0][0][0], pd.DataFrame)
@@ -97,7 +97,7 @@ def test_run_new_simulations_returns_dirname(tmpdir):
 
 
 #@decorators.testlevel(2)
-def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir):
+def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir, client):
     # simrun2 renames a dir once it finishes running
     # so create single-purpose subdirectories for simulation output
     subdir1 = tmpdir.mkdir("sub1")
@@ -111,7 +111,7 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir):
             nprocs=1,
             tStop=345,
             silent=True)
-        dummy = dummy.compute(scheduler=dask.get)
+        dummy = client.compute(dummy).result()
         cellParam = scp.build_parameters(cellParamName)
         # change location of cell by respecifying param file
         cellParam.neuron.filename = os.path.join(parent, 'test_simrun2',\
@@ -127,7 +127,7 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir):
             nprocs=1,
             tStop=345,
             silent=True)
-        dummy2 = dummy2.compute(scheduler=dask.get)
+        dummy2 = dummy2.compute()
         df1 = read_pandas_synapse_activation_from_roberts_format(
             os.path.join(
                 dummy[0][0][1], 'simulation_run%s_synapses.csv' %
@@ -142,7 +142,7 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir):
 
 
 #@decorators.testlevel(2)
-def test_reproduce_simulation_trail_from_roberts_model_control(tmpdir):
+def test_reproduce_simulation_trail_from_roberts_model_control(tmpdir, client):
     try:
         dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
             cellParamName,
@@ -152,7 +152,7 @@ def test_reproduce_simulation_trail_from_roberts_model_control(tmpdir):
             tStop=345,
             silent=True,
             scale_apical=scale_apical)
-        dummy = dummy.compute(scheduler=dask.get)
+        dummy = client.compute(dummy).result()
 
         #synapse activation
         df1 = read_pandas_synapse_activation_from_roberts_format(
@@ -218,7 +218,7 @@ def test_crossing_over_trails_show_identical_response_before_crossing_over_time(
             dirPrefix=str(tmpdir),
             nSweeps=2,
             tStop=345)
-        res = res.compute(scheduler=dask.get)
+        res = res.compute()
         df = pd.read_csv(glob.glob(
             os.path.join(res[0][0][0][1], '*vm_all_traces.csv'))[0],
                          sep='\t')

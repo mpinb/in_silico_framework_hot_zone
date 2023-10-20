@@ -180,7 +180,7 @@ def save_groupby(mdb, result, groupby):
 
 def init(mdb,
          groupby='',
-         get=None,
+         scheduler=None,
          prefun=prefun,
          applyfun=applyfun,
          postfun=postfun,

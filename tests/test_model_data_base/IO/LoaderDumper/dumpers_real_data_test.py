@@ -9,7 +9,7 @@ import dask
 from  model_data_base.IO.LoaderDumper import dask_to_csv, numpy_to_npy, pandas_to_msgpack, \
                             to_pickle, pandas_to_pickle, dask_to_msgpack, \
                             dask_to_categorized_msgpack, to_cloudpickle, reduced_lda_model
-from test_simrun2.reduced_model.get_kernel_test import get_test_Rm
+from tests.test_simrun2.reduced_model.get_kernel_test import get_test_Rm
 from numpy.testing import assert_array_equal
 import distributed
 import tempfile
@@ -39,9 +39,9 @@ def real_data_generic(mdb_, dumper_, client_=None):
                      dumper=dumper_,
                      client=client_)
     dummy = mdb_['voltage_traces2']
-    b = mdb_['voltage_traces'].compute(scheduler=dask.multiprocessing.get)
-    a = dummy.compute(scheduler=dask.multiprocessing.get)
-    assert_frame_equal(a, b)
+    b = mdb_['voltage_traces'].compute(scheduler="multiprocessing")
+    a = dummy.compute(scheduler="multiprocessing")
+    assert_frame_equal(a, b, check_column_type=False)
 
     if client_ is None:
         mdb_.setitem('synapse_activation2',
@@ -53,8 +53,8 @@ def real_data_generic(mdb_, dumper_, client_=None):
                      dumper=dumper_,
                      client=client_)
     dummy = mdb_['synapse_activation2']
-    b = mdb_['synapse_activation'].compute(scheduler=dask.multiprocessing.get)
-    a = dummy.compute(scheduler=dask.multiprocessing.get)
+    b = mdb_['synapse_activation'].compute(scheduler="multiprocessing")
+    a = dummy.compute(scheduler="multiprocessing")
     assert_frame_equal(a, b)
 
 

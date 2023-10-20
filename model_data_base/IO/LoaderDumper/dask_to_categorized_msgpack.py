@@ -198,8 +198,7 @@ def my_dask_writer(
         dask_options = dask.context._globals
         dask.config.set(callbacks=set())  #disable progress bars etc.
         for number in numbers:
-            pdf = ddf.get_partition(number).compute(
-                scheduler=dask.get)  #get = compatibility.synchronous_scheduler
+            pdf = ddf.get_partition(number).compute(scheduler="synchronous")  #get = compatibility.synchronous_scheduler
             fun(pdf, path, number, ndigits)
         dask.context._globals = dask_options
 
@@ -268,7 +267,7 @@ class Loader(parent_classes.Loader):
 def dump(obj,
          savedir,
          repartition=False,
-         get=None,
+         scheduler=None,
          categorize=True,
          client=None):
     """

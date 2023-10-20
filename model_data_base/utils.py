@@ -322,7 +322,7 @@ def flatten(l):
 #        ddf_delayeds = cloudpickle.loads(ddf_delayeds)
 #        ddf = dd.from_delayed(ddf_delayeds, meta = meta)
 #        dask_options = dask.context._globals
-#        pdf = ddf.compute(scheduler=dask.get)
+#        pdf = ddf.compute(scheduler="synchronous")
 #        dask.context._globals = dask_options
 #        return pdf
 
@@ -361,7 +361,7 @@ def synchronous_ddf_concat(ddf_path, meta, N, n):
     chunk = chunks_delayeds[n]
     ddf = dd.from_delayed(chunk, meta = meta)
     dask_options = dask.context._globals
-    pdf = ddf.compute(scheduler=dask.get)
+    pdf = ddf.compute().result()
     dask.context._globals = dask_options
     return pdf
 

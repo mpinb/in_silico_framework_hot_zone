@@ -125,7 +125,7 @@ import barrel_cortex
 
 class DistributedDDFWithSaveMethod:
 
-    def __init__(self, mdb=None, key=None, ddf=None, dumper=None, get=None):
+    def __init__(self, mdb=None, key=None, ddf=None, dumper=None, scheduler=None):
         self.ddf = ddf
         self._mdb = mdb
         self._key = key
