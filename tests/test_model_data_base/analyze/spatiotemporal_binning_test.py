@@ -48,6 +48,6 @@ class TestSpatioTemporalBinning:
         results as binning pandas dataframes'''
         assert 'synapse_activation' in list(fresh_mdb.keys())
         x = universal(
-            client.compute(fresh_mdb['synapse_activation']), 'soma_distance')
+            client.compute(fresh_mdb['synapse_activation']).result(), 'soma_distance')
         y = universal(fresh_mdb['synapse_activation'], 'soma_distance')
         np.testing.assert_equal(x, y)
