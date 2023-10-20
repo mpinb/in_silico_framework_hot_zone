@@ -76,9 +76,12 @@ elif six.PY3:
 
     YamlLoader = yaml.FullLoader  # Better choice, but only exists in Py3
 
-    def yaml_load(*args, **kwargs):
-        if 'Loader' not in kwargs:
-            kwargs['Loader'] = YamlLoader
-        return yaml.load(*args, **kwargs)
-
-    yaml.load = yaml_load
+    if yaml.load.__name__ != "yaml_load":
+        # make yaml loader compatible with py3.9
+        # It demands the Loader to be specified
+        # But sumatra does not specify it
+        def yaml_load(*args, **kwargs):
+            if 'Loader' not in kwargs:
+                kwargs['Loader'] = YamlLoader
+            return yaml.load(*args, **kwargs)
+        yaml.load = yaml_load
