@@ -148,7 +148,7 @@ echo "Dask library patched."
 # -------------------- 5. Patching pandas-msgpack -------------------- #
 print_title "5/6. Installing & patching pandas-msgpack"
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
-if [ ! -r "${PD_MSGPACK_HOME}" ]; then
+if [ ! -d "${PD_MSGPACK_HOME}" ]; then
     cd $SCRIPT_DIR
     echo "Cloning pandas-msgpack from GitHub."
     git clone https://github.com/abast/pandas-msgpack.git;

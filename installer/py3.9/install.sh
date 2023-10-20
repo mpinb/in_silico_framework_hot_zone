@@ -144,7 +144,7 @@ conda update -p ${CONDA_INSTALL_PATH} $(<$SCRIPT_DIR/tempfile)
 # -------------------- 5. Installing pandas-msgpack -------------------- #
 print_title "4/5. Installing pandas-msgpack"
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
-if [ ! -r "${PD_MSGPACK_HOME}" ]; then
+if [ ! -d "${PD_MSGPACK_HOME}" ]; then
     cd $SCRIPT_DIR
     git clone https://github.com/abast/pandas-msgpack.git
 fi
