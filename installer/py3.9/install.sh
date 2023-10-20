@@ -148,7 +148,13 @@ if [ ! -r "${PD_MSGPACK_HOME}" ]; then
     cd $SCRIPT_DIR
     git clone https://github.com/abast/pandas-msgpack.git
 fi
-# build pandas-msgpack
+# downgrade cython from 0.29.32 to 0.29.21 in order to build pandas-msgpack
+# Python builds _packers.cpp using Cython. Cython 0.29.32 builds a verison of _packers.cpp that will yield:
+# pandas_msgpack/msgpack/_packer.cpp:5955:69: error: too many arguments to function
+#     return (*((__Pyx_PyCFunctionFast)meth)) (self, args, nargs, NULL);
+#                                                                     ^
+#error: command '/usr/bin/gcc' failed with exit code 1
+pip install cython==0.29.21  
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
 
