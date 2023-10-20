@@ -9,31 +9,15 @@ Supports the creation of web-based data analytics dashboards consisting of linke
 
 ## Running the application
 
-### 1. Create Python environment
-The recommended way of setting up your local Python environment is using [conda](https://docs.conda.io/projects/conda/en/stable/user-guide/index.html). A good tutorial on using conda for managing Python environments can be found [here](https://whiteboxml.com/blog/the-definitive-guide-to-python-virtual-environments-with-conda). 
-
-Open a terminal (Linux) or Powershell (Windows) and check that conda is available:
+### 1. Start backend server (standalone Python server as in paper)
+Navigate to this folder, activate Python 3.8 environment of In-Silico-Framework (see [setup instructions](../../installer/README.md)), and start data server.
 ```
-conda --version
-```
-Note: If you did not add conda to the system PATH under Windows, you can us the the Anaconda Prompt (available in the start menu) instead of the Powershell.
-
-In your terminal / Powershell / Anaconda Prompt navigate to this repository, create a new Python environment, and install the required packages.
-```
-conda create --name coordinated-views python=3.8
-conda activate coordinated-views
-pip install -r requirements.txt
-```
-
-### 2. Start backend server (standalone Python server as in paper)
-Navigate to repository, activate Python environment, and start data server.
-```
-conda activate coordinated-views
+source_3
 python server_legacy.py ../../getting_started/linked-views-example-data/case_study_1
 ```
 Replace `case_study_1` with `case_study_2` to view the second case study from the paper (excluding membrane potentials).
 
-### 3. Start web-based frontend
+### 2. Start web-based frontend
 Please refer to the [documentation](frontend/README.md) in the frontend folder.
 
 
