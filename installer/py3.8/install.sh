@@ -7,7 +7,9 @@
 # 4. Compiles NEURON mechanisms
 
 set -e  # exit if error occurs
+pushd . # save this dir on stack
 
+# Global variables
 WORKING_DIR=$(pwd)
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda3-2020.11-Linux-x86_64.sh
@@ -44,7 +46,6 @@ done
 
 # -------------------- 0. Setup -------------------- #
 print_title "0/6. Preliminary checks"
-pushd . # save this dir on stack
 # 0.0 -- Create downloads folder (if it does not exist)
 if [ ! -d "$SCRIPT_DIR/downloads" ]; then
     mkdir $SCRIPT_DIR/downloads;
@@ -153,7 +154,7 @@ if [ ! -d "${PD_MSGPACK_HOME}" ]; then
     echo "Cloning pandas-msgpack from GitHub."
     git clone https://github.com/abast/pandas-msgpack.git;
 fi
-git -C pandas-msgpack apply $SCRIPT_DIR/pandas_msgpack.patch
+git -C $SCRIPT_DIR/pandas-msgpack apply $SCRIPT_DIR/pandas_msgpack.patch
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
 
@@ -162,10 +163,9 @@ print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 cd $channels; nrnivmodl
 cd $netcon; nrnivmodl
-popd
-pushd .
 
 # -------------------- 7. Cleanup -------------------- #
 echo "Succesfully installed In-Silico-Framework for Python 3.8"
 rm $SCRIPT_DIR/tempfile
+popd
 exit 0
