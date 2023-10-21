@@ -32,7 +32,8 @@ redis==3.5.3
 
 ## single_cell_parser dependencies
 neuron==7.8.2
-sumatra==0.7.4
+sumatra==0.7.4  # uses yaml.load without Loader kwarg
+pyyaml==5.3.1  # downgrade from 6.0 to be compatible with sumatra
 
 ## biophysics fitting dependencies
 deap==1.3.1

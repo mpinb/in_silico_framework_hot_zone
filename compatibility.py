@@ -75,13 +75,3 @@ elif six.PY3:
             return pandas.compat.pickle_compat.load(f)
 
     YamlLoader = yaml.FullLoader  # Better choice, but only exists in Py3
-
-
-    # make yaml loader compatible with py3.9
-    # It demands the Loader to be specified
-    # But sumatra does not specify it
-    def add_loader_kwarg(func, *args, **kwargs):
-        if 'Loader' not in kwargs:
-            kwargs['Loader'] = YamlLoader
-        return func(*args, **kwargs)
-    yaml.load = add_loader_kwarg(yaml.load)
