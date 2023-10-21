@@ -58,7 +58,7 @@ def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
         figures_list = df.map_partitions(fun2, meta=('A', 'object'))
         # get = dask.multiprocessing.get if get is None else get
         if type(scheduler) == distributed.client.Client:
-            fiugres_list=scheduler.compute(figures_list).result()
+            figures_list=scheduler.compute(figures_list).result()
         elif type(scheduler) == str:
             figures_list = figures_list.compute(
                     scheduler=scheduler)  #multiprocessing_scheduler)
