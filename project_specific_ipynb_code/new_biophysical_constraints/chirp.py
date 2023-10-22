@@ -363,7 +363,8 @@ def Synch(dict_):
 #         dict_['chirp.ZPP_filtered'] = #ndi.uniform_filter1d(dict_['chirp.ZPP'], size = 16, mode='nearest') 
 #         dict_['chirp.ZPP_dend_filtered'] = # ndi.uniform_filter1d(dict_['chirp.ZPP_dend'], size = 16, mode='nearest')
 
-
+        synch = {}
+    
 #         for x, a1, a2 in zip(dict_['chirp.freq_axis'], dict_['chirp.ZPP_filtered'], dict_['chirp.ZPP_dend_filtered']): 
 #             if abs(a1 - a2) < 0.5 and x>1:
 #                 synch[x] = (a1, a2)
