@@ -414,8 +414,8 @@ def Synch(dict_):
             synch_freq = -1000
             dict_['chirp.not_close'] = True
 
-    mean = 6.63
-    std = 1.5
+        mean = 6.63
+        std = 1.5
 
         dict_['chirp.synch_freq.raw'] = synch_freq
         dict_['chirp.synch_freq.normalized'] = (synch_freq - mean)/std
