@@ -143,6 +143,12 @@ def polyfilt_smoothing(freq_axis, Z_P):
     fit = [I.np.polyval(coefs, x) for x in freq_axis_high_res]
     return freq_axis_high_res, fit
 
+    coefs = I.np.polyfit(cropped_freq, cropped_Z_P, 13)
+
+    freq_axis_high_res = I.np.arange(0.0,20.0001,0.01)
+    fit = [I.np.polyval(coefs, x) for x in freq_axis_high_res]
+    return freq_axis_high_res, fit
+
 #new evaluation with fitting
 class Chirp:
 
@@ -210,19 +216,14 @@ class Chirp:
         freq_axis_high_res, fit = polyfilt_smoothing(freq_axis, ZAP)
 
         Res_freq = freq_axis_high_res[(np.where(fit == max(fit)))[0]][0]
-        #         y = I.scipy.signal.savgol_filter(ZAP, window_length = 19, polyorder = 3, mode='interp')
-        #         Res_freq = freq_axis[(np.where(y == max(y)))[0]][0]
-        #         if Res_freq < 0.5:
-        #             Res_freq = sorted(zip(y, freq_axis), reverse = True)[1][1]
-        #             Res_initial_ignored = True
-
-        return {
-            'chirp.res_freq': (Res_freq - mean) / std,
-            'chirp.res_freq.raw': Res_freq
-        }
-
-
-#     , 'chirp.ZAP': ZAP, 'chirp.signal_start': signal_start, 'chirp.stim_fft': stim_fft,
+#         y = I.scipy.signal.savgol_filter(ZAP, window_length = 19, polyorder = 3, mode='interp')
+#         Res_freq = freq_axis[(np.where(y == max(y)))[0]][0]
+#         if Res_freq < 0.5: 
+#             Res_freq = sorted(zip(y, freq_axis), reverse = True)[1][1]
+#             Res_initial_ignored = True 
+        
+        return {'chirp.res_freq.normalized': (Res_freq- mean)/std, 'chirp.res_freq.raw': Res_freq,'chirp.res_freq': I.np.abs((Res_freq- mean)/std)}
+#     , 'chirp.ZAP': ZAP, 'chirp.signal_start': signal_start, 'chirp.stim_fft': stim_fft, 
 #                 'chirp.response_fft': response_fft, 'chirp.fit': fit, 'chirp.freq_axis_high_res': freq_axis_high_res}
 #                 Unfiltered_ZAP': ZAP}
 #                 'Res_initial_ignored':  Res_initial_ignored}
@@ -302,16 +303,13 @@ class Chirp_dend:
         freq_axis_high_res, fit = polyfilt_smoothing(freq_axis, ZAP)
         
         Res_freq = freq_axis_high_res[(np.where(fit == max(fit)))[0]][0]
-        #         y = I.scipy.signal.savgol_filter(ZAP, window_length = 19, polyorder = 3, mode='interp')
-        #         Res_freq = freq_axis[(np.where(y == max(y)))[0]][0]
-        #         if Res_freq < 0.5:
-        #             Res_freq = sorted(zip(y, freq_axis), reverse = True)[1][1]
-        #             Res_initial_ignored = True
-
-        return {
-            'chirp.res_freq_dend': (Res_freq - mean) / std,
-            'chirp.res_freq_dend_raw': Res_freq
-        }
+#         y = I.scipy.signal.savgol_filter(ZAP, window_length = 19, polyorder = 3, mode='interp')
+#         Res_freq = freq_axis[(np.where(y == max(y)))[0]][0]
+#         if Res_freq < 0.5: 
+#             Res_freq = sorted(zip(y, freq_axis), reverse = True)[1][1]
+#             Res_initial_ignored = True 
+        
+        return {'chirp.res_freq_dend': I.np.abs((Res_freq- mean)/std), 'chirp.res_freq_dend.normalized': (Res_freq- mean)/std, 'chirp.res_freq_dend_raw': Res_freq}
 #     , 'chirp.ZAP_dend': ZAP, 'chirp.fit_dend': fit}
 
     def Transfer_dend(self, voltage_traces, mean, std):
@@ -336,16 +334,13 @@ class Chirp_dend:
         freq_axis_high_res, fit = polyfilt_smoothing(freq_axis, ZAP)
     
         Transfer = freq_axis_high_res[(np.where(fit == max(fit)))[0]][0]
-
-        #         ZAP = I.scipy.signal.savgol_filter(ZAP, window_length = 19, polyorder = 3, mode='interp')
-        #         Transfer = freq_axis[(np.where(ZAP == max(ZAP)))[0]][0]
-
-        return {
-            'chirp.transfer_dend': (Transfer - mean) / std,
-            'chirp.transfer_dend.raw': Transfer
-        }
-
-
+        
+#         ZAP = I.scipy.signal.savgol_filter(ZAP, window_length = 19, polyorder = 3, mode='interp')
+#         Transfer = freq_axis[(np.where(ZAP == max(ZAP)))[0]][0]
+        
+        return {'chirp.transfer_dend': I.np.abs((Transfer - mean)/std), 
+                'chirp.transfer_dend.normalized': (Transfer - mean)/std,
+                'chirp.transfer_dend.raw': Transfer}
 #                 'ZAP_transfer': ZAP, 'chirp.fit_transfer': fit}
 
     def ZPP_dend(self, voltage_traces, mean, std):
@@ -368,7 +363,6 @@ def Synch(dict_):
 #         dict_['chirp.ZPP_filtered'] = #ndi.uniform_filter1d(dict_['chirp.ZPP'], size = 16, mode='nearest') 
 #         dict_['chirp.ZPP_dend_filtered'] = # ndi.uniform_filter1d(dict_['chirp.ZPP_dend'], size = 16, mode='nearest')
 
-    synch = {}
 
 #         for x, a1, a2 in zip(dict_['chirp.freq_axis'], dict_['chirp.ZPP_filtered'], dict_['chirp.ZPP_dend_filtered']): 
 #             if abs(a1 - a2) < 0.5 and x>1:
@@ -378,13 +372,14 @@ def Synch(dict_):
 #             synch_freq = [key for i,key in enumerate(synch.keys()) if i ==  I.math.ceil(len(synch)/2)-1][0]
 #         else:
 #             synch_freq = -1000
-
+        if not 'chirp.freq_axis_high_res' in dict_:
+            return dict_
+        
         T, A1, A2 = dict_['chirp.freq_axis_high_res'], dict_['chirp.ZPP'], dict_['chirp.ZPP_dend']
         
         for x, a1, a2 in zip(T, A1, A2): 
             if abs(a1 - a2) < 0.5 and x>1: # below 1 Hz is not sampled by the chirp stimulus
                 synch[x] = (a1, a2)
-
         if synch:       
             # seperate intervals in which the two curves are close
             intervals = [] # intervals refers to the consecutive timepoints in which both curves are close
@@ -423,7 +418,10 @@ def Synch(dict_):
     std = 1.5
 
         dict_['chirp.synch_freq.raw'] = synch_freq
-        dict_['chirp.synch_freq'] = (synch_freq - mean)/std
+        dict_['chirp.synch_freq.normalized'] = (synch_freq - mean)/std
+        dict_['chirp.synch_freq'] = I.np.abs((synch_freq - mean)/std)
+        
+#         del(dict_['chirp.ZPP'], dict_['chirp.ZPP_dend'])
         
 #         del(dict_['chirp.ZPP'], dict_['chirp.ZPP_dend'])
         

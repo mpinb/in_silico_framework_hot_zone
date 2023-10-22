@@ -33,21 +33,42 @@ class snsDataset(Dataset):
                  end_row = None,
                  split_by_rank = False,
                  use_local_world_size = False,
-                 allow_create_shm = False):
+                 allow_create_shm = False,
+                 train_dataset_size = 0):
         self.sns = sns
         self.names = names
         _, shape, _ = sns._get_metadata_from_name(names[0])
-        self.len_ = shape[0]
+        self.len_whole_dataset = shape[0]
+        
+        if split_by_rank:
+            if start_row is not None or end_row is not None:
+                raise NotImplementedError()
+        if start_row is None:
+            start_row = 0
+        if end_row is None:
+            end_row = self.len_whole_dataset 
+        
+        end_row = end_row - train_dataset_size
+        
+        self.len_ = end_row - start_row
+
         self.start_row = start_row
         self.end_row = end_row
+        
         self.allow_create_shm = allow_create_shm
         if split_by_rank:
-            assert(start_row is None)
-            assert(end_row is None)
             self.start_row, self.end_row, self.len_ = get_slice_by_rank(self.len_, use_local_world_size)
         self.mode = mode
         self.cache = {}
         self.augment_fun = augment_fun
+        if train_dataset_size > 0:
+            # print('start row of training dataset', self.end_row)
+            self.test_dataset = snsDataset(sns, names, 'memory', augment_fun, 
+                                        start_row = self.end_row,
+                                        end_row = self.end_row + train_dataset_size,
+                                        split_by_rank = False,
+                                        allow_create_shm = False,
+                                        train_dataset_size = 0)
         
     def move_cache_to_gpu(self, device = None):
         self._load_data()
@@ -154,30 +175,31 @@ def expand_SINGLE_BIOPHYSICS_dataset(batch, dendritic_compartments = [0], device
         
     return SA, VT, AP_SOMA, AP_DEND, ISI_SOMA, ISI_DEND, None, None
 
-
-def get_default_dataset(dataset_name, mode = 'memmap', dendritic_compartments = [0], device = None):
+def get_default_dataset(dataset_name, mode = 'memmap', dendritic_compartments = [0], device = None, 
+                        split_by_rank = True, train_dataset_size = 0):
     mdb = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20230920_create_ANN_training_dataset_for_hypernetwork_training/')    
     if dataset_name == 'SINGLE_BIOPHYSICS':
         sns = mdb['original_dataset_chantal_dinuka']
         snsd = snsDataset(sns, 
                       mode = mode, 
                       allow_create_shm = True,
-                      split_by_rank = True, # load only a 1/world_size fraction of the dataset per worker
+                      split_by_rank = split_by_rank, # load only a 1/world_size fraction of the dataset per worker
                       augment_fun = [I.partial(expand_SINGLE_BIOPHYSICS_dataset, 
                                                device = device,
                                                dendritic_compartments = dendritic_compartments)],
-                      names = ['SA', 'ISI_SOMA', 'AP_SOMA', 'VT_SOMA', 'ISI_DEND', 'AP_DEND', 'VT_DEND'])  
-        
+                      names = ['SA', 'ISI_SOMA', 'AP_SOMA', 'VT_SOMA', 'ISI_DEND', 'AP_DEND', 'VT_DEND'],
+                      train_dataset_size = train_dataset_size)          
     elif dataset_name == '400k_BIOPHYSICS':
         sns = mdb['shared_numpy_store2_fixed']
         snsd = snsDataset(sns, 
-                          mode = mode, 
-                          allow_create_shm = True,
-                          split_by_rank = True,
-                          augment_fun = [I.partial(expand_400k_BIOPHYSICS_dataset, 
-                                                   device = device,
-                                                   dendritic_compartments = dendritic_compartments)],
-                          names = ['AP_DEND', 'SA', 'ISI_SOMA', 'ISI_DEND', 'AP_SOMA', 'VT', 'PARAMS'])
+                      mode = mode, 
+                      allow_create_shm = True,
+                      split_by_rank = split_by_rank,
+                      augment_fun = [I.partial(expand_400k_BIOPHYSICS_dataset, 
+                                               device = device,
+                                               dendritic_compartments = dendritic_compartments)],
+                      names = ['AP_DEND', 'SA', 'ISI_SOMA', 'ISI_DEND', 'AP_SOMA', 'VT', 'PARAMS'],
+                      train_dataset_size = train_dataset_size)
     return snsd
 
 
