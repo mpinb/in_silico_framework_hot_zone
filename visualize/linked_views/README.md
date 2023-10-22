@@ -1,0 +1,29 @@
+# Coordinated Views — A Grammar-based Approach
+## About
+
+Supports the creation of web-based data analytics dashboards consisting of linked views. Key features:
+- Integrate different JavaScript visualization libraries (e.g., Vega-Lite, Plotly.js, Babylon.js)
+- Thereby enable combination of InfoVis (e.g., scatter plot, parallel coordinates) and 3D views
+- Specify layout and interactions with a JSON-based grammar
+
+
+## Running the application
+
+### 1. Start backend server (standalone Python server as in paper)
+Navigate to this folder, activate Python 3.8 environment of In-Silico-Framework (see [setup instructions](../../installer/README.md)), and start data server.
+```
+source_3
+python data_server.py ../../getting_started/linked-views-example-data/case_study_1
+```
+Replace `case_study_1` with `case_study_2` to view the second case study from the paper (excluding membrane potentials).
+
+### 2. Start web-based frontend
+Please refer to the [documentation](frontend/README.md) in the frontend folder.
+
+
+## Publications
+Rapid Prototyping for Coordinated Views of Multi-scale Spatial and Abstract Data: A Grammar-based Approach.
+Philipp Harth, Arco Bast, Jakob Troidl, Bjorge Meulemeester, Hanspeter Pfister, Johanna Beyer, Marcel Oberlaender, Hans-Christian Hege, Daniel Baum.
+<i>Eurographics Workshop on Visual Computing for Biology and Medicine (VCBM)</i>, 2023.
+
+Ion channel distributions in cortical neurons are optimized for energy-efficient active dendritic computations. Arco Bast, Marcel Oberlaender. <i>bioRxiv</i> 2021.12.11.472235; doi: https://doi.org/10.1101/2021.12.11.472235
