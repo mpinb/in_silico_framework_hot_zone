@@ -122,19 +122,15 @@ class Hyperpolarizing:
         return out
 
     def Rin(self, voltage_traces, mean, std):
-        t, v = voltage_traces['tVec'], voltage_traces['vList']
-
-        c = np.where(t == (self.delay + self.duration - 20))
-        b = np.where(t == (self.delay + self.duration))
-
-        Rin = (np.average(v[0][int(c[0]):int(b[0])]) -
-               v[0][int(np.where(t == (self.delay - 20))[0])]) / self.amplitude
-
-        return {
-            'hyperpolarizing.Rin.raw': Rin,
-            'hyperpolarizing.Rin.normalized': (Rin - mean) / std,
-            'hyperpolarizing.Rin': (Rin - mean) / std
-        }
+        t,v = voltage_traces['tVec'],voltage_traces['vList']
+        
+        
+        c = np.where(t == (self.delay+self.duration-20))
+        b = np.where(t == (self.delay+self.duration))
+        
+        Rin = (np.average(v[0][int(c[0]):int(b[0])]) - v[0][int(np.where(t == (self.delay-20))[0])])/self.amplitude
+       
+        return {'hyperpolarizing.Rin.raw': Rin, 'hyperpolarizing.Rin.normalized': (Rin - mean)/std, 'hyperpolarizing.Rin':I.np.abs((Rin - mean)/std)}
 
     def Sag(self, voltage_traces, mean, std):
 
@@ -145,39 +141,26 @@ class Hyperpolarizing:
         b = np.where(t == (self.delay + self.duration))
         baseline = v[0][int(np.where(t == (self.delay - 20))[0])]
 
-        sag_difference = np.average(v[0][int(c[0]):int(b[0])]) - I.np.amin(
-            v[0][int(d):])
-        sag = (sag_difference / (I.np.amin(v[0][int(d):]) - baseline)) * -100
-
-        return {
-            'hyperpolarizing.Sag.raw': sag,
-            'hyperpolarizing.Sag.normalized': (sag - mean) / std,
-            'hyperpolarizing.Sag': (sag - mean) / std
-        }
-
-    def Attenuation(self, voltage_traces, mean, std):
-        t, v, i = voltage_traces['tVec'], voltage_traces[
-            'vList'], voltage_traces['iList']
-
-        c = np.where(t == (self.delay - 10))
+        sag_difference = np.average(v[0][int(c[0]):int(b[0])]) - I.np.amin(v[0][int(d):])
+        sag = (sag_difference/(I.np.amin(v[0][int(d):])-baseline))*-100
+    
+        return {'hyperpolarizing.Sag.raw': sag, 'hyperpolarizing.Sag.normalized': (sag - mean)/std, 'hyperpolarizing.Sag':I.np.abs((sag - mean)/std)}
+   
+    def Attenuation(self,  voltage_traces, mean, std): 
+        t,v,i = voltage_traces['tVec'],voltage_traces['vList'], voltage_traces['iList']
+        
+        c = np.where(t == (self.delay-10))
         b = np.where(t == (self.delay))
 
         v0_baseline = np.average(v[0][int(c[0]):int(b[0])])
         v1_baseline = np.average(v[1][int(c[0]):int(b[0])])
 
         v0 = np.min(v[0][int(b[0]):]) - v0_baseline
-        v1 = np.min(v[1][int(b[0]):]) - v1_baseline
-
-        Attenuation = v1 / v0
-        return {
-            'hyperpolarizing.Attenuation.raw':
-                Attenuation,
-            'hyperpolarizing.Attenuation.normalized':
-                (Attenuation - mean) / std,
-            'hyperpolarizing.Attenuation': (Attenuation - mean) / std
-        }
-
-
+        v1 =  np.min(v[1][int(b[0]):]) - v1_baseline
+    
+        Attenuation = v1/v0
+        return {'hyperpolarizing.Attenuation.raw': Attenuation, 'hyperpolarizing.Attenuation.normalized': (Attenuation - mean)/std, 'hyperpolarizing.Attenuation':I.np.abs((Attenuation - mean)/std)}           
+    
 class Dend_hyperpolarizing:
     def __init__(self, 
                  delay = 1000,
@@ -197,22 +180,16 @@ class Dend_hyperpolarizing:
         return out
 
     def Dend_Rin(self, voltage_traces, mean, std):
-        t, v = voltage_traces['tVec'], voltage_traces['vList']
-
-        c = np.where(t == (self.delay + self.duration - 20))
-        b = np.where(t == (self.delay + self.duration))
-
-        Rin = (np.average(v[1][int(c[0]):int(b[0])]) -
-               v[1][int(np.where(t == (self.delay - 20))[0])]) / self.amplitude
-
-        return {
-            'hyperpolarizing.Dend_Rin.raw': Rin,
-            'hyperpolarizing.Dend_Rin.normalized': (Rin - mean) / std,
-            'hyperpolarizing.Dend_Rin': (Rin - mean) / std
-        }
-
-
-def modify_evaluator_to_evaluate_hyperpolarizing_stimuli(e):
+        t,v = voltage_traces['tVec'],voltage_traces['vList']
+        
+        c = np.where(t == (self.delay+self.duration-20))
+        b = np.where(t == (self.delay+self.duration))
+        
+        Rin = (np.average(v[1][int(c[0]):int(b[0])]) - v[1][int(np.where(t == (self.delay-20))[0])])/self.amplitude
+       
+        return {'hyperpolarizing.Dend_Rin.raw': Rin, 'hyperpolarizing.Dend_Rin.normalized': (Rin - mean)/std, 'hyperpolarizing.Dend_Rin':I.np.abs((Rin - mean)/std)}
+    
+def modify_evaluator_to_evaluate_hyperpolarizing_stimuli(e): 
     hpz = Hyperpolarizing()
     d_hpz = Dend_hyperpolarizing()
 
