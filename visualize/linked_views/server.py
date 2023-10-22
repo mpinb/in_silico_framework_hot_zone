@@ -128,7 +128,7 @@ class LinkedViewsServer:
 
     def start(self, port=5000):                        
         if(self.thread is not None):
-            print(f"server already running at port {self.port}")
+            print("server already running at port {}".format(self.port))
             return        
         try:
             self.app = Flask(__name__)       
@@ -145,7 +145,7 @@ class LinkedViewsServer:
 
         self.thread = threading.Thread(target=_start)      
         self.thread.start()
-        print(f"server is running at port {self.port}")
+        print("server is running at port {}".format(self.port))
         self.start_logging()
         print("set data:        server.set_data(vaex_df)")
         print("stop server:     server.stop()")
@@ -166,7 +166,7 @@ class LinkedViewsServer:
     def start_logging(self):
         tmp_folder = Path(tempfile.gettempdir())
         log_filename = tmp_folder/"linked-views-server.log"
-        print(f"logs are written to {log_filename}")
+        print("logs are written to {}".format(log_filename))
         self.logfile_handler = logging.handlers.RotatingFileHandler(
             filename=log_filename,
             mode='w',
@@ -203,9 +203,9 @@ class LinkedViewsServer:
 
     def index(self):
         if(self.vaex_df):
-            return f"vaex df columns: {[name for name in list(self.vaex_df.columns)]}"
+            return "vaex df columns: {}".format([name for name in list(self.vaex_df.columns)])
         else:
-            return f"Tables: {[name for name in self.tables.keys()]}"
+            return "Tables: {}".format([name for name in self.tables.keys()])
 
 
     """
@@ -238,7 +238,7 @@ class LinkedViewsServer:
 
     def add_session(self, sessionData, name=None):
         if(name is None):
-            name = f"session-{len(self.objects)+1}"
+            name = "session-{}".format(len(self.objects)+1)
         sessionData["name"] = name
         self.objects.append(sessionData)
         return name 
@@ -488,7 +488,7 @@ class LinkedViewsServer:
         if(df_selected_indices is None):
             return "no selection"
         else:
-            return f"number of selected rows: {df_selected_indices.shape[0]}"
+            return "number of selected rows: {}".format(df_selected_indices.shape[0])
 
 
 
