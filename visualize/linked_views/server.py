@@ -156,7 +156,7 @@ class LinkedViewsServer:
             print("server is not running")
             return
 
-        print(f"Stopping server. If operation does not terminate, try to repeatedly reopen http://127.0.0.1:{self.port} in the browser.")
+        print("Stopping server. If operation does not terminate, try to repeatedly reopen http://127.0.0.1:{} in the browser.".format(self.port))
         self.stop_logging()
         self.server.shutdown()                
         self.thread.join()
