@@ -183,7 +183,7 @@ def rasterplot(df,
 #
 #         fun = lambda x: rasterplot_pd(x, colormap = colormap, fig = None, label = label, groupby_attribute = groupby_attribute, tlim = tlim, figsize = figsize)
 #         fun2 = lambda x: pd.Series({'A': fig2np(fun(x))})
-#         figures_list = df.map_partitions(fun2).compute(get = dask.async.get_sync)
+#         figures_list = df.map_partitions(fun2).compute(scheduler=dask.async.get_sync)
 #
 #         plt.axis('off')
 #         #print figures_list
