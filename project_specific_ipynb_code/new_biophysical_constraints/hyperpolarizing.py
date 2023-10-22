@@ -35,7 +35,7 @@ def modify_simulator_to_run_hyperpolarizing_stimuli(s, duration = None, delay = 
                                                                                  recordingSites = [], tStart = 0.0, tStop = tStop, vardt = True))])
     s.setup.stim_setup_funs.append(['hyperpolarizing.stim', param_to_kwargs(partial(setup_soma_step_with_current, amplitude = amplitude, delay = delay,
                                                                                     duration = duration))])
-    s.setup.stim_response_measure_funs.append(['hyperpolarizing.measure', param_to_kwargs(partial(record_at_dist_with_current, dist = dist))])
+    s.setup.stim_response_measure_funs.append(['hyperpolarizing.hay_measure', param_to_kwargs(partial(record_at_dist_with_current, dist = dist))])
     
     
 def modify_simulator_to_run_dend_hyperpolarizing_stimuli(s, duration = None, delay = None, amplitude = None, dist = None):
@@ -45,7 +45,7 @@ def modify_simulator_to_run_dend_hyperpolarizing_stimuli(s, duration = None, del
                                                                                       recordingSites = [], tStart = 0.0, tStop = tStop, vardt = True))])
     s.setup.stim_setup_funs.append(['dend_hyperpolarizing.stim', param_to_kwargs(partial(setup_soma_step_with_current, amplitude = amplitude, delay =
                                                                                          delay, duration = duration, dist = dist))])
-    s.setup.stim_response_measure_funs.append(['dend_hyperpolarizing.measure', param_to_kwargs(partial(record_at_dist_with_current, dist = dist))])
+    s.setup.stim_response_measure_funs.append(['dend_hyperpolarizing.hay_measure', param_to_kwargs(partial(record_at_dist_with_current, dist = dist))])
     
 ######################################################
 # Evaluator which can evaluate the hyperpolarizing stimuli protocols
@@ -144,8 +144,8 @@ def modify_evaluator_to_evaluate_hyperpolarizing_stimuli(e):
     hpz = Hyperpolarizing()
     d_hpz = Dend_hyperpolarizing()
                                                
-    e.setup.evaluate_funs.append(['hyperpolarizing.measure', hpz.get,'hyperpolarizing.features'])
-    e.setup.evaluate_funs.append(['dend_hyperpolarizing.measure', d_hpz.get,'dend_hyperpolarizing.features'])
+    e.setup.evaluate_funs.append(['hyperpolarizing.hay_measure', hpz.get,'hyperpolarizing.features'])
+    e.setup.evaluate_funs.append(['dend_hyperpolarizing.hay_measure', d_hpz.get,'dend_hyperpolarizing.features'])
                                
     
 ######################################################
