@@ -10,7 +10,8 @@ QOS=""
 
 # The user-defined port numbers of jupyter notebook/lab
 __LOCATION__="$(dirname "$(realpath "$0")")"
-DASK_PORT=$(awk -F "=" '/dask_client_2/ {print $2}' $__LOCATION__/user_settings.ini)
+__PARENT_DIR__="$(dirname "$__LOCATION__")"
+DASK_PORT=$(awk -F "=" '/dask_client_2/ {print $2}' $__PARENT_DIR__/config/port_numbers.ini)
 
 NC='\033[0m' # No Color
 ORANGE='\033[0;33m' # orange color

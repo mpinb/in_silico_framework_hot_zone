@@ -89,7 +89,7 @@ def read_user_port_numbers():
     __location__ = os.path.realpath(
         os.path.join(os.getcwd(), os.path.dirname(__file__)))
     config = configparser.ConfigParser()
-    config.read(os.path.join(__location__, 'user_settings.ini'))
+    config.read("config/port_numbers.ini")
     ports = config['PORT_NUMBERS']
     return ports
 
