@@ -25,7 +25,9 @@ export PATH=$HOME/local/bin:$PATH
 ```
 
 ### Dask configuration
-Dask automatically kill workers once they exceed 95% of the memory budget, which can be especially frustrating if you are doing a project where this is not a particular problematic thing to the point of terminating the worker without further ado (e.g. when working on a HPC). It can be useful to adapt this behavior. Dask automatically looks for files such as `distributed.yaml` throughout the entire codebase (like the one you find [here](./distributed.yaml)) for exactly such configuration. This way, you can configure workers to not be "terminated" or paused when they exceed memory 
+Dask automatically looks for files such as `distributed.yaml` throughout the entire codebase (like the one you find [here](./distributed.yaml)) for configuration. 
+
+Dask automatically kill workers once they exceed 95% of the memory budget, which can be especially frustrating if you are doing a project where this is not a particular problematic thing to the point of terminating the worker without further ado (e.g. when working on a HPC). It can be useful to adapt this behavior. [This way](./distributed.yaml), you can configure workers to not be terminated or paused when they exceed memory 
 ```yml
 distributed:
   worker:
@@ -47,3 +49,6 @@ lsof -i:22 ## see a specific port such as 22 ##
 nmap -sTU -O IP-address-Here
 ```
 Or just trial and error your way to a port you like. The odds are generally in your favor.
+
+## Code coverage
+The [codecov.yml](./codecov.yml) file defines configuration for code coverage. It is currently set to allow all coverage differences when pushing to master. It can be setup to not allow merges with master if coverage drops, or does not improve by a certain amount etc.

@@ -19,7 +19,11 @@ def get_user_port_numbers():
 
 
 def get_client():
-    """Gets the distributed.client object if dask has been setup
+    """Gets the distributed.client object if dask has been setup.
+    Assumes the dask client is succesfully running on the port numbers defined in config/port_numbers.ini
+    This assumption can be False is:
+    - The ports were already in use, and Dask jumped to the next available port number.
+    - The dask client was not set up at all, for whatever reason (e.g. connectivity problems)
 
     Returns:
         Client: the client object
@@ -32,10 +36,8 @@ def get_client():
 
     from socket import gethostbyname, gethostname
     hostname = gethostname()
-    ip = gethostbyname(
-        hostname
-    )  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
-    if 'soma' in hostname:
+    ip = gethostbyname(hostname)
+    if 'soma' in hostname:  # [somalogin0*, somagpu*, somacpu*]
         #we're on the soma cluster and have infiniband
         ip_infiniband = ip.replace('100', '102')  # a bit hackish, but it works
         client = distributed.Client(ip_infiniband + ':' + client_port)
