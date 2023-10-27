@@ -151,7 +151,7 @@ def pandas_to_array(pdf, x_component_fun, y_component_fun, value_fun):
         x = x_component_fun(index, values)
         y = y_component_fun(index, values)
         dummy = out_dict[x]
-        assert(y not in dummy)
+        assert y not in dummy
         dummy[y] = value_fun(index, values)
     
     return pd.DataFrame.from_dict(out_dict)
@@ -171,12 +171,12 @@ def pooled_std(m, s, n):
     
     returns: pooled mean, pooled std
     '''
-    assert(len(m) == len(s) == len(n) > 0)
+    assert len(m) == len(s) == len(n) > 0
     M = np.dot(m,n) / float(sum(n))#[mm*nn / float(sum(n)) for mm, nn in zip(m,n)]
     # take carre of n = 0
     dummy = [(ss,mm,nn) for ss,mm,nn in zip(s,m,n) if nn >= 1]
     s,m,n = list(zip(*dummy)) 
-    assert(len(m) == len(s) == len(n) > 0)
+    assert len(m) == len(s) == len(n) > 0
     #calculate SD
     s = [ss * np.sqrt((nn-1)/float(nn)) for ss,nn in zip(s,n)] # convert to biased estimator  
     var_tmp = np.dot(n, [ss**2 + mm**2 for ss, mm in zip(s,m)]) / np.array(n).sum() - (np.dot(m, n) / float(sum(n)))**2 # calculate variance
@@ -322,7 +322,7 @@ def flatten(l):
 #        ddf_delayeds = cloudpickle.loads(ddf_delayeds)
 #        ddf = dd.from_delayed(ddf_delayeds, meta = meta)
 #        dask_options = dask.context._globals
-#        pdf = ddf.compute(get = dask.get)
+#        pdf = ddf.compute(scheduler="synchronous")
 #        dask.context._globals = dask_options
 #        return pdf
 
@@ -338,12 +338,12 @@ def flatten(l):
 #        delayeds = [_synchronous_ddf_concat(cloudpickle.dumps(c), meta) for lv, c in enumerate(chunks_delayeds)]
 #        return dd.from_delayed(delayeds, meta = meta)
 #    else:
-#        assert(len(divisions) - 1 == len(delayeds))
+#        assert len(divisions) - 1 == len(delayeds)
 #        chunks_divisions = chunkIt(divisions[:-1], n)
 #        chunks_delayeds = chunkIt(delayeds, n)
 #        divisions = [c[0] for c in chunks_divisions] + [chunks_divisions[-1][-1]]
 #        delayeds = [_synchronous_ddf_concat(cloudpickle.dumps(c), meta) for lv, c in enumerate(chunks_delayeds)]
-#        assert(len(divisions) - 1 == len(delayeds))
+#        assert len(divisions) - 1 == len(delayeds)
 #        return dd.from_delayed(delayeds, meta = meta, divisions = divisions)
 
 
@@ -353,7 +353,7 @@ def flatten(l):
 ################################
 
 @dask.delayed
-def synchronous_ddf_concat(ddf_path, meta, N, n):    
+def synchronous_ddf_concat(ddf_path, meta, N, n, scheduler=None):    
     with open(ddf_path, 'rb') as f:
         ddf = cloudpickle.load(f)
     delayeds = ddf.to_delayed()
@@ -361,7 +361,7 @@ def synchronous_ddf_concat(ddf_path, meta, N, n):
     chunk = chunks_delayeds[n]
     ddf = dd.from_delayed(chunk, meta = meta)
     dask_options = dask.context._globals
-    pdf = ddf.compute(get = dask.get)
+    pdf = ddf.compute(scheduler="synchronous")
     dask.context._globals = dask_options
     return pdf
 
@@ -382,11 +382,11 @@ def myrepartition(ddf, N):
         delayeds = [synchronous_ddf_concat(ddf_path, meta, N, n) for n in range(N)]
         return dd.from_delayed(delayeds, meta = meta)
     else:
-        assert(len(divisions) - 1 == len(delayeds))
+        assert len(divisions) - 1 == len(delayeds)
         chunks_divisions = chunkIt(divisions[:-1], N)
         divisions = [c[0] for c in chunks_divisions] + [chunks_divisions[-1][-1]]
         delayeds = [synchronous_ddf_concat(ddf_path, meta, N, n) for n in range(N)]
-        assert(len(divisions) - 1 == len(delayeds))
+        assert len(divisions) - 1 == len(delayeds)
         return dd.from_delayed(delayeds, meta = meta, divisions = divisions)
     
 

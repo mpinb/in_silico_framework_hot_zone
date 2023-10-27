@@ -29,6 +29,7 @@ port=11113
 ssh -fN -R $port:localhost:$port somalogin02
 
 module load ffmpeg
+module load git
 echo "ffmpeg location: $(which ffmpeg)"
 
 srun -n1 -N1 "$CONDA_PREFIX/bin/python" $ISF_HOME/SLURM_scripts/component_isf.py "$(pwd)/management_dir_$1" $port
