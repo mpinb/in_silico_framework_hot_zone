@@ -1,0 +1,2 @@
+oririginal data path
+/scratch/visual/bzfharth/simulation_data_postprocessed/all_models_RW_BAC2step_seed_1_filtered_2023-06-22/simulations_sampled-10000_all_valid.csv
