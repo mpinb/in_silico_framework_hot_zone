@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import logging
 from logging import handlers
@@ -492,10 +493,23 @@ class LinkedViewsServer:
 
 
 
+def printUsageAndExit():
+    print("Usage:")
+    print("python server.py <data-folder> [<port>]")
+    exit()
+
 
 if __name__ == "__main__":
+    if(len(sys.argv) not in [2,3]):
+        printUsageAndExit()
 
-    server = LinkedViewsServer()
+    dataDir = Path(sys.argv[1])
+
+    port = 5000
+    if(len(sys.argv) == 3):
+        port = int(sys.argv[2])
+    
+    server = LinkedViewsServer(data_folder=dataDir)
     server.start(5000)
         
     time.sleep(3600) # keep running for 1h
