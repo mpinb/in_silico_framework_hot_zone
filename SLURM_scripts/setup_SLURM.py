@@ -83,15 +83,23 @@ def reset_process_number(management_dir):
         with open(p, 'w') as f:
             f.write('')
 
+def read_user_config():
+    ### setting up user-defined port numbers ###
+    parent_path = os.path.dirname(os.path.dirname(__file__))
+    config = configparser.ConfigParser()
+    config.read(os.path.join(parent_path, "config", "user_settings.ini"))
+    return config
 
 def read_user_port_numbers():
-    ### setting up user-defined port numbers ###
-    __location__ = os.path.realpath(
-        os.path.join(os.getcwd(), os.path.dirname(__file__)))
-    config = configparser.ConfigParser()
-    config.read("config/port_numbers.ini")
+    config = read_user_config()
     ports = config['PORT_NUMBERS']
+    # assert port numbers are integers
+    ports = {k: int(v) for k, v in ports.items()}
     return ports
+
+def get_jupyter_token():
+    config = read_user_config()
+    return config['JUPYTER']['token']
 
 
 def main(management_dir,
@@ -112,7 +120,7 @@ def main(management_dir,
             management_dir,
             PORTS)  # this process creates scheduler.json and scheduler3.json
         if launch_jupyter_server:
-            setup_jupyter_server(management_dir, PORTS)
+            setup_jupyter_server(management_dir, PORTS, token=get_jupyter_token())
         # Set the IP adress of whatever node you got assigned as a environment variable
     # TODO: why doesn't this work? It does not seem to be added to the environment variables
     ip = gethostbyname(

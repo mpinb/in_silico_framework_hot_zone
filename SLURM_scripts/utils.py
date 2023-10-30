@@ -4,7 +4,7 @@ import os
 
 
 def get_user_port_numbers():
-    """Read the port numbers defined in config/port_numbers.ini
+    """Read the port numbers defined in config/user_settings.ini
 
     Returns:
         dict: port numbers as values, names as keys
@@ -13,14 +13,14 @@ def get_user_port_numbers():
     # user-defined port numbers
     __parent_dir__ = os.path.realpath(os.path.dirname(__file__))
     config = configparser.ConfigParser()
-    config.read(os.path.join(__parent_dir__, "config", "port_numbers.ini"))
+    config.read(os.path.join(__parent_dir__, "config", "user_settings.ini"))
     ports = config['PORT_NUMBERS']
     return ports
 
 
 def get_client():
     """Gets the distributed.client object if dask has been setup.
-    Assumes the dask client is succesfully running on the port numbers defined in config/port_numbers.ini
+    Assumes the dask client is succesfully running on the port numbers defined in config/user_settings.ini
     This assumption can be False is:
     - The ports were already in use, and Dask jumped to the next available port number.
     - The dask client was not set up at all, for whatever reason (e.g. connectivity problems)
