@@ -22,7 +22,11 @@ source_3
 python server.py ../../getting_started/linked-views-example-data/case_study_1
 ```
 Replace `case_study_1` with `case_study_2` to view the second case study from the paper (excluding membrane potentials).
-
+To inspect the membrane potentials over time on the dendrite [download](https://cloud.zib.de/s/jmF7dejCm92Hpi6) the precomputed simulation data from case study 2 and additionally start the compute server.
+```
+source_3
+python compute_server.py <path-to>/case_study_2/simulation_data
+```
 
 
 ### 2. Start web-based frontend
