@@ -58,7 +58,7 @@ def _wrapper(mdb, key_first_item):
     _set_value(mdb, (key_first_item, 'status'), 'started')
     l.release()
     d = _get_value(mdb, (key_first_item, 'obj'))
-    d.compute(get=dask.get)
+    d.compute(scheduler="synchronous")
     l.acquire()
     _assert_value(mdb, (key_first_item, 'status'),
                   'started',

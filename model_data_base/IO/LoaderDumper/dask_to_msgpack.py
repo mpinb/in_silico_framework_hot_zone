@@ -5,7 +5,7 @@ Loader = dask_to_categorized_msgpack.Loader
 check = dask_to_categorized_msgpack.check
 
 
-def dump(obj, savedir, repartition=False, get=None, client=None):
+def dump(obj, savedir, repartition=False, scheduler=None, client=None):
     import os
     if not "ISF_IS_TESTING" in os.environ:
         # Module was not called from within the test suite
@@ -14,6 +14,6 @@ def dump(obj, savedir, repartition=False, get=None, client=None):
     return dask_to_categorized_msgpack.dump(obj,
                                             savedir,
                                             repartition=repartition,
-                                            get=get,
+                                            scheduler=scheduler,
                                             categorize=False,
                                             client=client)

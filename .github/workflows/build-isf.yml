@@ -30,8 +30,6 @@ jobs:
       uses: dorny/paths-filter@v2
       id: commit_changed
       with:
-        # compare with the commit on the runner
-        base: ${{ github.ref }}
         list-files: shell
         filters: |
           trigger_rebuild:

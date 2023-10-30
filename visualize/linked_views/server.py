@@ -229,6 +229,7 @@ class LinkedViewsServer:
             return f"Tables: {[name for name in self.tables.keys()]}"
 
 
+
     """
     ########################################################################################
                                     session storage
@@ -558,5 +559,3 @@ if __name__ == "__main__":
     server.start(port)
         
     time.sleep(3600) # keep running for 1h
-
-    

@@ -184,7 +184,7 @@ def generate_spatiotemporally_binned_inputs(model,
         ds.append(get_synapse_activation_dataframe(cell_param_dict, network_param_dict, sim_param_dict,\
                                                    max_spikes = 200, sim_trial_index = i))
 
-    meta_ = ds[0].compute(get=I.dask.get).head(1)
+    meta_ = ds[0].compute(scheduler=I.dask.get).head(1)
     ddf = I.dask.dataframe.from_delayed(ds, meta=meta_)
 
     out_mdb.create_sub_mdb('complete')

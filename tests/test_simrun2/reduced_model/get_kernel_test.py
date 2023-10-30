@@ -5,7 +5,7 @@ from simrun2.reduced_model.get_kernel import concatenate_return_boundaries, Redu
 import numpy as np
 import pandas as pd
 import pytest
-from test_model_data_base.context import FreshlyInitializedMdb
+from tests.test_model_data_base.context import FreshlyInitializedMdb
 
 
 def get_test_X_y(n_samples=1000, n_timepoints=100):

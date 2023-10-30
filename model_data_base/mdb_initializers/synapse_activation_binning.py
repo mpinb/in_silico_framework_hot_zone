@@ -5,7 +5,7 @@ Exemplary use:
 
     groupby  = ['EI']
     values = synapse_activation_postprocess_dask(mdb['synapse_activation'], groupby = groupby, prefun = prefun, applyfun = applyfun, postfun = postfun)
-    values = values.compute(get = c.get)
+    values = values.compute(scheduler=c.get)
     print 'save'
     save_groupby(mdb, values, groupby)
 '''
@@ -143,8 +143,12 @@ def synapse_activation_postprocess_dask(ddf, **kwargs):
     if 'get' in kwargs:
         get = kwargs['get']
         del kwargs['get']
+    if "scheduler" in kwargs:
+        scheduler = kwargs["scheduler"]
+        del kwargs["scheduler"]
     else:
         get = None
+        scheduler=None
 
     ds = [fun(d, **kwargs) for d in ds]
     ret = tree_reduction(ds, merge_results_together)
@@ -153,8 +157,8 @@ def synapse_activation_postprocess_dask(ddf, **kwargs):
         assert 'groupby' in kwargs
         save_groupby_delayed = dask.delayed(save_groupby)
         ret_saved = save_groupby_delayed(mdb, ret, kwargs['groupby'])
-        ret_saved.compute(get=get)
-        # data = ret.compute(get = get)
+        ret_saved.compute(scheduler=scheduler)
+        # data = ret.compute(scheduler=get)
         # save_groupby(mdb, data, kwargs['groupby'])
     else:
         return ret
@@ -180,7 +184,7 @@ def save_groupby(mdb, result, groupby):
 
 def init(mdb,
          groupby='',
-         get=None,
+         scheduler=None,
          prefun=prefun,
          applyfun=applyfun,
          postfun=postfun,
@@ -215,7 +219,7 @@ def init(mdb,
     postfun = partial(postfun, maxtime=maxtime)
     synapse_activation_postprocess_dask(mdb['synapse_activation'], \
                                         groupby = groupby, mdb = mdb, \
-                                        get = get, \
+                                        scheduler = scheduler, \
                                         prefun = prefun, \
                                         applyfun = applyfun, \
                                         postfun = postfun)

@@ -144,13 +144,20 @@ conda update -p ${CONDA_INSTALL_PATH} $(<$SCRIPT_DIR/tempfile)
 # -------------------- 5. Installing pandas-msgpack -------------------- #
 print_title "4/5. Installing pandas-msgpack"
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
-if [ ! -r "${PD_MSGPACK_HOME}" ]; then
+if [ ! -d "${PD_MSGPACK_HOME}" ]; then
     cd $SCRIPT_DIR
     git clone https://github.com/abast/pandas-msgpack.git
 fi
-# build pandas-msgpack
+# downgrade cython from 0.29.32 to 0.29.21 in order to build pandas-msgpack
+# Python builds _packers.cpp using Cython. Cython 0.29.32 builds a verison of _packers.cpp that will yield:
+# pandas_msgpack/msgpack/_packer.cpp:5955:69: error: too many arguments to function
+#     return (*((__Pyx_PyCFunctionFast)meth)) (self, args, nargs, NULL);
+#                                                                     ^
+#error: command '/usr/bin/gcc' failed with exit code 1
+pip install cython==0.29.21  
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
+pip install cython==0.29.32  # restore cython version
 
 # -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "5/5. Compiling NEURON mechanisms"
