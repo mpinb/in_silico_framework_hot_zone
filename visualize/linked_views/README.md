@@ -15,8 +15,8 @@ Start backend server in jupyter notebook (use Python 3.8 environment of In-Silic
 example_vaex.ipynb
 ```
 
-### 1b. Legacy mode (standalone Python server as in paper)
-Navigate to this folder, activate Python 3.8 environment of In-Silico-Framework (see [setup instructions](../../installer/README.md)), and start data server from command line.
+### 1b. Legacy mode (start server from command line as in paper)
+Navigate to this folder, activate Python 3.8 environment of In-Silico-Framework (see [setup instructions](../../installer/README.md)), and start data server from a console.
 ```
 source_3
 python server.py ../../getting_started/linked-views-example-data/case_study_1

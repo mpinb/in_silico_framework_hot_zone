@@ -51,6 +51,16 @@ def load_tables(data_folder, config, max_num_rows = 50000):
     return tables
 
 
+def load_table_from_df(df):
+    tables = {}
+    basename = "pandas_df"
+    tables[basename] = {}
+    tables[basename]["flat"] = df
+    columns_data = df.to_dict(orient="records")
+    tables[basename]["records"] = columns_data
+    return tables
+
+
 def write_objects_to_file(filenameProjects, objects):    
     if(filenameProjects is None):
         return
@@ -148,7 +158,7 @@ class LinkedViewsServer:
         self.thread.start()
         print(f"server is running at port {self.port}")
         self.start_logging()
-        print("set data:        server.set_data(vaex_df)")
+        print("set data:        server.set_data(df)")        
         print("stop server:     server.stop()")
         
 
@@ -181,12 +191,21 @@ class LinkedViewsServer:
     def stop_logging(self):
         logging.getLogger().removeHandler(self.logfile_handler)
 
-    def set_data(self, vaex_df):
-        assert self.server is not None        
-        self.vaex_df = vaex_df        
-        self.vaex_columns = vaex_df.get_column_names()         
-        self.vaex_df["row_index"] = np.arange(self.vaex_df.shape[0])
-        self.vaex_data_ranges = get_data_ranges_vaex(vaex_df)
+    def set_data(self, df):
+        assert self.server is not None
+
+        if(isinstance(df, pd.DataFrame)):
+            self.tables = load_table_from_df(df)
+            self.config["cached_tables"] = ["pandas_df"]
+        elif(isinstance(df, vaex.DataFrame)):
+            self.vaex_df = df        
+            self.vaex_columns = df.get_column_names()         
+            self.vaex_df["row_index"] = np.arange(self.vaex_df.shape[0])
+            self.vaex_data_ranges = get_data_ranges_vaex(df)
+        else:
+            raise TypeError(df)
+
+        
     
 
     def init_routes(self):
@@ -201,6 +220,7 @@ class LinkedViewsServer:
         self.app.add_url_rule("/dataServer/getValues", "getValues", self.getValues, methods=["GET", "POST"])
         self.app.add_url_rule("/dataServer/getDensity", "getDensity", self.getDensity, methods=["POST"])
         self.app.add_url_rule("/dataServer/setDensityPlotSelection", "setDensityPlotSelection", self.setDensityPlotSelection, methods=["POST"])
+        self.app.add_url_rule("/dataServer/setIndicesSelection", "setIndicesSelection", self.setIndicesSelection, methods=["POST"])
 
     def index(self):
         if(self.vaex_df):
@@ -453,6 +473,24 @@ class LinkedViewsServer:
                 return json.dumps(response_data)
 
 
+    def setIndicesSelection(self): 
+        self.last_request = request.data
+        if request.method == "POST":            
+            if request.data:
+                data = request.get_json(force=True)
+                
+                table = data["table"]
+                view_name = data["view_name"]                
+                indices = data["indices"]
+                
+                assert table == "pandas_df"
+                
+                self.selections[view_name] = sorted(indices)
+
+                response_data = {}
+                return json.dumps(response_data)
+
+
     def computeSelection(self, return_indices=True):
         if("global" in self.selections):
             columns = self.selections["global"]["columns"] 
@@ -483,6 +521,13 @@ class LinkedViewsServer:
     def getSelections(self):
         return self.selections
 
+    def getSelectionFromView(self, view_name):
+        if(view_name not in self.selections):
+            return []
+        else:
+            return self.selections[view_name]
+
+
 
     def getSelectedIndices(self):
         df_selected_indices = self.computeSelection()
@@ -510,7 +555,7 @@ if __name__ == "__main__":
         port = int(sys.argv[2])
     
     server = LinkedViewsServer(data_folder=dataDir)
-    server.start(5000)
+    server.start(port)
         
     time.sleep(3600) # keep running for 1h
 
