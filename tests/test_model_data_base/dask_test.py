@@ -37,5 +37,5 @@ def test_join_operation_of_dask():
     pandas_join = ddf1.compute().join(ddf2.compute(), how='inner')
     dask_from_pandas_join = ddf1_from_pandas.join(ddf2, how='inner')
 
-    assert_frame_equal(pandas_join, dask_from_delayed_join.compute())
-    assert_frame_equal(pandas_join, dask_from_pandas_join.compute())
+    assert_frame_equal(pandas_join.sort_index(axis=1), dask_from_delayed_join.compute().sort_index(axis=1))
+    assert_frame_equal(pandas_join.sort_index(axis=1), dask_from_pandas_join.compute().sort_index(axis=1))

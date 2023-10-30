@@ -31,8 +31,6 @@ jobs:
         run: |
           echo "------------ Preliminary setup for tests -------------"
           echo "Killing all dask processes on ${{ runner.name }} for user $USER (if they exist)"
-          pkill -U $USER dask-worker
-          pkill -U $USER dask-scheduler
           echo "Creating tests/logs/ directory..."
           mkdir -p ./tests/logs/
           echo "Removing previous coverage files..."
@@ -50,12 +48,17 @@ jobs:
           runner_number=$( echo $name | grep -Eo '[0-9]+$' )
           port_number=387${runner_number: -1}6
           bokeh_port=387${runner_number: -1}7
+          pkill -U $USER dask-worker
+          pkill -U $USER dask-scheduler
+          echo "Killing all processes on ports $port_number and $bokeh_port"
+          fuser -n tcp -k $port_number 
+          fuser -n tcp -k $bokeh_port 
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
 
           echo "------------ Running tests -------------"
           (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1)&
-          (dask-worker localhost:$port_number --nthreads 1 --nprocs 6 --memory-limit=100e15 > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1)&
+          (dask-worker localhost:$port_number --nthreads 1 --nprocs 6 --memory-limit=100e15 --local-directory="." > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1)&
           pytest -n 6 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py39.xml --cov=. --dask_server_port $port_number tests/
       - name: Cleanup dask orphan processes
         if: ${{ always() }}

@@ -1204,7 +1204,7 @@ class Plot:
     #         if not 'dendritic_recordings' in self.mdb[model][key].keys():
     #             self._reinit_mdb(self.mdb[model][key])
     #         vt = get_prox_recsite(self.mdb[model][key])
-    #         vt = vt.loc[list(st.index)].compute(get = I.dask.get)
+    #         vt = vt.loc[list(st.index)].compute(scheduler=I.dask.get)
     #         st = vt_to_st(vt, -20)
     #         if sample is not None:
     #             st = st.iloc[1::sample]

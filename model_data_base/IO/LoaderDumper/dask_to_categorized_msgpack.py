@@ -156,12 +156,12 @@ def bundle_delayeds(*args):
 #             ddf = mdb['ddf']
 #
 #             for number in numbers:
-#                 pdf = ddf.get_partition(number).compute(get = dask.async.get_sync)
+#                 pdf = ddf.get_partition(number).compute(scheduler=dask.async.get_sync)
 #                 fun(pdf, path, number, ndigits)
 #
 #         print 'execute!'
 #         delayeds = [save_chunk(mdb, chunk) for chunk in chunkIt(range(ddf.npartitions), 100)]
-#         dask.delayed(delayeds).compute(get=get)
+#         dask.delayed(delayeds).compute(scheduler=get)
 #     except:
 #         print 'reraise exception'
 #         raise
@@ -198,8 +198,7 @@ def my_dask_writer(
         dask_options = dask.context._globals
         dask.config.set(callbacks=set())  #disable progress bars etc.
         for number in numbers:
-            pdf = ddf.get_partition(number).compute(
-                get=dask.get)  #get = compatibility.synchronous_scheduler
+            pdf = ddf.get_partition(number).compute(scheduler="synchronous")  #get = compatibility.synchronous_scheduler
             fun(pdf, path, number, ndigits)
         dask.context._globals = dask_options
 
@@ -214,7 +213,7 @@ def my_dask_writer(
         save_chunk(ddf_scattered, chunk)
         for chunk in chunkIt(list(range(ddf.npartitions)), 10000)
     ]  #max 5000 tasks writing at the same time
-    futures = client.compute(delayeds)  #dask.delayed(delayeds).compute(get=get)
+    futures = client.compute(delayeds)  #dask.delayed(delayeds).compute(scheduler=get)
     client.gather(futures)  # throw an error if there was an error
 
 
@@ -268,7 +267,7 @@ class Loader(parent_classes.Loader):
 def dump(obj,
          savedir,
          repartition=False,
-         get=None,
+         scheduler=None,
          categorize=True,
          client=None):
     """

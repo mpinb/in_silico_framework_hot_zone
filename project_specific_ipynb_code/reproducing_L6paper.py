@@ -687,7 +687,7 @@ class EvokedActivitySimulationSetup:
                     mdb_init,
                     mdb[str(model_id)][self.output_dir_key],
                     burst_times=False,
-                    get=client.get,
+                    scheduler=client,
                     dendritic_voltage_traces=dendritic_voltage_traces)
 
 
@@ -822,7 +822,7 @@ class EvokedActivitySimulationSetupRieke:
                     mdb_init,
                     mdb[str(model_id)][self.output_dir_key],
                     burst_times=False,
-                    get=client.get,
+                    scheduler=client,
                     dendritic_voltage_traces=dendritic_voltage_traces)
 
 
