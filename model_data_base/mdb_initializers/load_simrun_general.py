@@ -676,7 +676,7 @@ def init(mdb, simresult_path,  \
 #with get_progress_bar_function()():
     mdb['simresult_path'] = simresult_path
     if core:
-        _build_core(mdb, repartition=repartition, metadata_dumper=pandas_to_parquet)
+        _build_core(mdb, repartition=repartition, metadata_dumper=dumper)
         if rewrite_in_optimized_format:
             optimize(mdb,
                      select=['voltage_traces'],
