@@ -15,8 +15,9 @@ module load git/2.31
 ulimit -Sn "$(ulimit -Hn)"
 export PYTHONPATH=$MYBASEDIR/project_src/in_silico_framework
 export ISF_HOME=$MYBASEDIR/project_src/in_silico_framework
-alias source_isf='source $MYBASEDIR/anaconda_isf2/bin/activate; export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH; cd $MYBASEDIR'
-alias source_3='source $MYBASEDIR/anaconda_isf3/bin/activate; export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH; cd $MYBASEDIR'
+alias source_isf='source $MYBASEDIR/anaconda_isf2.7/bin/activate; export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH; cd $MYBASEDIR'
+alias source_3='source $MYBASEDIR/anaconda_isf3.8/bin/activate; export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH; cd $MYBASEDIR'
+alias source_33='source $MYBASEDIR/anaconda_isf3.9/bin/activate; export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH; cd $MYBASEDIR'
 alias isf='cd $ISF_HOME'
 alias wip='cd $MYBASEDIR/notebooks'
 alias data='cd $MYBASEDIR'
@@ -50,5 +51,15 @@ nmap -sTU -O IP-address-Here
 ```
 Or just trial and error your way to a port you like. The odds are generally in your favor.
 
+## Automatic workflows
+The workflow files in [.github/workflows](.github/workflows) define automatic workflows that run as soon as some trigger event happens. This trigger event is currently defined as push and pull requests on (almost) all branches. We have set up a local machine with (since last update) 8 runners and 10TB of disk space to take care of parallellized testing for speedy development. Upon such trigger event, it will perform the following actions:
+1. Fetch the previous commit on the runner
+2. Based on the commit it receives, figure out if a rebuild of the codebase is necessary
+  a. Does a previous build already exists on the runner?
+  b. Was the previous build succesful?
+  c. Do the changes in the current commit not warrant a rebuild (i.e. they are not changes in the .github/workflows, testing/, or installer/ folder)
+  If the answer is yes to all these, it will skip the build process, otherwise it will (re)build the codebase
+3. Run the test suite
+
 ## Code coverage
-The [codecov.yml](./codecov.yml) file defines configuration for code coverage. It is currently set to allow all coverage differences when pushing to master. It can be setup to not allow merges with master if coverage drops, or does not improve by a certain amount etc.
+The [codecov.yml](../.github/codecov.yml) file defines configuration for code coverage. It is currently set to allow all coverage differences when pushing to master. It can be setup to not allow merges with master if coverage drops, or does not improve by a certain amount etc.
