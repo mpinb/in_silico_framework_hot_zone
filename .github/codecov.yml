@@ -1,0 +1,18 @@
+coverage:
+  status:
+    project:
+      default:
+        # basic
+        target: auto
+        threshold: 0%  # coverage is allowed to drop by this amount
+        base: auto  # compares coverage with previous PR
+        flags: 
+          - unit
+        paths: 
+          - "."
+       # advanced settings
+        branches: 
+          - master
+        if_ci_failed: error #success, failure, error, ignore
+        informational: false
+        only_pulls: false
