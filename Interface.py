@@ -206,7 +206,8 @@ from singlecell_input_mapper.ongoing_network_param_from_template import create_n
 
 if get_versions()['dirty']: warnings.warn('The source folder has uncommited changes!')
 
-from SLURM_scripts.utils import get_user_port_numbers, get_client
+from SLURM_scripts.utils import get_user_port_numbers
+from SLURM_scripts.setup_dask import get_client
 
 defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
 
