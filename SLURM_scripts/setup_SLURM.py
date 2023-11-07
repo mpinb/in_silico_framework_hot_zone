@@ -73,6 +73,8 @@ def get_process_number(management_dir):
         print('I am process number {}'.format(x))
     return x
 
+# def get_process_number(management_dir):
+#     return int(os.environ['SLURM_PROCID'])
 
 def reset_process_number(management_dir):
     with Lock(management_dir) as lock:
@@ -97,9 +99,11 @@ def read_user_port_numbers():
 def main(management_dir,
          launch_jupyter_server=True,
          notebook=None,
-         nb_kwargs=None):
-    if os.path.exists(management_dir):
+         nb_kwargs=None,
+         sleep = True):
+    if not os.path.exists(management_dir):
         try:
+            print('creating management dir')
             os.makedirs(management_dir)
         except OSError:  # if another process was faster creating it
             pass
@@ -129,7 +133,8 @@ def main(management_dir,
         run_notebook(notebook, nb_kwargs=nb_kwargs)
         exit(0)  # quit SLURM when notebook has finished running
     else:
-        time.sleep(60 * 60 * 24 * 365)
+        if sleep:
+            time.sleep(60 * 60 * 24 * 365)
 
 
 if __name__ == "__main__":
@@ -160,3 +165,5 @@ if __name__ == "__main__":
         notebook=args.notebook_name,
         nb_kwargs=args.nb_kwargs_from_cline
     )
+
+    
