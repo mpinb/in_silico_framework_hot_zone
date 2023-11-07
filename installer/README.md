@@ -91,6 +91,23 @@ After the installation is completed, proceed to install the IPython Kernels:
 source_isf; python -m ipykernel install --name root --user --display-name isf2
 source_3; python -m ipykernel install --name base --user --display-name isf3
 ```
+## Setting up VSCode
+
+Open config file in VSCode and copy over the following replacing the username:
+Host somalogin01
+  HostName somalogin01
+  User meulemeester
+
+Host somacpu* somagpu*
+  HostName %h
+  User meulemeester
+  ProxyCommand ssh -vv -W %h:%p somalogin01
+  ProxyJump somalogin01
+
+  Generate and SSH key using Powershell
+  ssh-keygen -b 4096
+
+  Download and install VScode extension "Remote -SSH" and copy over the public ssh key into trusted keys
 
 ## Cluster
 The [SLURM_scripts](../SLURM_scripts/) module provides various modules for cluster control. Two scripts tend to be used a lot, so it is worth adding them as an alias to your ~/.bashrc. You can name these commands however you want.
@@ -163,14 +180,16 @@ jupyter nbextensions_configurator enable --user
 
 ## Other config
 
-It is recommended to override some settings in the distributed config file. In particular the amount of memory per worker:
+It is recommended to override some settings in the distributed config yml file. In particular the amount of memory per worker, and whether or not dask should kill them if they eat up too much memory:
 
 ```yml
-	memory:
-	target: 0.90  # target fraction to stay below
-	spill:  False # fraction at which we spill to disk
-	pause: False  # fraction at which we pause worker threads
-	terminate: False  # fraction at which we terminate the worker
+distributed:
+  worker:
+    memory:
+      target: 0.90  # target fraction to stay below
+	  spill:  False # fraction at which we spill to disk
+	  pause: False  # fraction at which we pause worker threads
+	  terminate: False  # fraction at which we terminate the worker
 ```
 [This StackOverflow answer](https://stackoverflow.com/questions/57997463/dask-warning-worker-exceeded-95-memory-budget) gives more information.
 

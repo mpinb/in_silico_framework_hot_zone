@@ -7,7 +7,10 @@
 # 4. Compiles NEURON mechanisms
 
 set -e  # exit if error occurs
+pushd . # save this dir on stack
 
+# Global variables
+WORKING_DIR=$(pwd)
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda3-2020.11-Linux-x86_64.sh
 channels=$SCRIPT_DIR/../../mechanisms/channels_py3
@@ -66,7 +69,7 @@ elif [ ! "$(ls -A $SCRIPT_DIR/downloads/conda_packages)" ]; then
     echo "No conda packages found in downloads/conda_packages. They will be downloaded."
     download_conda_packages_flag="true"
 else
-    echo "Found conda packages in downloads/conda_packages. They will not be downloaded"
+    echo "Warning: found conda packages in downloads/conda_packages. They will not be redownloaded. If you have changed the conda_requirements.txt file, you should remove this folder or its contents before attemtping a reinstall."
     download_conda_packages_flag="false"
 fi
 
@@ -79,7 +82,7 @@ elif [ ! "$(ls -A $SCRIPT_DIR/downloads/pip_packages)" ]; then
     echo "No PyPI packages found in downloads/pip_packages. They will be downloaded."
     download_pip_packages_flag="true"
 else
-    echo "Found PyPI packages in downloads/pip_packages. They will not be downloaded."
+    echo "Warning: found PyPI packages in downloads/pip_packages. They will not be redownloaded. If you have changed the pip_requirements.txt file, you should remove this folder or its contents before attemtping a reinstall."
     download_pip_packages_flag="false"
 fi
 
@@ -97,10 +100,15 @@ if [[ "${download_conda_flag}" == "true" ]]; then
 fi
 # 1.1 -- Installing Anaconda
 echo "Anaconda will be installed in: ${CONDA_INSTALL_PATH}"
-bash $SCRIPT_DIR/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
-echo "Activating environment by running \"source ${CONDA_INSTALL_PATH}/bin/activate\""
-source ${CONDA_INSTALL_PATH}/bin/activate
+bash ${SCRIPT_DIR}/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
+# setup conda in current shell; avoid having to restart shell
+eval $($CONDA_INSTALL_PATH/bin/conda shell.bash hook);
+source ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh;
+echo "Activating environment by running \"conda activate ${CONDA_INSTALL_PATH}/bin/activate\"";
+conda activate ${CONDA_INSTALL_PATH}/;
 conda info
+echo $(which python)
+echo $(python --version)
 
 # -------------------- 2. Installing conda dependencies -------------------- #
 print_title "2/6. Installing conda dependencies "
@@ -126,35 +134,37 @@ print_title "3/6. Installing PyPI dependencies"
 # 3.0 -- Downloading In-Silico-Framework pip dependencies (if necessary).
 if [ "${download_pip_packages_flag}" == "true" ]; then
     echo "Downloading In-Silico-Framework pip dependencies."
-    python -m pip --no-cache-dir download --no-deps -r pip_requirements.txt -d $SCRIPT_DIR/downloads/pip_packages
+    python -m pip --no-cache-dir download --no-deps -r $SCRIPT_DIR/pip_requirements.txt -d $SCRIPT_DIR/downloads/pip_packages
     echo "Download pip packages completed."
 fi
 # 3.1 -- Installing In-Silico-Framework pip dependencies.
 echo "Installing In-Silico-Framework pip dependencies."
 python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages
 
-# -------------------- 4. Patching dask library -------------------- #
-print_title "4/6. Patching dask library"
-python $SCRIPT_DIR/patch_dask_linux64.py
-echo "Dask library patched."
-
 # -------------------- 5. Patching pandas-msgpack -------------------- #
-print_title "5/6. Patching pandas-msgpack"
+print_title "4/6. Installing & patching pandas-msgpack"
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
-if [ ! -r "${PD_MSGPACK_HOME}" ]; then
+if [ ! -d "${PD_MSGPACK_HOME}" ]; then
+    cd $SCRIPT_DIR
     echo "Cloning pandas-msgpack from GitHub."
     git clone https://github.com/abast/pandas-msgpack.git;
+    git -C $SCRIPT_DIR/pandas-msgpack apply $SCRIPT_DIR/pandas_msgpack.patch
 fi
-git -C pandas-msgpack apply $SCRIPT_DIR/pandas_msgpack.patch
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
 
-# -------------------- 6. Compiling NEURON mechanisms -------------------- #
+# -------------------- 6. installing the ipykernel -------------------- #
+print_title "5/6. Installing & patching pandas-msgpack"
+python -m ipykernel install --name base --user --display-name isf3.8
+
+# -------------------- 7. Compiling NEURON mechanisms -------------------- #
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 cd $channels; nrnivmodl
 cd $netcon; nrnivmodl
 
-# -------------------- 7. Cleanup -------------------- #
+# -------------------- Cleanup -------------------- #
+echo "Succesfully installed In-Silico-Framework for Python 3.8"
 rm $SCRIPT_DIR/tempfile
+popd
 exit 0

@@ -2,57 +2,57 @@
     "available_views": [
         {
             "type": "regl-scatterplot neurons",
-            "table": "neurons.csv",
-            "min_num_datasources": 2,
-            "max_num_datasources": 3
+            "dataTable": "neurons.csv",
+            "minNumDatasources": 2,
+            "maxNumDatasources": 3
         },
         {
             "type": "regl-scatterplot synapses",
-            "table": "synapses.csv",
-            "min_num_datasources": 2,
-            "max_num_datasources": 3
+            "dataTable": "synapses.csv",
+            "minNumDatasources": 2,
+            "maxNumDatasources": 3
         },
         {
             "type": "anatomical-view",
-            "table": "neurons.csv",
-            "min_num_datasources": 0,
-            "max_num_datasources": 3,
+            "dataTable": "neurons.csv",
+            "minNumDatasources": 0,
+            "maxNumDatasources": 3,
             "configuration": {
                 "name": "soma-barrelcortex"
             }
         },
         {
             "type": "anatomical-view-synapses",
-            "table": "synapses.csv",
-            "min_num_datasources": 0,
-            "max_num_datasources": 3,
+            "dataTable": "synapses.csv",
+            "minNumDatasources": 0,
+            "maxNumDatasources": 3,
             "configuration": {
                 "name": "soma-barrelcortex-synapses"
             }
         },
         {
             "type": "plotly-parallelcoords",
-            "min_num_datasources": 2,
-            "max_num_datasources": 30,
-            "table": "neurons.csv"
+            "minNumDatasources": 2,
+            "maxNumDatasources": 30,
+            "dataTable": "neurons.csv"
         },
         {
             "type": "barchart-celltypes",            
-            "min_num_datasources": 2,
-            "max_num_datasources": 30,
-            "table": "neurons.csv"
+            "minNumDatasources": 2,
+            "maxNumDatasources": 30,
+            "dataTable": "neurons.csv"
         },
         {
             "type": "barchart-celltypes-synapses",            
-            "min_num_datasources": 2,
-            "max_num_datasources": 30,
-            "table": "synapses.csv"
+            "minNumDatasources": 2,
+            "maxNumDatasources": 30,
+            "dataTable": "synapses.csv"
         },
         {
             "type": "celltype-density-synapses",            
-            "min_num_datasources": 2,
-            "max_num_datasources": 30,
-            "table": "synapses.csv"
+            "minNumDatasources": 2,
+            "maxNumDatasources": 30,
+            "dataTable": "synapses.csv"
         }
     ],
     "cached_tables" : ["neurons.csv", "synapses.csv"],    

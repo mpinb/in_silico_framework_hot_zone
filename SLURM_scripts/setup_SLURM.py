@@ -33,22 +33,25 @@ class StoreDictKeyPair(argparse.Action):
     used for notebook run kwargs (not yet implemented in submit.sh or setup_SLURM)
 
     """
+
     def __call__(self, parser, namespace, values, option_string=None):
         my_dict = {}
         for kv in values.split(","):
-            k,v = kv.split("=")
+            k, v = kv.split("=")
             my_dict[k] = eval(v)
         setattr(namespace, self.dest, my_dict)
+
 
 @contextmanager
 def Lock(management_dir):
     # Code to acquire resource, e.g.:
-    lock  = fasteners.InterProcessLock(os.path.join(management_dir, 'lock'))
+    lock = fasteners.InterProcessLock(os.path.join(management_dir, 'lock'))
     lock.acquire()
     try:
         yield lock
     finally:
         lock.release()
+
 
 def get_process_number(management_dir):
     with Lock(management_dir) as lock:
@@ -70,6 +73,7 @@ def get_process_number(management_dir):
         print('I am process number {}'.format(x))
     return x
 
+
 def reset_process_number(management_dir):
     with Lock(management_dir) as lock:
         p = lock.path  # this is a regular string in Python 2
@@ -78,6 +82,7 @@ def reset_process_number(management_dir):
         p += '_sync'
         with open(p, 'w') as f:
             f.write('')
+
 
 def read_user_port_numbers():
     ### setting up user-defined port numbers ###
@@ -99,7 +104,7 @@ async def setup(
     if not os.path.exists(management_dir):
         try:
             os.makedirs(management_dir)
-        except OSError: # if another process was faster creating it
+        except OSError:  # if another process was faster creating it
             pass
     PROCESS_NUMBER = get_process_number(management_dir)
     PORTS = read_user_port_numbers()
@@ -156,9 +161,11 @@ def run(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('management_dir')  # non-optional positional argument
-    # parser.add_argument("--nb_kwargs", dest="nb_kwargs_from_cline", action=StoreDictKeyPair, metavar="KEY1=VAL1,KEY2=VAL2...", nargs='?', const=None)
+    parser.add_argument("--nb_kwargs", dest="nb_kwargs_from_cline", action=StoreDictKeyPair, metavar="KEY1=VAL1,KEY2=VAL2...", nargs='?', const=None)
     # parser.add_argument("--nb_suffix", nargs='?', const="-out", default="-out")
-    parser.add_argument("--launch_jupyter_server", default=True, action='store_true')
+    parser.add_argument("--launch_jupyter_server",
+                        default=True,
+                        action='store_true')
     parser.add_argument('--notebook_name', nargs='?', const="", default=None)
     args = parser.parse_args()
 

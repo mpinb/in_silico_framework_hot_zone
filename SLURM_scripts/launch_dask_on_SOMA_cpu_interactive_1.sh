@@ -11,5 +11,6 @@ unset DISPLAY
 export SLURM_CPU_BIND=none
 ulimit -Sn "$(ulimit -Hn)"
 module load ffmpeg
+module load git
 echo "ffmpeg location: $(which ffmpeg)"
 srun -n1 -N1 -c24 python $MYBASEDIR/project_src/in_silico_framework/SLURM_scripts/setup_SLURM.py $MYBASEDIR/management_dir_$1

@@ -1,9 +1,11 @@
 import os
+import sys
+import time
 import logging
 from logging import handlers
 import tempfile
 import threading
-from . import util
+import util
 import glob
 import json
 import pandas as pd
@@ -46,6 +48,16 @@ def load_tables(data_folder, config, max_num_rows = 50000):
         tables[basename]["flat"] = df
         tables[basename]["records"] = columns_data
 
+    return tables
+
+
+def load_table_from_df(df):
+    tables = {}
+    basename = "pandas_df"
+    tables[basename] = {}
+    tables[basename]["flat"] = df
+    columns_data = df.to_dict(orient="records")
+    tables[basename]["records"] = columns_data
     return tables
 
 
@@ -127,7 +139,7 @@ class LinkedViewsServer:
 
     def start(self, port=5000):                        
         if(self.thread is not None):
-            print("server already running at port {}".format(self.port))
+            print("server is running at port {}".format(self.port))
             return        
         try:
             self.app = Flask(__name__)       
@@ -146,7 +158,7 @@ class LinkedViewsServer:
         self.thread.start()
         print("server is running at port {}".format(self.port))
         self.start_logging()
-        print("set data:        server.set_data(vaex_df)")
+        print("set data:        server.set_data(df)")        
         print("stop server:     server.stop()")
         
 
@@ -165,7 +177,7 @@ class LinkedViewsServer:
     def start_logging(self):
         tmp_folder = Path(tempfile.gettempdir())
         log_filename = tmp_folder/"linked-views-server.log"
-        print("logs are written to {}".format(log_filename)))
+        print("logs are written to {}".format(log_filename))
         self.logfile_handler = logging.handlers.RotatingFileHandler(
             filename=log_filename,
             mode='w',
@@ -179,12 +191,21 @@ class LinkedViewsServer:
     def stop_logging(self):
         logging.getLogger().removeHandler(self.logfile_handler)
 
-    def set_data(self, vaex_df):
-        assert self.server is not None        
-        self.vaex_df = vaex_df        
-        self.vaex_columns = vaex_df.get_column_names()         
-        self.vaex_df["row_index"] = np.arange(self.vaex_df.shape[0])
-        self.vaex_data_ranges = get_data_ranges_vaex(vaex_df)
+    def set_data(self, df):
+        assert self.server is not None
+
+        if(isinstance(df, pd.DataFrame)):
+            self.tables = load_table_from_df(df)
+            self.config["cached_tables"] = ["pandas_df"]
+        elif(isinstance(df, vaex.DataFrame)):
+            self.vaex_df = df        
+            self.vaex_columns = df.get_column_names()         
+            self.vaex_df["row_index"] = np.arange(self.vaex_df.shape[0])
+            self.vaex_data_ranges = get_data_ranges_vaex(df)
+        else:
+            raise TypeError(df)
+
+        
     
 
     def init_routes(self):
@@ -199,12 +220,14 @@ class LinkedViewsServer:
         self.app.add_url_rule("/dataServer/getValues", "getValues", self.getValues, methods=["GET", "POST"])
         self.app.add_url_rule("/dataServer/getDensity", "getDensity", self.getDensity, methods=["POST"])
         self.app.add_url_rule("/dataServer/setDensityPlotSelection", "setDensityPlotSelection", self.setDensityPlotSelection, methods=["POST"])
+        self.app.add_url_rule("/dataServer/setIndicesSelection", "setIndicesSelection", self.setIndicesSelection, methods=["POST"])
 
     def index(self):
         if(self.vaex_df):
-            return f"vaex df columns: {[name for name in list(self.vaex_df.columns)]}"
+            return "vaex df columns: {}".format([name for name in list(self.vaex_df.columns)])
         else:
-            return f"Tables: {[name for name in self.tables.keys()]}"
+            return "Tables: {}".format([name for name in self.tables.keys()])
+
 
 
     """
@@ -237,7 +260,7 @@ class LinkedViewsServer:
 
     def add_session(self, sessionData, name=None):
         if(name is None):
-            name = f"session-{len(self.objects)+1}"
+            name = "session-{}".format(len(self.objects)+1)
         sessionData["name"] = name
         self.objects.append(sessionData)
         return name 
@@ -362,19 +385,6 @@ class LinkedViewsServer:
                     "data_ranges" : get_data_ranges(filtered_df)
                 }
 
-                # -------
-                """
-                json_string = json.dumps(response_data)
-                zip_buffer = BytesIO()    
-                with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_STORED) as zip_file:
-                    zip_file.writestr('data.json', json_string)
-
-                response = make_response(zip_buffer.getvalue())
-                response.headers['Content-Type'] = 'application/zip'
-                response.headers['Content-Disposition'] = 'attachment; filename=data.zip'
-                return response
-                # -------
-                """
                 return json.dumps(response_data)
     
 
@@ -464,6 +474,24 @@ class LinkedViewsServer:
                 return json.dumps(response_data)
 
 
+    def setIndicesSelection(self): 
+        self.last_request = request.data
+        if request.method == "POST":            
+            if request.data:
+                data = request.get_json(force=True)
+                
+                table = data["table"]
+                view_name = data["view_name"]                
+                indices = data["indices"]
+                
+                assert table == "pandas_df"
+                
+                self.selections[view_name] = sorted(indices)
+
+                response_data = {}
+                return json.dumps(response_data)
+
+
     def computeSelection(self, return_indices=True):
         if("global" in self.selections):
             columns = self.selections["global"]["columns"] 
@@ -494,42 +522,40 @@ class LinkedViewsServer:
     def getSelections(self):
         return self.selections
 
+    def getSelectionFromView(self, view_name):
+        if(view_name not in self.selections):
+            return []
+        else:
+            return self.selections[view_name]
+
+
 
     def getSelectedIndices(self):
         df_selected_indices = self.computeSelection()
         if(df_selected_indices is None):
             return "no selection"
         else:
-            return f"number of selected rows: {df_selected_indices.shape[0]}"
+            return "number of selected rows: {}".format(df_selected_indices.shape[0])
 
 
+
+def printUsageAndExit():
+    print("Usage:")
+    print("python server.py <data-folder> [<port>]")
+    exit()
 
 
 if __name__ == "__main__":
+    if(len(sys.argv) not in [2,3]):
+        printUsageAndExit()
 
+    dataDir = Path(sys.argv[1])
 
-    import defaults.default_sessions as defaults
+    port = 5000
+    if(len(sys.argv) == 3):
+        port = int(sys.argv[2])
     
-    def append_PCA(df, columns, descriptor, n_components = 2):
-        pca = vaex.ml.PCA(features=columns, n_components=n_components)    
-        df_transformed = pca.fit_transform(df)
-        for component_idx in range(0, n_components):
-            df_transformed.rename("PCA_{}".format(component_idx), "{}-{}".format(descriptor, component_idx+1)))
-        return df_transformed
-
-    #data_folder = "/scratch/visual/bzfharth/in-silico-install-dir/project_src/in_silico_framework/getting_started/linked-views-example-data/backend_data_2023-06-22"
-    server = LinkedViewsServer()
-    server.start(5000)
-    
-    server.add_session(defaults.biophysics_fitting())
-
-    filename = "/scratch/visual/bzfharth/in-silico-install-dir/project_src/in_silico_framework/getting_started/linked-views-example-data/backend_data_2023-06-22/simulation_samples.csv"
-    df = vaex.from_csv(filename, copy_index=False)
-    df_extended = append_PCA(df, util.getParamsCols(), "PCA-ephys")
-
-    server.set_data(df_extended)
-
-    import time
-    time.sleep(600)
-
-    
+    server = LinkedViewsServer(data_folder=dataDir)
+    server.start(port)
+        
+    time.sleep(3600) # keep running for 1h

@@ -1,2 +1,3 @@
 import logging
-log = logging.getLogger(__name__)
+
+logger = logging.getLogger("ISF").getChild(__name__)
