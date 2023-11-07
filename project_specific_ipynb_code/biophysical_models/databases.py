@@ -93,6 +93,15 @@ get_ddf_RW_exploration_new_Ih__run_expansion = I.partial(_get_ddf_RW_exploration
 # - (NI, I running) run1: initialized from models in run1 in the database above with a seed point that fulfill the critical frequency constraints.
 #         this time including these as constraints of the possibility space. 
 #         morphologies are: ['WR64', '89', '91', 'WR71', '88']
-mdb = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20230929_RW_exploration_new_Ih_crti_freq_hyperpolarizing')
+mdb_RW_exploration_new_Ih_crit_freq_hyperpolarizing = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20230929_RW_exploration_new_Ih_crti_freq_hyperpolarizing')
 
+## The database below contains
+# - run1: initialized from models in run1 in the database above with a seed point that fulfill the critical frequency constraints.
+#         this time including these as constraints of the possibility space. 
+#         morphologies are: ['WR64', '89', '91', 'WR71', '88']
+mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20231018_RW_exploration_new_Ih_2BAC_step_crit_freq_chirp_hyperpolarizing')
 
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_run1 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'run1',
+                                                 selected_keys = ['WR71'])
