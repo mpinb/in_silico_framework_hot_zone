@@ -963,14 +963,14 @@ def interpolate_voltage_traces(voltage_traces_):
 ###################################
 
 
-def visualize_vt(vt, fig=None, soma_color='k', dend_color='#f7941d'):
+def visualize_vt(vt, fig=None, soma_color='k', dend_color='#f7941d', BAC_select = 295+80):
     plt = I.plt
     if fig is None:
         fig = plt.figure(dpi=200, figsize=(8, 6))
     ax = fig.add_subplot(2, 2, 1)
     t = vt['BAC.hay_measure']['tVec']
     vs = vt['BAC.hay_measure']['vList']
-    select = (t >= 295 - 10) & (t < 295 + 80)
+    select = (t >= 295 - 10) & (t < BAC_select)
     ax.plot(t[select] - 295, vs[0][select], soma_color)
     # ax.plot(t[select]-295,vs[2][select], '#f7941d')
     ax.plot(t[select] - 295, vs[1][select], dend_color)
