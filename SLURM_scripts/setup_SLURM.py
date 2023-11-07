@@ -100,6 +100,7 @@ async def setup(
     nb_kwargs=None,
     sleep=True,
     wait_for_workers=False):
+    # flag that is set to True if worker 0 finished setup
     setup_proc_0 = asyncio.Event()
     if not os.path.exists(management_dir):
         try:
@@ -117,6 +118,7 @@ async def setup(
         
         if launch_jupyter_server:
             setup_jupyter_server(management_dir, PORTS)
+        # worker 0 is odne with setting up serveres
         setup_proc_0.set()
     ip = gethostbyname(
         gethostname()
@@ -132,6 +134,7 @@ async def setup(
 
     setup_locking_config(management_dir)
     setup_dask_workers(management_dir, wait_for_workers=wait_for_workers)
+    # wait until worker 0 is done setting up servers
     await setup_proc_0.wait()
 
 
