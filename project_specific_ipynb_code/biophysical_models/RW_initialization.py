@@ -6,10 +6,9 @@ importlib.reload(project_specific_ipynb_code.biophysical_models.RW_analysis)
 from  project_specific_ipynb_code.biophysical_models.RW_analysis import read_all
 import model_data_base.IO.LoaderDumper.dask_to_parquet
 
-
 # default setup is as follows:
 # create a model database with one sub model data base as subkey
-# each sub model data base is initialized as biophysics_simulator mdb, i.e. has the keys get_SImulator, ...
+# each sub model data base is initialized as biophysics_simulator mdb, i.e. has the keys get_Simulator, ...
 # the sub database contains the key outdir_{description}
 
 def init(mdb, key, client = None, outdir = None, return_list = []):
