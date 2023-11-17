@@ -10,7 +10,9 @@ QOS=""
 
 # The user-defined port numbers of jupyter notebook/lab
 __LOCATION__="$(dirname "$(realpath "$0")")"
-DASK_PORT=$(awk -F "=" '/dask_client_2/ {print $2}' $__LOCATION__/user_settings.ini)
+__PARENT_DIR__="$(dirname "$__LOCATION__")"
+DASK_PORT=$(awk -F "=" '/dask_client_2/ {print $2}' $__PARENT_DIR__/config/user_settings.ini)
+JUPYTER_TOKEN=$(awk -F "=" '/token/ {print $2}' $__PARENT_DIR__/config/user_settings.ini)
 
 NC='\033[0m' # No Color
 ORANGE='\033[0;33m' # orange color
@@ -158,6 +160,10 @@ function format_jupyter_link {
     if [ -z "$token" ] ;  # no suffix is found: no token
     then
         printf "\nWarning: No token is set for this Jupyter server.\nVSCode will not be able to connect to this server, and notebooks running on this server can not be shared by link.\n">&2
+    elif [ "$token" = "..." ];
+    then
+        printf "\nWarning: Jupyter server is configured with a user-defined token.\n">&2
+        local token=$JUPYTER_TOKEN
     fi
     local jupyter_link="http://$1:$port_number/?token=$token"
     echo $jupyter_link
