@@ -56,20 +56,12 @@ def str_to_category(pdf):
 def category_to_str(pdf):
     '''careful: changes pdf!'''
     if six.PY3: # when loading data saved in py2 within py3
-        columns = []
-        index = []
-        for c in pdf.columns:
-            if isinstance(c, bytes):
-                columns.append(c.decode('utf-8'))
-            else:
-                columns.append(c)
-        for i in pdf.index:
-            if isinstance(i, bytes):
-                index.append(i.decode('utf-8'))
-            else:
-                index.append(i)
+        columns = [c.decode('utf-8') if isinstance(c, bytes) else c for c in pdf.columns]
+        index = [i.decode('utf-8') if isinstance(i, bytes) else i for i in pdf.index]
+        index_names = [i.decode('utf-8') if isinstance(i, bytes) else i for i in pdf.index.names]
         pdf.index = index
         pdf.columns = columns
+        pdf.index.names = index_names
         for name, value in pdf.iloc[0].iteritems():
             if isinstance(value, bytes):
                 pdf[name] = pdf[name].str.decode('utf-8')
