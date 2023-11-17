@@ -30,8 +30,10 @@ jobs:
           echo "------------ Preliminary setup for tests -------------"
           echo "Creating tests/logs/ directory..."
           mkdir -p ./tests/logs/
-          echo "Removing previous coverage files..."
-          rm .coverage.${{ runner.name }}.*
+          if [ -f .coverage.${{ runner.name }}.* ]; then
+            echo "Removing previous coverage files..."
+            rm .coverage.${{ runner.name }}.*
+          fi
 
           echo "------------ Setting up environment -------------"
           CONDA_TARGET_DIR="$HOME/anaconda_isf3.8"
