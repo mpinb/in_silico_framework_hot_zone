@@ -59,6 +59,7 @@ jobs:
           echo "Using port $port_number and bokeh port $bokeh_port"
 
           echo "------------ Running tests -------------"
+          unset DISPLAY
           if [ ! -d "$HOME/tmp" ]; then
             mkdir $HOME/tmp
           fi
