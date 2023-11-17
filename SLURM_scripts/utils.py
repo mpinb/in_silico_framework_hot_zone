@@ -18,33 +18,6 @@ def get_user_port_numbers():
     return ports
 
 
-def get_client():
-    """Gets the distributed.client object if dask has been setup.
-    Assumes the dask client is succesfully running on the port numbers defined in config/user_settings.ini
-    This assumption can be False is:
-    - The ports were already in use, and Dask jumped to the next available port number.
-    - The dask client was not set up at all, for whatever reason (e.g. connectivity problems)
-
-    Returns:
-        Client: the client object
-    """
-    ports = get_user_port_numbers()
-    if six.PY2:
-        client_port = ports['dask_client_2']
-    else:
-        client_port = ports['dask_client_3']
-
-    from socket import gethostbyname, gethostname
-    hostname = gethostname()
-    ip = gethostbyname(hostname)
-    if 'soma' in hostname:  # [somalogin0*, somagpu*, somacpu*]
-        #we're on the soma cluster and have infiniband
-        ip_infiniband = ip.replace('100', '102')  # a bit hackish, but it works
-        client = distributed.Client(ip_infiniband + ':' + client_port)
-    else:
-        client = distributed.Client(ip + ':' + client_port)
-    return client
-
 def tear_down_cluster(client):
     import os
     def get_jobid():

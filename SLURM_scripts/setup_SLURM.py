@@ -16,16 +16,16 @@ On all other processes:
 import fasteners
 import os
 import sys
+import asyncio
 import time
 import configparser
 from SLURM_scripts.setup_locking_server import setup_locking_server, setup_locking_config
-from SLURM_scripts.setup_dask_workers import setup_dask_scheduler, setup_dask_workers
+from SLURM_scripts.setup_dask import setup_dask_scheduler, setup_dask_workers
 from SLURM_scripts.setup_jupyter_server import setup_jupyter_server
 from contextlib import contextmanager
 import argparse
 from SLURM_scripts.nbrun import run_notebook
 from socket import gethostbyname, gethostname
-
 
 class StoreDictKeyPair(argparse.Action):
     """https://stackoverflow.com/questions/29986185/python-argparse-dict-arg
@@ -97,16 +97,16 @@ def read_user_port_numbers():
     ports = {k: int(v) for k, v in ports.items()}
     return ports
 
-def get_jupyter_token():
-    config = read_user_config()
-    return config['JUPYTER']['token']
-
-
-def main(management_dir,
-         launch_jupyter_server=True,
-         notebook=None,
-         nb_kwargs=None):
-    if os.path.exists(management_dir):
+async def setup(
+    management_dir,
+    launch_jupyter_server=True,
+    notebook=None,
+    nb_kwargs=None,
+    sleep=True,
+    wait_for_workers=False):
+    # flag that is set to True if worker 0 finished setup
+    setup_proc_0 = asyncio.Event()
+    if not os.path.exists(management_dir):
         try:
             os.makedirs(management_dir)
         except OSError:  # if another process was faster creating it
@@ -119,24 +119,49 @@ def main(management_dir,
         setup_dask_scheduler(
             management_dir,
             PORTS)  # this process creates scheduler.json and scheduler3.json
+        
         if launch_jupyter_server:
-            setup_jupyter_server(management_dir, PORTS, token=get_jupyter_token())
-        # Set the IP adress of whatever node you got assigned as a environment variable
-    # TODO: why doesn't this work? It does not seem to be added to the environment variables
+            setup_jupyter_server(management_dir, PORTS)
+        # worker 0 is odne with setting up serveres
+        setup_proc_0.set()
     ip = gethostbyname(
         gethostname()
     )  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
-    os.environ['IP_MAIN'] = ip
+    os.environ['IP'] = ip
     os.environ['IP_INFINIBAND'] = ip.replace(
         '100', '102')  # a bit hackish, but it works
+    if not "IP_MASTER" in os.environ.keys():
+        os.environ["IP_MASTER"] = ip
+    if not "IP_MASTER_INFINIBAND" in os.environ.keys():
+        os.environ["IP_MASTER_INFINIBAND"] = ip.replace('100', '102')
+    
 
     setup_locking_config(management_dir)
-    setup_dask_workers(management_dir)
+    setup_dask_workers(management_dir, wait_for_workers=wait_for_workers)
+    # wait until worker 0 is done setting up servers
+    await setup_proc_0.wait()
 
+
+def run(
+    management_dir,
+    launch_jupyter_server=True,
+    notebook=None,
+    nb_kwargs=None,
+    sleep=True,
+    wait_for_workers=False):
+    asyncio.run(
+        setup(
+            management_dir,
+            launch_jupyter_server=launch_jupyter_server,
+            notebook=notebook,
+            nb_kwargs=nb_kwargs,
+            sleep=sleep,
+            wait_for_workers=wait_for_workers)
+    )
     if notebook is not None and PROCESS_NUMBER == 0:
         run_notebook(notebook, nb_kwargs=nb_kwargs)
         exit(0)  # quit SLURM when notebook has finished running
-    else:
+    elif sleep:
         time.sleep(60 * 60 * 24 * 365)
 
 
@@ -162,7 +187,7 @@ if __name__ == "__main__":
         print("Running notebook {}".format(args.notebook_name))
         print("with kwargs {}".format(args.nb_kwargs_from_cline))
 
-    main(
+    run(
         MANAGEMENT_DIR,
         LAUNCH_JUPYTER_SERVER,
         notebook=args.notebook_name,
