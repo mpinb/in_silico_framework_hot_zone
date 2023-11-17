@@ -72,7 +72,7 @@ def setup_dask_workers(management_dir, wait_for_workers=False):
         get_client().wait_for_workers(n_workers=1)
 
 
-def get_client():
+def get_client(timeout=120):
     """Gets the distributed.client object if dask has been setup
 
     Returns:
@@ -85,9 +85,7 @@ def get_client():
         client_port = ports['dask_client_3']
 
     if "IP_MASTER" in os.environ.keys():
-        print("IP_MASTER in os.environ.keys()")
         if "IP_MASTER_INFINIBAND" in os.environ.keys():
-            print("IP_MASTER_INFINIBAND in os.environ.keys()")
             ip = os.environ['IP_MASTER_INFINIBAND']
         else:
             ip = os.environ["IP_MASTER"]
@@ -100,6 +98,6 @@ def get_client():
             #we're on the soma cluster and have infiniband
             ip = ip.replace('100', '102')  # a bit hackish, but it works
     print("getting client with ip {}".format(ip))
-    c = Client(ip + ':' + client_port, timeout=120)
+    c = Client(ip + ':' + client_port, timeout=timeout)
     print("got client {}".format(c))
     return c
