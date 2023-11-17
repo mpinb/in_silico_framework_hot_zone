@@ -7,7 +7,7 @@ The `git` command needs to be configured in order to use ISF. We recommend `git 
 
 ## Recommended configurations
 
-As this codebase is for the most part a collection of modules, make sure ISF is added to your `PYTHONPATH`. That way, whatever Python you're using knows it should look in this folder for these modules. We recommend adapting your `~/.bashrc` file with the following lines (also defined in [bashrc.sh](./bashrc.sh)):
+As this codebase is for the most part a collection of modules, make sure ISF is added to your `PYTHONPATH`. That way, whatever Python you're using knows it should look in this folder for these modules. We recommend adapting your `~/.bashrc` file with the following lines (also defined in [bashrc_example.sh](./bashrc_example.sh)):
 ```shell
 shopt -s expand_aliases
 export MYBASEDIR="/gpfs/soma_fs/scratch/$USER"
@@ -26,9 +26,9 @@ export PATH=$HOME/local/bin:$PATH
 ```
 
 ### Dask configuration
-Dask automatically looks for files such as `distributed.yaml` throughout the entire codebase (like the one you find [here](./distributed.yaml)) for configuration. 
+Dask automatically looks for files such as `distributed.yaml` throughout the entire codebase (like the one you find [here](./distributed_example.yaml)) for configuration. 
 
-Dask automatically kill workers once they exceed 95% of the memory budget, which can be especially frustrating if you are doing a project where this is not a particular problematic thing to the point of terminating the worker without further ado (e.g. when working on a HPC). It can be useful to adapt this behavior. [This way](./distributed.yaml), you can configure workers to not be terminated or paused when they exceed memory 
+Dask automatically kill workers once they exceed 95% of the memory budget, which can be especially frustrating if you are doing a project where this is not a particular problematic thing to the point of terminating the worker without further ado (e.g. when working on a HPC). It can be useful to adapt this behavior. [This way](./distributed_example.yaml), you can configure workers to not be terminated or paused when they exceed memory 
 ```yml
 distributed:
   worker:
@@ -41,7 +41,7 @@ distributed:
 (See this question on [StackOverflow](https://stackoverflow.com/questions/57997463/dask-warning-worker-exceeded-95-memory-budget))
 
 ### Port numbers
-If you expect to be sharing the same machine/IP address (e.g. when sharing nodes on a HPC), you should ensure that you are not running any process on a port that is already in use. For this reason, it is useful to define your unique port numbers in [port_numbers.ini](./port_numbers.ini). Ports numbers can theoretically range from 0-99999, but some ports are used for default processes (e.g. `4040`, `8080`, `8000`...). Check which ports are in use by running any of the following commands on Linux systems:
+If you expect to be sharing the same machine/IP address (e.g. when sharing nodes on a HPC), you should ensure that you are not running any process on a port that is already in use. For this reason, it is useful to define your unique port numbers in [user_settings.ini](./user_settings.ini). Ports numbers can theoretically range from 0-99999, but some ports are used for default processes (e.g. `4040`, `8080`, `8000`...). Check which ports are in use by running any of the following commands on Linux systems:
 ```shell
 lsof -i -P -n | grep LISTEN
 netstat -tulpn | grep LISTEN
