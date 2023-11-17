@@ -83,14 +83,18 @@ def reset_process_number(management_dir):
         with open(p, 'w') as f:
             f.write('')
 
+def read_user_config():
+    ### setting up user-defined port numbers ###
+    parent_path = os.path.dirname(os.path.dirname(__file__))
+    config = configparser.ConfigParser()
+    config.read(os.path.join(parent_path, "config", "user_settings.ini"))
+    return config
 
 def read_user_port_numbers():
-    ### setting up user-defined port numbers ###
-    __location__ = os.path.realpath(
-        os.path.join(os.getcwd(), os.path.dirname(__file__)))
-    config = configparser.ConfigParser()
-    config.read(os.path.join(__location__, 'user_settings.ini'))
+    config = read_user_config()
     ports = config['PORT_NUMBERS']
+    # assert port numbers are integers
+    ports = {k: int(v) for k, v in ports.items()}
     return ports
 
 async def setup(
