@@ -177,6 +177,13 @@ class ModelDataBase:
                 raise KeyError('Key {} is not set.'.format(key))
         return dir_to_data
     
+    def _get_dumper_string(self, savedir, arg):
+        path = self._get_path(arg)
+        if path is None:
+            return 'self'
+        else:
+            return IO.LoaderDumper.get_dumper_string_by_savedir(path)
+    
     def save_db_metadata(self):
         '''saves the data which defines the state of this database to db_metadata.json'''
         ## things that define the state of this mdb and should be saved
@@ -198,7 +205,60 @@ class ModelDataBase:
         '''Checks, if item is already in the database'''
         return key in list(self.keys())
 
+    def get_mkdtemp(self, prefix = '', suffix = ''):
+        '''creates a directory in the model_data_base directory and 
+        returns the path'''
+        absolute_path = tempfile.mkdtemp(prefix = prefix + '_', suffix = '_' + suffix, dir = self.basedir) 
+        os.chmod(absolute_path, 0o755)
+        relative_path = os.path.relpath(absolute_path, self.basedir)
+        return absolute_path, relative_path
+
+    def create_managed_folder(self, key, raise_ = True):
+        '''creates a folder in the mdb directory and saves the path in 'key'.
+        You can delete the folder using del mdb[key]'''
+        #todo: make sure that existing key will not be overwritten
+        if key in list(self.keys()):
+            if raise_:
+                raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
+        else:           
+            self.setitem(key, None, dumper = just_create_folder)
+        return self[key]
+
+    def create_shared_numpy_store(self, key, raise_ = True):
+        if key in list(self.keys()):
+            if raise_:
+                raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
+        else:
+            self.setitem(key, None, dumper = shared_numpy_store)        
+        return self[key]
+
+    def create_sub_mdb(self, key, register = 'as_parent', raise_ = True):
+        '''creates a ModelDataBase within a ModelDataBase. Example:
+        mdb.create_sub_mdb('my_sub_database')
+        mdb['my_sub_database']['sme_key'] = ['some_value']
+        '''
+        if register == 'as_parent':
+            # TODO
+            pass
+        if key in list(self.keys()):
+            if raise_:
+                raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
+        else:
+            self.setitem(key, None, dumper = just_create_mdb)
+        return self[key]
+
     def get(self, key, lock = None, **kwargs):
+        """Instead of mdb['key'], you can use mdb.getitem('key'). The advantage
+        is that this allows to pass additional arguments to the loader, e.g.
+        mdb.getitem('key', columns = [1,2,3]).
+
+        Args:
+            key (str): the key to get from mdb[key]
+            lock (Lock, optional): If you use file locking, provide the lock that grants access. Defaults to None.
+
+        Returns:
+            object: The object saved under mdb[key]
+        """
         dir_to_data = self._get_dir_to_data(key, check_exists = True)
         # this looks into the metadat.json, gets the name of the dumper, and loads this module form IO.LoaderDumper
         loaderdumper_module = get_dumper_from_folder(dir_to_data)
@@ -262,6 +322,23 @@ class ModelDataBase:
     def setitem(self, key, value, dumper = None, **kwargs):
         warnings.warn('setitem is deprecated. it exist to provide a consistent API with model_data_base version 1. use set instead.')
         self.set(key, value, dumper = dumper, **kwargs)
+
+    def getitem(self, key, lock=None dumper = None, **kwargs):
+        warnings.warn('setitem is deprecated. it exist to provide a consistent API with model_data_base version 1. use set instead.')
+        self.get(key, lock=lock dumper=dumper, **kwargs)
+    
+    def check_writing_privilege(self, key):
+        '''raises MdbException, if we don't have permission to write to key '''
+        if self.readonly is True:
+            raise MdbException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+        #this exists, so jupyter notebooks will not crash when they try to write something
+        elif self.readonly == 'warning': 
+            warnings.warn("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+        elif self.readonly == False:
+            pass
+        else:
+            raise MdbException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
+    
     
     def __setitem__(self, key, value):
         self.set(key, value)
