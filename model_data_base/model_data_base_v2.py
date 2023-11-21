@@ -1,3 +1,9 @@
+"""
+Created October 2023
+
+@authors: Arco Bast, Bjorge Meulemeester
+"""
+
 import os
 import string
 import warnings
@@ -71,9 +77,35 @@ def get_dumper_from_folder(folder, return_ = 'module'):
 
 class ModelDataBase:
     def __init__(self, basedir, readonly = False, nocreate = False):
+        '''
+        Class responsible for storing information, meant to be used as an interface to simulation 
+        results. If the dask backends are used to save the data, it will be out of memory,
+        allowing larger than memory calculations.
+        
+        E.g. this class can be initialized in a way that after the initialization, 
+        the data can be accessed in the following way:
+        mdb['voltage_traces']
+        mdb['synapse_activation']
+        mdb['spike_times']
+        mdb['metadata']
+        mdb['cell_activation']
+        
+        Further more, it is possible to assign new elements to the database
+        mdb['my_new_element'] = my_new_element
+        These elements are stored together with the other data in the basedir.
+        
+        They can be read out of the database in the following way:
+        my_reloaded_element = mdb['my_new_element']
+        
+        It is possible to use tuples of strings as keys to reflect an arbitrary hierarchy.
+        Valid keys are tuples of str or str. "@" is not allowed.
+        
+        To read out all existing keys, use the keys()-function.
+        '''
         self.basedir = os.path.abspath(basedir)
         self.readonly = readonly
         self.nocreate = nocreate
+        self.unique_id = None
         
         if not self._is_initialized():
             errstr = "Did not find a database in {path}. ".format(path = basedir) + \
@@ -85,6 +117,27 @@ class ModelDataBase:
                 raise MdbException(errstr.format(mode = 'readonly'))                
             self._initialize()
             
+    def _register_this_database(self):
+        print('registering database with unique id {} to the absolute path {}'.format(
+            self.unique_id, self.basedir))
+        try:
+            model_data_base_register.register_mdb(self)
+            self._registered_to_path = self.basedir
+        except MdbException as e:
+            warnings.warn(str(e))
+      
+    def _set_unique_id(self):
+        if self._unique_id is not None:
+            raise ValueError("self._unique_id is already set!")
+        # db_state.json may exists upon first init, but does not have a unique id yet. Create it and reset db_state
+        time = os.stat(os.path.join(self.basedir, 'db_state.json')).st_mtime
+        time = datetime.datetime.utcfromtimestamp(time)
+        time = time.strftime("%Y-%m-%d")
+        random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) 
+                                for _ in range(7))
+        self.unique_id = '_'.join([time, str(os.getpid()), random_string])
+        self.save_db_state()  
+     
     def _is_initialized(self):
         return os.path.exists(os.path.join(self.basedir, 'mdb.json'))
     
@@ -93,6 +146,8 @@ class ModelDataBase:
         os.makedirs(self.basedir, exist_ok = True)
         with open(os.path.join(self.basedir, 'mdb.json'), 'w'):
             pass
+        self._set_unique_id()
+        self.save_db_state()
         
     def _check_key_format(self, key):
         assert(key != 'mdb.json')
@@ -112,6 +167,14 @@ class ModelDataBase:
                 raise KeyError('Key {} is not set.'.format(key))
         return dir_to_data
     
+    def save_db_state(self):
+        '''saves the data which defines the state of this database to db_state.json'''
+        ## things that define the state of this mdb and should be saved
+        out = {'registeredDumpers': self._registeredDumpers, \
+               'unique_id': self.unique_id,
+               'basedir': self.basedir} 
+        with open(os.path.join(self.basedir, 'db_state.json'), 'w') as f:
+            json.dump(out, f)
     
     def get(self, key, lock = None, **kwargs):
         dir_to_data = self._get_dir_to_data(key, check_exists = True)
@@ -199,3 +262,13 @@ class ModelDataBase:
     
     def __reduce__(self):
         return (self.__class__, (self.basedir, self.readonly, True), {})
+
+class RegisteredFolder(ModelDataBase):
+    def __init__(self, path):
+        ModelDataBase.__init__(self, path, forcecreate = True)
+        self.setitem('self', None, dumper = just_create_folder)
+        dumper = just_create_folder
+        dumper.dump(None, path)
+        self._sql_backend['self'] = LoaderWrapper('')
+        self.setitem = None
+     
