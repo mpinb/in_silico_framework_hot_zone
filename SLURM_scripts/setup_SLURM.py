@@ -16,7 +16,6 @@ On all other processes:
 import fasteners
 import os
 import sys
-import asyncio
 import time
 import configparser
 from SLURM_scripts.setup_locking_server import setup_locking_server, setup_locking_config
