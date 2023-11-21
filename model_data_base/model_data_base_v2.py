@@ -325,7 +325,7 @@ class ModelDataBase:
 
     def getitem(self, key, lock=None dumper = None, **kwargs):
         warnings.warn('setitem is deprecated. it exist to provide a consistent API with model_data_base version 1. use set instead.')
-        self.get(key, lock=lock dumper=dumper, **kwargs)
+        self.get(key, lock=lock, dumper=dumper, **kwargs)
     
     def check_writing_privilege(self, key):
         '''raises MdbException, if we don't have permission to write to key '''
