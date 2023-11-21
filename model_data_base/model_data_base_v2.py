@@ -93,6 +93,7 @@ class ModelDataBase:
         Further more, it is possible to assign new elements to the database
         mdb['my_new_element'] = my_new_element
         These elements are stored together with the other data in the basedir.
+        All elements have associated metadata TODO: describe metadata
         
         They can be read out of the database in the following way:
         my_reloaded_element = mdb['my_new_element']
@@ -127,30 +128,39 @@ class ModelDataBase:
             warnings.warn(str(e))
       
     def _set_unique_id(self):
+        """
+        Sets a unique ID for the model data base as class attribute. Does not save this ID as metadata (this is taken care of by :func _initialize:)
+
+        Raises:
+            ValueError: If the unique ID is already set.
+        """
         if self._unique_id is not None:
             raise ValueError("self._unique_id is already set!")
-        # db_state.json may exists upon first init, but does not have a unique id yet. Create it and reset db_state
-        time = os.stat(os.path.join(self.basedir, 'db_state.json')).st_mtime
+        # db_metadata.json may exist upon first init, but does not have a unique id yet. Create it and reset db_metadata
+        time = os.stat(os.path.join(self.basedir, 'db_metadata.json')).st_mtime
         time = datetime.datetime.utcfromtimestamp(time)
         time = time.strftime("%Y-%m-%d")
         random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) 
                                 for _ in range(7))
         self.unique_id = '_'.join([time, str(os.getpid()), random_string])
-        self.save_db_state()  
+
+    def get_id(self):
+        return self._unique_id 
      
     def _is_initialized(self):
-        return os.path.exists(os.path.join(self.basedir, 'mdb.json'))
+        return os.path.exists(os.path.join(self.basedir, 'db_metadata.json'))
     
     def _initialize(self):
         _check_working_dir_clean_for_build(self.basedir)
         os.makedirs(self.basedir, exist_ok = True)
-        with open(os.path.join(self.basedir, 'mdb.json'), 'w'):
+        # create empty metadata file. 
+        with open(os.path.join(self.basedir, 'db_metadata.json'), 'w'):
             pass
         self._set_unique_id()
-        self.save_db_state()
+        self.save_db_metadata()
         
     def _check_key_format(self, key):
-        assert(key != 'mdb.json')
+        assert(key != 'db_metadata.json')
     
         if len(key) > 50:
             raise ValueError('keys must be shorter than 50 characters')
@@ -167,15 +177,27 @@ class ModelDataBase:
                 raise KeyError('Key {} is not set.'.format(key))
         return dir_to_data
     
-    def save_db_state(self):
-        '''saves the data which defines the state of this database to db_state.json'''
+    def save_db_metadata(self):
+        '''saves the data which defines the state of this database to db_metadata.json'''
         ## things that define the state of this mdb and should be saved
         out = {'registeredDumpers': self._registeredDumpers, \
                'unique_id': self.unique_id,
                'basedir': self.basedir} 
-        with open(os.path.join(self.basedir, 'db_state.json'), 'w') as f:
+        with open(os.path.join(self.basedir, 'db_metadata.json'), 'w') as f:
             json.dump(out, f)
+
+    def read_db_metadata(self):
+        '''sets the state of the database according to dbcore.pickle''' 
+        with open(os.path.join(self.basedir, 'db_metadata.json'), 'r') as f:
+            out = json.load(f)
+            
+        for name in out:
+            setattr(self, name, out[name])   
     
+    def itemexists(self, key):
+        '''Checks, if item is already in the database'''
+        return key in list(self.keys())
+
     def get(self, key, lock = None, **kwargs):
         dir_to_data = self._get_dir_to_data(key, check_exists = True)
         # this looks into the metadat.json, gets the name of the dumper, and loads this module form IO.LoaderDumper
