@@ -107,6 +107,8 @@ def setup(management_dir, launch_jupyter_server=True, wait_for_workers=False):
     All processes (including process 0) will set up:
         1. The locking configuration
         2. The dask workers, that will connect to the dask scheduler on process 0
+    Additionally, if the IP cannot be found as an environment variable, it will be set as "IP_MASTER" and "IP_MASTER_INFINIBAND". If you have multinode jobs, you should set the IP yourself. Otherwise, leaving it unspecified and letting this process set it is ok.
+    If :param wait_for_workers: is True (N=1) or an integer (N) larger than 0, then this method will wait until N workers have been set up an connected to the dask scheduler before continuing.
 
     Args:
         management_dir (str): The directory where the SLURM management files will be stored.
@@ -158,8 +160,8 @@ def run(
         2. An interactive job
         3. A notebook job (i.e. a batch job that runs a notebook)
     
-    If a notebook is specified, it will be run on process 0.
-    If no notebook is specified, this Python process will sleep until SLURM kills it.
+    If a notebook is specified, it will be run on process 0 and exit with exit code 0 when it is done.
+    If no notebook is specified, this Python process will sleep until it is killed by SLURM. This will keep the dask workers, dask scheduler, locking server, and jupyter server alive until your code has finished running.
 
     Args:
         management_dir (str): The path to the management directory, where management files will be stored (scheduler3.json, lock_sync, locking_server, lock and jupyter output)
