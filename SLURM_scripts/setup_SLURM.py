@@ -97,33 +97,32 @@ def read_user_port_numbers():
     ports = {k: int(v) for k, v in ports.items()}
     return ports
 
-async def setup(
-    management_dir,
-    launch_jupyter_server=True,
-    notebook=None,
-    nb_kwargs=None,
-    sleep=True,
-    wait_for_workers=False):
-    # flag that is set to True if worker 0 finished setup
-    setup_proc_0 = asyncio.Event()
+def setup(management_dir, launch_jupyter_server=True, wait_for_workers=False):
+    """
+    Sets up the SLURM job.
+    Process 0 will uniquely set up:
+        1. The locking server
+        2. The dask scheduler
+        3. The jupyter server (if launch_jupyter_server is True)
+    All processes (including process 0) will set up:
+        1. The locking configuration
+        2. The dask workers, that will connect to the dask scheduler on process 0
+    Additionally, if the IP cannot be found as an environment variable, it will be set as "IP_MASTER" and "IP_MASTER_INFINIBAND". If you have multinode jobs, you should set the IP yourself. Otherwise, leaving it unspecified and letting this process set it is ok.
+    If :param wait_for_workers: is True (N=1) or an integer (N) larger than 0, then this method will wait until N workers have been set up an connected to the dask scheduler before continuing.
+
+    Args:
+        management_dir (str): The directory where the SLURM management files will be stored.
+        launch_jupyter_server (bool, optional): Whether to launch a Jupyter server. Defaults to True.
+        wait_for_workers (bool|int, optional): Whether to wait for a certain amount of dask workers. Defaults to False (0).
+    """
     if not os.path.exists(management_dir):
         try:
             os.makedirs(management_dir)
         except OSError:  # if another process was faster creating it
             pass
+
     PROCESS_NUMBER = get_process_number(management_dir)
     PORTS = read_user_port_numbers()
-
-    if PROCESS_NUMBER == 0:
-        setup_locking_server(management_dir, PORTS)
-        setup_dask_scheduler(
-            management_dir,
-            PORTS)  # this process creates scheduler.json and scheduler3.json
-        
-        if launch_jupyter_server:
-            setup_jupyter_server(management_dir, PORTS)
-        # worker 0 is odne with setting up serveres
-        setup_proc_0.set()
     ip = gethostbyname(
         gethostname()
     )  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
@@ -134,12 +133,18 @@ async def setup(
         os.environ["IP_MASTER"] = ip
     if not "IP_MASTER_INFINIBAND" in os.environ.keys():
         os.environ["IP_MASTER_INFINIBAND"] = ip.replace('100', '102')
-    
 
+    # Setup for thread 0: launch servers
+    if PROCESS_NUMBER == 0:
+        setup_locking_server(management_dir, PORTS)
+        setup_dask_scheduler(
+            management_dir,
+            PORTS)  # this process creates scheduler.json and scheduler3.json
+        if launch_jupyter_server:
+            setup_jupyter_server(management_dir, PORTS)
+    
     setup_locking_config(management_dir)
     setup_dask_workers(management_dir, wait_for_workers=wait_for_workers)
-    # wait until worker 0 is done setting up servers
-    await setup_proc_0.wait()
 
 
 def run(
@@ -149,15 +154,30 @@ def run(
     nb_kwargs=None,
     sleep=True,
     wait_for_workers=False):
-    asyncio.run(
-        setup(
-            management_dir,
-            launch_jupyter_server=launch_jupyter_server,
-            notebook=notebook,
-            nb_kwargs=nb_kwargs,
-            sleep=sleep,
-            wait_for_workers=wait_for_workers)
-    )
+    """
+    Sets up the SLURM job for any job configuration:
+        1. A batch job
+        2. An interactive job
+        3. A notebook job (i.e. a batch job that runs a notebook)
+    
+    If a notebook is specified, it will be run on process 0 and exit with exit code 0 when it is done.
+    If no notebook is specified, this Python process will sleep until it is killed by SLURM. This will keep the dask workers, dask scheduler, locking server, and jupyter server alive until your code has finished running.
+
+    Args:
+        management_dir (str): The path to the management directory, where management files will be stored (scheduler3.json, lock_sync, locking_server, lock and jupyter output)
+        launch_jupyter_server (bool, optional): Whether to launch a Jupyter server. Defaults to True.
+        notebook (str, optional): The path to the notebook to run. Defaults to None.
+        nb_kwargs (dict, optional): Additional keyword arguments for running the notebook. Defaults to None.
+        sleep (bool, optional): Whether to sleep after setup. Defaults to True.
+        wait_for_workers (bool|int, optional): Whether to wait for a certain amount of dask workers. Defaults to False.
+    """
+
+    setup(
+        management_dir,
+        launch_jupyter_server=launch_jupyter_server,
+        wait_for_workers=wait_for_workers
+        )
+
     if notebook is not None and PROCESS_NUMBER == 0:
         run_notebook(notebook, nb_kwargs=nb_kwargs)
         exit(0)  # quit SLURM when notebook has finished running
