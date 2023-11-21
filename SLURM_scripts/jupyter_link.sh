@@ -5,14 +5,14 @@
 trap "exit 1" SIGUSR1
 PROC=$$
 
-# If a job doesnt start, this string will change tot he reason as to why it doesnt
+# If a job doesnt start, this string will change to the reason as to why it doesnt
 QOS=""
 
 # The user-defined port numbers of jupyter notebook/lab
-__LOCATION__="$(dirname "$(realpath "$0")")"
-DASK_PORT=$(awk -F "=" '/dask_client_3/ {print $2}' $__LOCATION__/user_settings.ini)
-NOTEBOOK_PORT=$(awk -F "=" '/jupyter_notebook/ {print $2}' $__LOCATION__/user_settings.ini)
-LAB_PORT=$(awk -F "=" '/jupyter_lab/ {print $2}' $__LOCATION__/user_settings.ini)
+__LOCATION__="$(dirname $(dirname "$(realpath "$0")"))"
+DASK_PORT=$(awk -F "=" '/dask_client_3/ {print $2}' $__LOCATION__/config/user_settings.ini)
+NOTEBOOK_PORT=$(awk -F "=" '/jupyter_notebook/ {print $2}' $__LOCATION__/config/user_settings.ini)
+LAB_PORT=$(awk -F "=" '/jupyter_lab/ {print $2}' $__LOCATION__/config/user_settings.ini)
 
 NC='\033[0m' # No Color
 ORANGE='\033[0;33m' # orange color
