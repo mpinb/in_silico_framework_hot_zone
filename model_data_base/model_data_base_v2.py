@@ -385,6 +385,9 @@ class ModelDataBase:
         else:
             raise MdbException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
     
+    def keys(self):
+        '''returns the keys of the database'''
+        return os.path.listdir(self.basedir).remove('db_metadata.json')
     
     def __setitem__(self, key, value):
         self.set(key, value)
