@@ -354,7 +354,7 @@ class ModelDataBase:
     
     def set(self, key, value, lock = None, dumper = None, **kwargs):
         if dumper is None or dumper == 'self':
-            dumper = self._find_dumper(item)
+            dumper = self._find_dumper(value)
         assert dumper is not None
         assert(inspect.ismodule(dumper))
         dir_to_data = self._get_dir_to_data(key)
