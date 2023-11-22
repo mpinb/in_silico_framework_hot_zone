@@ -3,9 +3,12 @@
 # even before pytest discovery
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
 # for setting environment variables, use pytest.ini or .env instead
-import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_base, model_data_base_v2, dask, six, getting_started, Interface  # Interface just to check if setup works. is in essence already a test
+import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_base, dask, six, getting_started
+import Interface  # Interface just to check if setup works. is in essence already a test
 from model_data_base.mdb_initializers.load_simrun_general import init
 from model_data_base.utils import silence_stdout
+from model_data_base.model_data_base import ModelDataBase
+from model_data_base.model_data_base_v2 import ModelDataBase as ModelDataBase_v2
 import pandas as pd
 import dask.dataframe as dd
 from Interface import get_client
@@ -130,11 +133,11 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
         8. spike_times
 
         Yields:
-            model_data_base.ModelDataBase: An mdb with data
+            ModelDataBase: An mdb with data
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDataBase(path)
         #self.mdb.settings.show_computation_progress = False
 
         with silence_stdout:
@@ -166,11 +169,11 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
         8. spike_times
 
         Yields:
-            model_data_base.ModelDataBase: An mdb with data
+            ModelDataBase: An mdb with data
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = model_data_base_v2.ModelDataBase(path)
+        mdb = ModelDataBase_v2(path)
         #self.mdb.settings.show_computation_progress = False
 
         with silence_stdout:
@@ -193,11 +196,11 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
         Does not initialize data, in contrast to fresh_mdb
 
         Yields:
-            model_data_base.ModelDataBase: An empty mdb
+            ModelDataBase: An empty mdb
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDataBase(path)
 
         yield mdb
         # cleanup
@@ -212,11 +215,11 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
         Does not initialize data, in contrast to fresh_mdb
 
         Yields:
-            model_data_base.ModelDataBase: An empty mdb
+            ModelDataBase: An empty mdb
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = model_data_base_v2.ModelDataBase(path)
+        mdb = ModelDataBase_v2(path)
 
         yield mdb
         # cleanup
@@ -259,7 +262,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         """
         # unique temp path
         path = tempfile.mkdtemp()
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDataBase(path)
         #self.mdb.settings.show_computation_progress = False
 
         with silence_stdout:
@@ -296,7 +299,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         """
         # unique temp path
         path = tempfile.mkdtemp()
-        mdb = model_data_base_v2.ModelDataBase(path)
+        mdb = ModelDataBase_v2(path)
         #self.mdb.settings.show_computation_progress = False
 
         with silence_stdout:
@@ -324,7 +327,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         """
         # unique temp path
         path = tempfile.mkdtemp()
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDataBase(path)
 
         yield mdb
         # cleanup
@@ -343,7 +346,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         """
         # unique temp path
         path = tempfile.mkdtemp()
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDataBase_v2(path)
 
         yield mdb
         # cleanup
