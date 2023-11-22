@@ -4,7 +4,6 @@
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
 # for setting environment variables, use pytest.ini or .env instead
 import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_base, dask, six, getting_started
-import Interface  # Interface just to check if setup works. is in essence already a test
 from model_data_base.mdb_initializers.load_simrun_general import init
 from model_data_base.utils import silence_stdout
 from model_data_base.model_data_base import ModelDataBase
