@@ -74,6 +74,15 @@ def make_all_str(dict_):
     return out
 
 def get_dumper_from_folder(folder, return_ = 'module'):
+    """Given a folder (i.e. key), return the dumper that was used to save the data in that folder/key.
+
+    Args:
+        folder (str): The folder in which the data is stored.
+        return_ (str, optional): Whether to return the dumper as a string or the actual module. Defaults to 'module'.
+
+    Returns:
+        str | module: The dumper that was used to save the data in that folder/key.
+    """
     with open(os.path.join(folder, "metadata.json")) as f:
         dumper_string = json.load(f)['dumper']
     if return_ == 'string':
@@ -258,7 +267,7 @@ class ModelDataBase:
             state = json.load(f)
             
         for name in state:
-            setattr(self, name, out[name])
+            setattr(self, name, state[name])
     
     def itemexists(self, key):
         '''Checks, if item is already in the database'''
