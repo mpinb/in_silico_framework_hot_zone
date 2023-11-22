@@ -239,7 +239,7 @@ class ModelDataBase:
     def save_db_state(self):
         '''saves the data which defines the state of this database to db_state.json'''
         ## things that define the state of this mdb and should be saved
-        out = {'_registeredDumpers': self._registeredDumpers, \
+        out = {'_registeredDumpers': [e.__name__ for e in self._registeredDumpers], \
                '_unique_id': self._unique_id,
                '_registered_to_path': self._registered_to_path} 
         with open(os.path.join(self.basedir, 'db_state.json'), 'w') as f:
