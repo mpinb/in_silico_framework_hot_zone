@@ -353,7 +353,7 @@ class ModelDataBase:
         return dumper
     
     def set(self, key, value, lock = None, dumper = None, **kwargs):
-        if dumper is None:
+        if dumper is None or dumper == 'self':
             dumper = self._find_dumper(item)
         assert dumper is not None
         assert(inspect.ismodule(dumper))
