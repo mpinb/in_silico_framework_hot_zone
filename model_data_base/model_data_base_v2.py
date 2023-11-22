@@ -17,12 +17,16 @@ import importlib
 from .IO import LoaderDumper
 from . import _module_versions
 VC = _module_versions.version_cached
+from ._version import get_versions
 
 class MdbException(Exception):
     '''Typical mdb errors'''
     pass 
 
 class MetadataAccessor:
+    """Access the metadata of some key
+    This is _not_ the metadata of the mdb itself (i.e. db_metadata.json)..
+    """
     def __init__(self, mdb):
         self.mdb = mdb
         
@@ -93,7 +97,13 @@ class ModelDataBase:
         Further more, it is possible to assign new elements to the database
         mdb['my_new_element'] = my_new_element
         These elements are stored together with the other data in the basedir.
-        All elements have associated metadata TODO: describe metadata
+        All elements have associated metadata (see :class model_data_base._module_versions.Versions_cached:):
+        - 'dumper': Which dumper was used to save this result. See :module model_data_base.IO.LoaderDumper: for available dumpers.
+        - 'time': Time at which this results was saved.
+        - 'conda_list': A fill list of all modules installed in the conda environment that was used to produce this result
+        - 'module_versions': The versions of all modules in the conda environment that was used to produce this result
+        - 'history': The history of the code that was used to produce this result in a Jupyter Notebook.
+        - 'hostname': Name of the machine the code was run on.
         
         They can be read out of the database in the following way:
         my_reloaded_element = mdb['my_new_element']
@@ -158,6 +168,15 @@ class ModelDataBase:
             pass
         self._set_unique_id()
         self.save_db_metadata()
+
+    def _check_key_validity(self, key):
+        """DEPRECATED! use _check_key_format instead.
+        Only here for consistent API with mdbv1
+
+        Args:
+            key (str): key
+        """
+        self._check_key_format(key)
         
     def _check_key_format(self, key):
         assert(key != 'db_metadata.json')
@@ -224,6 +243,14 @@ class ModelDataBase:
             self.setitem(key, None, dumper = just_create_folder)
         return self[key]
 
+    def get_managed_folder(self, key):
+        '''deprecated! Only here to have consistent API with mdb version 1.
+        
+        Use create_managed_folder instead'''   
+        warnings.warn("Get_managed_folder is deprecated and only exists to have consistent API with mdbv1.  Use create_managed_folder instead.") 
+        # TODO: remove this method
+        return self.create_managed_folder(key)
+
     def create_shared_numpy_store(self, key, raise_ = True):
         if key in list(self.keys()):
             if raise_:
@@ -246,6 +273,14 @@ class ModelDataBase:
         else:
             self.setitem(key, None, dumper = just_create_mdb)
         return self[key]
+
+    def get_sub_mdb(self,key, register = 'as_parent'):
+        '''deprecated! it only exists to have consistent API to mdbv1
+        
+        Use create_sub_mdb instead'''
+        warnings.warn("get_sub_mdb is deprecated. it only exists to have consistent API to mdbv1.  Use create_sub_mdb instead.")         
+        #TODO: remove this method
+        return self.create_sub_mdb(key, register = register)
 
     def get(self, key, lock = None, **kwargs):
         """Instead of mdb['key'], you can use mdb.getitem('key'). The advantage
