@@ -1,7 +1,7 @@
 from model_data_base.model_data_base import ModelDataBase, MdbException
 from model_data_base.model_data_base_register import _get_mdb_register, \
         ModelDataBaseRegister, get_mdb_by_unique_id, register_mdb
-import pytest
+import pytest, tempfile, shutil, os
 
 
 def assert_search_mdb_did_not_fail(mdbr):

@@ -117,6 +117,7 @@ class ModelDataBase:
         self.readonly = readonly
         self.nocreate = nocreate
         self._unique_id = None
+        self._registeredDumpers = []
         
         if not self._is_initialized():
             errstr = "Did not find a database in {path}. ".format(path = basedir) + \
@@ -157,6 +158,16 @@ class ModelDataBase:
     def get_id(self):
         return self._unique_id 
      
+    def registerDumper(self, dumper_module):
+        """
+        Make sure to provide the module, not the class
+
+        Args:
+            dumper_module (module): A module from model_data_base.IO.LoaderDumper. Must contain a Loader class and a dump() method.
+        
+        """
+        self._registeredDumpers.append(dumper_module)
+    
     def _is_initialized(self):
         return os.path.exists(os.path.join(self.basedir, 'db_metadata.json'))
     
@@ -167,6 +178,7 @@ class ModelDataBase:
         with open(os.path.join(self.basedir, 'db_metadata.json'), 'w'):
             pass
         self._set_unique_id()
+        self._registeredDumpers = [to_json]
         self.save_db_metadata()
 
     def _check_key_validity(self, key):
