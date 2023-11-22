@@ -438,7 +438,13 @@ class ModelDataBase:
     def keys(self):
         '''returns the keys of the database'''
         all_keys = os.listdir(self.basedir)
-        return tuple(e for e in all_keys if e not in ["db_state.json", "dbcore.pickle", "metadata.db", "sqlitedict.db"] and "lock" not in e)
+        keys =  tuple(
+            e for e in all_keys 
+            if e not in ["db_state.json", "dbcore.pickle", "metadata.db", "sqlitedict.db"]
+            and "lock" not in e
+            and "deleting" not in e)
+        return keys
+
     def __setitem__(self, key, value):
         self.set(key, value)
     
