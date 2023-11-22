@@ -228,7 +228,8 @@ class ModelDataBase:
         self._check_key_format(key)
         
     def _check_key_format(self, key):
-        assert(key != 'db_state.json')
+        assert key not in ('db_state.json', 'metadata.json', 'db_state', 'metadata'), "These keys are reserved for the database (v2) and cannot be used"
+        assert key not in ('dbcore.pickle', 'sqlitedict.db', 'metadata.db', 'dbcore', 'sqlitedict', 'metadata'), "These keys are reserved for the database and cannot be used"
     
         if len(key) > 50:
             raise ValueError('keys must be shorter than 50 characters')
@@ -331,6 +332,12 @@ class ModelDataBase:
         #TODO: remove this method
         return self.create_sub_mdb(key, register = register)
 
+    def _get_metadata(self, key):
+        '''returns the metadata of the key'''
+        dir_to_data = self._get_dir_to_data(key, check_exists = True)
+        with open(os.path.join(dir_to_data, 'metadata.json')) as f:
+            return json.load(f)
+    
     def get(self, key, lock = None, **kwargs):
         """Instead of mdb['key'], you can use mdb.getitem('key'). The advantage
         is that this allows to pass additional arguments to the loader, e.g.
@@ -343,6 +350,8 @@ class ModelDataBase:
         Returns:
             object: The object saved under mdb[key]
         """
+        if key.lower() in ('metadata.json', 'metadata'):
+            return self._get_metadata(key)
         dir_to_data = self._get_dir_to_data(key, check_exists = True)
         # this looks into the metadat.json, gets the name of the dumper, and loads this module form IO.LoaderDumper
         loaderdumper_module = get_dumper_from_folder(dir_to_data)
@@ -373,6 +382,7 @@ class ModelDataBase:
             dumper = self._find_dumper(value)
         assert dumper is not None
         assert(inspect.ismodule(dumper))
+        self._check_key_format(key)
         dir_to_data = self._get_dir_to_data(key)
         if os.path.exists(dir_to_data):
             raise KeyError('Key {} is already set. Use del mdb[key] first.'.format(key))  
