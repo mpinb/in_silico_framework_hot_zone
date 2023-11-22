@@ -1,5 +1,4 @@
 import numpy as np
-from .from . import *
 from model_data_base.analyze._add_nparray_aligned import *
 
 
