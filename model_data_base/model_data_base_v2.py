@@ -234,10 +234,7 @@ class ModelDataBase:
         """
         self._check_key_format(key)
         
-    def _check_key_format(self, key):
-        assert key not in ('db_state.json', 'metadata.json', 'db_state', 'metadata'), "These keys are reserved for the database (v2) and cannot be used"
-        assert key not in ('dbcore.pickle', 'sqlitedict.db', 'metadata.db', 'dbcore', 'sqlitedict', 'metadata'), "These keys are reserved for the database and cannot be used"
-    
+    def _check_key_format(self, key):    
         if len(key) > 50:
             raise ValueError('keys must be shorter than 50 characters')
         allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
