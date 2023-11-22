@@ -7,7 +7,7 @@ from . import decorators
 import pytest, os, shutil, six, tempfile, warnings, subprocess
 import numpy as np
 from getting_started import parent as getting_started_parent
-from tests.test_model_data_base.context import FreshlyInitializedMdb
+from tests.test_model_data_basefrom . import FreshlyInitializedMdb
 import pandas
 from pandas.util.testing import assert_frame_equal
 from model_data_base.mdb_initializers.load_simrun_general import init

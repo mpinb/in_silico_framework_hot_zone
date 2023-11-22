@@ -1,4 +1,4 @@
-from .context import *
+from from . import *
 from model_data_base.utils import *
 from . import decorators
 import numpy as np

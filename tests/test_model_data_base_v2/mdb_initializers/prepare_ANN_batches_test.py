@@ -1,6 +1,6 @@
 import tempfile
 import warnings
-from ..context import *
+from .from . import *
 import numpy as np
 import shutil
 from .. import decorators
