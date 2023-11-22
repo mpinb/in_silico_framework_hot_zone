@@ -74,7 +74,7 @@ def make_all_str(dict_):
     return out
 
 def get_dumper_from_folder(folder, return_ = 'module'):
-    with open('/gpfs/soma_fs/scratch/abast/testmdbv2/1/metadata.json') as f:
+    with open(os.path.join(folder, "metadata.json")) as f:
         dumper_string = json.load(f)['dumper']
     if return_ == 'string':
         return dumper_string
@@ -115,7 +115,12 @@ class ModelDataBase:
         It is possible to use tuples of strings as keys to reflect an arbitrary hierarchy.
         Valid keys are tuples of str or str. "@" is not allowed.
         
-        To read out all existing keys, use the keys()-function.
+        To read out all existing keys, use the keys() method.
+
+        Args:
+            basedir (str): The directory in which the database will be created, or read from.
+            readonly (bool, optional): If True, the database will be read only. Defaults to False.
+            nocreate (bool, optional): If True, a new database will not be created if it does not exist. Defaults to False.
         '''
         self.basedir = os.path.abspath(basedir)
         self.readonly = readonly
