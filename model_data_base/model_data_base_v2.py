@@ -18,6 +18,7 @@ from .IO import LoaderDumper
 from . import _module_versions
 VC = _module_versions.version_cached
 from ._version import get_versions
+from model_data_base.IO.LoaderDumper import to_cloudpickle
 
 class MdbException(Exception):
     '''Typical mdb errors'''
