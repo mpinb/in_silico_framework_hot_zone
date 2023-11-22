@@ -145,7 +145,7 @@ class ModelDataBase:
             
     def _register_this_database(self):
         print('registering database with unique id {} to the absolute path {}'.format(
-            self.unique_id, self.basedir))
+            self._unique_id, self.basedir))
         try:
             model_data_base_register.register_mdb(self)
             self._registered_to_path = self.basedir
@@ -240,7 +240,7 @@ class ModelDataBase:
         '''saves the data which defines the state of this database to db_state.json'''
         ## things that define the state of this mdb and should be saved
         out = {'_registeredDumpers': self._registeredDumpers, \
-               '_unique_id': self.unique_id,
+               '_unique_id': self._unique_id,
                '_registered_to_path': self._registered_to_path} 
         with open(os.path.join(self.basedir, 'db_state.json'), 'w') as f:
             json.dump(out, f)
