@@ -358,7 +358,7 @@ class ModelDataBase:
         warnings.warn('setitem is deprecated. it exist to provide a consistent API with model_data_base version 1. use set instead.')
         self.set(key, value, dumper = dumper, **kwargs)
 
-    def getitem(self, key, lock=None dumper = None, **kwargs):
+    def getitem(self, key, lock=None, dumper = None, **kwargs):
         warnings.warn('setitem is deprecated. it exist to provide a consistent API with model_data_base version 1. use set instead.')
         self.get(key, lock=lock, dumper=dumper, **kwargs)
     
