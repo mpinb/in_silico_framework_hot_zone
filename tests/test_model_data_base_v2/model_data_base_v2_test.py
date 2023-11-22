@@ -1,12 +1,11 @@
-from model_data_base.model_data_base_v2_v2 import ModelDataBase, MdbException
+from model_data_base.model_data_base_v2 import ModelDataBase, MdbException
 from model_data_base import model_data_base_register
-from model_data_base.model_data_base_v2_v2 import get_versions
+from model_data_base.model_data_base_v2 import get_versions
 import model_data_base.IO.LoaderDumper.to_pickle as to_pickle
 from model_data_base.IO.LoaderDumper import pandas_to_msgpack
 import pytest, os, shutil, six, tempfile, warnings, subprocess
 import numpy as np
 from getting_started import parent as getting_started_parent
-from tests.test_model_data_basefrom . import FreshlyInitializedMdb
 import pandas
 from pandas.util.testing import assert_frame_equal
 from model_data_base.mdb_initializers.load_simrun_general import init
