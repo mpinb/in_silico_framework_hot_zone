@@ -1,9 +1,8 @@
 import tempfile
 import warnings
-from ..context import *
+from tests.test_model_data_base import *
 import numpy as np
 import shutil
-from .. import decorators
 from model_data_base.mdb_initializers.prepare_ANN_batches import spike_times_to_onehot
 from model_data_base.mdb_initializers.load_simrun_general \
             import optimize as optimize_simrun_general

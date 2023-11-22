@@ -1,6 +1,6 @@
 import tempfile
 import warnings
-from ..context import *
+from tests.test_model_data_base import *
 from model_data_base.mdb_initializers.load_simrun_general \
             import optimize as optimize_simrun_general
 from model_data_base.mdb_initializers.synapse_activation_binning \

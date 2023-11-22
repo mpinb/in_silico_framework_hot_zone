@@ -44,14 +44,12 @@ def test_dataintegrity_no_empty_rows(fresh_mdb):
         assert 0 == len(voltage_traces[voltage_traces.isnan == True])
 
 
-#@decorators.testlevel(2)
 def test_voltage_traces_have_float_indices(fresh_mdb):
     e = fresh_mdb
     assert isinstance(e['voltage_traces'].columns[0], float)
     assert isinstance(e['voltage_traces'].head().columns[0], float)
 
 
-#@decorators.testlevel(2)
 def test_every_entry_in_initialized_mdb_can_be_serialized(fresh_mdb):
     import cloudpickle
     e = fresh_mdb

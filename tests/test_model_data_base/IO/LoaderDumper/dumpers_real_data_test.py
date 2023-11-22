@@ -1,5 +1,4 @@
 from model_data_base.model_data_base import ModelDataBase
-from ... import decorators
 import tempfile
 import numpy as np
 from pandas.util.testing import assert_frame_equal
