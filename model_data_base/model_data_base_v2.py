@@ -32,7 +32,7 @@ class MetadataAccessor:
         self.mdb = mdb
         
     def __getitem__(self, key):
-        dir_to_data = mdb._get_dir_to_data(key, check_exists = True)
+        dir_to_data = self.mdb._get_dir_to_data(key, check_exists = True)
         if not os.path.exists(os.path.join(dir_to_data, 'metadata.json')):
             warnings.warn("No metadata found for key {}".format(key))
             return {
