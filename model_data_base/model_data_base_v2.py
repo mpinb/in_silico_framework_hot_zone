@@ -25,7 +25,7 @@ class MdbException(Exception):
 
 class MetadataAccessor:
     """Access the metadata of some key
-    This is _not_ the metadata of the mdb itself (i.e. db_metadata.json)..
+    This is _not_ the metadata of the mdb itself (i.e. db_state.json)..
     """
     def __init__(self, mdb):
         self.mdb = mdb
@@ -96,7 +96,7 @@ class ModelDataBase:
         
         Further more, it is possible to assign new elements to the database
         mdb['my_new_element'] = my_new_element
-        These elements are stored together with the other data in the basedir.
+        
         All elements have associated metadata (see :class model_data_base._module_versions.Versions_cached:):
         - 'dumper': Which dumper was used to save this result. See :module model_data_base.IO.LoaderDumper: for available dumpers.
         - 'time': Time at which this results was saved.
@@ -104,6 +104,8 @@ class ModelDataBase:
         - 'module_versions': The versions of all modules in the conda environment that was used to produce this result
         - 'history': The history of the code that was used to produce this result in a Jupyter Notebook.
         - 'hostname': Name of the machine the code was run on.
+
+        These elements are stored in the basedir along with metadata and a Loader.pickle object that allows it to be loaded in.
         
         They can be read out of the database in the following way:
         my_reloaded_element = mdb['my_new_element']
@@ -116,8 +118,11 @@ class ModelDataBase:
         self.basedir = os.path.abspath(basedir)
         self.readonly = readonly
         self.nocreate = nocreate
+
+        # database state
         self._unique_id = None
         self._registeredDumpers = []
+        self._registered_to_path = None
         
         if not self._is_initialized():
             errstr = "Did not find a database in {path}. ".format(path = basedir) + \
@@ -128,6 +133,13 @@ class ModelDataBase:
             if readonly:
                 raise MdbException(errstr.format(mode = 'readonly'))                
             self._initialize()
+
+        if self.readonly == False:
+            if self._unique_id is None:
+                self._set_unique_id()
+            if self._registered_to_path is None:
+                self._register_this_database()
+                self.save_db_state()
             
     def _register_this_database(self):
         print('registering database with unique id {} to the absolute path {}'.format(
@@ -147,18 +159,18 @@ class ModelDataBase:
         """
         if self._unique_id is not None:
             raise ValueError("self._unique_id is already set!")
-        # db_metadata.json may exist upon first init, but does not have a unique id yet. Create it and reset db_metadata
-        time = os.stat(os.path.join(self.basedir, 'db_metadata.json')).st_mtime
+        # db_state.json may exist upon first init, but does not have a unique id yet. Create it and reset db_state
+        time = os.stat(os.path.join(self.basedir, 'db_state.json')).st_mtime
         time = datetime.datetime.utcfromtimestamp(time)
         time = time.strftime("%Y-%m-%d")
         random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) 
                                 for _ in range(7))
         self.unique_id = '_'.join([time, str(os.getpid()), random_string])
-
+    
     def get_id(self):
         return self._unique_id 
      
-    def registerDumper(self, dumper_module):
+    def register_dumper(self, dumper_module):
         """
         Make sure to provide the module, not the class
 
@@ -166,19 +178,27 @@ class ModelDataBase:
             dumper_module (module): A module from model_data_base.IO.LoaderDumper. Must contain a Loader class and a dump() method.
         
         """
-        self._registeredDumpers.append(dumper_module)
+        self._registered_dumpers.append(dumper_module)
     
     def _is_initialized(self):
-        return os.path.exists(os.path.join(self.basedir, 'db_metadata.json'))
+        return os.path.exists(os.path.join(self.basedir, 'db_state.json'))
     
     def _initialize(self):
         _check_working_dir_clean_for_build(self.basedir)
         os.makedirs(self.basedir, exist_ok = True)
-        # create empty metadata file. 
-        with open(os.path.join(self.basedir, 'db_metadata.json'), 'w'):
+        # create empty state file. 
+        with open(os.path.join(self.basedir, 'db_state.json'), 'w'):
             pass
         self._set_unique_id()
-        self.save_db_metadata()
+        self._registeredDumpers.append(to_cloudpickle)
+        self.state = {
+            '_registeredDumpers': self._registeredDumpers,
+            '_unique_id': self._unique_id,
+            '_registered_to_path': self._registered_to_path,
+            }
+            
+        self._register_this_database()
+        self.save_db_state()
 
     def _check_key_validity(self, key):
         """DEPRECATED! use _check_key_format instead.
@@ -190,7 +210,7 @@ class ModelDataBase:
         self._check_key_format(key)
         
     def _check_key_format(self, key):
-        assert(key != 'db_metadata.json')
+        assert(key != 'db_state.json')
     
         if len(key) > 50:
             raise ValueError('keys must be shorter than 50 characters')
@@ -214,22 +234,22 @@ class ModelDataBase:
         else:
             return IO.LoaderDumper.get_dumper_string_by_savedir(path)
     
-    def save_db_metadata(self):
-        '''saves the data which defines the state of this database to db_metadata.json'''
+    def save_db_state(self):
+        '''saves the data which defines the state of this database to db_state.json'''
         ## things that define the state of this mdb and should be saved
-        out = {'registeredDumpers': self._registeredDumpers, \
-               'unique_id': self.unique_id,
-               'basedir': self.basedir} 
-        with open(os.path.join(self.basedir, 'db_metadata.json'), 'w') as f:
+        out = {'_registeredDumpers': self._registeredDumpers, \
+               '_unique_id': self.unique_id,
+               '_registered_to_path': self._registered_to_path} 
+        with open(os.path.join(self.basedir, 'db_state.json'), 'w') as f:
             json.dump(out, f)
 
-    def read_db_metadata(self):
+    def read_db_state(self):
         '''sets the state of the database according to dbcore.pickle''' 
-        with open(os.path.join(self.basedir, 'db_metadata.json'), 'r') as f:
-            out = json.load(f)
+        with open(os.path.join(self.basedir, 'db_state.json'), 'r') as f:
+            state = json.load(f)
             
-        for name in out:
-            setattr(self, name, out[name])   
+        for name in state:
+            setattr(self, name, out[name])
     
     def itemexists(self, key):
         '''Checks, if item is already in the database'''
@@ -321,7 +341,19 @@ class ModelDataBase:
         dir_to_data_new = self._get_dir_to_data(new)
         os.rename(old, new)
 
+    def _find_dumper(self, item):
+        '''finds the dumper of a given item.'''
+        dumper = None
+        for d in self._registeredDumpers:
+            if d == 'self' or d.check(item):
+                dumper = d
+                break
+        return dumper
+    
     def set(self, key, value, lock = None, dumper = None, **kwargs):
+        if dumper is None:
+            dumper = self._find_dumper(item)
+        assert dumper is not None
         assert(inspect.ismodule(dumper))
         dir_to_data = self._get_dir_to_data(key)
         if os.path.exists(dir_to_data):
@@ -387,7 +419,7 @@ class ModelDataBase:
     
     def keys(self):
         '''returns the keys of the database'''
-        return os.path.listdir(self.basedir).remove('db_metadata.json')
+        return os.path.listdir(self.basedir).remove('db_state.json')
     
     def __setitem__(self, key, value):
         self.set(key, value)
@@ -396,7 +428,12 @@ class ModelDataBase:
         return self.get(key)
     
     def __delitem__(self, key):
-        '''items can be deleted using del my_model_data_base[key]'''
+        """
+        Items can be deleted using del my_model_data_base[key]
+        Deleting an item will first rename the item to a random string and then delete it in the background.
+        This way, your Python process is not interrupted when deleting large files, and you can immediately use the key again.
+        
+        """
         dir_to_data = self._get_dir_to_data(key, check_exists = True) 
         # rename folder to random folder
         N = 5
