@@ -27,13 +27,20 @@ class MdbException(Exception):
 
 class MetadataAccessor:
     """Access the metadata of some key
-    This is _not_ the metadata of the mdb itself (i.e. db_state.json)..
     """
     def __init__(self, mdb):
         self.mdb = mdb
         
     def __getitem__(self, key):
         dir_to_data = mdb._get_dir_to_data(key, check_exists = True)
+        if not os.path.exists(os.path.join(dir_to_data, 'metadata.json')):
+            warnings.warn("No metadata found for key {}".format(key))
+            return {
+                'dumper': get_dumper_from_folder(dir_to_data),
+                'time': "unknown",
+                'metadata_creation_time': 'post_hoc'
+                'version': "unknown",
+            }
         with open(os.path.join(dir_to_data, 'metadata.json')) as f:
             return json.load(f)
         
@@ -332,11 +339,6 @@ class ModelDataBase:
         #TODO: remove this method
         return self.create_sub_mdb(key, register = register)
 
-    def _get_metadata(self, key):
-        '''returns the metadata of the key'''
-        dir_to_data = self._get_dir_to_data(key, check_exists = True)
-        with open(os.path.join(dir_to_data, 'metadata.json')) as f:
-            return json.load(f)
     
     def get(self, key, lock = None, **kwargs):
         """Instead of mdb['key'], you can use mdb.getitem('key'). The advantage
@@ -350,9 +352,6 @@ class ModelDataBase:
         Returns:
             object: The object saved under mdb[key]
         """
-        if key.lower() in ('metadata.json', 'metadata'):
-            return self._get_metadata(key)
-        dir_to_data = self._get_dir_to_data(key, check_exists = True)
         # this looks into the metadat.json, gets the name of the dumper, and loads this module form IO.LoaderDumper
         loaderdumper_module = get_dumper_from_folder(dir_to_data)
         loader = loaderdumper_module.Loader()
@@ -361,6 +360,7 @@ class ModelDataBase:
         return_ = loader.get(dir_to_data, **kwargs)
         if lock:
             lock.release()
+        return_.metadata = MetadataAccessor(self)[key]
         return return_
     
     def rename(self, old, new):
