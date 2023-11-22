@@ -38,7 +38,7 @@ class MetadataAccessor:
             return {
                 'dumper': get_dumper_from_folder(dir_to_data),
                 'time': "unknown",
-                'metadata_creation_time': 'post_hoc'
+                'metadata_creation_time': 'post_hoc',
                 'version': "unknown",
             }
         with open(os.path.join(dir_to_data, 'metadata.json')) as f:
