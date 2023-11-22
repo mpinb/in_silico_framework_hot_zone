@@ -94,12 +94,12 @@ def test_metadata_update(empty_mdb_v2):
 
     #after initialization, the metdata is rebuild
     mdb = ModelDataBase(empty_mdb_v2.basedir)
-    assert mdb.['test'].metadata['version'], "unknown"
-    assert mdb.['test2'].metadata['version'] == "unknown"
-    assert mdb.['test'].metadata['dumper'] == 'self'
-    assert mdb.['test2'].metadata['dumper'] == 'to_pickle'
-    assert mdb.['test'].metadata['metadata_creation_time'] == 'post_hoc'
-    assert mdb.['test2'].metadata['metadata_creation_time'] == 'post_hoc'
+    assert mdb['test'].metadata['version'], "unknown"
+    assert mdb['test2'].metadata['version'] == "unknown"
+    assert mdb['test'].metadata['dumper'] == 'self'
+    assert mdb['test2'].metadata['dumper'] == 'to_pickle'
+    assert mdb['test'].metadata['metadata_creation_time'] == 'post_hoc'
+    assert mdb['test2'].metadata['metadata_creation_time'] == 'post_hoc'
 
 
 def test_check_working_dir_clean_for_build_works_correctly():
