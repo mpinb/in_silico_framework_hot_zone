@@ -167,7 +167,7 @@ class ModelDataBase:
         time = time.strftime("%Y-%m-%d")
         random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) 
                                 for _ in range(7))
-        self.unique_id = '_'.join([time, str(os.getpid()), random_string])
+        self._unique_id = '_'.join([time, str(os.getpid()), random_string])
     
     def get_id(self):
         return self._unique_id 
