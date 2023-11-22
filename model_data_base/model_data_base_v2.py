@@ -116,7 +116,7 @@ class ModelDataBase:
         self.basedir = os.path.abspath(basedir)
         self.readonly = readonly
         self.nocreate = nocreate
-        self.unique_id = None
+        self._unique_id = None
         
         if not self._is_initialized():
             errstr = "Did not find a database in {path}. ".format(path = basedir) + \
