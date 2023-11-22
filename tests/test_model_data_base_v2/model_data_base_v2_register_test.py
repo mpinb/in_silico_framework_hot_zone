@@ -1,6 +1,6 @@
-from tests.test_model_data_base_v2 import *
 from model_data_base.model_data_base_v2 import ModelDataBase, MdbException
-from model_data_base.model_data_base_register import _get_mdb_register, \
+import tempfile, os, shutil
+from model_data_base.model_data_base_v2_register import _get_mdb_register, \
         ModelDataBaseRegister, get_mdb_by_unique_id, register_mdb
 import pytest
 
