@@ -126,16 +126,18 @@ class ModelDataBase:
         self._registeredDumpers = []
         self._registered_to_path = None
         
-        if not self._is_initialized():
+        if self._is_initialized():
+            self.read_db_state()
+        else:
             errstr = "Did not find a database in {path}. ".format(path = basedir) + \
-                    "A new empty database will not be created since "+\
-                    "{mode} is set to True."
+            "A new empty database will not be created since "+\
+            "{mode} is set to True."
             if nocreate:
                 raise MdbException(errstr.format(mode = 'nocreate'))
             if readonly:
                 raise MdbException(errstr.format(mode = 'readonly'))                
             self._initialize()
-
+            
         if self.readonly == False:
             if self._unique_id is None:
                 self._set_unique_id()
