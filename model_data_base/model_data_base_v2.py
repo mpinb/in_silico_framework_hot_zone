@@ -178,7 +178,6 @@ class ModelDataBase:
         with open(os.path.join(self.basedir, 'db_metadata.json'), 'w'):
             pass
         self._set_unique_id()
-        self._registeredDumpers = [to_json]
         self.save_db_metadata()
 
     def _check_key_validity(self, key):
