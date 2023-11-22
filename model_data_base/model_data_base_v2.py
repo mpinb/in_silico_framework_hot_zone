@@ -339,7 +339,6 @@ class ModelDataBase:
         #TODO: remove this method
         return self.create_sub_mdb(key, register = register)
 
-    
     def get(self, key, lock = None, **kwargs):
         """Instead of mdb['key'], you can use mdb.getitem('key'). The advantage
         is that this allows to pass additional arguments to the loader, e.g.
@@ -361,7 +360,26 @@ class ModelDataBase:
         return_ = loader.get(dir_to_data, **kwargs)
         if lock:
             lock.release()
-        return_.metadata = MetadataAccessor(self)[key]
+        return return_
+    
+    def get_metadata(self, key, lock = None):
+        """Given a kye, this method fetches the metedata associated with this key
+        Apart from explicitly reading in the .json file using the absolute path, this is the
+        only way to access the metadata of some key.
+
+        Args:
+            key (str): The key for which to fetch the metadata
+            lock (Lock, optional): If using file locking. Defaults to None.
+
+        Returns:
+            _type_: _description_
+        """
+        dir_to_data = self._get_dir_to_data(key, check_exists = True)
+        if lock:
+            lock.acquire()
+        return_ = MetadataAccessor(self)[key]
+        if lock:
+            lock.release()
         return return_
     
     def rename(self, old, new):
