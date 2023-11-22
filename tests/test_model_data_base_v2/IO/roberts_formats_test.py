@@ -1,5 +1,4 @@
-from .from . import *
-from model_data_base.IO.roberts_formats import *
+from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format, write_pandas_synapse_activation_to_roberts_format
 import model_data_base
 import dask
 import tempfile
