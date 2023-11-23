@@ -34,7 +34,7 @@ class MetadataAccessor:
         if not os.path.exists(os.path.join(dir_to_data, 'metadata.json')):
             warnings.warn("No metadata found for key {}".format(key))
             return {
-                'dumper': get_dumper_from_folder(dir_to_data),
+                'dumper': "unkown",
                 'time': "unknown",
                 'metadata_creation_time': 'post_hoc',
                 'version': "unknown",
