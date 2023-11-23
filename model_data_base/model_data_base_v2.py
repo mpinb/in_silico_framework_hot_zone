@@ -20,10 +20,8 @@ VC = _module_versions.version_cached
 from ._version import get_versions
 from model_data_base.IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_mdb_v2, shared_numpy_store
 from . import model_data_base_v2_register
+from model_data_base import MdbException
 
-class MdbException(Exception):
-    '''Typical mdb errors'''
-    pass 
 
 class MetadataAccessor:
     """Access the metadata of some key
@@ -171,7 +169,7 @@ class ModelDataBase:
         print('registering database with unique id {} to the absolute path {}'.format(
             self._unique_id, self.basedir))
         try:
-            model_data_base_v2_register.register_mdb(self)
+            model_data_base_v2_register.register_mdb(self._unique_id, self.basedir)
             self._registered_to_path = self.basedir
         except MdbException as e:
             warnings.warn(str(e))
@@ -546,3 +544,9 @@ class RegisteredFolder(ModelDataBase):
         self._sql_backend['self'] = LoaderWrapper('')
         self.setitem = None
      
+
+def get_mdb_by_unique_id(unique_id):
+    mdb_path = _get_mdb_register().registry[unique_id]
+    mdb = ModelDataBase(mdb_path, nocreate=True)
+    assert mdb.get_id() == unique_id
+    return mdb
