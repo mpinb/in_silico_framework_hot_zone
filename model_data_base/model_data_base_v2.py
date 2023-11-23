@@ -141,6 +141,7 @@ class ModelDataBase:
         self.basedir = os.path.abspath(basedir)
         self.readonly = readonly
         self.nocreate = nocreate
+        self.parent_mdb = None
 
         # database state
         self._unique_id = None
@@ -170,7 +171,7 @@ class ModelDataBase:
         print('registering database with unique id {} to the absolute path {}'.format(
             self._unique_id, self.basedir))
         try:
-            model_data_base_register.register_mdb(self)
+            model_data_base_v2_register.register_mdb(self)
             self._registered_to_path = self.basedir
         except MdbException as e:
             warnings.warn(str(e))
@@ -240,10 +241,12 @@ class ModelDataBase:
         allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
         for c in key:
             if not c in allowed_characters:
-                raise ValueError('Character {} is not allowed'.format(c))        
+                raise ValueError('Character {} is not allowed'.format(c))  
         
     def _get_dir_to_data(self, key, check_exists = False):
         self._check_key_format(key)
+        if isinstance(key, tuple):
+            key = os.path.join(*key)
         dir_to_data = os.path.join(self.basedir, key)
         if check_exists:
             if not os.path.exists(dir_to_data):
@@ -316,17 +319,27 @@ class ModelDataBase:
     def create_sub_mdb(self, key, register = 'as_parent', raise_ = True):
         '''creates a ModelDataBase within a ModelDataBase. Example:
         mdb.create_sub_mdb('my_sub_database')
-        mdb['my_sub_database']['sme_key'] = ['some_value']
+        mdb['my_sub_database']['some_key'] = ['some_value']
         '''
-        if register == 'as_parent':
-            # TODO
-            pass
-        if key in list(self.keys()):
-            if raise_:
-                raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
-        else:
-            self.setitem(key, None, dumper = just_create_mdb_v2)
-        return self[key]
+        if isinstance(key, str):
+            key = (key,)
+        # go down the tree of pre-existing sub_mdbs as long as the keys exist
+        remaining_keys = key
+        parent_mdb = self
+        while key in parent_mdb.keys():
+            parent_mdb = parent_mdb[key]
+            remaining_keys = remaining_keys[1:]
+        if not remaining_keys and raise_:
+            # The sub_mdb already exists
+            raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key)):
+        for k in remaining_keys:
+            parent_mdb._check_key_format(key)
+            parent_mdb.set(key, None, dumper = just_create_mdb_v2)
+            parent_mdb[key].parent_mdb = parent_mdb  # remember that it has a parent
+            parent_mdb[key]._register_this_database()
+            parent_mdb = parent_mdb[key]  # go down the tree of sub_mdbs
+        # either raise is false and this mdb already exists, or we just created it
+        return parent_mdb
 
     def get_sub_mdb(self,key, register = 'as_parent'):
         '''deprecated! it only exists to have consistent API to mdbv1
@@ -337,8 +350,10 @@ class ModelDataBase:
         return self.create_sub_mdb(key, register = register)
 
     def get(self, key, lock = None, **kwargs):
-        """Instead of mdb['key'], you can use mdb.getitem('key'). The advantage
-        is that this allows to pass additional arguments to the loader, e.g.
+        """This is the main method to get data from a ModelDataBase. :func getitem: and :func __getitem__: call this method.
+        :func getitem: only exists to provide consistent API with mdbv1.
+        :func __getitem__: is the method that's being called when you use mdb[key].
+        The advantage is that this allows to pass additional arguments to the loader, e.g.
         mdb.getitem('key', columns = [1,2,3]).
 
         Args:
@@ -394,17 +409,37 @@ class ModelDataBase:
         return dumper
     
     def set(self, key, value, lock = None, dumper = None, **kwargs):
+        """Main method to save data in a ModelDataBase. :func setitem: and :func __setitem__: call this method.
+        :func setitem: only exists to provide consistent API with mdbv1.
+        :func __setitem__: is the method that's being called when you use mdb[key] = value.
+        The advantage of using this method is that you can specify a dumper and pass additional arguments to the dumper with **kwargs.
+        This method is thread safe, if you provide a lock.
+        # TODO: deprecate the dumper "self". "self" only makes sense with an sqlite backend. "default" would be better in this case.
+
+        Args:
+            key (str): _description_
+            value (obj): _description_
+            lock (Lock, optional): _description_. Defaults to None.
+            dumper (module|str|None, optional): The dumper module to use when saving data. If None or "self" are passed, it will use the default dumper to_cloudpickle. Defaults to None.
+
+        Raises:
+            KeyError: _description_
+        """
+        # Find correct dumper to save data with
         if dumper is None or dumper == 'self':
             dumper = self._find_dumper(value)
         assert dumper is not None
         assert(inspect.ismodule(dumper))
+        loaderdumper_module = dumper
+
+        # Check if the key is ok and create the corresponding path
         self._check_key_format(key)
         dir_to_data = self._get_dir_to_data(key)
         if os.path.exists(dir_to_data):
             raise KeyError('Key {} is already set. Use del mdb[key] first.'.format(key))  
         else:
             os.makedirs(dir_to_data)
-        loaderdumper_module = dumper
+        
         if lock:
             lock.acquire()
         try:
