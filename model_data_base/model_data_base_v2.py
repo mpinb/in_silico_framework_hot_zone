@@ -146,6 +146,7 @@ class ModelDataBase:
         self._registeredDumpers = []
         self._registered_to_path = None
         
+        self.metadata = MetaDataAccessor(self)
         if self._is_initialized():
             self.read_db_state()
         else:
@@ -366,8 +367,6 @@ class ModelDataBase:
         Returns:
             object: The object saved under mdb[key]
         """
-        if key == "metadata":
-            return self.get_metadata(key, lock = lock)
         # this looks into the metadata.json, gets the name of the dumper, and loads this module form IO.LoaderDumper
         dir_to_data = self._get_dir_to_data(key, check_exists = True)
         loaderdumper_module = get_dumper_from_folder(dir_to_data)
@@ -375,26 +374,6 @@ class ModelDataBase:
         if lock:
             lock.acquire()
         return_ = loader.get(dir_to_data, **kwargs)
-        if lock:
-            lock.release()
-        return return_
-    
-    def get_metadata(self, key, lock = None):
-        """Given a kye, this method fetches the metedata associated with this key
-        Apart from explicitly reading in the .json file using the absolute path, this is the
-        only way to access the metadata of some key.
-
-        Args:
-            key (str): The key for which to fetch the metadata
-            lock (Lock, optional): If using file locking. Defaults to None.
-
-        Returns:
-            _type_: _description_
-        """
-        dir_to_data = self._get_dir_to_data(key, check_exists = True)
-        if lock:
-            lock.acquire()
-        return_ = MetadataAccessor(self)[key]
         if lock:
             lock.release()
         return return_

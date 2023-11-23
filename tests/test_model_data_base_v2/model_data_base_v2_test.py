@@ -66,22 +66,22 @@ def test_metadata_update(empty_mdb_v2):
     existing metadata'''
     empty_mdb_v2.setitem('test', 1, dumper='self')
     empty_mdb_v2.setitem('test2', 1, dumper=to_pickle)
-    msg1 = "{} =/= {}".format(empty_mdb_v2.get_metadata('test')['version'],
+    msg1 = "{} =/= {}".format(empty_mdb_v2.metadata['test']['version'],
                               get_versions()['version'])
-    msg2 = "{} =/= {}".format(empty_mdb_v2.get_metadata('test2')['version'],
+    msg2 = "{} =/= {}".format(empty_mdb_v2.metadata['test2']['version'],
                               get_versions()['version'])
     msg_git = "\nDid the commit turn dirty during testing?\n"
     msg_git += subprocess.check_output(['git status'],
                                        shell=True).decode('utf-8')
-    assert empty_mdb_v2.get_metadata('test')['version'] == get_versions(
+    assert empty_mdb_v2.metadata['test']['version'] == get_versions(
     )['version'], msg1 + msg_git
-    assert empty_mdb_v2.get_metadata('test2')['version'] == get_versions(
+    assert empty_mdb_v2.metadata['test2']['version'] == get_versions(
     )['version'], msg2 + msg_git
-    assert empty_mdb_v2.get_metadata('test')['dumper'], 'self'
-    assert empty_mdb_v2.get_metadata('test2')['dumper'] == 'to_pickle'
-    assert empty_mdb_v2.get_metadata('test')[
+    assert empty_mdb_v2.metadata['test']['dumper'], 'self'
+    assert empty_mdb_v2.metadata['test2']['dumper'] == 'to_pickle'
+    assert empty_mdb_v2.metadata['test'][
         'metadata_creation_time'] == 'together_with_new_key'
-    assert empty_mdb_v2.get_metadata('test2')[
+    assert empty_mdb_v2.metadata['test2'][
         'metadata_creation_time'] == 'together_with_new_key'
 
     # directly after deleting metadata database, every information is "unknown"
@@ -92,17 +92,17 @@ def test_metadata_update(empty_mdb_v2):
     assert os.path.exists(metadata_db_path)
     os.remove(metadata_db_path)
 
-    assert empty_mdb_v2.get_metadata('test')['dumper'] == 'unknown'
-    assert empty_mdb_v2.get_metadata('test2')['dumper'] == 'unknown'
+    assert empty_mdb_v2.metadata['test']['dumper'] == 'unknown'
+    assert empty_mdb_v2.metadata['test2']['dumper'] == 'unknown'
 
     #after initialization, the metdata is rebuild
     mdb = ModelDataBase(empty_mdb_v2.basedir)
-    assert mdb.get_metadata('test')['version'], "unknown"
-    assert mdb.get_metadata('test2')['version'] == "unknown"
-    assert mdb.get_metadata('test')['dumper'] == 'self'
-    assert mdb.get_metadata('test2')['dumper'] == 'to_pickle'
-    assert mdb.get_metadata('test')['metadata_creation_time'] == 'post_hoc'
-    assert mdb.get_metadata('test2')['metadata_creation_time'] == 'post_hoc'
+    assert mdb.metadata['test']['version'], "unknown"
+    assert mdb.metadata['test2']['version'] == "unknown"
+    assert mdb.metadata['test']['dumper'] == 'self'
+    assert mdb.metadata['test2']['dumper'] == 'to_pickle'
+    assert mdb.metadata['test']['metadata_creation_time'] == 'post_hoc'
+    assert mdb.metadata['test2']['metadata_creation_time'] == 'post_hoc'
 
 
 def test_check_working_dir_clean_for_build_works_correctly():
