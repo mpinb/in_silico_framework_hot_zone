@@ -192,19 +192,6 @@ class ModelDataBase:
                                 for _ in range(7))
         self._unique_id = '_'.join([time, str(os.getpid()), random_string])
     
-    def get_id(self):
-        return self._unique_id 
-     
-    def register_dumper(self, dumper_module):
-        """
-        Make sure to provide the module, not the class
-
-        Args:
-            dumper_module (module): A module from model_data_base.IO.LoaderDumper. Must contain a Loader class and a dump() method.
-        
-        """
-        self._registered_dumpers.append(dumper_module)
-    
     def _is_initialized(self):
         return os.path.exists(os.path.join(self.basedir, 'db_state.json'))
     
@@ -258,6 +245,62 @@ class ModelDataBase:
             return 'self'
         else:
             return IO.LoaderDumper.get_dumper_string_by_savedir(path)
+    
+    def _find_dumper(self, item):
+        '''finds the dumper of a given item.'''
+        dumper = None
+        for d in self._registeredDumpers:
+            if d == 'self' or d.check(item):
+                dumper = d
+                break
+        return dumper
+        
+    def _write_metadata(self, dumper, dir_to_data, key):
+        '''this is private API and should only
+        be called from within ModelDataBase.
+        Can othervise be destructive!!!'''        
+        dumper_string = LoaderDumper.get_dumper_string_by_dumper_module(dumper)
+
+        out = {'dumper': dumper_string,
+               'time': tuple(datetime.datetime.utcnow().timetuple()), 
+               'conda_list': VC.get_conda_list(),
+               'module_versions': make_all_str(VC.get_module_versions()),
+               'history': VC.get_history(),
+               'hostname': VC.get_hostname(),
+               'metadata_creation_time': "together_with_new_key"}
+
+        out.update(VC.get_git_version())
+
+        if VC.get_git_version()['dirty']:
+            warnings.warn('The database source folder has uncommitted changes!')
+            
+        with open(os.path.join(dir_to_data, 'metadata.json'), 'w') as f:
+            json.dump(out, f)
+    
+    def _check_writing_privilege(self, key):
+        '''raises MdbException, if we don't have permission to write to key '''
+        if self.readonly is True:
+            raise MdbException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+        #this exists, so jupyter notebooks will not crash when they try to write something
+        elif self.readonly == 'warning': 
+            warnings.warn("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+        elif self.readonly == False:
+            pass
+        else:
+            raise MdbException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
+    
+    def get_id(self):
+        return self._unique_id 
+     
+    def register_dumper(self, dumper_module):
+        """
+        Make sure to provide the module, not the class
+
+        Args:
+            dumper_module (module): A module from model_data_base.IO.LoaderDumper. Must contain a Loader class and a dump() method.
+        
+        """
+        self._registered_dumpers.append(dumper_module)
     
     def save_db_state(self):
         '''saves the data which defines the state of this database to db_state.json'''
@@ -383,15 +426,6 @@ class ModelDataBase:
         dir_to_data_new = self._get_dir_to_data(new)
         os.rename(old, new)
 
-    def _find_dumper(self, item):
-        '''finds the dumper of a given item.'''
-        dumper = None
-        for d in self._registeredDumpers:
-            if d == 'self' or d.check(item):
-                dumper = d
-                break
-        return dumper
-    
     def set(self, key, value, lock = None, dumper = None, **kwargs):
         """Main method to save data in a ModelDataBase. :func setitem: and :func __setitem__: call this method.
         :func setitem: only exists to provide consistent API with mdbv1.
@@ -441,28 +475,6 @@ class ModelDataBase:
             raise
         if lock:
             lock.release()
-        
-    def _write_metadata(self, dumper, dir_to_data, key):
-        '''this is private API and should only
-        be called from within ModelDataBase.
-        Can othervise be destructive!!!'''        
-        dumper_string = LoaderDumper.get_dumper_string_by_dumper_module(dumper)
-
-        out = {'dumper': dumper_string,
-               'time': tuple(datetime.datetime.utcnow().timetuple()), 
-               'conda_list': VC.get_conda_list(),
-               'module_versions': make_all_str(VC.get_module_versions()),
-               'history': VC.get_history(),
-               'hostname': VC.get_hostname(),
-               'metadata_creation_time': "together_with_new_key"}
-
-        out.update(VC.get_git_version())
-
-        if VC.get_git_version()['dirty']:
-            warnings.warn('The database source folder has uncommitted changes!')
-            
-        with open(os.path.join(dir_to_data, 'metadata.json'), 'w') as f:
-            json.dump(out, f)
             
     def setitem(self, key, value, dumper = None, **kwargs):
         warnings.warn('setitem is deprecated. it exist to provide a consistent API with model_data_base version 1. use set instead.')
@@ -471,18 +483,6 @@ class ModelDataBase:
     def getitem(self, key, lock=None, dumper = None, **kwargs):
         warnings.warn('setitem is deprecated. it exist to provide a consistent API with model_data_base version 1. use set instead.')
         self.get(key, lock=lock, dumper=dumper, **kwargs)
-    
-    def check_writing_privilege(self, key):
-        '''raises MdbException, if we don't have permission to write to key '''
-        if self.readonly is True:
-            raise MdbException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
-        #this exists, so jupyter notebooks will not crash when they try to write something
-        elif self.readonly == 'warning': 
-            warnings.warn("DB is in readonly mode. Blocked writing attempt to key %s" % key)
-        elif self.readonly == False:
-            pass
-        else:
-            raise MdbException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
     
     def keys(self):
         '''returns the keys of the database'''
