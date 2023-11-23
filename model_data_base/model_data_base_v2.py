@@ -369,10 +369,10 @@ class ModelDataBase:
         remaining_keys = key
         parent_mdb = self
         k = remaining_keys[0]
-        while k in parent_mdb.keys():
+        while k in parent_mdb.keys() and remaining_keys:
+            k = remaining_keys[0]
             parent_mdb = parent_mdb[k]
             remaining_keys = remaining_keys[1:]
-            k = remaining_keys[0]
         if not remaining_keys and raise_:
             # The sub_mdb already exists
             raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
