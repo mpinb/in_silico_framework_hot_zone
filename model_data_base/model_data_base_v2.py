@@ -431,7 +431,8 @@ class ModelDataBase:
                'conda_list': VC.get_conda_list(),
                'module_versions': make_all_str(VC.get_module_versions()),
                'history': VC.get_history(),
-               'hostname': VC.get_hostname()}
+               'hostname': VC.get_hostname(),
+               'metadata_creation_time': "together_with_new_key"}
 
         out.update(VC.get_git_version())
 
