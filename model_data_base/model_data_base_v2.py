@@ -366,6 +366,8 @@ class ModelDataBase:
         Returns:
             object: The object saved under mdb[key]
         """
+        if key == "metadata":
+            return self.get_metadata(key, lock = lock)
         # this looks into the metadata.json, gets the name of the dumper, and loads this module form IO.LoaderDumper
         dir_to_data = self._get_dir_to_data(key, check_exists = True)
         loaderdumper_module = get_dumper_from_folder(dir_to_data)
