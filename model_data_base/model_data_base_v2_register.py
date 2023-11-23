@@ -9,8 +9,21 @@ _foldername = '.model_data_base_register.db'
 
 
 class ModelDataBaseRegister():
-
     def __init__(self, registry_basedir, search_mdbs="on_first_init"):
+        """Class for the model_data_base registry. This registry keeps track of all model_data_bases.
+        The registry should ideally be located in an obvious place, e.g. the model_data_base module itself.
+        Newly created model_data_bases are automatically added to the registry.
+        Accessing someone elses database is possible if:
+        1. Its location is on the same filesystem and you have the absolute path. In this case, you can simply open the path and the mdb will register itself to your registry.
+        2. You know the unique ID of the database. In this case, you can use :func model_data_base.get_mdb_by_unique_id:.
+        3. Someone else has registered the database in a registry that you have access to. In this case, you can use :func model_data_base_register.assimilate_remote_register:.
+
+        You can explicitly walk through a directory and add all model_data_bases to the registry with :func ModelDataBaseRegister.search_mdbs:.
+
+        Args:
+            registry_basedir (str): The location of the MDB registry
+            search_mdbs (str|bool, optional): Whether to look for model_data_bases in all subfolders of the registry's directory. Defaults to "on_first_init", which only does this if the registry is newly created.
+        """
         if not registry_basedir.endswith(_foldername):
             registry_basedir = os.path.join(registry_basedir, _foldername)
         assert registry_basedir.endswith(_foldername)
@@ -43,7 +56,7 @@ class ModelDataBaseRegister():
                     self.registry['failed', dir_] = e
 
     def add_mdb(self, unique_id, mdb_basedir):
-        self.registry[mdb._unique_id] = os.path.abspath(mdb_basedir)
+        self.registry[unique_id] = os.path.abspath(mdb_basedir)
 
 
 @cache
