@@ -331,14 +331,17 @@ class ModelDataBase:
             remaining_keys = remaining_keys[1:]
         if not remaining_keys and raise_:
             # The sub_mdb already exists
-            raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key)):
+            raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         for k in remaining_keys:
             parent_mdb._check_key_format(key)
             parent_mdb.set(key, None, dumper = just_create_mdb_v2)
             parent_mdb[key].parent_mdb = parent_mdb  # remember that it has a parent
             parent_mdb[key]._register_this_database()
             parent_mdb = parent_mdb[key]  # go down the tree of sub_mdbs
-        # either raise is false and this mdb already exists, or we just created it
+        # Either :arg raise_: is false and there are no remaining keys 
+        #   -> simply return the pre-existing sub_mdb
+        # or we just created it 
+        #   -> return newly created sub_mdb
         return parent_mdb
 
     def get_sub_mdb(self,key, register = 'as_parent'):
