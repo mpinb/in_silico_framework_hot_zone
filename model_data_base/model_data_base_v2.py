@@ -24,7 +24,7 @@ from model_data_base import MdbException
 
 
 class MetadataAccessor:
-    """Access the metadata of some key
+    """Access the metadata of some key 
     """
     def __init__(self, mdb):
         self.mdb = mdb
