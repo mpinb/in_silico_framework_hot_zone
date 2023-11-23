@@ -19,7 +19,7 @@ from . import _module_versions
 VC = _module_versions.version_cached
 from ._version import get_versions
 from model_data_base.IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_mdb_v2, shared_numpy_store
-from . import model_data_base_register
+from . import model_data_base_v2_register
 
 class MdbException(Exception):
     '''Typical mdb errors'''
