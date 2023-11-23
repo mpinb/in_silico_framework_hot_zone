@@ -146,7 +146,7 @@ class ModelDataBase:
         self._registeredDumpers = []
         self._registered_to_path = None
         
-        self.metadata = MetaDataAccessor(self)
+        self.metadata = MetadataAccessor(self)
         if self._is_initialized():
             self.read_db_state()
         else:
