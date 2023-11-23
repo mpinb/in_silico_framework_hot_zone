@@ -18,7 +18,7 @@ from .IO import LoaderDumper
 from . import _module_versions
 VC = _module_versions.version_cached
 from ._version import get_versions
-from model_data_base.IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_mdb, shared_numpy_store
+from model_data_base.IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_mdb_v2, shared_numpy_store
 from . import model_data_base_register
 
 class MdbException(Exception):
@@ -325,7 +325,7 @@ class ModelDataBase:
             if raise_:
                 raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         else:
-            self.setitem(key, None, dumper = just_create_mdb)
+            self.setitem(key, None, dumper = just_create_mdb_v2)
         return self[key]
 
     def get_sub_mdb(self,key, register = 'as_parent'):
