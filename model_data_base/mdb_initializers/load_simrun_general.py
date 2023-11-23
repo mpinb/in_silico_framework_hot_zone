@@ -489,7 +489,6 @@ def _build_core(mdb, repartition=None, metadata_dumper=pandas_to_parquet):
     #vt = read_voltage_traces_by_filenames(mdb['simresult_path'], mdb['file_list'])
     vt = read_voltage_traces_by_filenames(mdb['simresult_path'], filelist,
                                           repartition=repartition)
-    # mdb.setitem('voltage_traces', vt, dumper=to_cloudpickle)
     print('add divisions to voltage traces dataframe')
     vt.divisions = get_voltage_traces_divisions_by_metadata(
         mdb['metadata'], repartition=repartition)
