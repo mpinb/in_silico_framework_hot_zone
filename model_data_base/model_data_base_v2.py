@@ -416,6 +416,9 @@ class ModelDataBase:
         assert(inspect.ismodule(dumper))
         loaderdumper_module = dumper
 
+        #check if we have writing privilege
+        self._check_writing_privilege(key)
+
         # Check if the key is ok and create the corresponding path
         self._check_key_format(key)
         dir_to_data = self._get_dir_to_data(key)
