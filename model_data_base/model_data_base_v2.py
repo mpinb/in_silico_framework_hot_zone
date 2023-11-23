@@ -324,18 +324,20 @@ class ModelDataBase:
         # go down the tree of pre-existing sub_mdbs as long as the keys exist
         remaining_keys = key
         parent_mdb = self
-        while key in parent_mdb.keys():
-            parent_mdb = parent_mdb[key]
+        k = remaining_keys[0]
+        while k in parent_mdb.keys():
+            parent_mdb = parent_mdb[k]
             remaining_keys = remaining_keys[1:]
+            k = remaining_keys[0]
         if not remaining_keys and raise_:
             # The sub_mdb already exists
             raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         for k in remaining_keys:
-            parent_mdb._check_key_format(key)
+            parent_mdb._check_key_format(k)
             parent_mdb.set(key, None, dumper = just_create_mdb_v2)
-            parent_mdb[key].parent_mdb = parent_mdb  # remember that it has a parent
-            parent_mdb[key]._register_this_database()
-            parent_mdb = parent_mdb[key]  # go down the tree of sub_mdbs
+            parent_mdb[k].parent_mdb = parent_mdb  # remember that it has a parent
+            parent_mdb[k]._register_this_database()
+            parent_mdb = parent_mdb[k]  # go down the tree of sub_mdbs
         # Either :arg raise_: is false and there are no remaining keys 
         #   -> simply return the pre-existing sub_mdb
         # or we just created it 
