@@ -85,6 +85,9 @@ def test_metadata_update(empty_mdb_v2):
         'metadata_creation_time'] == 'together_with_new_key'
 
     # directly after deleting metadata database, every information is "unknown"
+    metadata_db_path = os.path.join(empty_mdb_v2.basedir, 'test', 'metadata.json')
+    assert os.path.exists(metadata_db_path)
+    os.remove(metadata_db_path)
     metadata_db_path = os.path.join(empty_mdb_v2.basedir, 'test2', 'metadata.json')
     assert os.path.exists(metadata_db_path)
     os.remove(metadata_db_path)
