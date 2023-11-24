@@ -324,4 +324,4 @@ def test_check_if_key_exists_can_handle_str_and_tuple_keys(empty_mdb_v2):
     assert empty_mdb_v2.check_if_key_exists(('a',))
     assert empty_mdb_v2.check_if_key_exists(('b', 'b'))
     assert not empty_mdb_v2.check_if_key_exists(('a', 'b'))
-    assert not empty_mdb_v2.check_if_key_exists('b')
+    assert empty_mdb_v2.check_if_key_exists('b')
