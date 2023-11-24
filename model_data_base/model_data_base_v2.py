@@ -592,13 +592,15 @@ class ModelDataBase:
 
         #check if we have writing privilege
         self._check_writing_privilege(key)
+        # Convert key and check validity
         if isinstance(key, str):
             key = key,
         self._check_key_format(key)
 
-        # Use recursion to create sub_mdbs in case a tuple is passed
-        # All elements except for the last one should become sub_mdbs
-        # The last element should be saved in the last sub_mdb, and thus cannot be a submdb itself
+        # Use recursion to create sub_mdbs in case a tuple key is passed
+        # All elements except for the last one should become sub_mdbs if they ar enot already
+        # The last key should be saved in the last sub_mdb (one-but-last key), 
+        # and thus the last key cannot be a submdb itself
         for subkey in key[:-1]:
             sub_mdb = self.create_sub_mdb(subkey)  # create or fetch the sub_mdb
             # Recursion: keep making sub_mdbs until we reach the last element
@@ -720,7 +722,7 @@ def rename_for_deletion(dir_to_data):
 
 def delete_in_background(dir_to_data):
     dir_to_data_rename = rename_for_deletion(dir_to_data)
-    p = threading.Thread(target = lambda : delete_from_disk(dir_to_data_rename)).start()
+    p = threading.Thread(target = lambda : shutil.rmtree(dir_to_data_rename)).start()
     return p
 
 
