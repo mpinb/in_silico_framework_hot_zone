@@ -478,7 +478,7 @@ class ModelDataBase:
                 # The key is not an mdb, but we want to create a submdb here
                 raise MdbException(
                     "You were trying to overwrite existing data at %s with a (sub)mdb by using key %s. Please use del mdb[%s] first" % (
-                        key[:i], key
+                        key[:i], key, key[:i]
                         ))
             # go down the tree of sub_mdbs
             remaining_keys = remaining_keys[1:]
