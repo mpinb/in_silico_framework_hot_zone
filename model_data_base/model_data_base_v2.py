@@ -630,11 +630,14 @@ class ModelDataBase:
         IOW, this method does not get called during garbage collection, when the object goes out of scope, or when the program terminates.
         It should be explicitly called by the user when the user likes to delete a database.
         '''
-        def delete_and_deregister_once_deleted(mdb):
-            delete_from_disk(mdb.basedir)
-            # this will wait until mdb is deleted and only then continue
-            mdb._deregister_this_database()
-        # start consecutive processes on one thread in background
+        def delete_and_deregister_once_deleted(dir_to_data, unique_id):
+            shutil.rmtree(dir_to_data_rename)
+            # this will delete in foreground of the thread, 
+            # and thus wait until mdb is deleted and only then continue
+            del _get_mdb_register()[unique_id]
+        # make sure folder is renamed before continuing python process
+        dir_to_data_rename = rename_for_deletion(self.basedir)
+        # start processes on one thread in background
         threading.Thread(target = lambda : delete_and_deregister_once_deleted(self)).start()
 
 class RegisteredFolder(ModelDataBase):
@@ -653,11 +656,7 @@ def get_mdb_by_unique_id(unique_id):
     assert mdb.get_id() == unique_id
     return mdb
 
-def delete_in_background(dir_to_data):
-    p = threading.Thread(target = lambda : delete_from_disk(dir_to_data_rename)).start()
-    return p
-
-def delete_from_disk(dir_to_data):
+def rename_for_deletion(dir_to_data):
     N = 5
     while True:
         random_string = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
@@ -665,5 +664,11 @@ def delete_from_disk(dir_to_data):
         if not os.path.exists(dir_to_data_rename):
             break
     os.rename(dir_to_data, dir_to_data_rename)
-    shutil.rmtree(dir_to_data_rename)
     return dir_to_data_rename
+
+def delete_in_background(dir_to_data):
+    dir_to_data_rename = rename_for_deletion(dir_to_data)
+    p = threading.Thread(target = lambda : delete_from_disk(dir_to_data_rename)).start()
+    return p
+
+
