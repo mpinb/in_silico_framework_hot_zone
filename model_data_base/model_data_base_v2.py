@@ -290,11 +290,15 @@ class ModelDataBase:
                 if not c in allowed_characters:
                     raise ValueError('Character {} is not allowed, but appears in key {}'.format(c, k))
         
-        # check if all but last element of the key points to a sub_mdb
-        for k in [key[:i] for i in range(1, len(key))]:
-            if not isinstance(self[k], ModelDataBase):
+        # check if all but last subkey of the key either points to a sub_mdb, 
+        # or does not exist entirely (and sub_mdbs will be created)
+        for k in [key[:i] for i in range(1, len(key))]:  # does not include last key
+            if os.path.exists(self[k]) and not isinstance(self[k], ModelDataBase):
                 raise MdbException(
                     "Key {} points to a non-ModelDataBase, yet you are trying to save data to it with key {}.".format(k, key))
+            else:
+                # If a key in the tuple does not exist yet, sub_mdbs will be created
+                break
         
         # check if the complete key refers to a value and not a sub_mdb
         # otherwise, an entire sub_mdb is about to be overwritten by data
@@ -303,15 +307,10 @@ class ModelDataBase:
                 "Key {} points to a ModelDataBase, but you are trying to overwrite it with data. If you need this key for the data, please remove the sub_mdb under the same key first using del mdb[key] or mdb[key].remove()".format(key)) 
         
     def _get_dir_to_data(self, key, check_exists = False):
-        if isinstance(key, tuple):
-            key_path = os.path.join(*key)
-            parent_mdb = self
-            for k in key:
-                parent_mdb._check_single_key_format(k)
-                parent_mdb = parent_mdb[k]
-        else:
-            self._check_single_key_format(key)
-            key_path = key
+        '''returns the directory to the data of a given key'''
+        self._check_key_format(key)
+        key = tuple(key)
+        key_path = os.path.join(*key)
         dir_to_data = os.path.join(self.basedir, key_path)
         if check_exists:
             if not os.path.exists(dir_to_data):
