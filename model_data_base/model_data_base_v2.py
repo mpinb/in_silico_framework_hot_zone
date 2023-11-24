@@ -284,19 +284,24 @@ class ModelDataBase:
         allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
         for c in key:
             if not c in allowed_characters:
-                raise ValueError('Character {} is not allowed'.format(c))  
+                raise ValueError('Character {} is not allowed'.format(c))
+        if key in self.keys() and isinstance(self[key], ModelDataBase):
+            raise MdbException('Key {} is already used as a sub_mdb. Please use a different key.'.format(key))
         
     def _get_dir_to_data(self, key, check_exists = False):
         if isinstance(key, tuple):
+            key_path = os.path.join(*key)
+            parent_mdb = self
             for k in key:
-                self._check_key_format(k)
-            key = os.path.join(*key)
+                parent_mdb._check_key_format(k)
+                parent_mdb = parent_mdb[k]
         else:
             self._check_key_format(key)
-        dir_to_data = os.path.join(self.basedir, key)
+            key_path = key
+        dir_to_data = os.path.join(self.basedir, key_path)
         if check_exists:
             if not os.path.exists(dir_to_data):
-                raise KeyError('Key {} is not set.'.format(key))
+                raise KeyError('Key {} is not set in mdb at directory {}.'.format(key_path, self.basedir))
         return dir_to_data
 
     def _detect_dumper_string_of_existing_key(self, key):
@@ -355,6 +360,14 @@ class ModelDataBase:
             pass
         else:
             raise MdbException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
+    
+    def check_if_key_exists(self, key):
+        '''returns True, if key exists in a database, False otherwise'''
+        try:
+            self._get_dir_to_data(key, check_exists = True)
+            return True
+        except KeyError:
+            return False
     
     def get_id(self):
         return self._unique_id 
@@ -459,7 +472,9 @@ class ModelDataBase:
                     "Key %s is already set in %s and is not a ModelDataBase. Please use del mdb[%s] first" % (
                         remaining_keys[0], parent_mdb.basedir, remaining_keys[0]
                         ))
+            # go down the tree
             parent_mdb = parent_mdb[remaining_keys[0]]
+            # shift the remaining keys in the tuple
             remaining_keys = remaining_keys[1:]
         # If there are still unique keys remaining in the tuple, we have to create at least one sub_mdb
         for k in remaining_keys:
