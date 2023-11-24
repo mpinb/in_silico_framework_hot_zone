@@ -535,8 +535,15 @@ class ModelDataBase:
         self._check_key_format(key)
         dir_to_data = self._get_dir_to_data(key)
         if os.path.exists(dir_to_data):
-
-            raise KeyError('Key {} is already set. Use del mdb[key] first.'.format(key))  
+            overwrite = kwargs.get('overwrite', True)  # overwrite=True if unspecified
+            if overwrite:
+                logger.warning('Key {} is already set in ModelDatabase {} located at {}. Overwriting...'.format(key, self, self.basedir))
+                os.rename(dir_to_data, dir_to_data + '.deleting')
+                delete_in_background(dir_to_data)
+            else:
+                raise KeyError(
+                    'Key {} is already set and you passed overwrite=False in the kwargs: {}'.format(key, kwargs) + \
+                    '\nEither use del mdb[key] first, set overwrite to True, or omit the overwrite keyword argument.')  
         else:
             os.makedirs(dir_to_data)
         
@@ -587,15 +594,7 @@ class ModelDataBase:
         
         """
         dir_to_data = self._get_dir_to_data(key, check_exists = True) 
-        # rename folder to random folder
-        N = 5
-        while True:
-            random_string = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
-            dir_to_data_rename = dir_to_data + '.deleting.' + random_string
-            if not os.path.exists(dir_to_data_rename):
-                break
-        os.rename(dir_to_data, dir_to_data_rename)
-        threading.Thread(target = lambda : shutil.rmtree(dir_to_data_rename)).start()
+        delete_in_background(dir_to_data)
     
     def __reduce__(self):
         return (self.__class__, (self.basedir, self.readonly, True), {})
@@ -615,3 +614,13 @@ def get_mdb_by_unique_id(unique_id):
     mdb = ModelDataBase(mdb_path, nocreate=True)
     assert mdb.get_id() == unique_id
     return mdb
+
+def delete_in_background(dir_to_data):
+    N = 5
+    while True:
+        random_string = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
+        dir_to_data_rename = dir_to_data + '.deleting.' + random_string
+        if not os.path.exists(dir_to_data_rename):
+            break
+    os.rename(dir_to_data, dir_to_data_rename)
+    threading.Thread(target = lambda : shutil.rmtree(dir_to_data_rename)).start()
