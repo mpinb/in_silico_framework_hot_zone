@@ -21,6 +21,7 @@ from ._version import get_versions
 from .IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_mdb_v2, shared_numpy_store, get_dumper_string_by_dumper_module
 from . import model_data_base_v2_register
 from . import MdbException
+logger = logging.getLogger("ISF").getChild(__name__)
 
 DEFAULT_DUMPER = to_cloudpickle
 
@@ -534,6 +535,7 @@ class ModelDataBase:
         self._check_key_format(key)
         dir_to_data = self._get_dir_to_data(key)
         if os.path.exists(dir_to_data):
+
             raise KeyError('Key {} is already set. Use del mdb[key] first.'.format(key))  
         else:
             os.makedirs(dir_to_data)
