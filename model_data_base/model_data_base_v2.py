@@ -538,7 +538,6 @@ class ModelDataBase:
             overwrite = kwargs.get('overwrite', True)  # overwrite=True if unspecified
             if overwrite:
                 logger.warning('Key {} is already set in ModelDatabase {} located at {}. Overwriting...'.format(key, self, self.basedir))
-                os.rename(dir_to_data, dir_to_data + '.deleting')
                 delete_in_background(dir_to_data)
             else:
                 raise KeyError(
