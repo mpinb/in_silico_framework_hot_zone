@@ -399,6 +399,10 @@ class ModelDataBase:
         parent_mdb = self
         while len(remaining_keys) > 0 and remaining_keys[0] in parent_mdb.keys():
             parent_mdb = parent_mdb[remaining_keys[0]]
+            if not isinstance(parent_mdb, ModelDataBase):
+                raise MdbException(
+                    "Key %s is already set in %s and is not a ModelDataBase. Please use del mdb[%s] first" % (
+                        remaining_keys[0], parent_mdb.basedir, remaining_keys[0]))
             remaining_keys = remaining_keys[1:]
         if len(remaining_keys) == 0 and raise_:
             # The sub_mdb already exists
