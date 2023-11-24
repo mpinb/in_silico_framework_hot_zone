@@ -279,9 +279,12 @@ class ModelDataBase:
                 raise ValueError('Character {} is not allowed'.format(c))  
         
     def _get_dir_to_data(self, key, check_exists = False):
-        self._check_key_format(key)
         if isinstance(key, tuple):
+            for k in key:
+                self._check_key_format(k)
             key = os.path.join(*key)
+        else:
+            self._check_key_format(key)
         dir_to_data = os.path.join(self.basedir, key)
         if check_exists:
             if not os.path.exists(dir_to_data):
