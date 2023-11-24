@@ -27,7 +27,7 @@ def test_unique_id_stays_the_same_on_reload(empty_mdb_v2):
 
 def test_new_unique_id_is_generated_if_it_is_not_set_yet(empty_mdb_v2):
     empty_mdb_v2._unique_id = None
-    empty_mdb_v2.save_db()
+    empty_mdb_v2.save_db_state()
     assert empty_mdb_v2._unique_id is None
     mdb = ModelDataBase(empty_mdb_v2.basedir)
     assert mdb._unique_id is not None
