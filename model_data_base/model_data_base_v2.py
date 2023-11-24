@@ -299,7 +299,6 @@ class ModelDataBase:
         # except the last subkey can be whatever
         mdb_sep = os.path.sep + 'mdb' + os.path.sep  # for sub_mdbs, if there are any
         key_path = mdb_sep.join(key)
-        key_path = os.path.join(*key)
         dir_to_data = os.path.join(self.basedir, key_path)
         
         if check_exists:
