@@ -167,6 +167,35 @@ class ModelDataBase:
             if self._registered_to_path is None:
                 self._register_this_database()
                 self.save_db_state()
+            self._update_metadata_if_necessary()
+
+    def _update_metadata_if_necessary(self):
+        '''
+        checks whether metadata is missing. Is so, it tries to estimate metadata, i.e. it sets the
+        time based on the timestamp of the files. When metadata is created in that way,
+        the field `metadata_creation_time` is set to `post_hoc`
+        '''
+            
+        keys_in_mdb_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
+        for key in keys_in_mdb_without_metadata:
+            print("Updating metadata for key {key}".format(key = str(key)))
+            dir_to_data = mdb._get_dir_to_data(key)
+            dumper = LoaderDumper.get_dumper_string_by_savedir(dir_to_data)
+            
+            time = os.stat(mdb._get_dumper_folder(key)).st_mtime
+            time = datetime.datetime.utcfromtimestamp(time)
+            time = tuple(time.timetuple())
+            
+            out = {
+                'dumper': dumper, 
+                'time': time,
+                'metadata_creation_time': 'post_hoc'
+                }
+            
+            if VC.get_git_version()['dirty']:
+                warnings.warn('The database source folder has uncommitted changes!')
+            
+            mdb.metadata[key] = out
             
     def _register_this_database(self):
         print('registering database with unique id {} to the absolute path {}'.format(
