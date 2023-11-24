@@ -232,7 +232,7 @@ def test_overwriting_an_item_deletes_old_version(empty_mdb_v2):
     def count_number_of_subfolders(key):
         '''counts the number of folders that are in the mdb
         basedir that match a given key'''
-        folders = [f for f in os.listdir(empty_mdb_v2.basedir) if key in f]
+        folders = [f for f in os.listdir(empty_mdb_v2.basedir) if key in f and not ".deleting." in f]
         return len(folders)
 
     assert count_number_of_subfolders('test') == 0
