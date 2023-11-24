@@ -268,7 +268,7 @@ class ModelDataBase:
             ValueError: If the key is over 50 characters long
             ValueError: If the key contains characters that are not allowed (only numeric or latin alphabetic characters, "-" and "_" are allowed)
         """
-        assert isinstance(key, str), "Any singular key must be a string"
+        assert isinstance(key, str), "Any singular key must be a string. {} is type {}".format(key, type(key))
         if len(key) > 50:
             raise ValueError('keys must be shorter than 50 characters')
         allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
