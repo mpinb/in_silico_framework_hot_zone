@@ -362,23 +362,26 @@ class ModelDataBase:
         '''creates a ModelDataBase within a ModelDataBase. Example:
         mdb.create_sub_mdb('my_sub_database')
         mdb['my_sub_database']['some_key'] = ['some_value']
+
+        Args:
+            key (str|tuple): The key of the sub_mdb
+            register (str, optional): ? TODO. Defaults to 'as_parent'.
+            raise_ (bool, optional): Whether to raise an error if the sub_mdb already exists. Defaults to True.
         '''
         if isinstance(key, str):
             key = (key,)
         # go down the tree of pre-existing sub_mdbs as long as the keys exist
         remaining_keys = key
         parent_mdb = self
-        k = remaining_keys[0]
-        while k in parent_mdb.keys() and remaining_keys:
-            k = remaining_keys[0]
-            parent_mdb = parent_mdb[k]
+        while len(remaining_keys) > 0 and remaining_keys[0] in parent_mdb.keys():
+            parent_mdb = parent_mdb[remaining_keys[0]]
             remaining_keys = remaining_keys[1:]
-        if not remaining_keys and raise_:
+        if len(remaining_keys) == 0 and raise_:
             # The sub_mdb already exists
             raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         for k in remaining_keys:
             parent_mdb._check_key_format(k)
-            parent_mdb.set(key, None, dumper = just_create_mdb_v2)
+            parent_mdb.set(k, None, dumper = just_create_mdb_v2)
             parent_mdb[k].parent_mdb = parent_mdb  # remember that it has a parent
             parent_mdb[k]._register_this_database()
             parent_mdb = parent_mdb[k]  # go down the tree of sub_mdbs
