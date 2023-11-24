@@ -1,4 +1,4 @@
-from model_data_base.model_data_base_v2 import ModelDataBase, MdbException
+from model_data_base.model_data_base_v2 import ModelDataBase, MdbException, get_mdb_by_unique_id
 import tempfile, os, shutil
 from model_data_base.model_data_base_v2_register import _get_mdb_register, \
         ModelDataBaseRegister, get_mdb_by_unique_id, register_mdb
