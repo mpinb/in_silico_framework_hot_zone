@@ -531,7 +531,7 @@ class ModelDataBase:
             sub_mdb.set(key[-1], value, lock = lock, dumper = dumper, **kwargs)
             return
         
-        # Key is not a tuple:
+        # Key is not a tuple
         # Check if the key is ok and create the corresponding path
         self._check_key_format(key)
         dir_to_data = self._get_dir_to_data(key)
@@ -544,8 +544,9 @@ class ModelDataBase:
                 raise KeyError(
                     'Key {} is already set and you passed overwrite=False in the kwargs: {}'.format(key, kwargs) + \
                     '\nEither use del mdb[key] first, set overwrite to True, or omit the overwrite keyword argument.')  
-        else:  # path does not exist: create it
-            os.makedirs(dir_to_data)
+        
+        # Either the path does not exist yet, or it's in the process of being deleted
+        os.makedirs(dir_to_data)
         
         if lock:
             lock.acquire()
