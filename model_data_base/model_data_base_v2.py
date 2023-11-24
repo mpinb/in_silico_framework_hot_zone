@@ -630,11 +630,11 @@ class ModelDataBase:
         IOW, this method does not get called during garbage collection, when the object goes out of scope, or when the program terminates.
         It should be explicitly called by the user when the user likes to delete a database.
         '''
-        def delete_and_deregister_once_deleted(mdb, dir_in_deletion):
+        def delete_and_deregister_once_deleted(mdb):
             p = delete_in_background(mdb.basedir)
             p.wait()
             mdb._deregister_this_database()
-        threading.Thread(target = lambda : delete_and_deregister_once_deleted(self, dir_in_deletion)).start()
+        threading.Thread(target = lambda : delete_and_deregister_once_deleted(self)).start()
 
 class RegisteredFolder(ModelDataBase):
     def __init__(self, path):
