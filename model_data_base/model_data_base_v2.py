@@ -594,6 +594,7 @@ class ModelDataBase:
             sub_mdb = self.create_sub_mdb(key[0])  
             # Recursion: call set on the sub_mdb with key[1:]
             sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
+            return
         elif isinstance(key, tuple) and len(key) == 1:
             key = key[0]  # key is string now 
         
