@@ -290,13 +290,11 @@ class ModelDataBase:
             if not os.path.exists(dir_to_data):
                 raise KeyError('Key {} is not set.'.format(key))
         return dir_to_data
-    
-    def _get_dumper_string(self, savedir, arg):
-        path = self._get_path(arg)
-        if path is None:
-            return get_dumper_string_by_dumper_module(DEFAULT_DUMPER)
-        else:
-            return IO.LoaderDumper.get_dumper_string_by_savedir(path)
+
+    def _detect_dumper_string_of_existing_key(self, key):
+        '''returns the dumper string of an existing key'''
+        dir_to_data = self._get_dir_to_data(key, check_exists = True)
+        return get_dumper_from_folder(dir_to_data, return_ = 'string')
     
     def _find_dumper(self, item):
         '''
