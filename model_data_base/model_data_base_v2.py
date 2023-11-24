@@ -592,13 +592,15 @@ class ModelDataBase:
 
         #check if we have writing privilege
         self._check_writing_privilege(key)
+        if isinstance(key, str):
+            key = key,
         self._check_key_format(key)
 
         # Use recursion to create sub_mdbs in case a tuple is passed
         # All elements except for the last one should become sub_mdbs
         # The last element should be saved in the last sub_mdb, and thus cannot be a submdb itself
-        for key in tuple(key)[:-1]:
-            sub_mdb = self.create_sub_mdb(key[0])  # create or fetch the sub_mdb
+        for subkey in key[:-1]:
+            sub_mdb = self.create_sub_mdb(subkey)  # create or fetch the sub_mdb
             # Recursion: keep making sub_mdbs until we reach the last element
             # at which point the for-loop will be skipped
             sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
