@@ -610,7 +610,7 @@ class RegisteredFolder(ModelDataBase):
      
 
 def get_mdb_by_unique_id(unique_id):
-    mdb_path = _get_mdb_register().registry[unique_id]
+    mdb_path = model_data_base_v2_register._get_mdb_register().registry[unique_id]
     mdb = ModelDataBase(mdb_path, nocreate=True)
     assert mdb.get_id() == unique_id
     return mdb
