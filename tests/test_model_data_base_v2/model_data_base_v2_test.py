@@ -50,11 +50,11 @@ def test_get_dumper_string_by_savedir(empty_mdb_v2):
     assert s1 == s2
 
 
-def test_can_detect_self_as_dumper(empty_mdb_v2):
+def test_can_detect_default_dumper(empty_mdb_v2):
     '''dumper string should be the same if it is determined
     post hoc (by providing the path to an already existing folder)
     or from the module reference directly.'''
-    empty_mdb_v2.setitem('test', 1)
+    empty_mdb_v2.setitem('test', 1)  # don't specify dumper
     s1 = empty_mdb_v2._detect_dumper_string_of_existing_key('test')
     assert s1 == 'to_cloudpickle'
 
