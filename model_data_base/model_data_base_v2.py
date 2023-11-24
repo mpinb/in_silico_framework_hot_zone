@@ -373,7 +373,12 @@ class ModelDataBase:
             state = json.load(f)
             
         for name in state:
-            setattr(self, name, state[name])
+            if name == '_registeredDumpers':
+                # from string to module
+                for dumper_string in state[name]:
+                    self._registeredDumpers.append(importlib.import_module(dumper_string))
+            else:
+                setattr(self, name, state[name])
     
     def itemexists(self, key):
         '''Checks, if item is already in the database'''
