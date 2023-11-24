@@ -296,7 +296,8 @@ class ModelDataBase:
 
         assert isinstance(key, str) or isinstance(key, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
         assert all([isinstance(k, str) for k in key]), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
-        key = tuple(key)  # a tuple of strings of length >= 1
+        # convert potential string to tuple (harmless for actual tuples)
+        key = key,
 
         # Check if individual characters are allowed
         for subkey in key:
@@ -313,7 +314,7 @@ class ModelDataBase:
             must_be_sub_mdb = os.path.join(self.basedir, os.path.join(*subkey))  # may or may not exist already
             if os.path.exists(must_be_sub_mdb) and not _is_sub_mdb(must_be_sub_mdb):
                 raise MdbException(
-                    "Key {} points to a non-ModelDataBase, yet you are trying to save data to it with key {}.".format(subkey, key))
+                    "Key {} points to a non-ModelDataBase, yet you are trying to save data to it as if it were a (sub)mdb with key {}.".format(subkey, key))
             else:
                 # If a key in the tuple does not exist yet, sub_mdbs will be created
                 break
@@ -334,7 +335,8 @@ class ModelDataBase:
             check_format (bool, optional): Whether to check the format of the key. Defaults to True. If False, the key is not checked for validity, but only for existence.
         '''
         self._check_key_format(key)
-        key = tuple(key)
+        # convert potential string to tuple (harmless for actual tuples)
+        key = key,  
         key_path = os.path.join(*key)
         dir_to_data = os.path.join(self.basedir, key_path)
         if check_exists:
@@ -500,7 +502,8 @@ class ModelDataBase:
             ModelDataBase: The newly created sub_mdb
         '''
         self._check_key_format(key)
-        key = tuple(key)
+        # convert potential string to tuple (harmless for actual tuples)
+        key = key,
         # go down the tree of pre-existing sub_mdbs as long as the keys exist
         remaining_keys = key
         parent_mdb = self
