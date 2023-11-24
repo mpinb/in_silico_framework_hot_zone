@@ -595,17 +595,19 @@ class ModelDataBase:
         self._check_key_format(key)
 
         # Use recursion to create sub_mdbs in case a tuple key is passed
-        # All elements except for the last one should become sub_mdbs if they ar enot already
-        # The last key should be saved in the last sub_mdb (one-but-last key), 
-        # and thus the last key cannot be a submdb itself
+        # All elements except for the last one should become sub_mdbs if they aren't already
+        # The last key should be saved in the last sub_mdb (i.e. one-but-last key), 
         if isinstance(key, tuple) and len(key) > 1:
-            sub_mdb = self.create_sub_mdb(key[0])  # create or fetch the sub_mdb
+            # create or fetch the sub_mdb
+            # calls set() with a string key, so no recursion
+            sub_mdb = self.create_sub_mdb(key[0])  
             # Recursion: call set on the sub_mdb with key[1:]
             sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
         elif isinstance(key, tuple) and len(key) == 1:
             key = key[0]  # key is string now 
         
-        # Key is not a tuple if code made it here
+        # Key is str and not a tuple if code made it here
+        assert type(key) == str  # for debugging
         dir_to_data = self._get_dir_to_data(key)
         if os.path.exists(dir_to_data):  # check if we can overwrite
             overwrite = kwargs.get('overwrite', True)  # overwrite=True if unspecified
@@ -674,7 +676,7 @@ class ModelDataBase:
     def __reduce__(self):
         return (self.__class__, (self.basedir, self.readonly, True), {})
 
-    def remove(self, deregister_timeout=3600):
+    def remove(self):
         '''
         Deletes the database from disk in the background and de-registers itself from the register as soon as it is deleted.
         Note that this method is not a destructor, nor equivalent to __del__ or __delete__.
@@ -689,7 +691,7 @@ class ModelDataBase:
         # make sure folder is renamed before continuing python process
         dir_to_data_rename = rename_for_deletion(self.basedir)
         # start processes on one thread in background
-        threading.Thread(target = lambda : delete_and_deregister_once_deleted(self)).start()
+        threading.Thread(target = lambda : delete_and_deregister_once_deleted(self, self._unique_id)).start()
 
 class RegisteredFolder(ModelDataBase):
     def __init__(self, path):
