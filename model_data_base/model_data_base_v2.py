@@ -265,6 +265,7 @@ class ModelDataBase:
         """
         self._check_key_format(key)
         
+       
     def _check_key_format(self, key):
         """
         Checks the format of a key (string or tuple) and if it is valid for setting data (not for get).
@@ -277,6 +278,26 @@ class ModelDataBase:
             ValueError: If the key is over 50 characters long
             ValueError: If the key contains characters that are not allowed (only numeric or latin alphabetic characters, "-" and "_" are allowed)
         """
+        def _is_sub_mdb(basedir, key):
+            """
+            Checks if some key points to a sub_mdb, without using methods like _get_dir_to_data (which use _check_key_validity).
+            Checks if "metadata.json" exists within the key in the basedir.
+            Does not check if basedir exists, or the key within the basedir.
+            
+            Checking key validity needs its own way to check if sub_mdbs are present, to avoid infinite recursion.
+            This method is only used internally by _check_key_validity, and should never be called directly.
+
+            Args:
+                basedir (ModelDatabase): The 
+                key (tuple): _description_
+            """
+            assert os.path.exists(basedir)
+            # This should always exist
+            dir_to_data = os.path.join(basedir, os.path.join(*key))
+            assert os.path.exists(dir_to_data)
+            return os.path.exists(os.path.join(dir_to_data, 'metadata.json'))
+
+
         assert isinstance(key, str) or isinstance(key, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
         assert all([isinstance(k, str) for k in key]), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
         key = tuple(key)
@@ -293,7 +314,8 @@ class ModelDataBase:
         # check if all but last subkey of the key either points to a sub_mdb, 
         # or does not exist entirely (and sub_mdbs will be created)
         for k in [key[:i] for i in range(1, len(key))]:  # does not include last key
-            if os.path.exists(self[k]) and not isinstance(self[k], ModelDataBase):
+            dir_to_data = os.path.join(self.basedir, os.path.join(*k))
+            if os.path.exists(dir_to_data) and not _is_sub_mdb(self.basedir, k):
                 raise MdbException(
                     "Key {} points to a non-ModelDataBase, yet you are trying to save data to it with key {}.".format(k, key))
             else:
@@ -302,11 +324,11 @@ class ModelDataBase:
         
         # check if the complete key refers to a value and not a sub_mdb
         # otherwise, an entire sub_mdb is about to be overwritten by data
-        if os.path.exists(self._get_dir_to_data(key, check_format=False)) and isinstance(self[key], ModelDataBase):
+        if os.path.exists(self._get_dir_to_data(key, check_format=False)) and _is_sub_mdb(self.basedir, key):
             raise MdbException(
                 "Key {} points to a ModelDataBase, but you are trying to overwrite it with data. If you need this key for the data, please remove the sub_mdb under the same key first using del mdb[key] or mdb[key].remove()".format(key)) 
         
-    def _get_dir_to_data(self, key, check_exists = False, check_format=True):
+    def _get_dir_to_data(self, key, check_exists=False):
         '''returns the directory to the data of a given key
         
         Args:
@@ -314,8 +336,7 @@ class ModelDataBase:
             check_exists (bool, optional): Whether to check if the key exists. Defaults to False. If True, a KeyError is raised if the key does not exist.
             check_format (bool, optional): Whether to check the format of the key. Defaults to True. If False, the key is not checked for validity, but only for existence.
         '''
-        if check_format:
-            self._check_key_format(key)
+        self._check_key_format(key)
         key = tuple(key)
         key_path = os.path.join(*key)
         dir_to_data = os.path.join(self.basedir, key_path)
@@ -534,7 +555,7 @@ class ModelDataBase:
             object: The object saved under mdb[key]
         """
         # this looks into the metadata.json, gets the name of the dumper, and loads this module form IO.LoaderDumper
-        dir_to_data = self._get_dir_to_data(key, check_exists = True)
+        dir_to_data = self._get_dir_to_data(key, check_exists=True)
         if lock:
             lock.acquire()
         return_ = LoaderDumper.load(dir_to_data, **kwargs)
