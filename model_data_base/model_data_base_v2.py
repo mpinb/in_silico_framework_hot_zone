@@ -210,15 +210,7 @@ class ModelDataBase:
             self._registered_to_path = self.basedir
         except MdbException as e:
             warnings.warn(str(e))
-
-    def _deregister_this_database(self):
-        print('Deregistering database with unique id {} (had the absolute path {})'.format(
-            self._unique_id, self.basedir))
-        try:
-            model_data_base_v2_register.deregister_mdb(self._unique_id)
-        except MdbException as e:
-            warnings.warn(str(e))
-      
+  
     def _set_unique_id(self):
         """
         Sets a unique ID for the model data base as class attribute. Does not save this ID as metadata (this is taken care of by :func _initialize:)
@@ -687,7 +679,8 @@ class ModelDataBase:
             shutil.rmtree(dir_to_data_rename)
             # this will delete in foreground of the thread, 
             # and thus wait until mdb is deleted and only then continue
-            del _get_mdb_register()[unique_id]
+            del _get_mdb_register()[unique_id]  # remove from the register
+
         # make sure folder is renamed before continuing python process
         dir_to_data_rename = rename_for_deletion(self.basedir)
         # start processes on one thread in background
