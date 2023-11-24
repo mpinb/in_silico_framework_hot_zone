@@ -21,6 +21,7 @@ from ._version import get_versions
 from .IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_mdb_v2, shared_numpy_store, get_dumper_string_by_dumper_module
 from . import model_data_base_v2_register
 from . import MdbException
+import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
 DEFAULT_DUMPER = to_cloudpickle
@@ -534,16 +535,16 @@ class ModelDataBase:
         # Check if the key is ok and create the corresponding path
         self._check_key_format(key)
         dir_to_data = self._get_dir_to_data(key)
-        if os.path.exists(dir_to_data):
+        if os.path.exists(dir_to_data):  # check if we can overwrite
             overwrite = kwargs.get('overwrite', True)  # overwrite=True if unspecified
             if overwrite:
-                logger.warning('Key {} is already set in ModelDatabase {} located at {}. Overwriting...'.format(key, self, self.basedir))
+                logger.info('Key {} is already set in ModelDatabase {} located at {}. Overwriting...'.format(key, self, self.basedir))
                 delete_in_background(dir_to_data)
             else:
                 raise KeyError(
                     'Key {} is already set and you passed overwrite=False in the kwargs: {}'.format(key, kwargs) + \
                     '\nEither use del mdb[key] first, set overwrite to True, or omit the overwrite keyword argument.')  
-        else:
+        else:  # path does not exist: create it
             os.makedirs(dir_to_data)
         
         if lock:
