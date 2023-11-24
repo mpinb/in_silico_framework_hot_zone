@@ -487,11 +487,9 @@ class ModelDataBase:
         """
         # this looks into the metadata.json, gets the name of the dumper, and loads this module form IO.LoaderDumper
         dir_to_data = self._get_dir_to_data(key, check_exists = True)
-        loaderdumper_module = get_dumper_from_folder(dir_to_data)
-        loader = loaderdumper_module.Loader()
         if lock:
             lock.acquire()
-        return_ = loader.get(dir_to_data, **kwargs)
+        return_ = LoaderDumper.load(dir_to_data, **kwargs)
         if lock:
             lock.release()
         return return_
