@@ -592,21 +592,18 @@ class ModelDataBase:
 
         #check if we have writing privilege
         self._check_writing_privilege(key)
-        # Convert key and check validity
-        if isinstance(key, str):
-            key = key,
         self._check_key_format(key)
 
         # Use recursion to create sub_mdbs in case a tuple key is passed
         # All elements except for the last one should become sub_mdbs if they ar enot already
         # The last key should be saved in the last sub_mdb (one-but-last key), 
         # and thus the last key cannot be a submdb itself
-        for subkey in key[:-1]:
-            sub_mdb = self.create_sub_mdb(subkey)  # create or fetch the sub_mdb
-            # Recursion: keep making sub_mdbs until we reach the last element
-            # at which point the for-loop will be skipped
+        if isinstance(key, tuple) and len(key) > 1:
+            sub_mdb = self.create_sub_mdb(key[0])  # create or fetch the sub_mdb
+            # Recursion: call set on the sub_mdb with key[1:]
             sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
-            return  # don't continue after the for loop in case keys is still a tuple of size > 1
+        elif isinstance(key, tuple) and len(key) == 1:
+            key = key[0]  # key is string now 
         
         # Key is not a tuple if code made it here
         dir_to_data = self._get_dir_to_data(key)
