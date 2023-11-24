@@ -210,6 +210,14 @@ class ModelDataBase:
             self._registered_to_path = self.basedir
         except MdbException as e:
             warnings.warn(str(e))
+
+    def _deregister_this_database(self):
+        print('Deregistering database with unique id {} to the absolute path {}'.format(
+            self._unique_id, self.basedir))
+        try:
+            model_data_base_v2_register.deregister_mdb(self._unique_id, self.basedir)
+        except MdbException as e:
+            warnings.warn(str(e))
       
     def _set_unique_id(self):
         """
@@ -587,12 +595,14 @@ class ModelDataBase:
     def keys(self):
         '''returns the keys of the database'''
         all_keys = os.listdir(self.basedir)
-        keys =  tuple(
+        keys_ =  tuple(
             e for e in all_keys 
-            if e not in ["db_state.json", "dbcore.pickle", "metadata.db", "sqlitedict.db"]
-            and "lock" not in e
-            and "deleting" not in e)
-        return keys
+            if e != "db_state.json"
+            and e not in ["dbcore.pickle", "metadata.db", "sqlitedict.db"] # mdbv1 compatibility
+            and not e.endswith(".lock") 
+            and ".deleting." not in e
+            )
+        return keys_
 
     def __setitem__(self, key, value):
         self.set(key, value)
@@ -612,6 +622,19 @@ class ModelDataBase:
     
     def __reduce__(self):
         return (self.__class__, (self.basedir, self.readonly, True), {})
+
+    def remove(self, deregister_timeout=3600):
+        '''
+        Deletes the database from disk in the background and de-registers itself from the register as soon as it is deleted.
+        Note that this method is not a destructor, nor equivalent to __del__ or __delete__.
+        IOW, this method does not get called during garbage collection, when the object goes out of scope, or when the program terminates.
+        It should be explicitly called by the user when the user likes to delete a database.
+        '''
+        def delete_and_deregister_once_deleted(mdb, dir_in_deletion):
+            p = delete_in_background(mdb.basedir)
+            p.wait()
+            mdb._deregister_this_database()
+        threading.Thread(target = lambda : delete_and_deregister_once_deleted(self, dir_in_deletion)).start()
 
 class RegisteredFolder(ModelDataBase):
     def __init__(self, path):
@@ -637,4 +660,5 @@ def delete_in_background(dir_to_data):
         if not os.path.exists(dir_to_data_rename):
             break
     os.rename(dir_to_data, dir_to_data_rename)
-    threading.Thread(target = lambda : shutil.rmtree(dir_to_data_rename)).start()
+    p = threading.Thread(target = lambda : shutil.rmtree(dir_to_data_rename)).start()
+    return p

@@ -61,6 +61,9 @@ class ModelDataBaseRegister():
     def keys(self):
         return self.registry.keys()
 
+    def __delitem__(self, key):
+        del self.registry[key]
+
 
 @cache
 def _get_mdb_register():
@@ -87,6 +90,10 @@ def _get_mdb_register():
 def register_mdb(unique_id, mdb_basedir):
     mdbr = _get_mdb_register()
     mdbr.add_mdb(unique_id, mdb_basedir)
+
+def deregister_mdb(unique_id):
+    mdbr = _get_mdb_register()
+    del mdbr.registry[unique_id]
 
 
 # def get_mdb_by_unique_id(parentdir_or_mdb, unique_id):

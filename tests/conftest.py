@@ -148,10 +148,7 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
 
     @pytest.fixture
     def fresh_mdb_v2(worker_id):
@@ -184,10 +181,7 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
 
     @pytest.fixture
     def empty_mdb(worker_id):
@@ -203,10 +197,7 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
 
     @pytest.fixture
     def empty_mdb_v2(worker_id):
@@ -222,10 +213,7 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
 
     @pytest.fixture
     def sqlite_db():
@@ -274,10 +262,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
 
     @pytest.yield_fixture
     def fresh_mdb_v2():
@@ -311,10 +296,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
 
     @pytest.yield_fixture
     def empty_mdb():
@@ -330,10 +312,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
 
     @pytest.yield_fixture
     def empty_mdb_v2():
@@ -349,10 +328,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
 
     @pytest.yield_fixture
     def sqlite_db():
@@ -365,5 +341,3 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         # cleanup
         if os.path.exists(tempdir):
             shutil.rmtree(tempdir)
-
-    
