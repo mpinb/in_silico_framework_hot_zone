@@ -622,6 +622,44 @@ class ModelDataBase:
         warnings.warn('setitem is deprecated. it exist to provide a consistent API with model_data_base version 1. use set instead.')
         self.get(key, lock=lock, dumper=dumper, **kwargs)
     
+    def maybe_calculate(self, key, fun, **kwargs):
+        '''This function returns the corresponding value of key,
+        if it is already in the database. If it is not in the database,
+        it calculates the value by calling fun, adds this value to the
+        database and returns the value.
+        
+        key: key on which the item can be accessed / should be accessible in the database
+        fun: function expects no parameters (e.g. lambda: 'hello world') 
+        force_calculation =: if set to True, the value will allways be recalculated
+            If there is already an entry in the database with the same key, it will
+            be overwritten
+        **kwargs: attributes, that get passed to ModelDataBase.setitem
+        
+        Example:
+        #value is calculated, since it is the first call and not in the database
+        mdb.maybe_calculate('knok_knok', lambda: 'whos there?', dumper = 'self')
+        > 'whos there?'
+        
+        #value is taken from the database, since it is already stored
+        mdb.maybe_calculate('knok_knok', lambda: 'whos there?', dumper = 'self')
+        > 'whos there?'        
+        '''
+        
+        if 'force_calculation' in kwargs:
+            force_calculation = kwargs['force_calculation']
+            del kwargs['force_calculation']
+        else:
+            force_calculation = False
+        try:
+            if force_calculation:
+                raise ValueError
+            return self[key]
+        except KeyError:
+            ret = fun()
+            self.setitem(key, ret, **kwargs)
+            return ret    
+    
+    
     def keys(self):
         '''returns the keys of the database'''
         all_keys = os.listdir(self.basedir)
