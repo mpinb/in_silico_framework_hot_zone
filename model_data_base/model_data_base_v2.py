@@ -314,8 +314,8 @@ class ModelDataBase:
         # check if all but last subkey of the key either points to a sub_mdb, 
         # or does not exist entirely (and sub_mdbs will be created)
         for k in [key[:i] for i in range(1, len(key))]:  # does not include last key
-            dir_to_data = os.path.join(self.basedir, os.path.join(*k))
-            if os.path.exists(dir_to_data) and not _is_sub_mdb(self.basedir, k):
+            maybe_dir_to_data = os.path.join(self.basedir, os.path.join(*k))  # may or may not exist already
+            if os.path.exists(maybe_dir_to_data) and not _is_sub_mdb(self.basedir, k):
                 raise MdbException(
                     "Key {} points to a non-ModelDataBase, yet you are trying to save data to it with key {}.".format(k, key))
             else:
@@ -324,7 +324,8 @@ class ModelDataBase:
         
         # check if the complete key refers to a value and not a sub_mdb
         # otherwise, an entire sub_mdb is about to be overwritten by data
-        if os.path.exists(self._get_dir_to_data(key, check_format=False)) and _is_sub_mdb(self.basedir, key):
+        maybe_dir_to_data = os.path.join(self.basedir, os.path.join(*k))  # may or may not exist already
+        if os.path.exists(maybe_dir_to_data) and _is_sub_mdb(self.basedir, key):
             raise MdbException(
                 "Key {} points to a ModelDataBase, but you are trying to overwrite it with data. If you need this key for the data, please remove the sub_mdb under the same key first using del mdb[key] or mdb[key].remove()".format(key)) 
         
