@@ -300,31 +300,31 @@ class ModelDataBase:
 
         assert isinstance(key, str) or isinstance(key, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
         assert all([isinstance(k, str) for k in key]), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
-        key = tuple(key)
+        key = tuple(key)  # a tuple of strings of length >= 1
 
         # Check if individual characters are allowed
-        for k in key:
-            if len(k) > 50:
+        for subkey in key:
+            if len(subkey) > 50:
                 raise ValueError('keys must be shorter than 50 characters')
             allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
-            for c in k:
+            for c in subkey:
                 if not c in allowed_characters:
-                    raise ValueError('Character {} is not allowed, but appears in key {}'.format(c, k))
+                    raise ValueError('Character {} is not allowed, but appears in key {}'.format(c, subkey))
         
         # check if all but last subkey of the key either points to a sub_mdb, 
         # or does not exist entirely (and sub_mdbs will be created)
-        for k in [key[:i] for i in range(1, len(key))]:  # does not include last key
-            maybe_dir_to_data = os.path.join(self.basedir, os.path.join(*k))  # may or may not exist already
-            if os.path.exists(maybe_dir_to_data) and not _is_sub_mdb(self.basedir, k):
+        for subkey in [key[:i] for i in range(1, len(key))]:  # does not include last key
+            maybe_dir_to_data = os.path.join(self.basedir, os.path.join(*subkey))  # may or may not exist already
+            if os.path.exists(maybe_dir_to_data) and not _is_sub_mdb(self.basedir, subkey):
                 raise MdbException(
-                    "Key {} points to a non-ModelDataBase, yet you are trying to save data to it with key {}.".format(k, key))
+                    "Key {} points to a non-ModelDataBase, yet you are trying to save data to it with key {}.".format(subkey, key))
             else:
                 # If a key in the tuple does not exist yet, sub_mdbs will be created
                 break
         
         # check if the complete key refers to a value and not a sub_mdb
         # otherwise, an entire sub_mdb is about to be overwritten by data
-        maybe_dir_to_data = os.path.join(self.basedir, os.path.join(*k))  # may or may not exist already
+        maybe_dir_to_data = os.path.join(self.basedir, os.path.join(*key))  # may or may not exist already
         if os.path.exists(maybe_dir_to_data) and _is_sub_mdb(self.basedir, key):
             raise MdbException(
                 "Key {} points to a ModelDataBase, but you are trying to overwrite it with data. If you need this key for the data, please remove the sub_mdb under the same key first using del mdb[key] or mdb[key].remove()".format(key)) 
