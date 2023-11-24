@@ -54,9 +54,9 @@ def test_can_detect_self_as_dumper(empty_mdb_v2):
     '''dumper string should be the same if it is determined
     post hoc (by providing the path to an already existing folder)
     or from the module reference directly.'''
-    empty_mdb_v2.setitem('test', 1, dumper='self')
+    empty_mdb_v2.setitem('test', 1)
     s1 = empty_mdb_v2._detect_dumper_string_of_existing_key('test')
-    assert s1 == 'self'
+    assert s1 == 'to_cloudpickle'
 
 
 def test_metadata_update(empty_mdb_v2):
@@ -64,7 +64,7 @@ def test_metadata_update(empty_mdb_v2):
     providing a smooth transition from databases, that had not implemented
     metadata to the newer version. This function should not overwrite
     existing metadata'''
-    empty_mdb_v2.setitem('test', 1, dumper='self')
+    empty_mdb_v2.setitem('test', 1)
     empty_mdb_v2.setitem('test2', 1, dumper=to_pickle)
     msg1 = "{} =/= {}".format(empty_mdb_v2.metadata['test']['version'],
                               get_versions()['version'])
@@ -77,7 +77,7 @@ def test_metadata_update(empty_mdb_v2):
     )['version'], msg1 + msg_git
     assert empty_mdb_v2.metadata['test2']['version'] == get_versions(
     )['version'], msg2 + msg_git
-    assert empty_mdb_v2.metadata['test']['dumper'], 'self'
+    assert empty_mdb_v2.metadata['test']['dumper'], 'to_cloudpickle'
     assert empty_mdb_v2.metadata['test2']['dumper'] == 'to_pickle'
     assert empty_mdb_v2.metadata['test'][
         'metadata_creation_time'] == 'together_with_new_key'
@@ -99,7 +99,7 @@ def test_metadata_update(empty_mdb_v2):
     mdb = ModelDataBase(empty_mdb_v2.basedir)
     assert mdb.metadata['test']['version'], "unknown"
     assert mdb.metadata['test2']['version'] == "unknown"
-    assert mdb.metadata['test']['dumper'] == 'self'
+    assert mdb.metadata['test']['dumper'] == 'to_cloudpickle'
     assert mdb.metadata['test2']['dumper'] == 'to_pickle'
     assert mdb.metadata['test']['metadata_creation_time'] == 'post_hoc'
     assert mdb.metadata['test2']['metadata_creation_time'] == 'post_hoc'
@@ -209,7 +209,7 @@ def test_sub_mdb_does_not_overwrite_existing_keys(empty_mdb_v2):
 
 
 def test_can_set_items_using_different_dumpers(empty_mdb_v2):
-    empty_mdb_v2.setitem('test_self', 1, dumper='self')
+    empty_mdb_v2.setitem('test_self', 1)
     empty_mdb_v2.setitem('test_to_pickle', 1, dumper=to_pickle)
     assert empty_mdb_v2['test_self'] == empty_mdb_v2['test_to_pickle']
 
@@ -328,7 +328,7 @@ def test_check_if_key_exists_can_handle_str_and_tuple_keys(empty_mdb_v2):
 
 
 def test_dumper_can_be_updated_and_metadata_is_adapted(empty_mdb_v2):
-    empty_mdb_v2.setitem('a', 1, dumper='self')
+    empty_mdb_v2.setitem('a', 1)
     m = empty_mdb_v2.metadata['a']
     assert m['dumper'] == 'to_cloudpickle'
     empty_mdb_v2.change_dumper('a', to_pickle)
