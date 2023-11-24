@@ -269,22 +269,6 @@ class ModelDataBase:
             ValueError: If the key is over 50 characters long
             ValueError: If the key contains characters that are not allowed (only numeric or latin alphabetic characters, "-" and "_" are allowed)
         """
-        def _is_sub_mdb(dir_to_data):
-            """
-            Checks if some key points to a sub_mdb, without using methods like _get_dir_to_data (which use _check_key_validity).
-            Checks if "metadata.json" exists withindir_to_data. If this is the case, it is assumed to be a (sub)mdb.
-            
-            Checking key validity needs its own way to check if sub_mdbs are present, to avoid infinite recursion.
-            This method is only used internally by _check_key_validity, and should never be called directly.
-
-            Args:
-                dir_to_data (str): The directory that points to either a key, or a sub_mdb
-            """
-            assert os.path.exists(dir_to_data)
-            # This should always exist
-            return os.path.exists(os.path.join(dir_to_data, 'db_state.json'))
-
-
         assert isinstance(key, str) or isinstance(key, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
         assert all([isinstance(k, str) for k in key]), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
         if isinstance(key, str):
@@ -299,24 +283,6 @@ class ModelDataBase:
                 if not c in allowed_characters:
                     raise ValueError('Character {} is not allowed, but appears in key {}'.format(c, subkey))
         
-        # check if all but last subkey of the key either points to a sub_mdb, 
-        # or does not exist entirely (and sub_mdbs will be created)
-        for subkey in [key[:i] for i in range(1, len(key))]:  # does not include last key
-            must_be_sub_mdb = os.path.join(self.basedir, os.path.join(*subkey))  # may or may not exist already
-            if os.path.exists(must_be_sub_mdb) and not _is_sub_mdb(must_be_sub_mdb):
-                raise MdbException(
-                    "Key {} points to a non-ModelDataBase, yet you are trying to save data to it as if it were a (sub)mdb with key {}.".format(subkey, key))
-            else:
-                # If a key in the tuple does not exist yet, sub_mdbs will be created
-                break
-        
-        # check if the complete key refers to a value and not a sub_mdb
-        # otherwise, an entire sub_mdb is about to be overwritten by data
-        may_not_be_sub_mdb = os.path.join(self.basedir, *key)  # may or may not exist already
-        if os.path.exists(may_not_be_sub_mdb) and _is_sub_mdb(may_not_be_sub_mdb):
-            raise MdbException(
-                "Key {} points to a ModelDataBase, but you are trying to overwrite it with data. If you need this key for the data, please remove the sub_mdb under the same key first using del mdb[key] or mdb[key].remove()".format(key)) 
-        
     def _get_dir_to_data(self, key, check_exists=False):
         '''returns the directory to the data of a given key
         
@@ -329,8 +295,13 @@ class ModelDataBase:
         # convert potential string to tuple (harmless for actual tuples)
         if isinstance(key, str):
             key = key,  # convert to tuple
+        # subkeys of tuple keys should always refer to sub_mdbs
+        # except the last subkey can be whatever
+        mdb_sep = os.path.sep + 'mdb' + os.path.sep  # for sub_mdbs, if there are any
+        key_path = mdb_sep.join(key)
         key_path = os.path.join(*key)
         dir_to_data = os.path.join(self.basedir, key_path)
+        
         if check_exists:
             if not os.path.exists(dir_to_data):
                 raise KeyError('Key {} is not set in mdb at directory {}.'.format(key_path, self.basedir))
@@ -499,16 +470,20 @@ class ModelDataBase:
         # go down the tree of pre-existing sub_mdbs as long as the keys exist
         remaining_keys = key
         parent_mdb = self
-        while len(remaining_keys) > 0 and remaining_keys[0] in parent_mdb.keys():
+        for i in range(len(key)):
+            if key[i] not in parent_mdb.keys():
+                # create sub_mdbs from here on
+                break
             if not isinstance(parent_mdb[remaining_keys[0]], ModelDataBase):
+                # The key is not an mdb, but we want to create a submdb here
                 raise MdbException(
-                    "Key %s is already set in %s and is not a ModelDataBase. Please use del mdb[%s] first" % (
-                        remaining_keys[0], parent_mdb.basedir, remaining_keys[0]
+                    "You were trying to overwrite existing data at %s with a (sub)mdb by using key %s. Please use del mdb[%s] first" % (
+                        key[:i], key
                         ))
-            # go down the tree
-            parent_mdb = parent_mdb[remaining_keys[0]]
-            # shift the remaining keys in the tuple
+            # go down the tree of sub_mdbs
             remaining_keys = remaining_keys[1:]
+            parent_mdb = parent_mdb[remaining_keys[0]]
+        
         # If there are still unique keys remaining in the tuple, we have to create at least one sub_mdb
         for k in remaining_keys:
             parent_mdb.set(k, None, dumper = just_create_mdb_v2, **kwargs)
@@ -594,7 +569,7 @@ class ModelDataBase:
             sub_mdb = self.create_sub_mdb(key[0])  
             # Recursion: call set on the sub_mdb with key[1:]
             sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
-            return
+            return  # stop here, since we're done for this key
         elif isinstance(key, tuple) and len(key) == 1:
             key = key[0]  # key is string now 
         
