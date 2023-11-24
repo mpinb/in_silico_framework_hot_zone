@@ -302,13 +302,20 @@ class ModelDataBase:
         
         # check if the complete key refers to a value and not a sub_mdb
         # otherwise, an entire sub_mdb is about to be overwritten by data
-        if os.path.exists(self._get_dir_to_data(key)) and isinstance(self[key], ModelDataBase):
+        if os.path.exists(self._get_dir_to_data(key, check_format=False)) and isinstance(self[key], ModelDataBase):
             raise MdbException(
                 "Key {} points to a ModelDataBase, but you are trying to overwrite it with data. If you need this key for the data, please remove the sub_mdb under the same key first using del mdb[key] or mdb[key].remove()".format(key)) 
         
-    def _get_dir_to_data(self, key, check_exists = False):
-        '''returns the directory to the data of a given key'''
-        self._check_key_format(key)
+    def _get_dir_to_data(self, key, check_exists = False, check_format=True):
+        '''returns the directory to the data of a given key
+        
+        Args:
+            key (str|tuple(str)): The key
+            check_exists (bool, optional): Whether to check if the key exists. Defaults to False. If True, a KeyError is raised if the key does not exist.
+            check_format (bool, optional): Whether to check the format of the key. Defaults to True. If False, the key is not checked for validity, but only for existence.
+        '''
+        if check_format:
+            self._check_key_format(key)
         key = tuple(key)
         key_path = os.path.join(*key)
         dir_to_data = os.path.join(self.basedir, key_path)
