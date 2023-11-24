@@ -421,15 +421,23 @@ class ModelDataBase:
             self.setitem(key, None, dumper = shared_numpy_store)        
         return self[key]
 
-    def create_sub_mdb(self, key, register = 'as_parent', raise_ = True):
+    def create_sub_mdb(self, key, register = 'as_parent', **kwargs):
         '''creates a ModelDataBase within a ModelDataBase. Example:
         mdb.create_sub_mdb('my_sub_database')
         mdb['my_sub_database']['some_key'] = ['some_value']
+        Kwargs will be passed to the dumper.
 
         Args:
             key (str|tuple): The key of the sub_mdb
             register (str, optional): ? TODO. Defaults to 'as_parent'.
             raise_ (bool, optional): Whether to raise an error if the sub_mdb already exists. Defaults to True.
+
+        Kwargs:
+            overwrite (bool, optional): Whether to overwrite the sub_mdb if it already exists. Defaults to True.
+            Other kwargs will be passed to the dumper, and may depend on which dumper you're using. Consult :module model_data_base.IO.LoaderDumper: for more information on possible kwargs.
+
+        Returns:
+            ModelDataBase: The newly created sub_mdb
         '''
         if isinstance(key, str):
             key = (key,)
@@ -443,12 +451,9 @@ class ModelDataBase:
                         remaining_keys[0], parent_mdb.basedir, remaining_keys[0]))
             parent_mdb = parent_mdb[remaining_keys[0]]
             remaining_keys = remaining_keys[1:]
-        if len(remaining_keys) == 0 and raise_:
-            # The sub_mdb already exists
-            raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         for k in remaining_keys:
             parent_mdb._check_key_format(k)
-            parent_mdb.set(k, None, dumper = just_create_mdb_v2)
+            parent_mdb.set(k, None, dumper = just_create_mdb_v2, **kwargs)
             parent_mdb[k].parent_mdb = parent_mdb  # remember that it has a parent
             parent_mdb[k]._register_this_database()
             parent_mdb = parent_mdb[k]  # go down the tree of sub_mdbs
