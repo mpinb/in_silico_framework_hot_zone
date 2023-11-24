@@ -256,8 +256,7 @@ class ModelDataBase:
             key (str|tuple): key
         """
         self._check_key_format(key)
-        
-       
+           
     def _check_key_format(self, key):
         """
         Checks the format of a key (string or tuple) and if it is valid for setting data (not for get).
@@ -679,7 +678,8 @@ class ModelDataBase:
             shutil.rmtree(dir_to_data_rename)
             # this will delete in foreground of the thread, 
             # and thus wait until mdb is deleted and only then continue
-            del _get_mdb_register()[unique_id]  # remove from the register
+            register = model_data_base_v2_register._get_mdb_register()
+            del register[unique_id]  # remove from the register
 
         # make sure folder is renamed before continuing python process
         dir_to_data_rename = rename_for_deletion(self.basedir)
