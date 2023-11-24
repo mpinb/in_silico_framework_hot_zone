@@ -14,13 +14,15 @@ import shutil
 import inspect
 import datetime
 import importlib
-from .IO import LoaderDumper
+from .IO import LoaderDumper, get_dumper_string_by_dumper_module
 from . import _module_versions
 VC = _module_versions.version_cached
 from ._version import get_versions
 from model_data_base.IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_mdb_v2, shared_numpy_store
 from . import model_data_base_v2_register
 from model_data_base import MdbException
+
+DEFAULT_DUMPER = to_cloudpickle
 
 
 class MetadataAccessor:
@@ -202,7 +204,7 @@ class ModelDataBase:
         with open(os.path.join(self.basedir, 'db_state.json'), 'w'):
             pass
         self._set_unique_id()
-        self._registeredDumpers.append(to_cloudpickle)
+        self._registeredDumpers.append(DEFAULT_DUMPER)
         self.state = {
             '_registeredDumpers': self._registeredDumpers,
             '_unique_id': self._unique_id,
@@ -221,7 +223,20 @@ class ModelDataBase:
         """
         self._check_key_format(key)
         
-    def _check_key_format(self, key):    
+    def _check_key_format(self, key):
+        """Checks the format of a single key
+        This is internal API and should never be called directly.
+        The usecase for this method should be to check if a singular key is valid.
+        It should only ever be called on single keys (so not e.g. tuples of strings in :func create_sub_mdb:)
+
+        Args:
+            key (str): The key
+
+        Raises:
+            ValueError: If the key is over 50 characters long
+            ValueError: If the key contains characters that are not allowed (only numeric or latin alphabetic characters, "-" and "_" are allowed)
+        """
+        assert isinstance(key, str), "Any singular key must be a string"
         if len(key) > 50:
             raise ValueError('keys must be shorter than 50 characters')
         allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
@@ -242,20 +257,29 @@ class ModelDataBase:
     def _get_dumper_string(self, savedir, arg):
         path = self._get_path(arg)
         if path is None:
-            return 'self'
+            return get_dumper_string_by_dumper_module(DEFAULT_DUMPER)
         else:
             return IO.LoaderDumper.get_dumper_string_by_savedir(path)
     
     def _find_dumper(self, item):
-        '''finds the dumper of a given item.'''
+        '''
+        Finds the dumper of a given item.
+        Iterates all registered dumper and returns the first one that can save the item
+        
+        Args:
+            item (object): The item to save
+
+        Returns:
+            module | None: The dumper module that can save the item, or None if there are no viable registered dumpers in the mdb.
+        '''
         dumper = None
         for d in self._registeredDumpers:
-            if d == 'self' or d.check(item):
+            if d.check(item):
                 dumper = d
                 break
         return dumper
         
-    def _write_metadata(self, dumper, dir_to_data, key):
+    def _write_metadata(self, dumper, dir_to_data):
         '''this is private API and should only
         be called from within ModelDataBase.
         Can othervise be destructive!!!'''        
@@ -447,7 +471,7 @@ class ModelDataBase:
             KeyError: _description_
         """
         # Find correct dumper to save data with
-        if dumper is None or dumper == 'self':
+        if dumper is None:
             dumper = self._find_dumper(value)
         assert dumper is not None
         assert(inspect.ismodule(dumper))
@@ -468,7 +492,7 @@ class ModelDataBase:
             lock.acquire()
         try:
             loaderdumper_module.dump(value, dir_to_data, **kwargs)
-            self._write_metadata(dumper, dir_to_data, key)
+            self._write_metadata(dumper, dir_to_data)
         except Exception as e:
             print("An error occured. Tidy up. Please do not interrupt.")
             try:
