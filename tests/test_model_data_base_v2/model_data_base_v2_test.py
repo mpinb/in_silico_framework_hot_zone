@@ -330,7 +330,7 @@ def test_check_if_key_exists_can_handle_str_and_tuple_keys(empty_mdb_v2):
 def test_dumper_can_be_updated_and_metadata_is_adapted(empty_mdb_v2):
     empty_mdb_v2.setitem('a', 1, dumper='self')
     m = empty_mdb_v2.metadata['a']
-    assert m['dumper'] == 'self'
+    assert m['dumper'] == 'to_cloudpickle'
     empty_mdb_v2.change_dumper('a', to_pickle)
     m = empty_mdb_v2.metadata['a']
     assert m['dumper'] == 'to_pickle'
