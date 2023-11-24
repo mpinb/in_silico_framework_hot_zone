@@ -533,6 +533,7 @@ class ModelDataBase:
                 sub_mdb = self.create_sub_mdb(key[0])
                 # Recursion - key here should be a string and set() will skip this if statement
                 sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
+                return
             elif len(key) == 1:
                 key = key[0]
             else:
