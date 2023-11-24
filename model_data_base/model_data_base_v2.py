@@ -303,7 +303,7 @@ class ModelDataBase:
         
         if check_exists:
             if not os.path.exists(dir_to_data):
-                raise KeyError('Key {} is not set in mdb at directory {}.'.format(key_path, self.basedir))
+                raise KeyError('Key {} is not set in mdb at directory {}'.format(key_path, self.basedir))
         return dir_to_data
 
     def _detect_dumper_string_of_existing_key(self, key):
@@ -575,8 +575,19 @@ class ModelDataBase:
         # Key is str and not a tuple if code made it here
         assert type(key) == str  # for debugging
         dir_to_data = self._get_dir_to_data(key)
-        if os.path.exists(dir_to_data):  # check if we can overwrite
+        if os.path.exists(dir_to_data):  
+            if os.path.exists(os.path.join(dir_to_data, 'metadata.json')):
+                # We are about to overwrite an mdb with data: that's a no-go (it's a me, Mario)
+                submdb_location = os.path.join(self.basedir, key)
+                raise MdbException(
+                    "You were trying to overwrite a sub_mdb at %s with data using the key %s. Please remove the sub_mdb first, or use a different key." % (
+                        dir_to_data, submdb_location
+                        )
+                )
+            # check if we can overwrite
             overwrite = kwargs.get('overwrite', True)  # overwrite=True if unspecified
+            
+            
             if overwrite:
                 logger.info('Key {} is already set in ModelDatabase {} located at {}. Overwriting...'.format(key, self, self.basedir))
                 delete_in_background(dir_to_data)
