@@ -43,6 +43,9 @@ class MetadataAccessor:
             }
         with open(os.path.join(dir_to_data, 'metadata.json')) as f:
             return json.load(f)
+
+    def keys():
+        return self.mdb.keys()
         
 def _check_working_dir_clean_for_build(working_dir):
     '''Backend method that checks, wether working_dir is suitable
