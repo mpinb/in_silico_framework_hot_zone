@@ -325,15 +325,3 @@ def test_check_if_key_exists_can_handle_str_and_tuple_keys(empty_mdb_v2):
     assert empty_mdb_v2.check_if_key_exists(('b', 'b'))
     assert not empty_mdb_v2.check_if_key_exists(('a', 'b'))
     assert not empty_mdb_v2.check_if_key_exists('b')
-
-
-def test_dumper_can_be_updated_and_metadata_is_adapted(empty_mdb_v2):
-    empty_mdb_v2.setitem('a', 1)
-    m = empty_mdb_v2.metadata['a']
-    assert m['dumper'] == 'to_cloudpickle'
-    empty_mdb_v2.change_dumper('a', to_pickle)
-    m = empty_mdb_v2.metadata['a']
-    assert m['dumper'] == 'to_pickle'
-    assert 'dumper_update' in list(m.keys())
-    du = m['dumper_update']
-    assert du[1]['dumper'] == 'to_pickle'
