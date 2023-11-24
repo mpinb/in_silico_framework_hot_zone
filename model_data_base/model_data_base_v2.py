@@ -557,7 +557,7 @@ class ModelDataBase:
             try:
                 shutil.rmtree(dir_to_data)
             except:
-                print('could not delete folder {:s}'.format(basedir_absolute))
+                print('could not delete folder {:s}'.format(dir_to_data))
             raise
         if lock:
             lock.release()
