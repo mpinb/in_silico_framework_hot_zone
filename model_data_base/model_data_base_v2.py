@@ -445,12 +445,14 @@ class ModelDataBase:
         remaining_keys = key
         parent_mdb = self
         while len(remaining_keys) > 0 and remaining_keys[0] in parent_mdb.keys():
+            parent_mdb = parent_mdb[remaining_keys[0]]
             if not isinstance(parent_mdb, ModelDataBase):
                 raise MdbException(
                     "Key %s is already set in %s and is not a ModelDataBase. Please use del mdb[%s] first" % (
-                        remaining_keys[0], parent_mdb.basedir, remaining_keys[0]))
-            parent_mdb = parent_mdb[remaining_keys[0]]
+                        remaining_keys[0], parent_mdb.basedir, remaining_keys[0]
+                        ))
             remaining_keys = remaining_keys[1:]
+        # If there are still unique keys remaining in the tuple, we have to create at least one sub_mdb
         for k in remaining_keys:
             parent_mdb._check_key_format(k)
             parent_mdb.set(k, None, dumper = just_create_mdb_v2, **kwargs)
@@ -529,9 +531,11 @@ class ModelDataBase:
         # Use recursion to create sub_mdbs in case a tuple is passed
         if type(key) == tuple:
             if len(key) > 1:
-                # create sub_mdb
+                # create or fetch the sub_mdb
                 sub_mdb = self.create_sub_mdb(key[0])
-                # Recursion - key here should be a string and set() will skip this if statement
+                # Recursion:
+                # If key[1:] is a tuple with 1 element, it will be unpacked in the next recursion iteration
+                # If key[1:] is a tuple with lenght > 1, the recursion continues
                 sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
                 return
             elif len(key) == 1:
