@@ -654,7 +654,7 @@ def get_mdb_by_unique_id(unique_id):
     return mdb
 
 def delete_in_background(dir_to_data):
-    p = threading.Thread(target = lambda : shutil.delete_from_disk(dir_to_data_rename)).start()
+    p = threading.Thread(target = lambda : delete_from_disk(dir_to_data_rename)).start()
     return p
 
 def delete_from_disk(dir_to_data):
