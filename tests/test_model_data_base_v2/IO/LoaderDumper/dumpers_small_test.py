@@ -92,8 +92,9 @@ def test_to_pickle_small(fresh_mdb_v2, pdf):
 def test_to_cloudpickle_small(fresh_mdb_v2, pdf):
     data_frame_generic_small(fresh_mdb_v2, pdf, pdf.copy(), to_cloudpickle)
 
-def test_self_small(fresh_mdb_v2, pdf):
-    data_frame_generic_small(fresh_mdb_v2, pdf, pdf.copy(), 'self')
+def test_default_small(fresh_mdb_v2, pdf):
+    # unspecified dumper, should be to_cloudpickle
+    data_frame_generic_small(fresh_mdb_v2, pdf, pdf.copy())
 
 def test_numpy_to_npy(fresh_mdb_v2, pdf):
 
