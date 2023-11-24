@@ -212,10 +212,10 @@ class ModelDataBase:
             warnings.warn(str(e))
 
     def _deregister_this_database(self):
-        print('Deregistering database with unique id {} to the absolute path {}'.format(
+        print('Deregistering database with unique id {} (had the absolute path {})'.format(
             self._unique_id, self.basedir))
         try:
-            model_data_base_v2_register.deregister_mdb(self._unique_id, self.basedir)
+            model_data_base_v2_register.deregister_mdb(self._unique_id)
         except MdbException as e:
             warnings.warn(str(e))
       
