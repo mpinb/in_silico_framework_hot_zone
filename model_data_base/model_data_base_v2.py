@@ -296,8 +296,8 @@ class ModelDataBase:
 
         assert isinstance(key, str) or isinstance(key, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
         assert all([isinstance(k, str) for k in key]), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
-        # convert potential string to tuple (harmless for actual tuples)
-        key = key,
+        if isinstance(key, str):
+            key = key,  # convert to tuple
 
         # Check if individual characters are allowed
         for subkey in key:
@@ -336,7 +336,8 @@ class ModelDataBase:
         '''
         self._check_key_format(key)
         # convert potential string to tuple (harmless for actual tuples)
-        key = key,  
+        if isinstance(key, str):
+            key = key,  # convert to tuple
         key_path = os.path.join(*key)
         dir_to_data = os.path.join(self.basedir, key_path)
         if check_exists:
@@ -502,8 +503,8 @@ class ModelDataBase:
             ModelDataBase: The newly created sub_mdb
         '''
         self._check_key_format(key)
-        # convert potential string to tuple (harmless for actual tuples)
-        key = key,
+        if isinstance(key, str):
+            key = key,  # convert to tuple
         # go down the tree of pre-existing sub_mdbs as long as the keys exist
         remaining_keys = key
         parent_mdb = self
