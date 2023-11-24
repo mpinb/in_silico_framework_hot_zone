@@ -300,7 +300,7 @@ class ModelDataBase:
         # otherwise, an entire sub_mdb is about to be overwritten by data
         if os.path.exists(self._get_dir_to_data(key)) and isinstance(self[key], ModelDataBase):
             raise MdbException(
-                "Key {} points to a ModelDataBase, but you are trying to overwrite it with data. If you need this key for the data, please remove the sub_mdb under the same key first using del mdb[key] or mdb[key].remove()."format(key)) 
+                "Key {} points to a ModelDataBase, but you are trying to overwrite it with data. If you need this key for the data, please remove the sub_mdb under the same key first using del mdb[key] or mdb[key].remove()".format(key)) 
         
     def _get_dir_to_data(self, key, check_exists = False):
         if isinstance(key, tuple):
