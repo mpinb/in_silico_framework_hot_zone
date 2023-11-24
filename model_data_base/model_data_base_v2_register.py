@@ -58,6 +58,9 @@ class ModelDataBaseRegister():
     def add_mdb(self, unique_id, mdb_basedir):
         self.registry[unique_id] = os.path.abspath(mdb_basedir)
 
+    def keys(self):
+        return self.registry.keys()
+
 
 @cache
 def _get_mdb_register():
