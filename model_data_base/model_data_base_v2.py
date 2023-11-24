@@ -527,12 +527,16 @@ class ModelDataBase:
         self._check_writing_privilege(key)
 
         # Use recursion to create sub_mdbs in case a tuple is passed
-        if type(key) == tuple and len(key) > 1:
-            # create sub_mdb
-            sub_mdb = self.create_sub_mdb(key[:-1])
-            # Recursion - key here should be a string and set() will skip this if statement
-            sub_mdb.set(key[-1], value, lock = lock, dumper = dumper, **kwargs)
-            return
+        if type(key) == tuple:
+            if len(key) > 1:
+                # create sub_mdb
+                sub_mdb = self.create_sub_mdb(key[0])
+                # Recursion - key here should be a string and set() will skip this if statement
+                sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
+            elif len(key) == 1:
+                key = key[0]
+            else:
+                raise MdbException('key {} is empty tuple'.format(key))
         
         # Key is not a tuple
         # Check if the key is ok and create the corresponding path
