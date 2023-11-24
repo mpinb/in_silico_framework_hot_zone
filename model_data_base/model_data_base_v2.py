@@ -295,7 +295,7 @@ class ModelDataBase:
             # This should always exist
             dir_to_data = os.path.join(basedir, os.path.join(*key))
             assert os.path.exists(dir_to_data)
-            return os.path.exists(os.path.join(dir_to_data, 'metadata.json'))
+            return os.path.exists(os.path.join(dir_to_data, 'db_state.json'))
 
 
         assert isinstance(key, str) or isinstance(key, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
