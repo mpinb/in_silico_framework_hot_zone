@@ -288,8 +288,8 @@ class ModelDataBase:
             This method is only used internally by _check_key_validity, and should never be called directly.
 
             Args:
-                basedir (ModelDatabase): The 
-                key (tuple): _description_
+                basedir (str): The starting directory in which to look for sub_mdbs
+                key (tuple): The key that either points to a sub_mdb or something else. Needs to actually exist in basedir
             """
             assert os.path.exists(basedir)
             # This should always exist
@@ -491,8 +491,6 @@ class ModelDataBase:
         mdb['my_sub_database']['some_key'] = ['some_value']
         Kwargs will be passed to the dumper.
 
-        TODO: don't override values with submdbs or vice-versa. Tried to make different key checks, but incomplete yet
-
         Args:
             key (str|tuple): The key of the sub_mdb
             register (str, optional): ? TODO. Defaults to 'as_parent'.
@@ -505,8 +503,8 @@ class ModelDataBase:
         Returns:
             ModelDataBase: The newly created sub_mdb
         '''
-        if isinstance(key, str):
-            key = (key,)
+        self._check_key_format(key)
+        key = tuple(key)
         # go down the tree of pre-existing sub_mdbs as long as the keys exist
         remaining_keys = key
         parent_mdb = self
@@ -522,7 +520,6 @@ class ModelDataBase:
             remaining_keys = remaining_keys[1:]
         # If there are still unique keys remaining in the tuple, we have to create at least one sub_mdb
         for k in remaining_keys:
-            parent_mdb._check_single_key_format(k)
             parent_mdb.set(k, None, dumper = just_create_mdb_v2, **kwargs)
             parent_mdb[k].parent_mdb = parent_mdb  # remember that it has a parent
             parent_mdb[k]._register_this_database()
