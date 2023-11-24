@@ -261,42 +261,56 @@ class ModelDataBase:
         Only here for consistent API with mdbv1
 
         Args:
-            key (str): key
+            key (str|tuple): key
         """
         self._check_key_format(key)
         
     def _check_key_format(self, key):
-        """Checks the format of a single key
+        """
+        Checks the format of a key (string or tuple) and if it is valid for setting data (not for get).
         This is internal API and should never be called directly.
-        The usecase for this method should be to check if a singular key is valid.
-        It should only ever be called on single keys (so not e.g. tuples of strings in :func create_sub_mdb:)
 
         Args:
-            key (str): The key
+            key (str|tuple(str)): The key
 
         Raises:
             ValueError: If the key is over 50 characters long
             ValueError: If the key contains characters that are not allowed (only numeric or latin alphabetic characters, "-" and "_" are allowed)
         """
-        assert isinstance(key, str), "Any singular key must be a string. {} is type {}".format(key, type(key))
-        if len(key) > 50:
-            raise ValueError('keys must be shorter than 50 characters')
-        allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
-        for c in key:
-            if not c in allowed_characters:
-                raise ValueError('Character {} is not allowed'.format(c))
-        if key in self.keys() and isinstance(self[key], ModelDataBase):
-            raise MdbException('Key {} is already used as a sub_mdb. Please use a different key.'.format(key))
+        assert isinstance(key, str) or isinstance(key, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
+        assert all([isinstance(k, str) for k in key]), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
+        key = tuple(key)
+
+        # Check if individual characters are allowed
+        for k in key:
+            if len(k) > 50:
+                raise ValueError('keys must be shorter than 50 characters')
+            allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
+            for c in k:
+                if not c in allowed_characters:
+                    raise ValueError('Character {} is not allowed, but appears in key {}'.format(c, k))
+        
+        # check if all but last element of the key points to a sub_mdb
+        for k in [key[:i] for i in range(1, len(key))]:
+            if not isinstance(self[k], ModelDataBase):
+                raise MdbException(
+                    "Key {} points to a non-ModelDataBase, yet you are trying to save data to it with key {}.".format(k, key))
+        
+        # check if the complete key refers to a value and not a sub_mdb
+        # otherwise, an entire sub_mdb is about to be overwritten by data
+        if os.path.exists(self._get_dir_to_data(key)) and isinstance(self[key], ModelDataBase):
+            raise MdbException(
+                "Key {} points to a ModelDataBase, but you are trying to overwrite it with data. If you need this key for the data, please remove the sub_mdb under the same key first using del mdb[key] or mdb[key].remove()."format(key)) 
         
     def _get_dir_to_data(self, key, check_exists = False):
         if isinstance(key, tuple):
             key_path = os.path.join(*key)
             parent_mdb = self
             for k in key:
-                parent_mdb._check_key_format(k)
+                parent_mdb._check_single_key_format(k)
                 parent_mdb = parent_mdb[k]
         else:
-            self._check_key_format(key)
+            self._check_single_key_format(key)
             key_path = key
         dir_to_data = os.path.join(self.basedir, key_path)
         if check_exists:
@@ -449,6 +463,8 @@ class ModelDataBase:
         mdb['my_sub_database']['some_key'] = ['some_value']
         Kwargs will be passed to the dumper.
 
+        TODO: don't override values with submdbs or vice-versa. Tried to make different key checks, but incomplete yet
+
         Args:
             key (str|tuple): The key of the sub_mdb
             register (str, optional): ? TODO. Defaults to 'as_parent'.
@@ -478,7 +494,7 @@ class ModelDataBase:
             remaining_keys = remaining_keys[1:]
         # If there are still unique keys remaining in the tuple, we have to create at least one sub_mdb
         for k in remaining_keys:
-            parent_mdb._check_key_format(k)
+            parent_mdb._check_single_key_format(k)
             parent_mdb.set(k, None, dumper = just_create_mdb_v2, **kwargs)
             parent_mdb[k].parent_mdb = parent_mdb  # remember that it has a parent
             parent_mdb[k]._register_this_database()
@@ -551,25 +567,19 @@ class ModelDataBase:
 
         #check if we have writing privilege
         self._check_writing_privilege(key)
+        self._check_key_format(key)
 
         # Use recursion to create sub_mdbs in case a tuple is passed
-        if type(key) == tuple:
-            if len(key) > 1:
-                # create or fetch the sub_mdb
-                sub_mdb = self.create_sub_mdb(key[0])
-                # Recursion:
-                # If key[1:] is a tuple with 1 element, it will be unpacked in the next recursion iteration
-                # If key[1:] is a tuple with lenght > 1, the recursion continues
-                sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
-                return
-            elif len(key) == 1:
-                key = key[0]
-            else:
-                raise MdbException('key {} is empty tuple'.format(key))
+        # All elements except for the last one should become sub_mdbs
+        # The last element should be saved in the last sub_mdb, and thus cannot be a submdb itself
+        for key in tuple(key)[:-1]:
+            sub_mdb = self.create_sub_mdb(key[0])  # create or fetch the sub_mdb
+            # Recursion: keep making sub_mdbs until we reach the last element
+            # at which point the for-loop will be skipped
+            sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
+            return  # don't continue after the for loop in case keys is still a tuple of size > 1
         
-        # Key is not a tuple
-        # Check if the key is ok and create the corresponding path
-        self._check_key_format(key)
+        # Key is not a tuple if code made it here
         dir_to_data = self._get_dir_to_data(key)
         if os.path.exists(dir_to_data):  # check if we can overwrite
             overwrite = kwargs.get('overwrite', True)  # overwrite=True if unspecified
