@@ -480,8 +480,8 @@ class ModelDataBase:
                         key[:i], key, key[:i]
                         ))
             # go down the tree of sub_mdbs
-            remaining_keys = remaining_keys[1:]
             parent_mdb = parent_mdb[remaining_keys[0]]
+            remaining_keys = remaining_keys[1:]
         
         # If there are still unique keys remaining in the tuple, we have to create at least one sub_mdb
         for k in remaining_keys:
