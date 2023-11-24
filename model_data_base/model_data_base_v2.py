@@ -576,7 +576,7 @@ class ModelDataBase:
         assert type(key) == str  # for debugging
         dir_to_data = self._get_dir_to_data(key)
         if os.path.exists(dir_to_data):  
-            if os.path.exists(os.path.join(dir_to_data, 'metadata.json')):
+            if os.path.exists(os.path.join(dir_to_data, 'mdb')):
                 # We are about to overwrite an mdb with data: that's a no-go (it's a me, Mario)
                 submdb_location = os.path.join(self.basedir, key)
                 raise MdbException(
