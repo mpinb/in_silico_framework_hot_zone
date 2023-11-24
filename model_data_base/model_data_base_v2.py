@@ -278,23 +278,19 @@ class ModelDataBase:
             ValueError: If the key is over 50 characters long
             ValueError: If the key contains characters that are not allowed (only numeric or latin alphabetic characters, "-" and "_" are allowed)
         """
-        def _is_sub_mdb(basedir, key):
+        def _is_sub_mdb(dir_to_data):
             """
             Checks if some key points to a sub_mdb, without using methods like _get_dir_to_data (which use _check_key_validity).
-            Checks if "metadata.json" exists within the key in the basedir.
-            Does not check if basedir exists, or the key within the basedir.
+            Checks if "metadata.json" exists withindir_to_data. If this is the case, it is assumed to be a (sub)mdb.
             
             Checking key validity needs its own way to check if sub_mdbs are present, to avoid infinite recursion.
             This method is only used internally by _check_key_validity, and should never be called directly.
 
             Args:
-                basedir (str): The starting directory in which to look for sub_mdbs
-                key (tuple): The key that either points to a sub_mdb or something else. Needs to actually exist in basedir
+                dir_to_data (str): The directory that points to either a key, or a sub_mdb
             """
-            assert os.path.exists(basedir)
-            # This should always exist
-            dir_to_data = os.path.join(basedir, os.path.join(*key))
             assert os.path.exists(dir_to_data)
+            # This should always exist
             return os.path.exists(os.path.join(dir_to_data, 'db_state.json'))
 
 
@@ -314,8 +310,8 @@ class ModelDataBase:
         # check if all but last subkey of the key either points to a sub_mdb, 
         # or does not exist entirely (and sub_mdbs will be created)
         for subkey in [key[:i] for i in range(1, len(key))]:  # does not include last key
-            maybe_dir_to_data = os.path.join(self.basedir, os.path.join(*subkey))  # may or may not exist already
-            if os.path.exists(maybe_dir_to_data) and not _is_sub_mdb(self.basedir, subkey):
+            must_be_sub_mdb = os.path.join(self.basedir, os.path.join(*subkey))  # may or may not exist already
+            if os.path.exists(must_be_sub_mdb) and not _is_sub_mdb(must_be_sub_mdb):
                 raise MdbException(
                     "Key {} points to a non-ModelDataBase, yet you are trying to save data to it with key {}.".format(subkey, key))
             else:
@@ -324,8 +320,8 @@ class ModelDataBase:
         
         # check if the complete key refers to a value and not a sub_mdb
         # otherwise, an entire sub_mdb is about to be overwritten by data
-        maybe_dir_to_data = os.path.join(self.basedir, os.path.join(*key))  # may or may not exist already
-        if os.path.exists(maybe_dir_to_data) and _is_sub_mdb(self.basedir, key):
+        may_not_be_sub_mdb = os.path.join(self.basedir, *key)  # may or may not exist already
+        if os.path.exists(may_not_be_sub_mdb) and _is_sub_mdb(may_not_be_sub_mdb):
             raise MdbException(
                 "Key {} points to a ModelDataBase, but you are trying to overwrite it with data. If you need this key for the data, please remove the sub_mdb under the same key first using del mdb[key] or mdb[key].remove()".format(key)) 
         
