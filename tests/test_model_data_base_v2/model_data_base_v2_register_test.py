@@ -42,7 +42,7 @@ class TestModelDataBaseRegister:
         assert get_mdb_by_unique_id(mdb3.get_id()).basedir == p3
 
         mdb4 = ModelDataBase(os.path.join(self.basetempdir, 'test4'))
-        register_mdb(mdb4)
+        mdb4._register_this_database()
         assert get_mdb_by_unique_id(mdb4.get_id()).basedir == mdb4.basedir
         assert_search_mdb_did_not_fail(mdbr)
 
