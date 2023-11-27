@@ -21,6 +21,7 @@ from ._version import get_versions
 from .IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_mdb_v2, shared_numpy_store, get_dumper_string_by_dumper_module
 from . import model_data_base_v2_register
 from . import MdbException
+from compatibility import pandas_unpickle_fun
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
@@ -28,7 +29,10 @@ DEFAULT_DUMPER = to_cloudpickle
 
 
 class MetadataAccessor:
-    """Access the metadata of some key 
+    """
+    Access the metadata of some key
+    It does not have a set method, as the metadata is set automatically when a key is set.
+    Upon accidental metadata removal, the ModelDataBase will try to estimate the metadata itself using :func ModelDataBase._update_metadata_if_necessary:.
     """
     def __init__(self, mdb):
         self.mdb = mdb
@@ -47,7 +51,8 @@ class MetadataAccessor:
             return json.load(f)
 
     def keys(self):
-        return self.mdb.keys()
+        return [ k for k in self.mdb.keys() if os.path.exists(os.path.join(self.mdb._get_dir_to_data(k), "metadata.json"))  ]
+
         
 def _check_working_dir_clean_for_build(working_dir):
     '''Backend method that checks, wether working_dir is suitable
@@ -172,35 +177,45 @@ class ModelDataBase:
             if self._registered_to_path is None:
                 self._register_this_database()
                 self.save_db_state()
-            self._update_metadata_if_necessary()
+            self._infer_metadata()  # In case some is missing
 
-    def _update_metadata_if_necessary(self):
+    def _infer_metadata(self):
         '''
-        checks whether metadata is missing. Is so, it tries to estimate metadata, i.e. it sets the
+        Checks whether metadata is missing. Is so, it tries to estimate metadata, i.e. it sets the
         time based on the timestamp of the files. When metadata is created in that way,
         the field `metadata_creation_time` is set to `post_hoc`
         '''
-            
+        def _get_dumper_folder(_mdb, _key):
+            savedir = _mdb._get_dir_to_data(_key)
+            try:
+                dumper_loc = os.path.join(savedir, 'Loader.pickle')
+                # try to actually init the dumper to catch potential errors
+                dumper = pandas_unpickle_fun(dumper_loc)
+                return os.path.dirname(dumper_loc)
+            except FileNotFoundError as e:
+                raise FileNotFoundError("Could not find Loader.pickle in {}. I do not know how to read in this data.".format(savedir)) from e
+
         keys_in_mdb_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
         for key in keys_in_mdb_without_metadata:
             print("Updating metadata for key {key}".format(key = str(key)))
             dir_to_data = self._get_dir_to_data(key)
             dumper = LoaderDumper.get_dumper_string_by_savedir(dir_to_data)
             
-            time = os.stat(self._get_dumper_folder(key)).st_mtime
+            time = os.stat(_get_dumper_folder(self, key)).st_mtime
             time = datetime.datetime.utcfromtimestamp(time)
             time = tuple(time.timetuple())
             
             out = {
                 'dumper': dumper, 
                 'time': time,
-                'metadata_creation_time': 'post_hoc'
+                'metadata_creation_time': 'post_hoc',
+                'version': 'unknown'
                 }
             
             if VC.get_git_version()['dirty']:
-                warnings.warn('The database source folder has uncommitted changes!')
-            
-            self.metadata[key] = out
+                logging.warning('The database source folder has uncommitted changes!')
+            # Save metdata, only for the key that does not have any
+            json.dump(out, open(os.path.join(dir_to_data, 'metadata.json'), 'w'))
             
     def _register_this_database(self):
         print('registering database with unique id {} to the absolute path {}'.format(
@@ -561,14 +576,11 @@ class ModelDataBase:
 
         # Use recursion to create sub_mdbs in case a tuple key is passed
         # All elements except for the last one should become sub_mdbs if they aren't already
-        # The last key should be saved in the last sub_mdb (i.e. one-but-last key), 
         if isinstance(key, tuple) and len(key) > 1:
-            # create or fetch the sub_mdb
-            # calls set() with a string key, so no recursion
-            sub_mdb = self.create_sub_mdb(key[0])  
+            sub_mdb = self.create_sub_mdb(key[0])  # create or fetch the sub_mdb
             # Recursion: call set on the sub_mdb with key[1:]
             sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
-            return  # stop here, since we're done for this key
+            return  # no further part of set() is needed for this subkey
         elif isinstance(key, tuple) and len(key) == 1:
             key = key[0]  # key is string now 
         
@@ -586,8 +598,6 @@ class ModelDataBase:
                 )
             # check if we can overwrite
             overwrite = kwargs.get('overwrite', True)  # overwrite=True if unspecified
-            
-            
             if overwrite:
                 logger.info('Key {} is already set in ModelDatabase {} located at {}. Overwriting...'.format(key, self, self.basedir))
                 delete_in_background(dir_to_data)
@@ -658,7 +668,6 @@ class ModelDataBase:
             ret = fun()
             self.setitem(key, ret, **kwargs)
             return ret    
-    
     
     def keys(self):
         '''returns the keys of the database'''
