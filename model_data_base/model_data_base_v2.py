@@ -781,7 +781,8 @@ class ModelDataBase:
             for i, element in enumerate(listd):
                 # stop iteration if max lines per key is reached
                 if i == max_lines_per_key and depth:
-                    lines.append(indent + '...')
+                    lines = lines[:-1]
+                    lines.append(indent + '... ({} more)'.format(len(listd)-max_lines_per_key+1))
                     return lines
                 # stop iteration if max lines is reached
                 if len(lines) >= max_lines:
@@ -804,7 +805,8 @@ class ModelDataBase:
                         lines = calc_recursive_filetree(
                             next_mdb, dir_to_data, 
                             depth=depth+1, max_depth=max_depth, 
-                            lines=lines, indent=next_indent, only_keys=only_keys)
+                            max_lines_per_key=max_lines_per_key, only_keys=only_keys,
+                            lines=lines, indent=next_indent)
                     # don't recurse deeper, simply adapt the dir
                     else:
                         element += os.path.sep + "..."
