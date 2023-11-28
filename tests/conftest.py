@@ -3,9 +3,11 @@
 # even before pytest discovery
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
 # for setting environment variables, use pytest.ini or .env instead
-import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_base, dask, six, getting_started, Interface  # Interface just to check if setup works. is in essence already a test
+import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_base, dask, six, getting_started
 from model_data_base.mdb_initializers.load_simrun_general import init
 from model_data_base.utils import silence_stdout
+from model_data_base.model_data_base import ModelDataBase
+from model_data_base.model_data_base_v2 import ModelDataBase as ModelDataBase_v2
 import pandas as pd
 import dask.dataframe as dd
 from Interface import get_client
@@ -130,11 +132,11 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
         8. spike_times
 
         Yields:
-            model_data_base.ModelDataBase: An mdb with data
+            ModelDataBase: An mdb with data
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDataBase(path)
         #self.mdb.settings.show_computation_progress = False
 
         with silence_stdout:
@@ -146,10 +148,40 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
+
+    @pytest.fixture
+    def fresh_mdb_v2(worker_id):
+        """Pytest fixture for a ModelDataBase object with a unique temp path.
+        Initializes data with model_data_base.mdb_initializers.load_simrun_general.init
+        Contains 8 keys with data:
+        1. simresult_path
+        2. filelist
+        3. sim_trail_index
+        4. metadata
+        5. voltage_traces
+        6. synapse_activation
+        7. cell_activation
+        8. spike_times
+
+        Yields:
+            ModelDataBase: An mdb with data
+        """
+        # unique temp path
+        path = tempfile.mkdtemp(prefix=worker_id)
+        mdb = ModelDataBase_v2(path)
+        #self.mdb.settings.show_computation_progress = False
+
+        with silence_stdout:
+            init(mdb,
+                 TEST_DATA_FOLDER,
+                 rewrite_in_optimized_format=False,
+                 parameterfiles=False,
+                 dendritic_voltage_traces=False)
+
+        yield mdb
+        # cleanup
+        mdb.remove()
 
     @pytest.fixture
     def empty_mdb(worker_id):
@@ -157,18 +189,31 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
         Does not initialize data, in contrast to fresh_mdb
 
         Yields:
-            model_data_base.ModelDataBase: An empty mdb
+            ModelDataBase: An empty mdb
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDataBase(path)
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
+
+    @pytest.fixture
+    def empty_mdb_v2(worker_id):
+        """Pytest fixture for a ModelDataBase object with a unique temp path.
+        Does not initialize data, in contrast to fresh_mdb
+
+        Yields:
+            ModelDataBase: An empty mdb
+        """
+        # unique temp path
+        path = tempfile.mkdtemp(prefix=worker_id)
+        mdb = ModelDataBase_v2(path)
+
+        yield mdb
+        # cleanup
+        mdb.remove()
 
     @pytest.fixture
     def sqlite_db():
@@ -204,7 +249,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         """
         # unique temp path
         path = tempfile.mkdtemp()
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDataBase(path)
         #self.mdb.settings.show_computation_progress = False
 
         with silence_stdout:
@@ -217,10 +262,41 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
+
+    @pytest.yield_fixture
+    def fresh_mdb_v2():
+        """Pytest fixture for a ModelDataBase object with a unique temp path.
+        Initializes data with model_data_base.mdb_initializers.load_simrun_general.init
+        Contains 8 keys with data:
+        1. simresult_path
+        2. filelist
+        3. sim_trail_index
+        4. metadata
+        5. voltage_traces
+        6. synapse_activation
+        7. cell_activation
+        8. spike_times
+
+        Yields:
+            model_data_base.ModelDataBase: An mdb with data
+        """
+        # unique temp path
+        path = tempfile.mkdtemp()
+        mdb = ModelDataBase_v2(path)
+        #self.mdb.settings.show_computation_progress = False
+
+        with silence_stdout:
+            init(mdb,
+                 TEST_DATA_FOLDER,
+                 rewrite_in_optimized_format=False,
+                 parameterfiles=False,
+                 dendritic_voltage_traces=False,
+                 dumper=pandas_to_msgpack)  # no Parquet dumper
+
+        yield mdb
+        # cleanup
+        mdb.remove()
 
     @pytest.yield_fixture
     def empty_mdb():
@@ -232,14 +308,27 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         """
         # unique temp path
         path = tempfile.mkdtemp()
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDataBase(path)
 
         yield mdb
         # cleanup
-        for key in mdb.keys():
-            del key
-        del mdb
-        shutil.rmtree(path)
+        mdb.remove()
+
+    @pytest.yield_fixture
+    def empty_mdb_v2():
+        """Pytest fixture for a ModelDataBase object with a unique temp path.
+        Does not initialize data, in contrast to fresh_mdb
+
+        Yields:
+            model_data_base.ModelDataBase: An empty mdb
+        """
+        # unique temp path
+        path = tempfile.mkdtemp()
+        mdb = ModelDataBase_v2(path)
+
+        yield mdb
+        # cleanup
+        mdb.remove()
 
     @pytest.yield_fixture
     def sqlite_db():

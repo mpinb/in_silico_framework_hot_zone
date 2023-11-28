@@ -4,9 +4,7 @@ import time
 import numpy as np
 import dask
 import distributed
-from ..context import *
-from .. import decorators
-
+from tests.test_model_data_base import *
 import pickle
 from model_data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SqliteDict
 
@@ -46,7 +44,6 @@ def test_pixelObject_can_be_assigned(sqlite_db):
     po_reconstructed = db[('test', 'myPixelObject')]
 
 
-#@decorators.testlevel(1)
 def test_concurrent_writes(sqlite_db, client):
     keys = [str(lv) for lv in range(100)]
     job = {key: write_data_to_dict(sqlite_db.path, key) for key in keys}

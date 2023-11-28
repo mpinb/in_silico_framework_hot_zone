@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 import dask
 import distributed
-from ..context import *
+from tests.test_model_data_base import *
 from model_data_base.sqlite_backend.tuplecloudsqlitedict import SqliteDict, check_key
 
 

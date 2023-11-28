@@ -1,4 +1,4 @@
-from ..context import *
+from tests.test_model_data_base import *
 from model_data_base.IO.dask_wrappers import *
 import os, shutil
 from mock import MagicMock
