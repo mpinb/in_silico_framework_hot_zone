@@ -36,10 +36,9 @@ class TestModelDataBaseRegister:
             mdb._register_this_database()
 
         mdbr = ModelDataBaseRegister(self.basetempdir)
-
-        assert get_mdb_by_unique_id(mdb1.get_id()).basedir == p1
-        assert get_mdb_by_unique_id(mdb2.get_id()).basedir == p2
-        assert get_mdb_by_unique_id(mdb3.get_id()).basedir == p3
+        assert get_mdb_by_unique_id(mdb1.get_id()).basedir.as_posix() == p1
+        assert get_mdb_by_unique_id(mdb2.get_id()).basedir.as_posix() == p2
+        assert get_mdb_by_unique_id(mdb3.get_id()).basedir.as_posix() == p3
 
         mdb4 = ModelDataBase(os.path.join(self.basetempdir, 'test4'))
         mdb4._register_this_database()

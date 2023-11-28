@@ -205,20 +205,14 @@ class ModelDataBase:
         time based on the timestamp of the files. When metadata is created in that way,
         the field `metadata_creation_time` is set to `post_hoc`
         '''
-        def _get_dumper_folder(_mdb, _key):
-            try:
-                dumper_loc = _key/'Loader.pickle'
-                # try to actually init the dumper to catch potential errors
-                dumper = pandas_unpickle_fun(dumper_loc)
-                return dumper_loc
-            except FileNotFoundError as e:
-                raise FileNotFoundError("Could not find Loader.pickle in {}. I do not know how to read in this data.".format(_key.name)) from e
-
         keys_in_mdb_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
         for key_str in keys_in_mdb_without_metadata:
             key = self._key_to_path(key_str)
             print("Updating metadata for key {key}".format(key = key.name))
-            dumper = LoaderDumper.get_dumper_string_by_savedir(key)
+            try:
+                dumper = LoaderDumper.get_dumper_string_by_savedir(key.as_posix())
+            except FileNotFoundError:
+                dumper = "unknown"
             
             time = os.stat(key).st_mtime
             time = datetime.datetime.utcfromtimestamp(time)
@@ -266,7 +260,7 @@ class ModelDataBase:
         return Path.exists(self.basedir/'db_state.json')
     
     def _initialize(self):
-        _check_working_dir_clean_for_build(self.basedir)      
+        _check_working_dir_clean_for_build(self.basedir)   
         os.makedirs(self.basedir, exist_ok = True)
         # create empty state file. 
         with open(self.basedir/'db_state.json', 'w'):
@@ -756,7 +750,7 @@ class ModelDataBase:
             indent = "" if indent is None else indent
             tee = '├── '
             last = '└── '
-            listd = root_dir_path.iterdir()
+            listd = [e for e in root_dir_path.iterdir()]
             if not all_files:
                 listd = [e for e in listd if e.name in mdb.keys() or e.name == "mdb"]
             
