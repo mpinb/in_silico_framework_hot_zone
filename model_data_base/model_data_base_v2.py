@@ -15,6 +15,7 @@ import inspect
 import datetime
 import importlib
 from .IO import LoaderDumper
+from pathlib import Path
 from . import _module_versions
 VC = _module_versions.version_cached
 from ._version import get_versions
@@ -721,7 +722,7 @@ class ModelDataBase:
     def __repr__(self):
         return self._get_str()  # print with default depth and max_lines
 
-    def print(self, depth=0, max_depth=2, max_lines=20, only_keys=False, max_lines_per_key=3):
+    def print(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3):
         """Prints out the content of the database in a tree structure.
 
         Args:
@@ -730,9 +731,9 @@ class ModelDataBase:
         """
         print(self._get_str(
             depth=depth, max_depth=max_depth, max_lines=max_lines, 
-            only_keys=only_keys, max_lines_per_key=max_lines_per_key))
+            all_files=all_files, max_lines_per_key=max_lines_per_key))
     
-    def _get_str(self, depth=0, max_depth=2, max_lines=20, only_keys=False, max_lines_per_key=3):
+    def _get_str(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3):
         """Fetches a string representation for this mdb in a tree structure.
         This is internal API and should never be called directly.
         
@@ -749,20 +750,19 @@ class ModelDataBase:
         tee = '├── '
         last = '└── '
         
-        def infer_color(mdb, dir_to_data):
-            if is_mdb(dir_to_data):
-                return bcolors.OKGREEN
-            elif os.path.exists(os.path.join(dir_to_data, 'metadata.json')):
-                return bcolors.OKBLUE
-            elif os.path.isdir(dir_to_data):
-                return bcolors.OKCYAN
+        def colorize_key(key):
+            if is_mdb(key.absolute()):
+                c = bcolors.OKGREEN
+            elif any([Path.exists(key/e) for e in ('Loader.json', 'Loader.pickle')]):
+                c = bcolors.OKBLUE
             else:
-                None
+                c = ""
+            return c + key.name + bcolors.ENDC
         
         def calc_recursive_filetree(
             mdb, root_dir_path, 
             depth=0, max_depth=2, max_lines_per_key=3,
-            lines=None, indent=None, only_keys=False):
+            lines=None, indent=None, all_files=False):
             """Fetches the contents of a directory, converts to string
             and adds a prefix to each line to indicate the depth of the file.
 
@@ -774,9 +774,21 @@ class ModelDataBase:
             indent = "" if indent is None else indent
             tee = '├── '
             last = '└── '
-            listd = os.listdir(root_dir_path)
-            if only_keys:
-                listd = [e for e in listd if e in mdb.keys() or e == "mdb"]
+            listd = root_dir_path.iterdir()
+            if not all_files:
+                listd = [e for e in listd if e.name in mdb.keys() or e.name == "mdb"]
+            
+            # these will be adapted depending on the nature of the recursion
+            recursion_kwargs = {
+                'mdb': mdb,
+                'root_dir_path': root_dir_path,
+                'depth': depth,
+                'max_depth': max_depth,
+                'max_lines_per_key': max_lines_per_key,
+                'lines': lines,
+                'indent': indent,
+                'all_files': all_files
+            }
             
             for i, element in enumerate(listd):
                 # stop iteration if max lines per key is reached
@@ -789,42 +801,44 @@ class ModelDataBase:
                     lines.append(indent + '...')
                     return lines
                 
-                dir_to_data = os.path.join(root_dir_path, element)
-                # colorize the text
-                if infer_color(mdb, dir_to_data) is not None:
-                    element = infer_color(mdb, dir_to_data) + element + bcolors.ENDC
                 # format the strings
                 prefix = indent + last if i == len(listd)-1 else indent + tee
-                
-                if os.path.isdir(dir_to_data):
-                    # next recursion iteration
-                    if depth+1 < max_depth:
-                        lines.append(prefix + element)
-                        next_mdb = ModelDataBase(dir_to_data, nocreate=True) if is_mdb(dir_to_data) else mdb
-                        next_indent = indent + '    ' if i == len(listd)-1 else indent + '│   '
-                        lines = calc_recursive_filetree(
-                            next_mdb, dir_to_data, 
-                            depth=depth+1, max_depth=max_depth, 
-                            max_lines_per_key=max_lines_per_key, only_keys=only_keys,
-                            lines=lines, indent=next_indent)
-                    # don't recurse deeper, simply adapt the dir
-                    else:
-                        element += os.path.sep + "..."
-                        lines.append(prefix + element)
 
+                # Recursion loop
+                if element.is_dir():
+                    # should always be the case if all_files = False
+                    # as  this will only iterate keys, which are directories
+                    if depth+1 < max_depth:
+                        # Directory: recurse deeper
+                        # (except if max_depth is reached)
+                        lines.append(prefix + colorize_key(element))
+                        recursion_kwargs['depth'] += 1
+                        recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
+                        recursion_kwargs['root_dir_path'] = element
+                        if Path.exists(element/'mdb') and not all_files:
+                            # submdb: recurse deeper without adding 'mdb' as key
+                            # (only add 'mdb' if all_files=True)
+                            recursion_kwargs['mdb'] = mdb[element.name]
+                            recursion_kwargs['root_dir_path'] = Path(recursion_kwargs['mdb'].basedir)
+                        lines = calc_recursive_filetree(**recursion_kwargs)
+                    else:
+                        # directory at max depth: don't recurse deeper
+                        colored_key = colorize_key(element)
+                        colored_key = str(colored_key + os.path.sep + '...') if Path.exists(element/'mdb') else element.name
+                        lines.append(prefix + colored_key)
                 else:
-                    # not a directory
-                    lines.append(prefix + element)
+                    # not a directory: just add the file
+                    lines.append(prefix + colorize_key(element))
             return lines
         
         str_ = ['<{}.{} object at {}>'.format(self.__class__.__module__, self.__class__.__name__, hex(id(self)))]
         str_.append("Located at {}".format(self.basedir))
-        str_.append("{1}ModelDataBases{0} | {2}Directories{0} | {3}Other keys{0}".format(
-            bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
+        # str_.append("{1}ModelDataBases{0} | {2}Directories{0} | {3}Keys{0}".format(
+        #     bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
         str_.append(bcolors.OKGREEN + self.basedir.split(os.path.sep)[-1] + bcolors.ENDC)
         lines = calc_recursive_filetree(
-            self, self.basedir, 
-            depth=0, max_depth=max_depth, max_lines_per_key=max_lines_per_key, only_keys=only_keys)
+            self, Path(self.basedir), 
+            depth=0, max_depth=max_depth, max_lines_per_key=max_lines_per_key, all_files=all_files)
         for line in lines:
             str_.append(line)
         return "\n".join(str_)
@@ -867,6 +881,7 @@ def get_mdb_by_unique_id(unique_id):
 def is_mdb(dir_to_data):
     '''returns True, if dir_to_data is a (sub)mdb, False otherwise'''
     can_exist = [
+        'mdb',
         'db_state.json', 
         'sqlitedict.db',  # for backwards compatibility
         ]
