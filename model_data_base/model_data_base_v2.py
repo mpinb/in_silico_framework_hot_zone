@@ -22,6 +22,7 @@ from ._version import get_versions
 from .IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_mdb_v2, shared_numpy_store, get_dumper_string_by_dumper_module
 from . import model_data_base_v2_register
 from . import MdbException
+from .utils import calc_recursive_filetree, rename_for_deletion, delete_in_background, is_mdb, get_mdb_by_unique_id
 from compatibility import pandas_unpickle_fun
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
@@ -39,7 +40,7 @@ class MetadataAccessor:
         self.mdb = mdb
         
     def __getitem__(self, key):
-        key = self.mdb._key_to_path(key)
+        key = self.mdb._convert_key_to_path(key)
         if not Path.exists(key/'metadata.json'):
             warnings.warn("No metadata found for key {}".format(key.name))
             return {
@@ -53,7 +54,6 @@ class MetadataAccessor:
 
     def keys(self):
         return [ k for k in self.mdb.keys() if Path.exists(self.mdb.basedir/k/"Loader.[json][pickle]") ]
-
         
 def _check_working_dir_clean_for_build(working_dir):
     '''Backend method that checks, wether working_dir is suitable
@@ -207,7 +207,7 @@ class ModelDataBase:
         '''
         keys_in_mdb_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
         for key_str in keys_in_mdb_without_metadata:
-            key = self._key_to_path(key_str)
+            key = self._convert_key_to_path(key_str)
             print("Updating metadata for key {key}".format(key = key.name))
             try:
                 dumper = LoaderDumper.get_dumper_string_by_savedir(key.as_posix())
@@ -285,7 +285,7 @@ class ModelDataBase:
         """
         self._check_key_format(key)
            
-    def _key_to_path(self, key):
+    def _convert_key_to_path(self, key):
         self._check_key_format(key)
         if isinstance(key, str):
             return self.basedir/key
@@ -326,7 +326,7 @@ class ModelDataBase:
         
     def _detect_dumper_string_of_existing_key(self, key):
         '''returns the dumper string of an existing key'''
-        return get_dumper_from_folder(self._key_to_path(key), return_ = 'string')
+        return get_dumper_from_folder(self._convert_key_to_path(key), return_ = 'string')
     
     def _find_dumper(self, item):
         '''
@@ -382,7 +382,7 @@ class ModelDataBase:
     
     def check_if_key_exists(self, key):
         '''returns True, if key exists in a database, False otherwise'''
-        return self._key_to_path(key).exists()
+        return self._convert_key_to_path(key).exists()
     
     def get_id(self):
         return self._unique_id 
@@ -527,7 +527,7 @@ class ModelDataBase:
             object: The object saved under mdb[key]
         """
         # this looks into the metadata.json, gets the name of the dumper, and loads this module form IO.LoaderDumper
-        key = self._key_to_path(key)
+        key = self._convert_key_to_path(key)
         if not Path.exists(key):
             raise KeyError("Key {} not found in keys of mdb. Keys found: {}".format(key.name, self.keys()))
         if lock:
@@ -537,8 +537,12 @@ class ModelDataBase:
             lock.release()
         return return_
     
-    def rename(self, old, new):
-        old.rename(new)
+    def rename(self, old_key, new_key):
+        if not any([isinstance(e, str) or isinstance(e, Path) for e in [old_key, new_key]]):
+            raise ValueError('old and new must be strings or Paths')
+        old_key = Path(old_key)
+        new_key = Path(new_key) 
+        old_key.rename(new_key)
 
     def set(self, key, value, lock = None, dumper = None, **kwargs):
         """Main method to save data in a ModelDataBase. :func setitem: and :func __setitem__: call this method.
@@ -578,7 +582,7 @@ class ModelDataBase:
         elif isinstance(key, tuple) and len(key) == 1:
             key = key[0]  # break recursion
         
-        key = self._key_to_path(key)
+        key = self._convert_key_to_path(key)
 
         # Key is Path and not a tuple if code made it here
         assert isinstance(key, Path)
@@ -688,8 +692,7 @@ class ModelDataBase:
         This way, your Python process is not interrupted when deleting large files, and you can immediately use the key again.
         
         """
-        to_delete = self._key_to_path(key)
-        assert to_delete.exists(), "Key {} not found in mdb.keys(): {}".format(key.name, self.keys())
+        to_delete = self._convert_key_to_path(key)
         delete_in_background(to_delete)
     
     def __reduce__(self):
@@ -723,90 +726,7 @@ class ModelDataBase:
             str: A string representation of this mdb in a tree structure.
 
         """
-        tee = '├── '
-        last = '└── '
-        
-        def colorize_key(key):
-            if is_mdb(key.absolute()):
-                c = bcolors.OKGREEN
-            elif any([Path.exists(key/e) for e in ('Loader.json', 'Loader.pickle')]):
-                c = bcolors.OKBLUE
-            else:
-                c = ""
-            return c + key.name + bcolors.ENDC
-        
-        def calc_recursive_filetree(
-            mdb, root_dir_path, 
-            depth=0, max_depth=2, max_lines_per_key=3,
-            lines=None, indent=None, all_files=False):
-            """Fetches the contents of a directory, converts to string
-            and adds a prefix to each line to indicate the depth of the file.
 
-            Args:
-                root_dir_path (_type_): _description_
-                depth (_type_): _description_
-            """
-            lines = [] if lines is None else lines
-            indent = "" if indent is None else indent
-            tee = '├── '
-            last = '└── '
-            listd = [e for e in root_dir_path.iterdir()]
-            if not all_files:
-                listd = [e for e in listd if e.name in mdb.keys() or e.name == "mdb"]
-            
-            # these will be adapted depending on the nature of the recursion
-            recursion_kwargs = {
-                'mdb': mdb,
-                'root_dir_path': root_dir_path,
-                'depth': depth,
-                'max_depth': max_depth,
-                'max_lines_per_key': max_lines_per_key,
-                'lines': lines,
-                'indent': indent,
-                'all_files': all_files
-            }
-            
-            for i, element in enumerate(listd):
-                # stop iteration if max lines per key is reached
-                if i == max_lines_per_key and depth:
-                    lines = lines[:-1]
-                    lines.append(indent + '... ({} more)'.format(len(listd)-max_lines_per_key+1))
-                    return lines
-                # stop iteration if max lines is reached
-                if len(lines) >= max_lines:
-                    lines.append(indent + '...')
-                    return lines
-                
-                # format the strings
-                prefix = indent + last if i == len(listd)-1 else indent + tee
-
-                # Recursion loop
-                if element.is_dir():
-                    # should always be the case if all_files = False
-                    # as  this will only iterate keys, which are directories
-                    if depth+1 < max_depth:
-                        # Directory: recurse deeper
-                        # (except if max_depth is reached)
-                        lines.append(prefix + colorize_key(element))
-                        recursion_kwargs['depth'] += 1
-                        recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
-                        recursion_kwargs['root_dir_path'] = element
-                        if Path.exists(element/'mdb') and not all_files:
-                            # submdb: recurse deeper without adding 'mdb' as key
-                            # (only add 'mdb' if all_files=True)
-                            recursion_kwargs['mdb'] = mdb[element.name]
-                            recursion_kwargs['root_dir_path'] = Path(recursion_kwargs['mdb'].basedir)
-                        lines = calc_recursive_filetree(**recursion_kwargs)
-                    else:
-                        # directory at max depth: don't recurse deeper
-                        colored_key = colorize_key(element)
-                        colored_key = str(colored_key + os.sep + '...') if Path.exists(element/'mdb') else element.name
-                        lines.append(prefix + colored_key)
-                else:
-                    # not a directory: just add the file
-                    lines.append(prefix + colorize_key(element))
-            return lines
-        
         str_ = ['<{}.{} object at {}>'.format(self.__class__.__module__, self.__class__.__name__, hex(id(self)))]
         str_.append("Located at {}".format(self.basedir))
         # str_.append("{1}ModelDataBases{0} | {2}Directories{0} | {3}Keys{0}".format(
@@ -846,45 +766,3 @@ class RegisteredFolder(ModelDataBase):
         dumper.dump(None, path)
         self._sql_backend['self'] = LoaderWrapper('')
         self.setitem = None
-     
-
-def get_mdb_by_unique_id(unique_id):
-    mdb_path = model_data_base_v2_register._get_mdb_register().registry[unique_id]
-    mdb = ModelDataBase(mdb_path, nocreate=True)
-    assert mdb.get_id() == unique_id
-    return mdb
-
-def is_mdb(dir_to_data):
-    '''returns True, if dir_to_data is a (sub)mdb, False otherwise'''
-    can_exist = [
-        'db_state.json', 
-        'sqlitedict.db',  # for backwards compatibility
-        ]
-    return any([Path.exists(dir_to_data/e) for e in can_exist])
-
-def rename_for_deletion(key):
-    N = 5
-    while True:
-        random_string = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
-        key_to_delete = Path(key.as_posix() + '.deleting.' + random_string)
-        if not key_to_delete.exists():
-            break
-    key.rename(key_to_delete)
-    return key_to_delete
-
-def delete_in_background(key):
-    assert key.exists()
-    key_to_delete = rename_for_deletion(key)
-    p = threading.Thread(target = lambda : shutil.rmtree(key_to_delete)).start()
-    return p
-
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
