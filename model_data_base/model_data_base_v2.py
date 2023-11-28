@@ -39,27 +39,27 @@ class MetadataAccessor:
         self.mdb = mdb
         
     def __getitem__(self, key):
-        dir_to_data = self.mdb._get_dir_to_data(key, check_exists = True)
-        if not os.path.exists(os.path.join(dir_to_data, 'metadata.json')):
-            warnings.warn("No metadata found for key {}".format(key))
+        key = self.mdb._key_to_path(key)
+        if not Path.exists(key/'metadata.json'):
+            warnings.warn("No metadata found for key {}".format(key.name))
             return {
                 'dumper': "unknown",
                 'time': "unknown",
                 'metadata_creation_time': 'post_hoc',
                 'version': "unknown",
             }
-        with open(os.path.join(dir_to_data, 'metadata.json')) as f:
+        with open(key/'metadata.json') as f:
             return json.load(f)
 
     def keys(self):
-        return [ k for k in self.mdb.keys() if os.path.exists(os.path.join(self.mdb._get_dir_to_data(k), "metadata.json"))  ]
+        return [ k for k in self.mdb.keys() if Path.exists(self.mdb.basedir/k/"Loader.[json][pickle]") ]
 
         
 def _check_working_dir_clean_for_build(working_dir):
     '''Backend method that checks, wether working_dir is suitable
     to build a new database there'''
     #todo: try to make dirs
-    if os.path.exists(working_dir):
+    if Path.exists(working_dir):
         try:
             if not os.listdir(working_dir):
                 return
@@ -101,7 +101,7 @@ def get_dumper_from_folder(folder, return_ = 'module'):
     Returns:
         str | module: The dumper that was used to save the data in that folder/key.
     """
-    with open(os.path.join(folder, "metadata.json")) as f:
+    with open(Path(folder)/"metadata.json") as f:
         dumper_string = json.load(f)['dumper']
     if return_ == 'string':
         return dumper_string
@@ -162,7 +162,7 @@ class ModelDataBase:
             nocreate (bool, optional): If True, a new database will not be created if it does not exist. 
                 Defaults to False.
         '''
-        self.basedir = os.path.abspath(basedir)
+        self.basedir = Path(basedir)
         self.readonly = readonly
         self.nocreate = nocreate
         self.parent_mdb = None
@@ -206,22 +206,21 @@ class ModelDataBase:
         the field `metadata_creation_time` is set to `post_hoc`
         '''
         def _get_dumper_folder(_mdb, _key):
-            savedir = _mdb._get_dir_to_data(_key)
             try:
-                dumper_loc = os.path.join(savedir, 'Loader.pickle')
+                dumper_loc = _key/'Loader.pickle'
                 # try to actually init the dumper to catch potential errors
                 dumper = pandas_unpickle_fun(dumper_loc)
-                return os.path.dirname(dumper_loc)
+                return dumper_loc
             except FileNotFoundError as e:
-                raise FileNotFoundError("Could not find Loader.pickle in {}. I do not know how to read in this data.".format(savedir)) from e
+                raise FileNotFoundError("Could not find Loader.pickle in {}. I do not know how to read in this data.".format(_key.name)) from e
 
         keys_in_mdb_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
-        for key in keys_in_mdb_without_metadata:
-            print("Updating metadata for key {key}".format(key = str(key)))
-            dir_to_data = self._get_dir_to_data(key)
-            dumper = LoaderDumper.get_dumper_string_by_savedir(dir_to_data)
+        for key_str in keys_in_mdb_without_metadata:
+            key = self._key_to_path(key_str)
+            print("Updating metadata for key {key}".format(key = key.name))
+            dumper = LoaderDumper.get_dumper_string_by_savedir(key)
             
-            time = os.stat(_get_dumper_folder(self, key)).st_mtime
+            time = os.stat(key).st_mtime
             time = datetime.datetime.utcfromtimestamp(time)
             time = tuple(time.timetuple())
             
@@ -235,7 +234,7 @@ class ModelDataBase:
             if VC.get_git_version()['dirty']:
                 logging.warning('The database source folder has uncommitted changes!')
             # Save metdata, only for the key that does not have any
-            json.dump(out, open(os.path.join(dir_to_data, 'metadata.json'), 'w'))
+            json.dump(out, open(key/'metadata.json', 'w'))
             
     def _register_this_database(self):
         print('registering database with unique id {} to the absolute path {}'.format(
@@ -256,7 +255,7 @@ class ModelDataBase:
         if self._unique_id is not None:
             raise ValueError("self._unique_id is already set!")
         # db_state.json may exist upon first init, but does not have a unique id yet. Create it and reset db_state
-        time = os.stat(os.path.join(self.basedir, 'db_state.json')).st_mtime
+        time = os.stat(self.basedir/'db_state.json').st_mtime
         time = datetime.datetime.utcfromtimestamp(time)
         time = time.strftime("%Y-%m-%d")
         random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) 
@@ -264,13 +263,13 @@ class ModelDataBase:
         self._unique_id = '_'.join([time, str(os.getpid()), random_string])
     
     def _is_initialized(self):
-        return os.path.exists(os.path.join(self.basedir, 'db_state.json'))
+        return Path.exists(self.basedir/'db_state.json')
     
     def _initialize(self):
         _check_working_dir_clean_for_build(self.basedir)      
         os.makedirs(self.basedir, exist_ok = True)
         # create empty state file. 
-        with open(os.path.join(self.basedir, 'db_state.json'), 'w'):
+        with open(self.basedir/'db_state.json', 'w'):
             pass
         self._set_unique_id()
         self._registeredDumpers.append(DEFAULT_DUMPER)
@@ -292,10 +291,23 @@ class ModelDataBase:
         """
         self._check_key_format(key)
            
-    def _check_key_format(self, key):
+    def _key_to_path(self, key):
+        self._check_key_format(key)
+        if isinstance(key, str):
+            return self.basedir/key
+        elif isinstance(key, tuple):
+            sub_mdb_path = ['mdb'] * (len(key) * 2 - 1)
+            sub_mdb_path[0::2] = key
+            return Path(self.basedir, *sub_mdb_path)
+        else:
+            assert isinstance(key, Path), "Key must be a string, tuple of strings, or Path. {} is type {}".format(key, type(key))
+            return key
+    
+    def _check_key_format(self, key_str_tuple):
         """
         Checks the format of a key (string or tuple) and if it is valid for setting data (not for get).
         This is internal API and should never be called directly.
+        This is the first line of checks when a user sets a key. For this reason, :arg key: is not Path, but a string or tuple.
 
         Args:
             key (str|tuple(str)): The key
@@ -304,13 +316,13 @@ class ModelDataBase:
             ValueError: If the key is over 50 characters long
             ValueError: If the key contains characters that are not allowed (only numeric or latin alphabetic characters, "-" and "_" are allowed)
         """
-        assert isinstance(key, str) or isinstance(key, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
-        assert all([isinstance(k, str) for k in key]), "Any key must be a string or tuple of strings. {} is type {}".format(key, type(key))
-        if isinstance(key, str):
-            key = key,  # convert to tuple
+        assert isinstance(key_str_tuple, str) or isinstance(key_str_tuple, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key_str_tuple, type(key_str_tuple))
+        if isinstance(key_str_tuple, str):
+            key_str_tuple = key_str_tuple,  # convert to tuple
+        assert all([isinstance(e, str) for e in key_str_tuple]), "Any key must be a string or tuple of strings. {} is type {}".format(key_str_tuple, type(key_str_tuple))
 
         # Check if individual characters are allowed
-        for subkey in key:
+        for subkey in key_str_tuple:
             if len(subkey) > 50:
                 raise ValueError('keys must be shorter than 50 characters')
             allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
@@ -318,33 +330,9 @@ class ModelDataBase:
                 if not c in allowed_characters:
                     raise ValueError('Character {} is not allowed, but appears in key {}'.format(c, subkey))
         
-    def _get_dir_to_data(self, key, check_exists=False):
-        '''returns the directory to the data of a given key
-        
-        Args:
-            key (str|tuple(str)): The key
-            check_exists (bool, optional): Whether to check if the key exists. Defaults to False. If True, a KeyError is raised if the key does not exist.
-            check_format (bool, optional): Whether to check the format of the key. Defaults to True. If False, the key is not checked for validity, but only for existence.
-        '''
-        self._check_key_format(key)
-        # convert potential string to tuple (harmless for actual tuples)
-        if isinstance(key, str):
-            key = key,  # convert to tuple
-        # subkeys of tuple keys should always refer to sub_mdbs
-        # except the last subkey can be whatever
-        mdb_sep = os.path.sep + 'mdb' + os.path.sep  # for sub_mdbs, if there are any
-        key_path = mdb_sep.join(key)
-        dir_to_data = os.path.join(self.basedir, key_path)
-        
-        if check_exists:
-            if not os.path.exists(dir_to_data):
-                raise KeyError('Key {} is not set in mdb at directory {}'.format(key_path, self.basedir))
-        return dir_to_data
-
     def _detect_dumper_string_of_existing_key(self, key):
         '''returns the dumper string of an existing key'''
-        dir_to_data = self._get_dir_to_data(key, check_exists = True)
-        return get_dumper_from_folder(dir_to_data, return_ = 'string')
+        return get_dumper_from_folder(self._key_to_path(key), return_ = 'string')
     
     def _find_dumper(self, item):
         '''
@@ -383,7 +371,7 @@ class ModelDataBase:
         if VC.get_git_version()['dirty']:
             warnings.warn('The database source folder has uncommitted changes!')
             
-        with open(os.path.join(dir_to_data, 'metadata.json'), 'w') as f:
+        with open(dir_to_data/'metadata.json', 'w') as f:
             json.dump(out, f)
     
     def _check_writing_privilege(self, key):
@@ -400,11 +388,7 @@ class ModelDataBase:
     
     def check_if_key_exists(self, key):
         '''returns True, if key exists in a database, False otherwise'''
-        try:
-            self._get_dir_to_data(key, check_exists = True)
-            return True
-        except KeyError:
-            return False
+        return self._key_to_path(key).exists()
     
     def get_id(self):
         return self._unique_id 
@@ -424,13 +408,13 @@ class ModelDataBase:
         ## things that define the state of this mdb and should be saved
         out = {'_registeredDumpers': [e.__name__ for e in self._registeredDumpers], \
                '_unique_id': self._unique_id,
-               '_registered_to_path': self._registered_to_path} 
-        with open(os.path.join(self.basedir, 'db_state.json'), 'w') as f:
+               '_registered_to_path': self._registered_to_path.as_posix()} 
+        with open(self.basedir/'db_state.json', 'w') as f:
             json.dump(out, f)
 
     def read_db_state(self):
         '''sets the state of the database according to dbcore.pickle''' 
-        with open(os.path.join(self.basedir, 'db_state.json'), 'r') as f:
+        with open(self.basedir/'db_state.json', 'r') as f:
             state = json.load(f)
             
         for name in state:
@@ -440,17 +424,13 @@ class ModelDataBase:
                     self._registeredDumpers.append(importlib.import_module(dumper_string))
             else:
                 setattr(self, name, state[name])
-    
-    def itemexists(self, key):
-        '''Checks, if item is already in the database'''
-        return key in list(self.keys())
 
     def get_mkdtemp(self, prefix = '', suffix = ''):
         '''creates a directory in the model_data_base directory and 
         returns the path'''
         absolute_path = tempfile.mkdtemp(prefix = prefix + '_', suffix = '_' + suffix, dir = self.basedir) 
         os.chmod(absolute_path, 0o755)
-        relative_path = os.path.relpath(absolute_path, self.basedir)
+        relative_path = absolute_path.relative_to(self.basedir)
         return absolute_path, relative_path
 
     def create_managed_folder(self, key, raise_ = True):
@@ -512,7 +492,7 @@ class ModelDataBase:
                 # The key exists and not an mdb, but we want to create one here
                 raise MdbException(
                     "You were trying to overwrite existing data at %s with a (sub)mdb by using key %s. Please use del mdb[%s] first" % (
-                        os.path.join(parent_mdb.basedir, key[i]), key, key[:i+1]
+                        parent_mdb.basedir/key[i], key, key[:i+1]
                         ))
             # go down the tree of sub_mdbs
             parent_mdb = parent_mdb[remaining_keys[0]]
@@ -553,18 +533,18 @@ class ModelDataBase:
             object: The object saved under mdb[key]
         """
         # this looks into the metadata.json, gets the name of the dumper, and loads this module form IO.LoaderDumper
-        dir_to_data = self._get_dir_to_data(key, check_exists=True)
+        key = self._key_to_path(key)
+        if not Path.exists(key):
+            raise KeyError("Key {} not found in keys of mdb. Keys found: {}".format(key.name, self.keys()))
         if lock:
             lock.acquire()
-        return_ = LoaderDumper.load(dir_to_data, **kwargs)
+        return_ = LoaderDumper.load(key, **kwargs)
         if lock:
             lock.release()
         return return_
     
     def rename(self, old, new):
-        dir_to_data_old = self._get_dir_to_data(old, check_exists = True)
-        dir_to_data_new = self._get_dir_to_data(new)
-        os.rename(old, new)
+        old.rename(new)
 
     def set(self, key, value, lock = None, dumper = None, **kwargs):
         """Main method to save data in a ModelDataBase. :func setitem: and :func __setitem__: call this method.
@@ -602,44 +582,45 @@ class ModelDataBase:
             sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
             return  # no further part of set() is needed for this subkey
         elif isinstance(key, tuple) and len(key) == 1:
-            key = key[0]  # key is string now 
+            key = key[0]  # break recursion
         
-        # Key is str and not a tuple if code made it here
-        assert type(key) == str  # for debugging
-        dir_to_data = self._get_dir_to_data(key)
-        if os.path.exists(dir_to_data):  
-            if is_mdb(dir_to_data):
+        key = self._key_to_path(key)
+
+        # Key is Path and not a tuple if code made it here
+        assert isinstance(key, Path)
+        if Path.exists(key):  
+            if is_mdb(key) or Path.exists(key/'mdb'):
+                # Either the key is an mdb, or it's a key that contains a submdb
                 # We are about to overwrite an mdb with data: that's a no-go (it's a me, Mario)
-                submdb_location = os.path.join(self.basedir, key)
                 raise MdbException(
                     "You were trying to overwrite a sub_mdb at %s with data using the key %s. Please remove the sub_mdb first, or use a different key." % (
-                        dir_to_data, submdb_location
+                        self.basedir, key.name
                         )
                 )
             # check if we can overwrite
             overwrite = kwargs.get('overwrite', True)  # overwrite=True if unspecified
             if overwrite:
-                logger.info('Key {} is already set in ModelDatabase {} located at {}. Overwriting...'.format(key, self, self.basedir))
-                delete_in_background(dir_to_data)
+                logger.info('Key {} is already set in ModelDatabase located at {}. Overwriting...'.format(key.name, self.basedir))
+                delete_in_background(key)
             else:
                 raise KeyError(
-                    'Key {} is already set and you passed overwrite=False in the kwargs: {}'.format(key, kwargs) + \
+                    'Key {} is already set and you passed overwrite=False in the kwargs: {}'.format(key.name, kwargs) + \
                     '\nEither use del mdb[key] first, set overwrite to True, or omit the overwrite keyword argument.')  
         
         # Either the path does not exist yet, or it's in the process of being deleted
-        os.makedirs(dir_to_data)
+        os.makedirs(key)
         
         if lock:
             lock.acquire()
         try:
-            loaderdumper_module.dump(value, dir_to_data, **kwargs)
-            self._write_metadata(dumper, dir_to_data)
+            loaderdumper_module.dump(value, key, **kwargs)
+            self._write_metadata(dumper, key)
         except Exception as e:
             print("An error occured. Tidy up. Please do not interrupt.")
             try:
-                shutil.rmtree(dir_to_data)
+                shutil.rmtree(key)
             except:
-                print('could not delete folder {:s}'.format(dir_to_data))
+                print('could not delete folder {:s}'.format(key.name))
             raise
         if lock:
             lock.release()
@@ -690,13 +671,13 @@ class ModelDataBase:
             return ret    
     
     def keys(self):
-        '''returns the keys of the database'''
-        all_keys = os.listdir(self.basedir)
+        '''returns the keys of the database as string objects'''
+        all_keys = self.basedir.iterdir()
         keys_ =  tuple(
-            e for e in all_keys 
-            if e not in ("db_state.json", "metadata.json", "Loader.json")
-            and e not in ["dbcore.pickle", "metadata.db", "sqlitedict.db", "Loader.pickle"] # mdbv1 compatibility
-            and ".deleting." not in e
+            e.name for e in all_keys 
+            if e.name not in ("db_state.json", "metadata.json", "Loader.json")
+            and e.name not in ["dbcore.pickle", "metadata.db", "sqlitedict.db", "Loader.pickle"] # mdbv1 compatibility
+            and ".deleting." not in e.name
             )
         return keys_
 
@@ -713,8 +694,9 @@ class ModelDataBase:
         This way, your Python process is not interrupted when deleting large files, and you can immediately use the key again.
         
         """
-        dir_to_data = self._get_dir_to_data(key, check_exists = True) 
-        delete_in_background(dir_to_data)
+        to_delete = self._key_to_path(key)
+        assert to_delete.exists(), "Key {} not found in mdb.keys(): {}".format(key.name, self.keys())
+        delete_in_background(to_delete)
     
     def __reduce__(self):
         return (self.__class__, (self.basedir, self.readonly, True), {})
@@ -824,7 +806,7 @@ class ModelDataBase:
                     else:
                         # directory at max depth: don't recurse deeper
                         colored_key = colorize_key(element)
-                        colored_key = str(colored_key + os.path.sep + '...') if Path.exists(element/'mdb') else element.name
+                        colored_key = str(colored_key + os.sep + '...') if Path.exists(element/'mdb') else element.name
                         lines.append(prefix + colored_key)
                 else:
                     # not a directory: just add the file
@@ -835,7 +817,7 @@ class ModelDataBase:
         str_.append("Located at {}".format(self.basedir))
         # str_.append("{1}ModelDataBases{0} | {2}Directories{0} | {3}Keys{0}".format(
         #     bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
-        str_.append(bcolors.OKGREEN + self.basedir.split(os.path.sep)[-1] + bcolors.ENDC)
+        str_.append(bcolors.OKGREEN + self.basedir.name + bcolors.ENDC)
         lines = calc_recursive_filetree(
             self, Path(self.basedir), 
             depth=0, max_depth=max_depth, max_lines_per_key=max_lines_per_key, all_files=all_files)
@@ -881,25 +863,25 @@ def get_mdb_by_unique_id(unique_id):
 def is_mdb(dir_to_data):
     '''returns True, if dir_to_data is a (sub)mdb, False otherwise'''
     can_exist = [
-        'mdb',
         'db_state.json', 
         'sqlitedict.db',  # for backwards compatibility
         ]
-    return any([os.path.exists(os.path.join(dir_to_data, e)) for e in can_exist])
+    return any([Path.exists(dir_to_data/e) for e in can_exist])
 
-def rename_for_deletion(dir_to_data):
+def rename_for_deletion(key):
     N = 5
     while True:
         random_string = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
-        dir_to_data_rename = dir_to_data + '.deleting.' + random_string
-        if not os.path.exists(dir_to_data_rename):
+        key_to_delete = Path(key.as_posix() + '.deleting.' + random_string)
+        if not key_to_delete.exists():
             break
-    os.rename(dir_to_data, dir_to_data_rename)
-    return dir_to_data_rename
+    key.rename(key_to_delete)
+    return key_to_delete
 
-def delete_in_background(dir_to_data):
-    dir_to_data_rename = rename_for_deletion(dir_to_data)
-    p = threading.Thread(target = lambda : shutil.rmtree(dir_to_data_rename)).start()
+def delete_in_background(key):
+    assert key.exists()
+    key_to_delete = rename_for_deletion(key)
+    p = threading.Thread(target = lambda : shutil.rmtree(key_to_delete)).start()
     return p
 
 class bcolors:
