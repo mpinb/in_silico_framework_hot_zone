@@ -110,9 +110,39 @@ def get_dumper_from_folder(folder, return_ = 'module'):
 class ModelDataBase:
     def __init__(self, basedir, readonly = False, nocreate = False):
         '''
-        Class responsible for storing information, meant to be used as an interface to simulation 
-        results. If the dask backends are used to save the data, it will be out of memory,
+        Class responsible for robustly storing and retrieving information.
+        It is meant to be used as an interface to simulation results. 
+        If the dask backends are used to save the data, it will be out of memory, 
         allowing larger than memory calculations.
+        
+        Saved elements can be accessed using dictionary syntax:
+        
+        Example:
+            my_reloaded_element = mdb['my_new_element']
+        
+        All saved elements are stored in the :arg basedir: along with metadata 
+        and a Loader.pickle object. The Loader.pickle object contains which 
+        module should be used to load the data with, along with all the necessary 
+        information to initialize the Loader. This is done because some data 
+        loaders need additional arguments
+        
+        All saved elements have associated metadata:
+        - 'dumper': Which data dumper was used to save this result. 
+            It's corresponding Loader can always be found in the same file. 
+            See :module model_data_base.IO.LoaderDumper: for all dumpers and loaders.
+        - 'time': Time at which this results was saved.
+        - 'conda_list': A fill list of all modules installed in the conda environment 
+            that was used to produce this result
+        - 'module_versions': The versions of all modules in the conda environment 
+            that was used to produce this result
+        - 'history': The history of the code that was used to produce this result 
+            in a Jupyter Notebook.
+        - 'hostname': Name of the machine the code was run on.
+        
+        It is possible to use tuples of strings as keys to reflect an arbitrary hierarchy.
+        Valid keys are tuples of str or str. "@" is not allowed.
+        
+        To read out all existing keys, use the keys() method.
         
         E.g. this class can be initialized in a way that after the initialization, 
         the data can be accessed in the following way:
@@ -124,29 +154,12 @@ class ModelDataBase:
         
         Further more, it is possible to assign new elements to the database
         mdb['my_new_element'] = my_new_element
-        
-        All elements have associated metadata (see :class model_data_base._module_versions.Versions_cached:):
-        - 'dumper': Which dumper was used to save this result. See :module model_data_base.IO.LoaderDumper: for available dumpers.
-        - 'time': Time at which this results was saved.
-        - 'conda_list': A fill list of all modules installed in the conda environment that was used to produce this result
-        - 'module_versions': The versions of all modules in the conda environment that was used to produce this result
-        - 'history': The history of the code that was used to produce this result in a Jupyter Notebook.
-        - 'hostname': Name of the machine the code was run on.
-
-        These elements are stored in the basedir along with metadata and a Loader.pickle object that allows it to be loaded in.
-        
-        They can be read out of the database in the following way:
-        my_reloaded_element = mdb['my_new_element']
-        
-        It is possible to use tuples of strings as keys to reflect an arbitrary hierarchy.
-        Valid keys are tuples of str or str. "@" is not allowed.
-        
-        To read out all existing keys, use the keys() method.
 
         Args:
             basedir (str): The directory in which the database will be created, or read from.
             readonly (bool, optional): If True, the database will be read only. Defaults to False.
-            nocreate (bool, optional): If True, a new database will not be created if it does not exist. Defaults to False.
+            nocreate (bool, optional): If True, a new database will not be created if it does not exist. 
+                Defaults to False.
         '''
         self.basedir = os.path.abspath(basedir)
         self.readonly = readonly
@@ -157,6 +170,12 @@ class ModelDataBase:
         self._unique_id = None
         self._registeredDumpers = []
         self._registered_to_path = None
+
+        self._forbidden_keys = [
+            "dbcore.pickle", "metadata.db", "sqlitedict.db", "Loader.pickle",  # for backwards compatibility
+            "db_state.json",
+            "Loader.json"
+        ]
         
         self.metadata = MetadataAccessor(self)
         if self._is_initialized():
@@ -177,9 +196,9 @@ class ModelDataBase:
             if self._registered_to_path is None:
                 self._register_this_database()
                 self.save_db_state()
-            self._infer_metadata()  # In case some is missing
+            self._infer_missing_metadata()  # In case some is missing
 
-    def _infer_metadata(self):
+    def _infer_missing_metadata(self):
         '''
         Checks whether metadata is missing. Is so, it tries to estimate metadata, i.e. it sets the
         time based on the timestamp of the files. When metadata is created in that way,
@@ -247,7 +266,7 @@ class ModelDataBase:
         return os.path.exists(os.path.join(self.basedir, 'db_state.json'))
     
     def _initialize(self):
-        _check_working_dir_clean_for_build(self.basedir)
+        _check_working_dir_clean_for_build(self.basedir)      
         os.makedirs(self.basedir, exist_ok = True)
         # create empty state file. 
         with open(os.path.join(self.basedir, 'db_state.json'), 'w'):
@@ -459,7 +478,7 @@ class ModelDataBase:
         else:
             self.setitem(key, None, dumper = shared_numpy_store)        
         return self[key]
-
+    
     def create_sub_mdb(self, key, register = 'as_parent', **kwargs):
         '''creates a ModelDataBase within a ModelDataBase. Example:
         mdb.create_sub_mdb('my_sub_database')
@@ -489,10 +508,10 @@ class ModelDataBase:
                 # create sub_mdbs from here on
                 break
             if not isinstance(parent_mdb[remaining_keys[0]], ModelDataBase):
-                # The key is not an mdb, but we want to create a submdb here
+                # The key exists and not an mdb, but we want to create one here
                 raise MdbException(
                     "You were trying to overwrite existing data at %s with a (sub)mdb by using key %s. Please use del mdb[%s] first" % (
-                        key[:i], key, key[:i]
+                        os.path.join(parent_mdb.basedir, key[i]), key, key[:i+1]
                         ))
             # go down the tree of sub_mdbs
             parent_mdb = parent_mdb[remaining_keys[0]]
@@ -501,8 +520,8 @@ class ModelDataBase:
         # If there are still unique keys remaining in the tuple, we have to create at least one sub_mdb
         for k in remaining_keys:
             parent_mdb.set(k, None, dumper = just_create_mdb_v2, **kwargs)
+            # Note: registering this database happens upon initialization of the sub_mdb
             parent_mdb[k].parent_mdb = parent_mdb  # remember that it has a parent
-            parent_mdb[k]._register_this_database()
             parent_mdb = parent_mdb[k]  # go down the tree of sub_mdbs
         # Either :arg raise_: is false and there are no remaining keys 
         #   -> simply return the pre-existing sub_mdb
@@ -578,7 +597,7 @@ class ModelDataBase:
         # All elements except for the last one should become sub_mdbs if they aren't already
         if isinstance(key, tuple) and len(key) > 1:
             sub_mdb = self.create_sub_mdb(key[0])  # create or fetch the sub_mdb
-            # Recursion: call set on the sub_mdb with key[1:]
+            # Recursion: set remaining subkeys in the sub_mdb
             sub_mdb.set(key[1:], value, lock = lock, dumper = dumper, **kwargs)
             return  # no further part of set() is needed for this subkey
         elif isinstance(key, tuple) and len(key) == 1:
@@ -588,7 +607,7 @@ class ModelDataBase:
         assert type(key) == str  # for debugging
         dir_to_data = self._get_dir_to_data(key)
         if os.path.exists(dir_to_data):  
-            if os.path.exists(os.path.join(dir_to_data, 'mdb')):
+            if is_mdb(dir_to_data):
                 # We are about to overwrite an mdb with data: that's a no-go (it's a me, Mario)
                 submdb_location = os.path.join(self.basedir, key)
                 raise MdbException(
@@ -674,9 +693,8 @@ class ModelDataBase:
         all_keys = os.listdir(self.basedir)
         keys_ =  tuple(
             e for e in all_keys 
-            if e != "db_state.json"
-            and e not in ["dbcore.pickle", "metadata.db", "sqlitedict.db"] # mdbv1 compatibility
-            and not e.endswith(".lock") 
+            if e not in ("db_state.json", "metadata.json", "Loader.json")
+            and e not in ["dbcore.pickle", "metadata.db", "sqlitedict.db", "Loader.pickle"] # mdbv1 compatibility
             and ".deleting." not in e
             )
         return keys_
@@ -699,6 +717,99 @@ class ModelDataBase:
     
     def __reduce__(self):
         return (self.__class__, (self.basedir, self.readonly, True), {})
+
+    def __repr__(self):
+        return self._get_str()  # print with default depth and max_lines
+
+    def print(self, depth=0, max_depth=2, max_lines=20, only_keys=False):
+        """Prints out the content of the database in a tree structure.
+
+        Args:
+            max_depth (int, optional): How deep you want the filestructure to be. Defaults to 2.
+            max_lines (int, optional): How long you want your filelist to be. Defaults to 20.
+        """
+        print(self._get_str(depth=depth, max_depth=max_depth, max_lines=max_lines, only_keys=only_keys))
+    
+    def _get_str(self, depth=0, max_depth=2, max_lines=20, only_keys=False, max_lines_per_key=3):
+        """Fetches a string representation for this mdb in a tree structure.
+        This is internal API and should never be called directly.
+        
+        Args:
+            max_depth (int, optional): How deep you want the filestructure to be. Defaults to 2.
+            max_lines (int, optional): How long you want your filelist to be. Defaults to 20.
+            only_keys (bool, optional): Whether to only print keys only, or all files. Defaults to False.
+            max_lines_per_key (int, optional): How many lines to print per key. Defaults to 4.
+
+        Returns:
+            str: A string representation of this mdb in a tree structure.
+
+        """
+        tee = '├── '
+        last = '└── '
+        
+        def infer_color(mdb, dir_to_data):
+            if is_mdb(dir_to_data):
+                return bcolors.OKGREEN
+            elif os.path.exists(os.path.join(dir_to_data, 'metadata.json')):
+                return bcolors.OKBLUE
+            elif os.path.isdir(dir_to_data):
+                return bcolors.OKCYAN
+            else:
+                None
+        
+        def calc_recursive_filetree(
+            mdb, root_dir_path, 
+            depth=0, max_depth=2, max_lines_per_key=3,
+            lines=None, indent=None, only_keys=False):
+            """Fetches the contents of a directory, converts to string
+            and adds a prefix to each line to indicate the depth of the file.
+
+            Args:
+                root_dir_path (_type_): _description_
+                depth (_type_): _description_
+            """
+            lines = [] if lines is None else lines
+            indent = "" if indent is None else indent
+            tee = '├── '
+            last = '└── '
+            listd = os.listdir(root_dir_path)
+            if only_keys:
+                listd = [e for e in listd if e in mdb.keys() or e == "mdb"]
+
+            for i, element in enumerate(listd):
+                dir_to_data = os.path.join(root_dir_path, element)
+                if len(lines) > max_lines:
+                    break
+                if i == max_lines_per_key:
+                    lines.append(indent + '...')
+                    return
+                prefix = indent + last if i == len(listd)-1 else indent + tee
+                if infer_color(mdb, dir_to_data) is not None:
+                    element = infer_color(mdb, dir_to_data) + element + bcolors.ENDC
+                lines.append(prefix + element)
+                next_indent = indent + '    ' if i == len(listd)-1 else indent + '│   '
+                if os.path.isdir(dir_to_data) and depth <= max_depth:
+                    if is_mdb(dir_to_data):
+                        mdb = ModelDataBase(dir_to_data, nocreate=True)
+                    calc_recursive_filetree(
+                        mdb, dir_to_data, 
+                        depth=depth+1, max_depth=max_depth, 
+                        lines=lines, indent=next_indent, only_keys=only_keys)
+            return lines
+        
+        str_ = ['<{}.{} object at {}>'.format(self.__class__.__module__, self.__class__.__name__, hex(id(self)))]
+        str_.append("Located at {}".format(self.basedir))
+        str_.append("{1}ModelDataBases{0} | {2}Directories{0} | {3}Other keys{0}".format(
+            bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
+        str_.append(bcolors.OKGREEN + self.basedir.split(os.path.sep)[-1] + bcolors.ENDC)
+        lines = calc_recursive_filetree(
+            self, self.basedir, 
+            depth=0, max_depth=2, max_lines_per_key=max_lines_per_key, only_keys=only_keys)
+        for line in lines:
+            str_.append(line)
+        if len(lines) > max_lines:
+            str_.append("...")
+        return "\n".join(str_)
 
     def remove(self):
         '''
@@ -735,6 +846,14 @@ def get_mdb_by_unique_id(unique_id):
     assert mdb.get_id() == unique_id
     return mdb
 
+def is_mdb(dir_to_data):
+    '''returns True, if dir_to_data is a (sub)mdb, False otherwise'''
+    can_exist = [
+        'db_state.json', 
+        'sqlitedict.db',  # for backwards compatibility
+        ]
+    return any([os.path.exists(os.path.join(dir_to_data, e)) for e in can_exist])
+
 def rename_for_deletion(dir_to_data):
     N = 5
     while True:
@@ -750,4 +869,13 @@ def delete_in_background(dir_to_data):
     p = threading.Thread(target = lambda : shutil.rmtree(dir_to_data_rename)).start()
     return p
 
-
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
