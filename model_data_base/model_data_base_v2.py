@@ -721,14 +721,16 @@ class ModelDataBase:
     def __repr__(self):
         return self._get_str()  # print with default depth and max_lines
 
-    def print(self, depth=0, max_depth=2, max_lines=20, only_keys=False):
+    def print(self, depth=0, max_depth=2, max_lines=20, only_keys=False, max_lines_per_key=3):
         """Prints out the content of the database in a tree structure.
 
         Args:
             max_depth (int, optional): How deep you want the filestructure to be. Defaults to 2.
             max_lines (int, optional): How long you want your filelist to be. Defaults to 20.
         """
-        print(self._get_str(depth=depth, max_depth=max_depth, max_lines=max_lines, only_keys=only_keys))
+        print(self._get_str(
+            depth=depth, max_depth=max_depth, max_lines=max_lines, 
+            only_keys=only_keys, max_lines_per_key=max_lines_per_key))
     
     def _get_str(self, depth=0, max_depth=2, max_lines=20, only_keys=False, max_lines_per_key=3):
         """Fetches a string representation for this mdb in a tree structure.
@@ -775,26 +777,42 @@ class ModelDataBase:
             listd = os.listdir(root_dir_path)
             if only_keys:
                 listd = [e for e in listd if e in mdb.keys() or e == "mdb"]
-
+            
             for i, element in enumerate(listd):
-                dir_to_data = os.path.join(root_dir_path, element)
-                if len(lines) > max_lines:
-                    break
-                if i == max_lines_per_key:
+                # stop iteration if max lines per key is reached
+                if i == max_lines_per_key and depth:
                     lines.append(indent + '...')
-                    return
-                prefix = indent + last if i == len(listd)-1 else indent + tee
+                    return lines
+                # stop iteration if max lines is reached
+                if len(lines) >= max_lines:
+                    lines.append(indent + '...')
+                    return lines
+                
+                dir_to_data = os.path.join(root_dir_path, element)
+                # colorize the text
                 if infer_color(mdb, dir_to_data) is not None:
                     element = infer_color(mdb, dir_to_data) + element + bcolors.ENDC
-                lines.append(prefix + element)
-                next_indent = indent + '    ' if i == len(listd)-1 else indent + '│   '
-                if os.path.isdir(dir_to_data) and depth <= max_depth:
-                    if is_mdb(dir_to_data):
-                        mdb = ModelDataBase(dir_to_data, nocreate=True)
-                    calc_recursive_filetree(
-                        mdb, dir_to_data, 
-                        depth=depth+1, max_depth=max_depth, 
-                        lines=lines, indent=next_indent, only_keys=only_keys)
+                # format the strings
+                prefix = indent + last if i == len(listd)-1 else indent + tee
+                
+                if os.path.isdir(dir_to_data):
+                    # next recursion iteration
+                    if depth+1 < max_depth:
+                        lines.append(prefix + element)
+                        next_mdb = ModelDataBase(dir_to_data, nocreate=True) if is_mdb(dir_to_data) else mdb
+                        next_indent = indent + '    ' if i == len(listd)-1 else indent + '│   '
+                        lines = calc_recursive_filetree(
+                            next_mdb, dir_to_data, 
+                            depth=depth+1, max_depth=max_depth, 
+                            lines=lines, indent=next_indent, only_keys=only_keys)
+                    # don't recurse deeper, simply adapt the dir
+                    else:
+                        element += os.path.sep + "..."
+                        lines.append(prefix + element)
+
+                else:
+                    # not a directory
+                    lines.append(prefix + element)
             return lines
         
         str_ = ['<{}.{} object at {}>'.format(self.__class__.__module__, self.__class__.__name__, hex(id(self)))]
@@ -804,11 +822,9 @@ class ModelDataBase:
         str_.append(bcolors.OKGREEN + self.basedir.split(os.path.sep)[-1] + bcolors.ENDC)
         lines = calc_recursive_filetree(
             self, self.basedir, 
-            depth=0, max_depth=2, max_lines_per_key=max_lines_per_key, only_keys=only_keys)
+            depth=0, max_depth=max_depth, max_lines_per_key=max_lines_per_key, only_keys=only_keys)
         for line in lines:
             str_.append(line)
-        if len(lines) > max_lines:
-            str_.append("...")
         return "\n".join(str_)
 
     def remove(self):
