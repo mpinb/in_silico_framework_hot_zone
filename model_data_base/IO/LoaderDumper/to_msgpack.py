@@ -1,6 +1,7 @@
 import os
 import msgpack
 from . import parent_classes
+import json
 
 
 def check(obj):
@@ -19,5 +20,5 @@ def dump(obj, path):
     with open(os.path.join(path, 'to_pickle_dump'), 'wb') as file_:
         msgpack.dump(obj, file_)
 
-    with open(os.path.join(path, 'Loader.pickle'), 'wb') as file_:
-        msgpack.dump(Loader(), file_)
+    with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
+        json.dump({'Loader': __name__}, f)

@@ -61,62 +61,61 @@ def data_frame_generic_small(mdb, pdf, ddf, dumper, client=None):
         b.index.name = str(b.index.name)
     assert_frame_equal(a, b)
 
-def test_dask_to_csv_small(fresh_mdb_v2, pdf, ddf):
-    data_frame_generic_small(fresh_mdb_v2, pdf, ddf, dask_to_csv)
+def test_dask_to_csv_small(fresh_mdb_legacy, pdf, ddf):
+    data_frame_generic_small(fresh_mdb_legacy, pdf, ddf, dask_to_csv)
 
-def test_dask_to_msgpack_small(fresh_mdb_v2, pdf, ddf, client):
-    data_frame_generic_small(fresh_mdb_v2, pdf, ddf, dask_to_msgpack,
+def test_dask_to_msgpack_small(fresh_mdb_legacy, pdf, ddf, client):
+    data_frame_generic_small(fresh_mdb_legacy, pdf, ddf, dask_to_msgpack,
         client=client)
 
-def test_dask_to_categorized_msgpack_small(fresh_mdb_v2, pdf, ddf, client):
-    data_frame_generic_small(fresh_mdb_v2, pdf, ddf, dask_to_categorized_msgpack,
+def test_dask_to_categorized_msgpack_small(fresh_mdb_legacy, pdf, ddf, client):
+    data_frame_generic_small(fresh_mdb_legacy, pdf, ddf, dask_to_categorized_msgpack,
         client=client)
 
-def test_pandas_to_msgpack_small(fresh_mdb_v2, pdf):
-    data_frame_generic_small(fresh_mdb_v2, pdf, pdf.copy(), pandas_to_msgpack)
+def test_pandas_to_msgpack_small(fresh_mdb_legacy, pdf):
+    data_frame_generic_small(fresh_mdb_legacy, pdf, pdf.copy(), pandas_to_msgpack)
 
 @pytest.mark.skipif(six.PY2, reason="Pandas DataFrames objects have no attribute `to_parquet` in Python 2.")
-def test_pandas_to_parquet_small(fresh_mdb_v2, pdf):
-    data_frame_generic_small(fresh_mdb_v2, pdf, pdf.copy(), pandas_to_parquet)
+def test_pandas_to_parquet_small(fresh_mdb_legacy, pdf):
+    data_frame_generic_small(fresh_mdb_legacy, pdf, pdf.copy(), pandas_to_parquet)
 
 @pytest.mark.skipif(six.PY2, reason="Pandas DataFrames objects have no attribute `to_parquet` in Python 2.")
-def test_dask_to_parquet_small(fresh_mdb_v2, pdf, ddf, client):
-    data_frame_generic_small(fresh_mdb_v2, pdf, ddf, dask_to_parquet, client=client)
+def test_dask_to_parquet_small(fresh_mdb_legacy, pdf, ddf, client):
+    data_frame_generic_small(fresh_mdb_legacy, pdf, ddf, dask_to_parquet, client=client)
 
-def test_pandas_to_pickle_small(fresh_mdb_v2, pdf):
-    data_frame_generic_small(fresh_mdb_v2, pdf, pdf.copy(), pandas_to_pickle)
+def test_pandas_to_pickle_small(fresh_mdb_legacy, pdf):
+    data_frame_generic_small(fresh_mdb_legacy, pdf, pdf.copy(), pandas_to_pickle)
 
-def test_to_pickle_small(fresh_mdb_v2, pdf):
-    data_frame_generic_small(fresh_mdb_v2, pdf, pdf.copy(), to_pickle)
+def test_to_pickle_small(fresh_mdb_legacy, pdf):
+    data_frame_generic_small(fresh_mdb_legacy, pdf, pdf.copy(), to_pickle)
 
-def test_to_cloudpickle_small(fresh_mdb_v2, pdf):
-    data_frame_generic_small(fresh_mdb_v2, pdf, pdf.copy(), to_cloudpickle)
+def test_to_cloudpickle_small(fresh_mdb_legacy, pdf):
+    data_frame_generic_small(fresh_mdb_legacy, pdf, pdf.copy(), to_cloudpickle)
 
-def test_default_small(fresh_mdb_v2, pdf):
-    # unspecified dumper, should be to_cloudpickle
-    data_frame_generic_small(fresh_mdb_v2, pdf, pdf.copy(), None)
+def test_self_small(fresh_mdb_legacy, pdf):
+    data_frame_generic_small(fresh_mdb_legacy, pdf, pdf.copy(), 'self')
 
-def test_numpy_to_npy(fresh_mdb_v2, pdf):
+def test_numpy_to_npy(fresh_mdb_legacy, pdf):
 
     def fun(x):
-        clean_up(fresh_mdb_v2)
-        fresh_mdb_v2.setitem('test', x, dumper=numpy_to_npy)
-        dummy = fresh_mdb_v2['test']
+        clean_up(fresh_mdb_legacy)
+        fresh_mdb_legacy.setitem('test', x, dumper=numpy_to_npy)
+        dummy = fresh_mdb_legacy['test']
         assert_array_equal(dummy, x)
 
     fun(np.random.randint(5, size=(100, 100)))
     fun(np.random.randint(5, size=(100,)))
     fun(np.array([]))
 
-def test_reduced_lda_model(fresh_mdb_v2):
-        Rm = get_test_Rm(fresh_mdb_v2)
+def test_reduced_lda_model(fresh_mdb_legacy):
+        Rm = get_test_Rm(fresh_mdb_legacy)
         # does not change the original object
         st = Rm.st
         lda_values = Rm.lda_values
         lda_value_dicts = Rm.lda_value_dicts
         mdb_list = Rm.mdb_list
 
-        fresh_mdb_v2.setitem('rm', Rm, dumper=reduced_lda_model)
+        fresh_mdb_legacy.setitem('rm', Rm, dumper=reduced_lda_model)
 
         assert st is Rm.st
         assert lda_values is Rm.lda_values
@@ -124,9 +123,9 @@ def test_reduced_lda_model(fresh_mdb_v2):
         assert mdb_list is Rm.mdb_list
 
         # can be loaded
-        Rm_reloaded = fresh_mdb_v2['rm']
+        Rm_reloaded = fresh_mdb_legacy['rm']
 
         # is functional
         Rm_reloaded.plot()
-        fresh_mdb_v2.setitem('rm2', Rm_reloaded, dumper=reduced_lda_model)
+        fresh_mdb_legacy.setitem('rm2', Rm_reloaded, dumper=reduced_lda_model)
         Rm_reloaded.get_lookup_series_for_different_refractory_period(10)

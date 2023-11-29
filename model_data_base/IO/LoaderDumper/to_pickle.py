@@ -1,6 +1,7 @@
 import os
 from . import parent_classes
 import compatibility
+import json
 
 
 def check(obj):
@@ -17,13 +18,7 @@ class Loader(parent_classes.Loader):
             os.path.join(savedir, 'to_pickle_dump'))
 
 
-def dump(obj, path):
-    compatibility.pickle_fun(obj, os.path.join(path, 'to_pickle_dump'))
-    compatibility.pickle_fun(Loader(), os.path.join(path, 'Loader.pickle'))
-
-
-#     with open(os.path.join(path, 'to_pickle_dump'), 'wb') as file_:
-#         cPickle.dump(obj, file_, protocol=cPickle.HIGHEST_PROTOCOL)
-
-#     with open(os.path.join(path, 'Loader.pickle'), 'wb') as file_:
-#         cPickle.dump(Loader(), file_)
+def dump(obj, savedir):
+    compatibility.pickle_fun(obj, os.path.join(savedir, 'to_pickle_dump'))
+    with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
+        json.dump({'Loader': __name__}, f)

@@ -15,14 +15,13 @@ Filesize: takes 14% of the space, to cloudpickle needs (7 x more space efficient
 from . import parent_classes
 import os, cloudpickle
 from simrun2.reduced_model.get_kernel import ReducedLdaModel
-from model_data_base.model_data_base import ModelDataBase
-from model_data_base.model_data_base_register import get_mdb_by_unique_id
+from model_data_base.model_data_base import ModelDataBase, get_mdb_by_unique_id
 from . import pandas_to_parquet, pandas_to_msgpack
 from . import numpy_to_npz
 import pandas as pd
 import compatibility
 import six
-
+import json
 
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''
@@ -94,7 +93,5 @@ def dump(obj, savedir):
         Rm.lda_values = lda_values
         Rm.lda_value_dicts = lda_value_dicts
         Rm.mdb_list = mdb_list
-        #         with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
-        #             cloudpickle.dump(Loader(), file_)
-        compatibility.cloudpickle_fun(Loader(),
-                                      os.path.join(savedir, 'Loader.pickle'))
+    with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
+        json.dump({'Loader': __name__}, f)

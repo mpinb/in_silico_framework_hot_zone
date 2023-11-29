@@ -6,7 +6,6 @@ from model_data_base.IO.LoaderDumper import pandas_to_msgpack
 import pytest, os, shutil, six, tempfile, warnings, subprocess
 import numpy as np
 from getting_started import parent as getting_started_parent
-from tests.test_model_data_base import *
 import pandas
 from pandas.util.testing import assert_frame_equal
 from model_data_base.mdb_initializers.load_simrun_general import init
@@ -28,7 +27,7 @@ def test_unique_id_stays_the_same_on_reload(empty_mdb):
 
 def test_new_unique_id_is_generated_if_it_is_not_set_yet(empty_mdb):
     empty_mdb._unique_id = None
-    empty_mdb.save_db()
+    empty_mdb.save_db_state()
     assert empty_mdb._unique_id is None
     mdb = ModelDataBase(empty_mdb.basedir)
     assert mdb._unique_id is not None
@@ -51,13 +50,13 @@ def test_get_dumper_string_by_savedir(empty_mdb):
     assert s1 == s2
 
 
-def test_can_detect_self_as_dumper(empty_mdb):
+def test_can_detect_default_dumper(empty_mdb):
     '''dumper string should be the same if it is determined
     post hoc (by providing the path to an already existing folder)
     or from the module reference directly.'''
-    empty_mdb.setitem('test', 1, dumper='self')
+    empty_mdb.setitem('test', 1)  # don't specify dumper
     s1 = empty_mdb._detect_dumper_string_of_existing_key('test')
-    assert s1 == 'self'
+    assert s1 == 'to_cloudpickle'
 
 
 def test_metadata_update(empty_mdb):
@@ -65,7 +64,7 @@ def test_metadata_update(empty_mdb):
     providing a smooth transition from databases, that had not implemented
     metadata to the newer version. This function should not overwrite
     existing metadata'''
-    empty_mdb.setitem('test', 1, dumper='self')
+    empty_mdb.setitem('test', 1)
     empty_mdb.setitem('test2', 1, dumper=to_pickle)
     msg1 = "{} =/= {}".format(empty_mdb.metadata['test']['version'],
                               get_versions()['version'])
@@ -78,7 +77,7 @@ def test_metadata_update(empty_mdb):
     )['version'], msg1 + msg_git
     assert empty_mdb.metadata['test2']['version'] == get_versions(
     )['version'], msg2 + msg_git
-    assert empty_mdb.metadata['test']['dumper'], 'self'
+    assert empty_mdb.metadata['test']['dumper'], 'to_cloudpickle'
     assert empty_mdb.metadata['test2']['dumper'] == 'to_pickle'
     assert empty_mdb.metadata['test'][
         'metadata_creation_time'] == 'together_with_new_key'
@@ -86,9 +85,12 @@ def test_metadata_update(empty_mdb):
         'metadata_creation_time'] == 'together_with_new_key'
 
     # directly after deleting metadata database, every information is "unknown"
-    metadata_db_path = os.path.join(empty_mdb.basedir, 'metadata.db')
+    metadata_db_path = os.path.join(empty_mdb.basedir, 'test', 'metadata.json')
     assert os.path.exists(metadata_db_path)
-    os.remove(os.path.join(empty_mdb.basedir, 'metadata.db'))
+    os.remove(metadata_db_path)
+    metadata_db_path = os.path.join(empty_mdb.basedir, 'test2', 'metadata.json')
+    assert os.path.exists(metadata_db_path)
+    os.remove(metadata_db_path)
 
     assert empty_mdb.metadata['test']['dumper'] == 'unknown'
     assert empty_mdb.metadata['test2']['dumper'] == 'unknown'
@@ -97,7 +99,7 @@ def test_metadata_update(empty_mdb):
     mdb = ModelDataBase(empty_mdb.basedir)
     assert mdb.metadata['test']['version'], "unknown"
     assert mdb.metadata['test2']['version'] == "unknown"
-    assert mdb.metadata['test']['dumper'] == 'self'
+    assert mdb.metadata['test']['dumper'] == 'to_cloudpickle'
     assert mdb.metadata['test2']['dumper'] == 'to_pickle'
     assert mdb.metadata['test']['metadata_creation_time'] == 'post_hoc'
     assert mdb.metadata['test2']['metadata_creation_time'] == 'post_hoc'
@@ -207,7 +209,7 @@ def test_sub_mdb_does_not_overwrite_existing_keys(empty_mdb):
 
 
 def test_can_set_items_using_different_dumpers(empty_mdb):
-    empty_mdb.setitem('test_self', 1, dumper='self')
+    empty_mdb.setitem('test_self', 1)
     empty_mdb.setitem('test_to_pickle', 1, dumper=to_pickle)
     assert empty_mdb['test_self'] == empty_mdb['test_to_pickle']
 
@@ -230,7 +232,7 @@ def test_overwriting_an_item_deletes_old_version(empty_mdb):
     def count_number_of_subfolders(key):
         '''counts the number of folders that are in the mdb
         basedir that match a given key'''
-        folders = [f for f in os.listdir(empty_mdb.basedir) if key in f]
+        folders = [f for f in os.listdir(empty_mdb.basedir) if key in f and not ".deleting." in f]
         return len(folders)
 
     assert count_number_of_subfolders('test') == 0
@@ -322,16 +324,4 @@ def test_check_if_key_exists_can_handle_str_and_tuple_keys(empty_mdb):
     assert empty_mdb.check_if_key_exists(('a',))
     assert empty_mdb.check_if_key_exists(('b', 'b'))
     assert not empty_mdb.check_if_key_exists(('a', 'b'))
-    assert not empty_mdb.check_if_key_exists('b')
-
-
-def test_dumper_can_be_updated_and_metadata_is_adapted(empty_mdb):
-    empty_mdb.setitem('a', 1, dumper='self')
-    m = empty_mdb.metadata['a']
-    assert m['dumper'] == 'self'
-    empty_mdb.change_dumper('a', to_pickle)
-    m = empty_mdb.metadata['a']
-    assert m['dumper'] == 'to_pickle'
-    assert 'dumper_update' in list(m.keys())
-    du = m['dumper_update']
-    assert du[1]['dumper'] == 'to_pickle'
+    assert empty_mdb.check_if_key_exists('b')

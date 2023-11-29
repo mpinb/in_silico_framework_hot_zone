@@ -4,7 +4,7 @@ import time
 import numpy as np
 import dask
 import distributed
-from tests.test_model_data_base import *
+from tests.test_model_data_base_legacy import *
 import pickle
 from model_data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SqliteDict
 

@@ -1,18 +1,11 @@
-import sys, os, time
-import warnings
-import six
+import sys, os, time, random, string, warnings, six, cloudpickle, \
+    contextlib, io, dask, random, string, distributed, \
+        logging, tempfile, shutil, signal, logging, threading, \
+            hashlib, collections, inspect
 from six.moves.cPickle import PicklingError # this import format has potential issues (see six documentation) -rieke
-import cloudpickle
-import contextlib
-import io
-import dask.dataframe as dd
-import dask
-import pandas as pd
-import numpy as np
-import distributed
-import six
+from pathlib import Path
 from six.moves import cPickle
-import logging
+import dask.dataframe as dd
 logger = logging.getLogger("ISF").getChild(__name__)
 
 
@@ -423,7 +416,7 @@ def colorize_key(key):
         
 
 def calc_recursive_filetree(
-    mdb, root_dir_path, 
+    mdb, root_dir_path, max_lines=30,
     depth=0, max_depth=2, max_lines_per_key=3,
     lines=None, indent=None, all_files=False):
     """
@@ -541,13 +534,6 @@ def delete_in_background(key):
     key_to_delete = rename_for_deletion(key)
     p = threading.Thread(target = lambda : shutil.rmtree(key_to_delete)).start()
     return p
-
-
-def get_mdb_by_unique_id(unique_id):
-    mdb_path = model_data_base_v2_register._get_mdb_register().registry[unique_id]
-    mdb = ModelDataBase(mdb_path, nocreate=True)
-    assert mdb.get_id() == unique_id
-    return mdb
 
 def is_mdb(dir_to_data):
     '''returns True, if dir_to_data is a (sub)mdb, False otherwise'''

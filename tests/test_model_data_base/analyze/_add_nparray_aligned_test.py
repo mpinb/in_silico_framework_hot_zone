@@ -1,4 +1,3 @@
-from tests.test_model_data_base import *
 import numpy as np
 from model_data_base.analyze._add_nparray_aligned import *
 

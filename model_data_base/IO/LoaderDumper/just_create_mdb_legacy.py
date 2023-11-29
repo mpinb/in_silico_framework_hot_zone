@@ -6,14 +6,14 @@ import model_data_base
 
 
 def check(obj):
-    '''checks whether obj can be saved with this dumper'''
+    '''checks wherther obj can be saved with this dumper'''
     return obj is None  #isinstance(obj, np) #basically everything can be saved with pickle
 
 
 class Loader(parent_classes.Loader):
 
     def get(self, savedir):
-        return model_data_base.model_data_base_v2.ModelDataBase(os.path.join(savedir, 'mdb'))
+        return model_data_base.model_data_base_legacy.ModelDataBase(os.path.join(savedir, 'mdb'))
 
 
 def dump(obj, savedir):

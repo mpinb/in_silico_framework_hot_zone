@@ -153,7 +153,7 @@ from model_data_base.utils import select, pandas_to_array, pooled_std
 from model_data_base.utils import skit, chunkIt
 from model_data_base.utils import cache
 from model_data_base import utils
-from model_data_base.model_data_base_register import get_mdb_by_unique_id
+from model_data_base.model_data_base import get_mdb_by_unique_id
 from model_data_base.model_data_base_register import assimilate_remote_register
 from model_data_base.mdbopen import resolve_mdb_path, create_mdb_path
 

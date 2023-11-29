@@ -238,7 +238,7 @@ class ModelDataBase(object):
 
         if recursive: 
             for k in list(self.keys()):
-                if self.metadata[k]['dumper'] == 'just_create_mdb':
+                if self.metadata[k]['dumper'] == 'just_create_mdb_legacy':
                     m = self[k]
                     m.in_memory(recursive = True)
                     self._sql_backend._db[k] = m
@@ -338,7 +338,7 @@ class ModelDataBase(object):
             if raise_:
                 raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         else:
-            self.setitem(key, None, dumper = just_create_mdb)
+            self.setitem(key, None, dumper = just_create_mdb_legacy)
         return self[key]
     
     def get_sub_mdb(self,key, register = 'as_parent'):
@@ -750,7 +750,7 @@ from . import _module_versions
 from .IO import LoaderDumper
 
 from .IO.LoaderDumper import just_create_folder
-from .IO.LoaderDumper import just_create_mdb
+from .IO.LoaderDumper import just_create_mdb_legacy
 from .IO.LoaderDumper import to_pickle
 from .IO.LoaderDumper import to_cloudpickle
 if six.PY3:

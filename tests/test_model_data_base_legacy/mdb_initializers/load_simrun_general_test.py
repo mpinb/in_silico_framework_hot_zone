@@ -9,24 +9,24 @@ import numpy as np
 optimize = silence_stdout(optimize)
 
 
-def test_optimization_works_dumpers_default(fresh_mdb_v2, client):
-    optimize(fresh_mdb_v2, dumper=None, client=client)
+def test_optimization_works_dumpers_default(fresh_mdb_legacy, client):
+    optimize(fresh_mdb_legacy, dumper=None, client=client)
 
 
-def test_optimization_works_dumpers_csv(fresh_mdb_v2, client):
-    optimize(fresh_mdb_v2, dumper=dask_to_csv, client=client)
+def test_optimization_works_dumpers_csv(fresh_mdb_legacy, client):
+    optimize(fresh_mdb_legacy, dumper=dask_to_csv, client=client)
 
 
-def test_optimization_works_dumpers_msgpack(fresh_mdb_v2, client):
-    optimize(fresh_mdb_v2, dumper=dask_to_msgpack, client=client)
+def test_optimization_works_dumpers_msgpack(fresh_mdb_legacy, client):
+    optimize(fresh_mdb_legacy, dumper=dask_to_msgpack, client=client)
 
 
-def test_optimization_works_dumpers_categorized_msgpack(fresh_mdb_v2, client):
-    optimize(fresh_mdb_v2, dumper=dask_to_categorized_msgpack, client=client)
+def test_optimization_works_dumpers_categorized_msgpack(fresh_mdb_legacy, client):
+    optimize(fresh_mdb_legacy, dumper=dask_to_categorized_msgpack, client=client)
 
 
-def test_dataintegrity_no_empty_rows(fresh_mdb_v2):
-    e = fresh_mdb_v2
+def test_dataintegrity_no_empty_rows(fresh_mdb_legacy):
+    e = fresh_mdb_legacy
     synapse_activation = e['synapse_activation']
     cell_activation = e['cell_activation']
     voltage_traces = e['voltage_traces']
@@ -44,15 +44,15 @@ def test_dataintegrity_no_empty_rows(fresh_mdb_v2):
         assert 0 == len(voltage_traces[voltage_traces.isnan == True])
 
 
-def test_voltage_traces_have_float_indices(fresh_mdb_v2):
-    e = fresh_mdb_v2
+def test_voltage_traces_have_float_indices(fresh_mdb_legacy):
+    e = fresh_mdb_legacy
     assert isinstance(e['voltage_traces'].columns[0], float)
     assert isinstance(e['voltage_traces'].head().columns[0], float)
 
 
-def test_every_entry_in_initialized_mdb_can_be_serialized(fresh_mdb_v2):
+def test_every_entry_in_initialized_mdb_can_be_serialized(fresh_mdb_legacy):
     import cloudpickle
-    e = fresh_mdb_v2
+    e = fresh_mdb_legacy
     for k in e.keys():
         v = e[k]
         cloudpickle.dumps(v)  # would raise an error if not picklable

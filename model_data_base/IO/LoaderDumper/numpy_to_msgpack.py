@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from . import parent_classes
 import pandas_msgpack
+import json
 
 
 def check(obj):
@@ -15,7 +16,6 @@ def check(obj):
 class Loader(parent_classes.Loader):
 
     def get(self, savedir):
-        #         return pd.read_msgpack(os.path.join(savedir, 'pandas_to_msgpack')).values
         return pandas_msgpack.read_msgpack(
             os.path.join(savedir, 'pandas_to_msgpack')).values
 
@@ -26,7 +26,6 @@ def dump(obj, savedir):
     pandas_msgpack.to_msgpack(os.path.join(savedir, 'pandas_to_msgpack'),
                               obj,
                               compress='blosc')
-    #     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
-    #         cloudpickle.dump(Loader(), file_)
-    compatibility.cloudpickle_fun(Loader(),
-                                  os.path.join(savedir, 'Loader.pickle'))
+
+    with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
+        json.dump({'Loader': __name__}, f)

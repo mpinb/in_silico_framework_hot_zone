@@ -1,4 +1,3 @@
-from tests.test_model_data_base import *
 from model_data_base.model_data_base import ModelDataBase
 import numpy as np
 import pytest

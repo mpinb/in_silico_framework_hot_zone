@@ -1,4 +1,5 @@
-from model_data_base.model_data_base_v2 import ModelDataBase
+from tests.test_model_data_base_legacy import *
+from model_data_base.model_data_base_legacy import ModelDataBase
 import numpy as np
 import pytest
 import signal

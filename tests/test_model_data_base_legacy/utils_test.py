@@ -1,4 +1,4 @@
-from tests.test_model_data_base_v2 import *
+from tests.test_model_data_base_legacy import *
 from model_data_base.utils import *
 import numpy as np
 from pandas.util.testing import assert_frame_equal
