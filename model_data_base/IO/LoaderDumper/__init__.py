@@ -24,9 +24,9 @@ which is the intended way to reload arbitrary objects saved with a Dumper.
 '''
 
 def get_meta(savedir):
-    if os.path.exists(os.path.join(savedir, 'meta.json')):
+    if os.path.exists(os.path.join(savedir, 'dask_meta.json')):
         # Construct meta dataframe for dask
-        with open(os.path.join(savedir, 'meta.json'), 'r') as f:
+        with open(os.path.join(savedir, 'dask_meta.json'), 'r') as f:
             meta_json = json.load(f)
         meta = pd.DataFrame(
             {
