@@ -96,7 +96,7 @@ def save_meta(obj, savedir):
         "columns": [str(c) for c in meta.columns],
         "column_name_dtypes" : [str(np.dtype(type(c))) for c in meta.columns],
         "dtypes": [str(e) for e in meta.dtypes.values]}
-    with open(os.path.join(savedir, 'meta.json'), 'w') as f:
+    with open(os.path.join(savedir, 'dask_meta.json'), 'w') as f:
         json.dump(meta_json, f)
 
 class Loader(parent_classes.Loader):

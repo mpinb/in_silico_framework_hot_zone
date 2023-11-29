@@ -1,12 +1,10 @@
 import sys, os, time, random, string, warnings, six, cloudpickle, \
-    contextlib, io, dask, random, string, distributed, \
-        logging, tempfile, shutil, signal, logging, threading, \
-            hashlib, collections, inspect
+    contextlib, io, dask, distributed, logging, tempfile, shutil, \
+         signal, logging, threading, hashlib, collections, inspect
 from six.moves.cPickle import PicklingError # this import format has potential issues (see six documentation) -rieke
 from pathlib import Path
 from six.moves import cPickle
 import dask.dataframe as dd
-import random
 logger = logging.getLogger("ISF").getChild(__name__)
 
 
