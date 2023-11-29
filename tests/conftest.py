@@ -148,7 +148,10 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
 
         yield mdb
         # cleanup
-        mdb.remove()
+        for key in mdb.keys():
+            del key
+        del mdb
+        shutil.rmtree(path)
 
     @pytest.fixture
     def fresh_mdb(worker_id):
@@ -197,7 +200,10 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
 
         yield mdb
         # cleanup
-        mdb.remove()
+        for key in mdb.keys():
+            del key
+        del mdb
+        shutil.rmtree(path)
 
     @pytest.fixture
     def empty_mdb(worker_id):
@@ -262,7 +268,10 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
 
         yield mdb
         # cleanup
-        mdb.remove()
+        for key in mdb.keys():
+            del key
+        del mdb
+        shutil.rmtree(path)
 
     @pytest.yield_fixture
     def fresh_mdb():
@@ -312,7 +321,11 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
 
         yield mdb
         # cleanup
-        mdb.remove()
+        for key in mdb.keys():
+            del key
+        del mdb
+        shutil.rmtree(path)
+
 
     @pytest.yield_fixture
     def empty_mdb():

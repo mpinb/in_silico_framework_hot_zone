@@ -1,5 +1,5 @@
 from model_data_base.model_data_base_legacy import ModelDataBase, MdbException
-from model_data_base import model_data_base_register
+from model_data_base import model_data_base_legacy_register
 from model_data_base.model_data_base_legacy import get_versions
 import model_data_base.IO.LoaderDumper.to_pickle as to_pickle
 from model_data_base.IO.LoaderDumper import pandas_to_msgpack
