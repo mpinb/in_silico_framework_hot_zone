@@ -207,7 +207,7 @@ class ModelDataBase:
         keys_in_mdb_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
         for key_str in keys_in_mdb_without_metadata:
             key = self._convert_key_to_path(key_str)
-            print("Updating metadata for key {key}".format(key = key.name))
+            logger.info("Updating metadata for key {key}".format(key = key.name))
             try:
                 dumper = LoaderDumper.get_dumper_string_by_savedir(key.as_posix())
             except FileNotFoundError:
@@ -230,7 +230,7 @@ class ModelDataBase:
             json.dump(out, open(key/'metadata.json', 'w'))
             
     def _register_this_database(self):
-        print('registering database with unique id {} to the absolute path {}'.format(
+        logger.info('registering database with unique id {} to the absolute path {}'.format(
             self._unique_id, self.basedir))
         try:
             model_data_base_register.register_mdb(self._unique_id, self.basedir)
@@ -534,7 +534,7 @@ class ModelDataBase:
         try:  # TODO: for debuggin purposes, remove later
             return_ = LoaderDumper.load(key, **kwargs)
         except FileNotFoundError as e:
-            self.print(all_files = True)
+            self.ls(all_files = True)
             raise MdbException("Could not load key %s. The file %s does not exist." % (key, e.filename))
         if lock:
             lock.release()
@@ -617,11 +617,11 @@ class ModelDataBase:
             loaderdumper_module.dump(value, key, **kwargs)
             self._write_metadata(dumper, key)
         except Exception as e:
-            print("An error occured. Tidy up. Please do not interrupt.")
+            logger.info("An error occured. Tidy up. Please do not interrupt.")
             try:
                 shutil.rmtree(key)
             except:
-                print('could not delete folder {:s}'.format(key.name))
+                logger.info('could not delete folder {:s}'.format(key.name))
             raise
         if lock:
             lock.release()
@@ -704,14 +704,14 @@ class ModelDataBase:
     def __repr__(self):
         return self._get_str()  # print with default depth and max_lines
 
-    def print(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3):
+    def ls(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3):
         """Prints out the content of the database in a tree structure.
 
         Args:
             max_depth (int, optional): How deep you want the filestructure to be. Defaults to 2.
             max_lines (int, optional): How long you want your filelist to be. Defaults to 20.
         """
-        print(self._get_str(
+        logger.info(self._get_str(
             depth=depth, max_depth=max_depth, max_lines=max_lines, 
             all_files=all_files, max_lines_per_key=max_lines_per_key))
     
