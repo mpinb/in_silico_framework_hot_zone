@@ -28,7 +28,7 @@ def data_frame_generic_small(db, pdf, ddf, dumper, client=None):
     This function provides a generic way to test dumpers for dataframes.
 
     Args:
-        db (ModelDataBase): An instance of the ModelDataBase class.
+        db (DataBase): An instance of the DataBase class.
         pdf (pd.DataFrame): A pandas DataFrame.
         ddf (dask.DataFrame): A dask DataFrame.
         dumper (string or dumper): A string or dumper object.

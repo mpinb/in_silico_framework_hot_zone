@@ -2,7 +2,7 @@ from isf_data_base.analyze.temporal_binning import *
 import pandas as pd
 import numpy as np
 import dask.dataframe as dd
-from isf_data_base.isf_data_base import ModelDataBase
+from isf_data_base.isf_data_base import DataBase
 
 npartitions = 80
 

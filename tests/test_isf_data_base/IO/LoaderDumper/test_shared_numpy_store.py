@@ -1,4 +1,4 @@
-from isf_data_base.isf_data_base import ModelDataBase
+from isf_data_base.isf_data_base import DataBase
 import numpy as np
 import pytest
 import signal

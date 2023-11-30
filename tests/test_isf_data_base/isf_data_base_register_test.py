@@ -1,7 +1,7 @@
-from isf_data_base.isf_data_base import ModelDataBase, DataBaseException, get_db_by_unique_id
+from isf_data_base.isf_data_base import DataBase, DataBaseException, get_db_by_unique_id
 import tempfile, os, shutil
 from isf_data_base.isf_data_base_register import _get_db_register, \
-        ModelDataBaseRegister, register_db
+        DataBaseRegister, register_db
 import pytest
 
 
@@ -12,7 +12,7 @@ def assert_search_db_did_not_fail(dbr):
     assert not keys
 
 
-class TestModelDataBaseRegister:
+class TestDataBaseRegister:
 
     def setup_class(self):
         self.basetempdir = tempfile.mkdtemp()
@@ -28,25 +28,25 @@ class TestModelDataBaseRegister:
         p1 = os.path.join(self.basetempdir, 'test1')
         p2 = os.path.join(self.basetempdir, 'test1', 'test2')
         p3 = os.path.join(self.basetempdir, 'test2', 'test2')
-        db1 = ModelDataBase(p1)
-        db2 = ModelDataBase(p2)
-        db3 = ModelDataBase(p3)
+        db1 = DataBase(p1)
+        db2 = DataBase(p2)
+        db3 = DataBase(p3)
 
         for db in [db1, db2, db3]:
             db._register_this_database()
 
-        dbr = ModelDataBaseRegister(self.basetempdir)
+        dbr = DataBaseRegister(self.basetempdir)
         assert get_db_by_unique_id(db1.get_id()).basedir.as_posix() == p1
         assert get_db_by_unique_id(db2.get_id()).basedir.as_posix() == p2
         assert get_db_by_unique_id(db3.get_id()).basedir.as_posix() == p3
 
-        db4 = ModelDataBase(os.path.join(self.basetempdir, 'test4'))
+        db4 = DataBase(os.path.join(self.basetempdir, 'test4'))
         db4._register_this_database()
         assert get_db_by_unique_id(db4.get_id()).basedir == db4.basedir
         assert_search_db_did_not_fail(dbr)
 
     def test_unknown_id_raises_KeyError(self):
-        dbr = ModelDataBaseRegister(self.basetempdir)
+        dbr = DataBaseRegister(self.basetempdir)
 
         with pytest.raises(KeyError):
             get_db_by_unique_id('bla')

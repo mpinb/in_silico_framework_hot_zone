@@ -1,6 +1,6 @@
 from isf_data_base.analyze.spatiotemporal_binning import *
 import dask
-from isf_data_base.isf_data_base import ModelDataBase
+from isf_data_base.isf_data_base import DataBase
 import numpy as np
 import pandas as pd
 

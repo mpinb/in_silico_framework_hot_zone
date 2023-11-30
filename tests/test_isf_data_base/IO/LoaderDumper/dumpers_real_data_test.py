@@ -1,4 +1,4 @@
-from isf_data_base.isf_data_base import ModelDataBase
+from isf_data_base.isf_data_base import DataBase
 import tempfile
 import numpy as np
 from pandas.util.testing import assert_frame_equal
@@ -26,7 +26,7 @@ def real_data_generic(db_, dumper_, client_=None):
     Does not ask for any fixtures
 
     Args:
-        db_ (ModelDataBase): db
+        db_ (DataBase): db
         dumper_ (dumper object): the dumper object. Must have a dump() method
         client_ (distributed.Client, optional): client object. Defaults to None.
     """
