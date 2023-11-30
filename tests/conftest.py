@@ -52,7 +52,7 @@ def is_port_in_use(port):
 
 
 def pytest_ignore_collect(path, config):
-    path = path.split(os.sep)
+    path = str(path).split(os.sep)
     if six.PY2:
         return "test_isf_data_base" in path  # Don't run new isfdb tests for PY2
     elif six.PY3:
