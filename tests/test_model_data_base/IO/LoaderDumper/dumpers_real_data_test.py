@@ -1,4 +1,5 @@
-from model_data_base.model_data_base_legacy import ModelDataBase
+from model_data_base.model_data_base import ModelDataBase
+from ... import decorators
 import tempfile
 import numpy as np
 from pandas.util.testing import assert_frame_equal
@@ -57,15 +58,15 @@ def real_data_generic(mdb_, dumper_, client_=None):
     assert_frame_equal(a, b)
 
 
-def test_dask_to_csv_real_data(fresh_mdb_legacy):
-    real_data_generic(mdb_=fresh_mdb_legacy, dumper_=dask_to_csv, client_=None)
+def test_dask_to_csv_real_data(fresh_mdb):
+    real_data_generic(mdb_=fresh_mdb, dumper_=dask_to_csv, client_=None)
 
 
-def test_dask_to_categorized_msgpack_real_data(client, fresh_mdb_legacy):
-    real_data_generic(mdb_=fresh_mdb_legacy,
+def test_dask_to_categorized_msgpack_real_data(client, fresh_mdb):
+    real_data_generic(mdb_=fresh_mdb,
                       dumper_=dask_to_categorized_msgpack,
                       client_=client)
 
 
-def test_dask_to_msgpack_real_data(client, fresh_mdb_legacy):
-    real_data_generic(mdb_=fresh_mdb_legacy, dumper_=dask_to_msgpack, client_=client)
+def test_dask_to_msgpack_real_data(client, fresh_mdb):
+    real_data_generic(mdb_=fresh_mdb, dumper_=dask_to_msgpack, client_=client)

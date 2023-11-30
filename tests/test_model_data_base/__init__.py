@@ -1,28 +1,61 @@
-"""
-Since commit 30e4b69239c46083702bd1da15c9bf6254c51a97 model_data_base has been updated, and the old model_data_base has been renamed to model_data_base_legacy. 
-This test suite is supposed to test functionality of the old model_data_base.
-
-Th enew model_data_base is still capable of reading in data that waas saved with the old model_data_base. You will see that the LoaderDumper module checks
-for the existence of Loader.pickle (the old format) and reads it in accordingly.
-
-The only reason why one would still want to use the legacy mdb version is if:
-- you need to _write_ in the old format
-- you need to use mdb in Python2.7 (the new mdb is Py3.4< only)
-"""
-
-from __future__ import absolute_import
-import os, sys, shutil, tempfile
-import distributed
-import pytest
-
-parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-sys.path.insert(0, parent)
-import distributed
-from model_data_base import *
-import getting_started
-import mechanisms
-# set up paths
-test_data_folder = os.path.join(getting_started.parent, \
-                              'example_simulation_data', \
-                              'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/')
-
+# import unittest
+# import sys
+# import pdb
+# import functools
+# import traceback
+#
+# #######################################
+# #monkypatches for unittest
+# #######################################
+#
+#
+# class Empty():
+#     '''Empty class for structuring data'''
+#     pass
+# unittest.monkypatches = Empty()
+#
+#
+# def debug_on(*exceptions):
+#     '''automaticaly starts debugger if error in unittest occurs.
+#     Doesn't seem to work. Not used.
+#     '''
+#     if not exceptions:
+#         exceptions = (AssertionError, )
+#     def decorator(f):
+#         #@functools.wraps(f)
+#         def wrapper(*args, **kwargs):
+#             try:
+#                 return f(*args, **kwargs)
+#             except exceptions:
+#                 info = sys.exc_info()
+#                 traceback.print_exception(*info)
+#                 pdb.post_mortem(info[2])
+#         return wrapper
+#     return decorator
+# unittest.monkypatches.debug_on = debug_on
+#
+#
+# def run_if_testlevel(flag):
+#     '''decorator for test functions using to define testlevels.
+#     This allows to run timeconsuming tests only if necessary.
+#
+#     Recommended usage:
+#     testlevel 0: very quick
+#     testlevel 1: takes a while
+#     testlevel 2: heavy computations'''
+#
+#     if not isinstance(flag, int) or flag == 'all':
+#         raise ValueError("")
+#     def deco(f):
+#         def wrapper(self, *args, **kwargs):
+#             #print(unittest.monkypatches.testlevel)
+#             if flag == 'all':
+#                 f(self, *args, **kwargs)
+#             elif unittest.monkypatches.testlevel >= flag:
+#                 f(self, *args, **kwargs)
+#             else:
+#                 self.skipTest("this test has testlevel %s. Current testlevel is %s" % (str(flag), str(unittest.monkypatches.testlevel)))
+#         return wrapper
+#     return deco
+# unittest.monkypatches.run_if_testlevel = run_if_testlevel
+# unittest.monkypatches.testlevel = 'all'

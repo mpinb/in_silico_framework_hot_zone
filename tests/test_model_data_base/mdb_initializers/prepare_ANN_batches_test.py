@@ -1,8 +1,9 @@
 import tempfile
 import warnings
-from tests.test_model_data_base_legacy import *
+from ..context import *
 import numpy as np
 import shutil
+from .. import decorators
 from model_data_base.mdb_initializers.prepare_ANN_batches import spike_times_to_onehot
 from model_data_base.mdb_initializers.load_simrun_general \
             import optimize as optimize_simrun_general
@@ -16,11 +17,11 @@ import distributed
 optimize_simrun_general = silence_stdout(optimize_simrun_general)
 
 
-def test_API(fresh_mdb_legacy, client):
-    optimize_simrun_general(fresh_mdb_legacy, client=client)
-    init_synapse_activation(fresh_mdb_legacy, groupby='EI')
-    init_synapse_activation(fresh_mdb_legacy, groupby=['EI'])
-    init_synapse_activation(fresh_mdb_legacy, groupby=['EI', 'proximal'])
+def test_API(fresh_mdb, client):
+    optimize_simrun_general(fresh_mdb, client=client)
+    init_synapse_activation(fresh_mdb, groupby='EI')
+    init_synapse_activation(fresh_mdb, groupby=['EI'])
+    init_synapse_activation(fresh_mdb, groupby=['EI', 'proximal'])
 
 
 def test_onehot_encoding():

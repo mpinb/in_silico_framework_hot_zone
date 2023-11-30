@@ -1,9 +1,10 @@
-from tests.test_model_data_base_legacy import *
+from ..context import *
+from .. import decorators
 from model_data_base.analyze.temporal_binning import *
 import pandas as pd
 import numpy as np
 import dask.dataframe as dd
-from model_data_base.model_data_base_legacy import ModelDataBase
+from model_data_base.model_data_base import ModelDataBase
 
 npartitions = 80
 
@@ -44,8 +45,9 @@ class TestTemporalBinning:
         np.testing.assert_array_equal(bins, np.array([0, 10, 20, 30, 40, 50]))
         np.testing.assert_array_equal(hist, np.array([4, 2, 0, 1, 1]))
 
-    def test_binning_real_data(self, client, fresh_mdb_legacy):
-        pdf = fresh_mdb_legacy['spike_times']
+    #@decorators.testlevel(1)
+    def test_binning_real_data(self, client, fresh_mdb):
+        pdf = fresh_mdb['spike_times']
         #if dask: convert to pandas
         try:
             pdf = pdf.compute()

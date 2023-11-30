@@ -1,5 +1,6 @@
-from tests.test_model_data_base_legacy import *
+from .context import *
 from model_data_base.utils import *
+from . import decorators
 import numpy as np
 from pandas.util.testing import assert_frame_equal
 import distributed
