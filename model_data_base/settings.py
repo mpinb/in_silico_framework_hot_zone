@@ -13,4 +13,3 @@ import os  ##
 
 # model_data_base_register
 model_data_base_register_path = os.path.dirname(__file__)
-isf_data_base_register_path = os.path.dirname(__file__)

@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 import os
-from .model_data_base import ModelDataBase, MdbException, get_mdb_by_unique_id
+from .model_data_base import ModelDataBase, MdbException
+from .model_data_base_register import get_mdb_by_unique_id
 from .utils import cache
 
 

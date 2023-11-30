@@ -97,4 +97,4 @@ def assimilate_remote_register(remote_path, local_path=_foldername):
         mdbr_local.mdb[k] = whole_registry_filtered[k]
 
 
-from .model_data_base_legacy import ModelDataBase, MdbException
+from .model_data_base import ModelDataBase, MdbException

@@ -238,7 +238,7 @@ class ModelDataBase(object):
 
         if recursive: 
             for k in list(self.keys()):
-                if self.metadata[k]['dumper'] == 'just_create_mdb_legacy':
+                if self.metadata[k]['dumper'] == 'just_create_mdb':
                     m = self[k]
                     m.in_memory(recursive = True)
                     self._sql_backend._db[k] = m
@@ -338,7 +338,7 @@ class ModelDataBase(object):
             if raise_:
                 raise MdbException("Key %s is already set. Please use del mdb[%s] first" % (key, key))
         else:
-            self.setitem(key, None, dumper = just_create_mdb_legacy)
+            self.setitem(key, None, dumper = just_create_mdb)
         return self[key]
     
     def get_sub_mdb(self,key, register = 'as_parent'):
@@ -364,7 +364,7 @@ class ModelDataBase(object):
         if path is None:
             return 'self'
         else:
-            return IO.LoaderDumper_legacy.get_dumper_string_by_savedir(path)
+            return IO.LoaderDumper.get_dumper_string_by_savedir(path)
         
     def __getitem__(self, arg, **kwargs):
         '''items can be retrieved from the ModelDataBase using this syntax:
@@ -373,7 +373,7 @@ class ModelDataBase(object):
             # general case                
             dummy = self._sql_backend[arg]
             if isinstance(dummy, LoaderWrapper):
-                dummy = LoaderDumper_legacy.load(os.path.join(self.basedir, dummy.relpath), loader_kwargs = kwargs) 
+                dummy = LoaderDumper.load(os.path.join(self.basedir, dummy.relpath), loader_kwargs = kwargs) 
             if isinstance(dummy, FunctionWrapper):
                 dummy = dummy.fun()
             return dummy   
@@ -490,7 +490,7 @@ class ModelDataBase(object):
         
         key: key
         item: item that should be saved
-        dumper= dumper module to use, e.g. model_data_base.IO.LoaderDumper_legacy.numpy_to_npy
+        dumper= dumper module to use, e.g. model_data_base.IO.LoaderDumper.numpy_to_npy
             If dumper is not set, the default dumper is used
         **kwargs: other keyword arguments that should be passed to the dumper
         '''
@@ -533,7 +533,7 @@ class ModelDataBase(object):
         be called from within ModelDataBase.
         Can othervise be destructive!!!'''        
         if inspect.ismodule(dumper):
-            dumper = LoaderDumper_legacy.get_dumper_string_by_dumper_module(dumper)
+            dumper = LoaderDumper.get_dumper_string_by_dumper_module(dumper)
         elif isinstance(dumper, str):
             pass
         else:
@@ -563,7 +563,7 @@ class ModelDataBase(object):
     def _detect_dumper_string_of_existing_key(self, key):
         dumper = self._sql_backend[key]
         if isinstance(dumper, LoaderWrapper):
-            dumper = LoaderDumper_legacy.get_dumper_string_by_savedir(os.path.join(self.basedir, dumper.relpath))
+            dumper = LoaderDumper.get_dumper_string_by_savedir(os.path.join(self.basedir, dumper.relpath))
         else:
             dumper = 'self'
         return dumper
@@ -638,14 +638,14 @@ class ModelDataBase(object):
     def _write_metadata_for_new_dumper(self, key, new_dumper):
         #update metadata
         if inspect.ismodule(new_dumper):
-            dumper = LoaderDumper_legacy.get_dumper_string_by_dumper_module(new_dumper)
+            dumper = LoaderDumper.get_dumper_string_by_dumper_module(new_dumper)
         elif isinstance(dumper, str):
             pass
                 
         metadata = self.metadata[key]
         if not 'dumper_updates' in metadata:
             metadata['dumper_update'] = [{k: metadata[k] for k in ['dumper', 'time', 'module_versions']}]
-        new_dumper = LoaderDumper_legacy.get_dumper_string_by_dumper_module(new_dumper)
+        new_dumper = LoaderDumper.get_dumper_string_by_dumper_module(new_dumper)
         dumper_update = {'dumper': new_dumper,
                'time': tuple(datetime.datetime.utcnow().timetuple()),
                'conda_list': VC.get_conda_list(),
@@ -747,14 +747,14 @@ class RegisteredFolder(ModelDataBase):
 
 from . import mdbopen
 from . import _module_versions
-from .IO import LoaderDumper_legacy
+from .IO import LoaderDumper
 
-from .IO.LoaderDumper_legacy import just_create_folder
-from .IO.LoaderDumper_legacy import just_create_mdb_legacy
-from .IO.LoaderDumper_legacy import to_pickle
-from .IO.LoaderDumper_legacy import to_cloudpickle
+from .IO.LoaderDumper import just_create_folder
+from .IO.LoaderDumper import just_create_mdb
+from .IO.LoaderDumper import to_pickle
+from .IO.LoaderDumper import to_cloudpickle
 if six.PY3:
-    from .IO.LoaderDumper_legacy import shared_numpy_store
+    from .IO.LoaderDumper import shared_numpy_store
                       
 VC = _module_versions.version_cached
 
