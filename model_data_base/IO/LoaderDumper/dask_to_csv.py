@@ -5,9 +5,7 @@ import dask.delayed
 import pandas as pd
 from . import parent_classes
 import glob
-import json
 import compatibility
-import numpy as np
 
 
 ####################################################
@@ -85,20 +83,6 @@ def check(obj):
     return isinstance(obj, dd.DataFrame)
 
 
-def save_meta(obj, savedir):
-    """
-    Construct a meta object to help out dask later on
-    The original meta object is an empty dataframe with the correct column names
-    We will save this in str format with parquet, as well as the original dtype for each column
-    """
-    meta = obj._meta
-    meta_json = {
-        "columns": [str(c) for c in meta.columns],
-        "column_name_dtypes" : [str(np.dtype(type(c))) for c in meta.columns],
-        "dtypes": [str(e) for e in meta.dtypes.values]}
-    with open(os.path.join(savedir, 'dask_meta.json'), 'w') as f:
-        json.dump(meta_json, f)
-
 class Loader(parent_classes.Loader):
 
     def __init__(self, meta, index_name=None, divisions=None):
@@ -107,11 +91,12 @@ class Loader(parent_classes.Loader):
         self.divisions = divisions
 
     def get(self, savedir, verbose=True):
-        # if dtypes is not defined (old mdb_versions) set it to None
+        #if dtypes is not defined (old mdb_versions) set it to None
         try:
             self.dtypes
         except AttributeError:
             self.dtypes = None
+
 
         my_read_csv = lambda x: pd.read_csv(x, index_col = self.index_name, skiprows = 1, \
                                                 names = [self.index_name] + list(self.meta.columns), \
@@ -148,26 +133,23 @@ def dump(obj, savedir, repartition=False, get=None):
         if obj.npartitions > 10000:
             obj = obj.repartition(npartitions=5000)
 
-    # get = compatibility.multiprocessing_scheduler if get is None else get
+#     get = compatibility.multiprocessing_scheduler if get is None else get
     index_flag = obj.index.name is not None
     my_to_csv(obj,
               os.path.join(savedir, fileglob),
               client=get,
               index=index_flag)
     #obj.to_csv(os.path.join(savedir, fileglob), get = settings.multiprocessing_scheduler, index = index_flag)
-    
+    meta = obj._meta
     index_name = obj.index.name
     if obj.known_divisions:
         divisions = obj.divisions
     else:
         divisions = None
 
-    with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
-        json.dump({
-            'Loader': __name__,
-            'index_name': index_name,
-            'divisions': divisions},
-            f)
 
-    save_meta(obj, savedir)
-
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#         cloudpickle.dump(Loader(meta, index_name = index_name, divisions = divisions), file_)
+    compatibility.cloudpickle_fun(
+        Loader(meta, index_name=index_name, divisions=divisions),
+        os.path.join(savedir, 'Loader.pickle'))

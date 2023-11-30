@@ -4,7 +4,6 @@ import compatibility
 import pandas as pd
 from . import parent_classes
 import pandas_msgpack
-import json
 
 
 def check(obj):
@@ -63,5 +62,7 @@ def dump(obj, savedir, rows_per_file=None):
                                   compress='blosc')
 
 
-    with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
-        json.dump({'Loader': __name__}, f)
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#         cloudpickle.dump(Loader(), file_)
+    compatibility.cloudpickle_fun(Loader(),
+                                  os.path.join(savedir, 'Loader.pickle'))

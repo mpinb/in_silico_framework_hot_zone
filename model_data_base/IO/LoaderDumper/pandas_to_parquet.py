@@ -4,7 +4,6 @@ import compatibility
 import pandas as pd
 from . import parent_classes
 from model_data_base.utils import df_colnames_to_str
-import json
 
 
 def check(obj):
@@ -30,8 +29,8 @@ def dump(obj, savedir):
     obj = df_colnames_to_str(obj)  # overrides original object
     # dump in parquet format
     obj.to_parquet(os.path.join(savedir, 'pandas_to_parquet.parquet'))
-    with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
-        json.dump({'Loader': __name__}, f)
+    compatibility.cloudpickle_fun(Loader(),
+                                  os.path.join(savedir, 'Loader.pickle'))
     # reset column names
     obj.columns = columns
     if obj.index.name is not None:

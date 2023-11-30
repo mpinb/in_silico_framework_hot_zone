@@ -1,12 +1,11 @@
-from model_data_base.model_data_base import ModelDataBase, MdbException, get_mdb_by_unique_id
-import tempfile, os, shutil
-from model_data_base.model_data_base_register import _get_mdb_register, \
-        ModelDataBaseRegister, register_mdb
-import pytest
+from model_data_base.model_data_base_legacy import ModelDataBase, MdbException
+from model_data_base.model_data_base_legacy_register import _get_mdb_register, \
+        ModelDataBaseRegister, get_mdb_by_unique_id, register_mdb
+import pytest, tempfile, shutil, os
 
 
 def assert_search_mdb_did_not_fail(mdbr):
-    keys = list(mdbr.keys())
+    keys = list(mdbr.mdb.keys())
     keys = [k for k in keys if isinstance(k, tuple)]
     #for k in keys: print (mdbr.mdb[k])
     assert not keys
@@ -36,9 +35,10 @@ class TestModelDataBaseRegister:
             mdb._register_this_database()
 
         mdbr = ModelDataBaseRegister(self.basetempdir)
-        assert get_mdb_by_unique_id(mdb1.get_id()).basedir.as_posix() == p1
-        assert get_mdb_by_unique_id(mdb2.get_id()).basedir.as_posix() == p2
-        assert get_mdb_by_unique_id(mdb3.get_id()).basedir.as_posix() == p3
+
+        assert get_mdb_by_unique_id(mdb1.get_id()).basedir == p1
+        assert get_mdb_by_unique_id(mdb2.get_id()).basedir == p2
+        assert get_mdb_by_unique_id(mdb3.get_id()).basedir == p3
 
         mdb4 = ModelDataBase(os.path.join(self.basetempdir, 'test4'))
         mdb4._register_this_database()

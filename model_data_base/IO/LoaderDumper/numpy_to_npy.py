@@ -3,7 +3,6 @@ import os
 import compatibility
 import numpy as np
 from . import parent_classes
-import json
 
 
 def check(obj):
@@ -20,5 +19,7 @@ class Loader(parent_classes.Loader):
 def dump(obj, savedir):
     np.save(os.path.join(savedir, 'np.npy'), obj)
 
-    with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
-        json.dump({'Loader': __name__}, f)
+    #     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+    #         cloudpickle.dump(Loader(), file_)
+    compatibility.cloudpickle_fun(Loader(),
+                                  os.path.join(savedir, 'Loader.pickle'))

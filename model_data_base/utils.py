@@ -534,7 +534,7 @@ def delete_in_background(key):
     p = threading.Thread(target = lambda : shutil.rmtree(key_to_delete)).start()
     return p
 
-def is_mdb(dir_to_data):
+def is_db(dir_to_data):
     '''returns True, if dir_to_data is a (sub)mdb, False otherwise'''
     can_exist = [
         'db_state.json', 

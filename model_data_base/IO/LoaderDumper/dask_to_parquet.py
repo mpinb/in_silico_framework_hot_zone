@@ -6,7 +6,6 @@ import dask
 import json
 from . import parent_classes
 from model_data_base.utils import df_colnames_to_str, chunkIt
-import json
 
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''
@@ -85,12 +84,9 @@ def dump(obj, savedir, schema=None, client=None, repartition = 10000):
     if obj.divisions is not None:
         with open(os.path.join(savedir, 'divisions.json'), 'w') as f:
             json.dump(obj.divisions, f)
-    
-    # partitions and n_partitions are saved in the filename
-    # see load_helper and save_helper. Loader.get() does not need to be initialized with this information
-    with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
-        json.dump({'Loader': __name__}, f)
-
+    #obj.to_parquet(os.path.join(savedir, 'pandas_to_parquet.parquet'), schema = schema)
+    compatibility.cloudpickle_fun(Loader(),
+                                  os.path.join(savedir, 'Loader.pickle'))
 
     # reset original colnames
     obj.columns = columns

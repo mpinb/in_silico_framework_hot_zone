@@ -31,11 +31,8 @@ import time
 from model_data_base.utils import chunkIt, myrepartition, mkdtemp
 import distributed
 import six
-import numpy as np
-
 # import pandas_msgpack # do not import this; it will break pickle in loaded dataframes
 from pandas_msgpack import to_msgpack, read_msgpack
-import json
 
 
 ####
@@ -242,21 +239,6 @@ def check(obj):
     return isinstance(obj, dd.DataFrame)  # and (obj.index.dtype == 'object')
 
 
-def save_meta(obj, savedir):
-    """
-    Construct a meta object to help out dask later on
-    The original meta object is an empty dataframe with the correct column names
-    We will save this in str format with parquet, as well as the original dtype for each column
-    """
-    meta = obj._meta
-    meta_json = {
-        "columns": [str(c) for c in meta.columns],
-        "column_name_dtypes" : [str(np.dtype(type(c))) for c in meta.columns],
-        "dtypes": [str(e) for e in meta.dtypes.values]}
-    with open(os.path.join(savedir, 'dask_meta.json'), 'w') as f:
-        json.dump(meta_json, f)
-    
-
 class Loader(parent_classes.Loader):
 
     def __init__(self, meta, index_name=None, divisions=None):
@@ -265,14 +247,14 @@ class Loader(parent_classes.Loader):
         self.divisions = divisions
 
     def get(self, savedir, verbose=False):
-        # if dtypes is not defined (old mdb_versions) set it to None
+        #if dtypes is not defined (old mdb_versions) set it to None
         try:
             self.dtypes
         except AttributeError:
             self.dtypes = None
 
 
-        # my_reader = lambda x: category_to_str(pd.read_msgpack(x))  ###
+#         my_reader = lambda x: category_to_str(pd.read_msgpack(x))  ###
         my_reader = lambda x: category_to_str(read_msgpack(x))
 
         if self.divisions:
@@ -332,7 +314,7 @@ def dump(obj,
                    os.path.join(savedir, fileglob),
                    categorize=categorize,
                    client=client)
-
+    meta = obj._meta
     index_name = obj.index.name
     if obj.known_divisions:
         assert obj.npartitions + 1 == len(obj.divisions)
@@ -341,13 +323,8 @@ def dump(obj,
         divisions = None
 
 
-    with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
-        json.dump({
-            'Loader': __name__,
-            'index_name': index_name,
-            'divisions': divisions},
-            f)
-    
-    save_meta(obj, savedir)
-
-
+#     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
+#         cloudpickle.dump(Loader(meta, index_name = index_name, divisions = divisions), file_)
+    compatibility.cloudpickle_fun(
+        Loader(meta, index_name=index_name, divisions=divisions),
+        os.path.join(savedir, 'Loader.pickle'))
