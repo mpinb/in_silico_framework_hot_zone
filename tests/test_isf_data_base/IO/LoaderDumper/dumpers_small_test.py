@@ -61,62 +61,62 @@ def data_frame_generic_small(db, pdf, ddf, dumper, client=None):
         b.index.name = str(b.index.name)
     assert_frame_equal(a, b)
 
-def test_dask_to_csv_small(fresh_db, pdf, ddf):
-    data_frame_generic_small(fresh_db, pdf, ddf, dask_to_csv)
+def test_dask_to_csv_small(empty_db, pdf, ddf):
+    data_frame_generic_small(empty_db, pdf, ddf, dask_to_csv)
 
-def test_dask_to_msgpack_small(fresh_db, pdf, ddf, client):
-    data_frame_generic_small(fresh_db, pdf, ddf, dask_to_msgpack,
+def test_dask_to_msgpack_small(empty_db, pdf, ddf, client):
+    data_frame_generic_small(empty_db, pdf, ddf, dask_to_msgpack,
         client=client)
 
-def test_dask_to_categorized_msgpack_small(fresh_db, pdf, ddf, client):
-    data_frame_generic_small(fresh_db, pdf, ddf, dask_to_categorized_msgpack,
+def test_dask_to_categorized_msgpack_small(empty_db, pdf, ddf, client):
+    data_frame_generic_small(empty_db, pdf, ddf, dask_to_categorized_msgpack,
         client=client)
 
-def test_pandas_to_msgpack_small(fresh_db, pdf):
-    data_frame_generic_small(fresh_db, pdf, pdf.copy(), pandas_to_msgpack)
+def test_pandas_to_msgpack_small(empty_db, pdf):
+    data_frame_generic_small(empty_db, pdf, pdf.copy(), pandas_to_msgpack)
 
 @pytest.mark.skipif(six.PY2, reason="Pandas DataFrames objects have no attribute `to_parquet` in Python 2.")
-def test_pandas_to_parquet_small(fresh_db, pdf):
-    data_frame_generic_small(fresh_db, pdf, pdf.copy(), pandas_to_parquet)
+def test_pandas_to_parquet_small(empty_db, pdf):
+    data_frame_generic_small(empty_db, pdf, pdf.copy(), pandas_to_parquet)
 
 @pytest.mark.skipif(six.PY2, reason="Pandas DataFrames objects have no attribute `to_parquet` in Python 2.")
-def test_dask_to_parquet_small(fresh_db, pdf, ddf, client):
-    data_frame_generic_small(fresh_db, pdf, ddf, dask_to_parquet, client=client)
+def test_dask_to_parquet_small(empty_db, pdf, ddf, client):
+    data_frame_generic_small(empty_db, pdf, ddf, dask_to_parquet, client=client)
 
-def test_pandas_to_pickle_small(fresh_db, pdf):
-    data_frame_generic_small(fresh_db, pdf, pdf.copy(), pandas_to_pickle)
+def test_pandas_to_pickle_small(empty_db, pdf):
+    data_frame_generic_small(empty_db, pdf, pdf.copy(), pandas_to_pickle)
 
-def test_to_pickle_small(fresh_db, pdf):
-    data_frame_generic_small(fresh_db, pdf, pdf.copy(), to_pickle)
+def test_to_pickle_small(empty_db, pdf):
+    data_frame_generic_small(empty_db, pdf, pdf.copy(), to_pickle)
 
-def test_to_cloudpickle_small(fresh_db, pdf):
-    data_frame_generic_small(fresh_db, pdf, pdf.copy(), to_cloudpickle)
+def test_to_cloudpickle_small(empty_db, pdf):
+    data_frame_generic_small(empty_db, pdf, pdf.copy(), to_cloudpickle)
 
-def test_default_small(fresh_db, pdf):
+def test_default_small(empty_db, pdf):
     # unspecified dumper, should be to_cloudpickle
-    data_frame_generic_small(fresh_db, pdf, pdf.copy(), None)
+    data_frame_generic_small(empty_db, pdf, pdf.copy(), None)
 
-def test_numpy_to_npy(fresh_db, pdf):
+def test_numpy_to_npy(empty_db, pdf):
 
     def fun(x):
-        clean_up(fresh_db)
-        fresh_db.setitem('test', x, dumper=numpy_to_npy)
-        dummy = fresh_db['test']
+        clean_up(empty_db)
+        empty_db.setitem('test', x, dumper=numpy_to_npy)
+        dummy = empty_db['test']
         assert_array_equal(dummy, x)
 
     fun(np.random.randint(5, size=(100, 100)))
     fun(np.random.randint(5, size=(100,)))
     fun(np.array([]))
 
-def test_reduced_lda_model(fresh_db):
-        Rm = get_test_Rm(fresh_db)
+def test_reduced_lda_model(empty_db):
+        Rm = get_test_Rm(empty_db)
         # does not change the original object
         st = Rm.st
         lda_values = Rm.lda_values
         lda_value_dicts = Rm.lda_value_dicts
         db_list = Rm.db_list
 
-        fresh_db.setitem('rm', Rm, dumper=reduced_lda_model)
+        empty_db.setitem('rm', Rm, dumper=reduced_lda_model)
 
         assert st is Rm.st
         assert lda_values is Rm.lda_values
@@ -124,9 +124,9 @@ def test_reduced_lda_model(fresh_db):
         assert db_list is Rm.db_list
 
         # can be loaded
-        Rm_reloaded = fresh_db['rm']
+        Rm_reloaded = empty_db['rm']
 
         # is functional
         Rm_reloaded.plot()
-        fresh_db.setitem('rm2', Rm_reloaded, dumper=reduced_lda_model)
+        empty_db.setitem('rm2', Rm_reloaded, dumper=reduced_lda_model)
         Rm_reloaded.get_lookup_series_for_different_refractory_period(10)
