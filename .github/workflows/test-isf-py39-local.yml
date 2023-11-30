@@ -4,11 +4,18 @@ name: ISF Py 3.9
 # Controls when the workflow will run
 on:
   push:
-    branches: '*'
-  pull_request:
-    branches: '*'
+    branches:
+      - "*"  # Pushes to any branch
+    paths-ignore:
+      - README.md  # don't run workflow when README changes
+      - CHANGELOG.md # Should never be edited anyway
+      - .gitignore
+      - .github/**
+  pull_request_target:  # only run on PR if it is closed, not while open
+    types:
+      - closed
   workflow_dispatch:
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
 jobs:
   build:
     uses: ./.github/workflows/build-isf.yml

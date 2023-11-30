@@ -1,9 +1,16 @@
 name: ISF Py 3.8
 on:
   push:
-    branches: '*'
-  pull_request:
-    branches: '*'
+    branches:
+      - "*"  # Pushes to any branch
+    paths-ignore:
+      - README.md  # don't run workflow when README changes
+      - CHANGELOG.md # Should never be edited anyway
+      - .gitignore
+      - .github/**
+  pull_request_target:  # only run on PR if it is closed, not while open
+    types:
+      - closed
   workflow_dispatch:
 
 jobs:

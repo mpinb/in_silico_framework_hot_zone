@@ -2,9 +2,18 @@
 # Builds ISF locally on the MPINB-hosted runner and runs all tests
 name: ISF Py 2.7
 # Controls when the workflow will run
+
 on:
   push:
     branches: [ 'master' , 'testing' , 'mdbv2_compatibility']
+    paths-ignore:
+      - README.md  # don't run workflow when README changes
+      - CHANGELOG.md # Should never be edited anyway
+      - .gitignore
+      - .github/**
+  pull_request_target:  # only run on PR if it is closed, not while open
+    types:
+      - closed
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
