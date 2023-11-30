@@ -52,15 +52,17 @@ def is_port_in_use(port):
 
 
 def pytest_ignore_collect(path, config):
-    path = str(path).split(os.sep)
     if six.PY2:
-        return "test_isf_data_base" in path  # Don't run new isfdb tests for PY2
+        return path.fnmatch("test_isf_data_base")  # Don't run new isfdb tests for PY2
     elif six.PY3:
         # Don't use ISF integrated tests for isf_db, as ISF still runs on the old mdb for compatibility on this
         # You can only test core mdb functionality, but not its integration to the rest of the code
-        
-        # Don't test initializers
-        return "test_isf_data_base" in path and "db_initializers" in path
+        if path.fnmatch("test_isf_data_base"):
+            if path.fnmatch("db_initializers"):  # Don't test initializers
+                return True
+            if any([path.fnmatch(e) for e in ("dumpers_real_data_test", "temporal_binning", "spatiotemporal_binning")]):
+                # These use fresh_mdb fixture which uses simrun init
+                return True
 
 
 def pytest_configure(config):
