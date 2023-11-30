@@ -51,6 +51,11 @@ def is_port_in_use(port):
         return s.connect_ex(('localhost', port)) == 0
 
 
+def pytest_ignore_collect(path, config):
+    # Don't run new isfdb tests for PY2
+    if six.PY2 and "test_isf_db" in path.basename:
+        return True
+
 def pytest_configure(config):
     import distributed
     import matplotlib
