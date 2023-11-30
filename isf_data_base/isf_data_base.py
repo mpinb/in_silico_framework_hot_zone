@@ -65,7 +65,7 @@ def _check_working_dir_clean_for_build(working_dir):
             else:
                 raise OSError()
         except OSError:
-            raise dbException("Can't build database: " \
+            raise DataBaseException("Can't build database: " \
                                + "The specified working_dir is either not empty " \
                                + "or write permission is missing. The specified path is %s" % working_dir)
     else:
@@ -73,7 +73,7 @@ def _check_working_dir_clean_for_build(working_dir):
             os.makedirs(working_dir)
             return
         except OSError:
-            raise dbException("Can't build database: " \
+            raise DataBaseException("Can't build database: " \
                                + "Cannot create the directories specified in %s" % working_dir)
             
     self.metadata = MetadataAccessor(self)
@@ -185,9 +185,9 @@ class DataBase:
             "A new empty database will not be created since "+\
             "{mode} is set to True."
             if nocreate:
-                raise dbException(errstr.format(mode = 'nocreate'))
+                raise DataBaseException(errstr.format(mode = 'nocreate'))
             if readonly:
-                raise dbException(errstr.format(mode = 'readonly'))                
+                raise DataBaseException(errstr.format(mode = 'readonly'))                
             self._initialize()
             
         if self.readonly == False:
@@ -235,7 +235,7 @@ class DataBase:
         try:
             isf_data_base_register.register_db(self._unique_id, self.basedir)
             self._registered_to_path = self.basedir
-        except dbException as e:
+        except DataBaseException as e:
             warnings.warn(str(e))
   
     def _set_unique_id(self):
@@ -368,16 +368,16 @@ class DataBase:
             json.dump(out, f)
     
     def _check_writing_privilege(self, key):
-        '''raises dbException, if we don't have permission to write to key '''
+        '''raises DataBaseException, if we don't have permission to write to key '''
         if self.readonly is True:
-            raise dbException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+            raise DataBaseException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         #this exists, so jupyter notebooks will not crash when they try to write something
         elif self.readonly == 'warning': 
             warnings.warn("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         elif self.readonly == False:
             pass
         else:
-            raise dbException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
+            raise DataBaseException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
     
     def check_if_key_exists(self, key):
         '''returns True, if key exists in a database, False otherwise'''
@@ -432,7 +432,7 @@ class DataBase:
         #todo: make sure that existing key will not be overwritten
         if key in list(self.keys()):
             if raise_:
-                raise dbException("Key %s is already set. Please use del db[%s] first" % (key, key))
+                raise DataBaseException("Key %s is already set. Please use del db[%s] first" % (key, key))
         else:           
             self.setitem(key, None, dumper = just_create_folder)
         return self[key]
@@ -448,7 +448,7 @@ class DataBase:
     def create_shared_numpy_store(self, key, raise_ = True):
         if key in list(self.keys()):
             if raise_:
-                raise dbException("Key %s is already set. Please use del db[%s] first" % (key, key))
+                raise DataBaseException("Key %s is already set. Please use del db[%s] first" % (key, key))
         else:
             self.setitem(key, None, dumper = shared_numpy_store)        
         return self[key]
@@ -483,7 +483,7 @@ class DataBase:
                 break
             if not isinstance(parent_db[remaining_keys[0]], DataBase):
                 # The key exists and not an db, but we want to create one here
-                raise dbException(
+                raise DataBaseException(
                     "You were trying to overwrite existing data at %s with a (sub)db by using key %s. Please use del db[%s] first" % (
                         parent_db.basedir/key[i], key, key[:i+1]
                         ))
@@ -535,7 +535,7 @@ class DataBase:
             return_ = LoaderDumper.load(key, **kwargs)
         except FileNotFoundError as e:
             self.ls(all_files = True)
-            raise dbException("Could not load key %s. The file %s does not exist." % (key, e.filename))
+            raise DataBaseException("Could not load key %s. The file %s does not exist." % (key, e.filename))
         if lock:
             lock.release()
         return return_
@@ -593,7 +593,7 @@ class DataBase:
             if is_db(key) or Path.exists(key/'db'):
                 # Either the key is an db, or it's a key that contains a subdb
                 # We are about to overwrite an db with data: that's a no-go (it's a me, Mario)
-                raise dbException(
+                raise DataBaseException(
                     "You were trying to overwrite a sub_db at %s with data using the key %s. Please remove the sub_db first, or use a different key." % (
                         self.basedir, key.name
                         )

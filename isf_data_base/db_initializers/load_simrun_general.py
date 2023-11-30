@@ -13,7 +13,7 @@ from isf_data_base import utils, DataBase
 from isf_data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, \
     to_cloudpickle, to_pickle, pandas_to_parquet, dask_to_msgpack, pandas_to_msgpack, \
         get_dumper_string_by_dumper_module, dask_to_parquet
-from isf_data_base import dbException
+from isf_data_base import DataBaseException
 from isf_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format as read_sa
 from isf_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format as read_ca
 from isf_data_base.analyze.spike_detection import spike_detection
@@ -392,7 +392,7 @@ def create_db_path_print(path, replace_dict={}):
     ## replace_dict: todo
     try:
         return create_db_path(path), True
-    except dbException as e:
+    except DataBaseException as e:
         # print e
         return path, False
 

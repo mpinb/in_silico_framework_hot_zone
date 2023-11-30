@@ -51,7 +51,7 @@ class DataBaseRegister():
                     self.add_db(metadata["unique_id"], dir_)
                 except (KeyboardInterrupt, SystemExit):
                     raise
-                except dbException:  # if there is no database
+                except DataBaseException:  # if there is no database
                     continue
                 except Exception as e:
                     self.registry['failed', dir_] = e
