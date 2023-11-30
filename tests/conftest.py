@@ -52,15 +52,15 @@ def is_port_in_use(port):
 
 
 def pytest_ignore_collect(path, config):
+    path = path.split(os.sep)
     if six.PY2:
-        if "test_isf_data_base" in path.name:
-            # Don't run new isfdb tests for PY2
-            return True
+        return "test_isf_data_base" in path  # Don't run new isfdb tests for PY2
     elif six.PY3:
         # Don't use ISF integrated tests for isf_db, as ISF still runs on the old mdb for compatibility on this
         # You can only test core mdb functionality, but not its integration to the rest of the code
+        
         # Don't test initializers
-        return "test_isf_data_base" in path.name and "db_initializers" in path.name
+        return "test_isf_data_base" in path and "db_initializers" in path
 
 
 def pytest_configure(config):
