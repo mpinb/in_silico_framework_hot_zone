@@ -742,7 +742,7 @@ def add_dendritic_spike_times(mdb, dendritic_spike_times_threshold=-30.):
 def _get_dumper(value):
     '''tries to automativcally infer the best dumper for each table'''
     if isinstance(value, pd.DataFrame):
-        return pandas_to_parquet if six.PY3 else pandas_to_msgpack
+        return pandas_to_parquet if six.PY3 else pandas_to_msgpack  # TODO
     elif isinstance(value, dd.DataFrame):
         return dask_to_parquet if six.PY3 else dask_to_msgpack
     else:
