@@ -317,7 +317,7 @@ def test_mini_optimization_run(capsys, client):
 )
 def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
     """
-    TODO: make this test compatible with py3. Currently, it can not read the simulator object from mdb_legacy
+    This test is incompatible with py3.
     it yields:
     ```
     TypeError                                 Traceback (most recent call last)
@@ -328,6 +328,31 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
         4 r
 
     TypeError: an integer is required (got type str)
+
+    This test is also incompatible with Py2. It yelds:
+    ```
+    >>> s_legacy = mdb_legacy['86']['get_Simulator'](mdb_legacy['86'])
+    Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/model_data_base/model_data_base.py", line 376, in __getitem__
+        dummy = LoaderDumper.load(os.path.join(self.basedir, dummy.relpath), loader_kwargs = kwargs) 
+    File "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/model_data_base/IO/LoaderDumper/__init__.py", line 32, in load
+        return myloader.get(savedir, **loader_kwargs)
+    File "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/model_data_base/IO/LoaderDumper/to_cloudpickle.py", line 17, in get
+        os.path.join(savedir, 'to_pickle_dump'))
+    File "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/compatibility.py", line 48, in pandas_unpickle_fun
+        return uncloudpickle_fun(file_path)
+    File "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/compatibility.py", line 44, in uncloudpickle_fun
+        return cloudpickle.load(f)
+    File "/gpfs/soma_fs/scratch/meulemeester/anaconda_isf2/lib/python2.7/pickle.py", line 1384, in load
+        return Unpickler(file).load()
+    File "/gpfs/soma_fs/scratch/meulemeester/anaconda_isf2/lib/python2.7/pickle.py", line 864, in load
+        dispatch[key](self)
+    File "/gpfs/soma_fs/scratch/meulemeester/anaconda_isf2/lib/python2.7/pickle.py", line 1139, in load_reduce
+        value = func(*args)
+    File "/gpfs/soma_fs/scratch/meulemeester/anaconda_isf2/lib/python2.7/site-packages/cloudpickle/cloudpickle.py", line 1041, in _make_skel_func
+        if cell_count >= 0 else
+    TypeError: range() integer end argument expected, got list.
     ```
     """
     setup_hay_evaluator(
