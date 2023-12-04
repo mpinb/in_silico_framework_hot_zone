@@ -3,9 +3,11 @@
 # even before pytest discovery
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
 # for setting environment variables, use pytest.ini or .env instead
-import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_base, dask, six, getting_started, Interface  # Interface just to check if setup works. is in essence already a test
+import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_base, dask, six, getting_started
 from model_data_base.mdb_initializers.load_simrun_general import init
 from model_data_base.utils import silence_stdout
+from model_data_base.model_data_base import ModelDataBase as ModelDatabase
+from isf_data_base.isf_data_base import DataBase
 import pandas as pd
 import dask.dataframe as dd
 from Interface import get_client
@@ -47,6 +49,20 @@ def pytest_addoption(parser):
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
+
+
+def pytest_ignore_collect(path, config):
+    if six.PY2:
+        return path.fnmatch("/*test_isf_data_base*")  # Don't run new isfdb tests for PY2
+    elif six.PY3:
+        # Don't use ISF integrated tests for isf_db, as ISF still runs on the old mdb for compatibility on this
+        # You can only test core mdb functionality, but not its integration to the rest of the code
+        if path.fnmatch("/*test_isf_data_base*"):
+            if path.fnmatch("/*db_initializers*"):  # Don't test initializers
+                return True
+            if any([path.fnmatch(e) for e in ("/*dumpers_real_data_test*", "/*temporal_binning*", "/*spatiotemporal_binning*")]):
+                # These use fresh_mdb fixture which uses simrun init
+                return True
 
 
 def pytest_configure(config):
@@ -130,11 +146,11 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
         8. spike_times
 
         Yields:
-            model_data_base.ModelDataBase: An mdb with data
+            ModelDataBase: An mdb with data
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDatabase(path)
         #self.mdb.settings.show_computation_progress = False
 
         with silence_stdout:
@@ -152,16 +168,49 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
         shutil.rmtree(path)
 
     @pytest.fixture
+    def fresh_db(worker_id):
+        """Pytest fixture for an isf_data_base.DataBase object with a unique temp path.
+        Initializes data with model_data_base.mdb_initializers.load_simrun_general.init
+        Contains 8 keys with data:
+        1. simresult_path
+        2. filelist
+        3. sim_trail_index
+        4. metadata
+        5. voltage_traces
+        6. synapse_activation
+        7. cell_activation
+        8. spike_times
+
+        Yields:
+            isf_data_base.DataBase: An mdb with data
+        """
+        # unique temp path
+        path = tempfile.mkdtemp(prefix=worker_id)
+        db = DataBase(path)
+        #self.mdb.settings.show_computation_progress = False
+
+        with silence_stdout:
+            init(db,
+                 TEST_DATA_FOLDER,
+                 rewrite_in_optimized_format=False,
+                 parameterfiles=False,
+                 dendritic_voltage_traces=False)
+
+        yield db
+        # cleanup
+        db.remove()
+
+    @pytest.fixture
     def empty_mdb(worker_id):
         """Pytest fixture for a ModelDataBase object with a unique temp path.
         Does not initialize data, in contrast to fresh_mdb
 
         Yields:
-            model_data_base.ModelDataBase: An empty mdb
+            ModelDataBase: An empty mdb
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDatabase(path)
 
         yield mdb
         # cleanup
@@ -169,6 +218,22 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
             del key
         del mdb
         shutil.rmtree(path)
+
+    @pytest.fixture
+    def empty_db(worker_id):
+        """Pytest fixture for a isf_data_base.DataBase object with a unique temp path.
+        Does not initialize data, in contrast to fresh_mdb
+
+        Yields:
+            isf_data_base.DataBase: An empty mdb
+        """
+        # unique temp path
+        path = tempfile.mkdtemp(prefix=worker_id)
+        db = DataBase(path)
+
+        yield db
+        # cleanup
+        db.remove()
 
     @pytest.fixture
     def sqlite_db():
@@ -204,7 +269,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         """
         # unique temp path
         path = tempfile.mkdtemp()
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDatabase(path)
         #self.mdb.settings.show_computation_progress = False
 
         with silence_stdout:
@@ -232,7 +297,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         """
         # unique temp path
         path = tempfile.mkdtemp()
-        mdb = model_data_base.ModelDataBase(path)
+        mdb = ModelDatabase(path)
 
         yield mdb
         # cleanup
