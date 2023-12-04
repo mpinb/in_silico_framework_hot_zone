@@ -874,6 +874,68 @@ class CellMorphologyVisualizer(CMVDataParser):
         if plot:
             plt.show()
 
+    def show_dendritic_groups_in_morphology(self,dendritic_groups,dendritic_group_to_color_dict,
+                           save='',
+                           plot=True,
+                           highlight_section=None,
+                           highlight_x=None):
+        '''
+        Creates a python plot of the cell morphology in 3D, with the different dendritic group in different colors (ie: tuft, trunk, oblique and basal dendrites)
+
+        Args:
+            - dendritic_groups: dictionary with dendritic groups as keys (ie: 'trunk', 'oblique', 'tuft' and 'basal'), and lists of sections as values
+            - dendritic_group_to_color_dict: dictionary that specifies the color of each dendritic group (ie: 'trunk': 'orange', 'oblique': 'lime', 'tuft': 'aqua', 'basal': 'magenta')
+            - Save: path where the plot will be saved. If it's empty it will not be saved
+            - Plot: whether the plot should be shown.
+        '''
+        fig = plt.figure(figsize=(15, 15), dpi=self.dpi)
+
+        ax = plt.axes(projection='3d', proj_type='ortho')
+
+        sections = np.unique(self.morphology['sec_n'].values)
+        for sec in sections:
+            for group in dendritic_groups.keys():
+                if sec in dendritic_groups[group]:
+                    color = dendritic_group_to_color_dict[group]
+            
+            points = self.morphology.loc[self.morphology['sec_n'] == sec]
+            for i in points.index:
+                if i != points.index[-1]:
+                    linewidth = (points.loc[i]['diameter'] +
+                                 points.loc[i + 1]['diameter']) / 2 * 1.5 + 0.2
+                    ax.plot3D([points.loc[i]['x'], points.loc[i + 1]['x']],
+                              [points.loc[i]['y'], points.loc[i + 1]['y']],
+                              [points.loc[i]['z'], points.loc[i + 1]['z']],
+                              color=color,
+                              lw=linewidth)
+
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_zticks([])
+        plt.axis('off')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.azim = self.azim
+        ax.dist = self.dist
+        ax.elev = self.elev
+        ax.roll = self.roll
+        # plot arrow, if necessary
+        if highlight_section is not None or highlight_x is not None:
+            draw_arrow(self.morphology,
+                       ax,
+                       highlight_section=highlight_section,
+                       highlight_x=highlight_x,
+                       highlight_arrow_args=self.highlight_arrow_args)
+        ax.set_box_aspect([
+            ub - lb
+            for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')
+        ])
+
+        if save != '':
+            plt.savefig(save)  # ,bbox_inches='tight')
+        if plot:
+            plt.show()
+
     def show_voltage_in_morphology_3d(self,
                                       time_point,
                                       vmin=None,
