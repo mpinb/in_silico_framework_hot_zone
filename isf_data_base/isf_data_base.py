@@ -759,7 +759,7 @@ class DataBase:
         # make sure folder is renamed before continuing python process
         dir_to_data_rename = rename_for_deletion(self.basedir)
         # start processes on one thread in background
-        threading.Thread(target = lambda : delete_and_deregister_once_deleted(self, self._unique_id)).start()
+        return threading.Thread(target = lambda : delete_and_deregister_once_deleted(self, self._unique_id)).start()
 
 class RegisteredFolder(DataBase):
     def __init__(self, path):
