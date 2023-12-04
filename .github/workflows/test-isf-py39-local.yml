@@ -34,7 +34,10 @@ jobs:
           echo "Creating tests/logs/ directory..."
           mkdir -p ./tests/logs/
           echo "Removing previous coverage files..."
-          rm .coverage.${{ runner.name }}.*
+          if [ -f .coverage.${{ runner.name }}.* ]; then
+            echo "Removing previous coverage files..."
+            rm .coverage.${{ runner.name }}.*
+          fi
 
           echo "------------ Setting up environment -------------"
           CONDA_TARGET_DIR="$HOME/anaconda_isf3.9"
@@ -57,9 +60,16 @@ jobs:
           echo "Using port $port_number and bokeh port $bokeh_port"
 
           echo "------------ Running tests -------------"
+          unset DISPLAY
+          if [ ! -d "$HOME/tmp" ]; then
+            mkdir $HOME/tmp
+          fi
+          export TMPDIR=$HOME/tmp
           (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1)&
           (dask-worker localhost:$port_number --nthreads 1 --nprocs 6 --memory-limit=100e15 --local-directory="." > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1)&
-          pytest -n 6 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py39.xml --cov=. --dask_server_port $port_number tests/
+          pytest -n 6 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py39.xml --cov=. --dask_server_port $port_number tests/ || exit 1;
+          rm -rf $TMPDIR
+
       - name: Cleanup dask orphan processes
         if: ${{ always() }}
         run: |
@@ -80,3 +90,26 @@ jobs:
           files: ./tests/logs/report_py39.xml
           verbose: true # optional (default = false)
       
+  docs:
+    name: Build documentation
+    needs: test 
+    runs-on: ["ibs3005", "runner1"]
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - name: Build docs
+        run: |
+          echo "------------ Setting up environment -------------"
+          CONDA_TARGET_DIR="$HOME/anaconda_isf3.9"
+          source $CONDA_TARGET_DIR/bin/activate
+          echo "Using Python: $(which python)"
+          export PYTHONPATH=$(pwd):$HOME
+          echo $PYTHONPATH
+
+          echo "------------ Building docs -------------"
+          cd docs
+          make clean
+          make html
+          cd ..

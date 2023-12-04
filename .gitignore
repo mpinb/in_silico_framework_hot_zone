@@ -98,3 +98,4 @@ installer/x86_64/mod_func.c
 
 SLURM_scripts/user_settings
 test.log
+installer/py*.*/downloads/**
