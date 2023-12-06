@@ -55,10 +55,11 @@ def setup_locking_config(management_dir):
 
 
 def check_locking_config():
-    import model_data_base.distributed_lock
+    from model_data_base.distributed_lock import get_client as get_locking_client
+    server, client = get_locking_client()
     print('locking configuration')
-    print(model_data_base.distributed_lock.server)
-    print(model_data_base.distributed_lock.client)
+    print(server)
+    print(client)
     #assert model_data_base.distributed_lock.server['type'] == 'redis'
     #import socket
     #socket.gethostname()
