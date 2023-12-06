@@ -411,3 +411,148 @@ def df_colnames_to_str(df):
             logger.warning("Converting the following index name to string for saving with parquet: {}".format(df.index.name))
             df.index.name = str(df.index.name)
     return df
+
+def colorize_key(key):
+    if is_mdb(key.absolute()):
+        c = bcolors.OKGREEN
+    elif any([Path.exists(key/e) for e in ('Loader.json', 'Loader.pickle')]):
+        c = bcolors.OKBLUE
+    else:
+        c = ""
+    return c + key.name + bcolors.ENDC
+        
+
+def calc_recursive_filetree(
+    mdb, root_dir_path, 
+    depth=0, max_depth=2, max_lines_per_key=3,
+    lines=None, indent=None, all_files=False):
+    """
+    Fetches the contents of an mdb and formats them as a string representing a tree structure
+
+    Args:
+        root_dir_path (_type_): _description_
+        depth (_type_): _description_
+    """
+    lines = [] if lines is None else lines
+    indent = "" if indent is None else indent
+    tee = '├── '
+    last = '└── '
+    listd = [e for e in root_dir_path.iterdir()]
+    if not all_files:
+        listd = [e for e in listd if e.name in mdb.keys() or e.name == "mdb"]
+    
+    # these will be adapted depending on the nature of the recursion
+    recursion_kwargs = {
+        'mdb': mdb,
+        'root_dir_path': root_dir_path,
+        'depth': depth,
+        'max_depth': max_depth,
+        'max_lines_per_key': max_lines_per_key,
+        'lines': lines,
+        'indent': indent,
+        'all_files': all_files
+    }
+    
+    for i, element in enumerate(listd):
+        # stop iteration if max lines per key is reached
+        if i == max_lines_per_key and depth:
+            lines = lines[:-1]
+            lines.append(indent + '... ({} more)'.format(len(listd)-max_lines_per_key+1))
+            return lines
+        # stop iteration if max lines is reached
+        if len(lines) >= max_lines:
+            lines.append(indent + '...')
+            return lines
+        
+        # format the strings
+        prefix = indent + last if i == len(listd)-1 else indent + tee
+
+        # Recursion loop
+        if element.is_dir():
+            # should always be the case if all_files = False
+            # as  this will only iterate keys, which are directories
+            if depth+1 < max_depth:
+                # Directory: recurse deeper
+                # (except if max_depth is reached)
+                lines.append(prefix + colorize_key(element))
+                recursion_kwargs['depth'] += 1
+                recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
+                recursion_kwargs['root_dir_path'] = element
+                if Path.exists(element/'mdb') and not all_files:
+                    # submdb: recurse deeper without adding 'mdb' as key
+                    # (only add 'mdb' if all_files=True)
+                    recursion_kwargs['mdb'] = mdb[element.name]
+                    recursion_kwargs['root_dir_path'] = Path(recursion_kwargs['mdb'].basedir)
+                lines = calc_recursive_filetree(**recursion_kwargs)
+            else:
+                # directory at max depth: don't recurse deeper
+                colored_key = colorize_key(element)
+                colored_key = str(colored_key + os.sep + '...') if Path.exists(element/'mdb') else element.name
+                lines.append(prefix + colored_key)
+        else:
+            # not a directory: just add the file
+            lines.append(prefix + colorize_key(element))
+    return lines
+
+class bcolors:
+    """
+    List of colors for terminal output in bash
+    """
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+def rename_for_deletion(key):
+    """Renames some key to indicate it's in the process of being deleted
+
+    Args:
+        key (pathlib.Path): The key
+
+    Returns:
+        pathlib.Path: The renamed key
+    """
+    N = 5
+    while True:
+        random_string = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
+        key_to_delete = Path(key.as_posix() + '.deleting.' + random_string)
+        if not key_to_delete.exists():
+            break
+    key.rename(key_to_delete)
+    return key_to_delete
+
+def delete_in_background(key):
+    """Starts a background process that deletes a key
+
+    Args:
+        key (pathlib.Path): The key to be deleted
+
+    Returns:
+        threading.Thread: The process that takes care of deletion
+    """
+    if not key.exists():
+        logging.warning("Cannot delete key {}. Path {} does not exist".format(key.name, key))
+        return None
+    key_to_delete = rename_for_deletion(key)
+    p = threading.Thread(target = lambda : shutil.rmtree(key_to_delete)).start()
+    return p
+
+
+def get_mdb_by_unique_id(unique_id):
+    mdb_path = model_data_base_v2_register._get_mdb_register().registry[unique_id]
+    mdb = ModelDataBase(mdb_path, nocreate=True)
+    assert mdb.get_id() == unique_id
+    return mdb
+
+def is_mdb(dir_to_data):
+    '''returns True, if dir_to_data is a (sub)mdb, False otherwise'''
+    can_exist = [
+        'db_state.json', 
+        'sqlitedict.db',  # for backwards compatibility
+        ]
+    return any([Path.exists(dir_to_data/e) for e in can_exist])

@@ -1,4 +1,4 @@
-from ..context import *
+from tests.test_model_data_base import *
 from model_data_base.IO.roberts_formats import *
 import model_data_base
 import dask
