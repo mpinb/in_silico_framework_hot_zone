@@ -1,5 +1,4 @@
 import six
-import distributed
 import os
 
 
