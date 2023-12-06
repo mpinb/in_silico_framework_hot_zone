@@ -1,6 +1,8 @@
 import six
 import distributed
 import os
+import logging
+logger = logging.getLogger('ISF').getChild(__name__)
 
 
 def get_user_port_numbers():
@@ -11,9 +13,11 @@ def get_user_port_numbers():
     """
     import configparser
     # user-defined port numbers
-    __parent_dir__ = os.path.realpath(os.path.dirname(__file__))
+    root_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     config = configparser.ConfigParser()
-    config.read(os.path.join(__parent_dir__, "config", "user_settings.ini"))
+    p = os.path.join(root_dir, "config", "user_settings.ini")
+    logger.info("Reading user_settings.ini from {}".format(p))
+    config.read(p)
     ports = config['PORT_NUMBERS']
     return ports
 

@@ -1,4 +1,5 @@
-from tests.test_model_data_base import *
+from ..context import *
+from .. import decorators
 from model_data_base.analyze.spatiotemporal_binning import *
 import dask
 from model_data_base.model_data_base import ModelDataBase

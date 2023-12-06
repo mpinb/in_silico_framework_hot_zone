@@ -1,7 +1,8 @@
+from .context import *
 from model_data_base.model_data_base import ModelDataBase, MdbException
 from model_data_base.model_data_base_register import _get_mdb_register, \
         ModelDataBaseRegister, get_mdb_by_unique_id, register_mdb
-import pytest, tempfile, shutil, os
+import pytest
 
 
 def assert_search_mdb_did_not_fail(mdbr):
@@ -41,7 +42,7 @@ class TestModelDataBaseRegister:
         assert get_mdb_by_unique_id(mdb3.get_id()).basedir == p3
 
         mdb4 = ModelDataBase(os.path.join(self.basetempdir, 'test4'))
-        mdb4._register_this_database()
+        register_mdb(mdb4)
         assert get_mdb_by_unique_id(mdb4.get_id()).basedir == mdb4.basedir
         assert_search_mdb_did_not_fail(mdbr)
 
