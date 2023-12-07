@@ -29,28 +29,40 @@ class PandasTableWrapper:
 
     def min(self, column=None, binby=None, shape=None, selection=None, limits=None):
         if all([x is None for x in [binby, shape, selection, limits]]):
-            return self.df.min()
+            if column is None:
+                return self.df.min()
+            else:
+                return self.df[column].min()
         binsize = get_binsize(shape, limits)
         assert not isinstance(binsize, Sequence), "Nested binning/shape/limits are not supported."
         return self.df.iloc[selection].clip(*limits).binby(columns=binby, binsize=binsize, mode="min")
 
     def max(self, column=None, binby=None, shape=None, selection=None, limits=None):
         if all([x is None for x in [binby, shape, selection, limits]]):
-            return self.df.max()
+            if column is None:
+                return self.df.max()
+            else:
+                return self.df[column].max()
         binsize = get_binsize(shape, limits)
         assert not isinstance(binsize, Sequence), "Nested binning/shape/limits are not supported."
         return self.df.iloc[selection].clip(*limits).binby(columns=binby, binsize=binsize, mode="max")
 
     def mean(self, column=None, binby=None, shape=None, selection=None, limits=None):
         if all([x is None for x in [binby, shape, selection, limits]]):
-            return self.df.mean()
+            if column is None:
+                return self.df.mean()
+            else:  
+                return self.df[column].mean()
         binsize = get_binsize(shape, limits)
         assert not isinstance(binsize, Sequence), "Nested binning/shape/limits are not supported."
         return self.df.iloc[selection].clip(*limits).binby(columns=binby, binsize=binsize, mode="mean")
 
     def median(self, column=None, binby=None, shape=None, selection=None, limits=None):
         if all([x is None for x in [binby, shape, selection, limits]]):
-            return self.df.median()
+            if column is None:
+                return self.df.median()
+            else:
+                return self.df[column].median()
         binsize = get_binsize(shape, limits)
         assert not isinstance(binsize, Sequence), "Nested binning/shape/limits are not supported."
         return self.df.iloc[selection].clip(*limits).binby(columns=binby, binsize=binsize, mode="median")
