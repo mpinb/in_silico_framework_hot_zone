@@ -14,7 +14,7 @@ def biophysics_fitting_vaex_1():
                     "maxNumDatasources": 2,
                     "minNumDatasources": 2,
                     "name": "2-channel",
-                    "dataTable": "vaex_df",
+                    "dataTable": "Abstract DataFrame",
                     "type": "density-2-channel"
                 }, {
                     "configuration": {
@@ -32,7 +32,7 @@ def biophysics_fitting_vaex_1():
                     "maxNumDatasources": 3,
                     "minNumDatasources": 3,
                     "name": "3-channel",
-                    "dataTable": "vaex_df",
+                    "dataTable": "Abstract DataFrame",
                     "type": "density-3-channel"
                 }],
                 "grid": {
@@ -74,7 +74,7 @@ def biophysics_fitting_vaex_2():
                     "maxNumDatasources": 2,
                     "minNumDatasources": 2,
                     "name": "2-channel",
-                    "dataTable": "vaex_df",
+                    "dataTable": "Abstract DataFrame",
                     "type": "density-2-channel"
                 }, {
                     "configuration": {
@@ -92,7 +92,7 @@ def biophysics_fitting_vaex_2():
                     "maxNumDatasources": 3,
                     "minNumDatasources": 3,
                     "name": "3-channel",
-                    "dataTable": "vaex_df",
+                    "dataTable": "Abstract DataFrame",
                     "type": "density-3-channel"
                 }],
                 "grid": {

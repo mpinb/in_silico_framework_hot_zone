@@ -211,10 +211,10 @@ class LinkedViewsServer:
     def set_data(self, df):
         assert self.server is not None
 
-        if(isinstance(df, pd.DataFrame)):
+        if isinstance(df, pd.DataFrame):
             self.abstract_df = PandasTableWrapper(df)
             self.config["cached_tables"] = ["Abstract DataFrame"]
-        elif(isinstance(df, vaex.DataFrame)):
+        elif isinstance(df, vaex.DataFrame):
             self.abstract_df = VaexTableWrapper(df)        
             self.abstract_df["row_index"] = np.arange(self.abstract_df.shape[0])
             self.config["cached_tables"] = ["Abstract DataFrame"]
@@ -376,7 +376,7 @@ class LinkedViewsServer:
 
                 columns = data["columns"]
                 indices = data["indices"]
-                format = data["format"]
+                data_format = data["format"]
                 #print(columns)
                 #print(set(columns) - set(df.columns))
                 assert set(columns).issubset(set(adf.columns))
@@ -389,16 +389,16 @@ class LinkedViewsServer:
                 else:
                     filtered_adf.df = adf.df.iloc[indices][columns]
 
-                if(format == "expanded"):
+                if data_format == "expanded":
                     values = filtered_adf.to_dict()
-                elif(format == "flat"):
+                elif data_format == "flat":
                     values = filtered_adf.df.values.tolist()
-                elif(format == "flat-normalized"):
+                elif data_format == "flat-normalized":
                     values = normalize(filtered_adf).values.tolist()
-                elif(format == "flat-normalized-PCA"):
+                elif data_format == "flat-normalized-PCA":
                     values = getPCA(filtered_adf) 
                 else:
-                    raise ValueError(format)
+                    raise ValueError(data_format)
 
                 response_data = {
                     "columns" : columns,
