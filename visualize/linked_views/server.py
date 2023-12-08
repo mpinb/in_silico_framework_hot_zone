@@ -51,18 +51,18 @@ def load_tables(data_folder, config, max_num_rows = 50000):
     return tables
 
 
-def load_table_from_df(df):
-    tables = {}
-    basename = "pandas_df"
-    tables[basename] = {}
-    tables[basename]["flat"] = df
-    columns_data = df.to_dict(orient="records")
-    tables[basename]["records"] = columns_data
-    return tables
+# def load_table_from_df(df):
+#     tables = {}
+#     basename = "pandas_df"
+#     tables[basename] = {}
+#     tables[basename]["flat"] = df
+#     columns_data = df.to_dict(orient="records")
+#     tables[basename]["records"] = columns_data
+#     return tables
 
 def load_table_from_adf(adf):
     tables = {}
-    basename = "pandas_df"
+    basename = "Abstract DataFrame"
     tables[basename] = {}
     tables[basename]["flat"] = adf
     columns_data = adf.df.to_dict(orient="records")
@@ -89,12 +89,12 @@ def get_data_ranges(adf):
     ranges["max"] = adf.max().to_list()
     return ranges 
 
-def get_data_ranges_vaex(df):
-    col_names = df.get_column_names()
-    ranges = {}
-    ranges["min"] = df.min(col_names).tolist()
-    ranges["max"] = df.max(col_names).tolist()
-    return ranges 
+# def get_data_ranges_vaex(df):
+#     col_names = df.get_column_names()
+#     ranges = {}
+#     ranges["min"] = df.min(col_names).tolist()
+#     ranges["max"] = df.max(col_names).tolist()
+#     return ranges 
 
 def normalize(df, low=-1, high=1):
     scaler = MinMaxScaler(feature_range=(low, high))
@@ -117,7 +117,7 @@ def getPCA(df):
     
 class LinkedViewsServer:
     def __init__(self, config_file_path = None, data_folder=None, log_dir=None):
-        if(config_file_path is not None):
+        if config_file_path is not None:
             self.config_file_path = config_file_path
         else:
             self.config_file_path = Path(os.path.dirname(__file__))/"defaults"/"config.json"        
@@ -140,7 +140,7 @@ class LinkedViewsServer:
         print(self.config_file_path)
         self.config = util.loadJson(self.config_file_path)
 
-        if(self.data_folder):
+        if self.data_folder:
             self.tables = load_tables(self.data_folder, self.config)
             self.filenameProjects = self.data_folder/"projects.json"
             # Load objects from the file on server startup
@@ -153,14 +153,14 @@ class LinkedViewsServer:
             self.tables = {}
             self.objects = []
 
-
     def start(self, port=5000):                        
         if(self.thread is not None):
             print("server is running at port {}".format(self.port))
             return        
         try:
-            self.app = Flask(__name__)       
-            CORS(self.app)     
+            self.app = Flask(__name__)
+            self.app.debug=True  # TODO  
+            CORS(self.app)   
             self.server = make_server('0.0.0.0', port, self.app)                        
             self.port = port
             self.init_routes()
@@ -171,6 +171,7 @@ class LinkedViewsServer:
         def _start():
             self.server.serve_forever()
 
+        
         self.thread = threading.Thread(target=_start)      
         self.thread.start()
         print("server is running at port {}".format(self.port))
@@ -178,7 +179,6 @@ class LinkedViewsServer:
         print("set data:        server.set_data(df)")        
         print("stop server:     server.stop()")
         
-
     def stop(self):
         if(self.thread is None):
             print("server is not running")
@@ -192,8 +192,8 @@ class LinkedViewsServer:
         print("Server stopped.")
 
     def start_logging(self):
-        tmp_folder = Path(self.log_dir)/"tmp"  # TODO for soma_fs
-        log_filename = tmp_folder/"linked-views-server.log"
+        tmp_folder = "/gpfs/soma_fs/scratch/meulemeester/tmp/logs"  # TODO for soma_fs, normally tmpfile.gettemp() for /tmp or smth
+        log_filename = os.path.join(tmp_folder, "linked-views-server.log")
         print("logs are written to {}".format(log_filename))
         self.logfile_handler = logging.handlers.RotatingFileHandler(
             filename=log_filename,
@@ -203,7 +203,8 @@ class LinkedViewsServer:
         self.logfile_handler.setLevel(logging.INFO)
         formatter = logging.Formatter("%(asctime)s [%(levelname)s]: %(message)s", "%Y-%m-%d %H:%M:%S")
         self.logfile_handler.setFormatter(formatter)
-        logging.getLogger().addHandler(self.logfile_handler)
+        self.logger = logging.getLogger()
+        self.logger.addHandler(self.logfile_handler)
 
     def stop_logging(self):
         logging.getLogger().removeHandler(self.logfile_handler)
@@ -213,15 +214,16 @@ class LinkedViewsServer:
 
         if(isinstance(df, pd.DataFrame)):
             self.abstract_df = PandasTableWrapper(df)
-            self.config["cached_tables"] = ["PandasTableWrapper"]
+            self.config["cached_tables"] = ["Abstract DataFrame"]
         elif(isinstance(df, vaex.DataFrame)):
-            self.abstract_df = df        
-            self.abstract_df["row_index"] = np.arange(self.abstract_df.shape[0])
-            self.config["cached_tables"] = ["Vaex DataFrame"]
+            # self.abstract_df = VaexTableWrapper(df)        
+            # self.abstract_df["row_index"] = np.arange(self.abstract_df.shape[0])
+            # self.config["cached_tables"] = ["VaexTableWrapper"]
+            pass
         else:
             raise TypeError(df)
         self.tables = load_table_from_adf(self.abstract_df)
-        self.columns = self.abstract_df.get_column_names()
+        self.columns = self.abstract_df.columns
         self.data_ranges = get_data_ranges(self.abstract_df)
 
     def init_routes(self):
@@ -240,11 +242,9 @@ class LinkedViewsServer:
 
     def index(self):
         if(self.abstract_df):
-            return "vaex df columns: {}".format([name for name in list(self.abstract_df.columns)])
+            return "Abstract DataFrame columns: {}".format(self.abstract_df.columns)
         else:
             return "Tables: {}".format([name for name in self.tables.keys()])
-
-
 
     """
     ########################################################################################
@@ -273,7 +273,6 @@ class LinkedViewsServer:
         write_objects_to_file(self.filenameProjects, self.objects)
         return jsonify(new_object)
 
-
     def add_session(self, sessionData, name=None):
         if(name is None):
             name = "session-{}".format(len(self.objects)+1)
@@ -284,20 +283,17 @@ class LinkedViewsServer:
     def remove_session(self, name):
         self.delete_object(name)
 
-
     def get_session(self, name):
         for session in self.objects:
             if(session["name"] == name):
                 return session
         return None
 
-
     """
     ########################################################################################
                                     end of session storage
     ########################################################################################
     """
-
 
     #@app.route("/matrixServer/getMetaData", methods=["GET", "POST"])
     #@cross_origin()
@@ -306,19 +302,26 @@ class LinkedViewsServer:
             if request.data:
                 data = request.get_json(force=True)
                 
-                meta_data = []            
+                meta_data = []        
                 for tableName, tableData in self.tables.items():
-                    adf = tableData["flat"]            
+                    adf = tableData["flat"]
                     meta_data.append({
                         "name" : tableName,
                         "num_rows" : adf.shape[0],
-                        "columns" : adf.columns,
+                        "columns" : self.columns,
                         "data_ranges" : get_data_ranges(adf)                
                     })
+                    for md in meta_data:
+                        for key, val in md.items():
+                            try:
+                                json.dumps({key: val})
+                            except Exception as e:
+                                print("Could not json dump {}:{}".format(key, val))
+                                raise
 
-                # if(self.abstract_df is not None):                       
+                # if self.abstract_df is not None:                       
                 #     meta_data.append({
-                #         "name" : "vaex_df",
+                #         "name" : "Abstract DataFrame",
                 #         "num_rows" : self.abstract_df.shape[0],
                 #         "columns" : self.columns,
                 #         "data_ranges" : self.data_ranges#'get_data_ranges_vaex(self.abstract_df)                
@@ -331,8 +334,13 @@ class LinkedViewsServer:
                     "table_mapping" : self.config["table_mapping"],
                     "cached_tables" : self.config["cached_tables"]
                 }
+                for key, val in response_data.items():
+                    try:
+                        json.dumps(response_data)
+                    except:
+                        print("could not json serialize {}: {}".format (key, val))
+                        raise
                 return json.dumps(response_data)
-
 
     #@app.route("/matrixServer/getResourceJSON", methods=["GET", "POST"])
     #@cross_origin()
@@ -345,7 +353,7 @@ class LinkedViewsServer:
                 filename = self.resourceDir/resourceName
                 print(filename)
 
-                if(not os.path.exists(filename)):
+                if not os.path.exists(filename):
                     raise ValueError(filename)
                 else:
                     jsonData = util.loadJson(filename)
@@ -354,15 +362,13 @@ class LinkedViewsServer:
                         "filename" : resourceName,
                         "jsonData" : jsonData
                     }
-
+                    
                     return json.dumps(response_data)
-
-
 
     #@app.route("/matrixServer/getValues", methods=["GET", "POST"])
     #@cross_origin()
     def getValues(self):
-        
+        print("getting values...")
         if request.method == "POST":
             if request.data:
                 data = request.get_json(force=True)
@@ -404,18 +410,18 @@ class LinkedViewsServer:
 
                 return json.dumps(response_data)
     
-
     def getDensity(self): 
         self.last_request = request.data
         if request.method == "POST":            
             if request.data:
                 data = request.get_json(force=True)
+                print(data)
 
                 tableName = data["table"]
-                if(tableName not in ["vaex_df"]):
+                if tableName not in ["Abstract DataFrame"]:
                     raise ValueError(tableName)
 
-                df = self.abstract_df
+                adf = self.abstract_df
               
                 columns = data["columns"]                
                 #indices = data["indices"]
@@ -434,35 +440,35 @@ class LinkedViewsServer:
                 nCells = density_grid_shape[0] * density_grid_shape[1]
                 #indices = np.arange(nCells)
                                                 
-                minmax_x = df.minmax(binbycols[0])
-                minmax_y = df.minmax(binbycols[1])
+                minmax_x = adf.minmax(binbycols[0])
+                minmax_y = adf.minmax(binbycols[1])
                 data_ranges = [minmax_x.tolist(), minmax_y.tolist()]
                 
                 if(format == "count"):
-                    values = df.count(
+                    values = adf.count(
                         binby=binbycols, 
                         shape=density_grid_shape, selection=self.active_selection, 
                         limits=data_ranges).astype(float)
                     values[values == 0] = np.nan
                 elif(format == "min"):                    
-                    values = df.min(
+                    values = adf.min(
                         value_column, binby=binbycols, 
                         shape=density_grid_shape, selection=self.active_selection, 
                         limits=data_ranges)
                     values[values > 10**100] = np.nan
                 elif(format == "max"):                    
-                    values = df.max(
+                    values = adf.max(
                         value_column, binby=binbycols, 
                         shape=density_grid_shape, selection=self.active_selection, 
                         limits=data_ranges)
                     values[values < -10**100] = np.nan
                 elif(format == "mean"):                    
-                    values = df.mean(
+                    values = adf.mean(
                         value_column, binby=binbycols, 
                         shape=density_grid_shape, selection=self.active_selection,
                         limits=data_ranges)
                 elif(format == "median"):
-                    values = df.median_approx(
+                    values = adf.median_approx(
                         value_column, binby=binbycols, 
                         shape=density_grid_shape, selection=self.active_selection, 
                         limits=data_ranges)
@@ -482,7 +488,6 @@ class LinkedViewsServer:
 
                 return json.dumps(response_data)
 
-
     def setDensityPlotSelection(self): 
         self.last_request = request.data
         if request.method == "POST":            
@@ -494,7 +499,7 @@ class LinkedViewsServer:
                 bin_ranges = data["bin_ranges"]
                 selection_name = data["selection_name"]
                 
-                assert table == "vaex_df"
+                assert table == "Abstract DataFrame"  # vaex_df
                 for column in columns:
                     assert column in self.columns
 
@@ -506,7 +511,6 @@ class LinkedViewsServer:
                 response_data = {}
                 return json.dumps(response_data)
 
-
     def setIndicesSelection(self): 
         self.last_request = request.data
         if request.method == "POST":            
@@ -517,13 +521,12 @@ class LinkedViewsServer:
                 view_name = data["view_name"]                
                 indices = data["indices"]
                 
-                assert table == "pandas_df"
+                assert table == "Abstract DataFrame"  # pandas_df
                 
                 self.selections[view_name] = sorted(indices)
 
                 response_data = {}
                 return json.dumps(response_data)
-
 
     def computeSelection(self, return_indices=True):
         if("global" in self.selections):
@@ -551,7 +554,6 @@ class LinkedViewsServer:
     def resetSelection(self):
         self.active_selection = None
 
-
     def getSelections(self):
         return self.selections
 
@@ -560,8 +562,6 @@ class LinkedViewsServer:
             return []
         else:
             return self.selections[view_name]
-
-
 
     def getSelectedIndices(self):
         df_selected_indices = self.computeSelection()

@@ -4,13 +4,13 @@
             "type": "regl-scatterplot",
             "min_num_datasources": 2,
             "max_num_datasources": 3,
-            "table": "pandas_df"
+            "table": "Abstract DataFrame"
         },
         {
             "type": "plotly-parallelcoords",
             "min_num_datasources": 2,
             "max_num_datasources": 30,
-            "table": "pandas_df"
+            "table": "Abstract DataFrame"
         },
         {
             "type": "density-2-channel",
