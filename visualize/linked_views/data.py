@@ -2,6 +2,16 @@ import pandas as pd
 from collections.abc import Sequence
 
 class AbstractDataFrameWrapper(object):
+    """
+    Baseclass for the DataFrame wrappers.
+    This baseclass takes care of everything that the DataFrame wrappers don't have.
+    
+    All methods or attributes that are not overwritten by specific DataFrame wrappers are passed to the underlying DataFrame instead.
+
+    While it supports dictionary-like __getitem__ and __setitem__ methods, .loc or .iloc are not supported.
+    Instead, use the .df attribute to access the underlying DataFrame directly.
+    
+    """
     def __init__(self, data):
         self.df = data
         self.name = "Abstract DataFrame"
@@ -34,6 +44,13 @@ class AbstractDataFrameWrapper(object):
             raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{attr}', and neither does its underlying dataframe.")
 
 class PandasTableWrapper(AbstractDataFrameWrapper):
+    """
+    This class serves as a wrapper around the Pandas DataFrame, providing a unified interface for linked views.
+
+    It overrides the 'min', 'max', 'mean', and 'median' methods to support binning.
+    If the arguments ['binby', 'shape', 'selection', 'limits'] are not specified, these methods will operate on the undelrying dataframe with no modifications.
+    Otherwise, a vaex-like binning operation will be performed on the underlying dataframe, and the result will be returned.
+    """
     def __init__(self, data):
         super().__init__(data)
         self.columns = data.columns.tolist()
@@ -113,6 +130,14 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
         return self.df.to_dict(*args, **kwargs)
 
 class VaexTableWrapper(AbstractDataFrameWrapper):
+    """
+    This class serves as a wrapper around the Vaex DataFrame, providing a unified interface for linked views. 
+
+    It overrides the 'min', 'max', 'mean', and 'median' methods.
+    If the 'expression' argument is not specified, these methods will operate on all columns of the DataFrame by default. 
+
+    This modification allows for more intuitive usage and ensures consistent behavior across different views.
+    """
     def __init__(self, data):
         super().__init__(data)
         self.columns = self.df.get_column_names()
@@ -121,31 +146,27 @@ class VaexTableWrapper(AbstractDataFrameWrapper):
         # TODO
         pass
 
-    def calculate(self, operation, *args, **kwargs):
-        if not args and "expression" not in kwargs:
-            kwargs["expression"] = self.columns
-
+    def _calculate(self, _operation, *args, **kwargs):
         allowed_operations = ["min", "max", "mean", "median", "count"]
-        if operation in allowed_operations:
-            operation_func = getattr(self.df, operation)
+        if _operation in allowed_operations:
+            if not args and "expression" not in kwargs:
+                kwargs["expression"] = self.columns
+            operation_func = getattr(self.df, _operation)
             return operation_func(*args, **kwargs)
         else:
             raise ValueError(f"Invalid operation. Choose from {allowed_operations}.")
 
     def min(self, *args, **kwargs):
-        return self.calculate("min", *args, **kwargs)
+        return self._calculate("min", *args, **kwargs)
 
     def max(self, *args, **kwargs):
-        return self.calculate("max", *args, **kwargs)
+        return self._calculate("max", *args, **kwargs)
 
     def mean(self, *args, **kwargs):
-        return self.calculate("mean", *args, **kwargs)
+        return self._calculate("mean", *args, **kwargs)
 
     def median(self, *args, **kwargs):
-        return self.calculate("median", *args, **kwargs)
-
-    def count(self, *args, **kwargs):
-        return self.calculate("count", *args, **kwargs)
+        return self._calculate("median", *args, **kwargs)
 
 aggregation_mode_mapping = {
     'mean': lambda x: x.mean,
