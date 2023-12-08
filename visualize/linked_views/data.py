@@ -28,7 +28,7 @@ class AbstractDataFrameWrapper(object):
             def wrapper(*args, **kwargs):
                 """Fetches the correct attr, but doesn't call it yet"""
                 method = getattr(self.df, attr)
-                return method
+                return method(*args, **kwargs)
             return wrapper
         else:
             raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{attr}', and neither does its underlying dataframe.")
