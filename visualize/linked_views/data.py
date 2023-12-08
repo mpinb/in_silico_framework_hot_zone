@@ -26,8 +26,9 @@ class AbstractDataFrameWrapper(object):
         # before calling __getattr__
         if hasattr(self.df, attr):
             def wrapper(*args, **kwargs):
+                """Fetches the correct attr, but doesn't call it yet"""
                 method = getattr(self.df, attr)
-                return method(*args, **kwargs)
+                return method
             return wrapper
         else:
             raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{attr}', and neither does its underlying dataframe.")
@@ -35,7 +36,6 @@ class AbstractDataFrameWrapper(object):
 class PandasTableWrapper(AbstractDataFrameWrapper):
     def __init__(self, data):
         super().__init__(data)
-        self.name = "Pandas DataFrame"
         self.columns = data.columns.tolist()
 
     def binby(self, columns, binsize, mode="mean", value_col=None):
@@ -96,27 +96,63 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
         binsize = get_binsize(shape, limits)
         assert not isinstance(binsize, Sequence), "Nested binning/shape/limits are not supported (yet)."
         return self.df.iloc[selection].clip(*limits).binby(columns=binby, binsize=binsize, mode="median")
-
+    
     def compute_selection(self, ):
         # TODO
         pass
+
+    def to_dict(self, *args, **kwargs):
+        """Returns a dictionary representation of the dataframe.
+        Orients by records by default, unless otherwise specified.
+
+        Returns:
+            dict: The dictionary
+        """
+        if "orient" not in kwargs:
+            kwargs["orient"] = "records"
+        return self.df.to_dict(*args, **kwargs)
 
 class VaexTableWrapper(AbstractDataFrameWrapper):
     def __init__(self, data):
         super().__init__(data)
-        self.name = "Vaex DataFrame"
         self.columns = self.df.get_column_names()
+    
     def compute_selection(self, ):
         # TODO
         pass
-    def to_dict(self):
-        return self.df.to_dict()
+
+    def calculate(self, operation, *args, **kwargs):
+        if not args and "expression" not in kwargs:
+            kwargs["expression"] = self.columns
+
+        allowed_operations = ["min", "max", "mean", "median", "count"]
+        if operation in allowed_operations:
+            operation_func = getattr(self.df, operation)
+            return operation_func(*args, **kwargs)
+        else:
+            raise ValueError(f"Invalid operation. Choose from {allowed_operations}.")
+
+    def min(self, *args, **kwargs):
+        return self.calculate("min", *args, **kwargs)
+
+    def max(self, *args, **kwargs):
+        return self.calculate("max", *args, **kwargs)
+
+    def mean(self, *args, **kwargs):
+        return self.calculate("mean", *args, **kwargs)
+
+    def median(self, *args, **kwargs):
+        return self.calculate("median", *args, **kwargs)
+
+    def count(self, *args, **kwargs):
+        return self.calculate("count", *args, **kwargs)
 
 aggregation_mode_mapping = {
-    'mean': lambda x: x.mean(),
-    'median': lambda x: x.median(),
-    'min': lambda x: x.min(),
-    'max': lambda x: x.max(),
+    'mean': lambda x: x.mean,
+    'median': lambda x: x.median,
+    'min': lambda x: x.min,
+    'max': lambda x: x.max,
+    'count': lambda x: x.count,
 }
 
 def get_binsize_1d(shape, limits):

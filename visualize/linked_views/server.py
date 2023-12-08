@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 import vaex
 import vaex.ml
-from .data import PandasTableWrapper
+from .data import PandasTableWrapper, VaexTableWrapper
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
@@ -43,7 +43,7 @@ def load_tables(data_folder, config, max_num_rows = 50000):
             randomState = np.random.RandomState(seed)
             df = df.sample(sampleSize, random_state=randomState)
 
-        columns_data = df.to_dict(orient="records")
+        columns_data = df.to_dict()
         tables[basename] = {}
         tables[basename]["flat"] = df
         tables[basename]["records"] = columns_data
@@ -56,7 +56,7 @@ def load_tables(data_folder, config, max_num_rows = 50000):
 #     basename = "pandas_df"
 #     tables[basename] = {}
 #     tables[basename]["flat"] = df
-#     columns_data = df.to_dict(orient="records")
+#     columns_data = df.to_dict()
 #     tables[basename]["records"] = columns_data
 #     return tables
 
@@ -65,7 +65,7 @@ def load_table_from_adf(adf):
     basename = "Abstract DataFrame"
     tables[basename] = {}
     tables[basename]["flat"] = adf
-    columns_data = adf.df.to_dict(orient="records")
+    columns_data = adf.to_dict()
     tables[basename]["records"] = columns_data
     return tables
 
@@ -85,8 +85,8 @@ def get_data_ranges(adf):
     """
     col_names = adf.columns
     ranges = {}
-    ranges["min"] = adf.min().to_list()
-    ranges["max"] = adf.max().to_list()
+    ranges["min"] = adf.min().tolist()
+    ranges["max"] = adf.max().tolist()
     return ranges 
 
 # def get_data_ranges_vaex(df):
@@ -159,7 +159,6 @@ class LinkedViewsServer:
             return        
         try:
             self.app = Flask(__name__)
-            self.app.debug=True  # TODO  
             CORS(self.app)   
             self.server = make_server('0.0.0.0', port, self.app)                        
             self.port = port
@@ -216,10 +215,9 @@ class LinkedViewsServer:
             self.abstract_df = PandasTableWrapper(df)
             self.config["cached_tables"] = ["Abstract DataFrame"]
         elif(isinstance(df, vaex.DataFrame)):
-            # self.abstract_df = VaexTableWrapper(df)        
-            # self.abstract_df["row_index"] = np.arange(self.abstract_df.shape[0])
-            # self.config["cached_tables"] = ["VaexTableWrapper"]
-            pass
+            self.abstract_df = VaexTableWrapper(df)        
+            self.abstract_df["row_index"] = np.arange(self.abstract_df.shape[0])
+            self.config["cached_tables"] = ["Abstract DataFrame"]
         else:
             raise TypeError(df)
         self.tables = load_table_from_adf(self.abstract_df)
@@ -384,20 +382,21 @@ class LinkedViewsServer:
                 assert set(columns).issubset(set(adf.columns))
                 assert len(indices) == 0 or max(indices) < adf.shape[0]         
 
-                
+                # update df attr of Abstract DataFrame
+                filtered_adf = adf
                 if(len(indices) == 0):
-                    filtered_df = adf.df[columns]
+                    filtered_adf.df = adf.df[columns]
                 else:
-                    filtered_df = adf.df.iloc[indices][columns]
+                    filtered_adf.df = adf.df.iloc[indices][columns]
 
                 if(format == "expanded"):
-                    values = filtered_df.to_dict(orient="records")
+                    values = filtered_adf.to_dict()
                 elif(format == "flat"):
-                    values = filtered_df.values.tolist()
+                    values = filtered_adf.df.values.tolist()
                 elif(format == "flat-normalized"):
-                    values = normalize(filtered_df).values.tolist()
+                    values = normalize(filtered_adf).values.tolist()
                 elif(format == "flat-normalized-PCA"):
-                    values = getPCA(filtered_df) 
+                    values = getPCA(filtered_adf) 
                 else:
                     raise ValueError(format)
 
@@ -405,7 +404,7 @@ class LinkedViewsServer:
                     "columns" : columns,
                     "indices" : indices,
                     "values" : values,
-                    "data_ranges" : get_data_ranges(filtered_df)
+                    "data_ranges" : get_data_ranges(filtered_adf)
                 }
 
                 return json.dumps(response_data)
