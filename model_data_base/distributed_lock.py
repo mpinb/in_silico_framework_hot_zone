@@ -6,8 +6,6 @@ import yaml
 import os
 import warnings
 from compatibility import YamlLoader
-import logging
-logger = logging.getLogger("ISF").getChild(__name__)
 
 if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
     pass
@@ -16,8 +14,8 @@ elif 'ISF_DISTRIBUTED_LOCK_CONFIG' in os.environ:
     with open(os.environ['ISF_DISTRIBUTED_LOCK_CONFIG'], 'r') as f:
         config = yaml.load(f, Loader=YamlLoader)
 else:
-    logger.warning(
-        "Environment variable ISF_DISTRIBUTED_LOCK_CONFIG is not set. " +
+    warnings.warn(
+        "environment variable ISF_DISTRIBUTED_LOCK_CONFIG is not set. " +
         "Falling back to default configuration.")
     config = [
         dict(type="redis",
@@ -46,8 +44,8 @@ def get_client():
                     redis.exceptions.ConnectionError):
                 pass
         elif server["type"] == "file":
-            logger.warning(
-                "Using file based locking. "
+            warnings.warn(
+                "Using file based locking."
                 "Please be careful on nfs mounts as file based locking has issues in this case."
             )
             return server, None

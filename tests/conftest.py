@@ -6,8 +6,8 @@
 import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_base, dask, six, getting_started
 from model_data_base.mdb_initializers.load_simrun_general import init
 from model_data_base.utils import silence_stdout
-from model_data_base.model_data_base import ModelDataBase
-from model_data_base.model_data_base_v2 import ModelDataBase as ModelDataBase_v2
+from model_data_base.model_data_base import ModelDataBase as ModelDatabase
+from isf_data_base.isf_data_base import DataBase
 import pandas as pd
 import dask.dataframe as dd
 from Interface import get_client
@@ -49,6 +49,20 @@ def pytest_addoption(parser):
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
+
+
+def pytest_ignore_collect(path, config):
+    if six.PY2:
+        return path.fnmatch("/*test_isf_data_base*")  # Don't run new isfdb tests for PY2
+    elif six.PY3:
+        # Don't use ISF integrated tests for isf_db, as ISF still runs on the old mdb for compatibility on this
+        # You can only test core mdb functionality, but not its integration to the rest of the code
+        if path.fnmatch("/*test_isf_data_base*"):
+            if path.fnmatch("/*db_initializers*"):  # Don't test initializers
+                return True
+            if any([path.fnmatch(e) for e in ("/*dumpers_real_data_test*", "/*temporal_binning*", "/*spatiotemporal_binning*")]):
+                # These use fresh_mdb fixture which uses simrun init
+                return True
 
 
 def pytest_configure(config):
@@ -136,7 +150,7 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = ModelDataBase(path)
+        mdb = ModelDatabase(path)
         #self.mdb.settings.show_computation_progress = False
 
         with silence_stdout:
@@ -148,11 +162,14 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
 
         yield mdb
         # cleanup
-        mdb.remove()
+        for key in mdb.keys():
+            del key
+        del mdb
+        shutil.rmtree(path)
 
     @pytest.fixture
-    def fresh_mdb_v2(worker_id):
-        """Pytest fixture for a ModelDataBase object with a unique temp path.
+    def fresh_db(worker_id):
+        """Pytest fixture for an isf_data_base.DataBase object with a unique temp path.
         Initializes data with model_data_base.mdb_initializers.load_simrun_general.init
         Contains 8 keys with data:
         1. simresult_path
@@ -165,23 +182,23 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
         8. spike_times
 
         Yields:
-            ModelDataBase: An mdb with data
+            isf_data_base.DataBase: An mdb with data
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = ModelDataBase_v2(path)
+        db = DataBase(path)
         #self.mdb.settings.show_computation_progress = False
 
         with silence_stdout:
-            init(mdb,
+            init(db,
                  TEST_DATA_FOLDER,
                  rewrite_in_optimized_format=False,
                  parameterfiles=False,
                  dendritic_voltage_traces=False)
 
-        yield mdb
+        yield db
         # cleanup
-        mdb.remove()
+        db.remove()
 
     @pytest.fixture
     def empty_mdb(worker_id):
@@ -193,27 +210,30 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for mdbs
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = ModelDataBase(path)
+        mdb = ModelDatabase(path)
 
         yield mdb
         # cleanup
-        mdb.remove()
+        for key in mdb.keys():
+            del key
+        del mdb
+        shutil.rmtree(path)
 
     @pytest.fixture
-    def empty_mdb_v2(worker_id):
-        """Pytest fixture for a ModelDataBase object with a unique temp path.
+    def empty_db(worker_id):
+        """Pytest fixture for a isf_data_base.DataBase object with a unique temp path.
         Does not initialize data, in contrast to fresh_mdb
 
         Yields:
-            ModelDataBase: An empty mdb
+            isf_data_base.DataBase: An empty mdb
         """
         # unique temp path
         path = tempfile.mkdtemp(prefix=worker_id)
-        mdb = ModelDataBase_v2(path)
+        db = DataBase(path)
 
-        yield mdb
+        yield db
         # cleanup
-        mdb.remove()
+        db.remove()
 
     @pytest.fixture
     def sqlite_db():
@@ -249,7 +269,7 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         """
         # unique temp path
         path = tempfile.mkdtemp()
-        mdb = ModelDataBase(path)
+        mdb = ModelDatabase(path)
         #self.mdb.settings.show_computation_progress = False
 
         with silence_stdout:
@@ -262,41 +282,10 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
 
         yield mdb
         # cleanup
-        mdb.remove()
-
-    @pytest.yield_fixture
-    def fresh_mdb_v2():
-        """Pytest fixture for a ModelDataBase object with a unique temp path.
-        Initializes data with model_data_base.mdb_initializers.load_simrun_general.init
-        Contains 8 keys with data:
-        1. simresult_path
-        2. filelist
-        3. sim_trail_index
-        4. metadata
-        5. voltage_traces
-        6. synapse_activation
-        7. cell_activation
-        8. spike_times
-
-        Yields:
-            model_data_base.ModelDataBase: An mdb with data
-        """
-        # unique temp path
-        path = tempfile.mkdtemp()
-        mdb = ModelDataBase_v2(path)
-        #self.mdb.settings.show_computation_progress = False
-
-        with silence_stdout:
-            init(mdb,
-                 TEST_DATA_FOLDER,
-                 rewrite_in_optimized_format=False,
-                 parameterfiles=False,
-                 dendritic_voltage_traces=False,
-                 dumper=pandas_to_msgpack)  # no Parquet dumper
-
-        yield mdb
-        # cleanup
-        mdb.remove()
+        for key in mdb.keys():
+            del key
+        del mdb
+        shutil.rmtree(path)
 
     @pytest.yield_fixture
     def empty_mdb():
@@ -308,27 +297,14 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         """
         # unique temp path
         path = tempfile.mkdtemp()
-        mdb = ModelDataBase(path)
+        mdb = ModelDatabase(path)
 
         yield mdb
         # cleanup
-        mdb.remove()
-
-    @pytest.yield_fixture
-    def empty_mdb_v2():
-        """Pytest fixture for a ModelDataBase object with a unique temp path.
-        Does not initialize data, in contrast to fresh_mdb
-
-        Yields:
-            model_data_base.ModelDataBase: An empty mdb
-        """
-        # unique temp path
-        path = tempfile.mkdtemp()
-        mdb = ModelDataBase_v2(path)
-
-        yield mdb
-        # cleanup
-        mdb.remove()
+        for key in mdb.keys():
+            del key
+        del mdb
+        shutil.rmtree(path)
 
     @pytest.yield_fixture
     def sqlite_db():

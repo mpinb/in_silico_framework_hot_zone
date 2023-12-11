@@ -3,7 +3,7 @@ developed in
 http://10.102.3.85:11112/notebooks/20221030_hot_zone_on_interactive%2Bbig_simulations_many_morphologies_redo.ipynb#'''
 import Interface as I
 
-from model_data_base.model_data_base_register import get_mdb_by_unique_id
+from model_data_base.model_data_base import get_mdb_by_unique_id
 from copy import deepcopy
 # original location: '/gpfs/soma_fs/scratch/abast/results/20221030_hot_zone_on_interactive+big_simulations_many_morphologies_redo'
 mdb = get_mdb_by_unique_id('2022-12-05_41103_8ewM75Y')
