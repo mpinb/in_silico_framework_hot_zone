@@ -1,5 +1,6 @@
 import pandas as pd
 from collections.abc import Sequence
+import numpy as np
 
 class AbstractDataFrameWrapper(object):
     """
@@ -50,69 +51,78 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
     It overrides the 'min', 'max', 'mean', and 'median' methods to support binning.
     If the arguments ['binby', 'shape', 'selection', 'limits'] are not specified, these methods will operate on the undelrying dataframe with no modifications.
     Otherwise, a vaex-like binning operation will be performed on the underlying dataframe, and the result will be returned.
+
+    Added minmax for vaex-consistent API
     """
     def __init__(self, data):
         super().__init__(data)
         self.columns = data.columns.tolist()
 
-    def binby(self, columns, binsize, mode="mean", value_col=None):
+    def binby(self, columns, binsize, mode="mean", value_col=None, df=None):
+        df = df if df is not None else self.df
         assert len(columns) == 2, "Please provide an array of 2 columns to bin by. You provided {}".format(columns)
         assert (value_col == None and mode=="count") or (value_col != None and mode != "count"), "If mode = count, you may not pass a value_col, otherwise you must."
         c1, c2 = columns
+        bs1, bs2 = binsize
         if mode == "count":
-            return self.df.groupby([(selfdf[c1]/binsize).round()*binsize, 
-                    (self.df[c2]/binsize).round()*binsize]).apply(lambda x: x.count())
+            return self.df.groupby([
+                (self.df[c1]/bs1).round()*bs1, 
+                (self.df[c2]/bs2).round()*bs2]
+                ).apply(lambda x: x.count())
+        elif mode =="minmax":
+            return self.df.groupby([
+                (self.df[c1]/bs1).round()*bs1, 
+                (self.df[c2]/bs2).round()*bs2]
+                ).apply(lambda x: np.array([x.min(), x.max()]).T)
         else:
+            # default aggregation mode, such as mean, min, max, median
             agg = aggregation_mode_mapping[mode] if isinstance(mode, str) else mode
-            return self.df.groupby([(selfdf[c1]/binsize).round()*binsize, 
-                    (self.df[c2]/binsize).round()*binsize]).apply(lambda x: agg(x[value_col]))
+            return self.df.groupby([
+                (self.df[c1]/bs1).round()*bs1, 
+                (self.df[c2]/bs2).round()*bs2]
+                ).apply(lambda x: agg(x[value_col]))
 
-    def count(self, binby=None, shape=None, selection=None, limits=None):
-        binsize = get_binsize(shape, limits)
-        assert not isinstance(binsize, Sequence), "Nested binning/shape/limits are not supported (yet)."
+    def calculate(self, operation, column=None, binby=None, shape=None, selection=None, limits=None):
         if all([x is None for x in [binby, shape, selection, limits]]):
-            return self.df.count()
-        return self.df.iloc[selection].clip(*limits).binby(columns=binby, binsize=binsize, mode="count")
+            if column is None:
+                column = self.columns
+            if operation == "minmax":
+                return self.df[column].agg(["min", "max"])
+            else:
+                return self.df[column].agg(operation)
+        binsize = get_binsize(shape, limits)
+        assert not isinstance(binsize[0], Sequence), "Nested binning/shape/limits are not supported (yet)."
+        
+        r = self.df
+        if selection:
+            r = r.iloc[selection]
+        r = self.binby(df=r, columns=binby, binsize=binsize, mode=operation, value_col=column)
+        if limits:
+            assert not isinstance(limits[0], Sequence), "Nested binning/shape/limits are not supported (yet)."
+            r = r.clip(*limits)
+        return r
+    
+    def count(self, binby=None, shape=None, selection=None, limits=None):
+        return self.calculate("count", binby=binby, shape=shape, selection=selection, limits=limits)
 
     def min(self, column=None, binby=None, shape=None, selection=None, limits=None):
-        if all([x is None for x in [binby, shape, selection, limits]]):
-            if column is None:
-                return self.df.min()
-            else:
-                return self.df[column].min()
-        binsize = get_binsize(shape, limits)
-        assert not isinstance(binsize, Sequence), "Nested binning/shape/limits are not supported (yet)."
-        return self.df.iloc[selection].clip(*limits).binby(columns=binby, binsize=binsize, mode="min")
+        return self.calculate("min", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
 
     def max(self, column=None, binby=None, shape=None, selection=None, limits=None):
-        if all([x is None for x in [binby, shape, selection, limits]]):
-            if column is None:
-                return self.df.max()
-            else:
-                return self.df[column].max()
-        binsize = get_binsize(shape, limits)
-        assert not isinstance(binsize, Sequence), "Nested binning/shape/limits are not supported (yet)."
-        return self.df.iloc[selection].clip(*limits).binby(columns=binby, binsize=binsize, mode="max")
+        return self.calculate("max", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
 
     def mean(self, column=None, binby=None, shape=None, selection=None, limits=None):
-        if all([x is None for x in [binby, shape, selection, limits]]):
-            if column is None:
-                return self.df.mean()
-            else:  
-                return self.df[column].mean()
-        binsize = get_binsize(shape, limits)
-        assert not isinstance(binsize, Sequence), "Nested binning/shape/limits are not supported (yet)."
-        return self.df.iloc[selection].clip(*limits).binby(columns=binby, binsize=binsize, mode="mean")
+        return self.calculate("mean", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
 
     def median(self, column=None, binby=None, shape=None, selection=None, limits=None):
-        if all([x is None for x in [binby, shape, selection, limits]]):
-            if column is None:
-                return self.df.median()
-            else:
-                return self.df[column].median()
-        binsize = get_binsize(shape, limits)
-        assert not isinstance(binsize, Sequence), "Nested binning/shape/limits are not supported (yet)."
-        return self.df.iloc[selection].clip(*limits).binby(columns=binby, binsize=binsize, mode="median")
+        return self.calculate("median", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
+
+    def median_approx(self, column=None, binby=None, shape=None, selection=None, limits=None):
+        """Warning: this is same as median for pandas, but not for vaex"""
+        return self.calculate("median", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
+    
+    def minmax(self, column=None, binby=None, shape=None, selection=None, limits=None):
+        return self.calculate("minmax", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
     
     def compute_selection(self, ):
         # TODO
@@ -164,6 +174,9 @@ class VaexTableWrapper(AbstractDataFrameWrapper):
 
     def mean(self, *args, **kwargs):
         return self._calculate("mean", *args, **kwargs)
+
+    def median_approx(self, *args, **kwargs):
+        return self._calculate("median_approx", *args, **kwargs)
 
     def median(self, *args, **kwargs):
         return self._calculate("median", *args, **kwargs)
