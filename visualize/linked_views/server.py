@@ -414,7 +414,6 @@ class LinkedViewsServer:
         if request.method == "POST":            
             if request.data:
                 data = request.get_json(force=True)
-                print(data)
 
                 tableName = data["table"]
                 if tableName not in ["Abstract DataFrame"]:

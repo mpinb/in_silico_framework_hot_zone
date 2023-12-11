@@ -16,8 +16,6 @@ class AbstractDataFrameWrapper(object):
     def __init__(self, data):
         self.df = data
         self.name = "Abstract DataFrame"
-        self.shape = self.df.shape
-        self.columns = self.df.columns
 
     def __setattr__(self, attr, value):
         if attr in ['df', 'name', 'shape', 'columns']:
@@ -58,71 +56,84 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
         super().__init__(data)
         self.columns = data.columns.tolist()
 
-    def binby(self, columns, binsize, mode="mean", value_col=None, df=None):
-        df = df if df is not None else self.df
-        assert len(columns) == 2, "Please provide an array of 2 columns to bin by. You provided {}".format(columns)
-        assert (value_col == None and mode=="count") or (value_col != None and mode != "count"), "If mode = count, you may not pass a value_col, otherwise you must."
-        c1, c2 = columns
-        bs1, bs2 = binsize
-        if mode == "count":
-            return self.df.groupby([
-                (self.df[c1]/bs1).round()*bs1, 
-                (self.df[c2]/bs2).round()*bs2]
-                ).apply(lambda x: x.count())
-        elif mode =="minmax":
-            return self.df.groupby([
-                (self.df[c1]/bs1).round()*bs1, 
-                (self.df[c2]/bs2).round()*bs2]
-                ).apply(lambda x: np.array([x.min(), x.max()]).T)
+    def binby(self, columns, binsize):
+        """Calculates some statistic on a binned representation of the data. 
+        These bins can be N-dimensional, but tend to be 1d, 2D and occasionally 3d, as they are used for plotting.
+
+        Args:
+            columns (array): Array of column names to bin by.
+            binsize (Sequence): binsize defines the size of the bins, and is of shape Nx2, where N is the number of dimensions.
+
+        Returns:
+            pd.DataFrameGroupBy: a pd.DataFrameGroupBy object that cannot be used for PandasTableWrapper
+        """
+        grouped_df = self.df.groupby([(self.df[c]/bs).round()*bs for c, bs in zip(columns, binsize)])
+        return grouped_df
+
+    def calc_like_pandas(self, operation, columns=None, inplace=False):
+        if columns is None:
+            columns = self.columns
+        if operation == "minmax":
+            filtered_df = self.df[columns].agg(["min", "max"])
         else:
-            # default aggregation mode, such as mean, min, max, median
-            agg = aggregation_mode_mapping[mode] if isinstance(mode, str) else mode
-            return self.df.groupby([
-                (self.df[c1]/bs1).round()*bs1, 
-                (self.df[c2]/bs2).round()*bs2]
-                ).apply(lambda x: agg(x[value_col]))
-
-    def calculate(self, operation, column=None, binby=None, shape=None, selection=None, limits=None):
-        if all([x is None for x in [binby, shape, selection, limits]]):
-            if column is None:
-                column = self.columns
-            if operation == "minmax":
-                return self.df[column].agg(["min", "max"])
-            else:
-                return self.df[column].agg(operation)
-        binsize = get_binsize(shape, limits)
-        assert not isinstance(binsize[0], Sequence), "Nested binning/shape/limits are not supported (yet)."
+            filtered_df = self.df[columns].agg(operation)
         
-        r = self.df
-        if selection:
-            r = r.iloc[selection]
-        r = self.binby(df=r, columns=binby, binsize=binsize, mode=operation, value_col=column)
+        if inplace:
+            self.df = filtered_df
+            return self
+        else:
+            return PandasTableWrapper(filtered_df)
+
+
+    def calculate(self, operation, expression=None, binby=None, shape=None, selection=None, limits=None):
+        if all([x is None for x in [binby, shape, selection, limits]]):
+            return self.calc_like_pandas(operation, columns=expression, inplace=inplace)
+
         if limits:
-            assert not isinstance(limits[0], Sequence), "Nested binning/shape/limits are not supported (yet)."
-            r = r.clip(*limits)
+            if not isinstance(limits[0], Sequence):
+                limits = [limits]*len(self.columns)
+            assert len(limits) == len(binby), "Got {} limits for {} columns".format(len(limits), len(self.columns))
+            assert all([len(limit_pair) == 2 for limit_pair in limits]), "All elements in limits should be  pair of values"
+            for i, (col, limit) in enumerate(zip(binby, limits)):
+                self.df = self.df.loc[(self.df[col] >= limit[0]) & (self.df[col] <= limit[1])]
+        
+        binsize = get_binsize(shape, limits)
+        assert (expression == None and operation=="count") or (expression != None and operation != "count"), "If calculating the count(), you may not pass an expression, otherwise you must."
+                    
+        self.filtered_df = pandas_table_wrapper.df[selection] if selection is not None else self.df
+        grouped_df = self.binby(columns=binby, binsize=binsize)
+        if operation == "count":
+            r = grouped_df.apply(lambda x: x.count())
+        elif operation =="minmax":
+            r = grouped_df.apply(lambda x: np.array([x.min(), x.max()]).T)
+        else:
+            r = getattr(grouped_df[expression], operation)().unstack()
+        self.filtered_df = None
+        
         return r
-    
-    def count(self, binby=None, shape=None, selection=None, limits=None):
-        return self.calculate("count", binby=binby, shape=shape, selection=selection, limits=limits)
 
-    def min(self, column=None, binby=None, shape=None, selection=None, limits=None):
-        return self.calculate("min", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
 
-    def max(self, column=None, binby=None, shape=None, selection=None, limits=None):
-        return self.calculate("max", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
+    def count(self, *args, **kwargs):
+        return self.calculate("count", *args, **kwargs)
 
-    def mean(self, column=None, binby=None, shape=None, selection=None, limits=None):
-        return self.calculate("mean", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
+    def min(self, *args, **kwargs):
+        return self.calculate("min", *args, **kwargs)
 
-    def median(self, column=None, binby=None, shape=None, selection=None, limits=None):
-        return self.calculate("median", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
+    def max(self, *args, **kwargs):
+        return self.calculate("max",  *args, **kwargs)
 
-    def median_approx(self, column=None, binby=None, shape=None, selection=None, limits=None):
+    def mean(self, *args, **kwargs):
+        return self.calculate("mean", *args, **kwargs)
+
+    def median(self, *args, **kwargs):
+        return self.calculate("median", *args, **kwargs)
+
+    def median_approx(self, *args, **kwargs):
         """Warning: this is same as median for pandas, but not for vaex"""
-        return self.calculate("median", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
+        return self.calculate("median", *args, **kwargs)
     
-    def minmax(self, column=None, binby=None, shape=None, selection=None, limits=None):
-        return self.calculate("minmax", column=column, binby=binby, shape=shape, selection=selection, limits=limits)
+    def minmax(self, *args, **kwargs):
+        return self.calculate("minmax", *args, **kwargs)
     
     def compute_selection(self, ):
         # TODO
@@ -139,6 +150,9 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
             kwargs["orient"] = "records"
         return self.df.to_dict(*args, **kwargs)
 
+    def get_selection(self, indices):
+        return self.df.iloc[indices]
+
 class VaexTableWrapper(AbstractDataFrameWrapper):
     """
     This class serves as a wrapper around the Vaex DataFrame, providing a unified interface for linked views. 
@@ -151,6 +165,7 @@ class VaexTableWrapper(AbstractDataFrameWrapper):
     def __init__(self, data):
         super().__init__(data)
         self.columns = self.df.get_column_names()
+        self.shape = self.df.shape
     
     def compute_selection(self, ):
         # TODO
