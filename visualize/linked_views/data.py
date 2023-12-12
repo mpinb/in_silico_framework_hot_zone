@@ -54,9 +54,9 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
     """
     def __init__(self, data):
         super().__init__(data)
-        self.columns = data.columns.tolist()
+        self.columns = data.columns.tolist() if isinstance(data, pd.DataFrame) else data.Index
 
-    def binby(self, columns, binsize):
+    def binby(self, df, columns, limits, shape):
         """Calculates some statistic on a binned representation of the data. 
         These bins can be N-dimensional, but tend to be 1d, 2D and occasionally 3d, as they are used for plotting.
 
@@ -67,12 +67,21 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
         Returns:
             pd.DataFrameGroupBy: a pd.DataFrameGroupBy object that cannot be used for PandasTableWrapper
         """
-        grouped_df = self.df.groupby([(self.df[c]/bs).round()*bs for c, bs in zip(columns, binsize)])
+        df = df if df is not None else self.df
+        binsizes = get_binsize(shape, limits)
+        grouped_df = df.groupby(
+            [
+                pd.cut(df[col], bins=np.linspace(lim[0], lim[1], shape_+1)) 
+                for col, lim, binsize, shape_ in zip(columns, limits, binsizes, shape)
+            ])
         return grouped_df
 
     def calc_like_pandas(self, operation, columns=None, inplace=False):
         if columns is None:
             columns = self.columns
+        elif isinstance(columns, str):
+            columns = [columns]
+        
         if operation == "minmax":
             filtered_df = self.df[columns].agg(["min", "max"])
         else:
@@ -85,30 +94,29 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
             return PandasTableWrapper(filtered_df)
 
 
-    def calculate(self, operation, expression=None, binby=None, shape=None, selection=None, limits=None):
+    def calculate(self, operation, expression=None, binby=None, shape=None, selection=None, limits=None, inplace=False):
         if all([x is None for x in [binby, shape, selection, limits]]):
             return self.calc_like_pandas(operation, columns=expression, inplace=inplace)
 
         if limits:
-            if not isinstance(limits[0], Sequence):
-                limits = [limits]*len(self.columns)
+            if not isinstance(limits, Sequence):
+                # limits are single int for all columns
+                limits = [limits]*len(columns)
             assert len(limits) == len(binby), "Got {} limits for {} columns".format(len(limits), len(self.columns))
             assert all([len(limit_pair) == 2 for limit_pair in limits]), "All elements in limits should be  pair of values"
+            # clip data to limits
             for i, (col, limit) in enumerate(zip(binby, limits)):
                 self.df = self.df.loc[(self.df[col] >= limit[0]) & (self.df[col] <= limit[1])]
-        
-        binsize = get_binsize(shape, limits)
-        assert (expression == None and operation=="count") or (expression != None and operation != "count"), "If calculating the count(), you may not pass an expression, otherwise you must."
-                    
-        self.filtered_df = pandas_table_wrapper.df[selection] if selection is not None else self.df
-        grouped_df = self.binby(columns=binby, binsize=binsize)
-        if operation == "count":
-            r = grouped_df.apply(lambda x: x.count())
-        elif operation =="minmax":
+
+        # create a grouped dataframe       
+        grouped_df = self.binby(
+            self.df[selection] if selection is not None else self.df,  # filter data
+            columns=binby, limits=limits, shape=shape  # bin data
+            )
+        if operation =="minmax":
             r = grouped_df.apply(lambda x: np.array([x.min(), x.max()]).T)
         else:
             r = getattr(grouped_df[expression], operation)().unstack()
-        self.filtered_df = None
         
         return r
 
