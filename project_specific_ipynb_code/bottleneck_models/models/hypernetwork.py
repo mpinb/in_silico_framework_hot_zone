@@ -14,14 +14,16 @@ class Model(torch.nn.Module):
                  number_of_layers_after_bottleneck = 5,
                  bottleneck_ISI_soma = True,
                  bottleneck_ISI_dend = True,
+                 biophysics = True,                 
                  dendritic_location = True,
                  total_variation_spatial = 0.,
                  total_variation_temporal = 0.,
                  L2_hypernetwork = 0.,
                  neighbors_0 = None,
-                 neighbors_1 = None):
+                 neighbors_1 = None,
+                 ):
         
-        
+        '''unused kwargs: biophysics'''
         super(Model, self).__init__()
         
         # parameters from the earlier bottleneck model
@@ -165,6 +167,7 @@ def forward_biopysics(self, BIOPHYSICS_DENDRITIC_LOCATION):
     return weights
         
 def show(savepath = None, model = None, model_kwargs = None, params = 0, title = None):
+    """"""
     import Interface as I
     sorted_index = [0, 61, 1, 32, 91, 230, 10, 48, 79, 33, 62, 2, 92, 104, 11, 22, 40, 63, 76, 231, 
                     34, 234, 64, 12, 56, 71, 3, 49, 20, 23, 45, 88, 6, 27, 41, 80, 93, 16, 68, 77, 
