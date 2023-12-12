@@ -34,11 +34,7 @@ class AbstractDataFrameWrapper(object):
         # because Python first looks if it is in the instance (which it should if it's initialized)
         # before calling __getattr__
         if hasattr(self.df, attr):
-            def wrapper(*args, **kwargs):
-                """Fetches the correct attr, but doesn't call it yet"""
-                method = getattr(self.df, attr)
-                return method(*args, **kwargs)
-            return wrapper
+            return getattr(self.df, attr)
         else:
             raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{attr}', and neither does its underlying dataframe.")
 
@@ -76,7 +72,7 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
             ])
         return grouped_df
 
-    def calc_like_pandas(self, operation, columns=None, inplace=False):
+    def calc_like_pandas(self, operation, columns=None):
         if columns is None:
             columns = self.columns
         elif isinstance(columns, str):
@@ -87,16 +83,12 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
         else:
             filtered_df = self.df[columns].agg(operation)
         
-        if inplace:
-            self.df = filtered_df
-            return self
-        else:
-            return PandasTableWrapper(filtered_df)
+        return filtered_df.values
 
 
-    def calculate(self, operation, expression=None, binby=None, shape=None, selection=None, limits=None, inplace=False):
+    def calculate(self, operation, expression=None, binby=None, shape=None, selection=None, limits=None):
         if all([x is None for x in [binby, shape, selection, limits]]):
-            return self.calc_like_pandas(operation, columns=expression, inplace=inplace)
+            return self.calc_like_pandas(operation, columns=expression)
 
         if limits:
             if not isinstance(limits, Sequence):
@@ -105,12 +97,12 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
             assert len(limits) == len(binby), "Got {} limits for {} columns".format(len(limits), len(self.columns))
             assert all([len(limit_pair) == 2 for limit_pair in limits]), "All elements in limits should be  pair of values"
             # clip data to limits
-            for i, (col, limit) in enumerate(zip(binby, limits)):
-                self.df = self.df.loc[(self.df[col] >= limit[0]) & (self.df[col] <= limit[1])]
+            for col, limit in zip(binby, limits):
+                filtered_df = self.df.iloc[self.df[col].between(*limit)]
 
         # create a grouped dataframe       
         grouped_df = self.binby(
-            self.df[selection] if selection is not None else self.df,  # filter data
+            filtered_df.iloc[selection] if selection is not None else filtered_df,  # filter data
             columns=binby, limits=limits, shape=shape  # bin data
             )
         if operation =="minmax":
