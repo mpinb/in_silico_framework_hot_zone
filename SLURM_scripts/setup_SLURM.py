@@ -96,7 +96,11 @@ def read_user_port_numbers():
     ports = {k: int(v) for k, v in ports.items()}
     return ports
 
-def setup(management_dir, launch_jupyter_server=True, wait_for_workers=False):
+def setup(
+    proc_n, 
+    management_dir,
+    launch_jupyter_server=True, 
+    wait_for_workers=False):
     """
     Sets up the SLURM job.
     Process 0 will uniquely set up:
@@ -114,13 +118,7 @@ def setup(management_dir, launch_jupyter_server=True, wait_for_workers=False):
         launch_jupyter_server (bool, optional): Whether to launch a Jupyter server. Defaults to True.
         wait_for_workers (bool|int, optional): Whether to wait for a certain amount of dask workers. Defaults to False (0).
     """
-    if not os.path.exists(management_dir):
-        try:
-            os.makedirs(management_dir)
-        except OSError:  # if another process was faster creating it
-            pass
 
-    PROCESS_NUMBER = get_process_number(management_dir)
     PORTS = read_user_port_numbers()
     ip = gethostbyname(
         gethostname()
@@ -134,7 +132,7 @@ def setup(management_dir, launch_jupyter_server=True, wait_for_workers=False):
         os.environ["IP_MASTER_INFINIBAND"] = ip.replace('100', '102')
 
     # Setup for thread 0: launch servers
-    if PROCESS_NUMBER == 0:
+    if proc_n == 0:
         setup_locking_server(management_dir, PORTS)
         setup_dask_scheduler(
             management_dir,
@@ -170,14 +168,21 @@ def run(
         sleep (bool, optional): Whether to sleep after setup. Defaults to True.
         wait_for_workers (bool|int, optional): Whether to wait for a certain amount of dask workers. Defaults to False.
     """
+    if not os.path.exists(management_dir):
+        try:
+            os.makedirs(management_dir)
+        except OSError:  # if another process was faster creating it
+            pass
 
+    proc_n = get_process_number(management_dir)
     setup(
+        proc_n,
         management_dir,
         launch_jupyter_server=launch_jupyter_server,
         wait_for_workers=wait_for_workers
         )
 
-    if notebook is not None and PROCESS_NUMBER == 0:
+    if notebook is not None and proc_n == 0:
         run_notebook(notebook, nb_kwargs=nb_kwargs)
         exit(0)  # quit SLURM when notebook has finished running
     elif sleep:
