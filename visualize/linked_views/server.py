@@ -130,7 +130,6 @@ class LinkedViewsServer:
         else:
             self.resourceDir = None
         self.filenameProjects = None
-        self.log_dir = log_dir
 
         self.thread = None    
         self.abstract_df = None
@@ -192,7 +191,7 @@ class LinkedViewsServer:
         print("Server stopped.")
 
     def start_logging(self):
-        tmp_folder = tmpfile.gettemp()
+        tmp_folder = tempfile.mkdtemp()
         log_filename = os.path.join(tmp_folder, "linked-views-server.log")
         print("logs are written to {}".format(log_filename))
         self.logfile_handler = logging.handlers.RotatingFileHandler(
@@ -241,7 +240,9 @@ class LinkedViewsServer:
 
     def index(self):
         if self.abstract_df:
-            return "{} columns: {}".format(type(self.abstract_df), self.abstract_df.columns)
+            return "{} columns: {}".format(
+                self.abstract_df.__class__.__name__,
+                self.abstract_df.columns)
         else:
             return "Tables: {}".format([name for name in self.tables.keys()])
 
