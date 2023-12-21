@@ -1,5 +1,4 @@
 import os
-import asyncio
 from SLURM_scripts.utils import get_user_port_numbers
 from socket import gethostbyname, gethostname
 from dask.distributed import Client
