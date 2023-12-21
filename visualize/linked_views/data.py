@@ -75,18 +75,29 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
     def calc_like_pandas(self, operation, columns=None):
         if columns is None:
             columns = self.columns
-        elif isinstance(columns, str):
-            columns = [columns]
         
         if operation == "minmax":
             filtered_df = self.df[columns].agg(["min", "max"])
+        elif operation == "count":
+            filtered_df = self.df.count()
         else:
             filtered_df = self.df[columns].agg(operation)
         
         return filtered_df.values
 
+    def calc_binned_statistic(self, operation, expression=None, binby=None, shape=None, selection=None, limits=None):
+        """Calculates some statistic on a binned representation of the data.
 
-    def calculate(self, operation, expression=None, binby=None, shape=None, selection=None, limits=None):
+        Args:
+            expression (str): The column to compute the statistic on. Not applicable if operation is `count`.
+            binby (str): The columns to bin by. Usually 2D
+            limits (Sequence): The limits of the binning operation.
+            shape (Sequence): The shape of the binning operation.
+            operation (str): The statistic to compute. Options are: 'min', 'max', 'mean', 'median', 'count'.
+
+        Returns:
+            pd.DataFrame: A pandas DataFrame containing the result of the calculation.
+        """
         if all([x is None for x in [binby, shape, selection, limits]]):
             return self.calc_like_pandas(operation, columns=expression)
 
@@ -98,7 +109,7 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
             assert all([len(limit_pair) == 2 for limit_pair in limits]), "All elements in limits should be  pair of values"
             # clip data to limits
             for col, limit in zip(binby, limits):
-                filtered_df = self.df.iloc[self.df[col].between(*limit)]
+                filtered_df = self.df[self.df[col].between(*limit)]
 
         # create a grouped dataframe       
         grouped_df = self.binby(
@@ -106,34 +117,36 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
             columns=binby, limits=limits, shape=shape  # bin data
             )
         if operation =="minmax":
-            r = grouped_df.apply(lambda x: np.array([x.min(), x.max()]).T)
+            r = grouped_df.apply(lambda x: np.array([x.min(), x.max()]))
+        elif operation == "count":
+            # Counting in bins is done with size() in pandas, not count() (the latter counts for all columns in some 1d bin)
+            r = grouped_df.size().unstack()
         else:
             r = getattr(grouped_df[expression], operation)().unstack()
         
         return r
 
-
     def count(self, *args, **kwargs):
-        return self.calculate("count", *args, **kwargs)
+        return self.calc_binned_statistic("count", *args, **kwargs)
 
     def min(self, *args, **kwargs):
-        return self.calculate("min", *args, **kwargs)
+        return self.calc_binned_statistic("min", *args, **kwargs)
 
     def max(self, *args, **kwargs):
-        return self.calculate("max",  *args, **kwargs)
+        return self.calc_binned_statistic("max",  *args, **kwargs)
 
     def mean(self, *args, **kwargs):
-        return self.calculate("mean", *args, **kwargs)
+        return self.calc_binned_statistic("mean", *args, **kwargs)
 
     def median(self, *args, **kwargs):
-        return self.calculate("median", *args, **kwargs)
+        return self.calc_binned_statistic("median", *args, **kwargs)
 
     def median_approx(self, *args, **kwargs):
         """Warning: this is same as median for pandas, but not for vaex"""
-        return self.calculate("median", *args, **kwargs)
+        return self.calc_binned_statistic("median", *args, **kwargs)
     
     def minmax(self, *args, **kwargs):
-        return self.calculate("minmax", *args, **kwargs)
+        return self.calc_binned_statistic("minmax", *args, **kwargs)
     
     def compute_selection(self, ):
         # TODO
@@ -168,33 +181,34 @@ class VaexTableWrapper(AbstractDataFrameWrapper):
         self.shape = self.df.shape
     
     def compute_selection(self, ):
-        # TODO
+        raise NotImplementedError("compute_selection not implemented for VaexTableWrapper")
         pass
 
-    def _calculate(self, _operation, *args, **kwargs):
+    def calc_binned_statistic(self, operation, *args, **kwargs):
         allowed_operations = ["min", "max", "mean", "median", "count"]
-        if _operation in allowed_operations:
+        if operation in allowed_operations:
             if not args and "expression" not in kwargs:
                 kwargs["expression"] = self.columns
-            operation_func = getattr(self.df, _operation)
+            operation_func = getattr(self.df, operation)
             return operation_func(*args, **kwargs)
         else:
             raise ValueError(f"Invalid operation. Choose from {allowed_operations}.")
 
     def min(self, *args, **kwargs):
-        return self._calculate("min", *args, **kwargs)
+        return self.calc_binned_statistic("min", *args, **kwargs)
 
     def max(self, *args, **kwargs):
-        return self._calculate("max", *args, **kwargs)
+        return self.calc_binned_statistic("max", *args, **kwargs)
 
     def mean(self, *args, **kwargs):
-        return self._calculate("mean", *args, **kwargs)
+        return self.calc_binned_statistic("mean", *args, **kwargs)
 
     def median_approx(self, *args, **kwargs):
-        return self._calculate("median_approx", *args, **kwargs)
+        return self.calc_binned_statistic("median_approx", *args, **kwargs)
 
     def median(self, *args, **kwargs):
-        return self._calculate("median", *args, **kwargs)
+        """compute approx median instead of exact median (faster)"""
+        return self.calc_binned_statistic("median_approx", *args, **kwargs)
 
 aggregation_mode_mapping = {
     'mean': lambda x: x.mean,
@@ -221,3 +235,24 @@ def get_binsize(shape, limits):
         assert len(shape) == len(limits), "Got {} values for shape, but {} limits".format(len(shape, len(limits)))
         assert all([len(limit_pair) == 2 for limit_pair in limits]), "All elements in limits should be  pair of values"
         return [get_binsize_1d(s, l) for s, l in zip(shape, limits)]
+
+def mask_invalid_values(values, operation, invalid_values):
+    """Given an array of values, masks invalid values as specified by the invalid_values argument.
+    What constitutes an invalid value depends on the operation being performed.
+
+    Args:
+        values (_type_): _description_
+        operation (_type_): _description_
+        invalid_values (_type_): _description_
+    """
+    if operation == "count":
+        values = values[values == 0] = invalid_value
+    elif operation=='max':
+        values = values[values < -10**100] = invalid_value
+    elif operation=='min':
+        values = values[values > 10**100] = invalid_value
+    elif operation in ['mean', 'median']:
+        pass
+    else:
+        raise ValueError(f"Invalid operation. Choose from ['mean', 'median', 'min', 'max', 'count'].")
+    return values

@@ -12,10 +12,10 @@ import pandas as pd
 import numpy as np
 import vaex
 import vaex.ml
-from .data import PandasTableWrapper, VaexTableWrapper
+from .data import PandasTableWrapper, VaexTableWrapper, mask_invalid_values
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-
+import warnings
 from pathlib import Path
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -99,7 +99,7 @@ def get_data_ranges(adf):
 def normalize(df, low=-1, high=1):
     scaler = MinMaxScaler(feature_range=(low, high))
     df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
-    return df_normalized
+    return PandasTableWrapper(df_normalized)
 
 def getPCA(df):    
     scaler = StandardScaler()
@@ -366,7 +366,19 @@ class LinkedViewsServer:
     #@app.route("/matrixServer/getValues", methods=["GET", "POST"])
     #@cross_origin()
     def getValues(self):
-        print("getting values...")
+        """
+        Fetches the values from a request JSON, filters them based on columns and indices, converts them to one of the following formats:
+            - expanded: a list of dictionaries, where each dictionary represents a row
+            - flat: a list of lists, where each list represents a row
+            - flat-normalized: a list of lists, where each list represents a row and the values are normalized to [-1,1]
+            - flat-normalized-PCA: a list of lists, where each list represents a row and the values are normalized to [-1,1] and reduced to 2 dimensions using PCA
+
+        Raises:
+            ValueError: If the data format is not one of the above.
+
+        Returns:
+            json.dumps: The response data
+        """
         if request.method == "POST":
             if request.data:
                 data = request.get_json(force=True)
@@ -377,8 +389,6 @@ class LinkedViewsServer:
                 columns = data["columns"]
                 indices = data["indices"]
                 data_format = data["format"]
-                #print(columns)
-                #print(set(columns) - set(df.columns))
                 assert set(columns).issubset(set(adf.columns))
                 assert len(indices) == 0 or max(indices) < adf.shape[0]         
 
@@ -409,31 +419,49 @@ class LinkedViewsServer:
 
                 return json.dumps(response_data)
     
-    def getDensity(self): 
+    def getDensity(self):
+        """
+        Given a request JSON, computes aggregate statistics in 2D bins and returns the result. 
+        Aggregation can be performed on a subset of the data, specified by a selection.
+        The density can be computed in the following formats:
+            - count: the number of data points in each bin
+            - min: the minimum value in each bin
+            - max: the maximum value in each bin
+            - mean: the mean value in each bin
+            - median: the median value in each bin
+
+        Raises:
+            ValueError: If the aggregation format is not in ["count", "min", "max", "mean", "median"].
+            AssertionError: If the name of the table is not "Abstract DataFrame".
+            AssertionError: If the number of columns is not 2 for agg_format in ["count"] and 3 for agg_format in ["min", "max", "mean", "median"].
+
+        Returns:
+            _type_: _description_
+        """
         self.last_request = request.data
         if request.method == "POST":            
             if request.data:
-                data = request.get_json(force=True)
+                request_data = request.get_json(force=True)
 
-                tableName = data["table"]
-                if tableName not in ["Abstract DataFrame"]:
-                    raise ValueError(tableName)
+                assert request_data["table"] == "Abstract DataFrame", \
+                    "Only Abstract DataFrames are supported. \
+                    If you are not using pandas or vaex tables, please create a wrapper in data.py."
 
                 adf = self.abstract_df
-              
-                columns = data["columns"]                
-                #indices = data["indices"]
-                format = data["format"]
-                if(format in ["count"]):
+                columns = request_data["columns"]                
+                # indices = data["indices"]
+                agg_format = request_data["format"]
+                if agg_format in ["count"]:
                     assert len(columns) == 2
-                elif(format in ["min", "max", "mean", "median"]):
+                    value_column=None
+                elif agg_format in ["min", "max", "mean", "median"]:
                     assert len(columns) == 3
                     value_column = columns[2]
                 else:
-                    raise ValueError(format)
+                    raise ValueError(agg_format)
 
                 binbycols = columns[0:2]
-                density_grid_shape = tuple(data["density_grid_shape"])
+                density_grid_shape = tuple(request_data["density_grid_shape"])
                 print("density_grid_shape", density_grid_shape)
                 nCells = density_grid_shape[0] * density_grid_shape[1]
                 #indices = np.arange(nCells)
@@ -441,45 +469,18 @@ class LinkedViewsServer:
                 minmax_x = adf.minmax(binbycols[0])
                 minmax_y = adf.minmax(binbycols[1])
                 data_ranges = [minmax_x.tolist(), minmax_y.tolist()]
-                
-                if(format == "count"):
-                    values = adf.count(
-                        binby=binbycols, 
-                        shape=density_grid_shape, selection=self.active_selection, 
-                        limits=data_ranges).astype(float)
-                    values[values == 0] = np.nan
-                elif(format == "min"):                    
-                    values = adf.min(
-                        value_column, binby=binbycols, 
-                        shape=density_grid_shape, selection=self.active_selection, 
-                        limits=data_ranges)
-                    values[values > 10**100] = np.nan
-                elif(format == "max"):                    
-                    values = adf.max(
-                        value_column, binby=binbycols, 
-                        shape=density_grid_shape, selection=self.active_selection, 
-                        limits=data_ranges)
-                    values[values < -10**100] = np.nan
-                elif(format == "mean"):                    
-                    values = adf.mean(
-                        value_column, binby=binbycols, 
-                        shape=density_grid_shape, selection=self.active_selection,
-                        limits=data_ranges)
-                elif(format == "median"):
-                    values = adf.median_approx(
-                        value_column, binby=binbycols, 
-                        shape=density_grid_shape, selection=self.active_selection, 
-                        limits=data_ranges)
-                else:
-                    raise ValueError(format)             
-
-                values = np.nan_to_num(values, nan=INVALID_NUMBER)
+                values = adf.calc_binned_statistic(
+                    operation=agg_format, expression = value_column,
+                    binby=binbycols, shape=density_grid_shape, 
+                    selection=self.active_selection,
+                    limits=data_ranges)
+                values = mask_invalid_values(values=values, operation=agg_format, mask_value=INVALID_NUMBER)        
                 
                 response_data = {
                     "columns" : columns,
                     #"indices" : indices.tolist(),
                     "values" : values.tolist(),
-                    "density_grid_shape" : data["density_grid_shape"],
+                    "density_grid_shape" : request_data["density_grid_shape"],
                     "data_ranges" : data_ranges,
                     "masked_value" : INVALID_NUMBER
                 }
@@ -527,10 +528,9 @@ class LinkedViewsServer:
                 return json.dumps(response_data)
 
     def computeSelection(self, return_indices=True):
-        if("global" in self.selections):
+        if "global" in self.selections:
             columns = self.selections["global"]["columns"] 
-            col1 = columns[0]
-            col2 = columns[1]
+            col1, col2 = columns[0], columns[1]
 
             ranges = self.selections["global"]["bin_ranges"]
 
