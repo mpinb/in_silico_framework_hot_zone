@@ -241,7 +241,7 @@ class LinkedViewsServer:
 
     def index(self):
         if self.abstract_df:
-            return "Abstract DataFrame columns: {}".format(self.abstract_df.columns)
+            return "{} columns: {}".format(type(self.abstract_df), self.abstract_df.columns)
         else:
             return "Tables: {}".format([name for name in self.tables.keys()])
 
