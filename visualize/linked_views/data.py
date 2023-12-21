@@ -126,6 +126,14 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
         
         return r
 
+    def compute_selection(self, columns, bin_ranges):
+        col1, col2 = columns[0], columns[1]
+        df_selected_indices = self.df.iloc[
+            df[col1].between(*bin_ranges[0]) & \
+            df[col2].between(*bin_ranges[1])]
+
+        return df_selected_indices
+    
     def count(self, *args, **kwargs):
         return self.calc_binned_statistic("count", *args, **kwargs)
 
@@ -180,9 +188,15 @@ class VaexTableWrapper(AbstractDataFrameWrapper):
         self.columns = self.df.get_column_names()
         self.shape = self.df.shape
     
-    def compute_selection(self, ):
-        raise NotImplementedError("compute_selection not implemented for VaexTableWrapper")
-        pass
+    def compute_selection(self, columns, bin_ranges, return_indices=True):
+        self.df.select_nothing(name="selection_global")
+        col1, col2 = columns[0], columns[1]
+        for idx, range_i in enumerate(bin_ranges):    
+            limit_i = [(range_i[0][0], range_i[0][1]), (range_i[1][0], range_i[1][1])]       
+            self.df.select_rectangle(self.df[col1], self.df[col2], limit_i, name="selection_global", mode="or")
+
+        df_selected_indices = self.df.evaluate(self.df["row_index"], selection="selection_global")
+        return df_selected_indices
 
     def calc_binned_statistic(self, operation, *args, **kwargs):
         allowed_operations = ["min", "max", "mean", "median", "count"]

@@ -135,6 +135,7 @@ class LinkedViewsServer:
         self.thread = None    
         self.abstract_df = None
         self.selections = {}
+        """Dictionary of selection config per view. Keeps track of the selected columns and bins per view"""
         self.active_selection = None
 
         print(self.config_file_path)
@@ -373,6 +374,8 @@ class LinkedViewsServer:
             - flat-normalized: a list of lists, where each list represents a row and the values are normalized to [-1,1]
             - flat-normalized-PCA: a list of lists, where each list represents a row and the values are normalized to [-1,1] and reduced to 2 dimensions using PCA
 
+        This is an initial data parser that is used before passing the dataframe for further operations (e.g. density computation).
+        
         Raises:
             ValueError: If the data format is not one of the above.
 
@@ -421,7 +424,7 @@ class LinkedViewsServer:
     
     def getDensity(self):
         """
-        Given a request JSON, computes aggregate statistics in 2D bins and returns the result. 
+        Fetches the request JSON, computes aggregate statistics in 2D bins and returns the result. 
         Aggregation can be performed on a subset of the data, specified by a selection.
         The density can be computed in the following formats:
             - count: the number of data points in each bin
@@ -515,6 +518,12 @@ class LinkedViewsServer:
                 return json.dumps(response_data)
 
     def setIndicesSelection(self): 
+        """
+        Saves the selection for a particular view. Doe snot return any response data.
+
+        Returns:
+            None: An empty JSON as response.
+        """
         self.last_request = request.data
         if request.method == "POST":            
             if request.data:
@@ -532,20 +541,23 @@ class LinkedViewsServer:
                 return json.dumps(response_data)
 
     def computeSelection(self, return_indices=True):
+        """
+        Reads in the selection config for the global view and computes the indices of the selected rows.
+        This is necessary to sync selections across views.
+
+        Args:
+            return_indices (bool, optional): _description_. Defaults to True.
+
+        Returns:
+            _type_: _description_
+        """
         if "global" in self.selections:
             columns = self.selections["global"]["columns"] 
-            col1, col2 = columns[0], columns[1]
-
             ranges = self.selections["global"]["bin_ranges"]
 
-            self.abstract_df.select_nothing(name="selection_global")
-            for idx, range_i in enumerate(ranges):    
-                limit_i = [(range_i[0][0], range_i[0][1]), (range_i[1][0], range_i[1][1])]        
-                self.abstract_df.select_rectangle(self.abstract_df[col1], self.abstract_df[col2], limit_i, name="selection_global", mode="or")
+            df_selected_indices = self.adf.compute_selection(columns=columns, bin_ranges=ranges)
             self.active_selection = "selection_global"
-
-            if(return_indices):
-                df_selected_indices = self.abstract_df.evaluate(self.abstract_df["row_index"], selection="selection_global")
+            if return_indices:
                 return df_selected_indices
             else:
                 return "selection_global"
@@ -560,14 +572,14 @@ class LinkedViewsServer:
         return self.selections
 
     def getSelectionFromView(self, view_name):
-        if(view_name not in self.selections):
+        if view_name not in self.selections:
             return []
         else:
             return self.selections[view_name]
 
     def getSelectedIndices(self):
         df_selected_indices = self.computeSelection()
-        if(df_selected_indices is None):
+        if df_selected_indices is None:
             return "no selection"
         else:
             return "number of selected rows: {}".format(df_selected_indices.shape[0])
