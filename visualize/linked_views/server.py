@@ -441,16 +441,16 @@ class LinkedViewsServer:
         self.last_request = request.data
         if request.method == "POST":            
             if request.data:
-                request_data = request.get_json(force=True)
+                data = request.get_json(force=True)
 
-                assert request_data["table"] == "Abstract DataFrame", \
+                assert data["table"] == "Abstract DataFrame", \
                     "Only Abstract DataFrames are supported. \
                     If you are not using pandas or vaex tables, please create a wrapper in data.py."
 
                 adf = self.abstract_df
-                columns = request_data["columns"]                
+                columns = data["columns"]                
                 # indices = data["indices"]
-                agg_format = request_data["format"]
+                agg_format = data["format"]
                 if agg_format in ["count"]:
                     assert len(columns) == 2
                     value_column=None
@@ -461,7 +461,7 @@ class LinkedViewsServer:
                     raise ValueError(agg_format)
 
                 binbycols = columns[0:2]
-                density_grid_shape = tuple(request_data["density_grid_shape"])
+                density_grid_shape = tuple(data["density_grid_shape"])
                 print("density_grid_shape", density_grid_shape)
                 nCells = density_grid_shape[0] * density_grid_shape[1]
                 #indices = np.arange(nCells)
@@ -473,14 +473,18 @@ class LinkedViewsServer:
                     operation=agg_format, expression = value_column,
                     binby=binbycols, shape=density_grid_shape, 
                     selection=self.active_selection,
-                    limits=data_ranges)
-                values = mask_invalid_values(values=values, operation=agg_format, mask_value=INVALID_NUMBER)        
+                    limits=data_ranges
+                    ).values
+                
+                values = mask_invalid_values(
+                    values=values, 
+                    operation=agg_format, mask_value=INVALID_NUMBER)        
                 
                 response_data = {
                     "columns" : columns,
                     #"indices" : indices.tolist(),
                     "values" : values.tolist(),
-                    "density_grid_shape" : request_data["density_grid_shape"],
+                    "density_grid_shape" : data["density_grid_shape"],
                     "data_ranges" : data_ranges,
                     "masked_value" : INVALID_NUMBER
                 }

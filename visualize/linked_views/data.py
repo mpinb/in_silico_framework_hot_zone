@@ -236,7 +236,7 @@ def get_binsize(shape, limits):
         assert all([len(limit_pair) == 2 for limit_pair in limits]), "All elements in limits should be  pair of values"
         return [get_binsize_1d(s, l) for s, l in zip(shape, limits)]
 
-def mask_invalid_values(values, operation, invalid_value):
+def mask_invalid_values(values, operation, mask_value):
     """Given an array of values, masks invalid values as specified by the invalid_values argument.
     What constitutes an invalid value depends on the operation being performed.
 
@@ -246,13 +246,14 @@ def mask_invalid_values(values, operation, invalid_value):
         invalid_value (float | int): Value to use as masking value
     """
     if operation == "count":
-        values = values[values == 0] = invalid_value
+        values[values == 0] = mask_value
     elif operation=='max':
-        values = values[values < -10**100] = invalid_value
+        values[values < -10**100] = mask_value
     elif operation=='min':
-        values = values[values > 10**100] = invalid_value
+        values[values > 10**100] = mask_value
     elif operation in ['mean', 'median']:
         pass
     else:
         raise ValueError(f"Invalid operation. Choose from ['mean', 'median', 'min', 'max', 'count'].")
+    values[np.isnan(values)] = mask_value
     return values
