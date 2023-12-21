@@ -85,8 +85,20 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
         
         return filtered_df.values
 
-    def calc_binned_statistic(self, operation, expression=None, binby=None, shape=None, selection=None, limits=None):
-        """Calculates some statistic on a binned representation of the data.
+    def calc_binned_statistic(
+        self, 
+        operation, 
+        expression=None, 
+        binby=None, 
+        shape=None, 
+        selection=None, 
+        limits=None):
+        """
+        Creates a binned representation of the data.
+        Bins the data on columns :arg binby: in a grid of size :arg shape: and 
+        calculates the statistic :arg operation: on the column :arg expression:.
+        If :arg operation: is 'count', then :arg expression: is redundant and ignored.
+        If :arg limits: is passed, the data is clipped to the limits before binning. 
 
         Args:
             expression (str): The column to compute the statistic on. Not applicable if operation is `count`.
@@ -96,7 +108,7 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
             operation (str): The statistic to compute. Options are: 'min', 'max', 'mean', 'median', 'count'.
 
         Returns:
-            pd.DataFrame: A pandas DataFrame containing the result of the calculation.
+            np.ndarray: a numpy array of shape :arg shape: containing the binned statistic.
         """
         if all([x is None for x in [binby, shape, selection, limits]]):
             return self.calc_like_pandas(operation, columns=expression)
@@ -155,10 +167,6 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
     
     def minmax(self, *args, **kwargs):
         return self.calc_binned_statistic("minmax", *args, **kwargs)
-    
-    def compute_selection(self, ):
-        # TODO
-        pass
 
     def to_dict(self, *args, **kwargs):
         """Returns a dictionary representation of the dataframe.
@@ -173,6 +181,7 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
 
     def get_selection(self, indices):
         return self.df.iloc[indices]
+
 
 class VaexTableWrapper(AbstractDataFrameWrapper):
     """
@@ -199,6 +208,26 @@ class VaexTableWrapper(AbstractDataFrameWrapper):
         return df_selected_indices
 
     def calc_binned_statistic(self, operation, *args, **kwargs):
+        """
+        Creates a binned representation of the data.
+        Bins the data on columns :arg binby: in a grid of size :arg shape: and 
+        calculates the statistic :arg operation: on the column :arg expression:.
+        If :arg operation: is 'count', then :arg expression: is redundant and ignored.
+        If :arg limits: is passed, the data is clipped to the limits before binning. 
+
+        This is merely a wrapper around the vaex.DataFrame method of the same name, 
+        with an additional check if :arg expression: is not specified, the statistic is computed on all columns.
+
+        Args:
+            expression (str): The column to compute the statistic on. Not applicable if operation is `count`.
+            binby (str): The columns to bin by. Usually 2D
+            limits (Sequence): The limits of the binning operation.
+            shape (Sequence): The shape of the binning operation.
+            operation (str): The statistic to compute. Options are: 'min', 'max', 'mean', 'median', 'count'.
+
+        Returns:
+            np.ndarray: a numpy array of shape :arg shape: containing the binned statistic.
+        """
         allowed_operations = ["min", "max", "mean", "median", "count"]
         if operation in allowed_operations:
             if not args and "expression" not in kwargs:
@@ -268,6 +297,6 @@ def mask_invalid_values(values, operation, mask_value):
     elif operation in ['mean', 'median']:
         pass
     else:
-        raise ValueError(f"Invalid operation. Choose from ['mean', 'median', 'min', 'max', 'count'].")
+        raise ValueError("Invalid operation. Choose from ['mean', 'median', 'min', 'max', 'count'].")
     values[np.isnan(values)] = mask_value
     return values
