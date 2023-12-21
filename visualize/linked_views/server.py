@@ -116,7 +116,7 @@ def getPCA(df):
 
     
 class LinkedViewsServer:
-    def __init__(self, config_file_path = None, data_folder=None, log_dir=None):
+    def __init__(self, config_file_path = None, data_folder=None):
         if config_file_path is not None:
             self.config_file_path = config_file_path
         else:
@@ -192,7 +192,7 @@ class LinkedViewsServer:
         print("Server stopped.")
 
     def start_logging(self):
-        tmp_folder = "/gpfs/soma_fs/scratch/meulemeester/tmp/logs"  # TODO for soma_fs, normally tmpfile.gettemp() for /tmp or smth
+        tmp_folder = tmpfile.gettemp()
         log_filename = os.path.join(tmp_folder, "linked-views-server.log")
         print("logs are written to {}".format(log_filename))
         self.logfile_handler = logging.handlers.RotatingFileHandler(
@@ -240,7 +240,7 @@ class LinkedViewsServer:
         self.app.add_url_rule("/dataServer/setIndicesSelection", "setIndicesSelection", self.setIndicesSelection, methods=["POST"])
 
     def index(self):
-        if(self.abstract_df):
+        if self.abstract_df:
             return "Abstract DataFrame columns: {}".format(self.abstract_df.columns)
         else:
             return "Tables: {}".format([name for name in self.tables.keys()])
