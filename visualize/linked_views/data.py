@@ -236,14 +236,14 @@ def get_binsize(shape, limits):
         assert all([len(limit_pair) == 2 for limit_pair in limits]), "All elements in limits should be  pair of values"
         return [get_binsize_1d(s, l) for s, l in zip(shape, limits)]
 
-def mask_invalid_values(values, operation, invalid_values):
+def mask_invalid_values(values, operation, invalid_value):
     """Given an array of values, masks invalid values as specified by the invalid_values argument.
     What constitutes an invalid value depends on the operation being performed.
 
     Args:
-        values (_type_): _description_
-        operation (_type_): _description_
-        invalid_values (_type_): _description_
+        values (np.ndarray): Values to mask
+        operation (str): Which operation was performed on this set of values. Depending on the operation, different values are considered invalid.
+        invalid_value (float | int): Value to use as masking value
     """
     if operation == "count":
         values = values[values == 0] = invalid_value
