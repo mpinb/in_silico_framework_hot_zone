@@ -19,7 +19,6 @@ def init(mdb, key, client = None, outdir = None, return_list = []):
     l = Load(client, outdir, n_particles = n_particles)
     init_RW_exploration(mdb, l , key)
     
-
 def get_dtype(df):
     return df.dtypes
 
@@ -43,6 +42,7 @@ class Load:
             # constructs a dask dataframe with monotonously increasing index and known divisions
             futures = self.futures
             # check if some futures return 'empty', which indicates that no simulations for this seedpoint have been performed
+            # raise
             empty_list = self.client.gather(self.client.map(lambda x: isinstance(x, str) and x == 'empty', futures))
             if any(empty_list):
                 warnings.warn('No simulations found for some seedpoints! Skipping these seedpoints.')

@@ -10,17 +10,21 @@ class Data:
             
 def _get_ddf_RW_exploration_template(mdb, key, selected_keys, columns = None, inside = True, persist = False):
     out = {}
+    s = {}
+    e = {}
+    c = {}
+    m = {}
     if inside:
         key = key + '_inside'
     for k in selected_keys:
         out[k] = mdb[k].getitem(key, columns = columns) 
+        m[k] = mdb[k]
+        s[k] = mdb[k]['get_Simulator'](mdb[k])
+        e[k] = mdb[k]['get_Evaluator'](mdb[k])
+        c[k] = mdb[k]['get_Combiner'](mdb[k])
     if persist:
         out = {k:client.persist(ddf) for k, ddf in out.items()}
-    m = mdb[k]
-    s = m['get_Simulator'](m)
-    e = m['get_Evaluator'](m)
-    c = m['get_Combiner'](m)
-    out_data = Data(ddf_dict = out, params = mdb[k]['params'], s = s, e = e, c = c, param_names = list(mdb[k]['params'].index))
+    out_data = Data(ddf_dict = out, params = mdb[k]['params'], s = s, e = e, c = c, m = m, param_names = list(mdb[k]['params'].index))
     return out_data
 
 
@@ -105,3 +109,43 @@ get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_run1 = I.partial(_
                                                  mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
                                                  'run1',
                                                  selected_keys = ['WR71'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_run2 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'run2',
+                                                 selected_keys = ['WR71'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_run3 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'run3',
+                                                 selected_keys = ['WR71'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_run3 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'run3',
+                                                 selected_keys = ['WR71'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_run1 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'noAtt_run1',
+                                                 selected_keys = ['WR64','WR71','88','89','91'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'noAtt_cf_fixed_run1',
+                                                 selected_keys = ['WR64','WR71','88','89','91'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231226 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'noAtt_cf_fixed_run1_20231226',
+                                                 selected_keys = ['WR64','WR71','88','89','91'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231227 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'noAtt_cf_fixed_run1_20231227',
+                                                 selected_keys = ['WR64','WR71','88','89','91'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231228 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'noAtt_cf_fixed_run1_20231228',
+                                                 selected_keys = ['WR64','WR71','88','89','91'])
