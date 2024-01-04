@@ -92,7 +92,8 @@ class RW:
         iterations = sorted(iterations,reverse=True)
         if iterations and max(iterations) > 60000:
             print('more than 60000 iterations done. exit gracegfully')
-            sys.exit(0)
+            return 
+            #sys.exit(0)
         if len(iterations) == 0:
             print('So far nothing simulated, start from seedpoint', selected_seedpoint)
             p = seed_point_for_exploration_pd # p is pandas and the full vector and unnormalized

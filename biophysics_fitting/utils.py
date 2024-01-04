@@ -14,31 +14,42 @@ from functools import partial
 def connected_to_structure_beyond(cell,
                                   sec,
                                   beyond_dist,
-                                  struct_list=['Dendrite', 'ApicalDendrite']):
-    if cell.distance_to_soma(sec, 1) > beyond_dist and sec.label in struct_list:
+                                  beyond_struct=['ApicalDendrite'],
+                                  n_children_required=1):
+    '''computes if a secion sec of a cell is connected to a structure at a soma distance 
+    larger than beyond_dist. n_children_required: at least the specified amound of children
+    needs to have such a connection. This can be helpful to detect the main bifurcation, 
+    which is the bifurcation in which both children are connected to the tuft.'''
+    if cell.distance_to_soma(sec, 1) > beyond_dist and sec.label in beyond_struct:
         return True
     else:
-        return bool(
-            sum(
-                connected_to_dend_beyond(cell, c, beyond_dist)
+        sum_ = sum(
+                connected_to_structure_beyond(cell, c, beyond_dist, n_children_required = 1)
                 for c in sec.children()
-                if sec.label in struct_list))
+                if sec.label in beyond_struct)
+        if sum_ >= n_children_required:
+            return True
+        else:
+            return False
 
 
 connected_to_dend_beyond = partial(connected_to_structure_beyond,
-                                   struct_list=['Dendrite', 'ApicalDendrite'])
+                                   beyond_struct=['Dendrite', 'ApicalDendrite'])
 
 
-def get_inner_sec_dist_list(cell,
+def get_inner_sec_dist_dict(cell,
                             beyond_dist=1000,
-                            beyond_struct=['ApicalDendrite']):
+                            beyond_struct=['ApicalDendrite'],
+                            n_children_required = 1):
     '''returns sections, that are connected to compartments with labels in beyond_struct that have a minimum soma distance of
     beyond_dist. This is useful to get sections of the apical trunk filtering out oblique dendrites.'''
     sec_dist_dict = {
         cell.distance_to_soma(sec, 1.0): sec
         for sec in cell.sections
-        if connected_to_structure_beyond(cell, sec, beyond_dist,
-                                         ['ApicalDendrite'])
+        if connected_to_structure_beyond(cell, sec, 
+                                         beyond_dist,
+                                         beyond_struct, 
+                                         n_children_required = n_children_required)
     }
     return sec_dist_dict
 
@@ -51,12 +62,47 @@ def get_inner_section_at_distance(cell,
     Also, it is assured, that the section returned has children that have a soma distance beyond beyond_dist of the label in
     beyond_struct'''
     import six
-    sec_dist_dict = get_inner_sec_dist_list(cell, beyond_dist, beyond_struct)
+    sec_dist_dict = get_inner_sec_dist_dict(cell, beyond_dist, beyond_struct)
     dummy = {k - dist: v for k, v in six.iteritems(sec_dist_dict) if k > dist}
     closest_sec = dummy[min(dummy)]
     x = (dist - cell.distance_to_soma(closest_sec, 0.0)) / closest_sec.L
     return closest_sec, x
 
+
+def get_main_bifurcation_section(cell):
+    '''returns the main bifurcation section of a cell'''
+    two_children_connected_list = get_inner_sec_dist_dict(cell, n_children_required = 2)
+    two_children_connected_list = list(two_children_connected_list.values())
+    sec = two_children_connected_list[0]
+    while sec.parent() in two_children_connected_list:
+        sec = sec.parent()
+    return sec
+
+def augment_cell_with_detailed_labels(cell):
+    '''further discriminates the dendrite into tuft, oblique, trunk and basal sections
+    by assigning these labels to section.label_detailed
+    
+    returns: None'''
+    def helper(secs):
+        for sec in secs:
+            sec.label_detailed = 'tuft'
+            children = sec.children()
+            helper(children)
+    sec = get_main_bifurcation_section(cell)
+    helper(sec.children())
+    while sec != cell.soma:
+        sec.label_detailed = 'trunk'
+        sec = sec.parent
+    for sec in cell.sections:
+        if sec.label == 'ApicalDendrite':
+            try:
+                sec.label_detailed
+            except AttributeError:
+                 sec.label_detailed = 'oblique'
+        elif sec.label in ['Dendrite', 'BasalDendrite']:
+            sec.label_detailed = 'basal'
+        else:
+            sec.label_detailed = sec.label
 
 #####################################
 # read out Vm at section
