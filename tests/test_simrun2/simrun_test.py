@@ -1,5 +1,4 @@
 from .context import *
-import test_model_data_base.context
 import os, sys, glob, shutil, tempfile
 import numpy as np
 from numpy.testing import assert_almost_equal
