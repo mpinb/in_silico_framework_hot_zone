@@ -36,7 +36,7 @@ def setup_locking_server(management_dir, ports):
         },
         'type': 'zookeeper'
     }]
-    # config = [{'type': 'file'}]  # uncomment this line if zookeeper is not running (i.e., you receive an error similar to 'No handlers could be found for logger "kazoo.client"')
+    config = [{'type': 'file'}]  # uncomment this line if zookeeper is not running (i.e., you receive an error similar to 'No handlers could be found for logger "kazoo.client"')
     with open(get_locking_file_path(management_dir), 'w') as f:
         f.write(yaml.dump(config))
     setup_locking_config(management_dir)

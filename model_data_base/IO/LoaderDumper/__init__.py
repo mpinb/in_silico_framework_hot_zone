@@ -18,7 +18,12 @@ moving of the data, the path of the data is not saved within the Loader object
 and has to be passed to the get function. This is wrapped in the following load function,
 which is the intended way to reload arbitrary objects saved with a Dumper.
 '''
+def _load_pickle(savedir):
+    warnings.warn('Deprecated')
+    pass
 
+def _load_json(savedir):
+    pass
 
 def load(savedir, load_data=True, loader_kwargs={}):
     '''Standard interface to load data, that was saved to savedir
