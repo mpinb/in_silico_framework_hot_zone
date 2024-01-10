@@ -228,7 +228,8 @@ class VaexTableWrapper(AbstractDataFrameWrapper):
         Returns:
             np.ndarray: a numpy array of shape :arg shape: containing the binned statistic.
         """
-        allowed_operations = ["min", "max", "mean", "median", "count"]
+        allowed_operations = ["min", "max", "mean", "median_approx", "median", "count"]
+        operation = operation if operation != "median" else "median_approx"  # median_approx is vaex's underlying median method
         if operation in allowed_operations:
             if not args and "expression" not in kwargs:
                 kwargs["expression"] = self.columns
