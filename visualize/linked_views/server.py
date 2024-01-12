@@ -5,14 +5,14 @@ import logging
 from logging import handlers
 import tempfile
 import threading
-from . import util
+from visualize.linked_views import util
 import glob
 import json
 import pandas as pd
 import numpy as np
 import vaex
 import vaex.ml
-from .data import PandasTableWrapper, VaexTableWrapper, mask_invalid_values
+from visualize.linked_views.data import PandasTableWrapper, VaexTableWrapper, mask_invalid_values
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import warnings
@@ -478,7 +478,7 @@ class LinkedViewsServer:
                     binby=binbycols, shape=density_grid_shape, 
                     selection=self.active_selection,
                     limits=data_ranges
-                    ).values
+                    )
                 
                 values = mask_invalid_values(
                     values=values, 
@@ -556,7 +556,8 @@ class LinkedViewsServer:
             columns = self.selections["global"]["columns"] 
             ranges = self.selections["global"]["bin_ranges"]
 
-            df_selected_indices = self.adf.compute_selection(columns=columns, bin_ranges=ranges)
+            adf = self.abstract_df
+            df_selected_indices = adf.compute_selection(columns=columns, bin_ranges=ranges)
             self.active_selection = "selection_global"
             if return_indices:
                 return df_selected_indices
