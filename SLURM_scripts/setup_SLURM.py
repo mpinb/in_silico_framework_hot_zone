@@ -87,15 +87,14 @@ def reset_process_number(management_dir):
             f.write('')
 
 
-def read_user_port_numbers():
+def read_user_config():
+    import os, configparser
     ### setting up user-defined port numbers ###
-    __location__ = os.path.realpath(
-        os.path.join(os.getcwd(), os.path.dirname(__file__)))
+    config_path = os.path.dirname(os.path.dirname(__file__)) # two levels up
+    config_path = os.path.join(config_path, 'config', 'user_settings.ini') # ./config/user_settings.ini
     config = configparser.ConfigParser()
-    config.read(os.path.join(__location__, 'user_settings.ini'))
-    ports = config['PORT_NUMBERS']
-    return ports
-
+    config.read(config_path)
+    return config 
 
 def main(management_dir,
          launch_jupyter_server=True,
@@ -109,15 +108,18 @@ def main(management_dir,
         except OSError:  # if another process was faster creating it
             pass
     PROCESS_NUMBER = get_process_number(management_dir)
-    PORTS = read_user_port_numbers()
+    CONFIG = read_user_config()
 
     if PROCESS_NUMBER == 0:
-        setup_locking_server(management_dir, PORTS)
+        print(dict(CONFIG['PORT_NUMBERS']))
+        setup_locking_server(management_dir, CONFIG['PORT_NUMBERS'])
         setup_dask_scheduler(
             management_dir,
-            PORTS)  # this process creates scheduler.json and scheduler3.json
+            CONFIG['PORT_NUMBERS'])  # this process creates scheduler.json and scheduler3.json
         if launch_jupyter_server:
-            setup_jupyter_server(management_dir, PORTS)
+            token = CONFIG['JUPYTER']['token']
+            print(setup_jupyter_server)
+            setup_jupyter_server(management_dir, CONFIG['PORT_NUMBERS'])
         # Set the IP adress of whatever node you got assigned as a environment variable
     # TODO: why doesn't this work? It does not seem to be added to the environment variables
     ip = gethostbyname(
