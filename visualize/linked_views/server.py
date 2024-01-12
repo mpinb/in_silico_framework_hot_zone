@@ -215,8 +215,9 @@ class LinkedViewsServer:
             self.abstract_df = PandasTableWrapper(df)
             self.config["cached_tables"] = ["Abstract DataFrame"]
         elif isinstance(df, vaex.DataFrame):
+            df["row_index"] = np.arange(df.shape[0])
             self.abstract_df = VaexTableWrapper(df)        
-            self.abstract_df["row_index"] = np.arange(self.abstract_df.shape[0])
+            #self.abstract_df.df["row_index"] = np.arange(self.abstract_df.shape[0])
             self.config["cached_tables"] = ["Abstract DataFrame"]
         else:
             raise TypeError(df)
