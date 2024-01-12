@@ -105,5 +105,4 @@ if __name__ == "__main__":
             pass
     PROCESS_NUMBER = get_process_number(MANAGEMENT_DIR)
     PORTS = read_user_port_numbers()
-
     setup_locking_server(MANAGEMENT_DIR, PORTS)
