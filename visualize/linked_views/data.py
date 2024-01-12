@@ -116,7 +116,7 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
         if limits:
             if not isinstance(limits, Sequence):
                 # limits are single int for all columns
-                limits = [limits]*len(columns)
+                limits = [limits]*len(self.columns)
             assert len(limits) == len(binby), "Got {} limits for {} columns".format(len(limits), len(self.columns))
             assert all([len(limit_pair) == 2 for limit_pair in limits]), "All elements in limits should be  pair of values"
             # clip data to limits
@@ -135,15 +135,22 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
             r = grouped_df.size().unstack()
         else:
             r = getattr(grouped_df[expression], operation)().unstack()
-        
-        return r
+                
+        return r.values
 
-    def compute_selection(self, columns, bin_ranges):
+    def compute_selection(self, columns, bin_ranges):                
         col1, col2 = columns[0], columns[1]
-        df_selected_indices = self.df.iloc[
-            df[col1].between(*bin_ranges[0]) & \
-            df[col2].between(*bin_ranges[1])]
-
+        mask = None
+        for current_bin in bin_ranges: 
+            # current_bin is one selected mark/dot in the density plot,
+            # i.e., current_bin = [[col1_min, col1_max], [col2_min, col2_max]] 
+            current_mask = self.df[col1].between(current_bin[0][0], current_bin[0][1]) & \
+                        self.df[col2].between(current_bin[1][0], current_bin[1][1])
+            if(mask is None):
+                mask = current_mask
+            else:
+                mask |= current_mask        
+        df_selected_indices = self.df.index[mask].to_numpy().astype(int)
         return df_selected_indices
     
     def count(self, *args, **kwargs):
@@ -205,7 +212,7 @@ class VaexTableWrapper(AbstractDataFrameWrapper):
             self.df.select_rectangle(self.df[col1], self.df[col2], limit_i, name="selection_global", mode="or")
 
         df_selected_indices = self.df.evaluate(self.df["row_index"], selection="selection_global")
-        return df_selected_indices
+        return df_selected_indices.astype(int)
 
     def calc_binned_statistic(self, operation, *args, **kwargs):
         """
