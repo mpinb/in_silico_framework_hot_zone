@@ -217,7 +217,6 @@ class LinkedViewsServer:
         elif isinstance(df, vaex.DataFrame):
             df["row_index"] = np.arange(df.shape[0])
             self.abstract_df = VaexTableWrapper(df)        
-            #self.abstract_df.df["row_index"] = np.arange(self.abstract_df.shape[0])
             self.config["cached_tables"] = ["Abstract DataFrame"]
         else:
             raise TypeError(df)
@@ -466,8 +465,7 @@ class LinkedViewsServer:
                     raise ValueError(agg_format)
 
                 binbycols = columns[0:2]
-                density_grid_shape = tuple(data["density_grid_shape"])
-                print("density_grid_shape", density_grid_shape)
+                density_grid_shape = tuple(data["density_grid_shape"])                
                 nCells = density_grid_shape[0] * density_grid_shape[1]
                 #indices = np.arange(nCells)
                                                 
@@ -521,7 +519,7 @@ class LinkedViewsServer:
 
     def setIndicesSelection(self): 
         """
-        Saves the selection for a particular view. Doe snot return any response data.
+        Saves the selection for a particular view. Does not return any response data.
 
         Returns:
             None: An empty JSON as response.
