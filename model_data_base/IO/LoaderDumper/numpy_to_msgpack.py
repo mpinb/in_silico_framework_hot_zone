@@ -13,7 +13,6 @@ def check(obj):
 
 
 class Loader(parent_classes.Loader):
-
     def get(self, savedir):
         #         return pd.read_msgpack(os.path.join(savedir, 'pandas_to_msgpack')).values
         return pandas_msgpack.read_msgpack(
@@ -28,5 +27,6 @@ def dump(obj, savedir):
                               compress='blosc')
     #     with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
     #         cloudpickle.dump(Loader(), file_)
-    compatibility.cloudpickle_fun(Loader(),
-                                  os.path.join(savedir, 'Loader.pickle'))
+    
+    #compatibility.cloudpickle_fun(Loader(),
+    #                              os.path.join(savedir, 'Loader.pickle'))

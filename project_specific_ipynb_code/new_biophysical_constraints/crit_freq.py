@@ -238,7 +238,8 @@ class Crit_freq:
 
         baseline = np.average(v[2][c:b])
         v = v - baseline
-
+        v[v<0] = 0
+        
         end = [(n, x) for n,x in enumerate(v[2]) if abs(x)<returning_to_rest and n>d]
         if len(end)>0: 
             end = end[0][0]

@@ -9,20 +9,34 @@ def get_vector_norm(v):
 def evaluation_function_incremental_helper(p,
                                            s = None,  
                                            e = None,
-                                           cutoffs = {'bAP':3.2, 
-                                                  'BAC': 3.2, 
-                                                  'StepOne':4.5, 
-                                                  'StepTwo': 4.5, 
-                                                  'StepThree': 4.5},
-                                           stim_order = ['bAP', 'BAC', 'StepOne', 'StepTwo', 'StepThree'], 
+                                           cutoffs = None,
+                                           stim_order = None, 
                                            verbose = True,
                                            additional_evaluation_functions = [],
                                            objectives_by_stimulus = None):
     '''
-    global variables: 
-    evaluators_by_stimulus
-    objectives_dict
+    Allows to evaluate if a model shows responses with errors below the cutoff, one
+    stimulus at a time. 
+    
+    Returns: True if all stimuli pass. False if any stimulus has an error above its cutoff. 
+    
+    s: Simulator object
+    e: Evaluator object
+    stim_order: order in which stimuli are simulated. List consisting of strings 
+        and tuples of strings. Use strings if only one stimulus is to be simulated, 
+        use tuples of strings to simulate several stimuli in one go. 
+    cutoffs: dictionary, with keys that are in stim_order. Values are float and 
+        indicate the maximum error allowed for these stimuli
+    objectives_by_stimulus: dictionary with keys that are in stim_order. Values are lists 
+        of names of objectives, returned by the evaluator object.
+    additional_evaluation_functions: additional functions to be applied onto the final voltage 
+        traces dictionary, which return a dictionary which is appended to the
+        evaluations. 
     '''
+    # make sure all defined cutoffs can actually be applied
+    for c in cutoffs:
+        assert(c in stim_order)
+        assert(c in objectives_by_stimulus)
     p = p.copy()
     evaluation = {}
     evaluation.update(p)
