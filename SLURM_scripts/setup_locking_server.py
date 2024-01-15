@@ -36,7 +36,7 @@ def setup_locking_server(management_dir, ports):
         },
         'type': 'zookeeper'
     }]
-    # config = [{'type': 'file'}]  # uncomment this line if zookeeper is not running (i.e., you receive an error similar to 'No handlers could be found for logger "kazoo.client"')
+    config = [{'type': 'file'}]  # uncomment this line if zookeeper is not running (i.e., you receive an error similar to 'No handlers could be found for logger "kazoo.client"')
     with open(get_locking_file_path(management_dir), 'w') as f:
         f.write(yaml.dump(config))
     setup_locking_config(management_dir)
@@ -55,10 +55,11 @@ def setup_locking_config(management_dir):
 
 
 def check_locking_config():
-    import model_data_base.distributed_lock
+    from model_data_base.distributed_lock import get_client as get_locking_client
+    server, client = get_locking_client()
     print('locking configuration')
-    print(model_data_base.distributed_lock.server)
-    print(model_data_base.distributed_lock.client)
+    print(server)
+    print(client)
     #assert model_data_base.distributed_lock.server['type'] == 'redis'
     #import socket
     #socket.gethostname()
@@ -104,5 +105,4 @@ if __name__ == "__main__":
             pass
     PROCESS_NUMBER = get_process_number(MANAGEMENT_DIR)
     PORTS = read_user_port_numbers()
-
     setup_locking_server(MANAGEMENT_DIR, PORTS)

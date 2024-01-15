@@ -1,5 +1,4 @@
 import six
-import distributed
 import os
 import logging
 logger = logging.getLogger('ISF').getChild(__name__)

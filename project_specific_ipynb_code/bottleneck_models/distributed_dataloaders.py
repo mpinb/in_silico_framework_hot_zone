@@ -169,16 +169,16 @@ def expand_SINGLE_BIOPHYSICS_dataset(batch, dendritic_compartments = [0], device
     
     if dendritic_compartments[0] == 0:
         VT = VT_SOMA
-    elif dendritic_compartments[152] == 0: # doublecheck dend is really 147
+    elif dendritic_compartments[0] == 152 : # doublecheck dend is really 147 (we checked it and confirmed !
         VT = VT_DEND
     else:
         raise ValueError('dendritic location not contained in dataset')
         
-    return SA, VT, AP_SOMA, AP_DEND, ISI_SOMA, ISI_DEND, None, None
+    return SA, VT, AP_SOMA, AP_DEND, ISI_SOMA, ISI_DEND,None,None
 
 
 
-def get_default_dataset(dataset_name, mode = 'memmap', dendritic_compartments = [0], device = None, 
+def get_default_dataset(dataset_name, mode = 'shared_memory', dendritic_compartments = [0], device = None, 
                         split_by_rank = True, train_dataset_size = 0):
     mdb = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20230920_create_ANN_training_dataset_for_hypernetwork_training/')    
     if dataset_name == 'SINGLE_BIOPHYSICS':

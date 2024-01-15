@@ -111,13 +111,20 @@ class Hyperpolarizing:
         Attenuation = v1/v0
         return {'hyperpolarizing.Attenuation.raw': Attenuation, 'hyperpolarizing.Attenuation.normalized': (Attenuation - mean)/std, 'hyperpolarizing.Attenuation':I.np.abs((Attenuation - mean)/std)}           
     
-    
+# Beaulieu-Laroche.etal2018 (temporal, Rin at 400 micron soma distance 15 to 35 megaohm)
+# Kalmbach.etal2013 (frontal, Rin at 400 micron distance 15 to 55 megaohm)
+# Zhu 2000 (somatosensory, at tuft: 5 megaohm)
+# Harnett 2013 (somatosensory: at nexus: 8.9 megaohm, SD 3.0 megaohm)
+#    However, it seems this study did not include deep bifurcating cells. It
+#    remains unclear if 8.9 holds up for the nexus of these cells. To
+#    define constraints which generalize across morphologies, we use the data
+#    on soma distance dependent measurements and constrain Rin at 400 micron distance.
 class Dend_hyperpolarizing:
     def __init__(self, 
                  delay = 1000,
                  duration = 1000,
                  amplitude = -0.05, 
-                 definitions={'Dend_Rin':('Dend_Rin',30,5)}): #Beaulieu-Laroche.etal2018, Kalmbach.etal2013 
+                 definitions={'Dend_Rin':('Dend_Rin',30,5)}): 
     
         self.delay = delay
         self.duration = duration

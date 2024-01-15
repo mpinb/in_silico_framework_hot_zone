@@ -10,7 +10,13 @@ class Model(torch.nn.Module):
                  number_of_layers_after_bottleneck = 5,
                  bottleneck_ISI_soma = True,
                  bottleneck_ISI_dend = True,
-                 biophysics = True):
+                 biophysics = True,
+                 dendritic_location = True,
+                 total_variation_spatial = 0.,
+                 total_variation_temporal = 0.,
+                 L2_hypernetwork = 0.,
+                 neighbors_0 = None,
+                 neighbors_1 = None):
         '''Pytorch model class for the "bottleneck" model. It has the following structure:
                      \   synaptic input   /
                        \                /
@@ -39,7 +45,10 @@ class Model(torch.nn.Module):
                 of features is defined here, but not which features it is, as this is determined by the loss, which
                 is not part of this model
             layer_width: width of the decoder
-            number_of_layers_after_bottleneck: number of layers in the decoder'''
+            number_of_layers_after_bottleneck: number of layers in the decoder
+            
+            unused keywords: dendritic_location, total_variation_spatial, total_variation_temporal, L2_hypernetwork, neighbors_0, neighbors_1
+            '''
         
         super(Model, self).__init__()
         
@@ -53,6 +62,7 @@ class Model(torch.nn.Module):
         self.biophysics = biophysics
         self.relu = nn.ReLU()
         self.bottleneck_size = bottleneck_size
+        self.total_variation_temporal = total_variation_temporal
         self.linear1 = nn.Linear(in_features = n_celltypes*temporal_window_width*n_spatial_bins, out_features = bottleneck_size , bias = False) # bias was true
         
         ###################################
@@ -146,11 +156,25 @@ class Model(torch.nn.Module):
         
         # more layers
         out = forward_after_bottleneck(bottleneck_values)
-                                      
-        # then final output
-        return out
+
+        extra_loss = 0.
+
+        if self.total_variation_temporal:
+            # v = self.linear1.weight.view(self.n_celltypes, 
+            #                  self.n_spatial_bins, 
+            #                  self.temporal_window_width)    
+            
+            TVL = torch.pow(self.linear1.weight.view(self.bottleneck_size, 
+                                                      self.n_celltypes, 
+                                                      self.n_spatial_bins, 
+                                                      self.temporal_window_width).diff(axis = -1),2).sum()            
+            # TVL = torch.pow(v.diff(axis = -1),2).sum()
+            extra_loss += TVL * self.total_variation_temporal
+            
+            # then final output
+        return out, extra_loss
     
-def show(savepath = None, model = None):
+def show(savepath = None, model = None, model_kwargs = None, params = 0, title = None):
     sorted_index = [0, 61, 1, 32, 91, 230, 10, 48, 79, 33, 62, 2, 92, 104, 11, 22, 40, 63, 76, 231, 
                     34, 234, 64, 12, 56, 71, 3, 49, 20, 23, 45, 88, 6, 27, 41, 80, 93, 16, 68, 77, 
                     101, 65, 67, 105, 13, 72, 38, 35, 74, 235, 4, 57, 89, 94, 52, 232, 24, 46, 69, 
@@ -202,7 +226,6 @@ def show(savepath = None, model = None):
         weights_for_fig = I.np.concatenate([I.np.transpose(weights1[0]), I.np.transpose(weights1[1])], axis = 0)
         im = axes[lv,0].imshow(weights_for_fig, vmin = -scaling, vmax = scaling, cmap='seismic', interpolation = 'none')
         fig.colorbar(im, cax = axes[lv,1]) 
-        title = 'epoch_{}_batch_{}'.format(epoch, 'nan')
         axes[lv,0].set_title(title)
     if savepath:
         fig.savefig(I.os.path.join(savepath, title+'.png'))

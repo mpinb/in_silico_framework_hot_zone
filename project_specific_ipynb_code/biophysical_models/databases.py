@@ -8,19 +8,30 @@ class Data:
         for k,v in kwargs.items():
             setattr(self, k, v)
             
-def _get_ddf_RW_exploration_template(mdb, key, selected_keys, columns = None, inside = True, persist = False):
+def _get_ddf_RW_exploration_template(mdb, key, name, selected_keys, columns = None, inside = True, persist = False):
     out = {}
+    s = {}
+    e = {}
+    c = {}
+    m = {}
     if inside:
         key = key + '_inside'
     for k in selected_keys:
         out[k] = mdb[k].getitem(key, columns = columns) 
+        m[k] = mdb[k]
+        s[k] = mdb[k]['get_Simulator'](mdb[k])
+        e[k] = mdb[k]['get_Evaluator'](mdb[k])
+        c[k] = mdb[k]['get_Combiner'](mdb[k])
     if persist:
         out = {k:client.persist(ddf) for k, ddf in out.items()}
-    m = mdb[k]
-    s = m['get_Simulator'](m)
-    e = m['get_Evaluator'](m)
-    c = m['get_Combiner'](m)
-    out_data = Data(ddf_dict = out, params = mdb[k]['params'], s = s, e = e, c = c, param_names = list(mdb[k]['params'].index))
+    out_data = Data(ddf_dict = out, 
+                    params = mdb[k]['params'], 
+                    s = s, 
+                    e = e, 
+                    c = c, 
+                    m = m, 
+                    param_names = list(mdb[k]['params'].index),
+                    name = name)
     return out_data
 
 
@@ -93,6 +104,64 @@ get_ddf_RW_exploration_new_Ih__run_expansion = I.partial(_get_ddf_RW_exploration
 # - (NI, I running) run1: initialized from models in run1 in the database above with a seed point that fulfill the critical frequency constraints.
 #         this time including these as constraints of the possibility space. 
 #         morphologies are: ['WR64', '89', '91', 'WR71', '88']
-mdb = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20230929_RW_exploration_new_Ih_crti_freq_hyperpolarizing')
+mdb_RW_exploration_new_Ih_crit_freq_hyperpolarizing = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20230929_RW_exploration_new_Ih_crti_freq_hyperpolarizing')
 
+## The database below contains
+# - run1: initialized from models in run1 in the database above with a seed point that fulfill the critical frequency constraints.
+#         this time including these as constraints of the possibility space. 
+#         morphologies are: ['WR64', '89', '91', 'WR71', '88']
+mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing = I.ModelDataBase('/gpfs/soma_fs/scratch/abast/results/20231018_RW_exploration_new_Ih_2BAC_step_crit_freq_chirp_hyperpolarizing')
 
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_run1 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'run1',
+                                                 'get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_run1',
+                                                 selected_keys = ['WR71'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_run2 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'run2',
+                                                 'get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_run2',
+                                                 selected_keys = ['WR71'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_run3 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'run3',
+                                                 'get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_run3',
+                                                 selected_keys = ['WR71'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_run1 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'noAtt_run1',
+                                                 'get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_run1',
+                                                 selected_keys = ['WR64','WR71','88','89','91'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'noAtt_cf_fixed_run1',
+                                                 'get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1',
+                                                 selected_keys = ['WR64','WR71','88','89','91'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231226 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'noAtt_cf_fixed_run1_20231226',
+                                                 'get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231226',
+                                                 selected_keys = ['WR64','WR71','88','89','91'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231227 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'noAtt_cf_fixed_run1_20231227',
+                                                 'get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231227',
+                                                 selected_keys = ['WR64','WR71','88','89','91'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231228 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'noAtt_cf_fixed_run1_20231228',
+                                                 'get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231228',
+                                                 selected_keys = ['WR64','WR71','88','89','91'])
+
+get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231228_RW_0_01 = I.partial(_get_ddf_RW_exploration_template,
+                                                 mdb_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing, 
+                                                 'noAtt_cf_fixed_run1_20231228_RW_WR64',
+                                                 'get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231228_RW_0_01',
+                                                 selected_keys = ['WR64'])

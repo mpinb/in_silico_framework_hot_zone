@@ -296,7 +296,7 @@ class CellParser(object):
                                 h.pop_section()
 
             elif mech.spatial == 'linear':
-                ''' spatially linear distribution'''
+                ''' spatially linear distribution with negative slope'''
                 maxDist = self.cell.max_distance(label)
                 #                set origin to 0 of first branch with this label
                 if label == 'Soma':
@@ -332,7 +332,44 @@ class CellParser(object):
                         for s in paramStrings:
                             s = '.'.join(('seg', mechName, s))
                             exec(s)
-
+                            
+            elif mech.spatial == 'linear_capped':
+                ''' spatially linear distribution which reaches a constant value 
+                after a specified soma distance'''
+                maxDist = self.cell.max_distance(label)
+                #                set origin to 0 of first branch with this label
+                if label == 'Soma':
+                    silent = h.distance(0, 0.0, sec=self.cell.soma)
+                else:
+                    for sec in self.cell.sections:
+                        if sec.label != label:
+                            continue
+                        if sec.parent.label == 'Soma':
+                            silent = h.distance(0, 0.0, sec=sec)
+                            break
+                relDistance = False
+                if mech['distance'] == 'relative':
+                    relDistance = True
+                param_name = mech['param_name']
+                prox_value = mech['prox_value']
+                dist_value = mech['dist_value']
+                dist_value_distance = mech['dist_value_distance']
+                for sec in self.cell.structures[label]:
+                    sec.insert(mechName)
+                    for seg in sec:
+                        paramStrings = []
+                        dist = self.cell.distance_to_soma(sec, seg.x)
+                        if relDistance:
+                            dist = dist / maxDist
+                        if dist >= dist_value_distance:
+                            value = dist_value
+                        else:
+                            value = prox_value+(dist_value-prox_value)/dist_value_distance*dist
+                        s = param_name + '=' + str(value)
+                        paramStrings.append(s)
+                        s = '.'.join(('seg', mechName, s))
+                        exec(s)
+                        
             elif mech.spatial == 'exponential':
                 ''' spatially exponential distribution:
                 f(x) = offset + linScale*exp(_lambda*(x-xOffset))'''

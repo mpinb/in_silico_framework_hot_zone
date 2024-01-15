@@ -76,7 +76,7 @@ def get_objective_function(mdb_setup):
     return objective_function
 
 
-def get_mymap(mdb_setup, mdb_run, c, satisfactory_boundary_dict=None):
+def get_mymap(mdb_setup, mdb_run, c, satisfactory_boundary_dict=None, n_reschedule_on_runtime_error = 3):
     # CAVE! get_mymap is doing more, than just to return a map function.
     # - the map function ignores the first argument.
     #   The first argument (i.e. the function to be mapped on the iterable) is ignored.
@@ -106,6 +106,15 @@ def get_mymap(mdb_setup, mdb_run, c, satisfactory_boundary_dict=None):
             time.sleep(3 * 60)
             print('Rescheduling ...')
             return mymap(func, iterable)
+        except RuntimeError:
+            if reschedule_on_runtime_error >= 0:
+                print(
+                    'Got a RuntimeError while gathering futures. This may be dask related, or it may be a RuntimeError raised by the' + 
+                    'Evaluator. Remaining attempts: {}. Waiting for 3 Minutes, then reschedule.'.format(reschedule_on_runtime_error)
+                )
+                return mymap(func, iterable, n_reschedule_on_runtime_error = n_reschedule_on_runtime_error - 1)
+            else:
+                raise 
         except:
             I.distributed.wait(futures)
             for lv, f in enumerate(futures):

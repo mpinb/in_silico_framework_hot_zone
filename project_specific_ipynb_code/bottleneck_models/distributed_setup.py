@@ -30,7 +30,7 @@ def get_n_workers_per_ip(workers, n):
 def submit_train_loop_to_dask(client, train, batch_size = 10000, GPUS_PER_NODE = 4, skip_rank_0 = True):
     workers = client.scheduler_info()['workers'].keys() 
     selected_workers = get_n_workers_per_ip(workers, GPUS_PER_NODE)
-    selected_workers_flat = [k for k in selected_workers for k in k]
+    selected_workers_flat = [k for k in selected_workers for k in k if k.split('.')[2] == '3']
     futures = []
     world_size = len(selected_workers_flat)
     rank = 0
