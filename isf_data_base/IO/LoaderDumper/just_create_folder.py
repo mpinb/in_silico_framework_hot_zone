@@ -34,7 +34,7 @@ class ManagedFolder(str):
         return ManagedFolder(os.path.join(self, *args))
 
     def listdir(self):
-        return [f for f in os.listdir(self) if not f == 'Loader.pickle']
+        return [f for f in os.listdir(self) if not f in ('Loader.json' 'metadata.json')]
 
     def get_file(self, suffix):
         '''if folder only contains one file of specified suffix, this file is returned'''
