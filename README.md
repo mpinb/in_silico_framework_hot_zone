@@ -4,9 +4,9 @@
 <img src=./docs/_static/_figures/isf-logo-black.png#gh-light-mode-only width='350'>
 
 # The In-Silico-Framework (ISF)
-[![In-Silico-Framework (Python 2.7) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27-local.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py27-local.yml)
-[![In-Silico-Framework (Python 3.8) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py38-local.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py38-local.yml)
-[![In-Silico-Framework (Python 3.9) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py39-local.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py39-local.yml)
+[![In-Silico-Framework (Python 2.7) install and test](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py27-local.yml/badge.svg)](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py27-local.yml)
+[![In-Silico-Framework (Python 3.8) install and test](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py38-local.yml/badge.svg)](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py38-local.yml)
+[![In-Silico-Framework (Python 3.9) install and test](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py39-local.yml/badge.svg)](https://github.com/mpinb/in_silico_framework/actions/workflows/test-isf-py39-local.yml)
 [![codecov](https://codecov.io/gh/mpinb/in_silico_framework/graph/badge.svg?token=V4P4QMFM12)](https://codecov.io/gh/mpinb/in_silico_framework)
 </div>
 
