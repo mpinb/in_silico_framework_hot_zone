@@ -15,22 +15,22 @@ def get_test_X_y(n_samples=1000, n_timepoints=100):
     return X, y
 
 
-def get_test_Rm(fresh_mdb):
+def get_test_Rm(fresh_db):
     X, y = get_test_X_y(n_samples=5000)
-    fresh_mdb['test_synapse_activation'] = X
-    fresh_mdb['spike_times'] = pd.DataFrame(y).astype('f8').replace(
+    fresh_db['test_synapse_activation'] = X
+    fresh_db['spike_times'] = pd.DataFrame(y).astype('f8').replace(
         0, np.NaN).replace(1, 100)
     Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
                     synapse_activation_window_width = 50)
-    Rm.fit([fresh_mdb])
+    Rm.fit([fresh_db])
     return Rm
 
 
 @pytest.mark.xfail(strict=False,
                    reason="This test is statistical, and may sometimes fail.")
-def test_statistical_ReducedLdaModel_inference(fresh_mdb):
+def test_statistical_ReducedLdaModel_inference(fresh_db):
     '''compare model infered from test data to expectancy'''
-    Rm = get_test_Rm(fresh_mdb)
+    Rm = get_test_Rm(fresh_db)
     Rm.plot()  # make sure this can be executed
 
     assert 200 < np.array(Rm.lda_values).mean() < 400  ##!!
@@ -44,39 +44,39 @@ def test_statistical_ReducedLdaModel_inference(fresh_mdb):
     np.testing.assert_array_less(max([std1, std2]) / min([std1, std2]), 3)
     np.testing.assert_array_less(3, abs(mean1 - mean2) / max([std1, std2]))
     #import Interface as I
-    #mdb = I.ModelDataBase('/nas1/Data_arco/project_src/in_silico_framework/test_model_data_base/data/already_initialized_mdb_for_compatibility_testing/', nocreate = True)
-    #Rm.mdb_list = None
-    #mdb['reduced_model'] = Rm
+    #db = I.DataBase('/nas1/Data_arco/project_src/in_silico_framework/test_isf_data_base/data/already_initialized_db_for_compatibility_testing/', nocreate = True)
+    #Rm.db_list = None
+    #db['reduced_model'] = Rm
 
 
 @pytest.mark.xfail(strict=False,
                    reason="This test is statistical, and may sometimes fail.")
-def test_statistical_ReducedLdaModel_apply(fresh_mdb):
+def test_statistical_ReducedLdaModel_apply(fresh_db):
     '''compare model infered from test data to expectancy'''
     X, y = get_test_X_y(n_samples=5000)
-    fresh_mdb['test_synapse_activation'] = X
-    fresh_mdb['spike_times'] = pd.DataFrame(y).astype('f8').replace(
+    fresh_db['test_synapse_activation'] = X
+    fresh_db['spike_times'] = pd.DataFrame(y).astype('f8').replace(
         0, np.NaN).replace(1, 100)
     Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
                     synapse_activation_window_width = 50, cache = False)
-    Rm.fit([fresh_mdb])
+    Rm.fit([fresh_db])
     mn = 0
-    res = Rm.apply_static(fresh_mdb, model_number=mn)
+    res = Rm.apply_static(fresh_db, model_number=mn)
     np.testing.assert_equal(res.lda_values, Rm.lda_values[mn])
 
 
 @pytest.mark.xfail(strict=False,
                    reason="This test is statistical, and may sometimes fail.")
 def test_statistical_ReducedLdaModel_apply_data_outside_trainingsdata(
-        fresh_mdb):
+        fresh_db):
     '''compare model infered from test data to expectancy'''
     X, y = get_test_X_y(n_samples=5000)
-    fresh_mdb['test_synapse_activation'] = X
-    fresh_mdb['spike_times'] = pd.DataFrame(y).astype('f8').replace(
+    fresh_db['test_synapse_activation'] = X
+    fresh_db['spike_times'] = pd.DataFrame(y).astype('f8').replace(
         0, np.NaN).replace(1, 100)
     Rm = ReducedLdaModel(['test_synapse_activation'], output_window_min = 99, output_window_max = 101, \
                     synapse_activation_window_width = 50, cache = False)
-    Rm.fit([fresh_mdb])
+    Rm.fit([fresh_db])
     mn = 0
     res = Rm.apply_static({'test_synapse_activation': X - 10000},
                           model_number=mn)

@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import single_cell_parser as scp
 import getting_started
-from model_data_base.utils import fancy_dict_compare
+from isf_data_base.utils import fancy_dict_compare
 import os
 import pytest
 from .context import *

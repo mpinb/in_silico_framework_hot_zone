@@ -66,13 +66,13 @@ class Rm(object):
 
     def __init__(self,
                  name,
-                 mdb,
+                 db,
                  tmin=None,
                  tmax=None,
                  width=None,
                  selected_indices=None):
         self.name = name
-        self.mdb = mdb
+        self.db = db
         self.tmax = tmax
         self.tmin = tmin
         self.width = width
@@ -454,7 +454,7 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
         self.data = None
 
     def setup(self, Rm):
-        self.mdb = Rm.mdb
+        self.db = Rm.db
         self.tmin = Rm.tmin
         self.tmax = Rm.tmax
         self.width = Rm.width
@@ -470,24 +470,24 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
 
     def get_spatial_binsize(self):
         '''returns spatial binsize'''
-        mdb = self.mdb[0] if type(mdb) == list else self.mdb
+        db = self.db[0] if type(db) == list else self.db
         key = self.key
         level = self.get_spatial_bin_level(key)
-        spatial_binsize = mdb[key].keys()[0][level]  # something like '100to150'
+        spatial_binsize = db[key].keys()[0][level]  # something like '100to150'
         spatial_binsize = spatial_binsize.split('to')
         spatial_binsize = float(spatial_binsize[1]) - float(spatial_binsize[0])
         return spatial_binsize
 
     def get_groups(self):
         '''returns all groups other than spatial binning'''
-        mdb = self.mdb
-        if type(mdb) != list:
-            mdb = [mdb]
+        db = self.db
+        if type(db) != list:
+            db = [db]
         key = self.key
         level = self.get_spatial_bin_level(key)
         out = []
-        for single_mdb in mdb:  #rieke
-            for k in single_mdb[key].keys():
+        for single_db in db:  #rieke
+            for k in single_db[key].keys():
                 k = list(k)
                 k.pop(level)
                 out.append(tuple(k))
@@ -496,15 +496,15 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
 
 #     def get_sorted_keys_by_group(self, group):
 
-    def get_sorted_keys_by_group(self, group, mdb=None):  #rieke
+    def get_sorted_keys_by_group(self, group, db=None):  #rieke
         '''returns keys sorted such that the first key is the closest to the soma'''
-        if mdb == None:  #rieke bc
-            mdb = self.mdb
-        mdb = mdb[0] if type(mdb) == list else mdb
+        if db == None:  #rieke bc
+            db = self.db
+        db = db[0] if type(db) == list else db
         key = self.key
         group = list(group)
         level = self.get_spatial_bin_level(key)
-        keys = mdb[key].keys()
+        keys = db[key].keys()
         keys = sorted(keys, key=lambda x: float(x[level].split('to')[0]))
         out = []
         for k in keys:
@@ -517,26 +517,26 @@ class DataExtractor_spatiotemporalSynapseActivation(DataExtractor):
     def _get_spatiotemporal_input(self, group):
         '''returns spatiotemporal input in the following dimensions:
         (trial, time, space)'''
-        mdb = self.mdb
-        if type(mdb) != list:
-            mdb = [mdb]
+        db = self.db
+        if type(db) != list:
+            db = [db]
         key = self.key
         #         keys = self.get_sorted_keys_by_group(group)
-        #         out = [mdb[key][k][:,self.tmax-self.width:self.tmax] for k in keys]
+        #         out = [db[key][k][:,self.tmax-self.width:self.tmax] for k in keys]
         #         out = numpy.dstack(out)
 
         outs = []
-        for m, single_mdb in enumerate(mdb):
-            keys = self.get_sorted_keys_by_group(group, mdb=single_mdb)
+        for m, single_db in enumerate(db):
+            keys = self.get_sorted_keys_by_group(group, db=single_db)
             if self.selected_indices is not None:
                 out = [
-                    single_mdb[key][k][self.selected_indices[m],
+                    single_db[key][k][self.selected_indices[m],
                                        self.tmax - self.width:self.tmax]
                     for k in keys
                 ]
             else:
                 out = [
-                    single_mdb[key][k][:, self.tmax - self.width:self.tmax]
+                    single_db[key][k][:, self.tmax - self.width:self.tmax]
                     for k in keys
                 ]
             out = numpy.dstack(out)
@@ -561,7 +561,7 @@ class DataExtractor_categorizedTemporalSynapseActivation(DataExtractor):
         self.data = None
 
     def setup(self, Rm):
-        self.mdb = Rm.mdb
+        self.db = Rm.db
         self.tmin = Rm.tmin
         self.tmax = Rm.tmax
         self.width = Rm.width
@@ -569,16 +569,16 @@ class DataExtractor_categorizedTemporalSynapseActivation(DataExtractor):
         self._set_data()
 
     def _set_data(self):
-        mdbs = self.mdb
-        if type(mdbs) != list:
-            mdbs = [mdbs]
+        dbs = self.db
+        if type(dbs) != list:
+            dbs = [dbs]
         key = self.key
-        keys = mdbs[0][key].keys()
+        keys = dbs[0][key].keys()
         out = {}
         outs = []
         for k in keys:
             out[k] = []
-            for m in mdbs:
+            for m in dbs:
                 #print set(m[key].keys())
                 #print keys
                 assert set(m[key].keys()) == set(keys)
@@ -648,22 +648,22 @@ class Strategy_categorizedTemporalRaisedCosine(Strategy):
 class DataExtractor_spiketimes(DataExtractor):
 
     def setup(self, Rm):
-        self.mdb = Rm.mdb
+        self.db = Rm.db
         self.st = None
         self.selected_indices = Rm.selected_indices
 
     def get(self):
-        if type(self.mdb) != list:
-            return self.mdb['spike_times']
+        if type(self.db) != list:
+            return self.db['spike_times']
         else:
             st_list = []
             if self.selected_indices is not None:
-                for m, single_mdb in enumerate(self.mdb):
-                    st_list.append(single_mdb['spike_times'].iloc[
+                for m, single_db in enumerate(self.db):
+                    st_list.append(single_db['spike_times'].iloc[
                         self.selected_indices[m]])
             else:
-                for single_mdb in self.mdb:
-                    st_list.append(single_mdb['spike_times'])
+                for single_db in self.db:
+                    st_list.append(single_db['spike_times'])
             return pd.concat(st_list)
 
 
@@ -673,7 +673,7 @@ class DataExtractor_object(DataExtractor):
         self.key = key
 
     def setup(self, Rm):
-        self.mdb = Rm.mdb
+        self.db = Rm.db
         self.data = Rm[self.key]  #rieketodo
 
     def get(self):
@@ -691,20 +691,20 @@ class DataExtractor_spikeInInterval(DataExtractor):
             self.tmin = Rm.tmin
         if self.tmax is None:
             self.tmax = Rm.tmax
-        self.mdb = Rm.mdb
+        self.db = Rm.db
         self.selected_indices = Rm.selected_indices
 
-        if type(self.mdb) != list:
-            st = self.mdb['spike_times']
+        if type(self.db) != list:
+            st = self.db['spike_times']
         else:
             st_list = []
             if self.selected_indices is not None:
-                for m, single_mdb in enumerate(self.mdb):
-                    st_list.append(single_mdb['spike_times'].iloc[
+                for m, single_db in enumerate(self.db):
+                    st_list.append(single_db['spike_times'].iloc[
                         self.selected_indices[m]])
             else:
-                for single_mdb in self.mdb:
-                    st_list.append(single_mdb['spike_times'])
+                for single_db in self.db:
+                    st_list.append(single_db['spike_times'])
             st = pd.concat(st_list)
 
         self.sii = I.spike_in_interval(st, tmin=self.tmin, tmax=self.tmax)
@@ -719,22 +719,22 @@ class DataExtractor_ISI(DataExtractor):
         self.t = t
 
     def setup(self, Rm):
-        self.mdb = Rm.mdb
+        self.db = Rm.db
         if self.t is None:
             self.t = Rm.tmin
         self.selected_indices = Rm.selected_indices
 
-        if type(self.mdb) != list:
-            st = self.mdb['spike_times']
+        if type(self.db) != list:
+            st = self.db['spike_times']
         else:
             st_list = []
             if self.selected_indices is not None:
-                for m, single_mdb in enumerate(self.mdb):
-                    st_list.append(single_mdb['spike_times'].iloc[
+                for m, single_db in enumerate(self.db):
+                    st_list.append(single_db['spike_times'].iloc[
                         self.selected_indices[m]])
             else:
-                for single_mdb in self.mdb:
-                    st_list.append(single_mdb['spike_times'])
+                for single_db in self.db:
+                    st_list.append(single_db['spike_times'])
             st = pd.concat(st_list)
 
         t = self.t
@@ -757,15 +757,15 @@ class DataExtractor_daskDataframeColumn(DataExtractor):  #rieketodo
         self.data = None
 
     def setup(self, Rm):
-        self.mdb = Rm.mdb
-        cache = self.mdb.create_sub_mdb(
+        self.db = Rm.db
+        cache = self.db.create_sub_db(
             'DataExtractor_daskDataframeColumn_cache', raise_=False)
         complete_key = list(self.key) + [self.column]
         complete_key = map(str, complete_key)
         complete_key = tuple(complete_key)
         print(complete_key)
         if not complete_key in cache.keys():
-            slice_ = self.mdb[self.key][self.column]
+            slice_ = self.db[self.key][self.column]
             slice_ = self.client.compute(slice_).result()
             cache.setitem(complete_key,
                           slice_,

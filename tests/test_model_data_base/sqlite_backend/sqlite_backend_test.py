@@ -8,7 +8,7 @@ from ..context import *
 from .. import decorators
 
 import pickle
-from model_data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SqliteDict
+from isf_data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SqliteDict
 
 
 @dask.delayed

@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from model_data_base.utils import silence_stdout
+from isf_data_base.utils import silence_stdout
 
 
 def get_vector_norm(v):

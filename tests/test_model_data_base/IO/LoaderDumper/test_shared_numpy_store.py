@@ -1,5 +1,5 @@
 from ...context import *
-from model_data_base.model_data_base import ModelDataBase
+from isf_data_base.isf_data_base import DataBase
 from ... import decorators
 import numpy as np
 import pytest
@@ -7,7 +7,7 @@ import signal
 import time
 from multiprocessing import Process
 import six
-from model_data_base.IO.LoaderDumper.shared_numpy_store import *
+from isf_data_base.IO.LoaderDumper.shared_numpy_store import *
 
 
 class TemporaryDirectory:  # just for testing

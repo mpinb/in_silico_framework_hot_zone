@@ -3,14 +3,14 @@ import numpy as np
 import pandas as pd
 import single_cell_parser.analyze as sca
 import single_cell_parser as scp
-from simrun2.rerun_mdb import synapse_activation_df_to_roberts_synapse_activation
+from simrun2.rerun_db import synapse_activation_df_to_roberts_synapse_activation
 import time
-from model_data_base.mdb_initializers.prepare_ANN_batches import compute_AP_array, compute_ISI_array, spike_times_to_onehot, compute_ISI_from_st_list
-from model_data_base.mdb_initializers.prepare_ANN_batches import get_synapse_activation_array_weighted, augment_synapse_activation_df_with_branch_bin, get_spatial_bin_names
+from isf_data_base.db_initializers.prepare_ANN_batches import compute_AP_array, compute_ISI_array, spike_times_to_onehot, compute_ISI_from_st_list
+from isf_data_base.db_initializers.prepare_ANN_batches import get_synapse_activation_array_weighted, augment_synapse_activation_df_with_branch_bin, get_spatial_bin_names
 from single_cell_parser.analyze.membrane_potential_analysis import simple_spike_detection
 from project_specific_ipynb_code.hot_zone import get_main_bifurcation_section
 
-from model_data_base.mdb_initializers.prepare_ANN_batches import get_binsize
+from isf_data_base.db_initializers.prepare_ANN_batches import get_binsize
 
 import logging
 
@@ -249,7 +249,7 @@ def bin_voltages_in_section(cell, section_id,
     return np.array(binned_voltages)
 
 
-def _evoked_activity(mdb,
+def _evoked_activity(db,
                      stis,
                      outdir,
                      neuron_param_modify_functions=[],
@@ -269,7 +269,7 @@ def _evoked_activity(mdb,
     - Voltage traces at each spatial bin
 
     Args:
-        mdb (_type_): _description_
+        db (_type_): _description_
         stis (_type_): _description_
         outdir (_type_): _description_
         neuron_param_modify_functions (list, optional): _description_. Defaults to [].
@@ -491,7 +491,7 @@ from Interface import silence_stdout
 from biophysics_fitting.utils import execute_in_child_process
 
 
-def rerun_mdb(mdb,
+def rerun_db(db,
               outdir,
               neuron_param_modify_functions=[],
               network_param_modify_functions=[],
@@ -505,7 +505,7 @@ def rerun_mdb(mdb,
               max_time=445 + 60):
     '''
     TODO: do we still need bin size? isn't this the same as temporal resolution?
-    mdb: model data base initialized with I.mdb_init_simrun_general to be resimulated
+    db: model data base initialized with I.db_init_simrun_general to be resimulated
     outdir: location where simulation files are supposed to be stored
     tStop: end of simulation
     neuron_param_modify_functions: list of functions which take a neuron param file and may return it changed
@@ -514,10 +514,10 @@ def rerun_mdb(mdb,
     stis: sim_trial_indices which are to be resimulated. If None, the whole database is going to be resimulated.
     silent: suppress output to stdout
     child_process: run simulation in child process. This can help if dask workers time out during the simulation.'''
-    parameterfiles = mdb['parameterfiles']
-    neuron_folder = mdb['parameterfiles_cell_folder']
-    network_folder = mdb['parameterfiles_network_folder']
-    sa = mdb['synapse_activation']
+    parameterfiles = db['parameterfiles']
+    neuron_folder = db['parameterfiles_cell_folder']
+    network_folder = db['parameterfiles_network_folder']
+    sa = db['synapse_activation']
     # without the opaque object, dask tries to load in the entire dataframe before passing it to _evoked_activity
     sa = Opaque(sa)
     if stis is not None:
@@ -537,7 +537,7 @@ def rerun_mdb(mdb,
     myfun = dask.delayed(myfun)
     logger.info('outdir is', outdir)
     for stis in sim_trial_index_array:
-        d = myfun(mdb,
+        d = myfun(db,
                   stis,
                   outdir,
                   neuron_param_modify_functions=neuron_param_modify_functions,

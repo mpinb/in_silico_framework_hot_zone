@@ -74,7 +74,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
     seed = '00000'
     uniqueID = 'seed' + str(seed) + '_pid' + str(os.getpid())
     if auto_organize_results_folder:
-        dirName = os.path.join(utils.resolve_mdb_path(dirPrefix), 'results', \
+        dirName = os.path.join(utils.resolve_db_path(dirPrefix), 'results', \
                            time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID) + '_running')
     else:
         dirName = dirPrefix
@@ -187,7 +187,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, synapse_activation_files,
         os.path.join(dirName, uniqueID + '_network_model.param'))
 
     if auto_organize_results_folder:
-        dirName_final = os.path.join(utils.resolve_mdb_path(dirPrefix), 'results', \
+        dirName_final = os.path.join(utils.resolve_db_path(dirPrefix), 'results', \
                                time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
         os.rename(dirName, dirName_final)
         dirName = dirName_final

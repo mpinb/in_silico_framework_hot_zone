@@ -4,24 +4,24 @@ from ..context import *
 import numpy as np
 import shutil
 from .. import decorators
-from model_data_base.mdb_initializers.prepare_ANN_batches import spike_times_to_onehot
-from model_data_base.mdb_initializers.load_simrun_general \
+from isf_data_base.db_initializers.prepare_ANN_batches import spike_times_to_onehot
+from isf_data_base.db_initializers.load_simrun_general \
             import optimize as optimize_simrun_general
-from model_data_base.mdb_initializers.synapse_activation_binning \
+from isf_data_base.db_initializers.synapse_activation_binning \
             import init as init_synapse_activation
 
-from model_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
-from model_data_base.utils import silence_stdout
+from isf_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
+from isf_data_base.utils import silence_stdout
 import distributed
 
 optimize_simrun_general = silence_stdout(optimize_simrun_general)
 
 
-def test_API(fresh_mdb, client):
-    optimize_simrun_general(fresh_mdb, client=client)
-    init_synapse_activation(fresh_mdb, groupby='EI')
-    init_synapse_activation(fresh_mdb, groupby=['EI'])
-    init_synapse_activation(fresh_mdb, groupby=['EI', 'proximal'])
+def test_API(fresh_db, client):
+    optimize_simrun_general(fresh_db, client=client)
+    init_synapse_activation(fresh_db, groupby='EI')
+    init_synapse_activation(fresh_db, groupby=['EI'])
+    init_synapse_activation(fresh_db, groupby=['EI', 'proximal'])
 
 
 def test_onehot_encoding():

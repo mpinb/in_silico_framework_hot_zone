@@ -1,7 +1,7 @@
 import datetime
 from functools import partial
 import Interface as I
-from model_data_base.model_data_base import MdbException
+from isf_data_base.isf_data_base import MdbException
 import six
 
 
@@ -83,7 +83,7 @@ import itertools
 class SimulationFlow:
 
     def __init__(self,
-                 mdb,
+                 db,
                  name,
                  cell_params_dict=None,
                  network_params_dict=None,
@@ -91,7 +91,7 @@ class SimulationFlow:
         self.network_params = network_params_dict
         self.cell_params = cell_params_dict
         self.name = name
-        self.mdb = mdb
+        self.db = db
         self._db = [
         ]  # contains parameters, i.e. the **kwargs of the register function
         self._funtype = [
@@ -112,8 +112,8 @@ class SimulationFlow:
         self._network_param_templates = None
         self._final_param_files = None
 
-        if not len(list(mdb.keys())) == 0:
-            print('Warning! mdb not empty!')
+        if not len(list(db.keys())) == 0:
+            print('Warning! db not empty!')
 
         if autosetup:
             self._save_template_parameterfiles()
@@ -132,7 +132,7 @@ class SimulationFlow:
 
     def _save_template_parameterfiles(self, verbose=True):
         try:
-            outdir = self.mdb.create_managed_folder('cell_param_templates',
+            outdir = self.db.create_managed_folder('cell_param_templates',
                                                     raise_=True)
             for k, v in six.iteritems(self.cell_params):
                 v.save(outdir.join(k))
@@ -140,7 +140,7 @@ class SimulationFlow:
             if verbose:
                 print('cell_param_templates already saved. skipping.')
         try:
-            outdir = self.mdb.create_managed_folder('network_param_templates',
+            outdir = self.db.create_managed_folder('network_param_templates',
                                                     raise_=True)
             for k, v in six.iteritems(self.network_params):
                 v.save(outdir.join(k))
@@ -148,7 +148,7 @@ class SimulationFlow:
             if verbose:
                 print('network_param_templates already saved. skipping.')
         try:
-            params_outdir = self.mdb.create_managed_folder('final_param_files',
+            params_outdir = self.db.create_managed_folder('final_param_files',
                                                            raise_=True)
             with open(params_outdir.join('hierarchy.txt'), 'w') as f:
                 f.write(self.get_description())
@@ -156,9 +156,9 @@ class SimulationFlow:
             if verbose:
                 print('final_param_files folder already created. skipping.')
             # replace network_param structures with path
-        self._cell_param_templates = self.mdb['cell_param_templates']
-        self._network_param_templates = self.mdb['network_param_templates']
-        self._final_param_files = self.mdb['final_param_files']
+        self._cell_param_templates = self.db['cell_param_templates']
+        self._network_param_templates = self.db['network_param_templates']
+        self._final_param_files = self.db['final_param_files']
         self.cell_params = {
             k: self._cell_param_templates.join(k) for k in self.cell_params
         }
@@ -290,9 +290,9 @@ class SimulationFlow:
                 self._final_param_files.join(p).join('cell.param'))
             assert I.os.path.exists(
                 self._final_param_files.join(p).join('network.param'))
-        if 'simrun' in list(self.mdb.keys()):
+        if 'simrun' in list(self.db.keys()):
             print('Warning! The simrun folder is not empty!')
-        outdir = self.mdb.create_managed_folder('simrun', raise_=False)
+        outdir = self.db.create_managed_folder('simrun', raise_=False)
         self._delayeds_simulation = []
         for p in self._relative_paths:
             d = I.simrun_run_new_simulations(
@@ -308,18 +308,18 @@ class SimulationFlow:
         if not dryrun:
             self._futures_simulation = client.compute(self._delayeds_simulation)
 
-    def mdb_init(self, client, mode='full'):
+    def db_init(self, client, mode='full'):
         if not mode in ('full', 'full_delete', 'spike_times'):
             raise ValueError(
                 "mode must be one of ('full', 'full_delete', 'spike_times')")
         I.distributed.wait(self._futures_simulation)
         if 'full' in mode:
-            I.mdb_init_simrun_general.init(self.mdb,
-                                           self.mdb['simrun'],
+            I.db_init_simrun_general.init(self.db,
+                                           self.db['simrun'],
                                            client=client)
         if 'spike_times' in mode:
-            I.mdb_init_simrun_general.init(self.mdb,
-                                           self.mdb['simrun'],
+            I.db_init_simrun_general.init(self.db,
+                                           self.db['simrun'],
                                            client=client,
                                            synapse_activation=False,
                                            dendritic_voltage_traces=False,
@@ -329,7 +329,7 @@ class SimulationFlow:
                                            burst_times=False,
                                            repartition=False)
         if 'delete' in mode:
-            del self.mdb['simrun']
+            del self.db['simrun']
 
     def run_all_remote(self,
                        client,
@@ -344,7 +344,7 @@ class SimulationFlow:
             c = I.distributed.get_client(timeout=300)
             self.create_parameterfiles(c)
             self.run_simulation(c, nSweeps, nprocs, silent, tStop)
-            self.mdb_init(c, mode)
+            self.db_init(c, mode)
             return self
 
         print(self.get_description())

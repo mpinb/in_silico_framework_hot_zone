@@ -5,7 +5,7 @@ import pytest
 import dask
 import distributed
 from ..context import *
-from model_data_base.sqlite_backend.tuplecloudsqlitedict import SqliteDict, check_key
+from isf_data_base.sqlite_backend.tuplecloudsqlitedict import SqliteDict, check_key
 
 
 @dask.delayed

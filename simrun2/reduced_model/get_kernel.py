@@ -5,7 +5,7 @@ import dask
 import matplotlib.pyplot as plt
 import warnings
 import collections
-from model_data_base import utils as mdb_utils
+from isf_data_base import utils as db_utils
 from functools import partial
 
 
@@ -36,17 +36,17 @@ def compare_lists_by_none_values(l1, l2):
 
 
 ##################################################
-# methods for selecting synapse activation data out of a model_data_base instance
+# methods for selecting synapse activation data out of a isf_data_base instance
 # and to convert it to a format suitable for scipy.linear_discriminant_analysis
 #####################################################
-def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
+def _kernel_preprocess_data(db_list, keys_to_synapse_activation_data, \
                             synapse_acivation_window_min, synapse_activation_window_max, \
                             output_window_min, output_window_max, aggfun = None):
     '''takes a dictionary containing synapse activation data. This data is then
     concatenated to one large matrix, which can be used for the lda estimator.
     
     data_dict has to have the following format:
-        key: ModelDataBase - instance
+        key: DataBase - instance
         value: tuple containing keys to the synapse activation date
     
     Returns:
@@ -59,22 +59,22 @@ def _kernel_preprocess_data(mdb_list, keys_to_synapse_activation_data, \
     Xs = []
     spike_before = []
     sts = []
-    for mdb in mdb_list:
-        # get spike times for current mdb
-        st = mdb['spike_times']
+    for db in db_list:
+        # get spike times for current db
+        st = db['spike_times']
         y = np.array(spike_in_interval(st, output_window_min,
                                        output_window_max))
-        # get values for current mdb
-        mdb_values = {k: mdb[k][:, synapse_acivation_window_min:synapse_activation_window_max] \
+        # get values for current db
+        db_values = {k: db[k][:, synapse_acivation_window_min:synapse_activation_window_max] \
                       for k in keys_to_synapse_activation_data}
 
         if aggfun is None:
             keys = keys_to_synapse_activation_data
-            mdb_values_list = [mdb_values[k] for k in keys]
+            db_values_list = [db_values[k] for k in keys]
         else:
-            keys, mdb_values_list = aggfun(mdb_values)
+            keys, db_values_list = aggfun(db_values)
 
-        X, boundaries = concatenate_return_boundaries(mdb_values_list, axis=1)
+        X, boundaries = concatenate_return_boundaries(db_values_list, axis=1)
 
         ys.append(y)
         Xs.append(X)
@@ -241,12 +241,12 @@ class ReducedLdaModel():
         self.aggfun = aggfun
 
         if cache:
-            self.apply_rolling = mdb_utils.cache(self.apply_rolling)
-            self.apply_static = mdb_utils.cache(self.apply_static)
+            self.apply_rolling = db_utils.cache(self.apply_rolling)
+            self.apply_static = db_utils.cache(self.apply_static)
 
-    def fit(self, mdb_list, clfs=None):
-        self.mdb_list = mdb_list
-        X, boundaries, y, st = _kernel_preprocess_data(mdb_list, \
+    def fit(self, db_list, clfs=None):
+        self.db_list = db_list
+        X, boundaries, y, st = _kernel_preprocess_data(db_list, \
                                 self.keys_to_synapse_activation_data, \
                                 self.synapse_activation_window_min, \
                                 self.synapse_activation_window_max, \
@@ -325,7 +325,7 @@ class ReducedLdaModel():
             return fig1, fig2
 
     def get_minimodel_static(self, model_number=0):
-        '''returns partial, which can be called with keywords mdb or data_dict.
+        '''returns partial, which can be called with keywords db or data_dict.
         
         The partial is constructed such that it can be serialized fast, allowing
         efficient multiprocessing. This is the recommended way of sending a reduced
@@ -340,7 +340,7 @@ class ReducedLdaModel():
         return rm(data)
 
     def get_minimodel_rolling(self, refractory_period=0, model_number=0):
-        '''returns partial, which can be called with keywords mdb or data_dict.
+        '''returns partial, which can be called with keywords db or data_dict.
         
         The partial is constructed such that it can be serialized fast, allowing
         efficient multiprocessing. This is the recommended way of sending a reduced
@@ -400,36 +400,36 @@ def get_kernel_C2_grid(keys_to_synapse_activation_data = [
                 synapse_activation_window_max = None,\
                 output_window_min = 255, output_window_max = 265, refractory_period = 0,\
                 normalize_group_size = True, test_size = 0.4, verbosity = 2, \
-                lookup_series_stepsize = 5, cache = True, mdbs = 'mdbs_inhrobert'):
+                lookup_series_stepsize = 5, cache = True, dbs = 'dbs_inhrobert'):
     import Interface as I
     '''returns : clfs, lookup_series, pdf'''
 
     def spike_in_interval(st, tmin, tmax):
         return ((st >= tmin) & (st < tmax)).any(axis=1)
 
-    def get_mdbs_inhrobert():
+    def get_dbs_inhrobert():
         basedir = '/nas1/Data_arco/results/20170222_SuW_stimulus_in_C2_grid/'
         stim = ['B1', 'B2', 'B3', 'C1', 'C3', 'D1', 'D2', 'D3']
-        mdbs = {
-            s: I.ModelDataBase(I.os.path.join(basedir, s, 'mdb')) for s in stim
+        dbs = {
+            s: I.DataBase(I.os.path.join(basedir, s, 'db')) for s in stim
         }
-        mdbs['C2'] = I.ModelDataBase(
-            '/nas1/Data_arco/results/20170214_use_cell_grid_with_soma_at_constant_depth_below_layer_4_to_evaluate_location_dependency_of_evoked_responses/mdb/'
+        dbs['C2'] = I.DataBase(
+            '/nas1/Data_arco/results/20170214_use_cell_grid_with_soma_at_constant_depth_below_layer_4_to_evaluate_location_dependency_of_evoked_responses/db/'
         )
-        return mdbs
+        return dbs
 
-    def get_mdbs_inh24():
-        basedir = '/nas1/Data_arco/results/20170509_grid_with_tuned_INH_v2/mdbs/{stim}'
+    def get_dbs_inh24():
+        basedir = '/nas1/Data_arco/results/20170509_grid_with_tuned_INH_v2/dbs/{stim}'
         stim = ['B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'D1', 'D2', 'D3']
-        mdbs = {s: I.ModelDataBase(basedir.format(stim=s)) for s in stim}
-        return mdbs
+        dbs = {s: I.DataBase(basedir.format(stim=s)) for s in stim}
+        return dbs
 
-    if mdbs == 'mdbs_inhrobert':
-        mdbs = get_mdbs_inhrobert()
-    elif mdbs == 'mdbs_inh24':
-        mdbs = get_mdbs_inh24()
+    if dbs == 'dbs_inhrobert':
+        dbs = get_dbs_inhrobert()
+    elif dbs == 'dbs_inh24':
+        dbs = get_dbs_inh24()
     else:
-        pass  # mdbs needs to be a dictionary
+        pass  # dbs needs to be a dictionary
 
     #extract training values
     rm = ReducedLdaModel(keys_to_synapse_activation_data, \
@@ -440,11 +440,11 @@ def get_kernel_C2_grid(keys_to_synapse_activation_data = [
                 normalize_group_size, test_size, verbosity, \
                 lookup_series_stepsize, cache)
 
-    rm.fit(list(mdbs.values()))
+    rm.fit(list(dbs.values()))
     return rm
 
 
-get_kernel_C2_grid_cached = mdb_utils.cache(get_kernel_C2_grid)
+get_kernel_C2_grid_cached = db_utils.cache(get_kernel_C2_grid)
 
 # def C2_grid_10ms_to_20ms_poststim():
 #     '''returns : clfs, lookup_series, pdf'''

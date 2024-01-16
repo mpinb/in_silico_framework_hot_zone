@@ -36,7 +36,7 @@ def synapse_activation_df_to_roberts_synapse_activation(sa):
     return synapses
 
 
-def _evoked_activity(mdb,
+def _evoked_activity(db,
                      stis,
                      outdir,
                      tStop=None,
@@ -188,7 +188,7 @@ class Opaque:
         self.content = content
 
 
-def rerun_mdb(mdb,
+def rerun_db(db,
               outdir,
               tStop=None,
               neuron_param_modify_functions=[],
@@ -199,7 +199,7 @@ def rerun_mdb(mdb,
               additional_network_params=[],
               child_process=False):
     '''
-    mdb: model data base initialized with I.mdb_init_simrun_general to be resimulated
+    db: model data base initialized with I.db_init_simrun_general to be resimulated
     outdir: location where simulation files are supposed to be stored
     tStop: end of simulation
     neuron_param_modify_functions: list of functions which take a neuron param file and may return it changed
@@ -209,10 +209,10 @@ def rerun_mdb(mdb,
     silent: suppress output to stdout
     child_process: run simulation in child process. This can help if dask workers time out during the simulation.
     recreate_cell_every_run: set to True if you use synapse_activation as cell modify function.'''
-    parameterfiles = mdb['parameterfiles']
-    neuron_folder = mdb['parameterfiles_cell_folder']
-    network_folder = mdb['parameterfiles_network_folder']
-    sa = mdb['synapse_activation']
+    parameterfiles = db['parameterfiles']
+    neuron_folder = db['parameterfiles_cell_folder']
+    network_folder = db['parameterfiles_network_folder']
+    sa = db['synapse_activation']
     # without the opaque object, dask tries to load in the entire dataframe before passing it to _evoked_activity
     sa = Opaque(sa)
     if stis is not None:
@@ -232,7 +232,7 @@ def rerun_mdb(mdb,
     myfun = dask.delayed(myfun)
     logger.info('outdir is', outdir)
     for stis in sim_trial_index_array:
-        d = myfun(mdb,
+        d = myfun(db,
                   stis,
                   outdir,
                   tStop=tStop,

@@ -18,7 +18,7 @@ def skip_time(df, t_skip_start, t_skip_end):
     return x
 
 
-from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
+from isf_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 
 
 def _save_synapse_activation_to_folder(df, sim_trail_index, dirPrefix):

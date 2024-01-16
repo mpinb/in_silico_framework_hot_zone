@@ -26,9 +26,9 @@ Each subprocess creates a subfolder in the results folder, naming it based on wh
 In order to trace the voltage are more locations, this should be specified in the neuron parameter file.
 
 ## Reformatting simulation results
-I.mdb_init_simrun_general.init gathers the results and brings them to a format is convenient to work with. It creates a mdb that has a standardized structure.
+I.db_init_simrun_general.init gathers the results and brings them to a format is convenient to work with. It creates a db that has a standardized structure.
 
-I.mdb_init_simrun_general.init(mdb.create_sub_mdb('mdbs', raise_ = False).create_sub_mdb(output_name, raise_ = False), 
+I.db_init_simrun_general.init(db.create_sub_db('dbs', raise_ = False).create_sub_db(output_name, raise_ = False), 
                                    simresult_path=outdir.join(output_name), 
                                    core = True, voltage_traces=True, parameterfiles =True,
                                    rewrite_in_optimized_format = True,
@@ -37,7 +37,7 @@ I.mdb_init_simrun_general.init(mdb.create_sub_mdb('mdbs', raise_ = False).create
 
 if rewrite_in_optimized_format == True: fills db with data, writes it in (fast) binary format and combines it such that no matter how many simulation trials you have, you get max 5000 files. For interactive/testing results to False.
 
-The resulting mdb will have:
+The resulting db will have:
 - synapse_activation dataframe: dask (not pandas) dataframe since it is very large and often it wouldn't fit in memory.
 - cell_activation pandas (not dask) dataframe
 - spike_times dataframe: pandas (not dask) dataframe because it's relatively compact. Maybe GB if you do a huge simulation but not more.

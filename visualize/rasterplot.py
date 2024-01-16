@@ -14,8 +14,8 @@ TODO:
 # from compatibility import multiprocessing_scheduler
 import matplotlib.pyplot as plt
 from ._decorators import *
-from model_data_base.analyze._helper_functions import is_int
-from model_data_base.utils import convertible_to_int
+from isf_data_base.analyze._helper_functions import is_int
+from isf_data_base.utils import convertible_to_int
 
 
 def rasterplot2(st,

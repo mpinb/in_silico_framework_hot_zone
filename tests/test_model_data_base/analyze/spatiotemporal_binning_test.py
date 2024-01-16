@@ -1,8 +1,8 @@
 from ..context import *
 from .. import decorators
-from model_data_base.analyze.spatiotemporal_binning import *
+from isf_data_base.analyze.spatiotemporal_binning import *
 import dask
-from model_data_base.model_data_base import ModelDataBase
+from isf_data_base.isf_data_base import DataBase
 import numpy as np
 import pandas as pd
 
@@ -43,11 +43,11 @@ class TestSpatioTemporalBinning:
         b = np.array([[0, 0, 6, 1, 0, 1], [0, 0, 0, 0, 4, 2]])
         np.testing.assert_array_equal(a, b)
 
-    def test_binning_real_data(self, fresh_mdb, client):
+    def test_binning_real_data(self, fresh_db, client):
         '''binning dask dataframes has to deliver the same
         results as binning pandas dataframes'''
-        assert 'synapse_activation' in list(fresh_mdb.keys())
+        assert 'synapse_activation' in list(fresh_db.keys())
         x = universal(
-            client.compute(fresh_mdb['synapse_activation']).result(), 'soma_distance')
-        y = universal(fresh_mdb['synapse_activation'], 'soma_distance')
+            client.compute(fresh_db['synapse_activation']).result(), 'soma_distance')
+        y = universal(fresh_db['synapse_activation'], 'soma_distance')
         np.testing.assert_equal(x, y)

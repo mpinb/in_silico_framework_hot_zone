@@ -6,8 +6,8 @@ from ..generate_synapse_activations import generate_synapse_activations
 from ..run_existing_synapse_activations import run_existing_synapse_activations
 import os
 import pandas as pd
-from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
-from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
+from isf_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
+from isf_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 import neuron
 
 h = neuron.h
@@ -94,7 +94,7 @@ def crossing_over_helper(pdf,
 delayed_crossing_over_helper = dask.delayed(crossing_over_helper)
 
 
-def crossing_over(mdb,
+def crossing_over(db,
                   sim_trails,
                   time,
                   cellParamName,
@@ -108,7 +108,7 @@ def crossing_over(mdb,
         sim_trails = [sim_trails]
     dirPrefixes = []
     delayeds = []
-    synapse_activation = mdb['synapse_activation']
+    synapse_activation = db['synapse_activation']
     for sim_trail in sim_trails:
         sa = synapse_activation.loc[sim_trail]
         sim_trail = sim_trail.replace('/', '__')

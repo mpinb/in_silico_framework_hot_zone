@@ -2,7 +2,7 @@ import numpy as np
 from .context import *
 from visualize.histogram import *
 
-from model_data_base.analyze import temporal_binning
+from isf_data_base.analyze import temporal_binning
 
 
 class TestHistogram:

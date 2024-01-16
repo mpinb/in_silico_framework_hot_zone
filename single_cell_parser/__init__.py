@@ -40,20 +40,20 @@ from sumatra.parameters import build_parameters as build_parameters_sumatra
 from sumatra.parameters import NTParameterSet
 import numpy as np
 import warnings
-from model_data_base.mdbopen import mdbopen
+from isf_data_base.dbopen import dbopen
 
 
 #------------------------------------------------------------------------------
 # commonly used functions required for running single neuron simulations
 #------------------------------------------------------------------------------
 def build_parameters(filename, fast_but_security_risk=True):
-    from model_data_base.mdbopen import resolve_mdb_path
-    filename = resolve_mdb_path(filename)
+    from isf_data_base.dbopen import resolve_db_path
+    filename = resolve_db_path(filename)
 
     if fast_but_security_risk:
         # taking advantage of the fact that sumatra NTParameterSet produces
         # valid python code
-        with mdbopen(filename, 'r') as f:
+        with dbopen(filename, 'r') as f:
             dummy = eval(f.read())
         return NTParameterSet(dummy)
     else:

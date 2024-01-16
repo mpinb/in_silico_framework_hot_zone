@@ -6,7 +6,7 @@ Created on Mar 8, 2012
 
 import numpy as np
 from . import scalar_field
-from model_data_base.mdbopen import mdbopen
+from isf_data_base.dbopen import dbopen
 
 
 class Edge(object):
@@ -36,7 +36,7 @@ def read_hoc_file(fname=''):
     if not fname.endswith('.hoc') and not fname.endswith('.HOC'):
         raise IOError('Input file is not a .hoc file!')
 
-    with mdbopen(fname, 'r') as neuronFile:
+    with dbopen(fname, 'r') as neuronFile:
         print("Reading hoc file", fname)
         #        cell = co.Cell()
         #        simply store list of edges
@@ -179,7 +179,7 @@ def read_scalar_field(fname=''):
     if not fname.endswith('.am') and not fname.endswith('.AM'):
         raise IOError('Input file is not an Amira Mesh file!')
 
-    with mdbopen(fname, 'r') as meshFile:
+    with dbopen(fname, 'r') as meshFile:
         #            print "Reading Amira Mesh file", fname
         mesh = None
         extent, dims, bounds, origin, spacing = [], [], [], [], []
@@ -241,7 +241,7 @@ def read_connections_spreadsheet(fname):
     targetStructures = ('SOMA_LENGTH', 'APICAL_LENGTH', 'BASAL_LENGTH',
                         'SOMA_AREA', 'APICAL_AREA', 'BASAL_AREA')
 
-    with mdbopen(fname, 'r') as spreadsheet:
+    with dbopen(fname, 'r') as spreadsheet:
         for line in spreadsheet:
             stripLine = line.strip()
             if not stripLine:
@@ -268,7 +268,7 @@ def read_celltype_numbers_spreadsheet(fname):
     columns = None
     cellTypeNumbers = {}
 
-    with mdbopen(fname, 'r') as spreadsheet:
+    with dbopen(fname, 'r') as spreadsheet:
         header = False
         for line in spreadsheet:
             stripLine = line.strip()

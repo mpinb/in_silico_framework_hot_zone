@@ -1,6 +1,6 @@
 import numpy as np
 from ..context import *
-from model_data_base.analyze._add_nparray_aligned import *
+from isf_data_base.analyze._add_nparray_aligned import *
 
 
 class TestAddNumpyArrayAligned:

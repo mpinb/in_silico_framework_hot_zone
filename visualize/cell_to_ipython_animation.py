@@ -8,7 +8,7 @@ import jinja2
 import functools
 from base64 import b64encode
 import multiprocessing
-from model_data_base.utils import chunkIt
+from isf_data_base.utils import chunkIt
 
 html_template = 'animation_template.html'
 

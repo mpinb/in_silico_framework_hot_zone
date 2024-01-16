@@ -114,14 +114,14 @@ def test_reduced_lda_model(empty_db):
         st = Rm.st
         lda_values = Rm.lda_values
         lda_value_dicts = Rm.lda_value_dicts
-        db_list = Rm.mdb_list  # TODO: old API
+        db_list = Rm.db_list  # TODO: old API
 
         empty_db.setitem('rm', Rm, dumper=reduced_lda_model)
 
         assert st is Rm.st
         assert lda_values is Rm.lda_values
         assert lda_value_dicts is Rm.lda_value_dicts
-        assert db_list is Rm.mdb_list  # TODO: old API
+        assert db_list is Rm.db_list  # TODO: old API
 
         # can be loaded
         Rm_reloaded = empty_db['rm']

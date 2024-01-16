@@ -16,7 +16,7 @@ import simrun2.run_new_simulations
 import simrun2.run_existing_synapse_activations
 import simrun2.sim_trail_to_cell_object
 import simrun2.crossing_over.crossing_over_simple_interface
-from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
+from isf_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 # from compatibility import synchronous_scheduler
 
 import getting_started
@@ -204,12 +204,12 @@ def test_different_schedulers_give_same_result():
 
 #@decorators.testlevel(2)
 def test_crossing_over_trails_show_identical_response_before_crossing_over_time(
-        tmpdir, fresh_mdb):
+        tmpdir, fresh_db):
     try:
         t = np.random.randint(100, high=150)
-        sim_trail = list(fresh_mdb['sim_trail_index'])[0]
+        sim_trail = list(fresh_db['sim_trail_index'])[0]
         pdf, res = simrun2.crossing_over.crossing_over_simple_interface.crossing_over(
-            fresh_mdb,
+            fresh_db,
             sim_trail,
             t,
             cellParamName,

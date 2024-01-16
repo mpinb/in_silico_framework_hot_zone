@@ -1,5 +1,5 @@
 from project_specific_ipynb_code.reduced_model_output_paper import PostCell
-from model_data_base import utils
+from isf_data_base import utils
 import os
 import getting_started
 

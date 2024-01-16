@@ -1,10 +1,10 @@
 from ..context import *
-from model_data_base.IO.dask_wrappers import *
+from isf_data_base.IO.dask_wrappers import *
 import os, shutil
 from mock import MagicMock
 import numpy as np
 import tempfile
-import model_data_base
+import isf_data_base
 
 
 def test_concat_path_elements_to_filelist():
