@@ -822,15 +822,13 @@ class CellMorphologyVisualizer(CMVDataParser):
         sections = np.unique(self.morphology['sec_n'].values)
         for sec in sections:
             points = self.morphology.loc[self.morphology['sec_n'] == sec]
-            for i in points.index:
-                if i != points.index[-1]:
-                    linewidth = (points.loc[i]['diameter'] +
-                                 points.loc[i + 1]['diameter']) / 2 * 1.5 + 0.2
-                    ax.plot3D([points.loc[i]['x'], points.loc[i + 1]['x']],
-                              [points.loc[i]['y'], points.loc[i + 1]['y']],
-                              [points.loc[i]['z'], points.loc[i + 1]['z']],
-                              color='grey',
-                              lw=linewidth)
+            linewidths = [(points.loc[i]['diameter'] + points.loc[i + 1]['diameter']) / 2 * 1.5 + 0.2 for i in points.index[::-1]]
+            for i in points.index[::-1]:
+                ax.plot3D([points.loc[i]['x'], points.loc[i + 1]['x']],
+                            [points.loc[i]['y'], points.loc[i + 1]['y']],
+                            [points.loc[i]['z'], points.loc[i + 1]['z']],
+                            color='grey',
+                            lw=linewidths[i])
 
         ax.set_xticks([])
         ax.set_yticks([])
