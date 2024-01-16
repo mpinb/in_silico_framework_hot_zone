@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.axes3d import Axes3D
+from mpl_toolkits.mplot3d.art3d import Line3DCollection
 import numpy as np
 import os
 import dask
@@ -538,34 +539,8 @@ class CellMorphologyVisualizer(CMVDataParser):
         cmap = mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(vmin=self.vmin,
                                                                vmax=self.vmax),
                                      cmap=plt.get_cmap('jet'))
-        fig = plt.figure(figsize=(15, 15),
-                         dpi=self.dpi,
-                         facecolor=self.background_color)
-        ax = plt.axes(projection='3d', proj_type='ortho')
-        ax.set_facecolor(self.background_color)
-        sections = self.morphology['sec_n'].unique()
-        for sec_n in sections:
-            points = self.morphology[self.morphology['sec_n'] == sec_n]
-            if len(points) == 1:  # soma
-                color = (voltage[0] - self.vmin) / (self.vmax - self.vmin)
-                linewidth = (points['diameter'][0]) * 1.5 + 0.2
-                ax.scatter3D(points['x'],
-                             points['y'],
-                             points['z'],
-                             color=mpl.cm.jet(color),
-                             s=linewidth)
-            else:
-                for i, j in zip(points.index.values[:-1],
-                                points.index.values[1:]):
-                    p1, p2 = points.loc[i], points.loc[j]
-                    color = ((voltage[i] + voltage[j]) / 2 -
-                             self.vmin) / (self.vmax - self.vmin)
-                    linewidth = (p1['diameter'] +
-                                 p2['diameter']) / 2 * 1.5 + 0.2
-                    ax.plot3D([p1['x'], p2['x']], [p1['y'], p2['y']],
-                              [p1['z'], p2['z']],
-                              color=mpl.cm.jet(color),
-                              lw=linewidth)
+        voltage = self._get_voltages_at_timepoint(time_point)
+        fig, ax = self._get_3d_plot_morphology(colors=cmap.to_rgba(voltage))
 
         # Plot synapse activations
         if show_synapses:
@@ -803,43 +778,41 @@ class CellMorphologyVisualizer(CMVDataParser):
                 len(self.morphology)))
             of.write(scalar_str_(self.diameters))
 
-    def show_morphology_3d(self,
-                           save='',
-                           plot=True,
-                           highlight_section=None,
-                           highlight_x=None):
-        '''
-        Creates a python plot of the cell morphology in 3D
-
-        Args:
-            - Save: path where the plot will be saved. If it's empty it will not be saved
-            - Plot: whether the plot should be shown.
-        '''
+    def _get_3d_plot_morphology(
+        self, 
+        colors="grey",
+        highlight_section=None,
+        highlight_x=None):
+        # Generic axes setup
         fig = plt.figure(figsize=(15, 15), dpi=self.dpi)
-
         ax = plt.axes(projection='3d', proj_type='ortho')
-
-        sections = np.unique(self.morphology['sec_n'].values)
-        for sec in sections:
-            points = self.morphology.loc[self.morphology['sec_n'] == sec]
-            linewidths = [(points.loc[i]['diameter'] + points.loc[i + 1]['diameter']) / 2 * 1.5 + 0.2 for i in points.index[::-1]]
-            for i in points.index[::-1]:
-                ax.plot3D([points.loc[i]['x'], points.loc[i + 1]['x']],
-                            [points.loc[i]['y'], points.loc[i + 1]['y']],
-                            [points.loc[i]['z'], points.loc[i + 1]['z']],
-                            color='grey',
-                            lw=linewidths[i])
-
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_zticks([])
         plt.axis('off')
         ax.set_xlabel('x')
         ax.set_ylabel('y')
+        ax.set_zlabel('z')
         ax.azim = self.azim
         ax.dist = self.dist
         ax.elev = self.elev
         ax.roll = self.roll
+
+        sections = np.unique(self.morphology['sec_n'].values)
+        if isinstance(colors, str):
+            colors = [colors for _ in sections]
+        else:
+            assert len(colors) == len(sections), \
+                "Number of colors does not match number of sections. Either provide one color per section, or group line segment colors by section."
+        for sec_n, sec in enumerate(sections):
+            points = self.morphology.loc[self.morphology['sec_n'] == sec]
+            linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
+            points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
+            segments = np.concatenate([points[:-1], points[1:]], axis=1)
+            lc = Line3DCollection(segments, linewidths=linewidths, color=colors[sec_n])
+            ax.add_collection(lc)
+
+        ax.auto_scale_xyz(self.morphology['x'], self.morphology['y'], self.morphology['z'])
         # plot arrow, if necessary
         if highlight_section is not None or highlight_x is not None:
             draw_arrow(self.morphology,
@@ -851,17 +824,16 @@ class CellMorphologyVisualizer(CMVDataParser):
             ub - lb
             for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')
         ])
+        return fig, ax
 
-        if save != '':
-            plt.savefig(save)  # ,bbox_inches='tight')
-        if plot:
-            plt.show()
-
-    def show_dendritic_groups_in_morphology(self,dendritic_groups,dendritic_group_to_color_dict,
-                           save='',
-                           plot=True,
-                           highlight_section=None,
-                           highlight_x=None):
+    def show_dendritic_groups_in_morphology(
+        self,
+        dendritic_groups,
+        dendritic_group_to_color_dict,
+        save='',
+        plot=True,
+        highlight_section=None,
+        highlight_x=None):
         '''
         Creates a python plot of the cell morphology in 3D, with the different dendritic group in different colors (ie: tuft, trunk, oblique and basal dendrites)
 
@@ -871,53 +843,44 @@ class CellMorphologyVisualizer(CMVDataParser):
             - Save: path where the plot will be saved. If it's empty it will not be saved
             - Plot: whether the plot should be shown.
         '''
-        fig = plt.figure(figsize=(15, 15), dpi=self.dpi)
-
-        ax = plt.axes(projection='3d', proj_type='ortho')
-
+        colors = []
         sections = np.unique(self.morphology['sec_n'].values)
         for sec in sections:
             for group in dendritic_groups.keys():
                 if sec in dendritic_groups[group]:
                     color = dendritic_group_to_color_dict[group]
-            
-            points = self.morphology.loc[self.morphology['sec_n'] == sec]
-            for i in points.index:
-                if i != points.index[-1]:
-                    linewidth = (points.loc[i]['diameter'] +
-                                 points.loc[i + 1]['diameter']) / 2 * 1.5 + 0.2
-                    ax.plot3D([points.loc[i]['x'], points.loc[i + 1]['x']],
-                              [points.loc[i]['y'], points.loc[i + 1]['y']],
-                              [points.loc[i]['z'], points.loc[i + 1]['z']],
-                              color=color,
-                              lw=linewidth)
+                    colors.append(color)
+                else:
+                    colors.append('grey')
+        fig, ax = self._get_3d_plot_morphology(
+            colors=colors,
+            highlight_section=highlight_section,
+            highlight_x=highlight_x)
 
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_zticks([])
-        plt.axis('off')
-        ax.set_xlabel('x')
-        ax.set_ylabel('y')
-        ax.azim = self.azim
-        ax.dist = self.dist
-        ax.elev = self.elev
-        ax.roll = self.roll
-        # plot arrow, if necessary
-        if highlight_section is not None or highlight_x is not None:
-            draw_arrow(self.morphology,
-                       ax,
-                       highlight_section=highlight_section,
-                       highlight_x=highlight_x,
-                       highlight_arrow_args=self.highlight_arrow_args)
-        ax.set_box_aspect([
-            ub - lb
-            for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')
-        ])
+        if save != '': plt.savefig(save)  # ,bbox_inches='tight')
+        if plot: plt.show()
+    
+    def show_morphology_3d(self,
+                           save='',
+                           plot=True,
+                           highlight_section=None,
+                           highlight_x=None,
+                           colors="grey"):
+        '''
+        Creates a python plot of the cell morphology in 3D
 
-        if save != '':
-            plt.savefig(save)  # ,bbox_inches='tight')
-        if plot:
-            plt.show()
+        Args:
+            - Save: path where the plot will be saved. If it's empty it will not be saved
+            - Plot: whether the plot should be shown.
+        '''
+        
+        fig, ax = self._get_3d_plot_morphology(
+            colors=colors,
+            highlight_section=highlight_section,
+            highlight_x=highlight_x)
+        if save != '': plt.savefig(save)  # ,bbox_inches='tight')
+        if plot: plt.show()
+        return ax
 
     def show_voltage_in_morphology_3d(self,
                                       time_point,
@@ -944,35 +907,22 @@ class CellMorphologyVisualizer(CMVDataParser):
         if vmax is not None:
             self.vmax = vmax
         voltage = self._get_voltages_at_timepoint(time_point)
-
+        norm = mpl.colors.Normalize(vmin=self.vmin, vmax=self.vmax)
+        cmap = mpl.cm.ScalarMappable(norm=norm, cmap=plt.get_cmap('jet'))
+        
         # Plot morphology with colorcoded voltage
-        cmap = mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(vmin=self.vmin,
-                                                               vmax=self.vmax),
-                                     cmap=plt.get_cmap('jet'))
-        fig = plt.figure(figsize=(15, 15), dpi=self.dpi)
-        ax = plt.axes(projection='3d', proj_type='ortho')
-        sections = np.unique(self.morphology['sec_n'].values)
-        for sec in sections:
-            points = self.morphology.loc[self.morphology['sec_n'] == sec]
-            for i in points.index:
-                if i != points.index[-1]:
-                    color = ((voltage[i] + voltage[i + 1]) / 2 -
-                             self.vmin) / (self.vmax - self.vmin)
-                    linewidth = (points.loc[i]['diameter'] +
-                                 points.loc[i + 1]['diameter']) / 2 * 1.5 + 0.2
-                    ax.plot3D([points.loc[i]['x'], points.loc[i + 1]['x']],
-                              [points.loc[i]['y'], points.loc[i + 1]['y']],
-                              [points.loc[i]['z'], points.loc[i + 1]['z']],
-                              color=mpl.cm.jet(color),
-                              lw=linewidth)
+        color_per_section = []
+        for sec_n in np.unique(self.morphology['sec_n'].values):
+            indices = self.morphology[self.morphology['sec_n'] == sec_n].index
+            v = (voltage[indices[:-1]] + voltage[indices[1:]])/2
+            c = [cmap.to_rgba(v_) for v_ in v]
+            color_per_section.append(c)
 
-        # plot arrow, if necessary
-        if highlight_section is not None or highlight_x is not None:
-            draw_arrow(self.morphology, ax, highlight_section,
-                       self.highlight_arrow_args)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_zticks([])
+        fig, ax = self._get_3d_plot_morphology(
+            colors=color_per_section,
+            highlight_section=highlight_section,
+            highlight_x=highlight_x)
+
         plt.axis('off')
 
         # Add legends
@@ -985,23 +935,15 @@ class CellMorphologyVisualizer(CMVDataParser):
                 title_fontsize=12)
             # 0.64, 0.2, 0.05, 0.5
             cbaxes = fig.add_axes([0.64, 0.13, 0.05, 0.5])
-            fig.colorbar(mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(
-                vmin=self.vmin, vmax=self.vmax),
-                                               cmap=mpl.cm.jet),
-                         ax=cbaxes,
-                         orientation='vertical',
-                         label='mV',
-                         fraction=0.2)  # , fraction=0.015, pad=-0.25)
+            fig.colorbar(
+                mpl.cm.ScalarMappable(
+                    norm=mpl.colors.Normalize(vmin=self.vmin, vmax=self.vmax),
+                    cmap=mpl.cm.jet),
+                    ax=cbaxes,
+                    orientation='vertical',
+                    label='mV',
+                    fraction=0.2)  # , fraction=0.015, pad=-0.25)
             plt.axis('off')
-
-        ax.azim = self.azim
-        ax.dist = self.dist
-        ax.elev = self.elev
-        ax.roll = self.roll
-        ax.set_box_aspect([
-            ub - lb
-            for lb, ub in (getattr(ax, 'get_{}lim'.format(a))() for a in 'xyz')
-        ])
 
         if save != '':
             plt.savefig(save, facecolor=fig.get_facecolor(),
@@ -1009,15 +951,16 @@ class CellMorphologyVisualizer(CMVDataParser):
         if plot:
             plt.show()
 
-    def show_voltage_synapses_in_morphology_3d(self,
-                                               time_point,
-                                               time_show_syn_activ=None,
-                                               vmin=None,
-                                               vmax=None,
-                                               save='',
-                                               plot=True,
-                                               highlight_section=None,
-                                               highlight_x=None):
+    def show_voltage_synapses_in_morphology_3d(
+        self,
+        time_point,
+        time_show_syn_activ=None,
+        vmin=None,
+        vmax=None,
+        save='',
+        plot=True,
+        highlight_section=None,
+        highlight_x=None):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
         are shown for a particular time point.
@@ -1646,27 +1589,28 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
 
 
 @dask.delayed
-def plot_cell_voltage_synapses_in_morphology_3d(morphology,
-                                                voltage,
-                                                synapses,
-                                                time_point,
-                                                save,
-                                                population_to_color_dict,
-                                                azim=0,
-                                                dist=10,
-                                                elev=30,
-                                                roll=0,
-                                                vmin=-75,
-                                                vmax=-30,
-                                                synapse_legend=True,
-                                                voltage_legend=True,
-                                                time_offset=0,
-                                                dpi=72,
-                                                highlight_section=None,
-                                                highlight_x=None,
-                                                highlight_arrow_args=None,
-                                                show_synapses=True,
-                                                background_color="#FFFFFF"):
+def plot_cell_voltage_synapses_in_morphology_3d(
+    morphology,
+    voltage,
+    synapses,
+    time_point,
+    save,
+    population_to_color_dict,
+    azim=0,
+    dist=10,
+    elev=30,
+    roll=0,
+    vmin=-75,
+    vmax=-30,
+    synapse_legend=True,
+    voltage_legend=True,
+    time_offset=0,
+    dpi=72,
+    highlight_section=None,
+    highlight_x=None,
+    highlight_arrow_args=None,
+    show_synapses=True,
+    background_color="#FFFFFF"):
     '''
     Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
     are shown for a particular time point.
@@ -1704,35 +1648,33 @@ def plot_cell_voltage_synapses_in_morphology_3d(morphology,
     fig = plt.figure(figsize=(15, 15), dpi=dpi, facecolor=background_color)
     ax = plt.axes(projection='3d', proj_type='ortho')
     ax.set_facecolor(background_color)
+
     section_numbers = np.unique(morphology['sec_n'].values)
+    norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+    cmap = mpl.cm.ScalarMappable(norm=norm, cmap=plt.get_cmap('jet'))
+    
+    # Plot morphology with colorcoded voltage
+    color_per_section = []
     for sec_n in section_numbers:
-        points = morphology.loc[morphology['sec_n'] == sec_n]
-        if sec_n == 0:  # soma
-            color = (voltage[0] - vmin) / (vmax - vmin)
-            linewidth = points.loc[0]['diameter'] * 1.5 + 0.2
-            ax.plot3D([points.loc[0]['x']], [points.loc[0]['y']],
-                      [points.loc[0]['z']],
-                      color=mpl.cm.jet(color),
-                      lw=linewidth)
-        else:
-            for i, j in zip(points.index[:-1], points.index[1:]):
-                color = ((voltage[i] + voltage[j]) / 2 - vmin) / (vmax - vmin)
-                linewidth = (points.loc[i]['diameter'] +
-                             points.loc[j]['diameter']) / 2 * 1.5 + 0.2
-                ax.plot3D([points.loc[i]['x'], points.loc[j]['x']],
-                          [points.loc[i]['y'], points.loc[j]['y']],
-                          [points.loc[i]['z'], points.loc[j]['z']],
-                          color=mpl.cm.jet(color),
-                          lw=linewidth)
+        indices = morphology[morphology['sec_n'] == sec_n].index
+        v = (voltage[indices[:-1]] + voltage[indices[1:]])/2
+        c = [cmap.to_rgba(v_) for v_ in v]
+        color_per_section.append(c)
+    
+    for sec_n in section_numbers:
+        points = morphology.loc[morphology['sec_n'] == sec]
+        linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
+        points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        lc = Line3DCollection(segments, linewidths=linewidths, color=colors[sec_n])
+        ax.add_collection(lc)
 
     # Plot synapse activations
     if show_synapses:
         for population in synapses.keys():
             for synapse in synapses[population]:
                 color = population_to_color_dict[population]
-                ax.scatter3D(synapse[0],
-                             synapse[1],
-                             synapse[2],
+                ax.scatter3D(*synapse,
                              color=color,
                              edgecolors='grey',
                              s=75)
