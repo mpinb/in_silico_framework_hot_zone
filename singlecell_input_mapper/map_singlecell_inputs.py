@@ -52,7 +52,7 @@ import getting_started
 # located on your system (assuming you just unpack the data and do not change
 # the directory structure)
 #===============================================================================
-prefix = os.path.join(getting_started.parent, 'barrel_cortex')
+prefix = os.path.join(os.path.dirname(getting_started.parent), 'barrel_cortex')
 
 #===============================================================================
 # If you change the directory structure of the anatomical input data,
