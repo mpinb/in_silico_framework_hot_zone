@@ -29,6 +29,8 @@ else:
     warnings.warn(
         "Interactive visualizations only work on Py3. Dash and plotly are not compatible with the Py2 version of ISF."
     )
+import logging
+logger = logging.getLogger(__name__)
     
 class CMVDataParser:
     def __init__(self, cell, align_trunk=True):
@@ -248,7 +250,7 @@ class CMVDataParser:
         morphology = pd.DataFrame(
             points, columns=['x', 'y', 'z', 'diameter', 'sec_n', 'seg_n'])
         t2 = time.time()
-        print('Initialised simulation data in {} seconds'.format(
+        logger.info('Initialised simulation data in {} seconds'.format(
             np.around(t2 - t1, 2)))
         return morphology
 
@@ -344,7 +346,7 @@ class CMVDataParser:
             self.voltage_timeseries.append(voltage)
         # self.scalar_data["voltage"] = self.voltage_timeseries
         t2 = time.time()
-        print('Voltage retrieval runtime (s): ' + str(np.around(t2 - t1, 2)))
+        logger.info('Voltage retrieval runtime (s): ' + str(np.around(t2 - t1, 2)))
 
     def _calc_ion_dynamics_timeseries(self, ion_keyword):
         '''
@@ -372,7 +374,7 @@ class CMVDataParser:
                 time_point, ion_keyword)
             self.scalar_data[ion_keyword].append(ion_dynamics)
         t2 = time.time()
-        print('Ion dynamics retrieval runtime (s): ' +
+        logger.info('Ion dynamics retrieval runtime (s): ' +
               str(np.around(t2 - t1, 2)))
 
     def _get_synapses_at_timepoint(self, time_point):
@@ -415,7 +417,7 @@ class CMVDataParser:
             synapses = self._get_synapses_at_timepoint(time_point)
             self.synapses_timeseries.append(synapses)
         t2 = time.time()
-        print('Synapses retrieval runtime (s): ' + str(np.around(t2 - t1, 2)))
+        logger.info('Synapses retrieval runtime (s): ' + str(np.around(t2 - t1, 2)))
 
     def _update_times_to_show(self, t_start=None, t_end=None, t_step=None):
         """Checks if the specified time range equals the previously defined one. If not, updates the time range.
@@ -637,7 +639,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         '''
         if os.path.exists(path):
             if os.listdir(path):
-                print(
+                logger.info(
                     'Images already generated, they will not be generated again. Please, change the path name or delete the current one.'
                 )
                 return
@@ -689,7 +691,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         futures = client.compute(out)
         client.gather(futures)
         t2 = time.time()
-        print('Images generation runtime (s): ' + str(np.around(t2 - t1, 2)))
+        logger.info('Images generation runtime (s): ' + str(np.around(t2 - t1, 2)))
 
     def _write_vtk_frame(
         self, out_name, out_dir, time_point, scalar_data=None):
@@ -1393,7 +1395,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
                 time_point = c.time.value
                 keys = np.array(sorted(list(scalar_data_per_time.keys())))
                 closest_time_point = keys[np.argmin(np.abs(keys - time_point))]
-                print('requested_timepoint', time_point, 'selected_timepoint',
+                logger.info('requested_timepoint', time_point, 'selected_timepoint',
                       closest_time_point)
                 fig_cell.update_traces(marker={
                     "color": [
