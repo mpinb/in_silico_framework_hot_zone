@@ -154,7 +154,7 @@ cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
 
 # -------------------- 6. installing the ipykernel -------------------- #
-print_title "5/6. Installing & patching pandas-msgpack"
+print_title "5/6. Installing the ipykernel"
 python -m ipykernel install --name base --user --display-name isf3.8
 
 # -------------------- 7. Compiling NEURON mechanisms -------------------- #
