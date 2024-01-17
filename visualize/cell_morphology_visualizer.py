@@ -54,7 +54,8 @@ class CMVDataParser:
         self.soma_center = np.mean(soma.pts, axis=0)
 
         self.morphology = self._get_morphology(cell)  # a pandas DataFrame
-        self.n_sections = len(cell.sections)
+        self.sections = self.morphology['sec_n'].unique()
+        self.n_sections = len(self.sections)
         """A pd.DataFrame containing point information, diameter and section ID"""
         self.rotation_with_zaxis = None
         """Rotation object that defines the transformation between the cell trunk and the z-axis"""
@@ -491,7 +492,10 @@ class CellMorphologyVisualizer(CMVDataParser):
         """Rotation degrees of the neuron at each frame during timeseries visualization (in azimuth)"""
         self.dpi = 72
         """Image quality"""
+        self.vmin, self.vmax = -70, 20
         self.background_color = (1, 1, 1, 1)  # white
+        self.norm = mpl.colors.Normalize(vmin=self.vmin, vmax=self.vmax)
+        self.cmap = mpl.cm.ScalarMappable(norm=self.norm, cmap=plt.get_cmap('jet'))
 
         self.show_synapses = True
         """Whether or not to show the synapses on the plots that support this. Can be turned off manually here for e.g. testing purposes."""
@@ -506,6 +510,28 @@ class CellMorphologyVisualizer(CMVDataParser):
         
         self.population_to_color_dict = barrel_cortex.color_cellTypeColorMapHotZone    
 
+    def set_cmap(self, cmap="jet", vmin=None, vmax=None):
+        self.norm = mpl.colors.Normalize(vmin, vmax)
+        self.cmap = mpl.cm.ScalarMappable(norm=self.norm, cmap=plt.get_cmap(cmap))
+
+    def _get_color_per_section(self, array):
+        """
+        Given an array of scalar values of length n_points, bin them per section and assign a color according to self.cmap.
+        """
+        color_per_section = []
+
+        indices_soma = self.morphology[self.morphology['sec_n'] == 0].index
+        v_soma = np.mean(array[indices_soma])
+        c_soma = self.cmap.to_rgba(v_soma)
+        color_per_section.append([c_soma])
+        
+        for sec_n in range(1, self.n_sections):
+            indices = self.morphology[self.morphology['sec_n'] == sec_n].index
+            v = (array[indices[:-1]] + array[indices[1:]])/2
+            c = [self.cmap.to_rgba(v_) for v_ in v]
+            color_per_section.append(c)
+        return color_per_section
+    
     def _plot_cell_voltage_synapses_in_morphology_3d(
         self,
         voltage,
@@ -515,7 +541,8 @@ class CellMorphologyVisualizer(CMVDataParser):
         plot=True,
         highlight_section=None,
         highlight_x=None,
-        show_synapses=True):
+        show_synapses=True
+        ):
         '''
         Creates a python plot of the cell morphology in 3D color-coded with voltage, and where the synapse activations
         are shown for a particular time point.
@@ -528,13 +555,8 @@ class CellMorphologyVisualizer(CMVDataParser):
             - Plot: whether the plot should be shown.
         '''
         # Plot morphology with colorcoded voltage
-        n_sim_point = np.argmin(np.abs(self.times_to_show - time_point))
-        cmap = mpl.cm.ScalarMappable(norm=mpl.colors.Normalize(vmin=self.vmin,
-                                                               vmax=self.vmax),
-                                     cmap=plt.get_cmap('jet'))
-        voltage = self._get_voltages_at_timepoint(time_point)
         fig, ax = self._get_3d_plot_morphology(
-            colors=cmap.to_rgba(voltage),
+            colors=self._get_color_per_section(voltage),
             highlight_section=highlight_section,
             highlight_x=highlight_x)
 
@@ -787,14 +809,13 @@ class CellMorphologyVisualizer(CMVDataParser):
         ax.elev = self.elev
         ax.roll = self.roll
 
-        sections = np.unique(self.morphology['sec_n'].values)
         if isinstance(colors, str):
-            colors = [colors for _ in sections]
+            colors = [colors for _ in self.sections]
         else:
-            assert len(colors) == len(sections), \
-                "Number of colors does not match number of sections. Either provide one color per section, or group line segment colors by section."
-        for sec_n, sec in enumerate(sections):
-            points = self.morphology.loc[self.morphology['sec_n'] == sec]
+            assert len(colors) == len(self.sections), \
+                "Number of colors ({}) does not match number of sections ({}). Either provide one color per section, or group line segment colors by section.".format(len(colors), len(sections))
+        for sec_n in self.sections:
+            points = self.morphology.loc[self.morphology['sec_n'] == sec_n]
             linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
             points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
             segments = np.concatenate([points[:-1], points[1:]], axis=1)
@@ -833,8 +854,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             - Plot: whether the plot should be shown.
         '''
         colors = []
-        sections = np.unique(self.morphology['sec_n'].values)
-        for sec in sections:
+        for sec in self.sections:
             for group in dendritic_groups.keys():
                 if sec in dendritic_groups[group]:
                     color = dendritic_group_to_color_dict[group]
@@ -898,19 +918,12 @@ class CellMorphologyVisualizer(CMVDataParser):
         if vmax is not None:
             self.vmax = vmax
         voltage = self._get_voltages_at_timepoint(time_point)
-        norm = mpl.colors.Normalize(vmin=self.vmin, vmax=self.vmax)
-        cmap = mpl.cm.ScalarMappable(norm=norm, cmap=plt.get_cmap('jet'))
+        self.norm = mpl.colors.Normalize(vmin=self.vmin, vmax=self.vmax)
+        self.cmap = mpl.cm.ScalarMappable(norm=self.norm, cmap=plt.get_cmap('jet'))
         
         # Plot morphology with colorcoded voltage
-        color_per_section = []
-        for sec_n in np.unique(self.morphology['sec_n'].values):
-            indices = self.morphology[self.morphology['sec_n'] == sec_n].index
-            v = (voltage[indices[:-1]] + voltage[indices[1:]])/2
-            c = [cmap.to_rgba(v_) for v_ in v]
-            color_per_section.append(c)
-
         fig, ax = self._get_3d_plot_morphology(
-            colors=color_per_section,
+            colors=self._get_color_per_section(voltage),
             highlight_section=highlight_section,
             highlight_x=highlight_x)
 
