@@ -490,7 +490,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         # Visualization attributes
         self.camera = self.azim, self.dist, self.elev, self.roll = 0, 10, 30, 0
         """Camera angles and distance for matplotlib 3D visualizations"""
-        self.neuron_rotation = 3
+        self.neuron_rotation = 0.5
         """Rotation degrees of the neuron at each frame during timeseries visualization (in azimuth)"""
         self.dpi = 72
         """Image quality"""
@@ -1122,7 +1122,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             highlight_section=None,
             highlight_x=None,
             display=True,
-            tpf=1):
+            tpf=20):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
         shown for a set of time points. In each image the neuron rotates a bit (3 degrees) over its axis.
