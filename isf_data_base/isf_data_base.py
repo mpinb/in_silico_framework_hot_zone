@@ -711,9 +711,11 @@ class DataBase:
             max_depth (int, optional): How deep you want the filestructure to be. Defaults to 2.
             max_lines (int, optional): How long you want your filelist to be. Defaults to 20.
         """
-        logger.info(self._get_str(
-            depth=depth, max_depth=max_depth, max_lines=max_lines, 
-            all_files=all_files, max_lines_per_key=max_lines_per_key))
+        logger.log(
+            self._get_str(
+                depth=depth, max_depth=max_depth, max_lines=max_lines,
+                all_files=all_files, max_lines_per_key=max_lines_per_key),
+                level=logging.NOTSET)
     
     def _get_str(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3):
         """Fetches a string representation for this db in a tree structure.
