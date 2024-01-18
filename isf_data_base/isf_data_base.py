@@ -316,9 +316,9 @@ class DataBase:
 
         # Check if individual characters are allowed
         for subkey in key_str_tuple:
-            if len(subkey) > 50:
-                raise ValueError('keys must be shorter than 50 characters')
-            allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
+            if len(subkey) > 80:
+                raise ValueError('keys must be shorter than 80 characters')
+            allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_.1234567890'
             for c in subkey:
                 if not c in allowed_characters:
                     raise ValueError('Character {} is not allowed, but appears in key {}'.format(c, subkey))
@@ -479,7 +479,7 @@ class DataBase:
         parent_db = self
         for i in range(len(key)):
             if key[i] not in parent_db.keys():
-                # create sub_dbs from here on
+                # Moved down the tree of existing sub_mdbs: create new sub_dbs from here on
                 break
             if not isinstance(parent_db[remaining_keys[0]], DataBase):
                 # The key exists and not an db, but we want to create one here
@@ -724,7 +724,7 @@ class DataBase:
         Args:
             max_depth (int, optional): How deep you want the filestructure to be. Defaults to 2.
             max_lines (int, optional): How long you want your filelist to be. Defaults to 20.
-            only_keys (bool, optional): Whether to only print keys only, or all files. Defaults to False.
+            all_files (bool, optional): Whether to only print keys only, or all files. Defaults to False.
             max_lines_per_key (int, optional): How many lines to print per key. Defaults to 4.
 
         Returns:
