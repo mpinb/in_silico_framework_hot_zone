@@ -26,7 +26,7 @@ mechanisms/channels/x86_64
 mechanisms/channels/*~
 mechanisms/netcon/x86_64
 mechanisms/netcon/*~
-getting_started/barrel_cortex/*
+barrel_cortex/*
 !getting_started/barrel_cortex/*.7z.*
 MOEA_EH_model_visualization/**/*~
 .*
