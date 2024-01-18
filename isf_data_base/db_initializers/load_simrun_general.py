@@ -9,7 +9,8 @@ import pandas as pd
 import dask.dataframe as dd
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
-from isf_data_base import utils, DataBase
+from isf_data_base import utils
+from isf_data_base.isf_data_base import DataBase
 from isf_data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, \
     to_cloudpickle, to_pickle, pandas_to_parquet, dask_to_msgpack, pandas_to_msgpack, \
         get_dumper_string_by_dumper_module, dask_to_parquet
