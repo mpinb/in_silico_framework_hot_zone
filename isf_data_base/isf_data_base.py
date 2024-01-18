@@ -316,8 +316,10 @@ class DataBase:
 
         # Check if individual characters are allowed
         for subkey in key_str_tuple:
-            if len(subkey) > 80:
-                raise ValueError('keys must be shorter than 80 characters')
+            if len(subkey) > 100:
+                raise ValueError(
+                    'Keys must be shorter than {} characters.\nYou passed {}\nLength = {}'.format(
+                        100, subkey, len(subkey)))
             allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_.1234567890'
             for c in subkey:
                 if not c in allowed_characters:
@@ -399,7 +401,7 @@ class DataBase:
     def save_db_state(self):
         '''saves the data which defines the state of this database to db_state.json'''
         ## things that define the state of this db and should be saved
-        out = {'_registeredDumpers': [e.__name__ for e in self._registeredDumpers], \
+        out = {'_registeredDumpers': [e.__name__ for e in self._registeredDumpers],
                '_unique_id': self._unique_id,
                '_registered_to_path': self._registered_to_path.as_posix()} 
         with open(self.basedir/'db_state.json', 'w') as f:
@@ -415,6 +417,8 @@ class DataBase:
                 # from string to module
                 for dumper_string in state[name]:
                     self._registeredDumpers.append(importlib.import_module(dumper_string))
+            elif name == '_registered_to_path':
+                self._registered_to_path = Path(state[name])
             else:
                 setattr(self, name, state[name])
 
@@ -738,8 +742,11 @@ class DataBase:
         #     bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
         str_.append(bcolors.OKGREEN + self.basedir.name + bcolors.ENDC)
         lines = calc_recursive_filetree(
-            self, Path(self.basedir), 
-            depth=0, max_depth=max_depth, max_lines_per_key=max_lines_per_key, all_files=all_files)
+            self, 
+            Path(self.basedir), 
+            depth=0, max_depth=max_depth, 
+            max_lines=max_lines, max_lines_per_key=max_lines_per_key, 
+            all_files=all_files)
         for line in lines:
             str_.append(line)
         return "\n".join(str_)
