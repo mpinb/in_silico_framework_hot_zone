@@ -133,7 +133,7 @@ class DistributedDDFWithSaveMethod:
         self._get = get
 
     def save(self):
-        self._db.setitem(self._key,
+        self._db.set(self._key,
                           self.ddf,
                           dumper=self._dumper,
                           get=self._get)

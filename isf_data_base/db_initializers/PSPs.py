@@ -72,7 +72,7 @@ def init(db,
     db['PSPs']['description_key', PSPClass.__name__, 'neuron_param_path', 'confile_path']'''
     pdf = get_PSP_determinants_from_db(db)
     pspdb = db.create_sub_db('PSPs', raise_=False)
-    pspdb.setitem(
+    pspdb.set(
         'parameterfiles',
         get_parameterfiles_df_with_confile_and_neuron_param_path(db),
         dumper=pandas_to_parquet)

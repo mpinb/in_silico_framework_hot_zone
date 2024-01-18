@@ -179,7 +179,7 @@ def save_groupby(db, result, groupby):
         pass
     sub_db = db.create_sub_db(identifier)
     for key in result:
-        sub_db.setitem(key, result[key], dumper=numpy_to_msgpack)
+        sub_db.set(key, result[key], dumper=numpy_to_msgpack)
 
 
 def init(db,

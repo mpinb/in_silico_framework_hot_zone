@@ -532,7 +532,8 @@ def delete_in_background(key):
         logging.warning("Cannot delete key {}. Path {} does not exist".format(key.name, key))
         return None
     key_to_delete = rename_for_deletion(key)
-    p = threading.Thread(target = lambda : shutil.rmtree(key_to_delete)).start()
+    p = threading.Thread(target = lambda : shutil.rmtree(key_to_delete))
+    p.start()
     return p
 
 def is_db(dir_to_data):

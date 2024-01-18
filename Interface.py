@@ -50,19 +50,11 @@ import logging
 logger = logging.getLogger("ISF")
 # Redirect warnings to the logging system. This will format them accordingly.
 logging.captureWarnings(True)
-if not any([h.name == "logger_stream_handler" for h in logger.handlers
-           ]):
-    # If the stream handler hasn't been set yet: set it.
-    # a singular stream handler, so that all logs can redirect to this one
-    logger_stream_handler = logging.StreamHandler(stream=sys.stdout)
-    logger_stream_handler.name = "logger_stream_handler"
-    logger_stream_handler.setFormatter(
-        logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
-    logger.handlers = [logger_stream_handler
-                          ]  # Additional handlers can always be configured.
-logger_stream_handler = [
-    h for h in logger.handlers if h.name == "logger_stream_handler"
-][0]
+logger_stream_handler = logging.StreamHandler(stream=sys.stdout)
+logger_stream_handler.name = "ISF_logger_stream_handler"
+logger_stream_handler.setFormatter(
+    logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
+logger.handlers = [logger_stream_handler]  
 
 try:
     from IPython import display

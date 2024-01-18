@@ -212,7 +212,7 @@ import deap.algorithms
 import deap.tools
 import pickle
 
-logger = logging.getLogger('__main__')
+logger = logging.getLogger('ISF').getChild(__name__)
 
 
 def _evaluate_invalid_fitness(toolbox, population):

@@ -204,6 +204,8 @@ class DataBase:
         time based on the timestamp of the files. When metadata is created in that way,
         the field `metadata_creation_time` is set to `post_hoc`
         '''
+        if VC.get_git_version()['dirty']:
+            logger.warning('The database source folder has uncommitted changes!')
         keys_in_db_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
         for key_str in keys_in_db_without_metadata:
             key = self._convert_key_to_path(key_str)
@@ -224,8 +226,6 @@ class DataBase:
                 'version': 'unknown'
                 }
             
-            if VC.get_git_version()['dirty']:
-                logging.warning('The database source folder has uncommitted changes!')
             # Save metdata, only for the key that does not have any
             json.dump(out, open(key/'metadata.json', 'w'))
             
@@ -362,7 +362,7 @@ class DataBase:
         out.update(VC.get_git_version())
 
         if VC.get_git_version()['dirty']:
-            warnings.warn('The database source folder has uncommitted changes!')
+            logger.warn('The database source folder has uncommitted changes!')
             
         with open(dir_to_data/'metadata.json', 'w') as f:
             json.dump(out, f)
@@ -711,11 +711,11 @@ class DataBase:
             max_depth (int, optional): How deep you want the filestructure to be. Defaults to 2.
             max_lines (int, optional): How long you want your filelist to be. Defaults to 20.
         """
-        logger.log(
+        print(
             self._get_str(
                 depth=depth, max_depth=max_depth, max_lines=max_lines,
                 all_files=all_files, max_lines_per_key=max_lines_per_key),
-                level=logging.NOTSET)
+            )
     
     def _get_str(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3):
         """Fetches a string representation for this db in a tree structure.

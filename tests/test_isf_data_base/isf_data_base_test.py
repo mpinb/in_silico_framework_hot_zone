@@ -44,7 +44,7 @@ def test_get_dumper_string_by_savedir(empty_db):
     '''dumper string should be the same if it is determined
     post hoc (by providing the path to an already existing folder)
     or from the module reference directly.'''
-    empty_db.setitem('test', 1, dumper=to_pickle)
+    empty_db.set('test', 1, dumper=to_pickle)
     s1 = empty_db._detect_dumper_string_of_existing_key('test')
     s2 = IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
     assert s1 == s2
@@ -54,7 +54,7 @@ def test_can_detect_default_dumper(empty_db):
     '''dumper string should be the same if it is determined
     post hoc (by providing the path to an already existing folder)
     or from the module reference directly.'''
-    empty_db.setitem('test', 1)  # don't specify dumper
+    empty_db.set('test', 1)  # don't specify dumper
     s1 = empty_db._detect_dumper_string_of_existing_key('test')
     assert s1 == 'to_cloudpickle'
 
@@ -64,8 +64,8 @@ def test_metadata_update(empty_db):
     providing a smooth transition from databases, that had not implemented
     metadata to the newer version. This function should not overwrite
     existing metadata'''
-    empty_db.setitem('test', 1)
-    empty_db.setitem('test2', 1, dumper=to_pickle)
+    empty_db.set('test', 1)
+    empty_db.set('test2', 1, dumper=to_pickle)
     msg1 = "{} =/= {}".format(empty_db.metadata['test']['version'],
                               get_versions()['version'])
     msg2 = "{} =/= {}".format(empty_db.metadata['test2']['version'],
@@ -203,14 +203,14 @@ def test_keys_of_sub_dbs_can_be_called_with_a_single_tuple(empty_db):
 
 
 def test_sub_db_does_not_overwrite_existing_keys(empty_db):
-    empty_db.setitem('asd', 1)
+    empty_db.set('asd', 1)
     with pytest.raises(DataBaseException):
         empty_db.create_sub_db('asd')
 
 
 def test_can_set_items_using_different_dumpers(empty_db):
-    empty_db.setitem('test_self', 1)
-    empty_db.setitem('test_to_pickle', 1, dumper=to_pickle)
+    empty_db.set('test_self', 1)
+    empty_db.set('test_to_pickle', 1, dumper=to_pickle)
     assert empty_db['test_self'] == empty_db['test_to_pickle']
 
 

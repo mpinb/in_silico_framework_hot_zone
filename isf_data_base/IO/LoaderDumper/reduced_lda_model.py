@@ -66,7 +66,7 @@ def dump(obj, savedir):
         st_dumper = pandas_to_parquet
 
     try:
-        db.setitem('st',
+        db.set('st',
                     Rm.st.round(decimals=2).astype(float).reset_index(drop=True),
                     dumper=st_dumper)
         del Rm.st
@@ -78,7 +78,7 @@ def dump(obj, savedir):
             new_lda_value_dicts.append({})
             for k in list(d.keys()):
                 key = 'lda_value_dicts_' + str(lv)
-                db.setitem(key, d[k].round(decimals=2), dumper=numpy_to_npz)
+                db.set(key, d[k].round(decimals=2), dumper=numpy_to_npz)
                 new_lda_value_dicts[-1][k] = key
                 lv += 1
         Rm.lda_value_dicts = new_lda_value_dicts
