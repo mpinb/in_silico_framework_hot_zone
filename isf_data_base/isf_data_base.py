@@ -171,11 +171,12 @@ class DataBase:
         self._unique_id = None
         self._registeredDumpers = []
         self._registered_to_path = None
+        self._is_legacy = False  # if loading in legacy ModelDataBase
 
         self._forbidden_keys = [
             "dbcore.pickle", "metadata.db", "sqlitedict.db", "Loader.json",  # for backwards compatibility
-            "db_state.json",
-            "Loader.json"
+            "metadata.db.lock", "sqlitedict.db.lock",  # for backwards compatibility
+            "Loader.json", "db_state.json"
         ]
         
         self.metadata = MetadataAccessor(self)
@@ -257,9 +258,13 @@ class DataBase:
     def _is_initialized(self):
         if VC.get_git_version()['dirty']:
             logger.warning('The database source folder has uncommitted changes!')
+        if Path.exists(self.basedir/'dbcore.pickle'):
+            self._is_legacy = True
         if Path.exists(self.basedir/'db_state.json'):
+            # Converted legacy: has both .json and .pickle files.
             return True
         elif Path.exists(self.basedir/'dbcore.pickle'):
+            # Just a legacy. No .json file.
             logger.warning('You are reading a legacy ModelDataBase using the new API. Beware that some functionality may not work (yet)')
             self._db_state_fn = 'dbcore.pickle'
             return True
@@ -297,7 +302,7 @@ class DataBase:
         if isinstance(key, str):
             return self.basedir/key
         elif isinstance(key, tuple):
-            sub_db_path = ['db'] * (len(key) * 2 - 1)
+            sub_db_path = ['db' if not self._is_legacy else 'mdb'] * (len(key) * 2 - 1)
             sub_db_path[0::2] = key
             return Path(self.basedir, *sub_db_path)
         else:
@@ -386,6 +391,21 @@ class DataBase:
             pass
         else:
             raise DataBaseException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
+    
+    def _find_legacy_key(self, key):
+        """Given a key, find the corresponding key in the legacy ModelDataBase.
+        Legacy ModelDataBase keys have a random suffix wrapped in underscores, e.g. key_number_1_PGubxd_
+        This method finds all legacy keys that match some key, and returns the first one.
+
+        Args:
+            key (_type_): _description_
+        """
+        matching_keys = [k for k in self.keys() if k.startswith(str(key))]
+        if len(matching_keys) == 0:
+            raise KeyError("Could not find key {} in legacy ModelDataBase".format(key))
+        elif len(matching_keys) > 1:
+            logger.warning("Found multiple keys that match {}. Returning the first one: {}. All matching keys: {}".format(key, matching_keys[0], matching_keys))
+        return matching_keys[0]
     
     def check_if_key_exists(self, key):
         '''returns True, if key exists in a database, False otherwise'''
@@ -545,6 +565,8 @@ class DataBase:
             object: The object saved under db[key]
         """
         # this looks into the metadata.json, gets the name of the dumper, and loads this module form IO.LoaderDumper
+        if self._is_legacy:
+            key = self._find_legacy_key(key)
         key = self._convert_key_to_path(key)
         if not Path.exists(key):
             raise KeyError("Key {} not found in keys of db. Keys found: {}".format(key.name, self.keys()))
