@@ -1,4 +1,5 @@
-import os, platform
+import os, platform, logging
+logger = logging.getLogger("ISF").getChild(__name__)
 
 try:
     import tables
@@ -24,8 +25,8 @@ try:
         [os.path.exists(os.path.join(parent, channels, a)) for a in arch])
     assert any([os.path.exists(os.path.join(parent, netcon, a)) for a in arch])
 except AssertionError:
-    print("neuron mechanisms are not compiled.")
-    print("Trying to compile them. Only works, if nrnivmodl is in PATH")
+    logger.warning("neuron mechanisms are not compiled.")
+    logger.warning("Trying to compile them. Only works, if nrnivmodl is in PATH")
     os.system(
         '(cd {path}; nrnivmodl)'.format(path=os.path.join(parent, channels)))
     os.system(
@@ -37,9 +38,9 @@ except AssertionError:
         assert any(
             [os.path.exists(os.path.join(parent, netcon, a)) for a in arch])
     except AssertionError:
-        print("Could not complile mechanisms. Please do it manually")
+        logger.warning("Could not compile mechanisms. Please do it manually")
         raise
 
-print("Loading mechanisms:")
+logger.info("Loading mechanisms:")
 neuron.load_mechanisms(os.path.join(parent, channels))
 neuron.load_mechanisms(os.path.join(parent, netcon))
