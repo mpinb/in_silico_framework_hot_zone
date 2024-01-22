@@ -565,7 +565,11 @@ def convert_legacy_mdb(basedir):
             outpath = os.path.join(basedir, *key)
         else:
             outpath = os.path.join(basedir, key)
-        dummy = sql_backend[key]
+        try:
+            dummy = sql_backend[key]
+        except Exception as e:
+            print("Error converting {}: {}".format(key, e))
+            continue
         if isinstance(dummy, LoaderWrapper):
             outpath = os.path.join(basedir, dummy.relpath)
         if not os.path.exists(outpath):
