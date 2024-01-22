@@ -32,7 +32,7 @@ def get_client():
     if 'ISF_DISTRIBUTED_LOCK_BLOCK' in os.environ:
         return None, None
     for server in config:
-        print("trying to connect to distributed locking server {}".format(
+        logger.info("trying to connect to distributed locking server {}".format(
             str(server)))
         if server["type"] == "redis":
             import redis
@@ -40,7 +40,7 @@ def get_client():
             try:
                 c = redis.StrictRedis(**server["config"])
                 c.client_list()
-                print("success!")
+                logger.info("success!")
                 return server, c
             except (redis.exceptions.TimeoutError,
                     redis.exceptions.ConnectionError):
@@ -56,7 +56,7 @@ def get_client():
 
             zk = kazoo.client.KazooClient(**server["config"])
             zk.start()
-            print("success!")
+            logger.info("Success!")
             return server, zk
         else:
             raise NotImplementedError()
