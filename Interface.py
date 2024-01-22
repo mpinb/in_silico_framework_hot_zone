@@ -66,15 +66,15 @@ except ImportError:
 #
 # warnings.showwarning = warn_with_traceback
 
-# todo: the version is not specific to isf_data_base,
+# todo: the version is not specific to model_data_base,
 # therefore - ideally - the _version.py file would not live in the
 # subfolder mondel data base but in the top folder.
 # But then it does not work anymore ...
 # Currently, git needs to be installed to be able to get
 # the current version. Use versioneer.py to be able
 # to bundle package without the need of having git installed.
-from isf_data_base._version import get_versions
-from isf_data_base._module_versions import version_cached
+from model_data_base._version import get_versions
+from model_data_base._module_versions import version_cached
 
 if not 'ISF_MINIMIZE_IO' in os.environ:
     versions = get_versions()
@@ -89,41 +89,42 @@ if not 'ISF_MINIMIZE_IO' in os.environ:
 import barrel_cortex
 from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
 from isf_data_base.isf_data_base import DataBase
-#from isf_data_base.analyze.burst_detection import burst_detection
-from isf_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
-from isf_data_base.analyze.temporal_binning import universal as temporal_binning
+from model_data_base.model_data_base import ModelDataBase
+#from model_data_base.analyze.burst_detection import burst_detection
+from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
+from model_data_base.analyze.temporal_binning import universal as temporal_binning
 
-from isf_data_base.analyze.spike_detection import spike_detection, spike_in_interval
-from isf_data_base.analyze.spatiotemporal_binning import universal as spatiotemporal_binning
-from isf_data_base.analyze.spatial_binning import spatial_binning
-from isf_data_base.analyze import split_synapse_activation
-from isf_data_base.analyze.analyze_input_mapper_result import compare_to_neuronet
+from model_data_base.analyze.spike_detection import spike_detection, spike_in_interval
+from model_data_base.analyze.spatiotemporal_binning import universal as spatiotemporal_binning
+from model_data_base.analyze.spatial_binning import spatial_binning
+from model_data_base.analyze import split_synapse_activation
+from model_data_base.analyze.analyze_input_mapper_result import compare_to_neuronet
 
-from isf_data_base.IO.LoaderDumper import dask_to_csv as dumper_dask_to_csv
-from isf_data_base.IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
-from isf_data_base.IO.LoaderDumper import numpy_to_npz as dumper_numpy_to_npz
-from isf_data_base.IO.LoaderDumper import numpy_to_msgpack as dumper_numpy_to_msgpack
-from isf_data_base.IO.LoaderDumper import pandas_to_pickle as dumper_pandas_to_pickle
-from isf_data_base.IO.LoaderDumper import pandas_to_msgpack as dumper_pandas_to_msgpack
-from isf_data_base.IO.LoaderDumper import pandas_to_parquet as dumper_pandas_to_parquet
-from isf_data_base.IO.LoaderDumper import dask_to_msgpack as dumper_dask_to_msgpack
-from isf_data_base.IO.LoaderDumper import dask_to_categorized_msgpack as dumper_dask_to_categorized_msgpack
-from isf_data_base.IO.LoaderDumper import cell as dumper_cell
-from isf_data_base.IO.LoaderDumper import to_pickle as dumper_to_pickle
-from isf_data_base.IO.LoaderDumper import to_cloudpickle as dumper_to_cloudpickle
-from isf_data_base.IO.LoaderDumper import to_msgpack as dumper_to_msgpack
-from isf_data_base.IO.LoaderDumper import reduced_lda_model as dumper_reduced_lda_model
+from model_data_base.IO.LoaderDumper import dask_to_csv as dumper_dask_to_csv
+from model_data_base.IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
+from model_data_base.IO.LoaderDumper import numpy_to_npz as dumper_numpy_to_npz
+from model_data_base.IO.LoaderDumper import numpy_to_msgpack as dumper_numpy_to_msgpack
+from model_data_base.IO.LoaderDumper import pandas_to_pickle as dumper_pandas_to_pickle
+from model_data_base.IO.LoaderDumper import pandas_to_msgpack as dumper_pandas_to_msgpack
+from model_data_base.IO.LoaderDumper import pandas_to_parquet as dumper_pandas_to_parquet
+from model_data_base.IO.LoaderDumper import dask_to_msgpack as dumper_dask_to_msgpack
+from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack as dumper_dask_to_categorized_msgpack
+from model_data_base.IO.LoaderDumper import cell as dumper_cell
+from model_data_base.IO.LoaderDumper import to_pickle as dumper_to_pickle
+from model_data_base.IO.LoaderDumper import to_cloudpickle as dumper_to_cloudpickle
+from model_data_base.IO.LoaderDumper import to_msgpack as dumper_to_msgpack
+from model_data_base.IO.LoaderDumper import reduced_lda_model as dumper_reduced_lda_model
 
 if six.PY3:
-    from isf_data_base.IO.LoaderDumper.shared_numpy_store import SharedNumpyStore, shared_array_from_numpy, shared_array_from_disk, shared_array_from_shared_mem_name
+    from model_data_base.IO.LoaderDumper.shared_numpy_store import SharedNumpyStore, shared_array_from_numpy, shared_array_from_disk, shared_array_from_shared_mem_name
 
-from isf_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
-from isf_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
-from isf_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format
-from isf_data_base.IO.roberts_formats import read_InputMapper_summary
+from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
+from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
+from model_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format
+from model_data_base.IO.roberts_formats import read_InputMapper_summary
 
-from isf_data_base.db_initializers import load_simrun_general as db_init_simrun_general
-from isf_data_base.db_initializers import synapse_activation_binning as db_init_synapse_activation_binning
+from model_data_base.db_initializers import load_simrun_general as db_init_simrun_general
+from model_data_base.db_initializers import synapse_activation_binning as db_init_synapse_activation_binning
 
 load_param_files_from_db = db_init_simrun_general.load_param_files_from_db
 load_initialized_cell_and_evokedNW_from_db = db_init_simrun_general.load_initialized_cell_and_evokedNW_from_db
@@ -131,15 +132,15 @@ load_initialized_cell_and_evokedNW_from_db = db_init_simrun_general.load_initial
 synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
 db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
 
-from isf_data_base.analyze import split_synapse_activation  #, color_cellTypeColorMap, excitatory, inhibitory
-from isf_data_base.utils import silence_stdout
-from isf_data_base.utils import select, pandas_to_array, pooled_std
-from isf_data_base.utils import skit, chunkIt
-from isf_data_base.utils import cache
-from isf_data_base import utils
-from isf_data_base.isf_data_base import get_db_by_unique_id
-from isf_data_base.isf_data_base_register import assimilate_remote_register
-from isf_data_base.dbopen import resolve_db_path, create_db_path
+from model_data_base.analyze import split_synapse_activation  #, color_cellTypeColorMap, excitatory, inhibitory
+from model_data_base.utils import silence_stdout
+from model_data_base.utils import select, pandas_to_array, pooled_std
+from model_data_base.utils import skit, chunkIt
+from model_data_base.utils import cache
+from model_data_base import utils
+from model_data_base.model_data_base import get_db_by_unique_id
+from model_data_base.model_data_base_register import assimilate_remote_register
+from model_data_base.dbopen import resolve_db_path, create_db_path
 
 try:  ##to avoid import errors in distributed system because of missing matplotlib backend
     import matplotlib
@@ -228,7 +229,7 @@ def svg2emf(filename, path_to_inkscape="/usr/bin/inkscape"):
     logger.info(os.system(command))
 
 
-from isf_data_base._module_versions import version_cached
+from model_data_base._module_versions import version_cached
 
 
 def print_module_versions():
