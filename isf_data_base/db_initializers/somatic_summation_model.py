@@ -174,7 +174,7 @@ def init(db,
     db_vt = db.create_sub_db('voltage_traces_somatic_summation_model',
                                 raise_=False)
     if block_till_saved:
-        db_vt.setitem((description_key, PSPClass_name),
+        db_vt.set((description_key, PSPClass_name),
                        vt_new,
                        dumper=dask_to_msgpack,
                        scheduler=client)
