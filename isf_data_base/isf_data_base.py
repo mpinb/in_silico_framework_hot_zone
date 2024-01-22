@@ -421,10 +421,10 @@ class DataBase:
         '''sets the state of the database according to db_state.json/dbcore.pickle''' 
         with open(self.basedir/self._db_state_fn, 'r') as f:
             if self._db_state_fn.endswith('.json'):
-                state = json.load(out, f)
+                state = json.load(f)
             elif self._db_state_fn.endswith('.pickle'):
                 import cloudpickle
-                cloudpickle.load(out, f)
+                state = cloudpickle.load(f)
             
         for name in state:
             if name == '_registeredDumpers':
