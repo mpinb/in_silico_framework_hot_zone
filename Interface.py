@@ -46,15 +46,7 @@ import math
 
 ### logging setup
 import logging
-# All loggers will inherit the root logger's level and handlers
-logger = logging.getLogger("ISF")
-# Redirect warnings to the logging system. This will format them accordingly.
-logging.captureWarnings(True)
-logger_stream_handler = logging.StreamHandler(stream=sys.stdout)
-logger_stream_handler.name = "ISF_logger_stream_handler"
-logger_stream_handler.setFormatter(
-    logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
-logger.handlers = [logger_stream_handler]  
+from config.isf_logging import logger
 
 try:
     from IPython import display
@@ -64,7 +56,7 @@ except ImportError:
 try:
     import seaborn as sns
 except ImportError:
-    print("Could not import seaborn")
+    logger.warning("Could not import seaborn")
 
 # def warn_with_traceback(message, category, filename, lineno, file=None, line=None):
 #
@@ -91,8 +83,8 @@ if not 'ISF_MINIMIZE_IO' in os.environ:
     if __version__ == "0+unknown":
         raise OSError("Commit not found\nVersion is {}\nRevision_id is {}). Git is not found, or something else went wrong.".format(__version__, __git_revision__))
     else:
-        print("Current version: {version}".format(version = __version__))
-        print("Current pid: {pid}".format(pid = os.getpid()))
+        logger.info("Current version: {version}".format(version = __version__))
+        logger.info("Current pid: {pid}".format(pid = os.getpid()))
 
 import barrel_cortex
 from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
@@ -160,9 +152,9 @@ try:  ##to avoid import errors in distributed system because of missing matplotl
         from visualize.cell_to_ipython_animation import cell_to_ipython_animation, cell_to_animation, display_animation
         from visualize._figure_array_converter import show_pixel_object, PixelObject
     except ImportError as e:
-        print(e)
+        logger.warning(e)
 except ImportError:
-    print("Could not import matplotlib!")
+    logger.warning("Could not import matplotlib!")
 
 try:
     from simrun2.run_existing_synapse_activations import run_existing_synapse_activations \
@@ -181,7 +173,7 @@ try:
 
     from simrun2.crossing_over.crossing_over_simple_interface import crossing_over as simrun_crossing_over_simple_interface
 except ImportError:
-    print("Could not import full-compartmental-model simulator")
+    logger.warning("Could not import full-compartmental-model simulator")
 
 import single_cell_parser.analyze as sca
 import single_cell_parser as scp
@@ -189,7 +181,7 @@ from single_cell_parser import network  # simrun3.synaptic_strength_fitting reli
 try:
     from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
 except ImportError:
-    print("Could not import visualize.cell_morphology_visualizer!")
+    logger.warning("Could not import visualize.cell_morphology_visualizer!")
 from visualize.utils import write_video_from_images, write_gif_from_images, display_animation_from_images
 
 from simrun2.reduced_model import synapse_activation \
@@ -222,7 +214,7 @@ try:
     from visualize.linked_views.server import LinkedViewsServer
     from visualize.linked_views import defaults as LinkedViewsDefaults
 except ImportError:
-    print('Could not load linked views')
+    logger.warning('Could not load linked views')
 
 from functools import partial
 
@@ -233,17 +225,16 @@ def svg2emf(filename, path_to_inkscape="/usr/bin/inkscape"):
         'env -i', path_to_inkscape, "--file", filename, "--export-emf",
         filename[:-4] + ".emf"
     ])
-    print(os.system(command))
+    logger.info(os.system(command))
 
 
 from isf_data_base._module_versions import version_cached
 
 
 def print_module_versions():
-    print("Loaded modules with __version__ attribute are:")
     module_versions = ["{}: {}".format(x,version_cached.get_module_versions()[x])\
                        for x in sorted(version_cached.get_module_versions().keys())]
-    print(', '.join(module_versions))
+    logger.info("Loaded modules with __version__ attribute are:\n" + ', '.join(module_versions))
 
 
 def get_client(client_port=38786, timeout=120):
@@ -268,11 +259,12 @@ def get_client(client_port=38786, timeout=120):
         if 'soma' in hostname:
             #we're on the soma cluster and have infiniband
             ip = ip.replace('100', '102')  # a bit hackish, but it works
-    print("getting client with ip {}".format(ip))
+    logger.info("Getting client with ip {}".format(ip))
     c = Client(ip + ':' + client_port, timeout=timeout)
-    print("got client {}".format(c))
+    logger.info("Got client {}".format(c))
     return c
 
-print('')
-print('')
+print("\n\n")
 print_module_versions()
+
+logger.setLevel(logging.WARNING)
