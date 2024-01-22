@@ -167,6 +167,7 @@ class DataBase:
         self.parent_db = None
 
         # database state
+        self._db_state_fn = "db_state.json"
         self._unique_id = None
         self._registeredDumpers = []
         self._registered_to_path = None
@@ -260,6 +261,7 @@ class DataBase:
             return True
         elif Path.exists(self.basedir/'dbcore.pickle'):
             logger.warning('You are reading a legacy ModelDataBase using the new API. Beware that some functionality may not work (yet)')
+            self._db_state_fn = 'dbcore.pickle'
             return True
         else:
             return False
@@ -268,7 +270,7 @@ class DataBase:
         _check_working_dir_clean_for_build(self.basedir)   
         os.makedirs(self.basedir, exist_ok = True)
         # create empty state file. 
-        with open(self.basedir/'db_state.json', 'w'):
+        with open(self.basedir/self._db_state_fn, 'w'):
             pass
         self._set_unique_id()
         self._registeredDumpers.append(DEFAULT_DUMPER)
@@ -408,13 +410,21 @@ class DataBase:
         out = {'_registeredDumpers': [e.__name__ for e in self._registeredDumpers], \
                '_unique_id': self._unique_id,
                '_registered_to_path': self._registered_to_path.as_posix()} 
-        with open(self.basedir/'db_state.json', 'w') as f:
-            json.dump(out, f)
+        with open(self.basedir/self._db_state_fn, 'w') as f:
+            if self._db_state_fn.endswith('.json'):
+                json.dump(out, f)
+            elif self._db_state_fn.endswith('.pickle'):
+                import cloudpickle
+                cloudpickle.dump(out, f)
 
     def read_db_state(self):
-        '''sets the state of the database according to dbcore.pickle''' 
-        with open(self.basedir/'db_state.json', 'r') as f:
-            state = json.load(f)
+        '''sets the state of the database according to db_state.json/dbcore.pickle''' 
+        with open(self.basedir/self._db_state_fn, 'r') as f:
+            if self._db_state_fn.endswith('.json'):
+                state = json.load(out, f)
+            elif self._db_state_fn.endswith('.pickle'):
+                import cloudpickle
+                cloudpickle.load(out, f)
             
         for name in state:
             if name == '_registeredDumpers':
