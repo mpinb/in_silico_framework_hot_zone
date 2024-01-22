@@ -424,13 +424,16 @@ class DataBase:
                 state = json.load(f)
         elif self._db_state_fn.endswith('.pickle'):
             state = pandas_unpickle_fun(self.basedir/self._db_state_fn)
-            print(state)
             
         for name in state:
             if name == '_registeredDumpers':
                 # from string to module
                 for dumper_string in state[name]:
-                    self._registeredDumpers.append(importlib.import_module(dumper_string))
+                    if dumper_string == 'self':
+                        dumper = DEFAULT_DUMPER
+                    else:
+                        dumper = importlib.import_module(dumper_string)
+                    self._registeredDumpers.append(dumper)
             else:
                 setattr(self, name, state[name])
 
