@@ -225,8 +225,6 @@ class DataBase:
                 'version': 'unknown'
                 }
             
-            if VC.get_git_version()['dirty']:
-                logging.warning('The database source folder has uncommitted changes!')
             # Save metdata, only for the key that does not have any
             json.dump(out, open(key/'metadata.json', 'w'))
             
@@ -257,6 +255,8 @@ class DataBase:
         self._unique_id = '_'.join([time, str(os.getpid()), random_string])
     
     def _is_initialized(self):
+        if VC.get_git_version()['dirty']:
+            logger.warning('The database source folder has uncommitted changes!')
         if Path.exists(self.basedir/'db_state.json'):
             return True
         elif Path.exists(self.basedir/'dbcore.pickle'):
@@ -314,7 +314,7 @@ class DataBase:
             key (str|tuple(str)): The key
 
         Raises:
-            ValueError: If the key is over 50 characters long
+            ValueError: If the key is over 100 characters long
             ValueError: If the key contains characters that are not allowed (only numeric or latin alphabetic characters, "-" and "_" are allowed)
         """
         assert isinstance(key_str_tuple, str) or isinstance(key_str_tuple, tuple), "Any key must be a string or tuple of strings. {} is type {}".format(key_str_tuple, type(key_str_tuple))
@@ -324,9 +324,9 @@ class DataBase:
 
         # Check if individual characters are allowed
         for subkey in key_str_tuple:
-            if len(subkey) > 50:
-                raise ValueError('keys must be shorter than 50 characters')
-            allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
+            if len(subkey) > 100:
+                raise ValueError('keys must be shorter than 100 characters')
+            allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_.1234567890'
             for c in subkey:
                 if not c in allowed_characters:
                     raise ValueError('Character {} is not allowed, but appears in key {}'.format(c, subkey))
@@ -419,12 +419,12 @@ class DataBase:
 
     def read_db_state(self):
         '''sets the state of the database according to db_state.json/dbcore.pickle''' 
-        with open(self.basedir/self._db_state_fn, 'r') as f:
-            if self._db_state_fn.endswith('.json'):
+        if self._db_state_fn.endswith('.json'):
+            with open(self.basedir/self._db_state_fn, 'r') as f:
                 state = json.load(f)
-            elif self._db_state_fn.endswith('.pickle'):
-                import cloudpickle
-                state = cloudpickle.load(f)
+        elif self._db_state_fn.endswith('.pickle'):
+            state = pandas_unpickle_fun(self.basedir/self._db_state_fn)
+            print(state)
             
         for name in state:
             if name == '_registeredDumpers':
@@ -450,7 +450,7 @@ class DataBase:
             if raise_:
                 raise DataBaseException("Key %s is already set. Please use del db[%s] first" % (key, key))
         else:           
-            self.setitem(key, None, dumper = just_create_folder)
+            self.set(key, None, dumper = just_create_folder)
         return self[key]
 
     def get_managed_folder(self, key):
@@ -466,7 +466,7 @@ class DataBase:
             if raise_:
                 raise DataBaseException("Key %s is already set. Please use del db[%s] first" % (key, key))
         else:
-            self.setitem(key, None, dumper = shared_numpy_store)        
+            self.set(key, None, dumper = shared_numpy_store)        
         return self[key]
     
     def create_sub_db(self, key, register = 'as_parent', **kwargs):
@@ -564,8 +564,8 @@ class DataBase:
         old_key.rename(new_key)
 
     def set(self, key, value, lock = None, dumper = None, **kwargs):
-        """Main method to save data in a DataBase. :func setitem: and :func __setitem__: call this method.
-        :func setitem: only exists to provide consistent API with dbv1.
+        """Main method to save data in a DataBase. :func set: and :func __setitem__: call this method.
+        :func set: only exists to provide consistent API with dbv1.
         :func __setitem__: is the method that's being called when you use db[key] = value.
         The advantage of using this method is that you can specify a dumper and pass additional arguments to the dumper with **kwargs.
         This method is thread safe, if you provide a lock.
@@ -643,11 +643,11 @@ class DataBase:
             lock.release()
             
     def setitem(self, key, value, dumper = None, **kwargs):
-        warnings.warn('setitem is deprecated. it exist to provide a consistent API with legacy isf_data_base. use set instead.')
+        warnings.warn('set is deprecated. it exist to provide a consistent API with legacy isf_data_base. use set instead.')
         self.set(key, value, dumper = dumper, **kwargs)
 
     def getitem(self, key, lock=None, dumper = None, **kwargs):
-        warnings.warn('setitem is deprecated. it exist to provide a consistent API with legacy isf_data_base. use set instead.')
+        warnings.warn('set is deprecated. it exist to provide a consistent API with legacy isf_data_base. use set instead.')
         self.get(key, lock=lock, dumper=dumper, **kwargs)
     
     def maybe_calculate(self, key, fun, **kwargs):
@@ -661,7 +661,7 @@ class DataBase:
         force_calculation =: if set to True, the value will allways be recalculated
             If there is already an entry in the database with the same key, it will
             be overwritten
-        **kwargs: attributes, that get passed to DataBase.setitem
+        **kwargs: attributes, that get passed to DataBase.set
         
         Example:
         #value is calculated, since it is the first call and not in the database
@@ -684,7 +684,7 @@ class DataBase:
             return self[key]
         except KeyError:
             ret = fun()
-            self.setitem(key, ret, **kwargs)
+            self.set(key, ret, **kwargs)
             return ret    
     
     def keys(self):
@@ -780,11 +780,11 @@ class DataBase:
 class RegisteredFolder(DataBase):
     def __init__(self, path):
         DataBase.__init__(self, path, forcecreate = True)
-        self.setitem('self', None, dumper = just_create_folder)
+        self.set('self', None, dumper = just_create_folder)
         dumper = just_create_folder
         dumper.dump(None, path)
         self._sql_backend['self'] = LoaderWrapper('')
-        self.setitem = None
+        self.set = None
 
 def get_db_by_unique_id(unique_id):
     db_path = isf_data_base_register._get_db_register().registry[unique_id]
