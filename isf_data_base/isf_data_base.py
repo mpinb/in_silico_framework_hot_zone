@@ -256,7 +256,13 @@ class DataBase:
         self._unique_id = '_'.join([time, str(os.getpid()), random_string])
     
     def _is_initialized(self):
-        return Path.exists(self.basedir/'db_state.json')
+        if Path.exists(self.basedir/'db_state.json'):
+            return True
+        elif Path.exists(self.basedir/'dbcore.pickle'):
+            logger.warning('You are reading a legacy ModelDataBase using the new API. Beware that some functionality may not work (yet)')
+            return True
+        else:
+            return False
     
     def _initialize(self):
         _check_working_dir_clean_for_build(self.basedir)   
