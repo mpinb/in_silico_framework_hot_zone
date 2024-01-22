@@ -737,7 +737,7 @@ def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.):
     for kk in list(db['dendritic_recordings'].keys()):
         vt = db['dendritic_recordings'][kk]
         st = spike_detection(vt, threshold=dendritic_spike_times_threshold)
-        m.setitem(kk + '_' + str(dendritic_spike_times_threshold),
+        m.set(kk + '_' + str(dendritic_spike_times_threshold),
                   st,
                   dumper=pandas_to_parquet)
 
