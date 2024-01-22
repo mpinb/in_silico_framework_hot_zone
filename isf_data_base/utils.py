@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import sys, os, time, random, string, warnings, six, cloudpickle, \
     contextlib, io, dask, distributed, logging, tempfile, shutil, \
-         signal, logging, threading, hashlib, collections, inspect
+         signal, logging, threading, hashlib, collections, inspect, json
 from six.moves.cPickle import PicklingError # this import format has potential issues (see six documentation) -rieke
 from pathlib import Path
 from six.moves import cPickle
 import dask.dataframe as dd
+from model_data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
+from model_data_base.model_data_base import LoaderWrapper
 logger = logging.getLogger("ISF").getChild(__name__)
 
 
@@ -532,8 +534,7 @@ def delete_in_background(key):
         logging.warning("Cannot delete key {}. Path {} does not exist".format(key.name, key))
         return None
     key_to_delete = rename_for_deletion(key)
-    p = threading.Thread(target = lambda : shutil.rmtree(key_to_delete))
-    p.start()
+    p = threading.Thread(target = lambda : shutil.rmtree(key_to_delete)).start()
     return p
 
 def is_db(dir_to_data):
@@ -543,3 +544,32 @@ def is_db(dir_to_data):
         'sqlitedict.db',  # for backwards compatibility
         ]
     return any([Path.exists(dir_to_data/e) for e in can_exist])
+
+def convert_legacy_mdb(basedir):
+    """Converts a legacy mdb to be compatible with new mdb
+    Adds .json files for existing .pickle files. Does not overwrite existing files.
+
+    Args:
+        basedir (str): dir of the mdb
+    """
+    db_state = cloudpickle.load(open(os.path.join(basedir, 'dbcore.pickle'), 'rb'))
+    metadata = SQLBackend(os.path.join(basedir, 'metadata.db'))
+    sql_backend = SQLBackend(os.path.join(basedir, 'sqlitedict.db'))
+    
+    with open(os.path.join(basedir, 'db_state.json'), 'w') as f:
+        json.dump(db_state, f)
+    
+    for key in metadata.keys():
+        if not isinstance(key, str):
+            # key is tuple
+            outpath = os.path.join(basedir, *key)
+        else:
+            outpath = os.path.join(basedir, key)
+        dummy = sql_backend[key]
+        if isinstance(dummy, LoaderWrapper):
+            outpath = os.path.join(basedir, dummy.relpath)
+        if not os.path.exists(outpath):
+            print("Warning: key {} not found, but it exists in metadata. Skipping...".format(key))
+            continue
+        with open(os.path.join(outpath, 'metadata.json'), 'w') as f:
+            json.dump(metadata[key], f)
