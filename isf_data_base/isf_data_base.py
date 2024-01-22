@@ -204,8 +204,6 @@ class DataBase:
         time based on the timestamp of the files. When metadata is created in that way,
         the field `metadata_creation_time` is set to `post_hoc`
         '''
-        if VC.get_git_version()['dirty']:
-            logger.warning('The database source folder has uncommitted changes!')
         keys_in_db_without_metadata = set(self.keys()).difference(set(self.metadata.keys()))
         for key_str in keys_in_db_without_metadata:
             key = self._convert_key_to_path(key_str)
@@ -226,6 +224,8 @@ class DataBase:
                 'version': 'unknown'
                 }
             
+            if VC.get_git_version()['dirty']:
+                logging.warning('The database source folder has uncommitted changes!')
             # Save metdata, only for the key that does not have any
             json.dump(out, open(key/'metadata.json', 'w'))
             
@@ -256,7 +256,13 @@ class DataBase:
         self._unique_id = '_'.join([time, str(os.getpid()), random_string])
     
     def _is_initialized(self):
-        return Path.exists(self.basedir/'db_state.json')
+        if Path.exists(self.basedir/'db_state.json'):
+            return True
+        elif Path.exists(self.basedir/'dbcore.pickle'):
+            logger.warning('You are reading a legacy ModelDataBase using the new API. Beware that some functionality may not work (yet)')
+            return True
+        else:
+            return False
     
     def _initialize(self):
         _check_working_dir_clean_for_build(self.basedir)   
@@ -316,11 +322,9 @@ class DataBase:
 
         # Check if individual characters are allowed
         for subkey in key_str_tuple:
-            if len(subkey) > 100:
-                raise ValueError(
-                    'Keys must be shorter than {} characters.\nYou passed {}\nLength = {}'.format(
-                        100, subkey, len(subkey)))
-            allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_.1234567890'
+            if len(subkey) > 50:
+                raise ValueError('keys must be shorter than 50 characters')
+            allowed_characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_1234567890'
             for c in subkey:
                 if not c in allowed_characters:
                     raise ValueError('Character {} is not allowed, but appears in key {}'.format(c, subkey))
@@ -364,7 +368,7 @@ class DataBase:
         out.update(VC.get_git_version())
 
         if VC.get_git_version()['dirty']:
-            logger.warn('The database source folder has uncommitted changes!')
+            warnings.warn('The database source folder has uncommitted changes!')
             
         with open(dir_to_data/'metadata.json', 'w') as f:
             json.dump(out, f)
@@ -401,7 +405,7 @@ class DataBase:
     def save_db_state(self):
         '''saves the data which defines the state of this database to db_state.json'''
         ## things that define the state of this db and should be saved
-        out = {'_registeredDumpers': [e.__name__ for e in self._registeredDumpers],
+        out = {'_registeredDumpers': [e.__name__ for e in self._registeredDumpers], \
                '_unique_id': self._unique_id,
                '_registered_to_path': self._registered_to_path.as_posix()} 
         with open(self.basedir/'db_state.json', 'w') as f:
@@ -417,8 +421,6 @@ class DataBase:
                 # from string to module
                 for dumper_string in state[name]:
                     self._registeredDumpers.append(importlib.import_module(dumper_string))
-            elif name == '_registered_to_path':
-                self._registered_to_path = Path(state[name])
             else:
                 setattr(self, name, state[name])
 
@@ -483,7 +485,7 @@ class DataBase:
         parent_db = self
         for i in range(len(key)):
             if key[i] not in parent_db.keys():
-                # Moved down the tree of existing sub_mdbs: create new sub_dbs from here on
+                # create sub_dbs from here on
                 break
             if not isinstance(parent_db[remaining_keys[0]], DataBase):
                 # The key exists and not an db, but we want to create one here
@@ -715,11 +717,9 @@ class DataBase:
             max_depth (int, optional): How deep you want the filestructure to be. Defaults to 2.
             max_lines (int, optional): How long you want your filelist to be. Defaults to 20.
         """
-        print(
-            self._get_str(
-                depth=depth, max_depth=max_depth, max_lines=max_lines,
-                all_files=all_files, max_lines_per_key=max_lines_per_key),
-            )
+        logger.info(self._get_str(
+            depth=depth, max_depth=max_depth, max_lines=max_lines, 
+            all_files=all_files, max_lines_per_key=max_lines_per_key))
     
     def _get_str(self, depth=0, max_depth=2, max_lines=20, all_files=False, max_lines_per_key=3):
         """Fetches a string representation for this db in a tree structure.
@@ -728,7 +728,7 @@ class DataBase:
         Args:
             max_depth (int, optional): How deep you want the filestructure to be. Defaults to 2.
             max_lines (int, optional): How long you want your filelist to be. Defaults to 20.
-            all_files (bool, optional): Whether to only print keys only, or all files. Defaults to False.
+            only_keys (bool, optional): Whether to only print keys only, or all files. Defaults to False.
             max_lines_per_key (int, optional): How many lines to print per key. Defaults to 4.
 
         Returns:
@@ -742,11 +742,8 @@ class DataBase:
         #     bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
         str_.append(bcolors.OKGREEN + self.basedir.name + bcolors.ENDC)
         lines = calc_recursive_filetree(
-            self, 
-            Path(self.basedir), 
-            depth=0, max_depth=max_depth, 
-            max_lines=max_lines, max_lines_per_key=max_lines_per_key, 
-            all_files=all_files)
+            self, Path(self.basedir), 
+            depth=0, max_depth=max_depth, max_lines_per_key=max_lines_per_key, all_files=all_files)
         for line in lines:
             str_.append(line)
         return "\n".join(str_)
