@@ -46,7 +46,7 @@ import math
 
 ### logging setup
 import logging
-from config.isf_logging import logger
+from config.isf_logging import logger, logger_stream_handler
 
 try:
     from IPython import display
