@@ -4,6 +4,7 @@ import sys, os, time, random, string, warnings, six, cloudpickle, \
          signal, logging, threading, hashlib, collections, inspect, json
 from six.moves.cPickle import PicklingError # this import format has potential issues (see six documentation) -rieke
 from pathlib import Path
+from copy import deepcopy
 from six.moves import cPickle
 import dask.dataframe as dd
 logger = logging.getLogger("ISF").getChild(__name__)
@@ -418,7 +419,7 @@ def colorize_key(key):
 def calc_recursive_filetree(
     db, root_dir_path, max_lines=30,
     depth=0, max_depth=2, max_lines_per_key=3,
-    lines=None, indent=None, all_files=False):
+    lines=None, indent=None, all_files=False, colorize=True):
     """
     Fetches the contents of an db and formats them as a string representing a tree structure
 
@@ -426,6 +427,11 @@ def calc_recursive_filetree(
         root_dir_path (_type_): _description_
         depth (_type_): _description_
     """
+    kwargs = locals()
+    if colorize == False:
+        _colorize_key = lambda x: x.name
+    else:
+        _colorize_key = colorize_key
     lines = [] if lines is None else lines
     indent = "" if indent is None else indent
     tee = '├── '
@@ -433,19 +439,7 @@ def calc_recursive_filetree(
     listd = [e for e in root_dir_path.iterdir()]
     if not all_files:
         listd = [e for e in listd if e.name in db.keys() or e.name == "db"]
-    
-    # these will be adapted depending on the nature of the recursion
-    recursion_kwargs = {
-        'db': db,
-        'root_dir_path': root_dir_path,
-        'depth': depth,
-        'max_depth': max_depth,
-        'max_lines_per_key': max_lines_per_key,
-        'lines': lines,
-        'indent': indent,
-        'all_files': all_files
-    }
-    
+
     for i, element in enumerate(listd):
         # stop iteration if max lines per key is reached
         if i == max_lines_per_key and depth:
@@ -454,23 +448,25 @@ def calc_recursive_filetree(
             return lines
         # stop iteration if max lines is reached
         if len(lines) >= max_lines:
-            lines.append(indent + '...')
+            lines.append(indent + '... ({} more)'.format(len(listd)-i))
             return lines
         
         # format the strings
         prefix = indent + last if i == len(listd)-1 else indent + tee
 
-        if not element.is_dir():
-            # not a directory: just add the file
-            lines.append(prefix + colorize_key(element))
-        elif depth == max_depth:
+        if not element.is_dir():  # not a directory: just add the file
+            lines.append(prefix + _colorize_key(element))
+        elif depth >= max_depth:
+            print(depth)
+            print(element)
             # directory at max depth: add, but don't recurse deeper
-            colored_key = colorize_key(element)
+            colored_key = _colorize_key(element)
             colored_key = str(colored_key + os.sep + '...') if Path.exists(element/'db') else element.name
             lines.append(prefix + colored_key)
-        else:  # Recursion loop
+        else:
             # Directory: recurse deeper
-            lines.append(prefix + colorize_key(element))
+            recursion_kwargs = deepcopy(kwargs)  # adapt kwargs for recursion
+            lines.append(prefix + _colorize_key(element))
             recursion_kwargs['depth'] += 1  # Recursion index
             recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
             recursion_kwargs['root_dir_path'] = element
