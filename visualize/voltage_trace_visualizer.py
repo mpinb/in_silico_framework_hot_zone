@@ -17,7 +17,6 @@ def plot_vt(voltage_traces, key='BAC.hay_measure'):
     plt.close()
 
 def visualize_vt(vt, fig=None, soma_color='k', dend_color='#f7941d', BAC_select = 295+80):
-    plt = I.plt
     if fig is None:
         fig = plt.figure(dpi=200, figsize=(8, 6))
     ax = fig.add_subplot(2, 2, 1)
