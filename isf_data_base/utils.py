@@ -457,8 +457,6 @@ def calc_recursive_filetree(
         if not element.is_dir():  # not a directory: just add the file
             lines.append(prefix + _colorize_key(element))
         elif depth >= max_depth:
-            print(depth)
-            print(element)
             # directory at max depth: add, but don't recurse deeper
             colored_key = _colorize_key(element)
             colored_key = str(colored_key + os.sep + '...') if Path.exists(element/'db') else element.name
