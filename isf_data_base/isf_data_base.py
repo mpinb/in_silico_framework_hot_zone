@@ -752,7 +752,7 @@ class DataBase:
             max_depth (int, optional): How deep you want the filestructure to be. Defaults to 2.
             max_lines (int, optional): How long you want your filelist to be. Defaults to 20.
         """
-        logger.info(self._get_str(
+        print(self._get_str(
             depth=depth, max_depth=max_depth, max_lines=max_lines, 
             all_files=all_files, max_lines_per_key=max_lines_per_key))
     

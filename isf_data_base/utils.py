@@ -460,31 +460,28 @@ def calc_recursive_filetree(
         # format the strings
         prefix = indent + last if i == len(listd)-1 else indent + tee
 
-        # Recursion loop
-        if element.is_dir():
-            # should always be the case if all_files = False
-            # as  this will only iterate keys, which are directories
-            if depth+1 < max_depth:
-                # Directory: recurse deeper
-                # (except if max_depth is reached)
-                lines.append(prefix + colorize_key(element))
-                recursion_kwargs['depth'] += 1
-                recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
-                recursion_kwargs['root_dir_path'] = element
-                if Path.exists(element/'db') and not all_files:
-                    # subdb: recurse deeper without adding 'db' as key
-                    # (only add 'db' if all_files=True)
-                    recursion_kwargs['db'] = db[element.name]
-                    recursion_kwargs['root_dir_path'] = Path(recursion_kwargs['db'].basedir)
-                lines = calc_recursive_filetree(**recursion_kwargs)
-            else:
-                # directory at max depth: don't recurse deeper
-                colored_key = colorize_key(element)
-                colored_key = str(colored_key + os.sep + '...') if Path.exists(element/'db') else element.name
-                lines.append(prefix + colored_key)
-        else:
+        if not element.is_dir():
             # not a directory: just add the file
             lines.append(prefix + colorize_key(element))
+        elif depth == max_depth:
+            # directory at max depth: add, but don't recurse deeper
+            colored_key = colorize_key(element)
+            colored_key = str(colored_key + os.sep + '...') if Path.exists(element/'db') else element.name
+            lines.append(prefix + colored_key)
+        else:  # Recursion loop
+            # Directory: recurse deeper
+            lines.append(prefix + colorize_key(element))
+            recursion_kwargs['depth'] += 1  # Recursion index
+            recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
+            recursion_kwargs['root_dir_path'] = element
+            recursion_kwargs['lines'] = lines
+            if Path.exists(element/'db') and not all_files:
+                # subdb: recurse deeper without adding 'db' as key
+                # (only add 'db' if all_files=True)
+                recursion_kwargs['db'] = db[element.name]
+                recursion_kwargs['root_dir_path'] = Path(recursion_kwargs['db'].basedir)
+            lines = calc_recursive_filetree(**recursion_kwargs)
+            
     return lines
 
 class bcolors:
@@ -539,9 +536,12 @@ def is_db(dir_to_data):
     '''returns True, if dir_to_data is a (sub)db, False otherwise'''
     can_exist = [
         'db_state.json', 
+        'db',
         'sqlitedict.db',  # for backwards compatibility
         ]
-    return any([Path.exists(dir_to_data/e) for e in can_exist])
+    return any([Path.exists(dir_to_data/e) for e in can_exist]) or \
+         any([Path.exists(dir_to_data/'db'/e) for e in can_exist]) or \
+            any([Path.exists(dir_to_data/'mdb'/e) for e in can_exist])
 
 def convert_legacy_mdb(basedir):
     """Converts a legacy mdb to be compatible with new mdb
