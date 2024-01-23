@@ -256,8 +256,6 @@ class DataBase:
         self._unique_id = '_'.join([time, str(os.getpid()), random_string])
     
     def _is_initialized(self):
-        if VC.get_git_version()['dirty']:
-            logger.warning('The database source folder has uncommitted changes!')
         if Path.exists(self.basedir/'dbcore.pickle'):
             self._is_legacy = True
         if Path.exists(self.basedir/'db_state.json'):
@@ -362,6 +360,8 @@ class DataBase:
         '''this is private API and should only
         be called from within DataBase.
         Can othervise be destructive!!!'''        
+        if VC.get_git_version()['dirty']:
+            logger.warning('The database source folder has uncommitted changes!')
         dumper_string = LoaderDumper.get_dumper_string_by_dumper_module(dumper)
 
         out = {'dumper': dumper_string,
