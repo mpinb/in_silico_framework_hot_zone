@@ -497,12 +497,12 @@ def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
     db['sim_trail_index'] = db['voltage_traces'].index.compute()
 
     logging.info('generate metadata ...')
-    db.setitem('metadata', create_metadata(db), dumper=metadata_dumper)
+    db.set('metadata', create_metadata(db), dumper=metadata_dumper)
 
     logging.info('add divisions to voltage traces dataframe')
     vt.divisions = get_voltage_traces_divisions_by_metadata(
         db['metadata'], repartition=repartition)
-    db.setitem('voltage_traces', vt, dumper=to_cloudpickle)
+    db.set('voltage_traces', vt, dumper=to_cloudpickle)
 
     
 
@@ -535,7 +535,7 @@ def _build_synapse_activation(db, repartition=False, n_chunks=5000):
                               meta=delayeds[0].compute(scheduler="threads"),
                               divisions=divisions)
         logging.info('save dataframe')
-        db.setitem(key, ddf, dumper=dumper)
+        db.set(key, ddf, dumper=dumper)
 
     simresult_path = db['simresult_path']
     if simresult_path[-1] == '/' and len(simresult_path) > 1:
@@ -557,7 +557,9 @@ def _build_synapse_activation(db, repartition=False, n_chunks=5000):
 def _get_rec_site_managers(db):
     param_files = glob.glob(os.path.join(db['parameterfiles_cell_folder'],
                                          '*'))
-    param_files = [p for p in param_files if not p.endswith('Loader.pickle')]
+    param_files = [p for p in param_files if not p.endswith('Loader.pickle') \
+        and not p.endswith("Loader.json") \
+            and not p.endswith('metadata.json')]
     logging.info(len(param_files))
     rec_sites = []
     for param_file in param_files:
@@ -602,8 +604,8 @@ def _build_dendritic_voltage_traces(db, suffix_dict=None, repartition=None):
     sub_db = db['dendritic_recordings']
 
     for recSiteLabel in list(suffix_dict.keys()):
-        sub_db.setitem(recSiteLabel, out[recSiteLabel], dumper=to_cloudpickle)
-    #db.setitem('dendritic_voltage_traces_keys', out.keys(), dumper = to_cloudpickle)
+        sub_db.set(recSiteLabel, out[recSiteLabel], dumper=to_cloudpickle)
+    #db.set('dendritic_voltage_traces_keys', out.keys(), dumper = to_cloudpickle)
 
 
 def _build_param_files(db, client):
@@ -706,7 +708,7 @@ def init(db, simresult_path,  \
     if spike_times:
         logging.info("---spike times---")
         vt = db['voltage_traces']
-        db.setitem('spike_times',
+        db.set('spike_times',
                     spike_detection(vt),
                     dumper=dumper)
     logging.info('Initialization succesful.')
@@ -732,11 +734,11 @@ def add_dendritic_voltage_traces(db,
         add_dendritic_spike_times(db, dendritic_spike_times_threshold)
 
 def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.):
-    m = db.create_sub_db('dendritic_spike_times', raise_=False)
+    m = db.create_sub_db('dendritic_spike_times')
     for kk in list(db['dendritic_recordings'].keys()):
         vt = db['dendritic_recordings'][kk]
         st = spike_detection(vt, threshold=dendritic_spike_times_threshold)
-        m.setitem(kk + '_' + str(dendritic_spike_times_threshold),
+        m.set(kk + '_' + str(dendritic_spike_times_threshold),
                   st,
                   dumper=pandas_to_parquet)
 
@@ -807,9 +809,9 @@ def optimize(db,
                         ))
                 if isinstance(value, dd.DataFrame):
                     value = convert_df_columns_to_str(value)
-                    db.setitem(key, value, dumper = dumper, client = client)
+                    db.set(key, value, dumper = dumper, client = client)
                 else:
-                    db.setitem(key, value, dumper = dumper, scheduler=scheduler)
+                    db.set(key, value, dumper = dumper, scheduler=scheduler)
 
 def load_param_files_from_db(db, sti):
     import single_cell_parser as scp

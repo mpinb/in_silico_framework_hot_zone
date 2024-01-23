@@ -42,7 +42,7 @@ class MetadataAccessor:
     def __getitem__(self, key):
         key = self.db._convert_key_to_path(key)
         if not Path.exists(key/'metadata.json'):
-            warnings.warn("No metadata found for key {}".format(key.name))
+            logger.warning("No metadata found for key {}".format(key.name))
             return {
                 'dumper': "unknown",
                 'time': "unknown",
@@ -236,7 +236,7 @@ class DataBase:
             isf_data_base_register.register_db(self._unique_id, self.basedir)
             self._registered_to_path = self.basedir
         except DataBaseException as e:
-            warnings.warn(str(e))
+            logger.warning(str(e))
   
     def _set_unique_id(self):
         """
@@ -373,9 +373,6 @@ class DataBase:
                'metadata_creation_time': "together_with_new_key"}
 
         out.update(VC.get_git_version())
-
-        if VC.get_git_version()['dirty']:
-            warnings.warn('The database source folder has uncommitted changes!')
             
         with open(dir_to_data/'metadata.json', 'w') as f:
             json.dump(out, f)
@@ -386,7 +383,7 @@ class DataBase:
             raise DataBaseException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         #this exists, so jupyter notebooks will not crash when they try to write something
         elif self.readonly == 'warning': 
-            warnings.warn("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+            logger.warning("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         elif self.readonly == False:
             pass
         else:
@@ -480,7 +477,7 @@ class DataBase:
         '''deprecated! Only here to have consistent API with db version 1.
         
         Use create_managed_folder instead'''   
-        warnings.warn("Get_managed_folder is deprecated and only exists to have consistent API with dbv1.  Use create_managed_folder instead.") 
+        logger.warning("Get_managed_folder is deprecated and only exists to have consistent API with dbv1.  Use create_managed_folder instead.") 
         # TODO: remove this method
         return self.create_managed_folder(key)
 
@@ -546,7 +543,7 @@ class DataBase:
         '''deprecated! it only exists to have consistent API to dbv1
         
         Use create_sub_db instead'''
-        warnings.warn("get_sub_db is deprecated. it only exists to have consistent API to dbv1.  Use create_sub_db instead.")         
+        logger.warning("get_sub_db is deprecated. it only exists to have consistent API to dbv1.  Use create_sub_db instead.")         
         #TODO: remove this method
         return self.create_sub_db(key, register = register)
 
@@ -668,11 +665,11 @@ class DataBase:
             lock.release()
             
     def setitem(self, key, value, dumper = None, **kwargs):
-        warnings.warn('set is deprecated. it exist to provide a consistent API with legacy isf_data_base. use set instead.')
+        logger.warning('set is deprecated. it exist to provide a consistent API with legacy isf_data_base. use set instead.')
         self.set(key, value, dumper = dumper, **kwargs)
 
     def getitem(self, key, lock=None, dumper = None, **kwargs):
-        warnings.warn('set is deprecated. it exist to provide a consistent API with legacy isf_data_base. use set instead.')
+        logger.warning('set is deprecated. it exist to provide a consistent API with legacy isf_data_base. use set instead.')
         self.get(key, lock=lock, dumper=dumper, **kwargs)
     
     def maybe_calculate(self, key, fun, **kwargs):
@@ -718,7 +715,10 @@ class DataBase:
         keys_ =  tuple(
             e.name for e in all_keys 
             if e.name not in ("db_state.json", "metadata.json", "Loader.json")
-            and e.name not in ["dbcore.pickle", "metadata.db", "sqlitedict.db", "Loader.json"] # dbv1 compatibility
+            and e.name not in [
+                "dbcore.pickle", "metadata.db", 
+                "sqlitedict.db", "sqlitedict.db.lock",
+                "metadata.db.lock"] # dbv1 compatibility
             and ".deleting." not in e.name
             )
         return keys_

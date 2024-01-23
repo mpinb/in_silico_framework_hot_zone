@@ -6,8 +6,6 @@ from six.moves.cPickle import PicklingError # this import format has potential i
 from pathlib import Path
 from six.moves import cPickle
 import dask.dataframe as dd
-from model_data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
-from model_data_base.model_data_base import LoaderWrapper
 logger = logging.getLogger("ISF").getChild(__name__)
 
 
@@ -552,6 +550,8 @@ def convert_legacy_mdb(basedir):
     Args:
         basedir (str): dir of the mdb
     """
+    from model_data_base.model_data_base import SQLBackend
+    from model_data_base.model_data_base import LoaderWrapper
     db_state = cloudpickle.load(open(os.path.join(basedir, 'dbcore.pickle'), 'rb'))
     metadata = SQLBackend(os.path.join(basedir, 'metadata.db'))
     sql_backend = SQLBackend(os.path.join(basedir, 'sqlitedict.db'))
