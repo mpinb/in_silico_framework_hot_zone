@@ -2,6 +2,8 @@
 
 import os
 import numpy as np
+import logging
+logger = logging.getLogger("ISF").getChild(__name__)
 
 
 def convert_amira_surf_to_vtk(surf_file, outname='surface', outdir='.'):
@@ -118,3 +120,63 @@ def write_vtk_pointcloud_file(out_name=None,
                     "POINT_DATA {}\nSCALARS {} float 1\nLOOKUP_TABLE default\n".
                     format(len(points), scalar_name))
                 of.write(scalar_str_(scalar_data))
+
+
+def save_cells_landmark_files_vtk(
+    sa, 
+    synapse_location_pdf,
+    times_to_show,
+    outdir,
+    celltypes=None,
+    tspan = 1, 
+    set_index = ['synapse_ID', 'celltype']):
+
+    assert "celltype" in sa.columns, "Please add a column 'celltype' to the synapse activation dataframe."
+    assert "celltype" in synapse_location_pdf.columns, "Please add a column 'celltype' to the synapse location dataframe."
+    for ct in sa.celltype.unique():
+        if not ct in synapse_location_pdf.celltype.unique():
+            logger.warning("Celltype {} not in synapse location dataframe, but it is in the synapse activation dataframe.".format(ct))
+    for ct in synapse_location_pdf.celltype.unique():
+        if not ct in sa.celltype.unique():
+            logger.warning("Celltype {} not in synapse activation dataframe, but it is in the synapse location dataframe.".format(ct))
+    celltype_nr_mapper = {ct: i for i, ct in enumerate(sa.celltype.unique())}
+    logger.info("Celltype nr mapper: {}".format(celltype_nr_mapper))
+
+    from simrun2.utils import select_cells_that_spike_in_interval
+    
+    sa = sa.copy()
+    if 'synapse_type' in sa.columns:
+        sa['celltype'] = sa.synapse_type.str.split('_').str[0]
+    elif 'presynaptic_cell_type' in sa.columns:
+        sa['celltype'] = sa.presynaptic_cell_type.str.split('_').str[0]
+
+    if celltypes is None:
+        logger.warning("No celltypes passed. Using all celltypes in the dataset.")
+        celltypes = sa.celltype.unique()
+
+    synapse_location_pdf_grouped = synapse_location_pdf.groupby('celltype').apply(lambda x: x.reset_index(drop = True))
+    
+    # EXC
+    for t in times_to_show:
+        out = []
+        out_scalar = []
+        for celltype in celltypes:
+            selection = select_cells_that_spike_in_interval(
+                sa[sa.celltype == celltype], t, t + tspan, 
+                set_index = set_index)
+            selection_missing = [s for s in selection if not s in synapse_location_pdf_grouped.celltype]        
+            selection = [s for s in selection if s in synapse_location_pdf_grouped.celltype]    
+            if selection_missing:
+                logger.debug("Missing selection: {}".format(selection_missing))
+            pdf = synapse_location_pdf_grouped.loc[selection].positions
+            array = list(pdf)
+            if selection:
+                out.extend(array)
+                out_scalar.extend([celltype_nr_mapper[celltype]] * len(array))
+
+        write_vtk_pointcloud_file(
+            out_dir = outdir,
+            out_name = ('out_' +'%07.3f' % t).replace('.',''),
+            points = out,
+            scalar_data = [out_scalar],
+            scalar_data_names = ['celltype'])
