@@ -551,6 +551,10 @@ class CellMorphologyVisualizer(CMVDataParser):
             colors=self._get_color_per_section(voltage),
             highlight_section=highlight_section,
             highlight_x=highlight_x)
+        fig, ax = self._get_3d_plot_morphology(
+            colors=self._get_color_per_section(voltage),
+            highlight_section=highlight_section,
+            highlight_x=highlight_x)
 
         # Plot synapse activations
         if show_synapses:
@@ -682,6 +686,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         client.gather(futures)
         t2 = time.time()
         logger.info('Images generation runtime (s): ' + str(np.around(t2 - t1, 2)))
+        logger.info('Images generation runtime (s): ' + str(np.around(t2 - t1, 2)))
 
     def _write_vtk_frame(
         self, out_name, out_dir, time_point, scalar_data=None, n_decimals=2):
@@ -801,6 +806,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         plt.axis('off')
         ax.set_xlabel('x')
         ax.set_ylabel('y')
+        ax.set_zlabel('z')
         ax.set_zlabel('z')
         ax.azim = self.azim
         ax.dist = self.dist
@@ -1668,6 +1674,11 @@ def plot_cell_voltage_synapses_in_morphology_3d(
     
     for sec_n in section_numbers:
         points = morphology.loc[morphology['sec_n'] == sec_n]
+        linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
+        points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        lc = Line3DCollection(segments, linewidths=linewidths, color=color_per_section[sec_n])
+        ax.add_collection(lc)
         linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
         points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
