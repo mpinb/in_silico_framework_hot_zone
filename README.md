@@ -9,10 +9,7 @@
 [![In-Silico-Framework (Python 3.9) install and test](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py39-local.yml/badge.svg)](https://github.com/research-center-caesar/in_silico_framework/actions/workflows/test-isf-py39-local.yml)
 [![codecov](https://codecov.io/gh/mpinb/in_silico_framework/graph/badge.svg?token=V4P4QMFM12)](https://codecov.io/gh/mpinb/in_silico_framework)
 
-
-<video width="720" controls>
-<source src="docs/_static/synapses.mp4" type="video/mp4">
-</video>
+[![Synaptic activation of an L5PT]()](https://github.com/mpinb/in_silico_framework/tree/master/docs/_static/synapses.mp4)
 </div>
 
 ## Installation
