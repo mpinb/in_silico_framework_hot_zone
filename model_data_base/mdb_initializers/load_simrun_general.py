@@ -658,12 +658,12 @@ def init(mdb, simresult_path,  \
     '''
     assert dumper in (pandas_to_msgpack, pandas_to_parquet), \
         "Please use a pandas-compatible dumper. You used {}.".format(dumper)
-    if dumper == pandas_to_msgpack and six.PY3:
-        raise DeprecationError(
-            "The pandas_to_msgpack dumper is deprecated for Python 3.8 and onwards. Use pandas_to_parquet instead. \
-                If you _really_ need to use pandas_to_msgpack for whatever reason, use ISF Py2.7 and pretend to be the \
-                test suite by overriding the environment variable ISF_IS_TESTING. See\
-                model_data_base.IO.LoaderDumper.pandas_to_msgpack.dump")
+    if dumper == pandas_to_msgpack and six.PY3 and not os.environ.get('ISF_IS_TESTING', False):
+        raise DeprecationWarning(
+            """The pandas_to_msgpack dumper is deprecated for Python 3.8 and onwards. Use pandas_to_parquet instead. \n\
+            If you _really_ need to use pandas_to_msgpack for whatever reason, use ISF Py2.7 and pretend to be the \
+            test suite by overriding the environment variable ISF_IS_TESTING. See\
+            model_data_base.IO.LoaderDumper.pandas_to_msgpack.dump""")
     if burst_times:
         raise ValueError('deprecated!')
     if rewrite_in_optimized_format:
