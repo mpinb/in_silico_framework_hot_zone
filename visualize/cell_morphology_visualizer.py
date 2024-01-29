@@ -727,7 +727,8 @@ class CellMorphologyVisualizer(CMVDataParser):
         assert len(scalar_data) == len(self.sections), \
             "Scalar data does not match number of sections. Scalar data: {}, sections: {}".format(len(scalar_data), len(self.sections))
         
-        # Duplicate parent points as first point of each section
+        # VTK gets angry if you re-use a point for multiple lines
+        # So we will duplicate the last point of each parent section
         lookup_table = self.morphology.iloc[::-1]
         for sec in self.sections[1:]:
             parent_sec = self.parents[sec]
@@ -744,12 +745,13 @@ class CellMorphologyVisualizer(CMVDataParser):
             of.write(header_(out_name))
 
             # Points
+            logging.info("Writing points...")
             of.write("POINTS {} float\n".format(len(lookup_table)))
             of.write(points_str_(lookup_table[['x', 'y', 'z']].values))
-            # of.write(points_str_(self.points.values))
 
             # Line
-            # LINES n_cells total_amount_integers
+            # format: LINES n_cells total_amount_integers
+            logging.info("Writing lines...")
             lines_str = ""
             n_lines = 0
             n_comps = 0
@@ -764,24 +766,24 @@ class CellMorphologyVisualizer(CMVDataParser):
                 lines_str += '\n'
             of.write("LINES {n_lines} {size}\n".format(n_lines=n_lines,
                                                        size=n_comps))
-            # WARNING: size of lines is the amount of line vertices plus the leading number defining the amount of vertices per line
-            # which happens to be n_points + n_sections (since the sections are not connected)
+            # WARNING: total_amount_integers is the amount of line vertices plus the leading number defining the amount of vertices per line
+            # which happens to be n_points + n_sections after duplicating the parent section ends
+            # e.g. 2 16 765 means index 765 and 16 define a single line, the leading 2 defines the amount of points that define a line
             of.write(lines_str)
 
-            # e.g. 2 16 765 means index 765 and 16 define a single line, the leading 2 defines the amount of points that define a line
-            #of.write(line_pairs_str_(self.line_pairs))
-
-            # section id
+            # Additional point data
             of.write("POINT_DATA {}\n".format(len(lookup_table)))
             of.write("SCALARS section_id int 1\nLOOKUP_TABLE default\n")
             of.write(scalar_str_(lookup_table['sec_n'].astype(int).values))
 
             # Scalar data (as of now only membrane voltages and diameter)
             if scalar_data:
+                logging.info("Writing scalar data...")
                 of.write("SCALARS Vm float 1\nLOOKUP_TABLE default\n")
                 for scalar_data_ in scalar_data:
                     of.write(membrane_voltage_str_(scalar_data_))
             # Diameters
+            logging.info("Writing diameters...")
             of.write("SCALARS Diameter float 1\nLOOKUP_TABLE default\n")
             of.write(scalar_str_(lookup_table['diameter'].values))
 
