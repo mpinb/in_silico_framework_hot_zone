@@ -54,7 +54,7 @@ class CMVDataParser:
         ][0]
         self.soma = self.cell.soma
         self.soma_center = np.mean(soma.pts, axis=0)
-
+        self.parents = {}
         self.morphology = self._get_morphology(cell)  # a pandas DataFrame
         self.sections = self.morphology['sec_n'].unique()
         self.n_sections = len(self.sections)
@@ -232,12 +232,7 @@ class CMVDataParser:
             elif sec.label in ['AIS', 'Myelin']:
                 continue
             else:
-                # Point that belongs to the previous section: first point of this section
-                x, y, z = sec.parent.pts[-1]
-                n_seg_parent = len([seg.x for seg in sec.parent])
-                d = sec.parent.diamList[-1]
-                points.append([x, y, z, d, sec_n, 0])
-
+                self.parents[sec_n] = cell.sections.index(sec.parent)
                 # Points within the same section
                 xs_in_sec = [seg.x for seg in sec]
                 n_segments = len([seg for seg in sec])
@@ -257,57 +252,56 @@ class CMVDataParser:
     def _get_voltages_at_timepoint(self, time_point):
         '''
         Retrieves the VOLTAGE along the whole cell morphology from cell object at a particular time point.
-        Fetches this voltage from the original cell object
+        Each voltage is defined per section in the morphology. 
+        Note that the array of data per section each time starts with the last point of its parent section.
+
+        Fetches this voltage from the original cell object.
 
         Args:
          - time_point: time point from which we want to gather the voltage
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
-        voltage_points = np.empty(len(self.morphology) + self.n_sections -
-                                  1)  # pre-allocate memory
-        voltage_points[0] = self.soma.recVList[0][n_sim_point]
-        i = 1  # keeps track of which index to fill in voltage_points
-        for sec_n, sec in enumerate(
-            [sec for sec in self.cell.sections if sec.label != "Soma"]):
+        voltage_points = [[self.soma.recVList[0][n_sim_point]]]
+        for sec_n, sec in enumerate([sec for sec in self.cell.sections if sec.label not in ("Soma", "Myelin", "AIS")]):
             n_segs = len([seg for seg in sec])
-            voltage_points[i] = sec.parent.recVList[-1][n_sim_point]
-            i += 1
-            for n, pt in enumerate(sec.pts):
-                seg_n = int(n_segs * n / len(sec.pts))
-                voltage_points[i] = sec.recVList[seg_n][n_sim_point]
-                i += 1
+            n_pts = len(sec.pts)
+            # First point of this section is last point of prev section
+            voltage_points_this_section = [sec.parent.recVList[-1][n_sim_point]]
+            for n, _ in enumerate(sec.pts):
+                seg_n = int(n* n_segs / (n_pts-1)) if n != n_pts-1 else n_segs-1
+                voltage_points_this_section.append(sec.recVList[seg_n][n_sim_point])
+            voltage_points.append(voltage_points_this_section)
         return voltage_points
 
+    def _get_voltages_per_point_at_timepoint(self, time_point):
+        v_per_section = self._get_voltages_at_timepoint(time_point)
+        v_per_point = v_per_section[0]
+        for v in v_per_section[1:]:
+            v_per_point.extend(v[1:])
+        return v_per_point
+    
     def _get_ion_dynamic_at_timepoint(self, time_point, ion_keyword):
         '''
         Retrieves the ion dynamics along the whole cell morphology from cell object at a particular time point.
+        Note that the array of data per section each time starts with the last point of its parent section.
 
         Args:
          - time_point: time point from which we want to gather the voltage
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
-        ion_points = np.empty(len(self.morphology) + self.n_sections -
-                              1)  # pre-allocate memory
-        ion_points[
-            0] = self.soma.recordVars[ion_keyword][0][n_sim_point] or None
-        i = 1  # keeps track of which index to fill in ion_points
-        for sec_n, sec in enumerate(
-            [sec for sec in self.cell.sections if sec.label != "Soma"]):
+        ion_points = [[self.soma.recordVars[ion_keyword][0][n_sim_point] or None]]
+        for sec_n, sec in enumerate([sec for sec in self.cell.sections if sec.label != "Soma"]):
             n_segs = len([seg for seg in sec])
+            n_pts = len(sec.pts)
             if len(sec.recordVars[ion_keyword]) > 0:
-                ion_points[i] = sec.parent.recordVars[ion_keyword][-1][
-                    n_sim_point]
+                ion_points_this_section = [sec.parent.recordVars[ion_keyword][-1][n_sim_point]]
             else:
-                ion_points[i] = None
-            i += 1
+                ion_points_this_section = [None]
             for n, pt in enumerate(sec.pts):
-                seg_n = int(n_segs * n / len(sec.pts))
+                seg_n = int(n* n_segs / (n_pts-1)) if n != n_pts-1 else n_segs-1
                 if len(sec.recordVars[ion_keyword]) > 0:
-                    ion_points[i] = sec.recordVars[ion_keyword][seg_n][
-                        n_sim_point]
-                else:
-                    ion_points[i] = None
-                i += 1
+                    ion_points_this_section.append(sec.recordVars[ion_keyword][seg_n][n_sim_point])
+            ion_points.append(ion_points_this_section)
         return ion_points
 
     def _get_soma_voltage_at_timepoint(self, time_point):
@@ -321,6 +315,13 @@ class CMVDataParser:
         sec = [sec for sec in self.cell if sec.label == "Soma"][0]
         return sec.recVList[0][n_sim_point]
 
+    def _get_parent_point(self, sec_n):
+        if sec_n == 0:
+            return None
+        if sec_n > 0:
+            parent = self.morphology[self.morphology['sec_n'] == self.parents[sec_n]].iloc[-1]
+            return parent
+    
     def _get_soma_voltage_between_timepoints(self, t_start, t_end, t_step):
         voltages = []
         for t_ in np.arange(t_start, t_end + t_step, t_step):
@@ -520,18 +521,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         """
         Given an array of scalar values of length n_points, bin them per section and assign a color according to self.cmap.
         """
-        color_per_section = []
-
-        indices_soma = self.morphology[self.morphology['sec_n'] == 0].index
-        v_soma = np.mean(array[indices_soma])
-        c_soma = self.cmap.to_rgba(v_soma)
-        color_per_section.append([c_soma])
-        
-        for sec_n in range(1, self.n_sections):
-            indices = self.morphology[self.morphology['sec_n'] == sec_n].index
-            v = (array[indices[:-1]] + array[indices[1:]])/2
-            c = [self.cmap.to_rgba(v_) for v_ in v]
-            color_per_section.append(c)
+        color_per_section = [self.cmap.to_rgba(data) for data in array]
         return color_per_section
     
     def _plot_cell_voltage_synapses_in_morphology_3d(
@@ -694,7 +684,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         logger.info('Images generation runtime (s): ' + str(np.around(t2 - t1, 2)))
 
     def _write_vtk_frame(
-        self, out_name, out_dir, time_point, scalar_data=None):
+        self, out_name, out_dir, time_point, scalar_data=None, n_decimals=2):
         '''
         Format in which a cell morphology is saved to be visualized in paraview.
         Saves a vtk file for the entire cell at a singular time point, color-coded with scalar data, by default membrane voltage.
@@ -734,6 +724,18 @@ class CellMorphologyVisualizer(CMVDataParser):
                 v_string += '\n'
             return v_string
 
+        assert len(scalar_data) == len(self.sections), \
+            "Scalar data does not match number of sections. Scalar data: {}, sections: {}".format(len(scalar_data), len(self.sections))
+        
+        # Duplicate parent points as first point of each section
+        lookup_table = self.morphology.iloc[::-1]
+        for sec in self.sections[1:]:
+            parent_sec = self.parents[sec]
+            parent_point = self.morphology[self.morphology['sec_n'] == parent_sec].iloc[-1]
+            parent_point["sec_n"] = sec
+            lookup_table = lookup_table.append(parent_point)
+        lookup_table = lookup_table[::-1].reset_index()
+        
         # write out all data to .vtk file
         with open(os.path.join(out_dir, out_name) + "_{:06d}.vtk".format(
                 int(str(round(time_point, 1)).replace('.', ''))),
@@ -742,25 +744,24 @@ class CellMorphologyVisualizer(CMVDataParser):
             of.write(header_(out_name))
 
             # Points
-            of.write("POINTS {} float\n".format(len(self.points)))
-            of.write(points_str_(self.points.values))
+            of.write("POINTS {} float\n".format(len(lookup_table)))
+            of.write(points_str_(lookup_table[['x', 'y', 'z']].values))
+            # of.write(points_str_(self.points.values))
 
             # Line
             # LINES n_cells total_amount_integers
             lines_str = ""
             n_lines = 0
             n_comps = 0
-            for sec_n in range(len(self.cell.sections)):
-                points_this_sec = self.morphology[self.morphology['sec_n'] ==
-                                                  sec_n].index.values
-                if len(points_this_sec) > 0:
-                    n_lines += 1
+            for sec in self.sections:
+                n_lines += 1
+                n_comps += 1
+                sec = lookup_table[lookup_table['sec_n'] == sec]
+                lines_str += str(len(sec))
+                for p in sec.index:
                     n_comps += 1
-                    lines_str += str(len(points_this_sec))
-                    for p in points_this_sec:
-                        n_comps += 1
-                        lines_str += " " + str(p)
-                    lines_str += '\n'
+                    lines_str += " " + str(p)
+                lines_str += '\n'
             of.write("LINES {n_lines} {size}\n".format(n_lines=n_lines,
                                                        size=n_comps))
             # WARNING: size of lines is the amount of line vertices plus the leading number defining the amount of vertices per line
@@ -770,26 +771,19 @@ class CellMorphologyVisualizer(CMVDataParser):
             # e.g. 2 16 765 means index 765 and 16 define a single line, the leading 2 defines the amount of points that define a line
             #of.write(line_pairs_str_(self.line_pairs))
 
-            # Additional data
-            of.write("FIELD data 1\n")
-
             # section id
-            of.write("section_id 1 {} int\n".format(len(self.morphology)))
-            of.write(scalar_str_(self.morphology['sec_n'].values))
+            of.write("POINT_DATA {}\n".format(len(lookup_table)))
+            of.write("SCALARS section_id int 1\nLOOKUP_TABLE default\n")
+            of.write(scalar_str_(lookup_table['sec_n'].astype(int).values))
 
             # Scalar data (as of now only membrane voltages and diameter)
-            of.write("POINT_DATA {}\n".format(len(self.morphology)))
-            if scalar_data is None:
-                pass
-            else:
-                of.write("SCALARS Vm float 1\nLOOKUP_TABLE default\n".format(
-                    len(self.morphology)))
-                of.write(membrane_voltage_str_(scalar_data))
-
+            if scalar_data:
+                of.write("SCALARS Vm float 1\nLOOKUP_TABLE default\n")
+                for scalar_data_ in scalar_data:
+                    of.write(membrane_voltage_str_(scalar_data_))
             # Diameters
-            of.write("SCALARS Diameter float 1\nLOOKUP_TABLE default\n".format(
-                len(self.morphology)))
-            of.write(scalar_str_(self.diameters))
+            of.write("SCALARS Diameter float 1\nLOOKUP_TABLE default\n")
+            of.write(scalar_str_(lookup_table['diameter'].values))
 
     def _get_3d_plot_morphology(
         self, 
@@ -817,10 +811,12 @@ class CellMorphologyVisualizer(CMVDataParser):
             assert len(colors) == len(self.sections), \
                 "Number of colors ({}) does not match number of sections ({}). Either provide one color per section, or group line segment colors by section.".format(len(colors), len(sections))
         for sec_n in self.sections:
-            points = self.morphology.loc[self.morphology['sec_n'] == sec_n]
+            parent = self._get_parent_point(sec_n)
+            points = pd.concat(parent, self.morphology[self.morphology['sec_n'] == sec_n])
             linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
             points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
             segments = np.concatenate([points[:-1], points[1:]], axis=1)
+            assert len(segments) == self.morphology[self.morphology['sec_n'] == sec_n]
             lc = Line3DCollection(segments, linewidths=linewidths, color=colors[sec_n])
             ax.add_collection(lc)
 
@@ -1166,7 +1162,8 @@ class CellMorphologyVisualizer(CMVDataParser):
         t_start=None,
         t_end=None,
         t_step=None,
-        scalar_data=None):
+        scalar_data=None,
+        n_decimals=2):
         '''
         Format in which a cell morphology timeseries (color-coded with voltage) is saved to be visualized in paraview
 
@@ -1190,11 +1187,13 @@ class CellMorphologyVisualizer(CMVDataParser):
                                   time_point=0,
                                   scalar_data=None)
         elif scalar_data.lower() in ("voltage", "membrane voltage", "vm"):
-            for i in range(len(self.times_to_show)):
+            for t in self.times_to_show:
+                v = self._get_voltages_at_timepoint(t)
                 self._write_vtk_frame(out_name,
                                       out_dir,
-                                      time_point=self.times_to_show[i],
-                                      scalar_data=self.voltage_timeseries[i])
+                                      time_point=t,
+                                      scalar_data=v,
+                                      n_decimals=n_decimals)
         else:
             raise NotImplementedError(
                 "scalar data keyword not implemented, please pass one of the following: (None, vm, membrane voltage, voltage)"
@@ -1663,12 +1662,7 @@ def plot_cell_voltage_synapses_in_morphology_3d(
     cmap = mpl.cm.ScalarMappable(norm=norm, cmap=plt.get_cmap('jet'))
     
     # Plot morphology with colorcoded voltage
-    color_per_section = []
-    for sec_n in section_numbers:
-        indices = morphology[morphology['sec_n'] == sec_n].index
-        v = (voltage[indices[:-1]] + voltage[indices[1:]])/2
-        c = [cmap.to_rgba(v_) for v_ in v]
-        color_per_section.append(c)
+    color_per_section = np.array([[cmap.to_rgba(v_) for v_ in v_per_sec] for v_per_sec in voltage])
     
     for sec_n in section_numbers:
         points = morphology.loc[morphology['sec_n'] == sec_n]
