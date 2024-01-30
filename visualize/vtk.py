@@ -180,3 +180,94 @@ def save_cells_landmark_files_vtk(
             points = out,
             scalar_data = [out_scalar],
             scalar_data_names = ['celltype'])
+
+def write_vtk_skeleton_file(
+    lookup_table,
+    out_name, 
+    out_dir, 
+    point_scalar_data=None, 
+    n_decimals=2):
+    """_summary_
+
+    Args:
+        out_name (_type_): _description_
+        out_dir (_type_): _description_
+        time_point (_type_): _description_
+        point_scalar_data ({'name': [[data_per_section]]}, optional): Scalar data for each point in the .vtk file. Each entry in the dictionary is a nested list that defines scalar data for all points in a section.
+        n_decimals (int, optional): _description_. Defaults to 2.
+    """
+
+    def header_(out_name_=out_name):
+        h = "# vtk DataFile Version 4.0\n{}\nASCII\nDATASET POLYDATA\n".format(
+            out_name_)
+        return h
+
+    def points_str_(points_):
+        p = ""
+        for p_ in points_:
+            line = ""
+            for comp in p_:
+                line += str(round(comp, 3))
+                line += " "
+            p += str(line[:-1])
+            p += "\n"
+        return p
+
+    def point_scalar_str_(scalar_data):
+        diameter_string = ""
+        for d in scalar_data:
+            diameter_string += str(d)
+            diameter_string += "\n"
+        return diameter_string
+
+    sections = lookup_table['sec_n'].unique()
+    for dataname, data in point_scalar_data.items():
+        assert len(data) == len(lookup_table), \
+            "Length of point scalar data \"{}\" does not match number of points. Scalar data: {}, sections: {}".format(dataname, len(data), len(sections))
+        
+    # VTK gets angry if you re-use a point for multiple lines
+    # So we will duplicate the last point of each parent section
+    lookup_table = lookup_table
+    
+    # write out all data to .vtk file
+    with open(os.path.join(out_dir, out_name),
+                "w+",
+                encoding="utf-8") as of:
+        of.write(header_(out_name))
+
+        # Points
+        of.write("POINTS {} float\n".format(len(lookup_table)))
+        of.write(points_str_(lookup_table[['x', 'y', 'z']].values))
+
+        # Line
+        # format: LINES n_cells total_amount_integers
+        lines_str = ""
+        n_lines = 0
+        n_comps = 0
+        for sec in sections:
+            n_lines += 1
+            n_comps += 1
+            sec = lookup_table[lookup_table['sec_n'] == sec]
+            lines_str += str(len(sec))
+            for p in sec.index:
+                n_comps += 1
+                lines_str += " " + str(p)
+            lines_str += '\n'
+        of.write("LINES {n_lines} {size}\n".format(n_lines=n_lines,
+                                                    size=n_comps))
+        # WARNING: total_amount_integers is the amount of line vertices plus the leading number defining the amount of vertices per line
+        # which happens to be n_points + n_sections after duplicating the parent section ends
+        # e.g. 2 16 765 means index 765 and 16 define a single line, the leading 2 defines the amount of points that define a line
+        of.write(lines_str)
+
+        # Additional point data: section_id
+        of.write("POINT_DATA {}\n".format(len(lookup_table)))
+        of.write("SCALARS section_id int 1\nLOOKUP_TABLE default\n")
+        of.write(point_scalar_str_(lookup_table['sec_n'].astype(int).values))
+
+        # Scalar data (as of now only membrane voltages and diameter)
+        if point_scalar_data:
+            for name, data in point_scalar_data.items():
+                of.write("SCALARS {} float 1\nLOOKUP_TABLE default\n".format(name))
+                of.write(point_scalar_str_(data))
+    
