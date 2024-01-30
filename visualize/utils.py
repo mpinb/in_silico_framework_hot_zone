@@ -283,7 +283,7 @@ def find_files_and_order_them(files, files_format='.png'):
 
 
 class Arrow3D(FancyArrowPatch):
-
+    """see https://gist.github.com/WetHat/1d6cd0f7309535311a539b42cccca89c"""
     def __init__(self, x, y, z, dx, dy, dz, *args, **kwargs):
         super().__init__((0, 0), (0, 0), *args, **kwargs)
         self._xyz = (x, y, z)
@@ -354,19 +354,36 @@ def draw_arrow(morphology,
             "Please provide either a section index to highlight, or a distance from soma x."
         )
 
-    # get start of arrow
-    start_x, start_y, start_z = x, y, z + arrow_size
-    dx, dy, dz = 0, 0, -arrow_size
+    # get start of arrow: point down
+    start_x, start_y, start_z = x, y, z
+    dx, dy, dz = 0, 0, 0
     ddx = ddy = 0
+    if 'orientation' in highlight_arrow_args:
+        orientation = highlight_arrow_args['orientation']
+        del highlight_arrow_args['orientation']
+        if 'x' in orientation:
+            start_x += arrow_size
+            dx -= arrow_size
+        if 'y' in orientation:
+            start_y += arrow_size
+            dy -= arrow_size
+        if 'z' in orientation:
+            start_z += arrow_size
+            dz -= arrow_size
+    else:
+        # point down by default
+        start_z += arrow_size
+        dz -= arrow_size
 
     if 'rotation' in highlight_arrow_args:
+        print("rotating arrow")
         alpha = highlight_arrow_args['rotation']
         del highlight_arrow_args['rotation']
         dx2, dz2 = np.dot(
             np.array([[np.cos(alpha), -np.sin(alpha)],
                       [np.sin(alpha), np.cos(alpha)]]), [dx, dz])
-        start_x = start_x + (dx - dx2)
-        start_z = start_z + (dz - dz2)
+        start_x = start_x - dx2 + dx
+        start_z = start_z - dz2 + dz
         dx = dx2
         dz = dz2
 
