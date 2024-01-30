@@ -1,4 +1,7 @@
 import Interface as I
+import pandas as pd
+import os
+import single_cell_parser as scp
 import inspect
 import six
 
@@ -45,3 +48,43 @@ def set_default_arguments_if_not_set(o, kwargs):
             errstr = 'Warning! Setting {} to default value {}'
             print(errstr.format(n, v))
             setattr(o, n, v)
+
+def get_fraction_of_landmarkAscii(frac, path):
+    'returns fraction of landmarkAscii files defined in path'
+    f = os.path.basename(path)
+    celltype = f.split('.')[-2]
+    positions = scp.read_landmark_file(path)
+    pdf = pd.DataFrame({'positions': positions, 'label': celltype})
+    if len(pdf) == 0:  # cannot sample from empty pdf
+        return pdf
+    if frac >= 1:
+        return pdf
+    else:
+        return pdf.sample(frac=frac)
+
+
+def get_fraction_of_landmarkAscii_dir(frac, basedir=None):
+    'loads all landmarkAscii files in directory and returns dataframe containing'\
+    'position and filename (without suffix i.e. without .landmarkAscii)'
+    out = []
+    for f in os.listdir(basedir):
+        if not f.endswith('landmarkAscii'):
+            continue
+        out.append(get_fraction_of_landmarkAscii(1, os.path.join(basedir, f)))
+
+    return pd.concat(out).sample(frac=frac).sort_values('label').reset_index(
+        drop=True)
+
+def select_cells_that_spike_in_interval(
+    sa,
+    tmin,
+    tmax,
+    set_index=[
+        'synapse_ID', 'synapse_type'
+    ]):
+    pdf = sa.set_index(list(set_index))
+    pdf = pdf[[c for c in pdf.columns if c.isdigit()]]
+    pdf = pdf[((pdf >= tmin) & (pdf < tmax)).any(axis=1)]
+    cells_that_spike = pdf.index
+    cells_that_spike = cells_that_spike.tolist()
+    return cells_that_spike
