@@ -9,7 +9,8 @@ import pandas as pd
 import dask.dataframe as dd
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
-from isf_data_base import utils, DataBase
+from isf_data_base import utils
+from isf_data_base.isf_data_base import DataBase
 from isf_data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, \
     to_cloudpickle, to_pickle, pandas_to_parquet, dask_to_msgpack, pandas_to_msgpack, \
         get_dumper_string_by_dumper_module, dask_to_parquet
@@ -496,12 +497,12 @@ def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
     db['sim_trail_index'] = db['voltage_traces'].index.compute()
 
     logging.info('generate metadata ...')
-    db.setitem('metadata', create_metadata(db), dumper=metadata_dumper)
+    db.set('metadata', create_metadata(db), dumper=metadata_dumper)
 
     logging.info('add divisions to voltage traces dataframe')
     vt.divisions = get_voltage_traces_divisions_by_metadata(
         db['metadata'], repartition=repartition)
-    db.setitem('voltage_traces', vt, dumper=to_cloudpickle)
+    db.set('voltage_traces', vt, dumper=to_cloudpickle)
 
     
 
@@ -534,7 +535,7 @@ def _build_synapse_activation(db, repartition=False, n_chunks=5000):
                               meta=delayeds[0].compute(scheduler="threads"),
                               divisions=divisions)
         logging.info('save dataframe')
-        db.setitem(key, ddf, dumper=dumper)
+        db.set(key, ddf, dumper=dumper)
 
     simresult_path = db['simresult_path']
     if simresult_path[-1] == '/' and len(simresult_path) > 1:
@@ -556,7 +557,9 @@ def _build_synapse_activation(db, repartition=False, n_chunks=5000):
 def _get_rec_site_managers(db):
     param_files = glob.glob(os.path.join(db['parameterfiles_cell_folder'],
                                          '*'))
-    param_files = [p for p in param_files if not p.endswith('Loader.pickle')]
+    param_files = [p for p in param_files if not p.endswith('Loader.pickle') \
+        and not p.endswith("Loader.json") \
+            and not p.endswith('metadata.json')]
     logging.info(len(param_files))
     rec_sites = []
     for param_file in param_files:
@@ -601,8 +604,8 @@ def _build_dendritic_voltage_traces(db, suffix_dict=None, repartition=None):
     sub_db = db['dendritic_recordings']
 
     for recSiteLabel in list(suffix_dict.keys()):
-        sub_db.setitem(recSiteLabel, out[recSiteLabel], dumper=to_cloudpickle)
-    #db.setitem('dendritic_voltage_traces_keys', out.keys(), dumper = to_cloudpickle)
+        sub_db.set(recSiteLabel, out[recSiteLabel], dumper=to_cloudpickle)
+    #db.set('dendritic_voltage_traces_keys', out.keys(), dumper = to_cloudpickle)
 
 
 def _build_param_files(db, client):
@@ -660,12 +663,11 @@ def init(db, simresult_path,  \
     '''
     assert dumper in (pandas_to_msgpack, pandas_to_parquet), \
         "Please use a pandas-compatible dumper. You used {}.".format(dumper)
-    if dumper == pandas_to_msgpack and six.PY3:
-        raise DeprecationError(
-            "The pandas_to_msgpack dumper is deprecated for Python 3.8 and onwards. Use pandas_to_parquet instead. \
-                If you _really_ need to use pandas_to_msgpack for whatever reason, use ISF Py2.7 and pretend to be the \
-                test suite by overriding the environment variable ISF_IS_TESTING. See\
-                isf_data_base.IO.LoaderDumper.pandas_to_msgpack.dump")
+    if dumper == pandas_to_msgpack and six.PY3 and not os.environ.get('ISF_IS_TESTING', False):
+        raise DeprecationWarning(
+            """The pandas_to_msgpack dumper is deprecated for Python 3.8 and onwards. Use pandas_to_parquet instead.\n
+            If you _really_ need to use pandas_to_msgpack for whatever reason, use ISF Py2.7 and pretend to be the test suite by overriding the environment variable ISF_IS_TESTING. 
+            See model_data_base.IO.LoaderDumper.pandas_to_msgpack.dump""")
     if burst_times:
         raise ValueError('deprecated!')
     if rewrite_in_optimized_format:
@@ -706,7 +708,7 @@ def init(db, simresult_path,  \
     if spike_times:
         logging.info("---spike times---")
         vt = db['voltage_traces']
-        db.setitem('spike_times',
+        db.set('spike_times',
                     spike_detection(vt),
                     dumper=dumper)
     logging.info('Initialization succesful.')
@@ -732,11 +734,11 @@ def add_dendritic_voltage_traces(db,
         add_dendritic_spike_times(db, dendritic_spike_times_threshold)
 
 def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.):
-    m = db.create_sub_db('dendritic_spike_times', raise_=False)
+    m = db.create_sub_db('dendritic_spike_times')
     for kk in list(db['dendritic_recordings'].keys()):
         vt = db['dendritic_recordings'][kk]
         st = spike_detection(vt, threshold=dendritic_spike_times_threshold)
-        m.setitem(kk + '_' + str(dendritic_spike_times_threshold),
+        m.set(kk + '_' + str(dendritic_spike_times_threshold),
                   st,
                   dumper=pandas_to_parquet)
 
@@ -807,9 +809,9 @@ def optimize(db,
                         ))
                 if isinstance(value, dd.DataFrame):
                     value = convert_df_columns_to_str(value)
-                    db.setitem(key, value, dumper = dumper, client = client)
+                    db.set(key, value, dumper = dumper, client = client)
                 else:
-                    db.setitem(key, value, dumper = dumper, scheduler=scheduler)
+                    db.set(key, value, dumper = dumper, scheduler=scheduler)
 
 def load_param_files_from_db(db, sti):
     import single_cell_parser as scp
