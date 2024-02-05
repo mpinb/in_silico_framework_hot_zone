@@ -12,7 +12,6 @@ import pandas as pd
 import dask.dataframe as dd
 from Interface import get_client
 from Interface import logger as isf_logger
-from Interface import logger_stream_handler as isf_logger_stream_handler
 from isf_data_base.IO.LoaderDumper import pandas_to_msgpack
 
 logger = logging.getLogger("ISF").getChild(__name__)
