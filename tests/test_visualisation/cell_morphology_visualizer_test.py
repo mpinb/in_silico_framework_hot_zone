@@ -40,7 +40,7 @@ class TestCellMorphologyVisualizer:
     def test_plot_voltage(self):
         self.cmv.plot(
             color="voltage",
-            votlage_legend=True,
+            show_legend=True,
             time_point=0, 
             plot=False)
 
@@ -52,7 +52,6 @@ class TestCellMorphologyVisualizer:
         self.cmv.plot(
             color="voltage",
             synapses=True,
-            synapse_legend=True,
             time_point=0,
             plot=False)
 
@@ -65,8 +64,8 @@ class TestCellMorphologyVisualizer:
         self.cmv.write_gif(
             images_path=outdir,
             color="voltage",
-            show_synapses=True,
-            out_path=os.path.join(outdir, "test_gif.gif"),
+            synapses=True,
+            out_name=os.path.join(outdir, "test_gif.gif"),
             client=client)
 
     @pytest.mark.skipif(

@@ -505,11 +505,11 @@ class CMVDataParser:
                 if len(self.times_to_show) == len(new_time):
                     # there are timepoints that are newly defined
                     if (self.times_to_show != new_time).any():
-                        self.ion_dynamics_timeseries = []
+                        self.ion_dynamics_timeseries = {}
                         self.voltage_timeseries = []
                         self.synapses_timeseries = []
                 else:  # there were no times previously defined
-                    self.ion_dynamics_timeseries = []
+                    self.ion_dynamics_timeseries = {}
                     self.voltage_timeseries = []
                     self.synapses_timeseries = []
             self.times_to_show = new_time
@@ -688,7 +688,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             ion_data = self._get_ion_dynamics_at_timepoint(time_point, keyword)      
             colors = self._get_color_per_section(ion_data)
 
-        elif keyword in mcolors:
+        elif keyword in [*mcolors.BASE_COLORS, *mcolors.TABLEAU_COLORS, *mcolors.CSS4_COLORS, *mcolors.XKCD_COLORS] :
             colors = [keyword for _ in self.sections]
 
         else:
