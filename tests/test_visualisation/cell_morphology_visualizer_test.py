@@ -27,37 +27,45 @@ class TestCellMorphologyVisualizer:
         six.PY2,
         reason="The cell_morphology_visualizer methods are not available on Py2"
     )
-    def test_show_morphology_3d(self):
-        self.cmv.show_morphology_3d(highlight_section=1, plot=False)
+    def test_plot_morphology(self):
+        self.cmv.plot(plot=False)
+        
+    def test_highlight_section(self):
+        self.cmv.plot(highlight_section=1, plot=False)
 
     @pytest.mark.skipif(
         six.PY2,
         reason="The cell_morphology_visualizer methods are not available on Py2"
     )
-    def test_show_voltage_in_morphology_3d(self):
-        self.cmv.show_voltage_in_morphology_3d(time_point=0,
-                                               highlight_section=1,
-                                               plot=False)
+    def test_plot_voltage(self):
+        self.cmv.plot(
+            color="voltage",
+            votlage_legend=True,
+            time_point=0, 
+            plot=False)
 
     @pytest.mark.skipif(
         six.PY2,
         reason="The cell_morphology_visualizer methods are not available on Py2"
     )
-    def test_show_voltage_synapses_in_morphology_3d(self):
-        """
-        TODO: test highlight arrow?
-        """
-        self.cmv.show_voltage_synapses_in_morphology_3d(time_point=0,
-                                                        plot=False)
+    def test_plot_synapses(self):
+        self.cmv.plot(
+            color="voltage",
+            synapses=True,
+            synapse_legend=True,
+            time_point=0,
+            plot=False)
 
     @pytest.mark.skipif(
         six.PY2,
         reason="The cell_morphology_visualizer methods are not available on Py2"
     )
-    def test_write_gif_voltage_synapses_in_morphology_3d(self, tmpdir, client):
+    def test_write_gif(self, tmpdir, client):
         outdir = str(tmpdir.dirname)
-        self.cmv.write_gif_voltage_synapses_in_morphology_3d(
+        self.cmv.write_gif(
             images_path=outdir,
+            color="voltage",
+            show_synapses=True,
             out_path=os.path.join(outdir, "test_gif.gif"),
             client=client)
 
@@ -67,10 +75,10 @@ class TestCellMorphologyVisualizer:
     )
     @pytest.mark.xfail(strict=False,
                        reason="ffmpeg is not installed on the local runner")
-    def test_write_video_voltage_synapses_in_morphology_3d(
+    def test_write_video(
             self, tmpdir, client):
         outdir = str(tmpdir.dirname)
-        self.cmv.write_video_voltage_synapses_in_morphology_3d(
+        self.cmv.write_video(
             images_path=outdir,
             out_path=os.path.join(outdir, "test_video.mp4"),
             client=client)
@@ -79,11 +87,16 @@ class TestCellMorphologyVisualizer:
         six.PY2,
         reason="The cell_morphology_visualizer methods are not available on Py2"
     )
-    def test_display_animation_voltage_synapses_in_morphology_3d(
+    def test_display_animation(
             self, tmpdir, client):
         outdir = str(tmpdir.dirname)
-        self.cmv.display_animation_voltage_synapses_in_morphology_3d(
-            images_path=outdir, client=client)
+        self.cmv.display_animation(
+            color="voltage",
+            show_synapses=True,
+            voltage_legend=True,
+            synapse_legend=True,
+            images_path=outdir, 
+            client=client)
 
 
 class TestCellMorphologyInteractiveVisualizer:
