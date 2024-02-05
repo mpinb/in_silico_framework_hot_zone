@@ -540,7 +540,10 @@ class CMVDataParser:
             return_data = self._get_color_per_section(ion_data) if return_color else ion_data
 
         elif keyword in [*mcolors.BASE_COLORS, *mcolors.TABLEAU_COLORS, *mcolors.CSS4_COLORS, *mcolors.XKCD_COLORS] :
-            return_data = [[keyword for _ in sec.pts] for sec in self.cell.sections]
+            return_data = [[keyword]]  # soma, just one point
+            for sec in self.cell.sections:
+                if not sec.label in ("AIS", "Myelin", "Soma"):
+                    return_data.append([keyword for _ in sec.pts])
 
         else:
             raise ValueError("Color keyword not recognized. Available options are: \"voltage\", \"vm\", \"synapses\", \"synapse\", a color from self.possible_scalars, or a color from matplotlib.colors")
@@ -731,7 +734,6 @@ class CellMorphologyVisualizer(CMVDataParser):
             - show_synapses (bool): whether the synapse activations should be shown
             - time_point (int|float): time point from which we want to gather the voltage/synapses. Defaults to 0
             - save (bool): path where the plot will be saved. If it's empty it will not be saved (Default)
-            - plot (bool): whether the plot should be shown. Set to False when you use this method for writing out (i.e. save != "").
             - highlight_section (int): section number of the section that should be highlighted
             - highlight_x (float): x coordinate of the section that should be highlighted
 
@@ -761,7 +763,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             synapse_legend=self.synapse_legend,
             dpi=self.dpi,
             save=save,
-            plot=False
+            plot=True
         )
         return fig
 
@@ -797,7 +799,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             - time_show_syn_activ: Time in the simulation during which a synapse activation is shown during the visualization
             - vmin: min voltages colorcoded in the cell morphology
             - vmax: max voltages colorcoded in the cell morphology (the lower vmax is, the stronger the APs are observed)
-            - frame_duration: duration of each frame in ms
+            - tpf: duration of each frame in ms
         '''
         assert self._has_simulation_data()
         if not out_name.endswith(".gif"):
@@ -811,7 +813,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             client=client,
             highlight_section=highlight_section,
             highlight_x=highlight_x)
-        write_gif_from_images(images_path, out_name, interval=frame_duration)
+        write_gif_from_images(images_path, out_name, interval=tpf)
 
     def write_video(
         self,

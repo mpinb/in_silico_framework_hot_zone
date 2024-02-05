@@ -25,10 +25,10 @@ class TestCellMorphologyVisualizer:
         six.PY2,
         reason="The cell_morphology_visualizer methods are not available on Py2")
     def test_plot_morphology(self):
-        self.cmv.plot(plot=False)
+        self.cmv.plot()
         
     def test_highlight_section(self):
-        self.cmv.plot(highlight_section=1, plot=False)
+        self.cmv.plot(highlight_section=1)
 
     @pytest.mark.skipif(
         six.PY2,
@@ -37,8 +37,7 @@ class TestCellMorphologyVisualizer:
         self.cmv.plot(
             color="voltage",
             show_legend=True,
-            time_point=0, 
-            plot=False)
+            time_point=0)
 
     @pytest.mark.skipif(
         six.PY2,
@@ -47,8 +46,7 @@ class TestCellMorphologyVisualizer:
         self.cmv.plot(
             color="voltage",
             show_synapses=True,
-            time_point=0,
-            plot=False)
+            time_point=0)
 
     @pytest.mark.skipif(
         six.PY2,
