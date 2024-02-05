@@ -273,12 +273,12 @@ def eaAlphaMuPlusLambdaCheckpoint(population,
         stats(deap.tools.Statistics): generation of statistics
         halloffame(deap.tools.HallOfFame): hall of fame
         cp_frequency(int): generations between checkpoints
-        cp_filename(ModelDataBase or None): db_run, where the checkpoint is stored in [generation]_checlpoint. Was: path to checkpoint filename
+        cp_filename(DataBase or None): db_run, where the checkpoint is stored in [generation]_checlpoint. Was: path to checkpoint filename
         continue_cp(bool): whether to continue
     """
     # added by arco
     if db_run is not None:
-        assert isinstance(db_run, I.ModelDataBase)  # db_run
+        assert isinstance(db_run, I.DataBase)  # db_run
     assert halloffame is None
     # end added by arco
 
