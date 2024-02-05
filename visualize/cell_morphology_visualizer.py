@@ -1001,7 +1001,10 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         Shows an interactive 3D render of the Cell with NO data overlayed.
 
         Args:
-            - background_color: just some grey by default
+            - color (str | [[float]]): If you want some other color overlayed on the cell morphology. 
+                Options: "voltage", "vm", "synapses", "synapse", or a color string, or a nested list of colors for each section
+            - time_point (float | int): time_point at which to plot some scalar data. Ignored when color does not refer to scalar data.
+            - diameter: If the actual diameter is poorly visible, set this value to a fixed diameter.
 
         Returns:
             plotly.graph_objs._figure.Figure: an interactive figure. Usually added to a ipywidgets.VBox object
@@ -1190,6 +1193,12 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
         The parameters :param:t_start, :param:t_end and :param:t_step will define the :param:self.time attribute
 
+        Args:
+        - color (str | [[float]]): If you want some other color overlayed on the cell morphology. 
+            Options: "voltage", "vm", "synapses", "synapse", or a color string, or a nested list of colors for each section
+        - time_point (float | int): time_point at which to plot some scalar data. Ignored when color does not refer to scalar data.
+        - diameter: If the actual diameter is poorly visible, set this value to a fixed diameter.
+        
         """
         if self._keyword_is_scalar_data(color) and time_point is None:
             raise ValueError("You passed scalar data {} as a color, but didn't provide a timepoint at which to plot this. Please specify time_point.".format(color))
