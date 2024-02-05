@@ -536,38 +536,3 @@ def is_db(dir_to_data):
     return any([Path.exists(dir_to_data/e) for e in can_exist]) or \
          any([Path.exists(dir_to_data/'db'/e) for e in can_exist]) or \
             any([Path.exists(dir_to_data/'mdb'/e) for e in can_exist])
-
-def convert_legacy_mdb(basedir):
-    """Converts a legacy mdb to be compatible with new mdb
-    Adds .json files for existing .pickle files. Does not overwrite existing files.
-
-    Args:
-        basedir (str): dir of the mdb
-    """
-    from model_data_base.model_data_base import SQLBackend
-    from model_data_base.model_data_base import LoaderWrapper
-    db_state = cloudpickle.load(open(os.path.join(basedir, 'dbcore.pickle'), 'rb'))
-    metadata = SQLBackend(os.path.join(basedir, 'metadata.db'))
-    sql_backend = SQLBackend(os.path.join(basedir, 'sqlitedict.db'))
-    
-    with open(os.path.join(basedir, 'db_state.json'), 'w') as f:
-        json.dump(db_state, f)
-    
-    for key in metadata.keys():
-        if not isinstance(key, str):
-            # key is tuple
-            outpath = os.path.join(basedir, *key)
-        else:
-            outpath = os.path.join(basedir, key)
-        try:
-            dummy = sql_backend[key]
-        except Exception as e:
-            print("Error converting {}: {}".format(key, e))
-            continue
-        if isinstance(dummy, LoaderWrapper):
-            outpath = os.path.join(basedir, dummy.relpath)
-        if not os.path.exists(outpath):
-            print("Warning: key {} not found, but it exists in metadata. Skipping...".format(key))
-            continue
-        with open(os.path.join(outpath, 'metadata.json'), 'w') as f:
-            json.dump(metadata[key], f)
