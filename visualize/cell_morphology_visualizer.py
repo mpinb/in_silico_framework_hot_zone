@@ -1,5 +1,6 @@
 from biophysics_fitting import get_main_bifurcation_section
 import pandas as pd
+from matplotlib import colors as mcolors
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.axes3d import Axes3D
@@ -102,16 +103,19 @@ class CMVDataParser:
         By default, the simulation is chopped to the specified t_begin and t_end, and evenly divided in 10 timesteps."""
         self.times_to_show = None
         """An array of time points to visualize. Gets calculated from :param:self.t_start, :param:self.t_end and :param:self.t_step"""
-
-        self.scalar_data = None
-        """Scalar data to overlay on the meuron morphology. If there is simulation data available, this is initialized as the membrane voltage, but ion currents are also possible"""
         self.possible_scalars = {
-            'K_Pst.ik', 'Ih.m', 'Ca_LVAst.ik', 'Nap_Et2.ina', 'SK_E2.ik',
-            'Nap_Et2.h', 'K_Pst.h', 'Nap_Et2.m', 'NaTa_t.h', 'SK_E2.z',
-            'Ca_HVA.h', 'Ih.ihcn', 'K_Tst.ik', 'Ca_HVA.m', 'Im.ik',
-            'NaTa_t.ina', 'NaTa_t.m', 'SKv3_1.m', 'Ca_LVAst.h', 'K_Pst.m',
-            'SKv3_1.ik', 'Ca_LVAst.m', 'Ca_HVA.ica', 'Ca_LVAst.ica', 'K_Tst.m',
-            'CaDynamics_E2.cai', 'K_Tst.h', 'cai'
+            'K_Pst.ik', 'K_Pst.m', 'K_Pst.h', 
+            'Ca_LVAst.ica', 'Ca_LVAst.h', 'Ca_LVAst.m', 
+            'Nap_Et2.ina', 'Nap_Et2.m', 'Nap_Et2.h', 
+            'SK_E2.ik', 'SK_E2.z',
+            'Ih.ihcn', 
+            'K_Tst.ik', 'K_Tst.h', 'K_Tst.m',
+            'Im.ik', 'Ih.m', 
+            'NaTa_t.ina', 'NaTa_t.m', 'NaTa_t.h', 
+            'SKv3_1.ik', 'SKv3_1.m', 
+            'Ca_HVA.ica', 'Ca_HVA.m', 'Ca_HVA.h', 
+            'CaDynamics_E2.cai', 
+            'cai'
         }
         """Accepted keywords for scalar data other than membrane voltage."""
 
@@ -176,10 +180,10 @@ class CMVDataParser:
         input population and the value is the list of active synapses for that type of population at that time point. 
         The list contains the 3d coordinates where each active synapse is located."""
         self.synapses_timeseries = []
+        self.ion_dynamics_timeseries = {}
 
         # Time in the simulation during which a synapse activation is shown during the visualization
         self.time_show_syn_activ = 2  # ms
-        self.scalar_data = {"voltage": self.voltage_timeseries}
 
     def _align_trunk_with_z_axis(self, cell):
         """
@@ -303,7 +307,7 @@ class CMVDataParser:
             v_per_point.extend(v[1:])
         return v_per_point
     
-    def _get_ion_dynamic_at_timepoint(self, time_point, ion_keyword):
+    def _get_ion_dynamics_at_timepoint(self, time_point, ion_keyword):
         '''
         Retrieves the ion dynamics along the whole cell morphology from cell object at a particular time point.
         Note that the array of data per section each time starts with the last point of its parent section.
@@ -312,14 +316,14 @@ class CMVDataParser:
          - time_point: time point from which we want to gather the voltage
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
-        ion_points = [[self.soma.recordVars[ion_keyword][0][n_sim_point] or None]]
-        for sec_n, sec in enumerate([sec for sec in self.cell.sections if sec.label != "Soma"]):
+        ion_points = [[self.soma.recordVars[ion_keyword][0][n_sim_point] or np.nan]]
+        for sec_n, sec in enumerate([sec for sec in self.cell.sections if sec.label not in ("Soma", "Myelin", "AIS")]):
             n_segs = len([seg for seg in sec])
             n_pts = len(sec.pts)
             if len(sec.recordVars[ion_keyword]) > 0:
                 ion_points_this_section = [sec.parent.recordVars[ion_keyword][-1][n_sim_point]]
             else:
-                ion_points_this_section = [None]
+                ion_points_this_section = [np.nan]
             for n, pt in enumerate(sec.pts):
                 seg_n = int(n* n_segs / (n_pts-1)) if n != n_pts-1 else n_segs-1
                 if len(sec.recordVars[ion_keyword]) > 0:
@@ -384,21 +388,21 @@ class CMVDataParser:
         '''
         self._update_times_to_show(self.t_start, self.t_end, self.t_step)
         assert ion_keyword in self.possible_scalars, \
-            "Ion keyword not recognised. Possible keywords are: " + str(self.possible_scalars)
+            "Ion keyword \"{}\" not recognised. Possible keywords are: {}".format(ion_keyword, self.possible_scalars)
         assert any([ion_keyword in sec.recordVars.keys() for sec in self.cell.sections]), \
             "No sections found with ion dynamics for ion keyword " + ion_keyword
 
-        if ion_keyword in self.scalar_data.keys():
-            return  # We have already retrieved the voltage timeseries
+        if ion_keyword in self.ion_dynamics_timeseries.keys():
+            return  # We have already calculated the ion_dynamics_timeseries
         else:
-            self.scalar_data[ion_keyword] = []
+            self.ion_dynamics_timeseries[ion_keyword] = []
 
         logger.info("Fetching ion dynamics timeseries...")
         t1 = time.time()
         for time_point in self.times_to_show:  # For each frame of the video/animation
-            ion_dynamics = self._get_ion_dynamic_at_timepoint(
+            ion_dynamics = self._get_ion_dynamics_at_timepoint(
                 time_point, ion_keyword)
-            self.scalar_data[ion_keyword].append(ion_dynamics)
+            self.ion_dynamics_timeseries[ion_keyword].append(ion_dynamics)
         t2 = time.time()
         logger.info('Ion dynamics retrieval runtime (s): ' +
               str(np.around(t2 - t1, 2)))
@@ -448,6 +452,21 @@ class CMVDataParser:
         if all([e == {} for e in self.synapses_timeseries]):
             logger.warning("No synaptic activity found in simulation")
 
+    def _get_timeseries_minmax(self, timeseries):
+        """
+        Timeseries have two axes: time, section_id. Each timeseries[time][section_id] shows values for all points in that section at that time.
+        Getting minmax of nested lists can be annoying, hence this method.
+        
+        Returns min and max for some timeseries across all timepoints and sections.
+        """
+        mn = 1e10
+        mx = -1e10
+        for data_at_time in timeseries:
+            for data_at_section in data_at_time:
+                mn = np.nanmin((np.nanmin(data_at_section), mn))
+                mx = np.nanmax((np.nanmax(data_at_section), mx))
+        return mn, mx
+    
     def _update_times_to_show(self, t_start=None, t_end=None, t_step=None):
         """Checks if the specified time range equals the previously defined one. If not, updates the time range.
         If all arguments are None, does nothing. Useful for defining default time range
@@ -523,16 +542,15 @@ class CellMorphologyVisualizer(CMVDataParser):
         """Rotation degrees of the neuron at each frame during timeseries visualization (in azimuth)"""
         self.dpi = 72
         """Image quality"""
-        self.vmin, self.vmax = -70, 20
+        self.vmin, self.vmax = -70, 20  # legend bounds - intialized for membrane voltage by default
         self.background_color = (1, 1, 1, 1)  # white
         self.norm = mpl.colors.Normalize(vmin=self.vmin, vmax=self.vmax)
-        self.cmap_name = "jet"
-        self.cmap = mpl.cm.ScalarMappable(norm=self.norm, cmap=plt.get_cmap(self.cmap_name))
+        self.cmap = mpl.cm.ScalarMappable(norm=self.norm, cmap=plt.get_cmap("jet"))
         self.show_synapses = True
         """Whether or not to show the synapses on the plots that support this. Can be turned off manually here for e.g. testing purposes."""
         self.synapse_legend = True
         """whether the synapse activations legend should appear in the plot"""
-        self.voltage_legend = True
+        self.legend = True
         """whether the voltage legend should appear in the plot"""
         self.highlight_arrow_args = None
         """Additional arguments for the arrow. See available kwargs on https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.patches.Arrow.html#matplotlib.patches.Arrow"""
@@ -541,9 +559,10 @@ class CellMorphologyVisualizer(CMVDataParser):
         
         self.population_to_color_dict = barrel_cortex.color_cellTypeColorMapHotZone    
 
-    def _get_color_per_section(self, array):
+    def _get_color_per_section(self, array, nan_color="#f0f0f0"):
         """
         Given an array of scalar values of length n_points, bin them per section and assign a color according to self.cmap.
+        If there is no data for a given point, it will be
         """
         color_per_section = [self.cmap.to_rgba(data) for data in array]
         return color_per_section
@@ -553,6 +572,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             path,
             color="grey",
             show_synapses=False,
+            show_legend=False,
             client=None, 
             synapses=None,
             highlight_section=None, 
@@ -588,6 +608,11 @@ class CellMorphologyVisualizer(CMVDataParser):
         # Then images are generated for each specified time step.
         self._update_times_to_show()
         self._calc_voltage_timeseries()
+        if color in self.possible_scalars:
+            self._calc_ion_dynamics_timeseries(color)
+            # update colormap
+            mn, mx = self._get_timeseries_minmax(self.ion_dynamics_timeseries[color])
+            self.set_cmap(self.cmap.cmap.name, vmin=mn, vmax=mx)
         if show_synapses:
             self._calc_synapses_timeseries()
 
@@ -602,10 +627,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         t1 = time.time()
         if client is not None:
             scattered_lookup_table = client.scatter(self.lookup_table, broadcast=True)
-        voltage_legend=None
-        if not isinstance(color, str) and self.voltage_legend:
-            voltage_legend = self.cmap
-        
+        legend=self.cmap if show_legend else None
         
         count = 0
         for time_point in self.times_to_show:
@@ -617,11 +639,12 @@ class CellMorphologyVisualizer(CMVDataParser):
                     lookup_table=self.lookup_table,
                     colors=color_per_section,
                     synapses=self.synapses_timeseries[i] if show_synapses else {},
+                    color_keyword=color,
                     time_point=time_point - self.time_offset,
                     save=filename,
                     population_to_color_dict=self.population_to_color_dict,
                     camera_position=self.camera_position,
-                    voltage_legend=voltage_legend,
+                    legend=legend,
                     synapse_legend=self.synapse_legend,
                     dpi=self.dpi,
                     highlight_section_kwargs=highlight_section_kwargs,
@@ -636,13 +659,11 @@ class CellMorphologyVisualizer(CMVDataParser):
 
     def _color_keyword_to_array(self, keyword, time_point):
         if keyword.lower() in ("voltage", "vm"):
-            assert isinstance(time_point, float) or isinstance(time_point, int), "Please propvide a valid time_point for the voltage"
             self._calc_voltage_timeseries()
             voltage = self._get_voltages_at_timepoint(time_point)
             colors = self._get_color_per_section(voltage)
 
         elif keyword.lower() in ("synapses", "synapse"):
-            assert isinstance(time_point, float) or isinstance(time_point, int), "Please propvide a valid time_point for the synapses"
             colors = []
             for sec in self.sections:
                 for group in dendritic_groups.keys():
@@ -661,12 +682,17 @@ class CellMorphologyVisualizer(CMVDataParser):
                         colors.append(color)
                     else:
                         colors.append('grey')
+                        
+        elif keyword in self.possible_scalars:
+            self._calc_ion_dynamics_timeseries(keyword)
+            ion_data = self._get_ion_dynamics_at_timepoint(time_point, keyword)      
+            colors = self._get_color_per_section(ion_data)
 
-        elif isinstance(keyword, str):
+        elif keyword in mcolors:
             colors = [keyword for _ in self.sections]
 
         else:
-            raise ValueError("Colors not recognized. Available options: (voltage, vm, synapses, synapse, or a color string)")
+            raise ValueError("Color keyword not recognized. Available options are: \"voltage\", \"vm\", \"synapses\", \"synapse\", a color from self.possible_scalars, or a color from matplotlib.colors")
         
         return colors
     
@@ -680,13 +706,12 @@ class CellMorphologyVisualizer(CMVDataParser):
         if vmax is None:
             vmax = self.vmax
         self.norm = mpl.colors.Normalize(vmin, vmax)
-        self.cmap_name = cmap
         self.cmap = mpl.cm.ScalarMappable(norm=self.norm, cmap=plt.get_cmap(cmap))
     
     def plot(
         self,
         color="grey",
-        voltage_legend=True,
+        show_legend=True,
         synapses=False,
         time_point=None,
         save='',
@@ -698,15 +723,15 @@ class CellMorphologyVisualizer(CMVDataParser):
         You can pass various arguments to adapt the plot, e.g. showing an ovelray of the membrane voltage, or synaptic locations.
 
         Args:
-            - color: If you want some other color overlayed on the cell morphology. 
+            - color (str | [[float]]): If you want some other color overlayed on the cell morphology. 
                 Options: "voltage", "vm", "synapses", "synapse", or a color string, or a nested list of colors for each section
-            - voltage_legend: whether the voltage legend should appear in the plot
-            - synapses: whether the synapse activations should be shown
-            - time_point: time point from which we want to gather the voltage/synapses. Defaults to 0
-            - save: path where the plot will be saved. If it's empty it will not be saved (Default)
-            - plot: whether the plot should be shown. Set to False when you use this method for writing out (i.e. save != "").
-            - highlight_section: section number of the section that should be highlighted
-            - highlight_x: x coordinate of the section that should be highlighted
+            - legend (bool): whether the voltage legend should appear in the plot
+            - synapses (bool): whether the synapse activations should be shown
+            - time_point (int|float): time point from which we want to gather the voltage/synapses. Defaults to 0
+            - save (bool): path where the plot will be saved. If it's empty it will not be saved (Default)
+            - plot (bool): whether the plot should be shown. Set to False when you use this method for writing out (i.e. save != "").
+            - highlight_section (int): section number of the section that should be highlighted
+            - highlight_x (float): x coordinate of the section that should be highlighted
 
         '''
         assert time_point is None or time_point < self.times_to_show[-1], "Time point exceeds simulation time"
@@ -715,9 +740,14 @@ class CellMorphologyVisualizer(CMVDataParser):
         if synapses:
             self._calc_synapses_timeseries()
         
+        legend=None
+        if not isinstance(color, str) and self.legend:
+            legend = self.cmap
+        
         fig, ax = get_3d_plot_morphology(
             self.lookup_table,
             colors=self._color_keyword_to_array(color, time_point),
+            color_keyword=color,
             synapses= self._get_synapses_at_timepoint(time_point) if synapses else None,
             time_point=time_point-self.time_offset if type(time_point) in (float, int) else time_point,
             camera_position=self.camera_position,
@@ -725,18 +755,21 @@ class CellMorphologyVisualizer(CMVDataParser):
                 'sec_n': highlight_section,
                 'highlight_x': highlight_x,
                 'arrow_args': self.highlight_arrow_args},
-            voltage_legend=self.cmap if voltage_legend else None,
+            legend=show_legend,
             synapse_legend=self.synapse_legend,
             dpi=self.dpi,
             save=save,
             plot=plot
-                )
+        )
+        return fig
 
     def write_gif(
         self,
         images_path,
+        out_name,
         color='grey',
         show_synapses=False,
+        show_legend=False,
         client=None,
         t_start=None,
         t_end=None,
@@ -765,20 +798,26 @@ class CellMorphologyVisualizer(CMVDataParser):
             - frame_duration: duration of each frame in ms
         '''
         assert self._has_simulation_data()
+        if not out_name.endswith(".gif"):
+            logger.warning(".gif extension not found in out_name. Adding it...")
+            out_name = out_name + ".gif"
         self._timeseries_images_cell_voltage_synapses_in_morphology_3d(
             images_path,
             color=color,
             show_synapses=show_synapses,
+            show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
             highlight_x=highlight_x)
-        write_gif_from_images(images_path, out_path, interval=frame_duration)
+        write_gif_from_images(images_path, out_name, interval=frame_duration)
 
     def write_video(
         self,
         images_path,
+        out_path,
         color='grey',
         show_synapses=False,
+        show_legend=False,
         client=None,
         t_start=None,
         t_end=None,
@@ -813,6 +852,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             images_path,
             color=color,
             show_synapses=show_synapses,
+            show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
             highlight_x=highlight_x)
@@ -827,6 +867,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             images_path,
             color='grey',
             show_synapses=False,
+            show_legend=False,
             client=None,
             t_start=None,
             t_end=None,
@@ -859,6 +900,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             images_path,
             color=color,
             show_synapses=show_synapses,
+            show_legend=show_legend,
             client=client,
             highlight_section=highlight_section,
             highlight_x=highlight_x)
@@ -1309,6 +1351,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
 def get_3d_plot_morphology(
     lookup_table=None,
     colors="grey",
+    color_keyword=None,
     synapses={},
     time_point=None,
     highlight_section_kwargs={'sec_n': None, 'highlight_x': None, 'arrow_args': {}},
@@ -1318,7 +1361,7 @@ def get_3d_plot_morphology(
     save='',
     plot=False,
     synapse_legend=True,
-    voltage_legend=None,
+    legend=None,
     return_figax = True
     ):
 
@@ -1383,14 +1426,16 @@ def get_3d_plot_morphology(
                                 edgecolor='grey',
                                 s=75)
     
-    #----------------- Plot voltage legend
-    if voltage_legend:
+    #----------------- Plot legend
+    if legend:
         cbaxes = fig.add_axes([0.64, 0.13, 0.05, 0.5])  # 0.64, 0.2, 0.05, 0.5
         cbaxes.axis("off")
-        fig.colorbar(voltage_legend, ax=cbaxes,
-                     orientation='vertical',
-                     label='mV',
-                     fraction=0.2)
+        fig.colorbar(
+            legend, 
+            ax=cbaxes,      
+            orientation='vertical',  
+            label=color_keyword,
+            fraction=0.2)
 
     if time_point is not None:
         ax.text2D(
