@@ -24,7 +24,17 @@ logger = logging.getLogger("ISF").getChild(__name__)
 class Cell(object):
     '''
     Cell object providing morphological information
-    and hoc interface
+    and hoc interface. This class is specialized to contain
+    simulation data of single-cell simulations.
+
+    Notable attributes:
+    - self.sections: a list of PySection objects
+        - self.sections[0] is the soma
+        - each section contains a section.vList, recording the voltage
+    - self.synapses: a dictionary of lists of Synapse objects
+    - self.tVec: a hoc Vector recording time
+
+    WARNING: while it contains similar methods, this is not the same class as :class singlecell_input_mapper.cell.Cell:
     '''
 
     def __init__(self):
