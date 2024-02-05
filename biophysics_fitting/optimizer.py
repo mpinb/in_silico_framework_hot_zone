@@ -12,8 +12,12 @@ import numpy
 import deap
 from bluepyopt.deapext import algorithms
 from bluepyopt.deapext.optimisations import WSListIndividual
-import Interface as I
 import six
+import pandas as pd
+from isf_data_base.IO.LoaderDumper import pandas_to_msgpack, pandas_to_parquet, to_pickle
+from isf_data_base.isf_data_base import DataBase
+from isf_data_base import utils as db_utils
+import distributed
 
 
 def robust_int(x):
@@ -38,13 +42,13 @@ def get_max_generation(db_run):
 def save_result(db_run, features, objectives):
     current_key = get_max_generation(db_run) + 1
     if six.PY2:
-        dumper = I.dumper_pandas_to_msgpack
+        dumper = pandas_to_msgpack
     elif six.PY3:
-        dumper = I.dumper_pandas_to_parquet
+        dumper = pandas_to_parquet
     else:
         raise RuntimeError()
     db_run.setitem(str(current_key),
-                    I.pd.concat([objectives, features], axis=1),
+                    pd.concat([objectives, features], axis=1),
                     dumper=dumper)
 
 
@@ -65,7 +69,7 @@ def get_objective_function(db_setup):
     Evaluator = db_setup['get_Evaluator'](db_setup)
 
     def objective_function(param_values):
-        p = I.pd.Series(param_values, index=parameter_df.index)
+        p = pd.Series(param_values, index=parameter_df.index)
         s = Simulator.run(p)
         e = Evaluator.evaluate(s)
         # ret is not a list but a dict!
@@ -93,12 +97,12 @@ def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule
 
     def mymap(func, iterable):
         params_list = list(map(list, iterable))
-        params_pd = I.pd.DataFrame(params_list, columns=params)
+        params_pd = pd.DataFrame(params_list, columns=params)
         futures = c.map(objective_fun, params_list, pure=False)
         try:
             features_dicts = c.gather(futures)
-        except (I.distributed.client.CancelledError,
-                I.distributed.scheduler.KilledWorker):
+        except (distributed.client.CancelledError,
+                distributed.scheduler.KilledWorker):
             print(
                 'Futures have been canceled. Waiting for 3 Minutes, then reschedule.'
             )
@@ -116,7 +120,7 @@ def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule
             else:
                 raise 
         except:
-            I.distributed.wait(futures)
+            distributed.wait(futures)
             for lv, f in enumerate(futures):
                 if not f.status == 'finished':
                     errstr = 'Problem with future number {}\n'.format(lv)
@@ -127,7 +131,7 @@ def get_mymap(db_setup, db_run, c, satisfactory_boundary_dict=None, n_reschedule
                     raise ValueError(errstr)
 ##        features_dicts = map(objective_fun, params_list) # temp rieke
         features_dicts = c.gather(futures)  #temp rieke
-        features_pd = I.pd.DataFrame(features_dicts)
+        features_pd = pd.DataFrame(features_dicts)
         save_result(db_run, params_pd, features_pd)
         combined_objectives_dict = list(map(combiner.combine, features_dicts))
         combined_objectives_lists = [[d[n]
@@ -165,7 +169,7 @@ class my_ibea_evaluator(bpop.evaluators.Evaluator):
         """Constructor"""
         super(my_ibea_evaluator, self).__init__()
         assert isinstance(
-            parameter_df, I.pd.DataFrame
+            parameter_df, pd.DataFrame
         )  # we rely on the fact that the dataframe has an order
         self.parameter_df = parameter_df
         self.params = [
@@ -278,7 +282,7 @@ def eaAlphaMuPlusLambdaCheckpoint(population,
     """
     # added by arco
     if db_run is not None:
-        assert isinstance(db_run, I.DataBase)  # db_run
+        assert isinstance(db_run, DataBase)  # db_run
     assert halloffame is None
     # end added by arco
 
@@ -316,7 +320,7 @@ def eaAlphaMuPlusLambdaCheckpoint(population,
     for gen in range(start_gen + 1, ngen + 1):
 
         if db is not None:
-            I.utils.wait_until_key_removed(db, 'pause')
+            db_utils.wait_until_key_removed(db, 'pause')
 
         offspring = _get_offspring(parents, toolbox, cxpb, mutpb)
 
@@ -347,7 +351,7 @@ def eaAlphaMuPlusLambdaCheckpoint(population,
             # save checkpoint in db
             db_run.setitem('{}_checkpoint'.format(gen),
                             cp,
-                            dumper=I.dumper_to_pickle)
+                            dumper=to_pickle)
             #pickle.dump(cp, open(cp_filename, "wb"))
             #logger.debug('Wrote checkpoint to %s', cp_filename)
 

@@ -4,7 +4,7 @@ Created on Nov 08, 2018
 @author: abast
 '''
 
-import Interface as I
+import numpy as np
 
 # moved to the bottom to resolve circular import
 # from .hay_complete_default_setup import get_hay_problem_description, get_hay_objective_names, get_hay_params_pdf
@@ -26,7 +26,7 @@ from .ephys import *
 
 
 def normalize(raw, mean, std):
-    return I.np.mean(I.np.abs(raw - mean)) / std
+    return np.mean(np.abs(raw - mean)) / std
 
 
 def nan_if_error(fun):
