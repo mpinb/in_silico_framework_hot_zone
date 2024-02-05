@@ -1211,6 +1211,16 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         color="grey",
         renderer="notebook_connected",
         t_start=None, t_end=None, t_step=None):
+        """
+        Args:
+        - color (str | [[float]]): If you want some other color overlayed on the cell morphology. 
+            Options: "voltage", "vm", "synapses", "synapse", or a color string, or a nested list of colors for each section
+        - renderer (str): Available renderers:
+            ['plotly_mimetype', 'jupyterlab', 'nteract', 'vscode', 'notebook', 'notebook_connected', 'kaggle', 'azure', 'colab',
+            'cocalc', 'databricks', 'json', 'png', 'jpeg', 'jpg', 'svg', 'pdf', 'browser', 'firefox', 'chrome', 'chromium', 
+            'iframe', 'iframe_connected', 'sphinx_gallery', 'sphinx_gallery_png']
+        - t_start, t_end, t_step (float|int): time interval
+        """
         # f is a dash app
         f = self._get_interactive_dash_app(color)
         return f.run_server(
