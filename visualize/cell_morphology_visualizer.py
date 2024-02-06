@@ -102,7 +102,7 @@ class CMVDataParser:
         By default, the simulation is chopped to the specified t_begin and t_end, and evenly divided in 10 timesteps."""
         self.times_to_show = None
         """An array of time points to visualize. Gets calculated from :param:self.t_start, :param:self.t_end and :param:self.t_step"""
-        self.possible_scalars = {
+        self.possible_scalars = (
             'K_Pst.ik', 'K_Pst.m', 'K_Pst.h', 
             'Ca_LVAst.ica', 'Ca_LVAst.h', 'Ca_LVAst.m', 
             'Nap_Et2.ina', 'Nap_Et2.m', 'Nap_Et2.h', 
@@ -115,7 +115,7 @@ class CMVDataParser:
             'Ca_HVA.ica', 'Ca_HVA.m', 'Ca_HVA.h', 
             'CaDynamics_E2.cai', 
             'cai'
-        }
+        )
         """Accepted keywords for scalar data other than membrane voltage."""
 
         self.voltage_timeseries = None
