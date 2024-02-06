@@ -1,3 +1,4 @@
+import os, glob, dask, time, six, distributed, socket, barrel_cortex, warnings
 from biophysics_fitting import get_main_bifurcation_section
 import pandas as pd
 from matplotlib import colors as mcolors
@@ -7,21 +8,17 @@ from mpl_toolkits.mplot3d.axes3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
 import numpy as np
 from visualize.vtk import write_vtk_skeleton_file
-import os, glob, dask, time, six, distributed, socket, barrel_cortex, warnings
 from single_cell_parser import serialize_cell
 from .utils import write_video_from_images, write_gif_from_images, display_animation_from_images, draw_arrow
 from barrel_cortex import inhibitory
 if six.PY3:
     from scipy.spatial.transform import Rotation
-    from dash import Dash, dcc, html, Input, Output, State
-    from dash.exceptions import PreventUpdate
+    from dash import Dash, dcc, html, Input, Output
     from dash import callback_context as ctx
     import plotly.offline as py
-    import plotly.tools as tls
     import plotly.io as pio
     import plotly.graph_objects as go
     import plotly.express as px
-    from plotly.subplots import make_subplots
 else:
     # let ImportWarnings show up when importing this module through Interface
     warnings.filterwarnings("default", category=ImportWarning, module=__name__)
