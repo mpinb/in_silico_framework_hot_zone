@@ -1,3 +1,4 @@
+import os, glob, dask, time, six, distributed, socket, barrel_cortex, warnings
 from biophysics_fitting import get_main_bifurcation_section
 import pandas as pd
 from matplotlib import colors as mcolors
@@ -7,21 +8,17 @@ from mpl_toolkits.mplot3d.axes3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
 import numpy as np
 from visualize.vtk import write_vtk_skeleton_file
-import os, glob, dask, time, six, distributed, socket, barrel_cortex, warnings
 from single_cell_parser import serialize_cell
 from .utils import write_video_from_images, write_gif_from_images, display_animation_from_images, draw_arrow
 from barrel_cortex import inhibitory
 if six.PY3:
     from scipy.spatial.transform import Rotation
-    from dash import Dash, dcc, html, Input, Output, State
-    from dash.exceptions import PreventUpdate
+    from dash import Dash, dcc, html, Input, Output
     from dash import callback_context as ctx
     import plotly.offline as py
-    import plotly.tools as tls
     import plotly.io as pio
     import plotly.graph_objects as go
     import plotly.express as px
-    from plotly.subplots import make_subplots
 else:
     # let ImportWarnings show up when importing this module through Interface
     warnings.filterwarnings("default", category=ImportWarning, module=__name__)
@@ -105,7 +102,7 @@ class CMVDataParser:
         By default, the simulation is chopped to the specified t_begin and t_end, and evenly divided in 10 timesteps."""
         self.times_to_show = None
         """An array of time points to visualize. Gets calculated from :param:self.t_start, :param:self.t_end and :param:self.t_step"""
-        self.possible_scalars = {
+        self.possible_scalars = (
             'K_Pst.ik', 'K_Pst.m', 'K_Pst.h', 
             'Ca_LVAst.ica', 'Ca_LVAst.h', 'Ca_LVAst.m', 
             'Nap_Et2.ina', 'Nap_Et2.m', 'Nap_Et2.h', 
@@ -118,7 +115,7 @@ class CMVDataParser:
             'Ca_HVA.ica', 'Ca_HVA.m', 'Ca_HVA.h', 
             'CaDynamics_E2.cai', 
             'cai'
-        }
+        )
         """Accepted keywords for scalar data other than membrane voltage."""
 
         self.voltage_timeseries = None
@@ -539,7 +536,11 @@ class CMVDataParser:
             ion_data = self._get_ion_dynamics_at_timepoint(time_point, keyword)      
             return_data = self._get_color_per_section(ion_data) if return_color else ion_data
 
-        elif keyword in [*mcolors.BASE_COLORS, *mcolors.TABLEAU_COLORS, *mcolors.CSS4_COLORS, *mcolors.XKCD_COLORS] :
+        elif (
+            keyword in mcolors.BASE_COLORS or
+            keyword in mcolors.CSS4_COLORS or
+            keyword in mcolors.XKCD_COLORS or
+            keyword in mcolors.TABLEAU_COLORS):
             return_data = [[keyword]]  # soma, just one point
             for sec in self.cell.sections:
                 if not sec.label in ("AIS", "Myelin", "Soma"):
@@ -552,7 +553,7 @@ class CMVDataParser:
     
     def _keyword_is_scalar_data(self, keyword):
         if isinstance(keyword, str):
-            return keyword in ("voltage", "vm", "synapses", "synapse", "dendrites", "dendritic_group", *self.possible_scalars)
+            return keyword in ("voltage", "vm", "synapses", "synapse", "dendrites", "dendritic_group") + self.possible_scalars
         return True  # if not string, should be scalar data
     
     def _get_color_per_section(
