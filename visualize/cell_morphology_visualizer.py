@@ -537,10 +537,10 @@ class CMVDataParser:
             return_data = self._get_color_per_section(ion_data) if return_color else ion_data
 
         elif (
-            e in mcolors.BASE_COLORS or
-            e in mcolors.CSS4_COLORS or
-            e in mcolors.XKCD_COLORS or
-            e in mcolors.TABLEAU_COLORS):
+            keyword in mcolors.BASE_COLORS or
+            keyword in mcolors.CSS4_COLORS or
+            keyword in mcolors.XKCD_COLORS or
+            keyword in mcolors.TABLEAU_COLORS):
             return_data = [[keyword]]  # soma, just one point
             for sec in self.cell.sections:
                 if not sec.label in ("AIS", "Myelin", "Soma"):
