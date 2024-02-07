@@ -7,7 +7,7 @@ The `git` command needs to be configured in order to use ISF. We recommend `git 
 
 ## Recommended configurations
 
-As this codebase is for the most part a collection of modules, make sure ISF is added to your `PYTHONPATH`. That way, whatever Python you're using knows it should look in this folder for these modules. We recommend adapting your `~/.bashrc` file with the following lines (also defined in [bashrc_example.sh](./bashrc_example.sh)):
+We recommend adapting your `~/.bashrc` file with the following lines (also defined in [bashrc_example.sh](./bashrc_example.sh)):
 ```shell
 shopt -s expand_aliases
 export MYBASEDIR="/gpfs/soma_fs/scratch/$USER"
@@ -39,30 +39,3 @@ distributed:
 	  terminate: False  # fraction at which we terminate the worker
 ```
 (See this question on [StackOverflow](https://stackoverflow.com/questions/57997463/dask-warning-worker-exceeded-95-memory-budget))
-
-## Port numbers
-If you expect to be sharing the same machine/IP address (e.g. when sharing nodes on a HPC), you should ensure that you are not running any process on a port that is already in use. For this reason, it is useful to define your unique port numbers in [user_settings.ini](./user_settings.ini). Ports numbers can theoretically range from 0-99999, but some ports are used for default processes (e.g. `4040`, `8080`, `8000`...). Check which ports are in use by running any of the following commands on Linux systems:
-```shell
-lsof -i -P -n | grep LISTEN
-netstat -tulpn | grep LISTEN
-ss -tulpn | grep LISTEN
-lsof -i:22 ## see a specific port such as 22 ##
-nmap -sTU -O IP-address-Here
-```
-Or just trial and error your way to a port you like. The odds are generally in your favor.
-
-## Jupyter token
-Jupyter server acces is protected with a password. The most common way is a token that appears in the link. By default, Juoyter generates such a token. If you would like to reuse the same token every time, you can set one in [user_settings.ini](./user_settings.ini). These tokens have quite a few constraints; the easiest is to just reuse one that jupyter has generated for you. 
-
-## Automatic workflows
-The workflow files in [.github/workflows](.github/workflows) define automatic workflows that run as soon as some trigger event happens. This trigger event is currently defined as push and pull requests on (almost) all branches. We have set up a local machine with (since last update) 8 runners and 10TB of disk space to take care of parallellized testing for speedy development. Upon such trigger event, it will perform the following actions:
-1. Fetch the previous commit on the runner
-2. Based on the commit it receives, figure out if a rebuild of the codebase is necessary
-  a. Does a previous build already exists on the runner?
-  b. Was the previous build succesful?
-  c. Do the changes in the current commit not warrant a rebuild (i.e. they are not changes in the .github/workflows, testing/, or installer/ folder)
-  If the answer is yes to all these, it will skip the build process, otherwise it will (re)build the codebase
-3. Run the test suite
-
-## Code coverage
-The [codecov.yml](../.github/codecov.yml) file defines configuration for code coverage. It is currently set to allow all coverage differences when pushing to master. It can be setup to not allow merges with master if coverage drops, or does not improve by a certain amount etc.
