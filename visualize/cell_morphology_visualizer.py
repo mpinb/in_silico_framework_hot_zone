@@ -3,25 +3,19 @@ import pandas as pd
 from matplotlib import colors as mcolors
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.axes3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
 import numpy as np
 from visualize.vtk import write_vtk_skeleton_file
-import os, glob, dask, time, six, distributed, socket, barrel_cortex, warnings
-from single_cell_parser import serialize_cell
+import os, dask, time, six, socket, barrel_cortex, warnings
 from .utils import write_video_from_images, write_gif_from_images, display_animation_from_images, draw_arrow
-from barrel_cortex import inhibitory
 if six.PY3:
     from scipy.spatial.transform import Rotation
-    from dash import Dash, dcc, html, Input, Output, State
-    from dash.exceptions import PreventUpdate
+    from dash import Dash, dcc, html, Input, Output
     from dash import callback_context as ctx
     import plotly.offline as py
-    import plotly.tools as tls
     import plotly.io as pio
     import plotly.graph_objects as go
     import plotly.express as px
-    from plotly.subplots import make_subplots
 else:
     # let ImportWarnings show up when importing this module through Interface
     warnings.filterwarnings("default", category=ImportWarning, module=__name__)
@@ -494,15 +488,15 @@ class CMVDataParser:
         self, 
         keyword, 
         time_point,
-        return_color=True):
+        return_color=True,
+        color_dict={}):
         """
         Returns a data array based on some keyword.
         If :arg return_color: is True (default), the returned array is a map from the input keyword to a color
         Otherwise, it is the raw data, not mapped to a colorscale. Which data is returned (mapped to colors or not)
         depends on the keyword (case-insensitive):
         - ("voltage", "vm"): voltage
-        - ("synapses", "synapse"): list of dictionaries of synapse activations
-        - Some rangeVar: ion dynamics
+        - Some rangeVar: ion dynamics. See self.available_scalars for possibilities.
         - regular string: will try to convert to amatplotlib accepted color string
         """
         if keyword.lower() in ("voltage", "vm"):
@@ -510,29 +504,18 @@ class CMVDataParser:
             voltage = self._get_voltages_at_timepoint(time_point)
             return_data = self._get_color_per_section(voltage) if return_color else voltage
 
-        elif keyword.lower() in ("synapses", "synapse"):
-            if not return_color:
-                raise NotImplementedError("Synapses are always colors")
-            return_data = []
-            for sec in self.sections:
-                for group in dendritic_groups.keys():
-                    if sec in dendritic_groups[group]:
-                        color = dendritic_group_to_color_dict[group]
-                        return_data.append(color)
-                    else:
-                        return_data.append('grey')
-
         elif keyword.lower() in ("dendrites", "dendritic group"):
             if not return_color:
                 raise NotImplementedError("Dendritic groups are always colors")
+            if not color_dict:
+                raise ValueError("Please provide a dictionary mapping section labels to colors")
             return_data = []
             for sec in self.sections:
-                for group in dendritic_groups.keys():
-                    if sec in dendritic_groups[group]:
-                        color = dendritic_group_to_color_dict[group]
-                        return_data.append(color)
-                    else:
-                        return_data.append('grey')
+                if sec.label in color_dict:
+                    color = color_dict[sec.label]
+                    return_data.append(color)
+                else:
+                    return_data.append('grey')
                         
         elif keyword in self.possible_scalars:
             self._calc_ion_dynamics_timeseries(keyword)
@@ -637,7 +620,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         shown for a set of time points. These images will then be used for a time-series visualization (video/gif/animation)
         and in each image the neuron rotates a bit (3 degrees) over its axis.
 
-        The parameters :param:self.t_start, :param:self.t_end and :param:self.t_step will define the :param:self.time attribute
+        The parameters :param self.t_start:, :param self.t_end: and :param self.t_step: will define the :param self.times_to_show: attribute
 
         Args:
             - t_start: start time point of our time series visualization
@@ -823,12 +806,10 @@ class CellMorphologyVisualizer(CMVDataParser):
         show_synapses=False,
         show_legend=False,
         client=None,
-        t_start=None,
-        t_end=None,
-        t_step=None,
         highlight_section=None,
         highlight_x=None,
-        display=True,
+        quality=5,
+        codec='mpeg4',
         tpf=20):
         '''
         Creates a set of images where a neuron morphology color-coded with voltage together with synapse activations are
@@ -862,7 +843,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             highlight_x=highlight_x)
         write_video_from_images(images_path,
                                 out_path,
-                                fps=framerate,
+                                fps=1/tpf,
                                 quality=quality,
                                 codec=codec)
 
