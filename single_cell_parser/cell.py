@@ -30,7 +30,7 @@ class Cell(object):
     Notable attributes:
     - self.sections: a list of PySection objects
         - self.sections[0] is the soma
-        - each section contains a section.vList, recording the voltage
+        - Each section contains recorded data (if any was recorded, e.g. membrane voltage): a 2D array where axis 0 is segment number, and axis 1 is time
     - self.synapses: a dictionary of lists of Synapse objects
     - self.tVec: a hoc Vector recording time
 
