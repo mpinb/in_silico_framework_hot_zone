@@ -239,7 +239,6 @@ class Crit_freq:
         baseline = np.average(v[2][c:b])
         v = v - baseline
         v[v<0] = 0
-        
         end = [(n, x) for n,x in enumerate(v[2]) if abs(x)<returning_to_rest and n>d]
         if len(end)>0: 
             end = end[0][0]
@@ -427,9 +426,9 @@ def visualize_crit_freq(voltage_traces, delay = None, tStop = None, n_stim = Non
         currents = {}
 
         for i in range(1,6): 
-            currents[f'i{i}'] = voltage_traces[f'crit_freq{i}.hay_measure']['iList'][0]
+            currents[f'i{i}'] = voltage_traces[f'crit_freq{i}.hay_measure']['iList'][0].copy()
             for y in range(1,4):
-                currents[f'i{i}'] += voltage_traces[f'crit_freq{i}.hay_measure']['iList'][y]
+                currents[f'i{i}'] += voltage_traces[f'crit_freq{i}.hay_measure']['iList'][y].copy()
 
         # just traces  
         fig, axes = I.plt.subplots(2, 5, figsize=(25, 6), sharex=True, sharey='row', gridspec_kw={'height_ratios': [4, 1]})
@@ -456,3 +455,78 @@ def visualize_crit_freq(voltage_traces, delay = None, tStop = None, n_stim = Non
             axes[0, ax_y].title.set_fontsize('xx-large')
 
         I.plt.show()
+        
+        
+######################################################
+# for iterating through different current amplitudes 
+######################################################
+
+#to do: Clean this up 
+
+def check_spikes(interval_spike_counts): 
+    spike_check = []
+    # three options (per frequency: increase (1), decrease(-1) or just right(0)) 
+    for spike_count in interval_spike_counts: 
+        if any(item>1 for item in spike_count):
+            spike_check.append(-1)
+        elif 0 in spike_count:
+            spike_check.append(1)
+        elif all(item == 1 for item in spike_count):
+            spike_check.append(0)
+    return spike_check
+
+def iterate_over_current_until_one_spike_per_interval(clean_mdb = None, p = None, current_range = None, start_current = None,
+                                                     soma_threshold = None, delay = None, freq_list = None, n_stim = None):
+    '''Takes a minimal simulator (from a mdb with only bAP, BAC and crit_freq stimuli with specified morhoplogy clean_mdb = mdb[morphology]), 
+    adds the crit_freq to the s, tries different current amplitudes until there is one spike per interval for all frequencies
+    make sure the start_current is within the current_range'''
+    
+    output = {}
+    amplitude = start_current 
+    s = clean_mdb['get_Simulator'](clean_mdb)
+    modify_simulator_to_run_crit_freq_stimuli(s, delay = delay, tStop = 700, n_stim = n_stim, freq_list = freq_list, amplitude = amplitude, duration = 2)
+    voltage_traces = interpolate_vt(s.run(p))
+    interval_spike_counts = []
+    a = 0 
+    for k,v in voltage_traces.items(): 
+        if 'crit_freq' in k: 
+            a += 1 
+            interval_spike_counts.append(get_spike_n_per_interval(v, soma_threshold, delay, freq_list, n_stim, a))
+    spike_check = check_spikes(interval_spike_counts)
+    
+    step_size = current_range[1] - current_range[0]
+    
+    amplitude_found = False 
+    done = False 
+    while done == False and amplitude in current_range: 
+        if all(check == -1 for check in spike_check) or set(spike_check) == {0,-1}:
+            amplitude += -step_size
+        if all(check == 1 for check in spike_check) or set(spike_check) == {0,1}:
+            amplitude += step_size        
+        if all(check == 0 for check in spike_check):
+            amplitude_found = True 
+            done = True
+        if len(set(spike_check)) == 3: 
+            done = True 
+        amplitude = I.np.around(amplitude, 3)
+        
+        s = clean_mdb['get_Simulator'](clean_mdb)
+        modify_simulator_to_run_crit_freq_stimuli(s, delay = delay, tStop = 700, n_stim = n_stim, freq_list = freq_list, amplitude = amplitude, duration = 2)
+        voltage_traces = interpolate_vt(s.run(p))
+        interval_spike_counts = []
+        a = 0
+        for k,v in voltage_traces.items(): 
+            if 'crit_freq' in k: 
+                a += 1 
+                interval_spike_counts.append(get_spike_n_per_interval(v, soma_threshold, delay, freq_list, n_stim, a))
+        spike_check = check_spikes(interval_spike_counts)
+        
+#     output['spike_check'] = spike_check
+#     output['amplitude_found'] = amplitude_found
+#     output['amplitude'] = amplitude
+#     output['voltage_traces'] = voltage_traces
+        
+#     return output
+    return amplitude
+
+    
