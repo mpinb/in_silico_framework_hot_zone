@@ -277,6 +277,34 @@ def get_L5tt_template():
     from sumatra.parameters import NTParameterSet
     return NTParameterSet(p['neuron'])
 
+def get_L5tt_template_v2():
+    neup = get_L5tt_template()
+    for loc in neup:
+        if loc == 'filename':
+            continue
+        mechanisms = neup[loc]['mechanisms']['range']
+        if 'CaDynamics_E2' in mechanisms:
+            mechanisms['CaDynamics_E2_v2'] = mechanisms['CaDynamics_E2']
+            del neup[loc]['mechanisms']['range']['CaDynamics_E2']
+    apic_skv31 = neup['ApicalDendrite']['mechanisms']['range']['SKv3_1']
+    apic_skv31['offset'] = None
+    apic_skv31['slope'] = None
+    apic_skv31['spatial'] = 'linear'
+    apic_skv31['distance'] = 'relative'
+            
+    from sumatra.parameters import NTParameterSet
+    p = {
+        'NMODL_mechanisms': {
+            'channels': '/'
+        },
+        'info': {
+            'author': 'regger and abast',
+            'date': '2018',
+            'name': 'scp_optimizer'
+        },
+        'mech_globals': {},
+        'neuron': neup}
+    return NTParameterSet(p['neuron'])
 
 def set_morphology(cell_param, filename=None):
     cell_param.filename = filename
