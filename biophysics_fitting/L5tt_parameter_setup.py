@@ -291,6 +291,7 @@ def get_L5tt_template_v2():
     apic_skv31['slope'] = None
     apic_skv31['spatial'] = 'linear'
     apic_skv31['distance'] = 'relative'
+    neup['cell_modify_functions'] = {'scale_apical': {'scale': None}}
             
     from sumatra.parameters import NTParameterSet
     p = {
