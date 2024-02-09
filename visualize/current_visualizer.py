@@ -127,6 +127,9 @@ class CurrentAnalysis:
             ax2.plot(x, y, 'k')
             x, y = t[select], np.array(self.voltage_trace)[select]
             ax2.plot(x, y, c=CALCIUM_ORANGE)
+        ax2.set_ylabel("Membrane potential (mV)")
+        ax.set_ylabel("Current (nA)")
+        ax.set_xlabel("Time (ms)")
 
     def plot_lines(self, ax=None, legend=True):
         if ax is None:
