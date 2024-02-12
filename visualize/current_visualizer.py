@@ -130,6 +130,7 @@ class CurrentAnalysis:
         ax2.set_ylabel("Membrane potential (mV)")
         ax.set_ylabel("Current (nA)")
         ax.set_xlabel("Time (ms)")
+        plt.legend()
 
     def plot_lines(self, ax=None, legend=True):
         if ax is None:
