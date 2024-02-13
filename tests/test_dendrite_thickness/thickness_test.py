@@ -5,7 +5,7 @@ import os
 import numpy as np
 from dendrite_thickness.thickness import IO, pipeline, utils
 from dendrite_thickness.thickness import thickness as th
-from .context import CURRENT_DIR
+from .context import CURRENT_DIR, DATA_DIR
 import pandas as pd
 import pytest
 import six
@@ -15,9 +15,9 @@ import logging
 
 logger = logging.getLogger("ISF").getChild(__name__)
 
-AM_FILE = os.path.join(CURRENT_DIR, 'test_files', 'am_files', 'rest',
+AM_FILE = os.path.join(DATA_DIR, 'am_files', 'rest',
                        'S13_final_done_Alison_zScale_40.am')
-IMAGE_FILE = os.path.join(CURRENT_DIR, 'test_files', 'image_files', 'rest',
+IMAGE_FILE = os.path.join(DATA_DIR, 'image_files', 'rest',
                           'S13_max_z_projection.tif')
 
 
@@ -127,13 +127,11 @@ def test_crop_image():
 
 
 def test_pipeline(client):
-    am_folder_path = os.path.join(CURRENT_DIR, 'test_files', 'am_files')
-    tif_folder_path = os.path.join(CURRENT_DIR, 'test_files', 'image_files')
-    hoc_file_path = os.path.join(CURRENT_DIR, 'test_files',
-                                 'WR58_Cell5_L5TT_Final.hoc')
-    output_folder_path = os.path.join(CURRENT_DIR, 'test_files', 'output')
-    bijective_points_path = os.path.join(CURRENT_DIR, 'test_files',
-                                         'manual_landmarks.landmarkAscii')
+    am_folder_path = os.path.join(DATA_DIR, 'am_files')
+    tif_folder_path = os.path.join(DATA_DIR, 'image_files')
+    hoc_file_path = os.path.join(DATA_DIR, 'WR58_Cell5_L5TT_Final.hoc')
+    output_folder_path = os.path.join(DATA_DIR, 'output')
+    bijective_points_path = os.path.join(DATA_DIR,'manual_landmarks.landmarkAscii')
 
     p = pipeline.ExtractThicknessPipeline()
 

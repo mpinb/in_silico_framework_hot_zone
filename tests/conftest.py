@@ -42,7 +42,7 @@ class ModuleFilter(logging.Filter):
 
 
 def pytest_addoption(parser):
-    parser.addoption("--dask_server_port", action="store", default="38787")
+    parser.addoption("--dask_server_port", action="store", default="38786")
 
 
 def is_port_in_use(port):
@@ -110,8 +110,15 @@ def client(pytestconfig):
     # Assume dask server and worker are already started
     # These are set up in the github workflow file.
     # If running tests locally, make sure you have a dask scheduler and dask worker running on the ports you want
-    return distributed.Client('localhost:{}'.format(
-        pytestconfig.getoption("--dask_server_port")))
+    hostname = socket.gethostname()
+    if "soma" in hostname:
+        ip = socket.gethostbyname(hostname).replace('100', '102')
+    else:
+        ip = 'localhost'
+    return distributed.Client(
+        '{}:{}'.format(
+            ip,
+            pytestconfig.getoption("--dask_server_port")))
 
 @pytest.fixture
 def pdf():
