@@ -1,7 +1,7 @@
 import os
 import numpy as np
-import radii as radi
-import transformTools as tr
+import dendrite_thickness.radii as radi
+import dendrite_thickness.transformTools as tr
 import re
 import pandas as pd
 import time

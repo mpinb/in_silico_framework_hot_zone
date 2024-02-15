@@ -105,9 +105,8 @@ class RadiusCalculator:
             raysProfileList.append(rayProfile)
 
         for i, ray in enumerate(rays):
-
             rayLength = len(ray)
-            halfRayLength = (rayLength - 1) / 2
+            halfRayLength = int((rayLength - 1) / 2)
 
             backCounterPoint = self.getCounterIndex(
                 image, point, list(reversed(ray[0:halfRayLength + 1])))
@@ -156,10 +155,10 @@ class RadiusCalculator:
 
     def postMeasurmentFunction(self, image, rays, raysProfileList):
 
-        maxIntensity = 0
-        centerPoint = rays[0][(len(rays[0]) - 1) / 2]
+        # initial_guesses (unused)
+        maxIntensity = 0         
+        centerPoint = rays[0][int((len(rays[0]) - 1) / 2)]
         for idx, rayProfile in enumerate(raysProfileList):
-
             indexOfMaxValue = np.argmax(np.array(rayProfile))
             newMaxIntensity = rayProfile[indexOfMaxValue]
 

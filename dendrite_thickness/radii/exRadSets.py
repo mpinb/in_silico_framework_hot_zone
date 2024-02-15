@@ -1,7 +1,7 @@
 import os
 import re
-import transformTools as tr
-import radii as radi
+import dendrite_thickness.transformTools as tr
+from dendrite_thickness import radii as radi
 import SimpleITK as sitk
 
 
