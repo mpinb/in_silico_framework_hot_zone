@@ -195,7 +195,8 @@ class ExtractThicknessPipeline:
 
     def run(self):
         self._run1()
-        self._run2()
+        df = self._run2()
+        return df
 
     def _run1(self):
         self._initialize_project()
