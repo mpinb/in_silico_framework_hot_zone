@@ -58,7 +58,8 @@ class CMVDataParser:
         """A set of section indices"""
         self.n_sections = None
         self.lookup_table = None
-        """A pd.DataFrame containing point information, diameter and section ID with duplicated points for branchpoints"""
+        """A pd.DataFrame containing point information, diameter and section ID with duplicated points for branchpoints.
+        This is the morphology dataframe that's most often used. Only the interactive visualizer plots out self.morphology."""
         self._calc_morphology(cell)  # a pandas DataFrame
         self.rotation_with_zaxis = None
         """Rotation object that defines the transformation between the cell trunk and the z-axis"""
@@ -228,6 +229,14 @@ class CMVDataParser:
         points = []
         for sec_n, sec in enumerate(cell.sections):
             if sec.label == 'Soma':
+                # n_segments = len([seg for seg in sec])
+                # for i, pt in enumerate(sec.pts):
+                #     seg_n = int(n_segments * i / len(sec.pts))
+                #     x, y, z = pt
+                #     d = sec.diamList[i]
+                #     points.append([x, y, z, d, sec_n, seg_n])
+                print('adding soma')
+                print(sec_n)
                 x, y, z = self.soma_center
                 # soma size
                 mn, mx = np.min(cell.soma.pts, axis=0), np.max(cell.soma.pts,
@@ -631,7 +640,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         '''
         if client is None:
             logger.warning("No dask client provided. Images will be generated on a single thread, which may take some time.")
-            client = dask.distributed.LocalCluster(n_workers=1, threads_per_worker=1)
+            client = distributed.LocalCluster(n_workers=1, threads_per_worker=1)
         
         if os.path.exists(path):
             if os.listdir(path):
@@ -1170,7 +1179,8 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         color="grey",
         renderer="notebook_connected",
         diameter=None,
-        time_point=None):
+        time_point=None,
+        show=True):
         """This method shows a plot with an interactive cell, overlayed with scalar data (if provided with the data argument).
         The parameters :param:t_start, :param:t_end and :param:t_step will define the :param:self.time attribute
 
@@ -1185,7 +1195,10 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             raise ValueError("You passed scalar data {} as a color, but didn't provide a timepoint at which to plot this. Please specify time_point.".format(color))
         pio.renderers.default = renderer
         f = self._get_interactive_cell(color, diameter=diameter, time_point=time_point)
-        return py.iplot(f)  # show is not True, return the object without executing the method that shows it
+        if show:
+            f.show(renderer=renderer)
+            return
+        return f  # show is not True, return the object without executing the method that shows it
 
     def interactive_app(
         self,
@@ -1226,6 +1239,15 @@ def get_3d_plot_morphology(
     legend=None,
     return_figax = True
     ):
+    """
+    Main method to construct a 3d matplotlib plto of a cell morphology, overlayed with some scalar data.
+    This method Uses LineCollections to plot the morphology. It uses a little trick, where each segment is extended by a copy of the next segment in line.
+    This way, the "elbow" between segments is sllightly cleaner, and does not look like a zigzag.
+    
+    Note that this introduces a minor visual interpolation error for transitions from large to small diameter. 
+    Since the voltage gradient in space is continuous and relatively smooth compared to the average segment distane, this is not visually obvious.
+    There are also still line edges for transitions from large to small diameter.
+    """
 
     #----------------- Generic axes setup
     fig = plt.figure(figsize=(15, 15), dpi=dpi)
@@ -1248,11 +1270,13 @@ def get_3d_plot_morphology(
             "Number of colors ({}) does not match number of sections ({}). Either provide one color per section, or group line segment colors by section.".format(len(colors), len(sections))
 
     #----------------- plot neuron morphology
-    for sec_n in sections[1:]:
+    for sec_n in sections:
         points = lookup_table[lookup_table['sec_n'] == sec_n]
         linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
         points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
-        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        # two segments, bound by three points
+        # The second segment assures smooth transition in the plot
+        segments = np.concatenate([points[:-2], points[1:-1], points[2:]], axis=1)
         lc = Line3DCollection(segments, linewidths=linewidths, color=colors[sec_n])
         ax.add_collection(lc)
 
