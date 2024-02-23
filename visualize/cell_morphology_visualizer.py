@@ -229,21 +229,21 @@ class CMVDataParser:
         points = []
         for sec_n, sec in enumerate(cell.sections):
             if sec.label == 'Soma':
-                # n_segments = len([seg for seg in sec])
-                # for i, pt in enumerate(sec.pts):
-                #     seg_n = int(n_segments * i / len(sec.pts))
-                #     x, y, z = pt
-                #     d = sec.diamList[i]
-                #     points.append([x, y, z, d, sec_n, seg_n])
-                print('adding soma')
-                print(sec_n)
-                x, y, z = self.soma_center
-                # soma size
-                mn, mx = np.min(cell.soma.pts, axis=0), np.max(cell.soma.pts,
-                                                               axis=0)
-                d_range = [mx_ - mn_ for mx_, mn_ in zip(mx, mn)]
-                d = max(d_range)
-                points.append([x, y, z, d, sec_n, 0])
+                n_segments = len([seg for seg in sec])
+                for i, pt in enumerate(sec.pts):
+                    seg_n = int(n_segments * i / len(sec.pts))
+                    x, y, z = pt
+                    d = sec.diamList[i]
+                    points.append([x, y, z, d, sec_n, seg_n])
+                # print('adding soma')
+                # print(sec_n)
+                # x, y, z = self.soma_center
+                # # soma size
+                # mn, mx = np.min(cell.soma.pts, axis=0), np.max(cell.soma.pts,
+                #                                                axis=0)
+                # d_range = [mx_ - mn_ for mx_, mn_ in zip(mx, mn)]
+                # d = max(d_range)
+                # points.append([x, y, z, d, sec_n, 0])
             elif sec.label in ['AIS', 'Myelin']:
                 continue
             else:
@@ -257,30 +257,26 @@ class CMVDataParser:
                     d = sec.diamList[i]
                     points.append([x, y, z, d, sec_n, seg_n])
 
-        lookup_table = pd.DataFrame(
+        self.lookup_table = pd.DataFrame(
             points, 
             columns=['x', 'y', 'z', 'diameter', 'sec_n', 'seg_n'])
-        lookup_table['sec_n'] = lookup_table['sec_n'].astype(int)
-        lookup_table['seg_n'] = lookup_table['seg_n'].astype(int)
+        self.lookup_table['sec_n'] = self.lookup_table['sec_n'].astype(int)
+        self.lookup_table['seg_n'] = self.lookup_table['seg_n'].astype(int)
         t2 = time.time()
         logger.info('Initialised simulation data in {} seconds'.format(
             np.around(t2 - t1, 2)))
-
-        self.sections = lookup_table['sec_n'].unique()
-        self.n_sections = len(self.sections)
         
-        parent_points = pd.DataFrame()
+        self.sections = self.lookup_table['sec_n'].unique()
+        self.n_sections = len(self.sections)
         for sec in self.sections[1:]:
             parent_sec = self.parents[sec]
-            parent_point = lookup_table[lookup_table['sec_n'] == parent_sec].iloc[[-1]]
+            parent_point = self.lookup_table[self.lookup_table['sec_n'] == parent_sec].iloc[[-1]]
             parent_point["sec_n"] = sec
-            parent_points.append(parent_point)
-        lookup_table = pd.concat([parent_points, lookup_table])
-        
-        # the first points are now the branch points
-        self.lookup_table = lookup_table
-        self.morphology = self.lookup_table.iloc[self.n_sections-1:]
+            self.lookup_table = pd.concat([parent_point, self.lookup_table])
+        # the first :arg n_sections: points are now the branch points
+        # indexing the df by section number will always begin with the branch point, i.e. first point of the section
     
+        self.morphology = self.lookup_table[self.n_sections-1:]
     def _get_voltages_at_timepoint(self, time_point):
         '''
         Retrieves the VOLTAGE along the whole cell morphology from cell object at a particular time point.
@@ -672,7 +668,9 @@ class CellMorphologyVisualizer(CMVDataParser):
         azim_ = self.camera_position['azim']
 
         t1 = time.time()
-        scattered_lookup_table = client.scatter(self.lookup_table, broadcast=True) if client is not None else self.lookup_table
+        maybe_scattered_lookup_table = client.scatter(
+            self.lookup_table, 
+            broadcast=True) if client is not None else self.lookup_table
         if client is None:
             logger.warning("No dask client provided. Images will be generated on a single thread, which may take some time.")
             client = dask.distributed.Client(dask.distributed.LocalCluster(n_workers=1, threads_per_worker=1))
@@ -685,9 +683,9 @@ class CellMorphologyVisualizer(CMVDataParser):
             filename = path + '/{0:0=5d}.png'.format(count)
             delayeds.append(
                 dask.delayed(get_3d_plot_morphology)(
-                    lookup_table=scattered_lookup_table,
+                    lookup_table=maybe_scattered_lookup_table,
                     colors=color_per_section,
-                    synapses=self.synapses_timeseries[i] if show_synapses else {},
+                    synapses=self.synapses_timeseries[time_point] if show_synapses else {},
                     color_keyword=color,
                     time_point=time_point - self.time_offset,
                     save=filename,
@@ -1247,6 +1245,8 @@ def get_3d_plot_morphology(
     Note that this introduces a minor visual interpolation error for transitions from large to small diameter. 
     Since the voltage gradient in space is continuous and relatively smooth compared to the average segment distane, this is not visually obvious.
     There are also still line edges for transitions from large to small diameter.
+
+    If you want proper tubes instead of this hacky thing, you should just use VTK.
     """
 
     #----------------- Generic axes setup

@@ -389,3 +389,20 @@ def draw_arrow(morphology,
 
     #print(start_x, start_y)
     ax.arrow3D(start_x, start_y, start_z, dx, dy, dz, **highlight_arrow_args)
+
+
+def segments_to_poly(segments, diameters, n_faces):
+    """
+    Given a list of segments, this methods converts them to polygons that neatly connect without seam
+
+    Args:
+        segments: a 2D list defining pairs of points. Each point pair defines a single segment
+        diameters: diameters associated with the segments
+        n_faces: amount of faces in the polygon tube
+    """
+
+    polygons = []
+    for i in range(len(segments)):
+        
+        
+        prev_poly
