@@ -12,6 +12,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda2-4.2.0-Linux-x86_64.sh
 channels=$SCRIPT_DIR/../../mechanisms/channels_py2
 netcon=$SCRIPT_DIR/../../mechanisms/netcon_py2
+CONDA_INSTALL_PATH=""
 
 function print_title {
     local str=$1
@@ -51,6 +52,10 @@ function _setArgs {
 }
 
 _setArgs "$@";
+if [ -z $CONDA_INSTALL_PATH  ]; then
+        echo 'Missing -p or --path. Please provide an installation path for the environment.' >&2
+        exit 1
+fi
 
 # -------------------- 0. Setup -------------------- #
 print_title "0/5. Preliminary checks"

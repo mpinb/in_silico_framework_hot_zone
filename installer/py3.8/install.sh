@@ -60,7 +60,10 @@ function _setArgs {
 }
 
 _setArgs "$@";
-echo "$CONDA_INSTALL_PATH"
+if [ -z $CONDA_INSTALL_PATH  ]; then
+        echo 'Missing -p or --path. Please provide an installation path for the environment.' >&2
+        exit 1
+fi
 
 # -------------------- 0. Setup -------------------- #
 print_title "0/6. Preliminary checks"
