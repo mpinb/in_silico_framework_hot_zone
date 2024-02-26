@@ -15,6 +15,8 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda3-2020.11-Linux-x86_64.sh
 channels=$SCRIPT_DIR/../../mechanisms/channels_py3
 netcon=$SCRIPT_DIR/../../mechanisms/netcon_py3
+CONDA_INSTALL_PATH=""
+INSTALL_NODE=false
 
 function print_title {
     local str=$1
@@ -27,20 +29,39 @@ function print_title {
     echo ""
 }
 
-usage() {
+function usage {
     cat << EOF
-Usage: ./isf-install.sh [-p <conda-install-path>]
+Usage: ./isf-install.sh [-p <conda-install-path>] [--node]
 
-    -h                          Display help
-    -p <conda-install-path>     The path where conda will be installed.
+    -h | --help                 Display help
+    -p <conda-install-path>     The path where the conda environment conda will be installed.
+    --node 			Install nodejs along with the python environment
 EOF
 }
 
 # ---------- Read command line options ----------#
-CONDA_INSTALL_PATH=${1:-""}  # default is unset ("")
-# If still unset (i.e. not given on cmdline): ask user
-echo $CONDA_INSTALL_PATH
-while [ -z $CONDA_INSTALL_PATH ]; do
+function _setArgs {
+  while [ "${1:-}" != "" ]; do
+    case "$1" in
+      "-p" | "--path")
+        shift
+        CONDA_INSTALL_PATH="$1"
+        ;;
+      "--node")
+        INSTALL_NODE=true
+        ;;
+      "-h" | "--help")
+	usage
+	exit 0;
+    esac
+    shift
+  done
+}
+
+_setArgs "$@";
+echo "$CONDA_INSTALL_PATH"
+# If CONDA_INSTALL_PATH still unset (i.e. not given on cmdline): ask user
+while [ "$CONDA_INSTALL_PATH" = "" ]; do
     read -p "Enter the directory in which the Anaconda environment should be installed: " CONDA_INSTALL_PATH
 done
 
@@ -129,6 +150,11 @@ echo "Installing In-Silico-Framework conda dependencies."
 sed "s|https://.*/|$SCRIPT_DIR/downloads/conda_packages/|" $SCRIPT_DIR/conda_requirements.txt > $SCRIPT_DIR/tempfile
 conda update --file $SCRIPT_DIR/tempfile --quiet
 
+# 2.2 -- Installing nodejs if necessary
+if [ "$INSTALL_NODE"=true ]; then
+    echo "Installing nodejs"
+    conda install -y nodejs -c conda-forge --repodata-fn=repodata.json
+fi
 # -------------------- 3. Installing PyPI dependencies -------------------- #
 print_title "3/6. Installing PyPI dependencies"
 # 3.0 -- Downloading In-Silico-Framework pip dependencies (if necessary).
@@ -164,6 +190,8 @@ cd $channels; nrnivmodl
 cd $netcon; nrnivmodl
 
 # -------------------- Cleanup -------------------- #
+echo ""
+echo ""
 echo "Succesfully installed In-Silico-Framework for Python 3.8"
 rm $SCRIPT_DIR/tempfile
 popd
