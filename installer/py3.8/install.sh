@@ -31,10 +31,10 @@ function print_title {
 
 function usage {
     cat << EOF
-Usage: ./isf-install.sh [-p <conda-install-path>] [--node]
+Usage: ./isf-install.sh [-p|--path <conda-install-path>] [--node]
 
-    -h | --help                 Display help
-    -p <conda-install-path>     The path where the conda environment conda will be installed.
+    -h | --help     Display help
+    -p | --path     The path where the conda environment conda will be installed.
     --node 			Install nodejs along with the python environment
 EOF
 }
@@ -61,10 +61,6 @@ function _setArgs {
 
 _setArgs "$@";
 echo "$CONDA_INSTALL_PATH"
-# If CONDA_INSTALL_PATH still unset (i.e. not given on cmdline): ask user
-while [ "$CONDA_INSTALL_PATH" = "" ]; do
-    read -p "Enter the directory in which the Anaconda environment should be installed: " CONDA_INSTALL_PATH
-done
 
 # -------------------- 0. Setup -------------------- #
 print_title "0/6. Preliminary checks"

@@ -1,6 +1,6 @@
 # Installation of in-silico-framework followed by CI tests.
 # Builds ISF locally on the MPINB-hosted runner and runs all tests
-name: ISF Py 2.7
+name: Py 2.7
 # Controls when the workflow will run
 
 on:

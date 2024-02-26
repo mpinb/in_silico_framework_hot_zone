@@ -1,4 +1,4 @@
-name: ISF Py 3.8
+name: Py 3.8
 on:
   push:
     branches:
