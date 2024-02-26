@@ -51,8 +51,9 @@ function _setArgs {
         INSTALL_NODE=true
         ;;
       "-h" | "--help")
-	usage
-	exit 0;
+        usage
+        exit 0
+        ;;
     esac
     shift
   done
