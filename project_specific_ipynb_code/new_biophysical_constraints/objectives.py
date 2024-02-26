@@ -14,13 +14,25 @@ objectives_hyperpolarizing = ['hyperpolarizing.Sag', 'hyperpolarizing.Attenuatio
 objectives_crit_freq = ['crit_freq.frequency_error', 
                         'crit_freq.num_spikes_error']
 
-objectives_chrip = ['chirp.res_freq',
+objectives_chirp = ['chirp.res_freq',
  'chirp.res_freq_dend',
  'chirp.transfer_dend',
  'chirp.synch_freq']
+
+#typo kept to not break other code
+objectives_chrip = objectives_chirp 
 
 objectives_by_stimulus = {'bAP': objectives_bAP,
                    'BAC': objectives_BAC2_only, 
                    'StepOne': objectives_step1, 
                    'StepTwo': objectives_step2, 
                    'StepThree': objectives_step3}
+
+objectives_by_stimulus_new = {'bAP': objectives_bAP,
+                   'BAC': objectives_BAC2_only, 
+                   'StepOne': objectives_step1, 
+                   'StepTwo': objectives_step2, 
+                   'StepThree': objectives_step3,
+                   'hyperpolarizing': [obj for obj in objectives_hyperpolarizing if 'Att' not in obj] ,
+                   'crit_freq': objectives_crit_freq, 
+                   'chirp': objectives_chirp}
