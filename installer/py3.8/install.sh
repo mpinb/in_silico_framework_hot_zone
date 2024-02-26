@@ -31,10 +31,10 @@ function print_title {
 
 function usage {
     cat << EOF
-Usage: ./isf-install.sh [-p <conda-install-path>] [--node]
+Usage: ./isf-install.sh [-p|--path <conda-install-path>] [--node]
 
-    -h | --help                 Display help
-    -p <conda-install-path>     The path where the conda environment conda will be installed.
+    -h | --help     Display help
+    -p | --path     The path where the conda environment conda will be installed.
     --node 			Install nodejs along with the python environment
 EOF
 }
@@ -51,19 +51,19 @@ function _setArgs {
         INSTALL_NODE=true
         ;;
       "-h" | "--help")
-	usage
-	exit 0;
+        usage
+        exit 0
+        ;;
     esac
     shift
   done
 }
 
 _setArgs "$@";
-echo "$CONDA_INSTALL_PATH"
-# If CONDA_INSTALL_PATH still unset (i.e. not given on cmdline): ask user
-while [ "$CONDA_INSTALL_PATH" = "" ]; do
-    read -p "Enter the directory in which the Anaconda environment should be installed: " CONDA_INSTALL_PATH
-done
+if [ -z "$CONDA_INSTALL_PATH"  ]; then
+    echo 'Missing -p or --path. Please provide an installation path for the environment.' >&2
+    exit 1
+fi
 
 # -------------------- 0. Setup -------------------- #
 print_title "0/6. Preliminary checks"
@@ -151,10 +151,11 @@ sed "s|https://.*/|$SCRIPT_DIR/downloads/conda_packages/|" $SCRIPT_DIR/conda_req
 conda update --file $SCRIPT_DIR/tempfile --quiet
 
 # 2.2 -- Installing nodejs if necessary
-if [ "$INSTALL_NODE"=true ]; then
+if [ "$INSTALL_NODE" = true ]; then
     echo "Installing nodejs"
     conda install -y nodejs -c conda-forge --repodata-fn=repodata.json
 fi
+
 # -------------------- 3. Installing PyPI dependencies -------------------- #
 print_title "3/6. Installing PyPI dependencies"
 # 3.0 -- Downloading In-Silico-Framework pip dependencies (if necessary).

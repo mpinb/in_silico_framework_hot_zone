@@ -39,3 +39,17 @@ distributed:
 	  terminate: False  # fraction at which we terminate the worker
 ```
 (See this question on [StackOverflow](https://stackoverflow.com/questions/57997463/dask-warning-worker-exceeded-95-memory-budget))
+
+## Automatic workflows
+The workflow files in [.github/workflows](.github/workflows) define automatic workflows that run as soon as some trigger event happens. This trigger event is currently defined as push and pull requests on (almost) all branches. We have set up a local machine with (since last update) 8 runners and 10TB of disk space to take care of parallellized testing for speedy development. Upon such trigger event, it will perform the following actions:
+1. Fetch the previous commit on the runner
+2. Based on the commit it receives, figure out if a rebuild of the codebase is necessary
+  a. Does a previous build already exists on the runner?
+  b. Was the previous build succesful?
+  c. Do the changes in the current commit not warrant a rebuild (i.e. they are not changes in the .github/workflows, testing/, or installer/ folder)
+  If the answer is yes to all these, it will skip the build process, otherwise it will (re)build the codebase
+3. Run the test suite
+
+
+### Cluster configuration
+Configuring cluster settings is outlined in a separate repository: https://github.com/mpinb/cluster_control

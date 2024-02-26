@@ -2,8 +2,10 @@
 import sys, os, time, random, string, warnings, six, cloudpickle, \
     contextlib, io, dask, distributed, logging, tempfile, shutil, \
          signal, logging, threading, hashlib, collections, inspect, json
+         signal, logging, threading, hashlib, collections, inspect, json
 from six.moves.cPickle import PicklingError # this import format has potential issues (see six documentation) -rieke
 from pathlib import Path
+from copy import deepcopy
 from copy import deepcopy
 from six.moves import cPickle
 import dask.dataframe as dd
@@ -420,6 +422,7 @@ def calc_recursive_filetree(
     db, root_dir_path, max_lines=30,
     depth=0, max_depth=2, max_lines_per_key=3,
     lines=None, indent=None, all_files=False, colorize=True):
+    lines=None, indent=None, all_files=False, colorize=True):
     """
     Fetches the contents of an db and formats them as a string representing a tree structure
 
@@ -427,6 +430,11 @@ def calc_recursive_filetree(
         root_dir_path (_type_): _description_
         depth (_type_): _description_
     """
+    kwargs = locals()
+    if colorize == False:
+        _colorize_key = lambda x: x.name
+    else:
+        _colorize_key = colorize_key
     kwargs = locals()
     if colorize == False:
         _colorize_key = lambda x: x.name
@@ -440,6 +448,7 @@ def calc_recursive_filetree(
     if not all_files:
         listd = [e for e in listd if e.name in db.keys() or e.name == "db"]
 
+
     for i, element in enumerate(listd):
         # stop iteration if max lines per key is reached
         if i == max_lines_per_key and depth:
@@ -449,11 +458,34 @@ def calc_recursive_filetree(
         # stop iteration if max lines is reached
         if len(lines) >= max_lines:
             lines.append(indent + '... ({} more)'.format(len(listd)-i))
+            lines.append(indent + '... ({} more)'.format(len(listd)-i))
             return lines
         
         # format the strings
         prefix = indent + last if i == len(listd)-1 else indent + tee
 
+        if not element.is_dir():  # not a directory: just add the file
+            lines.append(prefix + _colorize_key(element))
+        elif depth >= max_depth:
+            # directory at max depth: add, but don't recurse deeper
+            colored_key = _colorize_key(element)
+            colored_key = str(colored_key + os.sep + '...') if Path.exists(element/'db') else element.name
+            lines.append(prefix + colored_key)
+        else:
+            # Directory: recurse deeper
+            recursion_kwargs = deepcopy(kwargs)  # adapt kwargs for recursion
+            lines.append(prefix + _colorize_key(element))
+            recursion_kwargs['depth'] += 1  # Recursion index
+            recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
+            recursion_kwargs['root_dir_path'] = element
+            recursion_kwargs['lines'] = lines
+            if Path.exists(element/'db') and not all_files:
+                # subdb: recurse deeper without adding 'db' as key
+                # (only add 'db' if all_files=True)
+                recursion_kwargs['db'] = db[element.name]
+                recursion_kwargs['root_dir_path'] = Path(recursion_kwargs['db'].basedir)
+            lines = calc_recursive_filetree(**recursion_kwargs)
+            
         if not element.is_dir():  # not a directory: just add the file
             lines.append(prefix + _colorize_key(element))
         elif depth >= max_depth:
@@ -530,6 +562,7 @@ def is_db(dir_to_data):
     '''returns True, if dir_to_data is a (sub)db, False otherwise'''
     can_exist = [
         'db_state.json', 
+        'db',
         'db',
         'sqlitedict.db',  # for backwards compatibility
         ]

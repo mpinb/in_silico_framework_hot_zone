@@ -528,7 +528,7 @@ class CMVDataParser:
             ion_data = self._get_ion_dynamics_at_timepoint(time_point, keyword)      
             return_data = self._get_color_per_section(ion_data) if return_color else ion_data
 
-        elif keyword in [*mcolors.BASE_COLORS, *mcolors.TABLEAU_COLORS, *mcolors.CSS4_COLORS, *mcolors.XKCD_COLORS] :
+        elif keyword in list(mcolors.BASE_COLORS) + list(mcolors.TABLEAU_COLORS) + list(mcolors.CSS4_COLORS) + list(mcolors.XKCD_COLORS):
             return_data = [[keyword]]  # soma, just one point
             for sec in self.cell.sections:
                 if not sec.label in ("AIS", "Myelin", "Soma"):
@@ -541,7 +541,7 @@ class CMVDataParser:
     
     def _keyword_is_scalar_data(self, keyword):
         if isinstance(keyword, str):
-            return keyword in ("voltage", "vm", "synapses", "synapse", "dendrites", "dendritic_group") + tuple(self.possible_scalars,)
+            return keyword in ("voltage", "vm", "synapses", "synapse", "dendrites", "dendritic_group", *self.possible_scalars)
         return True  # if not string, should be scalar data
     
     def _get_color_per_section(
@@ -650,10 +650,6 @@ class CellMorphologyVisualizer(CMVDataParser):
             - path: path were the images should be stored
             - client: dask client for parallelization
         '''
-        if client is None:
-            logger.warning("No dask client provided. Images will be generated on a single thread, which may take some time.")
-            client = distributed.LocalCluster(n_workers=1, threads_per_worker=1)
-        
         if os.path.exists(path):
             if os.listdir(path):
                 logger.info(
