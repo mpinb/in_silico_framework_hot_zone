@@ -35,7 +35,6 @@ def make_chirp_stim(duration = None, delay = None, final_freq = None):
     
     
 def setup_iclamp_vplay(cell, delay = None, duration = None, final_freq = None, dist = None):
-    
     t_stim, v_stim = make_chirp_stim(duration = duration, delay = delay, final_freq = final_freq)
     stim_duration_incl_delay = delay + duration 
     
@@ -122,7 +121,6 @@ class Chirp:
         out = {}
         for name,(_,mean,std) in iter(self.definitions.items()):
             out.update(getattr(self, name)(voltage_traces, mean, std))
-#             out.update(getattr(self, name)(voltage_traces))
         return out   
 
     def variables(self, voltage_traces): 
@@ -148,33 +146,14 @@ class Chirp:
         t,v,i = voltage_traces['tVec'],voltage_traces['vList'][0], voltage_traces['iList'][0]
         signal_start, freq_axis, freq_indx = self.variables(voltage_traces)
 
-#         Res_initial_ignored = False
         stim_fft = self.fft_mag(voltage_traces, i)
         response_fft = self.fft_mag(voltage_traces, v)
         ZAP = response_fft/stim_fft
-        
-#         cropped_ZAP =  [y for x, y in zip(freq_axis, ZAP) if x>= 0.5]
-#         cropped_freq =  [x for x, y in zip(freq_axis, ZAP) if x>= 0.5]
-        
-#         coefs = I.np.polyfit(cropped_freq, cropped_ZAP, 13)
-#         fit = [I.np.polyval(coefs, x) for x in freq_axis]
-#         freq_axis_high_res = I.np.arange(0.5,20.0001,0.01)
-#         fit = [I.np.polyval(coefs, x) for x in freq_axis_high_res]
         freq_axis_high_res, fit = polyfilt_smoothing(freq_axis, ZAP)
-
         Res_freq = freq_axis_high_res[(np.where(fit == max(fit)))[0]][0]
-#         y = I.scipy.signal.savgol_filter(ZAP, window_length = 19, polyorder = 3, mode='interp')
-#         Res_freq = freq_axis[(np.where(y == max(y)))[0]][0]
-#         if Res_freq < 0.5: 
-#             Res_freq = sorted(zip(y, freq_axis), reverse = True)[1][1]
-#             Res_initial_ignored = True 
         
-        return {'chirp.res_freq.normalized': (Res_freq- mean)/std, 'chirp.res_freq.raw': Res_freq,'chirp.res_freq': I.np.abs((Res_freq- mean)/std)}
-#     , 'chirp.ZAP': ZAP, 'chirp.signal_start': signal_start, 'chirp.stim_fft': stim_fft, 
-#                 'chirp.response_fft': response_fft, 'chirp.fit': fit, 'chirp.freq_axis_high_res': freq_axis_high_res}
-#                 Unfiltered_ZAP': ZAP}
-#                 'Res_initial_ignored':  Res_initial_ignored}
-#         return {'Res_freq': Res_freq, 'ZAP': y}
+        return {'chirp.res_freq.normalized': (Res_freq- mean)/std, 'chirp.res_freq.raw': Res_freq,'chirp.res_freq': I.np.abs((Res_freq- mean)/std), 
+               'chirp.ZAP': fit}
                  
     def ZPP(self, voltage_traces, mean, std): 
         t,v,i = voltage_traces['tVec'],voltage_traces['vList'][0], voltage_traces['iList'][0]
@@ -203,7 +182,6 @@ class Chirp_dend:
         out = {}
         for name,(_,mean,std) in iter(self.definitions.items()):
             out.update(getattr(self, name)(voltage_traces, mean, std))
-#             out.update(getattr(self, name)(voltage_traces))
         return out   
 
     def variables(self, voltage_traces): 
@@ -233,26 +211,11 @@ class Chirp_dend:
         stim_fft = self.fft_mag(voltage_traces, i)
         response_fft = self.fft_mag(voltage_traces, v_dendrite)
         ZAP = response_fft/stim_fft
-
-#         cropped_ZAP =  [y for x, y in zip(freq_axis, ZAP) if x>= 0.5]
-#         cropped_freq =  [x for x, y in zip(freq_axis, ZAP) if x>= 0.5]
-        
-#         coefs = I.np.polyfit(cropped_freq, cropped_ZAP, 13)
-#         fit = [I.np.polyval(coefs, x) for x in freq_axis]
-        
-#         freq_axis_high_res = I.np.arange(0.5,20.0001,0.01)
-#         fit = [I.np.polyval(coefs, x) for x in freq_axis_high_res]
         freq_axis_high_res, fit = polyfilt_smoothing(freq_axis, ZAP)
-        
         Res_freq = freq_axis_high_res[(np.where(fit == max(fit)))[0]][0]
-#         y = I.scipy.signal.savgol_filter(ZAP, window_length = 19, polyorder = 3, mode='interp')
-#         Res_freq = freq_axis[(np.where(y == max(y)))[0]][0]
-#         if Res_freq < 0.5: 
-#             Res_freq = sorted(zip(y, freq_axis), reverse = True)[1][1]
-#             Res_initial_ignored = True 
         
-        return {'chirp.res_freq_dend': I.np.abs((Res_freq- mean)/std), 'chirp.res_freq_dend.normalized': (Res_freq- mean)/std, 'chirp.res_freq_dend_raw': Res_freq}
-#     , 'chirp.ZAP_dend': ZAP, 'chirp.fit_dend': fit}
+        return {'chirp.res_freq_dend': I.np.abs((Res_freq- mean)/std), 'chirp.res_freq_dend.normalized': (Res_freq- mean)/std, 'chirp.res_freq_dend.raw': Res_freq, 
+               'chirp.ZAP_dend': fit}
    
     def Transfer_dend(self, voltage_traces, mean, std):
         t,v,i = voltage_traces['tVec'],voltage_traces['vList'][0], voltage_traces['iList'][0]
@@ -263,26 +226,13 @@ class Chirp_dend:
         stim_fft = self.fft_mag(voltage_traces, i)
         response_fft = self.fft_mag(voltage_traces, v)
         ZAP = response_fft/stim_fft
-        
-#         cropped_ZAP =  [y for x, y in zip(freq_axis, ZAP) if x>= 1]
-#         cropped_freq =  [x for x, y in zip(freq_axis, ZAP) if x>= 1]
-        
-#         coefs = I.np.polyfit(cropped_freq, cropped_ZAP, 13)
-        
-#         freq_axis_high_res = I.np.arange(0.5,20.0001,0.01)
-#         fit = [I.np.polyval(coefs, x) for x in freq_axis_high_res]
-
         freq_axis_high_res, fit = polyfilt_smoothing(freq_axis, ZAP)
-    
         Transfer = freq_axis_high_res[(np.where(fit == max(fit)))[0]][0]
-        
-#         ZAP = I.scipy.signal.savgol_filter(ZAP, window_length = 19, polyorder = 3, mode='interp')
-#         Transfer = freq_axis[(np.where(ZAP == max(ZAP)))[0]][0]
         
         return {'chirp.transfer_dend': I.np.abs((Transfer - mean)/std), 
                 'chirp.transfer_dend.normalized': (Transfer - mean)/std,
-                'chirp.transfer_dend.raw': Transfer}
-#                 'ZAP_transfer': ZAP, 'chirp.fit_transfer': fit}
+                'chirp.transfer_dend.raw': Transfer, 
+               'chirp.transfer_ZAP': fit}              
                  
     def ZPP_dend(self, voltage_traces, mean, std): 
         t,v,i = voltage_traces['tVec'],voltage_traces['vList'][0], voltage_traces['iList'][0]
@@ -293,26 +243,22 @@ class Chirp_dend:
         
         freq_axis_high_res, fit = polyfilt_smoothing(freq_axis, ZPP)
         
+#         #zpp at the dendrite 
+#         v_dendrite = voltage_traces['vList'][1] 
+#         z_ratio_d = I.np.fft.rfft(v_dendrite[signal_start:])/I.np.fft.rfft(i[signal_start:])
+#         ZPP_dend_dend = (I.np.angle(z_ratio_d)[1:freq_indx])*(180/I.np.pi)
+#         freq_axis_high_res, fit_d = polyfilt_smoothing(freq_axis, ZPP_dend_dend)
+#         #
+
         return {'chirp.ZPP_dend': fit, 'chirp.freq_axis': freq_axis,  'chirp.freq_axis_high_res': freq_axis_high_res}
-
-
+               #'chirp.ZPP_dend_dend': fit_d}
 
 def Synch(dict_): 
     #ZPP: impedance phase profile
     #ZAP: impedance amplitude profile
-#         dict_['chirp.ZPP_filtered'] = #ndi.uniform_filter1d(dict_['chirp.ZPP'], size = 16, mode='nearest') 
-#         dict_['chirp.ZPP_dend_filtered'] = # ndi.uniform_filter1d(dict_['chirp.ZPP_dend'], size = 16, mode='nearest')
+
 
         synch = {}
-
-#         for x, a1, a2 in zip(dict_['chirp.freq_axis'], dict_['chirp.ZPP_filtered'], dict_['chirp.ZPP_dend_filtered']): 
-#             if abs(a1 - a2) < 0.5 and x>1:
-#                 synch[x] = (a1, a2)
-        
-#         if synch:
-#             synch_freq = [key for i,key in enumerate(synch.keys()) if i ==  I.math.ceil(len(synch)/2)-1][0]
-#         else:
-#             synch_freq = -1000
         if not 'chirp.freq_axis_high_res' in dict_:
             return dict_
         
@@ -362,9 +308,7 @@ def Synch(dict_):
         dict_['chirp.synch_freq.raw'] = synch_freq
         dict_['chirp.synch_freq.normalized'] = (synch_freq - mean)/std
         dict_['chirp.synch_freq'] = I.np.abs((synch_freq - mean)/std)
-        
-#         del(dict_['chirp.ZPP'], dict_['chirp.ZPP_dend'])
-        
+                
         return dict_
     
     
