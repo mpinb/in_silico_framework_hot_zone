@@ -60,9 +60,9 @@ function _setArgs {
 }
 
 _setArgs "$@";
-if [ -z $CONDA_INSTALL_PATH  ]; then
-        echo 'Missing -p or --path. Please provide an installation path for the environment.' >&2
-        exit 1
+if [ -z "$CONDA_INSTALL_PATH"  ]; then
+    echo 'Missing -p or --path. Please provide an installation path for the environment.' >&2
+    exit 1
 fi
 
 # -------------------- 0. Setup -------------------- #
@@ -151,10 +151,11 @@ sed "s|https://.*/|$SCRIPT_DIR/downloads/conda_packages/|" $SCRIPT_DIR/conda_req
 conda update --file $SCRIPT_DIR/tempfile --quiet
 
 # 2.2 -- Installing nodejs if necessary
-if [ "$INSTALL_NODE"=true ]; then
+if [ "$INSTALL_NODE" = true ]; then
     echo "Installing nodejs"
     conda install -y nodejs -c conda-forge --repodata-fn=repodata.json
 fi
+
 # -------------------- 3. Installing PyPI dependencies -------------------- #
 print_title "3/6. Installing PyPI dependencies"
 # 3.0 -- Downloading In-Silico-Framework pip dependencies (if necessary).
