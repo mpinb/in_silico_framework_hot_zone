@@ -52,12 +52,12 @@ class CMVDataParser:
         self.soma = self.cell.soma
         self.soma_center = np.mean(self.soma.pts, axis=0)
         self.parents = {}
-        self.morphology = None
+        self._morphology_unconnected = self.morphology = None
         """A pd.DataFrame containing point information, diameter and section ID"""
         self.sections = None
         """A set of section indices"""
         self.n_sections = None
-        self.lookup_table = None
+        self._morphology_connected = None
         """A pd.DataFrame containing point information, diameter and section ID with duplicated points for branchpoints.
         This is the morphology dataframe that's most often used. Only the interactive visualizer plots out self.morphology."""
         self._calc_morphology(cell)  # a pandas DataFrame
@@ -193,7 +193,7 @@ class CMVDataParser:
         Nothing
         """
 
-        assert len(self.morphology) > 0, "No morphology initialised yet"
+        assert len(self._morphology_unconnected) > 0, "No morphology initialised yet"
         # the bifurcation sections is the entire section: can be quite large
         # take last point, i.e. furthest from soma
         bifurcation = get_main_bifurcation_section(cell).pts[-1]
@@ -211,9 +211,9 @@ class CMVDataParser:
         rotation = Rotation.from_rotvec(rot_vec)
 
         # Anchor soma to (0, 0, 0) and rotate trunk to align with z-axis
-        self.lookup_table[['x', 'y', 'z']] = rotation.apply([
+        self._morphology_connected[['x', 'y', 'z']] = rotation.apply([
             e - self.soma_center
-            for e in self.lookup_table[['x', 'y', 'z']].values
+            for e in self._morphology_connected[['x', 'y', 'z']].values
         ])
 
         self.soma_center = (0., 0., 0.)
@@ -257,26 +257,27 @@ class CMVDataParser:
                     d = sec.diamList[i]
                     points.append([x, y, z, d, sec_n, seg_n])
 
-        self.lookup_table = pd.DataFrame(
+        self._morphology_connected = pd.DataFrame(
             points, 
             columns=['x', 'y', 'z', 'diameter', 'sec_n', 'seg_n'])
-        self.lookup_table['sec_n'] = self.lookup_table['sec_n'].astype(int)
-        self.lookup_table['seg_n'] = self.lookup_table['seg_n'].astype(int)
+        self._morphology_connected['sec_n'] = self._morphology_connected['sec_n'].astype(int)
+        self._morphology_connected['seg_n'] = self._morphology_connected['seg_n'].astype(int)
         t2 = time.time()
         logger.info('Initialised simulation data in {} seconds'.format(
             np.around(t2 - t1, 2)))
         
-        self.sections = self.lookup_table['sec_n'].unique()
+        self.sections = self._morphology_connected['sec_n'].unique()
         self.n_sections = len(self.sections)
         for sec in self.sections[1:]:
             parent_sec = self.parents[sec]
-            parent_point = self.lookup_table[self.lookup_table['sec_n'] == parent_sec].iloc[[-1]]
+            parent_point = self._morphology_connected[self._morphology_connected['sec_n'] == parent_sec].iloc[[-1]]
             parent_point["sec_n"] = sec
-            self.lookup_table = pd.concat([parent_point, self.lookup_table])
+            self._morphology_connected = pd.concat([parent_point, self._morphology_connected])
         # the first :arg n_sections: points are now the branch points
         # indexing the df by section number will always begin with the branch point, i.e. first point of the section
     
-        self.morphology = self.lookup_table[self.n_sections-1:]
+        self._morphology_unconnected = self._morphology_connected[self.n_sections-1:]
+    
     def _get_voltages_at_timepoint(self, time_point):
         '''
         Retrieves the VOLTAGE along the whole cell morphology from cell object at a particular time point.
@@ -554,6 +555,21 @@ class CMVDataParser:
         color_per_section = [self.cmap.to_rgba(data) for data in array]
         return color_per_section
     
+    def scale_diameter(self, scale_func):
+        """
+        Scale the diameter of the visualization with a scaling function.
+        :arg scale_func: should transform an array to an array of equal length.
+        To set a fixed diameter rather than scaling, pass `lambda x: fixed_d`
+
+        Args:
+            scale_func: method to scale the diameters with. Must accept an array and return an array. This will be passed to `pd.DataFrame.apply()`
+
+        Returns:
+            None: Nothing. 
+        """
+        self._morphology_connected['diameter'] = self._morphology_connected['diameter'].apply(scale_func)
+        assert self._morphology_unconnected['diameter'] == self.morphology['diameter'] == self._morphology_connected[self.n_sections-1:]['diameter']
+    
     def set_cmap(
         self, 
         cmap="jet", 
@@ -669,8 +685,8 @@ class CellMorphologyVisualizer(CMVDataParser):
 
         t1 = time.time()
         maybe_scattered_lookup_table = client.scatter(
-            self.lookup_table, 
-            broadcast=True) if client is not None else self.lookup_table
+            self._morphology_connected, 
+            broadcast=True) if client is not None else self._morphology_connected
         if client is None:
             logger.warning("No dask client provided. Images will be generated on a single thread, which may take some time.")
             client = dask.distributed.Client(dask.distributed.LocalCluster(n_workers=1, threads_per_worker=1))
@@ -739,7 +755,7 @@ class CellMorphologyVisualizer(CMVDataParser):
             legend = self.cmap
         
         fig, ax = get_3d_plot_morphology(
-            self.lookup_table,
+            self._morphology_connected,
             colors=self._color_keyword_to_array(color, time_point),
             color_keyword=color,
             synapses= self._get_synapses_at_timepoint(time_point) if show_synapses else None,
@@ -929,10 +945,10 @@ class CellMorphologyVisualizer(CMVDataParser):
 
         # add diameters by default
         scalar_data = {
-            'diameter': self.lookup_table['diameter'].values
+            'diameter': self._morphology_connected['diameter'].values
         }
 
-        scattered_lookup_table = client.scatter(self.lookup_table, broadcast=True) if client is not None else self.lookup_table
+        scattered_lookup_table = client.scatter(self._morphology_connected, broadcast=True) if client is not None else self._morphology_connected
         if client is None:
             logger.warning("No dask client provided. Images will be generated on a single thread, which may take some time.")
             client = dask.distributed.Client(dask.distributed.LocalCluster(n_workers=1, threads_per_worker=1))
@@ -1011,22 +1027,22 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
         # Create figure
         marker_markup = {
             'line': {'width': 0},
-            'size': self.morphology['diameter']
+            'size': self._morphology_unconnected['diameter']
             }  # remove outline of markers
         color = self._data_per_section_to_data_per_point(
                 self._color_keyword_to_array(
                     color, time_point, return_color=False))
         if color is not None:
             marker_markup['color'] = color
-        marker_markup['size'] = self.morphology['diameter'] if diameter is None else [diameter]*len(self.morphology)
-        hover_text = ["section {}".format(e) for e in self.morphology["sec_n"]]
+        marker_markup['size'] = self._morphology_unconnected['diameter'] if diameter is None else [diameter]*len(self._morphology_unconnected)
+        hover_text = ["section {}".format(e) for e in self._morphology_unconnected["sec_n"]]
         
         fig = go.FigureWidget(
             [
                 go.Scatter3d(
-                    x=self.morphology["x"].values,
-                    y=self.morphology["y"].values,
-                    z=self.morphology["z"].values,
+                    x=self._morphology_unconnected["x"].values,
+                    y=self._morphology_unconnected["y"].values,
+                    z=self._morphology_unconnected["z"].values,
                     mode='markers',
                     opacity=1,
                     marker=marker_markup,
@@ -1062,7 +1078,7 @@ class CellMorphologyInteractiveVisualizer(CMVDataParser):
             ipywidgets.VBox object: an interactive render of the cell.
         """
         self._update_times_to_show(self.t_start, self.t_end, self.t_step)
-        sections = self.morphology['sec_n']
+        sections = self._morphology_unconnected['sec_n']
 
         #------------ Create figure
         # Interactive cell
