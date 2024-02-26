@@ -541,7 +541,7 @@ class CMVDataParser:
     
     def _keyword_is_scalar_data(self, keyword):
         if isinstance(keyword, str):
-            return keyword in ("voltage", "vm", "synapses", "synapse", "dendrites", "dendritic_group", *self.possible_scalars)
+            return keyword in ("voltage", "vm", "synapses", "synapse", "dendrites", "dendritic_group") + tuple(self.possible_scalars,)
         return True  # if not string, should be scalar data
     
     def _get_color_per_section(
