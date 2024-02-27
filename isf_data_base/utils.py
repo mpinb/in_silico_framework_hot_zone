@@ -2,7 +2,6 @@
 import sys, os, time, random, string, warnings, six, cloudpickle, \
     contextlib, io, dask, distributed, logging, tempfile, shutil, \
          signal, logging, threading, hashlib, collections, inspect, json
-         signal, logging, threading, hashlib, collections, inspect, json
 from six.moves.cPickle import PicklingError # this import format has potential issues (see six documentation) -rieke
 from pathlib import Path
 from copy import deepcopy
@@ -421,7 +420,6 @@ def colorize_key(key):
 def calc_recursive_filetree(
     db, root_dir_path, max_lines=30,
     depth=0, max_depth=2, max_lines_per_key=3,
-    lines=None, indent=None, all_files=False, colorize=True):
     lines=None, indent=None, all_files=False, colorize=True):
     """
     Fetches the contents of an db and formats them as a string representing a tree structure

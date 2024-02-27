@@ -89,10 +89,9 @@ if not 'ISF_MINIMIZE_IO' in os.environ:
 import barrel_cortex
 from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
 from isf_data_base.isf_data_base import DataBase
-from model_data_base.model_data_base import ModelDataBase
 #from model_data_base.analyze.burst_detection import burst_detection
-from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
-from model_data_base.analyze.temporal_binning import universal as temporal_binning
+from isf_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
+from isf_data_base.analyze.temporal_binning import universal as temporal_binning
 
 from isf_data_base.analyze.spike_detection import spike_detection, spike_in_interval
 from isf_data_base.analyze.spatiotemporal_binning import universal as spatiotemporal_binning
@@ -132,14 +131,15 @@ load_initialized_cell_and_evokedNW_from_db = db_init_simrun_general.load_initial
 synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
 db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
 
-from model_data_base.analyze import split_synapse_activation  #, color_cellTypeColorMap, excitatory, inhibitory
-from model_data_base.utils import silence_stdout
-from model_data_base.utils import select, pandas_to_array, pooled_std
-from model_data_base.utils import skit, chunkIt
-from model_data_base.utils import cache
-from model_data_base import utils
-from model_data_base.model_data_base_register import assimilate_remote_register, get_mdb_by_unique_id
-from model_data_base.mdbopen import resolve_mdb_path, create_mdb_path
+from isf_data_base.analyze import split_synapse_activation  #, color_cellTypeColorMap, excitatory, inhibitory
+from isf_data_base.utils import silence_stdout
+from isf_data_base.utils import select, pandas_to_array, pooled_std
+from isf_data_base.utils import skit, chunkIt
+from isf_data_base.utils import cache
+from isf_data_base import utils
+from isf_data_base.isf_data_base_register import assimilate_remote_register
+from isf_data_base.isf_data_base import get_db_by_unique_id
+from isf_data_base.dbopen import resolve_db_path, create_db_path
 
 try:  ##to avoid import errors in distributed system because of missing matplotlib backend
     import matplotlib
