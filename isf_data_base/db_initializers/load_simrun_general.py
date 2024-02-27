@@ -667,7 +667,7 @@ def init(db, simresult_path,  \
         raise DeprecationWarning(
             """The pandas_to_msgpack dumper is deprecated for Python 3.8 and onwards. Use pandas_to_parquet instead.\n
             If you _really_ need to use pandas_to_msgpack for whatever reason, use ISF Py2.7 and pretend to be the test suite by overriding the environment variable ISF_IS_TESTING. 
-            See model_data_base.IO.LoaderDumper.pandas_to_msgpack.dump""")
+            See isf_data_base.IO.LoaderDumper.pandas_to_msgpack.dump""")
     if burst_times:
         raise ValueError('deprecated!')
     if rewrite_in_optimized_format:

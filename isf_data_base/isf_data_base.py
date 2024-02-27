@@ -34,7 +34,7 @@ class LoaderWrapper:
     '''This is a pointer to data, which is stored elsewhere.
     
     It is used by ModelDataBase, if data is stored in a subfolder of the 
-    model_data_base.basedir folder. It is not used, if the data is stored directly
+    isf_data_base.basedir folder. It is not used, if the data is stored directly
     in the sqlite database.
     
     The process of storing data in a subfolder is as follows:
@@ -45,7 +45,7 @@ class LoaderWrapper:
        necessary to recover the data
     4. A LoaderWrapper object pointing to the datafolder with a relative
         path (to allow moving of the database) is saved under the respective key
-        in the model_data_base
+        in the isf_data_base
         
     The process of loading in the data is as follows:
     1. the user request it: db['somekey']
