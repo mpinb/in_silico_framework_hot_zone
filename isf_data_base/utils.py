@@ -5,6 +5,7 @@ import sys, os, time, random, string, warnings, six, cloudpickle, \
 from six.moves.cPickle import PicklingError # this import format has potential issues (see six documentation) -rieke
 from pathlib import Path
 from copy import deepcopy
+from copy import deepcopy
 from six.moves import cPickle
 import dask.dataframe as dd
 logger = logging.getLogger("ISF").getChild(__name__)
@@ -427,7 +428,13 @@ def calc_recursive_filetree(
         root_dir_path (_type_): _description_
         depth (_type_): _description_
     """
-    kwargs = locals()
+    recursion_kwargs = locals()
+    
+    if colorize == False:
+        _colorize_key = lambda x: x.name
+    else:
+        _colorize_key = colorize_key
+    
     if colorize == False:
         _colorize_key = lambda x: x.name
     else:
@@ -463,7 +470,29 @@ def calc_recursive_filetree(
             lines.append(prefix + colored_key)
         else:
             # Directory: recurse deeper
-            recursion_kwargs = deepcopy(kwargs)  # adapt kwargs for recursion
+            recursion_kwargs = deepcopy(recursion_kwargs)  # adapt kwargs for recursion
+            lines.append(prefix + _colorize_key(element))
+            recursion_kwargs['depth'] += 1  # Recursion index
+            recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
+            recursion_kwargs['root_dir_path'] = element
+            recursion_kwargs['lines'] = lines
+            if Path.exists(element/'db') and not all_files:
+                # subdb: recurse deeper without adding 'db' as key
+                # (only add 'db' if all_files=True)
+                recursion_kwargs['db'] = db[element.name]
+                recursion_kwargs['root_dir_path'] = Path(recursion_kwargs['db'].basedir)
+            lines = calc_recursive_filetree(**recursion_kwargs)
+            
+        if not element.is_dir():  # not a directory: just add the file
+            lines.append(prefix + _colorize_key(element))
+        elif depth >= max_depth:
+            # directory at max depth: add, but don't recurse deeper
+            colored_key = _colorize_key(element)
+            colored_key = str(colored_key + os.sep + '...') if Path.exists(element/'db') else element.name
+            lines.append(prefix + colored_key)
+        else:
+            # Directory: recurse deeper
+            recursion_kwargs = deepcopy(recursion_kwargs)  # adapt kwargs for recursion
             lines.append(prefix + _colorize_key(element))
             recursion_kwargs['depth'] += 1  # Recursion index
             recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
@@ -531,43 +560,9 @@ def is_db(dir_to_data):
     can_exist = [
         'db_state.json', 
         'db',
+        'db',
         'sqlitedict.db',  # for backwards compatibility
         ]
     return any([Path.exists(dir_to_data/e) for e in can_exist]) or \
          any([Path.exists(dir_to_data/'db'/e) for e in can_exist]) or \
             any([Path.exists(dir_to_data/'mdb'/e) for e in can_exist])
-
-def convert_legacy_mdb(basedir):
-    """Converts a legacy mdb to be compatible with new mdb
-    Adds .json files for existing .pickle files. Does not overwrite existing files.
-
-    Args:
-        basedir (str): dir of the mdb
-    """
-    from model_data_base.model_data_base import SQLBackend
-    from model_data_base.model_data_base import LoaderWrapper
-    db_state = cloudpickle.load(open(os.path.join(basedir, 'dbcore.pickle'), 'rb'))
-    metadata = SQLBackend(os.path.join(basedir, 'metadata.db'))
-    sql_backend = SQLBackend(os.path.join(basedir, 'sqlitedict.db'))
-    
-    with open(os.path.join(basedir, 'db_state.json'), 'w') as f:
-        json.dump(db_state, f)
-    
-    for key in metadata.keys():
-        if not isinstance(key, str):
-            # key is tuple
-            outpath = os.path.join(basedir, *key)
-        else:
-            outpath = os.path.join(basedir, key)
-        try:
-            dummy = sql_backend[key]
-        except Exception as e:
-            print("Error converting {}: {}".format(key, e))
-            continue
-        if isinstance(dummy, LoaderWrapper):
-            outpath = os.path.join(basedir, dummy.relpath)
-        if not os.path.exists(outpath):
-            print("Warning: key {} not found, but it exists in metadata. Skipping...".format(key))
-            continue
-        with open(os.path.join(outpath, 'metadata.json'), 'w') as f:
-            json.dump(metadata[key], f)

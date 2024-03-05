@@ -31,7 +31,7 @@ function print_title {
 
 function usage {
     cat << EOF
-Usage: ./isf-install.sh [-p|--path <conda-install-path>] [--node]
+Usage: install [-p|--path <conda-install-path>] [--node]
 
     -h | --help     Display help
     -p | --path     The path where the conda environment conda will be installed.
@@ -57,8 +57,8 @@ function _setArgs {
     esac
     shift
   done
+  shift $((OPTIND-1))
 }
-
 _setArgs "$@";
 if [ -z "$CONDA_INSTALL_PATH"  ]; then
     echo 'Missing -p or --path. Please provide an installation path for the environment.' >&2

@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-import os
+import os, json
 from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
 from .utils import cache
 from . import DataBaseException
