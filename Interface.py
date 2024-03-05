@@ -43,6 +43,7 @@ import six
 import scipy
 import scipy.signal
 import math
+import compatibility
 
 ### logging setup
 import logging
