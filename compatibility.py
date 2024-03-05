@@ -6,6 +6,7 @@ The following 3rd party modules are used: pandas, dask, distributed
 import six
 import yaml
 import cloudpickle
+import sys
 
 # try: # new dask versions
 #     synchronous_scheduler = dask.get
@@ -75,3 +76,5 @@ elif six.PY3:
             return pandas.compat.pickle_compat.load(f)
 
     YamlLoader = yaml.FullLoader  # Better choice, but only exists in Py3
+
+sys.modules['model_data_base'] = sys.modules['isf_data_base.model_data_base']
