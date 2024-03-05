@@ -428,12 +428,13 @@ def calc_recursive_filetree(
         root_dir_path (_type_): _description_
         depth (_type_): _description_
     """
-    kwargs = locals()
+    recursion_kwargs = locals()
+    
     if colorize == False:
         _colorize_key = lambda x: x.name
     else:
         _colorize_key = colorize_key
-    kwargs = locals()
+    
     if colorize == False:
         _colorize_key = lambda x: x.name
     else:
@@ -446,7 +447,6 @@ def calc_recursive_filetree(
     if not all_files:
         listd = [e for e in listd if e.name in db.keys() or e.name == "db"]
 
-
     for i, element in enumerate(listd):
         # stop iteration if max lines per key is reached
         if i == max_lines_per_key and depth:
@@ -455,7 +455,6 @@ def calc_recursive_filetree(
             return lines
         # stop iteration if max lines is reached
         if len(lines) >= max_lines:
-            lines.append(indent + '... ({} more)'.format(len(listd)-i))
             lines.append(indent + '... ({} more)'.format(len(listd)-i))
             return lines
         
@@ -471,7 +470,7 @@ def calc_recursive_filetree(
             lines.append(prefix + colored_key)
         else:
             # Directory: recurse deeper
-            recursion_kwargs = deepcopy(kwargs)  # adapt kwargs for recursion
+            recursion_kwargs = deepcopy(recursion_kwargs)  # adapt kwargs for recursion
             lines.append(prefix + _colorize_key(element))
             recursion_kwargs['depth'] += 1  # Recursion index
             recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
@@ -493,7 +492,7 @@ def calc_recursive_filetree(
             lines.append(prefix + colored_key)
         else:
             # Directory: recurse deeper
-            recursion_kwargs = deepcopy(kwargs)  # adapt kwargs for recursion
+            recursion_kwargs = deepcopy(recursion_kwargs)  # adapt kwargs for recursion
             lines.append(prefix + _colorize_key(element))
             recursion_kwargs['depth'] += 1  # Recursion index
             recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
