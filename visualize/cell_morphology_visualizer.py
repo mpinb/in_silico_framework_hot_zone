@@ -3,6 +3,7 @@ import pandas as pd
 from matplotlib import colors as mcolors
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
 import numpy as np
 from visualize.vtk import write_vtk_skeleton_file
@@ -51,15 +52,17 @@ class CMVDataParser:
         """Pairs of point indices that define a line, i.e. some cell segment"""
         self.soma = self.cell.soma
         self.soma_center = np.mean(self.soma.pts, axis=0)
+        """Center of the soma of the original cell object, unaligned with z-axis."""
         self.parents = {}
+        """Maps sections to their parents. self.parents[10] returns the parent of section 10."""
         self._morphology_unconnected = self.morphology = None
         """A pd.DataFrame containing point information, diameter and section ID"""
+        self._morphology_connected = None
+        """A pd.DataFrame containing point information, diameter and section ID with duplicated points for branchpoints for connections between sections.
+        This is the morphology dataframe that's most often used. Only the interactive visualizer plots out self.morphology."""
         self.sections = None
         """A set of section indices"""
         self.n_sections = None
-        self._morphology_connected = None
-        """A pd.DataFrame containing point information, diameter and section ID with duplicated points for branchpoints.
-        This is the morphology dataframe that's most often used. Only the interactive visualizer plots out self.morphology."""
         self._calc_morphology(cell)  # a pandas DataFrame
         self.rotation_with_zaxis = None
         """Rotation object that defines the transformation between the cell trunk and the z-axis"""
@@ -216,7 +219,6 @@ class CMVDataParser:
             for e in self._morphology_connected[['x', 'y', 'z']].values
         ])
 
-        self.soma_center = (0., 0., 0.)
         self.rotation_with_zaxis = rotation
 
     def _calc_morphology(self, cell):
@@ -276,7 +278,7 @@ class CMVDataParser:
         # the first :arg n_sections: points are now the branch points
         # indexing the df by section number will always begin with the branch point, i.e. first point of the section
     
-        self._morphology_unconnected = self._morphology_connected[self.n_sections-1:]
+        self._morphology_unconnected = self.morphology = self._morphology_connected[self.n_sections-1:]
     
     def _get_voltages_at_timepoint(self, time_point):
         '''
@@ -290,8 +292,8 @@ class CMVDataParser:
          - time_point: time point from which we want to gather the voltage
         '''
         n_sim_point = np.argmin(np.abs(self.simulation_times - time_point))
-        voltage_points = [[self.soma.recVList[0][n_sim_point]]]
-        for sec_n, sec in enumerate([sec for sec in self.cell.sections if sec.label not in ("Soma", "Myelin", "AIS")]):
+        voltage_points = [[self.soma.recVList[0][n_sim_point]] * len(self.morphology[self.morphology['sec_n'] == 0])]
+        for _, sec in enumerate([sec for sec in self.cell.sections if sec.label not in ("Soma", "Myelin", "AIS")]):
             n_segs = len([seg for seg in sec])
             n_pts = len(sec.pts)
             # First point of this section is last point of prev section
@@ -303,7 +305,7 @@ class CMVDataParser:
         return voltage_points
 
     def _data_per_section_to_data_per_point(self, data_per_section):
-        d_per_point = [data_per_section[0][0]]
+        d_per_point = data_per_section[0]
         for data in data_per_section[1:]:
             d_per_point.extend(data[1:])
         return d_per_point
@@ -680,9 +682,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         azim_ = self.camera_position['azim']
 
         t1 = time.time()
-        maybe_scattered_lookup_table = client.scatter(
-            self._morphology_connected, 
-            broadcast=True) if client is not None else self._morphology_connected
+        maybe_scattered_df = client.scatter(self._morphology_connected, broadcast=True) if client is not None else self._morphology_connected
         if client is None:
             logger.warning("No dask client provided. Images will be generated on a single thread, which may take some time.")
             client = dask.distributed.Client(dask.distributed.LocalCluster(n_workers=1, threads_per_worker=1))
@@ -695,16 +695,16 @@ class CellMorphologyVisualizer(CMVDataParser):
             filename = path + '/{0:0=5d}.png'.format(count)
             delayeds.append(
                 dask.delayed(get_3d_plot_morphology)(
-                    lookup_table=maybe_scattered_lookup_table,
+                    lookup_table=maybe_scattered_df,
                     colors=color_per_section,
-                    synapses=self.synapses_timeseries[time_point] if show_synapses else {},
+                    synapses=self._get_synapses_at_timepoint(time_point) if show_synapses else {},
                     color_keyword=color,
                     time_point=time_point - self.time_offset,
                     save=filename,
                     population_to_color_dict=self.population_to_color_dict,
                     camera_position=self.camera_position,
                     legend=legend,
-                    synapse_legend=self.synapse_legend,
+                    synapse_legend=show_legend and show_synapses,
                     dpi=self.dpi,
                     highlight_section_kwargs=highlight_section_kwargs,
                     plot=False,
@@ -918,7 +918,7 @@ class CellMorphologyVisualizer(CMVDataParser):
         t_start=None,
         t_end=None,
         t_step=None,
-        scalar_data=None,
+        color=None,
         n_decimals=2,
         client=None):
         '''
@@ -932,28 +932,29 @@ class CellMorphologyVisualizer(CMVDataParser):
             - out_name: name of the file (not path, the file will be generated in out_dir)
             - out_dir: path where the images for the gif will be generated
         '''
-        
-        if scalar_data is not None and self._has_simulation_data():
+        scalar_data = {}
+
+        if color is not None and self._has_simulation_data():
             self._update_times_to_show(t_start, t_end, t_step)
-        if isinstance(scalar_data, str) and scalar_data.lower() in ("voltage", "membrane voltage", "vm"):
+        if isinstance(color, str) and color.lower() in ("voltage", "membrane voltage", "vm"):
             self._calc_voltage_timeseries()
-            scalar_data = {}
+            color_all_timepoints = [
+                self._data_per_section_to_data_per_point(
+                    self._get_voltages_at_timepoint(t)
+                    ) for t in self.times_to_show]
 
         # add diameters by default
-        scalar_data = {
-            'diameter': self._morphology_connected['diameter'].values
-        }
+        scalar_data['diameter'] = self._morphology_unconnected['diameter'].values
 
-        scattered_lookup_table = client.scatter(self._morphology_connected, broadcast=True) if client is not None else self._morphology_connected
+        scattered_lookup_table = client.scatter(self._morphology_unconnected, broadcast=True) if client is not None else self._morphology_unconnected
         if client is None:
             logger.warning("No dask client provided. Images will be generated on a single thread, which may take some time.")
             client = dask.distributed.Client(dask.distributed.LocalCluster(n_workers=1, threads_per_worker=1))
         
         delayeds = []
-        for t in self.times_to_show:
-            v = self._data_per_section_to_data_per_point(
-                self._get_voltages_at_timepoint(t))
-            scalar_data['Vm'] = v
+        for i, t in enumerate(self.times_to_show):
+            color_this_timepoint = color_all_timepoints[i]
+            scalar_data[color] = color_this_timepoint
             out_name_ = out_name+ "_{:06d}.vtk".format(int(str(round(t, 2)).replace('.', '')))
             delayeds.append(
                 dask.delayed(write_vtk_skeleton_file)(
@@ -1260,9 +1261,11 @@ def get_3d_plot_morphology(
 
     If you want proper tubes instead of this hacky thing, you should just use VTK.
     """
-
     #----------------- Generic axes setup
-    fig = plt.figure(figsize=(15, 15), dpi=dpi)
+    fig = plt.figure(
+        figsize=(15, 15), 
+        dpi=dpi,
+        num=str(time_point))
     ax = plt.axes(projection='3d', proj_type='ortho')
     ax.set_xticks([])
     ax.set_yticks([])
@@ -1311,18 +1314,23 @@ def get_3d_plot_morphology(
         for population in synapses.keys():
             for synapse in synapses[population]:
                 color = population_to_color_dict[population]
-                ax.scatter3D(*synapse,
-                             color=color,
-                             edgecolors='grey',
-                             s=75)
-        if synapse_legend:
-            for key in population_to_color_dict.keys():
-                if key != 'inactive':
-                    ax.scatter3D([], [], [],
-                                color=population_to_color_dict[key],
-                                label=key,
-                                edgecolor='grey',
-                                s=75)
+                ax.scatter3D(
+                    *synapse,
+                    color=color,
+                    edgecolors='grey',
+                    s=75)
+    if synapse_legend:
+        synapse_legend_ax = fig.add_axes([0.70, 0.43, 0.05, 0.2])
+        synapse_legend_ax.axis("off")
+        handles = []
+        for key in population_to_color_dict.keys():
+            if key != 'inactive':
+                handles.append(
+                    mpatches.Patch(
+                        color=population_to_color_dict[key], label=key))
+        synapse_legend_ax.legend(
+            handles=handles,
+            fontsize=12)
     
     #----------------- Plot legend
     if legend is not None:
@@ -1334,7 +1342,7 @@ def get_3d_plot_morphology(
             orientation='vertical',  
             label=color_keyword,
             fraction=0.2)
-
+        
     if time_point is not None:
         ax.text2D(
             x=0.7, y=0.7,
@@ -1343,16 +1351,13 @@ def get_3d_plot_morphology(
             fontsize=12)
 
     if save != '':
-        # call savefig on fig object, so it also works when it is a delayed object
-        plt.savefig(
+        fig.savefig(
             save, 
             edgecolor='none',
-            dpi=dpi)
-        plt.close()
-    
+            dpi=dpi,
+            bbox_inches='tight')
     if plot: 
         plt.show()
-        plt.close()
     if return_figax: 
         return fig, ax
     plt.close(fig)
