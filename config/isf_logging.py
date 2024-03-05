@@ -11,7 +11,8 @@ class LastPartFilter(logging.Filter):
         return True
 
 # All loggers will inherit the root logger's level and handlers
-logger = logging.getLogger("ISF")
+root_logger = logging.getLogger()
+isf_logger = root_logger.getChild("ISF")
 # Redirect warnings to the logging system. This will format them accordingly.
 logging.captureWarnings(True)
 logger_stream_handler = logging.StreamHandler(stream=sys.stdout)
@@ -19,5 +20,7 @@ logger_stream_handler.name = "ISF_logger_stream_handler"
 logger_stream_handler.setFormatter(
     logging.Formatter("[%(levelname)s] %(name_last)s: %(message)s"))
 logger_stream_handler.addFilter(LastPartFilter())
-logger.handlers = [logger_stream_handler]  
-logger.setLevel(logging.INFO)  # Set back to WARNING at the end
+root_logger.handlers = [logger_stream_handler]
+isf_logger.setLevel(logging.INFO)  # Set back to WARNING at the end
+
+logger = isf_logger
