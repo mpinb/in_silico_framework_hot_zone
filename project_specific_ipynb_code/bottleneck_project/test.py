@@ -1,4 +1,4 @@
-from data_base import DataBase
+from data_base.data_base import DataBase
 import Interface as I
 from bokeh.io import push_notebook, show, output_notebook
 from bokeh.layouts import row, gridplot
