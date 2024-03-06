@@ -165,3 +165,27 @@ get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_ru
                                                  'noAtt_cf_fixed_run1_20231228_RW_WR64',
                                                  'get_ddf_RW_exploration_new_Ih_crit_freq_chirp_hyperpolarizing_no_Att_cf_fixed_run1_20231228_RW_0_01',
                                                  selected_keys = ['WR64'])
+
+
+## The database below contains
+# - Results from the exploration utilizing the wave/lattice search approach. All experiments thus far have been run on the WR64 morphology.
+# The following files can be found in each result subdirectory:
+# - output_wavesearch_WR64_run_<date>_<run_number>.log - output log from search
+# - program_info.npy - an array with the following information: [final loop index, step size, minimum distance for skipping over points (not important), dimensionality of data, whether to use gpus(1=True), whether to use multiple gpus(1=True), whether to split data across gpus(not implemented), total number of hours]
+# - keys_key.pkl - ordered list of evaluation parameter name: the list at index i corresponds to the ith column in test_parameters__xxxxxxx_402__float32
+# - test_parameters__xxxxxxx_402__float32 - the parameters evaluated for every point within the dataset
+# - Loader.pickle - loader file to read in test_parameters
+# - results_n.0.npz - results from the nth hour checkpoint. Results include:
+#   - 'explored_points' - all points that have undergone evaluation. Includes both positive and negative points
+#   - 'positive_points'
+#   - 'searchpoints' - current list of unqueued points to continue search on. Once explored, if positive, new searchpoints are obtained in the neighborhood of the given point and added to searchpoints
+#   - 'unexplored_candidates' - searchpoints that have been queued to be added to 
+#   - 'list_results' - current results that have not yet been processed by master node (to determine whether to add each to positive_points or only explored_points and therefore whether to generate new points from them) - should be empty
+#   - 'list_evaluations' - list of all evaluations accumulated since last checkpoint (in addition to all other evaluations, these will also appear in the current test_parameters file)
+## Important results are:
+# wavesearch_wr64_run_2024-02-10_01_b41nw6y6_/ - step size of 0.1 (incomplete, only 51 hours)
+# wavesearch_wr64_run_2024-02-29_01_ko10ifua_/ - step size of 0.5
+# wavesearch_wr64_run_2024-02-29_02_peuk12wr_/ - step size of 0.3
+# wavesearch_wr64_run_2024-02-29_03_ftt462lk_/ - step size of 0.25
+mdb_wavesearch = I.ModelDataBase('/gpfs/soma_fs/scratch/keaton/results/20230831_wave_search')
+
