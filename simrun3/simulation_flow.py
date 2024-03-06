@@ -1,7 +1,7 @@
 import datetime
 from functools import partial
 import Interface as I
-from data_base.da_base import DataBaseException
+from data_base import DataBaseException
 import six
 
 

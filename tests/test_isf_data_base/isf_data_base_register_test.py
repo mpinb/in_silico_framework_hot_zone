@@ -1,4 +1,5 @@
-from data_base.data_base import DataBase, DataBaseException, get_db_by_unique_id
+from data_base.data_base import DataBase, get_db_by_unique_id
+from data_base import DataBaseException
 import tempfile, os, shutil
 from data_base.data_base_register import _get_db_register, \
         DataBaseRegister, register_db

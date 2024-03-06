@@ -28,7 +28,3 @@ def get_db_by_unique_id(unique_id):
     db = DataBase(db_path, nocreate=True)
     assert db.get_id() == unique_id
     return db
-
-class DataBaseException(Exception):
-    '''Typical isf_database errors'''
-    pass

@@ -14,7 +14,7 @@ from data_base.data_base import DataBase
 from data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, \
     to_cloudpickle, to_pickle, pandas_to_parquet, dask_to_msgpack, pandas_to_msgpack, \
         get_dumper_string_by_dumper_module, dask_to_parquet
-from data_base.data_base import DataBaseException
+from data_base import DataBaseException
 from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format as read_sa
 from data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format as read_ca
 from data_base.analyze.spike_detection import spike_detection
