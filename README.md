@@ -21,7 +21,7 @@ Every student needs to be able to synchronize their repository with https://gith
 
 ## Documentation
 
-The current state of the documentation is currently [locally hosted on ibs3005](http://10.40.130.27:8000/) (only accessible via somalogin01/02).
+The current state of the documentation is currently [locally hosted on ibs3005](http://10.40.130.27:8080/) (only accessible via somalogin01/02).
 
 Documentation is a work in progress. It is generated automatically from docstrings using Sphinx autosummary. Missing entries in the documentation are generally due to missing docstrings in the source code.
 
