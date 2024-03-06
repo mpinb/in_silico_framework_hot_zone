@@ -1,1 +1,1 @@
-{"Loader": "isf_data_base.IO.LoaderDumper.to_cloudpickle"}
+{"Loader": "data_base.IO.LoaderDumper.to_cloudpickle"}

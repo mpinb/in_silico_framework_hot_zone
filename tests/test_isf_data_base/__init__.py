@@ -6,7 +6,7 @@ import pytest
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 sys.path.insert(0, parent)
 import distributed
-from isf_data_base import utils
+from data_base import utils
 import getting_started
 import mechanisms
 # set up paths

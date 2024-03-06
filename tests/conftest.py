@@ -7,7 +7,7 @@ import os, shutil, logging, socket, pytest, tempfile, distributed, model_data_ba
 from model_data_base.mdb_initializers.load_simrun_general import init
 from model_data_base.utils import silence_stdout
 from model_data_base.model_data_base import ModelDataBase as ModelDatabase
-from isf_data_base.isf_data_base import DataBase
+from data_base.data_base import DataBase
 import pandas as pd
 import dask.dataframe as dd
 from Interface import get_client

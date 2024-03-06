@@ -13,7 +13,7 @@ import numpy as np
 import os
 import six
 # import single_cell_parser as scp # moved to bottom to resolve import error
-from model_data_base import utils
+from data_base import utils
 
 
 def get_EPSP_measurement():

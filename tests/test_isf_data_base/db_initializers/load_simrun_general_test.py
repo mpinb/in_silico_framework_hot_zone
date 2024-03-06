@@ -2,7 +2,7 @@ import tempfile
 import warnings
 from isf_data_base.db_initializers.load_simrun_general import optimize
 from isf_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
-from isf_data_base.utils import silence_stdout
+from data_base.utils import silence_stdout
 import distributed
 import numpy as np
 

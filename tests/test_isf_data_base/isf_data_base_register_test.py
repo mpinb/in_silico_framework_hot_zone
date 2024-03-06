@@ -1,6 +1,6 @@
-from isf_data_base.isf_data_base import DataBase, DataBaseException, get_db_by_unique_id
+from data_base.data_base import DataBase, DataBaseException, get_db_by_unique_id
 import tempfile, os, shutil
-from isf_data_base.isf_data_base_register import _get_db_register, \
+from data_base.data_base_register import _get_db_register, \
         DataBaseRegister, register_db
 import pytest
 

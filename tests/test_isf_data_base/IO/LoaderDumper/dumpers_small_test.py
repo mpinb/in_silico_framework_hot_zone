@@ -6,7 +6,7 @@ from isf_data_base.IO.LoaderDumper import dask_to_csv, numpy_to_npy, pandas_to_p
                                 dask_to_categorized_msgpack, to_cloudpickle, reduced_lda_model
 from tests.test_simrun2.reduced_model.get_kernel_test import get_test_Rm
 from numpy.testing import assert_array_equal
-from isf_data_base.utils import df_colnames_to_str
+from data_base.utils import df_colnames_to_str
 import pytest
 import six
 

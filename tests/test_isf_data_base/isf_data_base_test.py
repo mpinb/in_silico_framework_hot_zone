@@ -1,16 +1,16 @@
-from isf_data_base.isf_data_base import DataBase, DataBaseException
-from isf_data_base import isf_data_base_register
-from isf_data_base.isf_data_base import get_versions
-import isf_data_base.IO.LoaderDumper.to_pickle as to_pickle
-from isf_data_base.IO.LoaderDumper import pandas_to_msgpack
+from data_base.data_base import DataBase, DataBaseException
+from data_base import data_base_register
+from data_base.data_base import get_versions
+import data_base.IO.LoaderDumper.to_pickle as to_pickle
+from data_base.IO.LoaderDumper import pandas_to_msgpack
 import pytest, os, shutil, six, tempfile, warnings, subprocess
 import numpy as np
 from getting_started import parent as getting_started_parent
 import pandas
 from pandas.util.testing import assert_frame_equal
-from isf_data_base.db_initializers.load_simrun_general import init
-from isf_data_base.utils import silence_stdout
-from isf_data_base import IO
+from data_base.db_initializers.load_simrun_general import init
+from data_base.utils import silence_stdout
+from data_base import IO
 
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -280,7 +280,7 @@ def test_accessing_non_existent_key_raises_KeyError(empty_db):
 def test_compare_old_db_with_freshly_initialized_one(client):
     '''ensure compatibility with old versions'''
     old_path = os.path.join(parent, \
-                            'test_isf_data_base', \
+                            'test_data_base', \
                             'data',\
                             'already_initialized_db_for_compatibility_testing')
     old_db = DataBase(old_path, readonly=True, nocreate=True)

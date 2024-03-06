@@ -1,5 +1,5 @@
 from tests.test_isf_data_base import *
-from isf_data_base.utils import *
+from data_base.utils import *
 import numpy as np
 from pandas.util.testing import assert_frame_equal
 import distributed
