@@ -224,7 +224,7 @@ def transform_point(p, x, y, z, coordinate_system=None):
 
 
 def get_soma_centroid(hocpath):
-    from model_data_base.utils import silence_stdout
+    from data_base.utils import silence_stdout
     source_soma_points = get_cell_object_from_hoc(hocpath).soma.pts
     soma_centroid = np.array(source_soma_points).mean(axis=0)
     return soma_centroid

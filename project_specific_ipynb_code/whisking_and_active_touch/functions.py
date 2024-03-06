@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import scipy
 from project_specific_ipynb_code.bottleneck_project.helper_functions import get_binsize
 
-def get_response(spike_times,response_type): # move from project specific to model_data_base/analyse 
+def get_response(spike_times,response_type): # move from project specific to data_base/analyse 
     sta = spike_analysis.core.SpikeTimesAnalysis(None)
     sta._db['spike_times'] = spike_times
     sta.apply_extractor(spike_analysis.core.STAPlugin_bursts('bursts_edf','spike_times'))
@@ -30,7 +30,7 @@ def delete_simulation_results(mdb,output_name):
     else:
         print('-- results path ' + results_path + ' does not exist, could not be removed')
         
-def rate_in_interval(spike_times,tstart,tstop): # model_data_base/analyse
+def rate_in_interval(spike_times,tstart,tstop): # data_base/analyse
     '''
     Provides the spike rate in a given interval per trial
     '''

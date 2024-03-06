@@ -2,7 +2,7 @@ import os
 # import cloudpickle
 import compatibility
 from . import parent_classes
-import model_data_base
+from data_base.model_data_base.model_data_base import ModelDataBase
 
 
 def check(obj):
@@ -13,7 +13,7 @@ def check(obj):
 class Loader(parent_classes.Loader):
 
     def get(self, savedir):
-        return model_data_base.ModelDataBase(os.path.join(savedir, 'mdb'))
+        return ModelDataBase(os.path.join(savedir, 'mdb'))
 
 
 def dump(obj, savedir):

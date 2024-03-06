@@ -3,7 +3,7 @@ import os
 import compatibility
 import pandas as pd
 from . import parent_classes
-from model_data_base.utils import df_colnames_to_str
+from data_base.utils import df_colnames_to_str
 
 
 def check(obj):

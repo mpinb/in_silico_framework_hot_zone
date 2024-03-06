@@ -441,9 +441,9 @@ def start_run(mdb_setup,
     - get_Evaluator ... function, that returns a biophysics_fitting.evaluator.Evaluator object.
     - get_Combiner ... function, that returns a biophysics_fitting.combiner.Combiner object
     
-    get_Simulator, get_Evaluator, get_Combiner accept the mdb_setup model_data_base as argument.
+    get_Simulator, get_Evaluator, get_Combiner accept the db_setup data_base as argument.
     
-    This allows, that e.g. the Simular can depend on the model_data_base. Therefore it is e.g. possible, 
+    This allows, that e.g. the Simular can depend on the data_base. Therefore it is e.g. possible, 
     that the path to the morphology is not saved as absolute path. Instead, fixed parameters can be
     updated accordingly.
     

@@ -5,7 +5,7 @@ import pandas as pd
 import dask
 import json
 from . import parent_classes
-from model_data_base.utils import df_colnames_to_str, chunkIt
+from data_base.utils import df_colnames_to_str, chunkIt
 
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''

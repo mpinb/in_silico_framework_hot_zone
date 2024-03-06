@@ -22,7 +22,7 @@ h = neuron.h
 import dask
 from .seed_manager import get_seed
 from .utils import *
-from model_data_base.mdbopen import resolve_mdb_path
+from data_base.dbopen import resolve_db_path
 from biophysics_fitting.utils import execute_in_child_process
 import socket
 
@@ -70,7 +70,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
         cell = cell_generator()
 
     uniqueID = 'seed' + str(seed) + '_pid' + str(os.getpid())
-    dirName = os.path.join(resolve_mdb_path(dirPrefix), 'results', \
+    dirName = os.path.join(resolve_db_path(dirPrefix), 'results', \
                            time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID) + '_running')
     if not os.path.exists(dirName):
         os.makedirs(dirName)
@@ -162,7 +162,7 @@ def _evoked_activity(cellParamName, evokedUpParamName, dirPrefix = '', \
         os.path.join(dirName, uniqueID + '_neuron_model.param'))
     evokedUpNWParameters.save(
         os.path.join(dirName, uniqueID + '_network_model.param'))
-    dirName_final = os.path.join(resolve_mdb_path(dirPrefix), 'results', \
+    dirName_final = os.path.join(resolve_db_path(dirPrefix), 'results', \
                            time.strftime('%Y%m%d-%H%M') + '_' + str(uniqueID))
     os.rename(dirName, dirName_final)
     if tar:

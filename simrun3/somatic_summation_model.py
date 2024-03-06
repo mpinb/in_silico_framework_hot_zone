@@ -1,5 +1,5 @@
 import numpy as np
-from model_data_base.utils import convertible_to_int
+from data_base.utils import convertible_to_int
 from collections import defaultdict
 
 

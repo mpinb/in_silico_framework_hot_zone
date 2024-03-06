@@ -1,7 +1,7 @@
 import datetime
 from functools import partial
 import Interface as I
-from model_data_base.model_data_base import MdbException
+from data_base.da_base import DataBaseException
 import six
 
 
@@ -136,7 +136,7 @@ class SimulationFlow:
                                                     raise_=True)
             for k, v in six.iteritems(self.cell_params):
                 v.save(outdir.join(k))
-        except MdbException:
+        except DataBaseException:
             if verbose:
                 print('cell_param_templates already saved. skipping.')
         try:
@@ -144,7 +144,7 @@ class SimulationFlow:
                                                     raise_=True)
             for k, v in six.iteritems(self.network_params):
                 v.save(outdir.join(k))
-        except MdbException:
+        except DataBaseException:
             if verbose:
                 print('network_param_templates already saved. skipping.')
         try:
@@ -152,7 +152,7 @@ class SimulationFlow:
                                                            raise_=True)
             with open(params_outdir.join('hierarchy.txt'), 'w') as f:
                 f.write(self.get_description())
-        except MdbException:
+        except DataBaseException:
             if verbose:
                 print('final_param_files folder already created. skipping.')
             # replace network_param structures with path

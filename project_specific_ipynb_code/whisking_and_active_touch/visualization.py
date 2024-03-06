@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from project_specific_ipynb_code.hot_zone import event_rasterplot
-from model_data_base.analyze.temporal_binning import universal as temporal_binning
+from data_base.analyze.temporal_binning import universal as temporal_binning
 
 def plot_input_populations_activity_histogram(time_bins,rates,population_labels,ylim=None,xlim=None,figsize=(6,4)):
     '''

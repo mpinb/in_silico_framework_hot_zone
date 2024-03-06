@@ -28,7 +28,7 @@ from . import parent_classes
 import glob
 import compatibility
 import time
-from model_data_base.utils import chunkIt, myrepartition, mkdtemp
+from data_base.utils import chunkIt, myrepartition, mkdtemp
 import distributed
 import six
 # import pandas_msgpack # do not import this; it will break pickle in loaded dataframes
@@ -183,7 +183,7 @@ def bundle_delayeds(*args):
 ######################################################
 # reasonable performance: just do the serialization yourself
 ######################################################
-from model_data_base.utils import chunkIt
+from data_base.utils import chunkIt
 import cloudpickle
 
 

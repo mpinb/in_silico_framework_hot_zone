@@ -7,7 +7,7 @@ import tempfile
 import neuron
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
-from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
+from data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
 import numpy as np
 import pandas as pd
 from .utils import *

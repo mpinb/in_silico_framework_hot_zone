@@ -9,7 +9,7 @@ import logging
 logger = logging.getLogger('ISF').getChild(__name__)
 sys.modules['data_base.IO'] = isf_data_base.IO
 
-def is_model_data_base(path):
+def is_data_base(path):
     """
     Checks if a given path is a ModelDataBase.
     """
@@ -17,9 +17,9 @@ def is_model_data_base(path):
 
 class DataBase:
     def __new__(cls, basedir, readonly=False, nocreate=False):
-        if is_model_data_base(basedir):
+        if is_data_base(basedir):
             logger.warning('Reading a legacy-format ModelDataBase.')
-            return model_data_base.ModelDataBase(basedir, readonly=readonly, nocreate=nocreate)
+            return data_base.ModelDataBase(basedir, readonly=readonly, nocreate=nocreate)
         else:
             return isf_data_base.ISFDataBase(basedir, readonly=readonly, nocreate=nocreate)
 

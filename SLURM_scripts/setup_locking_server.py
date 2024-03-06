@@ -55,33 +55,33 @@ def setup_locking_config(management_dir):
 
 
 def check_locking_config():
-    from model_data_base.distributed_lock import get_client as get_locking_client
+    from data_base import get_client as get_locking_client
     server, client = get_locking_client()
     print('locking configuration')
     print(server)
     print(client)
-    #assert model_data_base.distributed_lock.server['type'] == 'redis'
+    #assert data_base.distributed_lock.server['type'] == 'redis'
     #import socket
     #socket.gethostname()
 
     #config = [dict(type = 'redis', config = dict(host = socket.gethostname(), port = 8885, socket_timeout = 1))]
 
     #print 'old locking configuration'
-    #print model_data_base.distributed_lock.server
-    #print model_data_base.distributed_lock.client
+    #print data_base.distributed_lock.server
+    #print data_base.distributed_lock.client
 
     #import time
     #while True:
     #    try:
-    #        model_data_base.distributed_lock.update_config(config)
+    #        data_base.distributed_lock.update_config(config)
     #        break
     #    except RuntimeError:
     #        print 'could not connect, retrying in 1 sec'
     #        time.sleep(1)
 
     #print 'updated locking configuration'
-    #print model_data_base.distributed_lock.server
-    #print model_data_base.distributed_lock.client
+    #print data_base.distributed_lock.server
+    #print data_base.distributed_lock.client
 
 
 if __name__ == "__main__":

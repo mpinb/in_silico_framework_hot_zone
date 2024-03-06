@@ -3,7 +3,7 @@ import pandas as pd
 import dask
 import matplotlib.pyplot as plt
 from biophysics_fitting.hay_evaluation import objectives_BAC, objectives_step
-from model_data_base.utils import convertible_to_int
+from data_base.utils import convertible_to_int
 
 I.sys.path.append('/axon/scratch/abast/project_src/SpikeAnalysis/')
 
@@ -14,11 +14,11 @@ def disable_locking_BE_CAREFUL(client):
     client.restart()
 
     def fun():
-        import model_data_base.distributed_lock
-        import model_data_base.sqlite_backend.sqlite_backend
+        import data_base.distributed_lock
+        import data_base.sqlite_backend.sqlite_backend
         import redis
-        model_data_base.distributed_lock.redis = redis
-        model_data_base.sqlite_backend.sqlite_backend.locking = False
+        data_base.distributed_lock.redis = redis
+        data_base.sqlite_backend.sqlite_backend.locking = False
 
     client.run(fun)
     fun()

@@ -5,8 +5,8 @@ import os
 import six
 import numpy as np
 import pandas as pd
-from model_data_base.utils import convertible_to_int, split_file_to_buffers, first_line_to_key
-from model_data_base.mdbopen import mdbopen
+from data_base.utils import convertible_to_int, split_file_to_buffers, first_line_to_key
+from data_base.dbopen import dbopen
 
 
 #################################################################
@@ -46,14 +46,14 @@ def read_csv_uneven_length(path, n_commas, header=None, skiprows=0):
         skiprows: skip rows at the beginning of the file (e.g. one to skip the 
                     header if you specified one manually)
     '''
-    with mdbopen(path) as f:
+    with dbopen(path) as f:
         bla = _replace_commas(f, n_commas, header, skiprows)
     return pd.read_csv(bla, index_col=False)
 
 
 def _max_commas(path):
     '''calculates the maximum number of delimiters (',' and '\t' in file.'''
-    with mdbopen(path, 'r') as f:
+    with dbopen(path, 'r') as f:
         text = f.read()
         text = text.replace('\t', ',')  #only , should be used
         commas_linewise = []
@@ -137,7 +137,7 @@ def read_pandas_cell_activation_from_roberts_format(path, sim_trail_index = 'no_
 ############################################################
 def write_pandas_synapse_activation_to_roberts_format(path, syn_activation):
     '''save pandas df in a format, which can be understood by the simulator'''
-    with mdbopen(path, 'w') as outputFile:
+    with dbopen(path, 'w') as outputFile:
         header = '# synapse type\t'
         header += 'synapse ID\t'
         header += 'soma distance\t'
@@ -191,7 +191,7 @@ def read_InputMapper_summary(pathOrBuffer, sep='\t'):
         return tables
 
     try:  #assume it is path
-        with mdbopen(pathOrBuffer) as f:
+        with dbopen(pathOrBuffer) as f:
             return fun(f)
     except TypeError:  #if it was buffer instead
         return fun(pathOrBuffer)

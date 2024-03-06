@@ -12,7 +12,7 @@ import fasteners
 
 #NOTE: For this import to succeed the in_silico_framework
 #      source folders needs to be added to the PYTHONPATH
-import model_data_base.distributed_lock as mdb_dist_lock
+import data_base.distributed_lock as mdb_dist_lock
 
 #NOTE: logging level currently set to INFO
 #change to DEBUG to see actual OS commands

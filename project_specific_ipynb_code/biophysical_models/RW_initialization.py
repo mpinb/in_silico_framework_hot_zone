@@ -4,7 +4,7 @@ import project_specific_ipynb_code.biophysical_models.RW_analysis
 import importlib
 importlib.reload(project_specific_ipynb_code.biophysical_models.RW_analysis)
 from  project_specific_ipynb_code.biophysical_models.RW_analysis import read_all
-import model_data_base.IO.LoaderDumper.dask_to_parquet
+import data_base.IO.LoaderDumper.dask_to_parquet
 
 # default setup is as follows:
 # create a model database with one sub model data base as subkey
@@ -75,10 +75,10 @@ def init_RW_exploration(client, target_mdb, data, name):
     futures = data.futures
     df = data.get_df() # Load.get_df(data) # should be: data.get_df()
     target_mdb.setitem(name, df, 
-                       dumper = model_data_base.IO.LoaderDumper.dask_to_parquet, 
+                       dumper = data_base.IO.LoaderDumper.dask_to_parquet, 
                        client = client)
     target_mdb.setitem(name + '_inside', df[df.inside == 'True'], 
-                       dumper = model_data_base.IO.LoaderDumper.dask_to_parquet, 
+                       dumper = data_base.IO.LoaderDumper.dask_to_parquet, 
                        client = client)
     
 def copy_simulator_setup(source_mdb, target_mdb):

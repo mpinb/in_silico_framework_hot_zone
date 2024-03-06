@@ -1125,7 +1125,7 @@ def get_sorted_recsite_names(mdb):
     return [key for _, key in sorted(zip(dist, keys))]
 
 
-from model_data_base.mdb_initializers.load_simrun_general import add_dendritic_voltage_traces
+from data_base.db_initializers.load_simrun_general import add_dendritic_voltage_traces
 
 
 class Plot:

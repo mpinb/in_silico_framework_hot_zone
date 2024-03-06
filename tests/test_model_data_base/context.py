@@ -6,7 +6,7 @@ import pytest
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 sys.path.insert(0, parent)
 import distributed
-from model_data_base import *
+from data_base.model_data_base import *
 import getting_started
 import mechanisms
 # set up paths
@@ -37,8 +37,8 @@ class FreshlyInitializedMdb(object):
         self.path = tempfile.mkdtemp()
         self.mdb = model_data_base.ModelDataBase(self.path)
         #self.mdb.settings.show_computation_progress = False
-        from model_data_base.mdb_initializers.load_simrun_general import init
-        from model_data_base.utils import silence_stdout
+        from data_base.db_initializers.load_simrun_general import init
+        from data_base.utils import silence_stdout
         with silence_stdout:
             init(self.mdb,
                  test_data_folder,

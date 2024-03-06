@@ -70,7 +70,7 @@ except ImportError:
 #
 # warnings.showwarning = warn_with_traceback
 
-# todo: the version is not specific to model_data_base,
+# todo: the version is not specific to data_base,
 # therefore - ideally - the _version.py file would not live in the
 # subfolder mondel data base but in the top folder.
 # But then it does not work anymore ...
@@ -138,10 +138,10 @@ db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
 mdb_init_crossing_over = db_init_crossing_over
 
 #--------------- mdb
-from model_data_base.mdb_initializers import load_simrun_general as mdb_init_simrun_general
-from model_data_base.mdb_initializers import synapse_activation_binning as mdb_init_synapse_activation_binning
-load_param_files_from_mdb = mdb_init_simrun_general.load_param_files_from_mdb
-load_initialized_cell_and_evokedNW_from_mdb = mdb_init_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
+from data_base.db_initializers import load_simrun_general as db_init_simrun_general
+from data_base.db_initializers import synapse_activation_binning as mdb_init_synapse_activation_binning
+load_param_files_from_mdb = db_init_simrun_general.load_param_files_from_mdb
+load_initialized_cell_and_evokedNW_from_mdb = db_init_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
 #for compatibility, deprecated!
 synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
 db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
@@ -243,7 +243,7 @@ def svg2emf(filename, path_to_inkscape="/usr/bin/inkscape"):
     logger.info(os.system(command))
 
 
-from model_data_base._module_versions import version_cached
+from data_base._module_versions import version_cached
 
 
 def print_module_versions():

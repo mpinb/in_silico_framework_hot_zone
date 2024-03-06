@@ -1,4 +1,4 @@
-from model_data_base.mdbopen import resolve_mdb_path
+from data_base.dbopen import resolve_db_path
 import pandas as pd
 import single_cell_parser as scp
 import os
@@ -10,7 +10,7 @@ logger = logging.getLogger("ISF").getChild(__name__)
 def load_param_file_if_path_is_provided(pathOrParam):
     import single_cell_parser as scp
     if isinstance(pathOrParam, str):
-        pathOrParam = resolve_mdb_path(pathOrParam)
+        pathOrParam = resolve_db_path(pathOrParam)
         return scp.build_parameters(pathOrParam)
     elif isinstance(pathOrParam, dict):
         return scp.NTParameterSet(pathOrParam)

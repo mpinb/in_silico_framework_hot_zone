@@ -3,15 +3,15 @@ developed in
 http://10.102.3.85:11112/notebooks/20221030_hot_zone_on_interactive%2Bbig_simulations_many_morphologies_redo.ipynb#'''
 import Interface as I
 
-from model_data_base.model_data_base import get_mdb_by_unique_id
+from data_base.data_base import get_db_by_unique_id
 from copy import deepcopy
 # original location: '/gpfs/soma_fs/scratch/abast/results/20221030_hot_zone_on_interactive+big_simulations_many_morphologies_redo'
-mdb = get_mdb_by_unique_id('2022-12-05_41103_8ewM75Y')
+mdb = get_db_by_unique_id('2022-12-05_41103_8ewM75Y')
 # original location: /gpfs/soma_fs/scratch/abast/results/20221020_hot_zone_biophysical_composition'
-mdb_biopysics_selection = get_mdb_by_unique_id('2022-10-20_137257_ZZNCsCw')
+mdb_biopysics_selection = get_db_by_unique_id('2022-10-20_137257_ZZNCsCw')
 morphologies_folder = mdb.create_managed_folder('morphologies', raise_=False)
 # original location: '/gpfs/soma_fs/scratch/abast/backup_axon_scratch_20211217/results/20200130_network_embedding_for_hot_zone_simulations'
-anatomical_model_mdb = get_mdb_by_unique_id('2020-01-30_31836_BL8OPAH')
+anatomical_model_mdb = get_db_by_unique_id('2020-01-30_31836_BL8OPAH')
 
 # the following is from: http://10.102.3.87:11112/notebooks/20220811_hot_zone_simulations_metaanalysis_4_science_paper.ipynb
 nan = I.np.nan
