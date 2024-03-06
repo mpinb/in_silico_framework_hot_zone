@@ -1316,7 +1316,7 @@ def get_landmarks_pdf_by_cellNr(network_param, landmarks_pdf_all):
     return I.pd.concat(out)
 
 
-load_param_files_from_mdb = I.mdb_init_simrun_general.load_param_files_from_mdb
+load_param_files_from_mdb = I.load_param_files_from_mdb
 
 
 def write_hoc_with_0_soma_diameter(hocpath_in, hocpath_out):

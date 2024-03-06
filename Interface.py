@@ -140,7 +140,7 @@ mdb_init_crossing_over = db_init_crossing_over
 #--------------- mdb
 from data_base.db_initializers import load_simrun_general as db_init_simrun_general
 from data_base.db_initializers import synapse_activation_binning as mdb_init_synapse_activation_binning
-load_param_files_from_mdb = db_init_simrun_general.load_param_files_from_mdb
+load_param_files_from_mdb = db_init_simrun_general.load_param_files_from_db
 load_initialized_cell_and_evokedNW_from_mdb = db_init_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
 #for compatibility, deprecated!
 synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
