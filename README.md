@@ -23,7 +23,7 @@ Every student needs to be able to synchronize their repository with https://gith
 
 The current state of the documentation is currently [locally hosted on ibs3005](http://10.40.130.27:8080/) (only accessible via somalogin01/02).
 
-Documentation is a work in progress. It is generated automatically from docstrings using Sphinx autosummary. Missing entries in the documentation are generally due to missing docstrings in the source code.
+Documentation is an ongoing endeavour. It is generated automatically from docstrings using Sphinx autosummary. Missing entries in the documentation are generally due to missing docstrings in the source code.
 
 ## Usage
 
@@ -31,5 +31,4 @@ The [Interface module](./Interface.py) glues together all submodules and gives d
 ```python
 import Interface as I
 ```
-
-A walkthrough of the capabilities of ISF is presented in the ["Getting Started" notebook](./getting_started/getting_started.ipynb).
+See the Introduction in [getting_started](getting_started/Introduction_to_ISF.ipynb) for more information.
