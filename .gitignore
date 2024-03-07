@@ -103,3 +103,5 @@ SLURM_scripts/user_settings
 test.log
 installer/py*.*/downloads/**
 **node_modules**
+docs/_build/**
+docs/_autosummary/**
