@@ -2,7 +2,7 @@
 
 import sys
 import single_cell_parser as scp
-from isf_data_base.dbopen import dbopen
+from data_base.dbopen import dbopen
 
 
 def create_network_parameter(templateParamName,

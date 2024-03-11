@@ -1,4 +1,4 @@
-from isf_data_base.dbopen import resolve_db_path
+from data_base.dbopen import resolve_db_path
 import pandas as pd
 import single_cell_parser as scp
 import os

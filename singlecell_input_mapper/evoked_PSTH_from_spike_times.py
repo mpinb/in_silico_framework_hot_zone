@@ -4,7 +4,7 @@ import sys
 import numpy as np
 import os, os.path
 import glob
-from isf_data_base import dbopen
+from data_base import dbopen
 
 # anatomical PC + surround columns (3x3)
 # ranging from (potentially) 1-9, starting at row-1, arc-1,

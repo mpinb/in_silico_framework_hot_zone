@@ -6,7 +6,7 @@ Created on Apr 2, 2012
 
 import numpy as np
 import single_cell_parser as scp
-from isf_data_base.dbopen import dbopen
+from data_base.dbopen import dbopen
 
 
 def compute_synapse_distances_times(fname, cell, t=None, synTypes=None):

@@ -4,11 +4,11 @@ import distributed, os, tempfile, six, shutil, pytest
 import pandas as pd
 import numpy as np
 import single_cell_parser as scp
-from isf_data_base import utils
+from data_base import utils
 from functools import partial
-from isf_data_base.IO.LoaderDumper import to_cloudpickle, pandas_to_pickle
-from isf_data_base.isf_data_base import DataBase
-from isf_data_base.utils import silence_stdout
+from data_base.IO.LoaderDumper import to_cloudpickle, pandas_to_pickle
+from data_base.data_base import DataBase
+from data_base.utils import silence_stdout
 from biophysics_fitting import hay_complete_default_setup, L5tt_parameter_setup
 from biophysics_fitting.parameters import param_to_kwargs
 from biophysics_fitting.optimizer import start_run, get_max_generation
@@ -87,8 +87,8 @@ def set_up_db(step=False):
         return hay_complete_default_setup.get_Combiner(step=step)
 
     tempdir = tempfile.mkdtemp()
-    db = DataBase(tempdir)
-    db.create_sub_db('86')
+    mdb = DataBase(tempdir)
+    mdb.create_sub_mdb('86')
 
     db['86'].create_managed_folder('morphology')
     shutil.copy(
@@ -362,7 +362,7 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
     # before testing reproducability, it is therefore necessary to initialize
     # the evaluator
 
-    db_legacy = DataBase(os.path.join(
+    mdb_legacy = DataBase(os.path.join(
         DATA_DIR, 'example_Kv3_1_slope_variable_dend_scale_step'),
                                readonly=True)  #
 

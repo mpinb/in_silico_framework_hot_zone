@@ -5,7 +5,7 @@ Created on Nov 3, 2012
 '''
 
 import numpy as np
-from isf_data_base.dbopen import dbopen
+from data_base.dbopen import dbopen
 
 
 def vm_mean(vVec, tVec, tStim, dtStim):

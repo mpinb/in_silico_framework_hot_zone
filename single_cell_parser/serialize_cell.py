@@ -8,8 +8,8 @@ import numpy as np
 import pandas as pd
 from six import BytesIO
 import sumatra
-from isf_data_base.utils import silence_stdout
-from isf_data_base.dbopen import dbopen
+from data_base.utils import silence_stdout
+from data_base.dbopen import dbopen
 from .cell_parser import CellParser
 
 
@@ -66,7 +66,7 @@ def cell_to_serializable_object(cell):
     return out
 
 
-from isf_data_base.utils import mkdtemp
+from data_base.utils import mkdtemp
 import os
 
 

@@ -5,7 +5,7 @@ import dask
 import matplotlib.pyplot as plt
 import warnings
 import collections
-from isf_data_base import utils as db_utils
+from data_base import utils as mdb_utils
 from functools import partial
 
 
@@ -36,7 +36,7 @@ def compare_lists_by_none_values(l1, l2):
 
 
 ##################################################
-# methods for selecting synapse activation data out of a isf_data_base instance
+# methods for selecting synapse activation data out of a data_base instance
 # and to convert it to a format suitable for scipy.linear_discriminant_analysis
 #####################################################
 def _kernel_preprocess_data(db_list, keys_to_synapse_activation_data, \

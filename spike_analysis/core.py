@@ -5,14 +5,14 @@ from functools import partial
 import neo
 import pandas as pd
 import numpy as np
-from isf_data_base import utils as db_utils
+from data_base import utils as mdb_utils
 from collections import defaultdict
 import tempfile
 import matplotlib.pyplot as plt
 from IPython import display
 import seaborn as sns
-from isf_data_base.analyze.spike_detection import spike_in_interval as db_analyze_spike_in_interval
-from isf_data_base.analyze.temporal_binning import universal as temporal_binning
+from data_base.analyze.spike_detection import spike_in_interval as mdb_analyze_spike_in_interval
+from data_base.analyze.temporal_binning import universal as temporal_binning
 from visualize import histogram
 
 ################################

@@ -6,7 +6,7 @@ Created on Mar 8, 2012
 
 import numpy as np
 from . import scalar_field
-from isf_data_base.dbopen import dbopen
+from data_base.dbopen import dbopen
 import logging
 
 logger = logging.getLogger("ISF").getChild(__name__)

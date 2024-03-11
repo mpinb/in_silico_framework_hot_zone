@@ -1,4 +1,4 @@
-from isf_data_base.dbopen import dbopen
+from data_base.dbopen import dbopen
 import os
 '''
 Created on Mar 8, 2012

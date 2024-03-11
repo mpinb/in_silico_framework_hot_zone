@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 Figure = plt.Figure
 Axes = plt.Axes
-from isf_data_base.utils import skit
+from data_base.utils import skit
 
 ##
 # todo: this is overcomplicated and should be removed

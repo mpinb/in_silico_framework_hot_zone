@@ -1,8 +1,8 @@
 import numpy as np
-from isf_data_base.utils import silence_stdout
+from data_base.utils import silence_stdout
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
-from isf_data_base.analyze import excitatory, inhibitory
+from data_base.analyze import excitatory, inhibitory
 
 # import Interface as I # moved to bottom becose auf circular import
 

@@ -11,7 +11,7 @@ import numpy as np
 from .cell import PointCell
 from . import writer
 from .synapse_mapper import SynapseMapper, SynapseDensity
-from isf_data_base.dbopen import dbopen
+from data_base.dbopen import dbopen
 
 
 class NetworkMapper:

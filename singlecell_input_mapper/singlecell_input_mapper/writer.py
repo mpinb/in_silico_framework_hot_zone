@@ -6,7 +6,7 @@ Created on Mar 8, 2012
 from __future__ import absolute_import
 from .scalar_field import ScalarField
 from .generate_nr_of_cells_spreadsheet import con_file_to_NumberOfConnectedCells_sheet
-from isf_data_base.dbopen import dbopen
+from data_base.dbopen import dbopen
 
 labels2int = {\
     "Neuron":                 2,\

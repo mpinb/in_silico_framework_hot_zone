@@ -4,7 +4,7 @@ import neuron
 h = neuron.h
 from Interface import scp
 from getting_started import getting_started_dir  # path to getting started folder
-from isf_data_base.utils import silence_stdout
+from data_base.utils import silence_stdout
 
 
 def setup_current_injection_experiment(rangevars=[]):

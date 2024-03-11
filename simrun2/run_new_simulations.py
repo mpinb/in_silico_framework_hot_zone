@@ -22,7 +22,7 @@ h = neuron.h
 import dask
 from .seed_manager import get_seed
 from .utils import *
-from isf_data_base.dbopen import resolve_db_path
+from data_base.dbopen import resolve_db_path
 from biophysics_fitting.utils import execute_in_child_process
 import socket
 
