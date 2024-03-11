@@ -76,5 +76,3 @@ elif six.PY3:
             return pandas.compat.pickle_compat.load(f)
 
     YamlLoader = yaml.FullLoader  # Better choice, but only exists in Py3
-
-sys.modules['model_data_base'] = sys.modules['isf_data_base']
