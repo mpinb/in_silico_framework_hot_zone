@@ -32,10 +32,13 @@ Module list
    ..tests
    visualize
 
-Usage
+Tutorials
 ==================
+.. toctree::
+   :glob:
 
-Take a look at the :py:mod:`getting_started` module for various notebooks on how to use ISF.
+   tutorials/1. data analysis/01_AP_extraction.ipynb
+
 
 Indices and tables
 ==================

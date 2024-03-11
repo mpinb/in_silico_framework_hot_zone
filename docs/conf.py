@@ -20,7 +20,14 @@ author = 'Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keat
 release = '0.0.1'
 version = '0.0.1'
 ## Make your modules available in sys.path
-sys.path.append(os.path.join(os.path.abspath(os.pardir)))
+project_root = os.path.join(os.path.abspath(os.pardir))
+sys.path.append(project_root)
+## copy over tutorials
+import shutil
+shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials'), ignore_errors=True)
+shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials', '1. data analysis'),  #TODO: all tutorials, not just 1. data analysis
+                os.path.join(project_root, 'docs', 'tutorials', '1. data analysis'))
+
 
 # -- General configuration ------------------------------------------------
 
@@ -39,7 +46,8 @@ extensions = [
     'sphinx.ext.intersphinx',
     ## Include autosymmary
     'sphinx.ext.autosummary',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    'nbsphinx'
 ]
 
 ## Include Python objects as they appear in source files
@@ -51,7 +59,7 @@ autodoc_default_options = {
     'show-inheritance': True,
 }
 ## Generate autodoc stubs with summaries from code
-autosummary_generate = True
+autosummary_generate = ['modules.rst']
 autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
 paramlinks_hyperlink_param = 'name'
 # Add any paths that contain templates here, relative to this directory.
