@@ -187,7 +187,7 @@ class ModelDataBase(object):
         self._registered_to_path = None
         
         try:
-            self.read_db()
+            self.read_mdb()
         except IOError:
             errstr = "Did not find a database in {path}. ".format(path = basedir) + \
                     "A new empty database will not be created since "+\
@@ -200,10 +200,10 @@ class ModelDataBase(object):
                 _check_working_dir_clean_for_build(basedir)
             self._first_init = True
             self._registeredDumpers = [to_cloudpickle]
-            self.save_db()                        
+            self.save_mdb()                        
             self._set_unique_id()
             self._register_this_database()
-            self.save_db()
+            self.save_mdb()
             
         
         self._sql_backend = SQLBackend(os.path.join(self.basedir, 'sqlitedict.db'))
@@ -213,7 +213,7 @@ class ModelDataBase(object):
         if self.readonly == False:
             if self._registered_to_path is None:
                 self._register_this_database()
-                self.save_db()
+                self.save_mdb()
             #self._register_this_database()            
             self._update_metadata_if_necessary()
             #############################
@@ -244,7 +244,7 @@ class ModelDataBase(object):
         print('registering database with unique_id {} to the absolute path {}'.format(
                         self._unique_id, self.basedir))
         try:
-            data_base_register.register_mdb(self)
+            data_base_register.register_db(self)
             self._registered_to_path = self.basedir
         except MdbException as e:
             warnings.warn(str(e))
@@ -258,7 +258,7 @@ class ModelDataBase(object):
         random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) 
                                 for _ in range(7))
         self._unique_id = '_'.join([time, str(os.getpid()), random_string])
-        self.save_db()      
+        self.save_mdb()      
         
     def get_id(self):
         return self._unique_id 
@@ -267,7 +267,7 @@ class ModelDataBase(object):
         '''caveat: make sure to provide the MODULE, not the class'''
         self._registeredDumpers.append(dumperModule)
     
-    def read_db(self):
+    def read_mdb(self):
         '''sets the state of the database according to dbcore.pickle''' 
         with open(os.path.join(self.basedir, 'dbcore.pickle'), 'rb') as f:
             out = pickle.load(f)
@@ -275,7 +275,7 @@ class ModelDataBase(object):
         for name in out:
             setattr(self, name, out[name])      
             
-    def save_db(self):
+    def save_mdb(self):
         '''saves the data which defines the state of this database to dbcore.pickle'''
         ## things that define the state of this mdb and should be saved
         out = {'_registeredDumpers': self._registeredDumpers, \
@@ -355,7 +355,7 @@ class ModelDataBase(object):
         if dummy.__class__.__name__ == "LoaderWrapper":
             return os.path.join(self.basedir, dummy.relpath)
         
-    def _get_dumper_string(savedir, arg):
+    def _get_dumper_string(self, savedir, arg):
         path = self._get_path(arg)
         if path is None:
             return 'self'

@@ -184,7 +184,7 @@ try:
         as simrun_trail_to_cell_object
     from simrun2 import crossing_over as simrun_crossing_over_module
     from simrun2.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
-    from simrun2.rerun_db import rerun_db as simrun_rerun_db
+    from simrun2.rerun_mdb import rerun_mdb as simrun_rerun_mdb
 
     from simrun2.crossing_over.crossing_over_simple_interface import crossing_over as simrun_crossing_over_simple_interface
 except ImportError:
