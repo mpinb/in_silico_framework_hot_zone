@@ -5,7 +5,7 @@ import dask
 import matplotlib.pyplot as plt
 import warnings
 import collections
-from data_base import utils as mdb_utils
+from data_base import utils as db_utils
 from functools import partial
 
 
