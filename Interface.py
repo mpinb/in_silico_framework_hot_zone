@@ -139,9 +139,9 @@ mdb_init_crossing_over = db_init_crossing_over
 
 #--------------- mdb
 from data_base.db_initializers import load_simrun_general as db_init_simrun_general
-from data_base.db_initializers import synapse_activation_binning as mdb_init_synapse_activation_binning
+from data_base.db_initializers import synapse_activation_binning as db_init_synapse_activation_binning
 load_param_files_from_mdb = db_init_simrun_general.load_param_files_from_db
-load_initialized_cell_and_evokedNW_from_mdb = db_init_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
+load_initialized_cell_and_evokedNW_from_mdb = db_init_simrun_general.load_initialized_cell_and_evokedNW_from_db
 #for compatibility, deprecated!
 synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
 db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
@@ -184,7 +184,8 @@ try:
         as simrun_trail_to_cell_object
     from simrun2 import crossing_over as simrun_crossing_over_module
     from simrun2.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
-    from simrun2.rerun_mdb import rerun_mdb as simrun_rerun_mdb
+    from simrun2.rerun_db import rerun_db as simrun_rerun_db
+    simrun_rerun_mdb = simrun_rerun_db
 
     from simrun2.crossing_over.crossing_over_simple_interface import crossing_over as simrun_crossing_over_simple_interface
 except ImportError:
