@@ -13,12 +13,6 @@ from .utils import write_video_from_images, write_gif_from_images, display_anima
 from barrel_cortex import inhibitory
 if six.PY3:
     from scipy.spatial.transform import Rotation
-    from dash import Dash, dcc, html, Input, Output
-    from dash import callback_context as ctx
-    import plotly.offline as py
-    import plotly.io as pio
-    import plotly.graph_objects as go
-    import plotly.express as px
 else:
     # let ImportWarnings show up when importing this module through Interface
     warnings.filterwarnings("default", category=ImportWarning, module=__name__)
@@ -30,6 +24,17 @@ else:
     )
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
+# For interactive visualizations
+try:
+    from dash import Dash, dcc, html, Input, Output
+    from dash import callback_context as ctx
+    import plotly.offline as py
+    import plotly.io as pio
+    import plotly.graph_objects as go
+    import plotly.express as px
+except ImportError as e:
+    logger.warning(e)
+
 
 class CMVDataParser:
     def __init__(
