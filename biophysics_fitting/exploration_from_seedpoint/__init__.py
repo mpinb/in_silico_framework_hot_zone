@@ -9,23 +9,28 @@ from data_base.utils import silence_stdout
 import time
 import sys
 
-def evaluation_function_incremental_helper(p,
-                                           s = None,  
-                                           cutoffs = {'bAP':3.2, 
-                                                  'BAC': 3.2, 
-                                                  'StepOne':4.5, 
-                                                  'StepTwo': 4.5, 
-                                                  'StepThree': 4.5},
-                                           stim_order = ['bAP', 'BAC', 'StepOne', 'StepTwo', 'StepThree'], 
-                                           verbose = True,
-                                           evaluators_by_stimulus = None,
-                                           additional_evaluation_functions = [],
-                                           objectives_by_stimulus = None):
+def evaluation_function_incremental_helper(
+        p,
+        s = None,  
+        cutoffs = None,
+        stim_order = ['bAP', 'BAC', 'StepOne', 'StepTwo', 'StepThree'], 
+        verbose = True,
+        evaluators_by_stimulus = None,
+        additional_evaluation_functions = [],
+        objectives_by_stimulus = None):
     '''
     global variables: 
     evaluators_by_stimulus
     objectives_dict
     '''
+
+    cutoffs = cutoffs or {
+            'bAP':3.2, 
+            'BAC': 3.2, 
+            'StepOne':4.5, 
+            'StepTwo': 4.5,
+            'StepThree': 4.5}
+
     p = p.copy()
     evaluation = {}
     evaluation.update(p)
