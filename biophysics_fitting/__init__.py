@@ -64,7 +64,8 @@ def get_inner_sec_dist_list(cell, select=['ApicalDendrite', 'Dendrite']):
 
 
 def get_branching_depth(cell, sec, beyond_dist=1000):
-    """Given a Cell object and a section number, this method returns the amount of sections that have children
+    """
+    Given a Cell object and a section number, this method returns the amount of sections that have children
     beyond some distance ``beyond_dist`` inbetween the soma and the given section.
 
     If this number is 0, that means that the given section, and all its parent sections up to the soma,
@@ -85,7 +86,8 @@ def get_branching_depth(cell, sec, beyond_dist=1000):
 
 
 def get_branching_depth_series(cell):
-    """Careful: z-depth only accurate for D2-registered cells!
+    """
+    Careful: z-depth only accurate for D2-registered cells!
     
     Args:
         cell (:class:`~single_cell_parser.cell.Cell`): The Cell object

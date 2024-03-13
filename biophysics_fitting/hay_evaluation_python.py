@@ -41,7 +41,8 @@ def nan_if_error(fun):
 
 
 class BAC:
-    """This class contains methods to calculate various metrics
+    """
+    This class contains methods to calculate various metrics
     to assess the accuracy of some simulation based on the voltage trace
     it produced. These metrics were introduced by Idan Segev, and illustrated in
     "Ion channel distributions in cortical neurons are optimized for energy-efficient
