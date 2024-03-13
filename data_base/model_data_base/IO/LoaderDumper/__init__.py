@@ -42,7 +42,7 @@ def load(savedir, load_data=True, loader_kwargs={}):
 def get_dumper_string_by_dumper_module(dumper_module):
     name = dumper_module.__name__
     prefix = 'model_data_base.IO.LoaderDumper.'
-    assert name.startswith(prefix)
+    assert name.startswith(prefix) or name.startswith('data_base.'+prefix), "Could not import dumper {}, as it does not contain the prefix {}".format(name, prefix)
     return name[len(prefix):]
 
 

@@ -13,7 +13,7 @@ def check(obj):
 class Loader(parent_classes.Loader):
 
     def get(self, savedir):
-        return isf_data_base.isf_data_base.DataBase(os.path.join(savedir, 'db'))
+        return isf_data_base.isf_data_base.ISFDataBase(os.path.join(savedir, 'db'))
 
 
 def dump(obj, savedir):
