@@ -8,7 +8,7 @@ february 2019: deprecated scaleFunc keyword, added support to specify cell_modif
 within the parameters
 '''
 
-import warnings
+import warnings, traceback
 from neuron import h
 import numpy as np
 import math
@@ -70,12 +70,12 @@ class CellParser(object):
             if sec.label == 'Soma':
                 self.cell.soma = sec
 
-#        add axon initial segment, myelin and nodes
+       # add axon initial segment, myelin and nodes
         if axon:
             self._create_ais_Hay2013()
-#            self._create_ais()
+            # self._create_ais()
 
-#        add dendritic spines (Rieke)
+       # add dendritic spines (Rieke)
         try:
             if 'rieke_spines' in list(
                     parameters.spatialgraph_modify_functions.keys()):
@@ -85,8 +85,8 @@ class CellParser(object):
         except AttributeError:
             pass
 
-#        second loop: connect sections
-#        and create structures dict
+       # second loop: connect sections
+       # and create structures dict
         branchRoots = []
         for sec in self.cell.sections:
             if sec.label != 'Soma':
@@ -104,7 +104,7 @@ class CellParser(object):
             else:
                 self.cell.structures[sec.label].append(sec)
 
-#        create trees
+       # create trees
         self.cell.tree = h.SectionList()
         self.cell.tree.wholetree(sec=self.cell.soma)
         for root in branchRoots:
@@ -132,12 +132,16 @@ class CellParser(object):
 
     def set_up_biophysics(self, parameters, full=False):
         '''
-        default method for initializing membrane properties
+        Default method for initializing membrane properties
         (e.g. cm, Rm, spines), linear and non-linear mechanisms
         and determine the compartment sizes for the simulations.
-        parameters should be the parameters of the postsynaptic
-        neuron from the parameter file.
+        
+        Parameters should be the parameters of the postsynaptic neuron from the parameter file.
         This is the preferred method for setting up biophysics.
+
+        Args:
+            - parameters
+            - full (bool)
         '''
         for label in list(parameters.keys()):
             if label == 'filename':
@@ -154,7 +158,7 @@ class CellParser(object):
             logger.info('    Adding membrane properties to %s' % label)
             self.insert_membrane_properties(label, parameters[label].properties)
 
-#        spatial discretization
+        #  spatial discretization
         logger.info('    Setting up spatial discretization...')
         if 'discretization' in parameters:
             f = parameters['discretization']['f']
@@ -180,25 +184,31 @@ class CellParser(object):
             except AttributeError:
                 pass
             logger.info('    Adding membrane range mechanisms to %s' % label)
-            self.insert_range_mechanisms(label,
-                                         parameters[label].mechanisms.range)
+            self.insert_range_mechanisms(
+                label,
+                parameters[label].mechanisms.range)
             if 'ions' in parameters[label].properties:
-                self._insert_ion_properties(label,
-                                            parameters[label].properties.ions)
-#            add spines if desired
+                self._insert_ion_properties(
+                    label,
+                    parameters[label].properties.ions)
+            #  add spines if desired
             if 'pas' in parameters[label].mechanisms.range\
                 and 'spines' in parameters[label].properties:
-                self._add_spines(label, parameters[label].properties.spines)
+                self._add_spines(
+                    label, 
+                    parameters[label].properties.spines)
             if 'ar' in parameters[label].mechanisms.range\
                 and 'spines' in parameters[label].properties:
-                self._add_spines_ar(label, parameters[label].properties.spines)
+                self._add_spines_ar(
+                    label, 
+                    parameters[label].properties.spines)
 
         self.cell.neuron_param = parameters
 
     def apply_cell_modify_functions(self, parameters):
         if 'cell_modify_functions' in list(parameters.keys()):
             if self.cell_modify_functions_applied == True:
-                logger.info('Cell modify functions have already been applied. We '+\
+                logger.warning('Cell modify functions have already been applied. We '+\
                 'are now modifying the cell again. Please doublecheck, whether '+\
                 'this is intended. This should not occur, if the cell is setup '+\
                 'up using the recommended way, i.e. by calling '+\
@@ -284,7 +294,17 @@ class CellParser(object):
                     s = param + '=' + str(mech[param])
                     paramStrings.append(s)
                 for sec in self.cell.structures[label]:
-                    sec.insert(mechName)
+                    # sec are neuron sections, i.e. __nrnsec__0x-----
+                    try:
+                        sec.insert(mechName)
+                    except ValueError as e:
+                        logger.error(
+                            "Could not insert range mechanism {} in label {}\n\
+                            NEURON could not find range mechanism with name: {}.\n\
+                            Did you build and import the mechanisms? \
+                            If you are working on a distributed cluster, you should import the mechanisms on the server side as well.".format(mechName, label, mechName))
+                        logger.error(traceback.format_exc())
+                        raise e
                     for seg in sec:
                         for s in paramStrings:
                             if not '_ion' in mechName:
@@ -725,7 +745,7 @@ class CellParser(object):
             sec.cm = sec.cm * F
             for seg in sec:
                 seg.g0_ar = seg.g0_ar * F
-#                seg.c_ar = seg.c_ar*F*F
+               # seg.c_ar = seg.c_ar*F*F
 
     def insert_passive_membrane(self, label):
         if self.cell is None:
@@ -782,8 +802,7 @@ class CellParser(object):
 
     def determine_nseg(self, f=100.0, full=False, max_seg_length=None):
         '''
-        determine the number of segments (compartments)
-        to be used according to the d-lambda rule
+        determine the number of segments (compartments) to be used according to the d-lambda rule
         optionally set frequency, default f=100.0 Hz
         '''
         totalNSeg = 0
