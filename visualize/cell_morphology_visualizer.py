@@ -352,6 +352,10 @@ class CMVDataParser:
             self.voltage_timeseries.append(voltage)
         t2 = time.time()
         logger.info('Voltage retrieval runtime (s): ' + str(np.around(t2 - t1, 2)))
+        self.set_cmap(
+            self.cmap, 
+            vmin=min(min([min(e) for e in self.voltage_timeseries])), 
+            vmax=max(max([max(e) for e in self.voltage_timeseries])))
 
     def _calc_ion_dynamics_timeseries(self, ion_keyword):
         '''
@@ -382,6 +386,10 @@ class CMVDataParser:
         t2 = time.time()
         logger.info('Ion dynamics retrieval runtime (s): ' +
               str(np.around(t2 - t1, 2)))
+        self.set_cmap(
+            self.cmap, 
+            vmin=min(min([min(e) for e in self.ion_dynamics_timeseries[ion_keyword]])), 
+            vmax=max(max([max(e) for e in self.ion_dynamics_timeseries[ion_keyword]])))
 
     def _get_synapses_at_timepoint(self, time_point):
         '''
@@ -498,7 +506,7 @@ class CMVDataParser:
         color_dict={}):
         """
         Returns a data array based on some keyword.
-        If :arg return_as_color: is True (default), the returned array is a map from the input keyword to a color
+        If :arg:return_as_color is True (default), the returned array is a map from the input keyword to a color
         Otherwise, it is the raw data, not mapped to a colorscale. Which data is returned (mapped to colors or not)
         depends on the keyword (case-insensitive):
         - ("voltage", "vm"): voltage
@@ -539,7 +547,6 @@ class CMVDataParser:
 
         else:
             raise ValueError("Color keyword not recognized. Available options are: \"voltage\", \"vm\", \"dendrites\", \"dendritic group\", a color from self.possible_scalars, or a color from matplotlib.colors")
-        self.set_cmap(self.cmap, vmin=min([min(e) for e in data_per_section]), vmax=max([max(e) for e in data_per_section]))
         return_data = self._get_color_per_section(data_per_section) if return_as_color else data_per_section
         return return_data
     
