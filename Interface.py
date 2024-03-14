@@ -1,15 +1,15 @@
 '''
-The purpose of this module is to glue together all libraries necessary for single cell simulations
-of cells in barrel cortex. This includes:
-
- - Moving around hoc-morphologies
- - Compute anatomical realization of presynaptic cells and synapses
- - Activation of synapses based on experimental data
- - determining apropriate biophysical parameters
- - setting up a cluster
- - use that cluster to optimize / find suitable parameters
- - use that cluster to compute single cell responses to synaptic input
- - efficiently store the simulation results and provide an easy interface to query data
+The purpose of this module is to glue together and give convenient acces to all subpackages and submodules in ISF:
+- biophysics_fitting
+- data_base
+- dendrite_thickness
+- NEURON mechanisms
+- simrun2
+- simrun3
+- single_cell_parser
+- single_cell_input_mapper
+- spike_analysis
+- visualize
 
 The recommended use is to import it in a jupyter notebook in the following manner::
 
@@ -278,6 +278,9 @@ def get_client(client_port=38786, timeout=120):
     logger.info("Getting client with ip {}".format(ip))
     c = Client(ip + ':' + client_port, timeout=timeout)
     logger.info("Got client {}".format(c))
+    logger.info("Making mechanisms visible on client side")
+    def import_mechanisms(): import mechanisms
+    c.run(import_mechanisms)
     return c
 
 print("\n\n")
