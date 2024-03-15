@@ -16,7 +16,6 @@ def generate_param_files_with_valid_references():
                 'simulation_data/C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/20150815-1530_20240/20240_neuron_model.param.TEMPLATE')]
     for path in filelist:
         path = os.path.join(IN_SILICO_FRAMEWORK_DIR, path)
-        print(path)
         assert os.path.exists(path)
         assert path.endswith(suffix)
         with open(path, 'r') as in_, open(path.rstrip(suffix), 'w') as out_:
