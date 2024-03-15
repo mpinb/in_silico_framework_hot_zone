@@ -313,14 +313,18 @@ def set_morphology(cell_param, filename=None):
 
 
 def set_ephys(cell_param, params=None):
-    'updates cell_param file. parameter names reflect the hay naming convention.'
+    """
+    Updates cell_param file. Parameter names reflect the hay naming convention.
+    """
     for k, v in six.iteritems(params):
         cell_param[hay_param_to_scp_neuron_param(k)] = float(v)
     return cell_param
 
 
 def set_param(cell_param, params=None):
-    'updates cell_param file. parameter names reflect the hierarchy in the cell_param file itself.'
+    """
+    Updates cell_param file. Parameter names reflect the hierarchy in the cell_param file itself.
+    """
     for k, v in six.iteritems(params):
         p = cell_param
         for kk in k.split('.')[:-1]:
@@ -349,6 +353,9 @@ def set_many_param(cell_param, params=None):
 
 
 def set_hot_zone(cell_param, min_=None, max_=None, outsidescale_sections=None):
+    """
+    Insert Ca_LVAst and Ca_HVA channels along the apical dendrite between :arg:min_ and :arg:max_ distance from the soma.
+    """
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['begin'] = min_
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['end'] = max_
     cell_param['ApicalDendrite'].mechanisms.range['Ca_HVA']['begin'] = min_

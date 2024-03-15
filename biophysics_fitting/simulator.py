@@ -32,10 +32,12 @@ class Simulator_Setup:
             raise ValueError('cell_param_generator must be set')
         if self.cell_generator is None:
             raise ValueError('cell_generator must be set')
-        self._check_first_element_of_name_is_the_same(self.stim_setup_funs,
-                                                      self.stim_run_funs)
         self._check_first_element_of_name_is_the_same(
-            self.stim_setup_funs, self.stim_response_measure_funs)
+            self.stim_setup_funs,
+            self.stim_run_funs)
+        self._check_first_element_of_name_is_the_same(
+            self.stim_setup_funs, 
+            self.stim_response_measure_funs)
         for fun in self.check_funs:
             fun()
         #if not len(self.stim_setup_funs) == len(self.stim_result_extraction_fun):
@@ -58,7 +60,7 @@ class Simulator_Setup:
         prefix1 = list({x.split('.')[0] for x in names1})
         prefix2 = list({x.split('.')[0] for x in names2})
 
-        assert tuple(sorted(prefix1)) == tuple(sorted(prefix2))
+        assert tuple(sorted(prefix1)) == tuple(sorted(prefix2)), "Setup functions: {}\nrun/response_functions: {}".format(prefix1, prefix2)
 
     def get_stims(self):
         return [x[0].split('.')[0] for x in self.stim_run_funs]
@@ -97,7 +99,11 @@ class Simulator_Setup:
         for name, fun in self.cell_param_modify_funs:
             #print name
             #print len(params), len(param_selector(params, name))
-            cell_param = fun(cell_param, params=param_selector(params, name))
+            try:
+                cell_param = fun(cell_param, params=param_selector(params, name))
+            except Exception as e:
+                logger.error("Could not run the cell parameter modify function {} ({})".format(name, fun))
+                raise e
             self._check_not_none(cell_param, 'cell_param', name)
         return cell_param
 
@@ -142,7 +148,11 @@ class Simulator_Setup:
         cell = self.cell_generator(cell_params)
         for name, fun in self.cell_modify_funs:
             #print len(param_selector(params, name))
-            cell = fun(cell, params=param_selector(params, name))
+            try:
+                cell = fun(cell, params=param_selector(params, name))
+            except Exception as e:
+                logger.error("Could not run the cell modify function {} ({})\n{}".format(name, fun))
+                raise e
             self._check_not_none(cell, 'cell', name)
         return cell, params
 

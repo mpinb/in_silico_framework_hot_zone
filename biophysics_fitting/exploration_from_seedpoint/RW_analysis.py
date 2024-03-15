@@ -57,7 +57,7 @@ class Load:
     def __init__(self, client, path, n_particles=1000):
         self.path = path
         self.n_particles = n_particles
-        self.delayeds = read_all(path, n_particles)
+        self.delayeds = read_all(path, n_particles_end=n_particles)
         self.futures = client.compute(self.delayeds)
 
         self.df = None
