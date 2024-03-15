@@ -14,7 +14,6 @@ Module list
    :recursive:
 
    Interface
-   SLURM_scripts
    barrel_cortex
    biophysics_fitting
    data_base
@@ -25,13 +24,32 @@ Module list
    spike_analysis
    visualize
 
+Tutorials
+=============
 .. nbgallery::
-   :caption: Tutorials
+   :caption: Introduction
    :glob:
 
    tutorials/00_intro_to_tutorials.ipynb
+
+
+.. nbgallery::
+   :caption: 1. Data Analysis
+   :glob:
+
    tutorials/1. data analysis/*
+
+.. nbgallery::
+   :caption: 2. biophysics
+   :glob:
+
    tutorials/2. biophysics/*
+
+
+.. nbgallery::
+   :caption: 3. synaptic simulations
+   :glob:
+
    tutorials/3. synaptic simulations/*
 
 

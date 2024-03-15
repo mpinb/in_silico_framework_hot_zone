@@ -5,10 +5,8 @@ API Reference
    :toctree: _autosummary
 
    Interface
-   SLURM_scripts
    barrel_cortex
    biophysics_fitting
-   compatibility
    data_base
    simrun2
    simrun3
