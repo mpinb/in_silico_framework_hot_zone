@@ -92,38 +92,13 @@ def create_cell(
 
     Args:
         - parameters (dict | dict-like):
-            A nested dictionary structure. Should include at least the keys 'filename' and on ekey per structure present in the `.hoc` file (e.g. "AIS", "Soma" ...). 
+            A nested dictionary structure. Should include at least the keys 'filename' and one key per structure present in the `.hoc` file (e.g. "AIS", "Soma" ...). 
             Optional keys include: 'cell_modify_functions', 'discretization'
         - scaleFunc (bool): 
             DEPRECATED,  should be specified in the parameters, as described in :meth:`single_cell_parser.cell_modify_funs`
         - allPoints (bool): Whether or not to use all the points in the `.hoc` file, or one point per segment (according to the distance-lambda rule). 
             Will be passed to :arg:full in :meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg`
         - setUpBiophysics (bool): whether or not to insert mechanisms corresponding to the biophysical parameters in :arg:parameters
-
-    Example parameters::
-        {'neuron': {
-        'Soma': { 
-            'mechanisms': {
-                'global': {},
-                'range': {
-                    'CaDynamics_E2_v2': {
-                        'decay': 159.29153855712977,
-                        'gamma': 0.013790283867325821,
-                        'spatial': 'uniform'},
-                    'Ca_HVA': {
-                        'gCa_HVAbar': 4.8300501784962e-05, 
-                        'spatial': 'uniform'},
-                    'Ca_LVAst': {...},
-                    'Ih': {...},
-                    ...}
-                    },
-            'properties': {'Ra': 100.0, 'cm': 1.0, 'ions': {'ek': -85.0, 'ena': 50.0}}
-            }
-        'Dendrite': { ... }
-        'filename': {some hocpath}
-        'cell_modify_functions': {
-            'scale_apical': {'scale': 2.1}
-        }}}
     '''
     if scaleFunc is not None:
         warnings.warn(
