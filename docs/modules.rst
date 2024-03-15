@@ -3,7 +3,7 @@ API Reference
 
 .. autosummary::
    :toctree: _autosummary
-   :rercursive:
+   :recursive:
 
    Interface
    barrel_cortex
