@@ -27,6 +27,14 @@ import shutil
 shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials'), ignore_errors=True)
 shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials'),
                 os.path.join(project_root, 'docs', 'tutorials'))
+# not done yet
+shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials', '4. reduced models'), ignore_errors=True)
+shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials', '5. network simulations'), ignore_errors=True)
+shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials', '6. visualization'), ignore_errors=True)
+shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials', '7. data management'), ignore_errors=True)
+shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials', 'radii'), ignore_errors=True)
+
+
 
 
 # -- General configuration ------------------------------------------------
