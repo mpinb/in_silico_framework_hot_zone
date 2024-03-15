@@ -100,7 +100,7 @@ def create_cell(
             Will be passed to :arg:full in :meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg`
         - setUpBiophysics (bool): whether or not to insert mechanisms corresponding to the biophysical parameters in :arg:parameters
 
-    Example parameters:
+    Example parameters::
         {'neuron': {
         'Soma': { 
             'mechanisms': {
