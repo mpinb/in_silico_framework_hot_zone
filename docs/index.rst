@@ -17,27 +17,22 @@ Module list
    SLURM_scripts
    barrel_cortex
    biophysics_fitting
-   ..compatibility
-   getting_started
-   ..mechanisms
-   model_data_base
-   ..nbrun
-   ..project_specific_ipynb_code
+   data_base
    simrun2
    simrun3
-   single_cell_analyzer
    single_cell_parser
    singlecell_input_mapper
    spike_analysis
-   ..tests
    visualize
 
-Tutorials
-==================
-.. toctree::
+.. nbgallery::
+   :caption: Tutorials
    :glob:
 
-   tutorials/1. data analysis/01_AP_extraction.ipynb
+   tutorials/00_intro_to_tutorials.ipynb
+   tutorials/1. data analysis/*
+   tutorials/2. biophysics/*
+   tutorials/3. synaptic simulations/*
 
 
 Indices and tables

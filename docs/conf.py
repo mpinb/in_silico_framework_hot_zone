@@ -25,8 +25,8 @@ sys.path.append(project_root)
 ## copy over tutorials
 import shutil
 shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials'), ignore_errors=True)
-shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials', '1. data analysis'),  #TODO: all tutorials, not just 1. data analysis
-                os.path.join(project_root, 'docs', 'tutorials', '1. data analysis'))
+shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials'),
+                os.path.join(project_root, 'docs', 'tutorials'))
 
 
 # -- General configuration ------------------------------------------------
@@ -62,6 +62,10 @@ autodoc_default_options = {
 autosummary_generate = ['modules.rst']
 autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
 paramlinks_hyperlink_param = 'name'
+
+# Don't run notebooks
+nbsphinx_execute = 'never'
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
