@@ -135,7 +135,7 @@ def get_bin_adjacency_map_in_section(cell, section_id, section_distances_df):
     Args:
         cell (Cell): the Cell object
         section_id (int): index of the neuron section
-        section_distances_df (pd.DataFrame): the dataframe describing distance to soma for all sections, as provided by :fun:get_section_distances_df
+        section_distances_df (pd.DataFrame): the dataframe describing distance to soma for all sections, as provided by :meth:get_section_distances_df
 
     Returns:
         neighboring_bins_dict (dict): a dictionary with bins as keys and a list of adjacent bins as values.

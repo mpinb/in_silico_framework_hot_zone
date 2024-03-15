@@ -81,7 +81,7 @@ class Evaluator:
 
         Returns:
             obj: Whatever the return value is of self.setup.finalize_funs. 
-                Usually, this is the output of :fun:~`biophysics_fitting.hay_evaluation_default_complete_setup_python.get_Evaluator`,
+                Usually, this is the output of :meth:~`biophysics_fitting.hay_evaluation_default_complete_setup_python.get_Evaluator`,
                 which returns 
         
         '''
