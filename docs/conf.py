@@ -27,6 +27,8 @@ import shutil
 shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials'), ignore_errors=True)
 shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials'),
                 os.path.join(project_root, 'docs', 'tutorials'))
+shutil.copy(os.path.join(project_root, 'getting_started', 'Introduction_to_ISF.ipynb'),
+                os.path.join(project_root, 'docs', 'Introduction_to_ISF.ipynb'))
 
 
 # -- General configuration ------------------------------------------------
