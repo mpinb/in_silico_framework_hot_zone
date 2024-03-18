@@ -30,8 +30,6 @@ shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials'),
 shutil.copy(os.path.join(project_root, 'getting_started', 'Introduction_to_ISF.ipynb'),
                 os.path.join(project_root, 'docs', 'Introduction_to_ISF.ipynb'))
 
-shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials'))
-
 
 # -- General configuration ------------------------------------------------
 
