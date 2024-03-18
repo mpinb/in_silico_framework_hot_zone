@@ -50,8 +50,7 @@ def set_up_db(step=False):
         cell_param.cell_modify_functions.scale_apical.scale = params['scale']
         return cell_param
 
-    params = hay_complete_default_setup.get_feasible_model_params().drop('x',
-                                                                         axis=1)
+    params = hay_complete_default_setup.get_feasible_model_params().drop('x', axis=1)
     params.index = 'ephys.' + params.index
     params = params.append(
         pd.DataFrame({
@@ -87,8 +86,8 @@ def set_up_db(step=False):
         return hay_complete_default_setup.get_Combiner(step=step)
 
     tempdir = tempfile.mkdtemp()
-    mdb = DataBase(tempdir)
-    mdb.create_sub_mdb('86')
+    db = DataBase(tempdir)
+    db.create_sub_mdb('86')
 
     db['86'].create_managed_folder('morphology')
     shutil.copy(
@@ -329,7 +328,7 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
 
     TypeError: an integer is required (got type str)
 
-    This test is also incompatible with Py2. It yelds:
+    This test is also incompatible with Py2. It yields:
     ```
     >>> s_legacy = db_legacy['86']['get_Simulator'](db_legacy['86'])
     Traceback (most recent call last):
@@ -368,9 +367,9 @@ def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
 
     db_new = set_up_db(step=True)
     try:
-        s_legacy = db_legacy['86']['get_Simulator'](db_legacy['86'])
+        s_legacy = mdb_legacy['86']['get_Simulator'](mdb_legacy['86'])
         s_new = db_new['86']['get_Simulator'](db_new['86'])
-        e_legacy = db_legacy['86']['get_Evaluator'](db_legacy['86'])
+        e_legacy = mdb_legacy['86']['get_Evaluator'](mdb_legacy['86'])
         e_new = db_new['86']['get_Evaluator'](db_new['86'])
         with silence_stdout:
             # initialize
