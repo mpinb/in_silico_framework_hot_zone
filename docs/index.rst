@@ -34,27 +34,33 @@ Tutorials
    :caption: Introduction
    :glob:
 
-   tutorials/00_intro_to_tutorials.ipynb
+   Introduction_to_ISF.ipynb
 
 
 .. nbgallery::
-   :caption: 1. Data Analysis
+   :caption: 1. Compartmental models
    :glob:
 
-   tutorials/1. data analysis/*
+   tutorials/1. compartmental models/*
 
 .. nbgallery::
-   :caption: 2. biophysics
+   :caption: 2. Network models
    :glob:
 
-   tutorials/2. biophysics/*
+   tutorials/2. network models/*
 
 
 .. nbgallery::
-   :caption: 3. synaptic simulations
+   :caption: 3. Analytically tractable reduced models
    :glob:
 
-   tutorials/3. synaptic simulations/*
+   tutorials/3. reduced models/*
+
+.. nbgallery::
+   :caption: 4. Analysis
+   :glob:
+
+   tutorials/4. analysis/*
 
 
 Indices and tables
