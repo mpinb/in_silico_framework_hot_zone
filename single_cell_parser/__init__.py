@@ -95,8 +95,8 @@ def create_cell(
         - scaleFunc (bool): 
             DEPRECATED,  should be specified in the parameters, as described in :meth:`single_cell_parser.cell_modify_funs`
         - allPoints (bool): Whether or not to use all the points in the `.hoc` file, or one point per segment (according to the distance-lambda rule). 
-            Will be passed to :arg:full in :meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg`
-        - setUpBiophysics (bool): whether or not to insert mechanisms corresponding to the biophysical parameters in :arg:parameters
+            Will be passed to ``full``in :meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg`
+        - setUpBiophysics (bool): whether or not to insert mechanisms corresponding to the biophysical parameters in ``parameters``
     '''
     if scaleFunc is not None:
         warnings.warn(

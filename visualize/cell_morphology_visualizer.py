@@ -273,7 +273,7 @@ class CMVDataParser:
             parent_point = self._morphology_connected[self._morphology_connected['sec_n'] == parent_sec].iloc[[-1]]
             parent_point["sec_n"] = sec
             self._morphology_connected = pd.concat([parent_point, self._morphology_connected])
-        # the first :arg n_sections: points are now the branch points
+        # the first ``n_sections`` points are now the branch points
         # indexing the df by section number will always begin with the branch point, i.e. first point of the section
     
         self._morphology_unconnected = self.morphology = self._morphology_connected[self.n_sections-1:]
@@ -506,7 +506,7 @@ class CMVDataParser:
         color_dict={}):
         """
         Returns a data array based on some keyword.
-        If :arg:return_as_color is True (default), the returned array is a map from the input keyword to a color
+        If ``return_as_color``is True (default), the returned array is a map from the input keyword to a color
         Otherwise, it is the raw data, not mapped to a colorscale. Which data is returned (mapped to colors or not)
         depends on the keyword (case-insensitive):
         - ("voltage", "vm"): voltage
@@ -569,7 +569,7 @@ class CMVDataParser:
     def scale_diameter(self, scale_func):
         """
         Scale the diameter of the visualization with a scaling function.
-        :arg scale_func: should transform an array to an array of equal length.
+        ``scale_func`` should transform an array to an array of equal length.
         To set a fixed diameter rather than scaling, pass `lambda x: fixed_d`
 
         Args:

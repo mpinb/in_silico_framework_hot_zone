@@ -95,10 +95,10 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
         limits=None):
         """
         Creates a binned representation of the data.
-        Bins the data on columns :arg binby: in a grid of size :arg shape: and 
-        calculates the statistic :arg operation: on the column :arg expression:.
-        If :arg operation: is 'count', then :arg expression: is redundant and ignored.
-        If :arg limits: is passed, the data is clipped to the limits before binning. 
+        Bins the data on columns ``binby: in a grid of size :arg shape`` and 
+        calculates the statistic ``operation: on the column :arg expression``.
+        If ``operation: is 'count', then :arg expression`` is redundant and ignored.
+        If ``limits`` is passed, the data is clipped to the limits before binning. 
 
         Args:
             expression (str): The column to compute the statistic on. Not applicable if operation is `count`.
@@ -108,7 +108,7 @@ class PandasTableWrapper(AbstractDataFrameWrapper):
             operation (str): The statistic to compute. Options are: 'min', 'max', 'mean', 'median', 'count'.
 
         Returns:
-            np.ndarray: a numpy array of shape :arg shape: containing the binned statistic.
+            np.ndarray: a numpy array of shape ``shape`` containing the binned statistic.
         """
         if all([x is None for x in [binby, shape, selection, limits]]):
             return self.calc_like_pandas(operation, columns=expression)
@@ -217,13 +217,13 @@ class VaexTableWrapper(AbstractDataFrameWrapper):
     def calc_binned_statistic(self, operation, *args, **kwargs):
         """
         Creates a binned representation of the data.
-        Bins the data on columns :arg binby: in a grid of size :arg shape: and 
-        calculates the statistic :arg operation: on the column :arg expression:.
-        If :arg operation: is 'count', then :arg expression: is redundant and ignored.
-        If :arg limits: is passed, the data is clipped to the limits before binning. 
+        Bins the data on columns ``binby: in a grid of size :arg shape`` and 
+        calculates the statistic ``operation: on the column :arg expression``.
+        If ``operation: is 'count', then :arg expression`` is redundant and ignored.
+        If ``limits`` is passed, the data is clipped to the limits before binning. 
 
         This is merely a wrapper around the vaex.DataFrame method of the same name, 
-        with an additional check if :arg expression: is not specified, the statistic is computed on all columns.
+        with an additional check if ``expression`` is not specified, the statistic is computed on all columns.
 
         Args:
             expression (str): The column to compute the statistic on. Not applicable if operation is `count`.
@@ -233,7 +233,7 @@ class VaexTableWrapper(AbstractDataFrameWrapper):
             operation (str): The statistic to compute. Options are: 'min', 'max', 'mean', 'median', 'count'.
 
         Returns:
-            np.ndarray: a numpy array of shape :arg shape: containing the binned statistic.
+            np.ndarray: a numpy array of shape ``shape`` containing the binned statistic.
         """
         allowed_operations = ["min", "max", "mean", "median_approx", "median", "count"]
         operation = operation if operation != "median" else "median_approx"  # median_approx is vaex's underlying median method

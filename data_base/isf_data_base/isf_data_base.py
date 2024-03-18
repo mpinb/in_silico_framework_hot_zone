@@ -138,7 +138,7 @@ class ISFDataBase:
         Example:
             my_reloaded_element = db['my_new_element']
         
-        All saved elements are stored in the :arg basedir: along with metadata 
+        All saved elements are stored in the ``basedir`` along with metadata 
         and a Loader.json object. The Loader.json object contains which 
         module should be used to load the data with, along with all the necessary 
         information to initialize the Loader. This is done because some data 
@@ -329,7 +329,7 @@ class ISFDataBase:
         """
         Checks the format of a key (string or tuple) and if it is valid for setting data (not for get).
         This is internal API and should never be called directly.
-        This is the first line of checks when a user sets a key. For this reason, :arg key: is not Path, but a string or tuple.
+        This is the first line of checks when a user sets a key. For this reason, ``key`` is not Path, but a string or tuple.
 
         Args:
             key (str|tuple(str)): The key
@@ -551,7 +551,7 @@ class ISFDataBase:
             # Note: registering this database happens upon initialization of the sub_db
             parent_db[k].parent_db = parent_db  # remember that it has a parent
             parent_db = parent_db[k]  # go down the tree of sub_dbs
-        # Either :arg raise_: is false and there are no remaining keys 
+        # Either ``raise_`` is false and there are no remaining keys 
         #   -> simply return the pre-existing sub_db
         # or we just created it 
         #   -> return newly created sub_db

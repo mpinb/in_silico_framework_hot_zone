@@ -354,7 +354,7 @@ def set_many_param(cell_param, params=None):
 
 def set_hot_zone(cell_param, min_=None, max_=None, outsidescale_sections=None):
     """
-    Insert Ca_LVAst and Ca_HVA channels along the apical dendrite between :arg:min_ and :arg:max_ distance from the soma.
+    Insert Ca_LVAst and Ca_HVA channels along the apical dendrite between ``min_`` and ``max_`` distance from the soma.
     """
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['begin'] = min_
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['end'] = max_
