@@ -22,7 +22,7 @@ logger = logging.getLogger("ISF").getChild(__name__)
 
 class CellParser(object):
     '''
-    class providing methods for setting up morphology in NEURON hoc object
+    This class provides methods for setting up a morphology from a NEURON hoc object
     '''
     #    h = neuron.h
     cell = None
@@ -58,7 +58,7 @@ class CellParser(object):
         #self.cell.id = '_'.join([part1, part2, part3])
         self.cell.hoc_path = self.hoc_path  # sotre path to hoc_file in cell object
 
-        #        first loop: create all Sections
+        # 1. Create all Sections
         for secID, edge in enumerate(edgeList):
             sec = PySection(edge.hocLabel, self.cell.id, edge.label)
             sec.secID = secID
@@ -70,12 +70,12 @@ class CellParser(object):
             if sec.label == 'Soma':
                 self.cell.soma = sec
 
-       # add axon initial segment, myelin and nodes
+        ## add axon initial segment, myelin and nodes
         if axon:
             self._create_ais_Hay2013()
             # self._create_ais()
 
-       # add dendritic spines (Rieke)
+        ## add dendritic spines (Rieke)
         try:
             if 'rieke_spines' in list(
                     parameters.spatialgraph_modify_functions.keys()):
@@ -85,8 +85,7 @@ class CellParser(object):
         except AttributeError:
             pass
 
-       # second loop: connect sections
-       # and create structures dict
+        # 2. Connect sections and create structures dict
         branchRoots = []
         for sec in self.cell.sections:
             if sec.label != 'Soma':
@@ -104,7 +103,7 @@ class CellParser(object):
             else:
                 self.cell.structures[sec.label].append(sec)
 
-       # create trees
+        # create trees
         self.cell.tree = h.SectionList()
         self.cell.tree.wholetree(sec=self.cell.soma)
         for root in branchRoots:
@@ -121,7 +120,7 @@ class CellParser(object):
         somaList.append(sec=self.cell.soma)
         self.cell.branches['Soma'] = [somaList]
 
-        #        scale dendrites if necessary
+        # scale dendrites if necessary
         if scaleFunc:
             warnings.warn(
                 'Keyword scaleFunc is deprecated! ' +
