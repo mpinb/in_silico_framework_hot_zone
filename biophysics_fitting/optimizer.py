@@ -250,31 +250,33 @@ def _get_offspring(parents, toolbox, cxpb, mutpb):
     return deap.algorithms.varAnd(parents, toolbox, cxpb, mutpb)
 
 
-def eaAlphaMuPlusLambdaCheckpoint(population,
-                                  toolbox,
-                                  mu,
-                                  cxpb,
-                                  mutpb,
-                                  ngen,
-                                  stats=None,
-                                  halloffame=None,
-                                  cp_frequency=1,
-                                  db_run=None,
-                                  continue_cp=False,
-                                  db=None):
+def eaAlphaMuPlusLambdaCheckpoint(
+        population,
+        toolbox,
+        mu,
+        cxpb,
+        mutpb,
+        ngen,
+        stats=None,
+        halloffame=None,
+        cp_frequency=1,
+        db_run=None,
+        continue_cp=False,
+        db=None):
     r"""This is the :math:`(~\alpha,\mu~,~\lambda)` evolutionary algorithm
+    
     Args:
         population(list of deap Individuals)
         toolbox(deap Toolbox)
-        mu(int): Total parent population size of EA
-        cxpb(float): Crossover probability
-        mutpb(float): Mutation probability
-        ngen(int): Total number of generation to run
-        stats(deap.tools.Statistics): generation of statistics
-        halloffame(deap.tools.HallOfFame): hall of fame
-        cp_frequency(int): generations between checkpoints
-        cp_filename(DataBase or None): db_run, where the checkpoint is stored in [generation]_checlpoint. Was: path to checkpoint filename
-        continue_cp(bool): whether to continue
+        mu (int): Total parent population size of EA
+        cxpb (float): Crossover probability
+        mutpb (float): Mutation probability
+        ngen (int): Total number of generation to run
+        stats (deap.tools.Statistics): generation of statistics
+        halloffame (deap.tools.HallOfFame): hall of fame
+        cp_frequency (int): generations between checkpoints
+        cp_filename (DataBase or None): db_run, where the checkpoint is stored in [generation]_checkpoint. Was: path to checkpoint filename
+        continue_cp (bool): whether to continue
     """
     # added by arco
     if db_run is not None:
@@ -363,17 +365,23 @@ def eaAlphaMuPlusLambdaCheckpoint(population,
 #####################################################
 
 
-def run(self,
+def run(
+        self,
         max_ngen=10,
         offspring_size=None,
         continue_cp=False,
         cp_filename=None,
         cp_frequency=1,
         pop=None,
-        db=None):
-    """Copy pasted from the BluePyOpt package, however extended, such that a start population can be defined.
-    Note: the population needs to be in a special format. Use methods in biophysics_fitting.population 
-    to create a population."""
+        db=None
+        ):
+    """
+    Adapted from the BluePyOpt package: extended such that a start population can be defined.
+    
+    Note: 
+        the population needs to be in a special format. Use methods in biophysics_fitting.population 
+        to create a population.
+    """
     # Allow run function to override offspring_size
     # TODO probably in the future this should not be an object field anymore
     # keeping for backward compatibility
@@ -422,24 +430,27 @@ def get_population_with_different_n_objectives(old_pop, n_objectives):
     return pop
 
 
-def start_run(db_setup,
-              n,
-              pop=None,
-              client=None,
-              continue_cp=False,
-              offspring_size=1000,
-              eta=10,
-              mutpb=0.3,
-              cxpb=0.7,
-              max_ngen=600,
-              satisfactory_boundary_dict=None):
-    '''function to start an optimization run as specified in db_setup. The following attributes need
+def start_run(
+        db_setup,
+        n,
+        pop=None,
+        client=None,
+        continue_cp=False,
+        offspring_size=1000,
+        eta=10,
+        mutpb=0.3,
+        cxpb=0.7,
+        max_ngen=600,
+        satisfactory_boundary_dict=None
+        ):
+    '''
+    function to start an optimization run as specified in db_setup. The following attributes need
     to be defined in db_setup:
     
-    - params ... this is a pandas.DataFrame with the parameternames as index and the columns min_ and max_
-    - get_Simulator ... function, that returns a biophysics_fitting.simulator.Simulator object
-    - get_Evaluator ... function, that returns a biophysics_fitting.evaluator.Evaluator object.
-    - get_Combiner ... function, that returns a biophysics_fitting.combiner.Combiner object
+        - params ... this is a pandas.DataFrame with the parameternames as index and the columns min_ and max_
+        - get_Simulator ... function, that returns a biophysics_fitting.simulator.Simulator object
+        - get_Evaluator ... function, that returns a biophysics_fitting.evaluator.Evaluator object.
+        - get_Combiner ... function, that returns a biophysics_fitting.combiner.Combiner object
     
     get_Simulator, get_Evaluator, get_Combiner accept the db_setup data_base as argument.
     
@@ -447,13 +458,13 @@ def start_run(db_setup,
     that the path to the morphology is not saved as absolute path. Instead, fixed parameters can be
     updated accordingly.
     
-    For an exemplary setup of a Simulaotr, Evaluator and Combiner object, see 
+    For an exemplary setup of a Simulator, Evaluator and Combiner object, see 
     biophysics_fitting.hay_complete_default_setup.
     
     For on examplary setup of a complete optimization project see 
     20190111_fitting_CDK_morphologies_Kv3_1_slope_step.ipynb
     
-    You can also have a look at the test case in test_biophysics_fitting.test_optimizer.py
+    You can also have a look at the test case in tests.test_biophysics_fitting.optimizer_test.py
     
     satisfactory_boundary_dict needs to be given if you want to stop the optimisation when 
     a satisfactory models is found. Keys need to match the combined objectives. 
@@ -470,10 +481,11 @@ def start_run(db_setup,
     #   db_setup[str(n)] then contains all the saved results
 
     db_run = setup_db_run(db_setup, n)
-    mymap = get_mymap(db_setup,
-                      n,
-                      client,
-                      satisfactory_boundary_dict=satisfactory_boundary_dict)
+    mymap = get_mymap(
+        db_setup,
+        n,
+        client,
+        satisfactory_boundary_dict=satisfactory_boundary_dict)
     len_objectives = len(db_setup['get_Combiner'](db_setup).setup.names)
     parameter_df = db_setup['params']
     evaluator_fun = db_setup['get_Evaluator'](db_setup)
