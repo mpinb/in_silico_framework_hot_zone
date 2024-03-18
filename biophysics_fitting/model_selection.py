@@ -1,7 +1,7 @@
 import pandas as pd
 from collections import defaultdict
 from .hay_evaluation import objectives_BAC, objectives_step
-from isf_data_base.utils import convertible_to_int
+from data_base.utils import convertible_to_int
 
 
 def get_model_pdf_from_db(db):

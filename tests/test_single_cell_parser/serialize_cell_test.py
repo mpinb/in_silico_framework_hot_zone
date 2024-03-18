@@ -8,7 +8,7 @@ import single_cell_parser as scp
 import pickle
 from getting_started import getting_started_dir  # path to getting started folder
 from single_cell_parser.serialize_cell import *
-from isf_data_base.utils import silence_stdout
+from data_base.utils import silence_stdout
 import mechanisms.l5pt as mechanisms
 from .context import *
 

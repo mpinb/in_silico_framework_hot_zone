@@ -11,7 +11,7 @@ from data_base.isf_data_base import ISFDataBase
 from data_base.data_base import DataBase
 import os, shutil, logging, socket, pytest, tempfile, distributed, isf_data_base, dask, six, getting_started
 from isf_data_base.db_initializers.load_simrun_general import init
-from isf_data_base.utils import silence_stdout
+from data_base.utils import silence_stdout
 from isf_data_base.isf_data_base import DataBase as ModelDatabase
 from isf_data_base.isf_data_base import DataBase
 import pandas as pd
