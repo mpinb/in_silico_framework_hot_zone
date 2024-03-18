@@ -1,6 +1,5 @@
 """
-This init file imports all the important classes from this directory. This way, each submodule in this directory can focus on a single task, and this __init__ file then
-serves as an easy importable module in Interface.
+Visualization toolbox. Provides modules for visualizing cell morphologies, ion currents, membrane voltage, rasterplots, PSTHs...
 
 Authors: Arco Bast, Maria Royo, Bjorge Meulemeester
 """

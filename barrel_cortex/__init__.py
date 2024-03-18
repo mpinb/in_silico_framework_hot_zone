@@ -1,11 +1,12 @@
-"""Initialisation file for the barrel_cortex module
+"""
+This package contains barrel cortex specific code and data:
 
-This module should contain everything that's related to the entire barrel cortex.
-It includes:
+    - average_barrel_field_L45_border.am: barrel cortex geometry, to be rendered in AMIRA
+    - barrel_cortex.py: contains functions specific to barrel cortex simulations, such as synaptic strength readout, methods to move morphologies in barrel cortex...
     - average_barrel_field_L45_border.am: barrel cortex geometry, to be rendered in AMIRA
     - barrel_cortex.py: contains functions specific to barrel cortex simulations, such as synaptic strength readout, methods to move morphologies in barrel cortex...
 
-Date: 10/01/2023
+Last updated: 18/03/2024
 """
 import pandas as pd
 from functools import partial

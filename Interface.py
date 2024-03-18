@@ -1,15 +1,16 @@
 '''
-The purpose of this module is to glue together and give convenient acces to all subpackages and submodules in ISF:
-- biophysics_fitting
-- data_base
-- dendrite_thickness
-- NEURON mechanisms
-- simrun2
-- simrun3
-- single_cell_parser
-- single_cell_input_mapper
-- spike_analysis
-- visualize
+This module gives convenient access to all subpackages and submodules in ISF:
+
+    - biophysics_fitting
+    - data_base
+    - dendrite_thickness
+    - NEURON mechanisms
+    - simrun2
+    - simrun3
+    - single_cell_parser
+    - single_cell_input_mapper
+    - spike_analysis
+    - visualize
 
 The recommended use is to import it in a jupyter notebook in the following manner::
 

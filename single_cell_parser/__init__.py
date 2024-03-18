@@ -1,7 +1,5 @@
 '''
-cell parser and synapse mapper 
-for single cell simulations
-with NeuroNet subcellular synapse distributions
+Cell parser and synapse mapper for single cell simulations with NeuroNet subcellular synapse distributions.
 '''
 import logging
 

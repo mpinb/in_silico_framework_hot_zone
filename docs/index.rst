@@ -3,8 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to In-Silico Framework (ISF)'s documentation!
+The In-Silico Framework (ISF)
 =====================================================
+
+ISF is a multi-scale simulation environment for the generation, simulation, and analysis of neurobiologically tractable single cell and network-level simulations.
+
+![organigram.png](../docs/_static/organigram@300x.png)
 
 Module list
 =============

@@ -1,3 +1,16 @@
+"""
+This package contains code to generate and analyze biophysically detailed multi-compartmental models.
+
+It provides two ways to generate mutli-compartmental models:
+
+    1. A Multi-Objective Evolutionary Algorithm (MOEA): :mod:biophysics_fitting.MOEA_EH_minimal
+    2. An exploration algorithm: :mod:biophysics_fitting.exploration_from_seedpoint
+
+The MOEA does not require any a priori assumptions on biophysical parameters to find a MCM, but fails to explore the full diversity of possible MCMs. 
+On the other hand, the exploration approach can explore the full diversity of possible biophysical models, but also requires a MCM as a seedpoint in order to start. 
+If you need to generate models from scratch, we recommend using the MOEA algorithm to find at least a single model, and then using this as a seedpoint for the exploration algorithm.
+"""
+
 import pandas as pd
 import logging
 
