@@ -10,6 +10,8 @@
 [![codecov](https://codecov.io/gh/mpinb/in_silico_framework/graph/badge.svg?token=V4P4QMFM12)](https://codecov.io/gh/mpinb/in_silico_framework)
 </div>
 
+ISF is a multi-scale simulation environment for the generation, simulation, and analysis of neurobiologically tractable single cell and network-level simulations.
+
 ## Installation
 
 Detailed instructions on how to install the repo are given in the [installer directory](./installer/).
