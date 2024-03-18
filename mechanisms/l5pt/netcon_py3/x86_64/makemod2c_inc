@@ -1,0 +1,57 @@
+
+./ampa.c: ../ampa.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd ".."; MODLUNIT=$(NRNUNITS) $(NOCMODL) ampa.mod -o "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/mechanisms/netcon_py3/x86_64")
+
+./ampa.o: ./ampa.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
+
+./gsyn.c: ../gsyn.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd ".."; MODLUNIT=$(NRNUNITS) $(NOCMODL) gsyn.mod -o "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/mechanisms/netcon_py3/x86_64")
+
+./gsyn.o: ./gsyn.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
+
+./k2syn.c: ../k2syn.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd ".."; MODLUNIT=$(NRNUNITS) $(NOCMODL) k2syn.mod -o "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/mechanisms/netcon_py3/x86_64")
+
+./k2syn.o: ./k2syn.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
+
+./nmda2.c: ../nmda2.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd ".."; MODLUNIT=$(NRNUNITS) $(NOCMODL) nmda2.mod -o "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/mechanisms/netcon_py3/x86_64")
+
+./nmda2.o: ./nmda2.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
+
+./nmda2_schiller.c: ../nmda2_schiller.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd ".."; MODLUNIT=$(NRNUNITS) $(NOCMODL) nmda2_schiller.mod -o "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/mechanisms/netcon_py3/x86_64")
+
+./nmda2_schiller.o: ./nmda2_schiller.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
+
+./pregen.c: ../pregen.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd ".."; MODLUNIT=$(NRNUNITS) $(NOCMODL) pregen.mod -o "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/mechanisms/netcon_py3/x86_64")
+
+./pregen.o: ./pregen.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
+
+./vecevent.c: ../vecevent.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd ".."; MODLUNIT=$(NRNUNITS) $(NOCMODL) vecevent.mod -o "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/mechanisms/netcon_py3/x86_64")
+
+./vecevent.o: ./vecevent.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
+

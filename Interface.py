@@ -279,7 +279,7 @@ def get_client(client_port=38786, timeout=120):
     c = Client(ip + ':' + client_port, timeout=timeout)
     logger.info("Got client {}".format(c))
     logger.info("Making mechanisms visible on client side")
-    def import_mechanisms(): import mechanisms
+    def import_mechanisms(): import mechanisms.l5pt as l5pt
     c.run(import_mechanisms)
     return c
 

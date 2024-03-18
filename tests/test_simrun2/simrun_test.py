@@ -20,7 +20,7 @@ from isf_data_base.IO.roberts_formats import read_pandas_synapse_activation_from
 # from compatibility import synchronous_scheduler
 
 import getting_started
-import mechanisms
+import mechanisms.l5pt as mechanisms
 
 getting_started_folder = getting_started.parent
 
