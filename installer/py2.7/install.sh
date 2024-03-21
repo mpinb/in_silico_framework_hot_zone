@@ -10,8 +10,6 @@ set -e  # exit if error occurs
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda2-4.2.0-Linux-x86_64.sh
-channels=$SCRIPT_DIR/../../mechanisms/channels_py2
-netcon=$SCRIPT_DIR/../../mechanisms/netcon_py2
 CONDA_INSTALL_PATH=""
 
 function print_title {
@@ -158,8 +156,11 @@ python -m ipykernel install --name base --user --display-name isf2.7
 # -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
-cd $channels; nrnivmodl
-cd $netcon; nrnivmodl
+for d in $SCRIPT_DIR/../../mechanisms/*/
+do
+    ( cd "$d" && cd channels_py3; nrnivmodl )
+    ( cd "$d" && cd netcon_py3; nrnivmodl )
+done
 
 # -------------------- Cleanup -------------------- #
 echo "Succesfully installed In-Silico-Framework for Python 2.7."
