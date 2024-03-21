@@ -1,5 +1,5 @@
 import tables
 import neuron
-import mechanisms.l5pt as mechanisms
+from mechanisms import l5pt as l5pt_mechanisms
 #neuron.load_mechanisms('/nas1/Data_arco/project_src/mechanisms/netcon')
 #neuron.load_mechanisms('/nas1/Data_arco/project_src/mechanisms/channels')

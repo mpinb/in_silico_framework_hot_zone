@@ -32,7 +32,7 @@ class TestSingleCellParserInit:
         assert comp == ''
 
     def test_cell_modify_functions_in_neuron_param_is_respected(self):
-        import mechanisms.l5pt as mechanisms
+        from mechanisms import l5pt as l5pt_mechanisms
         neuron_param = scp.build_parameters(getting_started.neuronParam)
         cell = scp.create_cell(neuron_param.neuron)
         diam_unscaled = next(

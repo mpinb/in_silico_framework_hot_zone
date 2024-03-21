@@ -8,7 +8,7 @@ sys.path.insert(0, parent)
 import distributed
 from data_base import utils
 import getting_started
-import mechanisms.l5pt as mechanisms
+from mechanisms import l5pt as l5pt_mechanisms
 # set up paths
 test_data_folder = os.path.join(getting_started.parent, \
                               'example_simulation_data', \
