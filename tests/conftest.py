@@ -3,15 +3,13 @@
 # even before pytest discovery
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
 # for setting environment variables, use pytest.ini or .env instead
-import os, logging, socket, dask, six, getting_started
-import pandas as pd
-import dask.dataframe as dd
+import os, logging, socket, dask, six
 from Interface import logger as isf_logger
 # --- Import fixtures
-from fixtures import client
-from fixtures.dataframe_fixtures import pdf, ddf
+from .fixtures import client
+from .fixtures.dataframe_fixtures import pdf, ddf
 if six.PY3:  # pytest can be parallellized on py3: use unique ids for dbs
-    from fixtures.data_base_fixtures_py3 import (
+    from .fixtures.data_base_fixtures_py3 import (
         fresh_db, 
         fresh_mdb, 
         empty_db, 
@@ -19,14 +17,14 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for dbs
         sqlite_db
     )
 elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers. has been deprecated since 6.2.0
-    from fixtures.data_base_fixtures_py2 import (
+    from .fixtures.data_base_fixtures_py2 import (
         fresh_db, 
         fresh_mdb, 
         empty_db, 
         empty_mdb, 
         sqlite_db
     )
-from context import TEST_DATA_FOLDER, CURRENT_DIR
+from .context import TEST_DATA_FOLDER, CURRENT_DIR
 
 logger = logging.getLogger("ISF").getChild(__name__)
 os.environ["ISF_IS_TESTING"] = "True"
@@ -62,20 +60,10 @@ def is_port_in_use(port):
 
 def pytest_ignore_collect(path, config):
     if six.PY2:
-        return (path.fnmatch("/*test_isf_data_base*") or # Don't run new isfdb tests for PY2
-        path.fnmatch("/*cell_morphology_visualizer_test*"))
-    elif six.PY3:
-        # Don't use ISF integrated tests for isf_db, as ISF still runs on the old db for compatibility on this
-        # You can only test core db functionality, but not its integration to the rest of the code
-        # Don't use ISF integrated tests for isf_db, as ISF still runs on the old db for compatibility on this
-        # You can only test core db functionality, but not its integration to the rest of the code
-        if path.fnmatch("/*test_isf_data_base*"):
-            if path.fnmatch("/*db_initializers*"):  # Don't test initializers
-                return True
-            if any([path.fnmatch(e) for e in ("/*dumpers_real_data_test*", "/*temporal_binning*", "/*spatiotemporal_binning*")]):
-                # These use fresh_db fixture which uses simrun init
-                # These use fresh_db fixture which uses simrun init
-                return True
+        return (
+            path.fnmatch("/*test_data_base/model_data_base/*")  # only run ModelDataBase tests on Py2
+            or path.fnmatch("/*cell_morphology_visualizer_test*")  # don't run cmv tests on Py2
+            )
 
 
 def pytest_configure(config):
