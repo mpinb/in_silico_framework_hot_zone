@@ -3,7 +3,7 @@ from visualize.rasterplot import *
 import dask.dataframe as dd
 import pandas as pd
 from . import decorators
-from isf_data_base.isf_data_base import DataBase
+from data_base.data_base import DataBase
 
 
 class TestRasterplot:

@@ -37,9 +37,9 @@ def data_frame_generic_small(mdb, pdf, ddf, dumper, client=None):
     #index not set
     clean_up(mdb)
     if client is None:
-        mdb.set('test', ddf, dumper=dumper)
+        mdb.setitem('test', ddf, dumper=dumper)
     else:
-        mdb.set('test', ddf, dumper=dumper, client=client)
+        mdb.setitem('test', ddf, dumper=dumper, client=client)
     dummy = mdb['test']
     a = dask.compute(dummy)[0].reset_index(drop=True)
     b = pdf.reset_index(drop=True)
@@ -50,9 +50,9 @@ def data_frame_generic_small(mdb, pdf, ddf, dumper, client=None):
     #sorted index set
     clean_up(mdb)
     if client is None:
-        mdb.set('test', ddf.set_index(0), dumper=dumper)
+        mdb.setitem('test', ddf.set_index(0), dumper=dumper)
     else:
-        mdb.set('test', ddf.set_index(0), dumper=dumper, client=client)
+        mdb.setitem('test', ddf.set_index(0), dumper=dumper, client=client)
     dummy = mdb['test']
     a = dask.compute(dummy)[0]
     b = pdf.set_index(0)
@@ -100,7 +100,7 @@ def test_numpy_to_npy(empty_mdb, pdf):
 
     def fun(x):
         clean_up(empty_mdb)
-        empty_mdb.set('test', x, dumper=numpy_to_npy)
+        empty_mdb.setitem('test', x, dumper=numpy_to_npy)
         dummy = empty_mdb['test']
         assert_array_equal(dummy, x)
 
@@ -116,7 +116,7 @@ def test_reduced_lda_model(empty_mdb):
         lda_value_dicts = Rm.lda_value_dicts
         mdb_list = Rm.mdb_list  # TODO: old API
 
-        empty_mdb.set('rm', Rm, dumper=reduced_lda_model)
+        empty_mdb.setitem('rm', Rm, dumper=reduced_lda_model)
 
         assert st is Rm.st
         assert lda_values is Rm.lda_values
@@ -128,5 +128,5 @@ def test_reduced_lda_model(empty_mdb):
 
         # is functional
         Rm_reloaded.plot()
-        empty_mdb.set('rm2', Rm_reloaded, dumper=reduced_lda_model)
+        empty_mdb.setitem('rm2', Rm_reloaded, dumper=reduced_lda_model)
         Rm_reloaded.get_lookup_series_for_different_refractory_period(10)

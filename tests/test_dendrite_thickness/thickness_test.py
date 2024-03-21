@@ -6,19 +6,19 @@ import numpy as np
 from dendrite_thickness.thickness import IO, pipeline, utils
 from dendrite_thickness.thickness import thickness as th
 from .context import CURRENT_DIR, DATA_DIR
-import pandas as pd
-import pytest
 import six
-import distributed
-import subprocess
 import logging
 
 logger = logging.getLogger("ISF").getChild(__name__)
 
-AM_FILE = os.path.join(DATA_DIR, 'am_files', 'rest',
-                       'S13_final_done_Alison_zScale_40.am')
-IMAGE_FILE = os.path.join(DATA_DIR, 'image_files', 'rest',
-                          'S13_max_z_projection.tif')
+AM_FILE = os.path.join(
+    DATA_DIR, 
+    'am_files',
+    'S13_final_done_Alison_zScale_40.am')
+IMAGE_FILE = os.path.join(
+    DATA_DIR, 
+    'image_files',
+    'S13_max_z_projection.tif')
 
 
 def test_am_read():

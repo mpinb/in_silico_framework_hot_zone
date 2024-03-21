@@ -7,12 +7,7 @@ from data_base.db_initializers.load_simrun_general import init
 from data_base.utils import silence_stdout
 from data_base.data_base import DataBase
 from data_base.IO.LoaderDumper import pandas_to_msgpack
-import getting_started
-
-TEST_DATA_FOLDER = os.path.join(
-    getting_started.parent, 
-    'example_simulation_data',
-    'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/')
+from ..context import TEST_DATA_FOLDER
 
 
 # Py2 needs msgpack dumper, as parquet was not yet implemented for pandas DataFrames

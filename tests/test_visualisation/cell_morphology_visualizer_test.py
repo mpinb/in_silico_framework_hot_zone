@@ -11,7 +11,8 @@ class TestCellMorphologyVisualizer:
     def setup_class(self):
         self.cell = setup_synapse_activation_experiment()
         self.cmv = CellMorphologyVisualizer(
-            self.cell, align_trunk=six.PY3,
+            self.cell, 
+            align_trunk=six.PY3,
             t_start=0, t_end=1,t_step=0.5
         )  # don't align trunk in py2, ithas no scipy Rotation object
 
