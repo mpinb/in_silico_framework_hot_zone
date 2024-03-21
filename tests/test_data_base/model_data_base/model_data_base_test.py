@@ -1,4 +1,4 @@
-from data_base.model_data_base import ModeldataBase, MdbException
+from data_base.model_data_base import ModelDataBase, MdbException
 from data_base.data_base import get_versions
 import data_base.IO.LoaderDumper.to_pickle as to_pickle
 from data_base.IO.LoaderDumper import pandas_to_msgpack
@@ -20,7 +20,7 @@ def test_unique_id_is_set_on_initialization(empty_mdb):
 
 def test_unique_id_stays_the_same_on_reload(empty_mdb):
     db1 = empty_mdb
-    db2 = ModeldataBase(empty_mdb.basedir)
+    db2 = ModelDataBase(empty_mdb.basedir)
     assert db1._unique_id == db2._unique_id
 
 
@@ -28,7 +28,7 @@ def test_new_unique_id_is_generated_if_it_is_not_set_yet(empty_mdb):
     empty_mdb._unique_id = None
     empty_mdb.save_db_state()
     assert empty_mdb._unique_id is None
-    db = ModeldataBase(empty_mdb.basedir)
+    db = ModelDataBase(empty_mdb.basedir)
     assert db._unique_id is not None
 
 
@@ -95,7 +95,7 @@ def test_metadata_update(empty_mdb):
     assert empty_mdb.metadata['test2']['dumper'] == 'unknown'
 
     #after initialization, the metdata is rebuild
-    db = ModeldataBase(empty_mdb.basedir)
+    db = ModelDataBase(empty_mdb.basedir)
     assert db.metadata['test']['version'], "unknown"
     assert db.metadata['test2']['version'] == "unknown"
     assert db.metadata['test']['dumper'] == 'to_cloudpickle'
@@ -112,17 +112,17 @@ def test_check_working_dir_clean_for_build_works_correctly():
     with open(os.path.join(testpath, 'somefile'), 'w'):
         pass
     with pytest.raises(MdbException):
-        ModeldataBase(testpath)
+        ModelDataBase(testpath)
 
     #can create database if folder can be created but does not exist
     shutil.rmtree(testpath)
-    ModeldataBase(testpath)
+    ModelDataBase(testpath)
 
     #cannot create database if subfolder is in folder
     shutil.rmtree(testpath)
     os.makedirs(os.path.join(testpath, 'somefolder'))
     with pytest.raises(Exception):
-        ModeldataBase(testpath)
+        ModelDataBase(testpath)
 
     #tidy up
     shutil.rmtree(testpath)
@@ -142,8 +142,8 @@ def test_db_does_not_permit_writes_if_readonly(empty_mdb):
 def test_db_will_not_be_created_if_nocreate(empty_mdb):
     testpath = tempfile.mkdtemp()
     with pytest.raises(Exception):
-        ModeldataBase(testpath, nocreate=True)
-    ModeldataBase(empty_mdb.basedir, nocreate=True)
+        ModelDataBase(testpath, nocreate=True)
+    ModelDataBase(empty_mdb.basedir, nocreate=True)
     shutil.rmtree(testpath)
 
 
@@ -165,7 +165,7 @@ def test_managed_folder_does_not_overwrite_existing_keys(empty_mdb):
 
 def test_can_instantiate_sub_db(empty_mdb):
     empty_mdb.create_sub_db('test_sub_db')
-    assert isinstance(empty_mdb['test_sub_db'], ModeldataBase)
+    assert isinstance(empty_mdb['test_sub_db'], ModelDataBase)
 
 
 def test_cannot_set_hierarchical_key_it_is_already_used_in_hierarchy(empty_mdb):
@@ -282,11 +282,11 @@ def test_compare_old_db_with_freshly_initialized_one(client):
                             'test_data_base', \
                             'data',\
                             'already_initialized_db_for_compatibility_testing')
-    old_db = ModeldataBase(old_path, readonly=True, nocreate=True)
+    old_db = ModelDataBase(old_path, readonly=True, nocreate=True)
 
     # Manually create db
     path = tempfile.mkdtemp()
-    fresh_db = ModeldataBase(path)
+    fresh_db = ModelDataBase(path)
     test_data_folder = os.path.join(getting_started_parent,
                                     'example_simulation_data')
     with silence_stdout:

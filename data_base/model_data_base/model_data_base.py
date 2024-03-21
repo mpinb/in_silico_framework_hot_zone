@@ -244,7 +244,7 @@ class ModelDataBase(object):
         print('registering database with unique_id {} to the absolute path {}'.format(
                         self._unique_id, self.basedir))
         try:
-            data_base_register.register_db(self)
+            data_base_register.register_db(self._unique_id, self.basedir)
             self._registered_to_path = self.basedir
         except MdbException as e:
             warnings.warn(str(e))

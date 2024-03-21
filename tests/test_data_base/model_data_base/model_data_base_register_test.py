@@ -1,4 +1,4 @@
-from data_base.model_data_base import ModelDataBase, get_db_by_unique_id, MdbException
+from data_base.model_data_base.model_data_base import ModelDataBase, get_db_by_unique_id, MdbException
 import tempfile, os, shutil
 from data_base.data_base_register import _get_db_register, DataBaseRegister, register_db
 import pytest
