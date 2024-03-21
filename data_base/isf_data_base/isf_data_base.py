@@ -296,13 +296,12 @@ class ISFDataBase:
             pass
         self._set_unique_id()
         self._registeredDumpers.append(DEFAULT_DUMPER)
+        self._register_this_database()
         self.state = {
             '_registeredDumpers': self._registeredDumpers,
             '_unique_id': self._unique_id,
             '_registered_to_path': self._registered_to_path,
             }
-            
-        self._register_this_database()
         self.save_db_state()
 
     def _check_key_validity(self, key):
