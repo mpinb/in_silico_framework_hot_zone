@@ -376,7 +376,9 @@ def run(
         db=None
         ):
     """
-    Adapted from the BluePyOpt package: extended such that a start population can be defined.
+    This method is a class method of the BluePyOpt optimisations.DEAPOptimisation class.
+    It is extended here such that a start population can be defined.
+    Running actual optimization is done with the :meth:~`biophysics_fitting.optimizer.start_run`, which further extends this method.
     
     Note: 
         the population needs to be in a special format. Use methods in biophysics_fitting.population 
@@ -393,7 +395,7 @@ def run(
         pop = self.toolbox.population(n=offspring_size)
     else:
         print("initialized with population of size {:s}".format(len(pop)))
-        assert (continue_cp == False)
+        assert continue_cp == False
 
     ## commented out by arco
     #stats = deap.tools.Statistics(key=lambda ind: ind.fitness.sum)
