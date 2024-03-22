@@ -505,9 +505,6 @@ def _build_core(db, repartition=None, metadata_dumper=pandas_to_parquet):
     db.set('voltage_traces', vt, dumper=to_cloudpickle)
 
     
-
-
-
 def _build_synapse_activation(db, repartition=False, n_chunks=5000):
     def template(key, paths, file_reader_fun, dumper):
         logging.info('counting commas')
@@ -634,14 +631,26 @@ def _build_param_files(db, client):
 
     db['parameterfiles'] = df
 
-def init(db, simresult_path,  \
-         core = True, voltage_traces = True, synapse_activation = True,
-         dendritic_voltage_traces = True, parameterfiles = True, \
-         spike_times = True,  burst_times = False, \
-         repartition = True, scheduler = None, rewrite_in_optimized_format = True,
-         dendritic_spike_times = True, dendritic_spike_times_threshold = -30.,
-         client = None, n_chunks = 5000, dumper = pandas_to_parquet):
-    '''Use this function to load simulation data generated with the simrun2 module 
+def init(
+        db, 
+        simresult_path,
+        core=True, 
+        voltage_traces= True, 
+        synapse_activation = True,
+        dendritic_voltage_traces = True, 
+        parameterfiles = True,
+        spike_times = True,  
+        burst_times = False, \
+        repartition = True, 
+        scheduler = None, 
+        rewrite_in_optimized_format = True,
+        dendritic_spike_times = True, 
+        dendritic_spike_times_threshold = -30.,
+        client = None, 
+        n_chunks = 5000, 
+        dumper = pandas_to_parquet):
+    '''
+    Use this function to load simulation data generated with the simrun2 module 
     into a DataBase. 
     
     After initialization, you can access the data from the data_base in the following manner:
@@ -675,9 +684,9 @@ def init(db, simresult_path,  \
         scheduler = client
 
 
-#     get = compatibility.multiprocessing_scheduler if get is None else get
-#     with dask.set_options(scheduler=scheduler):
-#with get_progress_bar_function()():
+    # get = compatibility.multiprocessing_scheduler if get is None else get
+    # with dask.set_options(scheduler=scheduler):
+    # with get_progress_bar_function()():
     db['simresult_path'] = simresult_path
     if core:
         _build_core(db, repartition=repartition, metadata_dumper=dumper)

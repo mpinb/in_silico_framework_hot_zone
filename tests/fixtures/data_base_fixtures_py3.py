@@ -2,16 +2,8 @@ import os, shutil, pytest, tempfile
 from data_base.db_initializers.load_simrun_general import init
 from data_base.utils import silence_stdout
 from data_base.data_base import DataBase
-from data_base.db_initializers.load_simrun_general import init
-from data_base.utils import silence_stdout
-from data_base.data_base import DataBase
 from data_base.model_data_base import ModelDataBase
-import getting_started
-
-TEST_DATA_FOLDER = os.path.join(
-    getting_started.parent, 
-    'example_simulation_data',
-    'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/')
+from ..context import TEST_DATA_FOLDER
 
 @pytest.fixture
 def fresh_db(worker_id):
