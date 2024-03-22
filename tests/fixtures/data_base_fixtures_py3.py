@@ -7,9 +7,8 @@ from ..context import TEST_DATA_FOLDER
 
 @pytest.fixture
 def fresh_db(worker_id):
-    """Pytest fixture for an isf_data_base.DataBase object with a unique temp path.
+    """Pytest fixture for an data_base.DataBase object with a unique temp path.
     Initializes data with data_base.db_initializers.load_simrun_general.init
-    Initializes data with isf_data_base.db_initializers.load_simrun_general.init
     Contains 8 keys with data:
     1. simresult_path
     2. filelist
@@ -42,7 +41,7 @@ def fresh_db(worker_id):
 
 @pytest.fixture
 def fresh_mdb(worker_id):
-    """Pytest fixture for an isf_data_base.DataBase object with a unique temp path.
+    """Pytest fixture for an data_base.DataBase object with a unique temp path.
     Initializes data with data_base.db_initializers.load_simrun_general.init
     
     Contains 8 keys with data:
@@ -118,7 +117,6 @@ def empty_mdb(worker_id):
 @pytest.fixture
 def sqlite_db():
     from data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SqliteDict
-    from isf_data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SqliteDict
     tempdir = tempfile.mkdtemp()
     path = os.path.join(tempdir, 'tuplecloudsql_test.db')
     db = SqliteDict(path)

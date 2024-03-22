@@ -26,8 +26,7 @@ def fresh_db():
     8. spike_times
 
     Yields:
-        data_base.ModelDataBase: An db with data
-        isf_data_base.DataBase: An db with data
+        data_base.DataBase: An db with data
     """
     # unique temp path
     path = tempfile.mkdtemp()
@@ -66,7 +65,6 @@ def fresh_mdb():
 
     Yields:
         data_base.ModelDataBase: An db with data
-        isf_data_base.DataBase: An db with data
     """
     # unique temp path
     path = tempfile.mkdtemp()
@@ -96,7 +94,7 @@ def empty_db():
 
     Yields:
         data_base.ModelDataBase: An empty db
-        isf_data_base.DataBase: An empty db
+        data_base.DataBase: An empty db
     """
     # unique temp path
     path = tempfile.mkdtemp()
@@ -116,7 +114,6 @@ def empty_mdb():
 
     Yields:
         data_base.ModelDataBase: An empty db
-        isf_data_base.DataBase: An empty db
     """
     # unique temp path
     path = tempfile.mkdtemp()
@@ -132,7 +129,6 @@ def empty_mdb():
 @pytest.yield_fixture
 def sqlite_db():
     from data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SqliteDict
-    from isf_data_base.sqlite_backend.sqlite_backend import SQLiteBackend as SqliteDict
     tempdir = tempfile.mkdtemp()
     path = os.path.join(tempdir, 'tuplecloudsql_test.db')
     db = SqliteDict(path)

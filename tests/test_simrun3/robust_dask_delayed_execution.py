@@ -1,4 +1,4 @@
-from isf_data_base.distributed_lock import get_lock
+from data_base.distributed_lock import get_lock
 import os
 import warnings
 import dask

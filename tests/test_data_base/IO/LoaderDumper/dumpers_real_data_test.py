@@ -1,6 +1,6 @@
 from data_base.data_base import DataBase
 from pandas.util.testing import assert_frame_equal
-from  isf_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
+from  data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
 import tempfile
 
 

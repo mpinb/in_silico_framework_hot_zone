@@ -16,7 +16,7 @@ import simrun2.run_new_simulations
 import simrun2.run_existing_synapse_activations
 import simrun2.sim_trail_to_cell_object
 import simrun2.crossing_over.crossing_over_simple_interface
-from isf_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
+from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 # from compatibility import synchronous_scheduler
 
 import getting_started
