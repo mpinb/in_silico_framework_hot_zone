@@ -8,8 +8,8 @@ CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 TEST_DATA_FOLDER = os.path.join(
     getting_started_dir, 
     'example_data',
-    'simulation_data'
-    'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center/')
+    'simulation_data',
+    'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center')
 assert os.path.exists(TEST_DATA_FOLDER)
 
 sys.path.insert(0, parent)
