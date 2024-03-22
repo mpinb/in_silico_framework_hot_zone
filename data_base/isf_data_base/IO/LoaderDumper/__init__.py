@@ -67,9 +67,26 @@ def load(savedir, load_data=True, loader_kwargs={}):
 
 
 def get_dumper_string_by_dumper_module(dumper_module):
+    """
+    Check if a dumper module starts with the correct prefix.
+    The prefix can either be isf_data_base.something, 
+    but also data_base.something, since isf_data_base is the default data_base system for the isf project.
+
+    Args:
+        dumper_module: The module to check.
+    
+    Returns:
+        The dumper string.
+    """
     name = dumper_module.__name__
-    prefix = 'isf_data_base.IO.LoaderDumper.'
-    assert name.startswith(prefix) or name.startswith('data_base.'+prefix), "Could not import dumper module {}, as it does not contain the prefix {}".format(name, prefix)
+    prefix1 = 'isf_data_base.IO.LoaderDumper.'
+    prefix2 = 'data_base.IO.LoaderDumper'
+    if name.startswith(prefix1):
+        prefix = prefix1
+    elif name.startswith(prefix2):
+        prefix = prefix2
+    else:
+        raise ValueError("Could not import dumper module {}, as it does not contain the prefix {} or".format(name, prefix1, prefix2))
     return name[len(prefix):]
 
 
