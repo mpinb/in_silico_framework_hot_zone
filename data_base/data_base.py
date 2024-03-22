@@ -13,7 +13,7 @@ logger = logging.getLogger('ISF').getChild(__name__)
 
 def is_model_data_base(path):
     """
-    Checks if a given path is a ModelDataBase.
+    Checks if a given path is a ModelDataBase, containing data that has been saved with model_data_base.IO.LoaderDumper.some_module.
     """
     return os.path.exists(os.path.join(path, 'sqlitedict.db'))
 

@@ -124,7 +124,7 @@ def get_dumper_from_folder(folder, return_ = 'module'):
     if return_ == 'string':
         return dumper_string
     elif return_ == 'module':
-        return importlib.import_module("data_base.isf_data_base.IO.LoaderDumper.{}".format(dumper_string))
+        return importlib.import_module("data_base.IO.LoaderDumper.{}".format(dumper_string))
 
 class ISFDataBase:
     def __init__(self, basedir, readonly = False, nocreate = False, suppress_errors=False):
@@ -149,7 +149,7 @@ class ISFDataBase:
         All saved elements have associated metadata:
         - 'dumper': Which data dumper was used to save this result. 
             It's corresponding Loader can always be found in the same file. 
-            See :module:data_base.isf_data_base.IO.LoaderDumper for all dumpers and loaders.
+            See :mod:data_base.isf_data_base.IO.LoaderDumper for all dumpers and loaders.
         - 'time': Time at which this results was saved.
         - 'conda_list': A fill list of all modules installed in the conda environment 
             that was used to produce this result
@@ -439,7 +439,7 @@ class ISFDataBase:
         Make sure to provide the module, not the class
 
         Args:
-            dumper_module (module): A module from data_base.isf_data_base.IO.LoaderDumper. Must contain a Loader class and a dump() method.
+            dumper_module (module): A module from data_base.IO.LoaderDumper. Must contain a Loader class and a dump() method.
         
         """
         self._registered_dumpers.append(dumper_module)
@@ -517,7 +517,7 @@ class ISFDataBase:
 
         Kwargs:
             overwrite (bool, optional): Whether to overwrite the sub_db if it already exists. Defaults to True.
-            Other kwargs will be passed to the dumper, and may depend on which dumper you're using. Consult :module data_base.isf_data_base.IO.LoaderDumper: for more information on possible kwargs.
+            Other kwargs will be passed to the dumper, and may depend on which dumper you're using. Consult :mod:data_base.IO.LoaderDumper for more information on possible kwargs.
 
         Returns:
             DataBase: The newly created sub_db

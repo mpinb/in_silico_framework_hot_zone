@@ -80,7 +80,7 @@ def get_dumper_string_by_dumper_module(dumper_module):
     """
     name = dumper_module.__name__
     prefix1 = 'isf_data_base.IO.LoaderDumper.'
-    prefix2 = 'data_base.IO.LoaderDumper'
+    prefix2 = 'data_base.isf_data_base.IO.LoaderDumper'
     if name.startswith(prefix1):
         prefix = prefix1
     elif name.startswith(prefix2):
