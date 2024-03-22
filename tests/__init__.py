@@ -18,14 +18,19 @@ def setup_current_injection_experiment(
         cell: a cell object that contains the simulation.
     """
     rangevars = rangevars or []
-    cell_param = os.path.join(getting_started_dir, \
-                        'biophysical_constraints', \
-                        '86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param')
+    cell_param = os.path.join(
+        getting_started_dir, 
+        'example_data',
+        'biophysical_constraints', 
+        '86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param')
     cell_param = scp.build_parameters(
         cell_param)  # this is the main method to load in parameterfiles
     # load scaled hoc morphology
-    cell_param.neuron.filename = os.path.join(getting_started_dir, 'anatomical_constraints', \
-                        '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_scaled_diameters.hoc')
+    cell_param.neuron.filename = os.path.join(
+        getting_started_dir,
+        'example_data',
+        'anatomical_constraints', 
+        '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_scaled_diameters.hoc')
     with silence_stdout:
         cell = scp.create_cell(cell_param.neuron)
 
