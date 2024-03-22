@@ -3,7 +3,6 @@ Wrapper class that decides whether or not a database is legacy ModelDataBase, or
 """
 from data_base import model_data_base, isf_data_base
 import sys
-sys.modules['data_base.IO'] = isf_data_base.IO
 sys.modules['model_data_base'] = model_data_base
 sys.modules['isf_data_base'] = isf_data_base
 import os

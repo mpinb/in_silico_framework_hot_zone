@@ -10,6 +10,9 @@ It contains two important subpackages:
     1. :py:mod:model_data_base: A legacy format, only used by the Oberlaender lab at In-Silico Brain Sciences, MPINB Bonn. This should never be used by anyone else.
     2. :py:mod:isf_data_base: An updated data_base package, using JSON as metadata format, and the newest file formats, such as parquet.
 """
+import sys
+import isf_data_base.IO
+sys.modules['data_base.IO'] = isf_data_base.IO
 
 class DataBaseException(Exception):
     '''Typical data_base errors'''
