@@ -25,17 +25,23 @@ from mechanisms import l5pt as l5pt_mechanisms
 getting_started_folder = getting_started.parent
 
 name = 'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center'
-cellParamName = os.path.join(getting_started_folder, \
-                             'biophysical_constraints', \
-                             '86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param')
-networkName = os.path.join(getting_started_folder, \
-                           'functional_constraints', \
-                           'network.param')
-example_path = os.path.join(getting_started_folder, \
-                            'example_simulation_data', \
-                            'C2_evoked_UpState_INH_PW_1.0_SuW_0.5_C2center', \
-                            '20150815-1530_20240', \
-                            'simulation_run0000_synapses.csv')
+cellParamName = os.path.join(
+    getting_started_folder,
+    'example_data',
+    'biophysical_constraints',
+    '86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param')
+networkName = os.path.join(
+    getting_started_folder,
+    'example_data',
+    'functional_constraints', 
+    'network.param')
+example_path = os.path.join(
+    getting_started_folder, 
+    'example_data',
+    'simulation_data',
+    name,
+    '20150815-1530_20240', 
+    'simulation_run0000_synapses.csv')
 
 assert os.path.exists(cellParamName)
 assert os.path.exists(networkName)
