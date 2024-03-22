@@ -53,7 +53,7 @@ class MetadataAccessor:
     """
     Access the metadata of some key
     It does not have a set method, as the metadata is set automatically when a key is set.
-    Upon accidental metadata removal, the DataBase will try to estimate the metadata itself using :func DataBase._update_metadata_if_necessary:.
+    Upon accidental metadata removal, the DataBase will try to estimate the metadata itself using :meth:DataBase._update_metadata_if_necessary.
     """
     def __init__(self, db):
         self.db = db
@@ -127,7 +127,7 @@ def get_dumper_from_folder(folder, return_ = 'module'):
         return importlib.import_module("data_base.isf_data_base.IO.LoaderDumper.{}".format(dumper_string))
 
 class ISFDataBase:
-    def __init__(self, basedir, readonly = False, nocreate = False):
+    def __init__(self, basedir, readonly = False, nocreate = False, suppress_errors=False):
         '''
         Class responsible for robustly storing and retrieving information.
         It is meant to be used as an interface to simulation results. 
@@ -136,7 +136,8 @@ class ISFDataBase:
         
         Saved elements can be accessed using dictionary syntax:
         
-        Example:
+        Example::
+
             my_reloaded_element = db['my_new_element']
         
         All saved elements are stored in the ``basedir`` along with metadata 
@@ -148,7 +149,7 @@ class ISFDataBase:
         All saved elements have associated metadata:
         - 'dumper': Which data dumper was used to save this result. 
             It's corresponding Loader can always be found in the same file. 
-            See :module data_base.isf_data_base.IO.LoaderDumper: for all dumpers and loaders.
+            See :module:data_base.isf_data_base.IO.LoaderDumper for all dumpers and loaders.
         - 'time': Time at which this results was saved.
         - 'conda_list': A fill list of all modules installed in the conda environment 
             that was used to produce this result
@@ -164,26 +165,33 @@ class ISFDataBase:
         To read out all existing keys, use the keys() method.
         
         E.g. this class can be initialized in a way that after the initialization, 
-        the data can be accessed in the following way:
-        db['voltage_traces']
-        db['synapse_activation']
-        db['spike_times']
-        db['metadata']
-        db['cell_activation']
+        the data can be accessed in the following way::
+
+            db['voltage_traces']
+            db['synapse_activation']
+            db['spike_times']
+            db['metadata']
+            db['cell_activation']
         
         Further more, it is possible to assign new elements to the database
         db['my_new_element'] = my_new_element
 
         Args:
-            basedir (str): The directory in which the database will be created, or read from.
-            readonly (bool, optional): If True, the database will be read only. Defaults to False.
-            nocreate (bool, optional): If True, a new database will not be created if it does not exist. 
+            basedir (str): 
+                The directory in which the database will be created, or read from.
+            readonly (bool, optional): 
+                If True, the database will be read only. Defaults to False.
+            nocreate (bool, optional): 
+                If True, a new database will not be created if it does not exist. 
                 Defaults to False.
+            suppress_errors (bool, optional):
+                If True, errors will be suppressed and raised as warnings instead. Defaults to False. Use with caution.
         '''
         self.basedir = Path(basedir)
         self.readonly = readonly
         self.nocreate = nocreate
         self.parent_db = None
+        self._suppress_errors = suppress_errors
 
         # database state
         self._db_state_fn = "db_state.json"
@@ -255,11 +263,14 @@ class ISFDataBase:
             data_base_register.register_db(self._unique_id, self.basedir)
             self._registered_to_path = self.basedir
         except DataBaseException as e:
-            logger.warning(str(e))
+            if self._suppress_errors:
+                logger.warning(str(e))
+            else:
+                raise e
   
     def _set_unique_id(self):
         """
-        Sets a unique ID for the DataBase as class attribute. Does not save this ID as metadata (this is taken care of by :func _initialize:)
+        Sets a unique ID for the DataBase as class attribute. Does not save this ID as metadata (this is taken care of by :meth:_initialize)
 
         Raises:
             ValueError: If the unique ID is already set.
@@ -303,15 +314,6 @@ class ISFDataBase:
             '_registered_to_path': self._registered_to_path,
             }
         self.save_db_state()
-
-    def _check_key_validity(self, key):
-        """DEPRECATED! use _check_key_format instead.
-        Only here for consistent API with dbv1
-
-        Args:
-            key (str|tuple): key
-        """
-        self._check_key_format(key)
            
     def _convert_key_to_path(self, key):
         self._check_key_format(key)
@@ -398,7 +400,10 @@ class ISFDataBase:
     def _check_writing_privilege(self, key):
         '''raises DataBaseException, if we don't have permission to write to key '''
         if self.readonly is True:
-            raise DataBaseException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+            if self._suppress_errors:
+                logger.warning("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+            else:
+                raise DataBaseException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         #this exists, so jupyter notebooks will not crash when they try to write something
         elif self.readonly == 'warning': 
             logger.warning("DB is in readonly mode. Blocked writing attempt to key %s" % key)
@@ -491,14 +496,6 @@ class ISFDataBase:
             self.set(key, None, dumper = just_create_folder)
         return self[key]
 
-    def get_managed_folder(self, key):
-        '''deprecated! Only here to have consistent API with db version 1.
-        
-        Use create_managed_folder instead'''   
-        logger.warning("Get_managed_folder is deprecated and only exists to have consistent API with dbv1.  Use create_managed_folder instead.") 
-        # TODO: remove this method
-        return self.create_managed_folder(key)
-
     def create_shared_numpy_store(self, key, raise_ = True):
         if key in list(self.keys()):
             if raise_:
@@ -557,18 +554,10 @@ class ISFDataBase:
         #   -> return newly created sub_db
         return parent_db
 
-    def get_sub_db(self,key, register = 'as_parent'):
-        '''deprecated! it only exists to have consistent API to dbv1
-        
-        Use create_sub_db instead'''
-        logger.warning("get_sub_db is deprecated. it only exists to have consistent API to dbv1.  Use create_sub_db instead.")         
-        #TODO: remove this method
-        return self.create_sub_db(key, register = register)
-
     def get(self, key, lock = None, **kwargs):
-        """This is the main method to get data from a DataBase. :func getitem: and :func __getitem__: call this method.
-        :func getitem: only exists to provide consistent API with dbv1.
-        :func __getitem__: is the method that's being called when you use db[key].
+        """This is the main method to get data from a DataBase. :meth:getitem and :meth:__getitem__ call this method.
+        :meth:getitem only exists to provide consistent API with dbv1.
+        :meth:__getitem__ is the method that's being called when you use db[key].
         The advantage is that this allows to pass additional arguments to the loader, e.g.
         db.getitem('key', columns = [1,2,3]).
 
@@ -604,9 +593,9 @@ class ISFDataBase:
         old_key.rename(new_key)
 
     def set(self, key, value, lock = None, dumper = None, **kwargs):
-        """Main method to save data in a DataBase. :func set: and :func __setitem__: call this method.
-        :func set: only exists to provide consistent API with dbv1.
-        :func __setitem__: is the method that's being called when you use db[key] = value.
+        """Main method to save data in a DataBase. :meth:set and :meth:__setitem__ call this method.
+        :meth:set only exists to provide consistent API with dbv1.
+        :meth:__setitem__ is the method that's being called when you use db[key] = value.
         The advantage of using this method is that you can specify a dumper and pass additional arguments to the dumper with **kwargs.
         This method is thread safe, if you provide a lock.
         # TODO: deprecate the dumper "self". "self" only makes sense with an sqlite backend. "default" would be better in this case.
@@ -681,14 +670,6 @@ class ISFDataBase:
             raise
         if lock:
             lock.release()
-            
-    def setitem(self, key, value, dumper = None, **kwargs):
-        logger.warning('set is deprecated. it exist to provide a consistent API with legacy data_base. use set instead.')
-        self.set(key, value, dumper = dumper, **kwargs)
-
-    def getitem(self, key, lock=None, dumper = None, **kwargs):
-        logger.warning('set is deprecated. it exist to provide a consistent API with legacy data_base. use set instead.')
-        self.get(key, lock=lock, dumper=dumper, **kwargs)
     
     def maybe_calculate(self, key, fun, **kwargs):
         '''This function returns the corresponding value of key,
