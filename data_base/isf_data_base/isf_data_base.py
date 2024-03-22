@@ -9,8 +9,8 @@ from .IO import LoaderDumper
 from pathlib import Path
 from data_base import (
     _module_versions,
-    data_base_register,
-    DataBaseException)
+    data_base_register)
+from data_base.exceptions import DataBaseException
 VC = _module_versions.version_cached
 from data_base._version import get_versions
 from .IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_isf_db, shared_numpy_store, get_dumper_string_by_dumper_module

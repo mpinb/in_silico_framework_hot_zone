@@ -11,9 +11,5 @@ It contains two important subpackages:
     2. :py:mod:isf_data_base: An updated data_base package, using JSON as metadata format, and the newest file formats, such as parquet.
 """
 import sys
-import isf_data_base.IO
-sys.modules['data_base.IO'] = isf_data_base.IO
-
-class DataBaseException(Exception):
-    '''Typical data_base errors'''
-    pass
+from .isf_data_base import IO
+sys.modules['data_base.IO'] = IO

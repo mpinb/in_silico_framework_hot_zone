@@ -1,10 +1,6 @@
 from __future__ import absolute_import
 from .tuplecloudsqlitedict import SqliteDict
-import os, time
-from ..utils import DelayedKeyboardInterrupt
-
-from threading import ThreadError
-import warnings
+import os
 
 ###################################################
 # additional locking

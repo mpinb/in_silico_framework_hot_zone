@@ -2,7 +2,7 @@ from __future__ import absolute_import
 import os, json
 from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
 from .utils import cache
-from . import DataBaseException
+from .exceptions import DataBaseException
 from .settings import data_base_register_path
 from compatibility import pandas_unpickle_fun
 
