@@ -5,6 +5,8 @@ from .utils import cache
 from .exceptions import DataBaseException
 from .settings import data_base_register_path
 from compatibility import pandas_unpickle_fun
+import logging
+logger = logging.getLogger("ISF").getChild(__name__)
 
 _foldername = '.data_base_register.db'
 
@@ -66,11 +68,9 @@ class DataBaseRegister():
                 except Exception as e:
                     self.mdb['failed', dir_] = e
             else:
-                raise DataBaseException(
-                    "Could not find a metadata.json or dbcore.pickle file in {}. \
-                    Are you sure the path points to a ModelDataBase or ISFDataBase?".format(dir_))
+                logger.warning(
+                    "Could not find a metadata.json or dbcore.pickle file in {}. Are you sure the path points to a directory containing at least one ModelDataBase or ISFDataBase?".format(dir_))
             
-
     def add_db(self, unique_id, db_basedir):
         self.registry[unique_id] = os.path.abspath(db_basedir)
 
