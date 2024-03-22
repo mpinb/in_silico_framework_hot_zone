@@ -1,5 +1,5 @@
 from data_base.data_base import DataBase
-from data_base import  DataBaseException
+from data_base.exceptions import  DataBaseException
 from data_base._version import get_versions
 import data_base.IO.LoaderDumper.to_pickle as to_pickle
 from data_base.IO.LoaderDumper import pandas_to_msgpack

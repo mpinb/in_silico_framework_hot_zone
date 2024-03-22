@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import os
 from data_base.data_base import DataBase, get_db_by_unique_id
-from data_base import DataBaseException
+from data_base.exceptions import DataBaseException
 from .utils import cache
 
 
