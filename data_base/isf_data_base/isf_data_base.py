@@ -149,7 +149,7 @@ class ISFDataBase:
         All saved elements have associated metadata:
         - 'dumper': Which data dumper was used to save this result. 
             It's corresponding Loader can always be found in the same file. 
-            See :mod:data_base.isf_data_base.IO.LoaderDumper for all dumpers and loaders.
+            See :mod:data_base.data_base.IO.LoaderDumper for all dumpers and loaders.
         - 'time': Time at which this results was saved.
         - 'conda_list': A fill list of all modules installed in the conda environment 
             that was used to produce this result

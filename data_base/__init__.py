@@ -19,6 +19,8 @@ This way:
 See also:
 1. :mod:data_base.data_base to see how old data formats are automatically read in.
 2. :mod:model_data_base to see how the old IO subpackage is registered under the original name `model_data_base.IO` to guarantee compatibility with `pickle` formats.
+
+All methods in ISF should never import IO from the model_data_base or isf_data_base subpackages directly, but always use the data_base.IO module, which is dynamically set to the correct IO subpackage.
 """
 import sys
 from .isf_data_base import IO

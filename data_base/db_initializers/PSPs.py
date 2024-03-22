@@ -1,7 +1,7 @@
 import os
 import single_cell_parser as scp
 from data_base.dbopen import create_db_path, resolve_db_path
-from isf_data_base.IO.LoaderDumper import pandas_to_parquet
+from data_base.IO.LoaderDumper import pandas_to_parquet
 
 
 def get_confile_form_network_param(n):

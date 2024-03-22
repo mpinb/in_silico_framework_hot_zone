@@ -2,9 +2,9 @@ import os
 from functools import partial
 import pandas as pd
 from simrun3.somatic_summation_model import ParseVT
-import isf_data_base.IO.LoaderDumper.dask_to_msgpack
+import data_base.IO.LoaderDumper.dask_to_msgpack
 
-dask_to_msgpack = isf_data_base.IO.LoaderDumper.dask_to_msgpack
+dask_to_msgpack = data_base.IO.LoaderDumper.dask_to_msgpack
 from collections import defaultdict
 import single_cell_parser as scp
 
@@ -70,7 +70,7 @@ def sa_to_vt_bypassing_lock(db_loader_dict,
     The synapse activation dataframe sa may contain several simtrails.
     The PSPs matching the anatomical location are automatically loaded. For this,
     it is necessary that the model data base has been initialized with 
-    isf_data_base.db_initializers.PSPs.init'''
+    data_base.db_initializers.PSPs.init'''
     parameterfiles = db_loader_dict['parameterfiles']()
     out = []
     index = []
@@ -105,7 +105,7 @@ def sa_to_vt_bypassing_lock(db_loader_dict,
 
 
 def get_db_loader_dict(db, descriptor=None, PSPClass_name=None):
-    from isf_data_base.IO.LoaderDumper import load
+    from data_base.IO.LoaderDumper import load
     import six
     keys = [
         k for k in list(db['PSPs'].keys())
