@@ -5,7 +5,7 @@ from functools import partial
 import neo
 import pandas as pd
 import numpy as np
-from data_base import utils as mdb_utils
+from data_base import utils as db_utils
 from collections import defaultdict
 import tempfile
 import matplotlib.pyplot as plt
