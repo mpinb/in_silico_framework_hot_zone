@@ -1,6 +1,6 @@
 from data_base.data_base import DataBase
 from pandas.util.testing import assert_frame_equal
-from  data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
+from data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
 import tempfile
 
 
@@ -21,9 +21,9 @@ def real_data_generic(db_, dumper_, client_=None):
         client_ (distributed.Client, optional): client object. Defaults to None.
     """
     if client_ is None:
-        db_.setitem('voltage_traces2', db_['voltage_traces'], dumper=dumper_)
+        db_.set('voltage_traces2', db_['voltage_traces'], dumper=dumper_)
     else:
-        db_.setitem('voltage_traces2',
+        db_.set('voltage_traces2',
                      db_['voltage_traces'],
                      dumper=dumper_,
                      client=client_)
@@ -33,11 +33,11 @@ def real_data_generic(db_, dumper_, client_=None):
     assert_frame_equal(a, b, check_column_type=False)
 
     if client_ is None:
-        db_.setitem('synapse_activation2',
+        db_.set('synapse_activation2',
                      db_['synapse_activation'],
                      dumper=dumper_)
     else:
-        db_.setitem('synapse_activation2',
+        db_.set('synapse_activation2',
                      db_['synapse_activation'],
                      dumper=dumper_,
                      client=client_)

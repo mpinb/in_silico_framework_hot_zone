@@ -2,7 +2,7 @@ import os
 from functools import partial
 import pandas as pd
 from simrun3.somatic_summation_model import ParseVT
-import data_base.IO.LoaderDumper.dask_to_msgpack
+import data_base.isf_data_base.IO.LoaderDumper.dask_to_msgpack
 
 dask_to_msgpack = data_base.IO.LoaderDumper.dask_to_msgpack
 from collections import defaultdict

@@ -5,9 +5,10 @@ import os
 
 
 def test_saved_and_reloaded_synapse_file_is_identical(tmpdir):
-    synapse_file_path = os.path.join(test_data_folder, \
-                                            '20150815-1530_20240', \
-                                            'simulation_run0000_synapses.csv')
+    synapse_file_path = os.path.join(
+        test_data_folder, 
+        '20150815-1530_20240', 
+        'simulation_run0000_synapses.csv')
     assert os.path.exists(synapse_file_path)
     synapse_pdf = read_pandas_synapse_activation_from_roberts_format(\
                             synapse_file_path, sim_trail_index = 'asdasd')

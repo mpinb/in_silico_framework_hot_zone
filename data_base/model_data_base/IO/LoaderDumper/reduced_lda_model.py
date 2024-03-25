@@ -15,7 +15,7 @@ Filesize: takes 14% of the space, to cloudpickle needs (7 x more space efficient
 from . import parent_classes
 import os, cloudpickle
 from simrun2.reduced_model.get_kernel import ReducedLdaModel
-from data_base.data_base import DataBase, get_db_by_unique_id
+from data_base.model_data_base.model_data_base import ModelDataBase
 from . import pandas_to_parquet, pandas_to_msgpack
 from . import numpy_to_npz
 import pandas as pd
@@ -32,7 +32,7 @@ def check(obj):
 class Loader(parent_classes.Loader):
 
     def get(self, savedir):
-        mdb = DataBase(savedir)
+        mdb = ModelDataBase(savedir)
         Rm = mdb['Rm']
         Rm.st = mdb['st']
         lv = 0
@@ -49,7 +49,7 @@ class Loader(parent_classes.Loader):
 
 
 def dump(obj, savedir):
-    mdb = DataBase(savedir)
+    mdb = ModelDataBase(savedir)
     Rm = obj
     # keep references of original objects
     try:  # some older versions do not have this attribute
@@ -58,7 +58,7 @@ def dump(obj, savedir):
         st = Rm.st = pd.DataFrame()
     lda_values = Rm.lda_values
     lda_value_dicts = Rm.lda_value_dicts
-    mdb_list = Rm.mdb_list
+    mdb_list = Rm.db_list
 
     if six.PY2:
         st_dumper = pandas_to_msgpack
@@ -83,8 +83,8 @@ def dump(obj, savedir):
                 lv += 1
         Rm.lda_value_dicts = new_lda_value_dicts
         # convert mdb_list to mdb ids
-        Rm.mdb_list = [
-            m.get_id() if not isinstance(m, str) else m for m in Rm.mdb_list
+        Rm.db_list = [
+            m.get_id() if not isinstance(m, str) else m for m in Rm.db_list
         ]
         mdb['Rm'] = Rm
     finally:
@@ -92,7 +92,7 @@ def dump(obj, savedir):
         Rm.st = st
         Rm.lda_values = lda_values
         Rm.lda_value_dicts = lda_value_dicts
-        Rm.mdb_list = mdb_list
+        Rm.db_list = mdb_list
         #         with open(os.path.join(savedir, 'Loader.pickle'), 'wb') as file_:
         #             cloudpickle.dump(Loader(), file_)
         compatibility.cloudpickle_fun(Loader(),

@@ -1,11 +1,9 @@
 import os, shutil, pytest, tempfile
 from data_base.db_initializers.load_simrun_general import init
+from data_base.model_data_base.mdb_initializers.load_simrun_general import init as init_mdb
 from data_base.utils import silence_stdout
 from data_base.data_base import DataBase
 from data_base.model_data_base import ModelDataBase
-from data_base.db_initializers.load_simrun_general import init
-from data_base.utils import silence_stdout
-from data_base.data_base import DataBase
 from data_base.IO.LoaderDumper import pandas_to_msgpack
 from ..context import TEST_DATA_FOLDER
 
@@ -72,7 +70,7 @@ def fresh_mdb():
     #self.db.settings.show_computation_progress = False
 
     with silence_stdout:
-        init(
+        init_mdb(
             db,
             TEST_DATA_FOLDER,
             rewrite_in_optimized_format=False,

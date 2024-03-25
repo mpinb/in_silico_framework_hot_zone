@@ -1,7 +1,7 @@
 import numpy as np
 from pandas.util.testing import assert_frame_equal
 import dask 
-from model_data_base.IO.LoaderDumper import dask_to_csv, numpy_to_npy, pandas_to_parquet, dask_to_parquet, \
+from data_base.model_data_base.IO.LoaderDumper import dask_to_csv, numpy_to_npy, pandas_to_parquet, dask_to_parquet, \
                                 pandas_to_msgpack, to_pickle, pandas_to_pickle, dask_to_msgpack, \
                                 dask_to_categorized_msgpack, to_cloudpickle, reduced_lda_model
 from tests.test_simrun2.reduced_model.get_kernel_test import get_test_Rm
@@ -114,14 +114,14 @@ def test_reduced_lda_model(empty_mdb):
         st = Rm.st
         lda_values = Rm.lda_values
         lda_value_dicts = Rm.lda_value_dicts
-        mdb_list = Rm.mdb_list  # TODO: old API
+        mdb_list = Rm.db_list
 
         empty_mdb.setitem('rm', Rm, dumper=reduced_lda_model)
 
         assert st is Rm.st
         assert lda_values is Rm.lda_values
         assert lda_value_dicts is Rm.lda_value_dicts
-        assert mdb_list is Rm.mdb_list  # TODO: old API
+        assert mdb_list is Rm.db_list
 
         # can be loaded
         Rm_reloaded = empty_mdb['rm']

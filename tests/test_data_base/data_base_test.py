@@ -321,4 +321,5 @@ def test_check_if_key_exists_can_handle_str_and_tuple_keys(empty_db):
     assert empty_db.check_if_key_exists(('a',))
     assert empty_db.check_if_key_exists(('b', 'b'))
     assert not empty_db.check_if_key_exists(('a', 'b'))
+    # this functionality is not supported in ModelDataBase, but it is in ISFDataBase
     assert empty_db.check_if_key_exists('b')

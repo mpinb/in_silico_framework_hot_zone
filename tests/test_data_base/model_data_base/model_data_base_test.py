@@ -6,7 +6,7 @@ from getting_started import parent as getting_started_parent
 from pandas.util.testing import assert_frame_equal
 from data_base.db_initializers.load_simrun_general import init
 from data_base.utils import silence_stdout
-from data_base import IO
+from data_base.model_data_base import IO
 
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -23,10 +23,10 @@ def test_unique_id_stays_the_same_on_reload(empty_mdb):
 
 def test_new_unique_id_is_generated_if_it_is_not_set_yet(empty_mdb):
     empty_mdb._unique_id = None
-    empty_mdb.save_db_state()
+    empty_mdb.save_mdb()
     assert empty_mdb._unique_id is None
-    db = ModelDataBase(empty_mdb.basedir)
-    assert db._unique_id is not None
+    mdb = ModelDataBase(empty_mdb.basedir)
+    assert mdb._unique_id is not None
 
 
 def test_get_dumper_string_by_dumper_module(empty_mdb):
@@ -40,7 +40,7 @@ def test_get_dumper_string_by_savedir(empty_mdb):
     '''dumper string should be the same if it is determined
     post hoc (by providing the path to an already existing folder)
     or from the module reference directly.'''
-    empty_mdb.set('test', 1, dumper=to_pickle)
+    empty_mdb.setitem('test', 1, dumper=to_pickle)
     s1 = empty_mdb._detect_dumper_string_of_existing_key('test')
     s2 = IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
     assert s1 == s2
@@ -50,7 +50,7 @@ def test_can_detect_default_dumper(empty_mdb):
     '''dumper string should be the same if it is determined
     post hoc (by providing the path to an already existing folder)
     or from the module reference directly.'''
-    empty_mdb.set('test', 1)  # don't specify dumper
+    empty_mdb.setitem('test', 1)  # don't specify dumper
     s1 = empty_mdb._detect_dumper_string_of_existing_key('test')
     assert s1 == 'to_cloudpickle'
 
@@ -60,8 +60,8 @@ def test_metadata_update(empty_mdb):
     providing a smooth transition from databases, that had not implemented
     metadata to the newer version. This function should not overwrite
     existing metadata'''
-    empty_mdb.set('test', 1)
-    empty_mdb.set('test2', 1, dumper=to_pickle)
+    empty_mdb.setitem('test', 1)
+    empty_mdb.setitem('test2', 1, dumper=to_pickle)
     msg1 = "{} =/= {}".format(empty_mdb.metadata['test']['version'],
                               get_versions()['version'])
     msg2 = "{} =/= {}".format(empty_mdb.metadata['test2']['version'],
@@ -81,10 +81,7 @@ def test_metadata_update(empty_mdb):
         'metadata_creation_time'] == 'together_with_new_key'
 
     # directly after deleting metadata database, every information is "unknown"
-    metadata_db_path = os.path.join(empty_mdb.basedir, 'test', 'metadata.json')
-    assert os.path.exists(metadata_db_path)
-    os.remove(metadata_db_path)
-    metadata_db_path = os.path.join(empty_mdb.basedir, 'test2', 'metadata.json')
+    metadata_db_path = os.path.join(empty_mdb.basedir, 'metadata.db')
     assert os.path.exists(metadata_db_path)
     os.remove(metadata_db_path)
 
@@ -160,9 +157,9 @@ def test_managed_folder_does_not_overwrite_existing_keys(empty_mdb):
         empty_mdb.create_managed_folder('asd')
 
 
-def test_can_instantiate_sub_db(empty_mdb):
-    empty_mdb.create_sub_db('test_sub_db')
-    assert isinstance(empty_mdb['test_sub_db'], ModelDataBase)
+def test_can_instantiate_sub_mdb(empty_mdb):
+    empty_mdb.create_sub_mdb('test_sub_mdb')
+    assert isinstance(empty_mdb['test_sub_mdb'], ModelDataBase)
 
 
 def test_cannot_set_hierarchical_key_it_is_already_used_in_hierarchy(empty_mdb):
@@ -190,23 +187,23 @@ def test_cannot_set_hierarchical_key_it_is_already_used_in_hierarchy(empty_mdb):
         fun4()
 
 
-def test_keys_of_sub_dbs_can_be_called_with_a_single_tuple(empty_mdb):
-    sub_db = empty_mdb.create_sub_db(('A', '1'))
-    sub_db['B'] = 1
-    sub_db['C', '1'] = 2
+def test_keys_of_sub_mdbs_can_be_called_with_a_single_tuple(empty_mdb):
+    sub_mdb = empty_mdb.create_sub_mdb(('A', '1'))
+    sub_mdb['B'] = 1
+    sub_mdb['C', '1'] = 2
     assert empty_mdb['A', '1', 'B'] == 1
     assert empty_mdb['A', '1', 'C', '1'] == 2
 
 
-def test_sub_db_does_not_overwrite_existing_keys(empty_mdb):
-    empty_mdb.set('asd', 1)
+def test_sub_mdb_does_not_overwrite_existing_keys(empty_mdb):
+    empty_mdb.setitem('asd', 1)
     with pytest.raises(MdbException):
-        empty_mdb.create_sub_db('asd')
+        empty_mdb.create_sub_mdb('asd')
 
 
 def test_can_set_items_using_different_dumpers(empty_mdb):
-    empty_mdb.set('test_self', 1)
-    empty_mdb.set('test_to_pickle', 1, dumper=to_pickle)
+    empty_mdb.setitem('test_self', 1)
+    empty_mdb.setitem('test_to_pickle', 1, dumper=to_pickle)
     assert empty_mdb['test_self'] == empty_mdb['test_to_pickle']
 
 
@@ -320,4 +317,4 @@ def test_check_if_key_exists_can_handle_str_and_tuple_keys(empty_mdb):
     assert empty_mdb.check_if_key_exists(('a',))
     assert empty_mdb.check_if_key_exists(('b', 'b'))
     assert not empty_mdb.check_if_key_exists(('a', 'b'))
-    assert empty_mdb.check_if_key_exists('b')
+    assert not empty_mdb.check_if_key_exists('b')

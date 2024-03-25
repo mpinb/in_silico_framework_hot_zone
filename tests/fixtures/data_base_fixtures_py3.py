@@ -1,5 +1,6 @@
 import os, shutil, pytest, tempfile
-from data_base.db_initializers.load_simrun_general import init
+from data_base.isf_data_base.db_initializers.load_simrun_general import init
+from data_base.model_data_base.mdb_initializers.load_simrun_general import init as init_mdb
 from data_base.utils import silence_stdout
 from data_base.data_base import DataBase
 from data_base.model_data_base import ModelDataBase
@@ -59,21 +60,25 @@ def fresh_mdb(worker_id):
     """
     # unique temp path
     path = tempfile.mkdtemp(prefix=worker_id)
-    db = ModelDataBase(path)
+    mdb = ModelDataBase(path)
     #self.db.settings.show_computation_progress = False
     #self.db.settings.show_computation_progress = False
 
     with silence_stdout:
-        init(
-            db,
+        init_mdb(
+            mdb,
             TEST_DATA_FOLDER,
             rewrite_in_optimized_format=False,
             parameterfiles=False,
             dendritic_voltage_traces=False)
 
-    yield db
+    yield mdb
     # cleanup
-    db.remove()
+    for key in mdb.keys():
+        del key
+    del mdb
+    shutil.rmtree(path)
+
 
 @pytest.fixture
 def empty_db(worker_id):
@@ -104,13 +109,13 @@ def empty_mdb(worker_id):
     """
     # unique temp path
     path = tempfile.mkdtemp(prefix=worker_id)
-    db = ModelDataBase(path)
+    mdb = ModelDataBase(path)
 
-    yield db
+    yield mdb
     # cleanup
-    for key in db.keys():
+    for key in mdb.keys():
         del key
-    del db
+    del mdb
     shutil.rmtree(path)
 
 

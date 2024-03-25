@@ -1,17 +1,5 @@
-from data_base.model_data_base import ModelDataBase
-import tempfile
-import numpy as np
 from pandas.util.testing import assert_frame_equal
-import dask.dataframe as dd
-import pandas as pd
-import dask
-from  data_base.IO.LoaderDumper import dask_to_csv, numpy_to_npy, pandas_to_parquet, \
-                            to_pickle, pandas_to_pickle, dask_to_msgpack, \
-                            dask_to_categorized_msgpack, to_cloudpickle, reduced_lda_model
-from tests.test_simrun2.reduced_model.get_kernel_test import get_test_Rm
-from numpy.testing import assert_array_equal
-import distributed
-import tempfile
+from data_base.model_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
 
 
 def robust_del_fun(mdb, key):

@@ -61,7 +61,7 @@ def is_port_in_use(port):
 def pytest_ignore_collect(path, config):
     if six.PY2:
         return (
-            path.fnmatch("/*test_data_base/model_data_base/*")  # only run ModelDataBase tests on Py2
+            path.fnmatch("/*test_data_base/data_base/*")  # only run new DataBase tests on Py2
             or path.fnmatch("/*cell_morphology_visualizer_test*")  # don't run cmv tests on Py2
             )
 

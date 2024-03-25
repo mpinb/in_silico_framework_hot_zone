@@ -9,17 +9,16 @@ import pandas as pd
 import dask.dataframe as dd
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
-from data_base import utils
-from data_base.data_base import DataBase
-from data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, \
+from data_base.isf_data_base import ISFDataBase as DataBase
+from data_base.isf_data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, \
     to_cloudpickle, to_pickle, pandas_to_parquet, dask_to_msgpack, pandas_to_msgpack, \
         get_dumper_string_by_dumper_module, dask_to_parquet
 from data_base.exceptions import DataBaseException
-from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format as read_sa
-from data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format as read_ca
+from data_base.isf_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format as read_sa
+from data_base.isf_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format as read_ca
 from data_base.analyze.spike_detection import spike_detection
 # from data_base.analyze.burst_detection import burst_detection
-from data_base.utils import mkdtemp
+from data_base.utils import mkdtemp, chunkIt, unique, silence_stdout
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
@@ -122,7 +121,7 @@ def read_voltage_traces_by_filenames(prefix,
     assert repartition is not None
     fnames = sorted(fnames)
     if repartition and len(fnames) > 10000:
-        fnames_chunks = utils.chunkIt(fnames, 5000)
+        fnames_chunks = chunkIt(fnames, 5000)
         delayeds = [
             read_voltage_traces_from_files_pandas(prefix, fnames_chunk)
             for fnames_chunk in fnames_chunks
@@ -144,7 +143,7 @@ def get_voltage_traces_divisions_by_metadata(metadata, repartition=None):
     divisions = metadata[metadata.trailnr == min(metadata.trailnr)]
     divisions = list(divisions.sim_trail_index)
     if len(divisions) > 10000 and repartition:
-        divisions = [d[0] for d in utils.chunkIt(divisions, 5000)]
+        divisions = [d[0] for d in chunkIt(divisions, 5000)]
     return tuple(divisions + [metadata.iloc[-1].sim_trail_index])
 
 ############################################
@@ -254,7 +253,7 @@ def get_max_commas(paths):
             n = max(n, _max_commas(path))
         return n
 
-    filepath_chunks = utils.chunkIt(
+    filepath_chunks = chunkIt(
         paths, 3000
     )  # count commas in max 300 processes at once. Arbitrary but reasonable.
     max_commas = [max_commas_in_chunk(chunk) for chunk in filepath_chunks]
@@ -308,7 +307,7 @@ def load_dendritic_voltage_traces_helper(db,
             for index, x in m.iterrows()
         ]
     #print suffix
-    fnames = utils.unique(fnames)
+    fnames = unique(fnames)
     ddf = read_voltage_traces_by_filenames(db['simresult_path'],
                                            fnames,
                                            divisions=divisions,
@@ -386,7 +385,7 @@ def generate_param_file_hashes(simresult_path, sim_trail_index):
 #####################################
 # step seven point one: replace paths in param files with relative dbpaths
 #####################################
-from ..dbopen import create_db_path
+from data_base.dbopen import create_db_path
 
 
 def create_db_path_print(path, replace_dict={}):
@@ -513,7 +512,7 @@ def _build_synapse_activation(db, repartition=False, n_chunks=5000):
         logging.info('generate dataframe')
         path_sti_tuples = list(zip(paths, list(db['sim_trail_index'])))
         if repartition and len(paths) > 10000:
-            path_sti_tuples = utils.chunkIt(path_sti_tuples, n_chunks)
+            path_sti_tuples = chunkIt(path_sti_tuples, n_chunks)
             delayeds = [
                 file_reader_fun(list(zip(*x))[0],
                                 list(zip(*x))[1], max_commas)
@@ -574,7 +573,7 @@ def _get_rec_site_managers(db):
     neuronParameters = scp.build_parameters(param_files[0])
     rec_sites = neuronParameters.sim.recordingSites
     cellParam = neuronParameters.neuron
-    with utils.silence_stdout:
+    with silence_stdout:
         cell = scp.create_cell(cellParam, setUpBiophysics=True)
     recSiteManagers = [
         sca.RecordingSiteManager(recFile, cell) for recFile in rec_sites

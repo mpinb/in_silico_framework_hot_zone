@@ -1,11 +1,11 @@
 import tempfile
 import warnings
-from data_base.db_initializers.load_simrun_general \
+from data_base.model_data_base.mdb_initializers.load_simrun_general \
             import optimize as optimize_simrun_general
-from data_base.db_initializers.synapse_activation_binning \
+from data_base.model_data_base.mdb_initializers.synapse_activation_binning \
             import init as init_synapse_activation
 
-from model_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
+from data_base.model_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
 from data_base.utils import silence_stdout
 import distributed
 

@@ -36,9 +36,9 @@ class TestModelDataBaseRegister:
             db._register_this_database()
 
         dbr = DataBaseRegister(self.basetempdir)
-        assert get_db_by_unique_id(db1.get_id()).basedir.as_posix() == p1
-        assert get_db_by_unique_id(db2.get_id()).basedir.as_posix() == p2
-        assert get_db_by_unique_id(db3.get_id()).basedir.as_posix() == p3
+        assert get_db_by_unique_id(db1.get_id()).basedir == p1
+        assert get_db_by_unique_id(db2.get_id()).basedir == p2
+        assert get_db_by_unique_id(db3.get_id()).basedir == p3
 
         db4 = ModelDataBase(os.path.join(self.basetempdir, 'test4'))
         db4._register_this_database()
