@@ -58,7 +58,7 @@ def dump(obj, savedir):
         st = Rm.st = pd.DataFrame()
     lda_values = Rm.lda_values
     lda_value_dicts = Rm.lda_value_dicts
-    db_list = Rm.mdb_list # TODO: old API
+    db_list = Rm.db_list
 
     if six.PY2:
         st_dumper = pandas_to_msgpack
@@ -66,9 +66,10 @@ def dump(obj, savedir):
         st_dumper = pandas_to_parquet
 
     try:
-        db.setitem('st',
-                    Rm.st.round(decimals=2).astype(float).reset_index(drop=True),
-                    dumper=st_dumper)
+        db.set(
+            'st',
+            Rm.st.round(decimals=2).astype(float).reset_index(drop=True),
+            dumper=st_dumper)
         del Rm.st
         del Rm.lda_values  # can be recalculated
         lv = 0
@@ -78,13 +79,13 @@ def dump(obj, savedir):
             new_lda_value_dicts.append({})
             for k in list(d.keys()):
                 key = 'lda_value_dicts_' + str(lv)
-                db.setitem(key, d[k].round(decimals=2), dumper=numpy_to_npz)
+                db.set(key, d[k].round(decimals=2), dumper=numpy_to_npz)
                 new_lda_value_dicts[-1][k] = key
                 lv += 1
         Rm.lda_value_dicts = new_lda_value_dicts
         # convert db_list to db ids
         Rm.db_list = [
-            m.get_id() if not isinstance(m, str) else m for m in Rm.mdb_list # TODO: old API
+            m.get_id() if not isinstance(m, str) else m for m in Rm.db_list
         ]
         db['Rm'] = Rm
     finally:
@@ -92,6 +93,6 @@ def dump(obj, savedir):
         Rm.st = st
         Rm.lda_values = lda_values
         Rm.lda_value_dicts = lda_value_dicts
-        Rm.mdb_list = db_list  # TODO: old API
+        Rm.db_list = db_list
     with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
         json.dump({'Loader': __name__}, f)
