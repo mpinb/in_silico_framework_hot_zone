@@ -84,7 +84,7 @@ def get_dumper_string_by_dumper_module(dumper_module):
         name = name.split('.')
         name.insert(1, 'isf_data_base')
         name = '.'.join(name)
-    prefix = 'data_base.isf_data_base.IO.LoaderDumper'
+    prefix = 'data_base.isf_data_base.IO.LoaderDumper.'
     assert name.startswith(prefix), "Could not import dumper module {}, as it does not contain the prefix {} or".format(name, prefix)
     return name[len(prefix):]
 

@@ -43,7 +43,7 @@ def save_result(db_run, features, objectives):
         dumper = I.dumper_pandas_to_parquet
     else:
         raise RuntimeError()
-    db_run.setitem(str(current_key),
+    db_run.set(str(current_key),
                     I.pd.concat([objectives, features], axis=1),
                     dumper=dumper)
 
@@ -347,7 +347,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
                 logbook=None,  # logbook, // arco
                 rndstate=random.getstate())
             # save checkpoint in db
-            db_run.setitem('{}_checkpoint'.format(gen),
+            db_run.set('{}_checkpoint'.format(gen),
                             cp,
                             dumper=I.dumper_to_pickle)
             #pickle.dump(cp, open(cp_filename, "wb"))
