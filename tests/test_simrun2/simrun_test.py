@@ -19,7 +19,7 @@ import simrun2.crossing_over.crossing_over_simple_interface
 from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 # from compatibility import synchronous_scheduler
 from mechanisms import l5pt as l5pt_mechanisms
-from .context import cellParamName, networkName, example_path
+from .context import cellParamName, networkName, example_path, parent
 
 assert os.path.exists(cellParamName)
 assert os.path.exists(networkName)
@@ -97,9 +97,11 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir, cl
         dummy = client.compute(dummy).result()
         cellParam = scp.build_parameters(cellParamName)
         # change location of cell by respecifying param file
-        cellParam.neuron.filename = os.path.join(parent, 'test_simrun2',\
-                        'data', \
-                        '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2_B1border.hoc')
+        cellParam.neuron.filename = os.path.join(
+        parent, 
+        'test_simrun2',
+        'data',
+        '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2_B1border.hoc')
         cellParamName_other_position = os.path.join(str(subdir_params),
                                                     'other_position.param')
         cellParam.save(cellParamName_other_position)

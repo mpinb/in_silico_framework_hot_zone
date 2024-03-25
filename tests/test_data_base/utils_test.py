@@ -2,7 +2,6 @@ from tests.test_data_base import *
 from data_base.utils import *
 import numpy as np
 from pandas.util.testing import assert_frame_equal
-import distributed
 
 
 def test_pandas_to_array():

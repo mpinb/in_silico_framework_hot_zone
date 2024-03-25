@@ -2,6 +2,8 @@ from __future__ import absolute_import
 import os
 from tests.context import TEST_DATA_FOLDER, TEST_SIMULATION_DATA_FOLDER
 
+parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
 cellParamName = os.path.join(
     TEST_DATA_FOLDER,
     'biophysical_constraints',
