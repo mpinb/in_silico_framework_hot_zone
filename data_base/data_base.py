@@ -12,12 +12,6 @@ import logging
 logger = logging.getLogger('ISF').getChild(__name__)
 
 
-def is_model_data_base(path):
-    """
-    Checks if a given path is a ModelDataBase, containing data that has been saved with model_data_base.IO.LoaderDumper.some_module.
-    """
-    return os.path.exists(os.path.join(path, 'sqlitedict.db'))
-
 class DataBase:
     def __new__(cls, basedir, readonly=False, nocreate=False):
         if is_model_data_base(basedir):
@@ -35,3 +29,9 @@ def get_db_by_unique_id(unique_id):
     db = DataBase(db_path, nocreate=True)
     assert db.get_id() == unique_id
     return db
+
+def is_model_data_base(path):
+    """
+    Checks if a given path is a ModelDataBase, containing data that has been saved with model_data_base.IO.LoaderDumper.some_module.
+    """
+    return os.path.exists(os.path.join(path, 'sqlitedict.db'))
