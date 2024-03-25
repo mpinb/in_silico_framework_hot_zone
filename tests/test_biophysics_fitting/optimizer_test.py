@@ -1,6 +1,6 @@
 # import global variables from context
-from .context import PARENT, DATA_DIR
-import distributed, os, tempfile, six, shutil, pytest
+from .context import  DATA_DIR
+import os, tempfile, six, shutil, pytest
 import pandas as pd
 import numpy as np
 import single_cell_parser as scp
@@ -10,7 +10,6 @@ from data_base.IO.LoaderDumper import to_cloudpickle, pandas_to_pickle
 from data_base.data_base import DataBase
 from data_base.utils import silence_stdout
 from biophysics_fitting import hay_complete_default_setup, L5tt_parameter_setup
-from biophysics_fitting.parameters import param_to_kwargs
 from biophysics_fitting.optimizer import start_run, get_max_generation
 
 # class FakeFuture():

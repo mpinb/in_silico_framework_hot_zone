@@ -1,16 +1,10 @@
-import tempfile
-import warnings
 import numpy as np
-import shutil
 from data_base.model_data_base.mdb_initializers.prepare_ANN_batches import spike_times_to_onehot
 from data_base.model_data_base.mdb_initializers.load_simrun_general \
             import optimize as optimize_simrun_general
 from data_base.model_data_base.mdb_initializers.synapse_activation_binning \
             import init as init_synapse_activation
-
-from model_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
 from data_base.utils import silence_stdout
-import distributed
 
 optimize_simrun_general = silence_stdout(optimize_simrun_general)
 
