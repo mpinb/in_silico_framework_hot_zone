@@ -13,8 +13,8 @@ class TestCellMorphologyVisualizer:
         self.cmv = CellMorphologyVisualizer(
             self.cell, 
             align_trunk=six.PY3,
-            t_start=0, t_end=1,t_step=0.5
-        )  # don't align trunk in py2, ithas no scipy Rotation object
+            t_start=0, t_stop=1,t_step=0.5
+        )  # don't align trunk in py2, scipy in Py2.7 has no Rotation object
 
     @pytest.mark.skipif(
         six.PY2,
@@ -77,10 +77,10 @@ class TestCellMorphologyVisualizer:
     @pytest.mark.skipif(
         six.PY2,
         reason="The cell_morphology_visualizer methods are not available on Py2")
-    def test_display_animation(
+    def test_animation(
             self, tmpdir, client):
         outdir = str(tmpdir.dirname)
-        self.cmv.display_animation(
+        self.cmv.animation(
             color="voltage",
             show_synapses=True,
             show_legend=True,
@@ -95,7 +95,7 @@ class TestCellMorphologyInteractiveVisualizer:
             rangevars=[self.ion_keyword])
         self.cmiv = CellMorphologyInteractiveVisualizer(
             cell=self.cell,
-            t_start=0, t_end=1, t_step=0.5,
+            t_start=0, t_stop=1, t_step=0.5,
             align_trunk=six.PY3,
             show=False)
         self.cmiv.show = False
