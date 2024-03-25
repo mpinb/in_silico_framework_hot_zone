@@ -30,12 +30,19 @@ generate_param_files_with_valid_references()
 
 hocfile = os.path.join(
     example_data_dir,
-    'anatomical_constraints/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_scaled_diameters.hoc'
+    'anatomical_constraints',
+    '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center_scaled_diameters.hoc'
 )
-networkParam = os.path.join(example_data_dir,
-                            'functional_constraints/network.param')
+networkParam = os.path.join(
+    example_data_dir,
+    'functional_constraints',
+    'network.param')
+
 neuronParam = os.path.join(
     example_data_dir,
-    'biophysical_constraints/86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param'
-)
-radiiData = os.path.join(example_data_dir, 'morphology',)
+    'biophysical_constraints',
+    '86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param')
+
+radiiData = os.path.join(
+    example_data_dir, 
+    'morphology')

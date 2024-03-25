@@ -18,7 +18,7 @@
 	
 	"neuron":
 	{
-		"filename": "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/getting_started/anatomical_constraints/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center.hoc",
+		"filename": "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/getting_started/example_data/anatomical_constraints/86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2center.hoc",
 		
 		"Soma":
 		{
@@ -340,7 +340,7 @@
 		"tStop": 250.0,
 		"dt": 0.025,
 		"T": 34.0,
-		"recordingSites": ["/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/getting_started/apical_proximal_distal_rec_sites.landmarkAscii"],
+		"recordingSites": ["/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/getting_started/example_data/apical_proximal_distal_rec_sites.landmarkAscii"],
 	},
 }
 
