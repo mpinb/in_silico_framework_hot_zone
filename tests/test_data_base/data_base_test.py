@@ -164,7 +164,7 @@ def test_managed_folder_does_not_overwrite_existing_keys(empty_db):
 
 def test_can_instantiate_sub_db(empty_db):
     empty_db.create_sub_db('test_sub_db')
-    assert isinstance(empty_db['test_sub_db'], DataBase)
+    assert isinstance(empty_db['test_sub_db'], type(empty_db))
 
 
 def test_cannot_set_hierarchical_key_it_is_already_used_in_hierarchy(empty_db):
