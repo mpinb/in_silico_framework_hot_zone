@@ -483,28 +483,6 @@ def calc_recursive_filetree(
                 recursion_kwargs['root_dir_path'] = Path(recursion_kwargs['db'].basedir)
             lines = calc_recursive_filetree(**recursion_kwargs)
             
-        if not element.is_dir():  # not a directory: just add the file
-            lines.append(prefix + _colorize_key(element))
-        elif depth >= max_depth:
-            # directory at max depth: add, but don't recurse deeper
-            colored_key = _colorize_key(element)
-            colored_key = str(colored_key + os.sep + '...') if Path.exists(element/'db') else element.name
-            lines.append(prefix + colored_key)
-        else:
-            # Directory: recurse deeper
-            recursion_kwargs = deepcopy(recursion_kwargs)  # adapt kwargs for recursion
-            lines.append(prefix + _colorize_key(element))
-            recursion_kwargs['depth'] += 1  # Recursion index
-            recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
-            recursion_kwargs['root_dir_path'] = element
-            recursion_kwargs['lines'] = lines
-            if Path.exists(element/'db') and not all_files:
-                # subdb: recurse deeper without adding 'db' as key
-                # (only add 'db' if all_files=True)
-                recursion_kwargs['db'] = db[element.name]
-                recursion_kwargs['root_dir_path'] = Path(recursion_kwargs['db'].basedir)
-            lines = calc_recursive_filetree(**recursion_kwargs)
-            
     return lines
 
 class bcolors:
