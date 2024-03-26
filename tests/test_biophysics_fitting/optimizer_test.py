@@ -86,7 +86,7 @@ def set_up_db(step=False):
 
     tempdir = tempfile.mkdtemp()
     db = DataBase(tempdir)
-    db.create_sub_mdb('86')
+    db.create_sub_db('86')
 
     db['86'].create_managed_folder('morphology')
     shutil.copy(
