@@ -114,14 +114,14 @@ def set_up_db(step=False):
         return fixed_params
 
     db['86']['get_fixed_params'] = get_fixed_params
-    db['86'].setitem('params', params, dumper=pandas_to_pickle)
-    db['86'].setitem('get_Simulator',
+    db['86'].set('params', params, dumper=pandas_to_pickle)
+    db['86'].set('get_Simulator',
                       partial(get_Simulator, step=True),
                       dumper=to_cloudpickle)
-    db['86'].setitem('get_Evaluator',
+    db['86'].set('get_Evaluator',
                       partial(get_Evaluator, step=True),
                       dumper=to_cloudpickle)
-    db['86'].setitem('get_Combiner',
+    db['86'].set('get_Combiner',
                       partial(get_Combiner, step=True),
                       dumper=to_cloudpickle)
 
