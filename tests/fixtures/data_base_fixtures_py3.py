@@ -39,6 +39,7 @@ def fresh_db(worker_id):
     yield db
     # cleanup
     db.remove()
+    del db
 
 @pytest.fixture
 def fresh_mdb(worker_id):
@@ -76,9 +77,9 @@ def fresh_mdb(worker_id):
     # cleanup
     for key in mdb.keys():
         del key
-    del mdb
     if os.path.exists(mdb.basedir):
         shutil.rmtree(mdb.basedir)
+    del mdb
 
 
 @pytest.fixture
@@ -97,8 +98,8 @@ def empty_db(worker_id):
     # cleanup
     for key in db.keys():
         del key
-    del db
     db.remove()
+    del db
 
 @pytest.fixture
 def empty_mdb(worker_id):
@@ -116,9 +117,9 @@ def empty_mdb(worker_id):
     # cleanup
     for key in mdb.keys():
         del key
-    del mdb
     if os.path.exists(mdb.basedir):
         shutil.rmtree(mdb.basedir)
+    del mdb
 
 
 @pytest.fixture
