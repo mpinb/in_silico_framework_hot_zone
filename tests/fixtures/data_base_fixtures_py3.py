@@ -77,7 +77,8 @@ def fresh_mdb(worker_id):
     for key in mdb.keys():
         del key
     del mdb
-    shutil.rmtree(path)
+    if os.path.exists(mdb.basedir):
+        shutil.rmtree(mdb.basedir)
 
 
 @pytest.fixture
@@ -97,7 +98,7 @@ def empty_db(worker_id):
     for key in db.keys():
         del key
     del db
-    shutil.rmtree(path)
+    db.remove()
 
 @pytest.fixture
 def empty_mdb(worker_id):
@@ -116,7 +117,8 @@ def empty_mdb(worker_id):
     for key in mdb.keys():
         del key
     del mdb
-    shutil.rmtree(path)
+    if os.path.exists(mdb.basedir):
+        shutil.rmtree(mdb.basedir)
 
 
 @pytest.fixture

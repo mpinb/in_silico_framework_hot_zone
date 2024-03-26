@@ -5,7 +5,7 @@ from data_base.utils import fancy_dict_compare
 import os
 import pytest
 from .context import *
-from tests.context import example_data_dir
+from tests.context import TEST_DATA_FOLDER
 import numpy as np
 
 
@@ -13,11 +13,11 @@ class TestSingleCellParserInit:
 
     def setup_class(self):
         self.cell_param = os.path.join(
-            example_data_dir,
+            TEST_DATA_FOLDER,
             'biophysical_constraints',
             '86_CDK_20041214_BAC_run5_soma_Hay2013_C2center_apic_rec.param')
         self.network_param = os.path.join(
-            example_data_dir,
+            TEST_DATA_FOLDER,
             'functional_constraints',
             'network.param')
 

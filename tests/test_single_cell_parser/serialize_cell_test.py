@@ -9,7 +9,7 @@ import pickle
 from getting_started import getting_started_dir  # path to getting started folder
 from single_cell_parser.serialize_cell import *
 from data_base.utils import silence_stdout
-from mechanisms import l5pt as l5pt_mechanisms
+import mechanisms.l5pt
 from tests.context import TEST_DATA_FOLDER
 
 
