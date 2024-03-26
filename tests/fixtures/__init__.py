@@ -8,8 +8,8 @@ def client(pytestconfig):
     hostname = socket.gethostname()
     if "soma" in hostname:
         ip = socket.gethostbyname(hostname).replace('100', '102')
-    else:
-        ip = 'localhost'
+    # else:
+    #     ip = 'localhost'
     c = distributed.Client(
         '{}:{}'.format(ip, pytestconfig.getoption("--dask_server_port"))
         )
