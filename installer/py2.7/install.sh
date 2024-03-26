@@ -156,10 +156,14 @@ python -m ipykernel install --name base --user --display-name isf2.7
 # -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
-for d in $SCRIPT_DIR/../../mechanisms/*/*/
+for d in $SCRIPT_DIR/../../mechanisms/*/
 do
-    ( cd "$d" && cd channels_py3; nrnivmodl )
-    ( cd "$d" && cd netcon_py3; nrnivmodl )
+    echo "Compiling mechanisms in $d"
+    ( cd "$d" && cd channels_py2; nrnivmodl )
+    cd ..
+    echo "Compiling mechanisms in $d"
+    ( cd "$d" && cd netcon_py2; nrnivmodl )
+    cd ..
 done
 
 # -------------------- Cleanup -------------------- #

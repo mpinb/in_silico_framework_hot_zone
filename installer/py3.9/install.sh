@@ -182,10 +182,15 @@ python -m ipykernel install --name base --user --display-name isf3.9
 # -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
-for d in $SCRIPT_DIR/../../mechanisms/*/*/
+for d in $SCRIPT_DIR/../../mechanisms/*/
 do
+    echo "Compiling channel mechanisms in $d"
     ( cd "$d" && cd channels_py3; nrnivmodl )
+    cd ..
+    echo "Compiling netcon mechanisms in $d"
     ( cd "$d" && cd netcon_py3; nrnivmodl )
+    cd ..
+    cd ..
 done
 
 # -------------------- Cleanup -------------------- #
