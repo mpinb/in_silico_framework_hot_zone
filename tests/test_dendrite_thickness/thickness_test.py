@@ -132,7 +132,7 @@ def test_crop_image():
 def test_pipeline(client):
     am_folder_path = os.path.join(DATA_DIR, 'am_files')
     tif_folder_path = os.path.join(DATA_DIR, 'image_files')
-    hoc_file_path = os.path.join(DATA_DIR, 'WR58_Cell5_L5TT_Final.hoc')
+    hoc_file_path = os.path.join(DATA_DIR, '89_L5_CDK20050712_nr6L5B_dend_PC_neuron_transform_registered_C2.hoc')
     output_folder_path = os.path.join(DATA_DIR, 'output')
     bijective_points_path = os.path.join(DATA_DIR,'manual_landmarks.landmarkAscii')
 
