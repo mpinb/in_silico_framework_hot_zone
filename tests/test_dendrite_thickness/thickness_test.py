@@ -71,8 +71,11 @@ def test_am_write():
     logger.info("***********")
     am_object = IO.Am(AM_FILE)
     am_object.read()
-    am_object.output_path = os.path.join(CURRENT_DIR, 'test_files', 'output',
-                                         'test_write.am')
+    am_object.output_path = os.path.join(
+        CURRENT_DIR, 
+        'test_files', 
+        'output',
+        'test_write.am')
     if not os.path.exists(am_object.output_path):
         with open(am_object.output_path, "w"):
             pass  # create empty file
