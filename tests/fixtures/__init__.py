@@ -10,6 +10,11 @@ def client(pytestconfig):
         ip = socket.gethostbyname(hostname).replace('100', '102')
     else:
         ip = 'localhost'
+    c = distributed.Client(
+        '{}:{}'.format(ip, pytestconfig.getoption("--dask_server_port"))
+        )
+    def import_mechanisms(): import mechanisms.l5pt as l5pt
+    c.run(import_mechanisms)
     return distributed.Client(
         '{}:{}'.format(
             ip,
