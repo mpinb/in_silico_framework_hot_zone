@@ -15,7 +15,4 @@ def client(pytestconfig):
         )
     def import_mechanisms(): import mechanisms.l5pt as l5pt
     c.run(import_mechanisms)
-    return distributed.Client(
-        '{}:{}'.format(
-            ip,
-            pytestconfig.getoption("--dask_server_port")))
+    return c
