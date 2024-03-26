@@ -40,10 +40,10 @@ Tutorials
 
 
 .. nbgallery::
-   :caption: 1. Compartmental models
+   :caption: 1. Neuron models
    :glob:
 
-   tutorials/1. compartmental models/*
+   tutorials/1. neuron models/*
 
 .. nbgallery::
    :caption: 2. Network models
@@ -51,18 +51,24 @@ Tutorials
 
    tutorials/2. network models/*
 
-
 .. nbgallery::
-   :caption: 3. Analytically tractable reduced models
+   :caption: 3. Multiscale models
    :glob:
 
-   tutorials/3. reduced models/*
+   tutorials/2. network models/*
+
 
 .. nbgallery::
-   :caption: 4. Analysis
+   :caption: 4. Analytically tractable reduced models
    :glob:
 
-   tutorials/4. analysis/*
+   tutorials/4. reduced models/*
+
+.. nbgallery::
+   :caption: 5. Analysis
+   :glob:
+
+   tutorials/5. analysis/*
 
 
 Indices and tables
