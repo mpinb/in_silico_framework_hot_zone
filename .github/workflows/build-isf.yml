@@ -30,7 +30,7 @@ jobs:
       id: checkout
 
     - name: Check changes with previous commit
-      uses: dorny/paths-filter@v3
+      uses: dorny/paths-filter@v2
       id: commit_changed
       with:
         list-files: shell
