@@ -187,7 +187,9 @@ print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 for d in $SCRIPT_DIR/../../mechanisms/*/
 do
+    echo "compiling channel mechanisms in $d"
     ( cd "$d" && cd channels_py3; nrnivmodl )
+    echo "compiling network connecetivity mechanisms in $d"
     ( cd "$d" && cd netcon_py3; nrnivmodl )
 done
 
