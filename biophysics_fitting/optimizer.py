@@ -280,7 +280,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
     """
     # added by arco
     if db_run is not None:
-        assert isinstance(db_run, I.DataBase)  # db_run
+        assert isinstance(db_run, type(I.DataBase))  # db_run
     assert halloffame is None
     # end added by arco
 
