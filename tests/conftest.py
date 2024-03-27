@@ -67,7 +67,7 @@ def pytest_ignore_collect(path, config):
             )
 
 
-def pytest_configure(config, client):
+def pytest_configure(config):
     import distributed
     import matplotlib
     import six
@@ -108,6 +108,16 @@ def pytest_configure(config, client):
     dask.config.set(dask_config)
 
     # --------------- Setup mechanisms  -------------------
+    hostname = socket.gethostname()
+    if "soma" in hostname:
+        ip = socket.gethostbyname(hostname).replace('100', '102')
+    else:
+        ip = 'localhost'
+    c = distributed.Client(
+        '{}:{}'.format(
+            ip, 
+            config.getoption("--dask_server_port"))
+        )
     def import_mechanisms(): import mechanisms.l5pt
-    client.run(import_mechanisms)
+    c.run(import_mechanisms)
 
