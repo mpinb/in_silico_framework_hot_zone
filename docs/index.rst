@@ -13,7 +13,47 @@ ISF is a multi-scale simulation environment for the generation, simulation, and 
   :alt: Overview of ISF
 
 .. raw:: html
-   :file: ./_static/overview/overview.js
+   <!DOCTYPE html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="default.css">
+   </head>
+
+
+   <div class="row">
+      <div class="header" id="in-vivo" width="10%">Input</div>
+      <div class="fixed-cell" id="in-vivo" width="90%">In-vivo observation</div>
+   </div>
+
+   <div class="row" id="row2">
+      <div class="header" id="in-vivo" width="10%">ISF</div>
+      <div class="expandable-cell" id="neuron">
+      <button type="button" class="collapsible" id="neuron-button">Neuron model</button>
+      <div class="content" >
+         <p>Lorem ipsum...</p>
+      </div></div>
+
+      <div class="expandable-cell" id="msm">
+      <button type="button" class="collapsible" >Multi-scale model</button>
+      <div class="content">
+         <p>Lorem ipsum...</p>
+      </div> </div>
+
+      <div class="expandable-cell" id="network">
+      <button type="button" class="collapsible" >Network model</button>
+      <div class="content">
+         <p>Lorem ipsum...</p>
+      </div> </div>
+
+   </div>
+
+   <div class="row">
+      <div class="header" id="in-vivo" width="10%">Output</div>
+      <div class="fixed-cell">Mechanistic explanation</div>
+   </div>
+
+
+   <script src="./overview/overview.js"></script>
+
 
 
 Module list
