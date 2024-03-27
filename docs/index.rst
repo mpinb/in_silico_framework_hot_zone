@@ -13,8 +13,7 @@ ISF is a multi-scale simulation environment for the generation, simulation, and 
   :alt: Overview of ISF
 
 .. raw:: html
-
-    <script src="../_static/overview.js"></script>
+   :file: ./_static/overview/overview.js
 
 
 Module list
