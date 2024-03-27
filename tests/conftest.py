@@ -67,7 +67,7 @@ def pytest_ignore_collect(path, config):
             )
 
 
-def pytest_configure(config):
+def pytest_configure(config, client):
     import distributed
     import matplotlib
     import six
@@ -106,4 +106,8 @@ def pytest_configure(config):
             },
         }
     dask.config.set(dask_config)
+
+    # --------------- Setup mechanisms  -------------------
+    def import_mechanisms(): import mechanisms.l5pt
+    client.run(import_mechanisms)
 
