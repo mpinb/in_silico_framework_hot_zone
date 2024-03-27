@@ -13,12 +13,6 @@ ISF is a multi-scale simulation environment for the generation, simulation, and 
   :alt: Overview of ISF
 
 .. raw:: html
-   <!DOCTYPE html>
-   <head>
-      <link rel="stylesheet" type="text/css" href="default.css">
-   </head>
-
-
    <div class="row">
       <div class="header" id="in-vivo" width="10%">Input</div>
       <div class="fixed-cell" id="in-vivo" width="90%">In-vivo observation</div>
