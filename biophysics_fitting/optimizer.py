@@ -16,6 +16,7 @@ import Interface as I
 import six
 
 
+
 def robust_int(x):
     try:
         return int(x)
@@ -280,7 +281,7 @@ def eaAlphaMuPlusLambdaCheckpoint(
     """
     # added by arco
     if db_run is not None:
-        assert isinstance(db_run, type(I.DataBase))  # db_run
+        assert db_run.__class__.__name__ in ("ModelDataBase", "ISFDataBase")  # db_run
     assert halloffame is None
     # end added by arco
 
