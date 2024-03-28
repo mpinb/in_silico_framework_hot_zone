@@ -30,9 +30,9 @@
 
 .organigram-expandable-cell {
   display: table-cell;
-  position: relative;
   text-align: center;
-  vertical-align: top;
+  height: 50px;
+  overflow: auto;
   width: 30%;
   padding: 10px;
   background: rgba(0, 128, 0, 0);
