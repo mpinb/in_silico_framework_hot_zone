@@ -1,4 +1,4 @@
-.row {
+.organigram-row {
   display: table;
   position: relative;
   width: 50%;
@@ -7,7 +7,7 @@
   border: 1px solid rgb(0, 153, 255);
 }
 
-.fixed-cell {
+.organigram-fixed-cell {
   display: table-cell;
   text-align: center;
   vertical-align: middle;
@@ -18,7 +18,7 @@
   border: 1px solid rgb(0, 0, 0);
 }
 
-.header {
+.organigram-header {
   display: table-cell;
   text-align: center;
   vertical-align: middle;
@@ -28,7 +28,7 @@
   border: 1px solid rgb(0, 0, 0);
 }
 
-.expandable-cell {
+.organigram-expandable-cell {
   display: table-cell;
   position: relative;
   text-align: center;
@@ -39,7 +39,7 @@
   border: 1px solid rgb(0, 255, 166);
 }
 
-.collapsible {
+.organigram-collapsible {
   width: 100%;
   height: 100%;
   text-align: center;
@@ -52,11 +52,11 @@
   font-size: 15px;
 }
 
-.collapsible:hover {
+.organigram-collapsible:hover {
   background-color: #ccc;
 }
 
-.content {
+.organigram-collapsible-content {
   display: block;
   overflow: hidden;
   height: 0;
@@ -65,7 +65,7 @@
   border: 1px solid rgb(234, 255, 0);
 } 
 
-.arrow-connector {
+.organigram-arrow-connector {
   padding: 0px;
   text-align: center;
   height: 5px;
@@ -73,15 +73,15 @@
   background-color: rgb(255, 2, 179);
 }
 
-#neuron {
+#organigram-neuron {
   padding-right: 5px;
 }
 
-#msm {
+#organigram-msm {
   padding-right: 5px;
   padding-left: 5px;
 }
 
-#network {
+#organigram-network {
   padding-left: 5px;
 }

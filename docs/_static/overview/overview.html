@@ -1,32 +1,26 @@
-<!DOCTYPE html>
-<head>
-    <link rel="stylesheet" type="text/css" href="_static/style.css">
-    <script src="jquery-3.7.1.min.js"></script>
-</head>
 
-
-<div class="row">
+<div class="organigram-row">
     <div class="header" id="in-vivo" width="10%">Input</div>
     <div class="fixed-cell" id="in-vivo" width="90%">In-vivo observation</div>
 </div>
 
-<div class="row" id="row2">
-    <div class="header" id="in-vivo" width="10%">ISF</div>
-    <div class="expandable-cell" id="neuron">
+<div class="organigram-row" id="row2">
+    <div class="organigram-header" id="in-vivo" width="10%">ISF</div>
+    <div class="organigram-expandable-cell" id="neuron">
     <button type="button" class="collapsible" id="neuron-button">Neuron model</button>
-    <div class="content" >
+    <div class="organigram-collapsible-content" >
       <p>Lorem ipsum...</p>
     </div></div>
 
-    <div class="expandable-cell" id="msm">
-    <button type="button" class="collapsible" >Multi-scale model</button>
+    <div class="organigram-expandable-cell" id="msm">
+    <button type="button" class="organigram-collapsible-content" >Multi-scale model</button>
     <div class="content">
       <p>Lorem ipsum...</p>
     </div> </div>
 
-    <div class="expandable-cell" id="network">
-    <button type="button" class="collapsible" >Network model</button>
-    <div class="content">
+    <div class="organigram-expandable-cell" id="network">
+    <button type="button" class="organigram-collapsible-content" >Network model</button>
+    <div class="organigram-content">
       <p>Lorem ipsum...</p>
     </div> </div>
 
@@ -36,6 +30,3 @@
     <div class="header" id="in-vivo" width="10%">Output</div>
     <div class="fixed-cell">Mechanistic explanation</div>
 </div>
-
-
-<script src="_static/overview.js"></script>
