@@ -15,7 +15,7 @@ for (i = 0; i < coll.length; i++) {
     }
 
     // extend or collapse current collapsible
-    var extended_height = "300%";
+    var extended_height = "300px";  // should be an absolute number to work in all browsers
     var content = this.nextElementSibling;
     if (content.style.height === extended_height) {
       content.style.height = "0";
