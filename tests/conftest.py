@@ -119,5 +119,7 @@ def pytest_configure(config):
             config.getoption("--dask_server_port"))
         )
     def update_path(): sys.path.insert(0, os.path.join(CURRENT_DIR, '..'))
+    def import_mechanisms(): import mechanisms
     c.run(update_path)
+    c.run(import_mechanisms)
 
