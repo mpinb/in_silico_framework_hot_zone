@@ -3,36 +3,77 @@
 </head>
 
 
-<div class="organigram-row">
-    <div class="organigram-header" id="in-vivo" width="10%">Input</div>
-    <div class="organigram-fixed-cell" id="in-vivo" width="90%">In-vivo observation</div>
-</div>
+<table>
+  <tbody>
 
-<div class="organigram-row" id="row2">
-    <div class="organigram-header" id="in-vivo" width="10%">ISF</div>
-    <div class="organigram-expandable-cell" id="neuron">
-    <button type="button" class="organigram-collapsible" id="neuron-button">Neuron model</button>
-    <div class="organigram-collapsible-content" >
-      <p>Lorem ipsum...</p>
-    </div></div>
+    <tr id="row-input">
+      <td class="organigram-header" id="in-vivo">Input</td>
+      <td class="organigram-fixed-cell" id="in-vivo" colspan="2">In-vivo observation</td>
+    </tr>
 
-    <div class="organigram-expandable-cell" id="msm">
-    <button type="button" class="organigram-collapsible" >Multi-scale model</button>
-    <div class="organigram-collapsible-content">
-      <p>Lorem ipsum...</p>
-    </div> </div>
+    <tr id="arrow-input-isf">
+      <td></td>
+      <td class="organigram-arrow" colspan="1"><img src="./downarr.svg" height="10% "></img></td>
+      <td class="organigram-arrow" colspan="1"><img src="./downarr.svg" height="10% "></img></td>
+    </tr>
 
-    <div class="organigram-expandable-cell" id="network">
-    <button type="button" class="organigram-collapsible" >Network model</button>
-    <div class="organigram-collapsible-content">
-      <p>Lorem ipsum...</p>
-    </div> </div>
+    <tr id="row-isf">
+        <td class="organigram-header" rowspan="5" id="ISF">ISF</td>
+        <td 
+        class="organigram-expandable-cell" id="neuron">
+          <button type="button" class="organigram-collapsible" id="neuron">Neuron model</button>
+          <div 
+            class="organigram-collapsible-content" >
+            <p>Lorem ipsum...</p>
+            </div>
+        </td>
+        
+        <td 
+        class="organigram-expandable-cell" id="network">
+          <button type="button" class="organigram-collapsible" id="network">Network model</button>
+          <div 
+            class="organigram-collapsible-content">
+            <p>Lorem ipsum...</p>
+            </div>
+        </td>
+      </tr>
+      
+      <td class="organigram-arrow" colspan="1"><img src="./downarr.svg" height="10% "></img></td>
+      <td class="organigram-arrow" colspan="1"><img src="./downarr.svg" height="10% "></img></td>
+      <tr>
+        <td 
+        class="organigram-expandable-cell" id="msm" colspan="2">
+          <button type="button" class="organigram-collapsible" id="msm">Multi-scale model</button>
+          <div 
+            class="organigram-collapsible-content">
+            <p>Lorem ipsum...</p>
+            </div>
+        </td>
+      </tr>
+      
+      <td class="organigram-arrow" colspan="2"><img src="./downarr.svg" height="10% "></img></td>
+      <tr>
+        <td class="organigram-expandable-cell" id="reduced" colspan="2">
+          <button type="button" class="organigram-collapsible" id="reduced">Reduced model</button>
+          <div 
+            class="organigram-collapsible-content">
+            <p>Lorem ipsum...</p>
+            </div>
+          </td>
+        </tr>
 
-</div>
+    </tr>
 
-<div class="organigram-row">
-    <div class="organigram-header" id="in-vivo" width="10%">Output</div>
-    <div class="organigram-fixed-cell">Mechanistic explanation</div>
-</div>
+    <tr id="arrow-isf-ecm">
+      <td></td>
+      <td class="organigram-arrow" colspan="2"><img src="./downarr.svg" height="10% "></img></td>
+    </tr>
+    
+    <tr id="row-output">
+      <td class="organigram-header" id="Output" >Output</div>
+      <td class="organigram-fixed-cell" id="Output" colspan="2  ">Mechanistic explanation</div>
+    </tr>
+</table> 
+
 
 <script src="./overview.js"></script>

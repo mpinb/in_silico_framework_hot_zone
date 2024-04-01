@@ -20,12 +20,11 @@ for (i = 0; i < coll.length; i++) {
     if (content.style.height === extended_height) {
       content.style.height = "0";
       content.style.overflow = "hidden";
-      extendConnector();
       
     } else {
+      // expand current collapsible
       content.style.height = extended_height;
       content.style.display = "block";
-      collapseConnector();
     };
     
   })
