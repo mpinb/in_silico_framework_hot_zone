@@ -3,7 +3,7 @@
 # even before pytest discovery
 # useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
 # for setting environment variables, use pytest.ini or .env instead
-import os, logging, socket, dask, six
+import os, logging, socket, dask, six, sys
 import mechanisms  # compile mechanisms on test server
 from Interface import logger as isf_logger
 # --- Import fixtures
@@ -107,7 +107,7 @@ def pytest_configure(config):
         }
     dask.config.set(dask_config)
 
-    # --------------- Setup mechanisms  -------------------
+    # --------------- Setup mechanisms on client -------------------
     hostname = socket.gethostname()
     if "soma" in hostname:
         ip = socket.gethostbyname(hostname).replace('100', '102')
@@ -118,6 +118,6 @@ def pytest_configure(config):
             ip, 
             config.getoption("--dask_server_port"))
         )
-    def import_mechanisms(): import mechanisms.l5pt
-    c.run(import_mechanisms)
+    def update_path(): sys.path.insert(0, os.path.join(CURRENT_DIR, '..'))
+    c.run(update_path)
 
