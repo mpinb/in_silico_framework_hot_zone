@@ -182,20 +182,13 @@ python -m ipykernel install --name base --user --display-name isf3.9
 # -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
-for cell_directory in $SCRIPT_DIR/../../mechanisms/!(__pycache__)
+shopt -s extglob
+for d in $SCRIPT_DIR/../../mechanisms/!(__pycache__)/!(__pycache__)/
 do
-    pushd .
-    cd "$cell_directory"
-    for channels_directory in $cell_directory/!(__pycache__)
-    do
-        pushd .
-        cd "$channels_directory"
-        echo "Compiling channel mechanisms in $channels_directory"
-        nrnivmodl
-        popd
-    done
-    popd
+    echo "Compiling channel mechanisms in $d"
+    cd $d; nrnivmodl || exit 1
 done
+
 #-------------------- Cleanup -------------------- #
 echo ""
 echo ""
