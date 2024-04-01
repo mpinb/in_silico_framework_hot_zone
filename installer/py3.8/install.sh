@@ -188,14 +188,14 @@ echo "Compiling NEURON mechanisms."
 shopt -s extglob
 for cell_directory in $SCRIPT_DIR/../../mechanisms/!(__pycache__)/
 do
-    pushd .
     cd "$cell_directory"
+    pushd
     for channels_directory in $cell_directory/!(__pycache__)/
     do
-        pushd .
         cd "$channels_directory"
+        pushd
         echo "Compiling channel mechanisms in $channels_directory"
-        nrnivmodl
+        nrnivmodl;
         popd
     done
     popd

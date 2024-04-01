@@ -196,8 +196,7 @@ do
     done
     popd
 done
-
-# -------------------- Cleanup -------------------- #
+#-------------------- Cleanup -------------------- #
 echo ""
 echo ""
 echo "Succesfully installed In-Silico-Framework for Python 3.9"
