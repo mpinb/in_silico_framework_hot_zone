@@ -6,19 +6,19 @@ import numpy as np
 from dendrite_thickness.thickness import IO, pipeline, utils
 from dendrite_thickness.thickness import thickness as th
 from .context import CURRENT_DIR 
-TEST_TEST_DATA_DIR = os.path.join(CURRENT_DIR, 'test_files')
-from .context import TEST_DATA_DIR as EXAMPLE_TEST_DATA_DIR
+TEST_DATA_DIR = os.path.join(CURRENT_DIR, 'test_files')
+from .context import DATA_DIR as EXAMPLE_DATA_DIR
 import six
 import logging
 
 logger = logging.getLogger("ISF").getChild(__name__)
 
 AM_FILE = os.path.join(
-    EXAMPLE_TEST_DATA_DIR, 
+    EXAMPLE_DATA_DIR, 
     'am_files',
     'S13_final_done_Alison_zScale_40.am')
 IMAGE_FILE = os.path.join(
-    EXAMPLE_TEST_DATA_DIR, 
+    EXAMPLE_DATA_DIR, 
     'image_files',
     'S13_max_z_projection.tif')
 
