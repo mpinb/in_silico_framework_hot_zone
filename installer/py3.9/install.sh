@@ -183,7 +183,7 @@ python -m ipykernel install --name base --user --display-name isf3.9
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 shopt -s extglob
-for d in $(find ./mechanisms/ -type d)
+for d in $(find $SCRIPT_DIR/../../mechanisms/ -type d)
 do
     if [ $(find $d -maxdepth 1 -name "*.mod" -print -quit) ]; then
         echo "compiling mechanisms in $d"
