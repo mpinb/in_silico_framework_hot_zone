@@ -151,7 +151,7 @@ html_static_path = ['_static']
 html_css_files = [
     'default.css',  # relative to html_static_path defined above
     'style.css',
-    'downarr.svg'
+    'figures/downarr.svg'
 ]
 
 html_js_files = [
