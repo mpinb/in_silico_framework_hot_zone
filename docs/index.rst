@@ -9,7 +9,7 @@ The In-Silico Framework (ISF)
 ISF is a multi-scale simulation environment for the generation, simulation, and analysis of neurobiologically tractable single cell and network-level simulations.
 
 .. raw:: html
-   :file: ./_static/overview/overview.html
+   :file: ./_static/overview.html
 
 
 

@@ -150,11 +150,11 @@ html_theme_options = {
 html_static_path = ['_static']
 html_css_files = [
     'default.css',  # relative to html_static_path defined above
-    'overview/style.css'
+    'style.css'
 ]
 
 html_js_files = [
-    'overview/overview.js'
+    'overview.js'
 ]
 
 # Add any extra paths that contain custom files (such as robots.txt or
