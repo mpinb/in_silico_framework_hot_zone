@@ -7,7 +7,7 @@ import os, logging, socket, dask, six, sys
 import mechanisms  # compile mechanisms on test server
 from Interface import logger as isf_logger
 # --- Import fixtures
-from .fixtures import client
+from .fixtures import client, get_available_ips
 from .fixtures.dataframe_fixtures import pdf, ddf
 if six.PY3:  # pytest can be parallellized on py3: use unique ids for dbs
     from .fixtures.data_base_fixtures_py3 import (
@@ -108,14 +108,9 @@ def pytest_configure(config):
     dask.config.set(dask_config)
 
     # --------------- Setup mechanisms on client -------------------
-    hostname = socket.gethostname()
-    if "soma" in hostname:
-        ip = socket.gethostbyname(hostname).replace('100', '102')
-    else:
-        ip = 'localhost'
     c = distributed.Client(
         '{}:{}'.format(
-            ip, 
+            "localhost", 
             config.getoption("--dask_server_port"))
         )
     def update_path(): sys.path.insert(0, os.path.join(CURRENT_DIR, '..'))
