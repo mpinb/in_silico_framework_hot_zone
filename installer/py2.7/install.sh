@@ -157,10 +157,12 @@ python -m ipykernel install --name base --user --display-name isf2.7
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 shopt -s extglob
-for d in $SCRIPT_DIR/../../mechanisms/!(__pycache__)/!(__pycache__)/
+for d in $(find ./mechanisms/ -type d)
 do
-    echo "Compiling channel mechanisms in $d"
-    cd $d; nrnivmodl || exit 1
+    if [ $(find $d -maxdepth 1 -name "*.mod" -print -quit) ]; then
+        echo "compiling mechanisms in $d"
+        cd $d; nrnivmodl || exit 1;
+    fi
 done
 
 # -------------------- Cleanup -------------------- #
