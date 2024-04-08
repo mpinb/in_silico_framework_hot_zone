@@ -69,8 +69,8 @@ jobs:
             mkdir $HOME/tmp
           fi
           export TMPDIR=$HOME/tmp
-          (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port --host=localhost > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1)&
-          (dask-worker localhost:$port_number --nthreads 1 --nprocs 10 --memory-limit=100e15 --local-directory="." > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1)&
+          (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port --host=localhost > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1) & \
+          (dask-worker localhost:$port_number --nthreads 1 --nprocs 10 --memory-limit=100e15 --local-directory="." > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1) & \
           pytest -n 5 -rsx -vv --color=yes --durations=15 --cov-report xml:tests/logs/report_py38.xml --cov=. --dask_server_port $port_number tests || exit 1;
           rm -rf $TMPDIR
 
