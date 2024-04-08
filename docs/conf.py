@@ -150,7 +150,8 @@ html_theme_options = {
 html_static_path = ['_static']
 html_css_files = [
     'default.css',  # relative to html_static_path defined above
-    'style.css'
+    'style.css',
+    'downarr.svg'
 ]
 
 html_js_files = [
