@@ -149,13 +149,13 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 html_css_files = [
-    'css/default.css',  # relative to html_static_path defined above
-    'css/style.css',
-    'figures/downarr.svg'
+    'default.css',  # relative to html_static_path defined above
+    'style.css',
+    'downarr.svg'
 ]
 
 html_js_files = [
-    'js/overview.js'
+    'overview.js'
 ]
 
 # Add any extra paths that contain custom files (such as robots.txt or
