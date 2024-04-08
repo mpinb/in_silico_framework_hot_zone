@@ -1,7 +1,6 @@
 # Pytest configuration file
-# this code will be run before any other pytest code
-# even before pytest discovery
-# useful to setup whatever needs to be done before the actual testing or test discovery, such as the distributed.client_object_duck_typed
+# this code will be run on each pytest worker before any other pytest code
+# useful to setup whatever needs to be done before the actual testing or test discovery
 # for setting environment variables, use pytest.ini or .env instead
 import os, logging, socket, dask, six, sys
 import mechanisms  # compile mechanisms on test server
@@ -68,6 +67,9 @@ def pytest_ignore_collect(path, config):
 
 
 def pytest_configure(config):
+    """
+    pytest configuration
+    """
     import distributed
     import matplotlib
     import six
@@ -94,27 +96,3 @@ def pytest_configure(config):
         os.path.join(CURRENT_DIR, "logs", "test.log"))
     isf_logging_file_handler.setLevel(logging.INFO)
     isf_logger.addHandler(isf_logging_file_handler)
-
-    # --------------- Setup dask  -------------------
-
-    dask_config = {
-        "worker": {  # set worker config
-            "memory_target": 0.90,
-            "memory_spill": False,
-            "memory_pause": False,
-            "memory_terminate": False,
-            },
-        }
-    dask.config.set(dask_config)
-
-    # --------------- Setup mechanisms on client -------------------
-    c = distributed.Client(
-        '{}:{}'.format(
-            "localhost", 
-            config.getoption("--dask_server_port"))
-        )
-    def update_path(): sys.path.insert(0, os.path.join(CURRENT_DIR, '..'))
-    def import_mechanisms(): import mechanisms
-    c.run(update_path)
-    c.run(import_mechanisms)
-

@@ -22,20 +22,13 @@ trash_it_now/
 
 # compiler output
 *.pyc
-mechanisms/l5pt/channels/x86_64
-mechanisms/l5pt/channels/*~
-mechanisms/l5pt/netcon/x86_64
-mechanisms/l5pt/netcon/*~
+mechanisms/**/x86_64/**
 barrel_cortex/*
 !getting_started/barrel_cortex/*.7z.*
 MOEA_EH_model_visualization/**/*~
 .*
 !.github
 simrun2/used_seeds
-mechanisms/l5pt/channels_py3/x86_64/*
-mechanisms/l5pt/channels_py2/x86_64/*
-mechanisms/l5pt/netcon_py3/x86_64/*
-mechanisms/l5pt/netcon_py2/x86_64/*
 SLURM_scripts/user_settings.ini
 
 #only template should be part of repository

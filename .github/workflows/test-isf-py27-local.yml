@@ -65,6 +65,8 @@ jobs:
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
 
+          export DASK_CONFIG=./config/dask_config.yml
+
           echo "------------ Running tests -------------"
           unset DISPLAY
           if [ ! -d "$HOME/tmp" ]; then
