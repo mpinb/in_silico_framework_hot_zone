@@ -1,7 +1,8 @@
 distributed:
   worker:
     memory:
-      target: 0.90  # target fraction to stay below
-	    spill:  False # fraction at which we spill to disk
-	    pause: False  # fraction at which we pause worker threads
-	    terminate: False  # fraction at which we terminate the worker
+      target: 0.90
+      spill:  False 
+      pause: False
+      terminate: False
+# https://stackoverflow.com/questions/57997463/dask-warning-worker-exceeded-95-memory-budget
