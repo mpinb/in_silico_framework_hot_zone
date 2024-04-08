@@ -7,7 +7,7 @@ import os, logging, socket, dask, six, sys
 import mechanisms  # compile mechanisms on test server
 from Interface import logger as isf_logger
 # --- Import fixtures
-from .fixtures import client, get_available_ips
+from .fixtures import client
 from .fixtures.dataframe_fixtures import pdf, ddf
 if six.PY3:  # pytest can be parallellized on py3: use unique ids for dbs
     from .fixtures.data_base_fixtures_py3 import (
