@@ -1,10 +1,11 @@
 """
 This directory contains the `.mod` files that define the biophysical behaviour of ion channels found in a Layer 5 Pyramidal Tract neuron (L5PT).
-In addition, it contains network connectivity parameters that define e.g. synaptic connections.
+In addition, it contains network connectivity parameters that define synaptic connections.
 
 """
 
-import os, platform, logging
+import os, platform, logging, sys
+from biophysics_fitting.utils import StreamToLogger
 logger = logging.getLogger("ISF").getChild(__name__)
 
 try:
@@ -48,5 +49,9 @@ except AssertionError:
         raise
 
 logger.info("Loading mechanisms:")
-neuron.load_mechanisms(os.path.join(parent, channels))
-neuron.load_mechanisms(os.path.join(parent, netcon))
+try:
+    with StreamToLogger(logger=logger, level=10) as sys.stout:
+        neuron.load_mechanisms(os.path.join(parent, channels))
+        neuron.load_mechanisms(os.path.join(parent, netcon))
+except Exception as e:
+    raise
