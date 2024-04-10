@@ -79,7 +79,7 @@ def get_dumper_string_by_dumper_module(dumper_module):
         The dumper string.
     """
     name = dumper_module.__name__
-    if not name.startswith('data_base.isf_data_base.'):
+    if not name.startswith('data_base.isf_data_base.') and name.startswith('data_base.'):
         # In case it is used as data_base.IO module
         name = name.split('.')
         name.insert(1, 'isf_data_base')
@@ -90,17 +90,10 @@ def get_dumper_string_by_dumper_module(dumper_module):
 
 
 def get_dumper_string_by_savedir(savedir):
-    #     with open(os.path.join(savedir, 'Loader.pickle'), 'rb') as file_:
-    #         myloader = cloudpickle.load(file_)
-    if os.path.exists(os.path.join(savedir, 'Loader.pickle')):
-        loader_module = compatibility.pandas_unpickle_fun(
-            os.path.join(savedir, 'Loader.pickle'))
-        dumper_module = getmodule(loader_module)
-    else:
-        loader_kwargs = json.load(open(os.path.join(savedir, 'Loader.json')))
-        loader_module = loader_kwargs['Loader']
-        del loader_kwargs['Loader']
-        dumper_module = importlib.import_module(loader_module)
+    loader_kwargs = json.load(open(os.path.join(savedir, 'Loader.json')))
+    loader_module = loader_kwargs['Loader']
+    del loader_kwargs['Loader']
+    dumper_module = importlib.import_module(loader_module)
     
     return get_dumper_string_by_dumper_module(dumper_module)
 
