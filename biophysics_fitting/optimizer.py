@@ -447,30 +447,38 @@ def start_run(
         satisfactory_boundary_dict=None
         ):
     '''
-    function to start an optimization run as specified in db_setup. The following attributes need
-    to be defined in db_setup:
+    Start an optimization run as specified in db_setup.
+
+    Args:
+        db_setup (data_base.DataBase): 
+            a DataBase containing the setup of the optimization. It must include:
+                - params ... this is a pandas.DataFrame with the parameternames as index and the columns min_ and max_
+                - get_Simulator ... function, that returns a biophysics_fitting.simulator.Simulator object
+                - get_Evaluator ... function, that returns a biophysics_fitting.evaluator.Evaluator object.
+                - get_Combiner ... function, that returns a biophysics_fitting.combiner.Combiner object
+            get_Simulator, get_Evaluator, get_Combiner accept the db_setup data_base as argument. 
+            This allows, that e.g. the Simular can depend on the data_base. Therefore it is e.g. possible, 
+            that the path to the morphology is not saved as absolute path. Instead, fixed parameters can be
+            updated accordingly.
+        n (int): a seedpoint for the optimization randomization.
+        pop (list of deap.Individuals | None): The previous population if the optimization is continued. None if a new optimization is started.
+        client (distributed.Client | None): A distributed client. If None, the optimization is run on the local machine.
+        continue_cp (bool): If True, the optimization is continued. If False, a new optimization is started.
+        offspring_size (int): The number of individuals in the offspring.
+        eta (int): The number of parents selected for each offspring.
+        mutpb (float): The mutation probability.
+        cxpb (float): The crossover probability.
+        max_ngen (int): The maximum number of generations.
+        satisfactory_boundary_dict (dict | None): A dictionary with the boundaries for the objectives. If a model is found, that has all objectives below the boundary, the optimization is stopped.
     
-        - params ... this is a pandas.DataFrame with the parameternames as index and the columns min_ and max_
-        - get_Simulator ... function, that returns a biophysics_fitting.simulator.Simulator object
-        - get_Evaluator ... function, that returns a biophysics_fitting.evaluator.Evaluator object.
-        - get_Combiner ... function, that returns a biophysics_fitting.combiner.Combiner object
-    
-    get_Simulator, get_Evaluator, get_Combiner accept the db_setup data_base as argument.
-    
-    This allows, that e.g. the Simular can depend on the data_base. Therefore it is e.g. possible, 
-    that the path to the morphology is not saved as absolute path. Instead, fixed parameters can be
-    updated accordingly.
-    
+        
     For an exemplary setup of a Simulator, Evaluator and Combiner object, see 
     biophysics_fitting.hay_complete_default_setup.
     
     For on examplary setup of a complete optimization project see 
-    20190111_fitting_CDK_morphologies_Kv3_1_slope_step.ipynb
+    getting_started/tutorials/1. neuron models/1.3 Generation.ipynb
     
     You can also have a look at the test case in tests.test_biophysics_fitting.optimizer_test.py
-    
-    satisfactory_boundary_dict needs to be given if you want to stop the optimisation when 
-    a satisfactory models is found. Keys need to match the combined objectives. 
     '''
     # CAVE! get_mymap is doing more, than just to return a map function.
     # - the map function ignores the first argument.
