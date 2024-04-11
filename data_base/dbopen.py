@@ -38,8 +38,8 @@ def create_db_path(path):
     if path.startswith('db://'):
         return path
     while True:
-        if (os.path.isdir(db_path)) and ('dbcore.pickle'
-                                          in os.listdir(db_path)):
+        if (os.path.isdir(db_path)) and (
+            'dbcore.pickle' in os.listdir(db_path) or 'db_state.json' in os.listdir(db_path)):
             break
         else:
             db_path = os.path.dirname(db_path)
