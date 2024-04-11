@@ -277,6 +277,10 @@ def get_client(client_port=38786, timeout=120):
     c = Client(ip + ':' + client_port, timeout=timeout)
     logger.info("Got client {}".format(c))
     logger.info("Making mechanisms visible on client side")
+    def update_path(): sys.path.insert(0, os.path.dirname(__file__))
+    def import_mechanisms(): import mechanisms
+    c.run(update_path)
+    c.run(import_mechanisms)
     return c
 
 print("\n\n")
