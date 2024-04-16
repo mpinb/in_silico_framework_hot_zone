@@ -15,7 +15,6 @@ import simrun.generate_synapse_activations
 import simrun.run_new_simulations
 import simrun.run_existing_synapse_activations
 import simrun.sim_trail_to_cell_object
-import simrun.crossing_over.crossing_over_simple_interface
 from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 # from compatibility import synchronous_scheduler
 from mechanisms import l5pt as l5pt_mechanisms
@@ -186,28 +185,3 @@ def test_ongoing_frequency_in_new_monte_carlo_simulation_is_like_in_roberts_cont
 def test_different_schedulers_give_same_result():
     pass
 """
-
-
-#@decorators.testlevel(2)
-def test_crossing_over_trails_show_identical_response_before_crossing_over_time(
-        tmpdir, fresh_db):
-    try:
-        t = np.random.randint(100, high=150)
-        sim_trail = list(fresh_db['sim_trail_index'])[0]
-        pdf, res = simrun.crossing_over.crossing_over_simple_interface.crossing_over(
-            fresh_db,
-            sim_trail,
-            t,
-            cellParamName,
-            networkName,
-            dirPrefix=str(tmpdir),
-            nSweeps=2,
-            tStop=345)
-        res = res.compute()
-        df = pd.read_csv(glob.glob(
-            os.path.join(res[0][0][0][1], '*vm_all_traces.csv'))[0],
-                         sep='\t')
-        assert_almost_equal(df[df.t < t]['Vm run 00'].values,
-                            df[df.t < t]['Vm run 01'].values)
-    except:
-        raise
