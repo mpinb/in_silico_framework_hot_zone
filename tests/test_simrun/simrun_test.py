@@ -1,4 +1,4 @@
-from .context import *
+from ..test_simrun2.context import *
 import os, sys, glob, shutil, tempfile
 import numpy as np
 from numpy.testing import assert_almost_equal
@@ -8,7 +8,7 @@ import dask
 import dask.dataframe as dd
 import single_cell_parser as scp
 import neuron
-from . import decorators
+from ..test_simrun2 import decorators
 import numpy as np
 from simrun.utils import scale_apical
 import simrun.generate_synapse_activations
@@ -19,7 +19,7 @@ import simrun.crossing_over.crossing_over_simple_interface
 from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 # from compatibility import synchronous_scheduler
 from mechanisms import l5pt as l5pt_mechanisms
-from .context import cellParamName, networkName, example_path, parent
+from ..test_simrun2.context import cellParamName, networkName, example_path, parent
 
 assert os.path.exists(cellParamName)
 assert os.path.exists(networkName)
