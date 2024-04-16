@@ -10,7 +10,7 @@ on top of such input to the somatic subthreashold potential.
 import Interface as I
 from biophysics_fitting.setup_stim import setup_soma_step
 from scipy.optimize import minimize, minimize_scalar
-from simrun3.synaptic_strength_fitting import PSPs
+from simrun.synaptic_strength_fitting import PSPs
 
 
 class PSP_with_current_injection:
@@ -118,7 +118,7 @@ class PSP_with_current_injection:
         return I.scp.NTParameterSet(neuron_param)
 
     def get_psp_simulator(self, gExRange=[1.0], exc_inh='exc', mode='synapses'):
-        '''returns simrun3.synaptic_strength_fitting.PSPs method, which is set up to simulate
+        '''returns simrun.synaptic_strength_fitting.PSPs method, which is set up to simulate
         individual synapse PSPs '''
         psp = PSPs(self.get_neuron_param_with_current_injection(),
                    self.confile,

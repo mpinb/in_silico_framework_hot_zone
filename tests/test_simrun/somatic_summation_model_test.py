@@ -3,7 +3,7 @@ from . import context
 import numpy as np
 import pandas as pd
 from Interface import defaultdict_defaultdict
-from simrun3.somatic_summation_model import *
+from simrun.somatic_summation_model import *
 
 
 class FakePSP:

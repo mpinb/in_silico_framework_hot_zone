@@ -63,11 +63,11 @@ def init(db,
     I.db_init_simrun_general. It determines all network embeddings (confile) and neuron models (neuron_param)
     present in the database and initializes the PSPs computation accordingly.
         
-    The PSPs are calculated using PSPClass. This can e.g. be a class defined in simrun3.PSP_with_modification.
+    The PSPs are calculated using PSPClass. This can e.g. be a class defined in simrun.PSP_with_modification.
     This class will be initialized as follows for all neuron_param and confile:
     psp_class_instance = PSPClass(neuron_param, confile, **PSPClass_kwargs)
         
-    PSPClass needs to provide a get method, that returns a PSPs object, as defined in simrun3.synaptic_strength_fitting.
+    PSPClass needs to provide a get method, that returns a PSPs object, as defined in simrun.synaptic_strength_fitting.
     The PSPs object will be executed and saved to db under the following location:
     db['PSPs']['description_key', PSPClass.__name__, 'neuron_param_path', 'confile_path']'''
     pdf = get_PSP_determinants_from_db(db)

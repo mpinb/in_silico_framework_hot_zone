@@ -177,7 +177,7 @@ try:
         as simrun_simtrail_to_cell_object
     from simrun.sim_trail_to_cell_object import trail_to_cell_object \
         as simrun_trail_to_cell_object
-    from simrun3 import crossing_over as simrun_crossing_over_module
+    from simrun import crossing_over as simrun_crossing_over_module
     from simrun.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
     from simrun.rerun_db import rerun_db as simrun_rerun_db
     simrun_rerun_mdb = simrun_rerun_db
@@ -187,7 +187,7 @@ except ImportError:
 
 import single_cell_parser.analyze as sca
 import single_cell_parser as scp
-from single_cell_parser import network  # simrun3.synaptic_strength_fitting relies on this
+from single_cell_parser import network  # simrun.synaptic_strength_fitting relies on this
 try:
     from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
 except ImportError:
@@ -201,7 +201,7 @@ from simrun.reduced_model import synapse_activation \
 from simrun.reduced_model import get_kernel \
     as rm_get_kernel
 
-import simrun3.synaptic_strength_fitting
+import simrun.synaptic_strength_fitting
 
 from singlecell_input_mapper.map_singlecell_inputs import map_singlecell_inputs
 from singlecell_input_mapper.evoked_network_param_from_template import create_network_parameter \
@@ -290,7 +290,7 @@ import compatibility
 # For this reason, we save the renamed packages/modules under an additional name (i.e. their old name)
 from data_base import model_data_base
 import simrun
-sys.modules['simrun3'] = simrun
+sys.modules['simrun'] = simrun
 sys.modules['model_data_base'] = model_data_base  # this used to be a top-level package
 
 # Set logging level back to WARNING to suppress verbosity in regular usage

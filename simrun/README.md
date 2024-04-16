@@ -1,6 +1,6 @@
 # simrun
 
-Together with [simrun3](../simrun3/), this module provides high-level acces to run many simulation trials in a scalable way (making use of the high-performance cluster). They make heavy use of the [single cell parser](../single_cell_parser/) module.
+Together with [simrun](../simrun/), this module provides high-level acces to run many simulation trials in a scalable way (making use of the high-performance cluster). They make heavy use of the [single cell parser](../single_cell_parser/) module.
 
 ## Running new simulations
 

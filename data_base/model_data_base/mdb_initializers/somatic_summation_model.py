@@ -1,7 +1,7 @@
 import os
 from functools import partial
 import pandas as pd
-from simrun3.somatic_summation_model import ParseVT
+from simrun.somatic_summation_model import ParseVT
 import model_data_base.IO.LoaderDumper.dask_to_msgpack
 
 dask_to_msgpack = model_data_base.IO.LoaderDumper.dask_to_msgpack
@@ -10,7 +10,7 @@ import single_cell_parser as scp
 
 
 class CelltypeSpecificSynapticWeights:
-    '''simrun3.somatic_summation_model allows specifying synaptic weights of individual synapses.
+    '''simrun.somatic_summation_model allows specifying synaptic weights of individual synapses.
     It therefore takes a dictionarry that maps from (celltype, synapseID) to the weight of that synapse.
     
     In the default case, we assign synaptic weights per celltype, not per individual synapse. This class 

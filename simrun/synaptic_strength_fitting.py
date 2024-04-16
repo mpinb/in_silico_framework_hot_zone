@@ -184,7 +184,7 @@ class PSPs:
         psp = self
         vt = psp.get_voltage_and_timing(
             method, merged=True, merge_celltype_kwargs=merge_celltype_kwargs)
-        #vt = I.simrun3.synaptic_strength_fitting.get_voltage_and_timing(vt, method)
+        #vt = I.simrun.synaptic_strength_fitting.get_voltage_and_timing(vt, method)
         pdf = I.pd.concat([
             I.pd.Series([x[1]
                          for x in vt[name][g][g]], name=name)
@@ -205,7 +205,7 @@ class PSPs:
         neuron_param = self.neuron_param
         if network_param is None:
             network_param = self.network_param  # psp.network_params_by_celltype[0]
-        cell_nw_generator = I.simrun3.get_cell_with_network.get_cell_with_network(
+        cell_nw_generator = I.simrun.get_cell_with_network.get_cell_with_network(
             neuron_param, network_param)
         cell, nwMap = cell_nw_generator()
         return cell, nwMap
@@ -337,7 +337,7 @@ def run_ex_synapse(cell_nw_generator,
                    tEnd=None,
                    tStim=None):
     '''core function, that actually activates a single synapse and runs the simulation.
-    cell_nw_generator: simrun3.get_cell_with_network.get_cell_with_network
+    cell_nw_generator: simrun.get_cell_with_network.get_cell_with_network
     neuron_param: single_cell_parser.NTParameterSet specifying biophysical properties
     network_param: single_cell_parser.NTParameterSet specifying network properties
     celltype: presynaptic celltype

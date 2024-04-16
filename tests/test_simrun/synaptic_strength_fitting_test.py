@@ -2,9 +2,9 @@ import Interface as I
 from . import decorators
 from . import context
 import getting_started
-import simrun3.synaptic_strength_fitting
+import simrun.synaptic_strength_fitting
 
-PSPs = simrun3.synaptic_strength_fitting.PSPs
+PSPs = simrun.synaptic_strength_fitting.PSPs
 
 # class FakeFuture():
 #     def __init__(self, f):
@@ -25,7 +25,7 @@ def test_VPM_synaptic_strength_is_between_1_72_and_1_85(client):
     There is some statistical fluctuation in this test due to the stochastic nature of synapse activation.
     The chosen limits of 1.72 - 1.85 should cover all possible stochastic variation by a good amount.
     """
-    PSPs = simrun3.synaptic_strength_fitting.PSPs
+    PSPs = simrun.synaptic_strength_fitting.PSPs
     confile = I.os.path.join(
         context.data_dir,
         '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2_synapses_20150202-1834_4335.con'

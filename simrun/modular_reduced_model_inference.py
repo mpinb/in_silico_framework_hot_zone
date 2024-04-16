@@ -595,7 +595,7 @@ class DataExtractor_categorizedTemporalSynapseActivation(DataExtractor):
         return self.data
 
 
-from simrun3.modular_reduced_model_inference import RaisedCosineBasis, numpy, make_weakref, np
+from simrun.modular_reduced_model_inference import RaisedCosineBasis, numpy, make_weakref, np
 
 
 class Strategy_categorizedTemporalRaisedCosine(Strategy):
