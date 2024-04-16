@@ -145,6 +145,7 @@ def rasterplot(df,
     if tlim:
         ax.set_xlim(tlim)
     # plt.gca().set_position([0.05, 0.05, 0.95, 0.95])
+    return fig
 
 
 
