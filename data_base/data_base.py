@@ -16,7 +16,7 @@ class DataBase:
     def __new__(cls, basedir, readonly=False, nocreate=False):
         if is_model_data_base(basedir):
             logger.warning('Reading a legacy-format ModelDataBase.')
-            db = model_data_base.ModelDataBase(basedir, readonly=readonly, nocreate=nocreate)
+            db = model_data_base.ModelDataBase(basedir, readonly=readonly, nocreate="True")
             logger.warning('Overwriting mdb.set and mdb.get to be compatible with ISF syntax...')
             db.set = db.setitem
             db.get = db.getitem
