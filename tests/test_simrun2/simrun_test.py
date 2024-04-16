@@ -10,12 +10,12 @@ import single_cell_parser as scp
 import neuron
 from . import decorators
 import numpy as np
-from simrun2.utils import scale_apical
-import simrun2.generate_synapse_activations
-import simrun2.run_new_simulations
-import simrun2.run_existing_synapse_activations
-import simrun2.sim_trail_to_cell_object
-import simrun2.crossing_over.crossing_over_simple_interface
+from simrun.utils import scale_apical
+import simrun.generate_synapse_activations
+import simrun.run_new_simulations
+import simrun.run_existing_synapse_activations
+import simrun.sim_trail_to_cell_object
+import simrun.crossing_over.crossing_over_simple_interface
 from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
 # from compatibility import synchronous_scheduler
 from mechanisms import l5pt as l5pt_mechanisms
@@ -29,7 +29,7 @@ assert os.path.exists(example_path)
 #@decorators.testlevel(1)
 def test_generate_synapse_activation_returns_filelist(tmpdir, client):
     try:
-        dummy = simrun2.generate_synapse_activations.generate_synapse_activations(
+        dummy = simrun3.generate_synapse_activations.generate_synapse_activations(
             cellParamName,
             networkName,
             dirPrefix=tmpdir.dirname,
@@ -47,7 +47,7 @@ def test_generate_synapse_activation_returns_filelist(tmpdir, client):
 def test_run_existing_synapse_activation_returns_identifier_dataframe_and_results_folder(
         tmpdir, client):
     try:
-        dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
+        dummy = simrun3.run_existing_synapse_activations.run_existing_synapse_activations(
             cellParamName,
             networkName, [example_path],
             dirPrefix=tmpdir.dirname,
@@ -64,7 +64,7 @@ def test_run_existing_synapse_activation_returns_identifier_dataframe_and_result
 #@decorators.testlevel(2)
 def test_run_new_simulations_returns_dirname(tmpdir):
     try:
-        dummy = simrun2.run_new_simulations.run_new_simulations(
+        dummy = simrun3.run_new_simulations.run_new_simulations(
             cellParamName,
             networkName,
             dirPrefix=tmpdir.dirname,
@@ -81,13 +81,13 @@ def test_run_new_simulations_returns_dirname(tmpdir):
 
 #@decorators.testlevel(2)
 def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir, client):
-    # simrun2 renames a dir once it finishes running
+    # simrun renames a dir once it finishes running
     # so create single-purpose subdirectories for simulation output
     subdir1 = tmpdir.mkdir("sub1")
     subdir2 = tmpdir.mkdir("sub2")
     subdir_params = tmpdir.mkdir("params")
     try:
-        dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
+        dummy = simrun3.run_existing_synapse_activations.run_existing_synapse_activations(
             cellParamName,
             networkName, [example_path],
             dirPrefix=str(subdir1),
@@ -99,13 +99,13 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir, cl
         # change location of cell by respecifying param file
         cellParam.neuron.filename = os.path.join(
         parent, 
-        'test_simrun2',
+        'test_simrun',
         'data',
         '86_L5_CDK20041214_nr3L5B_dend_PC_neuron_transform_registered_C2_B1border.hoc')
         cellParamName_other_position = os.path.join(str(subdir_params),
                                                     'other_position.param')
         cellParam.save(cellParamName_other_position)
-        dummy2 = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
+        dummy2 = simrun3.run_existing_synapse_activations.run_existing_synapse_activations(
             cellParamName_other_position,
             networkName, [example_path],
             dirPrefix=str(subdir2),
@@ -129,7 +129,7 @@ def test_position_of_morphology_does_not_matter_after_network_mapping(tmpdir, cl
 #@decorators.testlevel(2)
 def test_reproduce_simulation_trail_from_roberts_model_control(tmpdir, client):
     try:
-        dummy = simrun2.run_existing_synapse_activations.run_existing_synapse_activations(
+        dummy = simrun3.run_existing_synapse_activations.run_existing_synapse_activations(
             cellParamName,
             networkName, [example_path],
             dirPrefix=tmpdir.dirname,
@@ -194,7 +194,7 @@ def test_crossing_over_trails_show_identical_response_before_crossing_over_time(
     try:
         t = np.random.randint(100, high=150)
         sim_trail = list(fresh_db['sim_trail_index'])[0]
-        pdf, res = simrun2.crossing_over.crossing_over_simple_interface.crossing_over(
+        pdf, res = simrun3.crossing_over.crossing_over_simple_interface.crossing_over(
             fresh_db,
             sim_trail,
             t,

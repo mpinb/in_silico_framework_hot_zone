@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 #from ..context import *
-from simrun2.reduced_model.synapse_activation import get_poisson_realizations_from_expectancy_values
+from simrun.reduced_model.synapse_activation import get_poisson_realizations_from_expectancy_values
 import numpy as np
 import Interface as I
 

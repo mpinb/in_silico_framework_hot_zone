@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 #from ..context import *
-from simrun2.reduced_model.get_kernel import concatenate_return_boundaries, ReducedLdaModel,\
+from simrun.reduced_model.get_kernel import concatenate_return_boundaries, ReducedLdaModel,\
     compare_lists_by_none_values
 import numpy as np
 import pandas as pd
