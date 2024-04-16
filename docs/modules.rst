@@ -9,8 +9,7 @@ API Reference
    barrel_cortex
    biophysics_fitting
    data_base
-   simrun2
-   simrun3
+   simrun
    single_cell_parser
    singlecell_input_mapper
    spike_analysis
