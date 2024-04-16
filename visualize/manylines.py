@@ -18,9 +18,22 @@ import distributed
 npartitions = 80
 
 
-def manylines(df, ax = None, colormap = None, groupby_attribute = None, \
-              fig = None, figsize = (15,3), returnPixelObject = False, scheduler=None):
-    '''parallelizes the plot of many lines'''
+def manylines(
+    df, 
+    axis = None, 
+    colormap = None, 
+    groupby_attribute = None, 
+    fig = None, 
+    figsize = (15,3), 
+    returnPixelObject = False, 
+    scheduler=None):
+    '''
+    parallelizes the plot of many lines
+    
+    Args:
+        df (pd.DataFrame): the dataframe containing voltage traces
+        axis (list): the ax limits, e.g. [1, 10, 1, 10]
+    '''
 
     if ax is None:
         fig = plt.figure()
@@ -38,18 +51,18 @@ def manylines(df, ax = None, colormap = None, groupby_attribute = None, \
     #if isinstance()
     if isinstance(df, pd.DataFrame):
         if returnPixelObject:
-            ret = manylines_helper(df, axis = ax, colormap = colormap, \
+            ret = manylines_helper(df, axis = axis, colormap = colormap, \
                                 groupby_attribute = groupby_attribute, fig = None, \
                                 returnPixelObject = returnPixelObject)
         else:
-            ret = manylines_helper(df, axis = ax, colormap = colormap, \
+            ret = manylines_helper(df, axis = axis, colormap = colormap, \
                                 groupby_attribute = groupby_attribute, fig = fig, \
                                 returnPixelObject = returnPixelObject)
 
     elif isinstance(df, dd.DataFrame):
         fun = lambda x: manylines_helper(x, \
                                             fig = None, \
-                                            axis = ax, \
+                                            axis = axis, \
                                             colormap = colormap, \
                                             groupby_attribute = groupby_attribute, \
                                             figsize = figsize)
