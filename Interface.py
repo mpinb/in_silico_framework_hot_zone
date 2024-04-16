@@ -88,6 +88,7 @@ if not 'ISF_MINIMIZE_IO' in os.environ:
         logger.info("Current version: {version}".format(version = __version__))
         logger.info("Current pid: {pid}".format(pid = os.getpid()))
 
+import data_base
 from data_base.data_base import DataBase
 from data_base.model_data_base.model_data_base import ModelDataBase
 #from model_data_base.analyze.burst_detection import burst_detection
@@ -99,7 +100,7 @@ from data_base.analyze.spatiotemporal_binning import universal as spatiotemporal
 from data_base.analyze.spatial_binning import spatial_binning
 from data_base.analyze import split_synapse_activation
 from data_base.analyze.analyze_input_mapper_result import compare_to_neuronet
-
+# data_base.__init__.py register the correct IO package upon import
 from data_base.IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
 from data_base.IO.LoaderDumper import numpy_to_npz as dumper_numpy_to_npz
 from data_base.IO.LoaderDumper import numpy_to_msgpack as dumper_numpy_to_msgpack
@@ -155,7 +156,6 @@ try:  ##to avoid import errors in distributed system because of missing matplotl
     import matplotlib
     import matplotlib.pyplot as plt
     try:
-        from visualize.average_std import average_std as average_std
         from visualize.histogram import histogram as histogram
         from visualize.manylines import manylines
         from visualize.rasterplot import rasterplot, rasterplot2, rasterplot2_pdf_grouped

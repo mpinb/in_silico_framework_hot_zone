@@ -121,7 +121,7 @@ def rasterplot(df,
                        label=label,
                        groupby_attribute=None,
                        reset_index=False)
-        return ax
+        return fig
 
     relevant_columns = [_ for _ in df.columns if is_int(_)]
     df = df[relevant_columns]

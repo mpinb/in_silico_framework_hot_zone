@@ -10,6 +10,4 @@ def client(pytestconfig):
             "localhost", 
             pytestconfig.getoption("--dask_server_port"))
         )
-    def import_Interface(): import Interface as I
-    c.run(import_Interface)  # to assure all modules are initialized, neuron mechanisms are found, and backwards compatibility is assured.
     return c
