@@ -3,14 +3,14 @@ import pandas as pd
 import single_cell_parser as scp
 import os, sys, tarfile, shutil
 import logging
-import Interface as I
 import single_cell_parser as scp
 import pandas as pd
 import os
 import single_cell_parser as scp
 import inspect
 import six
-
+from collections import defaultdict
+defaultdict_defaultdict = lambda: defaultdict(lambda: defaultdict_defaultdict())
 
 def get_cellnumbers_from_confile(confile):
     con = scp.reader.read_functional_realization_map(confile)
@@ -21,7 +21,7 @@ def get_cellnumbers_from_confile(confile):
 def split_network_param_in_one_elem_dicts(dict_):
     out = []
     for k in list(dict_['network'].keys()):
-        d = I.defaultdict_defaultdict()
+        d = defaultdict_defaultdict()
         d['network'][k] = dict_['network'][k]
         out.append(scp.NTParameterSet(d))
     return out
