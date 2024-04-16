@@ -1,7 +1,7 @@
 import numpy as np
 from pandas.util.testing import assert_frame_equal
 import dask 
-from data_base.IO.LoaderDumper import dask_to_csv, numpy_to_npy, pandas_to_parquet, dask_to_parquet, \
+from data_base.IO.LoaderDumper import numpy_to_npy, pandas_to_parquet, dask_to_parquet, \
                                 pandas_to_msgpack, to_pickle, pandas_to_pickle, dask_to_msgpack, \
                                 dask_to_categorized_msgpack, to_cloudpickle, reduced_lda_model
 from tests.test_simrun.reduced_model.get_kernel_test import get_test_Rm
@@ -60,9 +60,6 @@ def data_frame_generic_small(db, pdf, ddf, dumper, client=None):
         b = df_colnames_to_str(b)
         b.index.name = str(b.index.name)
     assert_frame_equal(a, b)
-
-def test_dask_to_csv_small(empty_db, pdf, ddf):
-    data_frame_generic_small(empty_db, pdf, ddf, dask_to_csv)
 
 def test_dask_to_msgpack_small(empty_db, pdf, ddf, client):
     data_frame_generic_small(empty_db, pdf, ddf, dask_to_msgpack,

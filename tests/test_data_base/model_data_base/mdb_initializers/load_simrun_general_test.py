@@ -1,6 +1,6 @@
 import warnings
 from data_base.model_data_base.mdb_initializers.load_simrun_general import optimize
-from model_data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
+from model_data_base.IO.LoaderDumper import dask_to_msgpack, dask_to_categorized_msgpack
 from data_base.utils import silence_stdout
 import numpy as np
 
@@ -9,10 +9,6 @@ optimize = silence_stdout(optimize)
 
 def test_optimization_works_dumpers_default(fresh_mdb, client):
     optimize(fresh_mdb, dumper=None, client=client)
-
-
-def test_optimization_works_dumpers_csv(fresh_mdb, client):
-    optimize(fresh_mdb, dumper=dask_to_csv, client=client)
 
 
 def test_optimization_works_dumpers_msgpack(fresh_mdb, client):

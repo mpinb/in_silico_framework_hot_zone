@@ -1,6 +1,6 @@
 from data_base.data_base import DataBase
 from pandas.util.testing import assert_frame_equal
-from data_base.IO.LoaderDumper import dask_to_csv, dask_to_msgpack, dask_to_categorized_msgpack
+from data_base.IO.LoaderDumper import dask_to_msgpack, dask_to_categorized_msgpack
 import tempfile
 
 
@@ -45,10 +45,6 @@ def real_data_generic(db_, dumper_, client_=None):
     b = db_['synapse_activation'].compute(scheduler="multiprocessing")
     a = dummy.compute(scheduler="multiprocessing")
     assert_frame_equal(a, b)
-
-
-def test_dask_to_csv_real_data(fresh_db):
-    real_data_generic(db_=fresh_db, dumper_=dask_to_csv, client_=None)
 
 
 def test_dask_to_categorized_msgpack_real_data(client, fresh_db):
