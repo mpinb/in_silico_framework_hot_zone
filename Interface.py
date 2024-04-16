@@ -45,11 +45,6 @@ import scipy.signal
 import math
 
 
-#------ comptabilitity
-import compatibility
-sys.modules['simrun3'] = sys.modules['simrun']
-sys.modules['model_data_base'] = sys.modules['data_base.model_data_base']
-
 ### logging setup
 import logging
 from config.isf_logging import logger, logger_stream_handler
@@ -255,7 +250,8 @@ def print_module_versions():
 
 
 def get_client(client_port=38786, timeout=120):
-    """Gets the distributed.client object if dask has been setup
+    """
+    Gets the distributed.client object if dask has been setup
 
     Returns:
         Client: the client object
@@ -286,4 +282,16 @@ def get_client(client_port=38786, timeout=120):
 print("\n\n")
 print_module_versions()
 
+# ------ comptabilitity
+# For Py2 / Py3
+import compatibility
+# For old pickled data. This is to ensure backwards compatibility with the Oberlaender lab in MPINB, Bonn. Added on 16/04/2024
+# Since previous versions of this codebase used pickle as a data format, pickle now tries to import modules that don't exist anymore upon loading
+# For this reason, we save the renamed packages/modules under an additional name (i.e. their old name)
+from data_base import model_data_base
+import simrun
+sys.modules['simrun3'] = simrun
+sys.modules['model_data_base'] = model_data_base  # this used to be a top-level package
+
+# Set logging level back to WARNING to suppress verbosity in regular usage
 logger.setLevel(logging.WARNING)
