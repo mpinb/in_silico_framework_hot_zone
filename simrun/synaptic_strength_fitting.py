@@ -681,8 +681,11 @@ def merge_celltypes(vt,
                         'L2', 'L34', 'L4', 'L5st', 'L5tt', 'L6cc', 'L6ct',
                         'VPM_C2'
                     ],
-                    celltype_must_be_in=I.excitatory):
+                    celltype_must_be_in=None):
     '''concatenates voltagetraces of celltypes'''
+    if celltype_must_be_in is None:
+        celltype_must_be_in = I.excitatory
+
     out = I.defaultdict_defaultdict()
     for detection_string in detection_strings:
         for celltype in sorted(vt.keys()):
