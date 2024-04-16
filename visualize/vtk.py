@@ -142,7 +142,7 @@ def save_cells_landmark_files_vtk(
     celltype_nr_mapper = {ct: i for i, ct in enumerate(sa.celltype.unique())}
     logger.info("Celltype nr mapper: {}".format(celltype_nr_mapper))
 
-    from simrun2.utils import select_cells_that_spike_in_interval
+    from simrun.utils import select_cells_that_spike_in_interval
     
     sa = sa.copy()
     if 'synapse_type' in sa.columns:

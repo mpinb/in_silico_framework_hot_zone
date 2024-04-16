@@ -14,7 +14,7 @@ Filesize: takes 14% of the space, to cloudpickle needs (7 x more space efficient
 '''
 from . import parent_classes
 import os, cloudpickle
-from simrun2.reduced_model.get_kernel import ReducedLdaModel
+from simrun.reduced_model.get_kernel import ReducedLdaModel
 from data_base.model_data_base.model_data_base import ModelDataBase
 from . import pandas_to_parquet, pandas_to_msgpack
 from . import numpy_to_npz

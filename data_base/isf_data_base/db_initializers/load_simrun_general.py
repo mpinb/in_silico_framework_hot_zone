@@ -1,6 +1,6 @@
 '''
 Use the init function in this module to load simulation data generated 
-with the simrun2 module into a DataBase.
+with the simrun module into a DataBase.
 '''
 
 import os, glob, shutil, fnmatch, hashlib, six, dask, compatibility, scandir, warnings
@@ -568,7 +568,7 @@ def _get_rec_site_managers(db):
         raise NotImplementedError("Cannot initialize database with dendritic recordings if"\
                                   +"the cell parameter files differ in the landmarks they specify for the recording sites.")
     #############
-    # the following code is adapted from simrun2
+    # the following code is adapted from simrun
     #############
     neuronParameters = scp.build_parameters(param_files[0])
     rec_sites = neuronParameters.sim.recordingSites
@@ -649,7 +649,7 @@ def init(
         n_chunks = 5000, 
         dumper = pandas_to_parquet):
     '''
-    Use this function to load simulation data generated with the simrun2 module 
+    Use this function to load simulation data generated with the simrun module 
     into a DataBase. 
     
     After initialization, you can access the data from the data_base in the following manner:

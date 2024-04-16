@@ -5,8 +5,7 @@ This module gives convenient access to all subpackages and submodules in ISF:
     - data_base
     - dendrite_thickness
     - NEURON mechanisms
-    - simrun2
-    - simrun3
+    - simrun
     - single_cell_parser
     - single_cell_input_mapper
     - spike_analysis
@@ -48,6 +47,8 @@ import math
 
 #------ comptabilitity
 import compatibility
+sys.modules['simrun3'] = sys.modules['simrun']
+sys.modules['model_data_base'] = sys.modules['data_base.model_data_base']
 
 ### logging setup
 import logging
@@ -173,22 +174,21 @@ except ImportError:
     logger.warning("Could not import matplotlib!")
 
 try:
-    from simrun2.run_existing_synapse_activations import run_existing_synapse_activations \
+    from simrun.run_existing_synapse_activations import run_existing_synapse_activations \
         as simrun_run_existing_synapse_activations
-    from simrun2.generate_synapse_activations import generate_synapse_activations \
+    from simrun.generate_synapse_activations import generate_synapse_activations \
         as simrun_generate_synapse_activations
-    from simrun2.run_new_simulations import run_new_simulations \
+    from simrun.run_new_simulations import run_new_simulations \
         as simrun_run_new_simulations
-    from simrun2.sim_trail_to_cell_object import simtrail_to_cell_object \
+    from simrun.sim_trail_to_cell_object import simtrail_to_cell_object \
         as simrun_simtrail_to_cell_object
-    from simrun2.sim_trail_to_cell_object import trail_to_cell_object \
+    from simrun.sim_trail_to_cell_object import trail_to_cell_object \
         as simrun_trail_to_cell_object
-    from simrun2 import crossing_over as simrun_crossing_over_module
-    from simrun2.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
-    from simrun2.rerun_db import rerun_db as simrun_rerun_db
+    from simrun3 import crossing_over as simrun_crossing_over_module
+    from simrun.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
+    from simrun.rerun_db import rerun_db as simrun_rerun_db
     simrun_rerun_mdb = simrun_rerun_db
 
-    from simrun2.crossing_over.crossing_over_simple_interface import crossing_over as simrun_crossing_over_simple_interface
 except ImportError:
     logger.warning("Could not import full-compartmental-model simulator")
 
@@ -201,11 +201,11 @@ except ImportError:
     logger.warning("Could not import visualize.cell_morphology_visualizer!")
 from visualize.utils import write_video_from_images, write_gif_from_images, display_animation_from_images
 
-from simrun2.reduced_model import synapse_activation \
+from simrun.reduced_model import synapse_activation \
     as rm_synapse_activations
-#from simrun2.reduced_model import spiking_output \
+#from simrun.reduced_model import spiking_output \
 #    as simrun_reduced_model_spiking_output
-from simrun2.reduced_model import get_kernel \
+from simrun.reduced_model import get_kernel \
     as rm_get_kernel
 
 import simrun3.synaptic_strength_fitting
