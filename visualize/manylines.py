@@ -18,10 +18,14 @@ import distributed
 npartitions = 80
 
 
-@return_figure_or_axis
-def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
+def manylines(df, ax = None, colormap = None, groupby_attribute = None, \
               fig = None, figsize = (15,3), returnPixelObject = False, scheduler=None):
     '''parallelizes the plot of many lines'''
+
+    if ax is None:
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+
     assert fig is not None  # decorator takes care, that it is allwys axes
     #     assert get is not None
     if returnPixelObject:
@@ -34,18 +38,18 @@ def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
     #if isinstance()
     if isinstance(df, pd.DataFrame):
         if returnPixelObject:
-            ret = manylines_helper(df, axis = axis, colormap = colormap, \
+            ret = manylines_helper(df, axis = ax, colormap = colormap, \
                                 groupby_attribute = groupby_attribute, fig = None, \
                                 returnPixelObject = returnPixelObject)
         else:
-            ret = manylines_helper(df, axis = axis, colormap = colormap, \
+            ret = manylines_helper(df, axis = ax, colormap = colormap, \
                                 groupby_attribute = groupby_attribute, fig = fig, \
                                 returnPixelObject = returnPixelObject)
 
     elif isinstance(df, dd.DataFrame):
         fun = lambda x: manylines_helper(x, \
                                             fig = None, \
-                                            axis = axis, \
+                                            axis = ax, \
                                             colormap = colormap, \
                                             groupby_attribute = groupby_attribute, \
                                             figsize = figsize)
@@ -74,7 +78,7 @@ def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
             ax = fig
 
         for _, img in enumerate(figures_list.values):
-            ax.imshow(img, interpolation='nearest', extent=axis, aspect='auto')
+            ax.imshow(img, interpolation='nearest', extent=ax, aspect='auto')
         # raise
         # plt.gca().set_position([0, 0, 1, 1])
         # plt.close(fig)
@@ -87,7 +91,7 @@ def manylines(df, axis = None, colormap = None, groupby_attribute = None, \
 
     if returnPixelObject:
         assert isinstance(ret, plt.Figure)
-        raise ForceReturnException(PixelObject(axis, fig=ret))
+        raise ForceReturnException(PixelObject(ax, fig=ret))
     else:
         return ret
 

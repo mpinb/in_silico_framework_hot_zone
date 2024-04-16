@@ -91,14 +91,12 @@ def rasterplot2_pdf_grouped(pdf,
 
 
 @dask_to_pandas
-@return_figure_or_axis
 def rasterplot(df,
                colormap=None,
-               fig=None,
+               ax=None,
                label=None,
                groupby_attribute=None,
                tlim=None,
-               figsize=(15, 3),
                reset_index=True):
     '''
     creates a rasterplot,
@@ -108,6 +106,9 @@ def rasterplot(df,
     if df is a pandas.DataFrame, serial plotting is used
     '''
 
+    if ax is None:
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
     if reset_index:
         df = df.reset_index()
 
@@ -116,17 +117,16 @@ def rasterplot(df,
         for label, group_df in groups:
             rasterplot(group_df,
                        colormap=colormap,
-                       fig=fig,
+                       ax=ax,
                        label=label,
                        groupby_attribute=None,
                        reset_index=False)
-        return fig
+        return ax
 
     relevant_columns = [_ for _ in df.columns if is_int(_)]
     df = df[relevant_columns]
     times_all = []
     trails_all = []
-    ax = fig  #before: ax = fig.add_subplot(1,1,1), now managed by decorator  return_figure_or_axis
 
     # fig.patch.set_alpha(0.0)
     # axes = plt.axes()
@@ -146,7 +146,6 @@ def rasterplot(df,
         ax.set_xlim(tlim)
     # plt.gca().set_position([0.05, 0.05, 0.95, 0.95])
 
-    return fig
 
 
 ######################################
