@@ -67,13 +67,14 @@ except ImportError:
 #
 # warnings.showwarning = warn_with_traceback
 
-# todo: the version is not specific to data_base,
-# therefore - ideally - the _version.py file would not live in the
-# subfolder mondel data base but in the top folder.
-# But then it does not work anymore ...
-# Currently, git needs to be installed to be able to get
-# the current version. Use versioneer.py to be able
-# to bundle package without the need of having git installed.
+# TODO:
+# The version is not specific to 'data_base'. Ideally, the '_version.py' file 
+# should not reside in the subfolder 'model data base', but in the top folder.
+# However, this causes issues.
+#
+# Currently, git needs to be installed to fetch the current version. 
+# Consider using 'versioneer.py' for bundling the package without the 
+# necessity of having git installed.
 from data_base._version import get_versions
 from data_base._module_versions import version_cached
 
@@ -87,8 +88,6 @@ if not 'ISF_MINIMIZE_IO' in os.environ:
         logger.info("Current version: {version}".format(version = __version__))
         logger.info("Current pid: {pid}".format(pid = os.getpid()))
 
-import barrel_cortex
-from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
 from data_base.data_base import DataBase
 from data_base.model_data_base.model_data_base import ModelDataBase
 #from model_data_base.analyze.burst_detection import burst_detection
@@ -101,7 +100,6 @@ from data_base.analyze.spatial_binning import spatial_binning
 from data_base.analyze import split_synapse_activation
 from data_base.analyze.analyze_input_mapper_result import compare_to_neuronet
 
-from data_base.IO.LoaderDumper import dask_to_csv as dumper_dask_to_csv
 from data_base.IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
 from data_base.IO.LoaderDumper import numpy_to_npz as dumper_numpy_to_npz
 from data_base.IO.LoaderDumper import numpy_to_msgpack as dumper_numpy_to_msgpack
@@ -282,6 +280,8 @@ def get_client(client_port=38786, timeout=120):
 print("\n\n")
 print_module_versions()
 
+import barrel_cortex
+from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
 # ------ comptabilitity
 # For Py2 / Py3
 import compatibility
