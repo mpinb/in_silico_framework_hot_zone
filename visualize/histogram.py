@@ -41,7 +41,7 @@ def histogram(hist_bins,
     #except TypeError:
     #    pass
 
-    return fig
+    return ax.get_figure()
 
 
 def histogram2(hist_bins, color=None, ax=None, label=None, mode='step'):
