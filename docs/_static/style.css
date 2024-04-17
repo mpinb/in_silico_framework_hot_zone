@@ -1,5 +1,5 @@
 table {
-  border-collapse: separate;
+  border-collapse: collapse;
 }
 
 td>img {
@@ -12,6 +12,10 @@ td>img {
 
 tr {
   vertical-align: top;
+}
+
+td {
+  padding: 0px;
 }
 
 .organigram-fixed-cell {
@@ -39,7 +43,6 @@ tr {
   border-collapse: collapse;
   text-align: center;
   padding-left: 10px;
-  background: rgba(0, 128, 0, 0);
 }
 
 .organigram-collapsible {
@@ -62,11 +65,12 @@ tr {
 }
 
 .organigram-collapsible-content {
-  display: block;
+  display: flex;
   overflow: hidden;
   height: 0;
   transition: height 0.2s ease-out;
   background-color: #fbe3c5;
+  /* border: solid black; */
 } 
 
 
@@ -86,4 +90,16 @@ tr {
   background-color: #c1272d;
   background-clip: content-box;
   color: white;
+}
+
+#neuron-button {
+  width: 45%;
+  margin-right: 10%;
+  float: left;
+}
+
+#network-button{
+  width: 45%;
+  vertical-align: top;
+  float: right;
 }

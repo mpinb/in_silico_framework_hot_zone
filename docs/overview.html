@@ -24,21 +24,22 @@
     </tr>
 
     <tr id="row-isf">
-        <td class="organigram-header" rowspan="5" id="ISF">ISF</td>
+        <td class="organigram-header" rowspan="7" id="ISF">ISF</td>
         <td 
-        class="organigram-expandable-cell" id="neuron">
-          <button type="button" class="organigram-collapsible" id="neuron">Neuron model</button>
-          <div 
-            class="organigram-collapsible-content" >
+        class="organigram-fixed-cell" id="neuron-network-row" colspan="2">
+          <button type="button" class="organigram-collapsible" id="neuron-button">Neuron model</button>
+          <button type="button" class="organigram-collapsible" id="network-button">Network model</button>
+        </td>    
+        
+      </tr>
+      
+    <tr></tr>  
+      <td 
+        class="organigram-expandable-cell" id="neuron-network-content-row" colspan="2">
+            <div class="organigram-collapsible-content" id="neuron-content">
             <p>Lorem ipsum...</p>
             </div>
-        </td>
-        
-        <td 
-        class="organigram-expandable-cell" id="network">
-          <button type="button" class="organigram-collapsible" id="network">Network model</button>
-          <div 
-            class="organigram-collapsible-content">
+            <div class="organigram-collapsible-content" id="network-content">
             <p>Lorem ipsum...</p>
             </div>
         </td>
@@ -54,10 +55,10 @@
       </td>
       <tr>
         <td 
-        class="organigram-expandable-cell" id="msm" colspan="2">
-          <button type="button" class="organigram-collapsible" id="msm">Multi-scale model</button>
+        class="organigram-expandable-cell" id="msm-row" colspan="2">
+          <button type="button" class="organigram-collapsible" id="msm-button">Multi-scale model</button>
           <div 
-            class="organigram-collapsible-content">
+            class="organigram-collapsible-content" id="msm-content">
             <p>Lorem ipsum...</p>
             </div>
         </td>
@@ -68,10 +69,10 @@
         <img class="sidebar-logo only-dark" src="./_static/downarr-white.svg" height="10% "></img>
       </td>
       <tr>
-        <td class="organigram-expandable-cell" id="reduced" colspan="2">
-          <button type="button" class="organigram-collapsible" id="reduced">Reduced model</button>
+        <td class="organigram-expandable-cell" id="reduced-row" colspan="2">
+          <button type="button" class="organigram-collapsible" id="reduced-button">Reduced model</button>
           <div 
-            class="organigram-collapsible-content">
+            class="organigram-collapsible-content" id="reduced-content">
             <p>Lorem ipsum...</p>
             </div>
           </td>
