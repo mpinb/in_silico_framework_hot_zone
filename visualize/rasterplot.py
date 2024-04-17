@@ -110,6 +110,8 @@ def rasterplot(
     if ax is None:
         fig = plt.figure()
         ax = fig.add_subplot(111)
+    else:
+        fig = ax.get_figure()
     if reset_index:
         df = df.reset_index()
 
