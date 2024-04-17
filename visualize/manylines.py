@@ -20,10 +20,10 @@ npartitions = 80
 
 def manylines(
     df, 
+    ax = None, 
     axis = None, 
     colormap = None, 
     groupby_attribute = None, 
-    fig = None, 
     figsize = (15,3), 
     returnPixelObject = False, 
     scheduler=None):
@@ -31,8 +31,14 @@ def manylines(
     parallelizes the plot of many lines
     
     Args:
-        df (pd.DataFrame): the dataframe containing voltage traces
+        df (pd.DataFrame): the dataframe containing voltage traces,
+        ax (matplotlib.pyplot.Axes): an ax instance.
         axis (list): the ax limits, e.g. [1, 10, 1, 10]
+        colormap: a colormap
+        groupby_attribute: 
+        figsize (tupe(int)), the size of the Figure
+        returnPixelObject (bool): Whether or not to return as a PixelObject
+        scheduler (distributed.client.Client | str, optional): a distributed scheduler.
     '''
 
     if ax is None:
@@ -51,21 +57,21 @@ def manylines(
     #if isinstance()
     if isinstance(df, pd.DataFrame):
         if returnPixelObject:
-            ret = manylines_helper(df, axis = axis, colormap = colormap, \
-                                groupby_attribute = groupby_attribute, fig = None, \
-                                returnPixelObject = returnPixelObject)
+            ret = manylines_helper(
+                df, axis = axis, colormap = colormap, 
+                groupby_attribute = groupby_attribute, fig = None, 
+                returnPixelObject = returnPixelObject)
         else:
-            ret = manylines_helper(df, axis = axis, colormap = colormap, \
-                                groupby_attribute = groupby_attribute, fig = fig, \
-                                returnPixelObject = returnPixelObject)
+            ret = manylines_helper(
+                df, axis = axis, colormap = colormap,
+                groupby_attribute = groupby_attribute, fig = fig,
+                returnPixelObject = returnPixelObject)
 
     elif isinstance(df, dd.DataFrame):
-        fun = lambda x: manylines_helper(x, \
-                                            fig = None, \
-                                            axis = axis, \
-                                            colormap = colormap, \
-                                            groupby_attribute = groupby_attribute, \
-                                            figsize = figsize)
+        fun = lambda x: manylines_helper(
+            x, fig = None, axis = axis, 
+            colormap = colormap, groupby_attribute = groupby_attribute, 
+            figsize = figsize)
 
         def fun2(x):
             fig = fun(x)
