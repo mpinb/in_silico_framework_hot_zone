@@ -3,7 +3,6 @@ autor: arco
 date: 16.09.2016
 '''
 import numpy as np
-from ._decorators import return_figure_or_axis
 
 
 class PixelObject():
@@ -27,7 +26,6 @@ class PixelObject():
             self.array = fig2np(fig)
 
 
-@return_figure_or_axis
 def show_pixel_object(pixelObject, fig=None):
     fig.imshow(pixelObject.array,
                interpolation='nearest',
