@@ -1,11 +1,11 @@
 table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 10px 0;
 }
 
 td>img {
   display: block;
   height: 40px;
-  padding-left: 10px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -24,7 +24,6 @@ td {
   border-collapse: collapse;
   text-align: center;
   vertical-align: middle;
-  padding-left: 10px;
   height: 50px;
   width: 80%;
   background: rgba(0, 128, 0, 0);
@@ -43,10 +42,9 @@ td {
   display: table-cell;
   border-collapse: collapse;
   text-align: center;
-  padding-left: 10px;
 }
 
-.organigram-collapsible {
+.organigram-button {
   width: 100%;
   height: 50px;
   border-collapse: collapse;
@@ -58,10 +56,11 @@ td {
   color: white;
   cursor: pointer;
   outline: none;
+  transition: height 0.2s ease-out;
   font-size: 15px;
 }
 
-.organigram-collapsible:hover {
+.organigram-button:hover {
   background-color: #ffbc69;
 }
 
@@ -94,13 +93,14 @@ td {
 }
 
 #neuron-button {
-  width: 50% - 5px;
-  margin-right: 10px;
+  width: calc(50% - 5px);
+  margin-right: 5px;
   float: left;
 }
 
 #network-button{
-  width: 50% - 5px;
+  width: calc(50% - 5px);
   vertical-align: top;
   float: right;
+  margin-left: 5px;
 }
