@@ -44,9 +44,9 @@ def manylines(
     if ax is None:
         fig = plt.figure()
         ax = fig.add_subplot(111)
+    else:
+        fig = ax.get_figure()
 
-    assert fig is not None  # decorator takes care, that it is allwys axes
-    #     assert get is not None
     if returnPixelObject:
         fig = plt.figure(dpi=400, figsize=figsize)
         fig.patch.set_alpha(0.0)
@@ -54,7 +54,7 @@ def manylines(
         ax.patch.set_alpha(0.0)
         fig.axes[0].get_xaxis().set_visible(False)
         fig.axes[0].get_yaxis().set_visible(False)
-    #if isinstance()
+
     if isinstance(df, pd.DataFrame):
         if returnPixelObject:
             ret = manylines_helper(
