@@ -177,7 +177,6 @@ try:
         as simrun_simtrail_to_cell_object
     from simrun.sim_trail_to_cell_object import trail_to_cell_object \
         as simrun_trail_to_cell_object
-    from simrun import crossing_over as simrun_crossing_over_module
     from simrun.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
     from simrun.rerun_db import rerun_db as simrun_rerun_db
     simrun_rerun_mdb = simrun_rerun_db
