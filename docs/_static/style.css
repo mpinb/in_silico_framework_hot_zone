@@ -12,6 +12,7 @@ td>img {
 
 tr {
   vertical-align: top;
+  padding: 0px;
 }
 
 td {
@@ -93,13 +94,13 @@ td {
 }
 
 #neuron-button {
-  width: 45%;
-  margin-right: 10%;
+  width: 50% - 5px;;
+  margin-right: 10px;
   float: left;
 }
 
 #network-button{
-  width: 45%;
+  width: 50% - 5px;
   vertical-align: top;
   float: right;
 }
