@@ -11,7 +11,6 @@ import pandas as pd
 import dask.dataframe as dd
 # import dask
 from ._figure_array_converter import fig2np, PixelObject
-from ._decorators import return_figure_or_axis, ForceReturnException
 import distributed
 # from compatibility import multiprocessing_scheduler
 
