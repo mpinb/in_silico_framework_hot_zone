@@ -162,6 +162,10 @@ do
     if [ $(find $d -maxdepth 1 -name "*.mod" -print -quit) ]; then
         echo "compiling mechanisms in $d"
         cd $d; nrnivmodl || exit 1;
+        if ! find "$d" -type f -path "*/.libs/libnrnmech.so" -print -quit | grep -q .; then
+            echo "Error: Could not find libnrnmech.so in $d/*/.libs. Compilation of neuron mechanisms was unsuccesful."
+            exit 1
+        fi
     fi
 done
 
