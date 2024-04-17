@@ -87,20 +87,9 @@ def manylines(
                     scheduler=scheduler)  #multiprocessing_scheduler)
         else:
             raise NotImplementedError("Please provide either a distributed.client.Client object, or a string as scheduler.")
-        # print figures_list
-        # if fig is None: fig = plt.figure(figsize = figsize)
-        # plt.axis('off')
-        # print figures_list
-        if not isinstance(fig, plt.Axes):
-            ax = fig.add_subplot(111)
-        else:
-            ax = fig
 
         for _, img in enumerate(figures_list.values):
             ax.imshow(img, interpolation='nearest', extent=ax, aspect='auto')
-        # raise
-        # plt.gca().set_position([0, 0, 1, 1])
-        # plt.close(fig)
         ret = fig
 
     else:
