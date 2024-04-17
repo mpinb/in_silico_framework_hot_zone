@@ -41,12 +41,6 @@ def manylines(
         scheduler (distributed.client.Client | str, optional): a distributed scheduler.
     '''
 
-    if ax is None:
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-    else:
-        fig = ax.get_figure()
-
     if returnPixelObject:
         fig = plt.figure(dpi=400, figsize=figsize)
         fig.patch.set_alpha(0.0)
@@ -54,6 +48,13 @@ def manylines(
         ax.patch.set_alpha(0.0)
         fig.axes[0].get_xaxis().set_visible(False)
         fig.axes[0].get_yaxis().set_visible(False)
+
+    elif ax is None:
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+
+    else:
+        fig = ax.get_figure()
 
     if isinstance(df, pd.DataFrame):
         if returnPixelObject:
@@ -97,11 +98,8 @@ def manylines(
             "Supported input: dask.dataframe and pandas.DataFrame. " +
             "Recieved %s" % str(type(df)))
 
-    if returnPixelObject:
-        assert isinstance(ret, plt.Figure)
-        raise ForceReturnException(PixelObject(ax, fig=ret))
-    else:
-        return ret
+    assert isinstance(ret, plt.Figure)
+    return ret
 
 def manylines_helper(pdf, axis = None, colormap = None, groupby_attribute = None, \
                      fig = None, figsize = (15,3), returnPixelObject = False):
