@@ -91,13 +91,14 @@ def rasterplot2_pdf_grouped(pdf,
 
 
 @dask_to_pandas
-def rasterplot(df,
-               colormap=None,
-               ax=None,
-               label=None,
-               groupby_attribute=None,
-               tlim=None,
-               reset_index=True):
+def rasterplot(
+    df,
+    colormap=None,
+    ax=None,
+    label=None,
+    groupby_attribute=None,
+    tlim=None,
+    reset_index=True):
     '''
     creates a rasterplot,
     expects dataframe in the usual spike times format
