@@ -94,7 +94,7 @@ def manylines(
 
     assert isinstance(fig, plt.Figure)
     if returnPixelObject:
-        return PixelObject(axis, fig=fig)
+        return PixelObject(axis, ax=fig.gca())
     else:
         return fig
 

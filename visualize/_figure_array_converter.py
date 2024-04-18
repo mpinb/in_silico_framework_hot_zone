@@ -26,12 +26,12 @@ class PixelObject():
             self.array = fig2np(fig)
 
 
-def show_pixel_object(pixelObject, fig=None):
-    fig.imshow(pixelObject.array,
+def show_pixel_object(pixelObject, ax=None):
+    ax.imshow(pixelObject.array,
                interpolation='nearest',
                extent=pixelObject.extent,
                aspect='auto')
-    return fig
+    return ax
 
 
 def fig2np(fig):
