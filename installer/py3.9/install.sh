@@ -157,7 +157,7 @@ echo "Installing In-Silico-Framework conda dependencies."
 sed "s|https://.*/|$SCRIPT_DIR/downloads/conda_packages/|" $SCRIPT_DIR/conda_requirements.txt > $SCRIPT_DIR/tempfile
 conda update -p ${CONDA_INSTALL_PATH} $(<$SCRIPT_DIR/tempfile)
 
-# -------------------- 5. Installing pandas-msgpack -------------------- #
+# -------------------- 4. Installing pandas-msgpack -------------------- #
 print_title "4/6. Installing pandas-msgpack"
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
 if [ ! -d "${PD_MSGPACK_HOME}" ]; then
@@ -175,17 +175,29 @@ cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
 pip install cython==0.29.32  # restore cython version
 
-# -------------------- 6. installing the ipykernel -------------------- #
+# -------------------- 5. installing the ipykernel -------------------- #
 print_title "5/6. Installing the ipykernel"
 python -m ipykernel install --name base --user --display-name isf3.9
 
-# -------------------- 7. Compiling NEURON mechanisms -------------------- #
+# -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
-cd $channels; nrnivmodl
-cd $netcon; nrnivmodl
+shopt -s extglob
+for d in $(find $SCRIPT_DIR/../../mechanisms/*/*py3* -type d)
+do
+    if [ $(find $d -maxdepth 1 -name "*.mod" -print -quit) ]; then
+        echo "compiling mechanisms in $d"
+        cd $d; nrnivmodl || exit 1;
+        if ! find "$d" -type f -path "*/.libs/libnrnmech.so" -print -quit | grep -q .; then
+            echo "Error: Could not find libnrnmech.so in $d/*/.libs. Compilation of neuron mechanisms was unsuccesful."
+            exit 1
+        fi
+    fi
+done
 
-# -------------------- Cleanup -------------------- #
+#-------------------- Cleanup -------------------- #
+echo ""
+echo ""
 echo "Succesfully installed In-Silico-Framework for Python 3.9"
 rm $SCRIPT_DIR/tempfile
 exit 0

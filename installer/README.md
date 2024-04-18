@@ -16,7 +16,7 @@
 
 ## Requirements
 
-Every student needs to be able to synchronize their repository with https://github.com/research-center-caesar/in_silico_framework
+Every student needs to be able to synchronize their repository with https://github.com/mpinb/in_silico_framework
 
 
 ## Setup

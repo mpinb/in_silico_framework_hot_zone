@@ -11,7 +11,7 @@ import numpy as np
 from .cell import PointCell
 from . import writer
 from .synapse_mapper import SynapseMapper, SynapseDensity
-from model_data_base.mdbopen import mdbopen
+from data_base.dbopen import dbopen
 
 
 class NetworkMapper:
@@ -643,7 +643,7 @@ class NetworkMapper:
 
         sampleNumberDistributionName = postCellName[:-4]
         sampleNumberDistributionName += '_population_size_test_%03d_sample_distribution.csv' % nrOfSamples
-        with mdbopen(sampleNumberDistributionName, 'w') as outFile:
+        with dbopen(sampleNumberDistributionName, 'w') as outFile:
             header = 'population size\tminimum distance\tmedian distance\tsamples inside 1 SD\tsamples inside 2 SD\n'
             outFile.write(header)
             testSizes = list(sampleNumberSummary.keys())
@@ -663,7 +663,7 @@ class NetworkMapper:
 
         sampleNumberFeatureName = postCellName[:-4]
         sampleNumberFeatureName += '_population_size_test_%03d_sample_features.csv' % nrOfSamples
-        with mdbopen(sampleNumberFeatureName, 'w') as outFile:
+        with dbopen(sampleNumberFeatureName, 'w') as outFile:
             testSizes = list(sampleNumberFeatures.keys())
             testSizes.sort()
             nrOfFeatures = len(sampleNumberFeatures[testSizes[0]])

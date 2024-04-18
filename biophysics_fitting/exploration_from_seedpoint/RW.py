@@ -5,16 +5,24 @@ import numpy as np
 import cloudpickle
 import shutil
 from .utils import get_vector_norm
-from model_data_base.utils import silence_stdout
+from data_base.utils import silence_stdout
 import time
 import sys
 
 class RW:
-    def __init__(self, df_seeds = None, param_ranges = None, 
-                 params_to_explore = None, evaluation_function = None, 
-                 MAIN_DIRECTORY = None, min_step_size = 0, max_step_size = 0.02, 
-                 checkpoint_every = 100, n_iterations = 60000,
-                 mode = None):
+    def __init__(
+            self, 
+            df_seeds = None, 
+            param_ranges = None, 
+            params_to_explore = None, 
+            evaluation_function = None, 
+            MAIN_DIRECTORY = None, 
+            min_step_size = 0, 
+            max_step_size = 0.02, 
+            checkpoint_every = 100, 
+            n_iterations = 60000,
+            mode = None
+            ):
         '''Class to perform RW exploration from a seedpoint.
         
         df_seeds: pandas dataframe which contains the individual seed points as rows and 

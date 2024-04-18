@@ -1,15 +1,15 @@
 '''
-The purpose of this module is to glue together all libraries necessary for single cell simulations
-of cells in barrel cortex. This includes:
+This module gives convenient access to all subpackages and submodules in ISF:
 
- - Moving around hoc-morphologies
- - Compute anatomical realization of presynaptic cells and synapses
- - Activation of synapses based on experimental data
- - determining apropriate biophysical parameters
- - setting up a cluster
- - use that cluster to optimize / find suitable parameters
- - use that cluster to compute single cell responses to synaptic input
- - efficiently store the simulation results and provide an easy interface to query data
+    - biophysics_fitting
+    - data_base
+    - dendrite_thickness
+    - NEURON mechanisms
+    - simrun
+    - single_cell_parser
+    - single_cell_input_mapper
+    - spike_analysis
+    - visualize
 
 The recommended use is to import it in a jupyter notebook in the following manner::
 
@@ -44,6 +44,7 @@ import scipy
 import scipy.signal
 import math
 
+
 ### logging setup
 import logging
 from config.isf_logging import logger, logger_stream_handler
@@ -66,15 +67,16 @@ except ImportError:
 #
 # warnings.showwarning = warn_with_traceback
 
-# todo: the version is not specific to model_data_base,
-# therefore - ideally - the _version.py file would not live in the
-# subfolder mondel data base but in the top folder.
-# But then it does not work anymore ...
-# Currently, git needs to be installed to be able to get
-# the current version. Use versioneer.py to be able
-# to bundle package without the need of having git installed.
-from model_data_base._version import get_versions
-from model_data_base._module_versions import version_cached
+# TODO:
+# The version is not specific to 'data_base'. Ideally, the '_version.py' file 
+# should not reside in the subfolder 'model data base', but in the top folder.
+# However, this causes issues.
+#
+# Currently, git needs to be installed to fetch the current version. 
+# Consider using 'versioneer.py' for bundling the package without the 
+# necessity of having git installed.
+from data_base._version import get_versions
+from data_base._module_versions import version_cached
 
 if not 'ISF_MINIMIZE_IO' in os.environ:
     versions = get_versions()
@@ -86,66 +88,74 @@ if not 'ISF_MINIMIZE_IO' in os.environ:
         logger.info("Current version: {version}".format(version = __version__))
         logger.info("Current pid: {pid}".format(pid = os.getpid()))
 
-import barrel_cortex
-from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
-from isf_data_base.isf_data_base import DataBase
-from model_data_base.model_data_base import ModelDataBase
+import data_base
+from data_base.data_base import DataBase
+from data_base.model_data_base.model_data_base import ModelDataBase
 #from model_data_base.analyze.burst_detection import burst_detection
-from model_data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
-from model_data_base.analyze.temporal_binning import universal as temporal_binning
+from data_base.analyze.LDA import lda_prediction_rates as lda_prediction_rates
+from data_base.analyze.temporal_binning import universal as temporal_binning
 
-from model_data_base.analyze.spike_detection import spike_detection, spike_in_interval
-from model_data_base.analyze.spatiotemporal_binning import universal as spatiotemporal_binning
-from model_data_base.analyze.spatial_binning import spatial_binning
-from model_data_base.analyze import split_synapse_activation
-from model_data_base.analyze.analyze_input_mapper_result import compare_to_neuronet
-
-from model_data_base.IO.LoaderDumper import dask_to_csv as dumper_dask_to_csv
-from model_data_base.IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
-from model_data_base.IO.LoaderDumper import numpy_to_npz as dumper_numpy_to_npz
-from model_data_base.IO.LoaderDumper import numpy_to_msgpack as dumper_numpy_to_msgpack
-from model_data_base.IO.LoaderDumper import pandas_to_pickle as dumper_pandas_to_pickle
-from model_data_base.IO.LoaderDumper import pandas_to_msgpack as dumper_pandas_to_msgpack
-from model_data_base.IO.LoaderDumper import pandas_to_parquet as dumper_pandas_to_parquet
-from model_data_base.IO.LoaderDumper import dask_to_msgpack as dumper_dask_to_msgpack
-from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack as dumper_dask_to_categorized_msgpack
-from model_data_base.IO.LoaderDumper import cell as dumper_cell
-from model_data_base.IO.LoaderDumper import to_pickle as dumper_to_pickle
-from model_data_base.IO.LoaderDumper import to_cloudpickle as dumper_to_cloudpickle
-from model_data_base.IO.LoaderDumper import to_msgpack as dumper_to_msgpack
-from model_data_base.IO.LoaderDumper import reduced_lda_model as dumper_reduced_lda_model
+from data_base.analyze.spike_detection import spike_detection, spike_in_interval
+from data_base.analyze.spatiotemporal_binning import universal as spatiotemporal_binning
+from data_base.analyze.spatial_binning import spatial_binning
+from data_base.analyze import split_synapse_activation
+from data_base.analyze.analyze_input_mapper_result import compare_to_neuronet
+# data_base.__init__.py register the correct IO package upon import
+from data_base.IO.LoaderDumper import numpy_to_npy as dumper_numpy_to_npy
+from data_base.IO.LoaderDumper import numpy_to_npz as dumper_numpy_to_npz
+from data_base.IO.LoaderDumper import numpy_to_msgpack as dumper_numpy_to_msgpack
+from data_base.IO.LoaderDumper import pandas_to_pickle as dumper_pandas_to_pickle
+from data_base.IO.LoaderDumper import pandas_to_msgpack as dumper_pandas_to_msgpack
+from data_base.IO.LoaderDumper import pandas_to_parquet as dumper_pandas_to_parquet
+from data_base.IO.LoaderDumper import dask_to_msgpack as dumper_dask_to_msgpack
+from data_base.IO.LoaderDumper import dask_to_categorized_msgpack as dumper_dask_to_categorized_msgpack
+from data_base.IO.LoaderDumper import cell as dumper_cell
+from data_base.IO.LoaderDumper import to_pickle as dumper_to_pickle
+from data_base.IO.LoaderDumper import to_cloudpickle as dumper_to_cloudpickle
+from data_base.IO.LoaderDumper import to_msgpack as dumper_to_msgpack
+from data_base.IO.LoaderDumper import reduced_lda_model as dumper_reduced_lda_model
 
 if six.PY3:
-    from model_data_base.IO.LoaderDumper.shared_numpy_store import SharedNumpyStore, shared_array_from_numpy, shared_array_from_disk, shared_array_from_shared_mem_name
+    from data_base.IO.LoaderDumper.shared_numpy_store import SharedNumpyStore, shared_array_from_numpy, shared_array_from_disk, shared_array_from_shared_mem_name
 
-from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
-from model_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
-from model_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format
-from model_data_base.IO.roberts_formats import read_InputMapper_summary
+from data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
+from data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format
+from data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format
+from data_base.IO.roberts_formats import read_InputMapper_summary
+from data_base.db_initializers import load_simrun_general as db_init_simrun_general
+from data_base.db_initializers import synapse_activation_binning as db_init_synapse_activation_binning
 
-from model_data_base.mdb_initializers import load_simrun_general as mdb_init_simrun_general
-from model_data_base.mdb_initializers import synapse_activation_binning as mdb_init_synapse_activation_binning
-
-load_param_files_from_mdb = mdb_init_simrun_general.load_param_files_from_mdb
-load_initialized_cell_and_evokedNW_from_mdb = mdb_init_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
+#--------------- isf db
+load_param_files_from_db = db_init_simrun_general.load_param_files_from_db
+load_initialized_cell_and_evokedNW_from_db = db_init_simrun_general.load_initialized_cell_and_evokedNW_from_db
 #for compatibility, deprecated!
-synapse_activation_binning_dask = mdb_init_synapse_activation_binning.synapse_activation_postprocess_dask
-mdb_init_crossing_over = mdb_init_roberts_simulations = mdb_init_simrun_general
+synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
+db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
+mdb_init_crossing_over = db_init_crossing_over
 
-from model_data_base.analyze import split_synapse_activation  #, color_cellTypeColorMap, excitatory, inhibitory
-from model_data_base.utils import silence_stdout
-from model_data_base.utils import select, pandas_to_array, pooled_std
-from model_data_base.utils import skit, chunkIt
-from model_data_base.utils import cache
-from model_data_base import utils
-from model_data_base.model_data_base_register import assimilate_remote_register, get_mdb_by_unique_id
-from model_data_base.mdbopen import resolve_mdb_path, create_mdb_path
+#--------------- mdb
+from data_base.db_initializers import load_simrun_general as db_init_simrun_general
+from data_base.db_initializers import synapse_activation_binning as db_init_synapse_activation_binning
+load_param_files_from_mdb = db_init_simrun_general.load_param_files_from_db
+load_initialized_cell_and_evokedNW_from_mdb = db_init_simrun_general.load_initialized_cell_and_evokedNW_from_db
+#for compatibility, deprecated!
+synapse_activation_binning_dask = db_init_synapse_activation_binning.synapse_activation_postprocess_dask
+db_init_crossing_over = db_init_roberts_simulations = db_init_simrun_general
+
+from data_base.analyze import split_synapse_activation  #, color_cellTypeColorMap, excitatory, inhibitory
+from data_base.utils import silence_stdout
+from data_base.utils import select, pandas_to_array, pooled_std
+from data_base.utils import skit, chunkIt
+from data_base.utils import cache
+from data_base import utils
+from data_base.data_base import get_db_by_unique_id
+from data_base.data_base_register import assimilate_remote_register
+from data_base.dbopen import resolve_db_path, create_db_path
 
 try:  ##to avoid import errors in distributed system because of missing matplotlib backend
     import matplotlib
     import matplotlib.pyplot as plt
     try:
-        from visualize.average_std import average_std as average_std
         from visualize.histogram import histogram as histogram
         from visualize.manylines import manylines
         from visualize.rasterplot import rasterplot, rasterplot2, rasterplot2_pdf_grouped
@@ -157,41 +167,40 @@ except ImportError:
     logger.warning("Could not import matplotlib!")
 
 try:
-    from simrun2.run_existing_synapse_activations import run_existing_synapse_activations \
+    from simrun.run_existing_synapse_activations import run_existing_synapse_activations \
         as simrun_run_existing_synapse_activations
-    from simrun2.generate_synapse_activations import generate_synapse_activations \
+    from simrun.generate_synapse_activations import generate_synapse_activations \
         as simrun_generate_synapse_activations
-    from simrun2.run_new_simulations import run_new_simulations \
+    from simrun.run_new_simulations import run_new_simulations \
         as simrun_run_new_simulations
-    from simrun2.sim_trail_to_cell_object import simtrail_to_cell_object \
+    from simrun.sim_trail_to_cell_object import simtrail_to_cell_object \
         as simrun_simtrail_to_cell_object
-    from simrun2.sim_trail_to_cell_object import trail_to_cell_object \
+    from simrun.sim_trail_to_cell_object import trail_to_cell_object \
         as simrun_trail_to_cell_object
-    from simrun2 import crossing_over as simrun_crossing_over_module
-    from simrun2.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
-    from simrun2.rerun_mdb import rerun_mdb as simrun_rerun_mdb
+    from simrun.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
+    from simrun.rerun_db import rerun_db as simrun_rerun_db
+    simrun_rerun_mdb = simrun_rerun_db
 
-    from simrun2.crossing_over.crossing_over_simple_interface import crossing_over as simrun_crossing_over_simple_interface
 except ImportError:
     logger.warning("Could not import full-compartmental-model simulator")
 
 import single_cell_parser.analyze as sca
 import single_cell_parser as scp
-from single_cell_parser import network  # simrun3.synaptic_strength_fitting relies on this
+from single_cell_parser import network  # simrun.synaptic_strength_fitting relies on this
 try:
     from visualize.cell_morphology_visualizer import CellMorphologyVisualizer
 except ImportError:
     logger.warning("Could not import visualize.cell_morphology_visualizer!")
 from visualize.utils import write_video_from_images, write_gif_from_images, display_animation_from_images
 
-from simrun2.reduced_model import synapse_activation \
+from simrun.reduced_model import synapse_activation \
     as rm_synapse_activations
-#from simrun2.reduced_model import spiking_output \
+#from simrun.reduced_model import spiking_output \
 #    as simrun_reduced_model_spiking_output
-from simrun2.reduced_model import get_kernel \
+from simrun.reduced_model import get_kernel \
     as rm_get_kernel
 
-import simrun3.synaptic_strength_fitting
+import simrun.synaptic_strength_fitting
 
 from singlecell_input_mapper.map_singlecell_inputs import map_singlecell_inputs
 from singlecell_input_mapper.evoked_network_param_from_template import create_network_parameter \
@@ -228,7 +237,7 @@ def svg2emf(filename, path_to_inkscape="/usr/bin/inkscape"):
     logger.info(os.system(command))
 
 
-from model_data_base._module_versions import version_cached
+from data_base._module_versions import version_cached
 
 
 def print_module_versions():
@@ -238,7 +247,8 @@ def print_module_versions():
 
 
 def get_client(client_port=38786, timeout=120):
-    """Gets the distributed.client object if dask has been setup
+    """
+    Gets the distributed.client object if dask has been setup
 
     Returns:
         Client: the client object
@@ -256,15 +266,35 @@ def get_client(client_port=38786, timeout=120):
         ip = gethostbyname(
             hostname
         )  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
-        if 'soma' in hostname:
-            #we're on the soma cluster and have infiniband
-            ip = ip.replace('100', '102')  # a bit hackish, but it works
     logger.info("Getting client with ip {}".format(ip))
     c = Client(ip + ':' + client_port, timeout=timeout)
     logger.info("Got client {}".format(c))
+    logger.info("Making mechanisms visible on client side")
+    def update_path(): sys.path.insert(0, os.path.dirname(__file__))
+    def import_mechanisms(): import mechanisms
+    c.run(update_path)
+    c.run(import_mechanisms)
     return c
 
 print("\n\n")
 print_module_versions()
 
+import barrel_cortex
+from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
+
+# =====================
+#  comptabilitity
+# =====================
+
+# For Py2 / Py3
+import compatibility
+# For old pickled data. This is to ensure backwards compatibility with the Oberlaender lab in MPINB, Bonn. Added on 16/04/2024
+# Since previous versions of this codebase used pickle as a data format, pickle now tries to import modules that don't exist anymore upon loading
+# For this reason, we save the renamed packages/modules under an additional name (i.e. their old name)
+from data_base import model_data_base
+import simrun
+sys.modules['simrun3'] = simrun  # simrun used to be simrun2 and simrun3 (separate packages). Pickle still wants a simrun3 to exist.
+sys.modules['model_data_base'] = model_data_base  # this used to be a top-level package
+
+# Set logging level back to WARNING to suppress verbosity in regular usage
 logger.setLevel(logging.WARNING)

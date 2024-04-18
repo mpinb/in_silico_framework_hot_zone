@@ -1,5 +1,5 @@
 shopt -s expand_aliases
-export MYBASEDIR="/gpfs/soma_fs/scratch/$USER"
+export MYBASEDIR="$HOME"
 module load git/2.31
 ulimit -Sn "$(ulimit -Hn)"
 export PYTHONPATH=$MYBASEDIR/project_src/in_silico_framework

@@ -1,7 +1,5 @@
 '''
-cell parser and synapse mapper 
-for single cell simulations
-with NeuroNet subcellular synapse distributions
+Cell parser and synapse mapper for single cell simulations with NeuroNet subcellular synapse distributions.
 '''
 import logging
 
@@ -40,20 +38,20 @@ from sumatra.parameters import build_parameters as build_parameters_sumatra
 from sumatra.parameters import NTParameterSet
 import numpy as np
 import warnings
-from model_data_base.mdbopen import mdbopen
+from data_base.dbopen import dbopen
 
 
 #------------------------------------------------------------------------------
 # commonly used functions required for running single neuron simulations
 #------------------------------------------------------------------------------
 def build_parameters(filename, fast_but_security_risk=True):
-    from model_data_base.mdbopen import resolve_mdb_path
-    filename = resolve_mdb_path(filename)
+    from data_base.dbopen import resolve_db_path
+    filename = resolve_db_path(filename)
 
     if fast_but_security_risk:
         # taking advantage of the fact that sumatra NTParameterSet produces
         # valid python code
-        with mdbopen(filename, 'r') as f:
+        with dbopen(filename, 'r') as f:
             dummy = eval(f.read())
         return NTParameterSet(dummy)
     else:
@@ -77,12 +75,28 @@ def load_NMODL_parameters(parameters):
     except AttributeError:
         pass
 
-def create_cell(parameters, scaleFunc=None, allPoints=False, setUpBiophysics = True,\
-                silent = False):
+
+def create_cell(
+        parameters, 
+        scaleFunc=None, 
+        allPoints=False, 
+        setUpBiophysics = True,
+        silent = False
+        ):
     '''
-    default way of creating NEURON cell models;
+    Default way of creating NEURON cell models;
     includes spatial discretization and inserts
     biophysical mechanisms according to parameter file
+
+    Args:
+        - parameters (dict | dict-like):
+            A nested dictionary structure. Should include at least the keys 'filename' and one key per structure present in the `.hoc` file (e.g. "AIS", "Soma" ...). 
+            Optional keys include: 'cell_modify_functions', 'discretization'
+        - scaleFunc (bool): 
+            DEPRECATED,  should be specified in the parameters, as described in :meth:`single_cell_parser.cell_modify_funs`
+        - allPoints (bool): Whether or not to use all the points in the `.hoc` file, or one point per segment (according to the distance-lambda rule). 
+            Will be passed to ``full``in :meth:`~single_cell_parser.cell_parser.CellParser.determine_nseg`
+        - setUpBiophysics (bool): whether or not to insert mechanisms corresponding to the biophysical parameters in ``parameters``
     '''
     if scaleFunc is not None:
         warnings.warn(

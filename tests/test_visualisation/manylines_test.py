@@ -32,12 +32,12 @@ class TestManyLines:
         df = self.df.drop('attribute', axis=1)
         ddf = dd.from_pandas(df, npartitions=3)
         fig = plt.figure()
-        manylines(df, axis=[1, 10, 1, 10], fig=fig, scheduler="synchronous")
+        manylines(df, axis=[1, 10, 1, 10], ax=fig.gca(), scheduler="synchronous")
         if savefigs:
             fig.savefig(
                 os.path.join(self.tempdir, 'manylines_no_group_pandas.png'))
         fig = plt.figure()
-        manylines(ddf, axis=[1, 10, 1, 10], fig=fig, scheduler="synchronous")
+        manylines(ddf, axis=[1, 10, 1, 10], ax=fig.gca(), scheduler="synchronous")
         if savefigs:
             fig.savefig(
                 os.path.join(self.tempdir, 'manylines_no_group_dask.png'))
@@ -49,14 +49,14 @@ class TestManyLines:
         fig = plt.figure()
         manylines(df, axis = [1, 10, 1, 10], \
                         groupby_attribute = 'attribute', \
-                        colormap = self.colormap, fig = fig, scheduler="synchronous")
+                        colormap = self.colormap, ax = fig.gca(), scheduler="synchronous")
         if savefigs:
             fig.savefig(
                 os.path.join(self.tempdir, 'manylines_grouped_pandas.png'))
         fig = plt.figure()
         manylines(ddf, axis = [1, 10, 1, 10], \
                         groupby_attribute = 'attribute', \
-                        colormap = self.colormap, fig = fig, scheduler="synchronous")
+                        colormap = self.colormap, ax = fig.gca(), scheduler="synchronous")
         if savefigs:
             fig.savefig(os.path.join(self.tempdir,
                                      'manylines_grouped_dask.png'))

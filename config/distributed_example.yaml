@@ -1,7 +1,0 @@
-distributed:
-  worker:
-    memory:
-      target: 0.90  # target fraction to stay below
-	  spill:  False # fraction at which we spill to disk
-	  pause: False  # fraction at which we pause worker threads
-	  terminate: False  # fraction at which we terminate the worker

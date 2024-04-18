@@ -6,6 +6,7 @@ The following 3rd party modules are used: pandas, dask, distributed
 import six
 import yaml
 import cloudpickle
+import sys
 
 # try: # new dask versions
 #     synchronous_scheduler = dask.get

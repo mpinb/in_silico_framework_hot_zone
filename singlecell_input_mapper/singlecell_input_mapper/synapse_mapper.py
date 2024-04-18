@@ -43,8 +43,8 @@ class SynapseMapper(object):
         self.voxelEdgeMap = {}
 
 
-#        seed = int(time.time()) + 2342
-#        self.ranGen = np.random.RandomState(seed)
+        # seed = int(time.time()) + 2342
+        # self.ranGen = np.random.RandomState(seed)
 
     def create_synapses(self, preType='Generic'):
         '''
@@ -361,9 +361,9 @@ class SynapseDensity(object):
                     if not likeAmira:
                         r1 = sec.diamList[i] * 0.5
                         r2 = sec.diamList[i + 1] * 0.5
-#                    Amira Bug: uses diameter instead of radius
-#                    (doesn't matter for end result, but it's affecting
-#                    the INH PST density -> need to be consistent...)
+                    # Amira Bug: uses diameter instead of radius
+                    # (doesn't matter for end result, but it's affecting
+                    # the INH PST density -> need to be consistent...)
                     if likeAmira:
                         r1 = sec.diamList[i]
                         r2 = sec.diamList[i + 1]
@@ -381,8 +381,8 @@ class SynapseDensity(object):
                         clipSegmentsRadius.append((r1, r2))
 
 
-#            dims = density1.extent[1]+1, density1.extent[3]+1, density1.extent[5]+1
-#            nrOfVoxels = dims[0]*dims[1]*dims[2]
+            # dims = density1.extent[1]+1, density1.extent[3]+1, density1.extent[5]+1
+            # nrOfVoxels = dims[0]*dims[1]*dims[2]
             count = 0
             #            print 'Checking %dx%dx%d = %d voxels...' % (dims[0],dims[1],dims[2],nrOfVoxels)
             nrOfSegments = len(clipSegments)

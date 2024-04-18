@@ -13,8 +13,6 @@ pushd . # save this dir on stack
 WORKING_DIR=$(pwd)
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda3-2020.11-Linux-x86_64.sh
-channels=$SCRIPT_DIR/../../mechanisms/channels_py3
-netcon=$SCRIPT_DIR/../../mechanisms/netcon_py3
 CONDA_INSTALL_PATH=""
 INSTALL_NODE=false
 
@@ -168,7 +166,7 @@ fi
 echo "Installing In-Silico-Framework pip dependencies."
 python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages
 
-# -------------------- 5. Patching pandas-msgpack -------------------- #
+# -------------------- 4. Patching pandas-msgpack -------------------- #
 print_title "4/6. Installing & patching pandas-msgpack"
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
 if [ ! -d "${PD_MSGPACK_HOME}" ]; then
@@ -180,20 +178,32 @@ fi
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
 
-# -------------------- 6. installing the ipykernel -------------------- #
+# -------------------- 5. installing the ipykernel -------------------- #
 print_title "5/6. Installing the ipykernel"
 python -m ipykernel install --name base --user --display-name isf3.8
 
-# -------------------- 7. Compiling NEURON mechanisms -------------------- #
+# -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
-cd $channels; nrnivmodl
-cd $netcon; nrnivmodl
+shopt -s extglob
+for d in $(find $SCRIPT_DIR/../../mechanisms/*/*py3* -type d)
+do
+    if [ $(find $d -maxdepth 1 -name "*.mod" -print -quit) ]; then
+        echo "compiling mechanisms in $d"
+        cd $d; nrnivmodl || exit 1;
+        if ! find "$d" -type f -path "*/.libs/libnrnmech.so" -print -quit | grep -q .; then
+            echo "Error: Could not find libnrnmech.so in $d/*/.libs. Compilation of neuron mechanisms was unsuccesful."
+            exit 1
+        fi
+    fi
+done
+
+
+
 
 # -------------------- Cleanup -------------------- #
 echo ""
 echo ""
 echo "Succesfully installed In-Silico-Framework for Python 3.8"
 rm $SCRIPT_DIR/tempfile
-popd
 exit 0

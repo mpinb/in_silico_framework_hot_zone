@@ -193,9 +193,12 @@ def get_cur_stim(stim):
 
 
 def hay_evaluate(cur_stim, tvec, vList):
-    '''note: I had the problem with python segfaulting as soon as this function got executed.
-    In that case, make sure, the mechanisms are correctly compiled and loaded.
-    You can load the mechanisms by importing the mechanisms module.'''
+    '''
+    Note: 
+        I had the problem with python segfaulting as soon as this function got executed.
+        In that case, make sure, the mechanisms are correctly compiled and loaded.
+        You can load the mechanisms by importing the mechanisms module.
+    '''
     setup_hay_evaluator()
     feature_mean_list = h.evaluator.feature_mean_list
     feature_std_list = h.evaluator.feature_std_list

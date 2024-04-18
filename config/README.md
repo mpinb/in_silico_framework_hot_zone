@@ -7,7 +7,7 @@ The `git` command needs to be configured in order to use ISF. We recommend `git 
 
 ## Recommended configurations
 
-As this codebase is for the most part a collection of modules, make sure ISF is added to your `PYTHONPATH`. That way, whatever Python you're using knows it should look in this folder for these modules. We recommend adapting your `~/.bashrc` file with the following lines (also defined in [bashrc_example.sh](./bashrc_example.sh)):
+We recommend adapting your `~/.bashrc` file with the following lines (also defined in [bashrc_example.sh](./bashrc_example.sh)):
 ```shell
 shopt -s expand_aliases
 export MYBASEDIR="/gpfs/soma_fs/scratch/$USER"

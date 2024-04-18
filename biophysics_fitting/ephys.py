@@ -1,5 +1,5 @@
 '''The content of this module is mostly a reimplementation of the Hay et.al. 2011 methods used for extracting features'''
-import Interface as I
+import numpy as np
 
 
 def trace_check(
@@ -83,8 +83,8 @@ def trace_check_err(t, v, stim_onset=None, stim_duration=None, punish=250):
     v = v[select]
     t = t[select]
     var_fact = 1e-1
-    # print('trace variance is ', I.np.var(v), I.np.var(v)*var_fact, stim_onset, stim_duration)
-    return max(75, punish - I.np.var(v) * var_fact)
+    # print('trace variance is ', np.var(v), np.var(v)*var_fact, stim_onset, stim_duration)
+    return max(75, punish - np.var(v) * var_fact)
 
 
 def find_crossing_old(v, thresh):
@@ -99,7 +99,7 @@ def find_crossing_old(v, thresh):
     bvec = []
     ef = 0
     # added by arco to resolve failure of spike detection if value is exactly the threshold
-    v = I.np.array(v) > thresh
+    v = np.array(v) > thresh
     thresh = 0.5
     # end added by arco
     for i, vv in enumerate(v):
@@ -127,10 +127,10 @@ def find_crossing(v, thresh):
     Extended doku by Arco: returns [[],[]] if the number of crossing up vs crossing down is not equal.
     This is the vectorized fast version of find_crossing_old. 
     '''
-    v = I.np.array(v) > thresh
+    v = np.array(v) > thresh
     thresh = 0.5
-    upcross = I.np.where((v[:-1] < thresh) & (v[1:] > thresh))[0] + 1
-    downcross = I.np.where((v[:-1] > thresh) & (v[1:] < thresh))[0] + 1
+    upcross = np.where((v[:-1] < thresh) & (v[1:] > thresh))[0] + 1
+    downcross = np.where((v[:-1] > thresh) & (v[1:] < thresh))[0] + 1
     if len(upcross) == 0:
         return [[], []]
     downcross = downcross[downcross > upcross[0]]
@@ -152,10 +152,10 @@ def voltage_base(t, v, stim_delay):
         float: Mean voltage between 0.5*stim_delay and 0.75*stim_delay.
     """
     try:
-        ta = I.np.nonzero(
+        ta = np.nonzero(
             t >= 0.5 *
             stim_delay)[0][0]  # list(t >= 0.5*stim_delay).index(True)
-        ts = I.np.nonzero(
+        ts = np.nonzero(
             t >= 0.75 *
             stim_delay)[0][0]  # list(t >= 0.75*stim_delay).index(True)
     except IndexError:
@@ -178,7 +178,7 @@ def voltage_base2(voltage_traces, recSiteID, t0):
     """
     t = voltage_traces['baseline']['tVec']
     v = voltage_traces['baseline']['vList']['recSiteID']
-    i = I.np.argmin(I.np.abs(t - t0))
+    i = np.argmin(np.abs(t - t0))
     return v[i]
 
 
@@ -231,7 +231,7 @@ def AP_height(t, v, thresh=None):
         numpy.ndarray: Array of AP amplitudes.
     """
     out = [max(v[ti:tj]) for ti, tj in zip(*find_crossing(v, thresh))]
-    return I.np.array(out)
+    return np.array(out)
 
 
 def AP_width(t, v, thresh):
@@ -247,7 +247,7 @@ def AP_width(t, v, thresh):
         numpy.ndarray: Array of AP widths (in seconds) for each detected AP in the voltage trace `v`.
     """
     w = [t[tk] - t[ti] for ti, tk in zip(*find_crossing(v, thresh))]
-    return I.np.array(w)
+    return np.array(w)
 
 
 AP_width_check_1AP = AP_height_check_1AP
@@ -266,7 +266,7 @@ def AP_width(t, v, thresh):
         numpy.ndarray: Array of AP widths.
     """
     w = [t[tk] - t[ti] for ti, tk in zip(*find_crossing(v, thresh))]
-    return I.np.array(w)
+    return np.array(w)
 
 
 AP_width_check_1AP = AP_height_check_1AP
@@ -303,10 +303,10 @@ def AHP_depth_abs(t, v, thresh=None):
     Returns:
         numpy.ndarray: Array of AHP depths, one for each action potential in the voltage trace.
     """
-    apIndexList = I.np.array(find_crossing(v, thresh))
+    apIndexList = np.array(find_crossing(v, thresh))
     apIndexList = [(apIndexList[1, lv], apIndexList[0, lv + 1])
                    for lv in range(apIndexList.shape[1] - 1)]  # the gaps
-    return I.np.array([min(v[ti:tj]) for ti, tj in apIndexList])
+    return np.array([min(v[ti:tj]) for ti, tj in apIndexList])
 
 
 # Original: Returns 20std if no spike has been detected. Returns 20std if there are less than two
@@ -512,7 +512,7 @@ def BAC_ISI_check_repolarization(t, v, stim_end=None, repolarization=None):
     Returns:
         bool: True if the membrane potential has repolarized to the specified value, False otherwise.
     """
-    i = I.np.nonzero(t >= stim_end)[0][0]
+    i = np.nonzero(t >= stim_end)[0][0]
     return v[i] < repolarization
 
 

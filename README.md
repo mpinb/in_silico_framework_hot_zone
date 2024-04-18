@@ -13,6 +13,7 @@ https://github.com/mpinb/in_silico_framework/assets/38312921/adcc0ea7-154e-4713-
 
 </div>
 
+ISF is a multi-scale simulation environment for the generation, simulation, and analysis of neurobiologically tractable single cell and network-level simulations.
 
 ## Installation
 
