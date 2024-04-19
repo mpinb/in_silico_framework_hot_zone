@@ -282,19 +282,6 @@ print_module_versions()
 import barrel_cortex
 from barrel_cortex import excitatory, inhibitory, color_cellTypeColorMap, color_cellTypeColorMap_L6paper, color_cellTypeColorMap_L6paper_with_INH
 
-# =====================
-#  comptabilitity
-# =====================
-
-# For Py2 / Py3
 import compatibility
-# For old pickled data. This is to ensure backwards compatibility with the Oberlaender lab in MPINB, Bonn. Added on 16/04/2024
-# Since previous versions of this codebase used pickle as a data format, pickle now tries to import modules that don't exist anymore upon loading
-# For this reason, we save the renamed packages/modules under an additional name (i.e. their old name)
-from data_base import model_data_base
-import simrun
-sys.modules['simrun3'] = simrun  # simrun used to be simrun2 and simrun3 (separate packages). Pickle still wants a simrun3 to exist.
-sys.modules['model_data_base'] = model_data_base  # this used to be a top-level package
-
 # Set logging level back to WARNING to suppress verbosity in regular usage
 logger.setLevel(logging.WARNING)
