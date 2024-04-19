@@ -11,7 +11,12 @@ from . import reader
 class Cell(object):
     '''
     Cell object providing morphological information
-    and hoc interface
+    and hoc interface.
+
+    This class is specialized for use with the single cell input mapper.
+
+    WARNING: while it contains similar methods, this is not the same class as :class single_cell_parser.cell.Cell:
+
     '''
 
     def __init__(self):

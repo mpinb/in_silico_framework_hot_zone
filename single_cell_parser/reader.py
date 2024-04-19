@@ -6,7 +6,7 @@ Created on Mar 8, 2012
 
 import numpy as np
 from . import scalar_field
-from model_data_base.mdbopen import mdbopen
+from data_base.dbopen import dbopen
 import logging
 
 logger = logging.getLogger("ISF").getChild(__name__)
@@ -38,7 +38,7 @@ def read_hoc_file(fname=''):
     if not fname.endswith('.hoc') and not fname.endswith('.HOC'):
         raise IOError('Input file is not a .hoc file!')
 
-    with mdbopen(fname, 'r') as neuronFile:
+    with dbopen(fname, 'r') as neuronFile:
         logger.info("Reading hoc file %s" % fname)
         #        cell = co.Cell()
         #        simply store list of edges
@@ -180,7 +180,7 @@ def read_scalar_field(fname=''):
     if not fname.endswith('.am') and not fname.endswith('.AM'):
         raise IOError('Input file is not an Amira Mesh file!')
 
-    with mdbopen(fname, 'r') as meshFile:
+    with dbopen(fname, 'r') as meshFile:
         #            logger.info "Reading Amira Mesh file", fname
         mesh = None
         extent, dims, bounds, origin, spacing = [], [], [], [], [0., 0., 0.]
@@ -236,7 +236,7 @@ def read_synapse_realization(fname):
         raise IOError('Input file is not a synapse realization file!')
 
     synapses = {}
-    with mdbopen(fname, 'r') as synFile:
+    with dbopen(fname, 'r') as synFile:
         for line in synFile:
             stripLine = line.strip()
             if not stripLine or stripLine[0] == '#':
@@ -258,7 +258,7 @@ def read_pruned_synapse_realization(fname):
         raise IOError('Input file is not a synapse realization file!')
 
     synapses = {}
-    with mdbopen(fname, 'r') as synFile:
+    with dbopen(fname, 'r') as synFile:
         for line in synFile:
             stripLine = line.strip()
             if not stripLine or stripLine[0] == '#':
@@ -288,7 +288,7 @@ def read_functional_realization_map(fname):
     connections = {}
     anatomicalID = None
     lineCnt = 0
-    with mdbopen(fname, 'r') as synFile:
+    with dbopen(fname, 'r') as synFile:
         for line in synFile:
             stripLine = line.strip()
             if not stripLine:
@@ -323,7 +323,7 @@ def read_synapse_activation_file(fname):
     #    logger.info 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
     synapses = {}
     lineCnt = 0
-    with mdbopen(fname, 'r') as synFile:
+    with dbopen(fname, 'r') as synFile:
         for line in synFile:
             if not lineCnt:
                 lineCnt += 1
@@ -373,7 +373,7 @@ def read_complete_synapse_activation_file(fname):
     coded as tuples: (synapse ID, soma distance, section ID, point ID, structure label, [t1, t2, ... , tn])
     '''
     synapses = {}
-    with mdbopen(fname, 'r') as synFile:
+    with dbopen(fname, 'r') as synFile:
         for line in synFile:
             line = line.strip()
             if not line:
@@ -412,7 +412,7 @@ def read_spike_times_file(fname):
         in each trial as values
     '''
     spikeTimes = {}
-    with mdbopen(fname, 'r') as spikeTimeFile:
+    with dbopen(fname, 'r') as spikeTimeFile:
         for line in spikeTimeFile:
             line = line.strip()
             if not line:
@@ -450,7 +450,7 @@ def read_synapse_weight_file(fname):
     #    logger.info 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
     synWeights, synLocations = {}, {}
     lineCnt = 0
-    with mdbopen(fname, 'r') as synFile:
+    with dbopen(fname, 'r') as synFile:
         for line in synFile:
             if not lineCnt:
                 lineCnt += 1
@@ -490,7 +490,7 @@ def read_landmark_file(landmarkFilename):
         raise RuntimeError(errstr)
 
     landmarks = []
-    with mdbopen(landmarkFilename, 'r') as landmarkFile:
+    with dbopen(landmarkFilename, 'r') as landmarkFile:
         readPoints = False
         for line in landmarkFile:
             stripLine = line.strip()

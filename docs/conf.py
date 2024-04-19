@@ -20,7 +20,16 @@ author = 'Arco Bast, Amir Najafgholi, Maria Royo Cano, Rieke Fruengel, Matt Keat
 release = '0.0.1'
 version = '0.0.1'
 ## Make your modules available in sys.path
-sys.path.append(os.path.join(os.path.abspath(os.pardir)))
+project_root = os.path.join(os.path.abspath(os.pardir))
+sys.path.append(project_root)
+## copy over tutorials
+import shutil
+shutil.rmtree(os.path.join(project_root, 'docs', 'tutorials'), ignore_errors=True)
+shutil.copytree(os.path.join(project_root, 'getting_started', 'tutorials'),
+                os.path.join(project_root, 'docs', 'tutorials'))
+shutil.copy(os.path.join(project_root, 'getting_started', 'Introduction_to_ISF.ipynb'),
+                os.path.join(project_root, 'docs', 'Introduction_to_ISF.ipynb'))
+
 
 # -- General configuration ------------------------------------------------
 
@@ -39,7 +48,8 @@ extensions = [
     'sphinx.ext.intersphinx',
     ## Include autosymmary
     'sphinx.ext.autosummary',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    'nbsphinx'
 ]
 
 ## Include Python objects as they appear in source files
@@ -51,9 +61,15 @@ autodoc_default_options = {
     'show-inheritance': True,
 }
 ## Generate autodoc stubs with summaries from code
-autosummary_generate = True
+autosummary_generate = ['modules.rst']
 autosummary_imported_members = False  # do not show all imported modules per module, this is too bloated
 paramlinks_hyperlink_param = 'name'
+
+# Don't run notebooks
+nbsphinx_execute = 'never'
+pygments_style = "python"
+nbsphinx_codecell_lexer = "python"
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -134,6 +150,12 @@ html_theme_options = {
 html_static_path = ['_static']
 html_css_files = [
     'default.css',  # relative to html_static_path defined above
+    'style.css',
+    'downarr.svg'
+]
+
+html_js_files = [
+    'overview.js'
 ]
 
 # Add any extra paths that contain custom files (such as robots.txt or

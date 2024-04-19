@@ -13,8 +13,8 @@ pushd . # save this dir on stack
 WORKING_DIR=$(pwd)
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda3-2020.11-Linux-x86_64.sh
-channels=$SCRIPT_DIR/../../mechanisms/channels_py3
-netcon=$SCRIPT_DIR/../../mechanisms/netcon_py3
+CONDA_INSTALL_PATH=""
+INSTALL_NODE=false
 
 function print_title {
     local str=$1
@@ -27,22 +27,41 @@ function print_title {
     echo ""
 }
 
-usage() {
+function usage {
     cat << EOF
-Usage: ./isf-install.sh [-p <conda-install-path>]
+Usage: install [-p|--path <conda-install-path>] [--node]
 
-    -h                          Display help
-    -p <conda-install-path>     The path where conda will be installed.
+    -h | --help     Display help
+    -p | --path     The path where the conda environment conda will be installed.
+    --node 			Install nodejs along with the python environment
 EOF
 }
 
 # ---------- Read command line options ----------#
-CONDA_INSTALL_PATH=${1:-""}  # default is unset ("")
-# If still unset (i.e. not given on cmdline): ask user
-echo $CONDA_INSTALL_PATH
-while [ -z $CONDA_INSTALL_PATH ]; do
-    read -p "Enter the directory in which the Anaconda environment should be installed: " CONDA_INSTALL_PATH
-done
+function _setArgs {
+  while [ "${1:-}" != "" ]; do
+    case "$1" in
+      "-p" | "--path")
+        shift
+        CONDA_INSTALL_PATH="$1"
+        ;;
+      "--node")
+        INSTALL_NODE=true
+        ;;
+      "-h" | "--help")
+        usage
+        exit 0
+        ;;
+    esac
+    shift
+  done
+  shift $((OPTIND-1))
+}
+_setArgs "$@";
+if [ -z "$CONDA_INSTALL_PATH"  ]; then
+    echo 'Missing -p or --path. Please provide an installation path for the environment.' >&2
+    exit 1
+fi
 
 # -------------------- 0. Setup -------------------- #
 print_title "0/6. Preliminary checks"
@@ -129,6 +148,12 @@ echo "Installing In-Silico-Framework conda dependencies."
 sed "s|https://.*/|$SCRIPT_DIR/downloads/conda_packages/|" $SCRIPT_DIR/conda_requirements.txt > $SCRIPT_DIR/tempfile
 conda update --file $SCRIPT_DIR/tempfile --quiet
 
+# 2.2 -- Installing nodejs if necessary
+if [ "$INSTALL_NODE" = true ]; then
+    echo "Installing nodejs"
+    conda install -y nodejs -c conda-forge --repodata-fn=repodata.json
+fi
+
 # -------------------- 3. Installing PyPI dependencies -------------------- #
 print_title "3/6. Installing PyPI dependencies"
 # 3.0 -- Downloading In-Silico-Framework pip dependencies (if necessary).
@@ -141,7 +166,7 @@ fi
 echo "Installing In-Silico-Framework pip dependencies."
 python -m pip --no-cache-dir install --no-deps -r $SCRIPT_DIR/pip_requirements.txt --no-index --find-links $SCRIPT_DIR/downloads/pip_packages
 
-# -------------------- 5. Patching pandas-msgpack -------------------- #
+# -------------------- 4. Patching pandas-msgpack -------------------- #
 print_title "4/6. Installing & patching pandas-msgpack"
 PD_MSGPACK_HOME="$SCRIPT_DIR/pandas-msgpack"
 if [ ! -d "${PD_MSGPACK_HOME}" ]; then
@@ -153,18 +178,32 @@ fi
 cd $PD_MSGPACK_HOME; python setup.py build_ext --inplace --force install
 pip list | grep pandas
 
-# -------------------- 6. installing the ipykernel -------------------- #
-print_title "5/6. Installing & patching pandas-msgpack"
+# -------------------- 5. installing the ipykernel -------------------- #
+print_title "5/6. Installing the ipykernel"
 python -m ipykernel install --name base --user --display-name isf3.8
 
-# -------------------- 7. Compiling NEURON mechanisms -------------------- #
+# -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
-cd $channels; nrnivmodl
-cd $netcon; nrnivmodl
+shopt -s extglob
+for d in $(find $SCRIPT_DIR/../../mechanisms/*/*py3* -type d)
+do
+    if [ $(find $d -maxdepth 1 -name "*.mod" -print -quit) ]; then
+        echo "compiling mechanisms in $d"
+        cd $d; nrnivmodl || exit 1;
+        if ! find "$d" -type f -path "*/.libs/libnrnmech.so" -print -quit | grep -q .; then
+            echo "Error: Could not find libnrnmech.so in $d/*/.libs. Compilation of neuron mechanisms was unsuccesful."
+            exit 1
+        fi
+    fi
+done
+
+
+
 
 # -------------------- Cleanup -------------------- #
+echo ""
+echo ""
 echo "Succesfully installed In-Silico-Framework for Python 3.8"
 rm $SCRIPT_DIR/tempfile
-popd
 exit 0

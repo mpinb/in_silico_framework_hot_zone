@@ -6,7 +6,7 @@ Created on Apr 2, 2012
 
 import numpy as np
 import single_cell_parser as scp
-from model_data_base.mdbopen import mdbopen
+from data_base.dbopen import dbopen
 
 
 def compute_synapse_distances_times(fname, cell, t=None, synTypes=None):
@@ -63,7 +63,7 @@ def synapse_distances(pname):
         name += '_'
         name += synType
         name += '_syn_distances.csv'
-        with mdbopen(name, 'w') as distFile:
+        with dbopen(name, 'w') as distFile:
             header = 'Distance to soma (micron)\n'
             distFile.write(header)
             for d in dist:
@@ -90,7 +90,7 @@ def synapse_distances_2D(pname):
         name += '_'
         name += synType
         name += '_syn_distances_2Dprojected.csv'
-        with mdbopen(name, 'w') as distFile:
+        with dbopen(name, 'w') as distFile:
             header = 'Distance to soma (micron)\n'
             distFile.write(header)
             for d in dist:

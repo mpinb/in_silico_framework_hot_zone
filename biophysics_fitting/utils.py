@@ -264,8 +264,13 @@ def execute_in_child_process_kept_alive(fun):
 
 class StreamToLogger(object):
     """
-    Fake file-like stream object that redirects writes to a logger instance.
-    Used for reading in .hoc files that provide output due to various print statements.
+    Wrapper for a stream object that redirects writes to a logger instance.
+    Can be used as a context manager::
+
+        with StreamToLogger() as sys.stdout:
+            do_something()
+    
+    Used for reading in .hoc files that provide output due to various print statements in the `.hoc` file, or capturing NEURON output.
     """
 
     def __init__(self, logger, level):

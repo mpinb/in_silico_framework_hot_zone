@@ -1,11 +1,12 @@
-"""Initialisation file for the barrel_cortex module
+"""
+This package contains barrel cortex specific code and data:
 
-This module should contain everything that's related to the entire barrel cortex.
-It includes:
+    - average_barrel_field_L45_border.am: barrel cortex geometry, to be rendered in AMIRA
+    - barrel_cortex.py: contains functions specific to barrel cortex simulations, such as synaptic strength readout, methods to move morphologies in barrel cortex...
     - average_barrel_field_L45_border.am: barrel cortex geometry, to be rendered in AMIRA
     - barrel_cortex.py: contains functions specific to barrel cortex simulations, such as synaptic strength readout, methods to move morphologies in barrel cortex...
 
-Date: 10/01/2023
+Last updated: 18/03/2024
 """
 import pandas as pd
 from functools import partial
@@ -13,7 +14,7 @@ import numpy as np
 import os
 import six
 # import single_cell_parser as scp # moved to bottom to resolve import error
-from model_data_base import utils
+from data_base import utils
 
 
 def get_EPSP_measurement():
@@ -224,7 +225,7 @@ def transform_point(p, x, y, z, coordinate_system=None):
 
 
 def get_soma_centroid(hocpath):
-    from model_data_base.utils import silence_stdout
+    from data_base.utils import silence_stdout
     source_soma_points = get_cell_object_from_hoc(hocpath).soma.pts
     soma_centroid = np.array(source_soma_points).mean(axis=0)
     return soma_centroid

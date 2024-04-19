@@ -10,8 +10,7 @@ set -e  # exit if error occurs
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 anaconda_installer=Anaconda2-4.2.0-Linux-x86_64.sh
-channels=$SCRIPT_DIR/../../mechanisms/channels_py2
-netcon=$SCRIPT_DIR/../../mechanisms/netcon_py2
+CONDA_INSTALL_PATH=""
 
 function print_title {
     local str=$1
@@ -24,22 +23,37 @@ function print_title {
     echo ""
 }
 
-usage() {
+function usage {
     cat << EOF
-Usage: ./isf-install.sh [-p <conda-install-path>]
+Usage: ./isf-install.sh [-p|--path <conda-install-path>] [--node]
 
-    -h                          Display help
-    -p <conda-install-path>     The path where conda will be installed.
+    -h | --help     Display help
+    -p | --path     The path where the conda environment conda will be installed.
 EOF
 }
 
 # ---------- Read command line options ----------#
-CONDA_INSTALL_PATH=${1:-""}  # default is unset ("")
-# If still unset (i.e. not given on cmdline): ask user
-echo $CONDA_INSTALL_PATH
-while [ -z $CONDA_INSTALL_PATH ]; do
-    read -p "Enter the directory in which the Anaconda environment should be installed: " CONDA_INSTALL_PATH
-done
+function _setArgs {
+  while [ "${1:-}" != "" ]; do
+    case "$1" in
+      "-p" | "--path")
+        shift
+        CONDA_INSTALL_PATH="$1"
+        ;;
+      "-h" | "--help")
+        usage
+        exit 0
+        ;;
+    esac
+    shift
+  done
+}
+
+_setArgs "$@";
+if [ -z $CONDA_INSTALL_PATH  ]; then
+        echo 'Missing -p or --path. Please provide an installation path for the environment.' >&2
+        exit 1
+fi
 
 # -------------------- 0. Setup -------------------- #
 print_title "0/5. Preliminary checks"
@@ -142,8 +156,18 @@ python -m ipykernel install --name base --user --display-name isf2.7
 # -------------------- 6. Compiling NEURON mechanisms -------------------- #
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
-cd $channels; nrnivmodl
-cd $netcon; nrnivmodl
+shopt -s extglob
+for d in $(find $SCRIPT_DIR/../../mechanisms/*/*py2* -type d)
+do
+    if [ $(find $d -maxdepth 1 -name "*.mod" -print -quit) ]; then
+        echo "compiling mechanisms in $d"
+        cd $d; nrnivmodl || exit 1;
+        if ! find "$d" -type f -path "*/.libs/libnrnmech.so" -print -quit | grep -q .; then
+            echo "Error: Could not find libnrnmech.so in $d/*/.libs. Compilation of neuron mechanisms was unsuccesful."
+            exit 1
+        fi
+    fi
+done
 
 # -------------------- Cleanup -------------------- #
 echo "Succesfully installed In-Silico-Framework for Python 2.7."

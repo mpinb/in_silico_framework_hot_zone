@@ -89,6 +89,8 @@ def get_Simulator(fixed_params, step=False):
         ['hot_zone', param_to_kwargs(set_hot_zone)])
     s.setup.cell_generator = scp.create_cell
     #s.setup.cell_modify_funs.append('apical_dendrite_scaling', apical_dendrite_scaling)
+    
+    # --- Stimulus setup functions
     s.setup.stim_setup_funs.append(
         ['bAP.stim', param_to_kwargs(setup_stim.setup_bAP)])
     s.setup.stim_setup_funs.append(
@@ -103,24 +105,32 @@ def get_Simulator(fixed_params, step=False):
         s.setup.stim_setup_funs.append(
             ['StepThree.stim',
              param_to_kwargs(setup_stim.setup_StepThree)])
-    run_fun_bAP_BAC = partial(run_fun,
-                              T=34.0,
-                              Vinit=-75.0,
-                              dt=0.025,
-                              recordingSites=[],
-                              tStart=0.0,
-                              tStop=600.0,
-                              vardt=True)
+    
+    # --- Stimulus run functions
+    ## bAP and BAC
+    run_fun_bAP_BAC = partial(
+        run_fun,
+        T=34.0,
+        Vinit=-75.0,
+        dt=0.025,
+        recordingSites=[],
+        tStart=0.0,
+        tStop=600.0,
+        vardt=True)
     s.setup.stim_run_funs.append(['bAP.run', param_to_kwargs(run_fun_bAP_BAC)])
     s.setup.stim_run_funs.append(['BAC.run', param_to_kwargs(run_fun_bAP_BAC)])
-    run_fun_Step = partial(run_fun,
-                           T=34.0,
-                           Vinit=-75.0,
-                           dt=0.025,
-                           recordingSites=[],
-                           tStart=0.0,
-                           tStop=3000.0,
-                           vardt=True)
+    
+    ## Step currents
+    run_fun_Step = partial(
+        run_fun,
+        T=34.0,
+        Vinit=-75.0,
+        dt=0.025,
+        recordingSites=[],
+        tStart=0.0,
+        tStop=3000.0,
+        vardt=True)
+    
     if step:
         s.setup.stim_run_funs.append(
             ['StepOne.run', param_to_kwargs(run_fun_Step)])
@@ -128,10 +138,13 @@ def get_Simulator(fixed_params, step=False):
             ['StepTwo.run', param_to_kwargs(run_fun_Step)])
         s.setup.stim_run_funs.append(
             ['StepThree.run', param_to_kwargs(run_fun_Step)])
+        
+    # --- Stimulus response measurement functions
     s.setup.stim_response_measure_funs.append(
         ['bAP.hay_measure', param_to_kwargs(record_bAP)])
     s.setup.stim_response_measure_funs.append(
         ['BAC.hay_measure', param_to_kwargs(record_BAC)])
+    
     if step:
         s.setup.stim_response_measure_funs.append(
             ['StepOne.hay_measure',

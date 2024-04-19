@@ -1,6 +1,6 @@
 # Installation of in-silico-framework followed by CI tests.
 # Builds ISF locally on the MPINB-hosted runner and runs all tests
-name: ISF Py 2.7
+name: Py 2.7
 # Controls when the workflow will run
 
 on:
@@ -65,14 +65,16 @@ jobs:
           echo "Launching Dask server on $name"
           echo "Using port $port_number and bokeh port $bokeh_port"
 
+          export DASK_CONFIG=./config/dask_config.yml
+
           echo "------------ Running tests -------------"
           unset DISPLAY
           if [ ! -d "$HOME/tmp" ]; then
             mkdir $HOME/tmp
           fi
           export TMPDIR=$HOME/tmp
-          (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port > ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1)&
-          (dask-worker localhost:$port_number --nthreads 1 --nprocs 6 --memory-limit=100e15 > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1)&
+          (dask-scheduler --port=$port_number --bokeh-port=$bokeh_port --host=localhost --preload="import mechanisms, compatibility"> ./tests/logs/dask_scheduler_${{ github.run_id }}.log 2>&1) & \
+          (dask-worker localhost:$port_number --nthreads 1 --nprocs 6 --memory-limit=100e15 > ./tests/logs/dask_workers_${{ github.run_id }}.log 2>&1) & \
           python -m pytest -rsx -vv --color=yes --dask_server_port $port_number tests/ || exit 1;
           rm -rf $HOME/tmp
 
@@ -87,4 +89,6 @@ jobs:
         if: ${{ always() }} 
         with:
           name: ${{ github.run_id }}_logs
-          path: ./tests/logs/
+          path: |
+            ./tests/logs/
+            $HOME/build_output_2.7.txt

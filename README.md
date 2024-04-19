@@ -11,24 +11,22 @@
 
 https://github.com/mpinb/in_silico_framework/assets/38312921/adcc0ea7-154e-4713-b81f-4ce2fc4b33c4
 
-
 </div>
 
+ISF is a multi-scale simulation environment for the generation, simulation, and analysis of neurobiologically tractable single cell and network-level simulations.
 
 ## Installation
 
-Every student needs to be able to synchronize their repository with https://github.com/research-center-caesar/in_silico_framework. Detailed instructions on how to install the repo are given in the [installer directory](./installer/).
-
-## Documentation
-
-The current state of the documentation is currently [locally hosted on ibs3005](http://10.40.130.27:8080/) (only accessible via somalogin01/02).
-
-Documentation is an ongoing endeavour. It is generated automatically from docstrings using Sphinx autosummary. Missing entries in the documentation are generally due to missing docstrings in the source code.
+Detailed instructions on how to install the repo are given in the [installer directory](./installer/).
 
 ## Usage
 
-The [Interface module](./Interface.py) glues together all submodules and gives direct access to them. Rather than importing individual submodules, it is recommended to access them via Interface. Most of your code will probably start with
-```python
-import Interface as I
-```
-See the Introduction in [getting_started](getting_started/Introduction_to_ISF.ipynb) for more information.
+The [getting started directory](./getting_started) provides an introduction on how to use ISF, including:
+- [basic usage](./getting_started/Introduction_to_ISF.ipynb)
+- [data analysis](<./getting_started/tutorials/1. data analysis>)
+- [biophysics](<./getting_started/tutorials/2. biophysics>)
+- [synaptic simulations](<./getting_started/tutorials/3. synaptic simulations>)
+- [reduced models](<./getting_started/tutorials/4. reduced models>)
+- [network-level simulations](<./getting_started/tutorials/5. network simulations>)
+- [visualization](<./getting_started/tutorials/6. visualization>)
+- [data management](<./getting_started/tutorials/7. data management>)

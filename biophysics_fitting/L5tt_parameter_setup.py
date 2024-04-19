@@ -277,6 +277,35 @@ def get_L5tt_template():
     from sumatra.parameters import NTParameterSet
     return NTParameterSet(p['neuron'])
 
+def get_L5tt_template_v2():
+    neup = get_L5tt_template()
+    for loc in neup:
+        if loc == 'filename':
+            continue
+        mechanisms = neup[loc]['mechanisms']['range']
+        if 'CaDynamics_E2' in mechanisms:
+            mechanisms['CaDynamics_E2_v2'] = mechanisms['CaDynamics_E2']
+            del neup[loc]['mechanisms']['range']['CaDynamics_E2']
+    apic_skv31 = neup['ApicalDendrite']['mechanisms']['range']['SKv3_1']
+    apic_skv31['offset'] = None
+    apic_skv31['slope'] = None
+    apic_skv31['spatial'] = 'linear'
+    apic_skv31['distance'] = 'relative'
+    neup['cell_modify_functions'] = {'scale_apical': {'scale': None}}
+            
+    from sumatra.parameters import NTParameterSet
+    p = {
+        'NMODL_mechanisms': {
+            'channels': '/'
+        },
+        'info': {
+            'author': 'regger and abast',
+            'date': '2018',
+            'name': 'scp_optimizer'
+        },
+        'mech_globals': {},
+        'neuron': neup}
+    return NTParameterSet(p['neuron'])
 
 def set_morphology(cell_param, filename=None):
     cell_param.filename = filename
@@ -284,14 +313,18 @@ def set_morphology(cell_param, filename=None):
 
 
 def set_ephys(cell_param, params=None):
-    'updates cell_param file. parameter names reflect the hay naming convention.'
+    """
+    Updates cell_param file. Parameter names reflect the hay naming convention.
+    """
     for k, v in six.iteritems(params):
         cell_param[hay_param_to_scp_neuron_param(k)] = float(v)
     return cell_param
 
 
 def set_param(cell_param, params=None):
-    'updates cell_param file. parameter names reflect the hierarchy in the cell_param file itself.'
+    """
+    Updates cell_param file. Parameter names reflect the hierarchy in the cell_param file itself.
+    """
     for k, v in six.iteritems(params):
         p = cell_param
         for kk in k.split('.')[:-1]:
@@ -320,6 +353,9 @@ def set_many_param(cell_param, params=None):
 
 
 def set_hot_zone(cell_param, min_=None, max_=None, outsidescale_sections=None):
+    """
+    Insert Ca_LVAst and Ca_HVA channels along the apical dendrite between ``min_`` and ``max_`` distance from the soma.
+    """
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['begin'] = min_
     cell_param['ApicalDendrite'].mechanisms.range['Ca_LVAst']['end'] = max_
     cell_param['ApicalDendrite'].mechanisms.range['Ca_HVA']['begin'] = min_

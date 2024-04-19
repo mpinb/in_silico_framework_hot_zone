@@ -142,7 +142,7 @@ def save_cells_landmark_files_vtk(
     celltype_nr_mapper = {ct: i for i, ct in enumerate(sa.celltype.unique())}
     logger.info("Celltype nr mapper: {}".format(celltype_nr_mapper))
 
-    from simrun2.utils import select_cells_that_spike_in_interval
+    from simrun.utils import select_cells_that_spike_in_interval
     
     sa = sa.copy()
     if 'synapse_type' in sa.columns:
@@ -193,7 +193,7 @@ def write_vtk_skeleton_file(
         out_name (_type_): _description_
         out_dir (_type_): _description_
         time_point (_type_): _description_
-        point_scalar_data ({'name': [[data_per_section]]}, optional): Scalar data for each point in the .vtk file. Each entry in the dictionary is a nested list that defines scalar data for all points in a section.
+        point_scalar_data ({'name': [data_per_point]}, optional): Scalar data for each point in the .vtk file. Each entry in the dictionary is a nested list that defines scalar data for all points in a section.
         n_decimals (int, optional): _description_. Defaults to 2.
     """
 
@@ -223,16 +223,14 @@ def write_vtk_skeleton_file(
     sections = lookup_table['sec_n'].unique()
     for dataname, data in point_scalar_data.items():
         assert len(data) == len(lookup_table), \
-            "Length of point scalar data \"{}\" does not match number of points. Scalar data: {}, sections: {}".format(dataname, len(data), len(sections))
-        
-    # VTK gets angry if you re-use a point for multiple lines
-    # So we will duplicate the last point of each parent section
-    lookup_table = lookup_table
+            "Length of point scalar data \"{}\" does not match number of points. Scalar data: {}. Amount of points: {}".format(dataname, len(data), len(lookup_table))
+
     
     # write out all data to .vtk file
-    with open(os.path.join(out_dir, out_name),
-                "w+",
-                encoding="utf-8") as of:
+    with open(
+        os.path.join(out_dir, out_name),
+        "w+",
+        encoding="utf-8") as of:
         of.write(header_(out_name))
 
         # Points

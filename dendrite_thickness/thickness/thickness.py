@@ -32,18 +32,19 @@ logger = logging.getLogger("ISF").getChild(__name__)
 
 class ThicknessExtractor:
 
-    def __init__(self,
-                 points,
-                 image_file=None,
-                 xy_resolution=0.092,
-                 z_resolution=0.5,
-                 ray_length_front_to_back_in_micron=20,
-                 number_of_rays=36,
-                 threshold_percentage=0.5,
-                 max_seed_correction_radius_in_micron=10,
-                 _3d=False,
-                 image_stack=None,
-                 slice_name=None):
+    def __init__(
+            self,
+            points,
+            image_file=None,
+            xy_resolution=0.092,
+            z_resolution=0.5,
+            ray_length_front_to_back_in_micron=20,
+            number_of_rays=36,
+            threshold_percentage=0.5,
+            max_seed_correction_radius_in_micron=10,
+            _3d=False,
+            image_stack=None,
+            slice_name=None):
         """ This is the main method for extracting Thickness
         - Inputs:
             1. am_points: must be in the type transformation.Data.coordinate_2d, so they are a list of
@@ -200,7 +201,6 @@ class ThicknessExtractor:
         for i, ray_indices in enumerate(rays_indices):
 
             ray_length = len(ray_indices)
-            assert ray_length % 2 == 1, "ray_length should be uneven"
             half_ray_length = int((ray_length - 1) / 2)
 
             back_contour_index = self.get_contour_index(
