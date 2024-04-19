@@ -62,7 +62,7 @@ def setup_dask_workers(management_dir, wait_for_workers=False):
     #     nprocs=n_cpus, sfile=sfile)
     # print(command)
     # os.system(command)
-    command = '''dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --local-directory $JOB_TMPDIR --memory-limit=100e9 &'''
+    command = '''dask-worker --nthreads 1  --nprocs {nprocs} --scheduler-file={sfile} --local-directory $TMPDIR --memory-limit=100e9 &'''
     command = command.format(nprocs=n_cpus, sfile=sfile3)
     print(command)
     os.system(command)
