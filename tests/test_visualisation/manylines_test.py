@@ -47,7 +47,7 @@ class TestManyLines:
     def test_manylines_grouped(self):
         df = self.df
         ddf = dd.from_pandas(df, npartitions=3)
-        fig, ax = plt.subplot()
+        fig, ax = plt.subplots()
         manylines(
             df,
             axis = [1, 10, 1, 10], 
@@ -58,7 +58,7 @@ class TestManyLines:
         if savefigs:
             fig.savefig(
                 os.path.join(self.tempdir, 'manylines_grouped_pandas.png'))
-        fig, ax = plt.subplot()
+        fig, ax = plt.subplots()
         manylines(
             ddf, 
             axis = [1, 10, 1, 10],
@@ -80,7 +80,7 @@ class TestManyLines:
             returnPixelObject=True,
             scheduler=client)
         assert isinstance(po, PixelObject)
-        fig, ax = plt.subplot()
+        fig, ax = plt.subplots()
         show_pixel_object(po, ax=ax)
         if savefigs:
             fig.savefig(
@@ -97,7 +97,7 @@ class TestManyLines:
             returnPixelObject = True,
             scheduler=client)
         assert isinstance(po, PixelObject)
-        fig, ax = plt.subplot()
+        fig, ax = plt.subplots()
         show_pixel_object(po, ax=ax)
         if savefigs:
             fig.savefig(
@@ -110,7 +110,7 @@ class TestManyLines:
             returnPixelObject = True,
             scheduler=client)
         assert isinstance(po, PixelObject)
-        fig, ax = plt.subplot()
+        fig, ax = plt.subplots()
         show_pixel_object(po, ax=ax)
         if savefigs:
             fig.savefig(

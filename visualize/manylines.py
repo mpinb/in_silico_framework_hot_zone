@@ -59,26 +59,26 @@ def manylines(
         fig = ax.get_figure()
 
     if isinstance(df, pd.DataFrame):
-        fig = manylines_helper(
+        ax = manylines_helper(
             df, 
             axis = axis, 
             colormap = colormap, 
             groupby_attribute = groupby_attribute, 
-            fig = fig if returnPixelObject else None
+            ax = ax if returnPixelObject else None
             )
 
     elif isinstance(df, dd.DataFrame):
         fun = lambda x: manylines_helper(
             x, 
-            fig = None, 
+            ax = None, 
             axis = axis, 
             colormap = colormap, 
             groupby_attribute = groupby_attribute, 
             figsize = figsize)
 
         def fun2(x):
-            fig = fun(x)
-            return pd.Series({'A': fig2np(fig)})
+            ax = fun(x)
+            return pd.Series({'A': fig2np(ax.get_figure())})
 
         figures_list = df.map_partitions(fun2, meta=('A', 'object'))
         if type(scheduler) == distributed.client.Client:
@@ -88,7 +88,7 @@ def manylines(
         else:
             raise NotImplementedError("Please provide either a distributed.client.Client object, or a string as scheduler.")
 
-        for _, img in enumerate(figures_list.values):
+        for img in figures_list.values:
             ax.imshow(img, interpolation='nearest', extent=axis, aspect='auto')
 
     else:
@@ -106,7 +106,7 @@ def manylines_helper(
         axis = None, 
         colormap = None, 
         groupby_attribute = None,
-        fig = None, 
+        ax = None, 
         figsize = (15,3)
         ):
     '''Helper function which runs on a single core and can be called by map_partitions()
@@ -133,7 +133,7 @@ def manylines_helper(
         raise RuntimeError(
             "Supported input: pandas.DataFrame. Recieved %s" % str(type(pdf)))
 
-    if fig is None:
+    if ax is None:
         # vgl: http://stackoverflow.com/questions/8218608/scipy-savefig-without-frames-axes-only-content
         fig = plt.figure(dpi=400, figsize=figsize)
         fig.patch.set_alpha(0.0)
@@ -143,7 +143,8 @@ def manylines_helper(
         fig.axes[0].get_yaxis().set_visible(False)
 
     else:
-        ax = fig.gca()
+        fig = ax.get_figure()
+
     
     if groupby_attribute is None:
         for _, row in pdf.iterrows():
