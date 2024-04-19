@@ -257,9 +257,6 @@ def get_client(client_port=38786, timeout=120):
         ip = gethostbyname(
             hostname
         )  # fetches the ip of the current host, usually "somnalogin01" or "somalogin02"
-        if 'soma' in hostname:
-            #we're on the soma cluster and have infiniband
-            ip = ip.replace('100', '102')  # a bit hackish, but it works
     logger.info("Getting client with ip {}".format(ip))
     c = Client(ip + ':' + client_port, timeout=timeout)
     logger.info("Got client {}".format(c))
