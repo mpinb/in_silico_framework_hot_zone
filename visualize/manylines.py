@@ -59,19 +59,21 @@ def manylines(
         fig = ax.get_figure()
 
     if isinstance(df, pd.DataFrame):
-        if returnPixelObject:
-            fig = manylines_helper(
-                df, axis = axis, colormap = colormap, 
-                groupby_attribute = groupby_attribute, fig = None)
-        else:
-            fig = manylines_helper(
-                df, axis = axis, colormap = colormap,
-                groupby_attribute = groupby_attribute, fig = fig)
+        fig = manylines_helper(
+            df, 
+            axis = axis, 
+            colormap = colormap, 
+            groupby_attribute = groupby_attribute, 
+            fig = returnPixelObject
+            )
 
     elif isinstance(df, dd.DataFrame):
         fun = lambda x: manylines_helper(
-            x, fig = None, axis = axis, 
-            colormap = colormap, groupby_attribute = groupby_attribute, 
+            x, 
+            fig = None, 
+            axis = axis, 
+            colormap = colormap, 
+            groupby_attribute = groupby_attribute, 
             figsize = figsize)
 
         def fun2(x):
@@ -82,8 +84,7 @@ def manylines(
         if type(scheduler) == distributed.client.Client:
             figures_list=scheduler.compute(figures_list).result()
         elif type(scheduler) == str:
-            figures_list = figures_list.compute(
-                    scheduler=scheduler)  #multiprocessing_scheduler)
+            figures_list = figures_list.compute(scheduler=scheduler)
         else:
             raise NotImplementedError("Please provide either a distributed.client.Client object, or a string as scheduler.")
 
@@ -95,9 +96,8 @@ def manylines(
             "Supported input: dask.dataframe and pandas.DataFrame. " +
             "Recieved %s" % str(type(df)))
 
-    assert isinstance(fig, plt.Figure)
     if returnPixelObject:
-        return PixelObject(axis, fig=fig)
+        return PixelObject(axis, ax=ax)
     else:
         return fig
 

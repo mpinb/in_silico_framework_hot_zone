@@ -8,11 +8,11 @@ import numpy as np
 class PixelObject():
     '''holds all the information necessary to reconstruct a plot out of an array'''
 
-    def __init__(self, extent, fig=None, array=None):
+    def __init__(self, extent, ax=None, array=None):
         s = "either fig or array has to be specified"
-        if fig is None and array is None:
+        if ax is None and array is None:
             raise ValueError(s)
-        if not fig is None and not array is None:
+        if not ax is None and not array is None:
             raise ValueError(s)
         if not extent:
             raise ValueError(
@@ -22,7 +22,8 @@ class PixelObject():
         if isinstance(array, np.ndarray):
             self.array = array
 
-        if fig is not None:
+        if ax is not None:
+            fig = ax.get_figure()
             self.array = fig2np(fig)
 
 
