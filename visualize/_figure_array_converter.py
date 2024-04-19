@@ -9,11 +9,10 @@ class PixelObject():
     '''holds all the information necessary to reconstruct a plot out of an array'''
 
     def __init__(self, extent, ax=None, array=None):
-        s = "either fig or array has to be specified"
         if ax is None and array is None:
-            raise ValueError(s)
+            raise ValueError("Please specify an ax or an array (not both)")
         if not ax is None and not array is None:
-            raise ValueError(s)
+            raise ValueError("Please specify either an ax, or an array, not both)")
         if not extent:
             raise ValueError(
                 "extent / axis has to be specified to generate PixelObject")
@@ -24,6 +23,8 @@ class PixelObject():
 
         if ax is not None:
             fig = ax.get_figure()
+            print(ax)
+            print(fig)
             self.array = fig2np(fig)
 
 

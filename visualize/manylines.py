@@ -48,8 +48,8 @@ def manylines(
         fig.patch.set_alpha(0.0)
         ax = fig.add_subplot(111)
         ax.patch.set_alpha(0.0)
-        fig.axes[0].get_xaxis().set_visible(False)
-        fig.axes[0].get_yaxis().set_visible(False)
+        ax.set_visible(False)
+        ax.get_yaxis().set_visible(False)
 
     elif ax is None:
         fig = plt.figure()
@@ -59,7 +59,7 @@ def manylines(
         fig = ax.get_figure()
 
     if isinstance(df, pd.DataFrame):
-        ax = manylines_helper(
+        fig, ax = manylines_helper(
             df, 
             axis = axis, 
             colormap = colormap, 
@@ -77,12 +77,12 @@ def manylines(
             figsize = figsize)
 
         def fun2(x):
-            ax = fun(x)
-            return pd.Series({'A': fig2np(ax.get_figure())})
+            fig, _ = fun(x)
+            return pd.Series({'A': fig2np(fig)})
 
         figures_list = df.map_partitions(fun2, meta=('A', 'object'))
         if type(scheduler) == distributed.client.Client:
-            figures_list=scheduler.compute(figures_list).result()
+            figures_list = scheduler.compute(figures_list).result()
         elif type(scheduler) == str:
             figures_list = figures_list.compute(scheduler=scheduler)
         else:
@@ -99,7 +99,7 @@ def manylines(
     if returnPixelObject:
         return PixelObject(axis, ax=ax)
     else:
-        return fig
+        return fig, ax
 
 def manylines_helper(
         pdf, 
@@ -169,4 +169,4 @@ def manylines_helper(
 
     if axis:
         ax.axis(axis)
-    return fig
+    return fig, ax
