@@ -85,7 +85,7 @@ def manylines(
             raise NotImplementedError("Please provide either a distributed.client.Client object, or a string as scheduler.")
 
         for _, img in enumerate(figures_list.values):
-            ax.imshow(img, interpolation='nearest', extent=ax, aspect='auto')
+            ax.imshow(img, interpolation='nearest', extent=axis, aspect='auto')
 
     else:
         raise RuntimeError(
