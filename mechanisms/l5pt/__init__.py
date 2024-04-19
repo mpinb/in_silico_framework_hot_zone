@@ -29,8 +29,9 @@ else:
 
 try:
     assert any(
-        [os.path.exists(os.path.join(parent, channels, a)) for a in arch])
-    assert any([os.path.exists(os.path.join(parent, netcon, a)) for a in arch])
+        [os.path.exists(os.path.join(parent, channels, a, '.libs')) for a in arch])
+    assert any([os.path.exists(os.path.join(parent, netcon, a, '.libs')) for a in arch])
+
 except AssertionError:
     logger.warning("neuron mechanisms are not compiled.")
     logger.warning("Trying to compile them. Only works, if nrnivmodl is in PATH")
