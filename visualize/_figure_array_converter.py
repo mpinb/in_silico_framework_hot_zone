@@ -27,6 +27,15 @@ class PixelObject():
 
 
 def show_pixel_object(pixelObject, ax=None):
+    """ Displays a PixelObject on an axis
+
+    Args:
+        pixelObject (PixelObject): the PixelObject to display
+        ax (matplotlib.pyplot.Axes): the axis to display the PixelObject on
+
+    Returns
+        ax (matplotlib.pyplot.Axes): the axis with the PixelObject displayed    
+    """
     ax.imshow(pixelObject.array,
                interpolation='nearest',
                extent=pixelObject.extent,

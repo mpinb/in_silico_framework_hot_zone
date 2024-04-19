@@ -25,19 +25,22 @@ def manylines(
     groupby_attribute = None, 
     figsize = (15,3), 
     returnPixelObject = False, 
-    scheduler=None):
-    '''
-    parallelizes the plot of many lines
+    scheduler=None
+    ):
+    '''Parallelizes the plot of many lines
     
     Args:
         df (pd.DataFrame): the dataframe containing voltage traces,
         ax (matplotlib.pyplot.Axes): an ax instance.
         axis (list): the ax limits, e.g. [1, 10, 1, 10]
-        colormap: a colormap
-        groupby_attribute: 
-        figsize (tupe(int)), the size of the Figure
+        colormap (dict): a colormap, mapping values for :arg:groupby_attribute to colors.
+        groupby_attribute (str): column name to group by.
+        figsize (tupe(int)): the size of the Figure
         returnPixelObject (bool): Whether or not to return as a PixelObject
         scheduler (distributed.client.Client | str, optional): a distributed scheduler.
+
+    Returns:
+        fig (matplotlib.pyplot.Figure): Figure object containing all lines defined in :arg:df
     '''
 
     if returnPixelObject:
@@ -94,25 +97,35 @@ def manylines(
 
     assert isinstance(fig, plt.Figure)
     if returnPixelObject:
-        return PixelObject(axis, ax=fig.gca())
+        return PixelObject(axis, fig=fig)
     else:
         return fig
 
 def manylines_helper(pdf, axis = None, colormap = None, groupby_attribute = None, \
                      fig = None, figsize = (15,3)):
-    '''
-    Helper function which runs on a single core and can be called by map_partitions()
+    '''Helper function which runs on a single core and can be called by map_partitions()
 
     Args:
-        pdf (pd.DataFrame): a pandas DataFrame, each row of which will be plotted out.
-        axis (tuple | list, optional): axis limits, e.g. (1, 10, 1, 10)
-        colormap: a colormap to use for the plot. Must map a label from :arg:groupby_attribute to a color
-        fig (matplotlib.pyplot.Figure, optional): a Figure object to plot on. If specified, will plot ont he current active axis. If not, it will create one.
-        figsize (tuple): size of the figure.
+        pdf (pd.DataFrame): 
+            a pandas DataFrame, each row of which will be plotted out.
+        axis (tuple | list, optional): 
+            axis limits, e.g. (1, 10, 1, 10)
+        colormap (dict): 
+            A colormap to use for the plot. 
+            Must map a label from :arg:groupby_attribute to a color
+        fig (matplotlib.pyplot.Figure, optional): 
+            A Figure object to plot on. 
+            If specified, will plot on the current active axis. 
+            If not, it will create one.
+        figsize (tuple): 
+            size of the figure.
+
+    Returns:
+        fig (maptlotlib.pyplot.Figure): Figure object containing the lines as specified in pdf.
     '''
     if not isinstance(pdf, pd.DataFrame):
-        raise RuntimeError("Supported input: pandas.DataFrame. " +
-                           "Recieved %s" % str(type(pdf)))
+        raise RuntimeError(
+            "Supported input: pandas.DataFrame. Recieved %s" % str(type(pdf)))
 
     if fig is None:
         # vgl: http://stackoverflow.com/questions/8218608/scipy-savefig-without-frames-axes-only-content
@@ -134,12 +147,18 @@ def manylines_helper(pdf, axis = None, colormap = None, groupby_attribute = None
             label = row[groupby_attribute]
             row = row.drop(groupby_attribute)
             if colormap:
-                ax.plot(row.index.values, row.values, antialiased=True, \
-                          color = colormap[label], label = label)
+                ax.plot(
+                    row.index.values, 
+                    row.values, 
+                    antialiased=True,
+                    color = colormap[label], 
+                    label = label)
             else:
                 ax.plot(
-                    row.index.values, row.values, antialiased=True, \
-                           label = label)
+                    row.index.values, 
+                    row.values, 
+                    antialiased=True,
+                    label = label)
 
     if axis:
         ax.axis(axis)
