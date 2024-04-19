@@ -64,7 +64,7 @@ def manylines(
             axis = axis, 
             colormap = colormap, 
             groupby_attribute = groupby_attribute, 
-            fig = returnPixelObject
+            fig = fig if returnPixelObject else None
             )
 
     elif isinstance(df, dd.DataFrame):
@@ -101,8 +101,14 @@ def manylines(
     else:
         return fig
 
-def manylines_helper(pdf, axis = None, colormap = None, groupby_attribute = None, \
-                     fig = None, figsize = (15,3)):
+def manylines_helper(
+        pdf, 
+        axis = None, 
+        colormap = None, 
+        groupby_attribute = None,
+        fig = None, 
+        figsize = (15,3)
+        ):
     '''Helper function which runs on a single core and can be called by map_partitions()
 
     Args:
