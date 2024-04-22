@@ -6,7 +6,21 @@
 # 3. Patches pandas-msgpack and saves it as a local package
 # 4. Compiles NEURON mechanisms
 
-set -e  # exit if error occurs
+set -eE
+set -o pipefail
+trap 'echo "Error: Command on line $LINENO failed. Exiting with error code 1."; exit 1' ERR
+
+# Check if git is available
+if ! command -v git &> /dev/null; then
+    echo "git could not be found. Please install git."
+    exit 1
+fi
+
+# Check if gcc is available
+if ! command -v gcc &> /dev/null; then
+    echo "gcc could not be found. Please install gcc."
+    exit 1
+fi
 
 WORKING_DIR=$(pwd)
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -52,11 +66,21 @@ function _setArgs {
   done
 }
 
+
 _setArgs "$@";
 if [ -z $CONDA_INSTALL_PATH  ]; then
         echo 'Missing -p or --path. Please provide an installation path for the environment.' >&2
         exit 1
 fi
+
+parent_dir=$(dirname "$CONDA_INSTALL_PATH")
+if [ ! -d "$parent_dir" ]; then
+    echo "Error: Parent directory $parent_dir does not exist." >&2
+    exit 1
+fi
+
+
+CONDA_INSTALL_PATH=$(realpath "$CONDA_INSTALL_PATH")
 
 # # -------------------- 0. Setup -------------------- #
 print_title "0/6. Preliminary checks"
@@ -119,7 +143,7 @@ bash ${SCRIPT_DIR}/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
 # setup conda in current shell; avoid having to restart shell
 eval $($CONDA_INSTALL_PATH/bin/conda shell.bash hook);
 source ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh;
-echo "Activating environment by running \"conda activate ${CONDA_INSTALL_PATH}/bin/activate\"";
+echo "Activating environment by running \"conda activate ${CONDA_INSTALL_PATH}/\"";
 conda activate ${CONDA_INSTALL_PATH}/;
 conda info
 echo $(which python)
@@ -196,8 +220,10 @@ do
 done
 
 #-------------------- Cleanup -------------------- #
-echo ""
-echo ""
-echo "Succesfully installed In-Silico-Framework for Python 3.9"
+echo -e "\e[1;32m*****************************************************************\e[0m"
+echo -e "\e[1;32m*                                                               *\e[0m"
+echo -e "\e[1;32m*   Succesfully installed In-Silico-Framework for Python 3.9.   *\e[0m"
+echo -e "\e[1;32m*                                                               *\e[0m"
+echo -e "\e[1;32m*****************************************************************\e[0m"
 rm $SCRIPT_DIR/tempfile
 exit 0
