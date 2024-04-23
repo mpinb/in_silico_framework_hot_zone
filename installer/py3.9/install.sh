@@ -213,7 +213,7 @@ do
         echo "compiling mechanisms in $d"
         cd $d;
         
-        COMPILATION_DIR=$(dirname $(find $d -maxdepth 1 -name "*.c" -print -quit))
+        COMPILATION_DIR=$(find $d -type f -name "*.c" -printf '%h\n' | head -n 1)
         if [ -d "$COMPILATION_DIR" ]; then
             SO_FILE="$COMPILATION_DIR/libnrnmech.so"
             if [ ! -f "$SO_FILE" ]; then
@@ -225,7 +225,7 @@ do
         nrnivmodl || exit 1;
         
         # Verify if compilation was succesful
-        COMPILATION_DIR=$(dirname $(find $d -maxdepth 1 -name "*.c" -print -quit))
+        COMPILATION_DIR=$(find $d -type f -name "*.c" -printf '%h\n' | head -n 1)
         if [ -d "$COMPILATION_DIR" ]; then
             SO_FILE=$(find "$COMPILATION_DIR" -name "*.so" -print -quit)
             if [ ! -f "$SO_FILE" ]; then
