@@ -103,4 +103,13 @@ jobs:
         echo "Build success = ${{ job.status }}"
         echo ${{ job.status }} > $HOME/build_success${{ inputs.py_version }}.txt 
 
+    - name: Save build output as artifact
+      uses: actions/upload-artifact@v3
+      if: ${{ always() }} 
+      with:
+        name: ${{ github.run_id }}_build_output
+        path: |
+          $HOME/build_output_${{ inputs.py_version }}.txt
+
+
             
