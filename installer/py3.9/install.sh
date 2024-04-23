@@ -6,7 +6,21 @@
 # 3. Patches pandas-msgpack and saves it as a local package
 # 4. Compiles NEURON mechanisms
 
-set -e  # exit if error occurs
+set -eE
+set -o pipefail
+trap 'echo "Error: Command on line $LINENO failed. Exiting with error code 1."; exit 1' ERR
+
+# Check if git is available
+if ! command -v git &> /dev/null; then
+    echo "git could not be found. Please install git."
+    exit 1
+fi
+
+# Check if gcc is available
+if ! command -v gcc &> /dev/null; then
+    echo "gcc could not be found. Please install gcc."
+    exit 1
+fi
 
 WORKING_DIR=$(pwd)
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -52,11 +66,21 @@ function _setArgs {
   done
 }
 
+
 _setArgs "$@";
 if [ -z $CONDA_INSTALL_PATH  ]; then
         echo 'Missing -p or --path. Please provide an installation path for the environment.' >&2
         exit 1
 fi
+
+parent_dir=$(dirname "$CONDA_INSTALL_PATH")
+if [ ! -d "$parent_dir" ]; then
+    echo "Error: Parent directory $parent_dir does not exist." >&2
+    exit 1
+fi
+
+
+CONDA_INSTALL_PATH=$(realpath "$CONDA_INSTALL_PATH")
 
 # # -------------------- 0. Setup -------------------- #
 print_title "0/6. Preliminary checks"
@@ -119,7 +143,7 @@ bash ${SCRIPT_DIR}/downloads/${anaconda_installer} -b -p ${CONDA_INSTALL_PATH};
 # setup conda in current shell; avoid having to restart shell
 eval $($CONDA_INSTALL_PATH/bin/conda shell.bash hook);
 source ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh;
-echo "Activating environment by running \"conda activate ${CONDA_INSTALL_PATH}/bin/activate\"";
+echo "Activating environment by running \"conda activate ${CONDA_INSTALL_PATH}/\"";
 conda activate ${CONDA_INSTALL_PATH}/;
 conda info
 echo $(which python)
@@ -183,21 +207,44 @@ python -m ipykernel install --name base --user --display-name isf3.9
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 shopt -s extglob
-for d in $(find $SCRIPT_DIR/../../mechanisms/*/*py3* -type d)
+for d in $(find $SCRIPT_DIR/../../mechanisms/*/*py3* -maxdepth 1 -type d)
 do
     if [ $(find $d -maxdepth 1 -name "*.mod" -print -quit) ]; then
         echo "compiling mechanisms in $d"
-        cd $d; nrnivmodl || exit 1;
-        if ! find "$d" -type f -path "*/.libs/libnrnmech.so" -print -quit | grep -q .; then
-            echo "Error: Could not find libnrnmech.so in $d/*/.libs. Compilation of neuron mechanisms was unsuccesful."
-            exit 1
+        cd $d;
+        
+        COMPILATION_DIR=$(find $d -mindepth 2 -type f -name "*.c" -printf '%h\n' | head -n 1 || true)
+        if [ -d "$COMPILATION_DIR" ]; then
+            SO_FILE="$COMPILATION_DIR/libnrnmech.so"
+            if [ ! -f "$SO_FILE" ]; then
+                echo "Deleting previously created $COMPILATION_DIR because it does not contain libnrnmech.so. Recompiling..."
+                rm -r "$COMPILATION_DIR"
+            fi 
         fi
+
+        nrnivmodl || exit 1;
+        
+        # Verify if compilation was succesful
+        COMPILATION_DIR=$(find $d -type f -name "*.c" -printf '%h\n' | head -n 1 || true)
+        if [ -d "$COMPILATION_DIR" ]; then
+            SO_FILE=$(find "$COMPILATION_DIR" -name "*.so" -print -quit)
+            if [ ! -f "$SO_FILE" ]; then
+                echo "$COMPILATION_DIR does not contain a .so file. Compilation was unsuccesful. Please inspect the output of nrnivmodl for further information."
+                exist 1;
+            fi 
+        else
+            echo "No directory found containing *.c files. Compilation was unsuccesful."
+            exit 1;
+        fi
+
     fi
 done
 
 #-------------------- Cleanup -------------------- #
-echo ""
-echo ""
-echo "Succesfully installed In-Silico-Framework for Python 3.9"
+echo -e "\e[1;32m*****************************************************************\e[0m"
+echo -e "\e[1;32m*                                                               *\e[0m"
+echo -e "\e[1;32m*   Succesfully installed In-Silico-Framework for Python 3.9.   *\e[0m"
+echo -e "\e[1;32m*                                                               *\e[0m"
+echo -e "\e[1;32m*****************************************************************\e[0m"
 rm $SCRIPT_DIR/tempfile
 exit 0

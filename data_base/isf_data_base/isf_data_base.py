@@ -5,21 +5,12 @@ Created October 2023
 """
 
 import os, tempfile, string, json, threading, random, shutil, inspect, datetime, importlib, logging
-from .IO import LoaderDumper
 from pathlib import Path
-from data_base import (
-    _module_versions,
-    data_base_register)
-from data_base.exceptions import DataBaseException
+from data_base import _module_versions, data_base_register
+import data_base.exceptions as db_exceptions
 VC = _module_versions.version_cached
-from data_base._version import get_versions
-from .IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_isf_db, shared_numpy_store, get_dumper_string_by_dumper_module
-from data_base.utils import calc_recursive_filetree, rename_for_deletion, delete_in_background, is_db, bcolors
-from compatibility import pandas_unpickle_fun
+
 logger = logging.getLogger("ISF").getChild(__name__)
-
-DEFAULT_DUMPER = to_cloudpickle
-
 
 class LoaderWrapper:
     '''This is a pointer to data, which is stored elsewhere.
@@ -84,7 +75,7 @@ def _check_working_dir_clean_for_build(working_dir):
             else:
                 raise OSError()
         except OSError:
-            raise DataBaseException("Can't build database: " \
+            raise db_exceptions.DataBaseException("Can't build database: " \
                                + "The specified working_dir is either not empty " \
                                + "or write permission is missing. The specified path is %s" % working_dir)
     else:
@@ -92,7 +83,7 @@ def _check_working_dir_clean_for_build(working_dir):
             os.makedirs(working_dir)
             return
         except OSError:
-            raise DataBaseException("Can't build database: " \
+            raise db_exceptions.DataBaseException("Can't build database: " \
                                + "Cannot create the directories specified in %s" % working_dir)
             
     self.metadata = MetadataAccessor(self)
@@ -214,9 +205,9 @@ class ISFDataBase:
             "A new empty database will not be created since "+\
             "{mode} is set to True."
             if nocreate:
-                raise DataBaseException(errstr.format(mode = 'nocreate'))
+                raise db_exceptions.DataBaseException(errstr.format(mode = 'nocreate'))
             if readonly:
-                raise DataBaseException(errstr.format(mode = 'readonly'))                
+                raise db_exceptions.DataBaseException(errstr.format(mode = 'readonly'))                
             self._initialize()
             
         if self.readonly == False:
@@ -262,7 +253,7 @@ class ISFDataBase:
         try:
             data_base_register.register_db(self._unique_id, self.basedir)
             self._registered_to_path = self.basedir
-        except DataBaseException as e:
+        except db_exceptions.DataBaseException as e:
             if self._suppress_errors:
                 logger.warning(str(e))
             else:
@@ -403,14 +394,14 @@ class ISFDataBase:
             if self._suppress_errors:
                 logger.warning("DB is in readonly mode. Blocked writing attempt to key %s" % key)
             else:
-                raise DataBaseException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
+                raise db_exceptions.DataBaseException("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         #this exists, so jupyter notebooks will not crash when they try to write something
         elif self.readonly == 'warning': 
             logger.warning("DB is in readonly mode. Blocked writing attempt to key %s" % key)
         elif self.readonly == False:
             pass
         else:
-            raise DataBaseException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
+            raise db_exceptions.DataBaseException("Readonly attribute should be True, False or 'warning, but is: %s" % self.readonly)
     
     def _find_legacy_key(self, key):
         """Given a key, find the corresponding key in the legacy ModelDataBase.
@@ -491,17 +482,17 @@ class ISFDataBase:
         #todo: make sure that existing key will not be overwritten
         if key in list(self.keys()):
             if raise_:
-                raise DataBaseException("Key %s is already set. Please use del db[%s] first" % (key, key))
+                raise db_exceptions.DataBaseException("Key %s is already set. Please use del db[%s] first" % (key, key))
         else:           
-            self.set(key, None, dumper = just_create_folder)
+            self.set(key, None, dumper = LoaderDumper.just_create_folder)
         return self[key]
 
     def create_shared_numpy_store(self, key, raise_ = True):
         if key in list(self.keys()):
             if raise_:
-                raise DataBaseException("Key %s is already set. Please use del db[%s] first" % (key, key))
+                raise db_exceptions.DataBaseException("Key %s is already set. Please use del db[%s] first" % (key, key))
         else:
-            self.set(key, None, dumper = shared_numpy_store)        
+            self.set(key, None, dumper = LoaderDumper.shared_numpy_store)        
         return self[key]
     
     def create_sub_db(self, key, register = 'as_parent', **kwargs):
@@ -534,7 +525,7 @@ class ISFDataBase:
                 break
             if not parent_db[remaining_keys[0]].__class__.__name__ == "ISFDataBase":
                 # The key exists and not an db, but we want to create one here
-                raise DataBaseException(
+                raise db_exceptions.DataBaseException(
                     "You were trying to overwrite existing data at %s with a (sub)db by using key %s. Please use del db[%s] first" % (
                         parent_db.basedir/key[i], key, key[:i+1]
                         ))
@@ -544,7 +535,7 @@ class ISFDataBase:
         
         # If there are still unique keys remaining in the tuple, we have to create at least one sub_db
         for k in remaining_keys:
-            parent_db.set(k, None, dumper = just_create_isf_db, **kwargs)
+            parent_db.set(k, None, dumper = LoaderDumper.just_create_isf_db, **kwargs)
             # Note: registering this database happens upon initialization of the sub_db
             parent_db[k].parent_db = parent_db  # remember that it has a parent
             parent_db = parent_db[k]  # go down the tree of sub_dbs
@@ -580,7 +571,7 @@ class ISFDataBase:
             return_ = LoaderDumper.load(key, **kwargs)
         except FileNotFoundError as e:
             self.ls(all_files = True)
-            raise DataBaseException("Could not load key %s. The file %s does not exist." % (key, e.filename))
+            raise db_exceptions.DataBaseException("Could not load key %s. The file %s does not exist." % (key, e.filename))
         if lock:
             lock.release()
         return return_
@@ -604,7 +595,7 @@ class ISFDataBase:
             key (str): _description_
             value (obj): _description_
             lock (Lock, optional): _description_. Defaults to None.
-            dumper (module|str|None, optional): The dumper module to use when saving data. If None or "self" are passed, it will use the default dumper to_cloudpickle. Defaults to None.
+            dumper (module|str|None, optional): The dumper module to use when saving data. If None or "self" are passed, it will use the default dumper LoaderDumper.to_cloudpickle. Defaults to None.
 
         Raises:
             KeyError: _description_
@@ -638,7 +629,7 @@ class ISFDataBase:
             if is_db(key) or Path.exists(key/'db'):
                 # Either the key is an db, or it's a key that contains a subdb
                 # We are about to overwrite an db with data: that's a no-go (it's a me, Mario)
-                raise DataBaseException(
+                raise db_exceptions.DataBaseException(
                     "You were trying to overwrite a sub_db at %s with data using the key %s. Please remove the sub_db first, or use a different key." % (
                         self.basedir, key.name
                         )
@@ -804,8 +795,8 @@ class ISFDataBase:
 class RegisteredFolder(ISFDataBase):
     def __init__(self, path):
         ISFDataBase.__init__(self, path, forcecreate = True)
-        self.set('self', None, dumper = just_create_folder)
-        dumper = just_create_folder
+        self.set('self', None, dumper = LoaderDumper.just_create_folder)
+        dumper = LoaderDumper.just_create_folder
         dumper.dump(None, path)
         self._sql_backend['self'] = LoaderWrapper('')
         self.set = None
@@ -815,3 +806,10 @@ def get_isfdb_by_unique_id(unique_id):
     db = ISFDataBase(db_path, nocreate=True)
     assert db.get_id() == unique_id
     return db
+
+
+from .IO import LoaderDumper
+from .IO.LoaderDumper import to_cloudpickle, just_create_folder, just_create_isf_db, shared_numpy_store
+from data_base.utils import calc_recursive_filetree, rename_for_deletion, delete_in_background, is_db, bcolors
+from compatibility import pandas_unpickle_fun
+DEFAULT_DUMPER = LoaderDumper.to_cloudpickle

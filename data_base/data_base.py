@@ -1,13 +1,13 @@
 """
 Wrapper class that decides whether or not a database is legacy ModelDataBase, or the new ISFDataBase.
 """
-from data_base import model_data_base, isf_data_base
+from . import model_data_base, isf_data_base
 import sys
 # For backwards compatibility, register model_data_base as top-level module, 
 # so pickled data still knows where to find modules
 sys.modules['model_data_base'] = model_data_base
 import os
-from data_base.data_base_register import _get_db_register
+from .data_base_register import _get_db_register
 import logging
 logger = logging.getLogger('ISF').getChild(__name__)
 

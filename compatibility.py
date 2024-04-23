@@ -78,6 +78,8 @@ elif six.PY3:
             return pandas.compat.pickle_compat.load(f)
 
     YamlLoader = yaml.FullLoader  # Better choice, but only exists in Py3
+    import pandas.core.indexes
+    sys.modules['pandas.indexes'] = pandas.core.indexes
 
 # --------------- compatibility with old versions of ISF (only used by the Oberlaender lab in Bonn)
 # For old pickled data. This is to ensure backwards compatibility with the Oberlaender lab in MPINB, Bonn. Added on 16/04/2024
