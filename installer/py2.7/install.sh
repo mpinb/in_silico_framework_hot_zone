@@ -183,7 +183,7 @@ do
         echo "compiling mechanisms in $d"
         cd $d;
         
-        COMPILATION_DIR=$(find $d -type f -name "*.c" -printf '%h\n' | head -n 1 || true)
+        COMPILATION_DIR=$(find $d -mindepth 2 -type f -name "*.c" -printf '%h\n' | head -n 1 || true)
         if [ -d "$COMPILATION_DIR" ]; then
             LA_FILE="$COMPILATION_DIR/libnrnmech.la"
             if [ ! -f "$LA_FILE" ]; then
