@@ -181,11 +181,32 @@ for d in $(find $SCRIPT_DIR/../../mechanisms/*/*py2* -type d)
 do
     if [ $(find $d -maxdepth 1 -name "*.mod" -print -quit) ]; then
         echo "compiling mechanisms in $d"
-        cd $d; nrnivmodl || exit 1;
-        if ! find "$d" -type f -path "*/.libs/libnrnmech.so" -print -quit | grep -q .; then
-            echo "Error: Could not find libnrnmech.so in $d/*/.libs. Compilation of neuron mechanisms was unsuccesful."
-            exit 1
+        cd $d;
+        
+        COMPILATION_DIR=$(dirname $(find $d -maxdepth 1 -name "*.c" -print -quit))
+        if [ -d "$COMPILATION_DIR" ]; then
+            LA_FILE="$COMPILATION_DIR/libnrnmech.la"
+            if [ ! -f "$LA_FILE" ]; then
+                echo "Deleting previously created $COMPILATION_DIR because it does not contain libnrnmech.la. Recompiling..."
+                rm -r "$(dirname "$COMPILATION_DIR")"
+            fi 
         fi
+
+        nrnivmodl || exit 1;
+        
+        # Verify if compilation was succesful
+        COMPILATION_DIR=$(dirname $(find $d -maxdepth 1 -name "*.c" -print -quit))
+        if [ -d "$COMPILATION_DIR" ]; then
+            LA_FILE=$(find "$COMPILATION_DIR" -name "*.so" -print -quit)
+            if [ ! -f "$LA_FILE" ]; then
+                echo "$COMPILATION_DIR does not contain a .la file. Compilation was unsuccesful. Please inspect the output of nrnivmodl for further information."
+                exist 1;
+            fi 
+        else
+            echo "No directory found containing *.c files. Compilation was unsuccesful."
+            exit 1;
+        fi
+
     fi
 done
 
