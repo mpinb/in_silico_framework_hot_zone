@@ -1,10 +1,8 @@
 from __future__ import absolute_import
 import os, json
-from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
 from .utils import cache
 from .exceptions import DataBaseException
 from .settings import data_base_register_path
-from compatibility import pandas_unpickle_fun
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
@@ -107,3 +105,6 @@ def assimilate_remote_register(remote_path, local_path=_foldername):
     }
     for k in whole_registry_filtered.keys():
         dbr_local.registry[k] = whole_registry_filtered[k]
+
+from .sqlite_backend.sqlite_backend import SQLiteBackend as SQLBackend
+from compatibility import pandas_unpickle_fun

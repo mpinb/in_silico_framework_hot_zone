@@ -6,8 +6,7 @@ Created October 2023
 
 import os, tempfile, string, json, threading, random, shutil, inspect, datetime, importlib, logging
 from pathlib import Path
-import data_base._module_versions as _module_versions
-import data_base.data_base_register as data_base_register
+from data_base import _module_versions, data_base_register
 import data_base.exceptions as db_exceptions
 VC = _module_versions.version_cached
 
