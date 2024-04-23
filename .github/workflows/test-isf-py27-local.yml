@@ -91,4 +91,3 @@ jobs:
           name: ${{ github.run_id }}_logs
           path: |
             ./tests/logs/
-            $HOME/build_output_2.7.txt
