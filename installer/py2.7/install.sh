@@ -177,13 +177,13 @@ python -m ipykernel install --name base --user --display-name isf2.7
 print_title "6/6. Compiling NEURON mechanisms"
 echo "Compiling NEURON mechanisms."
 shopt -s extglob
-for d in $(find $SCRIPT_DIR/../../mechanisms/*/*py2* -type d)
+for d in $(find $SCRIPT_DIR/../../mechanisms/*/*py2* -maxdepth 1 -type d)
 do
     if [ $(find $d -maxdepth 1 -name "*.mod" -print -quit) ]; then
         echo "compiling mechanisms in $d"
         cd $d;
         
-        COMPILATION_DIR=$(find $d -type f -name "*.c" -printf '%h\n' | head -n 1)
+        COMPILATION_DIR=$(find $d -type f -name "*.c" -printf '%h\n' | head -n 1 || true)
         if [ -d "$COMPILATION_DIR" ]; then
             LA_FILE="$COMPILATION_DIR/libnrnmech.la"
             if [ ! -f "$LA_FILE" ]; then
@@ -195,8 +195,8 @@ do
         nrnivmodl || exit 1;
         
         # Verify if compilation was succesful
-
-        COMPILATION_DIR=$(find $d -type f -name "*.c" -printf '%h\n' | head -n 1)
+        cd $d;
+        COMPILATION_DIR=$(find $d -type f -name "*.c" -printf '%h\n' | head -n 1 || true)
         if [ -d "$COMPILATION_DIR" ]; then
             LA_FILE=$(find "$COMPILATION_DIR" -name "*.so" -print -quit)
             if [ ! -f "$LA_FILE" ]; then
