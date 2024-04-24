@@ -9,21 +9,36 @@ from .fixtures import client
 from .fixtures.dataframe_fixtures import pdf, ddf
 if six.PY3:  # pytest can be parallellized on py3: use unique ids for dbs
     from .fixtures.data_base_fixtures_py3 import (
-        fresh_db, 
-        fresh_mdb, 
-        empty_db, 
-        empty_mdb, 
+        fresh_db,
+        fresh_mdb,
+        empty_db,
+        empty_mdb,
         sqlite_db
     )
 elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers. has been deprecated since 6.2.0
     from .fixtures.data_base_fixtures_py2 import (
-        fresh_db, 
-        fresh_mdb, 
-        empty_db, 
-        empty_mdb, 
+        fresh_db,
+        fresh_mdb,
+        empty_db,
+        empty_mdb,
         sqlite_db
     )
 from .context import TEST_DATA_FOLDER, CURRENT_DIR
+from distributed.diagnostics.plugin import WorkerPlugin
+
+def import_worker_requirements():
+    import compatibility
+    import mechanisms
+
+class SetupWorker(WorkerPlugin):
+    def __init__(self):
+        import_worker_requirements()
+
+    def setup(self, worker):
+        """
+        This gets called every time a new worker is added to the scheduler
+        """
+        import_worker_requirements()
 
 logger = logging.getLogger("ISF").getChild(__name__)
 os.environ["ISF_IS_TESTING"] = "True"
@@ -65,7 +80,7 @@ def pytest_ignore_collect(path, config):
             )
 
 
-def pytest_configure(config):
+def pytest_configure(config, client):
     """
     pytest configuration
     """
@@ -95,3 +110,5 @@ def pytest_configure(config):
         os.path.join(CURRENT_DIR, "logs", "test.log"))
     isf_logging_file_handler.setLevel(logging.INFO)
     isf_logger.addHandler(isf_logging_file_handler)
+
+    client.register_worker_plugin(SetupWorker())
