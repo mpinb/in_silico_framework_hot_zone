@@ -26,6 +26,6 @@ def client(pytestconfig):
             "localhost", 
             pytestconfig.getoption("--dask_server_port"))
         )
-    c.register_plugin(SetupWorker)
+    c.register_scheduler_plugin(SetupWorker)
     c.run(import_worker_requirements) 
     return c
