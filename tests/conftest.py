@@ -80,7 +80,7 @@ def pytest_ignore_collect(path, config):
             )
 
 
-def pytest_configure(config, client):
+def pytest_configure(config):
     """
     pytest configuration
     """
@@ -111,4 +111,7 @@ def pytest_configure(config, client):
     isf_logging_file_handler.setLevel(logging.INFO)
     isf_logger.addHandler(isf_logging_file_handler)
 
-    client.register_worker_plugin(SetupWorker())
+    c = distributed.Client(
+        "localhost:" + str(config.getoption("--dask_server_port"))
+        )
+    c.register_worker_plugin(SetupWorker())
