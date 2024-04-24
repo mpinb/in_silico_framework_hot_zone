@@ -3,7 +3,6 @@
 # useful to setup whatever needs to be done before the actual testing or test discovery
 # for setting environment variables, use pytest.ini or .env instead
 import os, logging, socket, dask, six, sys
-from distributed.diagnostics.plugin import SchedulerPlugin
 from Interface import logger as isf_logger
 # --- Import fixtures
 from .fixtures import client

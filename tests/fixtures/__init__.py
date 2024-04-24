@@ -1,4 +1,5 @@
 import pytest, distributed
+from distributed.diagnostics.plugin import SchedulerPlugin
 
 def import_worker_requirements():
     import compatibility
@@ -12,6 +13,7 @@ class SetupWorker(SchedulerPlugin):
         """
         This gets called every time a new worker is added to the scheduler
         """
+        scheduler.submit(import_worker_requirements, workers=[worker])
         import_worker_requirements()
 
 @pytest.fixture
