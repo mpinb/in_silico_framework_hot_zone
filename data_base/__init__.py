@@ -24,8 +24,4 @@ See also:
 All methods in ISF should never import IO from the model_data_base or isf_data_base subpackages directly, but always use the data_base.IO module, which is set here to the correct IO subpackage.
 """
 import compatibility
-import sys
-from .isf_data_base import IO
-from .isf_data_base import db_initializers
-sys.modules['data_base.IO'] = IO
-sys.modules['data_base.db_initializers'] = db_initializers
+compatibility.init_data_base_compatibility()

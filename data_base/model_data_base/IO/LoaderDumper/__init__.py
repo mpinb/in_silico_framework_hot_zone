@@ -39,10 +39,20 @@ def load(savedir, load_data=True, loader_kwargs={}):
         return myloader
 
 def get_dumper_string_by_dumper_module(dumper_module):
+    """
+    Dumper modules can either be:
+    - data_base.model_data_base.IO.LoaderDumper.some_module
+    - model_data_base.IO.LoaderDumper.some_module (for backwards compatibility)
+    - data_base.IO
+    """
     name = dumper_module.__name__
-    if name.startswith('data_base.'):
+    if name.startswith('data_base.model_data_base'):
         # For backwards compatibility: drop data_base. prefix
         name = '.'.join(name.split('.')[1:])
+    elif name.startswith('data_base'):
+        # This happens when ISF is used in Python 2: all IO subpackages are ISF-wide "data_base.IO"
+        # save as model_data_base instead of data_base for backwards compatibility
+        name = name.replace('data_base.', 'model_data_base.')
     prefix = 'model_data_base.IO.LoaderDumper.'
     assert name.startswith(prefix), "Could not import dumper {}, as it does not contain the prefix {}".format(name, prefix)
     return name[len(prefix):]

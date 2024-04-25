@@ -70,7 +70,7 @@ def _check_working_dir_clean_for_build(working_dir):
     to build a new database there'''
     if Path.exists(working_dir):
         try:
-            if not os.listdir(working_dir):
+            if not os.listdir(str(working_dir)):
                 return
             else:
                 raise OSError()
