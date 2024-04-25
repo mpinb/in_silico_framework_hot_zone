@@ -15,7 +15,6 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for dbs
         empty_mdb,
         sqlite_db
     )
-    from distributed.diagnostics.plugin import WorkerPlugin
 elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers. has been deprecated since 6.2.0
     from .fixtures.data_base_fixtures_py2 import (
         fresh_db,
@@ -25,13 +24,16 @@ elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers
         sqlite_db
     )
 from .context import TEST_DATA_FOLDER, CURRENT_DIR
-from distributed.diagnostics.plugin import WorkerPlugin
 
 def import_worker_requirements():
     import compatibility
     import mechanisms
 
-if six.PY3:
+def ensure_workeres_have_imported_requirements(client):
+    """
+    This function is called in the pytest_configure hook to ensure that all workers have imported the necessary modules
+    """
+    from distributed.diagnostics.plugin import WorkerPlugin
     class SetupWorker(WorkerPlugin):
         def __init__(self):
             import_worker_requirements()
@@ -41,6 +43,8 @@ if six.PY3:
             This gets called every time a new worker is added to the scheduler
             """
             import_worker_requirements()
+    
+    client.register_worker_plugin(SetupWorker())
 
 logger = logging.getLogger("ISF").getChild(__name__)
 os.environ["ISF_IS_TESTING"] = "True"
@@ -116,4 +120,5 @@ def pytest_configure(config):
     c = distributed.Client(
         "localhost:" + str(config.getoption("--dask_server_port"))
         )
-    c.register_worker_plugin(SetupWorker())
+    if six.PY3:
+        ensure_workeres_have_imported_requirements(c)
