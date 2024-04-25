@@ -121,9 +121,10 @@ def update_mdb_for_forwards_compatibility():
     This new package has updated API calls, and should be used in all new code.
     For this reason, the old API of model_data_base needs to be updated.
     """
+    from data_base.model_data_base import mdb_initializers, IO
     from data_base import model_data_base
-    model_data_base.IO = model_data_base.IO
-    model_data_base.db_initializers = model_data_base.mdb_initializers
+    model_data_base.IO = IO
+    model_data_base.db_initializers = mdb_initializers
     from data_base.model_data_base.mdb_initializers import load_simrun_general
     load_simrun_general.load_param_files_from_db = load_simrun_general.load_param_files_from_mdb
     load_simrun_general.load_initialized_cell_and_evokedNW_from_db = load_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
