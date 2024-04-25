@@ -192,7 +192,14 @@ do
             fi 
         fi
 
-        nrnivmodl || exit 1;
+        echo "Compiling with nrnivmodl..."
+        output=$(nrnivmodl 2>&1)
+        if echo "$output" | grep -iq "error"; then
+            echo "$output"
+            exit 1
+        else
+            echo "$output"
+        fi
         
         # Verify if compilation was succesful
         cd $d;

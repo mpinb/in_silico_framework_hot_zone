@@ -223,8 +223,16 @@ do
                 rm -r "$COMPILATION_DIR"
             fi 
         fi
-        nrnivmodl || exit 1;
         
+        echo "Compiling with nrnivmodl..."
+        output=$(nrnivmodl 2>&1)
+        if echo "$output" | grep -iq "error"; then
+            echo "$output"
+            exit 1
+        else
+            echo "$output"
+        fi
+
         # Verify if compilation was succesful
         COMPILATION_DIR=$(find $d -type f -name "*.c" -printf '%h\n' | head -n 1 || true)
         if [ -d "$COMPILATION_DIR" ]; then
