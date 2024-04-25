@@ -215,28 +215,18 @@ do
         
         COMPILATION_DIR=$(find $d -mindepth 2 -type f -name "*.c" -printf '%h\n' | head -n 1 || true)
         if [ -d "$COMPILATION_DIR" ]; then
-            SO_FILE="$COMPILATION_DIR/libnrnmech.so"
-
-            if [ -f "$SO_FILE" ]; then
-                echo "libnrnmech.la is present in $COMPILATION_DIR. Skipping compilation for this directory."
-                continue
-            else
-                echo "Deleting previously created $COMPILATION_DIR because it does not contain libnrnmech.la. Recompiling..."
-                rm -r "$(dirname "$COMPILATION_DIR")"
-                output=$(nrnivmodl 2>&1)
-            fi
-        else
-            echo "No previously created compilation directory found. Compiling..."
-            output=$(nrnivmodl 2>&1)
+            echo "Found previously created compilation directory ${COMPILATION_DIR}"
+            echo "Deleting previously created $COMPILATION_DIR "
+            rm -r "$(dirname "$COMPILATION_DIR")"
         fi
         
+        output=$(nrnivmodl 2>&1)
         if echo "$output" | grep -iq "error"; then
             echo "$output"
             exit 1
         else
             echo "$output"
         fi
-
         
         # Verify if compilation was succesful
         COMPILATION_DIR=$(find $d -type f -name "*.c" -printf '%h\n' | head -n 1 || true)
