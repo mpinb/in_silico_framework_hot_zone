@@ -15,6 +15,7 @@ if six.PY3:  # pytest can be parallellized on py3: use unique ids for dbs
         empty_mdb,
         sqlite_db
     )
+    from distributed.diagnostics.plugin import WorkerPlugin
 elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers. has been deprecated since 6.2.0
     from .fixtures.data_base_fixtures_py2 import (
         fresh_db,
@@ -30,15 +31,16 @@ def import_worker_requirements():
     import compatibility
     import mechanisms
 
-class SetupWorker(WorkerPlugin):
-    def __init__(self):
-        import_worker_requirements()
+if six.PY3:
+    class SetupWorker(WorkerPlugin):
+        def __init__(self):
+            import_worker_requirements()
 
-    def setup(self, worker):
-        """
-        This gets called every time a new worker is added to the scheduler
-        """
-        import_worker_requirements()
+        def setup(self, worker):
+            """
+            This gets called every time a new worker is added to the scheduler
+            """
+            import_worker_requirements()
 
 logger = logging.getLogger("ISF").getChild(__name__)
 os.environ["ISF_IS_TESTING"] = "True"
