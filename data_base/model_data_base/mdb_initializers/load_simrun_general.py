@@ -10,11 +10,22 @@ import dask.dataframe as dd
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
 from model_data_base import ModelDataBase
-from model_data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, \
-    to_cloudpickle, to_pickle, pandas_to_parquet, dask_to_msgpack, pandas_to_msgpack, \
-        get_dumper_string_by_dumper_module, dask_to_parquet
-from model_data_base.model_data_base import get_progress_bar_function,\
-    MdbException
+from model_data_base.IO.LoaderDumper import (
+    dask_to_categorized_msgpack, 
+    pandas_to_pickle, 
+    to_cloudpickle, 
+    to_pickle, 
+    pandas_to_parquet, 
+    dask_to_msgpack, 
+    pandas_to_msgpack, 
+    get_dumper_string_by_dumper_module, 
+    dask_to_parquet
+    )
+from data_base.model_data_base.IO.LoaderDumper import(
+    pandas_to_parquet as db_pandas_to_parquet,
+    pandas_to_msgpack as db_pandas_to_msgpack,
+)
+from model_data_base.model_data_base import get_progress_bar_function, MdbException
 from ..IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format as read_sa
 from ..IO.roberts_formats import read_pandas_cell_activation_from_roberts_format as read_ca
 from data_base.analyze.spike_detection import spike_detection
@@ -656,8 +667,10 @@ def init(mdb, simresult_path,  \
     
     client: dask distributed Client object.
     '''
-    assert dumper in (pandas_to_msgpack, pandas_to_parquet), \
-        "Please use a pandas-compatible dumper. You used {}.".format(dumper)
+    assert dumper in (
+        pandas_to_msgpack, pandas_to_parquet,
+        db_pandas_to_msgpack, db_pandas_to_parquet
+      ), "Pleasee a pandas-compatible dumper. You used {}.".format(dumper)
     if dumper == pandas_to_msgpack and six.PY3 and not os.environ.get('ISF_IS_TESTING', False):
         raise DeprecationWarning(
             """The pandas_to_msgpack dumper is deprecated for Python 3.8 and onwards. Use pandas_to_parquet instead. \n\
