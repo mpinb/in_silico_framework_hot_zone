@@ -217,7 +217,7 @@ do
         if [ -d "$COMPILATION_DIR" ]; then
             echo "Found previously created compilation directory ${COMPILATION_DIR}"
             echo "Deleting previously created $COMPILATION_DIR "
-            rm -r "$(dirname "$COMPILATION_DIR")"
+            rm -r $COMPILATION_DIR
         fi
         
         output=$(nrnivmodl 2>&1)
