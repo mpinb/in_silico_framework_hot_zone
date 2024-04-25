@@ -47,7 +47,7 @@ def get_dumper_string_by_dumper_module(dumper_module):
     """
     name = dumper_module.__name__
     if name.startswith('data_base.model_data_base'):
-        # For backwards compatibility: drop data_base. prefix
+        # For backwards compatibility: drop data_base. 
         name = '.'.join(name.split('.')[1:])
     elif name.startswith('data_base'):
         # This happens when ISF is used in Python 2: all IO subpackages are ISF-wide "data_base.IO"

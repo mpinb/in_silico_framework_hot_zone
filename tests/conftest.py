@@ -34,7 +34,7 @@ def ensure_workers_have_imported_requirements(client):
     This function is called in the pytest_configure hook to ensure that all workers have imported the necessary modules
     """
     import sys
-    def update_path(): sys.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+    def update_path(): sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
     client.run(update_path)
     
     if six.PY3:
