@@ -28,7 +28,8 @@ class DataBase(object):
         """
         if is_model_data_base(basedir):
             logger.warning('Reading a legacy-format ModelDataBase.')
-            db = model_data_base.ModelDataBase(basedir, readonly=readonly, nocreate=not six.PY2)
+            nocreate = not (six.PY2 or 'ISF_IS_TESTING' in os.environ)
+            db = model_data_base.ModelDataBase(basedir, readonly=readonly, nocreate=nocreate)
             logger.warning('Overwriting mdb.set and mdb.get to be compatible with ISF syntax...')
             db.set = db.setitem
             db.get = db.getitem
