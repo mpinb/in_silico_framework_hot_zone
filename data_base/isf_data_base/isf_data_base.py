@@ -646,7 +646,7 @@ class ISFDataBase:
                     '\nEither use del db[key] first, set overwrite to True, or omit the overwrite keyword argument.')  
         
         # Either the path does not exist yet, or it's in the process of being deleted
-        os.makedirs(key)
+        os.makedirs(str(key))
         
         if lock:
             lock.acquire()
