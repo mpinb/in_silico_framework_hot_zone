@@ -149,20 +149,5 @@ def init_mdb_backwards_compatibility():
     from data_base import model_data_base
     sys.modules['model_data_base'] = model_data_base
 
-def update_mdb_for_forwards_compatibility():
-    """
-    ISF has an update data_base_package, and imports it as "data_base" throughout the codebase.
-    This new package has updated API calls, and should be used in all new code.
-    For this reason, the old API of model_data_base needs to be updated.
-    """
-    import sys
-    from data_base.model_data_base import IO, mdb_initializers
-    sys.modules['data_base.IO'] = IO
-    sys.modules['data_base.db_initializers'] = mdb_initializers 
-    from data_base.model_data_base.mdb_initializers import load_simrun_general
-    load_simrun_general.load_param_files_from_db = load_simrun_general.load_param_files_from_mdb
-    load_simrun_general.load_initialized_cell_and_evokedNW_from_db = load_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
-    
 def init_data_base_compatibility():
     init_mdb_backwards_compatibility()
-    update_mdb_for_forwards_compatibility()
