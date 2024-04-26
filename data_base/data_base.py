@@ -26,7 +26,7 @@ class DataBase(object):
         Returns
             ISFDataBase or ModelDataBase: The correct database object.
         """
-        if is_model_data_base(basedir) or six.PY2:
+        if is_model_data_base(basedir):
             logger.warning('Reading a legacy-format ModelDataBase.')
             db = model_data_base.ModelDataBase(basedir, readonly=readonly, nocreate=not six.PY2)
             logger.warning('Overwriting mdb.set and mdb.get to be compatible with ISF syntax...')

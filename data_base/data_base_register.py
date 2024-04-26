@@ -71,7 +71,7 @@ class DataBaseRegister():
                     "Could not find a metadata.json or dbcore.pickle file in {}. Are you sure the path points to a directory containing at least one ModelDataBase or ISFDataBase?".format(dir_))
             
     def add_db(self, unique_id, db_basedir):
-        self.registry[unique_id] = os.path.abspath(db_basedir)
+        self.registry[unique_id] = os.path.abspath(str(db_basedir))
 
     def keys(self):
         return self.registry.keys()

@@ -3,10 +3,7 @@ This module deals with API changes in 3rd party modules.
 The following 3rd party modules are used: pandas, dask, distributed
 '''
 
-import six
-import yaml
-import cloudpickle
-import sys
+import six, yaml, cloudpickle, os, sys
 
 # try: # new dask versions
 #     synchronous_scheduler = dask.get
@@ -52,7 +49,57 @@ if six.PY2:
             return pandas.compat.pickle_compat.load(f)
 
     YamlLoader = yaml.Loader
+    import os
 
+    import os
+
+    class Path(object):
+        """
+        A patch to use basic pathlib.Path functionality in Python 2. This is used in :py:mod:data_base.isf_data_base.isf_data_base
+        """
+        def __init__(self, *paths):
+            self.path = os.path.abspath(os.path.join(*paths))
+            self.name = os.path.basename(self.path)
+
+        def __div__(self, other):
+            return Path(self.path, other)
+
+        @staticmethod
+        def isinstance(obj):
+            return isinstance(obj, Path)
+
+        def __getitem__(self, key):
+            return self.path[key]
+
+        def __repr__(self):
+            return self.path
+
+        def __eq__(self, other):
+            return self.path == other.path
+        
+        def __getattr__(self, attr):
+            """
+            Delegate attribute access to the underlying string object.
+            """
+            return getattr(self.path, attr)
+        
+        def iterdir(self):
+            """
+            Iterate over the files in this directory. Does not yield any result for the special links '.' and '..'.
+            """
+            for entry in os.listdir(str(self.path)):
+                if entry not in ('.', '..'):
+                    yield Path(os.path.join(str(self.path), entry))
+        
+        def exists(self):
+            return os.path.exists(self.path)
+
+        def as_posix(self):
+            """
+            Return a string representation of the path with forward slashes (/).
+            """
+            return self.path.replace(os.sep, '/')
+        
 
 elif six.PY3:
     import types
@@ -83,6 +130,8 @@ elif six.PY3:
 
     import pandas.core.indexes
     sys.modules['pandas.indexes'] = pandas.core.indexes
+    from pathlib import Path
+        
 
 # --------------- compatibility with old versions of ISF (only used by the Oberlaender lab in Bonn)
 # For old pickled data. This is to ensure backwards compatibility with the Oberlaender lab in MPINB, Bonn. Last adapted on 25/04/2024
@@ -91,21 +140,6 @@ elif six.PY3:
 
 import simrun
 sys.modules['simrun3'] = simrun  # simrun used to be simrun2 and simrun3 (separate packages). Pickle still wants a simrun3 to exist.
-
-def init_data_base_python_version_compatibility():
-    """
-    ISFDataBase works with the Pathlib library, which did not exist in Python 2
-    """
-    if six.PY2:
-        from data_base.model_data_base import IO as mdb_IO
-        from data_base.model_data_base import mdb_initializers
-        sys.modules['data_base.IO'] = mdb_IO
-        sys.modules['data_base.db_initializers'] = mdb_initializers
-    elif six.PY3:
-        from data_base.isf_data_base import IO
-        from data_base.isf_data_base import db_initializers
-        sys.modules['data_base.IO'] = IO
-        sys.modules['data_base.db_initializers'] = db_initializers
 
 def init_mdb_backwards_compatibility():
     """
@@ -121,15 +155,14 @@ def update_mdb_for_forwards_compatibility():
     This new package has updated API calls, and should be used in all new code.
     For this reason, the old API of model_data_base needs to be updated.
     """
-    from data_base.model_data_base import mdb_initializers, IO
-    from data_base import model_data_base
-    model_data_base.IO = IO
-    model_data_base.db_initializers = mdb_initializers
+    import sys
+    from data_base.model_data_base import IO, mdb_initializers
+    sys.modules['data_base.IO'] = IO
+    sys.modules['data_base.db_initializers'] = mdb_initializers 
     from data_base.model_data_base.mdb_initializers import load_simrun_general
     load_simrun_general.load_param_files_from_db = load_simrun_general.load_param_files_from_mdb
     load_simrun_general.load_initialized_cell_and_evokedNW_from_db = load_simrun_general.load_initialized_cell_and_evokedNW_from_mdb
-
+    
 def init_data_base_compatibility():
-    init_data_base_python_version_compatibility()
     init_mdb_backwards_compatibility()
     update_mdb_for_forwards_compatibility()

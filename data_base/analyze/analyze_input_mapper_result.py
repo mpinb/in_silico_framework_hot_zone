@@ -5,7 +5,7 @@ import glob
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from ..IO.roberts_formats import read_InputMapper_summary
+from data_base.IO.roberts_formats import read_InputMapper_summary
 from ..utils import select
 from ..analyze import excitatory, inhibitory
 

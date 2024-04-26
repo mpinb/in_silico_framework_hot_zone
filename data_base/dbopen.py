@@ -27,7 +27,7 @@ def resolve_db_path(path):
     try:
         managed_folder = db[path_splitted[1]]
     except KeyError:
-        raise KeyError("Trying to load {}. The Database has been found at {}. ".format(path, db.basedir) + \
+        raise KeyError("Trying to load {}. The Database has been found at {}. ".format(path, db._basedir) + \
         "However, this Database does not contain the key {}".format(path_splitted[1]))
     return os.path.join(managed_folder, *path_splitted[2:])
 
@@ -50,7 +50,7 @@ def create_db_path(path):
     db = DataBase(db_path, nocreate=True)
 
     #print path
-    path_minus_db_basedir = os.path.relpath(path, db.basedir)
+    path_minus_db_basedir = os.path.relpath(path, db._basedir)
 
     key = None
     for k in list(db.keys()):
@@ -66,7 +66,7 @@ def create_db_path(path):
             pass
 
     if key is None:
-        raise KeyError("Found a Database at {}. ".format(db.basedir)+\
+        raise KeyError("Found a Database at {}. ".format(db._basedir)+\
                        "However, there is no key pointing to the subfolder {} in it."\
                        .format(path_minus_db_basedir.split('/')[0]))
     return os.path.join('db://', db.get_id(), key,
