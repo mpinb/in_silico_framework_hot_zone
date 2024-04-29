@@ -19,7 +19,7 @@ class LoaderWrapper:
     data_base.basedir folder. It is not used, if the data is stored directly
     in the sqlite database.
     
-    The process of storing data in a subfolder is as follows:
+    The process of storing data in a subfolder is as follows, errno:
     1. The subfolder is generated using the mkdtemp method
     2. the respective dumper puts its data there
     3. the dumper also saves a Loader.pickle file there. This contains an object
@@ -767,6 +767,7 @@ class ISFDataBase:
         """
 
         str_ = ['<{}.{} object at {}>'.format(self.__class__.__module__, self.__class__.__name__, hex(id(self)))]
+        str_.append("Located at {}".format(self._basedir))
         str_.append("Located at {}".format(self._basedir))
         # str_.append("{1}DataBases{0} | {2}Directories{0} | {3}Keys{0}".format(
         #     bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
