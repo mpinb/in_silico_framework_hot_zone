@@ -517,7 +517,7 @@ def rename_for_deletion(key):
         key_to_delete = Path(str(key) + '.deleting.' + random_string)
         if not key_to_delete.exists():
             break
-    key.rename(key_to_delete)
+    Path(key).rename(key_to_delete)
     return key_to_delete
 
 def delete_in_background(key):
