@@ -26,9 +26,11 @@ class DataBase(object):
         Returns
             ISFDataBase or ModelDataBase: The correct database object.
         """
-        if is_model_data_base(basedir) or six.PY2:
-            logger.warning('Reading a legacy-format ModelDataBase.')
-            db = model_data_base.ModelDataBase(basedir, readonly=readonly, nocreate=not six.PY2)
+        if is_model_data_base(basedir):
+            # Allow to create mdbs during testing, otherwise read-only.
+            nocreate = not os.environ.get('ISF_IS_TESTING', False)
+            db = model_data_base.ModelDataBase(basedir, readonly=readonly, nocreate=nocreate)
+            logger.warning('Reading a legacy-format ModelDataBase. nocreate is set to {}'.format(nocreate))
             logger.warning('Overwriting mdb.set and mdb.get to be compatible with ISF syntax...')
             db.set = db.setitem
             db.get = db.getitem
