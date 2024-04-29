@@ -18,21 +18,15 @@ Limitations: This is not tested to work well with dataframes that natively conta
 
 import os
 import cloudpickle
-import tempfile
 import dask.dataframe as dd
 import dask.delayed
 import dask
 import pandas as pd
 from . import parent_classes
 import glob
-import compatibility
-import time
-from data_base.utils import chunkIt, myrepartition, mkdtemp
-import distributed
+from data_base.utils import chunkIt, myrepartition 
 import six
 import numpy as np
-
-# import pandas_msgpack # do not import this; it will break pickle in loaded dataframes
 from pandas_msgpack import to_msgpack, read_msgpack
 import json
 
@@ -245,7 +239,7 @@ def get_numpy_dtype_as_str(obj):
     Python 2 has two types of strings: str and unicode. If left unspecified, numpy will default to unicode of unknown length, which is set to 0.
     reading this back in results in the loss of string-type column names. For this reason, we construct our own string representation of the numpy dtype of these columns.
     """
-    if isinstance(obj, six.text_type) or isinstance(obj, str):  # Check if obj is a string
+    if (isinstance(obj, six.text_type) or isinstance(obj, str)) and six.PY2:  # Check if obj is a string
             return '|S{}'.format(len(obj))
     else:
         return str(np.dtype(type(obj)))
