@@ -23,24 +23,27 @@ def real_data_generic(db_, dumper_, client_=None):
     if client_ is None:
         db_.set('voltage_traces2', db_['voltage_traces'], dumper=dumper_)
     else:
-        db_.set('voltage_traces2',
-                     db_['voltage_traces'],
-                     dumper=dumper_,
-                     client=client_)
+        db_.set(
+            'voltage_traces2',
+            db_['voltage_traces'],
+            dumper=dumper_,
+            client=client_)
     dummy = db_['voltage_traces2']
     b = db_['voltage_traces'].compute(scheduler="multiprocessing")
     a = dummy.compute(scheduler="multiprocessing")
     assert_frame_equal(a, b, check_column_type=False)
 
     if client_ is None:
-        db_.set('synapse_activation2',
-                     db_['synapse_activation'],
-                     dumper=dumper_)
+        db_.set(
+            'synapse_activation2',    
+            db_['synapse_activation'],
+            dumper=dumper_)
     else:
-        db_.set('synapse_activation2',
-                     db_['synapse_activation'],
-                     dumper=dumper_,
-                     client=client_)
+        db_.set(
+            'synapse_activation2',
+            db_['synapse_activation'],
+            dumper=dumper_,
+            client=client_)
     dummy = db_['synapse_activation2']
     b = db_['synapse_activation'].compute(scheduler="multiprocessing")
     a = dummy.compute(scheduler="multiprocessing")

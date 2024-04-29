@@ -465,14 +465,16 @@ def parallel_copy_helper(df, transform_fun=None):
 #             param.save(value.to_)
 
 
-def write_param_files_to_folder(df,
-                                folder,
-                                path_column,
-                                hash_column,
-                                transform_fun=None):
+def write_param_files_to_folder(
+        df,
+        folder,
+        path_column,
+        hash_column,
+        transform_fun=None):
     print("move parameterfiles")
     df = df.drop_duplicates(subset=hash_column)
     print('number of parameterfiles:', len(df))
+    # Constructing a dataframe mapping the param files form their original simulation result location to the mdb that's being initialized
     df2 = pd.DataFrame()
     df2['from_'] = df[path_column]
     df2['to_'] = df.apply(lambda x: os.path.join(folder, x[hash_column]),
@@ -616,8 +618,10 @@ def _build_dendritic_voltage_traces(mdb, suffix_dict=None, repartition=None):
 
 def _build_param_files(mdb, client):
     print('---moving parameter files---')
-    ds = generate_param_file_hashes(mdb['simresult_path'],
-                                    mdb['sim_trail_index'])
+    ds = generate_param_file_hashes(
+        mdb['simresult_path'],  # location of simulation results
+        mdb['sim_trail_index']
+        )
     futures = client.compute(ds)
     result = client.gather(futures)
     df = pd.concat(result)
@@ -628,9 +632,9 @@ def _build_param_files(mdb, client):
         del mdb['parameterfiles_network_folder']
     ds = write_param_files_to_folder(
         df,
-        mdb.create_managed_folder('parameterfiles_cell_folder'),
-        'path_neuron',
-        'hash_neuron',
+        folder=mdb.create_managed_folder('parameterfiles_cell_folder'),
+        path_column='path_neuron',
+        hash_column='hash_neuron',
         transform_fun=cell_param_to_mdbpath)
     client.gather(client.compute(ds))
     ds = write_param_files_to_folder(
@@ -640,14 +644,26 @@ def _build_param_files(mdb, client):
 
     mdb['parameterfiles'] = df
 
-def init(mdb, simresult_path,  \
-         core = True, voltage_traces = True, synapse_activation = True,
-         dendritic_voltage_traces = True, parameterfiles = True, \
-         spike_times = True,  burst_times = False, \
-         repartition = True, scheduler = None, rewrite_in_optimized_format = True,
-         dendritic_spike_times = True, dendritic_spike_times_threshold = -30.,
-         client = None, n_chunks = 5000, dumper = pandas_to_parquet):
-    '''Use this function to load simulation data generated with the simrun module 
+def init(
+        mdb, 
+        simresult_path,
+        core = True, 
+        voltage_traces = True, 
+        synapse_activation = True,
+        dendritic_voltage_traces = True, 
+        parameterfiles = True,
+        spike_times = True,  
+        burst_times = False,
+        repartition = True, 
+        scheduler = None, 
+        rewrite_in_optimized_format = True,
+        dendritic_spike_times = True, 
+        dendritic_spike_times_threshold = -30.,
+        client = None, 
+        n_chunks = 5000, 
+        dumper = pandas_to_parquet):
+    '''
+    Use this function to load simulation data generated with the simrun module 
     into a ModelDataBase. 
     
     After initialization, you can access the data from the model_data_base in the following manner:
@@ -667,7 +683,7 @@ def init(mdb, simresult_path,  \
     
     client: dask distributed Client object.
     '''
-    assert dumper in (pandas_to_msgpack, pandas_to_parquet), \
+    assert dumper in (pandas_to_msgpack, pandas_to_parquet, db_pandas_to_msgpack, db_pandas_to_parquet), \
             "Please a pandas-compatible dumper. You used {}.".format(dumper)
     if dumper == pandas_to_msgpack and six.PY3 and not os.environ.get('ISF_IS_TESTING', False):
         raise DeprecationWarning(
@@ -681,43 +697,59 @@ def init(mdb, simresult_path,  \
         assert client is not None
         scheduler = client
 
-
-#     get = compatibility.multiprocessing_scheduler if get is None else get
-#     with dask.set_options(scheduler=scheduler):
-#with get_progress_bar_function()():
     mdb['simresult_path'] = simresult_path
+    # 1. Build the core of the mdb, i.e. all essential files:
+    #   - filelist
+    #   - voltage_traces
+    #   - sim_trail_index
+    #   - metadata
     if core:
         _build_core(mdb, repartition=repartition, metadata_dumper=dumper)
         if rewrite_in_optimized_format:
-            optimize(mdb,
-                     select=['voltage_traces'],
-                     repartition=False,
-                     scheduler=scheduler,
-                     client=client)
+            # optimize: 'synapse_activation', 'cell_activation', 'voltage_traces', 'dendritic_recordings'
+            optimize(
+                mdb,
+                select=['voltage_traces'],
+                repartition=False,
+                scheduler=scheduler,
+                client=client)
+            
     if parameterfiles:
         _build_param_files(mdb, client=client)
+
     if synapse_activation:
-        _build_synapse_activation(mdb,
-                                  repartition=repartition,
-                                  n_chunks=n_chunks)
+        _build_synapse_activation(
+            mdb,
+            repartition=repartition,
+            n_chunks=n_chunks)
+        
         if rewrite_in_optimized_format:
-            optimize(mdb,
-                     select=['cell_activation', 'synapse_activation'],
-                     repartition=False,
-                     scheduler=scheduler,
-                     client=client,
-                     dumper=dumper)
+            optimize(
+                mdb,
+                select=['cell_activation', 'synapse_activation'],
+                repartition=False,
+                scheduler=scheduler,
+                client=client,
+                dumper=dumper)
+            
     if dendritic_voltage_traces:
-        add_dendritic_voltage_traces(mdb, rewrite_in_optimized_format,
-                                     dendritic_spike_times, repartition,
-                                     dendritic_spike_times_threshold, scheduler,
-                                     client, dumper=dumper)
+        add_dendritic_voltage_traces(
+            mdb, 
+            rewrite_in_optimized_format,
+            dendritic_spike_times, 
+            repartition,
+            dendritic_spike_times_threshold, 
+            scheduler,
+            client, 
+            dumper=dumper)
+        
     if spike_times:
         print("---spike times---")
         vt = mdb['voltage_traces']
-        mdb.setitem('spike_times',
-                    spike_detection(vt),
-                    dumper=dumper)
+        mdb.setitem(
+            'spike_times',
+            spike_detection(vt),
+            dumper=dumper)
     print('Initialization succesful.')
 
 
@@ -794,10 +826,8 @@ def optimize(mdb,
     scheduler: scheduler for task execution. Can be a Client object, or a string: [distributed, multiprocessing, processes, single-threaded, sync, synchronous, threading, threads]
     '''
     keys = list(mdb.keys())
-    keys_for_rewrite = select if select is not None else ['synapse_activation', \
-                                                          'cell_activation', \
-                                                          'voltage_traces', \
-                                                          'dendritic_recordings']
+    keys_for_rewrite = select if select is not None else [
+        'synapse_activation', 'cell_activation', 'voltage_traces', 'dendritic_recordings']
     for key in list(mdb.keys()):
         if not key in keys_for_rewrite:
             continue
@@ -827,10 +857,11 @@ def load_param_files_from_mdb(mdb, sti):
     return scp.build_parameters(neuf), scp.build_parameters(netf)
 
 
-def load_initialized_cell_and_evokedNW_from_mdb(mdb,
-                                                sti,
-                                                allPoints=False,
-                                                reconnect_synapses=True):
+def load_initialized_cell_and_evokedNW_from_mdb(
+        mdb,
+        sti,
+        allPoints=False,
+        reconnect_synapses=True):
     import dask
     from model_data_base.IO.roberts_formats import write_pandas_synapse_activation_to_roberts_format
     neup, netp = load_param_files_from_mdb(mdb, sti)

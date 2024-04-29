@@ -1,13 +1,13 @@
 """
 Wrapper class that decides whether or not a database is legacy ModelDataBase, or the new ISFDataBase.
 """
-from . import model_data_base, isf_data_base
-import sys
+from .model_data_base.model_data_base import ModelDataBase
+from .isf_data_base.isf_data_base import ISFDataBase
 # For backwards compatibility, register model_data_base as top-level module, 
 # so pickled data still knows where to find modules
 import os
 from .data_base_register import _get_db_register
-import logging, six
+import logging
 logger = logging.getLogger('ISF').getChild(__name__)
 
 
@@ -29,15 +29,17 @@ class DataBase(object):
         if is_model_data_base(basedir):
             # Allow to create mdbs during testing, otherwise read-only.
             nocreate = not os.environ.get('ISF_IS_TESTING', False)
-            db = model_data_base.ModelDataBase(basedir, readonly=readonly, nocreate=nocreate)
             logger.warning('Reading a legacy-format ModelDataBase. nocreate is set to {}'.format(nocreate))
             logger.warning('Overwriting mdb.set and mdb.get to be compatible with ISF syntax...')
+            
+            db = ModelDataBase(basedir, readonly=readonly, nocreate=nocreate)
             db.set = db.setitem
             db.get = db.getitem
             db.create_sub_db = db.create_sub_mdb
             return db
+        
         else:
-            return isf_data_base.ISFDataBase(basedir, readonly=readonly, nocreate=nocreate)
+            return ISFDataBase(basedir, readonly=readonly, nocreate=nocreate)
 
 def get_db_by_unique_id(unique_id):
     db_path = _get_db_register().registry[unique_id]
