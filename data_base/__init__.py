@@ -25,3 +25,4 @@ All methods in ISF should never import IO from the model_data_base or isf_data_b
 """
 import compatibility
 compatibility.init_data_base_compatibility()
+from .data_base import DataBase
