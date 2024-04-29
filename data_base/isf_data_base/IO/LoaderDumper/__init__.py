@@ -1,6 +1,7 @@
 import os
 # import cloudpickle
-import compatibility, json
+import compatibility, json, yaml
+from data_base.exceptions import DataBaseException
 from inspect import getmodule
 import importlib
 import pandas as pd
@@ -27,14 +28,19 @@ def get_meta(savedir):
     if os.path.exists(os.path.join(savedir, 'dask_meta.json')):
         # Construct meta dataframe for dask
         with open(os.path.join(savedir, 'dask_meta.json'), 'r') as f:
-            meta_json = json.load(f)
-        meta = pd.DataFrame(
-            {
-                c: pd.Series([], dtype=t) for c, t in zip(meta_json['columns'], meta_json['dtypes'])
-                })
+            # use yaml instead of json to ensure loaded data is string (and not unicode) in Python 2
+            # yaml is a subset of json, so this should always work, although it assumes the json is ASCII encoded, which should cover all our usecases.
+            # See also: https://stackoverflow.com/questions/956867/how-to-get-string-objects-instead-of-unicode-from-json
+            meta_json = yaml.safe_load(f)  
+        meta = pd.DataFrame({
+            c: pd.Series([], dtype=t)
+            for c, t in zip(meta_json['columns'], meta_json['dtypes'])
+            }, 
+            columns=meta_json['columns']  # ensure the order of the columns is fixed.
+            )
         column_dtype_mapping = [
             (c, t)
-            if not t.startswith('<U') else (c, '<U' + str(len(c)))  # assure numpy assigns enough characters for the string
+            if not t.startswith('<U') else (c, '<U' + str(len(c)))  # PY3: assure numpy has enough chars for string, given that the dtype is just 'str'
             for c, t in zip(meta.columns.values, meta_json['column_name_dtypes'])
             ]
         meta.columns = tuple(np.array([tuple(meta.columns.values)], dtype=column_dtype_mapping)[0])
@@ -48,6 +54,7 @@ def load(savedir, load_data=True, loader_kwargs={}):
     #     with open(os.path.join(savedir, 'Loader.pickle'), 'rb') as file_:
     #         myloader = cloudpickle.load(file_, encoding = 'latin1')
     if os.path.exists(os.path.join(savedir, 'Loader.pickle')):
+        raise DataBaseException("You're loading a .pickle file, which is the format used by data_base.model_data_base. However, I am the load() method from data_base.isf_data_base.")
         myloader = compatibility.pandas_unpickle_fun(
             os.path.join(savedir, 'Loader.pickle'))
     else:
@@ -57,9 +64,7 @@ def load(savedir, load_data=True, loader_kwargs={}):
         del loader_init_kwargs['Loader']
         if get_meta(savedir) is not None:
             loader_init_kwargs['meta'] = get_meta(savedir)
-            
         myloader = importlib.import_module(loader).Loader(**loader_init_kwargs)
-
     if load_data:
         return myloader.get(savedir, **loader_kwargs)
     else:

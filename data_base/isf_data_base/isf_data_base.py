@@ -4,10 +4,11 @@ Created October 2023
 @authors: Arco Bast, Bjorge Meulemeester
 """
 
-import os, tempfile, string, json, threading, random, shutil, inspect, datetime, importlib, logging, errno
+import os, tempfile, string, json, threading, random, shutil, inspect, datetime, importlib, logging, errno, six
 from pathlib import Path
 from data_base import _module_versions, data_base_register
 import data_base.exceptions as db_exceptions
+from data_base.utils import colorize
 VC = _module_versions.version_cached
 
 logger = logging.getLogger("ISF").getChild(__name__)
@@ -58,7 +59,7 @@ class MetadataAccessor:
                 'metadata_creation_time': 'post_hoc',
                 'version': "unknown",
             }
-        with open(key/'metadata.json') as f:
+        with open(str(key/'metadata.json')) as f:
             return json.load(f)
 
     def keys(self):
@@ -177,8 +178,8 @@ class ISFDataBase:
             suppress_errors (bool, optional):
                 If True, errors will be suppressed and raised as warnings instead. Defaults to False. Use with caution.
         '''
-        self.basedir = str(basedir)  # for public access: str. This is not a Path object for backwards compatibility.
-        self._basedir = Path(basedir)  # for internal operations
+        self.basedir = os.path.abspath(str(basedir))  # for public access: str. This is not a Path object for backwards compatibility.
+        self._basedir = Path(self.basedir)  # for internal operations
         self.readonly = readonly
         self.nocreate = nocreate
         self.parent_db = None
@@ -769,10 +770,10 @@ class ISFDataBase:
         str_.append("Located at {}".format(self._basedir))
         # str_.append("{1}DataBases{0} | {2}Directories{0} | {3}Keys{0}".format(
         #     bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
-        str_.append(bcolors.OKGREEN + self._basedir.name + bcolors.ENDC)
+        str_.append(colorize(self._basedir.name, bcolors.OKGREEN))
         lines = calc_recursive_filetree(
             self, Path(self._basedir), 
-            depth=0, max_depth=max_depth, max_lines_per_key=max_lines_per_key, all_files=all_files)
+            depth=depth, max_depth=max_depth, max_lines_per_key=max_lines_per_key, all_files=all_files, max_lines=max_lines)
         for line in lines:
             str_.append(line)
         return "\n".join(str_)
@@ -785,16 +786,16 @@ class ISFDataBase:
         It should be explicitly called by the user when the user likes to delete a database.
         '''
         def delete_and_deregister_once_deleted(dir_to_data, unique_id):
-            shutil.rmtree(dir_to_data_rename)
+            shutil.rmtree(dir_to_data)
             # this will delete in foreground of the thread, 
             # and thus wait until db is deleted and only then continue
             register = data_base_register._get_db_register()
             del register[unique_id]  # remove from the register
 
         # make sure folder is renamed before continuing python process
-        dir_to_data_rename = rename_for_deletion(self._basedir)
+        dir_to_data_rename = rename_for_deletion(str(self._basedir))
         # start processes on one thread in background
-        return threading.Thread(target = lambda : delete_and_deregister_once_deleted(self, self._unique_id)).start()
+        return threading.Thread(target = lambda : delete_and_deregister_once_deleted(dir_to_data_rename, self._unique_id)).start()
 
 class RegisteredFolder(ISFDataBase):
     def __init__(self, path):

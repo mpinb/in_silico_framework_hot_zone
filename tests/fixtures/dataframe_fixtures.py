@@ -1,6 +1,7 @@
 import pytest
 import pandas as pd
 import dask.dataframe as dd
+import six
 
 @pytest.fixture
 def pdf():
@@ -9,8 +10,13 @@ def pdf():
     Returns:
         pd.DataFrame: A dataframe
     """
-    return pd.DataFrame({0: [1,2,3,4,5,6], 1: ['1', '2', '3', '1', '2', '3'], '2': [False, True, True, False, True, False], \
-                                 'myname': ['bla', 'bla', 'bla', 'bla', 'bla', 'bla']})
+    pdf = pd.DataFrame({
+        0: [1,2,3,4,5,6], 
+        1: ['1', '2', '3', '1', '2', '3'], 
+        '2': [False, True, True, False, True, False], 
+        'myname': ['bla', 'bla', 'bla', 'bla', 'bla', 'bla']
+        })
+    return pdf
 
 @pytest.fixture
 def ddf(pdf):

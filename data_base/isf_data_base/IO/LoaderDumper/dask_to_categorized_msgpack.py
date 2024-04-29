@@ -14,7 +14,6 @@ stores an arbitrary dask dataframe to msgpack. Before saving, all str-columns wi
 each respective partition, if the part of unique values in the respective column is <= 20%. The original datatype
 will be restored if the dataframe is loaded. This therefore only serves as optimization to increase loading speed and
 reduce network traffic for suitable dataframes. Suitable dataframes are for example the synapse_activation dataframe.
-
 Limitations: This is not tested to work well with dataframes that natively contain categoricals'''
 
 import os
@@ -85,14 +84,11 @@ def get_writer_function(categorize):
     def ddf_save_chunks(pdf, path, number, digits):
         if categorize:
             str_to_category(pdf)
-
-
-#         pdf.to_msgpack(path.replace('*', str(number).zfill(digits)), compress = 'blosc') ###
-        to_msgpack(path.replace('*',
-                                str(number).zfill(digits)),
-                   pdf,
-                   compress='blosc')
-
+        #  pdf.to_msgpack(path.replace('*', str(number).zfill(digits)), compress = 'blosc') ###
+        to_msgpack(
+            path.replace('*', str(number).zfill(digits)),
+            pdf, 
+            compress='blosc')
     return ddf_save_chunks
 
 
@@ -241,6 +237,18 @@ def check(obj):
     '''checks wherther obj can be saved with this dumper'''
     return isinstance(obj, dd.DataFrame)  # and (obj.index.dtype == 'object')
 
+def get_numpy_dtype_as_str(obj):
+    """
+    Get a string representation of the numpy dtype of an object.
+    If the object is of type string, simply return 'str'.
+
+    Python 2 has two types of strings: str and unicode. If left unspecified, numpy will default to unicode of unknown length, which is set to 0.
+    reading this back in results in the loss of string-type column names. For this reason, we construct our own string representation of the numpy dtype of these columns.
+    """
+    if isinstance(obj, six.text_type) or isinstance(obj, str):  # Check if obj is a string
+            return '|S{}'.format(len(obj))
+    else:
+        return str(np.dtype(type(obj)))
 
 def save_meta(obj, savedir):
     """
@@ -251,7 +259,7 @@ def save_meta(obj, savedir):
     meta = obj._meta
     meta_json = {
         "columns": [str(c) for c in meta.columns],
-        "column_name_dtypes" : [str(np.dtype(type(c))) for c in meta.columns],
+        "column_name_dtypes" : [get_numpy_dtype_as_str(c) for c in meta.columns],
         "dtypes": [str(e) for e in meta.dtypes.values]}
     with open(os.path.join(savedir, 'dask_meta.json'), 'w') as f:
         json.dump(meta_json, f)
@@ -275,6 +283,7 @@ class Loader(parent_classes.Loader):
         # my_reader = lambda x: category_to_str(pd.read_msgpack(x))  ###
         my_reader = lambda x: category_to_str(read_msgpack(x))
 
+
         if self.divisions:
             if verbose:
                 print('loaded dask dataframe with known divisions')
@@ -293,12 +302,13 @@ class Loader(parent_classes.Loader):
         return ddf
 
 
-def dump(obj,
-         savedir,
-         repartition=False,
-         scheduler=None,
-         categorize=True,
-         client=None):
+def dump(
+        obj,
+        savedir,
+        repartition=False,
+        scheduler=None,
+        categorize=True,
+        client=None):
     """
     Save an object to a file in a DataBase in the pandas-msgpack format.
     Has been deprecated since 2023-09-01. Please use another dumper.
@@ -328,10 +338,11 @@ def dump(obj,
         if obj.npartitions > 10000:
             obj = myrepartition(obj, 10000)
 
-    my_dask_writer(obj,
-                   os.path.join(savedir, fileglob),
-                   categorize=categorize,
-                   client=client)
+    my_dask_writer(
+        obj,
+        os.path.join(savedir, fileglob),
+        categorize=categorize,
+        client=client)
 
     index_name = obj.index.name
     if obj.known_divisions:
@@ -349,5 +360,3 @@ def dump(obj,
             f)
     
     save_meta(obj, savedir)
-
-
