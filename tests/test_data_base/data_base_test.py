@@ -1,14 +1,12 @@
 from data_base.data_base import DataBase
 from data_base.exceptions import  DataBaseException
 from data_base._version import get_versions
-import data_base.IO.LoaderDumper.to_pickle as to_pickle
-from data_base.IO.LoaderDumper import pandas_to_msgpack
+from data_base.IO.LoaderDumper import pandas_to_msgpack, to_pickle, get_dumper_string_by_dumper_module
 import pytest, os, shutil, six, tempfile,  subprocess
 from getting_started import parent as getting_started_parent
 from pandas.util.testing import assert_frame_equal
 from data_base.db_initializers.load_simrun_general import init
 from data_base.utils import silence_stdout
-from data_base import IO
 
 parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -33,7 +31,7 @@ def test_new_unique_id_is_generated_if_it_is_not_set_yet(empty_db):
 
 def test_get_dumper_string_by_dumper_module():
     '''dumper string should be the modules name wrt IO.LoaderDumpers'''
-    s1 = IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
+    s1 = get_dumper_string_by_dumper_module(to_pickle)
     s2 = 'to_pickle'
     assert s1 == s2
 
@@ -44,7 +42,7 @@ def test_get_dumper_string_by_savedir(empty_db):
     or from the module reference directly.'''
     empty_db.set('test', 1, dumper=to_pickle)
     s1 = empty_db._detect_dumper_string_of_existing_key('test')
-    s2 = IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
+    s2 = get_dumper_string_by_dumper_module(to_pickle)
     assert s1 == s2
 
 
@@ -267,51 +265,6 @@ def test_maybe_calculate_runs_calculation_the_first_time_and_gets_result_from_db
 def test_accessing_non_existent_key_raises_KeyError(empty_db):
     with pytest.raises(KeyError):
         empty_db['some_nonexistent_key']
-
-
-@pytest.mark.skipif(
-    six.PY3,
-    reason=
-    "Old db only readable in Py2. Py3 does not have pandas.indexes. It has been moved to pandas.core.indexes."
-)
-def test_compare_old_db_with_freshly_initialized_one(client):
-    '''ensure compatibility with old versions'''
-    old_path = os.path.join(parent, \
-                            'test_data_base', \
-                            'data',\
-                            'already_initialized_db_for_compatibility_testing')
-    old_db = DataBase(old_path, readonly=True, nocreate=True)
-
-    # Manually create db
-    path = tempfile.mkdtemp()
-    fresh_db = DataBase(path)
-    test_data_folder = os.path.join(getting_started_parent,
-                                    'example_simulation_data')
-    with silence_stdout:
-        init(fresh_db,
-             test_data_folder,
-             client=client,
-             rewrite_in_optimized_format=False,
-             parameterfiles=False,
-             dendritic_voltage_traces=False,
-             dumper = pandas_to_msgpack)
-
-    #old_db['reduced_model']
-    assert_frame_equal(fresh_db['voltage_traces'].compute().sort_index(axis=1), \
-                        old_db['voltage_traces'].compute().sort_index(axis=1))
-    assert_frame_equal(fresh_db['synapse_activation'].compute().sort_index(axis=1), \
-                        old_db['synapse_activation'].compute().sort_index(axis=1))
-    assert_frame_equal(fresh_db['cell_activation'].compute().sort_index(axis=1), \
-                        old_db['cell_activation'].compute().sort_index(axis=1))
-    assert_frame_equal(fresh_db['metadata'].sort_index(axis=1), \
-                        old_db['metadata'].sort_index(axis=1))
-
-    # cleanup
-    shutil.rmtree(path)
-
-    # reduced model can be loaded - commented out by Rieke during python 2to3 transition
-    #     Rm = old_db['reduced_lda_model']
-    #     Rm.plot() # to make sure, this can be called
 
 
 def test_check_if_key_exists_can_handle_str_and_tuple_keys(empty_db):

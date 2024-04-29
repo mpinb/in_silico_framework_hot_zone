@@ -4,11 +4,11 @@ from data_base.model_data_base.IO.LoaderDumper import pandas_to_msgpack, to_pick
 import pytest, os, shutil, six, tempfile, subprocess
 from getting_started import parent as getting_started_parent
 from pandas.util.testing import assert_frame_equal
-from data_base.db_initializers.load_simrun_general import init
+from data_base.model_data_base.mdb_initializers.load_simrun_general import init
 from data_base.utils import silence_stdout
 from data_base.model_data_base import IO
 
-parent = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+parent = os.path.abspath(os.path.dirname(__file__))
 
 
 def test_unique_id_is_set_on_initialization(empty_mdb):
@@ -29,7 +29,7 @@ def test_new_unique_id_is_generated_if_it_is_not_set_yet(empty_mdb):
     assert mdb._unique_id is not None
 
 
-def test_get_dumper_string_by_dumper_module(empty_mdb):
+def test_get_dumper_string_by_dumper_module():
     '''dumper string should be the modules name wrt IO.LoaderDumpers'''
     s1 = IO.LoaderDumper.get_dumper_string_by_dumper_module(to_pickle)
     s2 = 'to_pickle'
@@ -272,41 +272,42 @@ def test_accessing_non_existent_key_raises_KeyError(empty_mdb):
 )
 def test_compare_old_mdb_with_freshly_initialized_one(client):
     '''ensure compatibility with old versions'''
-    old_path = os.path.join(parent, \
-                            'data',\
-                            'already_initialized_mdb_for_compatibility_testing')
+    old_path = os.path.join(
+        parent, 
+        'data',
+        'already_initialized_mdb_for_compatibility_testing')
     old_db = ModelDataBase(old_path, readonly=True, nocreate=True)
 
     # Manually create db
     path = tempfile.mkdtemp()
-    fresh_db = ModelDataBase(path)
-    test_data_folder = os.path.join(getting_started_parent,
-                                    'example_simulation_data')
+    fresh_mdb = ModelDataBase(path)
+    test_data_folder = os.path.join(
+        getting_started_parent,
+        'example_data',
+        'simulation_data',
+        )
     with silence_stdout:
-        init(fresh_db,
-             test_data_folder,
-             client=client,
-             rewrite_in_optimized_format=False,
-             parameterfiles=False,
-             dendritic_voltage_traces=False,
-             dumper = pandas_to_msgpack)
+        init(
+            fresh_mdb,
+            simresult_path=test_data_folder,
+            client=client,
+            rewrite_in_optimized_format=False,
+            parameterfiles=False,
+            dendritic_voltage_traces=False,
+            dumper = pandas_to_msgpack)
 
     #old_db['reduced_model']
-    assert_frame_equal(fresh_db['voltage_traces'].compute().sort_index(axis=1), \
+    assert_frame_equal(fresh_mdb['voltage_traces'].compute().sort_index(axis=1), \
                         old_db['voltage_traces'].compute().sort_index(axis=1))
-    assert_frame_equal(fresh_db['synapse_activation'].compute().sort_index(axis=1), \
+    assert_frame_equal(fresh_mdb['synapse_activation'].compute().sort_index(axis=1), \
                         old_db['synapse_activation'].compute().sort_index(axis=1))
-    assert_frame_equal(fresh_db['cell_activation'].compute().sort_index(axis=1), \
+    assert_frame_equal(fresh_mdb['cell_activation'].compute().sort_index(axis=1), \
                         old_db['cell_activation'].compute().sort_index(axis=1))
-    assert_frame_equal(fresh_db['metadata'].sort_index(axis=1), \
+    assert_frame_equal(fresh_mdb['metadata'].sort_index(axis=1), \
                         old_db['metadata'].sort_index(axis=1))
 
     # cleanup
     shutil.rmtree(path)
-
-    # reduced model can be loaded - commented out by Rieke during python 2to3 transition
-    #     Rm = old_db['reduced_lda_model']
-    #     Rm.plot() # to make sure, this can be called
 
 
 def test_check_if_key_exists_can_handle_str_and_tuple_keys(empty_mdb):
