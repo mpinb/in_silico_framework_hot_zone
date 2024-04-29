@@ -307,11 +307,13 @@ def test_mini_optimization_run(capsys, client):
         raise
 
 
-@pytest.mark.skipif(six.PY3, reason="This test is not Py3 compatible")
+@pytest.mark.skipif(
+    six.PY3, 
+    reason="This test is not Py3 compatible: `TypeError: an integer is required (got type str)` during `r = cloudpickle.load(f, encoding='latin1')`"
+)
 @pytest.mark.skipif(
     six.PY2,
-    reason=
-    "The legacy database is unreadable. Py3 yields `TypeError: an integer is required (got type str)` during `r = cloudpickle.load(f, encoding='latin1')`. Py2 yields `TypeError: range() integer end argument expected, got list` while trying `if cell_count >= 0` (cloudpickle.py, l1041)."
+    reason="The legacy database is unreadable: `TypeError: range() integer end argument expected, got list` while trying `if cell_count >= 0` (cloudpickle.py, l1041)."
 )
 def test_ON_HOLD_legacy_simulator_and_new_simulator_give_same_results():
     """
