@@ -514,7 +514,7 @@ def rename_for_deletion(key):
     N = 5
     while True:
         random_string = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
-        key_to_delete = Path(key.as_posix() + '.deleting.' + random_string)
+        key_to_delete = Path(str(key) + '.deleting.' + random_string)
         if not key_to_delete.exists():
             break
     key.rename(key_to_delete)
