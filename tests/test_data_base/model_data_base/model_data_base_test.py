@@ -270,12 +270,11 @@ def test_accessing_non_existent_key_raises_KeyError(empty_mdb):
     reason=
     "Old db only readable in Py2. Py3 does not have pandas.indexes. It has been moved to pandas.core.indexes."
 )
-def test_compare_old_db_with_freshly_initialized_one(client):
+def test_compare_old_mdb_with_freshly_initialized_one(client):
     '''ensure compatibility with old versions'''
     old_path = os.path.join(parent, \
-                            'test_data_base', \
                             'data',\
-                            'already_initialized_db_for_compatibility_testing')
+                            'already_initialized_mdb_for_compatibility_testing')
     old_db = ModelDataBase(old_path, readonly=True, nocreate=True)
 
     # Manually create db
