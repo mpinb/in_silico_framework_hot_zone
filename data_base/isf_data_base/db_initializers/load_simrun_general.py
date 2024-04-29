@@ -9,10 +9,17 @@ import pandas as pd
 import dask.dataframe as dd
 import single_cell_parser as scp
 import single_cell_parser.analyze as sca
-from data_base.isf_data_base import ISFDataBase as DataBase
-from data_base.isf_data_base.IO.LoaderDumper import dask_to_categorized_msgpack, pandas_to_pickle, \
-    to_cloudpickle, to_pickle, pandas_to_parquet, dask_to_msgpack, pandas_to_msgpack, \
-        get_dumper_string_by_dumper_module, dask_to_parquet
+from data_base.isf_data_base import ISFDataBase
+from data_base.isf_data_base.IO.LoaderDumper import (
+    dask_to_categorized_msgpack, 
+    pandas_to_pickle,
+    to_cloudpickle, 
+    to_pickle, 
+    pandas_to_parquet, 
+    dask_to_msgpack, 
+    pandas_to_msgpack,
+    get_dumper_string_by_dumper_module, 
+    dask_to_parquet)
 from data_base.exceptions import DataBaseException
 from data_base.isf_data_base.IO.roberts_formats import read_pandas_synapse_activation_from_roberts_format as read_sa
 from data_base.isf_data_base.IO.roberts_formats import read_pandas_cell_activation_from_roberts_format as read_ca
@@ -669,9 +676,9 @@ def init(
     
     client: dask distributed Client object.
     '''
-    assert dumper in (pandas_to_msgpack, pandas_to_parquet), \
-        "Please use a pandas-compatible dumper. You used {}.".format(dumper)
-    if dumper == pandas_to_msgpack and six.PY3 and not os.environ.get('ISF_IS_TESTING', False):
+    assert dumper.__name__.endswith('.IO.LoaderDumper.pandas_to_msgpack') or dumper.__name__.endswith('.IO.LoaderDumper.pandas_to_parquet'), \
+            "Please use a pandas-compatible dumper. You used {}.".format(dumper)
+    if dumper.__name__.endswith('pandas_to_msgpack') and six.PY3 and not os.environ.get('ISF_IS_TESTING', False):
         raise DeprecationWarning(
             """The pandas_to_msgpack dumper is deprecated for Python 3.8 and onwards. Use pandas_to_parquet instead.\n
             If you _really_ need to use pandas_to_msgpack for whatever reason, use ISF Py2.7 and pretend to be the test suite by overriding the environment variable ISF_IS_TESTING. 
@@ -722,14 +729,15 @@ def init(
     logging.info('Initialization succesful.')
 
 
-def add_dendritic_voltage_traces(db,
-                                 rewrite_in_optimized_format=True,
-                                 dendritic_spike_times=True,
-                                 repartition=True,
-                                 dendritic_spike_times_threshold=-30.,
-                                 scheduler=None,
-                                 client=None,
-                                 dumper=None):
+def add_dendritic_voltage_traces(
+        db,
+        rewrite_in_optimized_format=True,
+        dendritic_spike_times=True,
+        repartition=True,
+        dendritic_spike_times_threshold=-30.,
+        scheduler=None,
+        client=None,
+        dumper=None):
     _build_dendritic_voltage_traces(db, repartition=repartition)
     if rewrite_in_optimized_format:
         optimize(db['dendritic_recordings'],
@@ -754,9 +762,9 @@ def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.):
 def _get_dumper(value):
     '''tries to automativcally infer the best dumper for each table'''
     if isinstance(value, pd.DataFrame):
-        return pandas_to_parquet
+        return pandas_to_parquet if six.PY3 else pandas_to_msgpack
     elif isinstance(value, dd.DataFrame):
-        return dask_to_parquet
+        return dask_to_parquet if six.PY3 else dask_to_msgpack
     else:
         raise NotImplementedError()
 
@@ -804,7 +812,7 @@ def optimize(db,
             continue
         else:
             value = db[key]
-            if isinstance(value, DataBase):
+            if isinstance(value, ISFDataBase):
                 optimize(value,
                          select=list(value.keys()),
                          scheduler=scheduler,

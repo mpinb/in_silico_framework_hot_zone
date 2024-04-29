@@ -3,28 +3,56 @@
 # useful to setup whatever needs to be done before the actual testing or test discovery
 # for setting environment variables, use pytest.ini or .env instead
 import os, logging, socket, dask, six, sys
-import mechanisms  # compile mechanisms on test server
 from Interface import logger as isf_logger
 # --- Import fixtures
 from .fixtures import client
 from .fixtures.dataframe_fixtures import pdf, ddf
 if six.PY3:  # pytest can be parallellized on py3: use unique ids for dbs
     from .fixtures.data_base_fixtures_py3 import (
-        fresh_db, 
-        fresh_mdb, 
-        empty_db, 
-        empty_mdb, 
+        fresh_db,
+        fresh_mdb,
+        empty_db,
+        empty_mdb,
         sqlite_db
     )
 elif six.PY2:  # old pytest version needs explicit @pytest.yield_fixture markers. has been deprecated since 6.2.0
     from .fixtures.data_base_fixtures_py2 import (
-        fresh_db, 
-        fresh_mdb, 
-        empty_db, 
-        empty_mdb, 
+        fresh_db,
+        fresh_mdb,
+        empty_db,
+        empty_mdb,
         sqlite_db
     )
 from .context import TEST_DATA_FOLDER, CURRENT_DIR
+
+def import_worker_requirements():
+    import compatibility
+    import mechanisms
+
+def ensure_workers_have_imported_requirements(client):
+    """
+    This function is called in the pytest_configure hook to ensure that all workers have imported the necessary modules
+    """
+    import sys
+    def update_path(): sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+    client.run(update_path)
+    
+    if six.PY3:
+        # Add dask plugin in case workers get killed
+        from distributed.diagnostics.plugin import WorkerPlugin
+        class SetupWorker(WorkerPlugin):
+            def __init__(self):
+                import_worker_requirements()
+
+            def setup(self, worker):
+                """
+                This gets called every time a new worker is added to the scheduler
+                """
+                import_worker_requirements()
+        
+        client.register_worker_plugin(SetupWorker())
+    
+    client.run(import_worker_requirements)
 
 logger = logging.getLogger("ISF").getChild(__name__)
 os.environ["ISF_IS_TESTING"] = "True"
@@ -96,3 +124,8 @@ def pytest_configure(config):
         os.path.join(CURRENT_DIR, "logs", "test.log"))
     isf_logging_file_handler.setLevel(logging.INFO)
     isf_logger.addHandler(isf_logging_file_handler)
+
+    c = distributed.Client(
+        "localhost:" + str(config.getoption("--dask_server_port"))
+        )
+    ensure_workers_have_imported_requirements(c)

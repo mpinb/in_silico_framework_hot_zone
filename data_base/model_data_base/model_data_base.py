@@ -224,6 +224,11 @@ class ModelDataBase(object):
             if self._unique_id is None:
                 self._set_unique_id()
 
+        # Compatibility with new ISFDataBase:
+        self.set = self.setitem
+        self.get = self.getitem
+        self.create_sub_db = self.create_sub_mdb
+
     def in_memory(self, keys = 'all', recursive = True):
         '''Load all data required for accessing data in memory. This can be helpful, if locking 
         is taking much time, but would not be required. If in_memory has been called, no changes to 

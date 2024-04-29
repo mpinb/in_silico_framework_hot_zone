@@ -85,10 +85,10 @@ def get_writer_function(categorize):
 
 
 #         pdf.to_msgpack(path.replace('*', str(number).zfill(digits)), compress = 'blosc') ###
-        to_msgpack(path.replace('*',
-                                str(number).zfill(digits)),
-                   pdf,
-                   compress='blosc')
+        to_msgpack(
+            path.replace('*',str(number).zfill(digits)),
+            pdf,
+            compress='blosc')
 
     return ddf_save_chunks
 

@@ -185,23 +185,27 @@ do
         
         COMPILATION_DIR=$(find $d -mindepth 2 -type f -name "*.c" -printf '%h\n' | head -n 1 || true)
         if [ -d "$COMPILATION_DIR" ]; then
-            LA_FILE="$COMPILATION_DIR/libnrnmech.la"
-            if [ ! -f "$LA_FILE" ]; then
-                echo "Deleting previously created $COMPILATION_DIR because it does not contain libnrnmech.la. Recompiling..."
-                rm -r "$(dirname "$COMPILATION_DIR")"
-            fi 
+            echo "Found previously created compilation directory ${COMPILATION_DIR}"
+            echo "Deleting previously created $COMPILATION_DIR "
+            rm -r $COMPILATION_DIR
         fi
-
-        nrnivmodl || exit 1;
+        
+        output=$(nrnivmodl 2>&1)
+        if echo "$output" | grep -iq "error"; then
+            echo "$output"
+            exit 1
+        else
+            echo "$output"
+        fi
         
         # Verify if compilation was succesful
         cd $d;
         COMPILATION_DIR=$(find $d -type f -name "*.c" -printf '%h\n' | head -n 1 || true)
         if [ -d "$COMPILATION_DIR" ]; then
-            LA_FILE=$(find "$COMPILATION_DIR" -name "*.so" -print -quit)
+            LA_FILE=$(find "$COMPILATION_DIR" -name "*.la" -print -quit)
             if [ ! -f "$LA_FILE" ]; then
                 echo "$COMPILATION_DIR does not contain a .la file. Compilation was unsuccesful. Please inspect the output of nrnivmodl for further information."
-                exist 1;
+                exit 1;
             fi 
         else
             echo "No directory found containing *.c files. Compilation was unsuccesful."

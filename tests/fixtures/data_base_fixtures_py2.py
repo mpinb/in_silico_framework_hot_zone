@@ -5,6 +5,7 @@ from data_base.utils import silence_stdout
 from data_base.data_base import DataBase
 from data_base.model_data_base import ModelDataBase
 from data_base.IO.LoaderDumper import pandas_to_msgpack
+from data_base.model_data_base.IO.LoaderDumper import pandas_to_msgpack as mdb_pandas_to_msgpack
 from ..context import TEST_DATA_FOLDER
 
 
@@ -42,10 +43,7 @@ def fresh_db():
 
     yield db
     # cleanup
-    for key in db.keys():
-        del key
     del db
-    shutil.rmtree(path)
 
 @pytest.yield_fixture
 def fresh_mdb():
@@ -66,23 +64,21 @@ def fresh_mdb():
     """
     # unique temp path
     path = tempfile.mkdtemp()
-    db = ModelDataBase(path)
+    mdb = ModelDataBase(path)
     #self.db.settings.show_computation_progress = False
 
     with silence_stdout:
         init_mdb(
-            db,
+            mdb,
             TEST_DATA_FOLDER,
             rewrite_in_optimized_format=False,
             parameterfiles=False,
             dendritic_voltage_traces=False,
-            dumper=pandas_to_msgpack)  # no Parquet dumper
+            dumper=mdb_pandas_to_msgpack)  # no Parquet dumper
 
-    yield db
+    yield mdb
     # cleanup
-    for key in db.keys():
-        del key
-    del db
+    del mdb
     shutil.rmtree(path)
 
 @pytest.yield_fixture
@@ -100,10 +96,7 @@ def empty_db():
 
     yield db
     # cleanup
-    for key in db.keys():
-        del key
     del db
-    shutil.rmtree(path)
 
 @pytest.yield_fixture
 def empty_mdb():
@@ -119,8 +112,6 @@ def empty_mdb():
 
     yield db
     # cleanup
-    for key in db.keys():
-        del key
     del db
     shutil.rmtree(path)
 

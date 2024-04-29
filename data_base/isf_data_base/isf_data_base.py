@@ -4,14 +4,14 @@ Created October 2023
 @authors: Arco Bast, Bjorge Meulemeester
 """
 
-import os, tempfile, string, json, threading, random, shutil, inspect, datetime, importlib, logging
+import os, tempfile, string, json, threading, random, shutil, inspect, datetime, importlib, logging, errno, six
 from pathlib import Path
 from data_base import _module_versions, data_base_register
 import data_base.exceptions as db_exceptions
+from data_base.utils import colorize
 VC = _module_versions.version_cached
 
 logger = logging.getLogger("ISF").getChild(__name__)
-
 class LoaderWrapper:
     '''This is a pointer to data, which is stored elsewhere.
     
@@ -19,7 +19,7 @@ class LoaderWrapper:
     data_base.basedir folder. It is not used, if the data is stored directly
     in the sqlite database.
     
-    The process of storing data in a subfolder is as follows:
+    The process of storing data in a subfolder is as follows, errno:
     1. The subfolder is generated using the mkdtemp method
     2. the respective dumper puts its data there
     3. the dumper also saves a Loader.pickle file there. This contains an object
@@ -59,18 +59,18 @@ class MetadataAccessor:
                 'metadata_creation_time': 'post_hoc',
                 'version': "unknown",
             }
-        with open(key/'metadata.json') as f:
+        with open(str(key/'metadata.json')) as f:
             return json.load(f)
 
     def keys(self):
-        return [ k for k in self.db.keys() if Path.exists(self.db.basedir/k/"Loader.[json][pickle]") ]
+        return [ k for k in self.db.keys() if Path.exists(self.db._basedir/k/"Loader.[json][pickle]") ]
         
 def _check_working_dir_clean_for_build(working_dir):
     '''Backend method that checks, wether working_dir is suitable
     to build a new database there'''
     if Path.exists(working_dir):
         try:
-            if not os.listdir(working_dir):
+            if not os.listdir(str(working_dir)):
                 return
             else:
                 raise OSError()
@@ -80,7 +80,7 @@ def _check_working_dir_clean_for_build(working_dir):
                                + "or write permission is missing. The specified path is %s" % working_dir)
     else:
         try: 
-            os.makedirs(working_dir)
+            os.makedirs(str(working_dir))
             return
         except OSError:
             raise db_exceptions.DataBaseException("Can't build database: " \
@@ -110,7 +110,7 @@ def get_dumper_from_folder(folder, return_ = 'module'):
     Returns:
         str | module: The dumper that was used to save the data in that folder/key.
     """
-    with open(Path(folder)/"metadata.json") as f:
+    with open(str(Path(folder)/"metadata.json")) as f:
         dumper_string = json.load(f)['dumper']
     if return_ == 'string':
         return dumper_string
@@ -178,7 +178,8 @@ class ISFDataBase:
             suppress_errors (bool, optional):
                 If True, errors will be suppressed and raised as warnings instead. Defaults to False. Use with caution.
         '''
-        self.basedir = Path(basedir)
+        self.basedir = os.path.abspath(str(basedir))  # for public access: str. This is not a Path object for backwards compatibility.
+        self._basedir = Path(self.basedir)  # for internal operations
         self.readonly = readonly
         self.nocreate = nocreate
         self.parent_db = None
@@ -229,11 +230,11 @@ class ISFDataBase:
             key = self._convert_key_to_path(key_str)
             logger.info("Updating metadata for key {key}".format(key = key.name))
             try:
-                dumper = LoaderDumper.get_dumper_string_by_savedir(key.as_posix())
-            except FileNotFoundError:
+                dumper = LoaderDumper.get_dumper_string_by_savedir(str(key))
+            except EnvironmentError as e:
                 dumper = "unknown"
             
-            time = os.stat(key).st_mtime
+            time = os.stat(str(key)).st_mtime
             time = datetime.datetime.utcfromtimestamp(time)
             time = tuple(time.timetuple())
             
@@ -245,14 +246,14 @@ class ISFDataBase:
                 }
             
             # Save metdata, only for the key that does not have any
-            json.dump(out, open(key/'metadata.json', 'w'))
+            json.dump(out, open(str(key/'metadata.json'), 'w'))
             
     def _register_this_database(self):
         logger.info('registering database with unique id {} to the absolute path {}'.format(
-            self._unique_id, self.basedir))
+            self._unique_id, self._basedir))
         try:
-            data_base_register.register_db(self._unique_id, self.basedir)
-            self._registered_to_path = self.basedir
+            data_base_register.register_db(self._unique_id, self._basedir)
+            self._registered_to_path = self._basedir
         except db_exceptions.DataBaseException as e:
             if self._suppress_errors:
                 logger.warning(str(e))
@@ -269,7 +270,7 @@ class ISFDataBase:
         if self._unique_id is not None:
             raise ValueError("self._unique_id is already set!")
         # db_state.json may exist upon first init, but does not have a unique id yet. Create it and reset db_state
-        time = os.stat(self.basedir/'db_state.json').st_mtime
+        time = os.stat(str(self._basedir/'db_state.json')).st_mtime
         time = datetime.datetime.utcfromtimestamp(time)
         time = time.strftime("%Y-%m-%d")
         random_string = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) 
@@ -277,12 +278,12 @@ class ISFDataBase:
         self._unique_id = '_'.join([time, str(os.getpid()), random_string])
     
     def _is_initialized(self):
-        if Path.exists(self.basedir/'dbcore.pickle'):
+        if Path.exists(self._basedir/'dbcore.pickle'):
             self._is_legacy = True
-        if Path.exists(self.basedir/'db_state.json'):
+        if Path.exists(self._basedir/'db_state.json'):
             # Converted legacy: has both .json and .pickle files.
             return True
-        elif Path.exists(self.basedir/'dbcore.pickle'):
+        elif Path.exists(self._basedir/'dbcore.pickle'):
             # Just a legacy. No .json file.
             logger.warning('You are reading a legacy ModelDataBase using the new API. Beware that some functionality may not work (yet)')
             self._db_state_fn = 'dbcore.pickle'
@@ -291,10 +292,11 @@ class ISFDataBase:
             return False
     
     def _initialize(self):
-        _check_working_dir_clean_for_build(self.basedir)   
-        os.makedirs(self.basedir, exist_ok = True)
+        _check_working_dir_clean_for_build(self._basedir)   
+        if not os.path.exists(str(self._basedir)):
+            os.makedirs(str(self._basedir))
         # create empty state file. 
-        with open(self.basedir/self._db_state_fn, 'w'):
+        with open(str(self._basedir/self._db_state_fn), 'w'):
             pass
         self._set_unique_id()
         self._registeredDumpers.append(DEFAULT_DUMPER)
@@ -309,11 +311,11 @@ class ISFDataBase:
     def _convert_key_to_path(self, key):
         self._check_key_format(key)
         if isinstance(key, str):
-            return self.basedir/key
+            return self._basedir/key
         elif isinstance(key, tuple):
             sub_db_path = ['db' if not self._is_legacy else 'mdb'] * (len(key) * 2 - 1)
             sub_db_path[0::2] = key
-            return Path(self.basedir, *sub_db_path)
+            return Path(self._basedir, *sub_db_path)
         else:
             assert isinstance(key, Path), "Key must be a string, tuple of strings, or Path. {} is type {}".format(key, type(key))
             return key
@@ -385,7 +387,7 @@ class ISFDataBase:
 
         out.update(VC.get_git_version())
             
-        with open(dir_to_data/'metadata.json', 'w') as f:
+        with open(str(dir_to_data/'metadata.json'), 'w') as f:
             json.dump(out, f)
     
     def _check_writing_privilege(self, key):
@@ -440,8 +442,8 @@ class ISFDataBase:
         ## things that define the state of this db and should be saved
         out = {'_registeredDumpers': [e.__name__ for e in self._registeredDumpers], \
                '_unique_id': self._unique_id,
-               '_registered_to_path': self._registered_to_path.as_posix()} 
-        with open(self.basedir/self._db_state_fn, 'w') as f:
+               '_registered_to_path': str(self._registered_to_path)} 
+        with open(str(self._basedir/self._db_state_fn), 'w') as f:
             if self._db_state_fn.endswith('.json'):
                 json.dump(out, f)
             elif self._db_state_fn.endswith('.pickle'):
@@ -451,10 +453,10 @@ class ISFDataBase:
     def read_db_state(self):
         '''sets the state of the database according to db_state.json/dbcore.pickle''' 
         if self._db_state_fn.endswith('.json'):
-            with open(self.basedir/self._db_state_fn, 'r') as f:
+            with open(str(self._basedir/self._db_state_fn), 'r') as f:
                 state = json.load(f)
         elif self._db_state_fn.endswith('.pickle'):
-            state = pandas_unpickle_fun(self.basedir/self._db_state_fn)
+            state = pandas_unpickle_fun(str(self._basedir/self._db_state_fn))
             
         for name in state:
             if name == '_registeredDumpers':
@@ -471,9 +473,9 @@ class ISFDataBase:
     def get_mkdtemp(self, prefix = '', suffix = ''):
         '''creates a directory in the data_base directory and 
         returns the path'''
-        absolute_path = tempfile.mkdtemp(prefix = prefix + '_', suffix = '_' + suffix, dir = self.basedir) 
+        absolute_path = tempfile.mkdtemp(prefix = prefix + '_', suffix = '_' + suffix, dir=str(self._basedir))
         os.chmod(absolute_path, 0o755)
-        relative_path = absolute_path.relative_to(self.basedir)
+        relative_path = absolute_path.relative_to(str(self._basedir))
         return absolute_path, relative_path
 
     def create_managed_folder(self, key, raise_ = True):
@@ -527,7 +529,7 @@ class ISFDataBase:
                 # The key exists and not an db, but we want to create one here
                 raise db_exceptions.DataBaseException(
                     "You were trying to overwrite existing data at %s with a (sub)db by using key %s. Please use del db[%s] first" % (
-                        parent_db.basedir/key[i], key, key[:i+1]
+                        parent_db._basedir/key[i], key, key[:i+1]
                         ))
             # go down the tree of sub_dbs
             parent_db = parent_db[remaining_keys[0]]
@@ -567,11 +569,14 @@ class ISFDataBase:
             raise KeyError("Key {} not found in keys of db. Keys found: {}".format(key.name, self.keys()))
         if lock:
             lock.acquire()
-        try:  # TODO: for debuggin purposes, remove later
-            return_ = LoaderDumper.load(key, **kwargs)
-        except FileNotFoundError as e:
-            self.ls(all_files = True)
-            raise db_exceptions.DataBaseException("Could not load key %s. The file %s does not exist." % (key, e.filename))
+        try:
+            return_ = LoaderDumper.load(str(key), **kwargs)
+        except EnvironmentError as e:
+            if e.errno == errno.ENOENT:
+                self.ls(all_files = True)
+                raise db_exceptions.DataBaseException("Could not load key %s. The file %s does not exist." % (str(key), e.filename))
+            else:
+                raise e
         if lock:
             lock.release()
         return return_
@@ -631,13 +636,13 @@ class ISFDataBase:
                 # We are about to overwrite an db with data: that's a no-go (it's a me, Mario)
                 raise db_exceptions.DataBaseException(
                     "You were trying to overwrite a sub_db at %s with data using the key %s. Please remove the sub_db first, or use a different key." % (
-                        self.basedir, key.name
+                        str(self._basedir), key.name
                         )
                 )
             # check if we can overwrite
             overwrite = kwargs.get('overwrite', True)  # overwrite=True if unspecified
             if overwrite:
-                logger.info('Key {} is already set in DataBase located at {}. Overwriting...'.format(key.name, self.basedir))
+                logger.info('Key {} is already set in DataBase located at {}. Overwriting...'.format(key.name, str(self._basedir)))
                 delete_in_background(key)
             else:
                 raise KeyError(
@@ -645,17 +650,17 @@ class ISFDataBase:
                     '\nEither use del db[key] first, set overwrite to True, or omit the overwrite keyword argument.')  
         
         # Either the path does not exist yet, or it's in the process of being deleted
-        os.makedirs(key)
+        os.makedirs(str(key))
         
         if lock:
             lock.acquire()
         try:
-            loaderdumper_module.dump(value, key, **kwargs)
+            loaderdumper_module.dump(value, str(key), **kwargs)
             self._write_metadata(dumper, key)
         except Exception as e:
             logger.info("An error occured. Tidy up. Please do not interrupt.")
             try:
-                shutil.rmtree(key)
+                shutil.rmtree(str(key))
             except:
                 logger.info('could not delete folder {:s}'.format(key.name))
             raise
@@ -701,7 +706,7 @@ class ISFDataBase:
     
     def keys(self):
         '''returns the keys of the database as string objects'''
-        all_keys = self.basedir.iterdir()
+        all_keys = self._basedir.iterdir()
         keys_ =  tuple(
             e.name for e in all_keys 
             if e.name not in ("db_state.json", "metadata.json", "Loader.json")
@@ -730,7 +735,7 @@ class ISFDataBase:
         delete_in_background(to_delete)
     
     def __reduce__(self):
-        return (self.__class__, (self.basedir, self.readonly, True), {})
+        return (self.__class__, (self._basedir, self.readonly, True), {})
 
     def __repr__(self):
         return self._get_str()  # print with default depth and max_lines
@@ -762,13 +767,14 @@ class ISFDataBase:
         """
 
         str_ = ['<{}.{} object at {}>'.format(self.__class__.__module__, self.__class__.__name__, hex(id(self)))]
-        str_.append("Located at {}".format(self.basedir))
+        str_.append("Located at {}".format(self._basedir))
+        str_.append("Located at {}".format(self._basedir))
         # str_.append("{1}DataBases{0} | {2}Directories{0} | {3}Keys{0}".format(
         #     bcolors.ENDC, bcolors.OKGREEN, bcolors.WARNING, bcolors.OKCYAN) )
-        str_.append(bcolors.OKGREEN + self.basedir.name + bcolors.ENDC)
+        str_.append(colorize(self._basedir.name, bcolors.OKGREEN))
         lines = calc_recursive_filetree(
-            self, Path(self.basedir), 
-            depth=0, max_depth=max_depth, max_lines_per_key=max_lines_per_key, all_files=all_files)
+            self, Path(self._basedir), 
+            depth=depth, max_depth=max_depth, max_lines_per_key=max_lines_per_key, all_files=all_files, max_lines=max_lines)
         for line in lines:
             str_.append(line)
         return "\n".join(str_)
@@ -781,16 +787,16 @@ class ISFDataBase:
         It should be explicitly called by the user when the user likes to delete a database.
         '''
         def delete_and_deregister_once_deleted(dir_to_data, unique_id):
-            shutil.rmtree(dir_to_data_rename)
+            shutil.rmtree(dir_to_data)
             # this will delete in foreground of the thread, 
             # and thus wait until db is deleted and only then continue
             register = data_base_register._get_db_register()
             del register[unique_id]  # remove from the register
 
         # make sure folder is renamed before continuing python process
-        dir_to_data_rename = rename_for_deletion(self.basedir)
+        dir_to_data_rename = rename_for_deletion(str(self._basedir))
         # start processes on one thread in background
-        return threading.Thread(target = lambda : delete_and_deregister_once_deleted(self, self._unique_id)).start()
+        return threading.Thread(target = lambda : delete_and_deregister_once_deleted(dir_to_data_rename, self._unique_id)).start()
 
 class RegisteredFolder(ISFDataBase):
     def __init__(self, path):

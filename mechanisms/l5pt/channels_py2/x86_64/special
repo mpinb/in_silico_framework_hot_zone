@@ -10,4 +10,4 @@ if test "" = "yes" ; then
 else
 	NRNIV="${NRNBIN}nrniv"
 fi
-"${NRNIV}" -dll "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/mechanisms/channels_py2/x86_64/.libs/libnrnmech.so" "$@"
+"${NRNIV}" -dll "/gpfs/soma_fs/scratch/meulemeester/project_src/in_silico_framework/mechanisms/l5pt/channels_py2/x86_64/.libs/libnrnmech.so" "$@"

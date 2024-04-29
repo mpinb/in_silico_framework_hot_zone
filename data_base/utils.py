@@ -415,6 +415,9 @@ def colorize_key(key):
     else:
         c = ""
     return c + key.name + bcolors.ENDC
+
+def colorize(key, bcolor):
+    return bcolor + key + bcolors.ENDC
         
 
 def calc_recursive_filetree(
@@ -470,18 +473,18 @@ def calc_recursive_filetree(
             lines.append(prefix + colored_key)
         else:
             # Directory: recurse deeper
-            recursion_kwargs = deepcopy(recursion_kwargs)  # adapt kwargs for recursion
+            recursion_kwargs_next_iter = recursion_kwargs  # adapt kwargs for recursion
             lines.append(prefix + _colorize_key(element))
-            recursion_kwargs['depth'] += 1  # Recursion index
-            recursion_kwargs['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
-            recursion_kwargs['root_dir_path'] = element
-            recursion_kwargs['lines'] = lines
+            recursion_kwargs_next_iter['depth'] += 1  # Recursion index
+            recursion_kwargs_next_iter['indent'] = indent + '    ' if i == len(listd)-1 else indent + '│   '
+            recursion_kwargs_next_iter['root_dir_path'] = element
+            recursion_kwargs_next_iter['lines'] = lines
             if Path.exists(element/'db') and not all_files:
                 # subdb: recurse deeper without adding 'db' as key
                 # (only add 'db' if all_files=True)
-                recursion_kwargs['db'] = db[element.name]
-                recursion_kwargs['root_dir_path'] = Path(recursion_kwargs['db'].basedir)
-            lines = calc_recursive_filetree(**recursion_kwargs)
+                recursion_kwargs_next_iter['db'] = db[element.name]
+                recursion_kwargs_next_iter['root_dir_path'] = Path(recursion_kwargs_next_iter['db'].basedir)
+            lines = calc_recursive_filetree(**recursion_kwargs_next_iter)
             
     return lines
 
@@ -511,10 +514,10 @@ def rename_for_deletion(key):
     N = 5
     while True:
         random_string = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
-        key_to_delete = Path(key.as_posix() + '.deleting.' + random_string)
+        key_to_delete = Path(str(key) + '.deleting.' + random_string)
         if not key_to_delete.exists():
             break
-    key.rename(key_to_delete)
+    Path(key).rename(key_to_delete)
     return key_to_delete
 
 def delete_in_background(key):
@@ -530,7 +533,7 @@ def delete_in_background(key):
         logging.warning("Cannot delete key {}. Path {} does not exist".format(key.name, key))
         return None
     key_to_delete = rename_for_deletion(key)
-    p = threading.Thread(target = lambda : shutil.rmtree(key_to_delete)).start()
+    p = threading.Thread(target = lambda : shutil.rmtree(str(key_to_delete))).start()
     return p
 
 def is_db(dir_to_data):
