@@ -52,7 +52,7 @@ extensions = [
     'sphinxcontrib.bibtex'  # for citations
 ]
 
-bibtex_bibfiles = ['docs/bibliography.bib']
+bibtex_bibfiles = ['bibliography.bib']
 
 ## Include Python objects as they appear in source files
 ## Default: alphabetically ('alphabetical')
