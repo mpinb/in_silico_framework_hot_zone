@@ -1,15 +1,15 @@
 '''
 This module gives convenient access to all subpackages and submodules in ISF:
 
-    - biophysics_fitting
-    - data_base
-    - dendrite_thickness
-    - NEURON mechanisms
-    - simrun
-    - single_cell_parser
-    - single_cell_input_mapper
-    - spike_analysis
-    - visualize
+    - :py:mod:biophysics_fitting
+    - :py:mod:data_base
+    - :py:mod:dendrite_thickness
+    - :py:mod:NEURON mechanisms
+    - :py:mod:simrun
+    - :py:mod:single_cell_parser
+    - :py:mod:single_cell_input_mapper
+    - :py:mod:spike_analysis
+    - :py:mod:visualize
 
 The recommended use is to import it in a jupyter notebook in the following manner::
 
@@ -228,19 +228,13 @@ except ImportError:
 from functools import partial
 
 
-def svg2emf(filename, path_to_inkscape="/usr/bin/inkscape"):
-    '''converts svg to emf, which can be imported in word using inkscape. '''
-    command = ' '.join([
-        'env -i', path_to_inkscape, "--file", filename, "--export-emf",
-        filename[:-4] + ".emf"
-    ])
-    logger.info(os.system(command))
-
-
 from data_base._module_versions import version_cached
 
 
 def print_module_versions():
+    """
+    Print the version of each module in ISF.
+    """
     module_versions = ["{}: {}".format(x,version_cached.get_module_versions()[x])\
                        for x in sorted(version_cached.get_module_versions().keys())]
     logger.info("Loaded modules with __version__ attribute are:\n" + ', '.join(module_versions))
@@ -249,6 +243,10 @@ def print_module_versions():
 def get_client(client_port=38786, timeout=120):
     """
     Gets the distributed.client object if dask has been setup
+    
+    Args:
+        client_port (int): the port to use for the client
+        timeout (int|float): the timeout for the client (in seconds)
 
     Returns:
         Client: the client object
