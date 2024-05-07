@@ -46,11 +46,13 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.coverage',
     'sphinx.ext.intersphinx',
-    ## Include autosymmary
     'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
-    'nbsphinx'
+    'nbsphinx',  # for rendering tutorial notebooks
+    'sphinxcontrib.bibtex'  # for citations
 ]
+
+bibtex_bibfiles = ['bibliography.bib']
 
 ## Include Python objects as they appear in source files
 ## Default: alphabetically ('alphabetical')

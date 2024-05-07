@@ -18,6 +18,16 @@ from data_base import utils
 
 
 def get_EPSP_measurement():
+    """
+    Unitary post-synaptic potential distributions of L5PTs for synaptic input from each presynaptic excitatory cell type, and the respectively fitted synaptic
+    conductance values.
+    
+    Reference: 
+        Table S4 in :cite:`Egger_Narayanan_Guest_Bast_Udvary_Messore_Das_de_Kock_Oberlaender_2020`
+
+    Returns:
+        pd.DataFrame: EPSP mean, median and max for different cell types
+    """
     EPSP_mean = [0.49, 0.49, 0.35, 0.47, 0.46, 0.44, 0.44, 0.571]
     EPSP_med = [0.35, 0.35, 0.33, 0.33, 0.36, 0.31, 0.31, 0.463]
     EPSP_max = [1.9, 1.9, 1.0, 1.25, 1.5, 1.8, 1.8, 1.18]
