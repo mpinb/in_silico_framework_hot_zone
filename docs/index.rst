@@ -81,6 +81,6 @@ Indices and tables
 Bibliography
 ===========
 
-.. bibliography:: references.bib
+.. bibliography:: bibliography.bib
    :style: unsrt
    :cited:
