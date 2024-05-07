@@ -7,7 +7,7 @@ This module gives convenient access to all subpackages and submodules in ISF:
     - :py:mod:`NEURON mechanisms`
     - :py:mod:`simrun`
     - :py:mod:`single_cell_parser`
-    - :py:mod:`single_cell_input_mapper`
+    - :py:mod:`singlecell_input_mapper`
     - :py:mod:`spike_analysis`
     - :py:mod:`visualize`
 
