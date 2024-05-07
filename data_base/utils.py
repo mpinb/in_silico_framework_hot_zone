@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import sys, os, time, random, string, warnings, six, cloudpickle, \
     contextlib, io, dask, distributed, logging, tempfile, shutil, \
-         signal, logging, threading, hashlib, collections, inspect, json
+         signal, logging, threading, hashlib, collections, inspect, \
+             json, functools
 from six.moves.cPickle import PicklingError # this import format has potential issues (see six documentation) -rieke
 from pathlib import Path
 from copy import deepcopy
@@ -197,6 +198,7 @@ def unique(list_):
     return list(pd.Series(list_).drop_duplicates())
 
 def cache(function):
+    @functools.wraps(function)
     import hashlib
     memo = {}
     def get_key(*args, **kwargs):
