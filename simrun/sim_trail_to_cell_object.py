@@ -40,7 +40,7 @@ def synapse_activation_df_to_roberts_synapse_activation(sa):
         synapses[values.synapse_type].append(tuple_)
     return synapses
 
-def simtrail_to_cell_object(db, sim_trail_index, compute = True, allPoints = False, \
+def simtrail_to_cell_object(db, sim_trial_index, compute = True, allPoints = False, \
                             scale_apical = None, range_vars = None, silent = True,
                             neuron_param_modify_functions = [],
                             network_param_modify_functions = [],
@@ -48,7 +48,7 @@ def simtrail_to_cell_object(db, sim_trail_index, compute = True, allPoints = Fal
                             additional_network_params = [],
                             tStop = 345):
     '''Resimulates simulation trail and returns cell object.
-    Expects Instance of DataBase and sim_trail index.
+    Expects Instance of DataBase and sim_trial index.
     The db has to contain the paths to the parameterfiles at the following location: 
         ('parameterfiles', 'cellName')
         ('parameterfiles', 'networkName')
@@ -68,16 +68,18 @@ def simtrail_to_cell_object(db, sim_trail_index, compute = True, allPoints = Fal
 
     try:
         metadata = db['metadata']
-        metadata = metadata[metadata.sim_trail_index == sim_trail_index]
+        if 'sim_trial_index' in metadata:
+            metadata.sim_trial_index = metadata.sim_trail_index
+        metadata = metadata[metadata.sim_trial_index == sim_trial_index]
         assert len(metadata) == 1
         m = metadata.iloc[0]
         parameter_table = db['parameterfiles']
-        cellName = parameter_table.loc[sim_trail_index].hash_neuron
+        cellName = parameter_table.loc[sim_trial_index].hash_neuron
         cellName = os.path.join(db['parameterfiles_cell_folder'], cellName)
-        networkName = parameter_table.loc[sim_trail_index].hash_network
+        networkName = parameter_table.loc[sim_trial_index].hash_network
         networkName = os.path.join(db['parameterfiles_network_folder'],
                                    networkName)
-        sa = db['synapse_activation'].loc[sim_trail_index].compute()
+        sa = db['synapse_activation'].loc[sim_trial_index].compute()
         dummy =  trail_to_cell_object(cellName = cellName, \
                                     networkName = networkName, \
                                     synapse_activation_file = sa, \
