@@ -16,7 +16,7 @@ will be restored if the dataframe is loaded. This therefore only serves as optim
 reduce network traffic for suitable dataframes. Suitable dataframes are for example the synapse_activation dataframe.
 Limitations: This is not tested to work well with dataframes that natively contain categoricals'''
 
-import os
+import os, yaml
 import cloudpickle
 import dask.dataframe as dd
 import dask.delayed
@@ -257,11 +257,35 @@ def save_meta(obj, savedir):
         "dtypes": [str(e) for e in meta.dtypes.values]}
     with open(os.path.join(savedir, 'dask_meta.json'), 'w') as f:
         json.dump(meta_json, f)
+        
+        
+def get_meta(savedir):
+    if os.path.exists(os.path.join(savedir, 'dask_meta.json')):
+        # Construct meta dataframe for dask
+        with open(os.path.join(savedir, 'dask_meta.json'), 'r') as f:
+            # use yaml instead of json to ensure loaded data is string (and not unicode) in Python 2
+            # yaml is a subset of json, so this should always work, although it assumes the json is ASCII encoded, which should cover all our usecases.
+            # See also: https://stackoverflow.com/questions/956867/how-to-get-string-objects-instead-of-unicode-from-json
+            meta_json = yaml.safe_load(f)  
+        meta = pd.DataFrame({
+            c: pd.Series([], dtype=t)
+            for c, t in zip(meta_json['columns'], meta_json['dtypes'])
+            }, 
+            columns=meta_json['columns']  # ensure the order of the columns is fixed.
+            )
+        column_dtype_mapping = [
+            (c, t)
+            if not t.startswith('<U') else (c, '<U' + str(len(c)))  # PY3: assure numpy has enough chars for string, given that the dtype is just 'str'
+            for c, t in zip(meta.columns.values, meta_json['column_name_dtypes'])
+            ]
+        meta.columns = tuple(np.array([tuple(meta.columns.values)], dtype=column_dtype_mapping)[0])
+        return meta
+    return None
     
 
 class Loader(parent_classes.Loader):
 
-    def __init__(self, meta, index_name=None, divisions=None):
+    def __init__(self, meta=None, index_name=None, divisions=None):
         self.index_name = index_name
         self.meta = meta
         self.divisions = divisions
@@ -272,7 +296,9 @@ class Loader(parent_classes.Loader):
             self.dtypes
         except AttributeError:
             self.dtypes = None
-
+            
+        # update meta
+        self.meta = self.meta or get_meta(savedir)
 
         # my_reader = lambda x: category_to_str(pd.read_msgpack(x))  ###
         my_reader = lambda x: category_to_str(read_msgpack(x))
