@@ -78,3 +78,9 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+Bibliography
+===========
+
+.. bibliography:: references.bib
+   :style: unsrt
+   :cited:
