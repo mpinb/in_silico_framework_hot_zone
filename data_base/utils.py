@@ -198,7 +198,6 @@ def unique(list_):
     return list(pd.Series(list_).drop_duplicates())
 
 def cache(function):
-    @functools.wraps(function)
     import hashlib
     memo = {}
     def get_key(*args, **kwargs):
@@ -208,6 +207,7 @@ def cache(function):
             hash = hashlib.md5(cloudpickle.dumps([args, kwargs])).hexdigest()
         return hash
     
+    @functools.wraps(function)
     def wrapper(*args, **kwargs):
         key = get_key(*args, **kwargs)
         if key in memo:
