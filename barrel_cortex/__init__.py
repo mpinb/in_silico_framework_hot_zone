@@ -184,7 +184,7 @@ def get_distance_from_plane(plane_point1, plane_point2, plane_point3,
 
 
 def norm(x):
-     '''
+    '''
     Normalizes a vector.
 
     Parameters:
