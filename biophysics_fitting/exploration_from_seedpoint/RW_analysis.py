@@ -1,13 +1,31 @@
+"""
+This module provides code to analyze the results of a random walk exploration through biophysical parameter space.
+See :py:mod:~`biophysics_fitting.exploration_from_seedpoint.RW` for more information.
+"""
+
 import Interface as I
 from pickle import UnpicklingError
 
-def read_parameters(seed_folder,
-                    particle_id,
-                    normalized=False,
-                    only_in_space=False,
-                    only_return_parameters=True,
-                    param_names=None,
-                    param_ranges=None):
+def read_parameters(
+    seed_folder,
+    particle_id,
+    normalized=False,
+    only_in_space=False,
+    only_return_parameters=True,
+    param_names=None,
+    param_ranges=None
+    ):
+    """
+    Read the biophysical parameters that were explored during a RW exploration.
+    To read the full results, use :py:meth:~`biophysics_fitting.exploration_from_seedpoint.RW_analysis.read_pickle` instead.
+    See: :py:class:~`biophysics_fitting.exploration_from_seedpoint.RW.RW` for more info.
+    
+    Args:
+        seed_folder (str): path to the folder that contains the RW exploration result for a particular seed.
+        
+    Returns:
+        pd.DataFrame: a dataframe containing all biophysical parameters explored by a single particle.
+    """
     df = read_pickle(seed_folder, particle_id)
     if only_in_space:
         df2 = df.dropna(subset=objectives_2BAC + objectives_step)
@@ -26,6 +44,16 @@ def read_parameters(seed_folder,
 
 
 def robust_read_pickle(path):
+    """
+    Read a pickled dataframe. If it cannot be read, still return a dataframe, containing an error as content.
+    Useful for when you don't want your code to error during some large-scale analysis.
+    
+    Args:
+        path (str): path to the pickled dataframe
+        
+    Returns
+        (pd.DataFrame | pd.Series): the pickled DataFrame if reading was succesful, a pd.Series otherwise. Both contain the key 'init_error', specifying whether or not the read was succesful.
+    """
     try:
         df = I.pd.read_pickle(path) 
         df['init_error'] = ''
@@ -35,6 +63,16 @@ def robust_read_pickle(path):
         return I.pd.Series({"init_error":"Could not read {}".format(1)}).to_frame('init_error')
         
 def read_pickle(seed_folder, particle_id):
+    """
+    Read the results of a single particle of a RW exploration.
+    
+    Args:
+        seed_folder (str): the path of the directory corresponding to a seedpoint.
+        particle_id (str): the particle id
+        
+    Returns:
+        pd.DataFrame: The results of the RW exploration of a single particle.
+    """
     path = I.os.path.join(seed_folder, str(particle_id))
     df_names = [p for p in I.os.listdir(path) if p.endswith('.pickle')]
     df_names = sorted(df_names, key=lambda x: int(x.split('.')[0]))
@@ -47,6 +85,9 @@ def read_pickle(seed_folder, particle_id):
     return df
 
 def read_all(basedir, n_particles_start = 0, n_particles_end = 1000):
+    """
+    Read the results of all directories contained within some base directory, independent of which seepdoint or particle.
+    """
     fun = I.dask.delayed(read_pickle)
     ds = [fun(basedir, i) for i in range(n_particles_start, n_particles_end)]
     return ds
