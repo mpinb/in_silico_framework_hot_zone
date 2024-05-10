@@ -43,8 +43,6 @@ def data_frame_generic_small(mdb, pdf, ddf, dumper, client=None):
     dummy = mdb['test']
     a = dask.compute(dummy)[0].reset_index(drop=True)
     b = pdf.reset_index(drop=True)
-    if dumper in (pandas_to_parquet, dask_to_parquet):
-        b = df_colnames_to_str(b)
     assert_frame_equal(a, b)
     
     #sorted index set
