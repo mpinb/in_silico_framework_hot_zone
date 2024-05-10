@@ -5,29 +5,42 @@ import pandas as pd
 from . import parent_classes
 from data_base.utils import df_colnames_to_str
 import json
+from .utils import save_object_meta, read_object_meta
+import logging
+logger = logging.getLogger("ISF").getChild(__name__)
 
 
 def check(obj):
     '''checks wherther obj can be saved with this dumper'''
     return isinstance(
-        obj, (pd.DataFrame,
-              pd.Series))  #basically everything can be saved with pickle
+        obj, (pd.DataFrame, pd.Series))
 
 
 class Loader(parent_classes.Loader):
 
     def get(self, savedir):
-        return pd.read_parquet(
+        obj = pd.read_parquet(
             os.path.join(savedir, 'pandas_to_parquet.parquet'))
+        try:
+            # reset column dtype from string to original dtype.
+            meta = read_object_meta(savedir)
+            obj.columns = meta.columns
+        except FileNotFoundError:
+            logger.warning("No metadata found in {}\nColumn names will be string format".format(savedir))
+            
+        return obj
+        
 
 
 def dump(obj, savedir):
+    save_object_meta(obj, savedir)
     # save original columns
     columns = obj.columns
     if obj.index.name is not None:
         index_name = obj.index.name
     # convert column names and index names to str
-    obj = df_colnames_to_str(obj)  # overrides original object
+    # This overrides the original object, hence why we save the meta.
+    obj = df_colnames_to_str(obj)
     # dump in parquet format
     obj.to_parquet(os.path.join(savedir, 'pandas_to_parquet.parquet'))
     with open(os.path.join(savedir, 'Loader.json'), 'w') as f:
