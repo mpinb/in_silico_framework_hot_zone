@@ -119,10 +119,11 @@ def read_voltage_traces_from_npz(prefix, fname):
     return df
 
 
-def read_voltage_traces_by_filenames(prefix,
-                                     fnames,
-                                     divisions=None,
-                                     repartition=None):
+def read_voltage_traces_by_filenames(
+    prefix,
+    fnames,
+    divisions=None,
+    repartition=None):
     '''takes list of filenames pointing to voltage trace files,
     returns dask dataframe'''
     assert repartition is not None
@@ -392,7 +393,7 @@ def generate_param_file_hashes(simresult_path, sim_trail_index):
 #####################################
 # step seven point one: replace paths in param files with relative dbpaths
 #####################################
-from data_base.dbopen import create_db_path
+from ..dbopen import create_db_path
 
 
 def create_db_path_print(path, replace_dict={}):
@@ -760,7 +761,7 @@ def add_dendritic_spike_times(db, dendritic_spike_times_threshold=-30.):
 
 
 def _get_dumper(value):
-    '''tries to automativcally infer the best dumper for each table'''
+    '''tries to automatically infer the best dumper for each table'''
     if isinstance(value, pd.DataFrame):
         return pandas_to_parquet if six.PY3 else pandas_to_msgpack
     elif isinstance(value, dd.DataFrame):
@@ -769,12 +770,13 @@ def _get_dumper(value):
         raise NotImplementedError()
 
 
-def optimize(db,
-             dumper=None,
-             select=None,
-             scheduler=None,
-             repartition=False,
-             client=None):
+def optimize(
+    db,
+    dumper=None,
+    select=None,
+    scheduler=None,
+    repartition=False,
+    client=None):
     '''
     DEPRECATED; this step is now already done in a more coherent way by the init function if 
     rewrite_in_optimized_format is set to True.
@@ -803,20 +805,19 @@ def optimize(db,
     scheduler: scheduler for task execution. Can be a Client object, or a string: [distributed, multiprocessing, processes, single-threaded, sync, synchronous, threading, threads]
     '''
     keys = list(db.keys())
-    keys_for_rewrite = select if select is not None else ['synapse_activation', \
-                                                          'cell_activation', \
-                                                          'voltage_traces', \
-                                                          'dendritic_recordings']
+    keys_for_rewrite = select if select is not None else \
+        ['synapse_activation', 'cell_activation', 'voltage_traces', 'dendritic_recordings']
     for key in list(db.keys()):
         if not key in keys_for_rewrite:
             continue
         else:
             value = db[key]
             if isinstance(value, ISFDataBase):
-                optimize(value,
-                         select=list(value.keys()),
-                         scheduler=scheduler,
-                         client=client)
+                optimize(
+                    value,
+                    select=list(value.keys()),
+                    scheduler=scheduler,
+                    client=client)
             else:
                 dumper = _get_dumper(value)
                 logging.info(
@@ -824,7 +825,6 @@ def optimize(db,
                         str(key), get_dumper_string_by_dumper_module(dumper)
                         ))
                 if isinstance(value, dd.DataFrame):
-                    value = convert_df_columns_to_str(value)
                     db.set(key, value, dumper = dumper, client = client)
                 else:
                     db.set(key, value, dumper = dumper, scheduler=scheduler)
