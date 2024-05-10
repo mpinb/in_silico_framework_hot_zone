@@ -54,9 +54,6 @@ def data_frame_generic_small(db, pdf, ddf, dumper, client=None):
     dummy = db['test']
     a = dask.compute(dummy)[0]
     b = pdf.set_index(0)
-    if dumper in (pandas_to_parquet, dask_to_parquet):
-        b = df_colnames_to_str(b)
-        b.index.name = str(b.index.name)
     assert_frame_equal(a, b)
 
 def test_dask_to_msgpack_small(empty_db, pdf, ddf, client):
