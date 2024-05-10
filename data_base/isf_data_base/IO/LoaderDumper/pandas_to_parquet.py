@@ -25,9 +25,9 @@ class Loader(parent_classes.Loader):
             # reset column dtype from string to original dtype.
             meta = read_object_meta(savedir)
             obj.columns = meta.columns
+            obj.index = meta.index
         except FileNotFoundError:
             logger.warning("No metadata found in {}\nColumn names will be string format".format(savedir))
-            
         return obj
         
 
