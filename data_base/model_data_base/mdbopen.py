@@ -1,8 +1,29 @@
 from __future__ import absolute_import
 import os
-from data_base.data_base import DataBase, get_db_by_unique_id, is_model_data_base
+from data_base.data_base import DataBase, get_db_by_unique_id
 from data_base.exceptions import DataBaseException
-from .utils import cache
+import cloudpickle
+from six.moves import cPickle
+
+def cache(function):
+    import hashlib
+    memo = {}
+    def get_key(*args, **kwargs):
+        try:
+            hash = hashlib.md5(cPickle.dumps([args, kwargs])).hexdigest()
+        except (TypeError, AttributeError):
+            hash = hashlib.md5(cloudpickle.dumps([args, kwargs])).hexdigest()
+        return hash
+    
+    def wrapper(*args, **kwargs):
+        key = get_key(*args, **kwargs)
+        if key in memo:
+            return memo[key]
+        else:
+            rv = function(*args, **kwargs)
+            memo[key] = rv
+            return rv
+    return wrapper
 
 
 def resolve_mdb_path(path):
