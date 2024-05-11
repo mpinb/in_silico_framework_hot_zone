@@ -25,7 +25,6 @@ def load_helper(savedir, n_partitions, partition, columns=None):
     try:
         meta = read_object_meta(savedir)
         obj.columns = meta.columns
-        obj.index = meta.index
     except FileNotFoundError:
         logger.warning("No metadata found in {}\nColumn names will be string format".format(savedir))
     return obj

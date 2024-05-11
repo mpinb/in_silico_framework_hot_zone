@@ -108,11 +108,5 @@ def read_object_meta(savedir, raise_=True):
         if not t.startswith('<U') else (c, '<U' + str(len(c)))  # PY3: assure numpy has enough chars for string, given that the dtype is just 'str'
         for c, t in zip(meta.columns.values, meta_json['column_name_dtypes'])
         ]
-    index_dtype_mapping = [
-        (c, t)
-        if not t.startswith('<U') else (c, '<U' + str(len(c)))  # PY3: assure numpy has enough chars for string, given that the dtype is just 'str'
-        for c, t in zip(meta_json['index'], meta_json['index_dtypes'])
-    ]
     meta.columns = tuple(np.array([tuple(meta.columns.values)], dtype=column_dtype_mapping)[0])
-    meta.index = tuple(np.array([tuple(meta.index.values)], dtype=index_dtype_mapping)[0])
     return meta
