@@ -44,8 +44,7 @@ def save_object_meta(obj, savedir):
     meta_json = {
         "columns": [str(c) for c in meta.columns],
         "column_name_dtypes" : [get_numpy_dtype_as_str(c) for c in meta.columns],
-        "index": [str(c) for c in meta.index],
-        "index_dtypes": [get_numpy_dtype_as_str(e) for e in meta.index.values],
+        "index_dtype": get_numpy_dtype_as_str(meta.index),
         "dtypes": [str(e) for e in meta.dtypes.values]
         }
     with open(os.path.join(savedir, 'object_meta.json'), 'w') as f:
@@ -110,4 +109,5 @@ def read_object_meta(savedir, raise_=True):
         for c, t in zip(meta.columns, meta_json['column_name_dtypes'])
         ]
     meta.columns = tuple(np.array([tuple(meta.columns.values)], dtype=column_dtype_mapping)[0])
-    return meta
+    meta.index = meta.index.astype(meta_json['index_dtype'])
+    return meta 
