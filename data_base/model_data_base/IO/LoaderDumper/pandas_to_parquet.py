@@ -36,8 +36,9 @@ class Loader(parent_classes.Loader):
         try:
             meta =read_object_meta(savedir)
             obj.columns = meta.columns
+            obj.index = obj.index.astype(meta.index.dtype)
         except FileNotFoundError:
-            logger.warning("No metadata found in {}\nColumn names will be string format".format(savedir))
+            logger.warning("No metadata found in {}\nColumn names and index will be string format".format(savedir))
         return obj
 
 
