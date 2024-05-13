@@ -11,9 +11,11 @@ def dump(obj, savedir, repartition=False, scheduler=None, client=None):
         # Module was not called from within the test suite
         raise RuntimeError(
             'pandas-msgpack is not supported anymore in the data_base')
-    return dask_to_categorized_msgpack.dump(obj,
-                                            savedir,
-                                            repartition=repartition,
-                                            scheduler=scheduler,
-                                            categorize=False,
-                                            client=client)
+    return dask_to_categorized_msgpack.dump(
+        obj,
+        savedir,
+        repartition=repartition,
+        scheduler=scheduler,
+        categorize=False,
+        client=client
+        )

@@ -395,7 +395,7 @@ def generate_param_file_hashes(simresult_path, sim_trail_index):
 #####################################
 # step seven point one: replace paths in param files with relative mdbpaths
 #####################################
-from data_base.dbopen import create_db_path as create_mdb_path
+from ..mdbopen import create_mdb_path
 
 
 def create_mdb_path_print(path, replace_dict={}):
@@ -843,7 +843,6 @@ def optimize(mdb,
                 print('optimizing {} using dumper {}'.format(str(key), \
                                              get_dumper_string_by_dumper_module(dumper)))
                 if isinstance(value, dd.DataFrame):
-                    value = convert_df_columns_to_str(value)
                     mdb.setitem(key, value, dumper = dumper, client = client)
                 else:
                     mdb.setitem(key, value, dumper = dumper, scheduler=scheduler)
