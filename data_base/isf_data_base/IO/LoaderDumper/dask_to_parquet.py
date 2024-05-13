@@ -7,7 +7,7 @@ import json
 from . import parent_classes
 from data_base.utils import df_colnames_to_str, chunkIt
 import json
-from .utils import save_object_meta, read_object_meta
+from .utils import save_object_meta, set_object_meta
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
@@ -22,12 +22,7 @@ def load_helper(savedir, n_partitions, partition, columns=None):
         savedir, 
         'pandas_to_parquet.{}.{}.parquet'.format(n_partitions, partition)),
                            columns=columns)
-    try:
-        meta = read_object_meta(savedir)
-        obj.columns = meta.columns
-        obj.index = obj.index.astype(meta.index.dtype)
-    except FileNotFoundError:
-        logger.warning("No metadata found in {}\nColumn names and index will be string format".format(savedir))
+    obj = set_object_meta(obj, savedir)
     return obj
 
 

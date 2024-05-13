@@ -5,7 +5,7 @@ import pandas as pd
 from . import parent_classes
 from data_base.utils import df_colnames_to_str
 import json
-from .utils import save_object_meta, read_object_meta
+from .utils import save_object_meta, set_object_meta
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
@@ -21,13 +21,7 @@ class Loader(parent_classes.Loader):
     def get(self, savedir):
         obj = pd.read_parquet(
             os.path.join(savedir, 'pandas_to_parquet.parquet'))
-        try:
-            # reset column dtype from string to original dtype.
-            meta = read_object_meta(savedir)
-            obj.columns = meta.columns
-            obj.index = obj.index.astype(meta.index.dtype)
-        except FileNotFoundError:
-            logger.warning("No metadata found in {}\nColumn names and index will be string format".format(savedir))
+        obj = set_object_meta(obj)
         return obj
         
 

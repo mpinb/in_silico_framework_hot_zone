@@ -44,9 +44,14 @@ def save_object_meta(obj, savedir):
     meta_json = {
         "columns": [str(c) for c in meta.columns],
         "column_name_dtypes" : [get_numpy_dtype_as_str(c) for c in meta.columns],
-        "index_dtype": get_numpy_dtype_as_str(meta.index),
+        "index_dtype": str(meta.index.dtype),
         "dtypes": [str(e) for e in meta.dtypes.values]
         }
+    if meta.index.name is not None:
+        meta_json.update({
+            'index_name': str(meta.index.name),
+            'index_name_dtype': get_numpy_dtype_as_str(meta.index.name)
+        })
     with open(os.path.join(savedir, 'object_meta.json'), 'w') as f:
         json.dump(meta_json, f)
         
@@ -110,4 +115,41 @@ def read_object_meta(savedir, raise_=True):
         ]
     meta.columns = tuple(np.array([tuple(meta.columns.values)], dtype=column_dtype_mapping)[0])
     meta.index = meta.index.astype(meta_json['index_dtype'])
-    return meta 
+    if meta_json.get('index_name'):
+        # Cast to numpy array, set to correct dtype, extract from array again.
+        meta.index.name = np.array([meta_json['index_name']]).astype(meta_json['index_name_dtype'])[0]
+    else:
+        logger.warning("No index name dtype found in meta file. Index name will be string format. Verify if the column is the desired dtype when resetting the index.")
+    return meta
+
+def set_object_meta(obj, savedir):
+    """
+    Reset the dtypes of the columns and index of an object to the original dtypes.
+    Reads in the object meta from the same savedir and tries to assign the correct dtypes to columns and index.
+    
+    Args:
+        obj: The object to reset the dtypes of.
+        savedir: The directory where the meta file is stored.
+        
+    Returns:
+        obj: The object with the correct dtypes.
+    """
+    try:
+        meta = read_object_meta(savedir)
+    except FileNotFoundError as e:
+        logger.warning("No metadata found in {}\nColumn names and index will be string format".format(savedir))
+        return obj
+    
+    # Reset object dtypes
+    try:
+        obj.index = obj.index.astype(meta.index.dtype)
+        obj.index.name = meta.index.name
+    except Exception as e:
+        logger.warning(e)
+        logger.warning(f"Could not set the dtype of the index. Index will be string format")
+    try:
+        obj.columns = meta.columns
+    except Exception as e:
+        logger.warning(e)
+        logger.warning(f"Could not set the dtype of the columns. Columns will be string format")
+    return obj
