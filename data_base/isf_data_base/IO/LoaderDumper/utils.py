@@ -96,6 +96,7 @@ def read_object_meta(savedir, raise_=True):
         pd.DataFrame: The metadata of the saved object.
     """
     meta_name = get_meta_filename(savedir, raise_=raise_)
+    
     with open(os.path.join(savedir, meta_name), 'r') as f:
         # use yaml instead of json to ensure loaded data is string (and not unicode) in Python 2
         # yaml is a subset of json, so this should always work, although it assumes the json is ASCII encoded, which should cover all our usecases.
@@ -122,24 +123,20 @@ def read_object_meta(savedir, raise_=True):
         logger.warning("No index name dtype found in meta file. Index name will be string format. Verify if the column is the desired dtype when resetting the index.")
     return meta
 
-def set_object_meta(obj, savedir):
+def set_object_meta(obj, meta):
     """
     Reset the dtypes of the columns and index of an object to the original dtypes.
     Reads in the object meta from the same savedir and tries to assign the correct dtypes to columns and index.
     
     Args:
         obj: The object to reset the dtypes of.
-        savedir: The directory where the meta file is stored.
+        meta (pd.DataFrame): metadata for the object, containing only column names and the index with correct dtypes.
         
     Returns:
-        obj: The object with the correct dtypes.
+        None. Adapts the original object.
     """
-    try:
-        meta = read_object_meta(savedir)
-    except FileNotFoundError as e:
-        logger.warning("No metadata found in {}\nColumn names and index will be string format".format(savedir))
-        return obj
-    
+    assert isinstance(obj, (pd.DataFrame, pd.Series, ddf)), "Object must be a pandas DataFrame, pandas Series, or dask DataFrame." 
+    assert meta is not None, "No meta information provided. Cannot set the dtypes of the object."
     # Reset object dtypes
     try:
         obj.index = obj.index.astype(meta.index.dtype)
@@ -152,4 +149,3 @@ def set_object_meta(obj, savedir):
     except Exception as e:
         logger.warning(e)
         logger.warning(f"Could not set the dtype of the columns. Columns will be string format")
-    return obj

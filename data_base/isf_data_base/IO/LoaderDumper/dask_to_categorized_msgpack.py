@@ -245,21 +245,6 @@ def get_numpy_dtype_as_str(obj):
     else:
         return str(np.dtype(type(obj)))
 
-def save_object_meta(obj, savedir):
-    """
-    Construct a meta object to help out dask later on
-    The original meta object is an empty dataframe with the correct column names
-    We will save this in str format with parquet, as well as the original dtype for each column
-    """
-    meta = obj._meta
-    meta_json = {
-        "columns": [str(c) for c in meta.columns],
-        "column_name_dtypes" : [get_numpy_dtype_as_str(c) for c in meta.columns],
-        "dtypes": [str(e) for e in meta.dtypes.values]}
-    with open(os.path.join(savedir, 'dask_meta.json'), 'w') as f:
-        json.dump(meta_json, f)
-        
-        
 def read_object_meta(savedir):
     if os.path.exists(os.path.join(savedir, 'dask_meta.json')):
         # Construct meta dataframe for dask
@@ -298,12 +283,8 @@ class Loader(parent_classes.Loader):
         except AttributeError:
             self.dtypes = None
             
-        # update meta
-        self.meta = self.meta or read_object_meta(savedir)
-
         # my_reader = lambda x: category_to_str(pd.read_msgpack(x))  ###
         my_reader = lambda x: category_to_str(read_msgpack(x))
-
 
         if self.divisions:
             if verbose:

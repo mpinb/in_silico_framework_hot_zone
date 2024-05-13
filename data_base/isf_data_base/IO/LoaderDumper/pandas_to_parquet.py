@@ -5,7 +5,7 @@ import pandas as pd
 from . import parent_classes
 from data_base.utils import df_colnames_to_str
 import json
-from .utils import save_object_meta, set_object_meta
+from .utils import save_object_meta, set_object_meta, read_object_meta
 import logging
 logger = logging.getLogger("ISF").getChild(__name__)
 
@@ -17,11 +17,18 @@ def check(obj):
 
 
 class Loader(parent_classes.Loader):
+    def __init__(self, meta=None):
+        self.meta = meta
+        if self.meta is None:
+            logger.warning("No meta information provided. Column names, index labels, and index name (if it exists) will be string format.")
 
     def get(self, savedir):
         obj = pd.read_parquet(
             os.path.join(savedir, 'pandas_to_parquet.parquet'))
-        obj = set_object_meta(obj)
+        if self.meta is not None:
+            set_object_meta(
+                obj,
+                meta = self.meta)
         return obj
         
 
