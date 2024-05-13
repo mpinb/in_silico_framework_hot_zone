@@ -147,10 +147,10 @@ def set_object_meta(obj, savedir):
         obj.index.name = meta.index.name
     except Exception as e:
         logger.warning(e)
-        logger.warning(f"Could not set the dtype of the index. Index will be string format")
+        logger.warning("Could not set the dtype of the index. Index will be string format")
     try:
         obj.columns = meta.columns
     except Exception as e:
         logger.warning(e)
-        logger.warning(f"Could not set the dtype of the columns. Columns will be string format")
+        logger.warning("Could not set the dtype of the columns. Columns will be string format")
     return obj
