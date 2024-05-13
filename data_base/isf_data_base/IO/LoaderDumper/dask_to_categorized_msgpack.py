@@ -1,4 +1,5 @@
-'''This dumper is designed for dataframes with the following properties:
+'''
+This dumper is designed for dataframes with the following properties:
  - index is str
  - str columns have a lot of repetitive values.
  
@@ -29,7 +30,7 @@ import six
 import numpy as np
 from pandas_msgpack import to_msgpack, read_msgpack
 import json
-
+from .utils import save_object_meta
 
 ####
 # if you want to use this as template to implement another dask dumper:
@@ -244,22 +245,7 @@ def get_numpy_dtype_as_str(obj):
     else:
         return str(np.dtype(type(obj)))
 
-def save_meta(obj, savedir):
-    """
-    Construct a meta object to help out dask later on
-    The original meta object is an empty dataframe with the correct column names
-    We will save this in str format with parquet, as well as the original dtype for each column
-    """
-    meta = obj._meta
-    meta_json = {
-        "columns": [str(c) for c in meta.columns],
-        "column_name_dtypes" : [get_numpy_dtype_as_str(c) for c in meta.columns],
-        "dtypes": [str(e) for e in meta.dtypes.values]}
-    with open(os.path.join(savedir, 'dask_meta.json'), 'w') as f:
-        json.dump(meta_json, f)
-        
-        
-def get_meta(savedir):
+def read_object_meta(savedir):
     if os.path.exists(os.path.join(savedir, 'dask_meta.json')):
         # Construct meta dataframe for dask
         with open(os.path.join(savedir, 'dask_meta.json'), 'r') as f:
@@ -285,7 +271,7 @@ def get_meta(savedir):
 
 class Loader(parent_classes.Loader):
 
-    def __init__(self, meta=None, index_name=None, divisions=None):
+    def __init__(self, meta, index_name=None, divisions=None):
         self.index_name = index_name
         self.meta = meta
         self.divisions = divisions
@@ -297,12 +283,8 @@ class Loader(parent_classes.Loader):
         except AttributeError:
             self.dtypes = None
             
-        # update meta
-        self.meta = self.meta or get_meta(savedir)
-
         # my_reader = lambda x: category_to_str(pd.read_msgpack(x))  ###
         my_reader = lambda x: category_to_str(read_msgpack(x))
-
 
         if self.divisions:
             if verbose:
@@ -379,4 +361,4 @@ def dump(
             'divisions': divisions},
             f)
     
-    save_meta(obj, savedir)
+    save_object_meta(obj, savedir)

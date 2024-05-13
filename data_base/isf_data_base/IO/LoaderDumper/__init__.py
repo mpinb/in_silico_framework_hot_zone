@@ -1,6 +1,7 @@
 import os
 # import cloudpickle
 import compatibility, json, yaml
+from .utils import read_object_meta
 from data_base.exceptions import DataBaseException
 from inspect import getmodule
 import importlib
@@ -38,6 +39,8 @@ def load(savedir, load_data=True, loader_kwargs={}):
             loader_init_kwargs = json.load(f)
         loader = loader_init_kwargs['Loader']
         del loader_init_kwargs['Loader']
+        if os.path.exists(os.path.join(savedir, 'object_meta.json')):
+            loader_init_kwargs['meta'] = read_object_meta(savedir)
         myloader = importlib.import_module(loader).Loader(**loader_init_kwargs)
     if load_data:
         return myloader.get(savedir, **loader_kwargs)
