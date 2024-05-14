@@ -89,7 +89,7 @@ def read_voltage_traces_from_csv(prefix, fname):
     t = data[0]
     data = data[1:]
     
-    # FIX TO SOLVE ISSUE WHEN SIMULATED SIM TRAIL INDICES ARE NOT CONTINUOUS 
+    # In case the simulation trial indices are not consecutive
     INDICES = sorted([int(f.split('_')[1][3:]) for f in os.listdir(os.path.dirname(full_fname)) if 'synapses' in f])
     index = [
         str(os.path.join(os.path.dirname(fname),
