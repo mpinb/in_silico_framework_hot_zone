@@ -1,5 +1,5 @@
 '''
-This module gives convenient access to all subpackages and submodules in ISF:
+This module gives API access to all subpackages and submodules in ISF::
 
     - :py:mod:`biophysics_fitting`
     - :py:mod:`data_base`
