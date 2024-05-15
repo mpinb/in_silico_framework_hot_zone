@@ -32,7 +32,6 @@ def load(savedir, load_data=True, loader_kwargs={}):
     #         myloader = cloudpickle.load(file_, encoding = 'latin1')
     myloader = compatibility.pandas_unpickle_fun(
         os.path.join(savedir, 'Loader.pickle'))
-
     if load_data:
         return myloader.get(savedir, **loader_kwargs)
     else:

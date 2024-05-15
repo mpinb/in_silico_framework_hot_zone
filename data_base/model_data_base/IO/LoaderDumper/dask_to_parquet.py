@@ -6,22 +6,54 @@ import dask
 import json
 from . import parent_classes
 from data_base.utils import df_colnames_to_str, chunkIt
+from .utils import save_object_meta, set_object_meta
+import logging
+logger = logging.getLogger("ISF")
 
 def check(obj):
-    '''checks wherther obj can be saved with this dumper'''
-    return isinstance(obj, dd.DataFrame)
+    '''checks whether obj can be saved with this dumper'''
+    return isinstance(obj, dask.dataframe)
 
 
 @dask.delayed
 def load_helper(savedir, n_partitions, partition, columns=None):
-    return pd.read_parquet(os.path.join(
-        savedir,
-        'pandas_to_parquet.{}.{}.parquet'.format(n_partitions, partition)),
-                           columns=columns)
+    """
+    Loads a single partition of a dask dataframe from a parquet file.
+    Re-assigns the original column dtypes if a meta file is present.
+    
+    Args:
+        savedir (str): The directory to load the partition from.
+        n_partitions (int): The number of partitions the original dask dataframe was split into.
+        partition (int): The partition number to load.
+        columns: The columns to load.
+        
+    Returns:
+        pd.DataFrame: The loaded partition.
+    """
+    obj = pd.read_parquet(
+        os.path.join(
+            savedir,
+            'pandas_to_parquet.{}.{}.parquet'.format(
+                n_partitions, partition)), 
+        columns=columns)
+    obj = set_object_meta(obj, savedir)
+    return obj
 
 
 @dask.delayed
 def save_helper(savedir, delayed_df, n_partitions, partition):
+    """
+    Save a single partition of a dask dataframe to a parquet file.
+    
+    Args:
+        savedir (str): The directory to save the partition in.
+        delayed_df: The partition to save.
+        n_partitions (int): The number of partitions the original dask dataframe was split into.
+        partition (int): The current partition number to save.
+        
+    Returns:
+        None. Saves the partition.
+    """
     # save original columns and index name
     assert all([type(e) == str for e in delayed_df.columns]), "This method requires that all column names of the dataframe are strings, but they are {}".format([type(e) for e in delayed_df.columns])
     if delayed_df.index.name is not None:
@@ -32,8 +64,18 @@ def save_helper(savedir, delayed_df, n_partitions, partition):
             'pandas_to_parquet.{}.{}.parquet'.format(n_partitions, partition)))
 
 class Loader(parent_classes.Loader):
-
     def get(self, savedir, columns=None):
+        '''
+        Read in all partitions of a saved dask dataframe.
+        
+        Args:
+            savedir (str): The directory to load the dask dataframe from.
+            columns: The columns to load.
+                Default: None (all columns)
+            
+        Returns:
+            dask.dataframe: The loaded dask dataframe.
+        '''
         fnames = os.listdir(savedir)
         fnames = [f for f in fnames if 'pandas_to_parquet' in f]
         n_partitions = int(fnames[0].split('.')[1])
@@ -53,12 +95,27 @@ class Loader(parent_classes.Loader):
 
 
 def dump(obj, savedir, schema=None, client=None, repartition = 10000):
+    """
+    Dump an object using the parquet format.
+    Saves the dtype of the original columns as meta, because parquet requires column types to be string.
+    
+    Args:
+        obj: The object to save.
+        savedir (str): The directory to save the object in.
+        schema: The schema to save the object with (not implemented).
+        client: The dask client to use for computation.
+        repartition: The number of partitions to repartition the object into. See: https://docs.dask.org/en/latest/generated/dask.dataframe.DataFrame.partitions.html
+        
+    Returns:
+        None. Saves the object.
+    """
+    save_object_meta(obj, savedir)
+    
     # fetch original column names
     columns = obj.columns
     if obj.index.name is not None:
         index_name = obj.index.name
     
-    # put repqrtition here
     if repartition:
         if obj.npartitions >= repartition * 2:
             ds = obj.to_delayed()

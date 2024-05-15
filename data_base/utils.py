@@ -543,7 +543,6 @@ def is_db(dir_to_data):
     can_exist = [
         'db_state.json', 
         'db',
-        'db',
         'sqlitedict.db',  # for backwards compatibility
         ]
     return any([Path.exists(dir_to_data/e) for e in can_exist]) or \
