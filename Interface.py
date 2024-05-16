@@ -179,7 +179,10 @@ try:
         as simrun_trial_to_cell_object
     from simrun.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
     from simrun.rerun_db import rerun_db as simrun_rerun_db
+    # compatibility
     simrun_rerun_mdb = simrun_rerun_db
+    simrun_simtrail_to_cell_object = simrun_simtrial_to_cell_object
+    simrun_trial_to_cell_object = simrun_trial_to_cell_object
 
 except ImportError:
     logger.warning("Could not import full-compartmental-model simulator")
