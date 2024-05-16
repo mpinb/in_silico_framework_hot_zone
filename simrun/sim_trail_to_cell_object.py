@@ -40,7 +40,7 @@ def synapse_activation_df_to_roberts_synapse_activation(sa):
         synapses[values.synapse_type].append(tuple_)
     return synapses
 
-def simtrail_to_cell_object(db, sim_trial_index, compute = True, allPoints = False, \
+def simtrial_to_cell_object(db, sim_trial_index, compute = True, allPoints = False, \
                             scale_apical = None, range_vars = None, silent = True,
                             neuron_param_modify_functions = [],
                             network_param_modify_functions = [],

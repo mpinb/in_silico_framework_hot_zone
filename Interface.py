@@ -173,8 +173,8 @@ try:
         as simrun_generate_synapse_activations
     from simrun.run_new_simulations import run_new_simulations \
         as simrun_run_new_simulations
-    from simrun.sim_trail_to_cell_object import simtrail_to_cell_object \
-        as simrun_simtrail_to_cell_object
+    from simrun.sim_trail_to_cell_object import simtrial_to_cell_object \
+        as simrun_simtrial_to_cell_object
     from simrun.sim_trail_to_cell_object import trail_to_cell_object \
         as simrun_trail_to_cell_object
     from simrun.parameters_to_cell import parameters_to_cell as simrun_parameters_to_cell
