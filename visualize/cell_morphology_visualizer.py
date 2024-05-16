@@ -1309,6 +1309,7 @@ def get_3d_plot_morphology(
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
         lc = Line3DCollection(segments, linewidths=linewidths, color=colors[sec_n])
         lc.set_solid_capstyle('round')  # for round ends, no jagged lines
+        lc.set_joinstyle("round")
         ax.add_collection(lc)
 
     ax.auto_scale_xyz(lookup_table['x'], lookup_table['y'], lookup_table['z'])
