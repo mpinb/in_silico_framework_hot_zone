@@ -96,9 +96,9 @@ def init_simrun_compatibility():
     import simrun.sim_trial_to_cell_object
     # the typo "simtrail" has been renamed to "simtrial"
     # We still assign the old naming here, in case pickle tries to import it.
-    sys.modules['simrun3.sim_trail_to_cell_object'] = simrun.sim_trial_to_cell_object
-    sys.modules['simrun3.sim_trail_to_cell_object.trail_to_cell_object'] = simrun.sim_trial_to_cell_object.trail_to_cell_object
-    sys.modules['simrun3.sim_trail_to_cell_object.simtrail_to_cell_object'] = simrun.sim_trial_to_cell_object.simtrail_to_cell_object
+    simrun.sim_trail_to_cell_object = simrun.sim_trial_to_cell_object
+    simrun.sim_trail_to_cell_object.trail_to_cell_object = simrun.sim_trial_to_cell_object.trail_to_cell_object
+    simrun.sim_trail_to_cell_object.simtrail_to_cell_object = simrun.sim_trial_to_cell_object.simtrial_to_cell_object
     
 
 def init_mdb_backwards_compatibility():
@@ -123,4 +123,3 @@ def init_db_compatibility():
 def init_data_base_compatibility():
     init_mdb_backwards_compatibility()
     init_db_compatibility()
-    init_simrun_compatibility()
