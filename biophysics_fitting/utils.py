@@ -11,11 +11,13 @@ from functools import partial
 ####################################
 # selection of sections
 ####################################
-def connected_to_structure_beyond(cell,
-                                  sec,
-                                  beyond_dist,
-                                  beyond_struct=['ApicalDendrite'],
-                                  n_children_required=1):
+def connected_to_structure_beyond(
+    cell,
+    sec,
+    beyond_dist,
+    beyond_struct=['ApicalDendrite'],
+    n_children_required=1
+    ):
     '''computes if a secion sec of a cell is connected to a structure at a soma distance 
     larger than beyond_dist. n_children_required: at least the specified amound of children
     needs to have such a connection. This can be helpful to detect the main bifurcation, 
@@ -37,10 +39,11 @@ connected_to_dend_beyond = partial(connected_to_structure_beyond,
                                    beyond_struct=['Dendrite', 'ApicalDendrite'])
 
 
-def get_inner_sec_dist_dict(cell,
-                            beyond_dist=1000,
-                            beyond_struct=['ApicalDendrite'],
-                            n_children_required = 1):
+def get_inner_sec_dist_dict(
+    cell,
+    beyond_dist=1000,
+    beyond_struct=['ApicalDendrite'],
+    n_children_required = 1):
     '''returns sections, that are connected to compartments with labels in beyond_struct that have a minimum soma distance of
     beyond_dist. This is useful to get sections of the apical trunk filtering out oblique dendrites.'''
     sec_dist_dict = {
@@ -54,10 +57,11 @@ def get_inner_sec_dist_dict(cell,
     return sec_dist_dict
 
 
-def get_inner_section_at_distance(cell,
-                                  dist,
-                                  beyond_dist=1000,
-                                  beyond_struct=['ApicalDendrite']):
+def get_inner_section_at_distance(
+    cell,
+    dist,
+    beyond_dist=1000,
+    beyond_struct=['ApicalDendrite']):
     '''Returns the section and relative position of that section, such that the soma distance (along the dendrite) is dist.
     Also, it is assured, that the section returned has children that have a soma distance beyond beyond_dist of the label in
     beyond_struct'''
@@ -110,14 +114,17 @@ def augment_cell_with_detailed_labels(cell):
 
 
 def tVec(cell):
+    """Convenience method to convert a py:attr:~`single_cell_parser.cell.Cell.tVec` to a numpy array."""
     return np.array(cell.tVec)
 
 
 def vmSoma(cell):
+    """Convenience method to extract the soma voltage trace from a cell"""
     return np.array(cell.soma.recVList[0])
 
 
 def vmMax(cell):
+    """Calculate the maximum voltage of a cell at any timepoint, at any dendrite."""
     return np.max(
         [np.max(np.array(sec.recVList), axis=0) for sec in cell.sections],
         axis=0)

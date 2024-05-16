@@ -32,6 +32,16 @@ from .combiner import Combiner
 
 
 def get_fixed_params_example():
+    """Get an example of cell-specific fixed params.
+    
+    Fixed parameters are parameters that are required for a stimulus protocol.
+    They are specific to a stimulus protocol, and to the morphology of the cell.
+    This method provides an example of such fixed parameters for a L5PT and the
+    bAP and BAC stimuli.
+        
+    Returns:
+        dict: A dictionary with the fixed parameters.
+    """
     fixed_params = {
         'hot_zone.max_':
             614,
@@ -57,8 +67,10 @@ def record_bAP(cell, recSite1=None, recSite2=None):
     return {
         'tVec':
             tVec(cell),
-        'vList': (vmSoma(cell), vmApical(cell,
-                                         recSite1), vmApical(cell, recSite2))
+        'vList': (
+            vmSoma(cell), 
+            vmApical(cell, recSite1), 
+            vmApical(cell, recSite2))
     }
 
 

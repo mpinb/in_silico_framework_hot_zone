@@ -64,21 +64,22 @@ class BAC:
         punish_returning_to_rest_tolerance=2.,
         punish_max_prestim_dendrite_depo=-50,
         prefix='',
-        definitions={
-            'BAC_APheight': ('AP_height', 25.0, 5.0),
-            'BAC_ISI': ('BAC_ISI', 9.901, 0.8517),
-            'BAC_ahpdepth': ('AHP_depth_abs', -65.0, 4.0),
-            'BAC_caSpike_height': ('BAC_caSpike_height', 6.73, 2.54),
-            'BAC_caSpike_width': ('BAC_caSpike_width', 37.43, 1.27),
-            'BAC_spikecount': ('Spikecount', 3.0, 0.01)
-        }):
+        definitions=None
+        ):
 
         self.hot_zone_thresh = hot_zone_thresh
         self.soma_thresh = soma_thresh
         self.ca_max_after_nth_somatic_spike = ca_max_after_nth_somatic_spike
         self.stim_onset = stim_onset
         self.stim_duration = stim_duration
-        self.definitions = definitions
+        self.definitions = definitions if definitions is not None else {
+            'BAC_APheight': ('AP_height', 25.0, 5.0),
+            'BAC_ISI': ('BAC_ISI', 9.901, 0.8517),
+            'BAC_ahpdepth': ('AHP_depth_abs', -65.0, 4.0),
+            'BAC_caSpike_height': ('BAC_caSpike_height', 6.73, 2.54),
+            'BAC_caSpike_width': ('BAC_caSpike_width', 37.43, 1.27),
+            'BAC_spikecount': ('Spikecount', 3.0, 0.01)
+        }
         self.repolarization = repolarization
         self.punish = punish
         self.punish_last_spike_after_deadline = punish_last_spike_after_deadline
@@ -112,11 +113,12 @@ class BAC:
         # checking for problems in voltage trace
         t, v = voltage_traces['tVec'], voltage_traces['vList'][0]
         vmax = None  # voltage_traces['vMax']
-        err = trace_check_err(t,
-                              v,
-                              stim_onset=self.stim_onset,
-                              stim_duration=self.stim_duration,
-                              punish=self.punish)
+        err = trace_check_err(
+            t,
+            v,
+            stim_onset=self.stim_onset,
+            stim_duration=self.stim_duration,
+            punish=self.punish)
         err_flags = trace_check(
             t,
             v,

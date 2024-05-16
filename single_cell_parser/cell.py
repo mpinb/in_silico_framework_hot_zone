@@ -40,8 +40,7 @@ class Cell(object):
 
     def __init__(self):
         '''
-        Attributes:
-        
+        Attributes: 
             hoc_path (str)
             id (str | int, optional)
             soma (PySection)
