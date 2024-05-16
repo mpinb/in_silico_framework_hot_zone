@@ -40,14 +40,22 @@ def synapse_activation_df_to_roberts_synapse_activation(sa):
         synapses[values.synapse_type].append(tuple_)
     return synapses
 
-def simtrial_to_cell_object(db, sim_trial_index, compute = True, allPoints = False, \
-                            scale_apical = None, range_vars = None, silent = True,
-                            neuron_param_modify_functions = [],
-                            network_param_modify_functions = [],
-                            synapse_activation_modify_functions = [],
-                            additional_network_params = [],
-                            tStop = 345):
-    '''Resimulates simulation trail and returns cell object.
+def simtrial_to_cell_object(
+    db,
+    sim_trial_index,
+    compute = True, 
+    allPoints = False,
+    scale_apical = None, 
+    range_vars = None, 
+    silent = True,
+    neuron_param_modify_functions = [],
+    network_param_modify_functions = [],
+    synapse_activation_modify_functions = [],
+    additional_network_params = [],
+    tStop = 345
+    ):
+    '''
+    Resimulates simulation trial and returns cell object.
     Expects Instance of DataBase and sim_trial index.
     The db has to contain the paths to the parameterfiles at the following location: 
         ('parameterfiles', 'cellName')

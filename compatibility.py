@@ -84,8 +84,22 @@ elif six.PY3:
 # Since previous versions of this codebase used pickle as a data format, pickle now tries to import modules that don't exist anymore upon loading
 # For this reason, we save the renamed packages/modules under an additional name (i.e. their old name)
 
-import simrun
-sys.modules['simrun3'] = simrun  # simrun used to be simrun2 and simrun3 (separate packages). Pickle still wants a simrun3 to exist.
+def init_simrun_compatibility():
+    """
+    Registers simrun as a top-level package
+    Useful for old pickled data, that tries to import it as a top-level package. simrun has since been moved to simrun3
+    """
+    import simrun
+    # simrun used to be simrun2 and simrun3 (separate packages). 
+    # Pickle still wants a simrun3 to exist.
+    sys.modules['simrun3'] = simrun
+    # the typo "simtrail" has been renamed to "simtrial"
+    # We still assign the old naming here, in case pickle tries to import it.
+    import simrun3
+    simrun3.sim_trail_to_cell_object = simrun.sim_trial_to_cell_object
+    simrun3.sim_trail_to_cell_object.trail_to_cell_object = simrun.sim_trial_to_cell_object.trail_to_cell_object
+    simrun3.sim_trail_to_cell_object.simtrail_to_cell_object = simrun.sim_trial_to_cell_object.simtrail_to_cell_object
+    
 
 def init_mdb_backwards_compatibility():
     """
@@ -109,3 +123,4 @@ def init_db_compatibility():
 def init_data_base_compatibility():
     init_mdb_backwards_compatibility()
     init_db_compatibility()
+    init_simrun_compatibility()
