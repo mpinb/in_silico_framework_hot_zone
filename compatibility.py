@@ -93,6 +93,7 @@ def init_simrun_compatibility():
     # simrun used to be simrun2 and simrun3 (separate packages). 
     # Pickle still wants a simrun3 to exist.
     sys.modules['simrun3'] = simrun
+    import simrun.sim_trial_to_cell_object
     # the typo "simtrail" has been renamed to "simtrial"
     # We still assign the old naming here, in case pickle tries to import it.
     sys.modules['simrun3.sim_trail_to_cell_object'] = simrun.sim_trial_to_cell_object
