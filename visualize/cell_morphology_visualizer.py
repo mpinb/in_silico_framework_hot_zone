@@ -1306,10 +1306,9 @@ def get_3d_plot_morphology(
         points = lookup_table[lookup_table['sec_n'] == sec_n]
         linewidths = points['diameter'][:-1].values + points['diameter'][1:].values / 2 #* 1.5 + 0.2 
         points = points[['x', 'y', 'z']].values.reshape(-1, 1, 3)
-        # two segments, bound by three points
-        # The second segment assures smooth transition in the plot
-        segments = np.concatenate([points[:-2], points[1:-1], points[2:]], axis=1)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
         lc = Line3DCollection(segments, linewidths=linewidths, color=colors[sec_n])
+        lc.set_solid_capstyle('round')  # for round ends, no jagged lines
         ax.add_collection(lc)
 
     ax.auto_scale_xyz(lookup_table['x'], lookup_table['y'], lookup_table['z'])
